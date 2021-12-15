@@ -56,6 +56,7 @@ namespace EDDiscovery.UserControls
             this.toolStripPosition = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDistanceFrom = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSystemState = new System.Windows.Forms.ToolStripMenuItem();
+            this.displaySecurityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTarget = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripShip = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,6 +65,7 @@ namespace EDDiscovery.UserControls
             this.toolStripCargo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDataCount = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMaterialCounts = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayMicroresourcesCountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripCredits = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripGameMode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTravel = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +83,9 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.textBoxSystem = new ExtendedControls.ExtTextBox();
             this.extButtonEDSMTarget = new ExtendedControls.ExtButtonDrawn();
+            this.extTextBoxSecurity = new ExtendedControls.ExtTextBox();
             this.textBoxJumpRange = new ExtendedControls.ExtTextBox();
+            this.labelSecurity = new System.Windows.Forms.Label();
             this.labelJumpRange = new System.Windows.Forms.Label();
             this.panelFD = new ExtendedControls.PanelNoTheme();
             this.labelTarget = new System.Windows.Forms.Label();
@@ -105,6 +109,7 @@ namespace EDDiscovery.UserControls
             this.labelShip = new System.Windows.Forms.Label();
             this.labelMaterials = new System.Windows.Forms.Label();
             this.labelVisits = new System.Windows.Forms.Label();
+            this.labelMR = new System.Windows.Forms.Label();
             this.labelData = new System.Windows.Forms.Label();
             this.textBoxVisits = new ExtendedControls.ExtTextBox();
             this.labelFuel = new System.Windows.Forms.Label();
@@ -120,6 +125,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy = new ExtendedControls.ExtTextBox();
             this.textBoxFuel = new ExtendedControls.ExtTextBox();
             this.labelEconomy = new System.Windows.Forms.Label();
+            this.extTextBoxMR = new ExtendedControls.ExtTextBox();
             this.textBoxData = new ExtendedControls.ExtTextBox();
             this.textBoxGovernment = new ExtendedControls.ExtTextBox();
             this.textBoxMaterials = new ExtendedControls.ExtTextBox();
@@ -138,9 +144,6 @@ namespace EDDiscovery.UserControls
             this.labelSolDist = new System.Windows.Forms.Label();
             this.labelHomeDist = new System.Windows.Forms.Label();
             this.textBoxHomeDist = new ExtendedControls.ExtTextBox();
-            this.extTextBoxMR = new ExtendedControls.ExtTextBox();
-            this.labelMR = new System.Windows.Forms.Label();
-            this.displayMicroresourcesCountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.extPanelScroll.SuspendLayout();
             this.SuspendLayout();
@@ -158,6 +161,7 @@ namespace EDDiscovery.UserControls
             this.toolStripPosition,
             this.toolStripDistanceFrom,
             this.toolStripSystemState,
+            this.displaySecurityToolStripMenuItem,
             this.toolStripNotes,
             this.toolStripTarget,
             this.toolStripShip,
@@ -176,7 +180,7 @@ namespace EDDiscovery.UserControls
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 620);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 642);
             // 
             // toolStripSystem
             // 
@@ -278,6 +282,16 @@ namespace EDDiscovery.UserControls
             this.toolStripSystemState.Text = "Display System State";
             this.toolStripSystemState.Click += new System.EventHandler(this.toolStripSystemState_Click);
             // 
+            // displaySecurityToolStripMenuItem
+            // 
+            this.displaySecurityToolStripMenuItem.Checked = true;
+            this.displaySecurityToolStripMenuItem.CheckOnClick = true;
+            this.displaySecurityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.displaySecurityToolStripMenuItem.Name = "displaySecurityToolStripMenuItem";
+            this.displaySecurityToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.displaySecurityToolStripMenuItem.Text = "Display Security";
+            this.displaySecurityToolStripMenuItem.Click += new System.EventHandler(this.displaySecurityToolStripMenuItem_Click);
+            // 
             // toolStripNotes
             // 
             this.toolStripNotes.Checked = true;
@@ -354,6 +368,16 @@ namespace EDDiscovery.UserControls
             this.toolStripMaterialCounts.Size = new System.Drawing.Size(255, 22);
             this.toolStripMaterialCounts.Text = "Display Material Count";
             this.toolStripMaterialCounts.Click += new System.EventHandler(this.toolStripMaterialCount_Click);
+            // 
+            // displayMicroresourcesCountToolStripMenuItem
+            // 
+            this.displayMicroresourcesCountToolStripMenuItem.Checked = true;
+            this.displayMicroresourcesCountToolStripMenuItem.CheckOnClick = true;
+            this.displayMicroresourcesCountToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.displayMicroresourcesCountToolStripMenuItem.Name = "displayMicroresourcesCountToolStripMenuItem";
+            this.displayMicroresourcesCountToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.displayMicroresourcesCountToolStripMenuItem.Text = "Display Microresources Count";
+            this.displayMicroresourcesCountToolStripMenuItem.Click += new System.EventHandler(this.displayMicroresourcesCountToolStripMenuItem_Click);
             // 
             // toolStripCredits
             // 
@@ -514,8 +538,10 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.extScrollBar1);
             this.extPanelScroll.Controls.Add(this.textBoxSystem);
             this.extPanelScroll.Controls.Add(this.extButtonEDSMTarget);
+            this.extPanelScroll.Controls.Add(this.extTextBoxSecurity);
             this.extPanelScroll.Controls.Add(this.textBoxJumpRange);
             this.extPanelScroll.Controls.Add(this.textBoxTargetDist);
+            this.extPanelScroll.Controls.Add(this.labelSecurity);
             this.extPanelScroll.Controls.Add(this.labelJumpRange);
             this.extPanelScroll.Controls.Add(this.textBoxTarget);
             this.extPanelScroll.Controls.Add(this.panelFD);
@@ -638,7 +664,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.HideScrollBar = true;
             this.extScrollBar1.LargeChange = 10;
             this.extScrollBar1.Location = new System.Drawing.Point(355, 0);
-            this.extScrollBar1.Maximum = -24;
+            this.extScrollBar1.Maximum = 2;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -651,8 +677,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
-            this.extScrollBar1.Value = -24;
-            this.extScrollBar1.ValueLimited = -24;
+            this.extScrollBar1.Value = 0;
+            this.extScrollBar1.ValueLimited = 0;
             // 
             // textBoxSystem
             // 
@@ -709,6 +735,36 @@ namespace EDDiscovery.UserControls
             this.extButtonEDSMTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.extButtonEDSMTarget.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
+            // extTextBoxSecurity
+            // 
+            this.extTextBoxSecurity.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.extTextBoxSecurity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.extTextBoxSecurity.BackErrorColor = System.Drawing.Color.Red;
+            this.extTextBoxSecurity.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxSecurity.BorderColorScaling = 0.5F;
+            this.extTextBoxSecurity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.extTextBoxSecurity.ClearOnFirstChar = false;
+            this.extTextBoxSecurity.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extTextBoxSecurity.EndButtonEnable = true;
+            this.extTextBoxSecurity.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxSecurity.EndButtonImage")));
+            this.extTextBoxSecurity.EndButtonVisible = false;
+            this.extTextBoxSecurity.InErrorCondition = false;
+            this.extTextBoxSecurity.Location = new System.Drawing.Point(58, 733);
+            this.extTextBoxSecurity.Multiline = false;
+            this.extTextBoxSecurity.Name = "extTextBoxSecurity";
+            this.extTextBoxSecurity.ReadOnly = true;
+            this.extTextBoxSecurity.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.extTextBoxSecurity.SelectionLength = 0;
+            this.extTextBoxSecurity.SelectionStart = 0;
+            this.extTextBoxSecurity.Size = new System.Drawing.Size(54, 20);
+            this.extTextBoxSecurity.TabIndex = 47;
+            this.extTextBoxSecurity.TabStop = false;
+            this.extTextBoxSecurity.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxSecurity.WordWrap = true;
+            this.extTextBoxSecurity.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.extTextBoxSecurity.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.extTextBoxSecurity.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
             // textBoxJumpRange
             // 
             this.textBoxJumpRange.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
@@ -738,6 +794,18 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxJumpRange.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxJumpRange.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // labelSecurity
+            // 
+            this.labelSecurity.AutoSize = true;
+            this.labelSecurity.Location = new System.Drawing.Point(9, 733);
+            this.labelSecurity.Name = "labelSecurity";
+            this.labelSecurity.Size = new System.Drawing.Size(45, 13);
+            this.labelSecurity.TabIndex = 48;
+            this.labelSecurity.Text = "Security";
+            this.labelSecurity.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelSecurity.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelSecurity.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelJumpRange
             // 
@@ -1036,6 +1104,18 @@ namespace EDDiscovery.UserControls
             this.labelVisits.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelVisits.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
+            // labelMR
+            // 
+            this.labelMR.AutoSize = true;
+            this.labelMR.Location = new System.Drawing.Point(11, 447);
+            this.labelMR.Name = "labelMR";
+            this.labelMR.Size = new System.Drawing.Size(24, 13);
+            this.labelMR.TabIndex = 16;
+            this.labelMR.Text = "MR";
+            this.labelMR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelMR.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelMR.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
             // labelData
             // 
             this.labelData.AutoSize = true;
@@ -1111,8 +1191,9 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.Location = new System.Drawing.Point(52, 281);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.ReadOnly = false;
-            this.richTextBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.richTextBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBoxNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBoxNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -1174,8 +1255,9 @@ namespace EDDiscovery.UserControls
             this.richTextBoxScrollMissions.Location = new System.Drawing.Point(55, 611);
             this.richTextBoxScrollMissions.Name = "richTextBoxScrollMissions";
             this.richTextBoxScrollMissions.ReadOnly = false;
-            this.richTextBoxScrollMissions.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.richTextBoxScrollMissions.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBoxScrollMissions.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBoxScrollMissions.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBoxScrollMissions.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -1369,6 +1451,37 @@ namespace EDDiscovery.UserControls
             this.labelEconomy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.labelEconomy.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelEconomy.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // extTextBoxMR
+            // 
+            this.extTextBoxMR.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.extTextBoxMR.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.extTextBoxMR.BackErrorColor = System.Drawing.Color.Red;
+            this.extTextBoxMR.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxMR.BorderColorScaling = 0.5F;
+            this.extTextBoxMR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.extTextBoxMR.ClearOnFirstChar = false;
+            this.extTextBoxMR.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extTextBoxMR.EndButtonEnable = true;
+            this.extTextBoxMR.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxMR.EndButtonImage")));
+            this.extTextBoxMR.EndButtonVisible = false;
+            this.extTextBoxMR.InErrorCondition = false;
+            this.extTextBoxMR.Location = new System.Drawing.Point(52, 447);
+            this.extTextBoxMR.Multiline = false;
+            this.extTextBoxMR.Name = "extTextBoxMR";
+            this.extTextBoxMR.ReadOnly = true;
+            this.extTextBoxMR.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.extTextBoxMR.SelectionLength = 0;
+            this.extTextBoxMR.SelectionStart = 0;
+            this.extTextBoxMR.Size = new System.Drawing.Size(200, 20);
+            this.extTextBoxMR.TabIndex = 8;
+            this.extTextBoxMR.TabStop = false;
+            this.extTextBoxMR.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxMR.WordWrap = true;
+            this.extTextBoxMR.Click += new System.EventHandler(this.clickTextBox);
+            this.extTextBoxMR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.extTextBoxMR.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.extTextBoxMR.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxData
             // 
@@ -1838,59 +1951,6 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxHomeDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
-            // extTextBoxMR
-            // 
-            this.extTextBoxMR.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxMR.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.extTextBoxMR.BackErrorColor = System.Drawing.Color.Red;
-            this.extTextBoxMR.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxMR.BorderColorScaling = 0.5F;
-            this.extTextBoxMR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.extTextBoxMR.ClearOnFirstChar = false;
-            this.extTextBoxMR.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extTextBoxMR.EndButtonEnable = true;
-            this.extTextBoxMR.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxMR.EndButtonImage")));
-            this.extTextBoxMR.EndButtonVisible = false;
-            this.extTextBoxMR.InErrorCondition = false;
-            this.extTextBoxMR.Location = new System.Drawing.Point(52, 447);
-            this.extTextBoxMR.Multiline = false;
-            this.extTextBoxMR.Name = "extTextBoxMR";
-            this.extTextBoxMR.ReadOnly = true;
-            this.extTextBoxMR.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.extTextBoxMR.SelectionLength = 0;
-            this.extTextBoxMR.SelectionStart = 0;
-            this.extTextBoxMR.Size = new System.Drawing.Size(200, 20);
-            this.extTextBoxMR.TabIndex = 8;
-            this.extTextBoxMR.TabStop = false;
-            this.extTextBoxMR.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.extTextBoxMR.WordWrap = true;
-            this.extTextBoxMR.Click += new System.EventHandler(this.clickTextBox);
-            this.extTextBoxMR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
-            this.extTextBoxMR.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
-            this.extTextBoxMR.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
-            // 
-            // labelMR
-            // 
-            this.labelMR.AutoSize = true;
-            this.labelMR.Location = new System.Drawing.Point(11, 447);
-            this.labelMR.Name = "labelMR";
-            this.labelMR.Size = new System.Drawing.Size(24, 13);
-            this.labelMR.TabIndex = 16;
-            this.labelMR.Text = "MR";
-            this.labelMR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
-            this.labelMR.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
-            this.labelMR.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
-            // 
-            // displayMicroresourcesCountToolStripMenuItem
-            // 
-            this.displayMicroresourcesCountToolStripMenuItem.Checked = true;
-            this.displayMicroresourcesCountToolStripMenuItem.CheckOnClick = true;
-            this.displayMicroresourcesCountToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.displayMicroresourcesCountToolStripMenuItem.Name = "displayMicroresourcesCountToolStripMenuItem";
-            this.displayMicroresourcesCountToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
-            this.displayMicroresourcesCountToolStripMenuItem.Text = "Display Microresources Count";
-            this.displayMicroresourcesCountToolStripMenuItem.Click += new System.EventHandler(this.displayMicroresourcesCountToolStripMenuItem_Click);
-            // 
             // UserControlSysInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2005,5 +2065,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelMR;
         private ExtendedControls.ExtTextBox extTextBoxMR;
         private System.Windows.Forms.ToolStripMenuItem displayMicroresourcesCountToolStripMenuItem;
+        private ExtendedControls.ExtTextBox extTextBoxSecurity;
+        private System.Windows.Forms.Label labelSecurity;
+        private System.Windows.Forms.ToolStripMenuItem displaySecurityToolStripMenuItem;
     }
 }

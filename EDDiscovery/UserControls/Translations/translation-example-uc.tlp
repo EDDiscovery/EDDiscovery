@@ -1161,6 +1161,7 @@ SECTION UserControlSysInfo
 .labelTravel: "Travel" @
 .labelGamemode: "Mode" @
 .labelTarget: "Target" @
+.labelSecurity: "Security" @
 .buttonEDSMTarget: "EDSM" @
 .toolStripSystem: "Display System Name" @
 .toolStripEDSM: "Display EDSM Buttons" @
@@ -1172,6 +1173,7 @@ SECTION UserControlSysInfo
 .toolStripSystemState: "Display System State" @
 .toolStripNotes: "Display Notes" @
 .toolStripTarget: "Display Target" @
+.displaySecurityToolStripMenuItem: "Display Security" @
 .toolStripShip: "Display Ship Information" @
 .toolStripFuel: "Display Fuel Level" @
 .toolStripCargo: "Display Cargo Count" @
@@ -1466,6 +1468,11 @@ SECTION UserControlFactions
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
 
+SECTION UserControlOrganics
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
 
 SECTION ScanDisplayForm
 

@@ -57,7 +57,8 @@ namespace EDDiscovery.UserControls
         const int BitSelShipyardButtons = 20;
         const int BitSelStationFaction = 21;
         const int BitSelMR = 22;
-        const int BitSelTotal = 23;
+        const int BitSelSecurity = 23;
+        const int BitSelTotal = 24;
         const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << BitSelEDSMButtonsNextLine);
 
         private int[,] resetorder = new int[,]          // default reset order
@@ -73,6 +74,7 @@ namespace EDDiscovery.UserControls
             {BitSelShipyardButtons,-1},
             {BitSelDistanceFrom,-1},
             {BitSelSystemState,-1},
+            {BitSelSecurity,-1},
             {BitSelNotes,-1},
             {BitSelTarget,-1},
             {BitSelFuel,BitSelCargo},
@@ -84,7 +86,7 @@ namespace EDDiscovery.UserControls
             {BitSelJumpRange,-1},
         };
 
-        int[] SmallItems = new int[] { BitSelFuel, BitSelCargo, BitSelVisits, BitSelMats, BitSelData, BitSelCredits, BitSelJumpRange };
+        int[] SmallItems = new int[] { BitSelFuel, BitSelCargo, BitSelVisits, BitSelMats, BitSelData, BitSelCredits, BitSelJumpRange, BitSelSecurity};
 
         const int BitSelEDSMButtonsNextLine = 28;       // other options
         const int BitSelSkinny = 29;
@@ -124,6 +126,7 @@ namespace EDDiscovery.UserControls
                 displayShipButtonsToolStripMenuItem,
                 displayStationFactionToolStripMenuItem,         // BitSelStationFaction
                 displayMicroresourcesCountToolStripMenuItem,    // BitSelMR
+                displaySecurityToolStripMenuItem,
             };
 
             Debug.Assert(toolstriplist.Length == BitSelTotal);
@@ -169,6 +172,14 @@ namespace EDDiscovery.UserControls
                     else if (bit == BitSelMR)
                     {
                         var p = BaseUtils.LineStore.FindValue(Lines, BitSelData + 1);
+                        if (p != null)
+                            insertat = Lines.IndexOf(p) + 1;
+
+                        Selection |= (1 << bit);
+                    }
+                    else if (bit == BitSelSecurity)
+                    {
+                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelSystemState + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
@@ -311,6 +322,7 @@ namespace EDDiscovery.UserControls
                 textBoxEconomy.Text = economy;
                 textBoxGovernment.Text = gov;
                 textBoxState.Text = factionstate;
+                extTextBoxSecurity.Text = security;
 
                 extTextBoxStationFaction.Text = he.StationFaction ?? "";
 
@@ -714,6 +726,10 @@ namespace EDDiscovery.UserControls
         {
             ToggleSelection(sender, BitSelMR);
         }
+        private void displaySecurityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelSecurity);
+        }
 
         private void toolStripRemoveAll_Click(object sender, EventArgs e)
         {
@@ -936,6 +952,9 @@ namespace EDDiscovery.UserControls
 
                                 case BitSelMR:
                                     itembottom = this.SetPos(labpos, labelMR, datapos, extTextBoxMR, si);
+                                    break;
+                                case BitSelSecurity:
+                                    itembottom = this.SetPos(labpos, labelSecurity, datapos, extTextBoxSecurity, si);
                                     break;
 
                                 default:

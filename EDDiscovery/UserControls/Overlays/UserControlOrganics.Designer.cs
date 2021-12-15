@@ -435,6 +435,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxShowIncomplete.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowIncomplete.TabIndex = 34;
             this.extCheckBoxShowIncomplete.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowIncomplete, "Display incomplete scans");
             this.extCheckBoxShowIncomplete.UseVisualStyleBackColor = false;
             // 
             // labelValue
