@@ -241,6 +241,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.SingleRowSelect = true;
             this.dataGridView.Size = new System.Drawing.Size(1092, 406);
             this.dataGridView.TabIndex = 23;
+            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
             // ColDate
             // 
@@ -442,9 +443,9 @@ namespace EDDiscovery.UserControls
             this.labelValue.Location = new System.Drawing.Point(631, 6);
             this.labelValue.Margin = new System.Windows.Forms.Padding(12, 6, 3, 0);
             this.labelValue.Name = "labelValue";
-            this.labelValue.Size = new System.Drawing.Size(25, 13);
+            this.labelValue.Size = new System.Drawing.Size(43, 13);
             this.labelValue.TabIndex = 2;
-            this.labelValue.Text = "0 cr";
+            this.labelValue.Text = "<code>";
             // 
             // UserControlOrganics
             // 

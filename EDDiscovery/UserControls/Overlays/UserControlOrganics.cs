@@ -19,6 +19,7 @@ using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -79,6 +80,8 @@ namespace EDDiscovery.UserControls
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             extCheckBoxShowIncomplete.Checked = GetSetting("ShowIncomplete", true);
             extCheckBoxShowIncomplete.Click += ExtCheckBoxShowIncomplete_Click;
+
+            labelValue.Text = "";       // as its set to <code>
         }
 
 
@@ -244,7 +247,13 @@ namespace EDDiscovery.UserControls
                 DateTime? start = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerStartDate.Value) : default(DateTime?);
                 DateTime? end = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
+                DataGridViewColumn sortcolprev = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
+                SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
+                object curtag = dataGridView.CurrentCell != null ? dataGridView.Rows[dataGridView.CurrentCell.RowIndex].Tag : null;
+
                 dataGridView.Rows.Clear();
+                long totalvalue = 0;
+
                 foreach (var syskvp in discoveryform.history.StarScan.ScanDataByName)
                 {
                     foreach( var starkvp in syskvp.Value.StarNodes)
@@ -275,15 +284,33 @@ namespace EDDiscovery.UserControls
                                                 os.Item2.Genus_Localised,
                                                 os.Item2.Species_Localised,
                                                 os.Item2.ScanType,
+                                                os.Item2.EstimatedValue.ToStringInvariant("N0")
                                         };
 
                                         dataGridView.Rows.Add(data);
+
+                                        totalvalue += os.Item2.EstimatedValue != null ? os.Item2.EstimatedValue.Value : 0;
+                                        dataGridView.Rows[dataGridView.RowCount - 1].Tag = os.Item2;
                                     }
                                 }
                             }
                         }
                     }
+
                 }
+
+                dataGridView.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridView.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+
+                int rowwithtag;
+                if (curtag != null && (rowwithtag = dataGridView.FindRowWithTag(curtag)) >=0)
+                {
+                    dataGridView.CurrentCell = dataGridView.Rows[rowwithtag].Cells[0];
+                }
+                else if (dataGridView.RowCount > 0)
+                    dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];
+
+                labelValue.Text = totalvalue>0 ? (totalvalue.ToString("N0") + " cr") : "";
             }
         }
 
@@ -291,6 +318,14 @@ namespace EDDiscovery.UserControls
         {
             base.OnResize(e);
             DrawBodyInfo();
+        }
+
+        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column == ColDate)
+                e.SortDataGridViewColumnDate();
+            else if ( e.Column == ColValue )
+                e.SortDataGridViewColumnNumeric();
         }
 
         #endregion
@@ -380,5 +415,6 @@ namespace EDDiscovery.UserControls
             PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
             DrawGrid();
        }
+
     }
 }

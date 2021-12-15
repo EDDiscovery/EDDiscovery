@@ -31,6 +31,8 @@ namespace EDDiscovery.UserControls.Map3D
         {
             map = g;
 
+            GLBaseControl.Themer = Theme;
+
             // names of MS* are on screen items hidden during main menu presentation
 
             int leftmargin = 4;
@@ -110,8 +112,6 @@ namespace EDDiscovery.UserControls.Map3D
             maintooltip.ForeColor = Color.Orange;
             map.displaycontrol.Add(maintooltip);
 
-            GLBaseControl.Themer = Theme;
-
             // detect mouse press with menu open and close it
             map.displaycontrol.GlobalMouseDown += (ctrl, e) =>
             {
@@ -126,10 +126,10 @@ namespace EDDiscovery.UserControls.Map3D
         }
 
         // on menu button..
-
         public void ShowMenu(Map.Parts parts)
         {
-            map.displaycontrol.ApplyToControlOfName("InfoBoxForm*", (c) => { ((GLForm)c).Close(); });      // close any info box forms
+            //map.displaycontrol.ApplyToControlOfName("InfoBoxForm*", (c) => { ((GLForm)c).Close(); });      // close any info box forms (don't want to I think)
+
             map.displaycontrol.ApplyToControlOfName("MS*", (c) => { c.Visible = false; });      // hide the visiblity of the on screen controls
 
             int leftmargin = 4;

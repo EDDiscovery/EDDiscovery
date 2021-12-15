@@ -861,7 +861,7 @@ namespace EDDiscovery.UserControls.Map3D
                     if (e.System.Name.Equals(he.System.Name))
                     {
                         var t = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(e.EventTimeUTC);
-                        info = info.AppendPrePad($"@" + t.ToString(), Environment.NewLine);
+                        info = info.AppendPrePad($"{t.ToString()}", Environment.NewLine);
                     }
                 }
             }
