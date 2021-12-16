@@ -38,16 +38,16 @@ namespace EDDiscovery.UserControls.Webbrowser
 
         public bool IsDisallowed(string absuri)
         {
-            string[] userlistsplit = userurllist.HasChars() ? userurllist.Split(Environment.NewLine) : new string[0];
-            bool all = Array.IndexOf(userlistsplit, "*") >= 0;
+            string[] userlistsplit = userurllist.Split(Environment.NewLine);
             string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
 
+            bool all = userlistsplit.Length > 0 && userlistsplit[0] == "*";
+            bool urlisallowed = absuri.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase);
+            bool userallowed = userlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase,true) >= 0;
+            bool defallowed = defaultlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase,true) >= 0;
+
             // if not in these
-            if (!all &&
-                  !absuri.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&
-                  userlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase) == -1 &&
-                  defaultlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase) == -1
-                  )
+            if (!all && !urlisallowed &&  !userallowed && !defallowed )
             {
                 System.Diagnostics.Debug.WriteLine($"Webbrowser Disallowed {absuri}");
                 return true;
