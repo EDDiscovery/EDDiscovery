@@ -343,7 +343,7 @@ namespace EDDiscovery.UserControls
 
         private bool NewJE(JournalEntry ev, Stats st)
         {
-            System.Diagnostics.Debug.WriteLine($"Stats JE {ev.EventTimeUTC} {ev.EventTypeStr}");
+         //   System.Diagnostics.Debug.WriteLine($"Stats JE {ev.EventTimeUTC} {ev.EventTypeStr}");
 
             switch (ev.EventTypeID)
             {
