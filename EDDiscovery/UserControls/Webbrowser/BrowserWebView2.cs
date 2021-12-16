@@ -42,11 +42,23 @@ namespace EDDiscovery.UserControls.Webbrowser
             wv2.NavigationStarting += Wv2_NavigationStarting;
             var task = wv2.EnsureCoreWebView2Async();
             wv2.Visible = false; // hide ugly white until load
+           
         }
 
         private void Wv2_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
         {
             LoadResult(e.IsSuccess);
+            if ( e.IsSuccess )
+            {
+                wv2.CoreWebView2.Settings.IsPasswordAutosaveEnabled = true;     // enable password saving
+                wv2.CoreWebView2.FrameNavigationStarting += CoreWebView2_FrameNavigationStarting;
+            }
+        }
+
+        private void CoreWebView2_FrameNavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine($"FVS {e.Uri}");
+            e.Cancel = IsDisallowed(e.Uri);
         }
 
         private void Wv2_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
