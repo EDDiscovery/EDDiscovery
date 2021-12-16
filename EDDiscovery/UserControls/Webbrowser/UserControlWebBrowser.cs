@@ -347,7 +347,7 @@ namespace EDDiscovery.UserControls
     {
         public override void Init()
         {
-            Init("EDSM", "www.edsm.net");
+            Init("EDSM", "https://www.edsm.net");
         }
     }
 
