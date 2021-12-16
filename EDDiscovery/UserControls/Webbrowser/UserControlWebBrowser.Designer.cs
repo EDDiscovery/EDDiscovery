@@ -51,6 +51,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxAllowedList = new ExtendedControls.ExtCheckBox();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonIE11Warning = new ExtendedControls.ExtButton();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
@@ -213,11 +214,27 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extCheckBoxStar);
             this.panelControls.Controls.Add(this.checkBoxAutoTrack);
             this.panelControls.Controls.Add(this.extCheckBoxAllowedList);
+            this.panelControls.Controls.Add(this.extButtonIE11Warning);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(748, 30);
             this.panelControls.TabIndex = 32;
+            // 
+            // extButtonIE11Warning
+            // 
+            this.extButtonIE11Warning.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonIE11Warning.Image = global::EDDiscovery.Icons.Controls.Warning;
+            this.extButtonIE11Warning.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extButtonIE11Warning.Location = new System.Drawing.Point(152, 1);
+            this.extButtonIE11Warning.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonIE11Warning.Name = "extButtonIE11Warning";
+            this.extButtonIE11Warning.Size = new System.Drawing.Size(254, 23);
+            this.extButtonIE11Warning.TabIndex = 5;
+            this.extButtonIE11Warning.Text = "Using IE11 - click here to get WebView2";
+            this.extButtonIE11Warning.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.extButtonIE11Warning.UseVisualStyleBackColor = true;
+            this.extButtonIE11Warning.Click += new System.EventHandler(this.extButtonIE11Warning_Click);
             // 
             // UserControlWebBrowser
             // 
@@ -242,5 +259,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox extCheckBoxBack;
         private ExtendedControls.ExtCheckBox checkBoxAutoTrack;
         private ExtendedControls.ExtCheckBox extCheckBoxAllowedList;
+        private ExtendedControls.ExtButton extButtonIE11Warning;
     }
 }

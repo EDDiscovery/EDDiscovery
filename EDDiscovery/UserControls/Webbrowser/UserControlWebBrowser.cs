@@ -20,9 +20,9 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.JournalEvents;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using EDDiscovery.UserControls.Webbrowser;
 
 namespace EDDiscovery.UserControls
 {
@@ -32,7 +32,10 @@ namespace EDDiscovery.UserControls
         private ISystem last_sys_tracked = null;        // this tracks the travel grid selection always
         private SystemClass override_system = null;     // if set, override to this system.. 
 
-        private WebBrowserBase wbb;
+        private BrowserBase wbb;
+
+        private Timer uctgtimer = new System.Windows.Forms.Timer();
+        private HistoryEntry uctghe;
 
         #region Init
         public UserControlWebBrowser()
@@ -44,9 +47,13 @@ namespace EDDiscovery.UserControls
 
         }
 
+        string urlallowed;
+
         public void Init(string source, string urlallowed)
         {
             this.source = source;
+            this.urlallowed = urlallowed;
+
             DBBaseName = source + "AutoView";
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
@@ -61,12 +68,11 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxStar.Visible = source != "Spansh";
 
-            wbb = new WebBrowserIE11();
-            wbb.urlallowed = urlallowed;
-            wbb.userurllist = GetSetting("Allowed", "");
-            wbb.webbrowser.Dock = DockStyle.Fill;
-            Controls.Add(wbb.webbrowser);
-            Controls.SetChildIndex(wbb.webbrowser,0);
+            extButtonIE11Warning.Visible = false;
+
+            uctgtimer = new Timer();
+            uctgtimer.Interval = 50;
+            uctgtimer.Tick += Uctgtimer_Tick;
         }
 
         public override void LoadLayout()
@@ -83,44 +89,74 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            last_sys_tracked = uctg.GetCurrentHistoryEntry?.System;
-            PresentSystem(last_sys_tracked);    // may be null
+            System.Diagnostics.Debug.WriteLine($"Web browser initial display");
+            var wv2 = new BrowserWebView2();
+            wv2.LoadResult += (res) =>          // asynchronous to start up, UCTG, etc, winforms needs to run
+            {
+                System.Diagnostics.Debug.WriteLine($"Web browser view returned {res}");
+                if (res == true)
+                {
+                    wbb = wv2;
+                }
+                else
+                {
+                    extButtonIE11Warning.Visible = true;
+                    wbb = new BrowserIE11();
+                }
+
+                wbb.urlallowed = urlallowed;
+                wbb.userurllist = GetSetting("Allowed", "");
+                wbb.webbrowser.Dock = DockStyle.Fill;
+                Controls.Add(wbb.webbrowser);
+                Controls.SetChildIndex(wbb.webbrowser, 0);
+
+                last_sys_tracked = uctg.GetCurrentHistoryEntry?.System;
+                PresentSystem(last_sys_tracked);    // may be null
+            };
+            wv2.Start();
         }
 
         bool isClosing = false;     // in case we are in a middle of a lookup
 
         public override void Closing()
         {
+            uctgtimer.Stop();
             isClosing = true;
             PutSetting("PinState", rollUpPanelTop.PinState);
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 
-        #endregion
-
-        #region Display
-
-
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry) 
         {
-            if (he != null) // paranoia
+            if (he != null) // we may not have the webbrowser up, so we just tick until its ready
             {
-                // If not tracked last system, or name differs, its a new system..
+                System.Diagnostics.Debug.WriteLine($"Web browser utcg request {he.System.Name}");
+                uctghe = he;
+                uctgtimer.Start();
+            }
+        }
 
+        private void Uctgtimer_Tick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Web browser UCTG timer on {uctghe.System.Name} {wbb != null}");
+
+            if (wbb != null)        // wait till we have a webbrowser
+            {
+                uctgtimer.Stop();
                 bool nosys = last_sys_tracked == null;
 
-                if (nosys || last_sys_tracked.Name != he.System.Name)
+                if (nosys || last_sys_tracked.Name != uctghe.System.Name)
                 {
-                    last_sys_tracked = he.System;       // we want to track system always
+                    last_sys_tracked = uctghe.System;       // we want to track system always
 
                     if (override_system == null && (checkBoxAutoTrack.Checked || nosys))        // if no overridden, and tracking (or no sys), present
                         PresentSystem(last_sys_tracked);
                 }
-                else if (he.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
+                else if (uctghe.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
                 {
                     if (override_system == null && checkBoxAutoTrack.Checked)       // if not overriding, and tracking, present
                     {
-                        JournalStartJump jsj = he.journalEntry as JournalStartJump;
+                        JournalStartJump jsj = uctghe.journalEntry as JournalStartJump;
                         last_sys_tracked = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
                         PresentSystem(last_sys_tracked);
                     }
@@ -128,6 +164,10 @@ namespace EDDiscovery.UserControls
             }
         }
 
+
+        #endregion
+
+        #region Display
         private void PresentSystem(ISystem sys)
         {
             SetControlText("No Entry");
@@ -295,6 +335,12 @@ namespace EDDiscovery.UserControls
                 PresentSystem(last_sys_tracked);
             }
         }
+
+        private void extButtonIE11Warning_Click(object sender, EventArgs e)
+        {
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLWebView2);
+
+        }
     }
 
     public partial class UserControlEDSM : UserControlWebBrowser
@@ -309,7 +355,7 @@ namespace EDDiscovery.UserControls
     {
         public override void Init()
         {
-            Init("Spansh", "spansh.co.uk");
+            Init("Spansh", "https://spansh.co.uk");
         }
     }
 
@@ -317,7 +363,7 @@ namespace EDDiscovery.UserControls
     {
         public override void Init()
         {
-            Init("EDDB", "eddb.io");
+            Init("EDDB", "https://eddb.io");
         }
     }
 
@@ -325,86 +371,8 @@ namespace EDDiscovery.UserControls
     {
         public override void Init()
         {
-            Init("Inara", "inara.cz");
+            Init("Inara", "https://inara.cz");
         }
     }
-
-    public abstract class WebBrowserBase
-    {
-        public string urlallowed { get; set; }
-        public string userurllist { get; set; }
-
-        private string defaultallowed =
-                "about:" + Environment.NewLine +
-                "https://www.google.com/recaptcha" + Environment.NewLine +
-                "https://consentcdn.cookiebot.com" + Environment.NewLine +
-                "https://auth.frontierstore.net" + Environment.NewLine +
-                "https://googleads.g.doubleclick.net" + Environment.NewLine;
-
-
-        public Control webbrowser { get; set; }
-        public abstract void Navigate(string uri);
-        public abstract void GoBack();
-
-        public bool IsDisallowed(string urlhost,string absuri)
-        {
-            string[] userlistsplit = userurllist.HasChars() ? userurllist.Split(Environment.NewLine) : new string[0];
-            bool all = Array.IndexOf(userlistsplit, "*") >= 0;
-            string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
-
-            // if not in these
-            if (!all &&
-                  !urlhost.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&
-                  userlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase) == -1 &&
-                  defaultlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase) == -1
-                  )
-            {
-                System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + urlhost + " : " + absuri);
-                return true;
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + urlhost + " : " + absuri);
-                return false;
-            }
-        }
-
-    }
-
-    public class WebBrowserIE11 : WebBrowserBase
-    {
-        private WebBrowser wbie11;
-        public WebBrowserIE11()
-        {
-            webbrowser = wbie11 = new WebBrowser();
-            wbie11.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
-            wbie11.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
-            wbie11.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
-            webbrowser.Visible = false; // hide ugly white until load
-        }
-        public override void Navigate(string uri)
-        {
-            wbie11.Navigate(uri);
-        }
-        public override void GoBack()
-        {
-            wbie11.GoBack();
-        }
-
-        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            wbie11.Visible = true;
-        }
-        private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
-        {
-            e.Cancel = IsDisallowed(e.Url.Host, e.Url.AbsoluteUri);
-        }
-
-        private void webBrowser_NewWindow(object sender, CancelEventArgs e)
-        {
-            e.Cancel = true;
-        }
-    }
-
 }
 

@@ -148,6 +148,15 @@
     <Reference Include="GLOFC, Version=0.6.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RJKJSoft.GLOFC.0.6.5\lib\net48\GLOFC.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK, Version=3.3.2.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.3.3.2\lib\net20\OpenTK.dll</HintPath>
     </Reference>
@@ -264,6 +273,9 @@
     <Compile Include="UserControls\Overlays\UserControlOrganics.Designer.cs">
       <DependentUpon>UserControlOrganics.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Webbrowser\BrowserBase.cs" />
+    <Compile Include="UserControls\Webbrowser\BrowserWebView2.cs" />
+    <Compile Include="UserControls\Webbrowser\BrowserIE11.cs" />
     <Compile Include="WebServer\EDDWebTexts.cs" />
     <Compile Include="WebServer\EDDWebPresskey.cs" />
     <Compile Include="WebServer\EDDWebJournal.cs" />
@@ -1196,6 +1208,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets'))" />
   </Target>
   <Target Name="Version" BeforeTargets="Build">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
@@ -1252,4 +1265,5 @@ namespace CAPI
     </PropertyGroup>
     <WriteLinesToFile File="CapiClientID.cs" Overwrite="true" Lines="$(LauncherCmd)" />
   </Target>
+  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" />
 </Project>

@@ -22,7 +22,7 @@ namespace EDDiscovery.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace EDDiscovery.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace EDDiscovery.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -81,7 +81,7 @@ namespace EDDiscovery.Properties {
         ///
         ///Previous Contributo [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Credits {
+        public static string Credits {
             get {
                 return ResourceManager.GetString("Credits", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap EDCD {
+        public static System.Drawing.Bitmap EDCD {
             get {
                 object obj = ResourceManager.GetObject("EDCD", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -102,7 +102,7 @@ namespace EDDiscovery.Properties {
         ///1. This code is licensed under the Apache License Version 2.0, January 2004.  See below for the Apache license.
         ///2. DOWNLOADING OF DATA FROM GITHUB.COM/EDDISCOVERY.  From this site, EDD automatically checks at start up for the following information: New releases, Updated Bookmarks, New Expeditions, New Exploration list files, Updated Maps, Notifications.  It automatically downloads to your APPDATA folder any new or updated files detected.  None [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string EDD_Licence_Mono {
+        public static string EDD_Licence_Mono {
             get {
                 return ResourceManager.GetString("EDD_Licence_Mono", resourceCulture);
             }
@@ -112,7 +112,7 @@ namespace EDDiscovery.Properties {
         ///   Looks up a localized string similar to {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch0\stshfloch31506\stshfhich31506\stshfbi31506\deflang2057\deflangfe2057\themelang2057\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f34\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria Math;}
         ///{\f37\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0502020204030204}Calibri;}{\flomajor\f31500\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string EDD_License {
+        public static string EDD_License {
             get {
                 return ResourceManager.GetString("EDD_License", resourceCulture);
             }
@@ -121,7 +121,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon edlogo_3mo_icon {
+        public static System.Drawing.Icon edlogo_3mo_icon {
             get {
                 object obj = ResourceManager.GetObject("edlogo_3mo_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -131,7 +131,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] EliteGalacticRegions {
+        public static byte[] EliteGalacticRegions {
             get {
                 object obj = ResourceManager.GetObject("EliteGalacticRegions", resourceCulture);
                 return ((byte[])(obj));
@@ -141,7 +141,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Logo {
+        public static System.Drawing.Bitmap Logo {
             get {
                 object obj = ResourceManager.GetObject("Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -168,7 +168,7 @@ namespace EDDiscovery.Properties {
         ///	F1 ?	This help
         ///	F3 F4	Increase or decrease the light year limit for displ [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string maphelp3d {
+        public static string maphelp3d {
             get {
                 return ResourceManager.GetString("maphelp3d", resourceCulture);
             }
@@ -181,7 +181,7 @@ namespace EDDiscovery.Properties {
         ///
         ///The maximum and minimum radius are adjusted by the user: this permit to choose how far to plot and, quite useful, to plot systems in a shell. The slider, on the top right, permit to choose how much [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string mapuc {
+        public static string mapuc {
             get {
                 return ResourceManager.GetString("mapuc", resourceCulture);
             }
@@ -190,7 +190,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://coriolis.io/import?.
         /// </summary>
-        internal static string URLCoriolis {
+        public static string URLCoriolis {
             get {
                 return ResourceManager.GetString("URLCoriolis", resourceCulture);
             }
@@ -199,7 +199,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://edcd.github.io/.
         /// </summary>
-        internal static string URLEDCD {
+        public static string URLEDCD {
             get {
                 return ResourceManager.GetString("URLEDCD", resourceCulture);
             }
@@ -208,7 +208,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://eddb.io/.
         /// </summary>
-        internal static string URLeddb {
+        public static string URLeddb {
             get {
                 return ResourceManager.GetString("URLeddb", resourceCulture);
             }
@@ -217,7 +217,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://eddb.io/station/market-id/.
         /// </summary>
-        internal static string URLEDDBStationMarketId {
+        public static string URLEDDBStationMarketId {
             get {
                 return ResourceManager.GetString("URLEDDBStationMarketId", resourceCulture);
             }
@@ -226,7 +226,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to http://eddb.io/system/.
         /// </summary>
-        internal static string URLEDDBSystem {
+        public static string URLEDDBSystem {
             get {
                 return ResourceManager.GetString("URLEDDBSystem", resourceCulture);
             }
@@ -235,7 +235,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://eddb.io/system/name/.
         /// </summary>
-        internal static string URLEDDBSystemName {
+        public static string URLEDDBSystemName {
             get {
                 return ResourceManager.GetString("URLEDDBSystemName", resourceCulture);
             }
@@ -244,7 +244,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://eddiscovery.space/eddb/systems_populated.jsonl.
         /// </summary>
-        internal static string URLEDDBSystems {
+        public static string URLEDDBSystems {
             get {
                 return ResourceManager.GetString("URLEDDBSystems", resourceCulture);
             }
@@ -253,7 +253,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://www.elitedangerous.com/.
         /// </summary>
-        internal static string URLEDHomepage {
+        public static string URLEDHomepage {
             get {
                 return ResourceManager.GetString("URLEDHomepage", resourceCulture);
             }
@@ -262,7 +262,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to http://www.edshipyard.com/.
         /// </summary>
-        internal static string URLEDShipyard {
+        public static string URLEDShipyard {
             get {
                 return ResourceManager.GetString("URLEDShipyard", resourceCulture);
             }
@@ -271,7 +271,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://www.edsm.net/.
         /// </summary>
-        internal static string URLedsm {
+        public static string URLedsm {
             get {
                 return ResourceManager.GetString("URLedsm", resourceCulture);
             }
@@ -280,7 +280,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://www.edsm.net/dump/systemsWithCoordinates.json.gz.
         /// </summary>
-        internal static string URLEDSMFullSystems {
+        public static string URLEDSMFullSystems {
             get {
                 return ResourceManager.GetString("URLEDSMFullSystems", resourceCulture);
             }
@@ -289,7 +289,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://api.github.com/repos/EDDiscovery/EDDiscoveryData/.
         /// </summary>
-        internal static string URLGithubDataDownload {
+        public static string URLGithubDataDownload {
             get {
                 return ResourceManager.GetString("URLGithubDataDownload", resourceCulture);
             }
@@ -298,7 +298,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://api.github.com/repos/EDDiscovery/EDDiscovery/.
         /// </summary>
-        internal static string URLGithubDownload {
+        public static string URLGithubDownload {
             get {
                 return ResourceManager.GetString("URLGithubDownload", resourceCulture);
             }
@@ -307,7 +307,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://inara.cz/galaxy-starsystem/?search=.
         /// </summary>
-        internal static string URLInaraStarSystem {
+        public static string URLInaraStarSystem {
             get {
                 return ResourceManager.GetString("URLInaraStarSystem", resourceCulture);
             }
@@ -316,7 +316,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://inara.cz/galaxy-station/?search=.
         /// </summary>
-        internal static string URLInaraStation {
+        public static string URLInaraStation {
             get {
                 return ResourceManager.GetString("URLInaraStation", resourceCulture);
             }
@@ -325,7 +325,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://discordapp.com/invite/0qIqfCQbziTWzsQu.
         /// </summary>
-        internal static string URLProjectDiscord {
+        public static string URLProjectDiscord {
             get {
                 return ResourceManager.GetString("URLProjectDiscord", resourceCulture);
             }
@@ -334,7 +334,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://forums.frontier.co.uk/threads/eddiscovery-journals-exploration-trading-voice-recognition-speech-star-maps-webserver.329643/.
         /// </summary>
-        internal static string URLProjectEDForumPost {
+        public static string URLProjectEDForumPost {
             get {
                 return ResourceManager.GetString("URLProjectEDForumPost", resourceCulture);
             }
@@ -343,7 +343,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/issues.
         /// </summary>
-        internal static string URLProjectFeedback {
+        public static string URLProjectFeedback {
             get {
                 return ResourceManager.GetString("URLProjectFeedback", resourceCulture);
             }
@@ -352,7 +352,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery.
         /// </summary>
-        internal static string URLProjectGithub {
+        public static string URLProjectGithub {
             get {
                 return ResourceManager.GetString("URLProjectGithub", resourceCulture);
             }
@@ -361,7 +361,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/.
         /// </summary>
-        internal static string URLProjectVideos {
+        public static string URLProjectVideos {
             get {
                 return ResourceManager.GetString("URLProjectVideos", resourceCulture);
             }
@@ -370,7 +370,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://www.youtube.com.
         /// </summary>
-        internal static string URLProjectVideosRoot {
+        public static string URLProjectVideosRoot {
             get {
                 return ResourceManager.GetString("URLProjectVideosRoot", resourceCulture);
             }
@@ -379,7 +379,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/wiki.
         /// </summary>
-        internal static string URLProjectWiki {
+        public static string URLProjectWiki {
             get {
                 return ResourceManager.GetString("URLProjectWiki", resourceCulture);
             }
@@ -388,7 +388,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://www.youtube.com/embed/GkOGB7WF1Lo.
         /// </summary>
-        internal static string URLReleaseVideo {
+        public static string URLReleaseVideo {
             get {
                 return ResourceManager.GetString("URLReleaseVideo", resourceCulture);
             }
@@ -397,7 +397,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to http://ross.eddb.io/system/update/.
         /// </summary>
-        internal static string URLRossSystem {
+        public static string URLRossSystem {
             get {
                 return ResourceManager.GetString("URLRossSystem", resourceCulture);
             }
@@ -406,7 +406,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://spansh.co.uk/body/.
         /// </summary>
-        internal static string URLSpanshBodyId {
+        public static string URLSpanshBodyId {
             get {
                 return ResourceManager.GetString("URLSpanshBodyId", resourceCulture);
             }
@@ -415,7 +415,7 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://spansh.co.uk/station/.
         /// </summary>
-        internal static string URLSpanshStationMarketId {
+        public static string URLSpanshStationMarketId {
             get {
                 return ResourceManager.GetString("URLSpanshStationMarketId", resourceCulture);
             }
@@ -424,9 +424,18 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://spansh.co.uk/system/.
         /// </summary>
-        internal static string URLSpanshSystemSystemId {
+        public static string URLSpanshSystemSystemId {
             get {
                 return ResourceManager.GetString("URLSpanshSystemSystemId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://developer.microsoft.com/en-us/microsoft-edge/webview2/.
+        /// </summary>
+        public static string URLWebView2 {
+            get {
+                return ResourceManager.GetString("URLWebView2", resourceCulture);
             }
         }
     }
