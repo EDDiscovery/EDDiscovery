@@ -1069,6 +1069,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" @
 .JetConeBoost: "Jet Cone Boost" @
 .Scans: "Scans" @
+.OrganicScans: "Organic Scans" @
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
 

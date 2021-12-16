@@ -249,6 +249,7 @@ namespace EDDiscovery.UserControls
 
             public List<JumpInfo> FSDJumps;
             public List<ScanInfo> Scans;
+            public List<JournalScanOrganic> OrganicScans;
             public List<ScanCompleteInfo> ScanComplete;
             public List<JetConeBoostInfo> JetConeBoost;
             public Dictionary<string, ShipInfo> Ships;
@@ -271,6 +272,7 @@ namespace EDDiscovery.UserControls
             {
                 FSDJumps = new List<JumpInfo>();
                 Scans = new List<ScanInfo>();
+                OrganicScans = new List<JournalScanOrganic>();
                 ScanComplete = new List<ScanCompleteInfo>();
                 JetConeBoost = new List<JetConeBoostInfo>();
                 Ships = new Dictionary<string, ShipInfo>();
@@ -321,7 +323,7 @@ namespace EDDiscovery.UserControls
                     JournalTypeEnum.FSDJump, JournalTypeEnum.CarrierJump, JournalTypeEnum.Location, JournalTypeEnum.Docked, JournalTypeEnum.JetConeBoost,
                     JournalTypeEnum.Scan, JournalTypeEnum.SAAScanComplete, JournalTypeEnum.Docked,
                     JournalTypeEnum.ShipyardNew, JournalTypeEnum.ShipyardSwap, JournalTypeEnum.LoadGame,
-                    JournalTypeEnum.Statistics, JournalTypeEnum.SetUserShipName, JournalTypeEnum.Loadout, JournalTypeEnum.Died,
+                    JournalTypeEnum.Statistics, JournalTypeEnum.SetUserShipName, JournalTypeEnum.Loadout, JournalTypeEnum.Died, JournalTypeEnum.ScanOrganic
 
                 };
 
@@ -341,7 +343,7 @@ namespace EDDiscovery.UserControls
 
         private bool NewJE(JournalEntry ev, Stats st)
         {
-          //  System.Diagnostics.Debug.WriteLine("{0} Stats JE {1} {2}", DBName("") , ev.EventTimeUTC, ev.EventTypeStr);
+            System.Diagnostics.Debug.WriteLine($"Stats JE {ev.EventTimeUTC} {ev.EventTypeStr}");
 
             switch (ev.EventTypeID)
             {
@@ -395,6 +397,14 @@ namespace EDDiscovery.UserControls
                             wasdiscovered = sc.WasDiscovered, wasmapped = sc.WasMapped,
                             mapped = mapped, efficientlymapped = effcientlymapped,
                             shipid = st.currentshipid });
+                        break;
+                    }
+
+                case JournalTypeEnum.ScanOrganic:
+                    {
+                        JournalScanOrganic sc = ev as JournalScanOrganic;
+                        if ( sc.ScanType == JournalScanOrganic.ScanTypeEnum.Analyse)
+                            st.OrganicScans.Add(sc);
                         break;
                     }
 
@@ -679,6 +689,7 @@ namespace EDDiscovery.UserControls
                 var scanned = new string[intervals];
                 var mapped = new string[intervals];
                 var ucValue = new string[intervals];
+                var osValue = new string[intervals];
 
                 for (var ii = 0; ii < intervals; ii++)
                 {
@@ -686,6 +697,7 @@ namespace EDDiscovery.UserControls
                     var scanStats = currentstats.Scans.Where(x => x.utc >= starttimeutc[ii]).Distinct(new Stats.ScansAreForSameBody()).ToList();
                     var saascancomplete = currentstats.ScanComplete.Where(x => x.utc >= starttimeutc[ii]).ToList();
                     var jetconeboosts = currentstats.JetConeBoost.Where(x => x.utc >= starttimeutc[ii]).ToList();
+                    var organicscans = currentstats.OrganicScans.Where(x => x.EventTimeUTC >= starttimeutc[ii]).ToList();
 
                     jumps[ii] = fsdStats.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                     distances[ii] = fsdStats.Sum(j => j.jumpdist).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
@@ -696,6 +708,7 @@ namespace EDDiscovery.UserControls
                     scanned[ii] = scanStats.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                     mapped[ii] = saascancomplete.Count().ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                     ucValue[ii] = scanStats.Sum(x => (long)x.ev.EstimatedValue(x.wasdiscovered, x.wasmapped, x.mapped, x.efficientlymapped)).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    osValue[ii] = organicscans.Sum(x => (long)(x.EstimatedValue ?? 0)).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 }
 
                 StatToDGV(dataGridViewTravel, "Jumps".T(EDTx.UserControlStats_Jumps), jumps);
@@ -707,6 +720,7 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Scans".T(EDTx.UserControlStats_Scans), scanned);
                 StatToDGV(dataGridViewTravel, "Mapped".T(EDTx.UserControlStats_Mapped), mapped);
                 StatToDGV(dataGridViewTravel, "Scan value".T(EDTx.UserControlStats_Scanvalue), ucValue);
+                StatToDGV(dataGridViewTravel, "Organic Scans".T(EDTx.UserControlStats_OrganicScans), osValue);
             }
             else // MAJOR
             {

@@ -45,7 +45,6 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Statistics", ["wiki"] = "/Using-the-Statistics-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Scan", ["wiki"] = "/Using-the-Scan-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=636" },
                 new JObject() { ["panel"] = "Modules", ["wiki"] = "/Using-the-Ships-Load-Out-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Exploration", ["wiki"] = "/Using-the-Exploration-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Synthesis", ["wiki"] = "/Using-the-Synthesis-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Missions", ["wiki"] = "/Using-the-Missions-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Engineering", ["wiki"] = "/Using-the-Engineering-panel", ["video"] = "" },
@@ -66,8 +65,6 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Settings", ["wiki"] = "/Using-the-Settings-Panel", ["video"] = "/watch?v=v5g03mYdYAw" },
                 new JObject() { ["panel"] = "ScanGrid", ["wiki"] = "/Using-the-Scan-Grid", ["video"] = "" },
                 new JObject() { ["panel"] = "Compass", ["wiki"] = "/Using-the-Compass-Panel", ["video"] = "https://youtu.be/7Kt8XYOetj4" },
-                new JObject() { ["panel"] = "LocalMap", ["wiki"] = "/Using-the-Map-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Plot", ["wiki"] = "/Using-the-Plot-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "PanelSelector", ["wiki"] = "/Using-Panels", ["video"] = "" },
                 new JObject() { ["panel"] = "BookmarkManager", ["wiki"] = "/Using-the-Bookmarks-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "CombatPanel", ["wiki"] = "/Using-the-combat-panel", ["video"] = "" },
@@ -88,6 +85,8 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "SuitsWeapons", ["wiki"] = "/Using-the-Suits-and-Weapons-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "MicroResources", ["wiki"] = "/Using-the-Micro-Resources-Panel", ["video"] = "" },
+
+// TBD New ones, 3d/2d, organics
             }
         };
 

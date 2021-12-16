@@ -313,6 +313,7 @@ namespace EDDiscovery
         UserControlStats_Scans, // Scans
         UserControlStats_Mapped, // Mapped
         UserControlStats_Scanvalue, // Scan value
+        UserControlStats_OrganicScans, // Scan value
 
 
         UserControlStats_Lastdock, // Last dock
