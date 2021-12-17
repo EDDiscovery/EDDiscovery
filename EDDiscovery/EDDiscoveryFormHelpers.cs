@@ -398,14 +398,12 @@ namespace EDDiscovery
 
             statusStripEDD.Font = contextMenuStripTabs.Font = this.Font;
 
-            this.Refresh();                                             // force thru refresh to make sure its repainted
-
-            //System.Diagnostics.Debug.WriteLine("Label version " + label_version.Location + " " + label_version.Size + " " + mainMenu.Size);
-
             OnThemeChanged?.Invoke();
 
             if (panelrefreshaswell)
                 Controller.RefreshDisplays(); // needed to cause them to cope with theme change
+
+            this.Refresh();                                             // force thru refresh to make sure its repainted
         }
 
         #endregion

@@ -269,9 +269,9 @@ namespace EDDiscovery.UserControls
                 {
                     var totals2 = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
-                    Tuple<int, int, string, string> basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"));
-                    Tuple<int, int, string, string> standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"));
-                    Tuple<int, int, string, string> premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"));
+                    var basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"));
+                    var standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"));
+                    var premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"));
                     wantedList.Append(Environment.NewLine +
                         string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".T(EDTx.UserControlShoppingList_FSD), basic.Item1, standard.Item1, premium.Item1));
                 }

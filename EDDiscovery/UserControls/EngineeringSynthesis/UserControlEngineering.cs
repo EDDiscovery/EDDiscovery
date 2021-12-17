@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += UCTGChanged;
-            DGVLoadColumnLayout(dataGridViewEngineering);
+      //      DGVLoadColumnLayout(dataGridViewEngineering);
             chkNotHistoric.Checked = !isHistoric;       // upside down now
             chkNotHistoric.Visible = !isEmbedded;
         }
@@ -272,15 +272,18 @@ namespace EDDiscovery.UserControls
                     {
                         Recipes.Recipe r = Recipes.EngineeringRecipes[i];
 
-                        Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]);
+                        var res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = WantedPerRecipe[rno].ToString();
                         dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToString();
+                        dataGridViewEngineering[PercentageCol.Index, i].Value = res.Item5.ToString("N0");
                         dataGridViewEngineering[NotesCol.Index, i].Value = res.Item3;
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
                         dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(totalmcl);
                         dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
+                        if (res.Item5 >= 100.0)
+                            dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = EDDTheme.Instance.GridHighlightBack;
                     }
                     if (WantedPerRecipe[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {

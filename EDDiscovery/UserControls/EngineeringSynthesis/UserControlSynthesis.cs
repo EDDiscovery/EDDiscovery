@@ -251,17 +251,20 @@ namespace EDDiscovery.UserControls
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
                         Recipes.Recipe r = Recipes.SynthesisRecipes[rno];
-                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, r , WantedPerRecipe[rno]);
+                        var res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, r , WantedPerRecipe[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
                         {
-                            row.Cells[3].Value = WantedPerRecipe[rno].ToString();
-                            row.Cells[4].Value = res.Item2.ToString();
-                            row.Cells[5].Value = res.Item3;
-                            row.Cells[5].ToolTipText = res.Item4;
-                            row.Cells[6].Value = r.IngredientsStringvsCurrent(totalmcl);
-                            row.Cells[6].ToolTipText = r.IngredientsStringLong;
+                            row.Cells[3].Value = WantedPerRecipe[rno].ToString(); //wanted
+                            row.Cells[4].Value = res.Item2.ToString();  // available
+                            row.Cells[5].Value = res.Item5.ToString("N0"); // %
+                            row.Cells[6].Value = res.Item3; // notes
+                            row.Cells[6].ToolTipText = res.Item4;
+                            row.Cells[7].Value = r.IngredientsStringvsCurrent(totalmcl);    // recipe
+                            row.Cells[7].ToolTipText = r.IngredientsStringLong;
+                            if (res.Item5 >= 100.0)
+                                row.DefaultCellStyle.BackColor = EDDTheme.Instance.GridHighlightBack;
                         }
                     }
                     if (WantedPerRecipe[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
