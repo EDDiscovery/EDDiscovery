@@ -55,6 +55,10 @@ namespace EDDiscovery
             if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
             {
                 currentsettings.name = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom");
+
+                // pick a default, based on the name. This is useful when new names are introduced, as if we are using a default theme, we will pick the new colour from the theme
+                int defaulttouse = Math.Max(themelist.FindIndex(x => x.name == currentsettings.name),0);        
+
                 currentsettings.windowsframe = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ThemeWindowsFrame", true);
                 currentsettings.formopacity = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ThemeFormOpacity", 100);
                 currentsettings.fontname = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeFont", defaultfont);
@@ -64,7 +68,7 @@ namespace EDDiscovery
 
                 foreach (Settings.CI ck in themelist[0].colors.Keys)         // use themelist to find the key names, as we modify currentsettings as we go and that would cause an exception
                 {
-                    int d = themelist[0].colors[ck].ToArgb();               // use windows default colors.
+                    int d = themelist[defaulttouse].colors[ck].ToArgb();               // use windows default colors.
                     Color c = Color.FromArgb(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ThemeColor" + ck.ToString(), d));
                     currentsettings.colors[ck] = c;
                 }

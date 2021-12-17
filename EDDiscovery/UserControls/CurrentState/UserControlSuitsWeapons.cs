@@ -116,6 +116,8 @@ namespace EDDiscovery.UserControls
                 {
                     var weaponinfo = ItemData.GetWeapon(w.Value.FDName);        // may be null
                     var weapondp = weaponinfo?.GetStats(w.Value.Class);     // may be null
+                    if (weapondp != null && w.Value.WeaponMods != null)     // apply engineering to weapon stats
+                        weapondp = weapondp.ApplyEngineering(w.Value.WeaponMods);
 
                     string smods = w.Value.WeaponMods != null ? string.Join(", ", w.Value.WeaponMods.Select(x=>Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
                     object[] rowobj = new object[] {  EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(w.Value.EventTime).ToString(),
@@ -134,8 +136,6 @@ namespace EDDiscovery.UserControls
                                                weapondp?.HopperSize.ToString("N0") ?? "",
                                                weapondp?.Range.ToString("N0") ?? "",
                                                weapondp?.HeadShotMultiplier.ToString("N1") ?? "",
-
-
                     };
                    // System.Diagnostics.Debug.WriteLine("Weapon row {0} {1}", w.Value.EventTime, w.Value.FriendlyName);
                     dataGridViewWeapons.Rows.Add(rowobj);
