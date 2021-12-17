@@ -49,20 +49,6 @@ namespace EDDiscovery.UserControls
             this.panelPrev = new System.Windows.Forms.Panel();
             this.extPanelDataGridViewScrollWeapons = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewWeapons = new BaseUtils.DataGridViewColumnControl();
-            this.CWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWPrimary = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWWType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWDamageType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWFireMode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWDamage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWRPS = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWClipSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWHopper = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWRange = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.extPanelDataGridViewScrollSuits = new ExtendedControls.ExtPanelDataGridViewScroll();
@@ -80,6 +66,22 @@ namespace EDDiscovery.UserControls
             this.extScrollBar2 = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
+            this.CWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWPrimary = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWWType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWDamageType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWFireMode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWDamage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWRPS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWDPS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWClipSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWHopper = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWRange = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWHSD = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelPrev.SuspendLayout();
             this.extPanelDataGridViewScrollWeapons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWeapons)).BeginInit();
@@ -121,6 +123,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewWeapons.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewWeapons.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewWeapons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewWeapons.ColumnReorder = true;
             this.dataGridViewWeapons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CWTime,
             this.CWName,
@@ -133,9 +136,11 @@ namespace EDDiscovery.UserControls
             this.CWFireMode,
             this.CWDamage,
             this.CWRPS,
+            this.CWDPS,
             this.CWClipSize,
             this.CWHopper,
-            this.CWRange});
+            this.CWRange,
+            this.CWHSD});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -154,100 +159,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewWeapons.Size = new System.Drawing.Size(784, 302);
             this.dataGridViewWeapons.TabIndex = 1;
             this.dataGridViewWeapons.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewWeapons_SortCompare);
-            // 
-            // CWTime
-            // 
-            this.CWTime.HeaderText = "Time";
-            this.CWTime.Name = "CWTime";
-            this.CWTime.ReadOnly = true;
-            // 
-            // CWName
-            // 
-            this.CWName.HeaderText = "Name";
-            this.CWName.Name = "CWName";
-            this.CWName.ReadOnly = true;
-            // 
-            // CWClass
-            // 
-            this.CWClass.FillWeight = 50F;
-            this.CWClass.HeaderText = "Class";
-            this.CWClass.Name = "CWClass";
-            this.CWClass.ReadOnly = true;
-            // 
-            // CWMods
-            // 
-            this.CWMods.HeaderText = "Mods";
-            this.CWMods.Name = "CWMods";
-            this.CWMods.ReadOnly = true;
-            // 
-            // CWPrice
-            // 
-            this.CWPrice.FillWeight = 50F;
-            this.CWPrice.HeaderText = "Price";
-            this.CWPrice.Name = "CWPrice";
-            this.CWPrice.ReadOnly = true;
-            // 
-            // CWPrimary
-            // 
-            this.CWPrimary.FillWeight = 50F;
-            this.CWPrimary.HeaderText = "Primary";
-            this.CWPrimary.Name = "CWPrimary";
-            this.CWPrimary.ReadOnly = true;
-            // 
-            // CWWType
-            // 
-            this.CWWType.FillWeight = 50F;
-            this.CWWType.HeaderText = "Weapon Type";
-            this.CWWType.Name = "CWWType";
-            this.CWWType.ReadOnly = true;
-            // 
-            // CWDamageType
-            // 
-            this.CWDamageType.FillWeight = 50F;
-            this.CWDamageType.HeaderText = "Damage Type";
-            this.CWDamageType.Name = "CWDamageType";
-            this.CWDamageType.ReadOnly = true;
-            // 
-            // CWFireMode
-            // 
-            this.CWFireMode.FillWeight = 50F;
-            this.CWFireMode.HeaderText = "Fire Mode";
-            this.CWFireMode.Name = "CWFireMode";
-            this.CWFireMode.ReadOnly = true;
-            // 
-            // CWDamage
-            // 
-            this.CWDamage.FillWeight = 50F;
-            this.CWDamage.HeaderText = "Damage";
-            this.CWDamage.Name = "CWDamage";
-            this.CWDamage.ReadOnly = true;
-            // 
-            // CWRPS
-            // 
-            this.CWRPS.FillWeight = 50F;
-            this.CWRPS.HeaderText = "Rate/Sec";
-            this.CWRPS.Name = "CWRPS";
-            this.CWRPS.ReadOnly = true;
-            // 
-            // CWClipSize
-            // 
-            this.CWClipSize.FillWeight = 50F;
-            this.CWClipSize.HeaderText = "Clip Size";
-            this.CWClipSize.Name = "CWClipSize";
-            this.CWClipSize.ReadOnly = true;
-            // 
-            // CWHopper
-            // 
-            this.CWHopper.HeaderText = "Hopper Size";
-            this.CWHopper.Name = "CWHopper";
-            this.CWHopper.ReadOnly = true;
-            // 
-            // CWRange
-            // 
-            this.CWRange.FillWeight = 50F;
-            this.CWRange.HeaderText = "Range m";
-            this.CWRange.Name = "CWRange";
-            this.CWRange.ReadOnly = true;
             // 
             // extScrollBar1
             // 
@@ -306,6 +217,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSuits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewSuits.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewSuits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSuits.ColumnReorder = true;
             this.dataGridViewSuits.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CSTime,
             this.CSName,
@@ -448,6 +360,115 @@ namespace EDDiscovery.UserControls
             this.splitContainerMissions.SplitterDistance = 266;
             this.splitContainerMissions.TabIndex = 3;
             // 
+            // CWTime
+            // 
+            this.CWTime.HeaderText = "Time";
+            this.CWTime.Name = "CWTime";
+            this.CWTime.ReadOnly = true;
+            // 
+            // CWName
+            // 
+            this.CWName.HeaderText = "Name";
+            this.CWName.Name = "CWName";
+            this.CWName.ReadOnly = true;
+            // 
+            // CWClass
+            // 
+            this.CWClass.FillWeight = 50F;
+            this.CWClass.HeaderText = "Class";
+            this.CWClass.Name = "CWClass";
+            this.CWClass.ReadOnly = true;
+            // 
+            // CWMods
+            // 
+            this.CWMods.HeaderText = "Mods";
+            this.CWMods.Name = "CWMods";
+            this.CWMods.ReadOnly = true;
+            // 
+            // CWPrice
+            // 
+            this.CWPrice.FillWeight = 50F;
+            this.CWPrice.HeaderText = "Price";
+            this.CWPrice.Name = "CWPrice";
+            this.CWPrice.ReadOnly = true;
+            // 
+            // CWPrimary
+            // 
+            this.CWPrimary.FillWeight = 50F;
+            this.CWPrimary.HeaderText = "Primary";
+            this.CWPrimary.Name = "CWPrimary";
+            this.CWPrimary.ReadOnly = true;
+            // 
+            // CWWType
+            // 
+            this.CWWType.FillWeight = 50F;
+            this.CWWType.HeaderText = "Weapon Type";
+            this.CWWType.Name = "CWWType";
+            this.CWWType.ReadOnly = true;
+            // 
+            // CWDamageType
+            // 
+            this.CWDamageType.FillWeight = 50F;
+            this.CWDamageType.HeaderText = "Damage Type";
+            this.CWDamageType.Name = "CWDamageType";
+            this.CWDamageType.ReadOnly = true;
+            // 
+            // CWFireMode
+            // 
+            this.CWFireMode.FillWeight = 50F;
+            this.CWFireMode.HeaderText = "Fire Mode";
+            this.CWFireMode.Name = "CWFireMode";
+            this.CWFireMode.ReadOnly = true;
+            // 
+            // CWDamage
+            // 
+            this.CWDamage.FillWeight = 40F;
+            this.CWDamage.HeaderText = "Damage";
+            this.CWDamage.Name = "CWDamage";
+            this.CWDamage.ReadOnly = true;
+            // 
+            // CWRPS
+            // 
+            this.CWRPS.FillWeight = 40F;
+            this.CWRPS.HeaderText = "Rate/Sec";
+            this.CWRPS.Name = "CWRPS";
+            this.CWRPS.ReadOnly = true;
+            // 
+            // CWDPS
+            // 
+            this.CWDPS.FillWeight = 40F;
+            this.CWDPS.HeaderText = "DPS";
+            this.CWDPS.Name = "CWDPS";
+            this.CWDPS.ReadOnly = true;
+            // 
+            // CWClipSize
+            // 
+            this.CWClipSize.FillWeight = 40F;
+            this.CWClipSize.HeaderText = "Clip Size";
+            this.CWClipSize.Name = "CWClipSize";
+            this.CWClipSize.ReadOnly = true;
+            // 
+            // CWHopper
+            // 
+            this.CWHopper.FillWeight = 50F;
+            this.CWHopper.HeaderText = "Hopper Size";
+            this.CWHopper.Name = "CWHopper";
+            this.CWHopper.ReadOnly = true;
+            // 
+            // CWRange
+            // 
+            this.CWRange.FillWeight = 40F;
+            this.CWRange.HeaderText = "Range m";
+            this.CWRange.Name = "CWRange";
+            this.CWRange.ReadOnly = true;
+            // 
+            // CWHSD
+            // 
+            this.CWHSD.FillWeight = 40F;
+            this.CWHSD.HeaderText = "Head Shot Mult";
+            this.CWHSD.Name = "CWHSD";
+            this.CWHSD.ReadOnly = true;
+            // 
             // UserControlSuitsWeapons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -502,8 +523,10 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn CWFireMode;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWDamage;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWRPS;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWDPS;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWClipSize;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWHopper;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWRange;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWHSD;
     }
 }

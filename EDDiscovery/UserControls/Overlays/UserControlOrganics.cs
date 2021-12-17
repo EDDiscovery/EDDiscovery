@@ -88,6 +88,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -110,6 +111,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DGVSaveColumnLayout(dataGridView);
         }
 
         public override bool SupportTransparency { get { return true; } }

@@ -127,11 +127,14 @@ namespace EDDiscovery.UserControls
                                                weaponinfo !=null ? weaponinfo.Class.ToString().SplitCapsWord() : "",
                                                weaponinfo !=null ? weaponinfo.DamageType.ToString().SplitCapsWord() : "",
                                                weaponinfo !=null ? weaponinfo.FireMode.ToString().SplitCapsWord() : "",
-                                               weapondp != null ? weapondp.DPS.ToString("N1") : "",
-                                               weapondp != null ? weapondp.RatePerSec.ToString("N1") : "",
-                                               weapondp != null ? weapondp.ClipSize.ToString("N0") : "",
-                                               weapondp != null ? weapondp.HopperSize.ToString("N0") : "",
-                                               weapondp != null ? weapondp.Range.ToString("N0") : ""
+                                               weapondp?.Damage.ToString("N1") ?? "",
+                                               weapondp?.RatePerSec.ToString("N1") ?? "",
+                                               weapondp?.DPS.ToString("N1") ?? "",
+                                               weapondp?.ClipSize.ToString("N0") ?? "",
+                                               weapondp?.HopperSize.ToString("N0") ?? "",
+                                               weapondp?.Range.ToString("N0") ?? "",
+                                               weapondp?.HeadShotMultiplier.ToString("N1") ?? "",
+
 
                     };
                    // System.Diagnostics.Debug.WriteLine("Weapon row {0} {1}", w.Value.EventTime, w.Value.FriendlyName);
@@ -153,7 +156,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
-            else if (Array.IndexOf(new int[] {2,4,9,10,11,12},e.Column.Index)>=0)
+            else if (e.Column.Index==2 || e.Column.Index==4 || e.Column.Index>=9)
                 e.SortDataGridViewColumnNumeric();
         }
 
