@@ -144,8 +144,12 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
+#if DEBUG
             travelGridInDebugModeToolStripMenuItem.Checked = GetSetting(dbDebugMode, false);
             travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
+#else
+            travelGridInDebugModeToolStripMenuItem.Checked = travelGridInDebugModeToolStripMenuItem.Visible = false;
+#endif
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
@@ -460,9 +464,11 @@ namespace EDDiscovery.UserControls
                 string j = js.ToString().Replace(",\"", ", \"");
                 j = j.Left(1000);
 
-                string state = string.Format("{0}\r\n[{1},{2}]\r\n[{3},{4}]\r\nmc{5}/w{6}/s{7}/l{8}\r\nb{9}/h{10}/o{11}", item.TravelState, item.Status.BodyName, item.Status.BodyType, item.Status.StationName, 
-                                    item.Status.StationType,item.MaterialCommodity, item.Weapons,item.Suits, item.Loadouts , 
-                                    item.journalEntry.IsBeta, item.journalEntry.IsHorizons,item.journalEntry.IsOdyssey);
+                string state = $"{item.TravelState} Id {item.Status.ShipID}\r\n"
+                               + $"[{item.Status.BodyName},{item.Status.BodyType}]\r\n"
+                               + $"[{item.Status.StationName},{item.Status.StationType}]\r\n"
+                               + $"mc{item.MaterialCommodity}/w{item.Weapons}/s{item.Suits}/l{item.Loadouts}\r\n"
+                               + $"b{item.journalEntry.IsBeta}/h{ item.journalEntry.IsHorizons}/o{ item.journalEntry.IsOdyssey}";
 
                 string eventname = item.journalEntry.EventTypeStr.SplitCapsWord() == item.EventSummary ? item.EventSummary : (item.journalEntry.EventTypeStr + Environment.NewLine + item.EventSummary);
 

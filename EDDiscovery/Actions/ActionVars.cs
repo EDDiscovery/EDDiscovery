@@ -46,9 +46,12 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Hyperspace"] = he.IsInHyperSpace.ToStringIntValue();
                 vars[prefix + "WhereAmI"] = he.WhereAmI;
                 vars[prefix + "BodyType"] = he.BodyType;
-                vars[prefix + "ShipType"] = he.ShipType;
-                vars[prefix + "ShipTypeFD"] = he.ShipTypeFD;
-                vars[prefix + "ShipId"] = he.ShipId.ToString(ct);
+                vars[prefix + "ShipType"] = he.Status.ShipType;
+                vars[prefix + "ShipTypeFD"] = he.Status.ShipTypeFD;
+                vars[prefix + "OnFoot"] = he.Status.OnFoot.ToStringIntValue();
+                vars[prefix + "IsSRV"] = he.Status.IsSRV.ToStringIntValue();
+                vars[prefix + "IsFighter"] = he.Status.IsFighter.ToStringIntValue();
+                vars[prefix + "ShipId"] = he.Status.ShipID.ToString(ct);
                 vars[prefix + "IndexOf"] = he.EntryNumber.ToString(ct);
 
                 vars[prefix + "Credits"] = he.Credits.ToString(ct);
