@@ -148,8 +148,12 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
+#if DEBUG
             travelGridInDebugModeToolStripMenuItem.Checked = GetSetting(dbDebugMode, false);
             travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
+#else
+            travelGridInDebugModeToolStripMenuItem.Checked = travelGridInDebugModeToolStripMenuItem.Visible = false;
+#endif
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
@@ -740,9 +744,9 @@ namespace EDDiscovery.UserControls
             extCheckBoxOutlines.Checked = false;
         }
 
-        #endregion
+#endregion
 
-        #region Outlining
+#region Outlining
 
         private void extButtonOutlines_Click(object sender, EventArgs e)
         {
@@ -777,9 +781,9 @@ namespace EDDiscovery.UserControls
                 HistoryChanged(current_historylist, true);
         }
 
-        #endregion
+#endregion
 
-        #region TravelHistoryRightClick
+#region TravelHistoryRightClick
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -1130,9 +1134,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region Event Filter
+#region Event Filter
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -1162,9 +1166,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region Word wrap/visited
+#region Word wrap/visited
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
@@ -1185,9 +1189,9 @@ namespace EDDiscovery.UserControls
             HistoryChanged(discoveryform.history);
         }
 
-        #endregion
+#endregion
 
-        #region DEBUG clicks - only for special people who build the debug version!
+#region DEBUG clicks - only for special people who build the debug version!
 
         private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1435,7 +1439,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        #endregion
+#endregion
     }
 }
 
