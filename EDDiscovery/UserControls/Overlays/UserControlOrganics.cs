@@ -175,9 +175,7 @@ namespace EDDiscovery.UserControls
         private void ControlVisibility()
         {
             // if not in transparent mode, OR in No focus, or not autohiding, or FSSMode and don't hide in FSS mode
-            if ( !IsTransparent || 
-                    uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
-                    || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode)))
+            if ( !IsTransparent ||  uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide))
             {
                 // these are controlled by tranparency
                 flowLayoutPanelGridControl.Visible = dataViewScrollerPanel.Visible = extPictureBoxScroll.ScrollBarEnabled =
@@ -197,17 +195,17 @@ namespace EDDiscovery.UserControls
 
             pictureBox.ClearImageList();
 
-            if (lasthe != null && lasthe.HasBodyID && lasthe.Status.OnFoot)
+            if (lasthe != null && lasthe.HasBodyID )//&& lasthe.Status.OnFoot)
             {
                 StarScan.SystemNode data = discoveryform.history.StarScan.FindSystemSynchronous(lasthe.System, false);
 
                 if (data != null && data.NodesByID.TryGetValue(lasthe.BodyID.Value, out StarScan.ScanNode node))
                 {
-                    var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
+                    var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here
 
                     Font dfont = displayfont ?? this.Font;
 
-                    System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Go for draw on {lasthe.WhereAmI} {lasthe.BodyType}");
+                   // System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Go for draw on {lasthe.WhereAmI} {lasthe.BodyType}");
 
                     int vpos = 0;
                     StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
@@ -215,8 +213,8 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                     var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                    System.Diagnostics.Debug.WriteLine($"Pbox size {pictureBox.Size}");
-                    string l = string.Format("On Foot at {0}, planet type {1}, Radius {2}, Gravity {3} G, Atmosphere {4}", node.FullName, node.ScanData?.PlanetTypeText ?? "Unknown", node.ScanData?.RadiusText() ?? "Unknown", 
+                    //System.Diagnostics.Debug.WriteLine($"Pbox size {pictureBox.Size}");
+                    string l = string.Format("At {0}, {1}, Radius {2}, {3} G, {4}", node.FullName, node.ScanData?.PlanetTypeText ?? "Unknown", node.ScanData?.RadiusText() ?? "Unknown", 
                                                 node.ScanData?.nSurfaceGravityG?.ToString("N1")  ?? "Unknown" , node.ScanData?.Atmosphere);
 
                     string s = node.Organics != null ? JournalScanOrganic.OrganicList(node.Organics) : "No organic scanned";
@@ -336,7 +334,7 @@ namespace EDDiscovery.UserControls
 
         protected enum CtrlList
         {
-            autohide, donthidefssmode
+            autohide
         };
 
         private bool[] ctrlset; // holds current state of each control above
@@ -356,9 +354,8 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
-            displayfilter.AddAllNone();
+            // not yet until more than one displayfilter.AddAllNone();
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID("UserControlSurveyor.autoHideToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID("UserControlSurveyor.dontHideInFSSModeToolStripMenuItem"));
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }

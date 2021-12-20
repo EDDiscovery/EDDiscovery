@@ -351,7 +351,7 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     z = find.Item5;
                     var userdata = slset.UserData[find.Item1[0].tag] as string[];
-                    System.Diagnostics.Debug.WriteLine($"SLSet {find.Item2} {find.Item3} {find.Item4} {find.Item5} {userdata[find.Item2]}");
+                  //  System.Diagnostics.Debug.WriteLine($"SLSet {find.Item2} {find.Item3} {find.Item4} {find.Item5} {userdata[find.Item2]}");
 
                     string name = userdata[find.Item4];
                     int atsign = name.IndexOf(" @");        // remove any information denoted by space @

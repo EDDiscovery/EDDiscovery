@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls.Map3D
             // now build the shaders
 
             const int texbindingpoint = 1;
-            var vert = new GLPLVertexScaleLookat(rotate: dorotate, rotateelevation: doelevation, commontransform: false,       // a look at vertex shader
+            var vert = new GLPLVertexScaleLookat(rotate: dorotate, rotateelevation: doelevation,       // a look at vertex shader
                                                         autoscale: 30, autoscalemin: 1f, autoscalemax: 30f, useeyedistance:false); // below 500, 1f, above 500, scale up to 20x
             var tcs = new GLPLTesselationControl(10f);  // number of intermediate points
             tes = new GLPLTesselationEvaluateSinewave(wavesize, 1f);         // 0.2f in size, 1 wave across the object
