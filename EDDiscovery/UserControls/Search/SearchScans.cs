@@ -156,10 +156,19 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this, new Control[] { });
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan),bf:System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
+            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeUTC", "Date Time in UTC", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+
+            // from FSSBodySignals or SAASignalsFound
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsGeoSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsBioSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsThargoidSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsGuardianSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsHumanSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsOtherSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsUncategorisedSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
 
             string query = GetSetting(dbQuerySave, "");
 
@@ -261,7 +270,7 @@ namespace EDDiscovery.UserControls
 
                 var varusedincondition = cond.VariablesUsed();      // what variables are in use, so we don't enumerate the lots.
 
-                var helist = discoveryform.history.FilterByScan();
+                var helist = discoveryform.history.FilterByScanFSSBodySAASignals();
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
@@ -290,10 +299,8 @@ namespace EDDiscovery.UserControls
                 List<Tuple<ISystem,object[]>> rows = new List<Tuple<ISystem,object[]>>();
                 foreach (var he in helist)
                 {
-                    JournalScan js = he.journalEntry as JournalScan;
-
                     BaseUtils.Variables scandata = new BaseUtils.Variables();
-                    scandata.AddPropertiesFieldsOfClass(js, "",
+                    scandata.AddPropertiesFieldsOfClass(he.journalEntry, "",
                             new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5,
                             varsusedincondition);
 
@@ -303,14 +310,35 @@ namespace EDDiscovery.UserControls
                     {
                         ISystem sys = he.System;
                         string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-                        object[] rowobj = {
-                                                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
-                                                js.BodyName,
-                                                js.DisplayString(0),
-                                                (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                                sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
-                                               };
-                        rows.Add(new Tuple<ISystem,object[]>(sys,rowobj));
+
+                        JournalScan js = he.journalEntry as JournalScan;
+                        JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
+                        JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
+
+                        string name, info;
+                        if ( js != null )
+                        {
+                            name = js.BodyName;
+                            info = js.DisplayString(0);
+                        }
+                        else if ( jb != null )
+                        {
+                            name = jb.BodyName;
+                            jb.FillInformation(he.System, "", out info, out string d);
+                        }
+                        else
+                        {
+                            name = jbs.BodyName;
+                            jbs.FillInformation(he.System, "", out info, out string d);
+                        }
+
+                        object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
+                                            name,
+                                            info,
+                                            (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
+                                            sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
+                                            };
+                        rows.Add(new Tuple<ISystem, object[]>(sys, rowobj));
                     }
                 }
 
