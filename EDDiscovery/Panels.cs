@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -95,7 +95,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Log of program information" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "History", "TravelHistory", "History grid view") },
-            { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Visited Stars", "StarList", "Visited Star list", transparent: false) },
+            { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Visited Stars", "StarList", "Visited Star list") },
 
             { new PanelInfo( "Current State") },
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
@@ -120,15 +120,15 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.MaterialTrader, typeof(UserControlMaterialTrader), "Material Trader", "MaterialTrader", "Material trader") },
 
             { new PanelInfo( "Scans and Stars") },
-            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", false ) },
+            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system") },
 
             { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "EDSM - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Spansh, typeof(UserControlSpansh), "Spansh", "Spansh", "Spansh - Automatic web view of system") },
             { new PanelInfo( PanelIDs.EDDB, typeof(UserControlEDDB), "EDDB", "EDDB", "EDDB - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Inara, typeof(UserControlInara), "Inara", "Inara", "Inara - Automatic web view of system") },
-            { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
+            { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid") },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
-            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
+            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system") },
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
             { new PanelInfo( PanelIDs.Map2D, typeof(UserControl2DMap) ,"2D Map", "map2d", "2D Map of galaxy") },
@@ -137,25 +137,25 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Organics, typeof(UserControlOrganics) ,"Organic Scans", "OrganicScans", "Current body organic information and history of scans") },
 
             { new PanelInfo( "Bookmarks and Logs") },
-            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets", transparent:false)},
-            { new PanelInfo( PanelIDs.CaptainsLog, typeof(UserControlCaptainsLog), "Captain's Log", "CaptainsLog", "Captain's Log - notes on your travels", transparent:false)},
+            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets")},
+            { new PanelInfo( PanelIDs.CaptainsLog, typeof(UserControlCaptainsLog), "Captain's Log", "CaptainsLog", "Captain's Log - notes on your travels")},
 
             { new PanelInfo( "Combat") },
-            { new PanelInfo( PanelIDs.CombatPanel, typeof(UserControlCombatPanel), "Combat", "Combat", "Combat statistics", transparent:false)},
+            { new PanelInfo( PanelIDs.CombatPanel, typeof(UserControlCombatPanel), "Combat", "Combat", "Combat statistics")},
 
             { new PanelInfo( "Routes and Expeditions") },
             { new PanelInfo( PanelIDs.Route, typeof(UserControlRoute), "Route Finder", "RouteFinder", "Route Finder from stored star data") },
             { new PanelInfo( PanelIDs.Expedition, typeof(UserControlExpedition), "Expedition", "Expedition", "Expedition Planner, make up a expedition route") },
 
             { new PanelInfo( "Overlay Panels") },
-            { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information" , transparent:false ) },
-            { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay" , transparent: false ) },
-            { new PanelInfo( PanelIDs.Surveyor, typeof(UserControlSurveyor), "Surveyor", "Surveyor", "Surveyor - Surface map aid" , transparent: false ) },
-            { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "Notes overlay" , transparent: false) },
-            { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay", transparent: false) },
-            { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates", transparent:true) },
-            { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay", transparent:true) },
-            { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining overlay", transparent:true) },
+            { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information"  ) },
+            { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay"  ) },
+            { new PanelInfo( PanelIDs.Surveyor, typeof(UserControlSurveyor), "Surveyor", "Surveyor", "Surveyor - Surface map aid"  ) },
+            { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "Notes overlay" ) },
+            { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay") },
+            { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates") },
+            { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay") },
+            { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining overlay") },
 
             { new PanelInfo( "Settings") },
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
@@ -164,8 +164,8 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.ScreenShot, typeof(UserControlScreenshot), "Screen Shot", "ScreenShot", "Screen shot view") },
 
             { new PanelInfo( "Multi Panels") },
-            { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in it)" , transparent:false) },
-            { new PanelInfo( PanelIDs.SplitterControl, typeof(UserControlContainerSplitter), "Splitter", "TheSplitter", "Splitter (allows other panels to be placed in it)" , transparent:false) },
+            { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in it)" ) },
+            { new PanelInfo( PanelIDs.SplitterControl, typeof(UserControlContainerSplitter), "Splitter", "TheSplitter", "Splitter (allows other panels to be placed in it)" ) },
 
             { new PanelInfo( "Non User Panels") },
             { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
@@ -225,18 +225,14 @@ namespace EDDiscovery
             public string WindowRefName;
             public Image TabIcon { get { return PanelTypeIcons[PopoutID]; } }
             public string Description;          // must be non zero length to be user selectable
-            public bool SupportsTransparency;
-            public bool DefaultTransparent;
 
-            public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description, bool? transparent = null)
+            public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description)
             {
                 PopoutID = p;
                 PopoutType = t;
                 WindowTitle = wintitle;
                 WindowRefName = refname;
                 Description = description;
-                SupportsTransparency = transparent != null;
-                DefaultTransparent = transparent ?? false;
             }
 
             public PanelInfo(string s)
@@ -332,123 +328,6 @@ namespace EDDiscovery
             mi.Image = pi.TabIcon;
             mi.Click += h;
             return mi;
-        }
-    }
-
-    public class PopOutControl
-    {
-        public UserControlFormList usercontrolsforms;
-        EDDiscoveryForm discoveryform;
-
-        public PopOutControl( EDDiscoveryForm ed )
-        {
-            discoveryform = ed;
-            usercontrolsforms = new UserControlFormList(discoveryform);
-        }
-
-        public int Count { get { return usercontrolsforms.Count;  } }
-        public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
-
-        public UserControlForm FindUCCB(Type t) { return usercontrolsforms.FindUCCB(t); }
-        public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
-
-        private static string PopOutSaveID(PanelInformation.PanelIDs p)
-        {
-            return EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString();
-        }
-
-        public void ShowAllPopOutsInTaskBar()
-        {
-            usercontrolsforms.ShowAllInTaskBar();
-        }
-
-        public void MakeAllPopoutsOpaque()
-        {
-            usercontrolsforms.MakeAllOpaque();
-        }
-
-        public void CloseAllPopouts()
-        {
-            usercontrolsforms.CloseAll();
-        }
-
-        public void SaveCurrentPopouts()
-        {
-            foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
-            {
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
-                if (pi != null) // paranoia
-                {
-                    int numopened = usercontrolsforms.CountOf(pi.PopoutType);
-                    if ( numopened>0) System.Diagnostics.Debug.WriteLine($"Save Popout {p} {numopened}");
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(PopOutSaveID(p), numopened);
-                }
-            }
-        }
-
-        public void LoadSavedPopouts()
-        {
-            foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
-            {
-                int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(PopOutSaveID(p), 0);
-
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
-
-                //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
-
-                if (pi != null && numtoopen > 0) // paranoia on first..
-                {
-                    System.Diagnostics.Debug.WriteLine($"Load Popout {p} {numtoopen}");
-
-                    int numopened = usercontrolsforms.CountOf(pi.PopoutType);
-                    if (numopened < numtoopen)
-                    {
-                        for (int i = numopened + 1; i <= numtoopen; i++)
-                            PopOut(p);
-                    }
-                }
-            }
-        }
-
-
-        public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
-        {
-            UserControlForm tcf = usercontrolsforms.NewForm();
-            tcf.Icon = Properties.Resources.edlogo_3mo_icon;
-
-            UserControlCommonBase ctrl = PanelInformation.Create(selected);
-
-            PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByPanelID(selected);
-
-            if (ctrl != null && poi != null )
-            {
-                int numopened = usercontrolsforms.CountOf(ctrl.GetType()) + 1;
-                string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
-                string refname = poi.WindowRefName + numopened.ToString();
-
-                System.Diagnostics.Trace.WriteLine("PO:Make " + windowtitle + " ucf " + ctrl.GetType().Name);
-
-                //System.Diagnostics.Debug.WriteLine("TCF init");
-                tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
-                            poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor, discoveryform.theme.TransparentColorKey);
-
-                //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
-                ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
-
-                discoveryform.theme.ApplyStd(tcf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
-
-                //System.Diagnostics.Debug.WriteLine("Show");
-                tcf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
-
-                discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
-            }
-
-            return ctrl;
-        }
-
-        public bool AllowClose()
-        {
-            return usercontrolsforms.AllowClose();
         }
     }
 }

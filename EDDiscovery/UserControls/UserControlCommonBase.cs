@@ -67,6 +67,7 @@ namespace EDDiscovery.UserControls
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // implement if you call the uctg
 
         public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
+        public virtual bool DefaultTransparent { get { return false; } }  // override to say default to be transparent
 
         public virtual bool AllowClose() { return true; }   
 
@@ -289,6 +290,24 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Set Column Name " + root);
             dgv.SaveColumnSettings(root, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
                                         (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+        }
+
+        public void DGVTransparent(DataGridView dgv, bool on, Color curcol)
+        {
+            dgv.BackgroundColor = curcol;
+
+            dgv.ColumnHeadersDefaultCellStyle.BackColor =
+            dgv.RowHeadersDefaultCellStyle.BackColor = on ? curcol : EDDTheme.Instance.GridBorderBack;
+
+            dgv.DefaultCellStyle.BackColor = on ? curcol : EDDTheme.Instance.GridCellBack;
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = on ? curcol : EDDTheme.Instance.GridCellAltBack;
+
+            dgv.DefaultCellStyle.ForeColor = on ? EDDTheme.Instance.SPanelColor : EDDTheme.Instance.GridCellText;
+            dgv.AlternatingRowsDefaultCellStyle.ForeColor = on ? EDDTheme.Instance.SPanelColor : EDDTheme.Instance.GridCellAltText;
+
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor =
+            dgv.RowHeadersDefaultCellStyle.ForeColor = on ? EDDTheme.Instance.SPanelColor : EDDTheme.Instance.GridBorderText;
+
         }
 
         public class DBSettingsSaver             // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save

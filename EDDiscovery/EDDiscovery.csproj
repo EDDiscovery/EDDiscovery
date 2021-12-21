@@ -203,6 +203,7 @@
     <Compile Include="EDDiscoveryFormJournalEvents.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PopOuts.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
     <Compile Include="UserControls\3DMap\GalaxyStars.cs" />
     <Compile Include="UserControls\3DMap\GalMapObjects.cs" />
@@ -514,7 +515,7 @@
     </Compile>
     <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
-    <Compile Include="PanelAndPopOuts.cs" />
+    <Compile Include="Panels.cs" />
     <Compile Include="Forms\BookmarkForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -18,6 +18,7 @@ using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -88,6 +89,14 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= NewEntry;
         }
 
+        public override bool SupportTransparency { get { return true; } }
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            dataViewScrollerPanel.BackColor = this.BackColor = curcol;
+            DGVTransparent(dataGridViewEstimatedValues, on, curcol);
+            flowLayoutPanelTop.Visible = !on;
+
+        }
         public override void InitialDisplay()
         {
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);

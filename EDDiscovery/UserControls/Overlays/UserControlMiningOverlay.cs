@@ -72,21 +72,11 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
+        public override bool DefaultTransparent { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            if (on)
-            {
-                buttonExtExcel.ButtonColorScaling = extComboBoxChartOptions.ButtonColorScaling = 1.0f;
-                buttonExtExcel.BackColor = extComboBoxChartOptions.BackColor = curcol;
-            }
-            else
-            {
-                buttonExtExcel.ButtonColorScaling = extComboBoxChartOptions.ButtonColorScaling = 0.5f;
-                buttonExtExcel.BackColor = EDDTheme.Instance.Form;
-                extComboBoxChartOptions.BackColor = EDDTheme.Instance.ButtonBackColor;
-            }
-            extCheckBoxZeroRefined.BackColor = 
-            extPanelRollUp.BackColor = pictureBox.BackColor = this.BackColor = curcol;
+            extPanelRollUp.Visible = !on;
+            pictureBox.BackColor = this.BackColor = curcol;
             Display();
         }
 

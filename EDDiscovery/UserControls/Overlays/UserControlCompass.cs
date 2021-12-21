@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
-
+        public override bool DefaultTransparent { get { return true; } }
         public override void SetTransparency(bool on, Color curbackcol)
         {
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;

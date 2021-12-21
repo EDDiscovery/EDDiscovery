@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
         private Color labelnormalcolour, labeltransparentcolour;
 
         private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
-        private bool deftopmost, deftransparent;
+        private bool deftopmost;
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
 
@@ -71,28 +71,26 @@ namespace EDDiscovery.UserControls
         #region Public Interface
 
         public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
-                         bool deftransparentp , Color labelnormal , Color labeltransparent, Color transparentkey )
+                         Color labelnormal , Color labeltransparent, Color transparentkey )
         {
             //System.Diagnostics.Debug.WriteLine("UCF Init+");
             RestoreFormPositionRegKey = "PopUpForm" + rf;      // position remember key
 
             UserControl = c;
-            c.Dock = DockStyle.None;
-            c.Location = new Point(0, 10);
-            c.Size = new Size(200, 200);
+            UserControl.Dock = DockStyle.None;
+            UserControl.Location = new Point(0, 10);
+            UserControl.Size = new Size(200, 200);
             this.Controls.Add(c);
-            deftransparent = deftransparentp;   // only applied if allowed to be transparent.
             labelnormalcolour = labelnormal;
             labeltransparentcolour = labeltransparent;
 
-            TransparencyColorKey = c.SupportTransparency ? transparentkey : Color.Transparent;
+            TransparencyColorKey = UserControl.SupportTransparency ? transparentkey : Color.Transparent;
             WinTitle = label_index.Text = this.Text = title;            // label index always contains the wintitle, but may not be shown
 
             curwindowsborder = defwindowsborder = winborder;
             DBRefName = "PopUpForm" + rf;
             this.Name = rf;
             deftopmost = deftopmostp;
-            deftransparent = false;
 
             labelControlText.Text = "";                                 // always starts blank..
 
@@ -278,7 +276,7 @@ namespace EDDiscovery.UserControls
             this.BringToFront();
 
             if (IsTransparencySupported)
-                TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
+                TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
             bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "TopMost", deftopmost);
             //kludge 
