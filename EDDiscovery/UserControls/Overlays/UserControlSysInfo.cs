@@ -280,7 +280,7 @@ namespace EDDiscovery.UserControls
                 textBoxSystem.Text = he.System.Name;
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
-                textBoxBody.Text = he.WhereAmI + " (" + he.BodyType + ")";
+                textBoxBody.Text = he.WhereAmI + " (" + he.Status.BodyType + ")";
 
                 bool hasmarketid = he?.MarketID.HasValue ?? false;
                 bool hasbodyormarketid = hasmarketid || he.FullBodyID.HasValue;

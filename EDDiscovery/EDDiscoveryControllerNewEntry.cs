@@ -28,9 +28,19 @@ namespace EDDiscovery
         private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
         private System.Threading.Timer journalqueuedelaytimer;
 
-        public void NewEntry(JournalEntry je)        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
+        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
+        // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
+        public void NewEntry(JournalEntry je, StatusReader sr)        
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            if (je.EventTypeID == JournalTypeEnum.CodexEntry)
+            {
+                System.Diagnostics.Debug.Assert(sr != null, "Made codex programatically - wrong");
+                var jce = je as EliteDangerousCore.JournalEvents.JournalCodexEntry;
+                jce.EDDBodyName = sr.BodyName;     // copy in the SR Body name to the entry - this is a feed thru of status to the entry
+                System.Diagnostics.Debug.WriteLine($"Journal Codex set body name to {jce.EDDBodyName} due to status record");
+            }
 
             int playdelay = HistoryList.MergeTypeDelay(je); // see if there is a delay needed..
 
@@ -92,6 +102,17 @@ namespace EDDiscovery
 
                 foreach( var he in historyentries.EmptyIfNull())
                 {
+                    if (he.EntryType == JournalTypeEnum.CodexEntry)     // need to do some work on codex entry.. set bodyid as long as recorded body name matches tracking name, and update DB
+                    {
+                        var jce = he.journalEntry as EliteDangerousCore.JournalEvents.JournalCodexEntry;
+                        if ( jce.EDDBodyName == he.Status.BodyName)        // following EDDN advice, use status body name as master key
+                        {
+                            jce.EDDBodyId = he.Status.BodyID ?? -1;
+                            System.Diagnostics.Debug.WriteLine($"Journal Codex set body ID to {jce.EDDBodyId} as ID");
+                        }
+                        jce.UpdateDB();                     // write back
+                    }
+
                     if ( OnNewEntry != null)
                     {
                         foreach (var e in OnNewEntry.GetInvocationList())       // do the invokation manually, so we can time each method
@@ -138,7 +159,9 @@ namespace EDDiscovery
             });
         }
 
-        void NewUIEvent(UIEvent u)                  // UI thread new event
+        // New UI event. SR will be null if programatically made
+
+        void NewUIEvent(UIEvent u, StatusReader sr)                  // UI thread new event
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
@@ -196,7 +219,7 @@ namespace EDDiscovery
                                 InvokeAsyncOnUiThread(() =>
                                 {
                                     Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                    NewEntry(entry);                // then push it thru. this will cause another set of calls to NewEntry First/Second
+                                    NewEntry(entry,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
                                                                     // EDDN handler will pick up EDDCommodityPrices and send it.
                                 });
 
@@ -234,7 +257,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewEntry(outfitting);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewEntry(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 
@@ -250,7 +273,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewEntry(shipyardevent);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewEntry(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 

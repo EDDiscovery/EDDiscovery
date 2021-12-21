@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "LandedState"] = he.IsLanded.ToStringIntValue();
                 vars[prefix + "Hyperspace"] = he.IsInHyperSpace.ToStringIntValue();
                 vars[prefix + "WhereAmI"] = he.WhereAmI;
-                vars[prefix + "BodyType"] = he.BodyType;
+                vars[prefix + "BodyType"] = he.Status.BodyType;
                 vars[prefix + "ShipType"] = he.Status.ShipType;
                 vars[prefix + "ShipTypeFD"] = he.Status.ShipTypeFD;
                 vars[prefix + "OnFoot"] = he.Status.OnFoot.ToStringIntValue();

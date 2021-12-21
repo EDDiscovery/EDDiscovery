@@ -195,11 +195,11 @@ namespace EDDiscovery.UserControls
 
             pictureBox.ClearImageList();
 
-            if (lasthe != null && lasthe.HasBodyID )//&& lasthe.Status.OnFoot)
+            if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
             {
                 StarScan.SystemNode data = discoveryform.history.StarScan.FindSystemSynchronous(lasthe.System, false);
 
-                if (data != null && data.NodesByID.TryGetValue(lasthe.BodyID.Value, out StarScan.ScanNode node))
+                if (data != null && data.NodesByID.TryGetValue(lasthe.Status.BodyID.Value, out StarScan.ScanNode node))
                 {
                     var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here
 

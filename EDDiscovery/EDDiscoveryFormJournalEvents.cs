@@ -79,7 +79,7 @@ namespace EDDiscovery
 
         public void NewEntry(JournalEntry e)       // programatically do a new entry
         {
-            Controller.NewEntry(e);                 // push it thru as if the monitor watcher saw it
+            Controller.NewEntry(e,null);                 // push it thru as if the monitor watcher saw it
         }
 
          
