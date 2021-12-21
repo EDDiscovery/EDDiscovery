@@ -110,6 +110,10 @@ namespace EDDiscovery
                             jce.EDDBodyId = he.Status.BodyID ?? -1;
                             System.Diagnostics.Debug.WriteLine($"Journal Codex set body ID to {jce.EDDBodyId} as ID");
                         }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Journal Codex WARNING name does not match {he.Status.BodyName} vs {jce.EDDBodyName} {jce.EDDBodyId}");
+                        }
                         jce.UpdateDB();                     // write back
                     }
 
