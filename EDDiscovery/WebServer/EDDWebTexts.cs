@@ -89,14 +89,14 @@ namespace EDDiscovery.WebServer
                         if ( he.EntryType == JournalTypeEnum.ReceiveText )
                         {
                             var rt = he.journalEntry as JournalReceiveText;
-                            cur.Add(new JArray() { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(rt.EventTimeUTC).ToString(),
+                            cur.Add(new JArray() { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(rt.EventTimeUTC).ToString(),
                                                         rt.Channel, rt.FromLocalised.Alt(rt.From), rt.MessageLocalised });
                             count++;
                         }
                         else if ( he.EntryType == JournalTypeEnum.SendText)
                         {
                             var rt = he.journalEntry as JournalSendText;
-                            cur.Add(new JArray() { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(rt.EventTimeUTC).ToString(),
+                            cur.Add(new JArray() { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(rt.EventTimeUTC).ToString(),
                                                         "Send Text", rt.To_Localised.Alt(rt.To), rt.Message });
                             count++;
                         }

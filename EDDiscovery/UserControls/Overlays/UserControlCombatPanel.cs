@@ -60,8 +60,8 @@ namespace EDDiscovery.UserControls
                     string date = "";
                     if (Type == FilterEntry.EntryType.Time || Type == FilterEntry.EntryType.Mission)
                     {
-                        date = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(starttime).ToString("d") ;
-                        string dte = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(endtime).ToString("d");
+                        date = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttime).ToString("d") ;
+                        string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(endtime).ToString("d");
                         if (date.Equals(dte))
                             date = "(" + date + ")";
                         else
@@ -349,7 +349,7 @@ namespace EDDiscovery.UserControls
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
                 he.FillInformation(out var eventDescription, out _);
 
-                rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
+                rw.CreateCells(dataGridViewCombat, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                     he.EventSummary, eventDescription, rewardcol);
 
                 rw.Tag = he;

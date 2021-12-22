@@ -132,7 +132,7 @@ namespace EDDiscovery
 
             DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
 
-            screenshotconverter.NewJournalEntry(he.journalEntry);       // tell the screenshotter.
+            ScreenshotConverter.NewJournalEntry(he.journalEntry);       // tell the screenshotter.
 
             CheckActionProfile(he);
 

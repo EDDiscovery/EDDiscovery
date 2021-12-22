@@ -79,8 +79,8 @@ namespace EDDiscovery.UserControls.Helpers
             if (show)
             {
                 object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
-                                    EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC),
-                                    EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry),
+                                    EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC),
+                                    EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry),
                                     ms.OriginatingSystem + ": " + ms.OriginatingStation,
                                     ms.Mission.Faction,
                                     ms.DestinationSystemStation(),

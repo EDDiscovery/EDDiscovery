@@ -263,7 +263,7 @@ namespace EDDiscovery.UserControls
 
                 current_displayed = left;
                 labelLocation.Text = left.System.Name + ":" + left.WhereAmI;
-                string r = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(left.EventTimeUTC).ToString();
+                string r = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(left.EventTimeUTC).ToString();
                 toolTip.SetToolTip(labelLocation, r);
 
             }
@@ -318,7 +318,7 @@ namespace EDDiscovery.UserControls
                 if (last == null || !j.Station.Equals(last.Station) || last.EventTimeUTC - j.EventTimeUTC >= new TimeSpan(0,15,0))
                 {
                     comboboxentries.Add(h);
-                    string v = h.System.Name + ":" + h.WhereAmI + " " + "on".T(EDTx.on) + " " + EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
+                    string v = h.System.Name + ":" + h.WhereAmI + " " + "on".T(EDTx.on) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
                     if (h.journalEntry is JournalEDDCommodityPrices)
                         v += " (CAPI)";
                     comboBoxCustomFrom.Items.Add(v);

@@ -111,8 +111,8 @@ namespace EDDiscovery.WebServer
             JArray e = new JArray
             {
                 JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
-                EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC).ToString(),
-                EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString(),
+                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC).ToString(),
+                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString(),
                 ms.OriginatingSystem + ": " + ms.OriginatingStation,
                 ms.Mission.Faction,
                 ms.DestinationSystemStation(),

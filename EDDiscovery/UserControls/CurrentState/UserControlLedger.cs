@@ -131,14 +131,14 @@ namespace EDDiscovery.UserControls
                 transactioncountatdisplay = mc.Transactions.Count;
             }
 
-            dataGridViewLedger.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
+            dataGridViewLedger.Columns[0].HeaderText = EDDConfig.Instance.GetTimeTitle();
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
         private DataGridViewRow CreateRow(Ledger.Transaction tx)
         {
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(tx.utctime) ,
+            object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.utctime) ,
                                             tx.jtype.ToString().SplitCapsWord(),
                                             tx.notes,
                                             (tx.cashadjust>0) ? tx.cashadjust.ToString("N0") : "",

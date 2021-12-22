@@ -616,6 +616,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.AllowUserToDeleteRows = false;
             this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTravel.ColumnReorder = true;
             this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
             this.Icon,

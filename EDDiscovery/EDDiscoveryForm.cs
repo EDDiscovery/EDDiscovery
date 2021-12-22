@@ -34,14 +34,10 @@ using System.Windows.Forms;
 namespace EDDiscovery
 {
     public partial class EDDiscoveryForm : Forms.DraggableFormPos
-    { 
-        #region Variables
+    {
+        #region Major systems
 
-        private EDDiscoveryController Controller;
-        private Actions.ActionController actioncontroller;
-
-        public EliteDangerousCore.DLL.EDDDLLManager DLLManager;
-        public EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
+        public EliteDangerousCore.DLL.EDDDLLManager DLLManager { get; set; }
 
         public CAPI.CompanionAPI FrontierCAPI { get { return Controller.FrontierCAPI; } }
 
@@ -50,24 +46,20 @@ namespace EDDiscovery
         public Actions.ActionController ActionController { get { return actioncontroller; } }
         public BaseUtils.Variables Globals { get { return actioncontroller.Globals; } }
 
-        static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
         public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
         public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
 
-        public EliteDangerousCore.ScreenShots.ScreenShotConverter screenshotconverter;
+        public EliteDangerousCore.ScreenShots.ScreenShotConverter ScreenshotConverter { get; set; }
+        public PopOutControl PopOuts { get; set; }
 
-        private EDDiscovery._3DMap.MapManager old3DMap;
+        public GalacticMapping galacticMapping { get; private set; }
+        public GalacticMapping eliteRegions { get; private set; }
 
-        private bool in_system_sync = false;        // between start/end sync of databases
+        public HistoryList history { get { return Controller.history; } }
 
-        BaseUtils.GitHubRelease newRelease;
-
-        public PopOutControl PopOuts;
-
-        Timer periodicchecktimer;
-
+        public string LogText { get { return Controller.LogText; } }
         #endregion
 
         #region Callbacks from us
@@ -81,19 +73,9 @@ namespace EDDiscovery
                                                                         // theme has changed by settings, hook if you have some UI which needs refreshing due to it. 
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
-
         #endregion
 
-
-        #region Properties
-        public HistoryList history { get { return Controller.history; } }
-        public string LogText { get { return Controller.LogText; } }
-        public bool PendingClose { get { return Controller.PendingClose; } }
-        public GalacticMapping galacticMapping { get; private set; }
-        public GalacticMapping eliteRegions { get; private set; }
-        #endregion
-
-        #region Events - see the EDDiscoveryControl for meaning and context
+        #region Events due to EDDiscoveryControl 
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
@@ -125,6 +107,19 @@ namespace EDDiscovery
             EDCommander.CurrentCmdrID = id;
             Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
         }
+        #endregion
+
+        #region Privates
+
+        private EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
+        private EDDiscoveryController Controller;
+        private Actions.ActionController actioncontroller;
+        private EDDiscovery._3DMap.MapManager old3DMap;
+        private BaseUtils.GitHubRelease newRelease;
+        private Timer periodicchecktimer;
+        private bool in_system_sync = false;        // between start/end sync of databases
+
+
         #endregion
 
         #region Initialisation
@@ -182,7 +177,7 @@ namespace EDDiscovery
             // Some components require the controller to be initialized
             InitializeComponent();
 
-            screenshotconverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
+            ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
             old3DMap = new EDDiscovery._3DMap.MapManager(this);
 
@@ -218,8 +213,8 @@ namespace EDDiscovery
 
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
 
-            this.TopMost = EDDConfig.KeepOnTop;
-            notifyIconEDD.Visible = EDDConfig.UseNotifyIcon;
+            this.TopMost = EDDConfig.Instance.KeepOnTop;
+            notifyIconEDD.Visible = EDDConfig.Instance.UseNotifyIcon;
 
             // open all the major tabs except the built in ones
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");        // STAGE 3 Tabs
@@ -453,7 +448,7 @@ namespace EDDiscovery
 
             actioncontroller.CheckWarn();
 
-            screenshotconverter.Start((a) => Invoke(a),
+            ScreenshotConverter.Start((a) => Invoke(a),
                              (b) => LogLine(b),
                              () =>
                              {
@@ -469,7 +464,7 @@ namespace EDDiscovery
                              8000       // ms to wait after file detected before assuming journal will not be updated
                              );
 
-            screenshotconverter.OnScreenshot += (infile, outfile, imagesize, ss) => // screenshot seen
+            ScreenshotConverter.OnScreenshot += (infile, outfile, imagesize, ss) => // screenshot seen
             {
                 if (ss != null)
                 {
@@ -737,9 +732,9 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             // We may be getting called by this.ResumeLayout() from InitializeComponent().
-            if (EDDConfig != null && FormShownOnce)
+            if (EDDConfig.Instance != null && FormShownOnce)
             {
-                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                if (EDDConfig.Instance.UseNotifyIcon && EDDConfig.Instance.MinimizeToNotifyIcon)
                 {
                     if (FormWindowState.Minimized == WindowState)
                         Hide();
@@ -910,8 +905,8 @@ namespace EDDiscovery
             // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note); });
 
-            screenshotconverter.SaveSettings();
-            screenshotconverter.Stop();
+            ScreenshotConverter.SaveSettings();
+            ScreenshotConverter.Stop();
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
@@ -1394,7 +1389,7 @@ namespace EDDiscovery
             // Tray icon was double-clicked.
             if (FormWindowState.Minimized == WindowState)
             {
-                if (EDDConfig.MinimizeToNotifyIcon)
+                if (EDDConfig.Instance.MinimizeToNotifyIcon)
                     Show();
 
                 if (FormIsMaximised)
@@ -1418,7 +1413,7 @@ namespace EDDiscovery
             // Tray icon 'Open EDDiscovery' menu item was clicked. Present the main window.
             if (FormWindowState.Minimized == WindowState)
             {
-                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                if (EDDConfig.Instance.UseNotifyIcon && EDDConfig.Instance.MinimizeToNotifyIcon)
                     Show();
 
                 if (FormIsMaximised)

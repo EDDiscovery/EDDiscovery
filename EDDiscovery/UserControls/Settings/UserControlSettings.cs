@@ -63,14 +63,14 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
 
-            checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
-            checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
-            checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            checkBoxOrderRowsInverted.Checked = EDDConfig.Instance.OrderRowsInverted;
+            checkBoxMinimizeToNotifyIcon.Checked = EDDConfig.Instance.MinimizeToNotifyIcon;
+            checkBoxKeepOnTop.Checked = EDDConfig.Instance.KeepOnTop;
             checkBoxPanelSortOrder.Checked = EDDConfig.Instance.SortPanelsByName;
-            checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
-            checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
+            checkBoxUseNotifyIcon.Checked = EDDConfig.Instance.UseNotifyIcon;
+            checkBoxCustomResize.Checked = EDDConfig.Instance.DrawDuringResize;
 
-            extComboBoxGameTime.SelectedIndex = EDDiscoveryForm.EDDConfig.DisplayTimeIndex;
+            extComboBoxGameTime.SelectedIndex = EDDConfig.Instance.DisplayTimeIndex;
 
             checkBoxOrderRowsInverted.CheckedChanged += checkBoxOrderRowsInverted_CheckedChanged;
             checkBoxMinimizeToNotifyIcon.CheckedChanged += checkBoxMinimizeToNotifyIcon_CheckedChanged;
@@ -80,14 +80,14 @@ namespace EDDiscovery.UserControls
             extComboBoxGameTime.SelectedIndexChanged += ExtComboBoxGameTime_SelectedIndexChanged;
             checkBoxCustomResize.CheckedChanged += checkBoxCustomResize_CheckedChanged;
 
-            checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
+            checkBoxMinimizeToNotifyIcon.Enabled = EDDConfig.Instance.UseNotifyIcon;
 
             dataGridViewCommanders.AutoGenerateColumns = false;             // BEFORE assigned to list..
             dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
-            checkBoxCustomEnableScreenshots.Checked = discoveryform.screenshotconverter.AutoConvert;
+            checkBoxCustomEnableScreenshots.Checked = discoveryform.ScreenshotConverter.AutoConvert;
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
 
             checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.EDSMDownload;
@@ -349,7 +349,7 @@ namespace EDDiscovery.UserControls
 
         private void ExtComboBoxGameTime_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.DisplayTimeIndex = extComboBoxGameTime.SelectedIndex;
+            EDDConfig.Instance.DisplayTimeIndex = extComboBoxGameTime.SelectedIndex;
             discoveryform.RefreshDisplays();
         }
 
@@ -484,12 +484,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtScreenshot_Click(object sender, EventArgs e)
         {
-            discoveryform.screenshotconverter.Configure(this.discoveryform);
+            discoveryform.ScreenshotConverter.Configure(this.discoveryform);
         }
 
         private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)
         {
-            discoveryform.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked;
+            discoveryform.ScreenshotConverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked;
         }
 
         #endregion
@@ -517,12 +517,12 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxMinimizeToNotifyIcon_CheckedChanged(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
+            EDDConfig.Instance.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
         }
 
         private void checkBoxCustomResize_CheckedChanged(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.DrawDuringResize = checkBoxCustomResize.Checked;
+            EDDConfig.Instance.DrawDuringResize = checkBoxCustomResize.Checked;
         }
 
         public void DisableNotifyIcon()
@@ -533,7 +533,7 @@ namespace EDDiscovery.UserControls
         private void checkBoxUseNotifyIcon_CheckedChanged(object sender, EventArgs e)
         {
             bool chk = checkBoxUseNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.UseNotifyIcon = chk;
+            EDDConfig.Instance.UseNotifyIcon = chk;
             checkBoxMinimizeToNotifyIcon.Enabled = chk;
             discoveryform.useNotifyIconChanged(chk);
         }

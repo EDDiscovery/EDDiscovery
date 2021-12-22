@@ -400,7 +400,7 @@ namespace EDDiscovery.UserControls
             bool showiffsdorconfigall = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDCarrierJump;  // if this is off, or its a carrier jump
 
             if (Config(Configuration.showTime))
-                coldata.Add(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("HH:mm.ss"));
+                coldata.Add(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("HH:mm.ss"));
 
             if (Config(Configuration.showIcon))
                 coldata.Add("`!!ICON!!");                // dummy place holder..

@@ -273,7 +273,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (os.Item2.ScanType == JournalScanOrganic.ScanTypeEnum.Analyse || extCheckBoxShowIncomplete.Checked)
                                     {
-                                        DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
+                                        DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
 
                                         object[] data = new object[]
                                         {

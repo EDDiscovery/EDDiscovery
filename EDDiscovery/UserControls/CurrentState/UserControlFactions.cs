@@ -196,9 +196,9 @@ namespace EDDiscovery.UserControls
             for (int col = 1; col < dataGridViewFactions.ColumnCount - 1; col++)
                 dataGridViewFactions.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-            startDateTime.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(GetSetting("StartDate", DateTime.UtcNow));
+            startDateTime.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting("StartDate", DateTime.UtcNow));
             startDateTime.Checked = GetSetting("StartDateChecked", false);
-            endDateTime.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(GetSetting("EndDate", DateTime.UtcNow));
+            endDateTime.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting("EndDate", DateTime.UtcNow));
             endDateTime.Checked = GetSetting("EndDateChecked", false);
             VerifyDates();
 
@@ -242,9 +242,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            PutSetting("StartDate", EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(startDateTime.Value));
+            PutSetting("StartDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value));
             PutSetting("StartDateChecked", startDateTime.Checked);
-            PutSetting("EndDate", EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(endDateTime.Value));
+            PutSetting("EndDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value));
             PutSetting("EndDateChecked", endDateTime.Checked);
         }
 
@@ -596,7 +596,7 @@ namespace EDDiscovery.UserControls
                         int bought = i.Count > 0 ? i.Count : 0;
                         int sold = i.Count < 0 ? -i.Count : 0;
 
-                        object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
+                        object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                                             name,
                                             bought.ToString("N0"),
                                             sold.ToString("N0"),
@@ -648,7 +648,7 @@ namespace EDDiscovery.UserControls
                                                     (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)))
                 {
                     var bb = he.journalEntry as IStatsJournalEntryBountyOrBond;
-                    object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
+                    object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                                         bb.Type, bb.Target, bb.TargetFaction, bb.FactionReward(fs.Name).ToString("N0") };
                     var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
                     row.CreateCells(dgvpanel.DataGrid, rowobj);

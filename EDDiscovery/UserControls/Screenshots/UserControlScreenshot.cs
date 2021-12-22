@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
             if (filepart.StartsWith("\\ED_Pictures\\"))     // if its an ss record, try and find it either in watchedfolder or in default loc
             {
                 filepart = filepart.Substring(13);
-                filenameout = Path.Combine(discoveryform.screenshotconverter.InputFolder, filepart);
+                filenameout = Path.Combine(discoveryform.ScreenshotConverter.InputFolder, filepart);
 
                 if (!File.Exists(filenameout))
                 {

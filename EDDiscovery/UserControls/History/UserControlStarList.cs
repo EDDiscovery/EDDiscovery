@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid.Clear();
             dataGridViewStarList.Rows.Clear();
 
-            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
+            dataGridViewStarList.Columns[0].HeaderText = EDDConfig.Instance.GetTimeTitle();
 
             var visitlist = discoveryform.history.Visited.Values.ToList();
 
@@ -341,7 +341,7 @@ namespace EDDiscovery.UserControls
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
+            DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             var node = discoveryform.history.StarScan?.FindSystemSynchronous(he.System, false); // may be null
 
             string visits = discoveryform.history.Visits(he.System.Name).ToString();

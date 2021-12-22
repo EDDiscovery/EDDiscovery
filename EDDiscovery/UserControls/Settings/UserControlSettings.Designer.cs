@@ -559,7 +559,6 @@ namespace EDDiscovery.UserControls
             // 
             this.dataGridViewCommanders.AllowUserToAddRows = false;
             this.dataGridViewCommanders.AllowUserToDeleteRows = false;
-            this.dataGridViewCommanders.AllowUserToOrderColumns = true;
             this.dataGridViewCommanders.AllowUserToResizeRows = false;
             this.dataGridViewCommanders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewCommanders.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
