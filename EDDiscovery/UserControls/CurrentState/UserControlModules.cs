@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
-            allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules); //TBD
+            allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
             dataGridViewModules.MakeDoubleBuffered();
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 

@@ -96,8 +96,6 @@ namespace EDDiscovery.WebServer
             systemdata["VisitCount"] = hl.GetVisitsCount(he.System.Name);
             response["SystemData"] = systemdata;
 
-            // TBD.. if EDSMID = 0 , we may not have looked at it in the historywindow, do we want to do a lookup?
-
             JObject sysstate = new JObject();
 
             hl.ReturnSystemInfo(he, out string allegiance, out string economy, out string gov, out string faction, out string factionstate, out string security);

@@ -271,8 +271,6 @@ namespace EDDiscovery.UserControls
             {
                 textBoxItems1.Text = counts[(int)MaterialCommodityMicroResourceType.CatType.Commodity].ToString();
             }
-
-            // TBD  textBoxItems1.Text = "DBG GEN" +  mcl.Value.ToString();
         }
 
         #endregion

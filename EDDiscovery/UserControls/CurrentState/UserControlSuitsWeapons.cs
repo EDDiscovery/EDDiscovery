@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
                                                w.Value.Class,
                                                smods,
                                                w.Value.Price.ToString("N0"),
-                                               weaponinfo !=null ? (weaponinfo.Primary?"Primary":"Secondary") : "",     // TBD
+                                               weaponinfo !=null ? (weaponinfo.Primary?"Primary":"Secondary") : "",    
                                                weaponinfo !=null ? weaponinfo.Class.ToString().SplitCapsWord() : "",
                                                weaponinfo !=null ? weaponinfo.DamageType.ToString().SplitCapsWord() : "",
                                                weaponinfo !=null ? weaponinfo.FireMode.ToString().SplitCapsWord() : "",

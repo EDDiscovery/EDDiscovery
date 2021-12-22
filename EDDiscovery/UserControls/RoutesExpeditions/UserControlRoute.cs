@@ -146,9 +146,8 @@ namespace EDDiscovery.UserControls
         {
             if (hl != null && hl.Count > 0)
             {
-//TBD
-               // UpdateTo(true,true);
-               // UpdateFrom(true,true);
+                UpdateTo(null);
+                UpdateFrom(null);
             }
         }
 
