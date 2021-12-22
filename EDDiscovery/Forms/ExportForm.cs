@@ -72,7 +72,7 @@ namespace EDDiscovery.Forms
             checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("FormIncludeHeader", true);
             checkBoxCustomAutoOpen.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormOpenExcel", true);
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = !winborder;
 

@@ -53,7 +53,7 @@ namespace EDDiscovery.Forms
                 textBoxLicense.Text = Properties.Resources.EDD_Licence_Mono;
             }
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             paneltop.Visible = !winborder;
 

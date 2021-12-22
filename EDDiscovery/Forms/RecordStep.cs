@@ -63,7 +63,7 @@ namespace EDDiscovery.Forms
             checkBoxChangeZoom.Checked = true;
             ValidateData();
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 

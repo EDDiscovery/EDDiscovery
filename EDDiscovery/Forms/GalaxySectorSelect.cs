@@ -87,7 +87,7 @@ namespace EDDiscovery.Forms
                 initialsel = Selection = cellset;
                 initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
-                EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                var theme = ExtendedControls.Theme.Current;
                 bool winborder = theme.ApplyDialog(this);
                 statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 

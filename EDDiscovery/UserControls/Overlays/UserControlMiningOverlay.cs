@@ -293,13 +293,13 @@ namespace EDDiscovery.UserControls
             {
                 var found = ReadHistory( out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
 
-                Font displayfont = discoveryform.theme.GetFont;
-                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                Font displayfont = ExtendedControls.Theme.Current.GetFont;
+                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
-                Color GridC = discoveryform.theme.GridBorderLines;
-                Color TextC = discoveryform.theme.GridCellText;
-                Color BackC = discoveryform.theme.GridCellBack;
-                Color[] LineC = new Color[] { discoveryform.theme.KnownSystemColor , discoveryform.theme.TextBlockHighlightColor,
+                Color GridC = ExtendedControls.Theme.Current.GridBorderLines;
+                Color TextC = ExtendedControls.Theme.Current.GridCellText;
+                Color BackC = ExtendedControls.Theme.Current.GridCellBack;
+                Color[] LineC = new Color[] { ExtendedControls.Theme.Current.KnownSystemColor , ExtendedControls.Theme.Current.TextBlockHighlightColor,
                                                          Color.Blue, Color.Yellow, Color.Green, Color.Gray, Color.HotPink, Color.Teal };
 
                 using (StringFormat frmt = new StringFormat())
@@ -527,8 +527,8 @@ namespace EDDiscovery.UserControls
 
         private void Timetimer_Tick(object sender, EventArgs e)
         {
-            Font displayfont = discoveryform.theme.GetFont;
-            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            Font displayfont = ExtendedControls.Theme.Current.GetFont;
+            Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
             Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
             using (StringFormat frmt = new StringFormat())

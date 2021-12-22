@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
 
             if ( currentHE != null  )
             {
-                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
                 DateTime hetime = currentHE.EventTimeUTC;
@@ -164,7 +164,7 @@ namespace EDDiscovery.UserControls
                 List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
 
                 int vpos = 4;
-                Font displayfont = discoveryform.theme.GetFont;
+                Font displayfont = ExtendedControls.Theme.Current.GetFont;
 
                 foreach (MissionState ms in mcurrent)
                 {

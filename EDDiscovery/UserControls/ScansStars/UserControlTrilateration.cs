@@ -131,15 +131,15 @@ namespace EDDiscovery.UserControls
 
         public void LogText(string text)
         {
-            LogTextColor(text, discoveryform.theme.TextBlockColor);
+            LogTextColor(text, ExtendedControls.Theme.Current.TextBlockColor);
         }
         public void LogTextHighlight(string text)
         {
-            LogTextColor(text, discoveryform.theme.TextBlockHighlightColor);
+            LogTextColor(text, ExtendedControls.Theme.Current.TextBlockHighlightColor);
         }
         public void LogTextSuccess(string text)
         {
-            LogTextColor(text, discoveryform.theme.TextBlockSuccessColor);
+            LogTextColor(text, ExtendedControls.Theme.Current.TextBlockSuccessColor);
         }
         private void LogTextColor(string text, Color color)
         {
@@ -883,7 +883,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown".T(EDTx.UserControlTrilateration_PU);
-                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = discoveryform.theme.UnknownSystemColor;
+                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = ExtendedControls.Theme.Current.UnknownSystemColor;
             }
         }
 
@@ -1032,7 +1032,7 @@ namespace EDDiscovery.UserControls
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
-                        dataGridViewDistances[3, i].Style.ForeColor = discoveryform.theme.KnownSystemColor;
+                        dataGridViewDistances[3, i].Style.ForeColor = ExtendedControls.Theme.Current.KnownSystemColor;
                         dataGridViewDistances[3, i].Value = "Position found".T(EDTx.UserControlTrilateration_PF);
                     }
                 }

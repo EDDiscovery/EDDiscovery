@@ -553,7 +553,6 @@
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EDDConfig.cs" />
-    <Compile Include="Themeing\Theme.cs" />
     <Compile Include="3DMap\FormMap.cs">
       <SubType>Form</SubType>
     </Compile>

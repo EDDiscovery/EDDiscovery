@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using BaseUtils.JSON;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
@@ -387,14 +388,14 @@ namespace EDDiscovery
 
         public void ApplyTheme(bool panelrefreshaswell = false)     // set true if your changing the theme
         {
-            panel_close.Visible = !theme.WindowsFrame;
-            panel_minimize.Visible = !theme.WindowsFrame;
-            label_version.Visible = !theme.WindowsFrame && !EDDOptions.Instance.DisableVersionDisplay;
+            panel_close.Visible = !ExtendedControls.Theme.Current.WindowsFrame;
+            panel_minimize.Visible = !ExtendedControls.Theme.Current.WindowsFrame;
+            label_version.Visible = !ExtendedControls.Theme.Current.WindowsFrame && !EDDOptions.Instance.DisableVersionDisplay;
 
             // note in no border mode, this is not visible on the title bar but it is in the taskbar..
             this.Text = "EDDiscovery" + (EDDOptions.Instance.DisableVersionDisplay ? "" : " " + label_version.Text);
 
-            theme.ApplyStd(this);
+            ExtendedControls.Theme.Current.ApplyStd(this);
 
             statusStripEDD.Font = contextMenuStripTabs.Font = this.Font;
 
@@ -459,6 +460,62 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Theme
+
+        private ExtendedControls.Theme GetThemeFromDB()
+        {
+            if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // 
+            {
+                // we convert into JSON and then let the JSON reader do the job, of course, if we were doing this again, the JSON would just be in the DB
+
+                JObject jo = new JObject();
+                string name = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom");
+
+                jo["windowsframe"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ThemeWindowsFrame", true);
+                jo["formopacity"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ThemeFormOpacity", 100);
+                jo["fontname"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeFont", ExtendedControls.Theme.DefaultFont);
+                jo["fontsize"] = (float)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ThemeFontSize", ExtendedControls.Theme.DefaultFontSize);
+                jo["buttonstyle"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ButtonStyle", ExtendedControls.Theme.ButtonstyleSystem);
+                jo["textboxborderstyle"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("TextBoxBorderStyle", ExtendedControls.Theme.TextboxborderstyleFixed3D);
+
+                // pick a default, based on the name. This is useful when new names are introduced, as if we are using a default theme, we will pick the new colour from the theme
+                var defaulttheme = ThemeList.FindTheme(name) ?? ThemeList.FindTheme("Windows Default");
+
+                foreach (ExtendedControls.Theme.CI ci in Enum.GetValues(typeof(ExtendedControls.Theme.CI)))
+                {
+                    var cname = "ThemeColor" + ci.ToString();
+                    int d = defaulttheme.GetColor(ci).ToArgb();
+                    int dbv = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(cname, d);
+                    jo[ci.ToString()] = dbv;
+                }
+
+                ExtendedControls.Theme theme = new ExtendedControls.Theme();
+                return theme.FromJSON(jo, name, defaulttheme) ? theme : null;
+            }
+            else
+                return null;
+        }
+
+        private void SaveThemeToDB(ExtendedControls.Theme theme)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeNameOf", theme.Name);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ThemeWindowsFrame", theme.WindowsFrame);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFormOpacity", theme.Opacity);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeFont", theme.FontName);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFontSize", theme.FontSize);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ButtonStyle", theme.ButtonStyle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("TextBoxBorderStyle", theme.TextBoxBorderStyle);
+
+            foreach (ExtendedControls.Theme.CI ci in Enum.GetValues(typeof(ExtendedControls.Theme.CI)))
+            {
+                var cname = "ThemeColor" + ci.ToString();
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(cname, theme.GetColor(ci).ToArgb());
+            }
+        }
+
+
+
+        #endregion
 
     }
 }

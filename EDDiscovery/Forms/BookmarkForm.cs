@@ -40,7 +40,7 @@ namespace EDDiscovery.Forms
         public BookmarkForm( HistoryList he)
         {
             InitializeComponent();
-            EDDTheme.Instance.ApplyDialog(this);
+            ExtendedControls.Theme.Current.ApplyDialog(this);
             BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks  });
             helist = he;
         }

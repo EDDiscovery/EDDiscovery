@@ -53,7 +53,7 @@ namespace EDDiscovery.Forms
             dataGridViewMarks.Rows.Clear();
             dataGridViewMarks.Enabled = true;
             sendToCompassToolStripMenuItem.Enabled = false;
-            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = EDDTheme.Instance.GridBorderBack;
+            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
 
             if (!string.IsNullOrEmpty(systemName))
                 UpdateComboBox(systemName , helist);
@@ -70,7 +70,7 @@ namespace EDDiscovery.Forms
             planetmarks = pm != null ? pm : new PlanetMarks();
 
             dataGridViewMarks.CancelEdit();
-            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = EDDTheme.Instance.GridBorderBack;
+            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
             dataGridViewMarks.Rows.Clear();
             dataGridViewMarks.Enabled = true;
 
@@ -126,7 +126,7 @@ namespace EDDiscovery.Forms
             Edited = false;
             planetmarks = null;
             dataGridViewMarks.CancelEdit();
-            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = EDDTheme.Instance.GridBorderBack.Multiply(0.5F);
+            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack.Multiply(0.5F);
             dataGridViewMarks.Rows.Clear();
             dataGridViewMarks.Enabled = false;
         }

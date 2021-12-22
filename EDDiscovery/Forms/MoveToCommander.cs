@@ -40,7 +40,7 @@ namespace EDDiscovery.Forms
 
             BaseUtils.Translator.Instance.Translate(this);
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
             theme.ApplyDialog(this);
 
             return true;

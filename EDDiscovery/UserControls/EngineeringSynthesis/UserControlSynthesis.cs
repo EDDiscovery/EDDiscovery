@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
                             row.Cells[7].Value = r.IngredientsStringvsCurrent(totalmcl);    // recipe
                             row.Cells[7].ToolTipText = r.IngredientsStringLong;
                             if (res.Item5 >= 100.0)
-                                row.DefaultCellStyle.BackColor = EDDTheme.Instance.GridHighlightBack;
+                                row.DefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridHighlightBack;
                         }
                     }
                     if (WantedPerRecipe[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))

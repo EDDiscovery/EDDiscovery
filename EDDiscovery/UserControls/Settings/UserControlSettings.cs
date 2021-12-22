@@ -27,7 +27,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSettings : UserControlCommonBase
     {
-        private ExtendedControls.ThemeStandardEditor themeeditor = null;
         Timer tm = new Timer();
 
         public UserControlSettings()
@@ -45,7 +44,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             ResetThemeList();
-            SetEntryThemeComboBox();
 
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
 
@@ -117,6 +115,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxWebServerEnable.Checked = false;
             extButtonTestWeb.Enabled = numberBoxLongPortNo.Enabled = false;
             numberBoxLongPortNo.Value = EDDConfig.Instance.WebServerPort;
+
             tm.Tick += PeriodicCheck;
             tm.Interval = 1000;
             tm.Start();
@@ -132,7 +131,6 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
 
-            themeeditor?.Dispose();
             var frm = FindForm();
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged -= ParentForm_TopMostChanged;
@@ -379,37 +377,55 @@ namespace EDDiscovery.UserControls
 
         #region Theme
 
+        bool themeprogchange = false;
+        private void ResetThemeList()
+        {
+            themeprogchange = true;
+            comboBoxTheme.Items = discoveryform.ThemeList.GetThemeNames();
+            int i = discoveryform.ThemeList.FindThemeIndex(ExtendedControls.Theme.Current.Name);
+            if (i == -1)        // if not found
+            {
+                ExtendedControls.Theme.Current.SetCustom();     // not in list, must be custom, force name
+                comboBoxTheme.Items.Add("Custom");
+                comboBoxTheme.SelectedItem = "Custom";
+            }
+            else
+                comboBoxTheme.SelectedIndex = i;
+
+            themeprogchange = false;
+        }
         private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
         {
-            string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
-
-            string fontwanted = null;                                               // don't check custom, only a stored theme..
-            if (!themename.Equals("Custom") && !discoveryform.theme.IsFontAvailableInTheme(themename, out fontwanted))
+            if (!themeprogchange)
             {
-                string warning = string.Format(
-                      ("The font used by this theme is not available on your system." + Environment.NewLine +
-                      "The font needed is \"{0}\"." + Environment.NewLine +
-                      "Install this font to fully use this theme." + Environment.NewLine +
-                      "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine +
-                      "and is in your install folder " + Path.GetDirectoryName(Application.ExecutablePath) + " - install it manually" + Environment.NewLine +
-                      Environment.NewLine +
-                      "Would you like to load this theme using a replacement font?").T(EDTx.UserControlSettings_Font), fontwanted);
+                string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
 
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
-
-                if (res != DialogResult.Yes)
+                string fontwanted = null;                                               // don't check custom, only a stored theme..
+                if (!themename.Equals("Custom") && !discoveryform.ThemeList.IsFontAvailableInTheme(themename, out fontwanted))
                 {
-                    // Reset the combo box to the previous theme name and don't change anything else.
-                    SetEntryThemeComboBox();
-                    return;
+                    string warning = string.Format(
+                          ("The font used by this theme is not available on your system." + Environment.NewLine +
+                          "The font needed is \"{0}\"." + Environment.NewLine +
+                          "Install this font to fully use this theme." + Environment.NewLine +
+                          "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine +
+                          "and is in your install folder " + Path.GetDirectoryName(Application.ExecutablePath) + " - install it manually" + Environment.NewLine +
+                          Environment.NewLine +
+                          "Would you like to load this theme using a replacement font?").T(EDTx.UserControlSettings_Font), fontwanted);
+
+                    DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
+
+                    if (res != DialogResult.Yes)
+                    {
+                        // Reset the combo box to the previous theme name and don't change anything else.
+                        ResetThemeList();
+                        return;
+                    }
                 }
+
+                discoveryform.ThemeList.SetThemeByName(themename);             // given the name, go to it, if possible. if not, its not there, it should be
+                ResetThemeList();
+                discoveryform.ApplyTheme(true);
             }
-
-            if (!discoveryform.theme.SetThemeByName(themename))
-                discoveryform.theme.SetCustom();                                   // go to custom theme..
-
-            SetEntryThemeComboBox();
-            discoveryform.ApplyTheme(true);
         }
 
         private void buttonSaveTheme_Click(object sender, EventArgs e)
@@ -422,60 +438,44 @@ namespace EDDiscovery.UserControls
 
             if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                discoveryform.theme.SaveSettings(dlg.FileName);        // should create a new theme files
-                discoveryform.theme.LoadThemes();          // make sure up to data - we added a theme, reload them all
-                discoveryform.theme.Name = Path.GetFileNameWithoutExtension(dlg.FileName); // go to the theme name
-
-                ResetThemeList();
-
-                int curindex = discoveryform.theme.GetIndexOfCurrentTheme();       // get theme index.. may be -1 if theme not loaded back
-
-                if (curindex == -1)                                   // if not loaded, back to custom
-                    discoveryform.theme.SetCustom();   // custom
-
-                SetEntryThemeComboBox();
+                if ( ExtendedControls.Theme.Current.SaveFile(dlg.FileName))
+                {
+                    discoveryform.ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(),"*.eddtheme");          // make sure up to data - we added a theme, reload them all
+                    ExtendedControls.Theme.Current.Name = Path.GetFileNameWithoutExtension(dlg.FileName);   // we set the name here, if its not in the theme list on reset, it will go to custom
+                    ResetThemeList();
+                }
             }
         }
 
         public void button_edittheme_Click(object sender, EventArgs e)
         {
-            if (themeeditor == null)                    // no theme editor, make one..
+            var themeeditor = new ExtendedControls.ThemeEditor() { TopMost = FindForm().TopMost };
+
+            var curtheme = ExtendedControls.Theme.Current;
+
+            themeeditor.ApplyChanges = (theme) => { ExtendedControls.Theme.Current = theme; discoveryform.ApplyTheme(true); };
+
+            buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = false;
+
+            themeeditor.InitForm(curtheme);     // makes a copy
+            themeeditor.FormClosing += (sa, ea) =>
             {
-                themeeditor = new ExtendedControls.ThemeStandardEditor() { TopMost = FindForm().TopMost };
-                themeeditor.ApplyChanges = () => { discoveryform.ApplyTheme(true); };
-                themeeditor.InitForm();
-                themeeditor.FormClosing += close_edit;  // lets see when it closes
+                buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = true;
 
-                comboBoxTheme.Enabled = false;          // no doing this while theme editor is open
-                buttonSaveTheme.Enabled = false;
+                if ( themeeditor.DialogResult == DialogResult.OK )
+                {
+                    ExtendedControls.Theme.Current = themeeditor.Theme;
+                }
+                else
+                {
+                    ExtendedControls.Theme.Current = curtheme;
+                }
 
-                themeeditor.Show();                     // run form
-            }
-            else
-                themeeditor.BringToFront();             // its up, make it at front to show it
-        }
+                ResetThemeList();
+                discoveryform.ApplyTheme(true);
+            };
 
-        public void close_edit(object sender, FormClosingEventArgs e)
-        {
-            themeeditor = null;                         // called when editor closes
-            SetEntryThemeComboBox();
-            comboBoxTheme.Enabled = true;               // no doing this while theme editor is open
-            buttonSaveTheme.Enabled = true;
-        }
-
-        void SetEntryThemeComboBox()
-        {
-            int i = discoveryform.theme.GetIndexOfCurrentTheme();
-            if (i == -1)
-                comboBoxTheme.SelectedItem = "Custom";
-            else
-                comboBoxTheme.SelectedIndex = i;
-        }
-
-        private void ResetThemeList()
-        {
-            comboBoxTheme.Items = discoveryform.theme.GetThemeList();
-            comboBoxTheme.Items.Add("Custom");
+            themeeditor.Show(FindForm());
         }
 
         #endregion
@@ -541,10 +541,7 @@ namespace EDDiscovery.UserControls
         private void checkBoxKeepOnTop_CheckedChanged(object sender, EventArgs e)
         {
             var frm = FindForm();
-
             EDDConfig.Instance.KeepOnTop = frm.TopMost = checkBoxKeepOnTop.Checked;
-            if (themeeditor != null)
-                themeeditor.TopMost = checkBoxKeepOnTop.Checked;
         }
 
         private void ParentForm_TopMostChanged(object sender, EventArgs e)

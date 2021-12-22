@@ -208,8 +208,8 @@ namespace EDDiscovery.UserControls
 
             var curmcl = last_mcl != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
 
-            Font titlefont = EDDTheme.Instance.GetFont;
-            Font badgefont = EDDTheme.Instance.GetScaledFont(16f / 12f, max:21);
+            Font titlefont = ExtendedControls.Theme.Current.GetFont;
+            Font badgefont = ExtendedControls.Theme.Current.GetScaledFont(16f / 12f, max:21);
 
             const int hbadgemargin = 20;
             const int vbadgemargin = 12;

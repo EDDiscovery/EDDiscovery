@@ -364,7 +364,7 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid[he.Journalid] = rw;      
             rw.Tag = he;
 
-            rw.Cells[1].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
+            rw.Cells[1].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
             he.FillInformation(out string EventDescription, out string EventDetailedInfo);
 

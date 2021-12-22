@@ -69,7 +69,7 @@ namespace EDDiscovery._3DMap
                 }
                 else
                 {
-                    EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                    var theme = ExtendedControls.Theme.Current;
                     _formMap.IconSelect(theme.ApplyStd(_formMap));
 
                     _formMap.Show();

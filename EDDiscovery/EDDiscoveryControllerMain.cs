@@ -101,9 +101,6 @@ namespace EDDiscovery
         #endregion
 
         #region Accessors
-        private Func<Color> GetNormalTextColour;
-        private Func<Color> GetHighlightTextColour;
-        private Func<Color> GetSuccessTextColour;
         private Action<Action> InvokeAsyncOnUiThread;
         #endregion
 
@@ -119,11 +116,8 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryController(Func<Color> getNormalTextColor, Func<Color> getHighlightTextColor, Func<Color> getSuccessTextColor, Action<Action> invokeAsyncOnUiThread)
+        public EDDiscoveryController( Action<Action> invokeAsyncOnUiThread)
         {
-            GetNormalTextColour = getNormalTextColor;
-            GetHighlightTextColour = getHighlightTextColor;
-            GetSuccessTextColour = getSuccessTextColor;
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
             journalqueuedelaytimer = new Timer(DelayPlay, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -403,18 +397,18 @@ namespace EDDiscovery
         #region Logging
         public void LogLine(string text)
         {
-            LogLineColor(text, GetNormalTextColour());
+            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockColor);
         }
 
         public void LogLineHighlight(string text)
         {
             TraceLog.WriteLine(text);
-            LogLineColor(text, GetHighlightTextColour());
+            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockHighlightColor);
         }
 
         public void LogLineSuccess(string text)
         {
-            LogLineColor(text, GetSuccessTextColour());
+            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockSuccessColor);
         }
 
         public void LogLineColor(string text, Color color)

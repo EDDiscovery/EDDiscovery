@@ -116,13 +116,13 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("PO:Make " + windowtitle + " ucf " + ctrl.GetType().Name);
 
                 //System.Diagnostics.Debug.WriteLine("TCF init");
-                tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
-                             discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor, discoveryform.theme.TransparentColorKey);
+                tcf.Init(ctrl, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
+                             ExtendedControls.Theme.Current.LabelColor, ExtendedControls.Theme.Current.SPanelColor, ExtendedControls.Theme.Current.TransparentColorKey);
 
                 //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
                 ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
 
-                discoveryform.theme.ApplyStd(tcf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
+                ExtendedControls.Theme.Current.ApplyStd(tcf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
 
                 //System.Diagnostics.Debug.WriteLine("Show");
                 tcf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.

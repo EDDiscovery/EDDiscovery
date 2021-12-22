@@ -312,7 +312,7 @@ namespace EDDiscovery
             uccb.Init(eddiscovery, dn);    // start the uccb up
 
             uccb.Scale(this.FindForm().CurrentAutoScaleFactor());       // scale and
-            EDDTheme.Instance.ApplyStd(page);  // theme it.  Order as per the contract in UCCB
+            ExtendedControls.Theme.Current.ApplyStd(page);  // theme it.  Order as per the contract in UCCB
 
             return page;
         }

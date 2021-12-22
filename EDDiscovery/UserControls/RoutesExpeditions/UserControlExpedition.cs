@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
 
                 row.Tag = sys;      // store tag
 
-                row.Cells[0].Style.ForeColor = (sys?.HasCoordinate ?? false) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
+                row.Cells[0].Style.ForeColor = (sys?.HasCoordinate ?? false) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
                 row.Cells[Visits.Index].Value = discoveryform.history.Visits(sysname).ToString("0");
 
@@ -583,7 +583,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            EDDTheme.Instance.ApplyDialog(dropdown, true);
+            ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
             dropdown.Show(this.FindForm());
         }
 

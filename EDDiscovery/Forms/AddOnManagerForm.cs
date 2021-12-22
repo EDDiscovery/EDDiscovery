@@ -78,7 +78,7 @@ namespace EDDiscovery.Forms
 
             SizeF prev = this.AutoScaleDimensions;
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyStd(this);      // changing FONT changes the autoscale since form is in AutoScaleMode=font
 
             //System.Diagnostics.Debug.WriteLine("Scale factor " + prev + "->" + this.AutoScaleDimensions);
@@ -184,7 +184,7 @@ namespace EDDiscovery.Forms
             else
                 tabs = new int[] { 0,  80, 280, 360, 560, 560, 660, 720 , 780};
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
 
             int fonth = (int)theme.GetFont.GetHeight() + 1;
             int headervsize =  fonth + panelheightmargin + 2;

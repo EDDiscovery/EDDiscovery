@@ -130,12 +130,12 @@ namespace EDDiscovery.UserControls
             int butleft = hspacing / 2;
             int leftrighthoffset = hspacing/2-4;
 
-            float pixelh = discoveryform.theme.GetFont.GetHeight();     // get some idea of the size of the font
+            float pixelh = ExtendedControls.Theme.Current.GetFont.GetHeight();     // get some idea of the size of the font
 
             // tried disposing of old font but that crashes since the button is still assigned to it..
             //System.Diagnostics.Debug.WriteLine("Button width " + butwidth + " vs" + pixelh);
-            calfont = discoveryform.theme.GetScaledFont((float)Math.Min(butwidth,butheight) / pixelh * 0.5f);
-            labfont = discoveryform.theme.GetScaledFont((float)Math.Min(butwidth, butheight) / pixelh * 0.4f);
+            calfont = ExtendedControls.Theme.Current.GetScaledFont((float)Math.Min(butwidth,butheight) / pixelh * 0.5f);
+            labfont = ExtendedControls.Theme.Current.GetScaledFont((float)Math.Min(butwidth, butheight) / pixelh * 0.4f);
 
             for (int i = 0; i < 7; i++)
             {
@@ -174,17 +174,17 @@ namespace EDDiscovery.UserControls
 
                     daybuttons[i].Tag = noentries;
 
-                    if (discoveryform.theme.ButtonStyle == EDDTheme.ButtonStyles[0])  // system buttons - can't colour them
+                    if (ExtendedControls.Theme.Current.ButtonStyle == ExtendedControls.Theme.ButtonStyles[0])  // system buttons - can't colour them
                     {
                         daybuttons[i].Text = (i + 1).ToStringInvariant() + (noentries > 0 ? "*" : "");
                     }
                     else
                     {
                         daybuttons[i].Text = (i + 1).ToStringInvariant();
-                        daybuttons[i].BackColor = noentries > 0 ? discoveryform.theme.SPanelColor : discoveryform.theme.ButtonBackColor;
-                        daybuttons[i].ForeColor = noentries > 0 ? discoveryform.theme.TextBackColor : discoveryform.theme.ButtonTextColor;
+                        daybuttons[i].BackColor = noentries > 0 ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.ButtonBackColor;
+                        daybuttons[i].ForeColor = noentries > 0 ? ExtendedControls.Theme.Current.TextBackColor : ExtendedControls.Theme.Current.ButtonTextColor;
 
-                        daybuttons[i].FlatAppearance.MouseOverBackColor = discoveryform.theme.SPanelColor.Multiply(1.1f);
+                        daybuttons[i].FlatAppearance.MouseOverBackColor = ExtendedControls.Theme.Current.SPanelColor.Multiply(1.1f);
                     }
 
                     daybuttons[i].Visible = true;

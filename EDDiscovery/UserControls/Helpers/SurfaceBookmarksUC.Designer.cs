@@ -1,5 +1,4 @@
-﻿using static ExtendedControls.ThemeStandard;
-
+﻿
 namespace EDDiscovery.Forms
 {
     partial class SurfaceBookmarkUserControl

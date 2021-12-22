@@ -40,7 +40,7 @@ namespace EDDiscovery.Forms
             this.labelSummary.Text = he.EventSummary;
             this.labelDetails.Text = EventDescription;
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 

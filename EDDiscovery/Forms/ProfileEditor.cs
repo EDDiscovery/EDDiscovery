@@ -67,7 +67,7 @@ namespace EDDiscovery.Forms
             profiles = pr;
             Icon = ic;
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
 
@@ -150,7 +150,7 @@ namespace EDDiscovery.Forms
             g.triggercondition = new ConditionLists(tripcondition);        // copy so we can edit
             g.backcondition = new ConditionLists(backcondition);
 
-            EDDiscovery.EDDTheme.Instance.ApplyDialog(g.panel);
+            ExtendedControls.Theme.Current.ApplyDialog(g.panel);
             g.panel.Scale(this.CurrentAutoScaleFactor());
 
             panelVScrollMain.Controls.Add(g.panel);

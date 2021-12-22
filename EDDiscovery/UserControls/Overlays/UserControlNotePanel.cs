@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
 
             config = (Configuration)GetSetting("Config", (int)config);
 
-            displayfont = discoveryform.theme.GetFont;
+            displayfont = ExtendedControls.Theme.Current.GetFont;
 
             discoveryform.OnHistoryChange += OnHistoryChange;
             discoveryform.OnNoteChanged += OnNoteChange;
@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
 
                 if (hefsd != null)
                 {
-                    Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                    Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
                     string botline = "";

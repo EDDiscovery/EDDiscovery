@@ -51,7 +51,7 @@ namespace EDDiscovery
         public BaseUtils.Variables Globals { get { return actioncontroller.Globals; } }
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
-        public EDDTheme theme { get { return EDDTheme.Instance; } }
+        public ExtendedControls.ThemeList ThemeList { get; private set; }
 
         public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
         public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
@@ -134,8 +134,7 @@ namespace EDDiscovery
         public EDDiscoveryForm()
         {
             RestoreFormPositionRegKey = "Form";
-            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, 
-                                                        () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
+            Controller = new EDDiscoveryController(a => BeginInvoke(a));
 
             Controller.OnFinalClose += Controller_FinalClose;
 
@@ -199,16 +198,23 @@ namespace EDDiscovery
             labelInfoBoxTop.Text = "";
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
-            theme.LoadThemes();                                         // default themes and ones on disk loaded
+            ThemeList = new ExtendedControls.ThemeList();
+            ThemeList.LoadBaseThemes();                                         // default themes and ones on disk loaded
+            ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(), "*.eddtheme"); // load any file stored themes
+            ThemeList.SetThemeByName("Windows Default");                        // this is the default theme we use
 
             if (!EDDOptions.Instance.NoTheme)
-                theme.RestoreSettings();                                // theme, remember your saved settings
+            {
+                var theme = GetThemeFromDB();
+                if (theme != null)
+                    ExtendedControls.Theme.Current = theme;
+            }
 
             if (EDDOptions.Instance.FontSize > 0)
-                theme.FontSize = EDDOptions.Instance.FontSize;
+                ExtendedControls.Theme.Current.FontSize = EDDOptions.Instance.FontSize;
 
             if (EDDOptions.Instance.Font.HasChars())
-                theme.FontName = EDDOptions.Instance.Font;
+                ExtendedControls.Theme.Current.FontName = EDDOptions.Instance.Font;
 
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
 
@@ -909,7 +915,7 @@ namespace EDDiscovery
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
-            theme.SaveSettings(null);
+            SaveThemeToDB(ExtendedControls.Theme.Current);
 
             tabControlMain.CloseTabList();      // close and save tab list
 
@@ -1315,8 +1321,8 @@ namespace EDDiscovery
                 PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
             };
 
-            theme.ApplyStd(popoutdropdown,true);
-            popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
+            ExtendedControls.Theme.Current.ApplyStd(popoutdropdown,true);
+            popoutdropdown.SelectionBackColor = ExtendedControls.Theme.Current.ButtonBackColor;
             popoutdropdown.Show(this);
         }
 

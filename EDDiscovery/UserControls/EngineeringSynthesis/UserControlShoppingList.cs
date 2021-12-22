@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
-                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
 
@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                Font font = discoveryform.theme.GetFont;
+                Font font = ExtendedControls.Theme.Current.GetFont;
                 pictureBoxList.ClearImageList();
                 ExtPictureBox.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();

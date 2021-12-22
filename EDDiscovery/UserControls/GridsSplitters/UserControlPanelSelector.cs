@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls
             int width = 96;
             int padbot = 6, padbetween = 5;
 
-            float brigthness = EDDTheme.Instance.Form.GetBrightness();
+            float brigthness = ExtendedControls.Theme.Current.Form.GetBrightness();
             Image selback = brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2;
 
             {
@@ -84,8 +84,8 @@ namespace EDDiscovery.UserControls
                 CompositeButton cb = CompositeButton.QuickInit(
                             selback,
                             (i == 0) ? "NO ADD ONS!".T(EDTx.UserControlPanelSelector_NOADDONS) : i.ToString() + " Add Ons".T(EDTx.UserControlPanelSelector_AddOns),
-                            EDDTheme.Instance.GetFont,
-                            (i == 0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
+                            ExtendedControls.Theme.Current.GetFont,
+                            (i == 0) ? Color.Red : (ExtendedControls.Theme.Current.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : ExtendedControls.Theme.Current.TextBlockColor),
                             Color.Transparent,
                             EDDiscovery.Icons.Controls.ManageAddOns, iconsize,
                             new Image[] { EDDiscovery.Icons.Controls.ManageAddOns }, iconsize,
@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
                 toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".T(EDTx.UserControlPanelSelector_TTA));
                 toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".T(EDTx.UserControlPanelSelector_TTB));
 
-                EDDTheme.Instance.ApplyStd(cb);       // need to theme up the button
+                ExtendedControls.Theme.Current.ApplyStd(cb);       // need to theme up the button
                 cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
                 cb.Label.BackColor = cb.Decals[0].BackColor = Color.Transparent;
                 cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
@@ -113,8 +113,8 @@ namespace EDDiscovery.UserControls
                 CompositeButton cb = CompositeButton.QuickInit(
                             selback,
                             pi.WindowTitle,
-                            EDDTheme.Instance.GetFont,
-                            EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
+                            ExtendedControls.Theme.Current.GetFont,
+                            ExtendedControls.Theme.Current.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : ExtendedControls.Theme.Current.TextBlockColor,
                             Color.Transparent,
                             pi.TabIcon, iconsize,
                             new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.AddTab }, iconsize,
@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
                 toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".T(EDTx.UserControlPanelSelector_MT1));
                 toolTip.SetToolTip(cb.Decals[0], pi.Description);
 
-                EDDTheme.Instance.ApplyStd(cb);
+                ExtendedControls.Theme.Current.ApplyStd(cb);
                 cb.ResumeLayout();
 
                 cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);

@@ -482,9 +482,9 @@ namespace EDDiscovery.UserControls
             rw.Tag = item;  //tag on row
 
             if ( showSystemVisitedForeColourToolStripMenuItem.Checked )
-                rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate) ? discoveryform.theme.KnownSystemColor : discoveryform.theme.UnknownSystemColor;
+                rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate) ? ExtendedControls.Theme.Current.KnownSystemColor : ExtendedControls.Theme.Current.UnknownSystemColor;
             else if ( item.EntryType == JournalTypeEnum.FSDJump || item.EntryType == JournalTypeEnum.CarrierJump)
-                rw.Cells[2].Style.ForeColor = (item.System.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
+                rw.Cells[2].Style.ForeColor = (item.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
             if ( tip.Length>2000)

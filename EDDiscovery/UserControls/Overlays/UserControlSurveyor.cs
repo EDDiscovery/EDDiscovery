@@ -247,7 +247,7 @@ namespace EDDiscovery.UserControls
                 int vpos = 0;
                 StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                 frmt.Alignment = alignment;
-                var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
                 Font dfont = displayfont ?? this.Font;
@@ -866,7 +866,7 @@ namespace EDDiscovery.UserControls
                 DrawSystem(last_sys);
             };
 
-            EDDTheme.Instance.ApplyDialog(dropdown, true);
+            ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
             dropdown.Show(this.FindForm());
         }
 

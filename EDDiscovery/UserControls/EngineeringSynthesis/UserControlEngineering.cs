@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(totalmcl);
                         dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
                         if (res.Item5 >= 100.0)
-                            dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = EDDTheme.Instance.GridHighlightBack;
+                            dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridHighlightBack;
                     }
                     if (WantedPerRecipe[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {

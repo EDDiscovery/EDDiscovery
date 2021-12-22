@@ -297,16 +297,16 @@ namespace EDDiscovery.UserControls
             dgv.BackgroundColor = curcol;
 
             dgv.ColumnHeadersDefaultCellStyle.BackColor =
-            dgv.RowHeadersDefaultCellStyle.BackColor = on ? curcol : EDDTheme.Instance.GridBorderBack;
+            dgv.RowHeadersDefaultCellStyle.BackColor = on ? curcol : ExtendedControls.Theme.Current.GridBorderBack;
 
-            dgv.DefaultCellStyle.BackColor = on ? curcol : EDDTheme.Instance.GridCellBack;
-            dgv.AlternatingRowsDefaultCellStyle.BackColor = on ? curcol : EDDTheme.Instance.GridCellAltBack;
+            dgv.DefaultCellStyle.BackColor = on ? curcol : ExtendedControls.Theme.Current.GridCellBack;
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = on ? curcol : ExtendedControls.Theme.Current.GridCellAltBack;
 
-            dgv.DefaultCellStyle.ForeColor = on ? EDDTheme.Instance.SPanelColor : EDDTheme.Instance.GridCellText;
-            dgv.AlternatingRowsDefaultCellStyle.ForeColor = on ? EDDTheme.Instance.SPanelColor : EDDTheme.Instance.GridCellAltText;
+            dgv.DefaultCellStyle.ForeColor = on ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.GridCellText;
+            dgv.AlternatingRowsDefaultCellStyle.ForeColor = on ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.GridCellAltText;
 
             dgv.ColumnHeadersDefaultCellStyle.ForeColor =
-            dgv.RowHeadersDefaultCellStyle.ForeColor = on ? EDDTheme.Instance.SPanelColor : EDDTheme.Instance.GridBorderText;
+            dgv.RowHeadersDefaultCellStyle.ForeColor = on ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.GridBorderText;
 
         }
 

@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
         public void Init(string t, Icon ic, Dictionary<string,Image> tags = null )
         {
             this.Icon = ic;
-            bool winborder = ExtendedControls.ThemeableFormsInstance.Instance?.ApplyDialog(this) ?? true;
+            bool winborder = ExtendedControls.Theme.Current?.ApplyDialog(this) ?? true;
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
             groups.Add(g);
 
             panelVScroll1.Controls.Add(g.panel);
-            ExtendedControls.ThemeableFormsInstance.Instance?.ApplyDialog(g.panel);
+            ExtendedControls.Theme.Current?.ApplyDialog(g.panel);
 
             g.icon.AutoSize = false;    // buttons are normally autosized due to theming, turn it off now
             g.icon.Image = img;     // assign image - it may be big
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
                 but.Image = img;
             };
 
-            EDDTheme.Instance.ApplyDialog(dropdown, true);
+            ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
             dropdown.Show(this.FindForm());
         }
 

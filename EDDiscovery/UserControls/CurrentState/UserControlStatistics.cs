@@ -590,10 +590,10 @@ namespace EDDiscovery.UserControls
                 {
                     mostVisitedChart.Visible = true;
 
-                    Color GridC = discoveryform.theme.GridBorderLines;
-                    Color TextC = discoveryform.theme.GridCellText;
+                    Color GridC = ExtendedControls.Theme.Current.GridBorderLines;
+                    Color TextC = ExtendedControls.Theme.Current.GridCellText;
                     mostVisitedChart.Titles.Clear();
-                    mostVisitedChart.Titles.Add(new Title("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top, discoveryform.theme.GetFont, TextC));
+                    mostVisitedChart.Titles.Add(new Title("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top, ExtendedControls.Theme.Current.GetFont, TextC));
                     mostVisitedChart.Series[0].Points.Clear();
 
                     mostVisitedChart.ChartAreas[0].AxisX.LabelStyle.ForeColor = TextC;

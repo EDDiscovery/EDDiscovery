@@ -375,7 +375,7 @@ namespace EDDiscovery.UserControls
                 DrawSystem();
             };
 
-            EDDTheme.Instance.ApplyStd(dropdown,true);
+            ExtendedControls.Theme.Current.ApplyStd(dropdown,true);
 
             dropdown.Show(this.FindForm());
         }

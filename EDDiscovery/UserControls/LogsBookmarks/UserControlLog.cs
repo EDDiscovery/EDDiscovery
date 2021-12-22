@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnNewLogEntry += AppendText;
-            AppendText(discoveryform.LogText, discoveryform.theme.TextBlockColor);
+            AppendText(discoveryform.LogText, ExtendedControls.Theme.Current.TextBlockColor);
             richTextBox_History.ScrollToCaret();
             BaseUtils.Translator.Instance.Translate(contextMenuStrip,this);
         }

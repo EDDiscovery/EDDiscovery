@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
             checkBoxCustomGridOn.Checked = GetSetting("Gridshow", false);
             checkBoxCustomGridOn.Visible = IsFloatingWindow;
 
-            transparentfont = EDDTheme.Instance.GetFont;
+            transparentfont = ExtendedControls.Theme.Current.GetFont;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -219,10 +219,10 @@ namespace EDDiscovery.UserControls
             panelTop.Visible = !on;
             panelStatus.BackColor =  curbackcol;
 
-            Color fore = on ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            Color fore = on ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
 
             labelTarget.Font = labelCredits.Font = labelTotalKills.Font = labelTotalReward.Font = labelFactionKills.Font = labelFactionReward.Font = 
-                        labelFaction.Font = labelTotalCrimes.Font = labelBalance.Font = on ? transparentfont : EDDTheme.Instance.GetFont;
+                        labelFaction.Font = labelTotalCrimes.Font = labelBalance.Font = on ? transparentfont : ExtendedControls.Theme.Current.GetFont;
 
             labelTarget.ForeColor = labelCredits.ForeColor = labelTotalKills.ForeColor = labelTotalReward.ForeColor = labelFactionKills.ForeColor = labelFactionReward.ForeColor = labelFaction.ForeColor = labelTotalCrimes.ForeColor = labelBalance.ForeColor = fore;
             labelTarget.TextBackColor = labelCredits.TextBackColor = labelTotalKills.TextBackColor = labelTotalReward.TextBackColor = labelFactionKills.TextBackColor = labelFactionReward.TextBackColor = labelFaction.TextBackColor = labelTotalCrimes.TextBackColor = labelBalance.TextBackColor = curbackcol;

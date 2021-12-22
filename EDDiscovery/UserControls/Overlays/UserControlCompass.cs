@@ -103,13 +103,13 @@ namespace EDDiscovery.UserControls
             buttonNewBookmark.BackColor = curbackcol;
             BackColor = curbackcol;
 
-            Color fore = on ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            Color fore = on ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
             compassControl.ForeColor = fore;
             compassControl.StencilColor = fore;
             compassControl.CentreTickColor = fore.Multiply(1.2F);
             compassControl.BugColor = fore.Multiply(0.8F);
             compassControl.BackColor = on ? Color.Transparent : BackColor;
-            compassControl.Font = discoveryform.theme.GetScaledFont(0.8f);
+            compassControl.Font = ExtendedControls.Theme.Current.GetScaledFont(0.8f);
 
             if (autoHideTargetCoords)
             {

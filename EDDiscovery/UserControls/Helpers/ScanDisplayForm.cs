@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
             {      
                 sd = new ScanDisplayUserControl();
                 sd.SystemDisplay.ShowEDSMBodies =checkedsm;
-                int selsize = (int)(EDDTheme.Instance.GetFont.Height / 10.0f * 48.0f);
+                int selsize = (int)(ExtendedControls.Theme.Current.GetFont.Height / 10.0f * 48.0f);
                 sd.SystemDisplay.SetSize( selsize );
                 sd.Size = infosize;
 
@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
                     title += " ~ " + value.ToString("N0") + " cr";
                 }
 
-                sd.BackColor = EDDTheme.Instance.Form;
+                sd.BackColor = ExtendedControls.Theme.Current.Form;
                 sd.DrawSystem( data, null , hl.MaterialCommoditiesMicroResources.GetLast());
 
                 int wastedh = infosize.Height - sd.SystemDisplay.DisplayAreaUsed.Y - 10 - 40;

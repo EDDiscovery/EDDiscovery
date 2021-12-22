@@ -246,7 +246,7 @@ namespace EDDiscovery.UserControls
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
 
                 Font dfont = displayfont ?? this.Font;
-                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
 
                 bool drawnnootherstuff = DrawScanText(true, textcolour, backcolour, dfont);                    // go 1 for some of the scan positions

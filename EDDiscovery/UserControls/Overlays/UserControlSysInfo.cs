@@ -1195,7 +1195,7 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            EDDTheme.Instance.ApplyStd(extPanelScroll);     // reset themeing
+            ExtendedControls.Theme.Current.ApplyStd(extPanelScroll);     // reset themeing
 
             BackColor = curcol;
             extPanelScroll.BackColor = curcol;

@@ -39,7 +39,7 @@ namespace EDDiscovery.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            var framed = EDDTheme.Instance?.ApplyDialog(this) ?? true;
+            var framed = ExtendedControls.Theme.Current?.ApplyDialog(this) ?? true;
             if (framed)
             {
                 // hide the caption panel, and resize the bottom panel to fit.

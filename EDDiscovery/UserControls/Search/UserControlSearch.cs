@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.Init(discoveryform, displaynumber);
-                discoveryform.theme.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
+                ExtendedControls.Theme.Current.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
                 uccb.SetCursor(uctg);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();

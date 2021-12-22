@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
 
             foreach (UserControlContainerResizable r in uccrlist)
             {
-                r.BorderColor = on ? Color.Transparent : discoveryform.theme.GridBorderLines;
+                r.BorderColor = on ? Color.Transparent : ExtendedControls.Theme.Current.GridBorderLines;
                 UserControlCommonBase uc = (UserControlCommonBase)r.control;
                 uc.SetTransparency(on, curcol);
             }
@@ -216,8 +216,8 @@ namespace EDDiscovery.UserControls
             uccr.Init(uccb, pi.WindowTitle);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
-            uccr.BorderColor = discoveryform.theme.GridBorderLines;
-            uccr.SelectedBorderColor = discoveryform.theme.TextBlockHighlightColor;
+            uccr.BorderColor = ExtendedControls.Theme.Current.GridBorderLines;
+            uccr.SelectedBorderColor = ExtendedControls.Theme.Current.TextBlockHighlightColor;
 
             int numopenedinsidealready = uccrlist.Count(x => x.control.GetType().Equals(uccb.GetType()));    // how many others are there BEFORE add
 
@@ -362,7 +362,7 @@ namespace EDDiscovery.UserControls
             {
                 UserControlContainerResizable uccr = CreateInitPanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]));
                 // uccb init done above, contract states we now theme.
-                discoveryform.theme.ApplyStd(uccr);
+                ExtendedControls.Theme.Current.ApplyStd(uccr);
 
                 LoadLayoutPanel(uccr, uccr.control as UserControlCommonBase,
                                             new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
@@ -376,8 +376,8 @@ namespace EDDiscovery.UserControls
                 AssignTHC();
             };
 
-            discoveryform.theme.ApplyStd(popoutdropdown,true);
-            popoutdropdown.SelectionBackColor = discoveryform.theme.ButtonBackColor;
+            ExtendedControls.Theme.Current.ApplyStd(popoutdropdown,true);
+            popoutdropdown.SelectionBackColor = ExtendedControls.Theme.Current.ButtonBackColor;
             popoutdropdown.Show(this);
         }
 

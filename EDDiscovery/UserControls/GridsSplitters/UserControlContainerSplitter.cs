@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
                         uc.Init(discoveryform, displaynumber);      // init..
 
                         uc.Scale(this.FindForm().CurrentAutoScaleFactor());       // keeping to the contract, scale and  
-                        discoveryform.theme.ApplyStd(uc);       // theme the uc. between init and set cursor
+                        ExtendedControls.Theme.Current.ApplyStd(uc);       // theme the uc. between init and set cursor
 
                         uc.SetCursor(ucursor_inuse);
                         uc.LoadLayout();

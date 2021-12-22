@@ -210,7 +210,7 @@ namespace EDDiscovery.UserControls
                     int vpos = 0;
                     StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                     frmt.Alignment = StringAlignment.Near;
-                    var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                    var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
                     //System.Diagnostics.Debug.WriteLine($"Pbox size {pictureBox.Size}");
