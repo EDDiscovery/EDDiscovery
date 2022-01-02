@@ -290,6 +290,8 @@ namespace EDDiscovery.UserControls
 
                 if ( sys == null )
                 {
+                    row.Cells[Distance.Index].Tag = null;
+
                     row.Cells[Distance.Index].Value =
                     row.Cells[ColumnX.Index].Value =
                     row.Cells[ColumnY.Index].Value =
@@ -304,7 +306,10 @@ namespace EDDiscovery.UserControls
                 else 
                 {
                     ISystem prevlinesys = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as ISystem : null;
-                    row.Cells[Distance.Index].Value = (prevlinesys?.HasCoordinate ?? false) ? sys.Distance(prevlinesys).ToString("0.#") : "";
+
+                    double dist = (prevlinesys?.HasCoordinate ?? false) ? sys.Distance(prevlinesys) : 0;
+                    row.Cells[Distance.Index].Tag = dist;       // record in tag for computation laster
+                    row.Cells[Distance.Index].Value = dist>0 ? dist.ToString("0.#") : "";
 
                     row.Cells[ColumnX.Index].Value = sys.X.ToString("0.#");
                     row.Cells[ColumnY.Index].Value = sys.Y.ToString("0.#");
@@ -362,16 +367,19 @@ namespace EDDiscovery.UserControls
 
             for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
             {
-                var sys = dataGridView.Rows[rowindex].Tag as ISystem;
+                var row = dataGridView.Rows[rowindex];
+                var sys = row.Tag as ISystem;
                 if ( sys?.HasCoordinate ?? false)
                 {
                     if (firstsys == null)
                         firstsys = sys;
                     lastsys = sys;
 
-                    var ds = dataGridView[1,rowindex].Value as string;
+                    double? ds = row.Cells[Distance.Index].Tag as double?;
                     if (ds != null)
-                        totaldistance += ds.InvariantParseDouble(0);
+                    {
+                        totaldistance += ds.Value;
+                    }
                 }
             }
 
