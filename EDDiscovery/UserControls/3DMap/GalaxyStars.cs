@@ -409,4 +409,3 @@ namespace EDDiscovery.UserControls.Map3D
     }
 
 }
-//}

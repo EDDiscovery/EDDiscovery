@@ -88,7 +88,7 @@ namespace EDDiscovery
             this.fetchLogsAgainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fetchStarDataAgainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rescanAllJournalFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendUnsyncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebuildUserDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebuildSystemDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -566,7 +566,7 @@ namespace EDDiscovery
             this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.syncEDSMSystemsToolStripMenuItem,
             this.rescanAllJournalFilesToolStripMenuItem,
-            this.sendUnsuncedEDDNEventsToolStripMenuItem,
+            this.sendUnsyncedEDDNEventsToolStripMenuItem,
             this.sendHistoricDataToInaraToolStripMenuItem,
             this.rebuildUserDBIndexesToolStripMenuItem,
             this.rebuildSystemDBIndexesToolStripMenuItem,
@@ -620,13 +620,13 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem.Text = "Re-scan all journal files";
             this.rescanAllJournalFilesToolStripMenuItem.Click += new System.EventHandler(this.rescanAllJournalFilesToolStripMenuItem_Click);
             // 
-            // sendUnsuncedEDDNEventsToolStripMenuItem
+            // sendUnsyncedEDDNEventsToolStripMenuItem
             // 
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.EDDN;
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Name = "sendUnsuncedEDDNEventsToolStripMenuItem";
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Text = "Send unsynced EDDN events";
-            this.sendUnsuncedEDDNEventsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEDDNEventsToolStripMenuItem_Click);
+            this.sendUnsyncedEDDNEventsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.EDDN;
+            this.sendUnsyncedEDDNEventsToolStripMenuItem.Name = "sendUnsyncedEDDNEventsToolStripMenuItem";
+            this.sendUnsyncedEDDNEventsToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
+            this.sendUnsyncedEDDNEventsToolStripMenuItem.Text = "Send unsynced EDDN events";
+            this.sendUnsyncedEDDNEventsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEDDNEventsToolStripMenuItem_Click);
             // 
             // sendHistoricDataToInaraToolStripMenuItem
             // 
@@ -1071,7 +1071,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rescanAllJournalFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteDuplicateFSDJumpEntriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sendUnsuncedEDDNEventsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEDDNEventsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendHistoricDataToInaraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addOnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manageAddOnsToolStripMenuItem;

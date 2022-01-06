@@ -41,6 +41,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
             glwfc.EnsureCurrentPaintResize = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
@@ -73,6 +74,7 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine($"3dmap {displaynumber} stop");
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
             systemtimer.Stop();
 
             glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
@@ -118,6 +120,10 @@ namespace EDDiscovery.UserControls
             map.UpdateNavRoute();
         }
 
+        private void GlobalBookMarkList_OnBookmarkChange(EliteDangerousCore.DB.BookmarkClass bk, bool deleted)
+        {
+            map.UpdateBookmarks();
+        }
         public class MapSaverImpl : MapSaver
         {
             public MapSaverImpl(UserControlCommonBase n)

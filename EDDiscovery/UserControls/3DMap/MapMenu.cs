@@ -225,12 +225,22 @@ namespace EDDiscovery.UserControls.Map3D
 
                 if ((parts & Map.Parts.NavRoute) != 0)
                 {
-                    GLCheckBox butnr = new GLCheckBox("NavRoute", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.NavRoute") , null);
+                    GLCheckBox butnr = new GLCheckBox("NavRoute", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.NavRoute"), null);
                     butnr.ToolTipText = "Show nav route";
                     butnr.Checked = map.NavRouteDisplay;
                     butnr.CheckChanged += (e1) => { map.NavRouteDisplay = butnr.Checked; };
                     pform.Add(butnr);
                     hpos += butnr.Width + hpad;
+                }
+
+                if ((parts & Map.Parts.Bookmarks) != 0)
+                {
+                    GLCheckBox butbkmks = new GLCheckBox("Bookmarks", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowBookmarks"), null);
+                    butbkmks.ToolTipText = "Show bookmarks";
+                    butbkmks.Checked = map.ShowBookmarks;
+                    butbkmks.CheckChanged += (e1) => { map.ShowBookmarks = butbkmks.Checked; };
+                    pform.Add(butbkmks);
+                    hpos += butbkmks.Width + hpad;
                 }
 
                 vpos += iconsize + ypad;

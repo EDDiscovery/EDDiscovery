@@ -400,7 +400,7 @@ namespace EDDiscovery
                 buttonReloadActions.Visible = true;
 
 #if !DEBUG
-            sendUnsuncedEDDNEventsToolStripMenuItem.Visible = false;        // for testing only now
+            sendUnsyncedEDDNEventsToolStripMenuItem.Visible = false;        // for testing only now
 #endif
 
             extButtonDrawnHelp.Text = "";
