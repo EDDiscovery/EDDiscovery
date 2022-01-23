@@ -14,6 +14,11 @@
 
 using EliteDangerousCore;
 using GLOFC.GL4;
+using GLOFC.GL4.Shaders;
+using GLOFC.GL4.Shaders.Fragment;
+using GLOFC.GL4.Shaders.Geo;
+using GLOFC.GL4.Shaders.Vertex;
+using GLOFC.GL4.ShapeFactory;
 using OpenTK;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,9 +33,10 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Start(GLItemsList items, GLRenderProgramSortedList rObjects, float bookmarksize, GLStorageBlock findbufferresults, bool depthtest)
         {
-            var vert = new GLPLVertexScaleLookat(rotate: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true,
+            var vert = new GLPLVertexScaleLookat(rotatetoviewer: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true,
                                                             autoscale: 30, autoscalemin: 1f, autoscalemax: 30f); // above autoscale, 1f
 
+            GLOFC.GLStatics.Check();
 
             const int texbindingpoint = 1;
             var frag = new GLPLFragmentShaderTexture(texbindingpoint);       // binding - simple texturer based on vs model coords
@@ -38,7 +44,7 @@ namespace EDDiscovery.UserControls.Map3D
             objectshader = new GLShaderPipeline(vert, null, null, null, frag);
             items.Add(objectshader);
 
-            var objtex = items.NewTexture2D("Bookmarktex", BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowBookmarks"), OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);
+            var objtex = items.NewTexture2D("Bookmarktex", BaseUtils.Icons.IconSet.GetBitmap("GalMap.Bookmark"), OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);
 
             objectshader.StartAction += (s, m) =>
             {
@@ -52,7 +58,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // 0 is model pos, 1 is world pos by a buffer, 2 is tex co-ords
             ridisplay = GLRenderableItem.CreateVector4Vector4Vector2(items, OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rt,
-                                GLShapeObjectFactory.CreateQuad2(bookmarksize, bookmarksize),         // quad2 4 vertexts as the model positions
+                                GLShapeObjectFactory.CreateQuadTriStrip(bookmarksize, bookmarksize),         // quad2 4 vertexts as the model positions
                                 bookmarkposbuf, 0,       // world positions come from here - not filled as yet
                                 GLShapeObjectFactory.TexTriStripQuad,
                                 ic: 0, seconddivisor: 1);
@@ -64,7 +70,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // hook to modelworldbuffer, at modelpos and worldpos.  UpdateEnables will fill in instance count
             rifind = GLRenderableItem.CreateVector4Vector4Vector2(items, OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rt,
-                                                            GLShapeObjectFactory.CreateQuad2(bookmarksize, bookmarksize),         // quad2 4 vertexts as the model positions
+                                                            GLShapeObjectFactory.CreateQuadTriStrip(bookmarksize, bookmarksize),         // quad2 4 vertexts as the model positions
                                                             bookmarkposbuf, 0,
                                                             GLShapeObjectFactory.TexTriStripQuad,
                                                             ic: 0, seconddivisor: 1);

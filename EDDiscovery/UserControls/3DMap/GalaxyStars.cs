@@ -16,6 +16,13 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using GLOFC;
 using GLOFC.GL4;
+using GLOFC.GL4.Buffers;
+using GLOFC.GL4.Shaders;
+using GLOFC.GL4.Shaders.Fragment;
+using GLOFC.GL4.Shaders.Geo;
+using GLOFC.GL4.Shaders.Stars;
+using GLOFC.GL4.Shaders.Vertex;
+using GLOFC.GL4.ShapeFactory;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -44,7 +51,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
         {
-            sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) },
+            sunvertex = new GLPLVertexShaderModelCoordWorldAutoscale(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) },
                  autoscale: 30, autoscalemin: 1, autoscalemax: 2, useeyedistance:false);
             sunshader = items.NewShaderPipeline(null, sunvertex, new GLPLStarSurfaceFragmentShader());
 
@@ -61,7 +68,7 @@ namespace EDDiscovery.UserControls.Map3D
             textrc.ClipDistanceEnable = 1;  // we are going to cull primitives which are deleted
 
             int texunitspergroup = 16;
-            textshader = items.NewShaderPipeline(null, new GLPLVertexShaderQuadTextureWithMatrixTranslation(), new GLPLFragmentShaderTexture2DIndexedMulti(0, 0, true, texunitspergroup));
+            textshader = items.NewShaderPipeline(null, new GLPLVertexShaderMatrixQuadTexture(), new GLPLFragmentShaderTexture2DIndexMulti(0, 0, true, texunitspergroup));
 
             slset = new GLSetOfObjectsWithLabels("SLSet", rObjects, texunitspergroup, 100, 10,
                                                             sunshader, shapebuf, shape.Length, starrc, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles,
@@ -94,7 +101,7 @@ namespace EDDiscovery.UserControls.Map3D
             while (cleanbitmaps.TryDequeue(out Sector sectoclean))
             {
                 System.Diagnostics.Debug.WriteLine($"Final Clean bitmap for {sectoclean.pos}");
-                BitMapHelpers.Dispose(sectoclean.bitmaps);
+                GLOFC.Utils.BitMapHelpers.Dispose(sectoclean.bitmaps);
                 sectoclean.bitmaps = null;
             }
         }
@@ -200,7 +207,7 @@ namespace EDDiscovery.UserControls.Map3D
                             while (cleanbitmaps.TryDequeue(out Sector sectoclean))
                             {
                                 //System.Diagnostics.Debug.WriteLine($"Clean bitmap for {sectoclean.pos}");
-                                BitMapHelpers.Dispose(sectoclean.bitmaps);
+                                GLOFC.Utils.BitMapHelpers.Dispose(sectoclean.bitmaps);
                                 sectoclean.bitmaps = null;
                             }
                         }
@@ -259,11 +266,11 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         fmt.Alignment = StringAlignment.Center;
 
-                        d.bitmaps = BitMapHelpers.DrawTextIntoFixedSizeBitmaps(slset.LabelSize, d.text, Font, System.Drawing.Text.TextRenderingHint.ClearTypeGridFit,
-                                                ForeText, BackText, 0.5f, frmt: fmt, length: d.systems);
+                        d.bitmaps = GLOFC.Utils.BitMapHelpers.DrawTextIntoFixedSizeBitmaps(slset.LabelSize, d.text, Font, System.Drawing.Text.TextRenderingHint.ClearTypeGridFit,
+                                                ForeText, BackText, 0.5f, textformat: fmt, length: d.systems);
                     }
 
-                    d.textpos = GLPLVertexShaderQuadTextureWithMatrixTranslation.CreateMatrices(d.positions, LabelOffset,  //offset
+                    d.textpos = GLPLVertexShaderMatrixQuadTexture.CreateMatrices(d.positions, LabelOffset,  //offset
                                                                                 LabelSize, //size
                                                                                 new Vector3(0, 0, 0), // rot (unused due to below)
                                                                                 true, false, // rotate, no elevation
@@ -321,7 +328,7 @@ namespace EDDiscovery.UserControls.Map3D
                     while (cleanbitmaps.TryDequeue(out Sector sectoclean))
                     {
                         //System.Diagnostics.Debug.WriteLine($"Foreground Clean bitmap for {sectoclean.pos}");
-                        BitMapHelpers.Dispose(sectoclean.bitmaps);
+                        GLOFC.Utils.BitMapHelpers.Dispose(sectoclean.bitmaps);
                         sectoclean.bitmaps = null;
                     }
                 }
@@ -370,7 +377,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         private GLShaderPipeline sunshader;     // sun drawer
         private GLShaderPipeline textshader;     // text shader
-        private GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation sunvertex;
+        private GLPLVertexShaderModelCoordWorldAutoscale sunvertex;
         private GLBuffer shapebuf;
 
         private GLShaderPipeline findshader;    // find shader for lookups

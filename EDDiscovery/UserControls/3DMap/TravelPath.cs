@@ -19,6 +19,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using EliteDangerousCore;
+using GLOFC.GL4.Shaders.Fragment;
+using GLOFC.GL4.Shaders;
+using GLOFC.GL4.Shaders.Vertex;
+using GLOFC.GL4.Shaders.Stars;
+using GLOFC.GL4.Shaders.Geo;
+using GLOFC.GL4.Bitmaps;
+using GLOFC.GL4.ShapeFactory;
+using GLOFC.GL4.Textures;
 
 namespace EDDiscovery.UserControls.Map3D
 {
@@ -46,6 +54,7 @@ namespace EDDiscovery.UserControls.Map3D
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
+
         public void Start(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
             this.MaxStars = maxstars;
@@ -59,7 +68,7 @@ namespace EDDiscovery.UserControls.Map3D
             tapetex.SetSamplerMode(OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat, OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat);
 
             tapefrag = new GLPLFragmentShaderTextureTriStripColorReplace(1, Color.FromArgb(255, 206, 0, 0));
-            var vert = new GLPLVertexShaderTextureWorldCoordWithTriangleStripCoordWRGB();
+            var vert = new GLPLVertexShaderWorldTextureTriStrip();
             tapeshader = new GLShaderPipeline(vert, tapefrag);
             items.Add(tapeshader);
 
@@ -81,7 +90,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // the colour index of the stars is selected by the w parameter of the world position vertexes. 
             // we autoscale to make them bigger at greater distances from eye
-            sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.Yellow, Color.FromArgb(255, 230, 230, 1) }, 
+            sunvertex = new GLPLVertexShaderModelCoordWorldAutoscale(new Color[] { Color.Yellow, Color.FromArgb(255, 230, 230, 1) }, 
                                     autoscale:30, autoscalemin:1,autoscalemax:2, useeyedistance: false);
             sunshader = new GLShaderPipeline(sunvertex, new GLPLStarSurfaceFragmentShader());
             items.Add(sunshader);
@@ -149,7 +158,7 @@ namespace EDDiscovery.UserControls.Map3D
         private void CreatePathInt(Color? tapepathdefault = null)
         {
             // Note W here selects the colour index of the stars, 0 = first, 1 = second etc
-
+            
             Vector4[] positionsv4 = currentfilteredlistsys.Select(x => new Vector4((float)x.X, (float)x.Y, (float)x.Z, 0)).ToArray();
             Color[] color = new Color[currentfilteredlistsys.Count];
 
@@ -201,7 +210,7 @@ namespace EDDiscovery.UserControls.Map3D
                     if (textrenderer.Exist(isys) == false)                   // if does not exist already, need a new label
                     {
                         textrenderer.Add(isys, isys.Name, Font, ForeText, BackText, new Vector3((float)isys.X+LabelOffset.X, (float)isys.Y + LabelOffset.Y, (float)isys.Z+LabelOffset.Z),
-                                LabelSize, new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: true, rotateelevation: false, alphafadescalar: -200, alphafadepos: 300);
+                                LabelSize, new Vector3(0, 0, 0), textformat: fmt, rotatetoviewer: true, rotateelevation: false, alphafadescalar: -200, alphafadepos: 300);
                     }
                 }
             }
@@ -311,7 +320,7 @@ namespace EDDiscovery.UserControls.Map3D
         private GLRenderableItem ritape;
 
         private GLShaderPipeline sunshader;
-        private GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation sunvertex;
+        private GLPLVertexShaderModelCoordWorldAutoscale sunvertex;
         private GLBuffer starposbuf;
         private GLRenderableItem renderersun;
 
@@ -322,7 +331,6 @@ namespace EDDiscovery.UserControls.Map3D
 
         private float tapesize;
         private float sunsize;
-
     }
 
 }

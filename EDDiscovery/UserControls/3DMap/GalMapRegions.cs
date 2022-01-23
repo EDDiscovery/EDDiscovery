@@ -19,6 +19,10 @@ using GLOFC.GL4;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using GLOFC.GL4.Bitmaps;
+using GLOFC.GL4.Shaders.Fragment;
+using GLOFC.GL4.Shaders.Vertex;
+using GLOFC.GL4.Shaders;
 
 namespace EDDiscovery.UserControls.Map3D
 {
@@ -73,7 +77,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                     vertexregionoutlineindex.Add(0xffff);       // primitive restart to break polygon
 
-                    List<List<Vector2>> polys = PolygonTriangulator.Triangulate(polygonxz, false);  // cut into convex polygons first - because we want the biggest possible area for naming purposes
+                    List<List<Vector2>> polys = GLOFC.Utils.PolygonTriangulator.Triangulate(polygonxz, false);  // cut into convex polygons first - because we want the biggest possible area for naming purposes
 
                     Vector2 avgcentroid = new Vector2(0, 0);
                     int pointsaveraged = 0;
@@ -86,7 +90,7 @@ namespace EDDiscovery.UserControls.Map3D
                             if (points.Count == 3)                                    // already a triangle..
                                 polytri = new List<List<Vector2>>() { new List<Vector2>() { points[0], points[1], points[2] } };
                             else
-                                polytri = PolygonTriangulator.Triangulate(points, true);    // cut into triangles not polygons
+                                polytri = GLOFC.Utils.PolygonTriangulator.Triangulate(points, true);    // cut into triangles not polygons
 
                             foreach (List<Vector2> pt in polytri)
                             {
@@ -110,7 +114,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                         cindex = (cindex+1) % array.Length;
 
-                        Vector2 centeroid = PolygonTriangulator.WeightedCentroids(polys);
+                        Vector2 centeroid = GLOFC.Utils.PolygonTriangulator.WeightedCentroids(polys);
 
                         if (corr != null)   // allows the centeroid to be nerfed slightly
                         {
@@ -119,7 +123,7 @@ namespace EDDiscovery.UserControls.Map3D
                                 centeroid = new Vector2(centeroid.X + entry.x, centeroid.Y + entry.y);
                         }
 
-                        var final = PolygonTriangulator.FitInsideConvexPoly(polys, centeroid, new Vector2(sizeofname, sizeofname * (float)bitmapsize.Height / (float)bitmapsize.Width));
+                        var final = GLOFC.Utils.PolygonTriangulator.FitInsideConvexPoly(polys, centeroid, new Vector2(sizeofname, sizeofname * (float)bitmapsize.Height / (float)bitmapsize.Width));
 
                         Vector3 bestpos = new Vector3(final.Item1.X, 0, final.Item1.Y);
                         Vector3 bestsize = new Vector3(final.Item2.X, 1, final.Item2.Y);
@@ -134,7 +138,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // regions
 
-            var vertregion = new GLPLVertexShaderFixedColorPalletWorldCoords(array.ToVector4(0.1f));
+            var vertregion = new GLPLVertexShaderWorldPalletColor(array.ToVector4(0.1f), true);
             var fragregion = new GLPLFragmentShaderVSColor();
 
             regionshader = new GLShaderPipeline(vertregion, fragregion, null, null);

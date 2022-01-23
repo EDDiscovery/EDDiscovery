@@ -16,6 +16,7 @@ using EliteDangerousCore.EDSM;
 using GLOFC.GL4.Controls;
 using System.Collections.Generic;
 using System.Drawing;
+using static GLOFC.GL4.Controls.GLBaseControl;
 
 namespace EDDiscovery.UserControls.Map3D
 {
@@ -30,8 +31,6 @@ namespace EDDiscovery.UserControls.Map3D
         public MapMenu(Map g, Map.Parts parts)
         {
             map = g;
-
-            GLBaseControl.Themer = Theme;
 
             // names of MS* are on screen items hidden during main menu presentation
 
@@ -76,6 +75,16 @@ namespace EDDiscovery.UserControls.Map3D
                 hpos += iconsize + hpad;
             }
 
+            if ((parts & Map.Parts.Bookmarks) != 0)
+            {
+                GLCheckBox butbkmks = new GLCheckBox("MSTPBookmarks", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowBookmarks"), null);
+                butbkmks.ToolTipText = "Show bookmark list";
+                butbkmks.CheckOnClick = true;
+                butbkmks.CheckChanged += (e1) => { g.ToggleBookmarkList(butbkmks.Checked); };
+                map.displaycontrol.Add(butbkmks);
+                hpos += butbkmks.Width + hpad;
+            }
+
             if ((parts & Map.Parts.SearchBox) != 0)
             {
                 EntryTextBox = new GLTextBoxAutoComplete("MSTPEntryText", new Rectangle(hpos, vpos, 300, iconsize), "");
@@ -89,12 +98,13 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Map.Parts.PrepopulateEDSMLocalArea) != 0)
             {
-                GLImage butpopstars = new GLImage("MSPopulate", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowMoreStars") );
+                GLImage butpopstars = new GLImage("MSPopulate", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowMoreStars"));
                 butpopstars.ToolTipText = "Load star box at current look location";
                 butpopstars.MouseClick = (o, e1) => { g.AddMoreStarsAtLookat(); };
                 map.displaycontrol.Add(butpopstars);
                 hpos += butpopstars.Width + hpad;
             }
+
 
             DBStatus = new GLImage("MSDB", new Rectangle(hpos,vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.db") );
             DBStatus.Dock = DockingType.BottomRight;
@@ -143,7 +153,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // provide opening animation
             pform.ScaleWindow = new SizeF(0.0f, 0.0f);
-            pform.Animators.Add(new AnimateScale(10, 400, true, new SizeF(1, 1)));
+            pform.Animators.Add(new GLControlAnimateScale(10, 400, true, new SizeF(1, 1)));
             pform.Font = new Font("Arial", 10f);
 
             // and closing animation
@@ -152,7 +162,7 @@ namespace EDDiscovery.UserControls.Map3D
                 if ( nb != null)
                     map.LocalAreaSize = (int)nb.Value;
                 e.Handled = true;       // stop close
-                var ani = new AnimateScale(10, 400, true, new SizeF(0, 0));       // add a close animation
+                var ani = new GLControlAnimateScale(10, 400, true, new SizeF(0, 0));       // add a close animation
                 ani.FinishAction += (a, c, t) => { pform.ForceClose(); };   // when its complete, force close
                 pform.Animators.Add(ani); 
             };
@@ -360,7 +370,7 @@ namespace EDDiscovery.UserControls.Map3D
                 galgb.ForeColor = Color.Orange;
                 pform.Add(galgb);
                 GLFlowLayoutPanel galfp = new GLFlowLayoutPanel("GALFP", DockingType.Fill, 0);
-                galfp.FlowPadding = new Padding(2, 2, 2, 2);
+                galfp.FlowPadding = new PaddingType(2, 2, 2, 2);
                 galfp.BackColor = Color.Transparent;
                 galgb.Add(galfp);
                 vpos += galgb.Height + ypad;
@@ -496,79 +506,6 @@ namespace EDDiscovery.UserControls.Map3D
                          pc.PosCamera.EyePosition.X.ToStringInvariant("N1") + " ," + pc.PosCamera.EyePosition.Y.ToStringInvariant("N1") + " ," + pc.PosCamera.EyePosition.Z.ToStringInvariant("N1");
                          //+ " ! " + pc.PosCamera.CameraDirection + " R " + pc.PosCamera.CameraRotation;
         }
-
-        static void Theme(GLBaseControl s)      // run on each control during add, theme it
-        {
-            Color formback = Color.FromArgb(220, 60, 60, 70);
-            Color buttonface = Color.FromArgb(255, 128, 128, 128);
-            Color texc = Color.Orange;
-
-            var but = s as GLButton;
-            if (but != null)
-            {
-                but.ButtonFaceColour = buttonface;
-                but.ForeColor = texc;
-                but.BackColor = buttonface;
-                but.BorderColor = buttonface;
-            }
-
-            var cb = s as GLCheckBox;
-            if (cb != null)
-            {
-                cb.ButtonFaceColour = buttonface;
-            }
-            var cmb = s as GLComboBox;
-            if (cmb != null)
-            {
-                cmb.BackColor = formback ;
-                cmb.ForeColor = cmb.DropDownForeColor = texc;
-                cmb.FaceColor = cmb.DropDownBackgroundColor = buttonface;
-                cmb.BorderColor = formback;
-            }
-
-            var dt = s as GLDateTimePicker;
-            if (dt != null)
-            {
-                dt.BackColor = buttonface;
-                dt.ForeColor = texc;
-                dt.Calendar.ButLeft.ForeColor = dt.Calendar.ButRight.ForeColor = texc;
-                dt.SelectedColor = Color.FromArgb(255, 160, 160, 160);
-            }
-
-            var fr = s as GLForm;
-            if (fr != null)
-            {
-                fr.BackColor = formback;
-                fr.ForeColor = texc;
-            }
-
-            var tb = s as GLMultiLineTextBox;
-            if (tb != null)
-            {
-                tb.BackColor = formback;
-                tb.ForeColor = texc;
-            }
-
-            Color cmbck = Color.FromArgb(255, 128, 128, 128);
-
-            var ms = s as GLMenuStrip;
-            if (ms != null)
-            {
-                ms.BackColor = cmbck;
-                ms.IconStripBackColor = cmbck.Multiply(1.2f);
-            }
-            var mi = s as GLMenuItem;
-            if (mi != null)
-            {
-                mi.BackColor = cmbck;
-                mi.ButtonFaceColour = cmbck;
-                mi.ForeColor = texc;
-                mi.BackDisabledScaling = 1.0f;
-            }
-
-
-        }
-
 
     }
 }

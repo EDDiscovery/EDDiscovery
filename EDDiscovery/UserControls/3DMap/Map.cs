@@ -19,6 +19,14 @@ using GLOFC;
 using GLOFC.Controller;
 using GLOFC.GL4;
 using GLOFC.GL4.Controls;
+using GLOFC.GL4.Operations;
+using GLOFC.GL4.Shaders;
+using GLOFC.GL4.Shaders.Compute;
+using GLOFC.GL4.Shaders.Fragment;
+using GLOFC.GL4.Shaders.Sprites;
+using GLOFC.GL4.ShapeFactory;
+using GLOFC.GL4.Textures;
+using GLOFC.Utils;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -27,6 +35,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static GLOFC.GL4.Controls.GLBaseControl;
 
 namespace EDDiscovery.UserControls.Map3D
 {
@@ -135,7 +144,6 @@ namespace EDDiscovery.UserControls.Map3D
         public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
         {
             this.parent = parent;
-           // parts = (Parts)511;
 
             this.parts = parts;
             this.glwfc = glwfc;
@@ -149,6 +157,10 @@ namespace EDDiscovery.UserControls.Map3D
 
             int lyscale = 1;
             int front = -20000 / lyscale, back = front + 90000 / lyscale, left = -45000 / lyscale, right = left + 90000 / lyscale, vsize = 2000 / lyscale;
+
+            // parts = parts - (1 << 9);
+
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
             if ((parts & Parts.Galaxy) != 0) // galaxy
             {
@@ -230,7 +242,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.StarDots) != 0)
             {
                 int gran = 8;
-                Bitmap heat = galaxybitmap.Function(galaxybitmap.Width / gran, galaxybitmap.Height / gran, mode: BitMapHelpers.BitmapFunction.HeatMap);
+                Bitmap heat = galaxybitmap.Function(galaxybitmap.Width / gran, galaxybitmap.Height / gran, mode: GLOFC.Utils.BitMapHelpers.BitmapFunction.HeatMap);
                 //heat.Save(@"c:\code\heatmap.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 
                 Random rnd = new Random(23);
@@ -375,6 +387,7 @@ namespace EDDiscovery.UserControls.Map3D
                 routepath.Start("Route", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
             }
 
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
             // Matrix calc holding transform info
 
@@ -390,6 +403,8 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.Font = new Font("Arial", 10f);
             displaycontrol.Focusable = true;          // we want to be able to focus and receive key presses.
             displaycontrol.SetFocus();
+
+            GLBaseControl.Themer = MapThemer.Theme;
 
             // 3d controller
 
@@ -415,9 +430,12 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
                 {
+                    System.Diagnostics.Debug.Assert(displaycontrol.IsCurrent());
                     // MCUB set up by Controller3DDraw which did the work first
                     galaxymenu?.UpdateCoords(gl3dcontroller);
                     displaycontrol.Animate(glwfc.ElapsedTimems);
+
+                    GLStatics.ClearDepthBuffer();         // clear the depth buffer, so we are on top of all previous renders.
                     displaycontrol.Render(glwfc.RenderState, ts);
                 };
             }
@@ -428,8 +446,11 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.MouseMove += MouseMoveOnMap;
             displaycontrol.MouseWheel += MouseWheelOnMap;
 
+
             if ((parts & Parts.Menu) != 0)
-               galaxymenu = new MapMenu(this, parts);
+            {
+                galaxymenu = new MapMenu(this, parts);
+            }
 
             if ((parts & Parts.RightClick) != 0)
             {
@@ -452,9 +473,9 @@ namespace EDDiscovery.UserControls.Map3D
                             tb.CursorToEnd();
                             tb.BackColor = cfg.BackColor;
                             cfg.AddOK("OK");            // order important for tab control
-                            cfg.AddButton("goto", "Goto", new Point(0, 0), ac: AnchorType.AutoPlacement);
+                            cfg.AddButton("goto", "Goto", new Point(0, 0), anchor: AnchorType.AutoPlacement);
                             if (bkm!=null)
-                                cfg.AddButton("edit", "Edit", new Point(0, 0), ac: AnchorType.AutoPlacement);
+                                cfg.AddButton("edit", "Edit", new Point(0, 0), anchor: AnchorType.AutoPlacement);
                             cfg.Add("tb", tb);
                             cfg.Init(e.ViewportLocation, nl.Item1);
                             cfg.InstallStandardTriggers();
@@ -545,12 +566,28 @@ namespace EDDiscovery.UserControls.Map3D
                             System.Windows.Forms.DialogResult res = frm.ShowDialog();
                             if (res == System.Windows.Forms.DialogResult.OK)
                             {
+                                // add/update, the global bookmark callback will prompt update
+
                                 EliteDangerousCore.DB.BookmarkClass newcls = EliteDangerousCore.DB.GlobalBookMarkList.Instance.AddOrUpdateBookmark(
                                     null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
                                                                                                    DateTime.UtcNow, frm.Notes, frm.SurfaceLocations);
 
-                                UpdateBookmarks();
+
                             }
+                        }
+                    },
+                    new GLMenuItem("RCMDeleteBookmark", "Delete Bookmark")
+                    {
+                        MouseClick = (s1, e1) =>
+                        {
+                            var bkm = rightclickmenu.Tag as EliteDangerousCore.DB.BookmarkClass;
+                            if (bkm == null)
+                            {
+                                var nl2 = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
+                                bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl2.Item1);
+                            }
+
+                            DeleteBookmark(bkm);
                         }
                     },
                     new GLMenuItem("RCMAddExpedition", "Add to expedition")
@@ -580,7 +617,7 @@ namespace EDDiscovery.UserControls.Map3D
                     else
                     {
                         ms["RCMNewBookmark"].Visible = false;
-                        ms["RCMEditBookmark"].Visible = rightclickmenu.Tag is EliteDangerousCore.DB.BookmarkClass;
+                        ms["RCMEditBookmark"].Visible = ms["RCMDeleteBookmark"].Visible = rightclickmenu.Tag is EliteDangerousCore.DB.BookmarkClass;
                     }
                 };
             }
@@ -664,6 +701,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (galaxystars != null)
                 galaxystars.Start();
+
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
         }
         #endregion
 
@@ -700,6 +739,7 @@ namespace EDDiscovery.UserControls.Map3D
                 var bks = EliteDangerousCore.DB.GlobalBookMarkList.Instance.Bookmarks;
                 var list = bks.Select(a => new Vector4((float)a.x, (float)a.y + 1.5f, (float)a.z, 1)).ToArray();
                 bookmarks.Create(list);
+                FillBookmarkForm();
             }
         }
 
@@ -740,6 +780,122 @@ namespace EDDiscovery.UserControls.Map3D
                     bkm, bkm.isStar, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
                                                                                    bkm.TimeUTC, frm.Notes, frm.SurfaceLocations);
             }
+        }
+        public void DeleteBookmark(EliteDangerousCore.DB.BookmarkClass bkm)
+        {
+            GLMessageBox msg = new GLMessageBox("Confirm", displaycontrol, new Point(int.MinValue, 0), "Confirm Deletion of bookmark" + " " + bkm.Name, "Warning", 
+                            GLMessageBox.MessageBoxButtons.OKCancel, 
+                            callback: (mbox,dr) =>
+                            {
+                                if (dr == GLForm.DialogResultEnum.OK)
+                                {
+                                    EliteDangerousCore.DB.GlobalBookMarkList.Instance.Delete(bkm);
+                                }
+                            }
+                        );
+        }
+
+        GLForm bmform = null;
+
+        public void ToggleBookmarkList(bool on)
+        {
+            System.Diagnostics.Debug.WriteLine($"Bookmark list {on}");
+
+            if ( bmform == null )
+            {
+                bmform = new GLForm("BKForm", "Bookmarks", new Rectangle(5, 40, Math.Min(400,displaycontrol.Width-30), Math.Min(600,displaycontrol.Height-60)));
+                GLDataGridView dgv = null;
+                dgv = new GLDataGridView("BKDGV", new Rectangle(10, 10, 10, 10));
+                dgv.Dock = DockingType.Fill;
+                dgv.SelectCellSelectsRow = true;
+                dgv.AllowUserToSelectMultipleRows = false;
+                dgv.ColumnFillMode = GLDataGridView.ColFillMode.FillWidth;
+                dgv.HorizontalScrollVisible = false;
+                dgv.SelectRowOnRightClick = true;
+                dgv.RowHeaderEnable = false;
+                var col0 = dgv.CreateColumn(fillwidth: 100, title: "Star");
+                var col1 = dgv.CreateColumn(fillwidth: 50, title: "X");
+                var col2 = dgv.CreateColumn(fillwidth: 50, title: "Y");
+                var col3 = dgv.CreateColumn(fillwidth: 50, title: "Z");
+                var col4 = dgv.CreateColumn(fillwidth: 100, title: "Note");
+                dgv.AddColumn(col0);
+                dgv.AddColumn(col1);
+                dgv.AddColumn(col2);
+                dgv.AddColumn(col3);
+                dgv.AddColumn(col4);
+
+                dgv.MouseClickOnGrid += (row, col, mouseevent) =>       // intercept mouse click on grid rather than row selection since we can see what button clicked it
+                {
+                    if (mouseevent.Button == GLMouseEventArgs.MouseButtons.Left && row >= 0)
+                    {
+                        var bk = dgv.Rows[row].Tag as EliteDangerousCore.DB.BookmarkClass;
+                        gl3dcontroller.SlewToPosition(new Vector3((float)bk.x, (float)bk.y, (float)bk.z), -1);
+                    }
+                };
+
+                dgv.ContextMenuGrid = new GLContextMenu("BookmarksRightClickMenu",
+                    new GLMenuItem("BKEdit", "Edit")
+                    {
+                        MouseClick = (s, e) =>
+                        {
+                            var pos = dgv.ContextMenuGrid.Tag as GLDataGridView.RowColPos;
+                            System.Diagnostics.Debug.WriteLine($"Click on {pos.Row}");
+                            if (pos.Row >= 0)
+                            {
+                                var bk = dgv.Rows[pos.Row].Tag as EliteDangerousCore.DB.BookmarkClass;
+                                EditBookmark(bk);
+                            }
+                        }
+                    },
+                    new GLMenuItem("BKNew", "New")
+                    {
+                        MouseClick = (s, e) =>
+                        {
+                            BookmarkForm frm = new BookmarkForm(parent.discoveryform.history);
+                            frm.NewFreeEntrySystemBookmark(DateTime.UtcNow);
+                            System.Windows.Forms.DialogResult res = frm.ShowDialog();
+                            if (res == System.Windows.Forms.DialogResult.OK)
+                            {
+                                // add/update, the global bookmark callback will prompt update
+
+                                EliteDangerousCore.DB.BookmarkClass newcls = EliteDangerousCore.DB.GlobalBookMarkList.Instance.AddOrUpdateBookmark(
+                                    null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                                                                                                   DateTime.UtcNow, frm.Notes, frm.SurfaceLocations);
+
+                            }
+                        }
+                    },
+                    new GLMenuItem("BKDelete", "Delete")
+                    {
+                        MouseClick = (s, e) =>
+                        {
+                            var pos = dgv.ContextMenuGrid.Tag as GLDataGridView.RowColPos;
+                            System.Diagnostics.Debug.WriteLine($"Click on {pos.Row}");
+                            if (pos.Row >= 0)
+                            {
+                                var bk = dgv.Rows[pos.Row].Tag as EliteDangerousCore.DB.BookmarkClass;
+                                DeleteBookmark(bk);
+                            }
+                        }
+                    });
+
+                dgv.ContextMenuGrid.Opening = (cms,tag) => {
+                    var rcp = tag as GLDataGridView.RowColPos;      
+                    cms["BKEdit"].Visible = cms["BKDelete"].Visible = rcp.Row >= 0;
+                    cms.Tag = rcp; // transfer the opening position tag to the cms for the menu items, so it can get it
+                };
+
+
+                bmform.Add(dgv);
+                bmform.FormClosed += (f) => { bmform = null; displaycontrol.ApplyToControlOfName("MSTPBookmarks", (c) => { ((GLCheckBox)c).CheckedNoChangeEvent = false; }); };
+
+
+                FillBookmarkForm();
+
+                displaycontrol.Add(bmform);
+            }
+
+            bmform.Visible = on;
         }
 
         public void GoToTravelSystem(int dir)      //0 = current, 1 = next, -1 = prev
@@ -787,6 +943,33 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxymenu.EntryTextBox.CancelAutoComplete();
             }
             displaycontrol.SetFocus();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private void FillBookmarkForm()
+        {
+            if (bmform != null)
+            {
+                var dgv = bmform.ControlsZ[0] as GLDataGridView;
+                dgv.Clear();
+
+                var gl = EliteDangerousCore.DB.GlobalBookMarkList.Instance.Bookmarks;
+
+                foreach (var bk in gl)
+                {
+                    var row = dgv.CreateRow();
+
+                    row.AddCell(new GLDataGridViewCellText(bk.Name),
+                                new GLDataGridViewCellText(bk.x.ToString("N1")), new GLDataGridViewCellText(bk.y.ToString("N1")), new GLDataGridViewCellText(bk.z.ToString("N1")),
+                                new GLDataGridViewCellText(bk.Note));
+                    row.Tag = bk;
+                    row.AutoSize = true;
+                    dgv.AddRow(row);
+                }
+            }
         }
 
         #endregion
@@ -894,7 +1077,7 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("GALSTARSOBJ", GalaxyStarsMaxObjects);
             defaults.PutSetting("LOCALAREALY", LocalAreaSize);
             defaults.PutSetting("POSCAMERA", gl3dcontroller.PosCamera.StringPositionCamera);
-            defaults.PutSetting("BKMK", bookmarks.Enable);
+            defaults.PutSetting("BKMK", bookmarks?.Enable ?? true);
         }
 
         #endregion
@@ -998,6 +1181,8 @@ namespace EDDiscovery.UserControls.Map3D
         // Context is set.
         public void Systick()
         {
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
             gl3dcontroller.HandleKeyboardSlews(true, OtherKeys);
             gl3dcontroller.RecalcMatrixIfMoved();
             glwfc.Invalidate();
@@ -1008,8 +1193,10 @@ namespace EDDiscovery.UserControls.Map3D
         // Context is set.
         private void Controller3DDraw(Controller3D c3d, ulong time)
         {
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
-            mcb.SetText(gl3dcontroller.MatrixCalc);        // set the matrix unform block to the controller 3d matrix calc.
+            mcb.SetFull(gl3dcontroller.MatrixCalc);        // set the matrix unform block to the controller 3d matrix calc.
 
             // set up the grid shader size
 

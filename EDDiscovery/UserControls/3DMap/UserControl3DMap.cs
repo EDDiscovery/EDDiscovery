@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
-            glwfc.EnsureCurrentPaintResize = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
+            glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
 
             mapsave = new MapSaverImpl(this);
         }
@@ -87,23 +87,28 @@ namespace EDDiscovery.UserControls
 
         public void SetRoute(List<ISystem> syslist)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
             map.SetRoute(syslist);
         }
+
         public void GotoSystem(ISystem sys, float distancely = 50)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
             map.GoToSystem(sys, distancely);
         }
 
         private void SystemTick(object sender, EventArgs e)
         {
-            glwfc.EnsureCurrentContext();           // ensure the context, work may be done in the timers to the GL.
             //System.Diagnostics.Debug.WriteLine($"3dmap {displaynumber} tick");
-            GLOFC.Timers.Timer.ProcessTimers();
+            glwfc.EnsureCurrentContext();           // ensure the context
+            GLOFC.Utils.PolledTimer.ProcessTimers();     // work may be done in the timers to the GL.
             map.Systick();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
             if (he.IsFSDCarrierJump)
             {
                 map.UpdateTravelPath();
@@ -116,12 +121,16 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
             map.UpdateTravelPath();
             map.UpdateNavRoute();
         }
 
         private void GlobalBookMarkList_OnBookmarkChange(EliteDangerousCore.DB.BookmarkClass bk, bool deleted)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
             map.UpdateBookmarks();
         }
         public class MapSaverImpl : MapSaver
