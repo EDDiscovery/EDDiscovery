@@ -146,7 +146,8 @@
       <DesignTime>True</DesignTime>
     </None>
     <Reference Include="GLOFC, Version=0.6.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.0.6.6\lib\net48\GLOFC.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OFC\OFC\bin\Debug\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
@@ -205,10 +206,12 @@
     </Compile>
     <Compile Include="PopOuts.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
+    <Compile Include="UserControls\3DMap\Bookmarks.cs" />
     <Compile Include="UserControls\3DMap\GalaxyStars.cs" />
     <Compile Include="UserControls\3DMap\GalMapObjects.cs" />
     <Compile Include="UserControls\3DMap\GalMapRegions.cs" />
     <Compile Include="UserControls\3DMap\Map.cs" />
+    <Compile Include="UserControls\3DMap\MapTheme.cs" />
     <Compile Include="UserControls\3DMap\MapMenu.cs" />
     <Compile Include="UserControls\3DMap\ShaderGalaxy.cs" />
     <Compile Include="UserControls\3DMap\ShaderGrid.cs" />

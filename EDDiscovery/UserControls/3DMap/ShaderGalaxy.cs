@@ -13,6 +13,8 @@
  */
 
 using GLOFC.GL4;
+using GLOFC.GL4.Shaders;
+using GLOFC.GL4.Shaders.Volumetric;
 using OpenTK.Graphics.OpenGL;
 
 namespace EDDiscovery.UserControls.Map3D

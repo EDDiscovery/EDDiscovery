@@ -12,12 +12,21 @@
  * governing permissions and limitations under the License.
  */
 
+using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using GLOFC;
 using GLOFC.Controller;
 using GLOFC.GL4;
 using GLOFC.GL4.Controls;
+using GLOFC.GL4.Operations;
+using GLOFC.GL4.Shaders;
+using GLOFC.GL4.Shaders.Compute;
+using GLOFC.GL4.Shaders.Fragment;
+using GLOFC.GL4.Shaders.Sprites;
+using GLOFC.GL4.ShapeFactory;
+using GLOFC.GL4.Textures;
+using GLOFC.Utils;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -26,6 +35,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static GLOFC.GL4.Controls.GLBaseControl;
 
 namespace EDDiscovery.UserControls.Map3D
 {
@@ -51,6 +61,7 @@ namespace EDDiscovery.UserControls.Map3D
             EDSMStars = (1 << 6),
             NavRoute = (1 << 7),
             Route = (1 << 8),
+            Bookmarks = (1 << 9),
 
             Menu = (1<<15),
             RightClick = (1 << 16),
@@ -99,6 +110,8 @@ namespace EDDiscovery.UserControls.Map3D
         private GLPointSpriteShader starsprites;
         private GalaxyStars galaxystars;
 
+        private Bookmarks bookmarks;
+
         private GLContextMenu rightclickmenu;
 
         private MapMenu galaxymenu;
@@ -128,11 +141,9 @@ namespace EDDiscovery.UserControls.Map3D
         public ulong ElapsedTimems { get { return glwfc.ElapsedTimems; } }
 
         #region Initialise
-
         public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
         {
             this.parent = parent;
-           // parts = (Parts)511;
 
             this.parts = parts;
             this.glwfc = glwfc;
@@ -146,6 +157,10 @@ namespace EDDiscovery.UserControls.Map3D
 
             int lyscale = 1;
             int front = -20000 / lyscale, back = front + 90000 / lyscale, left = -45000 / lyscale, right = left + 90000 / lyscale, vsize = 2000 / lyscale;
+
+            // parts = parts - (1 << 9);
+
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
             if ((parts & Parts.Galaxy) != 0) // galaxy
             {
@@ -227,7 +242,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.StarDots) != 0)
             {
                 int gran = 8;
-                Bitmap heat = galaxybitmap.Function(galaxybitmap.Width / gran, galaxybitmap.Height / gran, mode: BitMapHelpers.BitmapFunction.HeatMap);
+                Bitmap heat = galaxybitmap.Function(galaxybitmap.Width / gran, galaxybitmap.Height / gran, mode: GLOFC.Utils.BitMapHelpers.BitmapFunction.HeatMap);
                 //heat.Save(@"c:\code\heatmap.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 
                 Random rnd = new Random(23);
@@ -327,21 +342,15 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.TravelPath) != 0)
             {
                 travelpath = new TravelPath();
-                travelpath.Create("TP", 50000, travelsunsize, tapesize, findresults, true, items, rObjects);
+                travelpath.Start("TP", 50000, travelsunsize, tapesize, findresults, true, items, rObjects);
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
-            }
-
-            if ((parts & Parts.Route) != 0)
-            {
-                routepath = new TravelPath();
-                routepath.Create("Route", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
             }
 
             if ((parts & Parts.NavRoute) != 0)
             {
                 navroute = new TravelPath();
-                navroute.Create("NavRoute", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
+                navroute.Start("NavRoute", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
                 UpdateNavRoute();
             }
 
@@ -349,6 +358,13 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 galmapobjects = new GalMapObjects();
                 galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
+            }
+
+            if ((parts & Parts.Bookmarks) != 0)
+            {
+                bookmarks = new Bookmarks();
+                bookmarks.Start(items, rObjects, 1.0f, findresults, true);
+                UpdateBookmarks();
             }
 
             if ((parts & Parts.EDSMStars) != 0)
@@ -365,6 +381,13 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Create(items, rObjects, galaxysunsize, findresults);
             }
 
+            if ((parts & Parts.Route) != 0)
+            {
+                routepath = new TravelPath();
+                routepath.Start("Route", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
+            }
+
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
             // Matrix calc holding transform info
 
@@ -380,6 +403,8 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.Font = new Font("Arial", 10f);
             displaycontrol.Focusable = true;          // we want to be able to focus and receive key presses.
             displaycontrol.SetFocus();
+
+            GLBaseControl.Themer = MapThemer.Theme;
 
             // 3d controller
 
@@ -405,9 +430,12 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
                 {
+                    System.Diagnostics.Debug.Assert(displaycontrol.IsCurrent());
                     // MCUB set up by Controller3DDraw which did the work first
                     galaxymenu?.UpdateCoords(gl3dcontroller);
                     displaycontrol.Animate(glwfc.ElapsedTimems);
+
+                    GLStatics.ClearDepthBuffer();         // clear the depth buffer, so we are on top of all previous renders.
                     displaycontrol.Render(glwfc.RenderState, ts);
                 };
             }
@@ -418,8 +446,11 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.MouseMove += MouseMoveOnMap;
             displaycontrol.MouseWheel += MouseWheelOnMap;
 
+
             if ((parts & Parts.Menu) != 0)
-               galaxymenu = new MapMenu(this, parts);
+            {
+                galaxymenu = new MapMenu(this, parts);
+            }
 
             if ((parts & Parts.RightClick) != 0)
             {
@@ -429,6 +460,8 @@ namespace EDDiscovery.UserControls.Map3D
                         MouseClick = (s, e) =>
                         {
                             var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
+                            var bkm = rightclickmenu.Tag as EliteDangerousCore.DB.BookmarkClass;
+
                             System.Diagnostics.Debug.WriteLine($"Info {nl.Item1} {nl.Item2}");
 
                             GLFormConfigurable cfg = new GLFormConfigurable("Info");
@@ -440,18 +473,42 @@ namespace EDDiscovery.UserControls.Map3D
                             tb.CursorToEnd();
                             tb.BackColor = cfg.BackColor;
                             cfg.AddOK("OK");            // order important for tab control
-                            cfg.AddButton("goto", "Goto", new Point(0, 0), ac: AnchorType.AutoPlacement);
+                            cfg.AddButton("goto", "Goto", new Point(0, 0), anchor: AnchorType.AutoPlacement);
+                            if (bkm!=null)
+                                cfg.AddButton("edit", "Edit", new Point(0, 0), anchor: AnchorType.AutoPlacement);
                             cfg.Add("tb", tb);
                             cfg.Init(e.ViewportLocation, nl.Item1);
                             cfg.InstallStandardTriggers();
-                            cfg.Trigger += (form, entry, name, tag) => { if (name == "goto") { gl3dcontroller.SlewToPositionZoom(nl.Item2, 300, -1); } };
+                            cfg.Trigger += (form, entry, name, tag) => 
+                            {
+                                if (name == "goto")
+                                {
+                                    gl3dcontroller.SlewToPositionZoom(nl.Item2, 300, -1);
+                                }
+                                else if (name == "edit")
+                                {
+                                    cfg.Close();
+                                    EditBookmark(bkm);
+                                }
+                            };
                             cfg.ResumeLayout();
                             displaycontrol.Add(cfg);
                             cfg.Moveable = true;
-
-                            // logical name is important as menu uses it to close downno 
-                            //GLMessageBox msg = new GLMessageBox("InfoBoxForm-1", displaycontrol, e.WindowLocation, null,
-                            //      nl.Item3, $"{nl.Item1}", GLMessageBox.MessageBoxButtons.OK, null, Color.FromArgb(220, 60, 60, 70), Color.DarkOrange);
+                        }
+                    },
+                    new GLMenuItem("RCMEditBookmark", "Edit Bookmark")
+                    {
+                        MouseClick = (s1, e1) =>
+                        {
+                            rightclickmenu.Visible = false;     // because its a winform dialog we are showing, the menu won't shut down during show
+                                                                // so we set this to invisible (not close, won't work inside here)
+                            var bkm = rightclickmenu.Tag as EliteDangerousCore.DB.BookmarkClass;
+                            if ( bkm == null)
+                            {
+                                var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
+                                bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl.Item1);
+                            }
+                            EditBookmark(bkm);
                         }
                     },
                     new GLMenuItem("RCMZoomIn", "Goto Zoom In")
@@ -498,6 +555,41 @@ namespace EDDiscovery.UserControls.Map3D
                                 ExtendedControls.MessageBoxTheme.Show(parent.FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
                         }
                     },
+                    new GLMenuItem("RCMNewBookmark", "New Bookmark")
+                    {
+                        MouseClick = (s1, e1) =>
+                        {
+                            rightclickmenu.Visible = false;     // see above for this reason
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
+                            BookmarkForm frm = new BookmarkForm(parent.discoveryform.history);
+                            frm.NewSystemBookmark(new SystemClass(nl.Item1, nl.Item2.X, nl.Item2.Y, nl.Item2.Z), "", DateTime.UtcNow);
+                            System.Windows.Forms.DialogResult res = frm.ShowDialog();
+                            if (res == System.Windows.Forms.DialogResult.OK)
+                            {
+                                // add/update, the global bookmark callback will prompt update
+
+                                EliteDangerousCore.DB.BookmarkClass newcls = EliteDangerousCore.DB.GlobalBookMarkList.Instance.AddOrUpdateBookmark(
+                                    null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                                                                                                   DateTime.UtcNow, frm.Notes, frm.SurfaceLocations);
+
+
+                            }
+                        }
+                    },
+                    new GLMenuItem("RCMDeleteBookmark", "Delete Bookmark")
+                    {
+                        MouseClick = (s1, e1) =>
+                        {
+                            var bkm = rightclickmenu.Tag as EliteDangerousCore.DB.BookmarkClass;
+                            if (bkm == null)
+                            {
+                                var nl2 = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
+                                bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl2.Item1);
+                            }
+
+                            DeleteBookmark(bkm);
+                        }
+                    },
                     new GLMenuItem("RCMAddExpedition", "Add to expedition")
                     {
                         MouseClick = (s1, e1) =>
@@ -508,9 +600,25 @@ namespace EDDiscovery.UserControls.Map3D
                     }
                 );
 
-                rightclickmenu.Opening += (ms) =>
+                rightclickmenu.Opening += (ms,opentag) =>
                 {
-                    ms["RCMAddExpedition"].Enabled = ms["RCMViewStarDisplay"].Enabled = ms["RCMViewEDSM"].Enabled = rightclickmenu.Tag is ISystem || rightclickmenu.Tag is HistoryEntry;
+                    bool issystem = rightclickmenu.Tag is ISystem || rightclickmenu.Tag is HistoryEntry;
+
+                    ms["RCMAddExpedition"].Visible = ms["RCMViewStarDisplay"].Visible = ms["RCMViewEDSM"].Visible = issystem;
+
+                    if (issystem)
+                    {
+                        var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
+                        var bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl.Item1);
+
+                        ms["RCMEditBookmark"].Visible = bkm != null;
+                        ms["RCMNewBookmark"].Visible = bkm == null;
+                    }
+                    else
+                    {
+                        ms["RCMNewBookmark"].Visible = false;
+                        ms["RCMEditBookmark"].Visible = ms["RCMDeleteBookmark"].Visible = rightclickmenu.Tag is EliteDangerousCore.DB.BookmarkClass;
+                    }
                 };
             }
 
@@ -593,7 +701,12 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (galaxystars != null)
                 galaxystars.Start();
+
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
         }
+        #endregion
+
+        #region Helpers
 
         public void UpdateTravelPath()   // new history entry
         {
@@ -619,6 +732,17 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
+        public void UpdateBookmarks()
+        {
+            if ( bookmarks != null )
+            {
+                var bks = EliteDangerousCore.DB.GlobalBookMarkList.Instance.Bookmarks;
+                var list = bks.Select(a => new Vector4((float)a.x, (float)a.y + 1.5f, (float)a.z, 1)).ToArray();
+                bookmarks.Create(list);
+                FillBookmarkForm();
+            }
+        }
+
         public void UpdateEDSMStarsLocalArea()
         {
             galaxystars.ClearBoxAround();
@@ -640,46 +764,139 @@ namespace EDDiscovery.UserControls.Map3D
                 }
             }
         }
-
         public void AddMoreStarsAtLookat()
         {
             galaxystars.Request9x3Box(gl3dcontroller.PosCamera.LookAt);
         }
 
-        #endregion
+        public void EditBookmark(EliteDangerousCore.DB.BookmarkClass bkm)
+        {
+            BookmarkForm frm = new BookmarkForm(parent.discoveryform.history);
+            frm.Bookmark(bkm);
+            System.Windows.Forms.DialogResult res = frm.ShowDialog();
+            if (res == System.Windows.Forms.DialogResult.OK)
+            {
+                EliteDangerousCore.DB.BookmarkClass newcls = EliteDangerousCore.DB.GlobalBookMarkList.Instance.AddOrUpdateBookmark(
+                    bkm, bkm.isStar, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                                                                                   bkm.TimeUTC, frm.Notes, frm.SurfaceLocations);
+            }
+        }
+        public void DeleteBookmark(EliteDangerousCore.DB.BookmarkClass bkm)
+        {
+            GLMessageBox msg = new GLMessageBox("Confirm", displaycontrol, new Point(int.MinValue, 0), "Confirm Deletion of bookmark" + " " + bkm.Name, "Warning", 
+                            GLMessageBox.MessageBoxButtons.OKCancel, 
+                            callback: (mbox,dr) =>
+                            {
+                                if (dr == GLForm.DialogResultEnum.OK)
+                                {
+                                    EliteDangerousCore.DB.GlobalBookMarkList.Instance.Delete(bkm);
+                                }
+                            }
+                        );
+        }
 
-        #region Turn on/off, move, etc.
+        GLForm bmform = null;
 
-        public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? true; } set { if (galaxyshader != null) galaxyshader.Enable = value; glwfc.Invalidate(); } }
-        public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? true; } set { if (stardots != null) stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
-        public int GalaxyStars { get { return galaxystars?.EnableMode ?? 0; } set { if (galaxystars != null) galaxystars.EnableMode = value; glwfc.Invalidate(); } }
-        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if (galaxystars != null ) galaxystars.MaxObjectsAllowed = value; } } 
-        public bool Grid { get { return gridshader?.Enable ?? true; } set { if (gridshader != null) gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
+        public void ToggleBookmarkList(bool on)
+        {
+            System.Diagnostics.Debug.WriteLine($"Bookmark list {on}");
 
-        public bool NavRouteDisplay { get { return navroute?.EnableTape ?? true; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
-        public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? true; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
-        public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
-        public void TravelPathRefresh() { if (travelpath != null) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
-        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? new DateTime(2014,12,14); } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
-        public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
-        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
-        public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
+            if ( bmform == null )
+            {
+                bmform = new GLForm("BKForm", "Bookmarks", new Rectangle(5, 40, Math.Min(400,displaycontrol.Width-30), Math.Min(600,displaycontrol.Height-60)));
+                GLDataGridView dgv = null;
+                dgv = new GLDataGridView("BKDGV", new Rectangle(10, 10, 10, 10));
+                dgv.Dock = DockingType.Fill;
+                dgv.SelectCellSelectsRow = true;
+                dgv.AllowUserToSelectMultipleRows = false;
+                dgv.ColumnFillMode = GLDataGridView.ColFillMode.FillWidth;
+                dgv.HorizontalScrollVisible = false;
+                dgv.SelectRowOnRightClick = true;
+                dgv.RowHeaderEnable = false;
+                var col0 = dgv.CreateColumn(fillwidth: 100, title: "Star");
+                var col1 = dgv.CreateColumn(fillwidth: 50, title: "X");
+                var col2 = dgv.CreateColumn(fillwidth: 50, title: "Y");
+                var col3 = dgv.CreateColumn(fillwidth: 50, title: "Z");
+                var col4 = dgv.CreateColumn(fillwidth: 100, title: "Note");
+                dgv.AddColumn(col0);
+                dgv.AddColumn(col1);
+                dgv.AddColumn(col2);
+                dgv.AddColumn(col3);
+                dgv.AddColumn(col4);
 
-        public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? true; } set { if (galmapobjects != null) galmapobjects.Enable = value; glwfc.Invalidate(); } }
-        public void SetGalObjectTypeEnable(string id, bool state) { if (galmapobjects != null) galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
-        public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? true; }
-        public void SetAllGalObjectTypeEnables(string set) { if (galmapobjects != null) galmapobjects.SetAllEnables(set); glwfc.Invalidate(); }
-        public string GetAllGalObjectTypeEnables() { return galmapobjects?.GetAllEnables() ?? ""; }
-        public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Enable = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsShadingEnable { get { return edsmgalmapregions?.Regions ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Regions = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsTextEnable { get { return edsmgalmapregions?.Text ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Text = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsEnable { get { return elitemapregions?.Enable ?? true; } set { if (elitemapregions != null) elitemapregions.Enable = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsOutlineEnable { get { return elitemapregions?.Outlines ?? true; } set { if (elitemapregions != null) elitemapregions.Outlines = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsShadingEnable { get { return elitemapregions?.Regions ?? false; } set { if (elitemapregions != null) elitemapregions.Regions = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? true; } set { if (elitemapregions != null) elitemapregions.Text = value; glwfc.Invalidate(); } }
+                dgv.MouseClickOnGrid += (row, col, mouseevent) =>       // intercept mouse click on grid rather than row selection since we can see what button clicked it
+                {
+                    if (mouseevent.Button == GLMouseEventArgs.MouseButtons.Left && row >= 0)
+                    {
+                        var bk = dgv.Rows[row].Tag as EliteDangerousCore.DB.BookmarkClass;
+                        gl3dcontroller.SlewToPosition(new Vector3((float)bk.x, (float)bk.y, (float)bk.z), -1);
+                    }
+                };
 
-        public int LocalAreaSize { get { return localareasize; } set { if ( value != localareasize ) { localareasize = value; UpdateEDSMStarsLocalArea(); } } }
+                dgv.ContextMenuGrid = new GLContextMenu("BookmarksRightClickMenu",
+                    new GLMenuItem("BKEdit", "Edit")
+                    {
+                        MouseClick = (s, e) =>
+                        {
+                            var pos = dgv.ContextMenuGrid.Tag as GLDataGridView.RowColPos;
+                            System.Diagnostics.Debug.WriteLine($"Click on {pos.Row}");
+                            if (pos.Row >= 0)
+                            {
+                                var bk = dgv.Rows[pos.Row].Tag as EliteDangerousCore.DB.BookmarkClass;
+                                EditBookmark(bk);
+                            }
+                        }
+                    },
+                    new GLMenuItem("BKNew", "New")
+                    {
+                        MouseClick = (s, e) =>
+                        {
+                            BookmarkForm frm = new BookmarkForm(parent.discoveryform.history);
+                            frm.NewFreeEntrySystemBookmark(DateTime.UtcNow);
+                            System.Windows.Forms.DialogResult res = frm.ShowDialog();
+                            if (res == System.Windows.Forms.DialogResult.OK)
+                            {
+                                // add/update, the global bookmark callback will prompt update
+
+                                EliteDangerousCore.DB.BookmarkClass newcls = EliteDangerousCore.DB.GlobalBookMarkList.Instance.AddOrUpdateBookmark(
+                                    null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                                                                                                   DateTime.UtcNow, frm.Notes, frm.SurfaceLocations);
+
+                            }
+                        }
+                    },
+                    new GLMenuItem("BKDelete", "Delete")
+                    {
+                        MouseClick = (s, e) =>
+                        {
+                            var pos = dgv.ContextMenuGrid.Tag as GLDataGridView.RowColPos;
+                            System.Diagnostics.Debug.WriteLine($"Click on {pos.Row}");
+                            if (pos.Row >= 0)
+                            {
+                                var bk = dgv.Rows[pos.Row].Tag as EliteDangerousCore.DB.BookmarkClass;
+                                DeleteBookmark(bk);
+                            }
+                        }
+                    });
+
+                dgv.ContextMenuGrid.Opening = (cms,tag) => {
+                    var rcp = tag as GLDataGridView.RowColPos;      
+                    cms["BKEdit"].Visible = cms["BKDelete"].Visible = rcp.Row >= 0;
+                    cms.Tag = rcp; // transfer the opening position tag to the cms for the menu items, so it can get it
+                };
+
+
+                bmform.Add(dgv);
+                bmform.FormClosed += (f) => { bmform = null; displaycontrol.ApplyToControlOfName("MSTPBookmarks", (c) => { ((GLCheckBox)c).CheckedNoChangeEvent = false; }); };
+
+
+                FillBookmarkForm();
+
+                displaycontrol.Add(bmform);
+            }
+
+            bmform.Visible = on;
+        }
 
         public void GoToTravelSystem(int dir)      //0 = current, 1 = next, -1 = prev
         {
@@ -709,18 +926,91 @@ namespace EDDiscovery.UserControls.Map3D
         public void ViewGalaxy()
         {
             gl3dcontroller.PosCamera.CameraRotation = 0;
-            gl3dcontroller.PosCamera.GoToZoomPan(new Vector3(0, 0, 0), new Vector2(140.75f, 0), 0.5f,3);
+            gl3dcontroller.PosCamera.GoToZoomPan(new Vector3(0, 0, 0), new Vector2(140.75f, 0), 0.5f, 3);
         }
 
         public void SetRoute(List<ISystem> syslist)
         {
-            if ( routepath != null )
+            if (routepath != null)
                 routepath.CreatePath(syslist, Color.Green);
-       }
+        }
+
+        private void SetEntryText(string text)
+        {
+            if (galaxymenu.EntryTextBox != null)
+            {
+                galaxymenu.EntryTextBox.Text = text;
+                galaxymenu.EntryTextBox.CancelAutoComplete();
+            }
+            displaycontrol.SetFocus();
+        }
 
         #endregion
 
         #region Helpers
+
+        private void FillBookmarkForm()
+        {
+            if (bmform != null)
+            {
+                var dgv = bmform.ControlsZ[0] as GLDataGridView;
+                dgv.Clear();
+
+                var gl = EliteDangerousCore.DB.GlobalBookMarkList.Instance.Bookmarks;
+
+                foreach (var bk in gl)
+                {
+                    var row = dgv.CreateRow();
+
+                    row.AddCell(new GLDataGridViewCellText(bk.Name),
+                                new GLDataGridViewCellText(bk.x.ToString("N1")), new GLDataGridViewCellText(bk.y.ToString("N1")), new GLDataGridViewCellText(bk.z.ToString("N1")),
+                                new GLDataGridViewCellText(bk.Note));
+                    row.Tag = bk;
+                    row.AutoSize = true;
+                    dgv.AddRow(row);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Enables
+
+        public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? true; } set { if (galaxyshader != null) galaxyshader.Enable = value; glwfc.Invalidate(); } }
+        public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? true; } set { if (stardots != null) stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
+        public int GalaxyStars { get { return galaxystars?.EnableMode ?? 0; } set { if (galaxystars != null) galaxystars.EnableMode = value; glwfc.Invalidate(); } }
+        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if (galaxystars != null ) galaxystars.MaxObjectsAllowed = value; } } 
+        public bool Grid { get { return gridshader?.Enable ?? true; } set { if (gridshader != null) gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
+
+        public bool NavRouteDisplay { get { return navroute?.EnableTape ?? true; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
+        public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? true; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
+        public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
+        public void TravelPathRefresh() { if (travelpath != null) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
+        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? new DateTime(2014,12,14); } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
+        public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
+        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
+        public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
+
+        public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? true; } set { if (galmapobjects != null) galmapobjects.Enable = value; glwfc.Invalidate(); } }
+        public void SetGalObjectTypeEnable(string id, bool state) { if (galmapobjects != null) galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
+        public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? true; }
+        public void SetAllGalObjectTypeEnables(string set) { if (galmapobjects != null) galmapobjects.SetAllEnables(set); glwfc.Invalidate(); }
+        public string GetAllGalObjectTypeEnables() { return galmapobjects?.GetAllEnables() ?? ""; }
+        public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Enable = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsShadingEnable { get { return edsmgalmapregions?.Regions ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Regions = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsTextEnable { get { return edsmgalmapregions?.Text ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Text = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsEnable { get { return elitemapregions?.Enable ?? true; } set { if (elitemapregions != null) elitemapregions.Enable = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsOutlineEnable { get { return elitemapregions?.Outlines ?? true; } set { if (elitemapregions != null) elitemapregions.Outlines = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsShadingEnable { get { return elitemapregions?.Regions ?? false; } set { if (elitemapregions != null) elitemapregions.Regions = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? true; } set { if (elitemapregions != null) elitemapregions.Text = value; glwfc.Invalidate(); } }
+        public bool ShowBookmarks { get { return bookmarks?.Enable ?? true; } set { if (bookmarks != null) bookmarks.Enable = value; glwfc.Invalidate(); } }
+
+        public int LocalAreaSize { get { return localareasize; } set { if ( value != localareasize ) { localareasize = value; UpdateEDSMStarsLocalArea(); } } }
+
+        #endregion
+
+        #region State load
 
         public void LoadState(MapSaver defaults, bool restorepos, int loadlimit)
         {
@@ -755,10 +1045,10 @@ namespace EDDiscovery.UserControls.Map3D
             GalaxyStarsMaxObjects = (loadlimit==0) ? defaults.GetSetting("GALSTARSOBJ", 500000) : loadlimit;
             LocalAreaSize = defaults.GetSetting("LOCALAREALY", 50);
 
+            ShowBookmarks = defaults.GetSetting("BKMK", true);
+
             if (restorepos )
                 gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
-
-
         }
 
         public void SaveState(MapSaver defaults)
@@ -787,30 +1077,33 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("GALSTARSOBJ", GalaxyStarsMaxObjects);
             defaults.PutSetting("LOCALAREALY", LocalAreaSize);
             defaults.PutSetting("POSCAMERA", gl3dcontroller.PosCamera.StringPositionCamera);
+            defaults.PutSetting("BKMK", bookmarks?.Enable ?? true);
         }
 
-        private void SetEntryText(string text)
-        {
-            if (galaxymenu.EntryTextBox != null)
-            {
-                galaxymenu.EntryTextBox.Text = text;
-                galaxymenu.EntryTextBox.CancelAutoComplete();
-            }
-            displaycontrol.SetFocus();
-        }
+        #endregion
+
+        #region Finding
 
         private Object FindObjectOnMap(Point loc)
         {
-            float tz = float.MaxValue, gz = float.MaxValue, sz = float.MaxValue, rp = float.MaxValue, nr = float.MaxValue;
+            float hez = float.MaxValue, galobjz = float.MaxValue, sysz = float.MaxValue, routez = float.MaxValue, navroutez = float.MaxValue, bkmz = float.MaxValue;
 
-            var he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out tz);     //z are maxvalue if not found, will return an HE since travelpath is made with it
-            var gmo = galmapobjects?.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out gz);
-            var sys = galaxystars?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out sz);
-            var rte = routepath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out rp);    
-            var nav = navroute?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out nr);     
+            var gmo = galmapobjects?.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out galobjz);
+            var bkm = bookmarks?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out bkmz);
+            var he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out hez);     //z are maxvalue if not found, will return an HE since travelpath is made with it
+            var sys = galaxystars?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out sysz);
+            var rte = routepath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out routez);    
+            var nav = navroute?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out navroutez);
 
-            if (gmo != null && gz < sz && gz < tz && gz < rp && gz < nr)      // got gmo, and closer than the others
+            if (gmo != null && galobjz < bkm && galobjz < hez && galobjz < sysz && galobjz < routez && galobjz < navroutez)      // got gmo, and closer than the others
                 return gmo;
+
+            if (bkm != null && bkmz < hez && bkmz < sysz && bkmz < routez && bkmz < navroutez)
+            {
+                var bks = EliteDangerousCore.DB.GlobalBookMarkList.Instance.Bookmarks;
+                return bks[bkm.Value];
+            }
+
             if (he != null )                            // he is prefered over others since it has more data associated with it
                 return he;
             if (sys != null)
@@ -833,13 +1126,17 @@ namespace EDDiscovery.UserControls.Map3D
         {
             var he = obj as HistoryEntry;
             var gmo = obj as GalacticMapObject;
+            var bkm = obj as EliteDangerousCore.DB.BookmarkClass;
             var sys = obj as ISystem;
 
-            string name = he != null ? he.System.Name : gmo != null ? gmo.Name : sys.Name;
+            string name = he != null ? he.System.Name : gmo != null ? gmo.Name : bkm != null ? bkm.Name : sys.Name;
+            if (bkm != null)
+                name = "Bookmark " + name;
 
             Vector3 pos = he != null ? new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z) :
                             gmo != null ? new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z) :
-                                new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
+                                bkm != null ? new Vector3((float)bkm.x, (float)bkm.y, (float)bkm.z) :
+                                    new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
 
             string info = "";
 
@@ -869,14 +1166,13 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 info = info.AppendPrePad(gmo.Description,Environment.NewLine);
             }
-            else
+            else if ( bkm != null)
             {
-
+                info = info.AppendPrePad(bkm.Note, Environment.NewLine);
             }
 
             return new Tuple<string, Vector3, string>(name, pos, info);
         }
-
 
         #endregion
 
@@ -885,6 +1181,8 @@ namespace EDDiscovery.UserControls.Map3D
         // Context is set.
         public void Systick()
         {
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
             gl3dcontroller.HandleKeyboardSlews(true, OtherKeys);
             gl3dcontroller.RecalcMatrixIfMoved();
             glwfc.Invalidate();
@@ -895,8 +1193,10 @@ namespace EDDiscovery.UserControls.Map3D
         // Context is set.
         private void Controller3DDraw(Controller3D c3d, ulong time)
         {
+            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
-            mcb.SetText(gl3dcontroller.MatrixCalc);        // set the matrix unform block to the controller 3d matrix calc.
+            mcb.SetFull(gl3dcontroller.MatrixCalc);        // set the matrix unform block to the controller 3d matrix calc.
 
             // set up the grid shader size
 

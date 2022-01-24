@@ -533,6 +533,8 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\Bookmark.png" />
+    <EmbeddedResource Include="GalMap\ShowBookmarks.png" />
     <EmbeddedResource Include="Panels\Organics.png" />
     <EmbeddedResource Include="Controls\ScanPosition.png" />
     <EmbeddedResource Include="Controls\Font.png" />

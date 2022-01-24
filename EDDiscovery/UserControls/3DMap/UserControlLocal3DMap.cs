@@ -43,7 +43,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;
 
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
-            glwfc.EnsureCurrentPaintResize = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
+            glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
 
             mapsave = new UserControl3DMap.MapSaverImpl(this);
         }
@@ -99,13 +99,15 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.Assert(systemtimer.Enabled);
 
-            glwfc.EnsureCurrentContext();           // ensure the context, work may be done in the timers to the GL.
-            GLOFC.Timers.Timer.ProcessTimers();
+            glwfc.EnsureCurrentContext();           // ensure the context
+            GLOFC.Utils.PolledTimer.ProcessTimers();     // work may be done in the timers to the GL.
             map.Systick();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
             if (he.IsFSDCarrierJump)
             {
                 map.UpdateTravelPath();
@@ -119,6 +121,8 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnSyncComplete(long full, long update)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
             if (full + update > 0)      // only if something changes do we refresh
             {
                 map.UpdateEDSMStarsLocalArea();
@@ -127,6 +131,8 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
             map.UpdateEDSMStarsLocalArea();
             map.UpdateTravelPath();
             map.UpdateNavRoute();

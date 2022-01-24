@@ -15,6 +15,14 @@
 using EliteDangerousCore.EDSM;
 using GLOFC;
 using GLOFC.GL4;
+using GLOFC.GL4.Bitmaps;
+using GLOFC.GL4.Shaders;
+using GLOFC.GL4.Shaders.Fragment;
+using GLOFC.GL4.Shaders.Geo;
+using GLOFC.GL4.Shaders.Tesselation;
+using GLOFC.GL4.Shaders.Vertex;
+using GLOFC.GL4.ShapeFactory;
+using GLOFC.GL4.Textures;
 using OpenTK;
 using System.Collections.Generic;
 using System.Drawing;
@@ -64,7 +72,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             Bitmap[] images = GalMapType.VisibleTypes.Select(x => GalMapTypeIcons[x.VisibleType.Value] as Bitmap).ToArray();
             // 256 is defined normal size
-            var objtex = new GLTexture2DArray(images, mipmaplevel: 1, genmipmaplevel: 3, bmpsize: new Size(256, 256), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8, alignment: ContentAlignment.BottomCenter);
+            var objtex = new GLTexture2DArray(images, bmpmipmaplevels: 1, wantedmipmaplevels: 3, texturesize: new Size(256, 256), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8, alignment: ContentAlignment.BottomCenter);
             IGLTexture texarray = items.Add(objtex, "GalObjTex");
 
             const float objsize = 1.0f;        // size of object on screen
@@ -75,8 +83,8 @@ namespace EDDiscovery.UserControls.Map3D
             // now build the shaders
 
             const int texbindingpoint = 1;
-            var vert = new GLPLVertexScaleLookat(rotate: dorotate, rotateelevation: doelevation,       // a look at vertex shader
-                                                        autoscale: 30, autoscalemin: 1f, autoscalemax: 30f, useeyedistance:false); // below 500, 1f, above 500, scale up to 20x
+            var vert = new GLPLVertexScaleLookat(rotatetoviewer: dorotate, rotateelevation: doelevation,       // a look at vertex shader
+                                                        autoscale: 30, autoscalemin: 1f, autoscalemax: 30f, useeyedistance:false); 
             var tcs = new GLPLTesselationControl(10f);  // number of intermediate points
             tes = new GLPLTesselationEvaluateSinewave(wavesize, 1f);         // 0.2f in size, 1 wave across the object
             var frag = new GLPLFragmentShaderTexture2DDiscard(texbindingpoint);       // binding - takes image pos from tes. imagepos < 0 means discard
@@ -98,7 +106,7 @@ namespace EDDiscovery.UserControls.Map3D
 
 
             ridisplay = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Patches, rt,
-                                GLShapeObjectFactory.CreateQuad2(objsize, objsize),         // quad2 4 vertexts
+                                GLShapeObjectFactory.CreateQuadTriStrip(objsize, objsize),         // quad2 4 vertexts
                                 new Vector4[galmap.VisibleMapObjects.Length],        // world positions
                                 ic: 0, seconddivisor: 1);
 
@@ -165,7 +173,7 @@ namespace EDDiscovery.UserControls.Map3D
                     textrenderer.Add(o.ID, o.Name, Font,
                         Color.White, Color.FromArgb(0, 255, 0, 255),
                         pos,
-                        labelsize, new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,
+                        labelsize, new Vector3(0, 0, 0), textformat: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,
                         alphafadescalar: -100, alphafadepos: 500); // fade in, alpha = 0 at >500, 1 at 400
 
                 }

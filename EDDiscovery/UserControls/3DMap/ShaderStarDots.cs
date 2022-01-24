@@ -13,6 +13,7 @@
  */
 
 using GLOFC.GL4;
+using GLOFC.GL4.Shaders;
 
 namespace EDDiscovery.UserControls.Map3D
 {
