@@ -67,8 +67,12 @@ namespace EDDiscovery.UserControls.Map3D
             items.Add(tapetex);
             tapetex.SetSamplerMode(OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat, OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat);
 
-            tapefrag = new GLPLFragmentShaderTextureTriStripColorReplace(1, Color.FromArgb(255, 206, 0, 0));
-            var vert = new GLPLVertexShaderWorldTextureTriStrip();
+            // configure the fragger, set the replacement color, and set the distance where the replacement color is used for all pixels
+            tapefrag = new GLPLFragmentShaderTextureTriStripColorReplace(1, Color.FromArgb(255, 206, 0, 0), 1000);
+            // create the vertex shader with the autoscale required
+            var vert = new GLPLVertexShaderWorldTextureTriStripNorm(100, 1, 10000);
+            vert.SetWidth(tapesize);        // set the nominal tape width
+            
             tapeshader = new GLShaderPipeline(vert, tapefrag);
             items.Add(tapeshader);
 
@@ -76,7 +80,10 @@ namespace EDDiscovery.UserControls.Map3D
             rts.DepthTest = depthtest;  // no depth test so always appears
 
             // now the renderer, set up with the render control, tape as the points, and bind a RenderDataTexture so the texture gets binded each time
-            ritape = GLRenderableItem.CreateVector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rts, new Vector4[] { Vector4.Zero }, new GLRenderDataTexture(tapetex));
+
+            var zerotape = new Vector4[] { Vector4.Zero };      // just use an dummy array to get this going
+            ritape = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rts, zerotape,zerotape, new GLRenderDataTexture(tapetex));
+
             tapepointbuf = items.LastBuffer();  // keep buffer for refill
 
             ritape.ElementBuffer = items.NewBuffer();       // empty buffer for element index for now
@@ -160,6 +167,8 @@ namespace EDDiscovery.UserControls.Map3D
             // Note W here selects the colour index of the stars, 0 = first, 1 = second etc
             
             Vector4[] positionsv4 = currentfilteredlistsys.Select(x => new Vector4((float)x.X, (float)x.Y, (float)x.Z, 0)).ToArray();
+          //   positionsv4 = positionsv4.Take(2).ToArray(); // debug
+
             Color[] color = new Color[currentfilteredlistsys.Count];
 
             if (currentfilteredlisthe != null)
@@ -181,13 +190,18 @@ namespace EDDiscovery.UserControls.Map3D
 
             float seglen = tapesize * 10;
 
-            // a tape is a set of points (item1) and indexes to select them (item2), so we need an element index in the renderer to use.
-            var tape = GLTapeObjectFactory.CreateTape(positionsv4, color, tapesize, seglen, 0F.Radians(), margin: sunsize * 1.2f);
+            // set the tape up
 
-            tapepointbuf.AllocateFill(tape.Item1.ToArray());        // replace the points with a new one
-            ritape.RenderState.PrimitiveRestart = GL4Statics.DrawElementsRestartValue(tape.Item3);        // IMPORTANT missing bit Robert, must set the primitive restart value to the new tape size
+            var tape = GLTapeNormalObjectFactory.CreateTape(positionsv4, color, seglen, 0F.Radians(), margin: sunsize * 1.2f); // create tape
+            
+            // we fill in the buffer again, and reset the binding position of entry two, update the element index, set visibility
+            tapepointbuf.AllocateBytes((tape.Item1.Count + tape.Item2.Count) * GLBuffer.Vec4size);
+            tapepointbuf.Fill(tape.Item1.ToArray());
+            tapepointbuf.Fill(tape.Item2.ToArray());
+            tapepointbuf.Bind(ritape.VertexArray, 1, tapepointbuf.Positions[1], 16);  // for the second one, need to update and rebind positions. First one always at zero
 
-            ritape.CreateElementIndex(ritape.ElementBuffer, tape.Item2.ToArray(), tape.Item3);       // update the element buffer
+            ritape.RenderState.PrimitiveRestart = GL4Statics.DrawElementsRestartValue(tape.Item4);   // IMPORTANT missing bit Robert, must set the primitive restart value to the new tape size
+            ritape.CreateElementIndex(ritape.ElementBuffer, tape.Item3.ToArray(), tape.Item4);       // update the element buffer, DrawCount, ElementIndexSize
             ritape.Visible = tape.Item1.Count > 0;      // only visible if positions..
 
             starposbuf.AllocateFill(positionsv4);       // and update the star position buffers so find and sun renderer works
@@ -220,7 +234,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             if ((currentfilteredlistsys?.Count ?? 0) > 0)
             {
-                const int rotperiodms = 20000;
+                const int rotperiodms = 10000;
                 time = time % rotperiodms;
                 float fract = (float)time / rotperiodms;
                 float angle = (float)(2 * Math.PI * fract);
