@@ -157,13 +157,13 @@ namespace EDDiscovery.Forms
             if (thisSystem != null)
             {
                 var lookup = await helist.StarScan.FindSystemAsync(thisSystem, true);
-                var landables = lookup?.Bodies?.Select(b => b.CustomNameOrOwnname );        // lets present all, even if not landable, as you may want a whole planet bookmark
+                var landables = lookup?.Bodies?.Select(b => b.FullName.ReplaceIfStartsWith(thisSystem.Name) + ((b.ScanData?.IsLandable??false) ? " (*)" : "" ));        // lets present all, even if not landable, as you may want a whole planet bookmark
 
                 if (landables != null)
                 {
                     foreach (string s in landables)
                     {
-                        //System.Diagnostics.Debug.WriteLine("Drop " + s);
+                        System.Diagnostics.Debug.WriteLine($"Add bookmark landable '{s}'");
                         BodyName.Items.Add(s);
                     }
                 }
