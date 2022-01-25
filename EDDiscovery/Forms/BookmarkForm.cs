@@ -142,7 +142,7 @@ namespace EDDiscovery.Forms
             {
                 var edsm = new EDSMClass();
                 edsmurl = edsm.GetUrlToSystem(name);
-                SurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks, helist);
+                SurfaceBookmarks.Init(bk.StarName, helist, bk.PlanetaryMarks);
             }
 
 

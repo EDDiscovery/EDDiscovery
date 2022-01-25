@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
                 if (bk.isRegion)
                     userControlSurfaceBookmarks.Disable();
                 else
-                    userControlSurfaceBookmarks.Init(bk.StarName,bk.PlanetaryMarks, discoveryform.history);
+                    userControlSurfaceBookmarks.Init(bk.StarName,discoveryform.history, bk.PlanetaryMarks);
             }
             else
             {

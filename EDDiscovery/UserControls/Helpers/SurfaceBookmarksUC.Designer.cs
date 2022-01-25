@@ -114,13 +114,13 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(644, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(641, 0);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 187);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 187);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 7;
@@ -135,6 +135,7 @@ namespace EDDiscovery.Forms
             // 
             this.dataGridViewMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewMarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewMarks.ColumnHeaderMenuStrip = null;
             this.dataGridViewMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BodyName,
@@ -146,11 +147,15 @@ namespace EDDiscovery.Forms
             this.dataGridViewMarks.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMarks.Name = "dataGridViewMarks";
+            this.dataGridViewMarks.RowHeaderMenuStrip = null;
             this.dataGridViewMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewMarks.Size = new System.Drawing.Size(644, 187);
+            this.dataGridViewMarks.SingleRowSelect = true;
+            this.dataGridViewMarks.Size = new System.Drawing.Size(641, 187);
             this.dataGridViewMarks.TabIndex = 3;
+            this.dataGridViewMarks.TopLeftHeaderMenuStrip = null;
             this.dataGridViewMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMarks_CellEndEdit);
             this.dataGridViewMarks.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewMarks_CellValidating);
+            this.dataGridViewMarks.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewMarks_DataError);
             this.dataGridViewMarks.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewMarks_UserDeletingRow);
             // 
             // BodyName

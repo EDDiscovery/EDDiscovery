@@ -45,9 +45,11 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Init(string systemName, HistoryList helist)     // from bookmark form.  new system or update with name..  name can be blank
+        public void Init(string systemName, HistoryList helist, PlanetMarks pm = null)
         {
-            planetmarks = new PlanetMarks();
+            Edited = false;
+
+            planetmarks = pm != null ? pm : new PlanetMarks();
 
             dataGridViewMarks.CancelEdit();
             dataGridViewMarks.Rows.Clear();
@@ -55,70 +57,67 @@ namespace EDDiscovery.Forms
             sendToCompassToolStripMenuItem.Enabled = false;
             dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
 
-            if (!string.IsNullOrEmpty(systemName))
-                UpdateComboBox(systemName , helist);
-
-            Edited = false;
-
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+
+            LoadGrid(systemName, helist);
         }
 
-        public void Init(string systemName, PlanetMarks pm, HistoryList helist)          // from UCB or Bookmark form, Init with a bookmark
+        // we do this in an async task, as the FindSystemAsync will go away for a while
+        // when it returns, we can then fill the grid if required with the right body name set.
+        private async void LoadGrid(string systemName, HistoryList helist)
         {
-            Edited = false;
-            planetmarks = pm != null ? pm : new PlanetMarks();
+            //System.Diagnostics.Debug.WriteLine($"Lookup for planets '{systemName}'");
+            var lookup = await helist.StarScan.FindSystemAsync(new SystemClass(systemName), true);
 
-            dataGridViewMarks.CancelEdit();
-            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
-            dataGridViewMarks.Rows.Clear();
-            dataGridViewMarks.Enabled = true;
+            // lets present all, even if not landable, as you may want a whole planet bookmark
+            var bodies = lookup?.Bodies?.Select(b => b.FullName.ReplaceIfStartsWith(systemName) + (b.CustomName != null ? " " + b.CustomName : ""));
 
-            dataGridViewMarks.SuspendLayout();
+            //System.Diagnostics.Debug.WriteLine($".. Finish lookup for planets '{systemName}' Got {bodies?.ToArray().Length}");
 
-            if (!string.IsNullOrEmpty(systemName))
-                UpdateComboBox(systemName, helist);
-
-            if (planetmarks.Planets != null)
+            if (bodies != null)
             {
-                foreach (Planet pl in planetmarks.Planets)
+                BodyName.Items.Clear();
+                foreach (string s in bodies)
                 {
-                    foreach (Location loc in pl.Locations)
+                    System.Diagnostics.Debug.WriteLine($"Add bookmark landable '{s}'");
+                    BodyName.Items.Add(s);
+                }
+
+                if (PlanetMarks?.Planets != null)
+                {
+                    foreach (Planet pl in PlanetMarks.Planets)
                     {
-                        System.Diagnostics.Debug.WriteLine("Add row {0} {1} {2}", loc.Name, loc.Longitude, loc.Latitude);
-                        using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
+                        foreach (Location loc in pl.Locations)
                         {
-                            if (!BodyName.Items.Contains(pl.Name))      // ensure planet in collection so we don't get errors..
-                                BodyName.Items.Add(pl.Name);
-
-                            dr.Cells[0].Value = pl.Name;
-                            dr.Cells[0].ReadOnly = true;
-                            dr.Cells[1].Value = loc.Name;               
-                            dr.Cells[2].Value = loc.Comment;
-
-                            if (loc.IsWholePlanetBookmark)              // whole planet gets empty lat/long
+                            System.Diagnostics.Debug.WriteLine($"Add row {pl.Name} {loc.Name} {loc.Longitude} {loc.Latitude}");
+                            using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
                             {
-                                dr.Cells[3].Value = dr.Cells[4].Value = "";
-                            }
-                            else
-                            {
-                                dr.Cells[3].Value = loc.Latitude.ToString("F4");
-                                dr.Cells[4].Value = loc.Longitude.ToString("F4");
-                            }
+                                if (!BodyName.Items.Contains(pl.Name))      // ensure planet in collection so we don't get errors..
+                                    BodyName.Items.Add(pl.Name);
 
-                            ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
-                            dr.Tag = loc;
+                                dr.Cells[0].Value = pl.Name;
+                                dr.Cells[0].ReadOnly = true;
+                                dr.Cells[1].Value = loc.Name;
+                                dr.Cells[2].Value = loc.Comment;
+
+                                if (loc.IsWholePlanetBookmark)              // whole planet gets empty lat/long
+                                {
+                                    dr.Cells[3].Value = dr.Cells[4].Value = "";
+                                }
+                                else
+                                {
+                                    dr.Cells[3].Value = loc.Latitude.ToString("F4");
+                                    dr.Cells[4].Value = loc.Longitude.ToString("F4");
+                                }
+
+                                ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
+                                dr.Tag = loc;
+                            }
                         }
                     }
                 }
             }
-
-            sendToCompassToolStripMenuItem.Enabled = true;
-
-            dataGridViewMarks.ResumeLayout();
-
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
         public void Disable()
@@ -146,27 +145,6 @@ namespace EDDiscovery.Forms
                 dr.Cells[4].Value = longitude.ToString("F4");
                 ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = false;
                 dr.Cells[1].Selected = true;
-            }
-        }
-
-        private async void UpdateComboBox(string systemName, HistoryList helist)
-        {
-            ISystem thisSystem = SystemCache.FindSystem(systemName, null ,false);        // not doing edsm lookup due to init
-
-            BodyName.Items.Clear();
-            if (thisSystem != null)
-            {
-                var lookup = await helist.StarScan.FindSystemAsync(thisSystem, true);
-                var landables = lookup?.Bodies?.Select(b => b.FullName.ReplaceIfStartsWith(thisSystem.Name) + ((b.ScanData?.IsLandable??false) ? " (*)" : "" ));        // lets present all, even if not landable, as you may want a whole planet bookmark
-
-                if (landables != null)
-                {
-                    foreach (string s in landables)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Add bookmark landable '{s}'");
-                        BodyName.Items.Add(s);
-                    }
-                }
             }
         }
 
@@ -335,6 +313,12 @@ namespace EDDiscovery.Forms
             return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;      // and be valid
         }
 
+        // if the bookmark contains a planet no longer there, we get this, so ignore the error
+        private void dataGridViewMarks_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+
+        }
 
         #endregion
 
