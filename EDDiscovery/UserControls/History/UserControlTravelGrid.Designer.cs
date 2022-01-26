@@ -72,7 +72,6 @@ namespace EDDiscovery.UserControls
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,7 +79,7 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughIGAUDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runSelectionThroughEDDNThruTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughEDAstroDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showSystemVisitedForeColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.travelGridInDebugModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -299,7 +298,6 @@ namespace EDDiscovery.UserControls
             this.moveToAnotherCommanderToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
             this.removeJournalEntryToolStripMenuItem,
-            this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem,
             this.writeEventInfoToLogDebugToolStripMenuItem,
@@ -307,12 +305,12 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem,
             this.runEntryThroughProfileSystemToolStripMenuItem,
             this.runSelectionThroughIGAUDebugToolStripMenuItem,
-            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem,
+            this.runSelectionThroughEDDNThruTestToolStripMenuItem,
             this.runSelectionThroughEDAstroDebugToolStripMenuItem,
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 554);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 532);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -438,13 +436,6 @@ namespace EDDiscovery.UserControls
             this.removeJournalEntryToolStripMenuItem.Text = "Remove Journal Entry";
             this.removeJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.removeJournalEntryToolStripMenuItem_Click);
             // 
-            // sendUnsyncedScanToEDDNToolStripMenuItem
-            // 
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
-            // 
             // runActionsOnThisEntryToolStripMenuItem
             // 
             this.runActionsOnThisEntryToolStripMenuItem.Name = "runActionsOnThisEntryToolStripMenuItem";
@@ -496,10 +487,10 @@ namespace EDDiscovery.UserControls
             // 
             // runSelectionThroughEDDNDebugNoSendToolStripMenuItem
             // 
-            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Name = "runSelectionThroughEDDNDebugNoSendToolStripMenuItem";
-            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Text = "Run selection through EDDN no send (Debug)";
-            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem_Click);
+            this.runSelectionThroughEDDNThruTestToolStripMenuItem.Name = "runSelectionThroughEDDNDebugNoSendToolStripMenuItem";
+            this.runSelectionThroughEDDNThruTestToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runSelectionThroughEDDNThruTestToolStripMenuItem.Text = "Run selection through EDDN Test Server (Debug)";
+            this.runSelectionThroughEDDNThruTestToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem_Click);
             // 
             // runSelectionThroughEDAstroDebugToolStripMenuItem
             // 
@@ -827,7 +818,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonField;
-        private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setNoteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem writeEventInfoToLogDebugToolStripMenuItem;
@@ -858,7 +848,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughIGAUDebugToolStripMenuItem;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
-        private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDDNDebugNoSendToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDDNThruTestToolStripMenuItem;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
         private System.Windows.Forms.ToolStripMenuItem showSystemVisitedForeColourToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDAstroDebugToolStripMenuItem;

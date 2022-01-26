@@ -58,7 +58,6 @@ namespace EDDiscovery.UserControls
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
@@ -185,7 +184,6 @@ namespace EDDiscovery.UserControls
             this.mapGotoStartoolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
             this.toolStripMenuItemStartStop,
-            this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
@@ -226,13 +224,6 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(293, 22);
             this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
             this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
-            // 
-            // sendUnsyncedScanToEDDNToolStripMenuItem
-            // 
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
             // 
             // runActionsOnThisEntryToolStripMenuItem
             // 
@@ -446,7 +437,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonField;
-        private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
         private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;

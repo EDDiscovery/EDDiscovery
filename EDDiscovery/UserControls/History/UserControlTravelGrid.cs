@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
             runSelectionThroughInaraSystemToolStripMenuItem.Visible =
             runEntryThroughProfileSystemToolStripMenuItem.Visible =
             runSelectionThroughIGAUDebugToolStripMenuItem.Visible =
-            runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Visible =
+            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
             runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;
 
             searchtimer = new Timer() { Interval = 500 };
@@ -149,6 +149,13 @@ namespace EDDiscovery.UserControls
             travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
 #else
             travelGridInDebugModeToolStripMenuItem.Checked = travelGridInDebugModeToolStripMenuItem.Visible = false;
+            writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
+            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
+            runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
+            runEntryThroughProfileSystemToolStripMenuItem.Visible = false;
+            runSelectionThroughIGAUDebugToolStripMenuItem.Visible = false;
+            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = false;
+            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = false;
 #endif
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -815,7 +822,6 @@ namespace EDDiscovery.UserControls
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
             toolStripMenuItemStartStop.Enabled = (rightclickhe != null);
             removeJournalEntryToolStripMenuItem.Enabled = (rightclickhe != null);
-            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclickhe != null && EDDNClass.IsDelayableEDDNMessage(rightclickhe.EntryType, rightclickhe.EventTimeUTC) && !rightclickhe.EDDNSync);
             runActionsOnThisEntryToolStripMenuItem.Enabled = (rightclickhe != null);
             setNoteToolStripMenuItem.Enabled = (rightclickhe != null);
             writeEventInfoToLogDebugToolStripMenuItem.Enabled = (rightclickhe != null);
@@ -1005,14 +1011,6 @@ namespace EDDiscovery.UserControls
             {
                 JournalEntry.Delete(rightclickhe.Journalid);
                 discoveryform.RefreshHistoryAsync();
-            }
-        }
-
-        private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (EDDNClass.IsDelayableEDDNMessage(rightclickhe.EntryType, rightclickhe.EventTimeUTC) && !rightclickhe.EDDNSync)
-            {
-                EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclickhe);
             }
         }
 

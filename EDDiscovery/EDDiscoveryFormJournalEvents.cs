@@ -125,10 +125,8 @@ namespace EDDiscovery
 
             if (EDDNClass.IsEDDNMessage(he.EntryType) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
             {
-                EDDNSync.SendEDDNEvents(LogLine, he);
+                EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> { he });
             }
-
-
 
             DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
 

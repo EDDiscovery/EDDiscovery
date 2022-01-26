@@ -399,10 +399,6 @@ namespace EDDiscovery
             if (EDDOptions.Instance.ActionButton)
                 buttonReloadActions.Visible = true;
 
-#if !DEBUG
-            sendUnsyncedEDDNEventsToolStripMenuItem.Visible = false;        // for testing only now
-#endif
-
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
@@ -1058,14 +1054,6 @@ namespace EDDiscovery
                 Controller.RefreshHistoryAsync(removedupfsdentries: true);
             }
         }
-
-        private void sendUnsyncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)      //DEBUG ONLY
-        {
-            List<HistoryEntry> hlsyncunsyncedlist = HistoryList.FilterByScanNotEDDNSynced(Controller.history.EntryOrder());        // first entry is oldest
-
-            EDDNSync.SendEDDNEvents(LogLine, hlsyncunsyncedlist);
-        }
-
         private void sendHistoricDataToInaraToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DateTime lasttime = UserDatabase.Instance.GetSettingDate("InaraLastHistoricUpload", DateTime.MinValue);
