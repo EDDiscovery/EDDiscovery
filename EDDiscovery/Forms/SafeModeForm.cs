@@ -39,6 +39,11 @@ namespace EDDiscovery.Forms
             tx.Translate(this);
         }
 
+        public SafeModeForm(bool enablerun) : this()
+        {
+            buttonRun.Visible = enablerun;
+        }
+
         private void Run_Click(object sender, EventArgs e)
         {
             Run(pos,theme,resettabs,resetlang);
@@ -77,11 +82,14 @@ namespace EDDiscovery.Forms
                                 "User: " + opt.UserDatabasePath + Environment.NewLine + "System: " + opt.SystemDatabasePath +
                                 Environment.NewLine + Environment.NewLine + "Do you wish to change their location?", "Move Databases", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
+                    buttonRun.Visible = false;      // can't run, must exit
+
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
                     fbd.Description = "Select new folder";
 
                     if (fbd.ShowDialog(this) == DialogResult.OK) 
                     {
+
                         string pathto = fbd.SelectedPath;
                         //string pathto = @"c:\code";   // debug
 
@@ -165,16 +173,39 @@ namespace EDDiscovery.Forms
                 if (MessageBox.Show(this, "Current system database is located at:" + Environment.NewLine + Environment.NewLine +
                                 "System: " + opt.SystemDatabasePath +
                                 Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine +
-                                "No user settings will be lost",
+                                "No user settings will be lost" + Environment.NewLine + 
+                                "Afterwards, Exit and restart EDD",
                                 "Delete/Rebuild System Database", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     File.Delete(opt.SystemDatabasePath);
+                    buttonRun.Visible = false;      // can't run, must exit
                 }
             }
             else
                 MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can delete any!", "Delete/Rebuild System Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
         }
+
+        private void buttonDeleteUserDB_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
+
+            if (File.Exists(opt.UserDatabasePath))
+            {
+                if (MessageBox.Show(this, "Current user database is located at:" + Environment.NewLine + Environment.NewLine +
+                                "User: " + opt.UserDatabasePath +
+                                Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine +
+                                "**All user settings will be lost**" + Environment.NewLine +
+                                "Afterwards, Exit and restart EDD",
+                                "Delete/Rebuild User Database", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                {
+                    File.Delete(opt.UserDatabasePath);
+                    buttonRun.Visible = false;      // can't run, must exit
+                }
+            }
+            else
+                MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can delete any!", "Delete/Rebuild User Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
 
         private void buttonResetDBLoc_Click(object sender, EventArgs e)
         {
@@ -191,6 +222,8 @@ namespace EDDiscovery.Forms
                     BaseUtils.FileHelpers.DeleteFileNoError(opt.DbOptionsFile());
                     EDDiscovery.EDDOptions.Instance.ResetSystemDatabasePath();
                     EDDiscovery.EDDOptions.Instance.ResetUserDatabasePath();
+
+                    buttonRun.Visible = false;      // can't run, must exit
                 }
             }
             else

@@ -132,10 +132,17 @@ namespace EDDiscovery
 
                                 bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EDDConfig.Instance.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
 
+                                //edsmsystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmsystems.json");     // debug
+                                //BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);
+                                //File.Copy(@"\code\edsm\edsmsystems.1e6.json", edsmsystems);
+                                //bool success = true;
+
                                 syncstate.perform_edsm_fullsync = false;
 
                                 if (success)
                                 {
+                                    ReportSyncProgress("Download complete, creating database");
+
                                     syncstate.edsm_fullsync_count = SystemsDatabase.Instance.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
 
                                     if (syncstate.edsm_fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled

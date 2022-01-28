@@ -40,11 +40,12 @@
             this.buttonLang = new System.Windows.Forms.Button();
             this.buttonResetDBLoc = new System.Windows.Forms.Button();
             this.buttonBackup = new System.Windows.Forms.Button();
+            this.buttonDeleteUserDB = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonDbs
             // 
-            this.buttonDbs.Location = new System.Drawing.Point(89, 210);
+            this.buttonDbs.Location = new System.Drawing.Point(89, 275);
             this.buttonDbs.Name = "buttonDbs";
             this.buttonDbs.Size = new System.Drawing.Size(193, 23);
             this.buttonDbs.TabIndex = 0;
@@ -54,7 +55,7 @@
             // 
             // buttonRun
             // 
-            this.buttonRun.Location = new System.Drawing.Point(89, 334);
+            this.buttonRun.Location = new System.Drawing.Point(89, 399);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(193, 23);
             this.buttonRun.TabIndex = 0;
@@ -85,18 +86,18 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(89, 364);
+            this.buttonCancel.Location = new System.Drawing.Point(89, 437);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(193, 23);
             this.buttonCancel.TabIndex = 0;
-            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.Text = "Exit";
             this.buttonCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonDeleteSystemDB
             // 
-            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 266);
+            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 201);
             this.buttonDeleteSystemDB.Name = "buttonDeleteSystemDB";
             this.buttonDeleteSystemDB.Size = new System.Drawing.Size(193, 23);
             this.buttonDeleteSystemDB.TabIndex = 0;
@@ -146,7 +147,7 @@
             // 
             // buttonResetDBLoc
             // 
-            this.buttonResetDBLoc.Location = new System.Drawing.Point(89, 295);
+            this.buttonResetDBLoc.Location = new System.Drawing.Point(89, 360);
             this.buttonResetDBLoc.Name = "buttonResetDBLoc";
             this.buttonResetDBLoc.Size = new System.Drawing.Size(193, 23);
             this.buttonResetDBLoc.TabIndex = 0;
@@ -156,7 +157,7 @@
             // 
             // buttonBackup
             // 
-            this.buttonBackup.Location = new System.Drawing.Point(89, 237);
+            this.buttonBackup.Location = new System.Drawing.Point(89, 302);
             this.buttonBackup.Name = "buttonBackup";
             this.buttonBackup.Size = new System.Drawing.Size(193, 23);
             this.buttonBackup.TabIndex = 0;
@@ -164,13 +165,24 @@
             this.buttonBackup.UseVisualStyleBackColor = true;
             this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
             // 
+            // buttonDeleteUserDB
+            // 
+            this.buttonDeleteUserDB.Location = new System.Drawing.Point(89, 230);
+            this.buttonDeleteUserDB.Name = "buttonDeleteUserDB";
+            this.buttonDeleteUserDB.Size = new System.Drawing.Size(193, 23);
+            this.buttonDeleteUserDB.TabIndex = 0;
+            this.buttonDeleteUserDB.Text = "Delete/Rebuild User DB";
+            this.buttonDeleteUserDB.UseVisualStyleBackColor = true;
+            this.buttonDeleteUserDB.Click += new System.EventHandler(this.buttonDeleteUserDB_Click);
+            // 
             // SafeModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 408);
+            this.ClientSize = new System.Drawing.Size(360, 476);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonRun);
+            this.Controls.Add(this.buttonDeleteUserDB);
             this.Controls.Add(this.buttonDeleteSystemDB);
             this.Controls.Add(this.buttonResetDBLoc);
             this.Controls.Add(this.buttonBackup);
@@ -202,5 +214,6 @@
         private System.Windows.Forms.Button buttonLang;
         private System.Windows.Forms.Button buttonResetDBLoc;
         private System.Windows.Forms.Button buttonBackup;
+        private System.Windows.Forms.Button buttonDeleteUserDB;
     }
 }

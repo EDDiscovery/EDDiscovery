@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using BaseUtils;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -146,8 +147,64 @@ namespace EDDiscovery
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
         }
 
-        public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
+        // called from EDDApplicationContext .. continues on with the construction of the system
+        public void Init(Action<string> msg)  
         {
+            // previously in controller
+
+            string logpath = EDDOptions.Instance.LogAppDirectory();
+
+            BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.hlog", 2, 256);        // Remove hlogs faster
+            BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.log", 10, 256);
+
+            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)       // no debugger, or tracelog option set
+            {
+                TraceLog.RedirectTrace(logpath, true, EDDOptions.Instance.TraceLog);
+            }
+
+            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          // no debugger, or log exceptions set
+            {
+                ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback);
+            }
+
+            if (EDDOptions.Instance.LogExceptions)
+            {
+                FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
+            }
+
+            Process.GetCurrentProcess().PriorityClass = EDDOptions.Instance.ProcessPriorityClass;
+
+            if (EDDOptions.Instance.ForceTLS12)
+            {
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
+            }
+
+            HttpCom.LogPath = logpath;
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Init config finished");
+
+            Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
+
+            GlobalBookMarkList.LoadBookmarks();
+            GlobalCaptainsLogList.LoadLog();
+
+            msg.Invoke("Loading Icons");
+            EDDiscovery.Icons.ForceInclusion.Include();      // Force the assembly into the project by a empty call
+            BaseUtils.Icons.IconSet.CreateSingleton();
+            System.Reflection.Assembly iconasm = BaseUtils.ResourceHelpers.GetAssemblyByName("EDDiscovery.Icons");
+            BaseUtils.Icons.IconSet.Instance.LoadIconsFromAssembly(iconasm);
+            BaseUtils.Icons.IconSet.Instance.AddAlias("settings", "Controls.Settings");             // from use by action system..
+            BaseUtils.Icons.IconSet.Instance.AddAlias("missioncompleted", "Journal.MissionCompleted");
+            BaseUtils.Icons.IconSet.Instance.AddAlias("speaker", "Legacy.speaker");
+            BaseUtils.Icons.IconSet.Instance.AddAlias("Default", "Legacy.star");        // MUST be present
+
+            msg.Invoke("Loading Configuration");
+            EDDConfig.Instance.Update();
+            EDDProfiles.Instance.LoadProfiles(EDDOptions.Instance.Profile);
+
+            string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");
+            BaseUtils.Icons.IconSet.Instance.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
+
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " ED init");        // STAGE 1
 
             msg.Invoke("Loading Translations");
