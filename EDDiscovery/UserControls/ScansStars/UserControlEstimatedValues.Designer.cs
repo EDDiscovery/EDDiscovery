@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxShowImpossible = new ExtendedControls.ExtCheckBox();
+            this.labelControlText = new System.Windows.Forms.Label();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
@@ -239,6 +240,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.Controls.Add(this.checkBoxEDSM);
             this.flowLayoutPanelTop.Controls.Add(this.checkBoxShowZeros);
             this.flowLayoutPanelTop.Controls.Add(this.extCheckBoxShowImpossible);
+            this.flowLayoutPanelTop.Controls.Add(this.labelControlText);
             this.flowLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelTop.Name = "flowLayoutPanelTop";
@@ -319,6 +321,16 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extCheckBoxShowImpossible, "Show all values, even ones which are impossible to get");
             this.extCheckBoxShowImpossible.UseVisualStyleBackColor = true;
             // 
+            // labelControlText
+            // 
+            this.labelControlText.AutoSize = true;
+            this.labelControlText.Location = new System.Drawing.Point(115, 0);
+            this.labelControlText.Name = "labelControlText";
+            this.labelControlText.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.labelControlText.Size = new System.Drawing.Size(43, 18);
+            this.labelControlText.TabIndex = 6;
+            this.labelControlText.Text = "<code>";
+            // 
             // extPanelRollUp
             // 
             this.extPanelRollUp.AutoHeight = false;
@@ -355,6 +367,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).EndInit();
             this.flowLayoutPanelTop.ResumeLayout(false);
+            this.flowLayoutPanelTop.PerformLayout();
             this.extPanelRollUp.ResumeLayout(false);
             this.extPanelRollUp.PerformLayout();
             this.ResumeLayout(false);
@@ -384,5 +397,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn FirstDiscMapped;
         private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;
         private ExtendedControls.ExtCheckBox extCheckBoxShowImpossible;
+        private System.Windows.Forms.Label labelControlText;
     }
 }

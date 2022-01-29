@@ -39,6 +39,7 @@ namespace EDDiscovery.UserControls
         public UserControlEstimatedValues()
         {
             InitializeComponent();
+            labelControlText.Text = "";     // clear label control text, only used by SetControlText if no other place is available
         }
 
         public override void Init()
@@ -136,17 +137,17 @@ namespace EDDiscovery.UserControls
 
             StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
 
-            SetControlText((last_sn == null) ? "No Scan".T(EDTx.NoScan) : string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV), last_sn.System.Name));
-
             if (last_sn != null)
             {
-                foreach( var bodies in last_sn.Bodies )
+                long totalvalue = 0;
+
+                foreach (var bodies in last_sn.Bodies)
                 {
-                    if ( bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
+                    if (bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
                     {
                         //System.Diagnostics.Debug.WriteLine("Estimated values Recalc for " + bodies.ScanData.BodyName);
                         var ev = bodies.ScanData.RecalcEstimatedValues();
-                        if ( !checkBoxShowZeros.Checked && ev.EstimatedValueBase == 0)
+                        if (!checkBoxShowZeros.Checked && ev.EstimatedValueBase == 0)
                             continue; // skip 0-value things
 
                         bool showimpossibleValues = extCheckBoxShowImpossible.Checked;
@@ -168,11 +169,11 @@ namespace EDDiscovery.UserControls
                         bool firstdiscovercond = !bodies.ScanData.IsPreviouslyDiscovered && bodies.ScanData.Mapped == false;
 
                         string firstdiscoveredstr = ev.EstimatedValueFirstDiscovered > 0 && (showimpossibleValues || firstdiscovercond)
-                                        ?  ev.EstimatedValueFirstDiscovered.ToString("N0") : "";
+                                        ? ev.EstimatedValueFirstDiscovered.ToString("N0") : "";
 
                         // the first is the normal, not mapped previously but discovered, and we not mapped
                         // the second is those systems in the bubble with mapped set but not discovered, and we not mapped
-                        bool firstmapcond = (!bodies.ScanData.IsPreviouslyMapped && bodies.ScanData.IsPreviouslyDiscovered && bodies.ScanData.Mapped == false) || 
+                        bool firstmapcond = (!bodies.ScanData.IsPreviouslyMapped && bodies.ScanData.IsPreviouslyDiscovered && bodies.ScanData.Mapped == false) ||
                                             (bodies.ScanData.IsPreviouslyMapped && !bodies.ScanData.IsPreviouslyDiscovered && bodies.ScanData.Mapped == false);
 
                         string firstmappedeffstr = ev.EstimatedValueFirstMappedEfficiently > 0 && (showimpossibleValues || firstmapcond)
@@ -198,11 +199,18 @@ namespace EDDiscovery.UserControls
                                         fdmappedstr ,
                                         bodies.ScanData.EstimatedValue.ToString("N0") });
 
+                        totalvalue += bodies.ScanData.EstimatedValue;
                     }
                 }
 
                 dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+
+                SetControlText(string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV) + ": " + totalvalue.ToString() + "cr", last_sn.System.Name));
+            }
+            else
+            {
+                SetControlText("No Scan".T(EDTx.NoScan));
             }
         }
 
