@@ -53,17 +53,19 @@ namespace EDDiscovery
         #region Implementation
         public EDDApplicationContext() : base(StartupForm())
         {
-            if (typeof(SafeModeForm).IsAssignableFrom(MainForm?.GetType()))
+            if ( MainForm is SafeModeForm)
             {
-                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
+                // give safemode the means to run EDD
+
+                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { RunEDD(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
             }
             else
             {
-                GoForAutoSequenceStart();
+                RunEDD();
             }
         }
 
-        // Return whichever form should initially be displayed; normally SplashForm, but maybe SafeModeForm or even something else.
+        // Return whichever form should initially be displayed; normally SplashForm, but maybe SafeModeForm
         private static Form StartupForm()
         {   // Really just a workaround for the clumsy terniary operator if constructing new but different things.
             bool insafemode = EDDOptions.Instance.SafeMode;     // force reading of options, pick up safe mode option
@@ -122,8 +124,9 @@ namespace EDDiscovery
                 return new SplashForm();
         }
 
+        // Run EDD!
         // Show SplashForm, if it's not already, then start a 250ms timer to ensure that we don't block the main loop during spool-up and ignition.
-        private void GoForAutoSequenceStart(EDDFormLaunchArgs args = null)
+        private void RunEDD(EDDFormLaunchArgs args = null)
         {
             if (MainForm == null || !(MainForm is SplashForm || MainForm.GetType().IsSubclassOf(typeof(SplashForm))))
             {
@@ -132,7 +135,7 @@ namespace EDDiscovery
 
             var tim = new Timer { Interval = 250 };
             tim.Tag = args;
-            tim.Tick += MainEngineStart;
+            tim.Tick += InitialiseEDD;
             tim.Start();
         }
 
@@ -146,17 +149,16 @@ namespace EDDiscovery
         }
 
         // Switch context from an existing Form to a different Form, Close() the previous Form, and Show() the new one.
-        private void SwitchContext(Form newContext)
+        private void SwitchContext(Form newForm)
         {
             Form f = MainForm;
-            MainForm = newContext;
+            MainForm = newForm;
             f?.Close();
             MainForm?.Show();
         }
 
-
         // Initialize everything on the UI thread, and report+die for any problems or SwitchContext from SplashForm to EDDiscoveryForm.
-        private void MainEngineStart(object sender, EventArgs e)
+        private void InitialiseEDD(object sender, EventArgs e)
         {
             var tim = (Timer)sender;
             tim?.Stop();
@@ -175,11 +177,12 @@ namespace EDDiscovery
                 SetLoadingMsg("Initialising Databases");
 
                 UserDatabase.Instance.Name = "UserDB";
-                UserDatabase.Instance.MinThreads = UserDatabase.Instance.MaxThreads = 2;        // set at 2 threads max/min
+                UserDatabase.Instance.MinThreads = 1;
+                UserDatabase.Instance.MaxThreads = 2;     
                 UserDatabase.Instance.MultiThreaded = true;     // starts up the threads
 
                 SystemsDatabase.Instance.Name = "SystemDB";
-                SystemsDatabase.Instance.MinThreads = 2;
+                SystemsDatabase.Instance.MinThreads = 1;
                 SystemsDatabase.Instance.MaxThreads = 8;
                 SystemsDatabase.Instance.MultiThreaded = true;  // starts up the threads
 
@@ -189,7 +192,7 @@ namespace EDDiscovery
                 }
                 catch ( Exception ex)
                 {
-                    EliteDangerousCore.DB.UserDatabase.Instance.Stop();     // need everything closed down
+                    EliteDangerousCore.DB.UserDatabase.Instance.ClearDown();     // need everything closed down
 
                     System.Windows.Forms.MessageBox.Show("Error: User DB is corrupt at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath + Environment.NewLine + Environment.NewLine +
                                                          "Database is unusable. Use safe mode to remove it and start again. All user settings will be lost" + Environment.NewLine + Environment.NewLine +
@@ -205,8 +208,8 @@ namespace EDDiscovery
                 }
                 catch (Exception ex)
                 {
-                    EliteDangerousCore.DB.UserDatabase.Instance.Stop();     // need everything closed down
-                    EliteDangerousCore.DB.SystemsDatabase.Instance.Stop();
+                    EliteDangerousCore.DB.UserDatabase.Instance.ClearDown();     // need everything closed down
+                    EliteDangerousCore.DB.SystemsDatabase.Instance.ClearDown();
 
                     System.Windows.Forms.MessageBox.Show("Error: System DB is corrupt at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
                                                          "Database is unusable. Use safe mode to remove it and start again. User settings will be retained" + Environment.NewLine + Environment.NewLine +

@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore.DB;
 using System;
 using System.Globalization;
 using System.IO;
@@ -39,9 +40,11 @@ namespace EDDiscovery.Forms
             tx.Translate(this);
         }
 
-        public SafeModeForm(bool enablerun) : this()
+        public SafeModeForm(bool userdbgood) : this()
         {
-            buttonRun.Visible = enablerun;
+            buttonRun.Enabled = buttonResetTheme.Enabled = buttonActionPacks.Enabled = buttonBackup.Enabled =
+            buttonPositions.Enabled = buttonResetTabs.Enabled = buttonRemoveDLLs.Enabled = buttonLang.Enabled = buttonDbs.Enabled =
+            buttonRemoveJournals.Enabled = userdbgood;       // can't do this if can't run
         }
 
         private void Run_Click(object sender, EventArgs e)
@@ -286,5 +289,19 @@ namespace EDDiscovery.Forms
             buttonLang.Enabled = false;
         }
 
+        private void buttonRemoveJournals_Click(object sender, EventArgs e)
+        {
+            if ( UserDatabase.Instance.Name != "UserDB" )       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
+            {
+                if (MessageBox.Show(this, "Confirm you want all journal entries removed from the DB" + Environment.NewLine + 
+                                "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." +  Environment.NewLine +
+                                "EDD on start will then rescan any journal logs it finds",
+                                "Delete Journal Entries", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                {
+                    UserDatabase.Instance.Initialize();
+                    UserDatabase.Instance.ClearJournals();
+                }
+            }
+        }
     }
 }
