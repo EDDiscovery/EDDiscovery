@@ -185,6 +185,8 @@ namespace EDDiscovery.UserControls
                         string fdmappedstr = ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 && (showimpossibleValues || fdmappedcond)
                             ? (ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstDiscoveredFirstMapped.ToString("N0")) : "";
 
+                        int estimatedvalue = bodies.ScanData.EstimatedValue;
+
                         dataGridViewEstimatedValues.Rows.Add(new object[] {
                                         GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
                                         spclass,
@@ -197,9 +199,9 @@ namespace EDDiscovery.UserControls
                                         firstdiscoveredstr,
                                         firstmappedeffstr,
                                         fdmappedstr ,
-                                        bodies.ScanData.EstimatedValue.ToString("N0") });
+                                        estimatedvalue>0 ? estimatedvalue.ToString("N0") : "" });
 
-                        totalvalue += bodies.ScanData.EstimatedValue;
+                        totalvalue += estimatedvalue;
                     }
                 }
 
@@ -247,7 +249,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewEstimatedValues_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index >= 6)
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnNumericThenAlpha();
+            else if (e.Column.Index >= 6)
                 e.SortDataGridViewColumnNumeric();
             else if (e.Column.Index >= 3)
                 SortImageColumn(e);
