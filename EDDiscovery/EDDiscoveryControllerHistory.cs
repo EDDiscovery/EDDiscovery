@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using BaseUtils.JSON;
+using QuickJSON;
 using EliteDangerousCore;
 
 namespace EDDiscovery

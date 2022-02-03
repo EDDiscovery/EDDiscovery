@@ -18,7 +18,7 @@ using BaseUtils;
 using BaseUtils.WebServer;
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
-using BaseUtils.JSON;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

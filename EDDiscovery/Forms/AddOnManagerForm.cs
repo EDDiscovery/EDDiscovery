@@ -20,7 +20,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using BaseUtils.JSON;
+using QuickJSON;
 using EDDiscovery.Versions;
 
 namespace EDDiscovery.Forms

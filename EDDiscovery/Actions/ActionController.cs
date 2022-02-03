@@ -17,7 +17,7 @@
 using ActionLanguage;
 using AudioExtensions;
 using BaseUtils;
-using BaseUtils.JSON;
+using QuickJSON;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using System;

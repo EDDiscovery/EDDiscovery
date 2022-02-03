@@ -141,7 +141,7 @@ namespace EDDiscovery
             BaseUtils.Variables cv = new BaseUtils.Variables();
 
             string prefix = "EventClass_";
-            cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);
             cv[prefix + "UIDisplayed"] = "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
             actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);
@@ -161,7 +161,7 @@ namespace EDDiscovery
                 {
                     if (DLLManager.Count > 0)       // if worth calling..
                     {
-                        BaseUtils.JSON.JToken t = BaseUtils.JSON.JToken.FromObject(uievent, ignoreunserialisable: true,
+                        QuickJSON.JToken t = QuickJSON.JToken.FromObject(uievent, ignoreunserialisable: true,
                                                                                     ignored: new Type[] { typeof(Bitmap), typeof(Image) },
                                                                                     maxrecursiondepth: 3);
                         string output = t?.ToString();

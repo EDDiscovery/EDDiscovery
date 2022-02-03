@@ -26,7 +26,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
 using EDDiscovery.Forms;
-using BaseUtils.JSON;
+using QuickJSON;
 
 namespace EDDiscovery.UserControls
 {
@@ -1035,7 +1035,7 @@ namespace EDDiscovery.UserControls
         private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
         {
             BaseUtils.Variables cv = new BaseUtils.Variables();
-            cv.AddPropertiesFieldsOfClass(rightclickhe.journalEntry, "EventClass_", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(rightclickhe.journalEntry, "EventClass_", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
         }
 
@@ -1178,7 +1178,7 @@ namespace EDDiscovery.UserControls
             if (rightclickhe != null)
             {
                 var mcmr = discoveryform.history.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
-                List<BaseUtils.JSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, mcmr);
+                List<QuickJSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, mcmr);
 
                 foreach (var j in list)
                 {

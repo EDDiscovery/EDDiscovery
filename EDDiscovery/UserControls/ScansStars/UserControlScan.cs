@@ -496,7 +496,7 @@ namespace EDDiscovery.UserControls
                     if ( nodes != null )
                     {
                         StarScan.ScanNode.DumpTree(nodes, "Top", 0);
-                        BaseUtils.JSON.JObject jobj = StarScan.ScanNode.DumpOrbitElements(nodes);
+                        QuickJSON.JObject jobj = StarScan.ScanNode.DumpOrbitElements(nodes);
                         File.WriteAllText(frm.Path, jobj.ToString(true)); // failure will be picked up below
                     }
                 }

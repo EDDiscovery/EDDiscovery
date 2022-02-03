@@ -301,7 +301,7 @@ namespace EDDiscovery.UserControls
                 {
                     BaseUtils.Variables scandata = new BaseUtils.Variables();
                     scandata.AddPropertiesFieldsOfClass(he.journalEntry, "",
-                            new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5,
+                            new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
                             varsusedincondition);
 
                     bool? res = cond.CheckAll(scandata, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclass);  // need function handler..

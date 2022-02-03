@@ -14,7 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using BaseUtils.JSON;
+using QuickJSON;
 using BaseUtils.WebServer;
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;

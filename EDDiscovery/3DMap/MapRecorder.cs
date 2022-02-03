@@ -15,7 +15,7 @@
  */
 
 using EDDiscovery.Forms;
-using BaseUtils.JSON;
+using QuickJSON;
 using OpenTK;
 using System;
 using System.Collections.Generic;
