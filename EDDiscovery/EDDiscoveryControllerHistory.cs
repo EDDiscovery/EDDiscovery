@@ -186,7 +186,8 @@ namespace EDDiscovery
 
                     journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)), 
                                                                          EDDOptions.Instance.MinJournalDateUTC,
-                                                                         forcereloadoflastn);
+                                                                         forcereloadoflastn,
+                                                                         closerequested:closeRequested);
 
                     if (args.NetLogPath != null)            // see if net logs need reading for old times sake.
                     {

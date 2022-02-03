@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore.DB;
 using System;
 using System.Globalization;
 using System.IO;
@@ -37,6 +38,13 @@ namespace EDDiscovery.Forms
             tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0,
                                         System.IO.Path.GetTempPath());
             tx.Translate(this);
+        }
+
+        public SafeModeForm(bool userdbgood) : this()
+        {
+            buttonRun.Enabled = buttonResetTheme.Enabled = buttonActionPacks.Enabled = buttonBackup.Enabled =
+            buttonPositions.Enabled = buttonResetTabs.Enabled = buttonRemoveDLLs.Enabled = buttonLang.Enabled = buttonDbs.Enabled =
+            buttonRemoveJournals.Enabled = userdbgood;       // can't do this if can't run
         }
 
         private void Run_Click(object sender, EventArgs e)
@@ -77,11 +85,14 @@ namespace EDDiscovery.Forms
                                 "User: " + opt.UserDatabasePath + Environment.NewLine + "System: " + opt.SystemDatabasePath +
                                 Environment.NewLine + Environment.NewLine + "Do you wish to change their location?", "Move Databases", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
+                    buttonRun.Visible = false;      // can't run, must exit
+
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
                     fbd.Description = "Select new folder";
 
                     if (fbd.ShowDialog(this) == DialogResult.OK) 
                     {
+
                         string pathto = fbd.SelectedPath;
                         //string pathto = @"c:\code";   // debug
 
@@ -165,16 +176,39 @@ namespace EDDiscovery.Forms
                 if (MessageBox.Show(this, "Current system database is located at:" + Environment.NewLine + Environment.NewLine +
                                 "System: " + opt.SystemDatabasePath +
                                 Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine +
-                                "No user settings will be lost",
+                                "No user settings will be lost" + Environment.NewLine + 
+                                "Afterwards, Exit and restart EDD",
                                 "Delete/Rebuild System Database", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     File.Delete(opt.SystemDatabasePath);
+                    buttonRun.Visible = false;      // can't run, must exit
                 }
             }
             else
                 MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can delete any!", "Delete/Rebuild System Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
         }
+
+        private void buttonDeleteUserDB_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
+
+            if (File.Exists(opt.UserDatabasePath))
+            {
+                if (MessageBox.Show(this, "Current user database is located at:" + Environment.NewLine + Environment.NewLine +
+                                "User: " + opt.UserDatabasePath +
+                                Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine +
+                                "**All user settings will be lost**" + Environment.NewLine +
+                                "Afterwards, Exit and restart EDD",
+                                "Delete/Rebuild User Database", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                {
+                    File.Delete(opt.UserDatabasePath);
+                    buttonRun.Visible = false;      // can't run, must exit
+                }
+            }
+            else
+                MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can delete any!", "Delete/Rebuild User Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
 
         private void buttonResetDBLoc_Click(object sender, EventArgs e)
         {
@@ -191,6 +225,8 @@ namespace EDDiscovery.Forms
                     BaseUtils.FileHelpers.DeleteFileNoError(opt.DbOptionsFile());
                     EDDiscovery.EDDOptions.Instance.ResetSystemDatabasePath();
                     EDDiscovery.EDDOptions.Instance.ResetUserDatabasePath();
+
+                    buttonRun.Visible = false;      // can't run, must exit
                 }
             }
             else
@@ -253,5 +289,19 @@ namespace EDDiscovery.Forms
             buttonLang.Enabled = false;
         }
 
+        private void buttonRemoveJournals_Click(object sender, EventArgs e)
+        {
+            if ( UserDatabase.Instance.Name != "UserDB" )       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
+            {
+                if (MessageBox.Show(this, "Confirm you want all journal entries removed from the DB" + Environment.NewLine + 
+                                "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." +  Environment.NewLine +
+                                "EDD on start will then rescan any journal logs it finds",
+                                "Delete Journal Entries", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                {
+                    UserDatabase.Instance.Initialize();
+                    UserDatabase.Instance.ClearJournals();
+                }
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@
 
 using BaseUtils.Win32;
 using EDDiscovery.Forms;
+using EliteDangerousCore.DB;
 using System;
 using System.IO;
 using System.Reflection;                //Assembly
@@ -50,84 +51,82 @@ namespace EDDiscovery
         #endregion
 
         #region Implementation
-
-        public EDDApplicationContext() : base(StartupForm)
+        public EDDApplicationContext() : base(StartupForm())
         {
-            if (typeof(SafeModeForm).IsAssignableFrom(MainForm?.GetType()))
+            if ( MainForm is SafeModeForm)
             {
-                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
+                // give safemode the means to run EDD
+
+                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { RunEDD(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
             }
             else
             {
-                GoForAutoSequenceStart();
+                RunEDD();
             }
         }
 
-        // Return whichever form should initially be displayed; normally SplashForm, but maybe SafeModeForm or even something else.
-        private static Form StartupForm
+        // Return whichever form should initially be displayed; normally SplashForm, but maybe SafeModeForm
+        private static Form StartupForm()
         {   // Really just a workaround for the clumsy terniary operator if constructing new but different things.
-            get
+            bool insafemode = EDDOptions.Instance.SafeMode;     // force reading of options, pick up safe mode option
+
+            // check some basic things can be reached before we start
+
+            string dberror = "Check status of the drive/share" + Environment.NewLine +
+                            "Check options.txt and dboptions.txt for correctness in " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine +
+                            "Or use safemode reset DB to remove dboptions.txt " + Environment.NewLine +
+                            "and go back to using the standard c: location";
+            string apperror = "Check status of the drive/share" + Environment.NewLine +
+                                "Also check options.txt is correct in your " + EDDOptions.ExeDirectory() + " folder";
+            string sysdbdir = Path.GetDirectoryName(EDDOptions.Instance.SystemDatabasePath);
+            string userdbdir = Path.GetDirectoryName(EDDOptions.Instance.UserDatabasePath);
+
+            if (!Directory.Exists(EDDOptions.Instance.AppDataDirectory))
             {
-
-                bool insafemode = EDDOptions.Instance.SafeMode;     // force reading of options, pick up safe mode option
-
-                // check some basic things can be reached before we start
-
-                string dberror = "Check status of the drive/share" + Environment.NewLine +
-                                "Check options.txt and dboptions.txt for correctness in " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine +
-                                "Or use safemode reset DB to remove dboptions.txt " + Environment.NewLine +
-                                "and go back to using the standard c: location";
-                string apperror = "Check status of the drive/share" + Environment.NewLine +
-                                  "Also check options.txt is correct in your " + EDDOptions.ExeDirectory() + " folder";
-                string sysdbdir = Path.GetDirectoryName(EDDOptions.Instance.SystemDatabasePath);
-                string userdbdir = Path.GetDirectoryName(EDDOptions.Instance.UserDatabasePath);
-
-                if (!Directory.Exists(EDDOptions.Instance.AppDataDirectory))
-                {
-                    System.Windows.Forms.MessageBox.Show("Error: App Data Directory is inaccessible at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine + apperror,
-                                                         "Application Folder inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
-                    Environment.Exit(1);
-                }
-                else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(EDDOptions.Instance.AppDataDirectory))
-                {
-                    System.Windows.Forms.MessageBox.Show("Error: App Data Directory is not writable at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine + apperror,
-                                                         "Application Folder not writable", System.Windows.Forms.MessageBoxButtons.OK);
-                    Environment.Exit(1);
-                }
-                else if (!Directory.Exists(sysdbdir))
-                {
-                    System.Windows.Forms.MessageBox.Show("Error: Systems database is inaccessible at " + EDDOptions.Instance.SystemDatabasePath + Environment.NewLine + Environment.NewLine + dberror,
-                                                        "Systems DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
-                    insafemode = true;
-                }
-                else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(sysdbdir))
-                {
-                    System.Windows.Forms.MessageBox.Show("Error: Systems database folder is not writable at " + sysdbdir + Environment.NewLine + Environment.NewLine + dberror,
-                                                        "Systems DB not writeable", System.Windows.Forms.MessageBoxButtons.OK);
-                    insafemode = true;
-                }
-                else if (!Directory.Exists(userdbdir))
-                {
-                    System.Windows.Forms.MessageBox.Show("Error: User database is inaccessible at " + EDDOptions.Instance.UserDatabasePath + Environment.NewLine + Environment.NewLine + dberror,
-                                                         "User DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
-                    insafemode = true;
-                }
-                else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(userdbdir))
-                {
-                    System.Windows.Forms.MessageBox.Show("Error: User database folder is not writable at " + sysdbdir + Environment.NewLine + Environment.NewLine + dberror,
-                                                        "User DB not writeable", System.Windows.Forms.MessageBoxButtons.OK);
-                    insafemode = true;
-                }
-
-                if (Control.ModifierKeys.HasFlag(Keys.Shift) || insafemode )
-                    return new SafeModeForm();
-                else
-                    return new SplashForm();
+                System.Windows.Forms.MessageBox.Show("Error: App Data Directory is inaccessible at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine + apperror,
+                                                        "Application Folder inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
+                Environment.Exit(1);
             }
+            else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(EDDOptions.Instance.AppDataDirectory))
+            {
+                System.Windows.Forms.MessageBox.Show("Error: App Data Directory is not writable at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine + apperror,
+                                                        "Application Folder not writable", System.Windows.Forms.MessageBoxButtons.OK);
+                Environment.Exit(1);
+            }
+            else if (!Directory.Exists(sysdbdir))
+            {
+                System.Windows.Forms.MessageBox.Show("Error: Systems database is inaccessible at " + EDDOptions.Instance.SystemDatabasePath + Environment.NewLine + Environment.NewLine + dberror,
+                                                    "Systems DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
+                insafemode = true;
+            }
+            else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(sysdbdir))
+            {
+                System.Windows.Forms.MessageBox.Show("Error: Systems database folder is not writable at " + sysdbdir + Environment.NewLine + Environment.NewLine + dberror,
+                                                    "Systems DB not writeable", System.Windows.Forms.MessageBoxButtons.OK);
+                insafemode = true;
+            }
+            else if (!Directory.Exists(userdbdir))
+            {
+                System.Windows.Forms.MessageBox.Show("Error: User database is inaccessible at " + EDDOptions.Instance.UserDatabasePath + Environment.NewLine + Environment.NewLine + dberror,
+                                                        "User DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
+                insafemode = true;
+            }
+            else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(userdbdir))
+            {
+                System.Windows.Forms.MessageBox.Show("Error: User database folder is not writable at " + sysdbdir + Environment.NewLine + Environment.NewLine + dberror,
+                                                    "User DB not writeable", System.Windows.Forms.MessageBoxButtons.OK);
+                insafemode = true;
+            }
+
+            if (Control.ModifierKeys.HasFlag(Keys.Shift) || insafemode )
+                return new SafeModeForm();
+            else
+                return new SplashForm();
         }
 
+        // Run EDD!
         // Show SplashForm, if it's not already, then start a 250ms timer to ensure that we don't block the main loop during spool-up and ignition.
-        private void GoForAutoSequenceStart(EDDFormLaunchArgs args = null)
+        private void RunEDD(EDDFormLaunchArgs args = null)
         {
             if (MainForm == null || !(MainForm is SplashForm || MainForm.GetType().IsSubclassOf(typeof(SplashForm))))
             {
@@ -136,7 +135,7 @@ namespace EDDiscovery
 
             var tim = new Timer { Interval = 250 };
             tim.Tag = args;
-            tim.Tick += MainEngineStart;
+            tim.Tick += InitialiseEDD;
             tim.Start();
         }
 
@@ -150,17 +149,16 @@ namespace EDDiscovery
         }
 
         // Switch context from an existing Form to a different Form, Close() the previous Form, and Show() the new one.
-        private void SwitchContext(Form newContext)
+        private void SwitchContext(Form newForm)
         {
             Form f = MainForm;
-            MainForm = newContext;
+            MainForm = newForm;
             f?.Close();
             MainForm?.Show();
         }
 
-
         // Initialize everything on the UI thread, and report+die for any problems or SwitchContext from SplashForm to EDDiscoveryForm.
-        private void MainEngineStart(object sender, EventArgs e)
+        private void InitialiseEDD(object sender, EventArgs e)
         {
             var tim = (Timer)sender;
             tim?.Stop();
@@ -172,17 +170,63 @@ namespace EDDiscovery
 
             try
             {
-                EDDMainForm = new EDDiscoveryForm();
-                SetLoadingMsg("Starting EDD");
+                System.Threading.Thread.CurrentThread.Name = "EDD Main Thread";
 
-                EDDiscoveryController.Initialize(SetLoadingMsg);   // this loads up the options
+                EDDMainForm = new EDDiscoveryForm();
+
+                SetLoadingMsg("Initialising Databases");
+
+                UserDatabase.Instance.Name = "UserDB";
+                UserDatabase.Instance.MinThreads = 1;
+                UserDatabase.Instance.MaxThreads = 2;     
+                UserDatabase.Instance.MultiThreaded = true;     // starts up the threads
+
+                SystemsDatabase.Instance.Name = "SystemDB";
+                SystemsDatabase.Instance.MinThreads = 1;
+                SystemsDatabase.Instance.MaxThreads = 8;
+                SystemsDatabase.Instance.MultiThreaded = true;  // starts up the threads
+
+                try
+                {
+                    UserDatabase.Instance.Initialize();
+                }
+                catch ( Exception ex)
+                {
+                    EliteDangerousCore.DB.UserDatabase.Instance.ClearDown();     // need everything closed down
+
+                    System.Windows.Forms.MessageBox.Show("Error: User DB is corrupt at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath + Environment.NewLine + Environment.NewLine +
+                                                         "Database is unusable. Use safe mode to remove it and start again. All user settings will be lost" + Environment.NewLine + Environment.NewLine +
+                                                         ex.Message.ToString(),
+                                                         "User DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    SwitchContext(new SafeModeForm(false));
+                    return;
+                }
+
+                try
+                {
+                    SystemsDatabase.Instance.Initialize();
+                }
+                catch (Exception ex)
+                {
+                    EliteDangerousCore.DB.UserDatabase.Instance.ClearDown();     // need everything closed down
+                    EliteDangerousCore.DB.SystemsDatabase.Instance.ClearDown();
+
+                    System.Windows.Forms.MessageBox.Show("Error: System DB is corrupt at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
+                                                         "Database is unusable. Use safe mode to remove it and start again. User settings will be retained" + Environment.NewLine + Environment.NewLine +
+                                                         ex.Message.ToString(),
+                                                         "System DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    SwitchContext(new SafeModeForm(false));
+                    return;
+                }
 
                 EDDOptions.Instance.NoWindowReposition |= launchArg.PositionReset;
                 EDDOptions.Instance.NoTheme |= launchArg.ThemeReset;
                 EDDOptions.Instance.TabsReset |= launchArg.TabsReset;
                 EDDOptions.Instance.ResetLanguage |= launchArg.ResetLang;
 
-                EDDMainForm.Init(SetLoadingMsg);    // call the init function, which will initialize the eddiscovery form
+                SetLoadingMsg("Starting EDD");
+
+                EDDMainForm.Init(SetLoadingMsg);    // call the init function, which will initialize the eddiscovery system
 
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
@@ -201,6 +245,7 @@ namespace EDDiscovery
                         }
                     }
                 }
+
 
                 SetLoadingMsg("Starting Program");
                 SwitchContext(EDDMainForm);         // Ignition, and liftoff!

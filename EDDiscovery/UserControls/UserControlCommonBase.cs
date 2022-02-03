@@ -95,7 +95,11 @@ namespace EDDiscovery.UserControls
 
         public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
 
-        public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
+
+        // set the control text for the panel. 
+        // for tabstrips, for forms, for resizable containers
+        // for other (such as directly in the tab) looks for a labelControlText, and if present, uses that/
+        public void SetControlText(string s)            
         {
             if (this.Parent is ExtendedControls.TabStrip)
                 ((ExtendedControls.TabStrip)(this.Parent)).SetControlText(s);
@@ -103,6 +107,15 @@ namespace EDDiscovery.UserControls
                 ((UserControlForm)(this.Parent)).SetControlText(s);
             else if (this.Parent is UserControlContainerResizable)
                 ((UserControlContainerResizable)(this.Parent)).SetControlText(s);
+            else
+            {
+                var t = this.GetType().GetField("labelControlText", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                if ( t != null )
+                {
+                    dynamic label = t.GetValue(this);
+                    label.Text = s;
+                }
+            }
         }
 
         public bool IsControlTextVisible()
