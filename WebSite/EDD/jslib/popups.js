@@ -30,7 +30,7 @@ style:
 
 import { RemoveChildren } from "/jslib/elements.js"
 
-export function ShowPopup(id, element = null,timetodisplayms = null, toppos = null)
+export function ShowPopup(id, element = null, timetodisplayms = null, toppos = null, closeonclick = true)
 {
     var notification = document.getElementById(id);
 
@@ -50,16 +50,17 @@ export function ShowPopup(id, element = null,timetodisplayms = null, toppos = nu
 
     if (timetodisplayms != null)
         setTimeout(function () { notification.style.visibility = null; }, timetodisplayms);
-    else
+    else if ( closeonclick )
         notification.onclick = function () { notification.style.visibility = null; };
 
     return notification;
 }
 
-export function HidePopup(id)
+export function HidePopup(id,removechildren=true)
 {
-    var notification = document.getElementById("scanobjectnotification");
-    RemoveChildren(notification);
-    notification.style.visibility = null;
+    var notification = document.getElementById(id);
+    if ( removechildren)
+        RemoveChildren(notification);
+    notification.style.visibility = "hidden";
 }
 

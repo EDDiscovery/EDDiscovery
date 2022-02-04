@@ -45,6 +45,7 @@ function OnLoad()
             ["checkbox", "planetclass", "Show classes of planets", scandisplaychange, true],
             ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
             ["checkbox", "edsm", "Check EDSM", scandisplaychange, false],
+            ["button", "value", "Set Valuable Limit", setvaluelimit, false],
             ["submenu", "size", "Set body image size..", "submenusize"],
             ["submenu", "statussize", "Set star display width..", "submenustardisplaysize"],
         ]);
@@ -90,6 +91,10 @@ function OnLoad()
 
     document.getElementById("scanimagearea").onclick = clickonscanbackground;           // a click on this is the same as the img, so handle it
     document.getElementsByTagName('aside')[0].onclick = cancelmenupopup;                // a click here cancels the menu/popup
+
+    document.getElementById("valuedialog_cancel").onclick = cancelvalue;
+    document.getElementById("valuedialog_ok").onclick = setvalue;
+
 }
 
 document.body.onload = OnLoad;
@@ -152,9 +157,12 @@ function RequestImage(entry)
 
     var size = FetchState("submenusize.sizegroup.radiostate", "48");
 
+    var valuelimit = FetchState("scandisplay_valuelimit", 50001);
+    console.log("Value limit is " + valuelimit);
+
     var req = "/systemmap/image.png?entry=" + entry + "&width=" + width + "&starsize=" + size + "&showmoons=" + showmoon + "&showbodyicons=" + bodyicons +
         "&showmaterials=" + showmaterials + "&showgravity=" + gvalue + "&showhabzone=" + habzone + "&showstarclass=" + starclass + "&showplanetclass=" + planetclass +
-        "&showdistance=" + distance + "&EDSM=" + edsm + "&reqtime=" + new Date().getTime();
+        "&showdistance=" + distance + "&EDSM=" + edsm + "&valuelimit=" + valuelimit + "&reqtime=" + new Date().getTime();
 
     lastobjectlist = null;      // indicate don't have a list now
     var img = jimgdiv.childNodes[0];
@@ -189,7 +197,29 @@ function stardisplaysizedisplaychange(mouseevent)
     setDisplaySize();
     CloseMenus();
     RequestImage(-1);
-} 
+}
+
+function setvaluelimit(mouseevent)
+{
+    CloseMenus();
+    var inputbox = document.getElementById("valuedialog_value");
+    inputbox.value = FetchState("scandisplay_valuelimit", 50001);
+    ShowPopup("valuedialog",null,null,null,false);
+}
+
+function cancelvalue()
+{
+    HidePopup("valuedialog",false);
+}
+
+function setvalue()
+{
+    var inputbox = document.getElementById("valuedialog_value");
+    StoreState("scandisplay_valuelimit", inputbox.value);
+    HidePopup("valuedialog",false);
+    RequestImage(-1);
+}
+
 
 function togglemenu()
 {

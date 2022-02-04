@@ -79,6 +79,7 @@ namespace EDDiscovery.WebServer
                         sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
                         sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
                         sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
+                        sd.ValueLimit = (request.QueryString["valuelimit"] ?? "50000").InvariantParseInt(50000);
                         sd.ShowEDSMBodies = checkEDSM;
                         sd.SetSize(starsize);
                         sd.Font = new Font("MS Sans Serif", 8.25f);

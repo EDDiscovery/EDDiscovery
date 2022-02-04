@@ -49,3 +49,44 @@
     max-width: 80%;
 }
 
+.okcanceldialog {
+    position: absolute; /* Sit on top of the screen */
+    visibility: hidden; /* Hidden by default. Visible on click */
+    background: rgb(192,96,0);
+    color: black;
+    border-style: solid;
+    border-width: 6px;
+    border-color: rgb(170,80,0);
+    border-radius: 6px;
+    padding: 4px;
+    z-index: 1;
+    overflow: auto;
+    white-space: pre-wrap;
+    text-align: center;
+    width: auto;
+    left: 50%;
+    margin-left: -30%;
+    height: auto;
+    top: 50%;
+    margin-top: -20%;
+    max-height: 80%;
+    max-width: 80%;
+}
+
+.okcanceldialog .okcanceltable1
+{
+}
+
+.okcanceldialog .okcanceltable2
+{
+    margin: 0px;
+    width:100%;
+}
+
+
+.okcanceldialog .okcancelbutton {
+    padding: 4px;
+    width: 80px;
+}
+
+
