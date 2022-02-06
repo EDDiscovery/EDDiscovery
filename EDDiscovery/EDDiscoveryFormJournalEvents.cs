@@ -58,7 +58,7 @@ namespace EDDiscovery
                 {
                     for (int i = lastfileh.EntryNumber - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
                     {
-                        //System.Diagnostics.Debug.WriteLine("{0} : {1} {2}", i, history.EntryOrder[i].EventTimeUTC, history.EntryOrder[i].EventSummary);
+                        //System.Diagnostics.Debug.WriteLine($"DLL-> {history[i].EventTimeUTC} {history[i].EventSummary}");
                         DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);
                     }
                 }
