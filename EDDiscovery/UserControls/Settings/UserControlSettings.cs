@@ -40,6 +40,18 @@ namespace EDDiscovery.UserControls
             extComboBoxGameTime.Items.Add("UTC");
             extComboBoxGameTime.Items.Add("Game Time".T(EDTx.UserControlSettings_GameTime));
 
+            ConfigureHelpButton(extButtonDrawnHelpTheme, "Theming");
+            ConfigureHelpButton(extButtonDrawnHelpScreenshots, "Screenshots");
+            ConfigureHelpButton(extButtonDrawnHelpTransparency, "Transparency");
+            ConfigureHelpButton(extButtonDrawnHelpWebServer, "Webserver");
+            ConfigureHelpButton(extButtonDrawnHelpSafeMode, "SafeMode");
+            ConfigureHelpButton(extButtonDrawnHelpMemory, "Memory");
+            ConfigureHelpButton(extButtonDrawnHelpEDSM, "EDSMSettings");
+            ConfigureHelpButton(extButtonDrawnHelpHistory, "HistoryDisplay");
+            ConfigureHelpButton(extButtonDrawnHelpDLL, "DLL");
+            ConfigureHelpButton(extButtonDrawnHelpWindowOptions, "WindowOptions");
+            ConfigureHelpButton(extButtonDrawnHelpCommanders, "Commanders");
+
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
@@ -122,6 +134,12 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
         }
+
+        public void ConfigureHelpButton(ExtendedControls.ExtButtonDrawn p, string tag)
+        {
+            p.Text = ""; p.Image = ExtendedControls.TabStrip.HelpIcon; p.Tag = tag;
+        }
+
 
         public override void InitialDisplay()
         {
@@ -478,6 +496,12 @@ namespace EDDiscovery.UserControls
             themeeditor.Show(FindForm());
         }
 
+        private void extButtonDrawnHelp_Click(object sender, EventArgs e)
+        {
+            EDDHelp.Help(FindForm(), extButtonDrawnHelpTheme, ((Control)sender).Tag as string);
+        }
+
+
         #endregion
 
         #region Screenshots
@@ -757,6 +781,7 @@ namespace EDDiscovery.UserControls
             discoveryform.DLLManager.DLLConfigure(this.FindForm(), this.FindForm().Icon,
                 (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
         }
+
     }
 }
 

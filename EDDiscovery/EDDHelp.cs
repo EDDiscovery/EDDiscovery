@@ -31,7 +31,7 @@ namespace EDDiscovery
 
         static private JToken defaulthelp = new JObject()
         {
-            ["Version"] = "1.4.0.0",
+            ["Version"] = "15.0.0.0",
             ["Panels"] = new JArray()
             {
                 new JObject() { ["panel"] = "Log", ["wiki"] = "/Using-the-EDDiscovery-Log-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=625" },
@@ -85,10 +85,26 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "SuitsWeapons", ["wiki"] = "/Using-the-Suits-and-Weapons-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "MicroResources", ["wiki"] = "/Using-the-Micro-Resources-Panel", ["video"] = "" },
-
-// TBD New ones, 3d/2d, organics
+                new JObject() { ["panel"] = "Map3D", ["wiki"] = "/Using-the-3D-Map", ["video"] = "" },
+                new JObject() { ["panel"] = "Organics", ["wiki"] = "/Using-the-Organic-Scans", ["video"] = "" },
+                new JObject() { ["panel"] = "Theming", ["wiki"] = "/Configuring-the-look-of-EDDiscovery", ["video"] = "" },
+                new JObject() { ["panel"] = "SafeMode", ["wiki"] = "/Safe-Mode", ["video"] = "" },
+                new JObject() { ["panel"] = "Transparency", ["wiki"] = "/Using-Panels#Pop-Out-Panels", ["video"] = "" },
+                new JObject() { ["panel"] = "Webserver", ["wiki"] = "/EDD-Web-Server-(Roccat-Style-Grid)", ["video"] = "" },
+                new JObject() { ["panel"] = "Screenshots", ["wiki"] = "/Screen-Shots", ["video"] = "" },
+                new JObject() { ["panel"] = "Memory", ["wiki"] = "/Reducing-Memory-Usage", ["video"] = "" },
+                new JObject() { ["panel"] = "EDSMSettings", ["wiki"] = "/EDSM-Integration-with-EDDiscovery", ["video"] = "" },
+                new JObject() { ["panel"] = "HistoryDisplay", ["wiki"] = "/Using-the-Settings-Panel#History-Options", ["video"] = "" },
+                new JObject() { ["panel"] = "DLL", ["wiki"] = "/Using-the-Settings-Panel#DLLs", ["video"] = "" },
+                new JObject() { ["panel"] = "WindowOptions", ["wiki"] = "/Using-the-Settings-Panel#Window-Options", ["video"] = "" },
+                new JObject() { ["panel"] = "Commanders", ["wiki"] = "/Using-the-Settings-Panel#Commanders", ["video"] = "" },
             }
         };
+
+        public static void Help(Form parent, Control ct, string name)
+        {
+            Help(parent, ct.PointToScreen(new Point(0, ct.Height)), name);
+        }
 
         public static void Help(Form parent, Point p, UserControlCommonBase uccb)
         {

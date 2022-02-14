@@ -1303,6 +1303,8 @@ SECTION UserControlTravelGrid
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
+.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
+.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
 .addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
 
 SECTION UserControlCaptainsLog

@@ -78,29 +78,40 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCommanders = new ExtendedControls.ExtScrollBar();
             this.flowLayoutButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBoxTheme = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpTheme = new ExtendedControls.ExtButtonDrawn();
             this.groupBoxCustomHistoryLoad = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpHistory = new ExtendedControls.ExtButtonDrawn();
             this.extComboBoxGameTime = new ExtendedControls.ExtComboBox();
             this.labelTimeDisplay = new System.Windows.Forms.Label();
             this.extGroupBoxWebServer = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpWebServer = new ExtendedControls.ExtButtonDrawn();
             this.numberBoxLongPortNo = new ExtendedControls.NumberBoxLong();
             this.labelPortNo = new System.Windows.Forms.Label();
             this.extButtonTestWeb = new ExtendedControls.ExtButton();
             this.extCheckBoxWebServerEnable = new ExtendedControls.ExtCheckBox();
             this.groupBoxInteraction = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpTransparency = new ExtendedControls.ExtButtonDrawn();
             this.labelTKey = new System.Windows.Forms.Label();
             this.groupBoxMemory = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpMemory = new ExtendedControls.ExtButtonDrawn();
             this.labelHistoryEssItems = new System.Windows.Forms.Label();
             this.labelHistorySel = new System.Windows.Forms.Label();
             this.groupBoxCustomScreenShots = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpScreenshots = new ExtendedControls.ExtButtonDrawn();
             this.groupBoxCustomEDSM = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpEDSM = new ExtendedControls.ExtButtonDrawn();
             this.groupBoxPopOuts = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpWindowOptions = new ExtendedControls.ExtButtonDrawn();
             this.extGroupBoxDLLPerms = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpDLL = new ExtendedControls.ExtButtonDrawn();
+            this.extButtonDLLConfigure = new ExtendedControls.ExtButton();
             this.extButtonDLLPerms = new ExtendedControls.ExtButton();
             this.groupBoxCustomLanguage = new ExtendedControls.ExtGroupBox();
             this.comboBoxCustomLanguage = new ExtendedControls.ExtComboBox();
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpSafeMode = new ExtendedControls.ExtButtonDrawn();
             this.labelSafeMode = new System.Windows.Forms.Label();
-            this.extButtonDLLConfigure = new ExtendedControls.ExtButton();
+            this.extButtonDrawnHelpCommanders = new ExtendedControls.ExtButtonDrawn();
             this.extPanelScroll.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerCommanders.SuspendLayout();
@@ -263,7 +274,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomEssentialEntries.SelectedIndex = -1;
             this.comboBoxCustomEssentialEntries.SelectedItem = null;
             this.comboBoxCustomEssentialEntries.SelectedValue = null;
-            this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(137, 21);
+            this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(123, 21);
             this.comboBoxCustomEssentialEntries.TabIndex = 7;
             this.comboBoxCustomEssentialEntries.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCustomEssentialEntries, "Select which items you consider essential to load older than the time above");
@@ -286,7 +297,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomHistoryLoadTime.SelectedIndex = -1;
             this.comboBoxCustomHistoryLoadTime.SelectedItem = null;
             this.comboBoxCustomHistoryLoadTime.SelectedValue = null;
-            this.comboBoxCustomHistoryLoadTime.Size = new System.Drawing.Size(137, 21);
+            this.comboBoxCustomHistoryLoadTime.Size = new System.Drawing.Size(123, 21);
             this.comboBoxCustomHistoryLoadTime.TabIndex = 7;
             this.comboBoxCustomHistoryLoadTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCustomHistoryLoadTime, "Reduce Memory use. Select either load all records, or load only essential items o" +
@@ -657,6 +668,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutButtons.Controls.Add(this.btnDeleteCommander);
             this.flowLayoutButtons.Controls.Add(this.buttonEditCommander);
             this.flowLayoutButtons.Controls.Add(this.buttonAddCommander);
+            this.flowLayoutButtons.Controls.Add(this.extButtonDrawnHelpCommanders);
             this.flowLayoutButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutButtons.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutButtons.Location = new System.Drawing.Point(3, 120);
@@ -669,6 +681,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxTheme.BackColorScaling = 0.5F;
             this.groupBoxTheme.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxTheme.BorderColorScaling = 0.5F;
+            this.groupBoxTheme.Controls.Add(this.extButtonDrawnHelpTheme);
             this.groupBoxTheme.Controls.Add(this.comboBoxTheme);
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
@@ -681,11 +694,34 @@ namespace EDDiscovery.UserControls
             this.groupBoxTheme.TextPadding = 0;
             this.groupBoxTheme.TextStartPosition = -1;
             // 
+            // extButtonDrawnHelpTheme
+            // 
+            this.extButtonDrawnHelpTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpTheme.AutoEllipsis = false;
+            this.extButtonDrawnHelpTheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpTheme.Image = null;
+            this.extButtonDrawnHelpTheme.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpTheme.Location = new System.Drawing.Point(251, 16);
+            this.extButtonDrawnHelpTheme.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpTheme.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpTheme.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpTheme.Name = "extButtonDrawnHelpTheme";
+            this.extButtonDrawnHelpTheme.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpTheme.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpTheme.Selectable = true;
+            this.extButtonDrawnHelpTheme.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpTheme.TabIndex = 26;
+            this.extButtonDrawnHelpTheme.Text = "?";
+            this.extButtonDrawnHelpTheme.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpTheme.UseMnemonic = true;
+            this.extButtonDrawnHelpTheme.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
             // groupBoxCustomHistoryLoad
             // 
             this.groupBoxCustomHistoryLoad.BackColorScaling = 0.5F;
             this.groupBoxCustomHistoryLoad.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomHistoryLoad.BorderColorScaling = 0.5F;
+            this.groupBoxCustomHistoryLoad.Controls.Add(this.extButtonDrawnHelpHistory);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.extComboBoxGameTime);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.labelTimeDisplay);
@@ -697,6 +733,28 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.Text = "History";
             this.groupBoxCustomHistoryLoad.TextPadding = 0;
             this.groupBoxCustomHistoryLoad.TextStartPosition = -1;
+            // 
+            // extButtonDrawnHelpHistory
+            // 
+            this.extButtonDrawnHelpHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpHistory.AutoEllipsis = false;
+            this.extButtonDrawnHelpHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpHistory.Image = null;
+            this.extButtonDrawnHelpHistory.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpHistory.Location = new System.Drawing.Point(251, 16);
+            this.extButtonDrawnHelpHistory.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpHistory.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpHistory.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpHistory.Name = "extButtonDrawnHelpHistory";
+            this.extButtonDrawnHelpHistory.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpHistory.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpHistory.Selectable = true;
+            this.extButtonDrawnHelpHistory.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpHistory.TabIndex = 26;
+            this.extButtonDrawnHelpHistory.Text = "?";
+            this.extButtonDrawnHelpHistory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpHistory.UseMnemonic = true;
+            this.extButtonDrawnHelpHistory.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // extComboBoxGameTime
             // 
@@ -734,6 +792,7 @@ namespace EDDiscovery.UserControls
             this.extGroupBoxWebServer.BackColorScaling = 0.5F;
             this.extGroupBoxWebServer.BorderColor = System.Drawing.Color.LightGray;
             this.extGroupBoxWebServer.BorderColorScaling = 0.5F;
+            this.extGroupBoxWebServer.Controls.Add(this.extButtonDrawnHelpWebServer);
             this.extGroupBoxWebServer.Controls.Add(this.numberBoxLongPortNo);
             this.extGroupBoxWebServer.Controls.Add(this.labelPortNo);
             this.extGroupBoxWebServer.Controls.Add(this.extButtonTestWeb);
@@ -746,6 +805,28 @@ namespace EDDiscovery.UserControls
             this.extGroupBoxWebServer.Text = "Web Server";
             this.extGroupBoxWebServer.TextPadding = 0;
             this.extGroupBoxWebServer.TextStartPosition = -1;
+            // 
+            // extButtonDrawnHelpWebServer
+            // 
+            this.extButtonDrawnHelpWebServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpWebServer.AutoEllipsis = false;
+            this.extButtonDrawnHelpWebServer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpWebServer.Image = null;
+            this.extButtonDrawnHelpWebServer.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpWebServer.Location = new System.Drawing.Point(251, 14);
+            this.extButtonDrawnHelpWebServer.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpWebServer.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpWebServer.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpWebServer.Name = "extButtonDrawnHelpWebServer";
+            this.extButtonDrawnHelpWebServer.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpWebServer.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpWebServer.Selectable = true;
+            this.extButtonDrawnHelpWebServer.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpWebServer.TabIndex = 26;
+            this.extButtonDrawnHelpWebServer.Text = "?";
+            this.extButtonDrawnHelpWebServer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpWebServer.UseMnemonic = true;
+            this.extButtonDrawnHelpWebServer.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // numberBoxLongPortNo
             // 
@@ -822,6 +903,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxInteraction.BackColorScaling = 0.5F;
             this.groupBoxInteraction.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxInteraction.BorderColorScaling = 0.5F;
+            this.groupBoxInteraction.Controls.Add(this.extButtonDrawnHelpTransparency);
             this.groupBoxInteraction.Controls.Add(this.comboBoxClickThruKey);
             this.groupBoxInteraction.Controls.Add(this.labelTKey);
             this.groupBoxInteraction.Location = new System.Drawing.Point(3, 253);
@@ -832,6 +914,28 @@ namespace EDDiscovery.UserControls
             this.groupBoxInteraction.Text = "Interaction";
             this.groupBoxInteraction.TextPadding = 0;
             this.groupBoxInteraction.TextStartPosition = -1;
+            // 
+            // extButtonDrawnHelpTransparency
+            // 
+            this.extButtonDrawnHelpTransparency.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpTransparency.AutoEllipsis = false;
+            this.extButtonDrawnHelpTransparency.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpTransparency.Image = null;
+            this.extButtonDrawnHelpTransparency.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpTransparency.Location = new System.Drawing.Point(251, 16);
+            this.extButtonDrawnHelpTransparency.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpTransparency.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpTransparency.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpTransparency.Name = "extButtonDrawnHelpTransparency";
+            this.extButtonDrawnHelpTransparency.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpTransparency.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpTransparency.Selectable = true;
+            this.extButtonDrawnHelpTransparency.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpTransparency.TabIndex = 26;
+            this.extButtonDrawnHelpTransparency.Text = "?";
+            this.extButtonDrawnHelpTransparency.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpTransparency.UseMnemonic = true;
+            this.extButtonDrawnHelpTransparency.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // labelTKey
             // 
@@ -847,6 +951,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxMemory.BackColorScaling = 0.5F;
             this.groupBoxMemory.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxMemory.BorderColorScaling = 0.5F;
+            this.groupBoxMemory.Controls.Add(this.extButtonDrawnHelpMemory);
             this.groupBoxMemory.Controls.Add(this.comboBoxCustomEssentialEntries);
             this.groupBoxMemory.Controls.Add(this.comboBoxCustomHistoryLoadTime);
             this.groupBoxMemory.Controls.Add(this.labelHistoryEssItems);
@@ -859,6 +964,28 @@ namespace EDDiscovery.UserControls
             this.groupBoxMemory.Text = "Memory";
             this.groupBoxMemory.TextPadding = 0;
             this.groupBoxMemory.TextStartPosition = -1;
+            // 
+            // extButtonDrawnHelpMemory
+            // 
+            this.extButtonDrawnHelpMemory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpMemory.AutoEllipsis = false;
+            this.extButtonDrawnHelpMemory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpMemory.Image = null;
+            this.extButtonDrawnHelpMemory.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpMemory.Location = new System.Drawing.Point(251, 12);
+            this.extButtonDrawnHelpMemory.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpMemory.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpMemory.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpMemory.Name = "extButtonDrawnHelpMemory";
+            this.extButtonDrawnHelpMemory.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpMemory.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpMemory.Selectable = true;
+            this.extButtonDrawnHelpMemory.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpMemory.TabIndex = 26;
+            this.extButtonDrawnHelpMemory.Text = "?";
+            this.extButtonDrawnHelpMemory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpMemory.UseMnemonic = true;
+            this.extButtonDrawnHelpMemory.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // labelHistoryEssItems
             // 
@@ -883,6 +1010,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.BackColorScaling = 0.5F;
             this.groupBoxCustomScreenShots.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomScreenShots.BorderColorScaling = 0.5F;
+            this.groupBoxCustomScreenShots.Controls.Add(this.extButtonDrawnHelpScreenshots);
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
             this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(577, 253);
@@ -894,11 +1022,34 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.TextPadding = 0;
             this.groupBoxCustomScreenShots.TextStartPosition = -1;
             // 
+            // extButtonDrawnHelpScreenshots
+            // 
+            this.extButtonDrawnHelpScreenshots.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpScreenshots.AutoEllipsis = false;
+            this.extButtonDrawnHelpScreenshots.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpScreenshots.Image = null;
+            this.extButtonDrawnHelpScreenshots.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpScreenshots.Location = new System.Drawing.Point(251, 12);
+            this.extButtonDrawnHelpScreenshots.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpScreenshots.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpScreenshots.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpScreenshots.Name = "extButtonDrawnHelpScreenshots";
+            this.extButtonDrawnHelpScreenshots.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpScreenshots.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpScreenshots.Selectable = true;
+            this.extButtonDrawnHelpScreenshots.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpScreenshots.TabIndex = 26;
+            this.extButtonDrawnHelpScreenshots.Text = "?";
+            this.extButtonDrawnHelpScreenshots.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpScreenshots.UseMnemonic = true;
+            this.extButtonDrawnHelpScreenshots.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
             // groupBoxCustomEDSM
             // 
             this.groupBoxCustomEDSM.BackColorScaling = 0.5F;
             this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomEDSM.BorderColorScaling = 0.5F;
+            this.groupBoxCustomEDSM.Controls.Add(this.extButtonDrawnHelpEDSM);
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
             this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMDownload);
             this.groupBoxCustomEDSM.Location = new System.Drawing.Point(3, 344);
@@ -910,11 +1061,34 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.TextPadding = 0;
             this.groupBoxCustomEDSM.TextStartPosition = -1;
             // 
+            // extButtonDrawnHelpEDSM
+            // 
+            this.extButtonDrawnHelpEDSM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpEDSM.AutoEllipsis = false;
+            this.extButtonDrawnHelpEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpEDSM.Image = null;
+            this.extButtonDrawnHelpEDSM.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpEDSM.Location = new System.Drawing.Point(251, 11);
+            this.extButtonDrawnHelpEDSM.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpEDSM.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpEDSM.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpEDSM.Name = "extButtonDrawnHelpEDSM";
+            this.extButtonDrawnHelpEDSM.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpEDSM.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpEDSM.Selectable = true;
+            this.extButtonDrawnHelpEDSM.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpEDSM.TabIndex = 26;
+            this.extButtonDrawnHelpEDSM.Text = "?";
+            this.extButtonDrawnHelpEDSM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpEDSM.UseMnemonic = true;
+            this.extButtonDrawnHelpEDSM.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
             // groupBoxPopOuts
             // 
             this.groupBoxPopOuts.BackColorScaling = 0.5F;
             this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxPopOuts.BorderColorScaling = 0.5F;
+            this.groupBoxPopOuts.Controls.Add(this.extButtonDrawnHelpWindowOptions);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxPanelSortOrder);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxKeepOnTop);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxCustomResize);
@@ -929,11 +1103,34 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.TextPadding = 0;
             this.groupBoxPopOuts.TextStartPosition = -1;
             // 
+            // extButtonDrawnHelpWindowOptions
+            // 
+            this.extButtonDrawnHelpWindowOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpWindowOptions.AutoEllipsis = false;
+            this.extButtonDrawnHelpWindowOptions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpWindowOptions.Image = null;
+            this.extButtonDrawnHelpWindowOptions.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpWindowOptions.Location = new System.Drawing.Point(251, 11);
+            this.extButtonDrawnHelpWindowOptions.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpWindowOptions.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpWindowOptions.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpWindowOptions.Name = "extButtonDrawnHelpWindowOptions";
+            this.extButtonDrawnHelpWindowOptions.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpWindowOptions.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpWindowOptions.Selectable = true;
+            this.extButtonDrawnHelpWindowOptions.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpWindowOptions.TabIndex = 26;
+            this.extButtonDrawnHelpWindowOptions.Text = "?";
+            this.extButtonDrawnHelpWindowOptions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpWindowOptions.UseMnemonic = true;
+            this.extButtonDrawnHelpWindowOptions.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
             // extGroupBoxDLLPerms
             // 
             this.extGroupBoxDLLPerms.BackColorScaling = 0.5F;
             this.extGroupBoxDLLPerms.BorderColor = System.Drawing.Color.LightGray;
             this.extGroupBoxDLLPerms.BorderColorScaling = 0.5F;
+            this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDrawnHelpDLL);
             this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLConfigure);
             this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLPerms);
             this.extGroupBoxDLLPerms.Location = new System.Drawing.Point(577, 344);
@@ -944,6 +1141,38 @@ namespace EDDiscovery.UserControls
             this.extGroupBoxDLLPerms.Text = "DLLs";
             this.extGroupBoxDLLPerms.TextPadding = 0;
             this.extGroupBoxDLLPerms.TextStartPosition = -1;
+            // 
+            // extButtonDrawnHelpDLL
+            // 
+            this.extButtonDrawnHelpDLL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpDLL.AutoEllipsis = false;
+            this.extButtonDrawnHelpDLL.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpDLL.Image = null;
+            this.extButtonDrawnHelpDLL.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpDLL.Location = new System.Drawing.Point(251, 11);
+            this.extButtonDrawnHelpDLL.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpDLL.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpDLL.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpDLL.Name = "extButtonDrawnHelpDLL";
+            this.extButtonDrawnHelpDLL.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpDLL.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpDLL.Selectable = true;
+            this.extButtonDrawnHelpDLL.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpDLL.TabIndex = 26;
+            this.extButtonDrawnHelpDLL.Text = "?";
+            this.extButtonDrawnHelpDLL.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpDLL.UseMnemonic = true;
+            this.extButtonDrawnHelpDLL.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
+            // extButtonDLLConfigure
+            // 
+            this.extButtonDLLConfigure.Location = new System.Drawing.Point(125, 17);
+            this.extButtonDLLConfigure.Name = "extButtonDLLConfigure";
+            this.extButtonDLLConfigure.Size = new System.Drawing.Size(99, 23);
+            this.extButtonDLLConfigure.TabIndex = 10;
+            this.extButtonDLLConfigure.Text = "Configure";
+            this.extButtonDLLConfigure.UseVisualStyleBackColor = true;
+            this.extButtonDLLConfigure.Click += new System.EventHandler(this.extButtonDLLConfigure_Click);
             // 
             // extButtonDLLPerms
             // 
@@ -998,6 +1227,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.BackColorScaling = 0.5F;
             this.groupBoxCustomSafeMode.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomSafeMode.BorderColorScaling = 0.5F;
+            this.groupBoxCustomSafeMode.Controls.Add(this.extButtonDrawnHelpSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
             this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(290, 479);
@@ -1009,24 +1239,58 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.TextPadding = 0;
             this.groupBoxCustomSafeMode.TextStartPosition = -1;
             // 
+            // extButtonDrawnHelpSafeMode
+            // 
+            this.extButtonDrawnHelpSafeMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpSafeMode.AutoEllipsis = false;
+            this.extButtonDrawnHelpSafeMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpSafeMode.Image = null;
+            this.extButtonDrawnHelpSafeMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpSafeMode.Location = new System.Drawing.Point(251, 16);
+            this.extButtonDrawnHelpSafeMode.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpSafeMode.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpSafeMode.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpSafeMode.Name = "extButtonDrawnHelpSafeMode";
+            this.extButtonDrawnHelpSafeMode.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpSafeMode.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpSafeMode.Selectable = true;
+            this.extButtonDrawnHelpSafeMode.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpSafeMode.TabIndex = 26;
+            this.extButtonDrawnHelpSafeMode.Text = "?";
+            this.extButtonDrawnHelpSafeMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpSafeMode.UseMnemonic = true;
+            this.extButtonDrawnHelpSafeMode.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
             // labelSafeMode
             // 
-            this.labelSafeMode.Location = new System.Drawing.Point(10, 22);
+            this.labelSafeMode.Location = new System.Drawing.Point(10, 19);
             this.labelSafeMode.Name = "labelSafeMode";
-            this.labelSafeMode.Size = new System.Drawing.Size(265, 62);
+            this.labelSafeMode.Size = new System.Drawing.Size(235, 65);
             this.labelSafeMode.TabIndex = 5;
-            this.labelSafeMode.Text = "Click this to perform special operations like to move system databases to another" +
-    " drive, reset UI, and other maintenance tasks...\r\n\r\n";
+            this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to ano" +
+    "ther drive, reset UI, and other maintenance tasks...\r\n\r\n";
             // 
-            // extButtonDLLConfigure
+            // extButtonDrawnHelpCommanders
             // 
-            this.extButtonDLLConfigure.Location = new System.Drawing.Point(157, 17);
-            this.extButtonDLLConfigure.Name = "extButtonDLLConfigure";
-            this.extButtonDLLConfigure.Size = new System.Drawing.Size(99, 23);
-            this.extButtonDLLConfigure.TabIndex = 10;
-            this.extButtonDLLConfigure.Text = "Configure";
-            this.extButtonDLLConfigure.UseVisualStyleBackColor = true;
-            this.extButtonDLLConfigure.Click += new System.EventHandler(this.extButtonDLLConfigure_Click);
+            this.extButtonDrawnHelpCommanders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpCommanders.AutoEllipsis = false;
+            this.extButtonDrawnHelpCommanders.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpCommanders.Image = null;
+            this.extButtonDrawnHelpCommanders.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpCommanders.Location = new System.Drawing.Point(641, 3);
+            this.extButtonDrawnHelpCommanders.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpCommanders.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpCommanders.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpCommanders.Name = "extButtonDrawnHelpCommanders";
+            this.extButtonDrawnHelpCommanders.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpCommanders.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpCommanders.Selectable = true;
+            this.extButtonDrawnHelpCommanders.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpCommanders.TabIndex = 26;
+            this.extButtonDrawnHelpCommanders.Text = "?";
+            this.extButtonDrawnHelpCommanders.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpCommanders.UseMnemonic = true;
+            this.extButtonDrawnHelpCommanders.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // UserControlSettings
             // 
@@ -1119,5 +1383,16 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtGroupBox extGroupBoxDLLPerms;
         private ExtendedControls.ExtButton extButtonDLLPerms;
         private ExtendedControls.ExtButton extButtonDLLConfigure;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpTheme;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpTransparency;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpSafeMode;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpWebServer;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpScreenshots;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpMemory;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpEDSM;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpHistory;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpWindowOptions;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpDLL;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpCommanders;
     }
 }
