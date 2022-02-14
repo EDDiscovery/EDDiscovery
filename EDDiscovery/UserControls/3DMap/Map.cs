@@ -815,8 +815,11 @@ namespace EDDiscovery.UserControls.Map3D
                 dgv.RowHeaderEnable = false;
                 var col0 = dgv.CreateColumn(fillwidth: 100, title: "Star");
                 var col1 = dgv.CreateColumn(fillwidth: 50, title: "X");
+                col1.SortCompare = GLDataGridViewSorts.SortCompareNumeric;
                 var col2 = dgv.CreateColumn(fillwidth: 50, title: "Y");
+                col2.SortCompare = GLDataGridViewSorts.SortCompareNumeric;
                 var col3 = dgv.CreateColumn(fillwidth: 50, title: "Z");
+                col3.SortCompare = GLDataGridViewSorts.SortCompareNumeric;
                 var col4 = dgv.CreateColumn(fillwidth: 100, title: "Note");
                 dgv.AddColumn(col0);
                 dgv.AddColumn(col1);
