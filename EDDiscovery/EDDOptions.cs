@@ -162,6 +162,7 @@ namespace EDDiscovery
                     case "realtimepriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.RealTime; break;
                     case "forcetls12": ForceTLS12 = true; break;
                     case "disabletimedisplay": DisableTimeDisplay = true; break;
+                    case "disablecommanderselect": DisableCommanderSelect = true; break;
                     case "disableversiondisplay": DisableVersionDisplay = true; break;
                     case "enabletgrightclicks": EnableTGRightDebugClicks = true; break;
                     default:
@@ -234,6 +235,7 @@ namespace EDDiscovery
         public System.Diagnostics.ProcessPriorityClass ProcessPriorityClass { get; set; } = System.Diagnostics.ProcessPriorityClass.Normal;
         public bool ForceTLS12 { get; set; }
         public bool DisableTimeDisplay { get; set; }
+        public bool DisableCommanderSelect { get; set; }
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
         public string DefaultJournalFolder { get; set; }        // default is null, use computed value

@@ -880,8 +880,9 @@ SECTION UserControlSettings
 .GameTime: "Game Time" @
 .Local: "Local" @
 .NoMap: "No map available!" @
-.extGroupBoxDLLPerms: "DLL Permissions" @
-.extButtonDLLPerms: "Configure" @
+.extGroupBoxDLLPerms: "DLLs" @
+.extButtonDLLPerms: "Permissions" @
+.extButtonDLLConfigure: "Configure" @
 
 
 SECTION UserControlShipYards

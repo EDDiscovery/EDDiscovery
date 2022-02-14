@@ -751,6 +751,12 @@ namespace EDDiscovery.UserControls
             if (n != null)
                 EDDConfig.Instance.DLLPermissions = n;
         }
+
+        private void extButtonDLLConfigure_Click(object sender, EventArgs e)
+        {
+            discoveryform.DLLManager.DLLConfigure(this.FindForm(), this.FindForm().Icon,
+                (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
+        }
     }
 }
 

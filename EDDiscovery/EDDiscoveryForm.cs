@@ -463,7 +463,6 @@ namespace EDDiscovery
                 tabControlMain.AllowDragReorder = false;
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
-
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -556,7 +555,8 @@ namespace EDDiscovery
             string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
             bool[] autodisallow = new bool[] { false, true };
             Tuple<string, string, string,string> res = DLLManager.Load(dllpaths, autodisallow,
-                                                                    verstring, options, DLLCallBacks, ref alloweddlls);
+                                                                    verstring, options, DLLCallBacks, ref alloweddlls,
+                                                                    (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
 
             if (res.Item3.HasChars())       // new DLLs
             {
@@ -585,7 +585,8 @@ namespace EDDiscovery
                 {
                     DLLManager.UnLoad();
                     Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Reload DLL");
-                    res = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls);
+                    res = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls,
+                                    (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" +name, set));
                 }
             }
 
@@ -1255,24 +1256,33 @@ namespace EDDiscovery
         }
 
         #endregion
-        
+
         #region Toolbar
 
         public void LoadCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
             comboBoxCommander.Items.Clear();            // comboBox is nicer with items
-            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
-            if (history.CommanderId == -1)
+
+            if (EDDOptions.Instance.DisableCommanderSelect)
             {
+                comboBoxCommander.Items.Add("Jameson");
                 comboBoxCommander.SelectedIndex = 0;
             }
             else
             {
-                comboBoxCommander.SelectedItem = EDCommander.Current.Name;
-            }
+                comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
+                if (history.CommanderId == -1)
+                {
+                    comboBoxCommander.SelectedIndex = 0;
+                }
+                else
+                {
+                    comboBoxCommander.SelectedItem = EDCommander.Current.Name;
+                }
 
-            comboBoxCommander.Enabled = true;
+                comboBoxCommander.Enabled = true;
+            }
         }
 
         private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)

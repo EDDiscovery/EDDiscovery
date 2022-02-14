@@ -121,7 +121,6 @@ namespace EDDiscovery
 
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system") },
-
             { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "EDSM - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Spansh, typeof(UserControlSpansh), "Spansh", "Spansh", "Spansh - Automatic web view of system") },
             { new PanelInfo( PanelIDs.EDDB, typeof(UserControlEDDB), "EDDB", "EDDB", "EDDB - Automatic web view of system") },
@@ -134,7 +133,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Map2D, typeof(UserControl2DMap) ,"2D Map", "map2d", "2D Map of galaxy") },
             { new PanelInfo( PanelIDs.Map3D, typeof(UserControl3DMap) ,"3D Map", "map3d", "3D Map of galaxy") },
             { new PanelInfo( PanelIDs.LocalMap3D, typeof(UserControlLocal3DMap) ,"Local 3D Map", "localmap3d", "Local 3D Map of systems near you") },
-            { new PanelInfo( PanelIDs.Organics, typeof(UserControlOrganics) ,"Organic Scans", "OrganicScans", "Current body organic information and history of scans") },
+            { new PanelInfo( PanelIDs.Organics, typeof(UserControlOrganics) ,"Organic Scans", "OrganicScans", "Organic scans of current body and historic scans") },
 
             { new PanelInfo( "Bookmarks and Logs") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets")},

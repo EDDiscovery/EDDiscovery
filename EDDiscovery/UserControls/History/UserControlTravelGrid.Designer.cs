@@ -103,6 +103,7 @@ namespace EDDiscovery.UserControls
             this.rollUpAfter5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
+            this.sendJournalEntriesToDLLsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -307,10 +308,11 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughIGAUDebugToolStripMenuItem,
             this.runSelectionThroughEDDNThruTestToolStripMenuItem,
             this.runSelectionThroughEDAstroDebugToolStripMenuItem,
+            this.sendJournalEntriesToDLLsToolStripMenuItem,
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 532);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 576);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -485,9 +487,9 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughIGAUDebugToolStripMenuItem.Text = "Run selection through IGAU (Debug)";
             this.runSelectionThroughIGAUDebugToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughIGAUDebugToolStripMenuItem_Click);
             // 
-            // runSelectionThroughEDDNDebugNoSendToolStripMenuItem
+            // runSelectionThroughEDDNThruTestToolStripMenuItem
             // 
-            this.runSelectionThroughEDDNThruTestToolStripMenuItem.Name = "runSelectionThroughEDDNDebugNoSendToolStripMenuItem";
+            this.runSelectionThroughEDDNThruTestToolStripMenuItem.Name = "runSelectionThroughEDDNThruTestToolStripMenuItem";
             this.runSelectionThroughEDDNThruTestToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.runSelectionThroughEDDNThruTestToolStripMenuItem.Text = "Run selection through EDDN Test Server (Debug)";
             this.runSelectionThroughEDDNThruTestToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem_Click);
@@ -775,6 +777,13 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.UseMnemonic = true;
             this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
+            // sendJournalEntriesToDLLsToolStripMenuItem
+            // 
+            this.sendJournalEntriesToDLLsToolStripMenuItem.Name = "sendJournalEntriesToDLLsToolStripMenuItem";
+            this.sendJournalEntriesToDLLsToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.sendJournalEntriesToDLLsToolStripMenuItem.Text = "Send selection to DLLs (Debug)";
+            this.sendJournalEntriesToDLLsToolStripMenuItem.Click += new System.EventHandler(this.sendJournalEntriesToDLLsToolStripMenuItem_Click);
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -853,5 +862,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem showSystemVisitedForeColourToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDAstroDebugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem travelGridInDebugModeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sendJournalEntriesToDLLsToolStripMenuItem;
     }
 }

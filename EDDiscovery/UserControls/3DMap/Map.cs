@@ -914,6 +914,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (he != null)
             {
                 GoToSystem(he.System, lydist);
+                travelpath?.SetSystem(he.System.Name);
             }
         }
 
@@ -1095,7 +1096,7 @@ namespace EDDiscovery.UserControls.Map3D
             var rte = routepath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out routez);    
             var nav = navroute?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out navroutez);
 
-            if (gmo != null && galobjz < bkm && galobjz < hez && galobjz < sysz && galobjz < routez && galobjz < navroutez)      // got gmo, and closer than the others
+            if (gmo != null && galobjz < bkmz && galobjz < hez && galobjz < sysz && galobjz < routez && galobjz < navroutez)      // got gmo, and closer than the others
                 return gmo;
 
             if (bkm != null && bkmz < hez && bkmz < sysz && bkmz < routez && bkmz < navroutez)

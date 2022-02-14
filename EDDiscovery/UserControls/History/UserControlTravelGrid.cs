@@ -156,6 +156,8 @@ namespace EDDiscovery.UserControls
             runSelectionThroughIGAUDebugToolStripMenuItem.Visible = false;
             runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = false;
             runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = false;
+            sendJournalEntriesToDLLsToolStripMenuItem.Visible = false;
+            
 #endif
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -475,7 +477,8 @@ namespace EDDiscovery.UserControls
                                + $"b[{item.Status.BodyName},{item.Status.BodyType},{item.Status.BodyID}]\r\n"
                                + $"s[{item.Status.StationName},{item.Status.StationType}]\r\n"
                                + $"mc{item.MaterialCommodity}/w{item.Weapons}/s{item.Suits}/l{item.Loadouts}\r\n"
-                               + $"b{item.journalEntry.IsBeta}/h{ item.journalEntry.IsHorizons}/o{ item.journalEntry.IsOdyssey}";
+                               + $"b{item.journalEntry.IsBeta}/h{ item.journalEntry.IsHorizons}/o{ item.journalEntry.IsOdyssey}\r\n"
+                               + $"bkt{item.Status.BookedTaxi} d {item.Status.BookedDropship}";
 
                 string eventname = item.journalEntry.EventTypeStr.SplitCapsWord() == item.EventSummary ? item.EventSummary : (item.journalEntry.EventTypeStr + Environment.NewLine + item.EventSummary);
 
@@ -1244,6 +1247,15 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { rightclickhe });
             }
+        }
+
+        private void sendJournalEntriesToDLLsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickhe != null)
+            {
+                discoveryform.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, rightclickhe), true);
+            }
+
         }
 
         private void travelGridInDebugModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)

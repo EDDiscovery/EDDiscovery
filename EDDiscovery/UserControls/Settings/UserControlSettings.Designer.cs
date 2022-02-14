@@ -94,12 +94,13 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots = new ExtendedControls.ExtGroupBox();
             this.groupBoxCustomEDSM = new ExtendedControls.ExtGroupBox();
             this.groupBoxPopOuts = new ExtendedControls.ExtGroupBox();
+            this.extGroupBoxDLLPerms = new ExtendedControls.ExtGroupBox();
+            this.extButtonDLLPerms = new ExtendedControls.ExtButton();
             this.groupBoxCustomLanguage = new ExtendedControls.ExtGroupBox();
             this.comboBoxCustomLanguage = new ExtendedControls.ExtComboBox();
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
             this.labelSafeMode = new System.Windows.Forms.Label();
-            this.extGroupBoxDLLPerms = new ExtendedControls.ExtGroupBox();
-            this.extButtonDLLPerms = new ExtendedControls.ExtButton();
+            this.extButtonDLLConfigure = new ExtendedControls.ExtButton();
             this.extPanelScroll.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerCommanders.SuspendLayout();
@@ -113,9 +114,9 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
             this.groupBoxPopOuts.SuspendLayout();
+            this.extGroupBoxDLLPerms.SuspendLayout();
             this.groupBoxCustomLanguage.SuspendLayout();
             this.groupBoxCustomSafeMode.SuspendLayout();
-            this.extGroupBoxDLLPerms.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -510,7 +511,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.HideScrollBar = true;
             this.extScrollBarSettings.LargeChange = 10;
             this.extScrollBarSettings.Location = new System.Drawing.Point(965, 0);
-            this.extScrollBarSettings.Maximum = -80;
+            this.extScrollBarSettings.Maximum = -5;
             this.extScrollBarSettings.Minimum = 0;
             this.extScrollBarSettings.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarSettings.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -523,8 +524,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarSettings.ThumbColorScaling = 0.5F;
             this.extScrollBarSettings.ThumbDrawAngle = 0F;
-            this.extScrollBarSettings.Value = -80;
-            this.extScrollBarSettings.ValueLimited = -80;
+            this.extScrollBarSettings.Value = -5;
+            this.extScrollBarSettings.ValueLimited = -5;
             // 
             // groupBoxCommanders
             // 
@@ -928,13 +929,39 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.TextPadding = 0;
             this.groupBoxPopOuts.TextStartPosition = -1;
             // 
+            // extGroupBoxDLLPerms
+            // 
+            this.extGroupBoxDLLPerms.BackColorScaling = 0.5F;
+            this.extGroupBoxDLLPerms.BorderColor = System.Drawing.Color.LightGray;
+            this.extGroupBoxDLLPerms.BorderColorScaling = 0.5F;
+            this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLConfigure);
+            this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLPerms);
+            this.extGroupBoxDLLPerms.Location = new System.Drawing.Point(577, 344);
+            this.extGroupBoxDLLPerms.Name = "extGroupBoxDLLPerms";
+            this.extGroupBoxDLLPerms.Size = new System.Drawing.Size(281, 52);
+            this.extGroupBoxDLLPerms.TabIndex = 21;
+            this.extGroupBoxDLLPerms.TabStop = false;
+            this.extGroupBoxDLLPerms.Text = "DLLs";
+            this.extGroupBoxDLLPerms.TextPadding = 0;
+            this.extGroupBoxDLLPerms.TextStartPosition = -1;
+            // 
+            // extButtonDLLPerms
+            // 
+            this.extButtonDLLPerms.Location = new System.Drawing.Point(9, 17);
+            this.extButtonDLLPerms.Name = "extButtonDLLPerms";
+            this.extButtonDLLPerms.Size = new System.Drawing.Size(99, 23);
+            this.extButtonDLLPerms.TabIndex = 10;
+            this.extButtonDLLPerms.Text = "Permissions";
+            this.extButtonDLLPerms.UseVisualStyleBackColor = true;
+            this.extButtonDLLPerms.Click += new System.EventHandler(this.extButtonDLLPerms_Click);
+            // 
             // groupBoxCustomLanguage
             // 
             this.groupBoxCustomLanguage.BackColorScaling = 0.5F;
             this.groupBoxCustomLanguage.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
-            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(577, 344);
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 479);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
             this.groupBoxCustomLanguage.Size = new System.Drawing.Size(281, 52);
             this.groupBoxCustomLanguage.TabIndex = 21;
@@ -973,7 +1000,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.BorderColorScaling = 0.5F;
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
-            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 479);
+            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(290, 479);
             this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
             this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(281, 127);
             this.groupBoxCustomSafeMode.TabIndex = 21;
@@ -991,30 +1018,15 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.Text = "Click this to perform special operations like to move system databases to another" +
     " drive, reset UI, and other maintenance tasks...\r\n\r\n";
             // 
-            // extGroupBoxDLLPerms
+            // extButtonDLLConfigure
             // 
-            this.extGroupBoxDLLPerms.BackColorScaling = 0.5F;
-            this.extGroupBoxDLLPerms.BorderColor = System.Drawing.Color.LightGray;
-            this.extGroupBoxDLLPerms.BorderColorScaling = 0.5F;
-            this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLPerms);
-            this.extGroupBoxDLLPerms.Location = new System.Drawing.Point(290, 479);
-            this.extGroupBoxDLLPerms.Name = "extGroupBoxDLLPerms";
-            this.extGroupBoxDLLPerms.Size = new System.Drawing.Size(281, 52);
-            this.extGroupBoxDLLPerms.TabIndex = 21;
-            this.extGroupBoxDLLPerms.TabStop = false;
-            this.extGroupBoxDLLPerms.Text = "DLL Permissions";
-            this.extGroupBoxDLLPerms.TextPadding = 0;
-            this.extGroupBoxDLLPerms.TextStartPosition = -1;
-            // 
-            // extButtonDLLPerms
-            // 
-            this.extButtonDLLPerms.Location = new System.Drawing.Point(9, 17);
-            this.extButtonDLLPerms.Name = "extButtonDLLPerms";
-            this.extButtonDLLPerms.Size = new System.Drawing.Size(99, 23);
-            this.extButtonDLLPerms.TabIndex = 10;
-            this.extButtonDLLPerms.Text = "Configure";
-            this.extButtonDLLPerms.UseVisualStyleBackColor = true;
-            this.extButtonDLLPerms.Click += new System.EventHandler(this.extButtonDLLPerms_Click);
+            this.extButtonDLLConfigure.Location = new System.Drawing.Point(157, 17);
+            this.extButtonDLLConfigure.Name = "extButtonDLLConfigure";
+            this.extButtonDLLConfigure.Size = new System.Drawing.Size(99, 23);
+            this.extButtonDLLConfigure.TabIndex = 10;
+            this.extButtonDLLConfigure.Text = "Configure";
+            this.extButtonDLLConfigure.UseVisualStyleBackColor = true;
+            this.extButtonDLLConfigure.Click += new System.EventHandler(this.extButtonDLLConfigure_Click);
             // 
             // UserControlSettings
             // 
@@ -1043,9 +1055,9 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.PerformLayout();
             this.groupBoxPopOuts.ResumeLayout(false);
             this.groupBoxPopOuts.PerformLayout();
+            this.extGroupBoxDLLPerms.ResumeLayout(false);
             this.groupBoxCustomLanguage.ResumeLayout(false);
             this.groupBoxCustomSafeMode.ResumeLayout(false);
-            this.extGroupBoxDLLPerms.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1106,5 +1118,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelTimeDisplay;
         private ExtendedControls.ExtGroupBox extGroupBoxDLLPerms;
         private ExtendedControls.ExtButton extButtonDLLPerms;
+        private ExtendedControls.ExtButton extButtonDLLConfigure;
     }
 }
