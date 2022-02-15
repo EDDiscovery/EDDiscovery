@@ -170,8 +170,8 @@ namespace EDDiscovery.UserControls
                         string firstdiscoveredstr = ev.EstimatedValueFirstDiscovered > 0 && (showimpossibleValues || firstdiscovercond)
                                         ? ev.EstimatedValueFirstDiscovered.ToString("N0") : "";
 
-                        // First Mapped: shown if not previously mapped and we have not mapped
-                        bool firstmapcond = bodies.ScanData.IsNotPreviouslyMapped && bodies.ScanData.Mapped == false;
+                        // First Mapped: shown if previously discovered, not previously mapped and we have not mapped
+                        bool firstmapcond = bodies.ScanData.IsPreviouslyDiscovered && bodies.ScanData.IsNotPreviouslyMapped && bodies.ScanData.Mapped == false;
 
                         string firstmappedeffstr = ev.EstimatedValueFirstMappedEfficiently > 0 && (showimpossibleValues || firstmapcond)
                                         ? (ev.EstimatedValueFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstMapped.ToString("N0")) : "";
