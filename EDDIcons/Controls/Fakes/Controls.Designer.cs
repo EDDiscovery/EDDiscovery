@@ -1273,6 +1273,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap NotDiscoveredButMapped {
+            get {
+                object obj = ResourceManager.GetObject("NotDiscoveredButMapped", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap notfirstdiscover {
             get {
                 object obj = ResourceManager.GetObject("notfirstdiscover", resourceCulture);

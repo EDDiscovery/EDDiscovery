@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(572, 542);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1247, 542);
             this.dataViewScrollerPanel.TabIndex = 25;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomDGV.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomDGV.HideScrollBar = true;
             this.vScrollBarCustomDGV.LargeChange = 0;
-            this.vScrollBarCustomDGV.Location = new System.Drawing.Point(556, 0);
+            this.vScrollBarCustomDGV.Location = new System.Drawing.Point(1231, 0);
             this.vScrollBarCustomDGV.Maximum = -1;
             this.vScrollBarCustomDGV.Minimum = 0;
             this.vScrollBarCustomDGV.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.RowHeadersVisible = false;
             this.dataGridViewEstimatedValues.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewEstimatedValues.SingleRowSelect = true;
-            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(556, 542);
+            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(1231, 542);
             this.dataGridViewEstimatedValues.TabIndex = 23;
             this.dataGridViewEstimatedValues.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEstimatedValues_SortCompare);
             // 
@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelTop.Name = "flowLayoutPanelTop";
-            this.flowLayoutPanelTop.Size = new System.Drawing.Size(572, 30);
+            this.flowLayoutPanelTop.Size = new System.Drawing.Size(1247, 30);
             this.flowLayoutPanelTop.TabIndex = 5;
             // 
             // checkBoxEDSM
@@ -348,7 +348,7 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.RollUpDelay = 1000;
             this.extPanelRollUp.SecondHiddenMarkerWidth = 0;
             this.extPanelRollUp.ShowHiddenMarker = true;
-            this.extPanelRollUp.Size = new System.Drawing.Size(572, 30);
+            this.extPanelRollUp.Size = new System.Drawing.Size(1247, 30);
             this.extPanelRollUp.TabIndex = 25;
             this.extPanelRollUp.UnrollHoverDelay = 1000;
             // 
@@ -363,7 +363,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.extPanelRollUp);
             this.Name = "UserControlEstimatedValues";
-            this.Size = new System.Drawing.Size(572, 572);
+            this.Size = new System.Drawing.Size(1247, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).EndInit();
             this.flowLayoutPanelTop.ResumeLayout(false);
