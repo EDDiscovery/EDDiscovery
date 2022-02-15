@@ -164,7 +164,9 @@ namespace EDDiscovery.UserControls
                         string mappedstr = ev.EstimatedValueMapped > 0 && (showimpossibleValues || mappedcond)
                                         ? (ev.EstimatedValueMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueMapped.ToString("N0")) : "";
 
-                        // First Discovered Column: shown if not in pr31 condition, not previously discovered, and we have not mapped 
+                        // Note EDSM bodies are marked as wasdiscovered=true, wasmapped=false (don't know so presume not)
+
+                        // First Discovered Column: shown if not in pr31 condition, not previously discovered, and we have not mapped
                         bool firstdiscovercond = !pr31condition && bodies.ScanData.IsNotPreviouslyDiscovered && bodies.ScanData.Mapped == false;
 
                         string firstdiscoveredstr = ev.EstimatedValueFirstDiscovered > 0 && (showimpossibleValues || firstdiscovercond)
