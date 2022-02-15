@@ -166,12 +166,6 @@ namespace EDDiscovery.UserControls
 
                         // Note EDSM bodies are marked as wasdiscovered=true, wasmapped=false (don't know so presume not)
 
-                        // First Discovered Column: shown if not in pr31 condition, not previously discovered, and we have not mapped
-                        bool firstdiscovercond = !pr31condition && bodies.ScanData.IsNotPreviouslyDiscovered && bodies.ScanData.Mapped == false;
-
-                        string firstdiscoveredstr = ev.EstimatedValueFirstDiscovered > 0 && (showimpossibleValues || firstdiscovercond)
-                                        ? ev.EstimatedValueFirstDiscovered.ToString("N0") : "";
-
                         // First Mapped: shown if previously discovered, not previously mapped and we have not mapped
                         bool firstmapcond = bodies.ScanData.IsPreviouslyDiscovered && bodies.ScanData.IsNotPreviouslyMapped && bodies.ScanData.Mapped == false;
 
@@ -198,7 +192,6 @@ namespace EDDiscovery.UserControls
                                         pr31condition ? Icons.Controls.Scan_NotDiscoveredButMapped : bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
                                         ev.EstimatedValueBase.ToString("N0"),
                                         mappedstr,
-                                        firstdiscoveredstr,
                                         firstmappedeffstr,
                                         fdmappedstr ,
                                         estimatedvalue>0 ? estimatedvalue.ToString("N0") : "" });
