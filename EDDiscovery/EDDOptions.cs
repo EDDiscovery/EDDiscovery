@@ -388,11 +388,13 @@ namespace EDDiscovery
 
             // process command line options for -appfolder
 
+            string appfolderwarningmessage = "";        // only used for command line appfolder overrides
             ProcessCommandLineOptions((optname, ca, toeol) =>           
             {                                                           
                 if (optname == "-appfolder" && ca.More)
                 {
                     AppFolder = ca.Next();
+                    appfolderwarningmessage = " (Using " + AppFolder + ")";
                     System.Diagnostics.Debug.WriteLine("App Folder to " + AppFolder);
                 }
             });
@@ -458,10 +460,7 @@ namespace EDDiscovery
 
                 if (!DisableShowDebugInfoInTitle)       // for when i'm doing help.. don't need this on
                 {
-                    if (AppFolder != null)
-                    {
-                        sb.Append($" (Using {AppFolder})");
-                    }
+                    sb.Append(appfolderwarningmessage);
 
                     if (EDSMClass.ServerAddress.Length == 0)
                         sb.Append(" (EDSM No server)");
