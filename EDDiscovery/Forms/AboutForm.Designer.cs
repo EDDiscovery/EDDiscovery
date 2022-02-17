@@ -53,8 +53,8 @@ namespace EDDiscovery.Forms
             this.labelLinks = new System.Windows.Forms.Label();
             this.linkLabelYouTube = new System.Windows.Forms.LinkLabel();
             this.linkLabelDeveloperChat = new System.Windows.Forms.LinkLabel();
-            this.linkLabelHelp = new System.Windows.Forms.LinkLabel();
             this.linkLabelGitHubIssue = new System.Windows.Forms.LinkLabel();
+            this.linkLabelHelp = new System.Windows.Forms.LinkLabel();
             this.linkLabelGitHub = new System.Windows.Forms.LinkLabel();
             this.linkLabelFDForum = new System.Windows.Forms.LinkLabel();
             this.linkLabelEliteDangerous = new System.Windows.Forms.LinkLabel();
@@ -122,8 +122,9 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.Location = new System.Drawing.Point(0, 64);
             this.textBoxLicense.Name = "textBoxLicense";
             this.textBoxLicense.ReadOnly = true;
-            this.textBoxLicense.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.textBoxLicense.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.textBoxLicense.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.textBoxLicense.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.textBoxLicense.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -210,20 +211,6 @@ namespace EDDiscovery.Forms
             this.linkLabelDeveloperChat.Text = "Developer Chat";
             this.linkLabelDeveloperChat.Click += new System.EventHandler(this.link_Click);
             // 
-            // linkLabelHelp
-            // 
-            this.linkLabelHelp.AutoSize = true;
-            this.linkLabelHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelHelp.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.linkLabelHelp.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelHelp.Location = new System.Drawing.Point(3, 80);
-            this.linkLabelHelp.Name = "linkLabelHelp";
-            this.linkLabelHelp.Size = new System.Drawing.Size(37, 16);
-            this.linkLabelHelp.TabIndex = 7;
-            this.linkLabelHelp.TabStop = true;
-            this.linkLabelHelp.Text = "Help";
-            this.linkLabelHelp.Click += new System.EventHandler(this.link_Click);
-            // 
             // linkLabelGitHubIssue
             // 
             this.linkLabelGitHubIssue.AutoSize = true;
@@ -238,6 +225,20 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHubIssue.TabStop = true;
             this.linkLabelGitHubIssue.Text = "Submit Feedback";
             this.linkLabelGitHubIssue.Click += new System.EventHandler(this.link_Click);
+            // 
+            // linkLabelHelp
+            // 
+            this.linkLabelHelp.AutoSize = true;
+            this.linkLabelHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelHelp.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.linkLabelHelp.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.linkLabelHelp.Location = new System.Drawing.Point(3, 80);
+            this.linkLabelHelp.Name = "linkLabelHelp";
+            this.linkLabelHelp.Size = new System.Drawing.Size(37, 16);
+            this.linkLabelHelp.TabIndex = 7;
+            this.linkLabelHelp.TabStop = true;
+            this.linkLabelHelp.Text = "Help";
+            this.linkLabelHelp.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelGitHub
             // 
@@ -323,7 +324,7 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation.Name = "labelNoAffiliation";
             this.labelNoAffiliation.Size = new System.Drawing.Size(210, 64);
             this.labelNoAffiliation.TabIndex = 16;
-            this.labelNoAffiliation.Text = "(C) 2015-2021 EDDiscovery Team\r\n\r\nEDDiscovery is not affiliated with \r\nFrontier D" +
+            this.labelNoAffiliation.Text = "(C) 2015-2022 EDDiscovery Team\r\n\r\nEDDiscovery is not affiliated with \r\nFrontier D" +
     "evelopments plc.\r\n";
             this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 

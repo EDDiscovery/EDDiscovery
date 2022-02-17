@@ -1240,16 +1240,6 @@ namespace EDDiscovery
             BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectDiscord);
         }
 
-        private void howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.MessageBoxTheme.Show(this,
-                            ("To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
-                            "and double click on the EDD program icon.  You will then be in the safe mode dialog." + Environment.NewLine +
-                            "You can reset various parameters and move the data bases to other locations.").T(EDTx.EDDiscoveryForm_SafeMode),
-                            "Information".T(EDTx.Information), MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        }
-
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
             AboutBox(this);

@@ -5,10 +5,10 @@ Development, Release, Videos by:
 Cmdr Robby
 
 Developers for this release series:
-Eahlstan, Fredjk-gh, Bravada Cadelanne
+Eahlstan, Bravada Cadelanne
 
 Test Support
-Eahlstan, JDM12983
+Eahlstan
 
 Images Captured by:
 Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
@@ -17,4 +17,4 @@ Languages Translations:
 Eahlstan, Fito-wolf, Dr.Smile, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
 
 Previous Contributors:
-nullx27, Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..
+JDM12983, Fredjk-gh, nullx27, Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..

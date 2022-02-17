@@ -85,7 +85,7 @@ namespace EDDiscovery
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
         public string DefaultJournalFolder { get; set; }        // default is null, use computed value
-        public string DefaultJournalMatchFilename { get; set; }        // default is set
+        public string DefaultJournalMatchFilename { get; set; } = "Journal*.log";      
         public DateTime MinJournalDateUTC { get; set; }        // default is MinDate
         public bool EnableTGRightDebugClicks { get; set; }
         public int HistoryLoadDayLimit { get; set; }    // default zero not set
@@ -125,7 +125,7 @@ namespace EDDiscovery
         public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
 
         private string AppFolder;      // internal to use.. for -appfolder option
-        private bool StoreDataInProgramDirectory;  // internal to us, to indicate portable
+        private bool StoreDataInProgramDirectory;  // internal to us, to indicate app folder is relative to exe not %localappdata%
         private string translationfolder; // internal to us
 
         #endregion
@@ -195,7 +195,7 @@ namespace EDDiscovery
                     if (File.Exists(filepath))
                         ProcessFile(filepath, getopt);
                     else
-                        System.Diagnostics.Debug.WriteLine("    No Option File " + filepath);
+                        System.Diagnostics.Debug.WriteLine("No Option File " + filepath);
                 }
             });
         }
@@ -361,10 +361,6 @@ namespace EDDiscovery
 #else
             EnableTGRightDebugClicks = true;
 #endif
-            DefaultJournalMatchFilename = "Journal*.log";
-
-            // these are embedded config variables
-            ProcessConfigVariables();
 
             // go thru the command line looking for -optionfile only
             ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption);
@@ -401,9 +397,9 @@ namespace EDDiscovery
 
             // Set up AppDataDirectory
 
-            if (AppFolder == null)                                      // if userdid not set it..
+            if (AppFolder == null)                      // if user did not set it..
             {
-                AppFolder = (StoreDataInProgramDirectory ? "Data" : "EDDiscovery");
+                AppFolder = "EDDiscovery";
             }
 
             if (Path.IsPathRooted(AppFolder))           // if rooted, the dir is -appfolder
@@ -422,7 +418,7 @@ namespace EDDiscovery
             if (!Directory.Exists(AppDataDirectory))        // make sure its there..
                 BaseUtils.FileHelpers.CreateDirectoryNoError(AppDataDirectory);
 
-            // TBD no idea why this is here
+            // here because 1 user did not have a big enough C: drive to holds the SQL temp files!  This may be an over-engineer!
             if (TempDirInDataDir == true)
             {
                 var tempdir = Path.Combine(AppDataDirectory, "Temp");
@@ -488,16 +484,6 @@ namespace EDDiscovery
                 ResetSystemDatabasePath();
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
-        }
-
-        private void ProcessConfigVariables()
-        {
-            var appsettings = System.Configuration.ConfigurationManager.AppSettings;
-
-            if (appsettings["StoreDataInProgramDirectory"] == "true")
-                StoreDataInProgramDirectory = true;
-
-            UserDatabasePath = appsettings["UserDatabasePath"];
         }
 
         public void ResetSystemDatabasePath()

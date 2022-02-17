@@ -951,18 +951,12 @@
     <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="App.Portable.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="OpenTK.dll.config" />
     <None Include="Resources\3dmaphelp.txt" />
     <None Include="Resources\EDD License.rtf" />
     <None Include="Resources\EliteGalacticRegions.json" />
-    <None Include="Resources\ImportHelp.txt" />
     <None Include="Resources\edlogo_3mo_icon.ico" />
-    <None Include="Resources\GNE.ico" />
     <None Include="Resources\Logo.png" />
-    <None Include="Resources\mapuc.txt" />
     <None Include="Resources\Credits.txt" />
     <None Include="Resources\EDCD.PNG" />
     <None Include="Resources\EDD Licence Mono.txt" />
@@ -1185,6 +1179,7 @@
     <Zip OutputFileName="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" FileRoot="$(MSBuildProjectDirectory)\..\WebSite\EDD\" />
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
+      <ZipFiles Include="$(OutDir)EDDiscovery.exe.config" />
       <ZipFiles Include="$(OutDir)*.dll" />
       <ZipFiles Include="$(OutDir)*.pdb" />
       <ZipFiles Include="$(OutDir)eddwebsite.zip" />
@@ -1192,9 +1187,7 @@
       <ZipFiles Include="$(MSBuildProjectDirectory)\UserControls\Translations\*.tlp" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp" />
-      <ZipFiles Include="$(ProjectDir)App.Portable.config">
-        <Name>EDDiscovery.exe.config</Name>
-      </ZipFiles>
+      <ZipFiles Include="$(ProjectDir)optionsportable.txt" />
       <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll">
         <Name>x64\SQLite.Interop.dll</Name>
       </Zipfiles>

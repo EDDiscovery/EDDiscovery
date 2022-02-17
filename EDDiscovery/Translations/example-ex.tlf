@@ -203,7 +203,6 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" @
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" @
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" @
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" @
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" @
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" @
@@ -249,7 +248,6 @@ SECTION EDDiscoveryForm
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" @
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" @
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" @
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." @
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" @
 .NoRel: "No new release found" @
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" @

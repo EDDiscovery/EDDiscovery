@@ -785,7 +785,7 @@ SECTION UserControlSettings
 .button_edittheme: "Edit Theme" @
 .buttonSaveTheme: "Save Theme" @
 .groupBoxCustomHistoryLoad: "History" @
-.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" @
+.checkBoxOrderRowsInverted: "Number Rows by Date Ascending" @
 .labelTimeDisplay: "Time: " @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
