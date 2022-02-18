@@ -384,7 +384,7 @@ SECTION UserControlMaterialCommodities
 
 SECTION UserControlMissionOverlay
 
-.IL: " Left " => " Links "
+.IL: " Left " => " Noch übrig: "
 .missionNameToolStripMenuItem: "Mission Name" => "Missionsname"
 .missionDescriptionToolStripMenuItem: "Mission Description" => "Missionsbeschreibung"
 .startDateToolStripMenuItem: "Start Date" => "Startdatum"
@@ -834,7 +834,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Heimatsystem"
 .labelOpenOn: "Open Centred On" => "Öffne zentriert auf"
 .labelHome: "Now in Commander Settings" => "Jetzt in Kommandanteneinstellungen"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die von diesem Thema verwendete Schriftart is t auf diesem System nicht verfügbar.\r\nDie benötigte Schriftart ist \"{0}\"\r\nInstalliere diese Schriftart um das Thema wie vorgesehen zu nutzen.\r\nDie Schriftart Euro Caps ist auf www.edassets.org frei verfügbar.\r\n\r\nWillst du diese Thema mit einer Ersatzschriftart laden?"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die von diesem Thema verwendete Schriftart ist auf diesem System nicht verfügbar.\r\nDie benötigte Schriftart ist \"{0}\"\r\nInstalliere diese Schriftart um das Thema wie vorgesehen zu nutzen.\r\nDie Schriftart Euro Caps ist auf www.edassets.org frei verfügbar.\r\n\r\nWillst du diese Thema mit einer Ersatzschriftart laden?"
 .Information: "Applies at next restart of ED Discovery" => "Angewendet nach dem nächsten Neustart von EDDiscovery"
 .AddC: "Commander name is not valid or duplicate" => "Komandantenname ist ungültig oder ein Duplikat"
 .AddT: "Cannot create Commander" => "Kann Kommandanten nicht erstellen"
