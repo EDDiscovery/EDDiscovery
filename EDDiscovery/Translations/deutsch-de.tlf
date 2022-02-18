@@ -102,8 +102,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" => "Streckenplaner"
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Expeditionsplaner, denk dir eine Expeditionsroute aus"
 .Expedition.Title: "Expedition" => "Expedition"
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Erkundungsplaner, erstelle eine Liste zu erkundender Systeme"
-.Exploration.Title: "Exploration" => "Erkundung"
 .SystemInformation.Description: "System Information" => "Systeminformation"
 .SystemInformation.Title: "System Information" => "Systeminformation"
 .Spanel.Description: "Summary panel overlay" => "Zusammenfassung der letzten Ereignisse"
@@ -150,6 +148,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" => "Anzahl der Mikroressourcen"
 .SuitsWeapons.Title: "Suits & Weapons" => "Anzüge & Waffen"
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" => "Anzüge, Konfigurationen, Waffen"
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 
@@ -200,7 +204,6 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier Forenthread"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Projektseite (Github)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "Be&richte Probleme / Ideen"
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Wie man den abgesicherten Modus startet um verschiedene Parameter zurückzusetzen"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "Über&prüfe auf Updates"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Rechtsklick um Registerkarten hinzuzufügen/zu entfernen - Linksklick und ziehen um neu zu ordnen"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Benutzen um ein neues Profil zu wählen oder Profileinstellungen zu bearbeiten"
@@ -246,7 +249,6 @@ SECTION EDDiscoveryForm
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Sternendatendownload is deaktiviert. Gehe zu den Einstellungen um ihn zu aktivieren."
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Datenbanksynchronisation ist im Laufen oder in der Warteschlange, bitte warten."
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Dies kann erhebliche Zeit dauern und benötigt Bandbreite.\r\nBestätige, ob du das willst."
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Um den abgesicherten Modus zu starten schließe das Programm.\r\nHalte die Shift-Taste gedrückt und klicke auf die EDDiscovery-Verknüpfung um neu zu starten.\r\nDu solltest dich nun im Menü des abgesicherten Modus befinden, wo du verschiedene Parameter zurücksetzen und die Datenbanken verschieben kannst."
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Bestätige, dass du die gesamte Historie auf den derzeitigen Kommandanten zurücksetzen willst."
 .NoRel: "No new release found" => "Keine neue Version gefunden."
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Bestätige, dass du alle duplizierten FSA-Sprünge vom derzeitigen Kommandanten entfernen willst."
@@ -296,7 +298,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Aktualiserung der Historie abgeschlossen."
 .Maps: "Checking for new EDDiscovery maps" => "Prüfe auf neue EDDiscovery-Karten"
 .EXPD: "Checking for new Expedition data" => "Prüfe auf neue Expeditionsdaten"
-.EXPL: "Checking for new Exploration data" => "Prüfe auf neue Erkundungsdaten"
 
 SECTION BookmarkForm
 
@@ -436,7 +437,7 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "AssignTravelLogSystem
 
 SECTION ExportForm
 
-ExportForm: "ExportForm" => "Exportformular"
+ExportForm: "Export Data" => "Exportformular"
 .checkBoxRawJournal: "Export Journals" => "Exportiere Journale"
 .buttonCancel: "Cancel" => "Abbrechen"
 .labelCVSSep: "CSV Separator" => "CSV Trennzeichen"
@@ -445,9 +446,11 @@ ExportForm: "ExportForm" => "Exportformular"
 .radioButtonComma: "Comma" => "Komma"
 .checkBoxIncludeHeader: "Include Header" => "Kopfzeile inkludieren"
 .checkBoxCustomAutoOpen: "Open" => "Öffnen"
-.label_index: "Export" => "Exportieren"
 .ECH: "Export current data {0}" => "Exportiere aktuelle Daten {0}"
 .JF: "Journal file" => "Journaldatei"
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 

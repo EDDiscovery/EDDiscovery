@@ -445,9 +445,7 @@ namespace EDDiscovery
 
         UserControlMissionOverlay_IL, //  Left
 
-        UserControlRouteTracker_Selectroute, // Select route
-        UserControlRouteTracker_PresstoCancel, // Press to Cancel
-        UserControlRouteTracker_Enterroute, // Enter route
+        // Note now in surveryor
         UserControlRouteTracker_J1, // jump
         UserControlRouteTracker_TF, // To First WP
         UserControlRouteTracker_JS, // jumps
@@ -456,9 +454,7 @@ namespace EDDiscovery
         UserControlRouteTracker_ToWP, // (WP {0})
         UserControlRouteTracker_NoFSD, //  No Ship FSD Information
         UserControlRouteTracker_Dev, // , Dev {0:N1}ly
-        UserControlRouteTracker_NoRoute, // Please set a route, by right clicking
         UserControlRouteTracker_NoWay, // Route contains no waypoints
-        UserControlRouteTracker_Unk, // Unknown location
         UserControlRouteTracker_NoCo, // No systems in route have known co-ords
         UserControlRouteTracker_Note, // Note
 
@@ -508,7 +504,6 @@ namespace EDDiscovery
         UserControlExpedition_Conflict, // The current route name conflicts with a well-known expedition.
         UserControlExpedition_Overwrite, // Warning: route already exists. Would you like to overwrite it?
         UserControlExpedition_EDSMUnk,
-        UserControlExpedition_UnkSystem, 
         UserControlExpedition_NoScanInfo,
         UserControlExpedition_Specify, // Please specify a name for the route.
         UserControlExpedition_UnknownS, // Unknown system, system is without co-ordinates

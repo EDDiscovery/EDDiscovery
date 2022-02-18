@@ -257,7 +257,6 @@ SECTION UserControlExpedition
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" @
 .EDSMUnk: "System not known to EDSM" @
 .NoScanInfo : "No local scan info" @
-.UnkSystem: "Unknown System" @
 
 .ColumnX: "X" @
 .ColumnY: "Y" @
@@ -265,13 +264,14 @@ SECTION UserControlExpedition
 
 SECTION UserControlJournalGrid
 
+.comboBoxTime.ToolTip: "Select the entries selected by age" @
+
 .ColumnTime: "Time" @
 .Event: "Event" @
 .ColumnType: "Description" @
 .ColumnText: "Information" @
 
 .labelTime: "Time" @
-.comboBoxTime.ToolTip: "Select the entries selected by age" @
 .labelSearch: "Search" @
 .textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -651,6 +651,7 @@ SECTION UserControlRoute
 .buttonToEDSM.ToolTip: "Open this end route system in EDSM" @
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" @
 .buttonTargetFrom.ToolTip: "Copy the target system to start route entry" @
+.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
 .cmd3DMap.ToolTip: "Show route on 3D Map" @
 .textBox_From.ToolTip: "Select system to start the route" @
 .textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" @
@@ -679,26 +680,17 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
-.showJumpsToolStripMenuItem: "Show Jumps To Go" @
-.showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" @
-.showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" @
-.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
-.autoCopyWPToolStripMenuItem: "Auto copy waypoint" @
-.autoSetTargetToolStripMenuItem: "Auto set target" @
-.showtargetinfo: "Show Target Information" @
-.showfuelinfo: "Show Fuel Information" @
-
-.NoFSD: " No Ship FSD Information" @
 .J1: "jump" @
-.JS: "jumps" @
-.NoCo: "No systems in route have known co-ords" @
-.NoWay: "Route contains no waypoints" @
-.FL: "From Last WP " @
 .TF: "To First WP " @
+.JS: "jumps" @
+.FL: "From Last WP " @
 .LF: ", Left {0:N1}ly" @
 .ToWP: "(WP {0})" @
-.Note: "Note: {0}" @
+.NoFSD: " No Ship FSD Information" @
 .Dev: ", Dev {0:N1}ly" @
+.NoWay: "Route contains no waypoints" @
+.NoCo: "No systems in route have known co-ords" @
+.Note: "Note: {0}" @
 
 
 SECTION UserControlScan
@@ -729,6 +721,8 @@ SECTION UserControlScan
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" @
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" @
 .SystemValue: "Show system and value in main display" @
+.extButtonFilter.ToolTip: "Filter Bodies" @
+.extButtonDisplayFilters.ToolTip: "Settings" @
 .AllG: "Show G on all planets" @
 .HabZone: "Show Habitation Zone" @
 .StarClass: "Show Classes of Stars" @
@@ -970,6 +964,7 @@ SECTION UserControlSpanel
 .extButtonScanShow.ToolTip: "Configure scan display" @
 .extButtoScanPos.ToolTip: "Set position of scan display" @
 .extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 
 .Target: "Target" @
 .TVE: "View system on EDSM" @
@@ -1427,6 +1422,9 @@ SECTION UserControlMiningOverlay
 .above: "% Above" @
 .dist: "Distribution" @
 .Limcargo: "Limpets left {0}, Cargo left {1}" @
+.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
+.buttonExtExcel.ToolTip: "Export" @
+.extComboBoxChartOptions.ToolTip: "Select chart options" @
 
 SECTION UserControlFactions
 .colFaction: "Faction" @

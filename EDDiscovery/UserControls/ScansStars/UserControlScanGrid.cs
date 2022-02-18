@@ -33,6 +33,7 @@ namespace EDDiscovery.UserControls
 
         private int iconsize;   // computed icon and body sizes
         private int bodysize;
+        private string dbRolledUp = "RolledUp";
 
         public UserControlScanGrid()
         {
@@ -54,12 +55,14 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             // retrieve context menu entries check state from DB
 
             checkBoxEDSM.Checked = GetSetting("checkEDSM", true);
             checkBoxEDSM.Click += CheckBoxEDSM_Click;
 
+            rollUpPanelTop.PinState = GetSetting(dbRolledUp, true);
             PopulateCtrlList();
         }
 
@@ -81,6 +84,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewScangrid);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            PutSetting(dbRolledUp, rollUpPanelTop.PinState);
         }
 
         public override void InitialDisplay()

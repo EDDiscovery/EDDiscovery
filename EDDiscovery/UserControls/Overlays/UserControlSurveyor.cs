@@ -77,6 +77,7 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute);
 

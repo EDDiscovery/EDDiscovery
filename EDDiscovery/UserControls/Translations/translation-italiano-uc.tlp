@@ -157,6 +157,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" => "Note"
 .RecipeCol: "Recipe" => "Ricetta"
 .EngineersCol: "Engineers" => "Ingenhere"
+.PercentageCol: "%" @
 .chkHistoric: "Use Cursor Positon" => "Usa la posizione del cursore"
 .buttonClear: "Clear" => "Pulischi Ricercati"
 .buttonFilterMaterial: "Material" => "Filtra per Materiali Filtra per Materiali"
@@ -179,42 +180,45 @@ SECTION UserControlEngineering
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nome del Corpo"
-.EstValue: "Current Value" => "Vaore Stimato"
+.BodyType: "Body Type" @
+.EDSM: "EDSM" @
+.Mapped: "Mapped" @
+.WasMapped: "Already Mapped" @
+.WasDiscovered: "Already Discovered" @
 .EstBase: "Base Value" @
 .MappedValue: "Mapped" @
 .FirstDiscovered: "First Discovered" @
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
-.BodyType: "Body Type" @
-.Mapped: "Mapped" @
-.WasMapped: "Already Mapped" @
-.WasDiscovered: "Already Discovered" @
-.SV: "Estimated Scan Values for {0}" => "Stima dei valori di scansione per {0}"
-.EDSM: "EDSM" @
+.EstValue: "Current Value" => "Vaore Stimato"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
+.SV: "Estimated Scan Values for {0}" => "Stima dei valori di scansione per {0}"
 
 SECTION UserControlExpedition
 
 .CurDist: "Cur. Dist" @
 .Visits: "Visits" => "Visite"
 .Scans: "Scans" => "Scansioni"
-.Bodies: "Bodies" @
+.FSSBodies: "FSS Bodies" @
+.KnownBodies: "Known Bodies" @
 .Stars: "Stars" => "Stella Principale"
 .Info: "Info" @
-
-.extButtonLoadRoute.ToolTip: "Load" => "Carica"
-.extButtonNew.ToolTip: "New Route" => "Nuovo Itinerario"
-.extButtonSave.ToolTip: "Save Route" => "Salva Itinerario"
-.extButtonDelete.ToolTip: "Delete Route" => "Elimina Itinerario"
-.extButtonImportFile.ToolTip: "Import file" => "Importa documento"
-.extButtonImportRoute.ToolTip: "Import route" => "Importa itinerario"
-.extButtonImportNavRoute.ToolTip: "Import route" => "Importa Nav itinerario"
-.buttonExtExport.ToolTip: "Export" => "Esporta"
-.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Mostra sulla mappa 3D"
-.extButtonAddSystems.ToolTip: "Add Systems" => "Aggiungi Systemi"
+.extButtonLoadRoute.ToolTip: "Load Route" => "Carica"
+.extButtonNew.ToolTip: "New Expedition" => "Nuovo Itinerario"
+.extButtonSave.ToolTip: "Save Expedition" => "Salva Itinerario"
+.extButtonDelete.ToolTip: "Delete Expedition" => "Elimina Itinerario"
+.extButtonImportFile.ToolTip: "Import File" => "Importa documento"
+.extButtonImportRoute.ToolTip: "Import from Route Panel" => "Importa itinerario"
+.extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Importa Nav itinerario"
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
+.buttonExtExport.ToolTip: "Export to File" => "Esporta"
+.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Mostra sulla mappa 3D"
+.extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Aggiungi Systemi"
+.extButtonDisplayFilters.ToolTip: "Select filters on Info" @
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .AddSys: "Add Systems" => "Aggiungi Systemi"
-
-.toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Nome del Sistema"
 .Distance: "Dist." @
 .Note: "Note" => "Nota"
@@ -224,49 +228,41 @@ SECTION UserControlExpedition
 .labelEndDate: "End Date: " => "Data di Termine: "
 .labelDateStart: "Start Date: " => "Data di Inizio: "
 .labelRouteName: "Route Name: " => "Nome di Itinerario: "
-.toolStripButtonNew: "New Route" => "Nuovo Itinerario"
-.toolStripButtonImportFile: "Import file" => "Importa documento"
-.toolStripButtonImportRoute: "Import route" => "Importa itinerario"
-.toolStripButtonSave: "Save Route" => "Salva Itinerario"
-.toolStripButtonExport: "Export" => "Esporta"
-.toolStripButtonDelete: "Delete Route" => "Elimina Itinerario"
-.toolStripButtonShowOn3DMap: "Show on 3D Map" => "Mostra sulla mappa 3D"
 .copyToolStripMenuItem: "Copy" => "Copia"
 .pasteToolStripMenuItem: "Paste" => "Incolla"
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Inserisci linee copiate"
 .deleteRowsToolStripMenuItem: "Delete Rows" => "Elimina linee"
 .setTargetToolStripMenuItem: "Set Target" => "Imposta Obiettivo"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "Modifica bookmark"
-.ctxMenuItemUndelete: "&Undelete" => "&Ricupera"
 .NoRoute: "No route set up. Please add at least two systems." @
 .Delete: "Are you sure you want to delete this route?" @
-.SelRoute: "Select a route file" @
-.FileE: "There was an error reading file" @
-.Nonames: "The imported file contains no known system names" @
 .Createroute: "Please create a route on a route panel" @
 .NoRouteExport: "There is no route to export " @
-.Export: "Export route" @
 .UnknownS: "Unknown system, system is without co-ordinates" @
 .Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" @
 .Specify: "Please specify a name for the route." @
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" @
 .EDSMUnk: "System not known to EDSM" @
+.NoScanInfo: "No local scan info" @
 .ColumnX: "X" @
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
 
-
 SECTION UserControlJournalGrid
 
-.JHF: "Journal: Filter out fields" @
+.comboBoxTime.ToolTip: "Select the entries selected by age" @
 .ColumnTime: "Time" => "Tempo"
 .Event: "Event" => "Evento"
 .ColumnType: "Description" => "Descrizione"
 .ColumnText: "Information" => "Informazione"
-.checkBoxMoveToTop: "Cursor to Top" => "Cursore in cima"
-.labelSearch: "Search" => "Cerca"
 .labelTime: "Time" => "Tempo"
+.labelSearch: "Search" => "Cerca"
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+.buttonFilter.ToolTip: "Filter out entries based on event type" @
+.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Rimuovi ordinamento delle colonne"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Salta alla voce"
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Vai al sistema sulla mappa 3D"
@@ -282,12 +278,8 @@ SECTION UserControlJournalGrid
 .TTEvent: "Filter out entries based on event type, " @
 .TTFilt3: "Total filtered out {0}" @
 .TTTotal: "Filter out entries matching the field selection, " @
+.JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" @
-.comboBoxJournalWindow.ToolTip: "Select the entries selected by age" @
 
 SECTION UserControlLedger
 
@@ -405,47 +397,52 @@ SECTION UserControlSurveyor
 .Scan: "Scan" @
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
-.autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
-.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.planetaryClassesToolStripMenuItem: "Planetary Classes" @
+.textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" @
+.textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" @
+.textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" @
+.showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" @
-.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
-.metalToolStripMenuItem: "Metal-rich Body" @
-.bodyFeaturesToolStripMenuItem: "Body Features" @
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
-.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
-.textAlignToolStripMenuItem: "Alignment" @
-.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" @
-.textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
-.textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
-.showAllPlanetsToolStripMenuItem: "Show All Planets" @
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
-.showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.wordWrapToolStripMenuItem: "Word Wrap" @
-.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
-.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
-.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
-.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
-.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
-.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.showMoreInformationToolStripMenuItem: "Show More Information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.autoHideToolStripMenuItem: "Auto Hide" @
+.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
+.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
+.extButtonPlanets.ToolTip: "Planet Filter" @
+.extButtonStars.ToolTip: "Star Filter" @
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonAlignment.ToolTip: "Alignment" @
+.extButtonFont.ToolTip: "Font" @
+.extButtonFSS.ToolTip: "FSS Signal Selection" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extButtonSetRoute.ToolTip: "Select route to follow" @
+.extButtonControlRoute.ToolTip: "Route Settings" @
+.navroute: "TX Nav Route" @
+.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
+.fsssignals: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
 
@@ -631,6 +628,7 @@ SECTION UserControlRoute
 .buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Apri questo destino di rotta su EDSM"
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Apri questa partenza di rotta su EDSM"
 .buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Usa il destino come partenza per la rotta"
+.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
 .cmd3DMap.ToolTip: "Show route on 3D Map" => "Mostra la rotta sulla mappa 3D"
 .textBox_From.ToolTip: "Select system to start the route" => "Seleziona sistema come partenza per la rotta"
 .textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "Fornisci il tuo raggio di salto, o cerca per salti lunghi"
@@ -657,29 +655,17 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
-.Note: "Note: {0}" @
-.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
-.setRouteToolStripMenuItem: "Set route" @
-.showJumpsToolStripMenuItem: "Show Jumps To Go" @
-.showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" @
-.showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" @
-.autoCopyWPToolStripMenuItem: "Auto copy waypoint" @
-.autoSetTargetToolStripMenuItem: "Auto set target" @
-.NoRoute: "Please set a route, by right clicking" @
-.NoWay: "Route contains no waypoints" @
-.Unk: "Unknown location" @
-.NoCo: "No systems in route have known co-ords" @
 .J1: "jump" @
-.JS: "jumps" @
-.NoFSD: " No Ship FSD Information" @
-.FL: "From Last WP " @
 .TF: "To First WP " @
+.JS: "jumps" @
+.FL: "From Last WP " @
 .LF: ", Left {0:N1}ly" @
 .ToWP: "(WP {0})" @
+.NoFSD: " No Ship FSD Information" @
 .Dev: ", Dev {0:N1}ly" @
-.Selectroute: "Select route" @
-.PresstoCancel: "Press to Cancel" @
-.Enterroute: "Enter route" @
+.NoWay: "Route contains no waypoints" @
+.NoCo: "No systems in route have known co-ords" @
+.Note: "Note: {0}" @
 
 SECTION UserControlScan
 
@@ -709,6 +695,8 @@ SECTION UserControlScan
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" @
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" @
 .SystemValue: "Show system and value in main display" @
+.extButtonFilter.ToolTip: "Filter Bodies" @
+.extButtonDisplayFilters.ToolTip: "Settings" @
 .AllG: "Show G on all planets" @
 .HabZone: "Show Habitation Zone" @
 .StarClass: "Show Classes of Stars" @
@@ -721,56 +709,33 @@ SECTION UserControlScan
 
 SECTION UserControlScanGrid
 
-.Geologicalactivity: "Geological activity" @
-.Surfacemapped: "Surface mapped" @
-.colName: "Name" @
-.colClass: "Class" @
-.colDistance: "Distance" @
-.colBriefing: "Information" @
-.Moon: "Moon" @
-.MainStar: "Main Star" @
-.Mass: "Mass" @
-.HabitableZone: "Habitable Zone" @
-.Landable: "Landable" @
-.Terraformable: "Terraformable" @
-.Volcanism: "Volcanism" @
-.Rings: "Has {0} rings: " @
-.Ring: "Ring: " @
-.BC: "This body contains: " @
-.Value: "Value" @
-.SS: "Scan Summary for {0}. {1}" @
-.AV: "Approx total scan value: {0:N0}" @
-.Radius: "Radius" @
-.Temperature: "Temperature" @
-.MetalRichbodies: "Metal Rich bodies" @
-.Waterworlds: "Water worlds" @
-.Earthlikesplanets: "Earth likes planets" @
-.Ammoniaworlds: "Ammonia worlds" @
-.Volcanicactivity: "Volcanic activity" @
-.Belt: "Belt: " @
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
-.circumstellarZoneToolStripMenuItem: "Circumstellar Zones" @
-.circumstellarZoneToolStripMenuItem.habitableZoneToolStripMenuItem: "Habitable Zone" @
-.circumstellarZoneToolStripMenuItem.metalRichToolStripMenuItem: "Metal Rich" @
-.circumstellarZoneToolStripMenuItem.waterWorldsToolStripMenuItem: "Water Worlds" @
-.circumstellarZoneToolStripMenuItem.earthLikePlanetsToolStripMenuItem: "Earth Like Planets" @
-.circumstellarZoneToolStripMenuItem.ammoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
-.circumstellarZoneToolStripMenuItem.icyBodiesToolStripMenuItem: "Icy Bodies" @
-.structuresToolStripMenuItem: "Structures" @
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Belts" @
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" @
 .materialsToolStripMenuItem: "Materials" @
 .valuesToolStripMenuItem: "Values" @
-.columnsToolStripMenuItem: "Columns" @
-.columnsToolStripMenuItem.nameToolStripMenuItem: "Name" @
-.columnsToolStripMenuItem.classToolStripMenuItem: "Class" @
-.columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" @
-.columnsToolStripMenuItem.informationToolStripMenuItem: "Information" @
-.toolStripStatusTotalValue: "Estimated scans value" @
-.toolStripStatusGreen: "GREEN SYSTEM" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+.MainStar: "Main Star" @
+.Mass: "Mass" @
+.Radius: "Radius" @
+.Temperature: "Temperature" @
+.Terraformable: "Terraformable" @
+.Moon: "Moon" @
+.Landable: "Landable" @
+.Geologicalactivity: "Geological activity" @
+.Surfacemapped: "Surface mapped" @
+.BC: "This body contains: " @
+.Ring: "Ring: " @
+.Belt: "Belt: " @
+.Value: "Value" @
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
-.eDSMCheckToolStripMenuItem: "EDSM Check" @
+.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
+.colName: "Name" @
+.colClass: "Class" @
+.colDistance: "Distance" @
+.colBriefing: "Information" @
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
 
 SECTION UserControlSettings
 
@@ -786,7 +751,7 @@ SECTION UserControlSettings
 .button_edittheme: "Edit Theme" => "Modifica il Tema"
 .buttonSaveTheme: "Save Theme" => "Salva il Tema"
 .groupBoxCustomHistoryLoad: "History" => "Opzioni dello Storico"
-.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Numera i registri dei pi� vecchi"
+.checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "Numera i registri dei pi� vecchi"
 .labelTimeDisplay: "Time: " @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
@@ -881,8 +846,9 @@ SECTION UserControlSettings
 .GameTime: "Game Time" @
 .Local: "Local" @
 .NoMap: "No map available!" @
-.extGroupBoxDLLPerms: "DLL Permissions" @
-.extButtonDLLPerms: "Configure" @
+.extGroupBoxDLLPerms: "DLLs" @
+.extButtonDLLPerms: "Permissions" @
+.extButtonDLLConfigure: "Configure" @
 
 SECTION UserControlShipYards
 
@@ -919,8 +885,9 @@ SECTION UserControlShoppingList
 SECTION UserControlSpanel
 
 .showSystemInformationToolStripMenuItem: "Show System Information" @
-.showHabitationMinimumAndMaximumDistanceToolStripMenuItem: "Show Habitation Minimum and Maximum Distance" @
 .toolStripMenuItemTargetLine: "Show Target Line" @
+.blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
+.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
 .EDSMButtonToolStripMenuItem: "EDSM Button" @
 .toolStripMenuItemTime: "Show Time" @
 .iconToolStripMenuItem: "Show Event Icon" @
@@ -929,46 +896,46 @@ SECTION UserControlSpanel
 .showNotesToolStripMenuItem: "Show Notes" @
 .showXYZToolStripMenuItem: "Show XYZ" @
 .showTargetToolStripMenuItem: "Show Target Distance per Star" @
-.blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" @
-.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
-.dontShowInformationWhenToolStripMenuItem: "Don't show information when.." @
-.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" @
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" @
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" @
-.OrdertoolStripMenuItem: "Column Order.." @
-.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
-.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
-.configureEventFilterToolStripMenuItem: "Configure Event Filter.." @
-.configureFieldFilterToolStripMenuItem: "Configure Field Filter.." @
-.surfaceScanDetailsToolStripMenuItem: "Configure Scan Display.." @
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
-.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
-.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
-.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
-.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
-.showInPositionToolStripMenuItem: "Set Scan Position.." @
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
-.Target: "Target" @
-.TVE: "View system on EDSM" @
-.SPF: "Summary Panel: Filter out fields" @
-.showCircumstellarZonesToolStripMenuItem: "Show Circumstellar Zones" @
+.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" @
 .showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" @
 .showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" @
 .showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" @
 .showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
-.dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" @
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" @
+.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
+.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
+.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
+.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
+.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
+.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
+.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
+.dontShowInformationWhenToolStripMenuItem: "Don't show information when" @
+.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" @
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" @
+.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonColumns.ToolTip: "Configure columns shown" @
+.extButtonColumnOrder.ToolTip: "Configure column order" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.buttonFilter.ToolTip: "Select what journal events to show" @
+.buttonField.ToolTip: "Filter out events" @
+.extButtonScanShow.ToolTip: "Configure scan display" @
+.extButtoScanPos.ToolTip: "Set position of scan display" @
+.extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.Target: "Target" @
+.TVE: "View system on EDSM" @
+.SPF: "Summary Panel: Filter out fields" @
 
 SECTION UserControlStarDistance
 
-.addToExplorationToolStripMenuItem: "Add To Exploration" @
 .addToExpeditionToolStripMenuItem: "Add to Expedition" @
 .colName: "Name" @
 .colDistance: "Distance" @
@@ -1005,6 +972,7 @@ SECTION UserControlStarList
 .comboBoxTime.ToolTip: "Select the entries by age" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" @
 .FSD: "This system has materials for FSD boost: " @
@@ -1012,6 +980,7 @@ SECTION UserControlStarList
 .OB: "{0} Other bodies" @
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valueable bodies" @
+.scanorganics: "Show organic scans" @
 
 SECTION UserControlStats
 
@@ -1053,6 +1022,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" @
 .JetConeBoost: "Jet Cone Boost" @
 .Scans: "Scans" @
+.OrganicScans: "Organic Scans" @
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
 .Beltcluster: "Belt Cluster: " @
@@ -1097,6 +1067,7 @@ SECTION UserControlSynthesis
 .Available: "Avail." @
 .Notes: "Notes" @
 .Recipe: "Recipe" @
+.Percentage: "%" @
 .chkHistoric: "Use Cursor Position" @
 .buttonMaterialFilter: "Material" @
 .buttonFilterLevel: "Level" @
@@ -1140,6 +1111,7 @@ SECTION UserControlSysInfo
 .labelTravel: "Travel" => "Viaggio"
 .labelGamemode: "Mode" => "Modo"
 .labelTarget: "Target" => "Destino"
+.labelSecurity: "Security" @
 .buttonEDSMTarget: "EDSM" @
 .toolStripSystem: "Display System Name" => "Mostra nome del Sistema"
 .toolStripEDSM: "Display EDSM Buttons" => "Mostra pulsante di EDSM"
@@ -1151,6 +1123,7 @@ SECTION UserControlSysInfo
 .toolStripSystemState: "Display System State" => "Mostra Stato del Sistema"
 .toolStripNotes: "Display Notes" => "Mostra Note"
 .toolStripTarget: "Display Target" => "Mostra Destino"
+.displaySecurityToolStripMenuItem: "Display Security" @
 .toolStripShip: "Display Ship Information" => "Mostra Informazioni sulla Nave"
 .toolStripFuel: "Display Fuel Level" => "Mostra Livello di Serbatoio"
 .toolStripCargo: "Display Cargo Count" => "Mostra Conteggio di Carico"
@@ -1207,6 +1180,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
 .travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" @
@@ -1272,10 +1246,11 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" @
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" @
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" @
-.addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" @
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
+.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
+.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
 .addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
 
 SECTION UserControlCaptainsLog
@@ -1360,23 +1335,6 @@ SECTION UserControlTrilateration
 .NoSector: "No systems with unknown coordinates were found for the current sector." @
 .SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
 
-SECTION UserControlTrippanel
-
-.showEDSMStartButtonsToolStripMenuItem: "Show EDSM/Start Buttons" @
-.showTargetToolStripMenuItem: "Show Target" @
-.showTravelledDistanceToolStripMenuItem: "Show Travelled Distance" @
-.showFuelLevelToolStripMenuItem: "Show Fuel Level" @
-.showCurrentFSDRangeToolStripMenuItem: "Show Current FSD Range" @
-.showAvgFSDRangeToolStripMenuItem: "Show Avg FSD Range" @
-.showMaxFSDRangeToolStripMenuItem: "Show Max FSD Range" @
-.showFSDRangeToolStripMenuItem: "Show FSD Range" @
-.jump: "jump" @
-.jumps: "jumps" @
-.NoT: " -> Target not set" @
-.FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
-.UKN: "System {0} unknown to EDSM" @
-.Left: "Left" @
-
 SECTION UserControlMaterialTrader
 
 .UpgradeCol: "From" @
@@ -1414,6 +1372,9 @@ SECTION UserControlMiningOverlay
 .above: "% Above" @
 .dist: "Distribution" @
 .Limcargo: "Limpets left {0}, Cargo left {1}" @
+.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
+.buttonExtExcel.ToolTip: "Export" @
+.extComboBoxChartOptions.ToolTip: "Select chart options" @
 
 SECTION UserControlFactions
 
@@ -1461,6 +1422,13 @@ SECTION UserControlFactions
 .MissionsInProgress: "Missions In Progress: " @
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
+
+SECTION UserControlOrganics
+
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
 
 SECTION ScanDisplayForm
 
@@ -1525,3 +1493,5 @@ SECTION UserControlSuitsWeapons
 .CWClipSize: "Clip Size" @
 .CWHopper: "Hopper Size" @
 .CWRange: "Range m" @
+.CWDPS: "DPS" @
+.CWHSD: "Head Shot Mult" @

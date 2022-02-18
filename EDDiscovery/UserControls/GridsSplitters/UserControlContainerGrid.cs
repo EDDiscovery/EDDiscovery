@@ -32,13 +32,13 @@ namespace EDDiscovery.UserControls
         private string dbWindowNames = "Windows";
         private string dbPositionSize = "Positons";     //sic, leave
         private string dbZOrder = "ZOrder";
+        private string dbRolledUp = "RolledUp";
 
         ExtendedControls.ExtListBoxForm popoutdropdown;
 
         public UserControlContainerGrid()
         {
             InitializeComponent();
-            rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
         }
 
         #region UCCB interface
@@ -47,6 +47,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             DBBaseName = "GridControl";
+
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
 
             //System.Diagnostics.Debug.WriteLine("Grid Restore from " + DBWindowNames);
 
@@ -61,6 +64,8 @@ namespace EDDiscovery.UserControls
                         CreateInitPanel(uccb);
                 }
             }
+
+            rollUpPanelMenu.PinState = GetSetting(dbRolledUp, true);
 
             ResumeLayout();
             UpdateButtons();
@@ -157,6 +162,7 @@ namespace EDDiscovery.UserControls
 
             PutSetting(dbWindowNames, s);
             PutSetting(dbPositionSize, p);
+            PutSetting(dbRolledUp, rollUpPanelMenu.PinState);
 
             string z = "";
 

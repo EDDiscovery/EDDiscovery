@@ -43,6 +43,9 @@ namespace EDDiscovery.UserControls
 
             UpdateComboBox(null);
             BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            extPanelRollUp.SetToolTip(toolTip);
+
             buttonExtExcel.Enabled = false;
             extCheckBoxZeroRefined.Checked = GetSetting(dbZeroRefined, false);
             extCheckBoxZeroRefined.CheckedChanged += new System.EventHandler(this.extCheckBoxZeroRefined_CheckedChanged);

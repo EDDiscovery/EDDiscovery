@@ -157,6 +157,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" => "Примечание"
 .RecipeCol: "Recipe" => "Рецепт"
 .EngineersCol: "Engineers" => "Инженеры"
+.PercentageCol: "%" @
 .chkHistoric: "Use Cursor Positon" => "Использовать позицию курсора"
 .buttonClear: "Clear" => "Сброс"
 .buttonFilterMaterial: "Material" => "Материалы"
@@ -179,45 +180,45 @@ SECTION UserControlEngineering
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Название тела"
-.EstValue: "Current Value" => "Примерная стоимость"
+.BodyType: "Body Type" @
+.EDSM: "EDSM" @
+.Mapped: "Mapped" @
+.WasMapped: "Already Mapped" @
+.WasDiscovered: "Already Discovered" @
 .EstBase: "Base Value" @
 .MappedValue: "Mapped" @
 .FirstDiscovered: "First Discovered" @
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
-.BodyType: "Body Type" @
-.Mapped: "Mapped" @
-.WasMapped: "Already Mapped" @
-.WasDiscovered: "Already Discovered" @
-.SV: "Estimated Scan Values for {0}" => "Примерная стоимость данных сканирования для {0}"
-.EDSM: "EDSM" @
+.EstValue: "Current Value" => "Примерная стоимость"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
+.SV: "Estimated Scan Values for {0}" => "Примерная стоимость данных сканирования для {0}"
 
 SECTION UserControlExpedition
 
-// new stuff
-
-.CurDist: "C. Расстояние" @
+.CurDist: "Cur. Dist" @
 .Visits: "Visits" => "Посещений"
 .Scans: "Scans" => "Отсканировано"
-.Bodies: "Bodies" @
+.FSSBodies: "FSS Bodies" @
+.KnownBodies: "Known Bodies" @
 .Stars: "Stars" => "Главная звезда"
 .Info: "Info" => "Информация"
-
-.extButtonLoadRoute.ToolTip: "Load" => "Загрузить"
-.extButtonNew.ToolTip: "New Route" => "Новый маршрут"
-.extButtonSave.ToolTip: "Save Route" => "Сохранить маршрут"
-.extButtonDelete.ToolTip: "Delete Route" => "Удалить маршрут"
-.extButtonImportFile.ToolTip: "Import file" => "Импорт из файла"
-.extButtonImportRoute.ToolTip: "Import route" => "Импорт маршрута"
-.extButtonImportNavRoute.ToolTip: "Import route" => "Импорт Nav маршрута"
-.buttonExtExport.ToolTip:  "Export" => "Экспорт"
-.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Показать на 3D-карте"
-.extButtonAddSystems.ToolTip: "Add Systems" => "Добавить системы"
+.extButtonLoadRoute.ToolTip: "Load Route" => "Загрузить"
+.extButtonNew.ToolTip: "New Expedition" => "Новый маршрут"
+.extButtonSave.ToolTip: "Save Expedition" => "Сохранить маршрут"
+.extButtonDelete.ToolTip: "Delete Expedition" => "Удалить маршрут"
+.extButtonImportFile.ToolTip: "Import File" => "Импорт из файла"
+.extButtonImportRoute.ToolTip: "Import from Route Panel" => "Импорт маршрута"
+.extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Импорт Nav маршрута"
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
+.buttonExtExport.ToolTip: "Export to File" => "Экспорт"
+.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Показать на 3D-карте"
+.extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Добавить системы"
+.extButtonDisplayFilters.ToolTip: "Select filters on Info" @
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .AddSys: "Add Systems" => "Добавить системы"
-
-
-.toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Название системы"
 .Distance: "Dist." => "Расстояние"
 .Note: "Note" => "Примечание"
@@ -227,48 +228,41 @@ SECTION UserControlExpedition
 .labelEndDate: "End Date: " => "Окончание: "
 .labelDateStart: "Start Date: " => "Начало: "
 .labelRouteName: "Route Name: " => "Маршрут: "
-.toolStripButtonNew: "New Route" => "Новый маршрут"
-.toolStripButtonImportFile: "Import file" => "Импорт из файла"
-.toolStripButtonImportRoute: "Import route" => "Импорт маршрута"
-.toolStripButtonSave: "Save Route" => "Сохранить маршрут"
-.toolStripButtonExport: "Export" => "Экспорт"
-.toolStripButtonDelete: "Delete Route" => "Удалить маршрут"
-.toolStripButtonShowOn3DMap: "Show on 3D Map" => "Показать на 3D-карте"
 .copyToolStripMenuItem: "Copy" => "Копировать"
 .pasteToolStripMenuItem: "Paste" => "Вставить"
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Вставить скопированные строки"
 .deleteRowsToolStripMenuItem: "Delete Rows" => "Удалить строки"
 .setTargetToolStripMenuItem: "Set Target" => "Выбрать цель"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "Изменить закладку"
-.ctxMenuItemUndelete: "&Undelete" => "Отменить удаление"
 .NoRoute: "No route set up. Please add at least two systems." => "Маршрут не установлен. Добавьте как минимум две системы"
 .Delete: "Are you sure you want to delete this route?" => "Вы действительно хотите удалить этот маршрут?"
-.SelRoute: "Select a route file" => "Выберите файл маршрута"
-.FileE: "There was an error reading file" => "Ошибка при чтении файла"
-.Nonames: "The imported file contains no known system names" => "Файл не содержит известных систем"
 .Createroute: "Please create a route on a route panel" => "Создайте маршрут во вкладке/окне маршрута"
 .NoRouteExport: "There is no route to export " => "Нет маршрута для экспорта"
-.Export: "Export route" => "Экспорт маршрута"
 .UnknownS: "Unknown system, system is without co-ordinates" => "Неизвестная система, у системы нет координат"
 .Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Изменения текущего маршрута не сохранены.\r\nСохранить маршрут перед продолжением?"
 .Specify: "Please specify a name for the route." => "Введите название маршрута"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Текущее название маршрута конфликтует с названием известной экспедиции\r\nВыберите другое имя."
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Внимание: маршрут уже существует. Вы действительно хотите его перезаписать?"
 .EDSMUnk: "System not known to EDSM" => "Система неизвестна в EDSM"
+.NoScanInfo: "No local scan info" @
 .ColumnX: "X" @
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
 
 SECTION UserControlJournalGrid
 
-.JHF: "Journal: Filter out fields" => "Журнал: фильтры полей"
+.comboBoxTime.ToolTip: "Select the entries selected by age" => "Выбор записей по времени"
 .ColumnTime: "Time" => "Время"
 .Event: "Event" => "Событие"
 .ColumnType: "Description" => "Описание"
 .ColumnText: "Information" => "Информация"
-.checkBoxMoveToTop: "Cursor to Top" => "Курсор наверх"
-.labelSearch: "Search" => "Поиск"
 .labelTime: "Time" => "Время"
+.labelSearch: "Search" => "Поиск"
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
+.buttonFilter.ToolTip: "Filter out entries based on event type" => "Фильтровать события по типу"
+.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Сбросить сортировку столбцов"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Перейти к другой записи..."
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Показать систему на 3D-карте"
@@ -284,12 +278,8 @@ SECTION UserControlJournalGrid
 .TTEvent: "Filter out entries based on event type, " => "Фильтровать записи по типу события"
 .TTFilt3: "Total filtered out {0}" => "Всего отфильтровано: {0}"
 .TTTotal: "Filter out entries matching the field selection, " => "Фильтровать записи в соответствии с указанными условиями"
+.JHF: "Journal: Filter out fields" => "Журнал: фильтры полей"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
-.buttonFilter.ToolTip: "Filter out entries based on event type" => "Фильтровать события по типу"
-.comboBoxJournalWindow.ToolTip: "Select the entries selected by age" => "Выбор записей по времени"
 
 SECTION UserControlLedger
 
@@ -407,47 +397,52 @@ SECTION UserControlSurveyor
 .Scan: "Scan" @
 .Systemscancomplete: "System scan complete." => "Сканирование системы завершено"
 .bodiesfound: " bodies found." => " тел найдено."
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
-.autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
-.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.planetaryClassesToolStripMenuItem: "Planetary Classes" => "Классы планет"
+.textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "По левому краю"
+.textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "По центру"
+.textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" => "По правому краю"
+.showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Аммиачные планеты"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Землеподобные планеты"
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" => "Водные планеты"
-.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
-.metalToolStripMenuItem: "Metal-rich Body" @
-.bodyFeaturesToolStripMenuItem: "Body Features" => "Особенности планет"
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" => "Терраформируемые"
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" => "С вулканизмом"
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "С кольцами"
-.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Скрыть уже картографированные планеты"
-.textAlignToolStripMenuItem: "Alignment" => "Выравнивание"
-.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "По левому краю"
-.textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "По центру"
-.textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "По правому краю"
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
-.showAllPlanetsToolStripMenuItem: "Show All Planets" @
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
-.showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.wordWrapToolStripMenuItem: "Word Wrap" @
-.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
-.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
-.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
-.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
-.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
-.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.showMoreInformationToolStripMenuItem: "Show More Information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.autoHideToolStripMenuItem: "Auto Hide" @
+.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
+.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Скрыть уже картографированные планеты"
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
+.extButtonPlanets.ToolTip: "Planet Filter" @
+.extButtonStars.ToolTip: "Star Filter" @
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonAlignment.ToolTip: "Alignment" @
+.extButtonFont.ToolTip: "Font" @
+.extButtonFSS.ToolTip: "FSS Signal Selection" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extButtonSetRoute.ToolTip: "Select route to follow" @
+.extButtonControlRoute.ToolTip: "Route Settings" @
+.navroute: "TX Nav Route" @
+.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
+.fsssignals: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
 
@@ -633,6 +628,7 @@ SECTION UserControlRoute
 .buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Открыть конечную точку маршрута в EDSM"
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Открыть начальную точку маршрута в EDSM"
 .buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Назначить целевую систему начальной точкой маршрута"
+.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
 .cmd3DMap.ToolTip: "Show route on 3D Map" => "Показать маршрут на 3D-карте"
 .textBox_From.ToolTip: "Select system to start the route" => "Выберите начальную точку маршрута"
 .textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "Укажите дальность прыжка или дальность поиска для длинных прыжков"
@@ -659,29 +655,17 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
-.Note: "Note: {0}" @
-.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
-.setRouteToolStripMenuItem: "Set route" => "Выбрать маршрут"
-.showJumpsToolStripMenuItem: "Show Jumps To Go" => "Показать количество прыжков до цели"
-.showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "Показать координаты точки маршрута"
-.showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Показать отклонение от маршрута"
-.autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Автоматически копировать точку маршрута"
-.autoSetTargetToolStripMenuItem: "Auto set target" => "Автоматически выбирать цель"
-.NoRoute: "Please set a route, by right clicking" => "Установите маршрут, щелкнув правой кнопкой мыши"
-.NoWay: "Route contains no waypoints" => "Маршрут не содержит точек маршрута"
-.Unk: "Unknown location" => "Неизвестное место"
-.NoCo: "No systems in route have known co-ords" => "Ни одна система маршрута не содержит известных координат"
 .J1: "jump" => "прыжок"
-.JS: "jumps" => "прыж."
-.NoFSD: " No Ship FSD Information" => "Нет информации о FSD"
-.FL: "From Last WP " => "От последней точки маршрута "
 .TF: "To First WP " => "До первой точки маршрута "
+.JS: "jumps" => "прыж."
+.FL: "From Last WP " => "От последней точки маршрута "
 .LF: ", Left {0:N1}ly" => ", осталось {0:N1} св. л."
 .ToWP: "(WP {0})" => "(точки маршрута {0})"
+.NoFSD: " No Ship FSD Information" => "Нет информации о FSD"
 .Dev: ", Dev {0:N1}ly" => ", отклонение {0:N1} св. л."
-.Selectroute: "Select route" => "Выберите маршрут"
-.PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
-.Enterroute: "Enter route" => "Выбор маршрута"
+.NoWay: "Route contains no waypoints" => "Маршрут не содержит точек маршрута"
+.NoCo: "No systems in route have known co-ords" => "Ни одна система маршрута не содержит известных координат"
+.Note: "Note: {0}" @
 
 SECTION UserControlScan
 
@@ -711,6 +695,8 @@ SECTION UserControlScan
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
 .SystemValue: "Show system and value in main display" @
+.extButtonFilter.ToolTip: "Filter Bodies" @
+.extButtonDisplayFilters.ToolTip: "Settings" @
 .AllG: "Show G on all planets" @
 .HabZone: "Show Habitation Zone" @
 .StarClass: "Show Classes of Stars" @
@@ -723,56 +709,33 @@ SECTION UserControlScan
 
 SECTION UserControlScanGrid
 
-.Geologicalactivity: "Geological activity" => "Геологическая активность"
-.Surfacemapped: "Surface mapped" => "Картографирована"
-.colName: "Name" => "Название"
-.colClass: "Class" => "Класс"
-.colDistance: "Distance" => "Расстояние"
-.colBriefing: "Information" => "Сводка"
-.Moon: "Moon" => "луна"
-.MainStar: "Main Star" => "Главная звезда"
-.Mass: "Mass" => "Масса"
-.HabitableZone: "Habitable Zone" => "Обитаемая зона"
-.Landable: "Landable" => "Пригодна для посадки"
-.Terraformable: "Terraformable" => "Пригодна для терраформирования"
-.Volcanism: "Volcanism" => "Вулканизм"
-.Rings: "Has {0} rings: " => "Число колец: {0}"
-.Ring: "Ring: " => "С кольцом: "
-.BC: "This body contains: " => "Материалы на планете: "
-.Value: "Value" => "Стоимость данных сканирования: "
-.SS: "Scan Summary for {0}. {1}" => "Результат сканирования {0}. {1}"
-.AV: "Approx total scan value: {0:N0}" => "Примерная общая стоимость данных сканирования: {0:N0}"
-.Radius: "Radius" => "Радиус"
-.Temperature: "Temperature" => "Температура"
-.MetalRichbodies: "Metal Rich bodies" => "Богатая металлами планета"
-.Waterworlds: "Water worlds" => "Водная планета"
-.Earthlikesplanets: "Earth likes planets" => "Землеподобная планета"
-.Ammoniaworlds: "Ammonia worlds" => "Аммиачная планета"
-.Volcanicactivity: "Volcanic activity" => "Вулканическая активность"
-.Belt: "Belt: " => "Пояс: "
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Результат сканирования {0} — звезд: {1}; планет: {2} (из них земного типа: {3}, газовых гигантов: {4}), лун: {5}"
-.circumstellarZoneToolStripMenuItem: "Circumstellar Zones" => "Околозвездная зона"
-.circumstellarZoneToolStripMenuItem.habitableZoneToolStripMenuItem: "Habitable Zone" => "Обитаемая зона"
-.circumstellarZoneToolStripMenuItem.metalRichToolStripMenuItem: "Metal Rich" => "Богатые металлами планеты"
-.circumstellarZoneToolStripMenuItem.waterWorldsToolStripMenuItem: "Water Worlds" => "Водные планеты"
-.circumstellarZoneToolStripMenuItem.earthLikePlanetsToolStripMenuItem: "Earth Like Planets" => "Землеподобные планеты"
-.circumstellarZoneToolStripMenuItem.ammoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "Аммиачные планеты"
-.circumstellarZoneToolStripMenuItem.icyBodiesToolStripMenuItem: "Icy Bodies" => "Ледяные планеты"
-.structuresToolStripMenuItem: "Structures" => "Структуры"
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Belts" => "Пояса"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" => "Кольца"
 .materialsToolStripMenuItem: "Materials" => "Материалы"
 .valuesToolStripMenuItem: "Values" => "Стоимость"
-.columnsToolStripMenuItem: "Columns" => "Столбцы"
-.columnsToolStripMenuItem.nameToolStripMenuItem: "Name" => "Название"
-.columnsToolStripMenuItem.classToolStripMenuItem: "Class" => "Класс"
-.columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" => "Расстояние"
-.columnsToolStripMenuItem.informationToolStripMenuItem: "Information" => "Информация"
-.toolStripStatusTotalValue: "Estimated scans value" => "Примерная стоимость данных сканирования"
-.toolStripStatusGreen: "GREEN SYSTEM" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+.MainStar: "Main Star" => "Главная звезда"
+.Mass: "Mass" => "Масса"
+.Radius: "Radius" => "Радиус"
+.Temperature: "Temperature" => "Температура"
+.Terraformable: "Terraformable" => "Пригодна для терраформирования"
+.Moon: "Moon" => "луна"
+.Landable: "Landable" => "Пригодна для посадки"
+.Geologicalactivity: "Geological activity" => "Геологическая активность"
+.Surfacemapped: "Surface mapped" => "Картографирована"
+.BC: "This body contains: " => "Материалы на планете: "
+.Ring: "Ring: " => "С кольцом: "
+.Belt: "Belt: " => "Пояс: "
+.Value: "Value" => "Стоимость данных сканирования: "
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
-.eDSMCheckToolStripMenuItem: "EDSM Check" @
+.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Результат сканирования {0} — звезд: {1}; планет: {2} (из них земного типа: {3}, газовых гигантов: {4}), лун: {5}"
+.colName: "Name" => "Название"
+.colClass: "Class" => "Класс"
+.colDistance: "Distance" => "Расстояние"
+.colBriefing: "Information" => "Сводка"
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
 
 SECTION UserControlSettings
 
@@ -788,7 +751,7 @@ SECTION UserControlSettings
 .button_edittheme: "Edit Theme" => "Изменить тему"
 .buttonSaveTheme: "Save Theme" => "Сохранить тему"
 .groupBoxCustomHistoryLoad: "History" => "Настройки истории"
-.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Нумерация строк снизу вверх"
+.checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "Нумерация строк снизу вверх"
 .labelTimeDisplay: "Time: " @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
@@ -883,8 +846,9 @@ SECTION UserControlSettings
 .GameTime: "Game Time" @
 .Local: "Local" @
 .NoMap: "No map available!" @
-.extGroupBoxDLLPerms: "DLL Permissions" @
-.extButtonDLLPerms: "Configure" @
+.extGroupBoxDLLPerms: "DLLs" @
+.extButtonDLLPerms: "Permissions" @
+.extButtonDLLConfigure: "Configure" @
 
 SECTION UserControlShipYards
 
@@ -921,8 +885,9 @@ SECTION UserControlShoppingList
 SECTION UserControlSpanel
 
 .showSystemInformationToolStripMenuItem: "Show System Information" => "Показать информацию о системе"
-.showHabitationMinimumAndMaximumDistanceToolStripMenuItem: "Show Habitation Minimum and Maximum Distance" => "Показать максимальное и минимальное расстояние для обитаемой зоны"
 .toolStripMenuItemTargetLine: "Show Target Line" => "Показать цель"
+.blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "Показать черную рамку вокруг текста"
+.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Текст может заполнять пустые столбцы"
 .EDSMButtonToolStripMenuItem: "EDSM Button" => "Показать кнопку EDSM"
 .toolStripMenuItemTime: "Show Time" => "Показать время"
 .iconToolStripMenuItem: "Show Event Icon" => "Показать значок события"
@@ -931,46 +896,46 @@ SECTION UserControlSpanel
 .showNotesToolStripMenuItem: "Show Notes" => "Показать примечания"
 .showXYZToolStripMenuItem: "Show XYZ" => "Показать координаты"
 .showTargetToolStripMenuItem: "Show Target Distance per Star" => "Показать расстояние до цели"
-.blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "Показать черную рамку вокруг текста"
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "Показывать расстояния/координаты только для FSD-прыжков"
-.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Текст может заполнять пустые столбцы"
-.dontShowInformationWhenToolStripMenuItem: "Don't show information when.." => "Не показывать информацию..."
-.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" => "...если пристыкован или на поверхности"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" => "...на панели карты Галактики"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" => "...на панели карты системы"
-.OrdertoolStripMenuItem: "Column Order.." => "Порядок столбцов..."
-.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "По умолчанию"
-.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Примечания после координат"
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" => "Расстояние, координаты, примечания"
-.configureEventFilterToolStripMenuItem: "Configure Event Filter.." => "Настроить фильтр событий"
-.configureFieldFilterToolStripMenuItem: "Configure Field Filter.." => "Настроить фильтр полей"
-.surfaceScanDetailsToolStripMenuItem: "Configure Scan Display.." => "Настроить окно сканирования"
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" => "Не показывать"
-.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "Показывать на 15 с"
-.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "Показывать на 30 с"
-.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "Показывать на 60 с"
-.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "Показать до следующего сканирования"
-.showInPositionToolStripMenuItem: "Set Scan Position.." => "Положение окна сканирования"
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" => "Справа"
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" => "Слева"
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" => "Над"
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" => "Под"
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" => "Сверху"
-.Target: "Target" => "Цель"
-.TVE: "View system on EDSM" => "Открыть систему в EDSM"
-.SPF: "Summary Panel: Filter out fields" => "Сводка: фильтры полей"
-.showCircumstellarZonesToolStripMenuItem: "Show Circumstellar Zones" => "Показать околозвездную зону"
+.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" => "Показать околозвездную зону"
 .showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" => "Богатые металлами планеты"
 .showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" => "Водные планеты"
 .showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" => "Землеподобные планеты"
 .showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "Аммиачные планеты"
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Ледяные планеты"
-.dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Полностью скрыть панель"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => "...на панели"
+.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "По умолчанию"
+.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Примечания после координат"
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" => "Расстояние, координаты, примечания"
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" => "Не показывать"
+.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "Показывать на 15 с"
+.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "Показывать на 30 с"
+.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "Показывать на 60 с"
+.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "Показать до следующего сканирования"
+.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" => "Справа"
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" => "Слева"
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" => "Над"
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" => "Под"
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" => "Сверху"
+.dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "Не показывать информацию..."
+.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "...если пристыкован или на поверхности"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "...на панели карты Галактики"
+.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonColumns.ToolTip: "Configure columns shown" @
+.extButtonColumnOrder.ToolTip: "Configure column order" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.buttonFilter.ToolTip: "Select what journal events to show" => "Настроить фильтр событий"
+.buttonField.ToolTip: "Filter out events" => "Настроить фильтр полей"
+.extButtonScanShow.ToolTip: "Configure scan display" @
+.extButtoScanPos.ToolTip: "Set position of scan display" @
+.extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.Target: "Target" => "Цель"
+.TVE: "View system on EDSM" => "Открыть систему в EDSM"
+.SPF: "Summary Panel: Filter out fields" => "Сводка: фильтры полей"
 
 SECTION UserControlStarDistance
 
-.addToExplorationToolStripMenuItem: "Add To Exploration" => "Добавить к панели исследований"
 .addToExpeditionToolStripMenuItem: "Add to Expedition" => "Добавить к панели экспедиции"
 .colName: "Name" => "Название"
 .colDistance: "Distance" => "Расстояние"
@@ -1007,6 +972,7 @@ SECTION UserControlStarList
 .comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" => "Число звезд: {0} {1}"
 .FSD: "This system has materials for FSD boost: " => "В этой системе есть материалы для вброса в FSD: "
@@ -1014,6 +980,7 @@ SECTION UserControlStarList
 .OB: "{0} Other bodies" => "число других небесных тел: {0}"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valueable bodies" @
+.scanorganics: "Show organic scans" @
 
 SECTION UserControlStats
 
@@ -1055,6 +1022,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" => "Базовых вбросов"
 .JetConeBoost: "Jet Cone Boost" => "Перегрузок FSD (джет)"
 .Scans: "Scans" => "Отсканировано"
+.OrganicScans: "Organic Scans" @
 .Mapped: "Mapped" => "Картографировано"
 .Scanvalue: "Scan value" => "Стоимость сканов"
 .Beltcluster: "Belt Cluster: " @
@@ -1099,6 +1067,7 @@ SECTION UserControlSynthesis
 .Available: "Avail." => "Доступно"
 .Notes: "Notes" => "Примечания"
 .Recipe: "Recipe" => "Рецепт"
+.Percentage: "%" @
 .chkHistoric: "Use Cursor Position" => "Использовать позицию курсора"
 .buttonMaterialFilter: "Material" => "Материалы"
 .buttonFilterLevel: "Level" => "Уровни"
@@ -1142,6 +1111,7 @@ SECTION UserControlSysInfo
 .labelTravel: "Travel" => "Полет"
 .labelGamemode: "Mode" => "Режим"
 .labelTarget: "Target" => "Цель"
+.labelSecurity: "Security" @
 .buttonEDSMTarget: "EDSM" @
 .toolStripSystem: "Display System Name" => "Показать название системы"
 .toolStripEDSM: "Display EDSM Buttons" => "Показать кнопки EDSM"
@@ -1153,6 +1123,7 @@ SECTION UserControlSysInfo
 .toolStripSystemState: "Display System State" => "Показать состояние системы"
 .toolStripNotes: "Display Notes" => "Показать примечания"
 .toolStripTarget: "Display Target" => "Показать цель"
+.displaySecurityToolStripMenuItem: "Display Security" @
 .toolStripShip: "Display Ship Information" => "Показать информацию о корабле"
 .toolStripFuel: "Display Fuel Level" => "Показать уровень топлива"
 .toolStripCargo: "Display Cargo Count" => "Показать кол-во груза"
@@ -1209,6 +1180,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
 .travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" => "История полетов: фильтры полей"
@@ -1274,10 +1246,11 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" => "Не сворачивать"
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "После первой группы"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "После первых пяти групп"
-.addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Панели исследований"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
+.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
+.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
 .addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
 
 SECTION UserControlCaptainsLog
@@ -1362,23 +1335,6 @@ SECTION UserControlTrilateration
 .NoSector: "No systems with unknown coordinates were found for the current sector." @
 .SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
 
-SECTION UserControlTrippanel
-
-.showEDSMStartButtonsToolStripMenuItem: "Show EDSM/Start Buttons" => "Показать кнопку EDSM/Старт"
-.showTargetToolStripMenuItem: "Show Target" => "Показать цель"
-.showTravelledDistanceToolStripMenuItem: "Show Travelled Distance" => "Показать пройденное расстояние"
-.showFuelLevelToolStripMenuItem: "Show Fuel Level" => "Показать уровень топлива"
-.showCurrentFSDRangeToolStripMenuItem: "Show Current FSD Range" => "Показать текущую дальность прыжка"
-.showAvgFSDRangeToolStripMenuItem: "Show Avg FSD Range" => "Показать среднюю дальность прыжка"
-.showMaxFSDRangeToolStripMenuItem: "Show Max FSD Range" => "Показать максимальную дальность прыжка"
-.showFSDRangeToolStripMenuItem: "Show FSD Range" => "Показать дальность прыжка"
-.jump: "jump" => "прыжок"
-.jumps: "jumps" => "прыжк."
-.NoT: " -> Target not set" => " -> Цель не определена"
-.FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Показать, если вы первооткрыватель согласно EDSM"
-.UKN: "System {0} unknown to EDSM" => "Система {0} неизвестна EDSM"
-.Left: "Left" @
-
 SECTION UserControlMaterialTrader
 
 .UpgradeCol: "From" @
@@ -1416,6 +1372,9 @@ SECTION UserControlMiningOverlay
 .above: "% Above" @
 .dist: "Distribution" @
 .Limcargo: "Limpets left {0}, Cargo left {1}" @
+.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
+.buttonExtExcel.ToolTip: "Export" @
+.extComboBoxChartOptions.ToolTip: "Select chart options" @
 
 SECTION UserControlFactions
 
@@ -1463,6 +1422,13 @@ SECTION UserControlFactions
 .MissionsInProgress: "Missions In Progress: " @
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
+
+SECTION UserControlOrganics
+
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
 
 SECTION ScanDisplayForm
 
@@ -1527,3 +1493,5 @@ SECTION UserControlSuitsWeapons
 .CWClipSize: "Clip Size" @
 .CWHopper: "Hopper Size" @
 .CWRange: "Range m" @
+.CWDPS: "DPS" @
+.CWHSD: "Head Shot Mult" @

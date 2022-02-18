@@ -29,16 +29,18 @@ SECTION StartUp
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery Mode sans échec"
-.buttonCancel: "Cancel" => "Annuler"
-.buttonNormal: "Run" => "Démarrer"
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Supprimer/Reconstuire la base de données des systèmes"
 .buttonDbs: "Move Databases" => "Déplacer la base de données"
-.buttonLang: "Reset Language to English" => "Remettre la langue en Anglais"
-.button1: "Remove all Action Packs" => "Retirer tous les Actions Packs"
-.buttonRemoveDLLs: "Remove all Extension DLLs" => "Retirer toutes les extensions DLL"
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "RAZ Onglets, Fermer les fenêtres"
+.buttonRun: "Run" => "Démarrer"
 .buttonPositions: "Reset Window Positions" => "RAZ des positions de fenêtres"
 .buttonResetTheme: "Reset Theme" => "RAZ du thème"
+.buttonCancel: "Cancel" => "Annuler"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Supprimer/Reconstuire la base de données des systèmes"
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "RAZ Onglets, Fermer les fenêtres"
+.buttonRemoveDLLs: "Remove all Extension DLLs" => "Retirer toutes les extensions DLL"
+.buttonActionPacks: "Remove all Action Packs" => "Retirer tous les Actions Packs"
+.buttonLang: "Reset Language to English" => "Remettre la langue en Anglais"
+.buttonResetDBLoc: "Reset DB Location" @
+.buttonBackup: "Backup Database" @
 
 SECTION PopOutInfo
 
@@ -100,8 +102,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" => "Calcul d'itinéraire"
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Planificateur d'expédition"
 .Expedition.Title: "Expedition" => "Expédition"
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Planificateur d'exploration, dresse une liste des étoiles à explorer"
-.Exploration.Title: "Exploration" @
 .SystemInformation.Description: "System Information" => "Information système"
 .SystemInformation.Title: "System Information" => "Information système"
 .Spanel.Description: "Summary panel overlay" => "Panneau superposé de résumé (overlay)"
@@ -148,6 +148,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" @
 .SuitsWeapons.Title: "Suits & Weapons" @
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 
@@ -198,7 +204,6 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier Forum - fil de discussion"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Page du projet (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Rapport de bug / Idées"
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Comment démarrer en mode sans échec pour réinitialiser des paramètres"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Vérifier les mises à jour"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Click droit pour ajouter/supprimer des onglets, Click gauche/glisser pour réorganiser les onglets"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Utiliser pour choisir un nouveau profil ou éditer les paramètres du profil"
@@ -244,7 +249,6 @@ SECTION EDDiscoveryForm
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Téléchargement des données stellaires désactivé. Vérifier les paramètres pour le réactiver"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Synchronisation des bases de données en cours ou en attente, merci de patienter"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Ceci va nécéssiter beaucoup de temps et de bande passante\r\nEtes vous sûr de vouloir continuer ?"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Pour démarrer en mode sans échec : quitter le programme, maintenir la touche MAJ\r\net double cliquer sur l'icône d'EDD. Vous devriez obtenir la boite de dialogue du mode sans échec.\r\nVous pouvez réinitialiser des paramètres et déplacer les bases de données à d'autres emplacements"
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Confirmez que vous souhaitez remettre à zero tout l'historique du commandant actuel"
 .NoRel: "No new release found" => "Pas de nouvelle version"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confirmez que vous supprimez les doublons FSD du commandant actuel"
@@ -294,7 +298,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Rafraichissement de l'historique terminé."
 .Maps: "Checking for new EDDiscovery maps" => "Vérification de nouvelles cartes sur EDDiscovery"
 .EXPD: "Checking for new Expedition data" => "Vérification de nouvelles données d'expédition"
-.EXPL: "Checking for new Exploration data" => "Vérification de nouvelles données d'exploration"
 
 SECTION BookmarkForm
 
@@ -434,7 +437,7 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
 
 SECTION ExportForm
 
-ExportForm: "ExportForm" @
+ExportForm: "Export Data" @
 .checkBoxRawJournal: "Export Journals" => "Exporter les journaux"
 .buttonCancel: "Cancel" => "Annuler"
 .labelCVSSep: "CSV Separator" => "Séparateur CSV"
@@ -443,9 +446,11 @@ ExportForm: "ExportForm" @
 .radioButtonComma: "Comma" => "Virgule"
 .checkBoxIncludeHeader: "Include Header" => "Inclure les entêtes"
 .checkBoxCustomAutoOpen: "Open" => "Ouvrir"
-.label_index: "Export" => "Exporter"
 .ECH: "Export current data {0}" => "Exporte les donnnées courantes {0}"
 .JF: "Journal file" => "Fichier journal"
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 

@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip1, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             shiptexttranslation = labelShip.Text;
         }
@@ -599,13 +599,13 @@ namespace EDDiscovery.UserControls
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
-                textBoxTarget.SetTipDynamically(toolTip1, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".T(EDTx.UserControlSysInfo_Pos), x, y, z));
+                textBoxTarget.SetTipDynamically(toolTip, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".T(EDTx.UserControlSysInfo_Pos), x, y, z));
             }
             else
             {
                 textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
-                textBoxTarget.SetTipDynamically(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".T(EDTx.UserControlSysInfo_Target));
+                textBoxTarget.SetTipDynamically(toolTip, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".T(EDTx.UserControlSysInfo_Target));
             }
         }
 

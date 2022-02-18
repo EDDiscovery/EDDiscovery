@@ -177,6 +177,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewUIEvent += OnNewUIEvent;
 
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             

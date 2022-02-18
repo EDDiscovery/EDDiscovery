@@ -78,7 +78,6 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
-
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater
 
 #if PLAYTHRU

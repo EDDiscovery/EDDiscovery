@@ -29,16 +29,18 @@ SECTION StartUp
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @
-.buttonCancel: "Cancel" @
-.buttonNormal: "Run" @
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
 .buttonDbs: "Move Databases" @
-.buttonLang: "Reset Language to English" @
-.button1: "Remove all Action Packs" @
-.buttonRemoveDLLs: "Remove all Extension DLLs" @
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
+.buttonRun: "Run" @
 .buttonPositions: "Reset Window Positions" @
 .buttonResetTheme: "Reset Theme" @
+.buttonCancel: "Cancel" @
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
+.buttonRemoveDLLs: "Remove all Extension DLLs" @
+.buttonActionPacks: "Remove all Action Packs" @
+.buttonLang: "Reset Language to English" @
+.buttonResetDBLoc: "Reset DB Location" @
+.buttonBackup: "Backup Database" @
 
 SECTION PopOutInfo
 
@@ -100,8 +102,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" => "Itinerario"
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Pianifica di Spedizione, prepara un itinerario di spedizione"
 .Expedition.Title: "Expedition" => "Spedizioni"
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Pianifica di Esplorazione, prepara una lista di sistemi da esplorare"
-.Exploration.Title: "Exploration" => "Esplorazione"
 .SystemInformation.Description: "System Information" => "Informazioni sul Sistema"
 .SystemInformation.Title: "System Information" => "Informazioni sul Sistema"
 .Spanel.Description: "Summary panel overlay" => "Sommario"
@@ -148,6 +148,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" @
 .SuitsWeapons.Title: "Suits & Weapons" @
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 
@@ -198,7 +204,6 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "Forum di &Frontier"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Pagine del progetto (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reporta un Problema o un Suggerimento"
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Come avviare il programma in Modo di Sicurezza per ridefinire vari parametri"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Verifica per aggiornamenti"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Premi con il bottone destro per aggiungere/rimuovere una scheda, trascina con il sinistro per riordinare"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
@@ -244,7 +249,6 @@ SECTION EDDiscoveryForm
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dati stellari disabilitato. Abilitarlo nel setup principale"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzazione al banco dati in corso, si prega di aspettare"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operazione pu� necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Per entrare nel modo sicuro, esci dal programma, premi shift\r\ne clicca sull'icona del programma. Cos� facendo si aprir� il pannelo di dialogo del modo sicuro.\r\nLi puoi reimpostare vari parametri e muovere i banchi dati in altre cartelle o dischi."
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Conferma il desiderio di reimpostare tutti i registri al comandante attuale"
 .NoRel: "No new release found" => "Nessuna nuova versione trovata"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
@@ -294,7 +298,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Ricaricamento dello storico completato"
 .Maps: "Checking for new EDDiscovery maps" => "Verificando per nuove mappe EDDiscovery"
 .EXPD: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
-.EXPL: "Checking for new Exploration data" @
 
 SECTION BookmarkForm
 
@@ -434,7 +437,7 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Registro di Viaggio"
 
 SECTION ExportForm
 
-ExportForm: "ExportForm" => "Esporta"
+ExportForm: "Export Data" => "Esporta"
 .checkBoxRawJournal: "Export Journals" => "Esporta Giornale"
 .buttonCancel: "Cancel" => "Cancella"
 .labelCVSSep: "CSV Separator" => "Separatore CVS"
@@ -443,9 +446,11 @@ ExportForm: "ExportForm" => "Esporta"
 .radioButtonComma: "Comma" => "Virgola"
 .checkBoxIncludeHeader: "Include Header" => "Includi l'intestazione"
 .checkBoxCustomAutoOpen: "Open" => "Apri in excel"
-.label_index: "Export" => "Esporta"
 .ECH: "Export current data {0}" => "Esporta lo storico corrente a {0}"
 .JF: "Journal file" => "File di Giornale"
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 

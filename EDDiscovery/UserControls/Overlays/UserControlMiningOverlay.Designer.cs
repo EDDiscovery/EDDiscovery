@@ -43,11 +43,13 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.ExtPictureBox();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
             this.extCheckBoxZeroRefined = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extComboBoxChartOptions = new ExtendedControls.ExtComboBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.extPanelRollUp.SuspendLayout();
             this.SuspendLayout();
@@ -62,6 +64,9 @@ namespace EDDiscovery.UserControls
             // 
             // extPanelRollUp
             // 
+            this.extPanelRollUp.AutoHeight = false;
+            this.extPanelRollUp.AutoHeightWidthDisable = false;
+            this.extPanelRollUp.AutoWidth = false;
             this.extPanelRollUp.Controls.Add(this.extCheckBoxZeroRefined);
             this.extPanelRollUp.Controls.Add(this.buttonExtExcel);
             this.extPanelRollUp.Controls.Add(this.extComboBoxChartOptions);
@@ -99,6 +104,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxZeroRefined.Text = ">0";
             this.extCheckBoxZeroRefined.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.extCheckBoxZeroRefined.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxZeroRefined, "Display items with zero refined items");
             this.extCheckBoxZeroRefined.UseVisualStyleBackColor = true;
             // 
             // buttonExtExcel
@@ -109,6 +115,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 60;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Export");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
@@ -131,8 +138,8 @@ namespace EDDiscovery.UserControls
             this.extComboBoxChartOptions.SelectedValue = null;
             this.extComboBoxChartOptions.Size = new System.Drawing.Size(225, 21);
             this.extComboBoxChartOptions.TabIndex = 3;
-            this.extComboBoxChartOptions.Text = "";
             this.extComboBoxChartOptions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.extComboBoxChartOptions, "Select chart options");
             this.extComboBoxChartOptions.ValueMember = "";
             // 
             // UserControlMiningOverlay
@@ -157,5 +164,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtComboBox extComboBoxChartOptions;
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtCheckBox extCheckBoxZeroRefined;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

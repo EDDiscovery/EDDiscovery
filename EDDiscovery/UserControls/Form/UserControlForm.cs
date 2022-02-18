@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
 
             Invalidate();
 
-            BaseUtils.Translator.Instance.Translate(toolTip1,this);
+            BaseUtils.Translator.Instance.Translate(toolTip,this);
             //System.Diagnostics.Debug.WriteLine("UCF Init-");
         }
 

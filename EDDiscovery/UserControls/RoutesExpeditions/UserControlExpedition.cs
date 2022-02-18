@@ -37,6 +37,7 @@ namespace EDDiscovery.UserControls
 
         private string[] displayfilters;        // display filters
         private string dbDisplayFilters = "DisplayFilters";
+        private string dbRolledUp = "RolledUp";
 
         private string dbEDSM = "EDSM";
 
@@ -74,6 +75,8 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
+            rollUpPanelTop.PinState = GetSetting(dbRolledUp, true);
+
             autoupdateedsm = new Timer() { Interval = 1000 };
             autoupdateedsm.Tick += Autoupdateedsm_Tick;
             autoupdateedsm.Start();     // something to display..
@@ -81,6 +84,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
             BaseUtils.Translator.Instance.Translate(contextMenuCopyPaste, this);
+            rollUpPanelTop.SetToolTip(toolTip);
         }
 
         public override void LoadLayout()
@@ -112,6 +116,7 @@ namespace EDDiscovery.UserControls
             autoupdateedsm.Stop();
 
             DGVSaveColumnLayout(dataGridView);
+            PutSetting(dbRolledUp, rollUpPanelTop.PinState);
 
             discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;

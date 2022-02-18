@@ -29,16 +29,18 @@ SECTION StartUp
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
-.buttonCancel: "Cancel" => "Отмена"
-.buttonNormal: "Run" => "Запуск"
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
 .buttonDbs: "Move Databases" => "Переместить базу данных"
-.buttonLang: "Reset Language to English" => "Сбросить язык"
-.button1: "Remove all Action Packs" => "Удалить все Action Packs"
-.buttonRemoveDLLs: "Remove all Extension DLLs" => "Удалить все dll дополнений"
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Сбросить вкладки, удалить отдельные окна"
+.buttonRun: "Run" => "Запуск"
 .buttonPositions: "Reset Window Positions" => "Сбросить положение окна"
 .buttonResetTheme: "Reset Theme" => "Сбросить тему"
+.buttonCancel: "Cancel" => "Отмена"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Сбросить вкладки, удалить отдельные окна"
+.buttonRemoveDLLs: "Remove all Extension DLLs" => "Удалить все dll дополнений"
+.buttonActionPacks: "Remove all Action Packs" => "Удалить все Action Packs"
+.buttonLang: "Reset Language to English" => "Сбросить язык"
+.buttonResetDBLoc: "Reset DB Location" @
+.buttonBackup: "Backup Database" @
 
 SECTION PopOutInfo
 
@@ -100,8 +102,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" => "Поиск маршрута"
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Планировщик экспедиций, построение маршрута экспедиции"
 .Expedition.Title: "Expedition" => "Экспедиции"
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Планировщик исследований, создание списка систем для исследования"
-.Exploration.Title: "Exploration" => "Исследования"
 .SystemInformation.Description: "System Information" => "Информация о системе"
 .SystemInformation.Title: "System Information" => "О системе"
 .Spanel.Description: "Summary panel overlay" => "Сводка (оверлей)"
@@ -148,6 +148,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" @
 .SuitsWeapons.Title: "Suits & Weapons" @
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 
@@ -198,7 +204,6 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "Тема на Frontier Forum"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "Страница проекта (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "Сообщить о проблеме / идее"
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Запуск в безопасном режиме"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "Проверить обновления"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Правая кнопка мыши — добавить/удалить вкладку, перетаскивание с зажатой левой кнопкой — сортировка"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Выберите новый профиль или измените настройки профиля"
@@ -244,7 +249,6 @@ SECTION EDDiscoveryForm
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Загрузка данных о системах отключена. Пожалуйста, включите ее в настройках"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Идет синхронизация с базой данных, пожалуйста, подождите"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "На это может уйти много времени и трафика\r\nВы действительно хотите это сделать?"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Для входа в безопасный режим запустите программу, удерживая клавишу shift.\r\nОткроется меню безопасного режима, в котором вы сможете сбросить различные\r\nпараметры или переместить базу в другое место."
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Вы действительно хотите сбросить все записи истории для текущего командира?"
 .NoRel: "No new release found" => "Новая версия программы не найдена"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Вы действительно хотите удалить все дубликаты FSD записей для текущего командира?"
@@ -294,7 +298,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Обновление истории завершено"
 .Maps: "Checking for new EDDiscovery maps" => "Ищу новые карты EDDiscovery"
 .EXPD: "Checking for new Expedition data" => "Ищу новые данные экспедиций"
-.EXPL: "Checking for new Exploration data" => "Ищу новые данные исследований"
 
 SECTION BookmarkForm
 
@@ -434,7 +437,7 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Назначить с
 
 SECTION ExportForm
 
-ExportForm: "ExportForm" => "Экспорт"
+ExportForm: "Export Data" => "Экспорт"
 .checkBoxRawJournal: "Export Journals" => "Экспорт журналов"
 .buttonCancel: "Cancel" => "Отмена"
 .labelCVSSep: "CSV Separator" => "Разделитель CSV"
@@ -443,9 +446,11 @@ ExportForm: "ExportForm" => "Экспорт"
 .radioButtonComma: "Comma" => "Запятая"
 .checkBoxIncludeHeader: "Include Header" => "С заголовками"
 .checkBoxCustomAutoOpen: "Open" => "Открыть в Excel"
-.label_index: "Export" => "Экспорт"
 .ECH: "Export current data {0}" => "Экспорт текущей выкладки «История» в {0}"
 .JF: "Journal file" => "Файл журнала"
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 

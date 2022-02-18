@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 

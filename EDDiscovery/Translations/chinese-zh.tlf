@@ -29,16 +29,18 @@ SECTION StartUp
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @
-.buttonCancel: "Cancel" @
-.buttonNormal: "Run" @
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
 .buttonDbs: "Move Databases" @
-.buttonLang: "Reset Language to English" @
-.button1: "Remove all Action Packs" @
-.buttonRemoveDLLs: "Remove all Extension DLLs" @
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
+.buttonRun: "Run" @
 .buttonPositions: "Reset Window Positions" @
 .buttonResetTheme: "Reset Theme" @
+.buttonCancel: "Cancel" @
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
+.buttonRemoveDLLs: "Remove all Extension DLLs" @
+.buttonActionPacks: "Remove all Action Packs" @
+.buttonLang: "Reset Language to English" @
+.buttonResetDBLoc: "Reset DB Location" @
+.buttonBackup: "Backup Database" @
 
 SECTION PopOutInfo
 
@@ -100,8 +102,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" => "航线规划"
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "远航考察规划助手，创建远航航线"
 .Expedition.Title: "Expedition" => "远航"
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "探索规划助手，创建一个探索目标星系列表"
-.Exploration.Title: "Exploration" => "探索"
 .SystemInformation.Description: "System Information" => "星系信息"
 .SystemInformation.Title: "System Information" => "星系信息"
 .Spanel.Description: "Summary panel overlay" => "概要面板(遮罩)"
@@ -148,6 +148,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" @
 .SuitsWeapons.Title: "Suits & Weapons" @
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 
@@ -198,7 +204,6 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier论坛"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "项目GitHub页面(&P)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "反馈问题/提供建议(&R)"
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "查看如何进入安全模式恢复之前的设置"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "检查更新(&C)"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "右击添加/移除标签页，左键拖拽排序"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "选择新的配置文件或更改配置文件设置"
@@ -244,7 +249,6 @@ SECTION EDDiscoveryForm
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "星系数据下载已被禁用。从设置里重新启用。"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "同步数据至数据库正在进行中或者即将开始，请稍等"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "这个操作将花费很长时间并会占用很多宽带\r\n你确定要继续？"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "如需进入安全模式的话，先退出该程序，按住Shift键并双击EDDiscovery的程序图标。\r\n这样你就会进入安全模式的对话框。\r\n在安全模式下你可以重置多种设置参数，以及移动数据库位置。"
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "请确认你想要把所有航行记录移动到当前指挥官名下"
 .NoRel: "No new release found" => "已是最新版本"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "请确认你想要移除当前指挥官名下重复的FSD跳跃记录"
@@ -294,7 +298,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "航行记录刷新完成。"
 .Maps: "Checking for new EDDiscovery maps" => "检查新的EDDiscovery地图中"
 .EXPD: "Checking for new Expedition data" => "检查新的远航数据中"
-.EXPL: "Checking for new Exploration data" => "检查新的探索数据中"
 
 SECTION BookmarkForm
 
@@ -434,7 +437,7 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "指向至新的星系
 
 SECTION ExportForm
 
-ExportForm: "ExportForm" => "导出"
+ExportForm: "Export Data" => "导出"
 .checkBoxRawJournal: "Export Journals" => "导出为游戏日志文件"
 .buttonCancel: "Cancel" => "取消"
 .labelCVSSep: "CSV Separator" => "CSV 分隔符"
@@ -443,9 +446,11 @@ ExportForm: "ExportForm" => "导出"
 .radioButtonComma: "Comma" => "逗号"
 .checkBoxIncludeHeader: "Include Header" => "包含表头"
 .checkBoxCustomAutoOpen: "Open" => "导出后打开"
-.label_index: "Export" => "导出"
 .ECH: "Export current data {0}" => "导出当前的航行记录视图为{0}"
 .JF: "Journal file" => "游戏日志文件"
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
