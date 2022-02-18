@@ -157,7 +157,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" => "Notizen"
 .RecipeCol: "Recipe" => "Rezept"
 .EngineersCol: "Engineers" => "Ingenieure"
-.PercentageCol: "%" @
+.PercentageCol: "%" => "%"
 .chkHistoric: "Use Cursor Positon" => "Verwende Zeigerposition"
 .buttonClear: "Clear" => "Leeren"
 .buttonFilterMaterial: "Material" => "Material"
@@ -192,17 +192,17 @@ SECTION UserControlEstimatedValues
 .FirstDiscMapped: "First Discovered Mapped" => "Zuerst entdeckt und kartographiert"
 .EstValue: "Current Value" => "Derzeitiger Wert"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Hole und zeige Informationen von EDSM"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Grün zeigt alle Materialien, Rot entfernt Materialien mit Lagerstand Null" 
+.extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" => "Zeige alle Wete, auch jene die unerreichbar sind."
 .SV: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
 
 SECTION UserControlExpedition
 
-.CurDist: "Cur. Dist" @
+.CurDist: "Cur. Dist" => "Akt.Entf."
 .Visits: "Visits" => "Besuche"
 .Scans: "Scans" => "Scans"
-.FSSBodies: "FSS Bodies" @
-.KnownBodies: "Known Bodies" @
+.FSSBodies: "FSS Bodies" => "VSS Körper"
+.KnownBodies: "Known Bodies" => "Bekannte Körper"
 .Stars: "Stars" => "Sterne"
 .Info: "Info" => "Info"
 .extButtonLoadRoute.ToolTip: "Load Route" => "Laden"
@@ -212,13 +212,13 @@ SECTION UserControlExpedition
 .extButtonImportFile.ToolTip: "Import File" => "Importiere Datei"
 .extButtonImportRoute.ToolTip: "Import from Route Panel" => "Importiere Route"
 .extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Importiere Nav-Route"
-.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" => "Importiere letzte Nav-Route"
 .buttonExtExport.ToolTip: "Export to File" => "Exportiere"
 .extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Auf 3D-Karte zeigen"
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Systeme hinzufügen"
-.extButtonDisplayFilters.ToolTip: "Select filters on Info" @
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
-.AddSys: "Add Systems" @
+.extButtonDisplayFilters.ToolTip: "Select filters on Info" => "Wähle Filter für Info"
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." => "Zeige/Verberge EDSM-Körperdaten"
+.AddSys: "Add Systems" => "System hinzufügen"
 .SystemName: "System Name" => "Systemname"
 .Distance: "Dist." => "Entf."
 .Note: "Note" => "Notiz"
@@ -244,7 +244,7 @@ SECTION UserControlExpedition
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Der derzeitige Routennamen steht im Konflikt mit einer bekannten Expedition.\r\nBitte spezifiziere einen neuen Namen um zu speichern."
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Warnung: Route exisitiert bereits. Willst du sie überschreiben?"
 .EDSMUnk: "System not known to EDSM" => "System ist EDSM nicht bekannt"
-.NoScanInfo: "No local scan info" @
+.NoScanInfo: "No local scan info" => "Keine lokale Scaninformation"
 .ColumnX: "X" => "X"
 .ColumnY: "Y" => "Y"
 .ColumnZ: "Z" => "Z"
@@ -258,7 +258,7 @@ SECTION UserControlJournalGrid
 .ColumnText: "Information" => "Information"
 .labelTime: "Time" => "Zeit"
 .labelSearch: "Search" => "Suche"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "Text eingeben um in allen Feldern danach zu suchen"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten im Gitter an Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Zeiger automatisch zum neuesten Eintrag bewegen sobald dieser eintrifft"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Einträge auf Basis von Ereignisart ausfiltern"
@@ -429,20 +429,20 @@ SECTION UserControlSurveyor
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "Im FSS-Modus nicht verbergen"
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Verbirg bereits kartographierte Körper"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Systeminformation immer anzeigen"
-.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
-.extButtonPlanets.ToolTip: "Planet Filter" @
-.extButtonStars.ToolTip: "Star Filter" @
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extButtonAlignment.ToolTip: "Alignment" @
-.extButtonFont.ToolTip: "Font" @
-.extButtonFSS.ToolTip: "FSS Signal Selection" @
-.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.extButtonSetRoute.ToolTip: "Select route to follow" @
-.extButtonControlRoute.ToolTip: "Route Settings" @
-.navroute: "TX Nav Route" @
-.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
-.fsssignals: "List signals to display, semicolon seperated" @
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" => "Importiere letzte Nav-Route"
+.extButtonPlanets.ToolTip: "Planet Filter" => "Planetenfilter"
+.extButtonStars.ToolTip: "Star Filter" => "Sternenfilter"
+.extButtonShowControl.ToolTip: "Display Settings" => "Anzeigeeinstellungen"
+.extButtonAlignment.ToolTip: "Alignment" => "Ausrichtung"
+.extButtonFont.ToolTip: "Font" => "Schriftart"
+.extButtonFSS.ToolTip: "FSS Signal Selection" => "VSS-Signalauswahl"
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" => "EDSM-Abfrage umschalten"
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Zeilenumbruch"
+.extButtonSetRoute.ToolTip: "Select route to follow" => "Wähle zu verfolgende Route"
+.extButtonControlRoute.ToolTip: "Route Settings" => "Routeneinstellungen"
+.navroute: "Nav Route" => "Nav-Route"
+.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Durchschn. {0:N1} Lj, Derzeit {1:N1} Lj, Maximal {2:N1} Lj"
+.fsssignals: "List signals to display, semicolon seperated" => "Trage anzuzeigende Signale ein, Semikolon als Trennzeichen"
 
 SECTION MissionListUserControl
 
@@ -628,7 +628,7 @@ SECTION UserControlRoute
 .buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Öffne das Routenendsystem in EDSM"
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Öffne das Routenstartsystem in EDSM"
 .buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Kopiere das Zielsystem als Routenstart"
-.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
+.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" => "Frage EDSM nach Sternen falls keine in der Datenbank vorhanden sind"
 .cmd3DMap.ToolTip: "Show route on 3D Map" => "Zeige Route in 3d-Karte"
 .textBox_From.ToolTip: "Select system to start the route" => "Wähle System um Route zu starten"
 .textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "Deine Sprungreichweite, oder Suchradius für lange Sprünge"
@@ -695,8 +695,8 @@ SECTION UserControlScan
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" => "Rechtsklick auf Panel um Werkzeugleiste zu zeigen/verbergen"
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" => "Rechtsklick auf Panel um Werkzeugleiste zu zeigen/verbergen"
 .SystemValue: "Show system and value in main display" => "Zeige System und Wert in der Hauptanzeige"
-.extButtonFilter.ToolTip: "Filter Bodies" @
-.extButtonDisplayFilters.ToolTip: "Settings" @
+.extButtonFilter.ToolTip: "Filter Bodies" => "Filtere Körper"
+.extButtonDisplayFilters.ToolTip: "Settings" => "Einstellungen"
 .AllG: "Show G on all planets" => "Zeige 'G' bei allen Planeten"
 .HabZone: "Show Habitation Zone" => "Zeige habitable Zone"
 .StarClass: "Show Classes of Stars" => "Zeige Sternenklassen"
@@ -713,7 +713,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" => "Ringe"
 .materialsToolStripMenuItem: "Materials" => "Materialien"
 .valuesToolStripMenuItem: "Values" => "Werte"
-.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" => "EDSM-Abfrage umschalten"
 .MainStar: "Main Star" => "Hauptstern"
 .Mass: "Mass" => "Masse"
 .Radius: "Radius" => "Radius"
@@ -734,8 +734,8 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "Klasse"
 .colDistance: "Distance" => "Entfernung"
 .colBriefing: "Information" => "Information"
-.extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.extButtonShowControl.ToolTip: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
+.extButtonHabZones.ToolTip: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone" 
 
 SECTION UserControlSettings
 
@@ -846,9 +846,9 @@ SECTION UserControlSettings
 .GameTime: "Game Time" => "Spielzeit"
 .Local: "Local" => "Lokal"
 .NoMap: "No map available!" => "Keine Karte verfügbar!"
-.extGroupBoxDLLPerms: "DLLs" => "DLL Bewilligungen"
-.extButtonDLLPerms: "Permissions" => "Konfigurieren"
-.extButtonDLLConfigure: "Configure" @
+.extGroupBoxDLLPerms: "DLLs" => "DLLs"
+.extButtonDLLPerms: "Permissions" => "Bewilligungen"
+.extButtonDLLConfigure: "Configure" => "Konfigurieren"
 
 SECTION UserControlShipYards
 
@@ -919,17 +919,17 @@ SECTION UserControlSpanel
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "Zeige keine Informationen wenn..."
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "... angedockt oder gelandet"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "... in der Galaxiekarte"
-.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
-.extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonColumns.ToolTip: "Configure columns shown" @
-.extButtonColumnOrder.ToolTip: "Configure column order" @
-.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" => "Verbirg den Titel wenn versteckt"
+.extButtonShowControl.ToolTip: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
+.extButtonColumns.ToolTip: "Configure columns shown" => "Konfiguriere sichtbare Spalten"
+.extButtonColumnOrder.ToolTip: "Configure column order" => "Konfiguriere Spaltenreihenfolge"
+.extButtonHabZones.ToolTip: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone"
 .buttonFilter.ToolTip: "Select what journal events to show" => "Konfiguriere Ereignisfilter..."
 .buttonField.ToolTip: "Filter out events" => "Konfiguriere Feldfilter..."
-.extButtonScanShow.ToolTip: "Configure scan display" @
-.extButtoScanPos.ToolTip: "Set position of scan display" @
-.extButtonFont.ToolTip: "Font" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extButtonScanShow.ToolTip: "Configure scan display" => "Konfiguriere Scananzeige"
+.extButtoScanPos.ToolTip: "Set position of scan display" => "Position der Scananzeige festlegen"
+.extButtonFont.ToolTip: "Font" => "Schriftart"
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Zeilenumbruch"
 .Target: "Target" => "Ziel"
 .TVE: "View system on EDSM" => "Zeige System auf EDSM"
 .SPF: "Summary Panel: Filter out fields" => "Zusammenfassungspaneel: Felder ausfiltern"
@@ -972,7 +972,7 @@ SECTION UserControlStarList
 .comboBoxTime.ToolTip: "Select the entries by age" => "Wähle die Einträge nach Alter"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" => "Zeige Scananzeige"
 .Value: "Scan Value" => "Scanwert"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "Text eingeben um in jedem Feld danach zu suchen"
 .Total: "Total" => "Gesamt"
 .CS: "{0} Star(s) {1}" => "{0} stern(e) {1}"
 .FSD: "This system has materials for FSD boost: " => "Dieses System hat Materialien für FSA-Einspeisung: "
@@ -980,7 +980,7 @@ SECTION UserControlStarList
 .OB: "{0} Other bodies" => "{0} andere Körper"
 .JUMP: "Show/Hide presence of Jumponium Materials" => "Zeige/Verbirg die Präsenz von Sprungmaterialien"
 .valueables: "Show valueable bodies" => "Zeige wertvolle Körper"
-.scanorganics: "Show organic scans" @
+.scanorganics: "Show organic scans" => "Zeige organische Scans"
 
 SECTION UserControlStats
 
@@ -1022,7 +1022,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" => "einfacher Boost"
 .JetConeBoost: "Jet Cone Boost" => "Kegelstrahlboost"
 .Scans: "Scans" => "Scans"
-.OrganicScans: "Organic Scans" @
+.OrganicScans: "Organic Scans" => "Organische Scans"
 .Mapped: "Mapped" => "Kartographiert"
 .Scanvalue: "Scan value" => "Scanwert"
 .Beltcluster: "Belt Cluster: " => "Gürtelgruppen"
@@ -1067,7 +1067,7 @@ SECTION UserControlSynthesis
 .Available: "Avail." => "Verfügb."
 .Notes: "Notes" => "Notizen"
 .Recipe: "Recipe" => "Rezept"
-.Percentage: "%" @
+.Percentage: "%" => "%"
 .chkHistoric: "Use Cursor Position" => "Verwende Zeigerposition"
 .buttonMaterialFilter: "Material" => "MAterial"
 .buttonFilterLevel: "Level" => "Stufe"
@@ -1111,7 +1111,7 @@ SECTION UserControlSysInfo
 .labelTravel: "Travel" => "Reise"
 .labelGamemode: "Mode" => "Modus"
 .labelTarget: "Target" => "Ziel"
-.labelSecurity: "Security" @
+.labelSecurity: "Security" => "Sicherheit"
 .buttonEDSMTarget: "EDSM" => "EDSM"
 .toolStripSystem: "Display System Name" => "Zeige Systemname"
 .toolStripEDSM: "Display EDSM Buttons" => "Zeige EDSM-Knopf"
@@ -1123,7 +1123,7 @@ SECTION UserControlSysInfo
 .toolStripSystemState: "Display System State" => "Zeige Systemzustand"
 .toolStripNotes: "Display Notes" => "Zeige Notizen"
 .toolStripTarget: "Display Target" => "Zeige Ziel"
-.displaySecurityToolStripMenuItem: "Display Security" @
+.displaySecurityToolStripMenuItem: "Display Security" => "Zeige Sicherheit"
 .toolStripShip: "Display Ship Information" => "Zeige Schiffsinformation"
 .toolStripFuel: "Display Fuel Level" => "Zeige Treibstofffüllstand"
 .toolStripCargo: "Display Cargo Count" => "Zeige Frachtenzähler"
@@ -1180,7 +1180,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "Text eingeben um in jedem Feld danach zu suchen"
 .travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" => "Reisegitter im Debugmodus"
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" => "Zeige Linien in 'besuchtes System'-Vordergrundfarbe"
 .THF: "History: Filter out fields" => "Historie: Felder ausfiltern"
@@ -1246,11 +1246,11 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" => "Aus"
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "Nach Erstem"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "Nach 5"
-.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Führe Auswahl durch IGAU aus (Debug)"
+.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Führe Auswahl über IGAU aus (Debug)"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
-.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Führe Auswahl durch EDAstro aus (Debug)"
-.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
-.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Führe Auswahl über EDAstro aus (Debug)"
+.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" => "Führe Auswahl über EDDN-Testserver aus (Debug)"
+.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" => "Sende Auswahl an DLLs (Debug)"
 .addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" => "Expeditionspanel"
 
 SECTION UserControlCaptainsLog
@@ -1372,9 +1372,9 @@ SECTION UserControlMiningOverlay
 .above: "% Above" => "% Über"
 .dist: "Distribution" => "Verteilung"
 .Limcargo: "Limpets left {0}, Cargo left {1}" => "Drohnen übrig {0}, Fracht übrig {1}"
-.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
-.buttonExtExcel.ToolTip: "Export" @
-.extComboBoxChartOptions.ToolTip: "Select chart options" @
+.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" => "Zeige Objekte mit null raffinierten Gegenständen"
+.buttonExtExcel.ToolTip: "Export" => "Exportieren"
+.extComboBoxChartOptions.ToolTip: "Select chart options" => "Wähle Tabellenoptionen"
 
 SECTION UserControlFactions
 
@@ -1425,10 +1425,10 @@ SECTION UserControlFactions
 
 SECTION UserControlOrganics
 
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extButtonFont.ToolTip: "Font" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
+.extButtonShowControl.ToolTip: "Display Settings" => "Anzeigeeinstellungen"
+.extButtonFont.ToolTip: "Font" => "Schriftart"
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Zeilenumbruch"
+.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" => "Zeige unvollständige Scans"
 
 SECTION ScanDisplayForm
 
@@ -1493,5 +1493,5 @@ SECTION UserControlSuitsWeapons
 .CWClipSize: "Clip Size" => "Magazingröße"
 .CWHopper: "Hopper Size" => "Behältergröße"
 .CWRange: "Range m" => "Reichweite m"
-.CWDPS: "DPS" @
-.CWHSD: "Head Shot Mult" @
+.CWDPS: "DPS" => "SPS"
+.CWHSD: "Head Shot Mult" => "Kopfschussmulti"

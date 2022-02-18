@@ -148,12 +148,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" => "Anzahl der Mikroressourcen"
 .SuitsWeapons.Title: "Suits & Weapons" => "Anzüge & Waffen"
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" => "Anzüge, Konfigurationen, Waffen"
-.Map3D.Title: "3D Map" @
-.Map3D.Description: "3D Map of galaxy" @
-.LocalMap3D.Title: "Local 3D Map" @
-.LocalMap3D.Description: "Local 3D Map of systems near you" @
-.Organics.Title: "Organic Scans" @
-.Organics.Description: "Current body organic information and history of scans" @
+.Map3D.Title: "3D Map" => "3D-Karte"
+.Map3D.Description: "3D Map of galaxy" => "3D-Karte der Galaxie"
+.LocalMap3D.Title: "Local 3D Map" => "Lokale 3D-Karte"
+.LocalMap3D.Description: "Local 3D Map of systems near you" => "3D-Karte der lokalen System in deiner Umgebung"
+.Organics.Title: "Organic Scans" => "Organische Scans"
+.Organics.Description: "Current body organic information and history of scans" => "Informationen über organische Scans des aktuellen Planeten sowie Scanhistorie"
 
 SECTION EDDiscoveryForm
 
@@ -448,9 +448,9 @@ ExportForm: "Export Data" => "Exportformular"
 .checkBoxCustomAutoOpen: "Open" => "Öffnen"
 .ECH: "Export current data {0}" => "Exportiere aktuelle Daten {0}"
 .JF: "Journal file" => "Journaldatei"
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
+.ImportTitle: "Import Data" => "Daten importieren"
+.ImportButton: "Import" => "Import"
+.ImportData: "Import data {0}" => "Importiere Daten {0}"
 
 SECTION Form2DMap
 
