@@ -441,7 +441,7 @@ SECTION UserControlSurveyor
 .extButtonSetRoute.ToolTip: "Select route to follow" => "Wähle zu verfolgende Route"
 .extButtonControlRoute.ToolTip: "Route Settings" => "Routeneinstellungen"
 .navroute: "Nav Route" => "Nav-Route"
-.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Durchschn. {0:N1} Lj, Derzeit {1:N1} Lj, Maximal {2:N1} Lj"
+.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Halber Tank {0:N1} Lj, Maximum {1:N1} Lj, Reichweite {2:N1} Lj"
 .fsssignals: "List signals to display, semicolon seperated" => "Trage anzuzeigende Signale ein, Semikolon als Trennzeichen"
 
 SECTION MissionListUserControl
