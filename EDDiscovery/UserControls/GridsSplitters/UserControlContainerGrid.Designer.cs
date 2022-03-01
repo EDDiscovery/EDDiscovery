@@ -32,15 +32,17 @@
             this.rollUpPanelMenu = new ExtendedControls.ExtPanelRollUp();
             this.buttonExtTile = new ExtendedControls.ExtButton();
             this.buttonExtDelete = new ExtendedControls.ExtButton();
+            this.buttonExtPopOut = new ExtendedControls.ExtButton();
             this.panelPlayfield = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonExtPopOut = new ExtendedControls.ExtButton();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.rollUpPanelMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // rollUpPanelMenu
             // 
+            this.rollUpPanelMenu.AutoHeight = false;
+            this.rollUpPanelMenu.AutoHeightWidthDisable = false;
+            this.rollUpPanelMenu.AutoWidth = false;
             this.rollUpPanelMenu.Controls.Add(this.buttonExtTile);
             this.rollUpPanelMenu.Controls.Add(this.buttonExtDelete);
             this.rollUpPanelMenu.Controls.Add(this.buttonExtPopOut);
@@ -52,6 +54,7 @@
             this.rollUpPanelMenu.RolledUpHeight = 5;
             this.rollUpPanelMenu.RollUpAnimationTime = 500;
             this.rollUpPanelMenu.RollUpDelay = 1000;
+            this.rollUpPanelMenu.SecondHiddenMarkerWidth = 0;
             this.rollUpPanelMenu.ShowHiddenMarker = true;
             this.rollUpPanelMenu.Size = new System.Drawing.Size(912, 32);
             this.rollUpPanelMenu.TabIndex = 1;
@@ -59,9 +62,6 @@
             // 
             // buttonExtTile
             // 
-            this.buttonExtTile.BorderColorScaling = 1.25F;
-            this.buttonExtTile.ButtonColorScaling = 0.5F;
-            this.buttonExtTile.ButtonDisabledScaling = 0.5F;
             this.buttonExtTile.Image = global::EDDiscovery.Icons.Controls.Tile;
             this.buttonExtTile.Location = new System.Drawing.Point(63, 3);
             this.buttonExtTile.Name = "buttonExtTile";
@@ -73,9 +73,6 @@
             // 
             // buttonExtDelete
             // 
-            this.buttonExtDelete.BorderColorScaling = 1.25F;
-            this.buttonExtDelete.ButtonColorScaling = 0.5F;
-            this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
             this.buttonExtDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
             this.buttonExtDelete.Location = new System.Drawing.Point(33, 3);
             this.buttonExtDelete.Name = "buttonExtDelete";
@@ -84,6 +81,18 @@
             this.toolTip.SetToolTip(this.buttonExtDelete, "Remove selected panel");
             this.buttonExtDelete.UseVisualStyleBackColor = true;
             this.buttonExtDelete.Click += new System.EventHandler(this.buttonExtDelete_Click);
+            // 
+            // buttonExtPopOut
+            // 
+            this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Panels;
+            this.buttonExtPopOut.Location = new System.Drawing.Point(3, 3);
+            this.buttonExtPopOut.Name = "buttonExtPopOut";
+            this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtPopOut.TabIndex = 2;
+            this.toolTip.SetToolTip(this.buttonExtPopOut, "Click to select a pop out panel to display");
+            this.buttonExtPopOut.UseVisualStyleBackColor = false;
+            this.buttonExtPopOut.Click += new System.EventHandler(this.buttonExtPopOut_Click);
             // 
             // panelPlayfield
             // 
@@ -101,21 +110,6 @@
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 50;
             this.toolTip.ShowAlways = true;
-            // 
-            // buttonExtPopOut
-            // 
-            this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtPopOut.BorderColorScaling = 1.25F;
-            this.buttonExtPopOut.ButtonColorScaling = 0.5F;
-            this.buttonExtPopOut.ButtonDisabledScaling = 0.5F;
-            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Panels;
-            this.buttonExtPopOut.Location = new System.Drawing.Point(3, 3);
-            this.buttonExtPopOut.Name = "buttonExtPopOut";
-            this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtPopOut.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.buttonExtPopOut, "Click to select a pop out panel to display");
-            this.buttonExtPopOut.UseVisualStyleBackColor = false;
-            this.buttonExtPopOut.Click += new System.EventHandler(this.buttonExtPopOut_Click);
             // 
             // UserControlContainerGrid
             // 
@@ -137,6 +131,5 @@
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonExtTile;
         private ExtendedControls.ExtButton buttonExtPopOut;
-        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

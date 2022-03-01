@@ -209,11 +209,15 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             dataGridViewFactions.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewFactions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;      
+            dataGridViewFactions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlFactions_colFaction, EDTx.UserControlFactions_colMissions, EDTx.UserControlFactions_colInfluence, EDTx.UserControlFactions_colReputation, EDTx.UserControlFactions_colMissionCredits, EDTx.UserControlFactions_CBought, EDTx.UserControlFactions_CSold, EDTx.UserControlFactions_CProfit, EDTx.UserControlFactions_MBought, EDTx.UserControlFactions_MSold, EDTx.UserControlFactions_CrimeCommitted, EDTx.UserControlFactions_BountyKills, EDTx.UserControlFactions_BountyValue, EDTx.UserControlFactions_BountyRewardsValue, EDTx.UserControlFactions_Interdicted, EDTx.UserControlFactions_Interdiction, EDTx.UserControlFactions_KillBondVictim, EDTx.UserControlFactions_KillBondsAward, EDTx.UserControlFactions_KillBondsValue, EDTx.UserControlFactions_colInfo, EDTx.UserControlFactions_labelTo };
+            var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem, EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, EDTx.UserControlFactions_showFactionSystemDetailToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTime_ToolTip, EDTx.UserControlFactions_endDateTime_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -521,7 +525,7 @@ namespace EDDiscovery.UserControls
                             {
                                 var faction = ms.Mission.Faction;
                                 if (faction == fs.Name)
-                                    mluc.Add(ms, true);
+                                    mluc.Add(ms, true,"");
                             }
                         }
                     }

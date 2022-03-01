@@ -62,6 +62,7 @@
             this.panelVScrollMain.Controls.Add(this.buttonMore);
             this.panelVScrollMain.Controls.Add(this.vScrollBarCustom1);
             this.panelVScrollMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelVScrollMain.FlowControlsLeftToRight = false;
             this.panelVScrollMain.Location = new System.Drawing.Point(0, 0);
             this.panelVScrollMain.Name = "panelVScrollMain";
             this.panelVScrollMain.Size = new System.Drawing.Size(883, 502);
@@ -89,13 +90,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(863, 0);
-            this.vScrollBarCustom1.Maximum = -462;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(867, 0);
+            this.vScrollBarCustom1.Maximum = -463;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 502);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 502);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -103,8 +104,8 @@
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -462;
-            this.vScrollBarCustom1.ValueLimited = -462;
+            this.vScrollBarCustom1.Value = -463;
+            this.vScrollBarCustom1.ValueLimited = -463;
             // 
             // panelTop
             // 
@@ -168,9 +169,9 @@
             this.label_index.AutoSize = true;
             this.label_index.Location = new System.Drawing.Point(3, 3);
             this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(66, 13);
+            this.label_index.Size = new System.Drawing.Size(43, 13);
             this.label_index.TabIndex = 23;
-            this.label_index.Text = "Profile Editor";
+            this.label_index.Text = "<code>";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
@@ -202,7 +203,7 @@
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonExtCancel.TabIndex = 7;
-            this.buttonExtCancel.Text = "Cancel";
+            this.buttonExtCancel.Text = "%Cancel%";
             this.buttonExtCancel.UseVisualStyleBackColor = true;
             this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
             // 
@@ -213,7 +214,7 @@
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 23);
             this.buttonOK.TabIndex = 7;
-            this.buttonOK.Text = "OK";
+            this.buttonOK.Text = "%OK%";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 

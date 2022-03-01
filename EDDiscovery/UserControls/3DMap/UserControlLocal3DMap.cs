@@ -36,8 +36,6 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Local3DMapPanel_";
 
-            BaseUtils.Translator.Instance.Translate(this);      // translate before we add anything else to the panel
-
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;

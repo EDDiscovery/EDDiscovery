@@ -64,12 +64,12 @@ namespace EDDiscovery.UserControls
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonFont = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extCheckBoxShowIncomplete = new ExtendedControls.ExtCheckBox();
             this.flowLayoutPanelGridControl = new System.Windows.Forms.FlowLayoutPanel();
             this.labelStart = new System.Windows.Forms.Label();
             this.extDateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
             this.labelEnd = new System.Windows.Forms.Label();
             this.extDateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
-            this.extCheckBoxShowIncomplete = new ExtendedControls.ExtCheckBox();
             this.labelValue = new System.Windows.Forms.Label();
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -338,6 +338,36 @@ namespace EDDiscovery.UserControls
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
             // 
+            // extCheckBoxShowIncomplete
+            // 
+            this.extCheckBoxShowIncomplete.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowIncomplete.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxShowIncomplete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxShowIncomplete.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxShowIncomplete.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowIncomplete.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowIncomplete.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowIncomplete.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxShowIncomplete.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxShowIncomplete.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxShowIncomplete.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxShowIncomplete.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxShowIncomplete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxShowIncomplete.Image = global::EDDiscovery.Icons.Controls.OrganicIncomplete;
+            this.extCheckBoxShowIncomplete.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowIncomplete.ImageIndeterminate = null;
+            this.extCheckBoxShowIncomplete.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowIncomplete.ImageUnchecked = null;
+            this.extCheckBoxShowIncomplete.Location = new System.Drawing.Point(587, 1);
+            this.extCheckBoxShowIncomplete.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxShowIncomplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowIncomplete.Name = "extCheckBoxShowIncomplete";
+            this.extCheckBoxShowIncomplete.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowIncomplete.TabIndex = 34;
+            this.extCheckBoxShowIncomplete.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowIncomplete, "Display incomplete scans");
+            this.extCheckBoxShowIncomplete.UseVisualStyleBackColor = false;
+            // 
             // flowLayoutPanelGridControl
             // 
             this.flowLayoutPanelGridControl.AutoSize = true;
@@ -407,36 +437,6 @@ namespace EDDiscovery.UserControls
             this.extDateTimePickerEndDate.TabIndex = 0;
             this.extDateTimePickerEndDate.TextBackColor = System.Drawing.Color.DarkBlue;
             this.extDateTimePickerEndDate.Value = new System.DateTime(2021, 12, 5, 11, 46, 34, 377);
-            // 
-            // extCheckBoxShowIncomplete
-            // 
-            this.extCheckBoxShowIncomplete.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBoxShowIncomplete.BackColor = System.Drawing.Color.Transparent;
-            this.extCheckBoxShowIncomplete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.extCheckBoxShowIncomplete.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxShowIncomplete.CheckBoxDisabledScaling = 0.5F;
-            this.extCheckBoxShowIncomplete.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.extCheckBoxShowIncomplete.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxShowIncomplete.Cursor = System.Windows.Forms.Cursors.Default;
-            this.extCheckBoxShowIncomplete.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.extCheckBoxShowIncomplete.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.extCheckBoxShowIncomplete.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.extCheckBoxShowIncomplete.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.extCheckBoxShowIncomplete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extCheckBoxShowIncomplete.Image = global::EDDiscovery.Icons.Controls.OrganicIncomplete;
-            this.extCheckBoxShowIncomplete.ImageButtonDisabledScaling = 0.5F;
-            this.extCheckBoxShowIncomplete.ImageIndeterminate = null;
-            this.extCheckBoxShowIncomplete.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBoxShowIncomplete.ImageUnchecked = null;
-            this.extCheckBoxShowIncomplete.Location = new System.Drawing.Point(587, 1);
-            this.extCheckBoxShowIncomplete.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extCheckBoxShowIncomplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.extCheckBoxShowIncomplete.Name = "extCheckBoxShowIncomplete";
-            this.extCheckBoxShowIncomplete.Size = new System.Drawing.Size(28, 28);
-            this.extCheckBoxShowIncomplete.TabIndex = 34;
-            this.extCheckBoxShowIncomplete.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.extCheckBoxShowIncomplete, "Display incomplete scans");
-            this.extCheckBoxShowIncomplete.UseVisualStyleBackColor = false;
             // 
             // labelValue
             // 

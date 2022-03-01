@@ -42,7 +42,11 @@ namespace EDDiscovery.UserControls
             DBBaseName = "MiningOverlay";
 
             UpdateComboBox(null);
-            BaseUtils.Translator.Instance.Translate(this);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            extPanelRollUp.SetToolTip(toolTip);
+
             buttonExtExcel.Enabled = false;
             extCheckBoxZeroRefined.Checked = GetSetting(dbZeroRefined, false);
             extCheckBoxZeroRefined.CheckedChanged += new System.EventHandler(this.extCheckBoxZeroRefined_CheckedChanged);

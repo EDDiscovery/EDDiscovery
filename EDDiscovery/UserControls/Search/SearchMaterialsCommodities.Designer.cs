@@ -52,7 +52,6 @@ namespace EDDiscovery.UserControls
             this.ColumnLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.Panel();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.buttonExtFind = new ExtendedControls.ExtButton();
@@ -113,6 +112,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.CheckEDSM = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnDate,
             this.ColumnStar,
@@ -122,8 +122,10 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.SingleRowSelect = true;
             this.dataGridView.Size = new System.Drawing.Size(788, 649);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
@@ -163,13 +165,6 @@ namespace EDDiscovery.UserControls
             this.ColumnPosition.MinimumWidth = 50;
             this.ColumnPosition.Name = "ColumnPosition";
             this.ColumnPosition.ReadOnly = true;
-            // 
-            // toolTip
-            // 
-            this.toolTip.AutoPopDelay = 120000;
-            this.toolTip.InitialDelay = 250;
-            this.toolTip.ReshowDelay = 100;
-            this.toolTip.ShowAlways = true;
             // 
             // panelTop
             // 
@@ -314,7 +309,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private EDDiscovery.UserControls.Search.DataGridViewStarResults dataGridView;
-        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.ExtButton buttonExtFind;
         private ExtendedControls.ExtComboBox comboBoxCustomCM2;

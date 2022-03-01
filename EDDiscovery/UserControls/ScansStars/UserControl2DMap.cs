@@ -57,8 +57,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            BaseUtils.Translator.Instance.Translate(this);      // translate before we add anything else to the panel
-
             systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
 
             pickerStart = new ExtendedControls.ExtDateTimePicker();

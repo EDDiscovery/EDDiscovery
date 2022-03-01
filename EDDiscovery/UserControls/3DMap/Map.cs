@@ -815,8 +815,11 @@ namespace EDDiscovery.UserControls.Map3D
                 dgv.RowHeaderEnable = false;
                 var col0 = dgv.CreateColumn(fillwidth: 100, title: "Star");
                 var col1 = dgv.CreateColumn(fillwidth: 50, title: "X");
+                col1.SortCompare = GLDataGridViewSorts.SortCompareNumeric;
                 var col2 = dgv.CreateColumn(fillwidth: 50, title: "Y");
+                col2.SortCompare = GLDataGridViewSorts.SortCompareNumeric;
                 var col3 = dgv.CreateColumn(fillwidth: 50, title: "Z");
+                col3.SortCompare = GLDataGridViewSorts.SortCompareNumeric;
                 var col4 = dgv.CreateColumn(fillwidth: 100, title: "Note");
                 dgv.AddColumn(col0);
                 dgv.AddColumn(col1);
@@ -914,6 +917,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (he != null)
             {
                 GoToSystem(he.System, lydist);
+                travelpath?.SetSystem(he.System.Name);
             }
         }
 
@@ -1095,7 +1099,7 @@ namespace EDDiscovery.UserControls.Map3D
             var rte = routepath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out routez);    
             var nav = navroute?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out navroutez);
 
-            if (gmo != null && galobjz < bkm && galobjz < hez && galobjz < sysz && galobjz < routez && galobjz < navroutez)      // got gmo, and closer than the others
+            if (gmo != null && galobjz < bkmz && galobjz < hez && galobjz < sysz && galobjz < routez && galobjz < navroutez)      // got gmo, and closer than the others
                 return gmo;
 
             if (bkm != null && bkmz < hez && bkmz < sysz && bkmz < routez && bkmz < navroutez)

@@ -27,9 +27,13 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { userControlSurfaceBookmarks });
-            BaseUtils.Translator.Instance.Translate(contextMenuStripBookmarks, this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName, EDTx.UserControlBookmarks_ColDescription, EDTx.UserControlBookmarks_labelSearch };
+            var enumlistcms = new Enum[] { EDTx.UserControlBookmarks_toolStripMenuItemGotoStar3dmap, EDTx.UserControlBookmarks_openInEDSMToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip, EDTx.UserControlBookmarks_buttonEdit_ToolTip, EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip, EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip, EDTx.UserControlBookmarks_buttonExtImport_ToolTip };
+            
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripBookmarks, enumlistcms, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void LoadLayout()

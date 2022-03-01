@@ -52,7 +52,6 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.conditionFilterUC = new ExtendedConditionsForms.ConditionFilterUC();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
@@ -117,6 +116,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.CheckEDSM = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnDate,
             this.ColumnStar,
@@ -171,13 +171,6 @@ namespace EDDiscovery.UserControls
             this.ColumnPosition.MinimumWidth = 50;
             this.ColumnPosition.Name = "ColumnPosition";
             this.ColumnPosition.ReadOnly = true;
-            // 
-            // toolTip
-            // 
-            this.toolTip.AutoPopDelay = 120000;
-            this.toolTip.InitialDelay = 250;
-            this.toolTip.ReshowDelay = 100;
-            this.toolTip.ShowAlways = true;
             // 
             // splitContainer
             // 
@@ -318,7 +311,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private EDDiscovery.UserControls.Search.DataGridViewStarResults dataGridView;
-        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.SplitContainer splitContainer;
         private ExtendedConditionsForms.ConditionFilterUC conditionFilterUC;
         private ExtendedControls.ExtButton buttonFind;

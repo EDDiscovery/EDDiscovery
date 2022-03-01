@@ -198,9 +198,13 @@ namespace EDDiscovery.UserControls
 
             panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip1, this);
+            var enumlist = new Enum[] { EDTx.UserControlSysInfo_labelStationFaction, EDTx.UserControlSysInfo_extButtonEDSMTarget, EDTx.UserControlSysInfo_labelSecurity, EDTx.UserControlSysInfo_labelJumpRange, EDTx.UserControlSysInfo_labelTarget, EDTx.UserControlSysInfo_labelSysName, EDTx.UserControlSysInfo_labelGamemode, EDTx.UserControlSysInfo_labelTravel, EDTx.UserControlSysInfo_labelOpenShip, EDTx.UserControlSysInfo_labelOpenStation, EDTx.UserControlSysInfo_labelOpen, EDTx.UserControlSysInfo_labelCargo, EDTx.UserControlSysInfo_labelCredits, EDTx.UserControlSysInfo_labelShip, EDTx.UserControlSysInfo_labelMaterials, EDTx.UserControlSysInfo_labelVisits, EDTx.UserControlSysInfo_labelMR, EDTx.UserControlSysInfo_labelData, EDTx.UserControlSysInfo_labelFuel, EDTx.UserControlSysInfo_labelBodyName, EDTx.UserControlSysInfo_labelPosition, EDTx.UserControlSysInfo_labelNote, EDTx.UserControlSysInfo_labelMissions, EDTx.UserControlSysInfo_labelEconomy, EDTx.UserControlSysInfo_labelGov, EDTx.UserControlSysInfo_labelAllegiance, EDTx.UserControlSysInfo_labelState, EDTx.UserControlSysInfo_labelSolDist, EDTx.UserControlSysInfo_labelHomeDist };
+            var enumlistcms = new Enum[] { EDTx.UserControlSysInfo_toolStripSystem, EDTx.UserControlSysInfo_toolStripEDSM, EDTx.UserControlSysInfo_toolStripEDSMDownLine, EDTx.UserControlSysInfo_toolStripVisits, EDTx.UserControlSysInfo_toolStripBody, EDTx.UserControlSysInfo_displayStationButtonsToolStripMenuItem, EDTx.UserControlSysInfo_displayStationFactionToolStripMenuItem, EDTx.UserControlSysInfo_toolStripPosition, EDTx.UserControlSysInfo_toolStripDistanceFrom, EDTx.UserControlSysInfo_toolStripSystemState, EDTx.UserControlSysInfo_displaySecurityToolStripMenuItem, EDTx.UserControlSysInfo_toolStripNotes, EDTx.UserControlSysInfo_toolStripTarget, EDTx.UserControlSysInfo_toolStripShip, EDTx.UserControlSysInfo_displayShipButtonsToolStripMenuItem, EDTx.UserControlSysInfo_toolStripFuel, EDTx.UserControlSysInfo_toolStripCargo, EDTx.UserControlSysInfo_toolStripDataCount, EDTx.UserControlSysInfo_toolStripMaterialCounts, EDTx.UserControlSysInfo_displayMicroresourcesCountToolStripMenuItem, EDTx.UserControlSysInfo_toolStripCredits, EDTx.UserControlSysInfo_toolStripGameMode, EDTx.UserControlSysInfo_toolStripTravel, EDTx.UserControlSysInfo_toolStripMissionList, EDTx.UserControlSysInfo_toolStripJumpRange, EDTx.UserControlSysInfo_toolStripSkinny, EDTx.UserControlSysInfo_toolStripReset, EDTx.UserControlSysInfo_toolStripRemoveAll };
+            var enumlisttt = new Enum[] { EDTx.UserControlSysInfo_ToolTip, EDTx.UserControlSysInfo_textBoxTargetDist_ToolTip, EDTx.UserControlSysInfo_textBoxTarget_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             shiptexttranslation = labelShip.Text;
         }
@@ -599,13 +603,13 @@ namespace EDDiscovery.UserControls
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
-                textBoxTarget.SetTipDynamically(toolTip1, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".T(EDTx.UserControlSysInfo_Pos), x, y, z));
+                textBoxTarget.SetTipDynamically(toolTip, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".T(EDTx.UserControlSysInfo_Pos), x, y, z));
             }
             else
             {
                 textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
-                textBoxTarget.SetTipDynamically(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".T(EDTx.UserControlSysInfo_Target));
+                textBoxTarget.SetTipDynamically(toolTip, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".T(EDTx.UserControlSysInfo_Target));
             }
         }
 

@@ -47,8 +47,11 @@ namespace EDDiscovery.UserControls
 
             Col1.HeaderText = Col2.HeaderText = Col3.HeaderText = Col4.HeaderText = ColPrice.HeaderText = ""; // zero because no values until a display selected
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlOutfitting_labelYardSel, EDTx.UserControlOutfitting_labelYard };
+            var enumlisttt = new Enum[] { EDTx.UserControlOutfitting_comboBoxYards_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

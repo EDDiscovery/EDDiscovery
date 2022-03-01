@@ -65,7 +65,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip, EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
@@ -191,7 +193,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawBodyInfo()
         {
-            System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Draw {lasthe?.System.Name} {lasthe?.System.HasCoordinate}");
+            //System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Draw {lasthe?.System.Name} {lasthe?.System.HasCoordinate}");
 
             pictureBox.ClearImageList();
 
@@ -355,7 +357,7 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
             // not yet until more than one displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID("UserControlSurveyor.autoHideToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
@@ -382,7 +384,7 @@ namespace EDDiscovery.UserControls
         {
             Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);
             string setting = FontHelpers.GetFontSettingString(f);
-            System.Diagnostics.Debug.WriteLine($"Organics Font selected {setting}");
+            //System.Diagnostics.Debug.WriteLine($"Organics Font selected {setting}");
             PutSetting("font", setting);
             displayfont = f;
             DrawBodyInfo();

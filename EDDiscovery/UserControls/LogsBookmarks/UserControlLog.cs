@@ -39,7 +39,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewLogEntry += AppendText;
             AppendText(discoveryform.LogText, ExtendedControls.Theme.Current.TextBlockColor);
             richTextBox_History.ScrollToCaret();
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip,this);
+
+            var enumlistcms = new Enum[] { EDTx.UserControlLog_toolStripMenuItemCopy, EDTx.UserControlLog_clearLogToolStripMenuItem };
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
         public override void InitialDisplay()

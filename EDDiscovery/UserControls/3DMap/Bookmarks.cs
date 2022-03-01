@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public int? Find(Point loc, GLRenderState state, Size viewportsize, out float z)
         {
-            z = 0;
+            z = float.MaxValue;
 
             if (!objectshader.Enable)
                 return null;

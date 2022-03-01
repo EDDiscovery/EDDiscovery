@@ -46,10 +46,12 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
-            BaseUtils.Translator.Instance.Translate(missionListCurrent);
-            BaseUtils.Translator.Instance.Translate(missionListPrevious);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.MissionListUserControl_PcolName, EDTx.MissionListUserControl_pColStart, EDTx.MissionListUserControl_pColEnd, EDTx.MissionListUserControl_pColOrigin, EDTx.MissionListUserControl_pColFromFaction, EDTx.MissionListUserControl_pColDestSys, EDTx.MissionListUserControl_pColTargetFaction, EDTx.MissionListUserControl_pColResult, EDTx.MissionListUserControl_pColInfo, EDTx.MissionListUserControl_labelTo, EDTx.MissionListUserControl_labelSearch };
+            
+            BaseUtils.Translator.Instance.TranslateControls(missionListCurrent, enumlist);
+            BaseUtils.Translator.Instance.TranslateControls(missionListPrevious, enumlist);
 
+            missionListPrevious.SearchTextChanged += () => { Display(); };
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -76,6 +78,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            missionListCurrent.Closing();
+            missionListPrevious.Closing();
+
             DGVSaveColumnLayout(missionListCurrent.dataGridView, "Current");
             DGVSaveColumnLayout(missionListPrevious.dataGridView, "Previous");
 
@@ -149,7 +154,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (MissionState ms in mcurrent)
                 {
-                    missionListCurrent.Add(ms, false);
+                    missionListCurrent.Add(ms, false, null);
                 }
 
                 missionListCurrent.Finish();
@@ -160,7 +165,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (MissionState ms in mprev)
                 {
-                    missionListPrevious.Add(ms, true);
+                    missionListPrevious.Add(ms, true, missionListPrevious.SearchText);
                 }
 
                 missionListPrevious.Finish();

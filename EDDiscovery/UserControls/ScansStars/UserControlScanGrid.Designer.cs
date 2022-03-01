@@ -46,6 +46,9 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extButtonShowControl = new ExtendedControls.ExtButton();
+            this.extButtonHabZones = new ExtendedControls.ExtButton();
+            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewScangrid = new BaseUtils.DataGridViewColumnControl();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,9 +59,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.extButtonShowControl = new ExtendedControls.ExtButton();
-            this.extButtonHabZones = new ExtendedControls.ExtButton();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -68,6 +68,63 @@ namespace EDDiscovery.UserControls
             this.panelControls.SuspendLayout();
             this.statusStripSummary.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // extButtonShowControl
+            // 
+            this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extButtonShowControl.Location = new System.Drawing.Point(8, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonShowControl.Name = "extButtonShowControl";
+            this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
+            this.extButtonShowControl.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonShowControl, "Configure overall settings");
+            this.extButtonShowControl.UseVisualStyleBackColor = false;
+            this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
+            // 
+            // extButtonHabZones
+            // 
+            this.extButtonHabZones.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonHabZones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonHabZones.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
+            this.extButtonHabZones.Location = new System.Drawing.Point(48, 1);
+            this.extButtonHabZones.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonHabZones.Name = "extButtonHabZones";
+            this.extButtonHabZones.Size = new System.Drawing.Size(28, 28);
+            this.extButtonHabZones.TabIndex = 35;
+            this.toolTip.SetToolTip(this.extButtonHabZones, "Configure hab zone information");
+            this.extButtonHabZones.UseVisualStyleBackColor = false;
+            this.extButtonHabZones.Click += new System.EventHandler(this.extButtonHabZones_Click);
+            // 
+            // checkBoxEDSM
+            // 
+            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
+            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxEDSM.ImageIndeterminate = null;
+            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.ImageUnchecked = null;
+            this.checkBoxEDSM.Location = new System.Drawing.Point(88, 1);
+            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSM.Name = "checkBoxEDSM";
+            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxEDSM.TabIndex = 33;
+            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxEDSM, "EDSM lookup toggle");
+            this.checkBoxEDSM.UseVisualStyleBackColor = false;
             // 
             // dataViewScrollerPanel2
             // 
@@ -227,63 +284,6 @@ namespace EDDiscovery.UserControls
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(572, 30);
             this.panelControls.TabIndex = 32;
-            // 
-            // extButtonShowControl
-            // 
-            this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonShowControl.Location = new System.Drawing.Point(8, 1);
-            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonShowControl.Name = "extButtonShowControl";
-            this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
-            this.extButtonShowControl.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonShowControl, "Configure overall settings");
-            this.extButtonShowControl.UseVisualStyleBackColor = false;
-            this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
-            // 
-            // extButtonHabZones
-            // 
-            this.extButtonHabZones.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonHabZones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonHabZones.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
-            this.extButtonHabZones.Location = new System.Drawing.Point(48, 1);
-            this.extButtonHabZones.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonHabZones.Name = "extButtonHabZones";
-            this.extButtonHabZones.Size = new System.Drawing.Size(28, 28);
-            this.extButtonHabZones.TabIndex = 35;
-            this.toolTip.SetToolTip(this.extButtonHabZones, "Configure hab zone information");
-            this.extButtonHabZones.UseVisualStyleBackColor = false;
-            this.extButtonHabZones.Click += new System.EventHandler(this.extButtonHabZones_Click);
-            // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.ImageIndeterminate = null;
-            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(88, 1);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxEDSM.TabIndex = 33;
-            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "EDSM lookup toggle");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
             // 
             // statusStripSummary
             // 

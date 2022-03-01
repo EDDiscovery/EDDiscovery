@@ -51,7 +51,6 @@ namespace EDDiscovery.UserControls
             this.ColumnCentreDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.findSystemsUserControl = new EDDiscovery.UserControls.FindSystemsUserControl();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -104,6 +103,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.CheckEDSM = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnStar,
             this.ColumnCentreDistance,
@@ -151,13 +151,6 @@ namespace EDDiscovery.UserControls
             this.ColumnPosition.Name = "ColumnPosition";
             this.ColumnPosition.ReadOnly = true;
             // 
-            // toolTip
-            // 
-            this.toolTip.AutoPopDelay = 120000;
-            this.toolTip.InitialDelay = 250;
-            this.toolTip.ReshowDelay = 100;
-            this.toolTip.ShowAlways = true;
-            // 
             // findSystemsUserControl
             // 
             this.findSystemsUserControl.AutoSize = true;
@@ -187,7 +180,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private EDDiscovery.UserControls.Search.DataGridViewStarResults dataGridView;
-        private System.Windows.Forms.ToolTip toolTip;
         private FindSystemsUserControl findSystemsUserControl;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCentreDistance;

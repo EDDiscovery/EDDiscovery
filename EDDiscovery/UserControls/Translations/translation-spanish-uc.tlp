@@ -4,9 +4,6 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "Tipo de marcador"
 .ColBookmarkName: "Bookmark Name" => "Nombre del marcador"
 .ColDescription: "Description" => "Descripción"
-.ColX: "X" => "X"
-.ColY: "Y" => "Y"
-.ColZ: "Z" => "Z"
 .labelSearch: "Search" => "Búsqueda"
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Ir a mapa 3D"
 .openInEDSMToolStripMenuItem: "Open in EDSM" => "Abrir en EDSM"
@@ -85,6 +82,10 @@ SECTION UserControlCompass
 
 SECTION UserControlWebBrowser
 
+.extButtonIE11Warning: "Using IE11 - click here to get WebView2" @
+.extCheckBoxBack.ToolTip: "Back" @
+.checkBoxAutoTrack.ToolTip: "Track system in history panel" @
+.extCheckBoxAllowedList.ToolTip: "URLs" @
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Seleccione otro sistema para ver"
 .System: "System: " => "Sistema: "
 .EnterSys: "Show System" => "Mostrar sistema"
@@ -129,7 +130,6 @@ SECTION SearchScans
 .ColumnInformation: "Information" => "Información"
 .ColumnCurrentDistance: "Current Distance" => "Distancia actual"
 .ColumnPosition: "Position" => "Posición"
-.conditionFilterUC.buttonMore: "+" => "+"
 
 SECTION SearchStars
 
@@ -143,8 +143,7 @@ SECTION DataGridViewStarResults
 .3d: "Go to star on 3D Map" => "Ir a estrella en mapa 3D"
 .EDSM: "View on EDSM" => "Ver en EDSM"
 .Data: "View Data On Entry" => "Ver datos en la entrada"
-.Sys: "System" => "Sistema"
-.Station: "Station" => "Estación"
+.Goto: "Go to entry on grid" @
 
 SECTION UserControlEngineering
 
@@ -157,65 +156,57 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" => "Notas"
 .RecipeCol: "Recipe" => "Receta"
 .EngineersCol: "Engineers" => "Ingenieros"
-.chkHistoric: "Use Cursor Positon" => "Usar posición del cursor"
-.buttonClear: "Clear" => "Borrar"
-.buttonFilterMaterial: "Material" => "Material"
-.buttonFilterUpgrade: "Upgrade" => "Potenciar"
-.buttonFilterLevel: "Level" => "Nivel"
-.buttonFilterEngineer: "Engineer" => "Ingeniero"
-.buttonFilterModule: "Module" => "Módulo"
 .ToolTip: "Left click and drag on grid to reorder" => "Haga clic con el botón izquierdo y arrastre en la cuadrícula para reordenar"
-.chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Cuando haga clic en, use los materiales en el cursor para estimar, cuando esté apagado, use siempre los últimos materiales"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Establecer todos los valores deseados en cero"
 .buttonFilterMaterial.ToolTip: "Filter the table by material" => "Filtrar la tabla por material"
 .buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "Filtrar la tabla por tipo de actualización"
 .buttonFilterLevel.ToolTip: "Filter the table by level" => "Filtrar la tabla por nivel"
 .buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "Filtrar la tabla por ingeniero"
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtrar la tabla por tipo de módulo"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Haga clic con el botón izquierdo y arrastre en la cuadrícula para reordenar"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Cuando está en rojo, use los materiales en el cursor para estimar, cuando en verde use siempre los materiales más recientes"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
 
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nombre del cuerpo"
-.EstValue: "Current Value" => "Valor estimado"
-.EstBase: "Base Value" => "Valor base"
-.MappedValue: "Mapped" => "Mapeado"
-.FirstDiscovered: "First Discovered" => "Descubierto por primera vez"
-.FirstMappedEff: "First Mapped" => "Primeros mapeados"
-.FirstDiscMapped: "First Discovered Mapped" => "Primer mapeado descubierto"
 .BodyType: "Body Type" => "Tipo de cuerpo"
+.EDSM: "EDSM" => "EDSM"
 .Mapped: "Mapped" => "Asignado"
 .WasMapped: "Already Mapped" => "Ya asignado"
 .WasDiscovered: "Already Discovered" => "Ya descubierto"
-.SV: "Estimated Scan Values for {0}" => "Valores de exploración estimados para {0}"
-.EDSM: "EDSM" => "EDSM"
+.EstBase: "Base Value" => "Valor base"
+.MappedValue: "Mapped" => "Mapeado"
+.FirstMappedEff: "First Mapped" => "Primeros mapeados"
+.FirstDiscMapped: "First Discovered Mapped" => "Primer mapeado descubierto"
+.EstValue: "Current Value" => "Valor estimado"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Obtener y mostrar información de EDSM"
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
+.SV: "Estimated Scan Values for {0}" => "Valores de exploración estimados para {0}"
 
 SECTION UserControlExpedition
 
-.CurDist: "C. Dist" @
+.CurDist: "Cur. Dist" @
 .Visits: "Visits" => "Visitas"
 .Scans: "Scans" => "Escaneos"
-.Bodies: "Bodies" => "Cuerpos"
+.FSSBodies: "FSS Bodies" @
+.KnownBodies: "Known Bodies" @
 .Stars: "Stars" => "Estrellas"
 .Info: "Info" => "Información"
-
-.extButtonLoadRoute.ToolTip:  "Load" => "Carga"
-.extButtonNew.ToolTip: "New Route" => "Nueva ruta"
-.extButtonSave.ToolTip: "Save Route" => "Guardar ruta"
-.extButtonDelete.ToolTip: "Delete Route" => "Eliminar ruta"
-.extButtonImportFile.ToolTip: "Import file" => "Importar archivo"
-.extButtonImportRoute.ToolTip: "Import route" => "Importar ruta"
-.extButtonImportNavRoute.ToolTip: "Import route" => "Importar Nav ruta"
-.buttonExtExport.ToolTip: "Export" => "Exportar"
-.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Mostrar en mapa 3D"
-.extButtonAddSystems.ToolTip: "Add Systems" => "Agregar sistemas"
+.extButtonLoadRoute.ToolTip: "Load Route" => "Carga"
+.extButtonNew.ToolTip: "New Expedition" => "Nueva ruta"
+.extButtonSave.ToolTip: "Save Expedition" => "Guardar ruta"
+.extButtonDelete.ToolTip: "Delete Expedition" => "Eliminar ruta"
+.extButtonImportFile.ToolTip: "Import File" => "Importar archivo"
+.extButtonImportRoute.ToolTip: "Import from Route Panel" => "Importar ruta"
+.extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Importar Nav ruta"
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
+.buttonExtExport.ToolTip: "Export to File" => "Exportar"
+.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Mostrar en mapa 3D"
+.extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Agregar sistemas"
+.extButtonDisplayFilters.ToolTip: "Select filters on Info" @
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .AddSys: "Add Systems" => "Agregar sistemas"
-
-
-.toolStripButtonImportNavRoute: "Import Nav route" => "Importar ruta de navegación"
 .SystemName: "System Name" => "Nombre del sistema"
 .Distance: "Dist." => "Dist."
 .Note: "Note" => "Nota"
@@ -225,94 +216,42 @@ SECTION UserControlExpedition
 .labelEndDate: "End Date: " => "Fecha final: "
 .labelDateStart: "Start Date: " => "Fecha de inicio: "
 .labelRouteName: "Route Name: " => "Nombre de ruta: "
-.toolStripButtonNew: "New Route" => "Nueva ruta"
-.toolStripButtonImportFile: "Import file" => "Importar archivo"
-.toolStripButtonImportRoute: "Import route" => "Importar ruta"
-.toolStripButtonSave: "Save Route" => "Guardar ruta"
-.toolStripButtonExport: "Export" => "Exportar"
-.toolStripButtonDelete: "Delete Route" => "Eliminar ruta"
-.toolStripButtonShowOn3DMap: "Show on 3D Map" => "Mostrar en mapa 3D"
 .copyToolStripMenuItem: "Copy" => "Copiar"
 .pasteToolStripMenuItem: "Paste" => "Pegar"
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Insertar filas copiadas"
 .deleteRowsToolStripMenuItem: "Delete Rows" => "Eliminar filas"
 .setTargetToolStripMenuItem: "Set Target" => "Poner un objectivo"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "Editar marcador"
-.ctxMenuItemUndelete: "&Undelete" => "&Recuperar"
 .NoRoute: "No route set up. Please add at least two systems." => "No se estableció ninguna ruta. Agregue al menos dos sistemas"
 .Delete: "Are you sure you want to delete this route?" => "¿Está seguro de que desea eliminar esta ruta?"
-.SelRoute: "Select a route file" => "Seleccionar un archivo de ruta"
-.FileE: "There was an error reading file" => "Hubo un error al leer el archivo"
-.Nonames: "The imported file contains no known system names" => "El archivo importado no contiene nombres de sistema conocidos"
 .Createroute: "Please create a route on a route panel" => "Cree una ruta en un panel de rutas"
 .NoRouteExport: "There is no route to export " => "No hay ruta para exportar "
-.Export: "Export route" => "Exportar ruta"
 .UnknownS: "Unknown system, system is without co-ordinates" => "Sistema desconocido, el sistema no tiene coordenadas"
 .Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Expedición: hay cambios sin guardar en la ruta actual.\r\n¿Desea guardar la ruta actual antes de continuar?"
 .Specify: "Please specify a name for the route." => "Por favor, especifique un nombre para la ruta"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "El nombre de la ruta actual entra en conflicto con una expedición conocida.\r\nPor favor, especifique un nuevo nombre para guardar los cambios"
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Advertencia: la ruta ya existe. ¿Le gustaría sobrescribirla?"
 .EDSMUnk: "System not known to EDSM" => "Sistema no conocido por EDSM"
-.ColumnX: "X" => "X"
-.ColumnY: "Y" => "Y"
-.ColumnZ: "Z" => "Z"
-
-SECTION UserControlExploration
-
-.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" => "Lista de exploración, confirme que desea perder todos los cambios"
-.ColumnSystemName: "System Name" => "Nombre del sistema"
-.ColumnDist: "Dist" => "Dist"
-.ColumnX: "X" => "X"
-.ColumnY: "Y" => "Y"
-.ColumnZ: "Z" => "Z"
-.ColumnVisits: "Visits" => "Visitas"
-.ColumnScans: "Scans" => "Escaneos"
-.ColumnPrimaryStar: "Stars" => "Estrellas"
-.ColumnInfo: "Info" => "Información"
-.ColumnNote: "Note" => "Nota"
-.labelFilename: "Filename: " => "Nombre del archivo: "
-.labelName: "Description: " => "Descripción: "
-.toolStripButtonNew: "New" => "Nuevo"
-.toolStripButtonLoad: "Load" => "Carga"
-.toolStripButtonSave: "Save" => "Ahorrar"
-.toolStripButtonAddSystems: "Add Systems" => "Agregar sistemas"
-.toolStripButtonImportTextFile: "Import Text File" => "Importar archivo de texto"
-.toolStripButtonExport: "Export" => "Exportar"
-.toolStripButtonClear: "Clear List" => "Limpiar lista"
-.copyToolStripMenuItem: "Copy" => "Copiar"
-.pasteToolStripMenuItem: "Paste" => "Pegar"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Insertar filas copiadas"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Eliminar filas"
-.setTargetToolStripMenuItem: "Set Target" => "Poner un objectivo"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "Editar marcador"
-.Saved: "Saved to {0} Exploration Set" => "Guardado en {0} Conjunto de exploración"
-.SelectSet: "Select a exploration set file" => "Seleccionar un archivo de conjunto de exploración"
-.OpenE: "There was a problem opening file {0}" => "Hubo un problema al abrir el archivo {0}"
-.NoSys: "The imported file contains no known system names" => "El archivo importado no contiene nombres de sistema conocidos"
-.NoRoute: "There is no route to export" => "No hay ruta para exportar"
-.Export: "Export route" => "Exportar ruta"
-.ErrorW: "Error exporting route. Is file {0} open?" => "Error al exportar la ruta. ¿El archivo {0} está abierto?"
-.Clear: "Are you sure you want to clear the route list?" => "¿Está seguro de que desea borrar la lista de rutas?"
-.AddSys: "Add Systems" => "Agregar sistemas"
-.EDSMUnk: "System not known to EDSM" => "Sistema no conocido por EDSM"
-.UnknownS: "Unknown system, system is without co-ordinates" => "Sistema desconocido, el sistema no tiene coordenadas"
+.NoScanInfo: "No local scan info" @
 
 SECTION UserControlJournalGrid
 
-.JHF: "Journal: Filter out fields" => "Diario: filtrar campos"
+.comboBoxTime.ToolTip: "Select the entries selected by age" => "Seleccione las entradas seleccionadas por edad"
 .ColumnTime: "Time" => "Tiempo"
 .Event: "Event" => "Evento"
 .ColumnType: "Description" => "Descripción"
 .ColumnText: "Information" => "Información"
-.checkBoxMoveToTop: "Cursor to Top" => "Cursor hacia arriba"
-.labelSearch: "Search" => "Búsqueda"
 .labelTime: "Time" => "Tiempo"
+.labelSearch: "Search" => "Búsqueda"
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "Introduzca texto para buscar un elemento en cualquier campo"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
+.buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrar las entradas según el tipo de evento"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Eliminar ordenación de columnas"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Ir a la entrada"
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Ir a estrella en mapa 3D"
 .viewOnEDSMToolStripMenuItem: "View on EDSM" => "Ver en EDSM"
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Establecer punto de inicio/parada para cálculos de recorrido"
-.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "Enviar escaneo no sincronizado a EDDN"
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Ejecutar acciones en esta entrada"
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "Copiar la entrada del diario al portapapeles"
 .TT1: " showing {0} original {1}" => " mostrando {0} original {1}"
@@ -322,16 +261,11 @@ SECTION UserControlJournalGrid
 .TTEvent: "Filter out entries based on event type, " => "Filtra las entradas según el tipo de evento, "
 .TTFilt3: "Total filtered out {0}" => "Total filtrado {0}"
 .TTTotal: "Filter out entries matching the field selection, " => "Filtre las entradas que coincidan con la selección del campo"
+.JHF: "Journal: Filter out fields" => "Diario: filtrar campos"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "No se pudo encontrar el sistema - no se ha sincronizado o EDSM no está disponible"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Introduzca texto para buscar un elemento en cualquier campo"
-.buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrar las entradas según el tipo de evento"
-.comboBoxJournalWindow.ToolTip: "Select the entries selected by age" => "Seleccione las entradas seleccionadas por edad"
 
 SECTION UserControlLedger
 
-.labelNoItems: "No Items Found" => "No se encontraron artículos"
 .TimeCol: "Time" => "Tiempo"
 .Type: "Type" => "Tipo"
 .Notes: "Notes" => "Notas"
@@ -340,7 +274,6 @@ SECTION UserControlLedger
 .Balance: "Balance" => "Equilibrio"
 .NormProfit: "Profit Per Unit" => "Beneficio por unidad"
 .labelTime: "Time" => "Tiempo"
-.buttonFilter: "Event Filter" => "Filtro de eventos"
 .labelSearch: "Search" => "Búsqueda"
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "Mostrar entradas que coincidan con este filtro de tipo de evento"
 .textBoxFilter.ToolTip: "Search to particular items" => "Buscar elementos en particular"
@@ -350,30 +283,6 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
 .NOLG: "No Ledger available" => "No hay libro mayor disponible"
 .TotalProfit: "Total Profit" @
-
-SECTION UserControlLocalMap
-
-.labelExtMin: "Min" => "Min"
-.labelExtMax: "Max" => "Max"
-.toolStripMenuZoom: "Zoom" => "Zoom"
-.toolStripMenuZoom.toolStripMenuZoom1: "1:1" => "1:1"
-.toolStripMenuZoom.toolStripMenuZoom125: "1.25:1" => "1,25: 1"
-.toolStripMenuZoom.toolStripMenuZoom15: "1.5:1" => "1,5: 1"
-.toolStripMenuZoom.toolStripMenuZoom175: "1.75:1" => "1,75: 1"
-.toolStripMenuZoom.toolStripMenuZoom2: "2:1" => "2: 1"
-.toolStripMenuZoom.toolStripMenuZoom25: "2.5:1" => "2.5: 1"
-.toolStripMenuZoom.toolStripMenuZoom3: "3:1" => "3: 1"
-.toolStripMenuZoom.toolStripMenuZoom35: "3.5:1" => "3,5: 1"
-.toolStripMenuZoom.toolStripMenuZoom4: "4:1" => "4: 1"
-.toolStripMenuZoom.toolStripMenuZoom5: "5:1" => "5: 1"
-.toolStripMenuZoom.toolStripMenuZoom6: "6:1" => "6: 1"
-.toolStripMenuZoom.toolStripMenuZoom8: "8:1" => "8: 1"
-.toolStripMenuZoom.toolStripMenuZoom10: "10:1" => "10: 1"
-.toolStripMenuZoomCenterMap: "Center Map" => "Mapa central"
-.toolStripMenuReset: "Reset" => "Reiniciar"
-.aboutToolStripAbout: "About" => "Acerca de"
-.panelTop.ToolTip: "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button" => "Girar con el primer botón del mouse; Zoom con ScrollWheel; Desplazar con el botón central"
-.3dmap: "3D Map of closest systems from {0}" => "Mapa 3D de los sistemas más cercanos de {0}"
 
 SECTION UserControlLog
 
@@ -396,13 +305,11 @@ SECTION UserControlMarketData
 .checkBoxBuyOnly: "Buy Only" => "Solo comprar"
 .labelVs: "Vs" => "Vs"
 .labelLocation: "No Data" => "Sin datos"
-.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparision to the previous market data.\r\nUseful when doing A->B->A trading" => "Al llegar a una estación en la que se está comparando (a la derecha)\r\ncambie la comparación con los datos de mercado anteriores.\r\nEs útil cuando se realizan operaciones A-> B-> A"
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Mostrar artículos que solo se pueden comprar"
 .comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Haga clic para seleccionar un conjunto de datos de mercado de comparación"
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Haga clic para seleccionar entre seguir el cursor o un conjunto de datos de mercado en particular"
 .Conly: "Cargo only, no market data on this item" => "Solo carga, no hay datos de mercado sobre este artículo"
 .LEntry: "Travel History Entry Last" => "Última entrada del historial de viajes"
-.panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" => "Al llegar a una estación con la que está comparando (a la derecha)\r\nswap t"
 .checkBoxSellOnly: "Sell Only" => "Solo vender"
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" => "Mostrar artículos que solo puede vender"
 
@@ -415,20 +322,17 @@ SECTION UserControlMaterialCommodities
 .Total: "Total" => "Total"
 .Rare: "Rare" => "Raro"
 .Recipes: "Recipes" => "Recetas"
-.labelNoItems: "No Items Found" => "No se encontraron artículos"
 .NameCol: "Name" => "Nombre"
 .ShortName: "Abv" => "Abv"
 .Category: "Category" => "Categoría"
 .Type: "Type" => "Tipo"
 .Number: "Number" => "Número"
 .Price: "Avg. Price" => "Precio medio"
-.checkBoxClear: "Remove zero items" => "Eliminar cero elementos"
 .textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
 .textBoxItems1.ToolTip: "Count of Items" => "Recuento de elementos"
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Elimine cero elementos el tiempo después de que lleguen a cero"
 .buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
 
 SECTION UserControlMissionOverlay
 
@@ -445,47 +349,51 @@ SECTION UserControlSurveyor
 .Scan: "Scan" => "Escanear"
 .Systemscancomplete: "System scan complete." => "Análisis del sistema completo"
 .bodiesfound: " bodies found." => " cadáveres encontrados"
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" => "Radio bajo"
-.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" => "Consulte EDSM para obtener información"
-.autoHideToolStripMenuItem: "Auto Hide" => "Auto-escondite"
-.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "No te escondas en el modo FSS"
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Mostrar información del sistema siempre"
-.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" => "Seleccionar señales FSS mostradas"
-.planetaryClassesToolStripMenuItem: "Planetary Classes" => "Clases planetarias"
+.textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Izquierda"
+.textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "Centro"
+.textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" => "Derecha"
+.showAllPlanetsToolStripMenuItem: "Show All Planets" => "Mostrar todos los planetas"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammonia World"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Mundo parecido a la Tierra"
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" => "Mundo acuático"
-.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
-.metalToolStripMenuItem: "Metal-rich Body" @
-.bodyFeaturesToolStripMenuItem: "Body Features" => "Características corporales"
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" => "Terraformable"
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" => "Tiene vulcanismo"
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "Tiene anillos"
-.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Ocultar cuerpos ya asignados"
-.textAlignToolStripMenuItem: "Alignment" => "Alineación"
-.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "Izquierda"
-.textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Centro"
-.textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Derecha"
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" => "Radio bajo"
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Tiene señales"
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "Aterrizable"
-.showAllPlanetsToolStripMenuItem: "Show All Planets" => "Mostrar todos los planetas"
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" => "Mostrar todas las estrellas"
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Mostrar grupos de cinturones"
-.showMoreInformationToolStripMenuItem: "Show More Information" => "Mostrar más información"
 .showValuesToolStripMenuItem: "Show values" => "Mostrar valores"
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.wordWrapToolStripMenuItem: "Word Wrap" => "Ajuste de línea"
-.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
-.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
-.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
-.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
-.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
-.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.showMoreInformationToolStripMenuItem: "Show More Information" => "Mostrar más información"
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.autoHideToolStripMenuItem: "Auto Hide" => "Auto-escondite"
+.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "No te escondas en el modo FSS"
+.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Ocultar cuerpos ya asignados"
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Mostrar información del sistema siempre"
+.extButtonPlanets.ToolTip: "Planet Filter" @
+.extButtonStars.ToolTip: "Star Filter" @
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonAlignment.ToolTip: "Alignment" @
+.extButtonFont.ToolTip: "Font" @
+.extButtonFSS.ToolTip: "FSS Signal Selection" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extButtonSetRoute.ToolTip: "Select route to follow" @
+.extButtonControlRoute.ToolTip: "Route Settings" @
+.navroute: "Nav Route" @
+.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
+.fsssignals: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
 
@@ -511,24 +419,36 @@ SECTION UserControlMissions
 
 SECTION UserControlModules
 
+.labelShip: "Ship" => "Nave"
+.labelVehicle: "Unknown" => "Desconocido"
+.comboBoxShips.ToolTip: "Select ship to view" => "Seleccionar Nave para ver"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
+.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Configurar datos adicionales que faltan en la salida del diario Elite"
+.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Enviar a ED Ship Yard"
+.buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Enviar a Coriolis"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
+.ForceSell: "Force Sell" => "Forzar venta"
+.ConfirmForceSell: "Condirm sell of ship" @
+.StoredModules: "Stored Modules" => "Módulos almacenados"
+.TravelHistoryEntry: "Travel History Entry" => "Entrada del historial de viajes"
+.System: "System" => "Sistema"
+.TxTime: "Tx Time" => "Tx Time"
+.Cost: "Cost" => "Costo"
+.SlotCol: "Slot" => "Ranura"
+.ItemInfo: "Info" => "Información"
+.Value: "Value" => "Valor"
+.Stored: "Stored" @
+.AllModules: "All Modules" => "Todos los módulos"
+.FSDAvgJump: "FSD Avg Jump" => "Salto medio FSD"
+.HT: "Half tank, no cargo" => "Medio tanque, sin carga"
 .MassFDUnladen: "Mass FD Unladen" => "Mass FD Unladen"
 .FuelReserveCapacity: "Fuel Reserve Capacity" => "Capacidad de reserva de combustible"
 .HullHealth: "Hull Health (Loadout)" => "Salud del casco (equipamiento)"
 .ItemLocalised: "Type" => "Tipo"
 .ItemCol: "Item" => "Artículo"
-.SlotCol: "Slot" => "Ranura"
-.ItemInfo: "Info" => "Información"
 .Mass: "Mass" => "Masa"
 .BluePrint: "BluePrint" => "Plano"
 .PriorityEnable: "P/E" => "EDUCACIÓN FÍSICA"
-.StoredModules: "Stored Modules" => "Módulos almacenados"
-.TravelHistoryEntry: "Travel History Entry" => "Entrada del historial de viajes"
-.Value: "Value" => "Valor"
-.System: "System" => "Sistema"
-.TxTime: "Tx Time" => "Tx Time"
-.Cost: "Cost" => "Costo"
-.FSDAvgJump: "FSD Avg Jump" => "Salto medio FSD"
-.HT: "Half tank, no cargo" => "Medio tanque, sin carga"
 .FSDMaxRange: "FSD Max Range" => "Rango máximo FSD"
 .FT: "Full Tank, no cargo" => "Tanque lleno, sin carga"
 .FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" => "FSD Maximum Fuel por salto"
@@ -546,10 +466,12 @@ SECTION UserControlModules
 .PadSize: "Pad Size" => "Tamaño de pad"
 .MainThrusterSpeed: "Main Thruster Speed" => "Velocidad del propulsor principal"
 .MainThrusterBoost: "Main Thruster Boost" => "Impulso del propulsor principal"
-.InTransitto: "In Transit to " => "En tránsito a "
 .Storedat: "Stored at" => "Guardado en"
 .CargoCapacity: "Cargo Capacity" => "Capacidad de carga"
 .InTransit: "In Transit" => "En tránsito"
+.InTransitto: "In Transit to " => "En tránsito a "
+.EDSURL: "Enter ED Shipyard URL" => "Introduzca la URL del astillero ED"
+.CURL: "Enter Coriolis URL" => "Introduzca la URL de Coriolis"
 .FW: "Fuel Warning: " => "Advertencia de combustible: "
 .TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "Ingrese el nivel de advertencia de combustible en% (0 = apagado, 1-100%)"
 .PresstoAccept: "Press to Accept" => "Presione para aceptar"
@@ -557,18 +479,6 @@ SECTION UserControlModules
 .NValid: "A Value is not valid" => "Un valor no es válido"
 .SC: "Ship Configure" => "Configurar envío"
 .MI: "Module Information" => "Información del módulo"
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Configurar datos adicionales que faltan en la salida del diario Elite"
-.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Enviar a ED Ship Yard"
-.buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Enviar a Coriolis"
-.comboBoxShips.ToolTip: "Select ship to view" => "Seleccionar Nave para ver"
-.labelVehicle: "Unknown" => "Desconocido"
-.labelShip: "Ship" => "Nave"
-.EDSURL: "Enter ED Shipyard URL" => "Introduzca la URL del astillero ED"
-.CURL: "Enter Coriolis URL" => "Introduzca la URL de Coriolis"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-.AllModules: "All Modules" => "Todos los módulos"
-.ForceSell: "Force Sell" => "Forzar venta"
 .NOSI: "No Ship Information available" => "No hay información de envío disponible"
 
 SECTION UserControlNotePanel
@@ -600,50 +510,12 @@ SECTION UserControlPanelSelector
 .PP1: "Pop out in a new window" => "Aparecer en una nueva ventana"
 .MT1: "Open as a new menu tab" => "Abrir como una nueva pestaña de menú"
 
-SECTION UserControlPlot
-
-.sysName: "Name" => "Nombre"
-.sysX: "X" => "X"
-.sysY: "Y" => "Y"
-.sysZ: "Z" => "Z"
-.sysVisits: "Visits" => "Visitas"
-.labelExtMin: "Min" => "Min"
-.labelExtMax: "Max" => "Max"
-.optionsToolStripMenuItem: "Options" => "Opciones"
-.optionsToolStripMenuItem.exportToToolStripMenuItem: "Export to..." => "Exportar a..."
-.optionsToolStripMenuItem.exportToToolStripMenuItem.pNGToolStripMenuItem: "PNG" => "PNG"
-.optionsToolStripMenuItem.exportToToolStripMenuItem.pDFToolStripMenuItem: "PDF" => "PDF"
-.optionsToolStripMenuItem.exportToToolStripMenuItem.sVGToolStripMenuItem: "SVG" => "SVG"
-.optionsToolStripMenuItem.exportToToolStripMenuItem.tXTToolStripMenuItem: "TXT" => "TXT"
-.comboBoxView.ToolTip: "Orientation of the Plot" => "Orientación de la parcela"
-.textMinRadius.ToolTip: "Minimum Range" => "Rango mínimo"
-.textMaxRadius.ToolTip: "Maximum Range" => "Rango maximo"
-.Top: "Top" => "Cima"
-.Front: "Front" => "Parte delantera"
-.Side: "Side" => "Lado"
-.Grid: "Grid" => "Cuadrícula"
-.Report: "Report" => "Informe"
-.2d: "2D Plot of systems in range from {0} " => "Gráfica 2D de sistemas en el rango de {0} "
-.PTOP: "Plot around {0}, viewed from the top" => "Trazar alrededor de {0}, visto desde arriba"
-.PFRONT: "Plot around {0}, viewed from the front" => "Trazar alrededor de {0}, visto desde el frente"
-.PSIDE: "Plot around {0}, viewed from the side" => "Trazar alrededor de {0}, visto desde el lateral"
-.SysAROUND: "Systems around {0}, from {1} to {2}, Ly: {3}" => "Sistemas alrededor de {0}, de {1} a {2}, Ly: {3}"
-.Vs: "\r\n    Visits: {0}" => "\r\n    Visitas: {0}"
-.Nt: "\r\n    Notes: {0}\r\n" => "\r\n    Notas: {0}\r\n"
-.D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0} distancia {1:N2} Ly"
-.D2: "\r\n    Visits: {0}" => "\r\n    Visitas: {0}"
-.D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "\r\n    Coordenadas: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
-
 SECTION UserControlRoute
 
 .SystemCol: "System" => "Sistema"
 .DistanceCol: "Distance" => "Distancia"
-.XCol: "X" => "X"
-.YCol: "Y" => "Y"
-.ZCol: "Z" => "Z"
 .WayPointDistCol: "Dist. Waypoint" => "Dist. Marcador"
 .DeviationCol: "Deviation" => "Desviación"
-.buttonExtExcel: "2" => "2"
 .buttonExtTravelTo: "History" => "Historial"
 .buttonExtTravelFrom: "History" => "Historial"
 .buttonExtTargetTo: "Target" => "Objetivo"
@@ -671,6 +543,7 @@ SECTION UserControlRoute
 .buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Abra este sistema de ruta final en EDSM"
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Abra este sistema de ruta de inicio en EDSM"
 .buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Copie el sistema de destino para iniciar la entrada de ruta"
+.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
 .cmd3DMap.ToolTip: "Show route on 3D Map" => "Mostrar ruta en mapa 3D"
 .textBox_From.ToolTip: "Select system to start the route" => "Seleccionar sistema para iniciar la ruta"
 .textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "Da tu rango de salto o rango de búsqueda para saltos largos"
@@ -697,120 +570,84 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
-.Note: "Note: {0}" => "Nota: {0}"
 .showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" => "Mostrar notas de marcadores"
-.setRouteToolStripMenuItem: "Set route" => "Establecer ruta"
 .showJumpsToolStripMenuItem: "Show Jumps To Go" => "Mostrar saltos para llevar"
 .showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "Mostrar coordenadas de Marcador"
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Mostrar desviación de la ruta"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Copia automática de Marcador"
 .autoSetTargetToolStripMenuItem: "Auto set target" => "Establecer objetivo automáticamente"
-.NoRoute: "Please set a route, by right clicking" => "Por favor, establezca una ruta, haciendo clic derecho"
-.NoWay: "Route contains no waypoints" => "La ruta no contiene Marcadores"
-.Unk: "Unknown location" => "Ubicación desconocida"
-.NoCo: "No systems in route have known co-ords" => "Ningún sistema en ruta tiene códigos conocidos"
+.showtargetinfo: "Show Target Information" @
+.showfuelinfo: "Show Fuel Information" @
 .J1: "jump" => "salto"
-.JS: "jumps" => "saltos"
-.NoFSD: " No Ship FSD Information" => " Información de FSD sin envío"
-.FL: "From Last WP " => "Desde el último WP "
 .TF: "To First WP " => "Al primer WP "
+.JS: "jumps" => "saltos"
+.FL: "From Last WP " => "Desde el último WP "
 .LF: ", Left {0:N1}ly" => ", Izquierda {0:N1} ly"
 .ToWP: "(WP {0})" => "(WP {0})"
+.NoFSD: " No Ship FSD Information" => " Información de FSD sin envío"
 .Dev: ", Dev {0:N1}ly" => ", Dev {0:N1} ly"
-.Selectroute: "Select route" => "Seleccionar ruta"
-.PresstoCancel: "Press to Cancel" => "Presione para cancelar"
-.Enterroute: "Enter route" => "Ingresar ruta"
+.NoWay: "Route contains no waypoints" => "La ruta no contiene Marcadores"
+.NoCo: "No systems in route have known co-ords" => "Ningún sistema en ruta tiene códigos conocidos"
+.Note: "Note: {0}" => "Nota: {0}"
 
 SECTION UserControlScan
 
-.Expired: "Expired: " => "Caducado: "
-.System: "System: " => "Sistema: "
+.extCheckBoxStar.ToolTip: "Select another system to view" => "Seleccione otro sistema para ver"
+.extButtonFilter.ToolTip: "Filter Bodies" @
+.extButtonDisplayFilters.ToolTip: "Settings" @
+.buttonSize.ToolTip: "Select image size" => "Seleccionar tamaño de imagen"
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Mostrar/Ocultar datos corporales de EDSM"
+.extButtonHighValue.ToolTip: "Set High Value Limit" => "Establecer límite de valor alto"
+.buttonExtExcel.ToolTip: "Export" => "Enviar datos en la cuadrícula para sobresalir"
+.System: "System:" => "Sistema: "
 .EnterSys: "Show System" => "Mostrar sistema"
 .VLMT: "Set Valuable Minimum" => "Establecer un mínimo valioso"
-.extCheckBoxStar.ToolTip: "Select another system to view" => "Seleccione otro sistema para ver"
-.buttonSize.ToolTip: "Select image size" => "Seleccionar tamaño de imagen"
-.extButtonHighValue.ToolTip: "Set High Value Limit" => "Establecer límite de valor alto"
-.toolStripMenuItemToolbar: "Show/Hide Toolbar" => "Mostrar/Ocultar barra de herramientas"
-.ToolTip: "Right click on panel to show/hide the toolbar" => "Haga clic derecho en el panel para mostrar/ocultar la barra de herramientas"
-.MatFull: "Hide materials which have reached their storage limit" => "Ocultar materiales que hayan alcanzado su límite de almacenamiento"
 .StatusIcons: "Show body status icons" => "Mostrar iconos de estado del cuerpo"
-.checkBoxTiny.ToolTip: "Image size teeny tiny" => "Tamaño de imagen pequeñito"
+.SystemValue: "Show system and value in main display" => "Mostrar sistema y valor en la pantalla principal"
+.MatFull: "Hide materials which have reached their storage limit" => "Ocultar materiales que hayan alcanzado su límite de almacenamiento"
 .ShowMaterials: "Show Materials" => "Mostrar materiales"
 .ShowRaresOnly: "Show rare materials only" => "Mostrar solo materiales raros"
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Mostrar/Ocultar datos corporales de EDSM"
 .ShowMoons: "Show Moons" => "Mostrar lunas"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
-.lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" => "Haga clic derecho en el panel para mostrar/ocultar la barra de herramientas"
-.AV: "Approx value: {0:N0}" => "Valor aproximado: {0:N0}"
-.NSD: "No scan data available" => "No hay datos de escaneo disponibles"
-.BC: "Barycentre of {0}" => "Baricentro de {0}"
-.showSystemToolStripMenuItem: "Show System" => "Mostrar sistema"
-.cancelShowSystemToolStripMenuItem: "Cancel Show System" => "Cancelar Mostrar sistema"
-.panelControls.ToolTip: "Right click on panel to show/hide the toolbar" => "Haga clic derecho en el panel para mostrar/ocultar la barra de herramientas"
-.rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" => "Haga clic derecho en el panel para mostrar/ocultar la barra de herramientas"
-.SystemValue: "Show system and value in main display" => "Mostrar sistema y valor en la pantalla principal"
+.Belt: "Belt" => "Cinturón"
+.Star: "Star" => "Estrella"
+.Barycentre: "Barycentre" => "Baricentro"
+.Body: "Body" => "Cuerpo"
 .AllG: "Show G on all planets" => "Mostrar G en todos los planetas"
 .HabZone: "Show Habitation Zone" => "Mostrar zona de habitación"
-.StarClass: "Show Classes of Stars" => "Mostrar clases de estrellas"
 .PlanetClass: "Show Classes of Planets" => "Mostrar clases de planetas"
+.StarClass: "Show Classes of Stars" => "Mostrar clases de estrellas"
 .Distance: "Show distance of bodies" => "Mostrar la distancia de los cuerpos"
-.Barycentre: "Barycentre" => "Baricentro"
-.Belt: "Belt" => "Cinturón"
-.Body: "Body" => "Cuerpo"
-.Star: "Star" => "Estrella"
+.Expired: "Expired: " => "Caducado: "
 
 SECTION UserControlScanGrid
 
-.Geologicalactivity: "Geological activity" => "Actividad geológica"
-.Surfacemapped: "Surface mapped" => "Superficie asignada"
 .colName: "Name" => "Nombre"
 .colClass: "Class" => "Clase"
 .colDistance: "Distance" => "Distancia"
 .colBriefing: "Information" => "Información"
-.Moon: "Moon" => "Luna"
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
 .MainStar: "Main Star" => "Estrella principal"
 .Mass: "Mass" => "Masa"
-.HabitableZone: "Habitable Zone" => "Zona habitable"
-.Landable: "Landable" => "Aterrizable"
-.Terraformable: "Terraformable" => "Terraformable"
-.Volcanism: "Volcanism" => "Vulcanismo"
-.Rings: "Has {0} rings: " => "Tiene {0} anillos: "
-.Ring: "Ring: " => "Anillo: "
-.BC: "This body contains: " => "Este cuerpo contiene: "
-.Value: "Value" => "Valor"
-.SS: "Scan Summary for {0}. {1}" => "Escanear resumen de {0}. {1}"
-.AV: "Approx total scan value: {0:N0}" => "Valor de escaneo total aproximado: {0:N0}"
 .Radius: "Radius" => "Radio"
 .Temperature: "Temperature" => "La temperatura"
-.MetalRichbodies: "Metal Rich bodies" => "Cuerpos ricos en metal"
-.Waterworlds: "Water worlds" => "Mundos acuáticos"
-.Earthlikesplanets: "Earth likes planets" => "A la Tierra le gustan los planetas"
-.Ammoniaworlds: "Ammonia worlds" => "Mundos de amoníaco"
-.Volcanicactivity: "Volcanic activity" => "Actividad volcánica"
+.Terraformable: "Terraformable" => "Terraformable"
+.Moon: "Moon" => "Luna"
+.Landable: "Landable" => "Aterrizable"
+.Geologicalactivity: "Geological activity" => "Actividad geológica"
+.Surfacemapped: "Surface mapped" => "Superficie asignada"
+.BC: "This body contains: " => "Este cuerpo contiene: "
+.Ring: "Ring: " => "Anillo: "
 .Belt: "Belt: " => "Cinturón: "
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Resumen de exploración de {0}: {1} estrellas; {2} planetas ({3} terrestres, {4} gigantes gaseosos), {5} lunas"
-.circumstellarZoneToolStripMenuItem: "Circumstellar Zones" => "Zonas circunestelares"
-.circumstellarZoneToolStripMenuItem.habitableZoneToolStripMenuItem: "Habitable Zone" => "Zona habitable"
-.circumstellarZoneToolStripMenuItem.metalRichToolStripMenuItem: "Metal Rich" => "Rico en metales"
-.circumstellarZoneToolStripMenuItem.waterWorldsToolStripMenuItem: "Water Worlds" => "Mundos del agua"
-.circumstellarZoneToolStripMenuItem.earthLikePlanetsToolStripMenuItem: "Earth Like Planets" => "Tierra como planetas"
-.circumstellarZoneToolStripMenuItem.ammoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "Mundos de amoníaco"
-.circumstellarZoneToolStripMenuItem.icyBodiesToolStripMenuItem: "Icy Bodies" => "Cuerpos helados"
-.structuresToolStripMenuItem: "Structures" => "Estructuras"
-.structuresToolStripMenuItem.beltsToolStripMenuItem: "Belts" => "Cinturones"
-.structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" => "Anillos"
-.materialsToolStripMenuItem: "Materials" => "Materiales"
-.valuesToolStripMenuItem: "Values" => "Valores"
-.columnsToolStripMenuItem: "Columns" => "Columnas"
-.columnsToolStripMenuItem.nameToolStripMenuItem: "Name" => "Nombre"
-.columnsToolStripMenuItem.classToolStripMenuItem: "Class" => "Clase"
-.columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" => "Distancia"
-.columnsToolStripMenuItem.informationToolStripMenuItem: "Information" => "Información"
-.toolStripStatusTotalValue: "Estimated scans value" => "Valor de escaneos estimado"
-.toolStripStatusGreen: "GREEN SYSTEM" => "SISTEMA VERDE"
+.Value: "Value" => "Valor"
 .GS: "This is a green system, as it has all existing jumponium materials available!" => "¡Este es un sistema ecológico, ya que tiene disponibles todos los materiales Jumponium existentes!"
 .JS: " jumponium materials found in system." => " materiales de jumponium encontrados en el sistema"
-.eDSMCheckToolStripMenuItem: "EDSM Check" @
+.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Resumen de exploración de {0}: {1} estrellas; {2} planetas ({3} terrestres, {4} gigantes gaseosos), {5} lunas"
+.structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Cinturones"
+.structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anillos"
+.materialsToolStripMenuItem: "Show materials" => "Materiales"
+.valuesToolStripMenuItem: "Show values" => "Valores"
 
 SECTION UserControlSettings
 
@@ -826,7 +663,7 @@ SECTION UserControlSettings
 .button_edittheme: "Edit Theme" => "Editar tema"
 .buttonSaveTheme: "Save Theme" => "Guardar tema"
 .groupBoxCustomHistoryLoad: "History" => "Historia"
-.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Número de filas Última entrada más alta"
+.checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "Número de filas Última entrada más alta"
 .labelTimeDisplay: "Time: " => "Tiempo: "
 .extGroupBoxWebServer: "Web Server" => "Servidor web"
 .labelPortNo: "Port" => "Puerto"
@@ -838,9 +675,6 @@ SECTION UserControlSettings
 .labelHistoryEssItems: "Essential entries: " => "Entradas esenciales: "
 .labelHistorySel: "Entries to read: " => "Entradas para leer: "
 .groupBoxCustomScreenShots: "Screenshots conversion" => "Conversión de capturas de pantalla"
-.checkBoxCustomCopyToClipboard: "Copy to clipboard" => "Copiar al portapapeles"
-.checkBoxCustomMarkHiRes: "Mark HiRes files" => "Marcar archivos HiRes"
-.checkBoxCustomRemoveOriginals: "Remove Originals" => "Eliminar originales"
 .buttonExtScreenshot: "Configure" => "Configurar"
 .checkBoxCustomEnableScreenshots: "Enable" => "Permitir"
 .groupBoxCustomEDSM: "EDSM/EDDB Control" => "Control EDSM/EDDB"
@@ -852,6 +686,9 @@ SECTION UserControlSettings
 .checkBoxCustomResize: "Redraw the screen during resizing" => "Redibujar la pantalla durante el cambio de tamaño"
 .checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "Minimizar al icono del área de notificación"
 .checkBoxUseNotifyIcon: "Show notification area icon" => "Mostrar icono del área de notificación"
+.extGroupBoxDLLPerms: "DLLs" @
+.extButtonDLLPerms: "Permissions" @
+.extButtonDLLConfigure: "Configure" @
 .groupBoxCustomLanguage: "Language" => "Idioma"
 .groupBoxCustomSafeMode: "Advanced" => "Avanzado"
 .buttonExtSafeMode: "Restart in Safe Mode" => "Reiniciar en modo seguro"
@@ -866,9 +703,6 @@ SECTION UserControlSettings
 .comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Seleccione la tecla para mantener presionada durante al menos 500 ms\r\npara mostrar la forma de una ventana emergente transparente, cuando\r\nel modo de transparencia emergente si Tc (Click a través,\r\ncontroles aún activos) o Tf ( controles inactivos)\r\nNo se garantiza que todas las teclas estén activas en todos los teclados "
 .comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" => "Seleccione los elementos que considere esenciales para cargar con una antigüedad superior a la anterior"
 .comboBoxCustomHistoryLoadTime.ToolTip: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "Reducir el uso de memoria. Seleccione cargar todos los registros o cargar solo los elementos esenciales de los registros anteriores a un tiempo establecido"
-.checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" => "Copia automática de la imagen al portapapeles"
-.checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" => "Para archivos de alta resolución, márquelos en el nombre del archivo"
-.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "Después de la conversión, elimine los originales"
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Configurar más opciones de captura de pantalla"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Activar/desactivar conversión de captura de pantalla"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Configurar qué partes de la galaxia se almacenan en las bases de datos"
@@ -879,6 +713,13 @@ SECTION UserControlSettings
 .checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Minimice la ventana principal al icono del área de notificación del sistema (bandeja del sistema)"
 .checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "Mostrar un icono del área de notificación del sistema (bandeja del sistema) para EDDiscovery"
 .buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "El modo seguro le permite realizar operaciones especiales, como mover las bases de datos, restablecer la interfaz de usuario, restablecer los paquetes de acción, DLL, etc."
+.GameTime: "Game Time" => "Horario del juego"
+.Local: "Local" => "Horario Local"
+.WSQ: "Warning about webserver-  see english text" => "Advertencia sobre el servidor web: consulte el texto en inglés"
+.WSF: "Did not start - click OK to configure windows" => "No se inició: haga clic en Aceptar para configurar Windows"
+.FS: "All entries for Statistics" => "Todas las entradas para estadísticas"
+.SM: "Safe Mode" => "Modo seguro"
+.CSM: "Confirm restart to safe mode" => "Confirmar reinicio en modo seguro"
 .DLA: "Disabled-Load All" => "Deshabilitado-Cargar todo"
 .7daysold: ">7 days old" => "> 7 días"
 .30daysold: ">30 days old" => ">30 días"
@@ -887,42 +728,19 @@ SECTION UserControlSettings
 .180daysold: ">180 days old" => ">180 días de edad"
 .270daysold: ">270 days old" => ">270 días de edad"
 .365daysold: "> 365 days old" => "> 365 días de edad"
-.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "Escaneos, carga, misiones, estado, saltos, etc."
-.FS: "All entries for Statistics" => "Todas las entradas para estadísticas"
-.EJS: "Jumps and Scans" => "Saltos y escaneos"
-.EJ: "Jumps" => "Saltos"
-.EN: "Nothing" => "Ninguna"
-.WSQ: "Warning about webserver-  see english text" => "Advertencia sobre el servidor web: consulte el texto en inglés"
-.WSF: "Did not start - click OK to configure windows" => "No se inició: haga clic en Aceptar para configurar Windows"
-.CSM: "Confirm restart to safe mode" => "Confirmar reinicio en modo seguro"
-.SM: "Safe Mode" => "Modo seguro"
-.checkBoxShowUIEvents: "Show Elite UI Events in history" => "Mostrar eventos Elite UI en el historial"
-.checkBoxUTC: "Display Game time instead of local time" => "Mostrar la hora del juego en lugar de la hora local"
-.buttonReloadSaved: "Open Saved Setup" => "Abrir configuración guardada"
-.buttonSaveSetup: "Save Current Setup" => "Guardar configuración actual"
-.checkBoxAutoSave: "Save Pop Outs on Exit" => "Guardar ventanas emergentes al salir"
-.checkBoxAutoLoad: "Load Pop Outs at Start" => "Cargar ventanas emergentes al inicio"
-.groupBox3dmap: "3D Map Settings" => "Configuración del mapa 3D"
-.labelMapCol: "Default Map Color" => "Color de mapa predeterminado"
-.labelZoom: "Default Zoom" => "Zoom predeterminado"
-.radioButtonHistorySelection: "History Grid Selection" => "Selección de cuadrícula de historial"
-.radioButtonCentreHome: "Home System" => "Sistema de inicio"
-.labelOpenOn: "Open Centred On" => "Abierto centrado en"
-.labelHome: "Now in Commander Settings" => "Ahora en la configuración de Commander"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La fuente utilizada por este tema no está disponible en su sistema.\r\nLa fuente necesaria es \" {0} \" "
-.Information: "Applies at next restart of ED Discovery" => "Se aplica en el próximo reinicio de ED Discovery"
 .AddC: "Commander name is not valid or duplicate" => "El nombre del comandante no es válido o está duplicado"
 .AddT: "Cannot create Commander" => "No se puede crear Commander"
-.DelCmdr: "Do you wish to delete commander " => "¿Desea eliminar el comandante "
 .Language: "Applies at next restart of ED Discovery" => "Se aplica en el próximo reinicio de ED Discovery"
 .RemoveSectors: "Remove Sectors" => "Eliminar sectores"
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "Eliminando {0} sector (s).\r\n\r\nEsto llevará un tiempo (hasta 30 minutos de dependencia del tipo de unidad y la cantidad de sectores).\r\nPuede continuar usando EDD mientras esta operación demora lugar\r\npero puede tardar en responder. No cierre EDD hasta que esta ventana diga\r\nel proceso ha finalizado\r\n\r\n "
-.GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Finalizado, cierre la ventana.\r\nSi ya tiene abierto el mapa 3d, los cambios no se reflejarán en ese mapa hasta el próximo inicio de EDD\r\n"
-.GameTime: "Game Time" => "Horario del juego"
-.Local: "Local" => "Horario Local"
+.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "Escaneos, carga, misiones, estado, saltos, etc."
+.EJS: "Jumps and Scans" => "Saltos y escaneos"
+.EJ: "Jumps" => "Saltos"
+.EN: "Nothing" => "Ninguna"
+.DelCmdr: "Do you wish to delete commander " => "¿Desea eliminar el comandante "
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La fuente utilizada por este tema no está disponible en su sistema.\r\nLa fuente necesaria es \" {0} \" "
 .NoMap: "No map available!" => "¡No hay mapa disponible!"
-.extGroupBoxDLLPerms: "DLL Permissions" @
-.extButtonDLLPerms: "Configure" @
+.GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Finalizado, cierre la ventana.\r\nSi ya tiene abierto el mapa 3d, los cambios no se reflejarán en ese mapa hasta el próximo inicio de EDD\r\n"
 
 SECTION UserControlShipYards
 
@@ -941,8 +759,6 @@ SECTION UserControlShipYards
 SECTION UserControlShoppingList
 
 .toggleListPositionToolStripMenuItem: "Toggle Shopping List Position" => "Alternar posición en la lista de compras"
-.buttonSpecialEffects: "Special Effects" => "Efectos especiales"
-.buttonTechBroker: "Tech Broker Unlocks" => "Desbloqueo de Tech Broker"
 .showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" => "Mostrar inyecciones máx. De FSD"
 .showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" => "Mostrar materiales corporales al aterrizar"
 .showBodyMaterialsWhenLandedToolStripMenuItem.onlyCapacityToolStripMenuItem: "Hide when storage full" => "Ocultar cuando el almacenamiento esté lleno"
@@ -959,8 +775,9 @@ SECTION UserControlShoppingList
 SECTION UserControlSpanel
 
 .showSystemInformationToolStripMenuItem: "Show System Information" => "Mostrar información del sistema"
-.showHabitationMinimumAndMaximumDistanceToolStripMenuItem: "Show Habitation Minimum and Maximum Distance" => "Mostrar distancia mínima y máxima de la habitación"
 .toolStripMenuItemTargetLine: "Show Target Line" => "Mostrar línea de destino"
+.blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "Mostrar cuadro negro alrededor del texto"
+.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Expandir texto sobre columnas vacías"
 .EDSMButtonToolStripMenuItem: "EDSM Button" => "Botón EDSM"
 .toolStripMenuItemTime: "Show Time" => "Tiempo de la funcion"
 .iconToolStripMenuItem: "Show Event Icon" => "Mostrar icono de evento"
@@ -969,46 +786,46 @@ SECTION UserControlSpanel
 .showNotesToolStripMenuItem: "Show Notes" => "Mostrar notas"
 .showXYZToolStripMenuItem: "Show XYZ" => "Mostrar XYZ"
 .showTargetToolStripMenuItem: "Show Target Distance per Star" => "Mostrar distancia objetivo por estrella"
-.blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "Mostrar cuadro negro alrededor del texto"
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "Mostrar distancias/coordenadas solo en saltos FSD"
-.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Expandir texto sobre columnas vacías"
-.dontShowInformationWhenToolStripMenuItem: "Don't show information when.." => "No mostrar información cuando ..."
-.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" => ".. cuando atracado o aterrizado"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" => ".. cuando en Galaxy Panel"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" => "... en el Panel de mapa del sistema"
-.OrdertoolStripMenuItem: "Column Order.." => "Orden de columna ..."
-.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "Por Defecto"
-.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Notas después de XYZ"
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" => "Distancia objetivo, XYZ, notas"
-.configureEventFilterToolStripMenuItem: "Configure Event Filter.." => "Configurar filtro de eventos ..."
-.configureFieldFilterToolStripMenuItem: "Configure Field Filter.." => "Configurar filtro de campo ..."
-.surfaceScanDetailsToolStripMenuItem: "Configure Scan Display.." => "Configurar pantalla de escaneo ..."
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" => "No mostrar"
-.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "Mostrar por 15 años"
-.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "Show for 30s"
-.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "Espectáculo de los 60"
-.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "Mostrar hasta el próximo escaneo"
-.showInPositionToolStripMenuItem: "Set Scan Position.." => "Establecer posición de escaneo ..."
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" => "A derecha"
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" => "A la izquierda"
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" => "Encima"
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" => "Debajo"
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" => "Encima"
-.Target: "Target" => "Objetivo"
-.TVE: "View system on EDSM" => "Ver sistema en EDSM"
-.SPF: "Summary Panel: Filter out fields" => "Panel de resumen: filtrar campos"
-.showCircumstellarZonesToolStripMenuItem: "Show Circumstellar Zones" => "Mostrar zonas circunestelares"
+.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" => "Mostrar zonas circunestelares"
 .showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" => "Planetas ricos en metales"
 .showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" => "Mundos del agua"
 .showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" => "Tierra como"
 .showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "Mundos de amoníaco"
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Planetas helados"
-.dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Ocultar completamente el panel"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => ".. cuando en un Panel"
+.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "Por Defecto"
+.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Notas después de XYZ"
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" => "Distancia objetivo, XYZ, notas"
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" => "No mostrar"
+.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "Mostrar por 15 años"
+.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "Show for 30s"
+.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "Espectáculo de los 60"
+.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "Mostrar hasta el próximo escaneo"
+.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" => "A derecha"
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" => "A la izquierda"
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" => "Encima"
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" => "Debajo"
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" => "Encima"
+.dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "No mostrar información cuando ..."
+.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => ".. cuando atracado o aterrizado"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => ".. cuando en Galaxy Panel"
+.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonColumns.ToolTip: "Configure columns shown" @
+.extButtonColumnOrder.ToolTip: "Configure column order" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.buttonFilter.ToolTip: "Select what journal events to show" => "Configurar filtro de eventos ..."
+.buttonField.ToolTip: "Filter out events" => "Configurar filtro de campo ..."
+.extButtonScanShow.ToolTip: "Configure scan display" @
+.extButtoScanPos.ToolTip: "Set position of scan display" @
+.extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.Target: "Target" => "Objetivo"
+.TVE: "View system on EDSM" => "Ver sistema en EDSM"
+.SPF: "Summary Panel: Filter out fields" => "Panel de resumen: filtrar campos"
 
 SECTION UserControlStarDistance
 
-.addToExplorationToolStripMenuItem: "Add To Exploration" => "Agregar a exploración"
 .addToExpeditionToolStripMenuItem: "Add to Expedition" => "Agregar a la expedición"
 .colName: "Name" => "Nombre"
 .colDistance: "Distance" => "Distancia"
@@ -1031,7 +848,6 @@ SECTION UserControlStarList
 .ColumnSystem: "System" => "Sistema"
 .ColumnVisits: "Visits" => "Visitas"
 .ColumnInformation: "Information" => "Información"
-.checkBoxMoveToTop: "Cursor to Top" => "Cursor hacia arriba"
 .labelSearch: "Search" => "Búsqueda"
 .labelTime: "Time" => "Tiempo"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Eliminar ordenación de columnas"
@@ -1040,11 +856,11 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "Establecer nota"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Introduzca texto para buscar un elemento en cualquier campo"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Mostrar/Ocultar datos del cuerpo de EDSM. Debido a las limitaciones del servidor, debe hacer clic en un sistema para recuperar los datos de EDSM"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Seleccione las entradas por edad"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" => "Ver pantalla de escaneo"
 .Value: "Scan Value" => "Valor de escaneo"
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
 .Total: "Total" => "Total"
 .CS: "{0} Star(s) {1}" => "{0} Estrella (s) {1}"
 .FSD: "This system has materials for FSD boost: " => "Este sistema tiene materiales para FSD boost: "
@@ -1052,13 +868,13 @@ SECTION UserControlStarList
 .OB: "{0} Other bodies" => "{0} Otros cuerpos"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valueable bodies" @
+.scanorganics: "Show organic scans" @
 
 SECTION UserControlStats
 
 .labelStart: "Start" => "Comienzo"
 .labelEndDate: "To" => "Para"
 .tabControlCustomStats.tabPageGeneral: "General" => "General"
-.tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" => "Más visitado"
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "Artículo"
 .tabControlCustomStats.tabPageGeneral.Information: "Information" => "Información"
 .tabControlCustomStats.tabPageTravel: "Travel" => "Viaje"
@@ -1093,6 +909,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" => "Refuerzo básico"
 .JetConeBoost: "Jet Cone Boost" => "Jet Cone Boost"
 .Scans: "Scans" => "Escaneos"
+.OrganicScans: "Organic Scans" @
 .Mapped: "Mapped" => "Asignado"
 .Scanvalue: "Scan value" => "Valor de exploración"
 .Beltcluster: "Belt Cluster: " => "Grupo de cinturones: "
@@ -1126,7 +943,6 @@ SECTION StatsTimeUserControl
 .Week: "Week" => "Semana"
 .Month: "Month" => "Mes"
 .Custom: "Custom" => "Personalizado"
-.labelTime: "Time" => "Tiempo"
 
 SECTION UserControlSynthesis
 
@@ -1137,102 +953,85 @@ SECTION UserControlSynthesis
 .Available: "Avail." => "Aprovechar."
 .Notes: "Notes" => "Notas"
 .Recipe: "Recipe" => "Receta"
-.chkHistoric: "Use Cursor Position" => "Usar posición del cursor"
-.buttonMaterialFilter: "Material" => "Material"
-.buttonFilterLevel: "Level" => "Nivel"
-.buttonRecipeFilter: "Synthesis" => "Síntesis"
-.buttonClear: "Clear" => "Borrar"
-.ToolTip: "Left click and drag on grid to reorder" => "Haga clic con el botón izquierdo y arrastre en la cuadrícula para reordenar"
-.chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Cuando haga clic en, use los materiales en el cursor para estimar, cuando esté apagado, use siempre los últimos materiales"
-.buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "Filtrar la tabla por tipo de material"
-.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" => "Filtrar la tabla por nivel de síntesis"
 .buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "Filtrar la tabla por tipo de síntesis"
+.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" => "Filtrar la tabla por nivel de síntesis"
+.buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "Filtrar la tabla por tipo de material"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Establecer todos los valores deseados en cero"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Haga clic con el botón izquierdo y arrastre en la cuadrícula para reordenar"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Cuando está en rojo, use los materiales en el cursor para estimar, cuando en verde use siempre los materiales más recientes"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
 
 SECTION UserControlSysInfo
 
-.OnFoot: "On Foot" @
-.labelJumpRange: "Jump" => "Salto"
-.toolStripJumpRange: "Display Jump Range" => "Mostrar rango de salto"
-.labelSysName: "System" => "Sistema"
-.labelOpen: "Open" => "Abrir"
-.buttonEDSM: "EDSM" => "EDSM"
-.labelVisits: "Visits" => "Visitas"
-.labelBodyName: "Body" => "Cuerpo"
-.labelPosition: "Pos" => "Pos"
-.labelHomeDist: "Home" => "Hogar"
-.labelSolDist: "Sol" => "Sol"
-.labelState: "State" => "Estado"
-.labelAllegiance: "Allegiance" => "Lealtad"
-.labelGov: "Gov" => "Gobierno"
-.labelEconomy: "Economy" => "Economía"
-.labelMissions: "Missions" => "Misiones"
-.labelNote: "Note" => "Nota"
-.labelFuel: "Fuel" => "Combustible"
-.labelData: "Data" => "Datos"
-.labelMaterials: "Materials" => "Materiales"
-.labelShip: "Ship" => "Nave"
-.labelCredits: "Credits" => "Créditos"
-.labelCargo: "Cargo" => "Cargo"
-.labelTravel: "Travel" => "Viaje"
-.labelGamemode: "Mode" => "Modo"
-.labelTarget: "Target" => "Objetivo"
-.buttonEDSMTarget: "EDSM" => "EDSM"
 .toolStripSystem: "Display System Name" => "Mostrar nombre del sistema"
 .toolStripEDSM: "Display EDSM Buttons" => "Mostrar botones EDSM"
 .toolStripEDSMDownLine: "EDSM buttons on separate line" => "Botones EDSM en línea separada"
 .toolStripVisits: "Display Visits" => "Mostrar visitas"
 .toolStripBody: "Display Body Name" => "Mostrar nombre del cuerpo"
+.displayStationButtonsToolStripMenuItem: "Display Station Buttons" => "Mostrar botones de la estación"
+.displayStationFactionToolStripMenuItem: "Display Station Faction" => "Mostrar facción de la estación"
 .toolStripPosition: "Display Position" => "Posición de visualización"
 .toolStripDistanceFrom: "Display Distance From" => "Mostrar distancia desde"
 .toolStripSystemState: "Display System State" => "Mostrar estado del sistema"
+.displaySecurityToolStripMenuItem: "Display Security" @
 .toolStripNotes: "Display Notes" => "Mostrar notas"
 .toolStripTarget: "Display Target" => "Mostrar objetivo"
 .toolStripShip: "Display Ship Information" => "Mostrar información del Nave"
+.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" => "Mostrar botones de envío"
 .toolStripFuel: "Display Fuel Level" => "Mostrar nivel de combustible"
 .toolStripCargo: "Display Cargo Count" => "Mostrar recuento de carga"
 .toolStripDataCount: "Display Data Count" => "Mostrar recuento de datos"
 .toolStripMaterialCounts: "Display Material Count" => "Mostrar recuento de materiales"
+.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
 .toolStripCredits: "Display Credits" => "Mostrar créditos"
 .toolStripGameMode: "Display Game Mode" => "Mostrar modo de juego"
 .toolStripTravel: "Display Travel Trip Statistics" => "Mostrar estadísticas de viaje"
 .toolStripMissionList: "Display Mission List" => "Mostrar lista de misiones"
+.toolStripJumpRange: "Display Jump Range" => "Mostrar rango de salto"
 .toolStripSkinny: "When transparent, use skinny look" => "Cuando sea transparente, usa un look delgado"
 .toolStripReset: "Reset" => "Reiniciar"
 .toolStripRemoveAll: "Remove All" => "Eliminar todo"
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantenga presionada la tecla Ctrl y luego arrastre hacia la izquierda un elemento para reposicionar, hay 8 columnas disponibles"
-.textBoxTarget.ToolTip: "Sets the target" => "Establece el objetivo"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Distancia al objetivo"
+.textBoxTarget.ToolTip: "Sets the target" => "Establece el objetivo"
+.labelStationFaction: "Faction" => "Facción"
+.extButtonEDSMTarget: "EDSM" => "EDSM"
+.labelSecurity: "Security" @
+.labelJumpRange: "Jump" => "Salto"
+.labelTarget: "Target" => "Objetivo"
+.labelSysName: "System" => "Sistema"
+.labelGamemode: "Mode" => "Modo"
+.labelTravel: "Travel" => "Viaje"
+.labelOpenShip: "Open" => "Abrir"
+.labelOpenStation: "Open" => "Abrir"
+.labelOpen: "Open" => "Abrir"
+.labelCargo: "Cargo" => "Cargo"
+.labelCredits: "Credits" => "Créditos"
+.labelShip: "Ship" => "Nave"
+.labelMaterials: "Materials" => "Materiales"
+.labelVisits: "Visits" => "Visitas"
+.labelMR: "MR" @
+.labelData: "Data" => "Datos"
+.labelFuel: "Fuel" => "Combustible"
+.labelBodyName: "Body" => "Cuerpo"
+.labelPosition: "Pos" => "Pos"
+.labelNote: "Note" => "Nota"
+.labelMissions: "Missions" => "Misiones"
+.labelEconomy: "Economy" => "Economía"
+.labelGov: "Gov" => "Gobierno"
+.labelAllegiance: "Allegiance" => "Lealtad"
+.labelState: "State" => "Estado"
+.labelSolDist: "Sol" => "Sol"
+.labelHomeDist: "Home" => "Hogar"
 .NoMissions: "No Missions" => "Sin misiones"
-.NA: "N/A" => "N/A"
 .SysUnk: "System unknown to EDSM" => "Sistema desconocido para EDSM"
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "La posición es {0:0.00}, {1:0.00}, {2:0.00}"
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "En el mapa 3D, haga clic con el botón derecho del ratón para crear un marcador, una marca de región o haga clic en una marca de nota y luego marque Establecer destino, o escríbalo aquí y presione enter"
-.extButtonEDSMTarget: "EDSM" => "EDSM"
-.labelOpenShip: "Open" => "Abrir"
-.labelOpenStation: "Open" => "Abrir"
-.extButtonSpanshStation: "S" => "S"
-.extButtonSpanshSystem: "S" => "S"
-.displayStationButtonsToolStripMenuItem: "Display Station Buttons" => "Mostrar botones de la estación"
-.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" => "Mostrar botones de envío"
-.labelStationFaction: "Faction" => "Facción"
-.displayStationFactionToolStripMenuItem: "Display Station Faction" => "Mostrar facción de la estación"
-.labelMR: "MR" @
-.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
+.OnFoot: "On Foot" @
+.NA: "N/A" => "N/A"
 
 SECTION UserControlContainerSplitter
 
 .sizeRatioToolStripMenuItem: "Set Size Ratio" => "Establecer relación de tamaño"
-.sizeRatioToolStripMenuItem.toolStripMenuItem13: "1:3" => "1: 3"
-.sizeRatioToolStripMenuItem.toolStripMenuItem12: "1:2" => "1: 2"
-.sizeRatioToolStripMenuItem.toolStripMenuItem23: "2:3" => "2: 3"
-.sizeRatioToolStripMenuItem.toolStripMenuItem11: "1:1" => "1:1"
-.sizeRatioToolStripMenuItem.toolStripMenuItem32: "3:2" => "3: 2"
-.sizeRatioToolStripMenuItem.toolStripMenuItem21: "2:1" => "2: 1"
-.sizeRatioToolStripMenuItem.toolStripMenuItem31: "3:1" => "3: 1"
 .ChangetoHorizontalSplit: "Change to Horizontal Split" => "Cambiar a división horizontal"
 .ChangetoVerticalSplit: "Change to Vertical Split" => "Cambiar a división vertical"
 .SplitLeftPanel: "Split Left Panel" => "Dividir panel izquierdo"
@@ -1247,43 +1046,14 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
-.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
-.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" => "Mostrar líneas en el sistema visitado en primer color"
-.THF: "History: Filter out fields" => "Historial: filtrar campos"
 .ColumnTime: "Time" => "Tiempo"
 .Icon: "Event" => "Evento"
 .ColumnSystem: "Description" => "Descripción"
 .ColumnDistance: "Information" => "Información"
 .ColumnNote: "Note" => "Nota"
-.checkBoxMoveToTop: "Cursor to Top" => "Cursor hacia arriba"
-.labelSearch: "Search" => "Búsqueda"
 .labelTime: "Time" => "Tiempo"
-.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Eliminar ordenación de columnas"
-.gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "Ir a la entrada"
-.setNoteToolStripMenuItem: "Set Note" => "Establecer nota"
-.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "Crear/editar marcador"
-.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Establecer punto de inicio/parada para cálculos de recorrido"
-.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "Saltar al siguiente marcador de inicio/parada"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Ir a estrella en mapa 3D"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Ver en EDSM"
-.starMapColourToolStripMenuItem: "Star Map Colour..." => "Color del mapa estelar ..."
-.addToTrilaterationToolStripMenuItem: "Add to ..." => "Añadir ..."
-.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "Sistema de panel de trilateración"
-.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "Sistemas buscados en el panel de trilateración"
-.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "Ambos de los anteriores"
-.addToTrilaterationToolStripMenuItem.routeToolStripMenuItem: "Expedition Panel" => "Panel de expedición"
-.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "Mover entradas a otro comandante"
-.hideSystemToolStripMenuItem: "Hide Entries" => "Ocultar entradas"
-.selectCorrectSystemToolStripMenuItem: "Assign new system" => "Asignar nuevo sistema"
-.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "Eliminar entrada de diario"
-.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "Enviar escaneo no sincronizado a EDDN"
-.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Ejecutar acciones en esta entrada"
-.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "Copiar entrada de diario al portapapeles/registro"
-.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "Escribir información de clase de evento en el registro (depuración)"
-.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Ejecutar acciones en la selección para la depuración de voz (Debug)"
-.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Ejecutar la selección a través del sistema Inara (depuración)"
-.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Ejecutar la entrada a través del sistema de perfiles (depuración)"
-.runSelectionThroughEDDNDebugNoSendToolStripMenuItem: "Run selection through EDDN no send (Debug)" => "Ejecutar selección a través de EDDN sin envío (depuración)"
+.labelSearch: "Search" => "Búsqueda"
+.THF: "History: Filter out fields" => "Historial: filtrar campos"
 .TT1: " showing {0} original {1}" => " mostrando {0} original {1}"
 .TTFilt1: "Filtered {0}" => "Filtrado {0}"
 .TTSelAge: "Select the entries by age, " => "Seleccione las entradas por edad, "
@@ -1297,26 +1067,50 @@ SECTION UserControlTravelGrid
 .SETSTARTTC: "Set Start marker for travel calculations" => "Establecer marcador de inicio para cálculos de viaje"
 .SETSTSTOP: "Set Start/Stop point for travel calculations" => "Establecer punto de inicio/parada para cálculos de recorrido"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "No se pudo encontrar el sistema - no se ha sincronizado o EDSM no está disponible"
-.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" => "No se pudo encontrar la entrada de ubicación o FSDJump asociada con la entrada de diario seleccionada"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Confirme que desea eliminar esta entrada\r\nPuede volver a aparecer si se vuelven a escanear los registros"
-.extCheckBoxOutlines.ToolTip: "Control Outlining" => "Esquema de control"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
-.buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtrar las entradas que coincidan con la selección del campo"
-.buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrar las entradas según el tipo de evento"
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Introduzca texto para buscar un elemento en cualquier campo"
-.comboBoxTime.ToolTip: "Select the entries by age" => "Seleccione las entradas por edad"
+.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Eliminar ordenación de columnas"
+.gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "Ir a la entrada"
+.setNoteToolStripMenuItem: "Set Note" => "Establecer nota"
+.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "Crear/editar marcador"
+.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Establecer punto de inicio/parada para cálculos de recorrido"
+.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "Saltar al siguiente marcador de inicio/parada"
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Ir a estrella en mapa 3D"
+.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Ver en EDSM"
+.starMapColourToolStripMenuItem: "Star Map Colour..." => "Color del mapa estelar ..."
+.addToTrilaterationToolStripMenuItem: "Add to ..." => "Añadir ..."
+.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "Sistema de panel de trilateración"
+.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "Sistemas buscados en el panel de trilateración"
+.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "Ambos de los anteriores"
+.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
+.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "Mover entradas a otro comandante"
+.hideSystemToolStripMenuItem: "Hide Entries" => "Ocultar entradas"
+.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "Eliminar entrada de diario"
+.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Ejecutar acciones en esta entrada"
+.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "Copiar entrada de diario al portapapeles/registro"
+.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "Escribir información de clase de evento en el registro (depuración)"
+.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Ejecutar acciones en la selección para la depuración de voz (Debug)"
+.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Ejecutar la selección a través del sistema Inara (depuración)"
+.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Ejecutar la entrada a través del sistema de perfiles (depuración)"
+.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Ejecutar la selección a través de IGAU (depuración)"
+.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Ejecutar la selección a través de EDAstro (Depurar)"
+.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
+.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" => "Mostrar líneas en el sistema visitado en primer color"
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .outliningOnOffToolStripMenuItem: "Outlining On" => "Delineando en"
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "Análisis del esquema de eventos"
 .toolStripRollUpOlderOutlines: "Roll up older entries" => "Recopilar entradas anteriores"
 .toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" => "Apagado"
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "Después de la primera"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "Después de 5"
-.addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Panel de exploración"
-.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Ejecutar la selección a través de IGAU (depuración)"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Seleccione las entradas por edad"
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "Introduzca texto para buscar un elemento en cualquier campo"
+.buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrar las entradas según el tipo de evento"
+.buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtrar las entradas que coincidan con la selección del campo"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Ejecutar la selección a través de EDAstro (Depurar)"
-.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
+.extCheckBoxOutlines.ToolTip: "Control Outlining" => "Esquema de control"
 
 SECTION UserControlCaptainsLog
 
@@ -1326,8 +1120,6 @@ SECTION UserControlCaptainsLog
 SECTION CaptainsLogDiary
 
 .Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" => "Dom;LUN;Mar;MIE;JUE;VIE;SAB"
-.buttonLeft: "<" => "<"
-.buttonRight: ">" => ">"
 
 SECTION CaptainsLogEntries
 
@@ -1400,23 +1192,6 @@ SECTION UserControlTrilateration
 .NoSector: "No systems with unknown coordinates were found for the current sector." => "No se encontraron sistemas con coordenadas desconocidas para el sector actual"
 .SectorCount: "{0} systems with unknown coordinates found in {1} sector." => "Se han encontrado {0} sistemas con coordenadas desconocidas en el sector {1}"
 
-SECTION UserControlTrippanel
-
-.showEDSMStartButtonsToolStripMenuItem: "Show EDSM/Start Buttons" => "Mostrar EDSM/botones de inicio"
-.showTargetToolStripMenuItem: "Show Target" => "Mostrar objetivo"
-.showTravelledDistanceToolStripMenuItem: "Show Travelled Distance" => "Mostrar distancia recorrida"
-.showFuelLevelToolStripMenuItem: "Show Fuel Level" => "Mostrar nivel de combustible"
-.showCurrentFSDRangeToolStripMenuItem: "Show Current FSD Range" => "Mostrar rango FSD actual"
-.showAvgFSDRangeToolStripMenuItem: "Show Avg FSD Range" => "Mostrar rango FSD promedio"
-.showMaxFSDRangeToolStripMenuItem: "Show Max FSD Range" => "Mostrar rango FSD máximo"
-.showFSDRangeToolStripMenuItem: "Show FSD Range" => "Mostrar rango FSD"
-.jump: "jump" => "salto"
-.jumps: "jumps" => "saltos"
-.NoT: " -> Target not set" => " -> Objetivo no establecido"
-.FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Muestra si EDSM indica su primer descubridor"
-.UKN: "System {0} unknown to EDSM" => "Sistema {0} desconocido para EDSM"
-.Left: "Left" => "Izquierda"
-
 SECTION UserControlMaterialTrader
 
 .UpgradeCol: "From" => "Desde"
@@ -1437,7 +1212,6 @@ SECTION UserControlMaterialTrader
 
 SECTION UserControlMiningOverlay
 
-.extCheckBoxZeroRefined: ">0" => "> 0"
 .Proscoll: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" => ", Buscadores despedidos {0}, recolectores desplegados {1}, agrietados {2}"
 .ref: "Ref." => "Árbitro."
 .coll: "Coll." => "Coll"
@@ -1454,6 +1228,9 @@ SECTION UserControlMiningOverlay
 .above: "% Above" => "% Encima"
 .dist: "Distribution" => "Distribución"
 .Limcargo: "Limpets left {0}, Cargo left {1}" => "Drones restantes {0}, Espacio restante {1}"
+.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
+.buttonExtExcel.ToolTip: "Export" @
+.extComboBoxChartOptions.ToolTip: "Select chart options" @
 
 SECTION UserControlFactions
 
@@ -1502,6 +1279,13 @@ SECTION UserControlFactions
 .CapShipVictims: "Capital ship Victims: " => "Víctimas del Nave capital: "
 .CapShipAward: "Capital ship Award: " => "Premio a la nave capital: "
 
+SECTION UserControlOrganics
+
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonFont.ToolTip: "Font" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
+
 SECTION ScanDisplayForm
 
 .Sys: "System" => "Sistema"
@@ -1509,12 +1293,7 @@ SECTION ScanDisplayForm
 
 SECTION TagsForm
 
-.buttonCancel: "Cancel" => "Cancelar"
-.buttonOK: "OK" => "OK"
-.label_index: "N/A" => "N/A"
-.buttonMore: "+" => "+"
 .buttonMore.ToolTip: "Add more tags" => "Agregar más etiquetas"
-TagsForm: "Tags" => "Etiquetas"
 .TN: "Tag name" => "Nombre de etiqueta"
 .SI: "Select image for this tag" => "Seleccionar imagen para esta etiqueta"
 .DE: "Delete entry" => "Eliminar la entrada"
@@ -1541,6 +1320,10 @@ SECTION CSV
 .Helpers.OpenFailed: "Failed to open " => "Falló al abrir "
 .Helpers.WriteFailed: "Failed to write to " => "No se pudo escribir a "
 
+SECTION InfoForm
+
+.Copyingtextfailed: "Copying text to clipboard failed" @
+
 SECTION UserControlSuitsWeapons
 
 .CSTime: "Time" @
@@ -1565,3 +1348,7 @@ SECTION UserControlSuitsWeapons
 .CWClipSize: "Clip Size" @
 .CWHopper: "Hopper Size" @
 .CWRange: "Range m" @
+.CWDPS: "DPS" @
+.CWHSD: "Head Shot Mult" @
+.Confirm: "Confirm Selling of" @
+.forceSellShipToolStripMenuItem: "Force Suit Sale" @

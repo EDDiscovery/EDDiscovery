@@ -66,7 +66,9 @@ namespace EDDiscovery.UserControls
 
             tabControlCustomStats.SelectedIndex = GetSetting(dbSelectedTabSave, 0);
             userControlStatsTimeScan.EnableDisplayStarsPlanetSelector();
-            BaseUtils.Translator.Instance.Translate(this);
+
+            var enumlist = new Enum[] { EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_Information, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel_userControlStatsTimeTravel_labelTime, EDTx.UserControlStats_tabControlCustomStats_tabPageScan, EDTx.UserControlStats_tabControlCustomStats_tabPageScan_userControlStatsTimeScan_labelTime, EDTx.UserControlStats_tabControlCustomStats_tabPageGameStats, EDTx.UserControlStats_tabControlCustomStats_tabPageByShip, EDTx.UserControlStats_labelStart, EDTx.UserControlStats_labelEndDate };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             try
             {

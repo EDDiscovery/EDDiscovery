@@ -8,7 +8,6 @@ Cancel: "Cancel" => "Cancella"
 Delete: "Delete" => "Elimina"
 Campaign: "Campaign" => "Campagna"
 NoScan: "No Scan" => "Nessuna Scansione"
-Systemnotknown: "System not known" => "Sistema sconosciuto"
 Travel: "Travel" => "Viaggio"
 GameTime: "Game Time" => "Orario del Gioco"
 Time: "Time" => "Orario"
@@ -19,8 +18,7 @@ Off: "Off" @
 Unknown: "Unknown" => "Sconosciuto"
 Information: "Information" => "Informazione"
 NoPos: "No Pos" => "Nessuna Posizione"
-HideColumn: "Hide Column" @
-UnhideallColumns: "Unhide all Columns" @
+RemoveAll: "Remove All" @
 
 SECTION StartUp
 
@@ -30,15 +28,23 @@ SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @
 .buttonCancel: "Cancel" @
-.buttonNormal: "Run" @
+.buttonRun: "Run" @
+.buttonRemoveJournals: "Remove Journals" @
+.buttonDeleteUserDB: "Delete/Rebuild User DB" @
 .buttonDeleteSystemDB: "Delete/Rebuild System DB" @
+.buttonResetDBLoc: "Reset DB Location" @
+.buttonBackup: "Backup Database" @
 .buttonDbs: "Move Databases" @
 .buttonLang: "Reset Language to English" @
-.button1: "Remove all Action Packs" @
+.buttonActionPacks: "Remove all Action Packs" @
 .buttonRemoveDLLs: "Remove all Extension DLLs" @
 .buttonResetTabs: "Reset Tabs, Remove PopOuts" @
 .buttonPositions: "Reset Window Positions" @
 .buttonResetTheme: "Reset Theme" @
+
+SECTION InfoForm
+
+.buttonAcknowledge: "Acknowledge" @
 
 SECTION PopOutInfo
 
@@ -100,8 +106,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" => "Itinerario"
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Pianifica di Spedizione, prepara un itinerario di spedizione"
 .Expedition.Title: "Expedition" => "Spedizioni"
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Pianifica di Esplorazione, prepara una lista di sistemi da esplorare"
-.Exploration.Title: "Exploration" => "Esplorazione"
 .SystemInformation.Description: "System Information" => "Informazioni sul Sistema"
 .SystemInformation.Title: "System Information" => "Informazioni sul Sistema"
 .Spanel.Description: "Summary panel overlay" => "Sommario"
@@ -148,6 +152,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" @
 .SuitsWeapons.Title: "Suits & Weapons" @
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 
@@ -162,14 +172,12 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "&Strumenti"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
-.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizza mappa &2D"
 .toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "Visualizza mappa &3D"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Finestre"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tutti nella taskbar"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Disabilita tutte le trasparenze"
 .toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "E&sci"
 .adminToolStripMenuItem: "A&dmin" => "&Gestione"
-.adminToolStripMenuItem.forceEDDBUpdateToolStripMenuItem: "Synchronise with EDDB" => "Sincronizza con EDDB"
 .adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "Mostra la cartella del giornale del comandante corrente"
 .adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "Resetta tutta la storia del comandante corrente"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "Leggi gli archivi di registro (log) 2.1 e anteriori"
@@ -179,9 +187,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" => "Invia dati non sincronizzati a EDSM"
 .adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" => "Ripristina indici del DB di sistema"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizza con EDSM"
-.adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Invia eventi EDDN non sincronizzati"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dati storici (navi anteriori, moduli in magazzino)"
-.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "Invia la lista dei Sistemi Visitati a Elite Dangerous"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
 .adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Componenti"
@@ -198,18 +204,14 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "Forum di &Frontier"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Pagine del progetto (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reporta un Problema o un Suggerimento"
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Come avviare il programma in Modo di Sicurezza per ridefinire vari parametri"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Verifica per aggiornamenti"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Premi con il bottone destro per aggiungere/rimuovere una scheda, trascina con il sinistro per riordinare"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Seleziona il comandante da visualizzare"
-.buttonExtEDSMSync.ToolTip: "Send any unsynced logs to EDSM" => "Sincronizza con EDSM, in ambe le direzioni"
 .buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Premi per aprire un pannello popout"
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Modifica i Componenti"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Gestisci i Componenti"
 .buttonExtRefresh.ToolTip: "Refresh the history" => "Aggiorna lo storico"
-.buttonExt2dmap.ToolTip: "Open the 2D Map" => "Apri la mappa 2D"
-.buttonExt3dmap.ToolTip: "Open the 3D Map" => "Apri la mappa 3D"
 .buttonReloadActions.ToolTip: "DEBUG reload action system" @
 .addTabToolStripMenuItem: "Insert Tab with panel.." => "Inserisci un pannelo come scheda"
 .removeTabToolStripMenuItem: "Remove Tab" => "Rimuovi scheda"
@@ -218,45 +220,27 @@ SECTION EDDiscoveryForm
 .RTABL: "Name: " => "Nome: "
 .RTABT: "Rename Tab" => "Rimuovi Scheda"
 .RTABTT: "Enter a new name for the tab" => "Rinomina la scheda"
-.ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Il tema selezionato non ha informazione su certi colori o altri settagi importanti. Per favore, correggere il tema."
 .DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n{0} \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
 .DLLL: "DLLs loaded: {0}" => "DLLs caricate: {0}"
 .DLLF: "DLLs failed to load: {0}" => "Impossibile caricare DLLs: {0}"
 .IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
 .FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
-.RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" @
 .PROFL: "Profile {0} Loaded" => "Profilo {0} caricato"
 .NI: "New EDDiscovery installer available: {0}" => "Nuovo setup di EDDiscovery disponibile: {0}"
 .NRA: "New Release Available!" => "Nuova versione disponibile!"
-.CAPINA: "Companion API is disabled in commander settings" => "La API Companion � disabilitata nel setup del comandante"
-.CAPION: "Logged into Companion API" => "Login nella API Companion effettuato"
-.CAPIF: "Companion API failed: {0}" => "Login nella API Companion non effettuato: {0}"
-.CAPIND: "CAPI not docked. Server API lagging!" => "CAPI non effettuato. Server API con ritardo!"
-.CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" => "CAPI profileSystemRequired � {0}, il sistema del profilo � {1}"
-.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " => "CAPI prfileStationRequired � {0}, la stazione del profilo � {1}"
-.CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, il mercato della stazione � {1}"
-.CAPIEX: "Companion API get failed: " => "API Companion continua a fallire: "
 .Arrived: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita di Numero {1}"
 .PE1: "Profile reports errors in triggers: " => "Errori nel profilo riportati dal trigger: "
-.EDDN: "Sent {0} event to EDDN ({1})" => "Inviati {0} eventi a EDDN ({1})"
-.EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN: "
 .Closing: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dati stellari disabilitato. Abilitarlo nel setup principale"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzazione al banco dati in corso, si prega di aspettare"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operazione pu� necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Per entrare nel modo sicuro, esci dal programma, premi shift\r\ne clicca sull'icona del programma. Cos� facendo si aprir� il pannelo di dialogo del modo sicuro.\r\nLi puoi reimpostare vari parametri e muovere i banchi dati in altre cartelle o dischi."
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Conferma il desiderio di reimpostare tutti i registri al comandante attuale"
 .NoRel: "No new release found" => "Nessuna nuova versione trovata"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
 .FSDRem: "Removed {0} FSD entries" => "Rimossi {0} registri FSD"
-.VSLNF: "Could not find VisitedStarsCache.dat file, choose file" => "Impossibile trovare il file VisitedStarsCache.dat"
-.VSLEXP: "File {0} created.\r\n{1}" => "Creati {0} file.\r\n{1}"
-.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "Riavviare Elite Dangerous per far si che questo file sia letto dalla mappa della galassia"
-.VSLFileErr: "Error writing {0} export visited stars" => "Errore scrivendo {0} esporto dei sistemi visitati"
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello storico a Inara � disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
 .RH: "Refresh History." => "Rinfrescare lo Storico"
 .NoEDSMAPI: "No EDSM API key set" => "Pre favore, assicurarsi che um comandante sia selezionato e che abbia una chiave di API EDSM assegnata"
-.EDSMSyncE: "EDSM Sync failed: {0}" => "Sincronizzazione EDSM fallita {0}"
 .EP: "Edit Profiles" => "Modificare Profili"
 .PL: "Profile {0} Loaded" => "PRofilo {0} Caricato"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Pannelo di popout"
@@ -264,8 +248,6 @@ SECTION EDDiscoveryForm
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Apri EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Nascondi l'icona di notificazione"
 .notifyIconMenu_Exit: "E&xit" => "&Esci"
-.buttonExt2dmap: "2D" @
-.buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Recupera registri nuovamente"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "REcupera dati stellari nuovamente"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
@@ -281,36 +263,26 @@ SECTION EDDiscoveryController
 .CD: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
 .EDSM: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dati di mappa galattici."
-.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery e EDMarketConnector non dovrebbero sincronizzare entrambi a EDDN. Ferma EDMC o disabilita 'invia a EDDN' nel setup!"
 .RTH: "Reading travel history" => "Leggiendo lo storico di viaggio"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
 .EDSMU: "EDSM systems update complete with {0} systems" => "Attualizzazione EDSM completata com {0} sistemi"
-.EDDBU: "EDDB systems update complete with {0} systems" => "Attualizzazione EDDB completata com {0} sistemi"
-.SYST: "Loading completed, total of {0:N0} systems stored" @
-.Refresh: "Refresh due to updating EDSM or EDDB system data" => "Ricaricamento in corso dovuto all'attualizzazione dei dati di EDSM o EDDB"
 .PLF: "Processing log file {0}" => "Processando il file di registro {0}"
 .RD: "Refresh Displays" => "Ricaricando la Schermata"
 .HRC: "History refresh complete." => "Ricaricamento dello storico completato"
-.Maps: "Checking for new EDDiscovery maps" => "Verificando per nuove mappe EDDiscovery"
 .EXPD: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
-.EXPL: "Checking for new Exploration data" @
 
 SECTION BookmarkForm
 
-BookmarkForm: "Create New Bookmark" => "Crea un nuobo Favorito"
 .buttonEDSM: "EDSM" @
 .labelName: "Name" => "Nome"
 .checkBoxTarget: "Make Target" => "Imposta come destino"
-.labelCo: "Co-ordinates" => "Coordinate"
 .buttonDelete: "Delete" => "Elimina"
 .buttonCancel: "Cancel" => "Cancella"
 .buttonOK: "OK" @
 .labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
 .labelTravelNote: "Travel History Note" => "Nota dello Storico di Viaggio"
-.labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Modifica nella schermo di viaggio)"
 .labelTimeMade: "Time Made" => "Tempo fatto"
-.UpdateBookmark: "Update Bookmark" => "Attualizza Favorito"
 .Update: "Update" => "Attualizza"
 .SB: "New System Bookmark" => "Nuovo Favorito di Sistema"
 .UB: "Update Bookmark" => "Attualizza Favorito"
@@ -321,19 +293,6 @@ BookmarkForm: "Create New Bookmark" => "Crea un nuobo Favorito"
 .ESN: "Enter a system name..." => "Inserisci un nome di sistema..."
 .GMO: "Galactic Mapping Object" => "Oggetto di Mappa Galattico"
 .Description: "Description" => "Descrizione"
-
-SECTION SurfaceBookmarksForm
-
-.labelSurface: "Surface Bookmarks In System" => "Favorito di Superficie nel Sistema"
-.sendToCompassToolStripMenuItem: "Send to compass" => "Avvia alla bussola"
-.BodyName: "Planetary Body" => "Corpo Planetario"
-.SurfaceName: "Name" => "Nome"
-.SurfaceDesc: "Description" => "Descrizione"
-.Latitude: "Latitude" => "Latitudine"
-.Longitude: "Longitude" => "Longitudine"
-.Valid: "Saveable" => "Salvabile"
-.deleteToolStripMenuItem: "Delete Row" => "Elimina riga"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Aggiungi manualmente un pianeta"
 
 SECTION SurfaceBookmarkUserControl
 
@@ -364,18 +323,9 @@ SECTION FindSystemsUserControl
 .buttonExtNames: "From DB Find Names" => "Cerca nomi dal DB"
 .buttonExtEDSM: "From EDSM" => "Da EDSM"
 .buttonExtDB: "From DB" => "Dal DB"
-.labelX: "X" @
-.labelY: "Y" @
-.labelZ: "Z" @
 .buttonExtVisited: "From Visited Systems" => "Da sistemi visitati"
 .checkBoxCustomCube: "Cube" => "Cubo"
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Escludi sistemi visitati"
-
-SECTION ConditionFilterForm
-
-ConditionFilterForm: "Journal: Filter out fields" => "Giornale: Filtra i Campi"
-.panelOK.buttonCancel: "Cancel" => "Cancella"
-.panelOK.buttonOK: "OK" @
 
 SECTION TravelHistoryFilter
 
@@ -393,9 +343,7 @@ SECTION TravelHistoryFilter
 
 SECTION AddOnManagerForm
 
-.buttonMore: "+" @
 .buttonExtGlobals: "Globals" => "Globale"
-.buttonOK: "OK" @
 .AddOnTitle: "Add-On Manager" => "Gestisci gli Add-Ons"
 .EditTitle: "Edit Add-Ons" => "Modifica gli Add-Ons"
 .Type: "Type" => "Tipo"
@@ -419,33 +367,21 @@ SECTION AddOnManagerForm
 .Failed: "Add-on failed to update. Check files for read only status" => "Attualizzazione dell'Add-On fallita. Verifica se gli archivi sono scrivibili"
 .DeleteWarn: "Do you really want to delete {0}" => "Sei sicuro di voler eliminare {0}"
 
-SECTION AssignTravelLogSystemForm
-
-AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Registro di Viaggio"
-.label1: "Travel Log System Name: " => "Nome del Sistema nel registro di viaggio"
-.label2: "Date Visited: " => "Data della visita"
-.label6: "EDSM Link: " => "Link EDSM"
-.label3: "New system name: " => "Nome del nuovo sistema: "
-.btnFindSystem: "Find" => "Cerca"
-.btnCancel: "Cancel" => "Cancella"
-.label4: "Travel Log Coordinates: " => "Coordinate del registro di viaggio"
-.btnOK: "OK" @
-.label5: "System Coordinates" => "Coordinate del Sistema"
-
 SECTION ExportForm
 
-ExportForm: "ExportForm" => "Esporta"
-.checkBoxRawJournal: "Export Journals" => "Esporta Giornale"
-.buttonCancel: "Cancel" => "Cancella"
+ExportForm: "Export Data" => "Esporta"
 .labelCVSSep: "CSV Separator" => "Separatore CVS"
-.radioButtonSemiColon: "Semicolon" => "Punto e Virgola"
-.buttonExport: "Export" => "Esporta"
 .radioButtonComma: "Comma" => "Virgola"
+.radioButtonSemiColon: "Semicolon" => "Punto e Virgola"
 .checkBoxIncludeHeader: "Include Header" => "Includi l'intestazione"
 .checkBoxCustomAutoOpen: "Open" => "Apri in excel"
-.label_index: "Export" => "Esporta"
+.labelUTCEnd: "UTC" @
+.labelUTCStart: "UTC" @
+.buttonExport: "Export" => "Esporta"
 .ECH: "Export current data {0}" => "Esporta lo storico corrente a {0}"
-.JF: "Journal file" => "File di Giornale"
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -455,17 +391,9 @@ SECTION Form2DMap
 .All: "All" => "Tutto"
 .Custom: "Custom" => "Personalizzato"
 
-SECTION UserControl2DMap
-
-UserControl2DMap: "2D Map" @
-.Nomapsavailable: "No maps available" @
-.toolStripButtonStars: "Stars" @
-.toolStripButtonSave: "Save" @
-
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "GalaxySectorSelect" => "Seleziona Settori Galattici"
-.buttonExtCancel: "Cancel" => "Cancella"
+GalaxySectorSelect: "Galaxy Sector Select" => "Seleziona Settori Galattici"
 .buttonExtSet: "Set" => "Imposta"
 .labelSectorName: "Sector" => "Settore"
 .Custom: "Custom" => "Personalizzato"
@@ -477,19 +405,16 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Seleziona Settori Galattici"
 .BC: "Bubble+Colonia" => "Bolla piú Colonia"
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Hai aggiunto nuovi settori!\r\nQuesta operazione richiede un nuovo scarico COMPLETO di tutti i dati EDSM\r\nSei sicuro di voler continuare?"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronizzazione dei dati stellari disabilitata nel settagio.\r\nAbilitare per impostare l'aggiornamento"
-.Warning: "Warning" => "Attenzione"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Hai rimosso settori!\r\nQuesto richiede che tutti i registri siano puliti, cosa che richiede tempo\r\nSei sicuro di voler continuare?"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "ED Discovery scarica i dati stellari da EDSM/EDDB, che è usato per importare dati addizionali. Seleziona quanti dati vuoi scaricare e conservare. Quanto più settori galattici scarichi, maggiore lo spazio necessario e la memoria usata."
 .Select: "Select: " => "Seleziona"
 .GALSELEN: "Select the data set" => "Seleziona il set di dati"
 .PresstoAccept: "Press to Accept" => "Premi per accettare"
-.PresstoCancel: "Press to Cancel" => "Premi per cancellare"
 .GALSELTitle: "Select EDSM Galaxy Data" => "Seleziona dati galattici EDSM"
 
 SECTION MoveToCommander
 
 MoveToCommander: "MoveToCommander" => "Sposta al Comandante"
-.buttonExtCancel: "Cancel" => "Cancella"
 .buttonTransfer: "Transfer" => "Trasferisci"
 .label1: "Move selected history to commander." => "Muovi lo storico selezionato al comandante."
 
@@ -509,53 +434,23 @@ NewReleaseForm: "EDDiscovery Release" => "Versione EDDiscovery"
 SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" => "Editor di Profilo"
-.buttonMore: "+" @
-.label_index: "Profile Editor" => "Editor di Profilo"
 .buttonExtGlobals: "Globals" => "Globale"
-.buttonExtCancel: "Cancel" => "Cancella"
-.buttonOK: "OK" @
 .Custom: "Custom" => "Personalizzato"
 .Trigger: "Trigger" => "Causa"
 .Back: "Back" => "Indietro"
-.Startup: "Startup" => "Inizio"
 .TrigEdit: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del profilo {0}"
 .BackEdit: "Edit Profile {0} Back Trigger" => "Modifica l'azione di ritorno del profilo {0}"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Vuoi eliminare il profilo {0}?\r\nQuesto farà si che tutte le informazioni si pergano di forma irriversibile!"
 .Default: "Default" => "Predefinito"
 
-SECTION RecordStep
-
-RecordStep: "RecordStep" => "Passo di Registro"
-.labelGoto: "Go to" => "Vai a"
-.labelPAt: "Pointing At" => "Puntando su"
-.checkBoxWaitForSlew: "Wait for slew" => "Aspetta per"
-.checkBoxChangeZoom: "Change Zoom" => "Cambia Zoom"
-.labelZoom: "Zoom" @
-.labelWait: "Wait for this time before action" => "Aspetta per questo tempo prima dell'azione"
-.checkBoxPan: "Change Dir" => "Cambia cartella"
-.labelZoomTime: "Time to take to Zoom" => "Tempo per effettuare lo zoom"
-.checkBoxPos: "Go To" => "Vai a"
-.labelMsgTime: "Message on screen time" => "Messagio sullo schermo di tempo"
-.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => "Mostra messaggio con completamento"
-.labelTimeChange: "Time to take to change pos" => "Tempo per effettuare lo spostamento"
-.checkBoxWaitComplete: "Wait for actions to complete" => "Aspetta per il completamento delle azioni"
-.labelTimeDir: "Time to take to change direction" => "Tempo per cambiare direzione"
-.labelTMEInfo: "0=default time" => "0=tempo default"
-.buttonCancel: "Cancel" => "Cancella"
-.labelMsg: "Message to display" => "Messaggio da mostrare"
-.buttonOK: "OK" @
-.label_index: "Record Step" => "Passo di Registro"
-
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Imposta Nota"
 .labelTTimestamp: "Timestamp: " => "Data e ora"
-.buttonCancel: "Cancel" => "Cancella"
 .buttonSave: "Save" => "Salva"
 .labelTSystem: "System: " => "Sistema"
 .labelTSummary: "Summary: " => "Sommario"
 .labelTDetails: "Details: " => "Dettagli"
-.label_index: "Set Note" => "Imposta Nota"
 
 SECTION MessageBoxTheme
 
@@ -575,15 +470,9 @@ SECTION DataGridViewDialogs
 .PresstoAccept: "Press to Accept" => "Premi per Accettare"
 .PresstoCancel: "Press to Cancel" => "Premi per Cancellare"
 .VNV: "Value is not valid" => "Il Valore non è valido"
-.Title: "Jump to Entry" => "Salti al registro"
-
-SECTION InfoForm
-
-.OK: "OK" @
 
 SECTION KeyForm
 
-.PK: "Press Key" => "Premi Tasto"
 KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
 .radioButtonUp: "Up" => "Su"
 .radioButtonDown: "Down" => "Giù"
@@ -591,7 +480,7 @@ KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
 .checkBoxShift: "Shift" @
 .checkBoxCtrl: "Ctrl" @
 .checkBoxAlt: "Alt" @
-.checkBoxKey: "Press Key" => "Premi Tasto"
+.checkBoxKey: "'Press Key'" => "Premi Tasto"
 .labelNextDelay: "Current Delay" => "Ritardo corrente"
 .labelSelKeys: "Select Key" => "Seleziona Tasto"
 .labelDelay: "Start Delay(ms)" => "Ritardo Iniziale"
@@ -601,8 +490,10 @@ KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
 .buttonDelete: "Delete" => "Elimina"
 .buttonNext: "Next" => "Prossimo"
 .buttonTest: "Test" => "Testa"
-.buttonCancel: "Cancel" => "Cancella"
-.buttonOK: "OK" @
+.PK: "Press Key" => "Premi Tasto"
+.NOPN: "Name a process to test sending keys" @
+.KERR: "Error {0} - check entry" @
+.NOP: "No process names to send keys to" @
 
 SECTION UserControlForm
 
@@ -620,13 +511,107 @@ SECTION ExtPanelRollUp
 
 SECTION CommanderForm
 
-.CAPIGB: "Frontier CAPI" @
 .CAPILoggingin: "Logging in" @
 .CAPIDisabled: "Disabled" @
 .CAPILogout: "Logout" @
 .CAPILoggedin: "Logged in" @
 .CAPILogin: "Login" @
 .CAPIAwaitLogin: "Await Log in" @
+
+SECTION SpeechConfigure
+
+SpeechConfigure: "Configure Speech" @
+.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
+.buttonExtTest: "Test" @
+.buttonExtDevice: "Device" @
+.buttonExtEffects: "Effects" @
+.checkBoxCustomLiteral: "Literal" @
+.checkBoxCustomComplete: "Wait until speech completes" @
+.labelEndTrigger: "End Trigger" @
+.labelStartTrigger: "Start Trigger" @
+.labelRate: "Rate" @
+.labelVoice: "Voice" @
+.labelVolume: "Volume" @
+.checkBoxCustomR: "Override" @
+.checkBoxCustomV: "Override" @
+
+SECTION WaveConfigureDialog
+
+WaveConfigureDialog: "Configure Wave" @
+.buttonExtDevice: "Device" @
+.labelStartTrigger: "Start Trigger" @
+.labelEndTrigger: "End Trigger" @
+.labelTitle: "Select Default device, volume and effects" @
+.buttonExtBrowse: "Browse" @
+.checkBoxCustomComplete: "Wait until audio completes" @
+.buttonExtEffects: "Effects" @
+.buttonExtTest: "Test" @
+.checkBoxCustomV: "Override" @
+.labelVolume: "Volume" @
+
+SECTION SoundEffectsDialog
+
+SoundEffectsDialog: "Sound Effects" @
+.labelEcho: "Echo" @
+.buttonExtTest: "Test" @
+.labelEchoMix: "Mix" @
+.labelChorus: "Chorus" @
+.checkBoxCustomNone: "No effects" @
+.labelReverb: "Reverb" @
+.checkBoxP: "Enable" @
+.checkBoxG: "Enable" @
+.labelDistortion: "Distortion" @
+.checkBoxD: "Enable" @
+.labelEchoFeedback: "Feedback" @
+.labelPitch: "Pitch" @
+.labelGargle: "Gargle" @
+.labelChorusMix: "Mix" @
+.labelEchoDelay: "Delay" @
+.checkBoxR: "Enable" @
+.labelReverbMix: "Mix" @
+.labelDistortionGain: "Gain" @
+.labelChorusFeedback: "Feedback" @
+.checkBoxC: "Enable" @
+.labelPitchOctave: "Octave" @
+.labelGargleFrequency: "Frequency" @
+.checkBoxE: "Enable" @
+.labelReverbTime: "Time" @
+.labelDistortionEdge: "Edge" @
+.labelChorusDelay: "Delay" @
+.labelChorusDepth: "Depth" @
+.labelReverbHFRatio: "HF Ratio" @
+.labelDistortionCentreFreq: "Cent Freq" @
+.labelDistortionFreqWidth: "Freq Width" @
+
+SECTION AudioDeviceConfigure
+
+AudioDeviceConfigure: "Audio Device Select" @
+.labelText: "Select Device" @
+
+SECTION ActionPackEditPackForm
+
+.buttonInstallationVars: "Install Parameters" @
+.labelEditProg: "Program" @
+
+SECTION ActionProgramEditForm
+
+ActionProgramEditForm: "Action Program" @
+.labelName: "Name:" @
+.buttonExtDisk: "As File" @
+.buttonExtLoad: "Load" @
+.buttonExtSave: "Save" @
+.buttonExtEdit: "Text Edit" @
+
+SECTION ActionPackEditForm
+
+.ci: "Configuration items for installation - specialist use" @
+.ip: "Input parameters to pass to program on run" @
+.df: "Define Variable:" @
+.cp: "Variables to pass into called program" @
+
+SECTION ActionPackVariablesForm
+
+.gv: "Global User variables to pass to program on run" @
 
 include translation-italiano-uc.tlp
 

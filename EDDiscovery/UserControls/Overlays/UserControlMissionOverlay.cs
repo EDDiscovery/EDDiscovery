@@ -71,8 +71,6 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "MissionOverlay";
 
-            BaseUtils.Translator.Instance.Translate(this);
-
             SelectionBits sel = (SelectionBits)GetSetting(dbSelections, (int)SelectionBits.Default);
 
             missionDescriptionToolStripMenuItem.Checked = (sel & SelectionBits.MissionName) != SelectionBits.None;
@@ -97,7 +95,9 @@ namespace EDDiscovery.UserControls
             missionDescriptionToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
             rewardToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
 
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            var enumlistcms = new Enum[] { EDTx.UserControlMissionOverlay_missionNameToolStripMenuItem, EDTx.UserControlMissionOverlay_missionDescriptionToolStripMenuItem, EDTx.UserControlMissionOverlay_startDateToolStripMenuItem, EDTx.UserControlMissionOverlay_endDateToolStripMenuItem, EDTx.UserControlMissionOverlay_factionInformationToolStripMenuItem, EDTx.UserControlMissionOverlay_rewardToolStripMenuItem };
+
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
         public override void LoadLayout()

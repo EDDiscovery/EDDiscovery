@@ -91,7 +91,8 @@ namespace EDDiscovery.Forms
                 bool winborder = theme.ApplyDialog(this);
                 statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 
-                BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
+                var enumlist = new Enum[] { EDTx.GalaxySectorSelect, EDTx.GalaxySectorSelect_buttonExtSet, EDTx.GalaxySectorSelect_labelSectorName };
+                BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
 
                 SetComboBox();
 

@@ -57,12 +57,13 @@ namespace EDDiscovery.UserControls.Search
             cms.Items[2].Name = "Data";
             cms.Items[2].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
             cms.Items[3].Text = "Go to entry on grid";
-            cms.Items[3].Name = "Data";
+            cms.Items[3].Name = "Goto";
             cms.Items[3].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
             cms.Opening += Cms_Opening;
             CellDoubleClick += cellDoubleClick;
 
-            BaseUtils.Translator.Instance.Translate(cms, this);
+            var enumlistcms = new Enum[] { EDTx.DataGridViewStarResults_3d, EDTx.DataGridViewStarResults_EDSM, EDTx.DataGridViewStarResults_Data, EDTx.DataGridViewStarResults_Goto };
+            BaseUtils.Translator.Instance.TranslateToolstrip(cms, enumlistcms,this);
         }
 
         public void Init(EDDiscoveryForm frm)

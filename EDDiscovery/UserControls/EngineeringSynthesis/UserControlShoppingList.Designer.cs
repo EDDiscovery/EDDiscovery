@@ -44,7 +44,6 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainerVertical = new System.Windows.Forms.SplitContainer();
             this.pictureBoxList = new ExtendedControls.ExtPictureBox();
             this.splitContainerRightHorz = new System.Windows.Forms.SplitContainer();
@@ -70,10 +69,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
             // 
             // splitContainerVertical
             // 
@@ -153,7 +148,7 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem,
             this.toggleListPositionToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuConfig";
-            this.contextMenuStrip.Size = new System.Drawing.Size(369, 158);
+            this.contextMenuStrip.Size = new System.Drawing.Size(369, 180);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -244,7 +239,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.SplitContainer splitContainerVertical;
         private ExtendedControls.ExtPictureBox pictureBoxList;
         private System.Windows.Forms.SplitContainer splitContainerRightHorz;

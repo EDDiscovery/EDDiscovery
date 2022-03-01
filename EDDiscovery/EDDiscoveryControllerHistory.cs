@@ -180,9 +180,14 @@ namespace EDDiscovery
 
                     string[] stdfolders = stdfolder != null ? new string[] { stdfolder, EDDOptions.Instance.CAPIDirectory() } : new string[] { EDDOptions.Instance.CAPIDirectory() };
 
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Setup watchers " + string.Join(",", stdfolders));
+
+
                     journalmonitor.SetupWatchers(stdfolders, EDDOptions.Instance.DefaultJournalMatchFilename, EDDOptions.Instance.MinJournalDateUTC);         // monitors are stopped, set up watchers
 
                     int forcereloadoflastn = args.ForceJournalReload ? int.MaxValue / 2 : 0;     // if forcing a reload, we indicate that by setting the reload count to a very high value, but not enough to cause int wrap
+
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Parse journal files");
 
                     journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)), 
                                                                          EDDOptions.Instance.MinJournalDateUTC,

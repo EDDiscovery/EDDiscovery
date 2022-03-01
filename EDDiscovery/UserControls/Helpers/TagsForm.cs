@@ -45,8 +45,11 @@ namespace EDDiscovery.UserControls
             groups = new List<Group>();
             InitializeComponent();
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { });
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { };      // no controls except OK/Cancel to translate
+            var enumlisttt = new Enum[] { EDTx.TagsForm_buttonMore_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public void Init(string t, Icon ic, Dictionary<string,Image> tags = null )

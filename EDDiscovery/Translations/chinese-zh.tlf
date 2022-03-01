@@ -8,7 +8,6 @@ Cancel: "Cancel" => "取消"
 Delete: "Delete" => "删除"
 Campaign: "Campaign" => "战役"
 NoScan: "No Scan" => "无扫描"
-Systemnotknown: "System not known" => "未知星系"
 Travel: "Travel" => "航行"
 GameTime: "Game Time" => "游戏事件"
 Time: "Time" => "时间"
@@ -19,8 +18,7 @@ Off: "Off" => "关闭"
 Unknown: "Unknown" => "未知"
 Information: "Information" => "提示"
 NoPos: "No Pos" => "无坐标"
-HideColumn: "Hide Column" @
-UnhideallColumns: "Unhide all Columns" @
+RemoveAll: "Remove All" @
 
 SECTION StartUp
 
@@ -30,15 +28,23 @@ SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @
 .buttonCancel: "Cancel" @
-.buttonNormal: "Run" @
+.buttonRun: "Run" @
+.buttonRemoveJournals: "Remove Journals" @
+.buttonDeleteUserDB: "Delete/Rebuild User DB" @
 .buttonDeleteSystemDB: "Delete/Rebuild System DB" @
+.buttonResetDBLoc: "Reset DB Location" @
+.buttonBackup: "Backup Database" @
 .buttonDbs: "Move Databases" @
 .buttonLang: "Reset Language to English" @
-.button1: "Remove all Action Packs" @
+.buttonActionPacks: "Remove all Action Packs" @
 .buttonRemoveDLLs: "Remove all Extension DLLs" @
 .buttonResetTabs: "Reset Tabs, Remove PopOuts" @
 .buttonPositions: "Reset Window Positions" @
 .buttonResetTheme: "Reset Theme" @
+
+SECTION InfoForm
+
+.buttonAcknowledge: "Acknowledge" @
 
 SECTION PopOutInfo
 
@@ -100,8 +106,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" => "航线规划"
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "远航考察规划助手，创建远航航线"
 .Expedition.Title: "Expedition" => "远航"
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "探索规划助手，创建一个探索目标星系列表"
-.Exploration.Title: "Exploration" => "探索"
 .SystemInformation.Description: "System Information" => "星系信息"
 .SystemInformation.Title: "System Information" => "星系信息"
 .Spanel.Description: "Summary panel overlay" => "概要面板(遮罩)"
@@ -148,6 +152,12 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" @
 .SuitsWeapons.Title: "Suits & Weapons" @
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 
@@ -162,14 +172,12 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "工具(&T)"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "设置(&S)"
-.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "显示&2D星图"
 .toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "显示&3D星图"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "弹窗(&P)"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "显示所有弹窗的任务栏图标(&S)"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "重置所有透明弹窗(&T)"
 .toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "退出(&E)"
 .adminToolStripMenuItem: "A&dmin" => "管理(&D)"
-.adminToolStripMenuItem.forceEDDBUpdateToolStripMenuItem: "Synchronise with EDDB" => "手动与EDDB同步获取空间站数据"
 .adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "显示当前指挥官的游戏日志文件路径"
 .adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "合并全部航行记录至当前指挥官"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "读取2.1和之前版本的游戏日志文件"
@@ -179,9 +187,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" @
 .adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "手动与EDSM同步获取星系数据"
-.adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "发送未同步的EDDN事件"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "向Inara发送历史数据（之前的飞船，储存的飞船模块）"
-.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "导出访问过的星系列表至游戏"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
 .adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
 .addOnsToolStripMenuItem: "&Add-Ons" => "插件(&A)"
@@ -198,18 +204,14 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier论坛"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "项目GitHub页面(&P)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "反馈问题/提供建议(&R)"
-.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "查看如何进入安全模式恢复之前的设置"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "检查更新(&C)"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "右击添加/移除标签页，左键拖拽排序"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "选择新的配置文件或更改配置文件设置"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "选择要查看的指挥官"
-.buttonExtEDSMSync.ToolTip: "Send any unsynced logs to EDSM" => "与EDSM双向同步"
 .buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "点击选取想要显示的弹窗"
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "编辑插件"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "管理插件"
 .buttonExtRefresh.ToolTip: "Refresh the history" => "刷新航行记录"
-.buttonExt2dmap.ToolTip: "Open the 2D Map" => "显示2D星图"
-.buttonExt3dmap.ToolTip: "Open the 3D Map" => "显示3D星图"
 .buttonReloadActions.ToolTip: "DEBUG reload action system" => "（调试）重载插件系统"
 .addTabToolStripMenuItem: "Insert Tab with panel.." => "添加标签页面板"
 .removeTabToolStripMenuItem: "Remove Tab" => "移除标签页"
@@ -218,45 +220,27 @@ SECTION EDDiscoveryForm
 .RTABL: "Name: " => "标题"
 .RTABT: "Rename Tab" => "重命名标签页"
 .RTABTT: "Enter a new name for the tab" => "请输入一个新的标题"
-.ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "储存的主题有缺失的颜色或者缺失的信息\r\n请从设置面板里手动修改缺失的颜色或其他信息。"
 .DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "已发现以下应用扩展DLL\r\n是否允许使用？\r\n{0} \r\n如果不允许使用的话，请把该DLL从EDDiscovery的DLL文件夹中删除\r\n或者卸载包含此DLL的插件包\r\n再不然可以按住Shift键的同时双击EDDiscovery的图标进入安全模式使用移除所有扩展DLL的选项。"
 .DLLL: "DLLs loaded: {0}" => "已加载DLL：{0}"
 .DLLF: "DLLs failed to load: {0}" => "DLL加载失败：{0}"
 .IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
 .FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
-.RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" @
 .PROFL: "Profile {0} Loaded" => "配置文件“{0}”已加载"
 .NI: "New EDDiscovery installer available: {0}" => "可更新至新版本：{0}"
 .NRA: "New Release Available!" => "发现新版本!"
-.CAPINA: "Companion API is disabled in commander settings" => "Companion API在指挥官的设置中被禁用"
-.CAPION: "Logged into Companion API" => "Companion API连接成功"
-.CAPIF: "Companion API failed: {0}" => "Companion API失败: {0}"
-.CAPIND: "CAPI not docked. Server API lagging!" => "Companion API未连接，服务器API卡顿中！"
-.CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" @
-.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " @
-.CAPIMN: "CAPI stationname {0}, market station is {1} " @
-.CAPIEX: "Companion API get failed: " @
 .Arrived: "Arrived at system {0} Visit No. {1}" => "到达{0}星系，第{1}次访问"
 .PE1: "Profile reports errors in triggers: " => "配置文件返回错误："
-.EDDN: "Sent {0} event to EDDN ({1})" => "向EDDN发送了事件:{0}({1})"
-.EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN：发送商品价格失败："
 .Closing: "Closing, please wait!" => "关闭中，请稍等！"
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "星系数据下载已被禁用。从设置里重新启用。"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "同步数据至数据库正在进行中或者即将开始，请稍等"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "这个操作将花费很长时间并会占用很多宽带\r\n你确定要继续？"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "如需进入安全模式的话，先退出该程序，按住Shift键并双击EDDiscovery的程序图标。\r\n这样你就会进入安全模式的对话框。\r\n在安全模式下你可以重置多种设置参数，以及移动数据库位置。"
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "请确认你想要把所有航行记录移动到当前指挥官名下"
 .NoRel: "No new release found" => "已是最新版本"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "请确认你想要移除当前指挥官名下重复的FSD跳跃记录"
 .FSDRem: "Removed {0} FSD entries" => "移除了{0}条FSD跳跃记录"
-.VSLNF: "Could not find VisitedStarsCache.dat file, choose file" => "找不到文件VisitedStarsCache.dat，请手动选择"
-.VSLEXP: "File {0} created.\r\n{1}" => "已生成文件 {0}\r\n{1}"
-.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "重启游戏后才能被载入游戏的银河系星图"
-.VSLFileErr: "Error writing {0} export visited stars" => "导出访问过的星系失败，无法写入文件 {0}"
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "为防止服务器泛洪，Inara历史数据上传已被禁用直到与上次上传相间1个小时为止"
 .RH: "Refresh History." => "刷新航行记录。"
 .NoEDSMAPI: "No EDSM API key set" => "请确保你已选中一个指挥官并且设置了EDSM的API Key！"
-.EDSMSyncE: "EDSM Sync failed: {0}" => "EDSM同步失败：{0}"
 .EP: "Edit Profiles" => "编辑配置文件"
 .PL: "Profile {0} Loaded" => "配置文件{0}已加载"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "打开新的弹窗面板"
@@ -264,8 +248,6 @@ SECTION EDDiscoveryForm
 .notifyIconMenu_Open: "&Open EDDiscovery" => "打开EDDiscovery(O)"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "隐藏托盘图标(&H)"
 .notifyIconMenu_Exit: "E&xit" => "退出(&X)"
-.buttonExt2dmap: "2D" @
-.buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "重新获取日志"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "重新获取星系数据"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
@@ -281,36 +263,26 @@ SECTION EDDiscoveryController
 .CD: "Closing down, please wait.." => "正在关闭中，请稍后..."
 .EDSM: "Get galactic mapping from EDSM." => "从EDSM获取银河星图。"
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "笔记，书签以及银河星图已加载。"
-.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery和EDMarketConnector不应该同时向EDDN同步。关闭EDMarketConnector或者从设置面板中关闭”发送至EDDN“的选项！"
 .RTH: "Reading travel history" => "读取航行记录中"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "请在刷新完成之前不要关闭EDDiscovery"
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "同步至EDSM和EDDB已被禁用，从设置面板重新开启"
 .EDSMU: "EDSM systems update complete with {0} systems" => "EDSM完成更新了{0}个星系"
-.EDDBU: "EDDB systems update complete with {0} systems" => "EDDB完成更新了{0}个星系"
-.SYST: "Loading completed, total of {0:N0} systems stored" => "加载完成，总共储存了{0:N0}个星系"
-.Refresh: "Refresh due to updating EDSM or EDDB system data" => "基于EDSM或者EDDB的数据更新的刷新"
 .PLF: "Processing log file {0}" => "正在处理日志文件 {0}"
 .RD: "Refresh Displays" => "刷新显示"
 .HRC: "History refresh complete." => "航行记录刷新完成。"
-.Maps: "Checking for new EDDiscovery maps" => "检查新的EDDiscovery地图中"
 .EXPD: "Checking for new Expedition data" => "检查新的远航数据中"
-.EXPL: "Checking for new Exploration data" => "检查新的探索数据中"
 
 SECTION BookmarkForm
 
-BookmarkForm: "Create New Bookmark" => "创建新书签"
 .buttonEDSM: "EDSM" @
 .labelName: "Name" => "名称"
 .checkBoxTarget: "Make Target" => "选择为目标"
-.labelCo: "Co-ordinates" => "坐标"
 .buttonDelete: "Delete" => "删除"
 .buttonCancel: "Cancel" => "取消"
 .buttonOK: "OK" => "确认"
 .labelBookmarkNotes: "Bookmark Notes" => "书签笔记"
 .labelTravelNote: "Travel History Note" => "航行记录笔记"
-.labelTravelNoteEdit: "(Edit on Travel Screen)" => "（从航行记录面板编辑）"
 .labelTimeMade: "Time Made" => "创建时间"
-.UpdateBookmark: "Update Bookmark" => "更新书签"
 .Update: "Update" => "更新"
 .SB: "New System Bookmark" => "新建星系标签"
 .UB: "Update Bookmark" => "更新标签"
@@ -321,19 +293,6 @@ BookmarkForm: "Create New Bookmark" => "创建新书签"
 .ESN: "Enter a system name..." => "输入一个星系名称..."
 .GMO: "Galactic Mapping Object" => "银河系星图绘制计划对象"
 .Description: "Description" => "描述"
-
-SECTION SurfaceBookmarksForm
-
-.labelSurface: "Surface Bookmarks In System" => "星系中的地表标签"
-.sendToCompassToolStripMenuItem: "Send to compass" => "发送至指南针"
-.BodyName: "Planetary Body" => "星体"
-.SurfaceName: "Name" => "名称"
-.SurfaceDesc: "Description" => "描述"
-.Latitude: "Latitude" => "纬度"
-.Longitude: "Longitude" => "经度"
-.Valid: "Saveable" => "可保存的"
-.deleteToolStripMenuItem: "Delete Row" => "删除该行"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "手动添加星体"
 
 SECTION SurfaceBookmarkUserControl
 
@@ -364,18 +323,9 @@ SECTION FindSystemsUserControl
 .buttonExtNames: "From DB Find Names" => "从数据库查找名称"
 .buttonExtEDSM: "From EDSM" => "从EDSM搜索"
 .buttonExtDB: "From DB" => "从数据库搜索"
-.labelX: "X" => "X："
-.labelY: "Y" => "Y："
-.labelZ: "Z" => "Z："
 .buttonExtVisited: "From Visited Systems" => "从星系访问记录里搜索"
 .checkBoxCustomCube: "Cube" => "立方体"
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
-
-SECTION ConditionFilterForm
-
-ConditionFilterForm: "Journal: Filter out fields" => "航行日志：过滤掉的领域"
-.panelOK.buttonCancel: "Cancel" => "取消"
-.panelOK.buttonOK: "OK" => "确认"
 
 SECTION TravelHistoryFilter
 
@@ -393,9 +343,7 @@ SECTION TravelHistoryFilter
 
 SECTION AddOnManagerForm
 
-.buttonMore: "+" @
 .buttonExtGlobals: "Globals" => "全局"
-.buttonOK: "OK" => "确认"
 .AddOnTitle: "Add-On Manager" => "插件管理器"
 .EditTitle: "Edit Add-Ons" => "编辑插件"
 .Type: "Type" => "类型"
@@ -419,33 +367,21 @@ SECTION AddOnManagerForm
 .Failed: "Add-on failed to update. Check files for read only status" => "插件更新失败。请检查文件是否为只读状态。"
 .DeleteWarn: "Do you really want to delete {0}" => "你是否真要删除{0}？"
 
-SECTION AssignTravelLogSystemForm
-
-AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "指向至新的星系"
-.label1: "Travel Log System Name: " => "航行纪录中的星系名称："
-.label2: "Date Visited: " => "访问日期："
-.label6: "EDSM Link: " => "EDSM链接"
-.label3: "New system name: " => "新的星系名称："
-.btnFindSystem: "Find" => "搜索"
-.btnCancel: "Cancel" => "取消"
-.label4: "Travel Log Coordinates: " => "航行纪录中的坐标："
-.btnOK: "OK" => "确认"
-.label5: "System Coordinates" => "星系坐标"
-
 SECTION ExportForm
 
-ExportForm: "ExportForm" => "导出"
-.checkBoxRawJournal: "Export Journals" => "导出为游戏日志文件"
-.buttonCancel: "Cancel" => "取消"
+ExportForm: "Export Data" => "导出"
 .labelCVSSep: "CSV Separator" => "CSV 分隔符"
-.radioButtonSemiColon: "Semicolon" => "分号"
-.buttonExport: "Export" => "导出"
 .radioButtonComma: "Comma" => "逗号"
+.radioButtonSemiColon: "Semicolon" => "分号"
 .checkBoxIncludeHeader: "Include Header" => "包含表头"
 .checkBoxCustomAutoOpen: "Open" => "导出后打开"
-.label_index: "Export" => "导出"
+.labelUTCEnd: "UTC" @
+.labelUTCStart: "UTC" @
+.buttonExport: "Export" => "导出"
 .ECH: "Export current data {0}" => "导出当前的航行记录视图为{0}"
-.JF: "Journal file" => "游戏日志文件"
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -455,17 +391,9 @@ SECTION Form2DMap
 .All: "All" => "全部"
 .Custom: "Custom" => "自定义"
 
-SECTION UserControl2DMap
-
-UserControl2DMap: "2D Map" @
-.Nomapsavailable: "No maps available" @
-.toolStripButtonStars: "Stars" @
-.toolStripButtonSave: "Save" @
-
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "GalaxySectorSelect" => "选择想要下载的银河系星域"
-.buttonExtCancel: "Cancel" => "取消"
+GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星域"
 .buttonExtSet: "Set" => "保存"
 .labelSectorName: "Sector" => "星域"
 .Custom: "Custom" => "自定义"
@@ -477,19 +405,16 @@ GalaxySectorSelect: "GalaxySectorSelect" => "选择想要下载的银河系星�
 .BC: "Bubble+Colonia" => "科洛尼亚(Colonia)至太阳系周边"
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "你添加了新的星域！\r\n这将会需要完全重新下载EDSM数据\r\n确认要继续吗？"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "星系数据同步已被禁用。\r\n若要让星系数据更新，请从设置里重新启用星系数据下载"
-.Warning: "Warning" => "警告"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "你移除了一些星域！\r\n这将会花上一段时间来从数据库里清除数据\r\n确认要继续吗？"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
 .Select: "Select: " => "选择："
 .GALSELEN: "Select the data set" => "选择数据集"
 .PresstoAccept: "Press to Accept" => "点击以接受"
-.PresstoCancel: "Press to Cancel" => "点击以取消"
 .GALSELTitle: "Select EDSM Galaxy Data" => "选择 EDSM 银河星图数据"
 
 SECTION MoveToCommander
 
 MoveToCommander: "MoveToCommander" => "转移至指挥官..."
-.buttonExtCancel: "Cancel" => "取消"
 .buttonTransfer: "Transfer" => "转移"
 .label1: "Move selected history to commander." => "将选中的航行记录转移到另一位指挥官那里。"
 
@@ -509,53 +434,23 @@ NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Version"
 SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" => "配置编辑器"
-.buttonMore: "+" @
-.label_index: "Profile Editor" => "配置编辑器"
 .buttonExtGlobals: "Globals" => "全局设定"
-.buttonExtCancel: "Cancel" => "取消"
-.buttonOK: "OK" => "确认"
 .Custom: "Custom" => "自定义"
 .Trigger: "Trigger" => "触发器"
 .Back: "Back" => "反触发器"
-.Startup: "Startup" => "启动"
 .TrigEdit: "Edit Profile {0} Trigger" => "编辑配置文件{0}的触发器"
 .BackEdit: "Edit Profile {0} Back Trigger" => "编辑配置文件{0}的反触发器"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "你是否想要删除配置文件{0}？\r\n这将删除此配置文件的所有信息并且该操作不能撤销！"
 .Default: "Default" => "默认配置"
 
-SECTION RecordStep
-
-RecordStep: "RecordStep" => "分段录制"
-.labelGoto: "Go to" => "移至："
-.labelPAt: "Pointing At" => "指向："
-.checkBoxWaitForSlew: "Wait for slew" => "等待回转"
-.checkBoxChangeZoom: "Change Zoom" => "进行缩放"
-.labelZoom: "Zoom" => "缩放倍数："
-.labelWait: "Wait for this time before action" => "执行动作前等待时间"
-.checkBoxPan: "Change Dir" => "改变方向"
-.labelZoomTime: "Time to take to Zoom" => "缩放所用时间："
-.checkBoxPos: "Go To" => "移动位置"
-.labelMsgTime: "Message on screen time" => "消息显示时长："
-.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => "完成时显示消息"
-.labelTimeChange: "Time to take to change pos" => "移动位置所用时间："
-.checkBoxWaitComplete: "Wait for actions to complete" => "等待动作完成"
-.labelTimeDir: "Time to take to change direction" => "改变方向所用时间："
-.labelTMEInfo: "0=default time" => "0=默认时间"
-.buttonCancel: "Cancel" => "取消"
-.labelMsg: "Message to display" => "显示消息："
-.buttonOK: "OK" => "确认"
-.label_index: "Record Step" => "分段录制"
-
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "创建笔记"
 .labelTTimestamp: "Timestamp: " => "时间："
-.buttonCancel: "Cancel" => "取消"
 .buttonSave: "Save" => "保存"
 .labelTSystem: "System: " => "星系："
 .labelTSummary: "Summary: " => "概要："
 .labelTDetails: "Details: " => "详情："
-.label_index: "Set Note" => "创建笔记"
 
 SECTION MessageBoxTheme
 
@@ -575,15 +470,9 @@ SECTION DataGridViewDialogs
 .PresstoAccept: "Press to Accept" => "点击以接受"
 .PresstoCancel: "Press to Cancel" => "点击以取消"
 .VNV: "Value is not valid" => "值无效"
-.Title: "Jump to Entry" => "跳至行"
-
-SECTION InfoForm
-
-.OK: "OK" => "确认"
 
 SECTION KeyForm
 
-.PK: "Press Key" => "按下一个键"
 KeyForm: "Define Key Sequence" => "定义按键"
 .radioButtonUp: "Up" => "KeyUp"
 .radioButtonDown: "Down" => "KeyDown"
@@ -591,7 +480,7 @@ KeyForm: "Define Key Sequence" => "定义按键"
 .checkBoxShift: "Shift" @
 .checkBoxCtrl: "Ctrl" @
 .checkBoxAlt: "Alt" @
-.checkBoxKey: "Press Key" => "按下一个键"
+.checkBoxKey: "'Press Key'" => "按下一个键"
 .labelNextDelay: "Current Delay" => "当前延时"
 .labelSelKeys: "Select Key" => "选择按键"
 .labelDelay: "Start Delay(ms)" => "启动延时(ms)"
@@ -601,8 +490,10 @@ KeyForm: "Define Key Sequence" => "定义按键"
 .buttonDelete: "Delete" => "删除"
 .buttonNext: "Next" => "下一个"
 .buttonTest: "Test" => "测试"
-.buttonCancel: "Cancel" => "取消"
-.buttonOK: "OK" => "确认"
+.PK: "Press Key" => "按下一个键"
+.NOPN: "Name a process to test sending keys" @
+.KERR: "Error {0} - check entry" @
+.NOP: "No process names to send keys to" @
 
 SECTION UserControlForm
 
@@ -620,13 +511,107 @@ SECTION ExtPanelRollUp
 
 SECTION CommanderForm
 
-.CAPIGB: "Frontier CAPI" @
 .CAPILoggingin: "Logging in" @
 .CAPIDisabled: "Disabled" @
 .CAPILogout: "Logout" @
 .CAPILoggedin: "Logged in" @
 .CAPILogin: "Login" @
 .CAPIAwaitLogin: "Await Log in" @
+
+SECTION SpeechConfigure
+
+SpeechConfigure: "Configure Speech" @
+.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
+.buttonExtTest: "Test" @
+.buttonExtDevice: "Device" @
+.buttonExtEffects: "Effects" @
+.checkBoxCustomLiteral: "Literal" @
+.checkBoxCustomComplete: "Wait until speech completes" @
+.labelEndTrigger: "End Trigger" @
+.labelStartTrigger: "Start Trigger" @
+.labelRate: "Rate" @
+.labelVoice: "Voice" @
+.labelVolume: "Volume" @
+.checkBoxCustomR: "Override" @
+.checkBoxCustomV: "Override" @
+
+SECTION WaveConfigureDialog
+
+WaveConfigureDialog: "Configure Wave" @
+.buttonExtDevice: "Device" @
+.labelStartTrigger: "Start Trigger" @
+.labelEndTrigger: "End Trigger" @
+.labelTitle: "Select Default device, volume and effects" @
+.buttonExtBrowse: "Browse" @
+.checkBoxCustomComplete: "Wait until audio completes" @
+.buttonExtEffects: "Effects" @
+.buttonExtTest: "Test" @
+.checkBoxCustomV: "Override" @
+.labelVolume: "Volume" @
+
+SECTION SoundEffectsDialog
+
+SoundEffectsDialog: "Sound Effects" @
+.labelEcho: "Echo" @
+.buttonExtTest: "Test" @
+.labelEchoMix: "Mix" @
+.labelChorus: "Chorus" @
+.checkBoxCustomNone: "No effects" @
+.labelReverb: "Reverb" @
+.checkBoxP: "Enable" @
+.checkBoxG: "Enable" @
+.labelDistortion: "Distortion" @
+.checkBoxD: "Enable" @
+.labelEchoFeedback: "Feedback" @
+.labelPitch: "Pitch" @
+.labelGargle: "Gargle" @
+.labelChorusMix: "Mix" @
+.labelEchoDelay: "Delay" @
+.checkBoxR: "Enable" @
+.labelReverbMix: "Mix" @
+.labelDistortionGain: "Gain" @
+.labelChorusFeedback: "Feedback" @
+.checkBoxC: "Enable" @
+.labelPitchOctave: "Octave" @
+.labelGargleFrequency: "Frequency" @
+.checkBoxE: "Enable" @
+.labelReverbTime: "Time" @
+.labelDistortionEdge: "Edge" @
+.labelChorusDelay: "Delay" @
+.labelChorusDepth: "Depth" @
+.labelReverbHFRatio: "HF Ratio" @
+.labelDistortionCentreFreq: "Cent Freq" @
+.labelDistortionFreqWidth: "Freq Width" @
+
+SECTION AudioDeviceConfigure
+
+AudioDeviceConfigure: "Audio Device Select" @
+.labelText: "Select Device" @
+
+SECTION ActionPackEditPackForm
+
+.buttonInstallationVars: "Install Parameters" @
+.labelEditProg: "Program" @
+
+SECTION ActionProgramEditForm
+
+ActionProgramEditForm: "Action Program" @
+.labelName: "Name:" @
+.buttonExtDisk: "As File" @
+.buttonExtLoad: "Load" @
+.buttonExtSave: "Save" @
+.buttonExtEdit: "Text Edit" @
+
+SECTION ActionPackEditForm
+
+.ci: "Configuration items for installation - specialist use" @
+.ip: "Input parameters to pass to program on run" @
+.df: "Define Variable:" @
+.cp: "Variables to pass into called program" @
+
+SECTION ActionPackVariablesForm
+
+.gv: "Global User variables to pass to program on run" @
 
 include translation-chinese-uc.tlp
 

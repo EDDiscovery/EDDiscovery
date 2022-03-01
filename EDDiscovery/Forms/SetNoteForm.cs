@@ -28,6 +28,12 @@ namespace EDDiscovery.Forms
         public SetNoteForm(HistoryEntry he, EDDiscoveryForm parent)
         {
             InitializeComponent();
+
+            var enumlist = new Enum[] { EDTx.SetNoteForm, EDTx.SetNoteForm_labelTTimestamp, EDTx.SetNoteForm_buttonSave, EDTx.SetNoteForm_labelTSystem, EDTx.SetNoteForm_labelTSummary, EDTx.SetNoteForm_labelTDetails };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            label_index.Text = this.Text;
+
             this.Owner = parent;
             this.HistoryEntry = he;
             this.NoteText = he.SNC?.Note;
@@ -44,7 +50,6 @@ namespace EDDiscovery.Forms
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelTimestamp, labelSystem, labelSummary, labelDetails });
         }
 
         private void SaveNote()

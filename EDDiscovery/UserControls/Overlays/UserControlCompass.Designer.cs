@@ -43,9 +43,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlCompass));
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.labelTargetLat = new ExtendedControls.ExtLabel();
             this.checkBoxHideTransparent = new ExtendedControls.ExtCheckBox();
             this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
@@ -59,10 +57,6 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.SuspendLayout();
             this.flowLayoutPanelBookmarks.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
             // 
             // labelTargetLat
             // 
@@ -284,7 +278,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtLabel labelTargetLat;
         private ExtendedControls.ExtCheckBox checkBoxHideTransparent;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLatitude;

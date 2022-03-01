@@ -79,11 +79,34 @@ namespace EDDiscovery
 
         public void NewEntry(JournalEntry e)       // programatically do a new entry
         {
-            Controller.NewEntry(e,null);                 // push it thru as if the monitor watcher saw it
+            Controller.NewJournalEntryFromScanner(e,null);                 // push it thru as if the monitor watcher saw it
         }
 
-         
-        private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
+        // Called by controller before any HL removal reorder. The raw HE stream.  The MCMR etc databases have been updated
+        public void Controller_NewHistoryEntryUnfiltered(HistoryEntry he)
+        {
+            System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType} {he.EventSummary}");
+
+            // EDSM needs the raw stream, so send it here..
+
+            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.OkayToSend(he))          
+            {
+                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });       // send, if bad credentials, EDSM will moan alerting the user
+            }
+
+            // as does Inara. Note the MCMR has been updated.  Needed here due to using materials/cargo
+            if (EDCommander.Current.SyncToInara)
+            {
+                var mcmr = history.MaterialCommoditiesMicroResources.GetDict(he.MaterialCommodity);
+                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he, mcmr);
+            }
+
+            DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he));       // give DLL the unfiltered stream
+
+        }
+
+        // Called after HE removal/reorder, and after the UI's has had a chance to operate
+        private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         
         {
             BaseUtils.AppTicks.TickCountLapDelta("DFS", true);
 
@@ -101,16 +124,6 @@ namespace EDDiscovery
                 int count = history.GetVisitsCount(he.System.Name);
                 LogLine(string.Format("Arrived at system {0} Visit No. {1}".T(EDTx.EDDiscoveryForm_Arrived), he.System.Name, count));
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
-            }
-
-            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.OkayToSend(he))           // send this one, if allowed.
-            {
-                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });       // send, if bad credentials, EDSM will moan alerting the user
-            }
-
-            if (EDCommander.Current.SyncToInara)
-            {
-                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, hl, he);
             }
 
             if (EDCommander.Current.SyncToIGAU)

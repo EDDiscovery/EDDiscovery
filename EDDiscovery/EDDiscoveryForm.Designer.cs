@@ -113,7 +113,6 @@ namespace EDDiscovery
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuSeparatorBottom = new System.Windows.Forms.ToolStripSeparator();
             this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label_version = new System.Windows.Forms.Label();
@@ -760,7 +759,6 @@ namespace EDDiscovery
             this.frontierForumThreadToolStripMenuItem,
             this.gitHubToolStripMenuItem,
             this.reportIssueIdeasToolStripMenuItem,
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem,
             this.helpMenuSeparatorBottom,
             this.checkForNewReleaseToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
@@ -771,7 +769,7 @@ namespace EDDiscovery
             // 
             this.aboutToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.About;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -780,7 +778,7 @@ namespace EDDiscovery
             this.wikiHelpToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Wiki;
             this.wikiHelpToolStripMenuItem.Name = "wikiHelpToolStripMenuItem";
             this.wikiHelpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.wikiHelpToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.wikiHelpToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.wikiHelpToolStripMenuItem.Text = "&View Help";
             this.wikiHelpToolStripMenuItem.Click += new System.EventHandler(this.wikiHelpToolStripMenuItem_Click);
             // 
@@ -789,20 +787,20 @@ namespace EDDiscovery
             this.viewHelpVideosToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Video;
             this.viewHelpVideosToolStripMenuItem.Name = "viewHelpVideosToolStripMenuItem";
             this.viewHelpVideosToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F1)));
-            this.viewHelpVideosToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.viewHelpVideosToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.viewHelpVideosToolStripMenuItem.Text = "View Help Videos";
             this.viewHelpVideosToolStripMenuItem.Click += new System.EventHandler(this.viewHelpVideosToolStripMenuItem_Click);
             // 
             // helpMenuSeparatorTop
             // 
             this.helpMenuSeparatorTop.Name = "helpMenuSeparatorTop";
-            this.helpMenuSeparatorTop.Size = new System.Drawing.Size(351, 6);
+            this.helpMenuSeparatorTop.Size = new System.Drawing.Size(239, 6);
             // 
             // eDDiscoveryChatDiscordToolStripMenuItem
             // 
             this.eDDiscoveryChatDiscordToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.DiscordChat;
             this.eDDiscoveryChatDiscordToolStripMenuItem.Name = "eDDiscoveryChatDiscordToolStripMenuItem";
-            this.eDDiscoveryChatDiscordToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.eDDiscoveryChatDiscordToolStripMenuItem.Text = "&Discord - EDD Community Chat";
             this.eDDiscoveryChatDiscordToolStripMenuItem.Click += new System.EventHandler(this.eddiscoveryChatDiscordToolStripMenuItem_Click);
             // 
@@ -810,7 +808,7 @@ namespace EDDiscovery
             // 
             this.frontierForumThreadToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.FrontierForumThread;
             this.frontierForumThreadToolStripMenuItem.Name = "frontierForumThreadToolStripMenuItem";
-            this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.frontierForumThreadToolStripMenuItem.Text = "&Frontier Forum Thread";
             this.frontierForumThreadToolStripMenuItem.Click += new System.EventHandler(this.frontierForumThreadToolStripMenuItem_Click);
             // 
@@ -818,7 +816,7 @@ namespace EDDiscovery
             // 
             this.gitHubToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Github;
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
-            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.gitHubToolStripMenuItem.Text = "&Project Page (GitHub)";
             this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
             // 
@@ -826,28 +824,20 @@ namespace EDDiscovery
             // 
             this.reportIssueIdeasToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.ReportIssue;
             this.reportIssueIdeasToolStripMenuItem.Name = "reportIssueIdeasToolStripMenuItem";
-            this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.reportIssueIdeasToolStripMenuItem.Text = "&Report Issue / Idea";
             this.reportIssueIdeasToolStripMenuItem.Click += new System.EventHandler(this.reportIssueIdeasToolStripMenuItem_Click);
-            // 
-            // howToRunInSafeModeToResetVariousParametersToolStripMenuItem
-            // 
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.SafeModeHelp;
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Name = "howToRunInSafeModeToResetVariousParametersToolStripMenuItem";
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Text = "How to Run in Safe Mode to reset various parameters";
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Click += new System.EventHandler(this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click);
             // 
             // helpMenuSeparatorBottom
             // 
             this.helpMenuSeparatorBottom.Name = "helpMenuSeparatorBottom";
-            this.helpMenuSeparatorBottom.Size = new System.Drawing.Size(351, 6);
+            this.helpMenuSeparatorBottom.Size = new System.Drawing.Size(239, 6);
             // 
             // checkForNewReleaseToolStripMenuItem
             // 
             this.checkForNewReleaseToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.CheckForNewRelease;
             this.checkForNewReleaseToolStripMenuItem.Name = "checkForNewReleaseToolStripMenuItem";
-            this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.checkForNewReleaseToolStripMenuItem.Text = "&Check for Updates";
             this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
             // 
@@ -1075,7 +1065,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem frontierForumThreadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gitHubToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportIssueIdeasToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem howToRunInSafeModeToResetVariousParametersToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
         private System.Windows.Forms.ToolStripMenuItem checkForNewReleaseToolStripMenuItem;
         private System.Windows.Forms.Label label_version;

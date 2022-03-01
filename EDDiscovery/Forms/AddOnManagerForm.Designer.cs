@@ -187,7 +187,7 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(904, 0);
-            this.vScrollBarCustom1.Maximum = -308;
+            this.vScrollBarCustom1.Maximum = -347;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -200,8 +200,8 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -308;
-            this.vScrollBarCustom1.ValueLimited = -308;
+            this.vScrollBarCustom1.Value = -347;
+            this.vScrollBarCustom1.ValueLimited = -347;
             // 
             // richTextBoxScrollDescription
             // 
@@ -212,8 +212,9 @@ namespace EDDiscovery.Forms
             this.richTextBoxScrollDescription.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxScrollDescription.Name = "richTextBoxScrollDescription";
             this.richTextBoxScrollDescription.ReadOnly = false;
-            this.richTextBoxScrollDescription.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.richTextBoxScrollDescription.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBoxScrollDescription.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBoxScrollDescription.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBoxScrollDescription.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -259,7 +260,7 @@ namespace EDDiscovery.Forms
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 23);
             this.buttonOK.TabIndex = 7;
-            this.buttonOK.Text = "OK";
+            this.buttonOK.Text = "%OK%";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 

@@ -54,9 +54,12 @@ namespace EDDiscovery.UserControls
 
             checkBoxCube.Checked = GetSetting("Behaviour", false);
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlStarDistance_colName, EDTx.UserControlStarDistance_colDistance, EDTx.UserControlStarDistance_colVisited, EDTx.UserControlStarDistance_labelExtMin, EDTx.UserControlStarDistance_labelExtMax, EDTx.UserControlStarDistance_checkBoxCube };
+            var enumlistcms = new Enum[] { EDTx.UserControlStarDistance_viewSystemToolStripMenuItem, EDTx.UserControlStarDistance_viewOnEDSMToolStripMenuItem1, EDTx.UserControlStarDistance_addToTrilaterationToolStripMenuItem1, EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.UserControlStarDistance_textMinRadius_ToolTip, EDTx.UserControlStarDistance_textMaxRadius_ToolTip, EDTx.UserControlStarDistance_checkBoxCube_ToolTip };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

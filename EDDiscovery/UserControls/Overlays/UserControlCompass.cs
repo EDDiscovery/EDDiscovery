@@ -72,8 +72,8 @@ namespace EDDiscovery.UserControls
 
             checkBoxHideTransparent.Visible = IsFloatingWindow;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlCompass_labelBookmark, EDTx.UserControlCompass_labelTargetLat, EDTx.UserControlCompass_checkBoxHideTransparent };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
         }
 
         public override void Closing()

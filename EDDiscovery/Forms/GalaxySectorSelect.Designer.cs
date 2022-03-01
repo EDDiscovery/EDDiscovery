@@ -54,9 +54,11 @@
             this.imageViewer.AutoSize = false;
             this.imageViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageViewer.Location = new System.Drawing.Point(0, 32);
+            this.imageViewer.MaxZoom = 400;
+            this.imageViewer.MinZoom = 10;
             this.imageViewer.Name = "imageViewer";
             this.imageViewer.Selection = null;
-            this.imageViewer.Size = new System.Drawing.Size(782, 717);
+            this.imageViewer.Size = new System.Drawing.Size(1021, 257);
             this.imageViewer.TabIndex = 0;
             this.imageViewer.ZoomIncrement = 5;
             // 
@@ -76,7 +78,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(782, 32);
+            this.panelTop.Size = new System.Drawing.Size(1021, 32);
             this.panelTop.TabIndex = 1;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
@@ -88,7 +90,7 @@
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
-            this.panel_close.Location = new System.Drawing.Point(752, 6);
+            this.panel_close.Location = new System.Drawing.Point(991, 6);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
@@ -110,7 +112,7 @@
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(722, 6);
+            this.panel_minimize.Location = new System.Drawing.Point(961, 6);
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
@@ -131,7 +133,7 @@
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonExtCancel.TabIndex = 2;
-            this.buttonExtCancel.Text = "Cancel";
+            this.buttonExtCancel.Text = "%Cancel%";
             this.buttonExtCancel.UseVisualStyleBackColor = true;
             this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
             // 
@@ -225,9 +227,9 @@
             // statusStripCustom
             // 
             this.statusStripCustom.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
-            this.statusStripCustom.Location = new System.Drawing.Point(0, 751);
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 291);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(784, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(1023, 22);
             this.statusStripCustom.TabIndex = 33;
             // 
             // panelOuter
@@ -238,20 +240,20 @@
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 0);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(784, 751);
+            this.panelOuter.Size = new System.Drawing.Size(1023, 291);
             this.panelOuter.TabIndex = 0;
             // 
             // GalaxySectorSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 773);
+            this.ClientSize = new System.Drawing.Size(1023, 313);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.statusStripCustom);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GalaxySectorSelect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "GalaxySectorSelect";
+            this.Text = "Galaxy Sector Select";
             this.Resize += new System.EventHandler(this.GalaxySectorSelect_Resize);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();

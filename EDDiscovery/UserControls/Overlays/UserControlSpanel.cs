@@ -176,7 +176,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += NewTarget;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
 
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlisttt = new Enum[] { EDTx.UserControlSpanel_extButtonShowControl_ToolTip, EDTx.UserControlSpanel_extButtonColumns_ToolTip, EDTx.UserControlSpanel_extButtonColumnOrder_ToolTip, EDTx.UserControlSpanel_extButtonHabZones_ToolTip, EDTx.UserControlSpanel_buttonFilter_ToolTip, EDTx.UserControlSpanel_buttonField_ToolTip, EDTx.UserControlSpanel_extButtonScanShow_ToolTip, EDTx.UserControlSpanel_extButtoScanPos_ToolTip, EDTx.UserControlSpanel_extButtonFont_ToolTip, EDTx.UserControlSpanel_extCheckBoxWordWrap_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             
@@ -897,15 +899,15 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(Configuration.showSystemInformation, "Show System Information".TxID("UserControlSpanel.showSystemInformationToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showTargetLine, "Show Target Line".TxID("UserControlSpanel.toolStripMenuItemTargetLine"));
-            displayfilter.AddStandardOption(Configuration.showBlackBoxAroundText, "Show black box around text".TxID("UserControlSpanel.blackBoxAroundTextToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showExpandOverColumns, "Expand text over empty columns".TxID("UserControlSpanel.expandTextOverEmptyColumnsToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showSystemInformation, "Show System Information".TxID(EDTx.UserControlSpanel_showSystemInformationToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showTargetLine, "Show Target Line".TxID(EDTx.UserControlSpanel_toolStripMenuItemTargetLine));
+            displayfilter.AddStandardOption(Configuration.showBlackBoxAroundText, "Show black box around text".TxID(EDTx.UserControlSpanel_blackBoxAroundTextToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showExpandOverColumns, "Expand text over empty columns".TxID(EDTx.UserControlSpanel_expandTextOverEmptyColumnsToolStripMenuItem));
 
-            string dontshow = "Don't show information when".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem") + " ";
-            displayfilter.AddStandardOption(Configuration.showNothingWhenDocked, dontshow + "docked or landed".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showNothingWhenPanel, dontshow + "when in a panel".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showNoTitleWhenHidden, "Hide the title when hidden".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem"));
+            string dontshow = "Don't show information when".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem) + " ";
+            displayfilter.AddStandardOption(Configuration.showNothingWhenDocked, dontshow + "docked or landed".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem_showNothingWhenDockedtoolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showNothingWhenPanel, dontshow + "when in a panel".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem_dontshowwhenInGalaxyPanelToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showNoTitleWhenHidden, "Hide the title when hidden".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem_hideTitleToolStripMenuItem));
 
             CommonCtrl(displayfilter,extButtonShowControl);
         }
@@ -914,15 +916,15 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(Configuration.showEDSMButton, "Show EDSM Button".TxID("UserControlSpanel.EDSMButtonToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showTime, "Show Time".TxID("UserControlSpanel.toolStripMenuItemTime"));
-            displayfilter.AddStandardOption(Configuration.showIcon, "Show Event Icon".TxID("UserControlSpanel.iconToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showDescription, "Show Description".TxID("UserControlSpanel.showDescriptionToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showInformation, "Show Information".TxID("UserControlSpanel.showInformationToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showNotes, "Show Notes".TxID("UserControlSpanel.showNotesToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showXYZ, "Show XYZ".TxID("UserControlSpanel.showXYZToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showDistancePerStar, "Show Target Distance per Star".TxID("UserControlSpanel.showTargetToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showDistancesOnFSDJumpsOnly, "Show Distances/Coords on FSD Jumps Only".TxID("UserControlSpanel.showDistancesOnFSDJumpsOnlyToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showEDSMButton, "Show EDSM Button".TxID(EDTx.UserControlSpanel_EDSMButtonToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showTime, "Show Time".TxID(EDTx.UserControlSpanel_toolStripMenuItemTime));
+            displayfilter.AddStandardOption(Configuration.showIcon, "Show Event Icon".TxID(EDTx.UserControlSpanel_iconToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showDescription, "Show Description".TxID(EDTx.UserControlSpanel_showDescriptionToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showInformation, "Show Information".TxID(EDTx.UserControlSpanel_showInformationToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showNotes, "Show Notes".TxID(EDTx.UserControlSpanel_showNotesToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showXYZ, "Show XYZ".TxID(EDTx.UserControlSpanel_showXYZToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showDistancePerStar, "Show Target Distance per Star".TxID(EDTx.UserControlSpanel_showTargetToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showDistancesOnFSDJumpsOnly, "Show Distances/Coords on FSD Jumps Only".TxID(EDTx.UserControlSpanel_showDistancesOnFSDJumpsOnlyToolStripMenuItem));
             CommonCtrl(displayfilter,extButtonColumns);
         }
 
@@ -930,12 +932,12 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(Configuration.showHabInformation, "Show Habitation Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showMetalRichZone, "Show Metal Rich Planet Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showWaterWrldZone, "Show Water World Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showEarthLikeZone, "Show Earth Like Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showAmmonWrldZone, "Show Ammonia Worlds Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem"));
-            displayfilter.AddStandardOption(Configuration.showIcyPlanetZone, "Show Icy Planets Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showHabInformation, "Show Habitation Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showMetalRichZone, "Show Metal Rich Planet Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showMetalRichPlanetsToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showWaterWrldZone, "Show Water World Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showWaterWorldsToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showEarthLikeZone, "Show Earth Like Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showEarthLikeToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showAmmonWrldZone, "Show Ammonia Worlds Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showAmmoniaWorldsToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showIcyPlanetZone, "Show Icy Planets Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showIcyPlanetsToolStripMenuItem));
             CommonCtrl(displayfilter,extButtonHabZones);
         }
 
@@ -962,9 +964,9 @@ namespace EDDiscovery.UserControls
         private void extButtonColumnOrder_Click(object sender, EventArgs e)
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-            displayfilter.AddStandardOption(0, "Default".TxID("UserControlSpanel.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(1, "Notes after XYZ".TxID("UserControlSpanel.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(2, "Target Distance, XYZ, Notes".TxID("UserControlSpanel.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(0, "Default".TxID(EDTx.UserControlSpanel_OrdertoolStripMenuItem_orderDefaultToolStripMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(1, "Notes after XYZ".TxID(EDTx.UserControlSpanel_OrdertoolStripMenuItem_orderNotesAfterXYZToolStripMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(2, "Target Distance, XYZ, Notes".TxID(EDTx.UserControlSpanel_OrdertoolStripMenuItem_orderTargetDistanceXYZNotesToolStripMenuItem), null, "All", true);
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
             displayfilter.ScreenMargin = new Size(0, 0);
@@ -1006,11 +1008,11 @@ namespace EDDiscovery.UserControls
         private void extButtonScanShow_Click(object sender, EventArgs e)
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-            displayfilter.AddStandardOption(Configuration.showScanOff, "Do not show".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScan15s, "Show for 15s".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScan30s, "Show for 30s".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScan60s, "Show for 60s".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScanIndefinite, "Show until next scan".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanOff, "Do not show".TxID(EDTx.UserControlSpanel_surfaceScanDetailsToolStripMenuItem_scanNoToolStripMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScan15s, "Show for 15s".TxID(EDTx.UserControlSpanel_surfaceScanDetailsToolStripMenuItem_scan15sToolStripMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScan30s, "Show for 30s".TxID(EDTx.UserControlSpanel_surfaceScanDetailsToolStripMenuItem_scan30sToolStripMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScan60s, "Show for 60s".TxID(EDTx.UserControlSpanel_surfaceScanDetailsToolStripMenuItem_scan60sToolStripMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanIndefinite, "Show until next scan".TxID(EDTx.UserControlSpanel_surfaceScanDetailsToolStripMenuItem_scanUntilNextToolStripMenuItem), null, "All", true);
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
             displayfilter.ScreenMargin = new Size(0, 0);
@@ -1028,11 +1030,11 @@ namespace EDDiscovery.UserControls
         private void extButtoScanPos_Click(object sender, EventArgs e)
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-            displayfilter.AddStandardOption(Configuration.showScanRight, "Scan right".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanRightMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScanLeft, "Scan left".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanLeftMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScanAbove, "Scan above".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanAboveMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScanBelow, "Scan below".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanBelowMenuItem"), null, "All", true);
-            displayfilter.AddStandardOption(Configuration.showScanOnTop, "Scan on top".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanOnTopMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanRight, "Scan right".TxID(EDTx.UserControlSpanel_showInPositionToolStripMenuItem_scanRightMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanLeft, "Scan left".TxID(EDTx.UserControlSpanel_showInPositionToolStripMenuItem_scanLeftMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanAbove, "Scan above".TxID(EDTx.UserControlSpanel_showInPositionToolStripMenuItem_scanAboveMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanBelow, "Scan below".TxID(EDTx.UserControlSpanel_showInPositionToolStripMenuItem_scanBelowMenuItem), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanOnTop, "Scan on top".TxID(EDTx.UserControlSpanel_showInPositionToolStripMenuItem_scanOnTopMenuItem), null, "All", true);
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
             displayfilter.ScreenMargin = new Size(0, 0);

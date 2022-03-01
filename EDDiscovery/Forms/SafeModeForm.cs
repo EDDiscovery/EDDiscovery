@@ -35,9 +35,11 @@ namespace EDDiscovery.Forms
             InitializeComponent();
 
             BaseUtils.Translator tx = new BaseUtils.Translator();
-            tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0,
-                                        System.IO.Path.GetTempPath());
-            tx.Translate(this);
+            tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0,System.IO.Path.GetTempPath());
+            //tx.LoadTranslation("example-ex", CultureInfo.CurrentUICulture, new string[] { @"c:\code\eddiscovery\eddiscovery\translations" }, 2,System.IO.Path.GetTempPath());
+
+            var enumlist = new Enum[] { EDTx.SafeModeForm, EDTx.SafeModeForm_buttonCancel, EDTx.SafeModeForm_buttonRun, EDTx.SafeModeForm_buttonRemoveJournals, EDTx.SafeModeForm_buttonDeleteUserDB, EDTx.SafeModeForm_buttonDeleteSystemDB, EDTx.SafeModeForm_buttonResetDBLoc, EDTx.SafeModeForm_buttonBackup, EDTx.SafeModeForm_buttonDbs, EDTx.SafeModeForm_buttonLang, EDTx.SafeModeForm_buttonActionPacks, EDTx.SafeModeForm_buttonRemoveDLLs, EDTx.SafeModeForm_buttonResetTabs, EDTx.SafeModeForm_buttonPositions, EDTx.SafeModeForm_buttonResetTheme };
+            tx.TranslateControls(this, enumlist);
         }
 
         public SafeModeForm(bool userdbgood) : this()
@@ -214,7 +216,9 @@ namespace EDDiscovery.Forms
         {
             EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
 
-            if (File.Exists(opt.DbOptionsFile()))
+            string optionfile = Path.Combine(opt.AppDataDirectory, "dboptions.txt");
+
+            if (File.Exists(optionfile))
             {
                 if (MessageBox.Show(this, "Current databases are located at:" + Environment.NewLine + Environment.NewLine +
                                 "User: " + opt.UserDatabasePath + Environment.NewLine + "System: " + opt.SystemDatabasePath +
@@ -222,7 +226,7 @@ namespace EDDiscovery.Forms
                                 "Do you wish to change their back to the default in " + EDDiscovery.EDDOptions.Instance.AppDataDirectory + "?",
                                 "Reset Databases", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
-                    BaseUtils.FileHelpers.DeleteFileNoError(opt.DbOptionsFile());
+                    BaseUtils.FileHelpers.DeleteFileNoError(optionfile);
                     EDDiscovery.EDDOptions.Instance.ResetSystemDatabasePath();
                     EDDiscovery.EDDOptions.Instance.ResetUserDatabasePath();
 

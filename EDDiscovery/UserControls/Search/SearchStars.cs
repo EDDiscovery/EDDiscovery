@@ -51,10 +51,8 @@ namespace EDDiscovery.UserControls
             findSystemsUserControl.Excel += () => { dataGridView.Excel(3); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { findSystemsUserControl });
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
-            //BaseUtils.Translator.Instance.Translate(dataGridViewEDSM.ContextMenu, this);
-
+            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { findSystemsUserControl });
             dataGridView.Init(discoveryform);
         }
 

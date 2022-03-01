@@ -98,7 +98,8 @@ namespace EDDiscovery.UserControls
 
             ResumeLayout();
 
-            BaseUtils.Translator.Instance.Translate(contextMenuStripSplitter, this);
+            var enumlistcms = new Enum[] { EDTx.UserControlContainerSplitter_sizeRatioToolStripMenuItem };
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSplitter, enumlistcms, this);
 
             RunActionOnSplitterTree((p, c, uccb) =>
             {

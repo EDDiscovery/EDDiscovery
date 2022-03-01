@@ -50,6 +50,13 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustomDGV = new ExtendedControls.ExtScrollBar();
             this.dataGridViewEstimatedValues = new BaseUtils.DataGridViewColumnControl();
+            this.flowLayoutPanelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
+            this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowImpossible = new ExtendedControls.ExtCheckBox();
+            this.labelControlText = new System.Windows.Forms.Label();
+            this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EDSM = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,17 +65,9 @@ namespace EDDiscovery.UserControls
             this.WasDiscovered = new System.Windows.Forms.DataGridViewImageColumn();
             this.EstBase = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MappedValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FirstDiscovered = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FirstMappedEff = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FirstDiscMapped = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.flowLayoutPanelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
-            this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
-            this.extCheckBoxShowImpossible = new ExtendedControls.ExtCheckBox();
-            this.labelControlText = new System.Windows.Forms.Label();
-            this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).BeginInit();
             this.flowLayoutPanelTop.SuspendLayout();
@@ -83,7 +82,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(572, 542);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1247, 542);
             this.dataViewScrollerPanel.TabIndex = 25;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -99,7 +98,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomDGV.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomDGV.HideScrollBar = true;
             this.vScrollBarCustomDGV.LargeChange = 0;
-            this.vScrollBarCustomDGV.Location = new System.Drawing.Point(556, 0);
+            this.vScrollBarCustomDGV.Location = new System.Drawing.Point(1231, 0);
             this.vScrollBarCustomDGV.Maximum = -1;
             this.vScrollBarCustomDGV.Minimum = 0;
             this.vScrollBarCustomDGV.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -133,7 +132,6 @@ namespace EDDiscovery.UserControls
             this.WasDiscovered,
             this.EstBase,
             this.MappedValue,
-            this.FirstDiscovered,
             this.FirstMappedEff,
             this.FirstDiscMapped,
             this.EstValue});
@@ -144,95 +142,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.RowHeadersVisible = false;
             this.dataGridViewEstimatedValues.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewEstimatedValues.SingleRowSelect = true;
-            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(556, 542);
+            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(1231, 542);
             this.dataGridViewEstimatedValues.TabIndex = 23;
             this.dataGridViewEstimatedValues.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEstimatedValues_SortCompare);
-            // 
-            // BodyName
-            // 
-            this.BodyName.FillWeight = 75F;
-            this.BodyName.HeaderText = "Body Name";
-            this.BodyName.MinimumWidth = 50;
-            this.BodyName.Name = "BodyName";
-            // 
-            // BodyType
-            // 
-            this.BodyType.HeaderText = "Body Type";
-            this.BodyType.Name = "BodyType";
-            // 
-            // EDSM
-            // 
-            this.EDSM.FillWeight = 50F;
-            this.EDSM.HeaderText = "EDSM";
-            this.EDSM.Name = "EDSM";
-            // 
-            // Mapped
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.NullValue = null;
-            this.Mapped.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Mapped.FillWeight = 30F;
-            this.Mapped.HeaderText = "Mapped";
-            this.Mapped.Name = "Mapped";
-            this.Mapped.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Mapped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // WasMapped
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.NullValue = null;
-            this.WasMapped.DefaultCellStyle = dataGridViewCellStyle2;
-            this.WasMapped.FillWeight = 30F;
-            this.WasMapped.HeaderText = "Already Mapped";
-            this.WasMapped.Name = "WasMapped";
-            this.WasMapped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // WasDiscovered
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.NullValue = null;
-            this.WasDiscovered.DefaultCellStyle = dataGridViewCellStyle3;
-            this.WasDiscovered.FillWeight = 30F;
-            this.WasDiscovered.HeaderText = "Already Discovered";
-            this.WasDiscovered.Name = "WasDiscovered";
-            this.WasDiscovered.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // EstBase
-            // 
-            this.EstBase.FillWeight = 50F;
-            this.EstBase.HeaderText = "Base Value";
-            this.EstBase.Name = "EstBase";
-            // 
-            // MappedValue
-            // 
-            this.MappedValue.FillWeight = 50F;
-            this.MappedValue.HeaderText = "Mapped";
-            this.MappedValue.Name = "MappedValue";
-            // 
-            // FirstDiscovered
-            // 
-            this.FirstDiscovered.FillWeight = 50F;
-            this.FirstDiscovered.HeaderText = "First Discovered";
-            this.FirstDiscovered.Name = "FirstDiscovered";
-            // 
-            // FirstMappedEff
-            // 
-            this.FirstMappedEff.FillWeight = 50F;
-            this.FirstMappedEff.HeaderText = "First Mapped";
-            this.FirstMappedEff.Name = "FirstMappedEff";
-            // 
-            // FirstDiscMapped
-            // 
-            this.FirstDiscMapped.FillWeight = 50F;
-            this.FirstDiscMapped.HeaderText = "First Discovered Mapped";
-            this.FirstDiscMapped.Name = "FirstDiscMapped";
-            // 
-            // EstValue
-            // 
-            this.EstValue.FillWeight = 50F;
-            this.EstValue.HeaderText = "Current Value";
-            this.EstValue.MinimumWidth = 50;
-            this.EstValue.Name = "EstValue";
             // 
             // flowLayoutPanelTop
             // 
@@ -244,7 +156,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelTop.Name = "flowLayoutPanelTop";
-            this.flowLayoutPanelTop.Size = new System.Drawing.Size(572, 30);
+            this.flowLayoutPanelTop.Size = new System.Drawing.Size(1247, 30);
             this.flowLayoutPanelTop.TabIndex = 5;
             // 
             // checkBoxEDSM
@@ -348,13 +260,93 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.RollUpDelay = 1000;
             this.extPanelRollUp.SecondHiddenMarkerWidth = 0;
             this.extPanelRollUp.ShowHiddenMarker = true;
-            this.extPanelRollUp.Size = new System.Drawing.Size(572, 30);
+            this.extPanelRollUp.Size = new System.Drawing.Size(1247, 30);
             this.extPanelRollUp.TabIndex = 25;
             this.extPanelRollUp.UnrollHoverDelay = 1000;
             // 
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
+            // 
+            // BodyName
+            // 
+            this.BodyName.FillWeight = 75F;
+            this.BodyName.HeaderText = "Body Name";
+            this.BodyName.MinimumWidth = 50;
+            this.BodyName.Name = "BodyName";
+            // 
+            // BodyType
+            // 
+            this.BodyType.HeaderText = "Body Type";
+            this.BodyType.Name = "BodyType";
+            // 
+            // EDSM
+            // 
+            this.EDSM.FillWeight = 50F;
+            this.EDSM.HeaderText = "EDSM";
+            this.EDSM.Name = "EDSM";
+            // 
+            // Mapped
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = null;
+            this.Mapped.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Mapped.FillWeight = 30F;
+            this.Mapped.HeaderText = "Mapped";
+            this.Mapped.Name = "Mapped";
+            this.Mapped.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Mapped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // WasMapped
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = null;
+            this.WasMapped.DefaultCellStyle = dataGridViewCellStyle2;
+            this.WasMapped.FillWeight = 30F;
+            this.WasMapped.HeaderText = "Already Mapped";
+            this.WasMapped.Name = "WasMapped";
+            this.WasMapped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // WasDiscovered
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.NullValue = null;
+            this.WasDiscovered.DefaultCellStyle = dataGridViewCellStyle3;
+            this.WasDiscovered.FillWeight = 30F;
+            this.WasDiscovered.HeaderText = "Already Discovered";
+            this.WasDiscovered.Name = "WasDiscovered";
+            this.WasDiscovered.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // EstBase
+            // 
+            this.EstBase.FillWeight = 50F;
+            this.EstBase.HeaderText = "Base Value";
+            this.EstBase.Name = "EstBase";
+            // 
+            // MappedValue
+            // 
+            this.MappedValue.FillWeight = 50F;
+            this.MappedValue.HeaderText = "Mapped";
+            this.MappedValue.Name = "MappedValue";
+            // 
+            // FirstMappedEff
+            // 
+            this.FirstMappedEff.FillWeight = 50F;
+            this.FirstMappedEff.HeaderText = "First Mapped";
+            this.FirstMappedEff.Name = "FirstMappedEff";
+            // 
+            // FirstDiscMapped
+            // 
+            this.FirstDiscMapped.FillWeight = 50F;
+            this.FirstDiscMapped.HeaderText = "First Discovered Mapped";
+            this.FirstDiscMapped.Name = "FirstDiscMapped";
+            // 
+            // EstValue
+            // 
+            this.EstValue.FillWeight = 50F;
+            this.EstValue.HeaderText = "Current Value";
+            this.EstValue.MinimumWidth = 50;
+            this.EstValue.Name = "EstValue";
             // 
             // UserControlEstimatedValues
             // 
@@ -363,7 +355,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.extPanelRollUp);
             this.Name = "UserControlEstimatedValues";
-            this.Size = new System.Drawing.Size(572, 572);
+            this.Size = new System.Drawing.Size(1247, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).EndInit();
             this.flowLayoutPanelTop.ResumeLayout(false);
@@ -384,6 +376,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelRollUp extPanelRollUp;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtCheckBox checkBoxShowZeros;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowImpossible;
+        private System.Windows.Forms.Label labelControlText;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyType;
         private System.Windows.Forms.DataGridViewTextBoxColumn EDSM;
@@ -392,11 +386,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewImageColumn WasDiscovered;
         private System.Windows.Forms.DataGridViewTextBoxColumn EstBase;
         private System.Windows.Forms.DataGridViewTextBoxColumn MappedValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FirstDiscovered;
         private System.Windows.Forms.DataGridViewTextBoxColumn FirstMappedEff;
         private System.Windows.Forms.DataGridViewTextBoxColumn FirstDiscMapped;
         private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;
-        private ExtendedControls.ExtCheckBox extCheckBoxShowImpossible;
-        private System.Windows.Forms.Label labelControlText;
     }
 }

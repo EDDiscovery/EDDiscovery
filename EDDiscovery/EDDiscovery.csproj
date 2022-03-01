@@ -145,8 +145,8 @@
       <DependentUpon>Controls.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </None>
-    <Reference Include="GLOFC, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.0.8.0\lib\net48\GLOFC.dll</HintPath>
+    <Reference Include="GLOFC, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.GLOFC.0.9.0\lib\net48\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
@@ -249,6 +249,7 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\DataGridViewJumpToDialog.cs" />
     <Compile Include="UserControls\Helpers\FontHelpers.cs" />
     <Compile Include="UserControls\Helpers\PaintEventColumn.cs" />
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
@@ -951,18 +952,12 @@
     <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="App.Portable.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="OpenTK.dll.config" />
     <None Include="Resources\3dmaphelp.txt" />
     <None Include="Resources\EDD License.rtf" />
     <None Include="Resources\EliteGalacticRegions.json" />
-    <None Include="Resources\ImportHelp.txt" />
     <None Include="Resources\edlogo_3mo_icon.ico" />
-    <None Include="Resources\GNE.ico" />
     <None Include="Resources\Logo.png" />
-    <None Include="Resources\mapuc.txt" />
     <None Include="Resources\Credits.txt" />
     <None Include="Resources\EDCD.PNG" />
     <None Include="Resources\EDD Licence Mono.txt" />
@@ -1022,7 +1017,6 @@
     <None Include="Translations\Italiano-it.tlf" />
     <None Include="Translations\polski-pl.tlf" />
     <None Include="Translations\portugues-pt-br.tlf" />
-    <None Include="Translations\russian-ru.tlf" />
     <None Include="Translations\spanish-es.tlf" />
     <None Include="UserControls\Translations\translation-chinese-uc.tlp" />
     <None Include="UserControls\Translations\translation-deutsch-uc.tlp" />
@@ -1031,7 +1025,6 @@
     <None Include="UserControls\Translations\translation-italiano-uc.tlp" />
     <None Include="UserControls\Translations\translation-polski-uc.tlp" />
     <None Include="UserControls\Translations\translation-portugues-uc.tlp" />
-    <None Include="UserControls\Translations\translation-russian-uc.tlp" />
     <None Include="UserControls\Translations\translation-spanish-uc.tlp" />
   </ItemGroup>
   <ItemGroup>
@@ -1185,6 +1178,7 @@
     <Zip OutputFileName="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" FileRoot="$(MSBuildProjectDirectory)\..\WebSite\EDD\" />
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
+      <ZipFiles Include="$(OutDir)EDDiscovery.exe.config" />
       <ZipFiles Include="$(OutDir)*.dll" />
       <ZipFiles Include="$(OutDir)*.pdb" />
       <ZipFiles Include="$(OutDir)eddwebsite.zip" />
@@ -1192,9 +1186,7 @@
       <ZipFiles Include="$(MSBuildProjectDirectory)\UserControls\Translations\*.tlp" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp" />
-      <ZipFiles Include="$(ProjectDir)App.Portable.config">
-        <Name>EDDiscovery.exe.config</Name>
-      </ZipFiles>
+      <ZipFiles Include="$(ProjectDir)optionsportable.txt" />
       <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll">
         <Name>x64\SQLite.Interop.dll</Name>
       </Zipfiles>

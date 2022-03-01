@@ -67,11 +67,14 @@ namespace EDDiscovery.Forms
             profiles = pr;
             Icon = ic;
 
+            var enumlist = new Enum[] { EDTx.ProfileEditor, EDTx.ProfileEditor_buttonExtGlobals };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
             var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
 
-            BaseUtils.Translator.Instance.Translate(this);
+            label_index.Text = this.Text;
 
             SuspendLayout();
             foreach (EDDProfiles.Profile p in profiles.ProfileList)

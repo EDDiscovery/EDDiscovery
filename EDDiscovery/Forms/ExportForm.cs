@@ -57,6 +57,11 @@ namespace EDDiscovery.Forms
             this.showflags = showflags;
             this.suggestedfilenames = suggestedfilenames;
 
+            var enumlist = new Enum[] { EDTx.ExportForm, EDTx.ExportForm_labelCVSSep, EDTx.ExportForm_radioButtonComma, EDTx.ExportForm_radioButtonSemiColon, EDTx.ExportForm_checkBoxIncludeHeader, EDTx.ExportForm_checkBoxCustomAutoOpen, EDTx.ExportForm_labelUTCEnd, EDTx.ExportForm_labelUTCStart, EDTx.ExportForm_buttonExport };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            label_index.Text = this.Text;
+
             comboBoxSelectedType.Items.AddRange(selectionlist);
             comboBoxSelectedType.SelectedIndex = 0;
             comboBoxSelectedType.SelectedIndexChanged += ComboBoxSelectedType_SelectedIndexChanged;
@@ -77,8 +82,6 @@ namespace EDDiscovery.Forms
             panelTop.Visible = !winborder;
 
             SetVisibility();
-
-            BaseUtils.Translator.Instance.Translate(this);
 
             Import = import;
             if (import)

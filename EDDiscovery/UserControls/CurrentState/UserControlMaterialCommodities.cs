@@ -53,8 +53,11 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            BaseUtils.Translator.Instance.Translate(this, "UserControlMaterialCommodities", null);
-            BaseUtils.Translator.Instance.Translate(this, toolTip, "UserControlMaterialCommodities");
+            var enumlist = new Enum[] { EDTx.UserControlMaterialCommodities_NameCol, EDTx.UserControlMaterialCommodities_ShortName, EDTx.UserControlMaterialCommodities_Category, EDTx.UserControlMaterialCommodities_Type, EDTx.UserControlMaterialCommodities_Number, EDTx.UserControlMaterialCommodities_Price };
+            var enumlisttt = new Enum[] { EDTx.UserControlMaterialCommodities_buttonFilter_ToolTip, EDTx.UserControlMaterialCommodities_textBoxItems1_ToolTip, EDTx.UserControlMaterialCommodities_textBoxItems2_ToolTip, EDTx.UserControlMaterialCommodities_checkBoxShowZeros_ToolTip, EDTx.UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, "UserControlMaterialCommodities");
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, "UserControlMaterialCommodities");
 
             cfs = new JournalFilterSelector();
             cfs.AddAllNone();

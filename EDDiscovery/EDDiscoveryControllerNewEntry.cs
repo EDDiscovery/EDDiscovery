@@ -30,7 +30,7 @@ namespace EDDiscovery
 
         // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
         // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
-        public void NewEntry(JournalEntry je, StatusReader sr)        
+        public void NewJournalEntryFromScanner(JournalEntry je, StatusReader sr)        
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
@@ -42,7 +42,7 @@ namespace EDDiscovery
                 System.Diagnostics.Debug.WriteLine($"Journal Codex set body name to {jce.EDDBodyName} due to status record");
             }
 
-            int playdelay = HistoryList.MergeTypeDelay(je); // see if there is a delay needed..
+            int playdelay = HistoryList.MergeTypeDelayForJournalEntries(je); // see if there is a delay needed..
 
             if (playdelay > 0)  // if delaying to see if a companion event occurs. add it to list. Set timer so we pick it up
             {
@@ -70,7 +70,7 @@ namespace EDDiscovery
             {
                 JournalEntry je = journalqueue.Dequeue();
 
-                if (!HistoryList.MergeOrDiscardEntries(prev, je))                // if not merged
+                if (!HistoryList.MergeJournalEntries(prev, je))                // if not merged
                 {
                     if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
                         ActionEntry(prev);
@@ -85,16 +85,22 @@ namespace EDDiscovery
 
         private void ActionEntry(JournalEntry je)               // UI thread issue the JE to the system
         {
-            System.Diagnostics.Trace.WriteLine(string.Format(Environment.NewLine + "New JEntry {0} {1}", je.EventTimeUTC, je.EventTypeStr));
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
+            System.Diagnostics.Trace.WriteLine(string.Format(Environment.NewLine + "New JEntry {0} {1}", je.EventTimeUTC, je.EventTypeStr));
 
             // filter out commanders, and filter out any UI events
             if (je.CommanderId == history.CommanderId)
             {
+                OnNewJournalEntryUnfiltered?.Invoke(je);          // Called before any removal or merging, so this is the raw journal list
+
                 BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
 
-                var historyentries = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top, return a list of ones to process
+                var historyentry = history.MakeHistoryEntry(je);    // get an history entry and update the databases
+
+                OnNewHistoryEntryUnfiltered?.Invoke(historyentry);  // Called before any removal or merging, so this is the raw history entry.  Not been added to HL
+
+                var historyentries = history.AddHistoryEntryToListWithReorder(historyentry, h => LogLineHighlight(h));   // add a new one on top of the HL, reorder, remove, return a list of ones to process
 
                 var t1 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
                 if (t1.Item2 >= 20)
@@ -117,7 +123,7 @@ namespace EDDiscovery
                         jce.UpdateDB();                     // write back
                     }
 
-                    if ( OnNewEntry != null)
+                    if ( OnNewEntry != null)    // issue to OnNewEntry handlers
                     {
                         foreach (var e in OnNewEntry.GetInvocationList())       // do the invokation manually, so we can time each method
                         {
@@ -165,7 +171,7 @@ namespace EDDiscovery
 
         // New UI event. SR will be null if programatically made
 
-        void NewUIEvent(UIEvent u, StatusReader sr)                  // UI thread new event
+        void NewUIEventFromScanner(UIEvent u, StatusReader sr)                  // UI thread new event
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
@@ -223,7 +229,7 @@ namespace EDDiscovery
                                 InvokeAsyncOnUiThread(() =>
                                 {
                                     Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                    NewEntry(entry,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
+                                    NewJournalEntryFromScanner(entry,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
                                                                     // EDDN handler will pick up EDDCommodityPrices and send it.
                                 });
 
@@ -261,7 +267,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewEntry(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewJournalEntryFromScanner(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 
@@ -277,7 +283,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewEntry(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewJournalEntryFromScanner(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 

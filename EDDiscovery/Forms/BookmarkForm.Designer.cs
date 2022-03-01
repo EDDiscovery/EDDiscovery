@@ -104,8 +104,9 @@ namespace EDDiscovery.Forms
             this.textBoxBookmarkNotes.Location = new System.Drawing.Point(139, 173);
             this.textBoxBookmarkNotes.Name = "textBoxBookmarkNotes";
             this.textBoxBookmarkNotes.ReadOnly = false;
-            this.textBoxBookmarkNotes.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.textBoxBookmarkNotes.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.textBoxBookmarkNotes.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.textBoxBookmarkNotes.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.textBoxBookmarkNotes.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -421,6 +422,7 @@ namespace EDDiscovery.Forms
             this.textBoxName.Size = new System.Drawing.Size(336, 20);
             this.textBoxName.TabIndex = 13;
             this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxName.TextChangedEvent = "";
             this.textBoxName.WordWrap = true;
             this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
@@ -440,7 +442,7 @@ namespace EDDiscovery.Forms
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Create New Bookmark";
+            this.Text = "<code>";
             this.panelOuter.ResumeLayout(false);
             this.panelOuter.PerformLayout();
             this.ResumeLayout(false);

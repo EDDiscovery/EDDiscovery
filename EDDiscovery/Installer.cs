@@ -21,7 +21,7 @@ namespace EDDiscovery
 {
     static class Installer
     {
-        static public BaseUtils.GitHubRelease CheckForNewinstaller()
+        static public BaseUtils.GitHubRelease CheckForNewinstaller(bool force = false)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace EDDiscovery
                     Version v1 = new Version(releaseVersion);
                     Version v2 = new Version(currentVersion);
 
-                    if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
+                    if (force || v1.CompareTo(v2) > 0) // Test if newer installer exists:
                     {
                         return rel;
                     }

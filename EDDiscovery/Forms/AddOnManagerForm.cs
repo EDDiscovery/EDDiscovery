@@ -88,7 +88,8 @@ namespace EDDiscovery.Forms
 
             buttonExtGlobals.Visible = !managedownloadmode;
 
-            BaseUtils.Translator.Instance.Translate(this);
+            var enumlist = new Enum[] { EDTx.AddOnManagerForm_buttonExtGlobals };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             label_index.Text = this.Text = (managedownloadmode) ? "Add-On Manager".T(EDTx.AddOnManagerForm_AddOnTitle) : "Edit Add-Ons".T(EDTx.AddOnManagerForm_EditTitle);
         }

@@ -37,8 +37,6 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "3dMapPanel_";
 
-            BaseUtils.Translator.Instance.Translate(this);      // translate before we add anything else to the panel
-
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;

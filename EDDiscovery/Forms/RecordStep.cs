@@ -66,8 +66,6 @@ namespace EDDiscovery.Forms
             var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
-
-            BaseUtils.Translator.Instance.Translate(this);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

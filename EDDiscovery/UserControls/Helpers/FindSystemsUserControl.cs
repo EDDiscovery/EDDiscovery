@@ -83,7 +83,8 @@ namespace EDDiscovery.UserControls
 
             ValidateEnable();
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ });
+            var enumlist = new Enum[] { EDTx.FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, EDTx.FindSystemsUserControl_checkBoxCustomCube, EDTx.FindSystemsUserControl_buttonExtNames, EDTx.FindSystemsUserControl_buttonExtVisited, EDTx.FindSystemsUserControl_buttonExtDB, EDTx.FindSystemsUserControl_buttonExtEDSM, EDTx.FindSystemsUserControl_labelRadMax, EDTx.FindSystemsUserControl_labelRadMin, EDTx.FindSystemsUserControl_labelFilter };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ });
         }
 
         public void Save()

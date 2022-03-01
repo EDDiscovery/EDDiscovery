@@ -73,9 +73,13 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlMaterialTrader_UpgradeCol, EDTx.UserControlMaterialTrader_LevelCol, EDTx.UserControlMaterialTrader_WantedCol, EDTx.UserControlMaterialTrader_ModuleCol, EDTx.UserControlMaterialTrader_MaxCol, EDTx.UserControlMaterialTrader_AvailableCol, EDTx.UserControlMaterialTrader_buttonClear };
+            var enumlistcms = new Enum[] { EDTx.UserControlMaterialTrader_clearTradeToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.UserControlMaterialTrader_checkBoxCursorToTop_ToolTip, EDTx.UserControlMaterialTrader_buttonClear_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void Init()
@@ -84,9 +88,6 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTrades.MakeDoubleBuffered();
             dataGridViewTrades.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             extComboBoxTraderType.Items.AddRange(new string[] { "Raw".T(EDTx.UserControlMaterialTrader_Raw), "Encoded".T(EDTx.UserControlMaterialTrader_Encoded), "Manufactured".T(EDTx.UserControlMaterialTrader_Manufactured) });
             extComboBoxTraderType.SelectedIndex = GetSetting(dbTraderType, 0);

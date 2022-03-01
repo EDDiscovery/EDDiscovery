@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSkinny = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripReset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripRemoveAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.textBoxTargetDist = new ExtendedControls.ExtTextBox();
             this.textBoxTarget = new ExtendedControls.ExtTextBoxAutoComplete();
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 642);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 620);
             // 
             // toolStripSystem
             // 
@@ -453,9 +453,9 @@ namespace EDDiscovery.UserControls
             this.toolStripRemoveAll.Text = "Remove All";
             this.toolStripRemoveAll.Click += new System.EventHandler(this.toolStripRemoveAll_Click);
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // textBoxTargetDist
             // 
@@ -483,7 +483,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.TabIndex = 15;
             this.textBoxTargetDist.TabStop = false;
             this.textBoxTargetDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxTargetDist, "Distance to target");
+            this.toolTip.SetToolTip(this.textBoxTargetDist, "Distance to target");
             this.textBoxTargetDist.WordWrap = true;
             this.textBoxTargetDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTargetDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -523,7 +523,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.TabStop = false;
             this.textBoxTarget.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTarget.TextChangedEvent = "";
-            this.toolTip1.SetToolTip(this.textBoxTarget, "Sets the target");
+            this.toolTip.SetToolTip(this.textBoxTarget, "Sets the target");
             this.textBoxTarget.WordWrap = true;
             this.textBoxTarget.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
@@ -1959,7 +1959,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.extPanelScroll);
             this.Name = "UserControlSysInfo";
             this.Size = new System.Drawing.Size(371, 760);
-            this.toolTip1.SetToolTip(this, "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available");
+            this.toolTip.SetToolTip(this, "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available");
             this.Resize += new System.EventHandler(this.UserControlSysInfo_Resize);
             this.contextMenuStrip.ResumeLayout(false);
             this.extPanelScroll.ResumeLayout(false);
@@ -1995,7 +1995,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelTarget;
         private ExtendedControls.ExtButtonDrawn extButtonEDSMTarget;
         private ExtendedControls.ExtTextBoxAutoComplete textBoxTarget;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtTextBox textBoxTargetDist;
         private ExtendedControls.ExtTextBox textBoxSystem;
         private System.Windows.Forms.Label labelSysName;

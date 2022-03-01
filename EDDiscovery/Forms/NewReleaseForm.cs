@@ -68,7 +68,8 @@ namespace EDDiscovery.Forms
                     buttonMsiInstaller.Visible = false;
             }
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { lblCaption });
+            var enumlist = new Enum[] { EDTx.NewReleaseForm, EDTx.NewReleaseForm_labelName, EDTx.NewReleaseForm_btnClose, EDTx.NewReleaseForm_buttonMsiInstaller, EDTx.NewReleaseForm_labelURL, EDTx.NewReleaseForm_labelDownload, EDTx.NewReleaseForm_buttonPortablezip, EDTx.NewReleaseForm_buttonUrlOpen, EDTx.NewReleaseForm_buttonExeInstaller, EDTx.NewReleaseForm_labelRelease };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { lblCaption });
 
             base.OnLoad(e);
         }

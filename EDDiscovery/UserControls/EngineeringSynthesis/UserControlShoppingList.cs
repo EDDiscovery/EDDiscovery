@@ -90,9 +90,8 @@ namespace EDDiscovery.UserControls
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { userControlSynthesis, userControlEngineering });
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlistcms = new Enum[] { EDTx.UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem_onlyCapacityToolStripMenuItem, EDTx.UserControlShoppingList_showAvailableMaterialsInListWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem, EDTx.UserControlShoppingList_useEDSMDataInSystemAvailabilityToolStripMenuItem, EDTx.UserControlShoppingList_useHistoricMaterialCountsToolStripMenuItem, EDTx.UserControlShoppingList_toggleListPositionToolStripMenuItem };
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
         public override void SetCursor(IHistoryCursor cur)

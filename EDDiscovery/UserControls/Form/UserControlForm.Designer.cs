@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlForm));
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panel_showtitle = new ExtendedControls.ExtButtonDrawn();
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.panel_ontop = new ExtendedControls.ExtButtonDrawn();
@@ -61,9 +61,9 @@ namespace EDDiscovery.UserControls
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // panel_showtitle
             // 
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
             this.panel_showtitle.Size = new System.Drawing.Size(24, 24);
             this.panel_showtitle.TabIndex = 26;
             this.panel_showtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.panel_showtitle, "Toggle title visibility for this window when transparent");
+            this.toolTip.SetToolTip(this.panel_showtitle, "Toggle title visibility for this window when transparent");
             this.panel_showtitle.UseMnemonic = true;
             this.panel_showtitle.Click += new System.EventHandler(this.panel_showtitle_Click);
             // 
@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
             this.panel_minimize.TabIndex = 24;
             this.panel_minimize.TabStop = false;
             this.panel_minimize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.panel_minimize, "Minimise");
+            this.toolTip.SetToolTip(this.panel_minimize, "Minimise");
             this.panel_minimize.UseMnemonic = true;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
             this.panel_ontop.Size = new System.Drawing.Size(24, 24);
             this.panel_ontop.TabIndex = 24;
             this.panel_ontop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.panel_ontop, "Toggle window on top of others");
+            this.toolTip.SetToolTip(this.panel_ontop, "Toggle window on top of others");
             this.panel_ontop.UseMnemonic = true;
             this.panel_ontop.Click += new System.EventHandler(this.panel_ontop_Click);
             // 
@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             this.panel_taskbaricon.Size = new System.Drawing.Size(24, 24);
             this.panel_taskbaricon.TabIndex = 24;
             this.panel_taskbaricon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.panel_taskbaricon, "Toggle show taskbar icon for this window");
+            this.toolTip.SetToolTip(this.panel_taskbaricon, "Toggle show taskbar icon for this window");
             this.panel_taskbaricon.UseMnemonic = true;
             this.panel_taskbaricon.Click += new System.EventHandler(this.panel_taskbaricon_Click);
             // 
@@ -172,7 +172,7 @@ namespace EDDiscovery.UserControls
             this.panel_transparent.Size = new System.Drawing.Size(24, 24);
             this.panel_transparent.TabIndex = 24;
             this.panel_transparent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.panel_transparent, resources.GetString("panel_transparent.ToolTip"));
+            this.toolTip.SetToolTip(this.panel_transparent, resources.GetString("panel_transparent.ToolTip"));
             this.panel_transparent.UseMnemonic = true;
             this.panel_transparent.Click += new System.EventHandler(this.panel_transparency_Click);
             // 
@@ -195,7 +195,7 @@ namespace EDDiscovery.UserControls
             this.panel_close.TabIndex = 25;
             this.panel_close.TabStop = false;
             this.panel_close.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.panel_close, "Close");
+            this.toolTip.SetToolTip(this.panel_close, "Close");
             this.panel_close.UseMnemonic = true;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtStatusStrip statusStripBottom;
         private System.Windows.Forms.Label labelControlText;
         private ExtendedControls.ExtButtonDrawn panel_ontop;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButtonDrawn panel_transparent;
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.ExtButtonDrawn panel_taskbaricon;

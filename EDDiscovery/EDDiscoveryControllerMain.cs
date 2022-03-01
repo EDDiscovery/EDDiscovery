@@ -58,13 +58,15 @@ namespace EDDiscovery
 
         public event Action<UIEvent> OnNewUIEvent;                          // UI. MAJOR. UC. Mirrored. Always called irrespective of commander
 
-                                                                            // Next two ONLY called if its for the current commander, and its not a screened out event (uievent)
-        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Current commander. Called before OnNewJournalEntry, when NewEntry is called with a new item for the CURRENT commander
-        public event Action<HistoryEntry, HistoryList> OnNewEntrySecond;    // UI. Current commander. After onNewEntry, Use if you want to do something after the main UI has been updated
+
+        // In order. Current commander only
+
+        public event Action<JournalEntry> OnNewJournalEntryUnfiltered;      // UI. Called when a new journal entry is read.  Not filtered by history system
+        public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered;      // UI. Called when a new history entry is created and databases into it updated, but before adding.  Not filtered by history system
+        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called after HE has been added to the history list.  Post filtering
+        public event Action<HistoryEntry, HistoryList> OnNewEntrySecond;    // UI. Called after OnNewEntry for more processing. Post filtering
 
         // If a UC is a Cursor Control type, then OnNewEntry should also fire the cursor control OnChangedSelection, OnTravelSelectionChanged after onNewEntry has been received by the cursor UC
-
-        public event Action<JournalEntry> OnNewJournalEntry;                // UI. MAJOR. UC. Mirrored. Called after OnNewEntry, and when ANY new journal entry is created by the journal monitor
 
         // IF a log print occurs
 
@@ -134,8 +136,8 @@ namespace EDDiscovery
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
-            journalmonitor.OnNewJournalEntry += NewEntry;
-            journalmonitor.OnNewUIEvent += NewUIEvent;
+            journalmonitor.OnNewJournalEntry += NewJournalEntryFromScanner;
+            journalmonitor.OnNewUIEvent += NewUIEventFromScanner;
 
             FrontierCAPI = new CAPI.CompanionAPI(EDDOptions.Instance.CAPIDirectory(), CAPI.CapiClientIdentity.id, EDDApplicationContext.UserAgent, "eddiscovery");
             DDEServer = new BaseUtils.DDE.DDEServer();          // will be started in shown

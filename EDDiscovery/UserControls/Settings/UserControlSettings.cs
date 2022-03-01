@@ -40,8 +40,23 @@ namespace EDDiscovery.UserControls
             extComboBoxGameTime.Items.Add("UTC");
             extComboBoxGameTime.Items.Add("Game Time".T(EDTx.UserControlSettings_GameTime));
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            ConfigureHelpButton(extButtonDrawnHelpTheme, "Theming");
+            ConfigureHelpButton(extButtonDrawnHelpScreenshots, "Screenshots");
+            ConfigureHelpButton(extButtonDrawnHelpTransparency, "Transparency");
+            ConfigureHelpButton(extButtonDrawnHelpWebServer, "Webserver");
+            ConfigureHelpButton(extButtonDrawnHelpSafeMode, "SafeMode");
+            ConfigureHelpButton(extButtonDrawnHelpMemory, "Memory");
+            ConfigureHelpButton(extButtonDrawnHelpEDSM, "EDSMSettings");
+            ConfigureHelpButton(extButtonDrawnHelpHistory, "HistoryDisplay");
+            ConfigureHelpButton(extButtonDrawnHelpDLL, "DLL");
+            ConfigureHelpButton(extButtonDrawnHelpWindowOptions, "WindowOptions");
+            ConfigureHelpButton(extButtonDrawnHelpCommanders, "Commanders");
+
+            var enumlist = new Enum[] { EDTx.UserControlSettings_groupBoxCommanders, EDTx.UserControlSettings_ColumnCommander, EDTx.UserControlSettings_EdsmName, EDTx.UserControlSettings_JournalDirCol, EDTx.UserControlSettings_NotesCol, EDTx.UserControlSettings_btnDeleteCommander, EDTx.UserControlSettings_buttonEditCommander, EDTx.UserControlSettings_buttonAddCommander, EDTx.UserControlSettings_groupBoxTheme, EDTx.UserControlSettings_button_edittheme, EDTx.UserControlSettings_buttonSaveTheme, EDTx.UserControlSettings_groupBoxCustomHistoryLoad, EDTx.UserControlSettings_checkBoxOrderRowsInverted, EDTx.UserControlSettings_labelTimeDisplay, EDTx.UserControlSettings_extGroupBoxWebServer, EDTx.UserControlSettings_labelPortNo, EDTx.UserControlSettings_extButtonTestWeb, EDTx.UserControlSettings_extCheckBoxWebServerEnable, EDTx.UserControlSettings_groupBoxInteraction, EDTx.UserControlSettings_labelTKey, EDTx.UserControlSettings_groupBoxMemory, EDTx.UserControlSettings_labelHistoryEssItems, EDTx.UserControlSettings_labelHistorySel, EDTx.UserControlSettings_groupBoxCustomScreenShots, EDTx.UserControlSettings_buttonExtScreenshot, EDTx.UserControlSettings_checkBoxCustomEnableScreenshots, EDTx.UserControlSettings_groupBoxCustomEDSM, EDTx.UserControlSettings_buttonExtEDSMConfigureArea, EDTx.UserControlSettings_checkBoxCustomEDSMDownload, EDTx.UserControlSettings_groupBoxPopOuts, EDTx.UserControlSettings_checkBoxPanelSortOrder, EDTx.UserControlSettings_checkBoxKeepOnTop, EDTx.UserControlSettings_checkBoxCustomResize, EDTx.UserControlSettings_checkBoxMinimizeToNotifyIcon, EDTx.UserControlSettings_checkBoxUseNotifyIcon, EDTx.UserControlSettings_extGroupBoxDLLPerms, EDTx.UserControlSettings_extButtonDLLConfigure, EDTx.UserControlSettings_extButtonDLLPerms, EDTx.UserControlSettings_groupBoxCustomLanguage, EDTx.UserControlSettings_groupBoxCustomSafeMode, EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode };
+            var enumlisttt = new Enum[] { EDTx.UserControlSettings_btnDeleteCommander_ToolTip, EDTx.UserControlSettings_buttonEditCommander_ToolTip, EDTx.UserControlSettings_buttonAddCommander_ToolTip, EDTx.UserControlSettings_comboBoxTheme_ToolTip, EDTx.UserControlSettings_button_edittheme_ToolTip, EDTx.UserControlSettings_buttonSaveTheme_ToolTip, EDTx.UserControlSettings_checkBoxOrderRowsInverted_ToolTip, EDTx.UserControlSettings_comboBoxClickThruKey_ToolTip, EDTx.UserControlSettings_comboBoxCustomEssentialEntries_ToolTip, EDTx.UserControlSettings_comboBoxCustomHistoryLoadTime_ToolTip, EDTx.UserControlSettings_buttonExtScreenshot_ToolTip, EDTx.UserControlSettings_checkBoxCustomEnableScreenshots_ToolTip, EDTx.UserControlSettings_buttonExtEDSMConfigureArea_ToolTip, EDTx.UserControlSettings_checkBoxCustomEDSMDownload_ToolTip, EDTx.UserControlSettings_checkBoxPanelSortOrder_ToolTip, EDTx.UserControlSettings_checkBoxKeepOnTop_ToolTip, EDTx.UserControlSettings_checkBoxCustomResize_ToolTip, EDTx.UserControlSettings_checkBoxMinimizeToNotifyIcon_ToolTip, EDTx.UserControlSettings_checkBoxUseNotifyIcon_ToolTip, EDTx.UserControlSettings_buttonExtSafeMode_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             ResetThemeList();
 
@@ -122,6 +137,12 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
         }
+
+        public void ConfigureHelpButton(ExtendedControls.ExtButtonDrawn p, string tag)
+        {
+            p.Text = ""; p.Image = ExtendedControls.TabStrip.HelpIcon; p.Tag = tag;
+        }
+
 
         public override void InitialDisplay()
         {
@@ -478,6 +499,12 @@ namespace EDDiscovery.UserControls
             themeeditor.Show(FindForm());
         }
 
+        private void extButtonDrawnHelp_Click(object sender, EventArgs e)
+        {
+            EDDHelp.Help(FindForm(), extButtonDrawnHelpTheme, ((Control)sender).Tag as string);
+        }
+
+
         #endregion
 
         #region Screenshots
@@ -751,6 +778,13 @@ namespace EDDiscovery.UserControls
             if (n != null)
                 EDDConfig.Instance.DLLPermissions = n;
         }
+
+        private void extButtonDLLConfigure_Click(object sender, EventArgs e)
+        {
+            discoveryform.DLLManager.DLLConfigure(this.FindForm(), this.FindForm().Icon,
+                (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
+        }
+
     }
 }
 

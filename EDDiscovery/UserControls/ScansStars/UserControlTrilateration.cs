@@ -53,11 +53,15 @@ namespace EDDiscovery.UserControls
             toolStripButtonSector.Checked = GetSetting("Sectors", false);
             toolStripTextBoxSystem.Text = "Press Start New".T(EDTx.UserControlTrilateration_ToolStripText);
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(wantedContextMenu, this);
-            BaseUtils.Translator.Instance.Translate(trilatContextMenu, this);
-            BaseUtils.Translator.Instance.Translate(toolStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlTrilateration_ColumnSystem, EDTx.UserControlTrilateration_ColumnDistance, EDTx.UserControlTrilateration_ColumnCalculated, EDTx.UserControlTrilateration_ColumnStatus, EDTx.UserControlTrilateration_Source, EDTx.UserControlTrilateration_dataGridViewTextBoxColumnClosestSystemsSystem, EDTx.UserControlTrilateration_toolStrip };
+            var enumlistcms1 = new Enum[] { EDTx.UserControlTrilateration_removeFromWantedSystemsToolStripMenuItem, EDTx.UserControlTrilateration_viewOnEDSMToolStripMenuItem1, EDTx.UserControlTrilateration_deleteAllWithKnownPositionToolStripMenuItem, EDTx.UserControlTrilateration_addAllLocalSystemsToolStripMenuItem, EDTx.UserControlTrilateration_addAllEDSMSystemsToolStripMenuItem, EDTx.UserControlTrilateration_addAllSectorSystemsToolStripMenuItem };
+            var enumlistcms2 = new Enum[] { EDTx.UserControlTrilateration_addToWantedSystemsToolStripMenuItem, EDTx.UserControlTrilateration_viewOnEDSMToolStripMenuItem, EDTx.UserControlTrilateration_pasteToolStripMenuItem };
+            var enumlistcms3 = new Enum[] { EDTx.UserControlTrilateration_toolStripButtonSubmitDistances, EDTx.UserControlTrilateration_toolStripButtonNew, EDTx.UserControlTrilateration_toolStripLabelSystem, EDTx.UserControlTrilateration_toolStripTextBoxSystem, EDTx.UserControlTrilateration_toolStripLabel1, EDTx.UserControlTrilateration_toolStripAddFromHistory, EDTx.UserControlTrilateration_toolStripAddRecentHistory, EDTx.UserControlTrilateration_toolStripButtonSector };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateToolstrip(wantedContextMenu, enumlistcms1, this);
+            BaseUtils.Translator.Instance.TranslateToolstrip(trilatContextMenu, enumlistcms2, this);
+            BaseUtils.Translator.Instance.TranslateToolstrip(toolStrip, enumlistcms3, this);
         }
 
         public override void LoadLayout()

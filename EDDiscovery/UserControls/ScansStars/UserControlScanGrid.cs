@@ -33,6 +33,7 @@ namespace EDDiscovery.UserControls
 
         private int iconsize;   // computed icon and body sizes
         private int bodysize;
+        private string dbRolledUp = "RolledUp";
 
         public UserControlScanGrid()
         {
@@ -52,14 +53,20 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewEntry += NewEntry;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlScanGrid_colName, EDTx.UserControlScanGrid_colClass, EDTx.UserControlScanGrid_colDistance, EDTx.UserControlScanGrid_colBriefing };
+            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip, EDTx.UserControlScanGrid_checkBoxEDSM_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            rollUpPanelTop.SetToolTip(toolTip);
 
             // retrieve context menu entries check state from DB
 
             checkBoxEDSM.Checked = GetSetting("checkEDSM", true);
             checkBoxEDSM.Click += CheckBoxEDSM_Click;
 
+            rollUpPanelTop.PinState = GetSetting(dbRolledUp, true);
             PopulateCtrlList();
         }
 
@@ -81,6 +88,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewScangrid);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            PutSetting(dbRolledUp, rollUpPanelTop.PinState);
         }
 
         public override void InitialDisplay()
@@ -525,14 +533,16 @@ namespace EDDiscovery.UserControls
 
             return s;
         }
+
+
         private void extButtonShowControl_Click(object sender, EventArgs e)
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.showBelts.ToString(), "Show belts".TxID("UserControlScanGrid.structuresToolStripMenuItem.beltsToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showRings.ToString(), "Show rings".TxID("UserControlScanGrid.structuresToolStripMenuItem.ringsToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showMaterials.ToString(), "Show materials".TxID("UserControlScanGrid.materialsToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID("UserControlScanGrid.valuesToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showBelts.ToString(), "Show belts".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showRings.ToString(), "Show rings".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showMaterials.ToString(), "Show materials".TxID(EDTx.UserControlScanGrid_materialsToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlScanGrid_valuesToolStripMenuItem));
             CommonCtrl(displayfilter, extButtonHabZones);
         }
 
@@ -540,12 +550,12 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.showHabitable.ToString(), "Show Habitation Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem"));
-            displayfilter.AddStandardOption(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showHabitable.ToString(), "Show Habitation Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showMetalRichPlanetsToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showWaterWorldsToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showEarthLikeToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showAmmoniaWorldsToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showIcyPlanetsToolStripMenuItem));
             CommonCtrl(displayfilter, extButtonHabZones);
         }
 

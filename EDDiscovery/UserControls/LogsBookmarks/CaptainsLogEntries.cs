@@ -56,9 +56,13 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             GlobalCaptainsLogList.Instance.OnLogEntryChanged += LogChanged;
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { });
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.CaptainsLogEntries_ColTime, EDTx.CaptainsLogEntries_ColSystem, EDTx.CaptainsLogEntries_ColBodyName, EDTx.CaptainsLogEntries_ColNote, EDTx.CaptainsLogEntries_ColTags, EDTx.CaptainsLogEntries_labelDateStart, EDTx.CaptainsLogEntries_labelEndDate, EDTx.CaptainsLogEntries_labelSearch };
+            var enumlistcms = new Enum[] { EDTx.CaptainsLogEntries_toolStripMenuItemGotoStar3dmap, EDTx.CaptainsLogEntries_openInEDSMToolStripMenuItem, EDTx.CaptainsLogEntries_openAScanPanelViewToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.CaptainsLogEntries_textBoxFilter_ToolTip, EDTx.CaptainsLogEntries_buttonNew_ToolTip, EDTx.CaptainsLogEntries_buttonDelete_ToolTip, EDTx.CaptainsLogEntries_buttonTags_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { });
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             ColNote.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;

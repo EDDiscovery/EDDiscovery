@@ -333,7 +333,7 @@ namespace EDDiscovery.Actions
         private void Dmf_OnEditGlobals()                    // edit the globals
         {
             ExtendedConditionsForms.VariablesForm avf = new ExtendedConditionsForms.VariablesForm();
-            avf.Init("Global User variables to pass to program on run", this.Icon, PersistentVariables, showatleastoneentry: true);
+            avf.Init("Global User variables to pass to program on run".TxID(EDTx.ActionPackVariablesForm_gv), this.Icon, PersistentVariables, showatleastoneentry: true);
 
             if (avf.ShowDialog(discoveryform) == DialogResult.OK)
             {
@@ -429,7 +429,7 @@ namespace EDDiscovery.Actions
 
         #endregion
 
-        public void ConfigureVoice(string title)
+        public void ConfigureVoice(string title)    
         {
             string voicename = Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
             string volume = Globals.GetString(ActionSay.globalvarspeechvolume, "Default");
@@ -437,8 +437,8 @@ namespace EDDiscovery.Actions
             Variables effects = new Variables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.SpeechConfigure cfg = new ExtendedAudioForms.SpeechConfigure();
-            cfg.Init(AudioQueueSpeech, SpeechSynthesizer,
-                        "Select voice synthesizer defaults", title, this.Icon,
+            cfg.Init(true, AudioQueueSpeech, SpeechSynthesizer,
+                        title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
@@ -462,8 +462,8 @@ namespace EDDiscovery.Actions
             Variables effects = new Variables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.WaveConfigureDialog dlg = new ExtendedAudioForms.WaveConfigureDialog();
-            dlg.Init(AudioQueueWave, true,
-                        "Select Default device, volume and effects", title, this.Icon,
+            dlg.Init(true, AudioQueueWave,
+                        title, this.Icon,
                         "",
                         false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         volume, effects);

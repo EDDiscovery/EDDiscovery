@@ -161,8 +161,11 @@ namespace EDDiscovery.UserControls
 
             transparentfont = ExtendedControls.Theme.Current.GetFont;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlCombatPanel_Time, EDTx.UserControlCombatPanel_Event, EDTx.UserControlCombatPanel_Description, EDTx.UserControlCombatPanel_Reward, EDTx.UserControlCombatPanel_labelCredits, EDTx.UserControlCombatPanel_labelTotalKills, EDTx.UserControlCombatPanel_labelFactionKills, EDTx.UserControlCombatPanel_labelBalance, EDTx.UserControlCombatPanel_labelDied, EDTx.UserControlCombatPanel_labelTotalCrimes, EDTx.UserControlCombatPanel_labelTarget, EDTx.UserControlCombatPanel_labelFaction, EDTx.UserControlCombatPanel_labelTotalReward, EDTx.UserControlCombatPanel_labelFactionReward, EDTx.UserControlCombatPanel_buttonExtEditCampaign, EDTx.UserControlCombatPanel_checkBoxCustomGridOn };
+            var enumlisttt = new Enum[] { EDTx.UserControlCombatPanel_labelCredits_ToolTip, EDTx.UserControlCombatPanel_labelTotalKills_ToolTip, EDTx.UserControlCombatPanel_labelFactionKills_ToolTip, EDTx.UserControlCombatPanel_labelBalance_ToolTip, EDTx.UserControlCombatPanel_labelTotalCrimes_ToolTip, EDTx.UserControlCombatPanel_labelFaction_ToolTip, EDTx.UserControlCombatPanel_labelTotalReward_ToolTip, EDTx.UserControlCombatPanel_labelFactionReward_ToolTip, EDTx.UserControlCombatPanel_comboBoxCustomCampaign_ToolTip, EDTx.UserControlCombatPanel_buttonExtEditCampaign_ToolTip, EDTx.UserControlCombatPanel_checkBoxCustomGridOn_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             labelTarget.Size = new Size(1280, 24);
             labelTarget.Text = "No Target".T(EDTx.UserControlCombatPanel_NT);

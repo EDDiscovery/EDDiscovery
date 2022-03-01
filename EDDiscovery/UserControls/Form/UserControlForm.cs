@@ -107,7 +107,8 @@ namespace EDDiscovery.UserControls
 
             Invalidate();
 
-            BaseUtils.Translator.Instance.Translate(toolTip1,this);
+            var enumlisttt = new Enum[] { EDTx.UserControlForm_panel_showtitle_ToolTip, EDTx.UserControlForm_panel_minimize_ToolTip, EDTx.UserControlForm_panel_ontop_ToolTip, EDTx.UserControlForm_panel_taskbaricon_ToolTip, EDTx.UserControlForm_panel_transparent_ToolTip, EDTx.UserControlForm_panel_close_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             //System.Diagnostics.Debug.WriteLine("UCF Init-");
         }
 

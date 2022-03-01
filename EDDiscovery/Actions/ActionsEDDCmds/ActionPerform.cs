@@ -94,10 +94,12 @@ namespace EDDiscovery.Actions
 
                     else if (cmdname.Equals("configurevoice"))
                     {
-                        ac.ConfigureVoice(nextword ?? "Configure Voice Synthesis");
+                        ac.ConfigureVoice(nextword ?? null);
                     }
                     else if (cmdname.Equals("configurewave"))
-                        ac.ConfigureWave(nextword ?? "Configure Wave Output");
+                    {
+                        ac.ConfigureWave(nextword ?? null);
+                    }
                     else if (cmdname.Equals("voicenames"))
                     {
                         ap["VoiceNames"] = ac.SpeechSynthesizer.GetVoiceNames().QuoteStrings();
@@ -231,19 +233,19 @@ namespace EDDiscovery.Actions
                         ap["VoiceRecognitionEvent"] = ac.EnableVoiceReconEvent.ToStringIntValue();
                         System.Diagnostics.Debug.WriteLine("Voice recon " + ap["VoiceRecognitionEvent"]);
                     }
-                    else if ( cmdname.Equals("loadkeys"))
+                    else if (cmdname.Equals("loadkeys"))
                     {
                         ac.ActionConfigureKeys();
                     }
                     else if (cmdname.Equals("actionfile"))
                     {
                         ActionFile f = ac.Get(nextword);
-                        if ( f != null )
+                        if (f != null)
                         {
                             ap["Events_Count"] = f.InUseEventList.Count.ToStringInvariant();
 
                             int i = 1;
-                            foreach( var x in f.InUseEventList.Enumerable )
+                            foreach (var x in f.InUseEventList.Enumerable)
                             {
                                 ap["Events[" + i++ + "]"] = x.ToString(true);   // list hooked events
                                 ap["Events_" + x.EventName] = x.ToString(true);   // list hooked events
@@ -320,12 +322,12 @@ namespace EDDiscovery.Actions
                             {
                                 BaseUtils.Variables c = new BaseUtils.Variables();
 
-                                for ( int w = 2; w < exp.Count; w++ )
+                                for (int w = 2; w < exp.Count; w++)
                                 {
                                     string vname = exp[w];
                                     int asterisk = vname.IndexOf('*');
 
-                                    if ( asterisk >=0 )     // pass in name* no complaining if not there
+                                    if (asterisk >= 0)     // pass in name* no complaining if not there
                                     {
                                         string prefix = vname.Substring(0, asterisk);
 
@@ -341,12 +343,12 @@ namespace EDDiscovery.Actions
                                             c[vname] = ap.variables[vname];
                                         else
                                         {
-                                            ap.ReportError("No such variable '"  + vname  +"'");
+                                            ap.ReportError("No such variable '" + vname + "'");
                                             return true;
                                         }
                                     }
                                 }
-                                
+
                                 if (f.TriggerName.StartsWith("UI") || f.TriggerName.Equals("onEliteUIEvent"))
                                 {
                                     c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUSInvariant();

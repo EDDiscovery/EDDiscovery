@@ -55,8 +55,11 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol, EDTx.UserControlMarketData_labelLocation, EDTx.UserControlMarketData_labelVs, EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxSellOnly, EDTx.UserControlMarketData_checkBoxAutoSwap };
+            var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxSellOnly_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

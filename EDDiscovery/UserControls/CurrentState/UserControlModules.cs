@@ -46,8 +46,12 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ModulesGrid";
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo, EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable, EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle };
+            var enumlisttt = new Enum[] { EDTx.UserControlModules_comboBoxShips_ToolTip, EDTx.UserControlModules_extCheckBoxWordWrap_ToolTip, EDTx.UserControlModules_buttonExtCoriolis_ToolTip, EDTx.UserControlModules_buttonExtEDShipyard_ToolTip, EDTx.UserControlModules_buttonExtConfigure_ToolTip, EDTx.UserControlModules_buttonExtExcel_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
             allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
@@ -209,7 +213,7 @@ namespace EDDiscovery.UserControls
                     {
                         string info = sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit));
                         info = info.AppendPrePad(sm.TransferTimeString, ":");
-                        object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name, "Stored".Tx(EDTx.UserControlModules_Stored),
+                        object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name, "Stored".TxID(EDTx.UserControlModules_Stored),
                                  info ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
@@ -556,7 +560,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (controlname == "Sell")
                 {
-                    if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".Tx(EDTx.EDDiscoveryForm_ConfirmSyncToEDSM) + Environment.NewLine + last_si.ShipNameIdentType , "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
+                    if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".TxID(EDTx.UserControlModules_ConfirmForceSell) + Environment.NewLine + last_si.ShipNameIdentType , "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
                     {
                         var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow, last_si.ShipFD, last_si.ID, 0, EDCommander.CurrentCmdrID);
                         var jo = je.Json();

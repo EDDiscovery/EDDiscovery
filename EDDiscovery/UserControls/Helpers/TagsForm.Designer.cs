@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 9;
-            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.Text = "%Cancel%";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 10;
-            this.buttonOK.Text = "OK";
+            this.buttonOK.Text = "%OK%";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
@@ -155,9 +155,9 @@ namespace EDDiscovery.UserControls
             this.label_index.AutoSize = true;
             this.label_index.Location = new System.Drawing.Point(3, 8);
             this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(27, 13);
+            this.label_index.Size = new System.Drawing.Size(43, 13);
             this.label_index.TabIndex = 23;
-            this.label_index.Text = "N/A";
+            this.label_index.Text = "<code>";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
@@ -186,6 +186,7 @@ namespace EDDiscovery.UserControls
             this.panelVScroll1.Controls.Add(this.vScrollBarCustom2);
             this.panelVScroll1.Controls.Add(this.buttonMore);
             this.panelVScroll1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelVScroll1.FlowControlsLeftToRight = false;
             this.panelVScroll1.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll1.Name = "panelVScroll1";
             this.panelVScroll1.Size = new System.Drawing.Size(407, 165);
@@ -203,13 +204,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 10;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(387, 0);
-            this.vScrollBarCustom2.Maximum = -125;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(391, 0);
+            this.vScrollBarCustom2.Maximum = -126;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 165);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 165);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 0;
@@ -217,8 +218,8 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -125;
-            this.vScrollBarCustom2.ValueLimited = -125;
+            this.vScrollBarCustom2.Value = -126;
+            this.vScrollBarCustom2.ValueLimited = -126;
             // 
             // buttonMore
             // 
@@ -248,7 +249,7 @@ namespace EDDiscovery.UserControls
             this.Name = "TagsForm";
             this.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Tags";
+            this.Text = "<code>";
             this.Resize += new System.EventHandler(this.FormResize);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();

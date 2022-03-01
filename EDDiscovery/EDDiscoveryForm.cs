@@ -80,7 +80,6 @@ namespace EDDiscovery
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
-        public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
@@ -143,6 +142,7 @@ namespace EDDiscovery
             Controller.OnSyncComplete += (c1,c2) => { edsmRefreshTimer.Enabled = true; in_system_sync = false; };
             Controller.OnReportSyncProgress += ReportSyncProgress;
 
+            Controller.OnNewHistoryEntryUnfiltered += Controller_NewHistoryEntryUnfiltered; // called before being added to the HE, unfiltered, unmerged stream
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
         }
@@ -216,7 +216,7 @@ namespace EDDiscovery
             bool found = BaseUtils.Translator.Instance.LoadTranslation(lang, 
                     CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
-                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, debugout:true);
 
             if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
                 ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");
@@ -304,8 +304,11 @@ namespace EDDiscovery
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
 
-            BaseUtils.Translator.Instance.Translate(contextMenuStripTabs, this);        // need to translate BEFORE we add in extra items
-            BaseUtils.Translator.Instance.Translate(notifyIconContextMenuStrip, this);        // need to translate BEFORE we add in extra items
+            var enumlistcms = new Enum[] { EDTx.EDDiscoveryForm_addTabToolStripMenuItem, EDTx.EDDiscoveryForm_removeTabToolStripMenuItem, EDTx.EDDiscoveryForm_renameTabToolStripMenuItem, EDTx.EDDiscoveryForm_popOutPanelToolStripMenuItem, EDTx.EDDiscoveryForm_helpTabToolStripMenuItem };
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripTabs, enumlistcms, this);        // need to translate BEFORE we add in extra items
+
+            var enumlistcms2 = new Enum[] { EDTx.EDDiscoveryForm_notifyIconMenu_Open, EDTx.EDDiscoveryForm_notifyIconMenu_Hide, EDTx.EDDiscoveryForm_notifyIconMenu_Exit };
+            BaseUtils.Translator.Instance.TranslateToolstrip(notifyIconContextMenuStrip, enumlistcms2, this);        // need to translate BEFORE we add in extra items
 
             foreach (PanelInformation.PanelIDs pid in pids)
             {
@@ -448,8 +451,30 @@ namespace EDDiscovery
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
-            BaseUtils.Translator.Instance.Translate(mainMenu, this);
-            BaseUtils.Translator.Instance.Translate(toolTip,this);
+            var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_show3DMapsToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_exitToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchLogsAgainToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchStarDataAgainToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_rescanAllJournalFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_sendHistoricDataToInaraToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildUserDBIndexesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildSystemDBIndexesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_DLLPermissionsToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_showLogfilesToolStripMenuItem,
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_deleteDuplicateFSDJumpEntriesToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem_load21ToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem_read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem, EDTx.EDDiscoveryForm_addOnsToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_manageAddOnsToolStripMenuItem, EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_configureAddOnActionsToolStripMenuItem,
+                EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_editLastActionPackToolStripMenuItem, EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_stopCurrentlyRunningActionProgramToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_helpToolStripMenuItem_aboutToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_wikiHelpToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_viewHelpVideosToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_helpToolStripMenuItem_eDDiscoveryChatDiscordToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_helpToolStripMenuItem_frontierForumThreadToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_gitHubToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_reportIssueIdeasToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_helpToolStripMenuItem_checkForNewReleaseToolStripMenuItem };
+
+            BaseUtils.Translator.Instance.TranslateToolstrip(mainMenu, enumlistcms3, this);
+
+            var enumlisttt = new Enum[] { EDTx.EDDiscoveryForm_tabControlMain_ToolTip, EDTx.EDDiscoveryForm_comboBoxCommander_ToolTip, EDTx.EDDiscoveryForm_buttonExtRefresh_ToolTip, EDTx.EDDiscoveryForm_comboBoxCustomProfiles_ToolTip,
+                EDTx.EDDiscoveryForm_buttonExtManageAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtEditAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtPopOut_ToolTip, EDTx.EDDiscoveryForm_buttonReloadActions_ToolTip };
+
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             panelToolBar.SetToolTip(toolTip);    // use the defaults
 
@@ -463,7 +488,6 @@ namespace EDDiscovery
                 tabControlMain.AllowDragReorder = false;
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
-
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -556,7 +580,8 @@ namespace EDDiscovery
             string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
             bool[] autodisallow = new bool[] { false, true };
             Tuple<string, string, string,string> res = DLLManager.Load(dllpaths, autodisallow,
-                                                                    verstring, options, DLLCallBacks, ref alloweddlls);
+                                                                    verstring, options, DLLCallBacks, ref alloweddlls,
+                                                                    (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
 
             if (res.Item3.HasChars())       // new DLLs
             {
@@ -585,7 +610,8 @@ namespace EDDiscovery
                 {
                     DLLManager.UnLoad();
                     Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Reload DLL");
-                    res = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls);
+                    res = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls,
+                                    (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" +name, set));
                 }
             }
 
@@ -1239,40 +1265,39 @@ namespace EDDiscovery
             BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectDiscord);
         }
 
-        private void howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.MessageBoxTheme.Show(this,
-                            ("To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
-                            "and double click on the EDD program icon.  You will then be in the safe mode dialog." + Environment.NewLine +
-                            "You can reset various parameters and move the data bases to other locations.").T(EDTx.EDDiscoveryForm_SafeMode),
-                            "Information".T(EDTx.Information), MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        }
-
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
             AboutBox(this);
         }
 
         #endregion
-        
+
         #region Toolbar
 
         public void LoadCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
             comboBoxCommander.Items.Clear();            // comboBox is nicer with items
-            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
-            if (history.CommanderId == -1)
+
+            if (EDDOptions.Instance.DisableCommanderSelect)
             {
+                comboBoxCommander.Items.Add("Jameson");
                 comboBoxCommander.SelectedIndex = 0;
             }
             else
             {
-                comboBoxCommander.SelectedItem = EDCommander.Current.Name;
-            }
+                comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
+                if (history.CommanderId == -1)
+                {
+                    comboBoxCommander.SelectedIndex = 0;
+                }
+                else
+                {
+                    comboBoxCommander.SelectedItem = EDCommander.Current.Name;
+                }
 
-            comboBoxCommander.Enabled = true;
+                comboBoxCommander.Enabled = true;
+            }
         }
 
         private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)

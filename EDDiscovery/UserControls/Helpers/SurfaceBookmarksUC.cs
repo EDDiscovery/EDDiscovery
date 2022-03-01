@@ -57,8 +57,11 @@ namespace EDDiscovery.Forms
             sendToCompassToolStripMenuItem.Enabled = false;
             dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            var enumlist = new Enum[] { EDTx.SurfaceBookmarkUserControl_BodyName, EDTx.SurfaceBookmarkUserControl_SurfaceName, EDTx.SurfaceBookmarkUserControl_SurfaceDesc, EDTx.SurfaceBookmarkUserControl_Latitude, EDTx.SurfaceBookmarkUserControl_Longitude, EDTx.SurfaceBookmarkUserControl_Valid, EDTx.SurfaceBookmarkUserControl_labelSurface };
+            var enumlistcms = new Enum[] { EDTx.SurfaceBookmarkUserControl_sendToCompassToolStripMenuItem, EDTx.SurfaceBookmarkUserControl_deleteToolStripMenuItem, EDTx.SurfaceBookmarkUserControl_addPlanetManuallyToolStripMenuItem };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
 
             LoadGrid(systemName, helist);
         }

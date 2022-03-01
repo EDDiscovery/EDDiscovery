@@ -25,6 +25,9 @@ namespace EDDiscovery.UserControls.Helpers
     public partial class MissionListUserControl : UserControl
     {
         public Action DateTimeChanged;
+        public Action SearchTextChanged;
+        public string SearchText { get { return extTextBoxSearch.Text; } }
+        private Timer searchtimer;
 
         public MissionListUserControl()
         {
@@ -35,6 +38,15 @@ namespace EDDiscovery.UserControls.Helpers
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
             panelButtons.Visible = false;
             labelValue.Visible = false;
+            extTextBoxSearch.TextChanged += (s, e) => { searchtimer.Stop(); searchtimer.Start(); };
+            searchtimer = new Timer();
+            searchtimer.Interval = 500;
+            searchtimer.Tick += (x,y) => { searchtimer.Stop(); SearchTextChanged.Invoke(); };
+        }
+
+        public void Closing()
+        {
+            searchtimer.Stop();
         }
 
         public void SetMinimumHeight(int m)
@@ -66,7 +78,7 @@ namespace EDDiscovery.UserControls.Helpers
             completed = abandonded = failed = 0;
         }
 
-        public void Add(MissionState ms, bool previousmissions)
+        public void Add(MissionState ms, bool previousmissions, string search)
         {
             bool show = true;
             if (panelButtons.Visible)
@@ -78,9 +90,9 @@ namespace EDDiscovery.UserControls.Helpers
 
             if (show)
             {
-                object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
-                                    EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC),
-                                    EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry),
+                string[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
+                                    EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC).ToString(),
+                                    EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString(),
                                     ms.OriginatingSystem + ": " + ms.OriginatingStation,
                                     ms.Mission.Faction,
                                     ms.DestinationSystemStation(),
@@ -88,6 +100,12 @@ namespace EDDiscovery.UserControls.Helpers
                                     previousmissions ? ms.StateText : ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                     ms.MissionInfoColumn()
                 };
+
+                if ( search.HasChars() )
+                {
+                    if (Array.Find(rowobj, x => x.Contains(search, StringComparison.InvariantCultureIgnoreCase)) == null)
+                        return;
+                }
 
                 if (ms.State == MissionState.StateTypes.Abandoned)
                     abandonded++;

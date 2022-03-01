@@ -37,9 +37,9 @@ namespace EDDiscovery.UserControls
             rtbNodeInfo.Visible = false;
             toolTip.ShowAlways = true;
             imagebox.ClickElement += ClickElement;
-            SystemDisplay.Font = ExtendedControls.Theme.Current.GetDialogFont;
-            SystemDisplay.FontUnderlined = ExtendedControls.Theme.Current.GetDialogScaledFont(1f, FontStyle.Underline);
-            SystemDisplay.LargerFont = ExtendedControls.Theme.Current.GetFont;
+            SystemDisplay.Font = ExtendedControls.Theme.Current?.GetDialogFont ?? Font;
+            SystemDisplay.FontUnderlined = ExtendedControls.Theme.Current?.GetDialogScaledFont(1f, FontStyle.Underline) ?? Font;
+            SystemDisplay.LargerFont = ExtendedControls.Theme.Current?.GetFont ?? Font;
         }
 
         private void UserControlScan_Resize(object sender, EventArgs e)

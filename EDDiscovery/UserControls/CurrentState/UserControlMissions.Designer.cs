@@ -43,13 +43,11 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.missionListCurrent = new EDDiscovery.UserControls.Helpers.MissionListUserControl();
             this.panelPrev = new System.Windows.Forms.Panel();
-            this.panelCurrent = new System.Windows.Forms.Panel();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.missionListPrevious = new EDDiscovery.UserControls.Helpers.MissionListUserControl();
+            this.panelCurrent = new System.Windows.Forms.Panel();
+            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.panelPrev.SuspendLayout();
             this.panelCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMissions)).BeginInit();
@@ -60,9 +58,9 @@ namespace EDDiscovery.UserControls
             // 
             // missionListCurrent
             // 
-            this.missionListCurrent.Name = "missionListCurrent";
             this.missionListCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.missionListCurrent.Location = new System.Drawing.Point(0, 0);
+            this.missionListCurrent.Name = "missionListCurrent";
             this.missionListCurrent.Size = new System.Drawing.Size(800, 266);
             this.missionListCurrent.TabIndex = 1;
             // 
@@ -75,6 +73,14 @@ namespace EDDiscovery.UserControls
             this.panelPrev.Size = new System.Drawing.Size(800, 302);
             this.panelPrev.TabIndex = 4;
             // 
+            // missionListPrevious
+            // 
+            this.missionListPrevious.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.missionListPrevious.Location = new System.Drawing.Point(0, 0);
+            this.missionListPrevious.Name = "missionListPrevious";
+            this.missionListPrevious.Size = new System.Drawing.Size(800, 302);
+            this.missionListPrevious.TabIndex = 2;
+            // 
             // panelCurrent
             // 
             this.panelCurrent.Controls.Add(this.missionListCurrent);
@@ -83,10 +89,6 @@ namespace EDDiscovery.UserControls
             this.panelCurrent.Name = "panelCurrent";
             this.panelCurrent.Size = new System.Drawing.Size(800, 266);
             this.panelCurrent.TabIndex = 3;
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
             // 
             // splitContainerMissions
             // 
@@ -106,14 +108,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerMissions.SplitterDistance = 266;
             this.splitContainerMissions.TabIndex = 3;
             // 
-            // missionListPrevious
-            // 
-            this.missionListPrevious.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.missionListPrevious.Location = new System.Drawing.Point(0, 0);
-            this.missionListPrevious.Name = "missionListPrevious";
-            this.missionListPrevious.Size = new System.Drawing.Size(800, 302);
-            this.missionListPrevious.TabIndex = 2;
-            // 
             // UserControlMissions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -132,7 +126,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelPrev;
         private System.Windows.Forms.Panel panelCurrent;
         private System.Windows.Forms.SplitContainer splitContainerMissions;

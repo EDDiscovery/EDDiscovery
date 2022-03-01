@@ -17,19 +17,16 @@
 // turn on for play testing of all your scans
 //#define PLAYTHRU
 
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using BaseUtils;
-using System.IO;
 
 namespace EDDiscovery.UserControls
 {
@@ -76,8 +73,8 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewEntry += NewEntry;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            var enumlisttt = new Enum[] { EDTx.UserControlScan_extCheckBoxStar_ToolTip, EDTx.UserControlScan_extButtonFilter_ToolTip, EDTx.UserControlScan_extButtonDisplayFilters_ToolTip, EDTx.UserControlScan_buttonSize_ToolTip, EDTx.UserControlScan_checkBoxEDSM_ToolTip, EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater
 

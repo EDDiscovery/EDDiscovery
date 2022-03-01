@@ -57,11 +57,15 @@ namespace EDDiscovery.UserControls
             DBBaseName = source + "AutoView";
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
-            rollUpPanelTop.SetToolTip(toolTip);
+
+            var enumlist = new Enum[] { EDTx.UserControlWebBrowser_extButtonIE11Warning };
+            var enumlisttt = new Enum[] { EDTx.UserControlWebBrowser_extCheckBoxBack_ToolTip, EDTx.UserControlWebBrowser_extCheckBoxStar_ToolTip, EDTx.UserControlWebBrowser_checkBoxAutoTrack_ToolTip, EDTx.UserControlWebBrowser_extCheckBoxAllowedList_ToolTip };
 
             string thisname = typeof(UserControlWebBrowser).Name;
-            BaseUtils.Translator.Instance.Translate(this, thisname, null);          // lookup using the base name, not the derived name, so we don't have repeats
-            BaseUtils.Translator.Instance.Translate(this, toolTip, thisname);
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, thisname);          // lookup using the base name, not the derived name, so we don't have repeats
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, thisname);
+
+            rollUpPanelTop.SetToolTip(toolTip);
 
             checkBoxAutoTrack.Checked = GetSetting("AutoTrack", true);
             this.checkBoxAutoTrack.CheckedChanged += new System.EventHandler(this.checkBoxAutoTrack_CheckedChanged);

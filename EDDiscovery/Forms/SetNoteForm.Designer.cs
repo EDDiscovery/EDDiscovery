@@ -146,7 +146,7 @@
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonCancel.TabIndex = 3;
-            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.Text = "%Cancel%";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
@@ -169,8 +169,9 @@
             this.textBoxNote.Location = new System.Drawing.Point(6, 184);
             this.textBoxNote.Name = "textBoxNote";
             this.textBoxNote.ReadOnly = false;
-            this.textBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.textBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.textBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.textBoxNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.textBoxNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -249,9 +250,9 @@
             this.label_index.AutoSize = true;
             this.label_index.Location = new System.Drawing.Point(3, 8);
             this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(49, 13);
+            this.label_index.Size = new System.Drawing.Size(43, 13);
             this.label_index.TabIndex = 23;
-            this.label_index.Text = "Set Note";
+            this.label_index.Text = "<code>";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             // 
             // SetNoteForm
