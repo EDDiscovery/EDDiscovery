@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
                 | Map.Parts.Menu        
                 | Map.Parts.SearchBox | Map.Parts.RightClick 
                 | Map.Parts.YHoldButton | Map.Parts.GalaxyResetPos 
+                | Map.Parts.Bookmarks
                 );
 
             map.LoadState(mapsave,true,200000);
