@@ -91,7 +91,6 @@ namespace EDDiscovery
             this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebuildUserDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebuildSystemDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DLLPermissionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -567,7 +566,6 @@ namespace EDDiscovery
             this.sendHistoricDataToInaraToolStripMenuItem,
             this.rebuildUserDBIndexesToolStripMenuItem,
             this.rebuildSystemDBIndexesToolStripMenuItem,
-            this.DLLPermissionsToolStripMenuItem,
             this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem,
             this.showLogfilesToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
@@ -640,14 +638,6 @@ namespace EDDiscovery
             this.rebuildSystemDBIndexesToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
             this.rebuildSystemDBIndexesToolStripMenuItem.Text = "Rebuild System DB Indexes";
             this.rebuildSystemDBIndexesToolStripMenuItem.Click += new System.EventHandler(this.rebuildSystemDBIndexesToolStripMenuItem_Click);
-            // 
-            // DLLPermissionsToolStripMenuItem
-            // 
-            this.DLLPermissionsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.ShowLogFiles;
-            this.DLLPermissionsToolStripMenuItem.Name = "DLLPermissionsToolStripMenuItem";
-            this.DLLPermissionsToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.DLLPermissionsToolStripMenuItem.Text = "DLL Permissions (applies after restart)";
-            this.DLLPermissionsToolStripMenuItem.Click += new System.EventHandler(this.DLLPermissions_Click);
             // 
             // updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem
             // 
@@ -1076,7 +1066,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem rebuildSystemDBIndexesToolStripMenuItem;
         private ExtendedControls.ExtPanelResizer extPanelTopResizer;
         private System.Windows.Forms.Label labelGameDateTime;
-        private System.Windows.Forms.ToolStripMenuItem DLLPermissionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem load21ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpTabToolStripMenuItem;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;

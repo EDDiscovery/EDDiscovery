@@ -457,7 +457,7 @@ namespace EDDiscovery
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchLogsAgainToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchStarDataAgainToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_rescanAllJournalFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_sendHistoricDataToInaraToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildUserDBIndexesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildSystemDBIndexesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_DLLPermissionsToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildUserDBIndexesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildSystemDBIndexesToolStripMenuItem,
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_showLogfilesToolStripMenuItem,
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_deleteDuplicateFSDJumpEntriesToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem_load21ToolStripMenuItem, 
@@ -1175,13 +1175,6 @@ namespace EDDiscovery
                 history.FillInPositionsFSDJumps(LogLine);
                 RefreshDisplays();
             }
-        }
-
-        private void DLLPermissions_Click(object sender, EventArgs e)
-        {
-            string n = EliteDangerousCore.DLL.EDDDLLManager.DLLPermissionManager(this, this.Icon, EDDConfig.Instance.DLLPermissions);
-            if (n != null)
-                EDDConfig.Instance.DLLPermissions = n;
         }
 
         #endregion

@@ -53,7 +53,6 @@ namespace EDDiscovery
         EDDiscoveryForm_adminToolStripMenuItem_sendHistoricDataToInaraToolStripMenuItem, // ToolStrip control 'Send to Inara historic data (previous ships, stored modules)'
         EDDiscoveryForm_adminToolStripMenuItem_rebuildUserDBIndexesToolStripMenuItem, // ToolStrip control 'Rebuild User DB Indexes'
         EDDiscoveryForm_adminToolStripMenuItem_rebuildSystemDBIndexesToolStripMenuItem, // ToolStrip control 'Rebuild System DB Indexes'
-        EDDiscoveryForm_adminToolStripMenuItem_DLLPermissionsToolStripMenuItem, // ToolStrip control 'DLL Permissions (applies after restart)'
         EDDiscoveryForm_adminToolStripMenuItem_updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem, // ToolStrip control 'Update systems with unknown co-ordinates'
         EDDiscoveryForm_adminToolStripMenuItem_showLogfilesToolStripMenuItem, // ToolStrip control 'Show journal files directory of current commander'
         EDDiscoveryForm_adminToolStripMenuItem_dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem, // ToolStrip control 'Reset all history to current commander'
