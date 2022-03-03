@@ -189,7 +189,6 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizza con EDSM"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dati storici (navi anteriori, moduli in magazzino)"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
-.adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Componenti"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Gestire Componenti"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Modifica Componenti Action Files"
@@ -277,9 +276,6 @@ SECTION BookmarkForm
 .buttonEDSM: "EDSM" @
 .labelName: "Name" => "Nome"
 .checkBoxTarget: "Make Target" => "Imposta come destino"
-.buttonDelete: "Delete" => "Elimina"
-.buttonCancel: "Cancel" => "Cancella"
-.buttonOK: "OK" @
 .labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
 .labelTravelNote: "Travel History Note" => "Nota dello Storico di Viaggio"
 .labelTimeMade: "Time Made" => "Tempo fatto"

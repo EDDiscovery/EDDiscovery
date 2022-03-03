@@ -407,6 +407,7 @@ SECTION MissionListUserControl
 .pColResult: "Result (cr)" => "奖金(Cr)"
 .pColInfo: "Info" => "详情"
 .labelTo: "to" => "至"
+.labelSearch: "Search" @
 
 SECTION UserControlMissions
 

@@ -275,9 +275,6 @@ SECTION BookmarkForm
 .buttonEDSM: "EDSM" @
 .labelName: "Name" @
 .checkBoxTarget: "Make Target" @
-.buttonDelete: "Delete" @
-.buttonCancel: "Cancel" @
-.buttonOK: "OK" @
 .labelBookmarkNotes: "Bookmark Notes" @
 .labelTravelNote: "Travel History Note" @
 .labelTimeMade: "Time Made" @

@@ -407,6 +407,7 @@ SECTION MissionListUserControl
 .pColResult: "Result (cr)" @
 .pColInfo: "Info" @
 .labelTo: "to" @
+.labelSearch: "Search" @
 
 SECTION UserControlMissions
 

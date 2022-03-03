@@ -42,7 +42,7 @@ namespace EDDiscovery.Forms
             InitializeComponent();
             ExtendedControls.Theme.Current.ApplyDialog(this);
 
-            var enumlist = new Enum[] { EDTx.BookmarkForm_buttonEDSM, EDTx.BookmarkForm_labelName, EDTx.BookmarkForm_checkBoxTarget, EDTx.BookmarkForm_buttonDelete, EDTx.BookmarkForm_buttonCancel, EDTx.BookmarkForm_buttonOK, EDTx.BookmarkForm_labelBookmarkNotes, EDTx.BookmarkForm_labelTravelNote, EDTx.BookmarkForm_labelTimeMade };
+            var enumlist = new Enum[] { EDTx.BookmarkForm_buttonEDSM, EDTx.BookmarkForm_labelName, EDTx.BookmarkForm_checkBoxTarget, EDTx.BookmarkForm_labelBookmarkNotes, EDTx.BookmarkForm_labelTravelNote, EDTx.BookmarkForm_labelTimeMade };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks  });
             helist = he;
         }

@@ -407,6 +407,7 @@ SECTION MissionListUserControl
 .pColResult: "Result (cr)" => "Risultato (cr)"
 .pColInfo: "Info" @
 .labelTo: "to" => "a"
+.labelSearch: "Search" @
 
 SECTION UserControlMissions
 
