@@ -2,7 +2,7 @@
 
 #define MyAppName "EDDiscovery"
 #ifndef MyAppVersion
-#define MyAppVersion "11.4.505"
+#define MyAppVersion "12.1.710"
 #endif
 #define MyAppPublisher "EDDiscovery Team (Robby)"
 #define MyAppURL "https://github.com/EDDiscovery"
@@ -101,95 +101,91 @@ begin
 end;
 
 var DataDirPage: TInputDirWizardPage;
-var InstallUnderProgramButton : TButton;
+var DataDirIndex: Integer;
+var InstallChangeAppLocation : TButton;
 
 // callbacks for the data dir page
 
-procedure OnClickSetUnderInstall(Sender: TObject);
+procedure OnClickSetChangeDataFolder(Sender: TObject);
+var installunderpf:Boolean;
 begin
-    DataDirPage.Values[0] := WizardDirValue + '\Data';
-end;
+  if ( DataDirPage.Values[0] = 'c:\' ) then begin // if we have a c:\ default marker in there, we are installing to PFs, but they want a custom location, so pick a default one
+      DataDirPage.Values[0] := 'c:\EDDiscoveryData'; 
+  end;
 
-procedure OnClickSetDefAppLocation(Sender: TObject);
-begin
-    DataDirPage.Values[0] := 'c:\';
+  DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'Select location:';
+
+  InstallChangeAppLocation.Visible := false;
+  DataDirPage.Edits[DataDirIndex].Visible := true;
+  DataDirPage.Buttons[DataDirIndex].Visible := true;
 end;
 
 // On initialisation, we set up a new data dir page with two buttons
 
 procedure InitializeWizard;
-var
-  but1: TButton;
 begin
   // make a new page
   DataDirPage := CreateInputDirPage(wpSelectDir,
     'Select Personal Data Directory', 'Where should personal data files be installed?',
-    'Select the folder in which Setup should install personal data files, ' +
-      'then click Next.' + #13#10 +#13#10
-    '!!! LEAVE AT c:\ for the default location (c:\Users\<user>\AppData\Local\EDDiscovery) !!!',
+    'L1' + #13#10#13#10 + 'L2' + #13#10,    // text here is generated changed by code
     False, '');
-  DataDirPage.Add('');
-  DataDirPage.Values[0] := ''; 
 
-  // Button to set data page value to local app
-  but1:=TButton.Create(DataDirPage);
-  but1.Parent := DataDirPage.Buttons[0].Parent;
-  but1.Top := 100;
-  but1.Left := 0;
-  but1.Width := 200;
-  but1.Caption := 'Local App Location';
-  but1.OnClick := @OnClickSetDefAppLocation;
+  DataDirIndex := DataDirPage.Add('');
+  DataDirPage.Edits[DataDirIndex].Visible := false;
+  DataDirPage.Buttons[DataDirIndex].Visible := false;
+  
+  DataDirPage.Values[0] := 'c:\';    // c:\ means default appdata
 
-  // and to set data location to under the install
-  InstallUnderProgramButton:=TButton.Create(DataDirPage);
-  InstallUnderProgramButton.Parent := DataDirPage.Buttons[0].Parent;
-  InstallUnderProgramButton.Top := 140;
-  InstallUnderProgramButton.Left := 0;
-  InstallUnderProgramButton.Width := 200;
-  InstallUnderProgramButton.Caption := 'Under install location';
-  InstallUnderProgramButton.OnClick := @OnClickSetUnderInstall;
+  InstallChangeAppLocation:=TButton.Create(DataDirPage);
+  InstallChangeAppLocation.Parent := DataDirPage.Buttons[0].Parent;
+  InstallChangeAppLocation.Top := DataDirPage.Edits[DataDirIndex].Top;
+  InstallChangeAppLocation.Left := 0;
+  InstallChangeAppLocation.Width := 200;
+  InstallChangeAppLocation.Caption := 'Change Location';
+  InstallChangeAppLocation.OnClick := @OnClickSetChangeDataFolder;
+
 end;
 
 // on next on any page, do work
 
 function NextButtonClick(CurPageID: Integer): Boolean;
-var DefInstallPath:String;
-var AppPath:String;
 var installunderpf:Boolean;
-var PrevDataFolder:String;
+var prevdatafolder:String;
 begin
   Result:=True;
-
-  DefInstallPath := ExpandConstant('{autopf}\EDDiscovery');
-  Log('Default install computed as ' + DefInstallPath );
-
-  PrevDataFolder := GetPreviousData('DataDir','');
-  Log('Prev Data Folder computed as ' + PrevDataFolder );
-
   installunderpf := WildCardMatch(WizardDirValue,'*Program Files*');
 
-  // if next from select dir page, next is data page, set it up
   if ( CurPageID = wpSelectDir ) Then begin
-      InstallUnderProgramButton.Visible := Not(installunderpf);   // only visible if not installing under program files
 
-      // select the default data folder based on history, and program file location
+  // PFs install use c:\ marker to indicate %localappdata%\EDDiscovery
 
-      if ( PrevDataFolder <> '' ) Then begin
-        DataDirPage.Values[0] := PrevDataFolder;
-      end else if ( not(installunderpf) ) Then begin
-        DataDirPage.Values[0] := WizardDirValue + '\Data';
-      end else begin
-        DataDirPage.Values[0] := 'c:\';
+    if ( installunderpf ) then begin
+        DataDirPage.Values[0] := 'c:\'; // signal default loc
+        DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'User Data will be in c:\Users\<user>\AppData\Local\EDDiscovery';
+        end
+    else begin
+      prevdatafolder := GetPreviousData('DataDir','');
+      Log('Prev Data Folder computed as ' + PrevDataFolder );
+
+      if ( prevdatafolder <> '' ) And (prevdatafolder <> 'c:\' ) then begin   // if a good one, use it
+        DataDirPage.Values[0] := prevdatafolder;
+      end
+      else begin
+        DataDirPage.Values[0] := WizardDirValue + '\Data'; 
       end;
 
-    end
-    // if exiting data page, check conditions
-    else if ( CurPageID = DataDirPage.ID) Then begin
+      DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'User Data will be in ' + DataDirPage.Values[0];
+    end;
+
+  end 
+
+  // after data page, just check we do not have a silly situation 
+  else if ( CurPageID = DataDirPage.ID) Then begin
       if ( installunderpf And WildCardMatch(DataDirPage.Values[0],'*Program Files*')) Then begin
           MsgBox('Cannot store data files in program files location', mbError, mb_Ok);
           Result:=False;
-        end;
-    end;
+      end;
+  end;
 
 end;
 
@@ -202,13 +198,13 @@ begin
   SetPreviousData(PreviousDataKey, 'DataDir', DataDirPage.Values[0]);
 end;
 
-
 // called when ready to install is displayed
 function UpdateReadyMemo(Space, NewLine, MemoUserInfoInfo, MemoDirInfo, MemoTypeInfo,
   MemoComponentsInfo, MemoGroupInfo, MemoTasksInfo: String): String;
 var
   S: String;
 begin
+  // fix c:\ marker so it makes more sense to display
   if ( DataDirPage.Values[0] = 'c:\') Then begin
     S := 'c:\Users\<user>\AppData\Local\EDDiscovery';
   end else begin
@@ -226,6 +222,7 @@ end;
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if( CurStep = ssPostInstall ) then begin
+    // if user data location is not c:\, we need to write a redirect option file
     if ( DataDirPage.Values[0] <> 'c:\') Then begin
         Log('** Appdata is ' + DataDirPage.Values[0] + ' need to write options file to ' + WizardDirValue);
         SaveStringToFile(WizardDirValue+'\optionsappdata.txt', '-appfolder ' + DataDirPage.Values[0] + #13#10, false);
@@ -252,3 +249,12 @@ begin
     end
   end;
 end;
+
+// Help: 
+// this thing is written in Dephi.
+// To find class heirachy, best to look at say the CreateInputDirPage return class (TInputDirWizardPage)
+// Then look it up, you can see its properties. 
+// and you can follow it up the class tree to find more properties and call backs
+// TButtons for instance, has a TButtonControl parent class, TWinControl, to TControl which has left/top etc.
+
+
