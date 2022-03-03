@@ -86,7 +86,8 @@ namespace EDDiscovery.Forms
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                InitBrowser();
+                if (Properties.Resources.URLReleaseVideo.HasChars())
+                    InitBrowser();
             }
             else
             {
