@@ -26,7 +26,8 @@ namespace EDDiscovery.Actions
     public partial class ActionController : ActionCoreController
     {
         protected ActionMessageFilter actionfilesmessagefilter;
-        protected string actionfileskeyevents;
+        protected string actionfileskeyeventskeydown;
+        protected string actionfileskeyeventskeyup;
 
         protected class ActionMessageFilter : IMessageFilter
         {
@@ -43,20 +44,34 @@ namespace EDDiscovery.Actions
 
             public bool PreFilterMessage(ref Message m)
             {
-                if ((m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) && discoveryform.CanFocus)
+                if (discoveryform.CanFocus)
                 {
-                    var activeform = System.Windows.Forms.Form.ActiveForm;
-                    //System.Diagnostics.Debug.WriteLine("Active form " + activeform?.GetType().Name);
-
-                    if (ignoredforms == null || activeform == null || Array.IndexOf(ignoredforms, activeform.GetType()) == -1)
+                    if (m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN)
                     {
-                        Keys k = (Keys)m.WParam;
+                        var activeform = System.Windows.Forms.Form.ActiveForm;
+                        //System.Diagnostics.Debug.WriteLine("Active form " + activeform?.GetType().Name);
 
-                        if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
+                        if (ignoredforms == null || activeform == null || Array.IndexOf(ignoredforms, activeform.GetType()) == -1)
                         {
-                            string name = k.VKeyToString(Control.ModifierKeys);
-                            //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + name + " " + m.WParam + " " + Control.ModifierKeys);
+                            Keys k = (Keys)m.WParam;
+                            string name = k.WMKeyToString((ulong)m.LParam, Control.ModifierKeys);
+                           // System.Diagnostics.Debug.WriteLine($"Keydown {(ulong)m.LParam:X} {(ulong)m.WParam:X4} {Control.ModifierKeys} = {name}");
                             if (actcontroller.CheckKeys(name))
+                                return true;    // swallow, we did it
+                        }
+                    }
+                    else if ((m.Msg == WM.KEYUP))
+                    {
+                        var activeform = System.Windows.Forms.Form.ActiveForm;
+                        //System.Diagnostics.Debug.WriteLine("Active form " + activeform?.GetType().Name);
+
+                        if (ignoredforms == null || activeform == null || Array.IndexOf(ignoredforms, activeform.GetType()) == -1)
+                        {
+                            Keys k = (Keys)m.WParam;
+                            string name = k.WMKeyToString((ulong)m.LParam, Control.ModifierKeys);
+                          //  System.Diagnostics.Debug.WriteLine($"Keyup {(ulong)m.LParam:X} {(ulong)m.WParam:X4} {Control.ModifierKeys} = {name}");
+
+                            if (actcontroller.CheckReleaseKeys(name))
                                 return true;    // swallow, we did it
                         }
                     }
@@ -66,29 +81,38 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public void ActionConfigureKeys()
+        private string GetKeyEvent(string actionname, string eventname)
         {
-            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.Equals, ConditionEntry.MatchType.IsOneOf });        // need these to decide
+            var list = actionfiles.ReturnSpecificConditions(actionname, eventname, new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.Equals, ConditionEntry.MatchType.IsOneOf });        // need these to decide
 
-            if (ret.Count > 0)
+            string ret = "";
+
+            foreach (var t in list)                  // go thru the list, making up a comparision string with Name, on it..
             {
-                actionfileskeyevents = "";
-                foreach (Tuple<string, ConditionEntry.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
+                if (t.Item2.MatchCondition == ConditionEntry.MatchType.Equals)
+                    ret+= "<" + t.Item2.MatchString + ">";
+                else
                 {
-                    if (t.Item2 == ConditionEntry.MatchType.Equals)
-                        actionfileskeyevents += "<" + t.Item1 + ">";
-                    else
+                    StringParser p = new StringParser(t.Item2.MatchString);
+                    List<string> klist = p.NextQuotedWordList();
+                    if (klist != null)
                     {
-                        StringParser p = new StringParser(t.Item1);
-                        List<string> klist = p.NextQuotedWordList();
-                        if (klist != null)
-                        {
-                            foreach (string s in klist)
-                                actionfileskeyevents += "<" + s + ">";
-                        }
+                        foreach (string s in klist)
+                            ret += "<" + s + ">";
                     }
                 }
+            }
 
+            return ret;
+        }
+
+        public void ActionConfigureKeys()
+        {
+            actionfileskeyeventskeydown = GetKeyEvent(ActionEventEDList.onKeyPress.TriggerName, "KeyPress");
+            actionfileskeyeventskeyup = GetKeyEvent(ActionEventEDList.onKeyReleased.TriggerName, "KeyPress");
+
+            if ( actionfileskeyeventskeydown.HasChars() || actionfileskeyeventskeyup.HasChars())
+            {
                 if (actionfilesmessagefilter == null)
                 {
                     actionfilesmessagefilter = new ActionMessageFilter(discoveryform, this, keyignoredforms);
@@ -105,9 +129,19 @@ namespace EDDiscovery.Actions
 
         public bool CheckKeys(string keyname)
         {
-            if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
+            if (actionfileskeyeventskeydown.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
                 ActionRun(ActionEventEDList.onKeyPress, new Variables("KeyPress", keyname));
+                return true;
+            }
+            else
+                return false;
+        }
+        public bool CheckReleaseKeys(string keyname)
+        {
+            if (actionfileskeyeventskeyup.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
+            {
+                ActionRun(ActionEventEDList.onKeyReleased, new Variables("KeyPress", keyname));
                 return true;
             }
             else

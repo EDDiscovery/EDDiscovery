@@ -72,13 +72,14 @@ namespace EDDiscovery.Actions
 
                 voicerecon.Clear(); // clear grammars
 
-                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+                var ret = actionfiles.ReturnSpecificConditions(ActionEventEDList.onVoiceInput.TriggerName, "VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
 
                 if (ret.Count > 0)
                 {
                     foreach (var vp in ret)
                     {
-                        voicerecon.Add(vp.Item1);
+                        System.Diagnostics.Debug.WriteLine($"Voice Add {vp.Item1}:{vp.Item2.MatchString}");
+                        voicerecon.Add(vp.Item2.MatchString);
                     }
 
                     voicerecon.Start();
@@ -88,13 +89,13 @@ namespace EDDiscovery.Actions
 
         public string VoicePhrases(string sep)
         {
-            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+            var ret = actionfiles.ReturnSpecificConditions(ActionEventEDList.onVoiceInput.TriggerName, "VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
 
             string s = "";
             foreach (var vp in ret)
             {
                 BaseUtils.StringCombinations sb = new BaseUtils.StringCombinations();
-                sb.ParseString(vp.Item1);
+                sb.ParseString(vp.Item2.MatchString);
                 s += String.Join(",", sb.Permutations.ToArray()) + sep;
             }
 
@@ -105,7 +106,7 @@ namespace EDDiscovery.Actions
         {
             if (EnableVoiceReconEvent)
             {
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.000"));
                 ActionRun(ActionEventEDList.onVoiceInput, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
             }
             else

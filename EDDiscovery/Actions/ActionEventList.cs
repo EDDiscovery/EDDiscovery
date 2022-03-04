@@ -125,7 +125,13 @@ namespace EDDiscovery.Actions
                     new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceInput", "Voice text not recognised", BaseUtils.ConditionEntry.MatchType.MatchSemicolonList, "Event Variable"),
                     new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceConfidence", "% confidence in recognition", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual, "Event Variable"),
                 }
-                ), //19
+                ), //20
+            new ActionEventEDList("onKeyReleased", "KeyPress", "UI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("KeyPress", "Logical name of key", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable")
+                }
+                ),
 
             new ActionEventEDList("All","","Misc",null),                      // All, special match only
         };
@@ -151,7 +157,7 @@ namespace EDDiscovery.Actions
         public static ActionEvent onEDSMSync { get { return eddevents[18]; } }
         public static ActionEvent onVoiceInput { get { return eddevents[19]; } }
         public static ActionEvent onVoiceInputFailed { get { return eddevents[20]; } }
-
+        public static ActionEvent onKeyReleased { get { return eddevents[21]; } }
         // for events marked with run at refresh, get an HE per entry
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", "",null); }
 

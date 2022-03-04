@@ -103,6 +103,7 @@ end;
 var DataDirPage: TInputDirWizardPage;
 var DataDirIndex: Integer;
 var InstallChangeAppLocation : TButton;
+var SettoAppData: TButton;
 
 // callbacks for the data dir page
 
@@ -115,10 +116,21 @@ begin
 
   DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'Select location:';
 
+  SettoAppData.Visible := false;
   InstallChangeAppLocation.Visible := false;
   DataDirPage.Edits[DataDirIndex].Visible := true;
   DataDirPage.Buttons[DataDirIndex].Visible := true;
 end;
+
+procedure OnClickSettoAppData(Sender: TObject);
+begin
+  DataDirPage.Values[0] := 'c:\' 
+
+  DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'User Data will be in c:\Users\<user>\AppData\Local\EDDiscovery';
+
+end;
+
+
 
 // On initialisation, we set up a new data dir page with two buttons
 
@@ -143,6 +155,14 @@ begin
   InstallChangeAppLocation.Width := 200;
   InstallChangeAppLocation.Caption := 'Change Location';
   InstallChangeAppLocation.OnClick := @OnClickSetChangeDataFolder;
+
+  SettoAppData:=TButton.Create(DataDirPage);
+  SettoAppData.Parent := DataDirPage.Buttons[0].Parent;
+  SettoAppData.Top := DataDirPage.Edits[DataDirIndex].Top;
+  SettoAppData.Left := 250;
+  SettoAppData.Width := 200;
+  SettoAppData.Caption := 'Use Local App Data';
+  SettoAppData.OnClick := @OnClickSettoAppData;
 
 end;
 

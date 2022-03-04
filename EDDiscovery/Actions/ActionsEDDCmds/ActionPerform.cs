@@ -215,7 +215,6 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("voicerecognitionevent"))
                     {
-                        System.Diagnostics.Debug.WriteLine("Voice recon " + nextword);
                         if (nextword.Equals("toggle", StringComparison.InvariantCultureIgnoreCase))
                         {
                             ac.EnableVoiceReconEvent = !ac.EnableVoiceReconEvent;
