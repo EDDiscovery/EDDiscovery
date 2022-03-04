@@ -44,13 +44,21 @@ namespace EDDiscovery.Actions
                 vars[prefix + "DockedState"] = he.IsDocked.ToStringIntValue();
                 vars[prefix + "LandedState"] = he.IsLanded.ToStringIntValue();
                 vars[prefix + "Hyperspace"] = he.IsInHyperSpace.ToStringIntValue();
-                vars[prefix + "WhereAmI"] = he.WhereAmI;
-                vars[prefix + "BodyType"] = he.Status.BodyType;
-                vars[prefix + "ShipType"] = he.Status.ShipType;
-                vars[prefix + "ShipTypeFD"] = he.Status.ShipTypeFD;
+                vars[prefix + "WhereAmI"] = he.WhereAmI ?? "";
+                vars[prefix + "BodyType"] = he.Status.BodyType ?? "";
+                vars[prefix + "BodyName"] = he.Status.BodyName ?? "";
+                vars[prefix + "BodyID"] = (he.Status.BodyID ?? -1).ToStringInvariant();
+                vars[prefix + "StationName"] = he.Status.StationName ?? "";
+                vars[prefix + "StationType"] = he.Status.StationType ?? "";
+                vars[prefix + "StationFaction"] = he.Status.StationFaction ?? "";
+                vars[prefix + "ShipType"] = he.Status.ShipType ?? "";
+                vars[prefix + "ShipTypeFD"] = he.Status.ShipTypeFD ?? "";
                 vars[prefix + "OnFoot"] = he.Status.OnFoot.ToStringIntValue();
                 vars[prefix + "IsSRV"] = he.Status.IsSRV.ToStringIntValue();
                 vars[prefix + "IsFighter"] = he.Status.IsFighter.ToStringIntValue();
+                vars[prefix + "BodyApproached"] = he.Status.BodyApproached.ToStringIntValue();
+                vars[prefix + "BookedDropship"] = he.Status.BookedDropship.ToStringIntValue();
+                vars[prefix + "BookedTaxi"] = he.Status.BookedTaxi.ToStringIntValue();
                 vars[prefix + "ShipId"] = he.Status.ShipID.ToString(ct);
                 vars[prefix + "IndexOf"] = he.EntryNumber.ToString(ct);
 
@@ -74,9 +82,9 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Odyssey"] = he.journalEntry.IsOdyssey.ToStringIntValue();
                 vars[prefix + "GameMode"] = he.GameMode;
                 vars[prefix + "Group"] = he.Group;
+                vars[prefix + "OnCrewWithCaptain"] = he.Status.OnCrewWithCaptain ?? "";
                 vars[prefix + "Wanted"] = he.Wanted.ToStringIntValue();
                 vars[prefix + "MarketId"] = he.MarketID.HasValue ? he.MarketID.ToStringInvariant() : "0";
-                vars[prefix + "StationFaction "] = he.StationFaction ?? "";
 
                 vars[prefix + "Note"] = he.SNC?.Note ?? "";
 
