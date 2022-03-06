@@ -49,18 +49,17 @@ namespace EDDiscovery.Actions
                     if (m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN)
                     {
                         var activeform = System.Windows.Forms.Form.ActiveForm;
-                        //System.Diagnostics.Debug.WriteLine("Active form " + activeform?.GetType().Name);
 
                         if (ignoredforms == null || activeform == null || Array.IndexOf(ignoredforms, activeform.GetType()) == -1)
                         {
                             Keys k = (Keys)m.WParam;
                             string name = k.WMKeyToString((ulong)m.LParam, Control.ModifierKeys);
-                           // System.Diagnostics.Debug.WriteLine($"Keydown {(ulong)m.LParam:X} {(ulong)m.WParam:X4} {Control.ModifierKeys} = {name}");
+                            //System.Diagnostics.Debug.WriteLine($"Keydown {(ulong)m.LParam:X} {(ulong)m.WParam:X4} {Control.ModifierKeys} = {name}");
                             if (actcontroller.CheckKeys(name))
                                 return true;    // swallow, we did it
                         }
                     }
-                    else if ((m.Msg == WM.KEYUP))
+                    else if (m.Msg == WM.KEYUP)
                     {
                         var activeform = System.Windows.Forms.Form.ActiveForm;
                         //System.Diagnostics.Debug.WriteLine("Active form " + activeform?.GetType().Name);
@@ -69,7 +68,7 @@ namespace EDDiscovery.Actions
                         {
                             Keys k = (Keys)m.WParam;
                             string name = k.WMKeyToString((ulong)m.LParam, Control.ModifierKeys);
-                          //  System.Diagnostics.Debug.WriteLine($"Keyup {(ulong)m.LParam:X} {(ulong)m.WParam:X4} {Control.ModifierKeys} = {name}");
+                            //  System.Diagnostics.Debug.WriteLine($"Keyup {(ulong)m.LParam:X} {(ulong)m.WParam:X4} {Control.ModifierKeys} = {name}");
 
                             if (actcontroller.CheckReleaseKeys(name))
                                 return true;    // swallow, we did it
@@ -131,7 +130,9 @@ namespace EDDiscovery.Actions
         {
             if (actionfileskeyeventskeydown.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
-                ActionRun(ActionEventEDList.onKeyPress, new Variables("KeyPress", keyname));
+                // do not run directly, we are in a message filter here, so can't add new ones (see Keyform). Instead delay invoke on discovery form
+
+                discoveryform.BeginInvoke(new Action(() => ActionRun(ActionEventEDList.onKeyPress, new Variables("KeyPress", keyname)) ) );
                 return true;
             }
             else
@@ -141,7 +142,7 @@ namespace EDDiscovery.Actions
         {
             if (actionfileskeyeventskeyup.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
-                ActionRun(ActionEventEDList.onKeyReleased, new Variables("KeyPress", keyname));
+                discoveryform.BeginInvoke(new Action(() => ActionRun(ActionEventEDList.onKeyReleased, new Variables("KeyPress", keyname))));
                 return true;
             }
             else
