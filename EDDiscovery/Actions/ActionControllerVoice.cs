@@ -32,7 +32,7 @@ namespace EDDiscovery.Actions
         public bool VoiceReconOn(string culture = null)     // perform enableVR
         {
             voicerecon.Close(); // can close without stopping
-            voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+            voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture),true);
             return voicerecon.IsOpen;
         }
 
@@ -50,17 +50,7 @@ namespace EDDiscovery.Actions
         {
             if (voicerecon.IsOpen)
             {
-                voicerecon.Stop(true);
-                try
-                {
-                    voicerecon.BabbleTimeout = babble;
-                    voicerecon.InitialSilenceTimeout = initialsilence;
-                    voicerecon.EndSilenceTimeout = endsilence;
-                    voicerecon.EndSilenceTimeoutAmbigious = endsilenceambigious;
-                }
-                catch { };
-
-                voicerecon.Start();
+                voicerecon.UpdateParas(babble, endsilence, endsilenceambigious, initialsilence);
             }
         }
 
@@ -68,22 +58,17 @@ namespace EDDiscovery.Actions
         {
             if (voicerecon.IsOpen)
             {
-                voicerecon.Stop(true);
-
-                voicerecon.Clear(); // clear grammars
+                voicerecon.BeginGrammarUpdate();
 
                 var ret = actionfiles.ReturnSpecificConditions(ActionEventEDList.onVoiceInput.TriggerName, "VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
 
-                if (ret.Count > 0)
+                foreach (var vp in ret.EmptyIfNull())
                 {
-                    foreach (var vp in ret)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Voice Add {vp.Item1}:{vp.Item2.MatchString}");
-                        voicerecon.Add(vp.Item2.MatchString);
-                    }
-
-                    voicerecon.Start();
+                   // System.Diagnostics.Debug.WriteLine($"VR Add {vp.Item1}:{vp.Item2.MatchString}");
+                    voicerecon.AddGrammar(vp.Item2.MatchString);
                 }
+
+                voicerecon.EndGrammarUpdate();
             }
         }
 
@@ -106,7 +91,7 @@ namespace EDDiscovery.Actions
         {
             if (EnableVoiceReconEvent)
             {
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.000"));
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " VR Recognised " + text + " " + confidence.ToStringInvariant("0.000"));
                 ActionRun(ActionEventEDList.onVoiceInput, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
             }
             else
@@ -119,7 +104,7 @@ namespace EDDiscovery.Actions
         {
             if (EnableVoiceReconEvent)
             {
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
+              //  System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " VR Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
                 ActionRun(ActionEventEDList.onVoiceInputFailed, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
             }
 

@@ -372,10 +372,9 @@ namespace EDDiscovery
                     }
                 }
 
-                actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
-                actioncontroller.ReLoad();          // load system up here
             }
 
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
 
             // Stage 5 Misc
 
@@ -515,8 +514,9 @@ namespace EDDiscovery
                     Controller.AsyncPerformSync(edsmfullsync: true, edsm_alias_sync: true);      // order another go.
             }
 
-            Controller.PostInit_Shown();        // form is up, controller is released, create controller background thread
+            actioncontroller.ReLoad();          // load the action system up here, with the UI running
 
+            Controller.PostInit_Shown();        // form is up, controller is released, create controller background thread
 
             if (EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
@@ -1394,6 +1394,7 @@ namespace EDDiscovery
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();
+            Controller.ResetUIStatus();
 
             // keep for debug:
 

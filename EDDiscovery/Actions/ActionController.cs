@@ -173,7 +173,7 @@ namespace EDDiscovery.Actions
                             string err = ActionKeyED.VerifyBinding(b.UserData, frontierbindings);
                             if (err.Length > 0)
                             {   // just a warning.. not a full error, as we don't want to stop someone using the pack due to a missing key mapping
-                                LogLine("Key Mapping error: " + string.Format( "{0}:{1}:{2} {3}", af.Name, p.Name, b.LineNumber, err));
+                                LogLine("Key Mapping Warning: " + string.Format( "{0}:{1}:{2} {3}", af.Name, p.Name, b.LineNumber, err));
                             }
                         }
                     }

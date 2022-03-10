@@ -34,9 +34,9 @@ namespace EDDiscovery.Actions
         {
             public EliteDangerousCore.BindingsFile bindingsfile;
 
-            public Tuple<string, int, string> Parse(string s)
+            public Tuple<string, int, string> Parse(string s, bool beforeprefix)
             {
-                if ( s.Length > 0 && s.StartsWith("{"))     // frontier bindings start with decoration
+                if ( !beforeprefix && s.Length > 0 && s.StartsWith("{"))     // frontier bindings start with decoration
                 {
                     int endindex = s.IndexOf("}");
                     if ( endindex>=0 )                      // valid {}
@@ -119,7 +119,7 @@ namespace EDDiscovery.Actions
 
                 string ret = BaseUtils.EnhancedSendKeysParser.VerifyKeys(keys, new AKP() { bindingsfile = bf });
 
-                if (ret.Contains(errmsgforbinding))     // Ignore these..
+                if (ret.Contains("$disabled for now "+errmsgforbinding))     // Ignore these..
                     return "";
                 else
                     return ret;

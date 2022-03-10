@@ -201,6 +201,11 @@ namespace EDDiscovery
             }
         }
 
+        public void ResetUIStatus()
+        {
+            journalmonitor.ResetUIStatus();
+        }
+
         #endregion
 
         #region Background Worker Thread - kicked off by PostInit_Shown
