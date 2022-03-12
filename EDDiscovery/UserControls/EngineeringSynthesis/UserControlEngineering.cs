@@ -95,6 +95,7 @@ namespace EDDiscovery.UserControls
             ufs.SaveSettings += (newvalue, e) => { PutSetting(dbUpgradeFilterSave, newvalue); Display(); };
 
             List<string> matLongNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
+            matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);
             matfs.SaveSettings += (newvalue, e) => { PutSetting(dbMaterialFilterSave, newvalue); Display(); };
 
