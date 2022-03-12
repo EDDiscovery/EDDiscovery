@@ -230,7 +230,7 @@ namespace EDDiscovery.Forms
             int delta = bot.Top - topline;
 
             //System.Diagnostics.Debug.WriteLine("Control bot {0} {1} to {2} {3} delta {4}", bot.Name, bot.Top, top.Name, top.Top, delta);
-            foreach (Control c in panelOuter.Controls)
+            foreach (Control c in extPanelScroll.Controls)
             {
                 if (c.Top >= topline)  // if below..
                 {

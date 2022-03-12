@@ -62,11 +62,13 @@ namespace EDDiscovery.Forms
             this.textBoxTravelNote = new ExtendedControls.ExtTextBox();
             this.checkBoxTarget = new ExtendedControls.ExtCheckBox();
             this.buttonEDSM = new ExtendedControls.ExtButton();
-            this.panelOuter = new System.Windows.Forms.Panel();
             this.labelBadSystem = new System.Windows.Forms.Label();
             this.textBoxName = new ExtendedControls.ExtTextBoxAutoComplete();
+            this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
+            this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
             this.SurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
-            this.panelOuter.SuspendLayout();
+            this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
+            this.extPanelScroll.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelName
@@ -352,37 +354,6 @@ namespace EDDiscovery.Forms
             this.buttonEDSM.UseVisualStyleBackColor = true;
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
             // 
-            // panelOuter
-            // 
-            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOuter.Controls.Add(this.labelBadSystem);
-            this.panelOuter.Controls.Add(this.textBoxName);
-            this.panelOuter.Controls.Add(this.SurfaceBookmarks);
-            this.panelOuter.Controls.Add(this.buttonEDSM);
-            this.panelOuter.Controls.Add(this.labelName);
-            this.panelOuter.Controls.Add(this.checkBoxTarget);
-            this.panelOuter.Controls.Add(this.buttonDelete);
-            this.panelOuter.Controls.Add(this.labelX);
-            this.panelOuter.Controls.Add(this.buttonCancel);
-            this.panelOuter.Controls.Add(this.labelY);
-            this.panelOuter.Controls.Add(this.buttonOK);
-            this.panelOuter.Controls.Add(this.labelZ);
-            this.panelOuter.Controls.Add(this.textBoxZ);
-            this.panelOuter.Controls.Add(this.labelBookmarkNotes);
-            this.panelOuter.Controls.Add(this.textBoxY);
-            this.panelOuter.Controls.Add(this.labelTravelNote);
-            this.panelOuter.Controls.Add(this.textBoxX);
-            this.panelOuter.Controls.Add(this.textBoxTime);
-            this.panelOuter.Controls.Add(this.labelTimeMade);
-            this.panelOuter.Controls.Add(this.textBoxBookmarkNotes);
-            this.panelOuter.Controls.Add(this.textBoxTravelNote);
-            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 0);
-            this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(879, 706);
-            this.panelOuter.TabIndex = 12;
-            this.panelOuter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            // 
             // labelBadSystem
             // 
             this.labelBadSystem.AutoSize = true;
@@ -426,6 +397,45 @@ namespace EDDiscovery.Forms
             this.textBoxName.WordWrap = true;
             this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
+            // statusStripCustom
+            // 
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 704);
+            this.statusStripCustom.Name = "statusStripCustom";
+            this.statusStripCustom.Size = new System.Drawing.Size(895, 22);
+            this.statusStripCustom.TabIndex = 32;
+            // 
+            // extPanelScroll
+            // 
+            this.extPanelScroll.Controls.Add(this.extScrollBar1);
+            this.extPanelScroll.Controls.Add(this.textBoxTravelNote);
+            this.extPanelScroll.Controls.Add(this.textBoxBookmarkNotes);
+            this.extPanelScroll.Controls.Add(this.labelTimeMade);
+            this.extPanelScroll.Controls.Add(this.textBoxTime);
+            this.extPanelScroll.Controls.Add(this.textBoxX);
+            this.extPanelScroll.Controls.Add(this.labelTravelNote);
+            this.extPanelScroll.Controls.Add(this.textBoxY);
+            this.extPanelScroll.Controls.Add(this.labelBookmarkNotes);
+            this.extPanelScroll.Controls.Add(this.textBoxZ);
+            this.extPanelScroll.Controls.Add(this.labelZ);
+            this.extPanelScroll.Controls.Add(this.buttonOK);
+            this.extPanelScroll.Controls.Add(this.labelY);
+            this.extPanelScroll.Controls.Add(this.buttonCancel);
+            this.extPanelScroll.Controls.Add(this.labelX);
+            this.extPanelScroll.Controls.Add(this.buttonDelete);
+            this.extPanelScroll.Controls.Add(this.checkBoxTarget);
+            this.extPanelScroll.Controls.Add(this.labelName);
+            this.extPanelScroll.Controls.Add(this.buttonEDSM);
+            this.extPanelScroll.Controls.Add(this.SurfaceBookmarks);
+            this.extPanelScroll.Controls.Add(this.textBoxName);
+            this.extPanelScroll.Controls.Add(this.labelBadSystem);
+            this.extPanelScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelScroll.FlowControlsLeftToRight = false;
+            this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
+            this.extPanelScroll.Name = "extPanelScroll";
+            this.extPanelScroll.Size = new System.Drawing.Size(895, 704);
+            this.extPanelScroll.TabIndex = 15;
+            this.extPanelScroll.VerticalScrollBarDockRight = true;
+            // 
             // SurfaceBookmarks
             // 
             this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 390);
@@ -433,19 +443,50 @@ namespace EDDiscovery.Forms
             this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 261);
             this.SurfaceBookmarks.TabIndex = 12;
             // 
+            // extScrollBar1
+            // 
+            this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBar1.ArrowColorScaling = 0.5F;
+            this.extScrollBar1.ArrowDownDrawAngle = 270F;
+            this.extScrollBar1.ArrowUpDrawAngle = 90F;
+            this.extScrollBar1.BorderColor = System.Drawing.Color.White;
+            this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBar1.HideScrollBar = false;
+            this.extScrollBar1.LargeChange = 10;
+            this.extScrollBar1.Location = new System.Drawing.Point(879, 0);
+            this.extScrollBar1.Maximum = 100;
+            this.extScrollBar1.Minimum = 0;
+            this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBar1.Name = "extScrollBar1";
+            this.extScrollBar1.Size = new System.Drawing.Size(16, 704);
+            this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBar1.SmallChange = 1;
+            this.extScrollBar1.TabIndex = 15;
+            this.extScrollBar1.Text = "extScrollBar1";
+            this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBar1.ThumbColorScaling = 0.5F;
+            this.extScrollBar1.ThumbDrawAngle = 0F;
+            this.extScrollBar1.Value = 0;
+            this.extScrollBar1.ValueLimited = 0;
+            // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(879, 706);
-            this.Controls.Add(this.panelOuter);
+            this.ClientSize = new System.Drawing.Size(895, 726);
+            this.Controls.Add(this.extPanelScroll);
+            this.Controls.Add(this.statusStripCustom);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "<code>";
-            this.panelOuter.ResumeLayout(false);
-            this.panelOuter.PerformLayout();
+            this.extPanelScroll.ResumeLayout(false);
+            this.extPanelScroll.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -469,9 +510,11 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtTextBox textBoxTravelNote;
         private ExtendedControls.ExtCheckBox checkBoxTarget;
         private ExtendedControls.ExtButton buttonEDSM;
-        private System.Windows.Forms.Panel panelOuter;
         private SurfaceBookmarkUserControl SurfaceBookmarks;
         private ExtendedControls.ExtTextBoxAutoComplete textBoxName;
         private System.Windows.Forms.Label labelBadSystem;
+        private ExtendedControls.ExtStatusStrip statusStripCustom;
+        private ExtendedControls.ExtPanelScroll extPanelScroll;
+        private ExtendedControls.ExtScrollBar extScrollBar1;
     }
 }
