@@ -103,7 +103,6 @@ namespace EDDiscovery.Actions
             inputdevices = new DirectInputDevices.InputDeviceList(a => discoveryform.BeginInvoke(a));
             inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
 
-            frontierbindings.LoadBindingsFile();
             //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
             //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
 
@@ -146,6 +145,8 @@ namespace EDDiscovery.Actions
 
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
+
+            frontierbindings.LoadBindingsFile();
 
             ErrorList = actionfiles.LoadAllActionFiles(EDDOptions.Instance.ActionsAppDirectory());
 
