@@ -37,14 +37,8 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "3dMapPanel_";
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
-
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
-
-            mapsave = new MapSaverImpl(this);
         }
 
         public override void LoadLayout()
@@ -53,10 +47,10 @@ namespace EDDiscovery.UserControls
 
             glwfc.EnsureCurrentContext();
 
-            // load setup restore settings of map
             map = new Map();
-            map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
-                Map.Parts.Map3D);
+            map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, Map.Parts.Map3D);
+
+            mapsave = new MapSaverImpl(this);
             map.LoadState(mapsave,true,0);
 
             map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
@@ -65,19 +59,28 @@ namespace EDDiscovery.UserControls
             systemtimer.Interval = 50;
             systemtimer.Tick += new EventHandler(SystemTick);
             systemtimer.Start();
+
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
         }
 
         public override void Closing()
         {
             System.Diagnostics.Debug.WriteLine($"3dmap {displaynumber} stop");
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
-            systemtimer.Stop();
 
-            glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
-            map.SaveState(mapsave);
-            map.Dispose();
+            if (map != null)    // just in case loadlayout has not been called..
+            {
+                systemtimer.Stop();
+
+                discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+                discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+                EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
+
+                glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
+                map.SaveState(mapsave);
+                map.Dispose();
+            }
 
             glwfc.Dispose();
             glwfc = null;

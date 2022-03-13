@@ -36,14 +36,8 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Local3DMapPanel_";
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;
-
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
-
-            mapsave = new UserControl3DMap.MapSaverImpl(this);
         }
 
         public override void LoadLayout()
@@ -66,6 +60,7 @@ namespace EDDiscovery.UserControls
                 | Map.Parts.Bookmarks
                 );
 
+            mapsave = new UserControl3DMap.MapSaverImpl(this);
             map.LoadState(mapsave,true,200000);
 
             map.UpdateEDSMStarsLocalArea();    // now try and ask for a populated update after loading the settings
@@ -76,19 +71,28 @@ namespace EDDiscovery.UserControls
             systemtimer.Interval = 50;
             systemtimer.Tick += new EventHandler(SystemTick);
             systemtimer.Start();
+
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;
         }
 
         public override void Closing()
         {
             System.Diagnostics.Debug.WriteLine($"local 3dmap {displaynumber} stop");
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnSyncComplete -= Discoveryform_OnSyncComplete;
-            systemtimer.Stop();
 
-            glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
-            map.SaveState(mapsave);
-            map.Dispose();
+            if (map != null)    // just in case loadlayout has not been called..
+            {
+                systemtimer.Stop();
+
+                discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+                discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+                discoveryform.OnSyncComplete -= Discoveryform_OnSyncComplete;
+
+                glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
+                map.SaveState(mapsave);
+                map.Dispose();
+            }
 
             glwfc.Dispose();
             glwfc = null;
