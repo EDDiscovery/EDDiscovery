@@ -745,7 +745,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateEDSMStarsLocalArea()
         {
-            galaxystars.ClearBoxAround();
+            galaxystars?.ClearBoxAround();
             CheckRefreshLocalArea();      
         }
 
