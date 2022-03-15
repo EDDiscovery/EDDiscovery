@@ -101,7 +101,8 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he, mcmr);
             }
 
-            DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he));       // give DLL the unfiltered stream
+            if (DLLManager.Count > 0)
+                DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he));       // give DLL the unfiltered stream
 
         }
 
@@ -141,7 +142,8 @@ namespace EDDiscovery
                 EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> { he });
             }
 
-            DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
+            if (DLLManager.Count > 0)
+                DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
 
             ScreenshotConverter.NewJournalEntry(he.journalEntry);       // tell the screenshotter.
 

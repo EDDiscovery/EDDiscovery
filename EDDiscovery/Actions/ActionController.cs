@@ -640,17 +640,26 @@ namespace EDDiscovery.Actions
 
         #region Elite Input 
 
+        private bool axisison = false;      // record if anywant wants axis events
+
         public void EliteInput(bool on, bool axisevents)
         {
             inputdevicesactions.Stop();
             inputdevices.Clear();
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && on)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
-                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
-                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
-                inputdevicesactions.Start();
+                if (on)
+                {
+                    axisison |= axisevents;
+
+                    DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisison);
+                    DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
+                    DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
+                    inputdevicesactions.Start();
+                }
+                else
+                    axisison = false;
             }
         }
 

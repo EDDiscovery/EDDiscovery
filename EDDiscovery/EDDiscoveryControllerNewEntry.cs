@@ -59,59 +59,76 @@ namespace EDDiscovery
             }
         }
 
+        public void DelayPlay(Object s)             // timer thread timeout after play delay.. 
+        {
+            System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play timer executed");
+            journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
+            InvokeAsyncOnUiThread(() =>
+            {
+                PlayJournalList();
+            });
+        }
+
         public void PlayJournalList()                 // UI Threead play delay list out..
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Play out list");
 
-            JournalEntry prev = null;  // we start afresh from the point of merging so we don't merge with previous ones already shown
-
             while (journalqueue.Count > 0)
             {
-                JournalEntry je = journalqueue.Dequeue();
+                var current = journalqueue.Dequeue();
 
-                if (!HistoryList.MergeJournalEntries(prev, je))                // if not merged
-                {
-                    if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
-                        ActionEntry(prev);
-
-                    prev = je;                              // record
-                }
-            }
-
-            if (prev != null)                               // any left.. action it
-                ActionEntry(prev);
-        }
-
-        private void ActionEntry(JournalEntry je)               // UI thread issue the JE to the system
-        {
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-
-            System.Diagnostics.Trace.WriteLine(string.Format(Environment.NewLine + "New JEntry {0} {1}", je.EventTimeUTC, je.EventTypeStr));
-
-            // filter out commanders, and filter out any UI events
-            if (je.CommanderId == history.CommanderId)
-            {
-                OnNewJournalEntryUnfiltered?.Invoke(je);          // Called before any removal or merging, so this is the raw journal list
+                System.Diagnostics.Trace.WriteLine($"New JEntry {current.EventTimeUTC} {current.EventTypeStr}");
 
                 BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
 
-                var historyentry = history.MakeHistoryEntry(je);    // get an history entry and update the databases
+                if (current.CommanderId != history.CommanderId)         // remove non relevant jes
+                    continue;
 
-                OnNewHistoryEntryUnfiltered?.Invoke(historyentry);  // Called before any removal or merging, so this is the raw history entry.  Not been added to HL
+                List<JournalEntry> tomakehes = new List<JournalEntry>();       // list of he's to make and dispatch.. add the primary one
+                tomakehes.Add(current);
+
+                while (journalqueue.Count > 0)                      // go thru the list and find merge candidates
+                {
+                    var peek = journalqueue.Peek();
+
+                    if (peek.CommanderId != history.CommanderId)     // remove non relevant jes
+                    {
+                        journalqueue.Dequeue();                     // remove it
+                    }
+                    else if (HistoryList.MergeJournalEntries(current, peek))  // if the peeked is merged into current
+                    {
+                        journalqueue.Dequeue();                     // remove it
+                        tomakehes.Add(peek);                        // add it to the list to make he's from so we send it thru unfiltered
+                    }
+                    else
+                        break;                                      // not mergable and since we peeked not removed
+                }
+
+                HistoryEntry historyentry = null;
+
+                foreach( var j in tomakehes)                        // make all the he's in order required.. these are all merged into one, but we need to play them out for unfiltered
+                {
+                    OnNewJournalEntryUnfiltered?.Invoke(j);         // Called before any removal or merging, so this is the raw journal list
+
+                    var hentry = history.MakeHistoryEntry(j);       // get an history entry and update the databases
+
+                    if (historyentry == null)                       // first one is the one we save and fully add
+                        historyentry = hentry;
+
+                    OnNewHistoryEntryUnfiltered?.Invoke(hentry);    // Called before any removal or merging, so this is the raw history entry.  Not been added to HL
+                }
+
+                // now on the primary one, finish the job
 
                 var historyentries = history.AddHistoryEntryToListWithReorder(historyentry, h => LogLineHighlight(h));   // add a new one on top of the HL, reorder, remove, return a list of ones to process
 
-                var t1 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
-                if (t1.Item2 >= 20)
-                    System.Diagnostics.Trace.WriteLine(" NE Add Journal slow " + t1.Item1);
-
-                foreach( var he in historyentries.EmptyIfNull())
+                foreach (var he in historyentries.EmptyIfNull())
                 {
                     if (he.EntryType == JournalTypeEnum.CodexEntry)     // need to do some work on codex entry.. set bodyid as long as recorded body name matches tracking name, and update DB
                     {
                         var jce = he.journalEntry as EliteDangerousCore.JournalEvents.JournalCodexEntry;
-                        if ( jce.EDDBodyName == he.Status.BodyName)        // following EDDN advice, use status body name as master key
+                        if (jce.EDDBodyName == he.Status.BodyName)        // following EDDN advice, use status body name as master key
                         {
                             jce.EDDBodyId = he.Status.BodyID ?? -1;
                             System.Diagnostics.Debug.WriteLine($"Journal Codex set body ID to {jce.EDDBodyId} as ID");
@@ -123,13 +140,13 @@ namespace EDDiscovery
                         jce.UpdateDB();                     // write back
                     }
 
-                    if ( OnNewEntry != null)    // issue to OnNewEntry handlers
+                    if (OnNewEntry != null)    // issue to OnNewEntry handlers
                     {
                         foreach (var e in OnNewEntry.GetInvocationList())       // do the invokation manually, so we can time each method
                         {
                             Stopwatch sw = new Stopwatch(); sw.Start();
                             e.DynamicInvoke(he, history);
-                            if ( sw.ElapsedMilliseconds >= 20)
+                            if (sw.ElapsedMilliseconds >= 20)
                                 System.Diagnostics.Trace.WriteLine(" NE Add Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
                         }
                     }
@@ -151,22 +168,12 @@ namespace EDDiscovery
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
                     System.Diagnostics.Trace.WriteLine("NE END " + t3.Item1 + " " + (t3.Item3 > 99 ? "!!!!!!!!!!!!!" : ""));
                 }
-            }
 
-            if (je.EventTypeID == JournalTypeEnum.LoadGame) // and issue this on Load game
-            {
-                OnRefreshCommanders?.Invoke();
+                if (historyentry.EntryType == JournalTypeEnum.LoadGame) // and issue this on Load game
+                {
+                    OnRefreshCommanders?.Invoke();
+                }
             }
-        }
-
-        public void DelayPlay(Object s)             // timer thread timeout after play delay.. 
-        {
-            System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play timer executed");
-            journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
-            InvokeAsyncOnUiThread(() =>
-            {
-                PlayJournalList();
-            });
         }
 
         // New UI event. SR will be null if programatically made
