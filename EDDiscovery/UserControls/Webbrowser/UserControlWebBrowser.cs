@@ -93,11 +93,11 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            System.Diagnostics.Debug.WriteLine($"Web browser initial display");
+            System.Diagnostics.Trace.WriteLine($"Web browser initial display");
             var wv2 = new BrowserWebView2();
             wv2.LoadResult += (res) =>          // asynchronous to start up, UCTG, etc, winforms needs to run
             {
-                System.Diagnostics.Debug.WriteLine($"Web browser view returned {res}");
+                System.Diagnostics.Trace.WriteLine($"Web browser view returned {res}");
                 if (res == true)
                 {
                     wbb = wv2;

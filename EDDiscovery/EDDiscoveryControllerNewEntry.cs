@@ -85,8 +85,9 @@ namespace EDDiscovery
                 if (current.CommanderId != history.CommanderId)         // remove non relevant jes
                     continue;
 
-                List<JournalEntry> tomakehes = new List<JournalEntry>();       // list of he's to make and dispatch.. add the primary one
-                tomakehes.Add(current);
+                OnNewJournalEntryUnfiltered?.Invoke(current);         // Called before any removal or merging, so this is the raw journal list
+                HistoryEntry historyentry = history.MakeHistoryEntry(current);
+                OnNewHistoryEntryUnfiltered?.Invoke(historyentry);
 
                 while (journalqueue.Count > 0)                      // go thru the list and find merge candidates
                 {
@@ -98,28 +99,13 @@ namespace EDDiscovery
                     }
                     else if (HistoryList.MergeJournalEntries(current, peek))  // if the peeked is merged into current
                     {
+                        OnNewJournalEntryUnfiltered?.Invoke(peek);         // send the peeked, unmodified
+                        OnNewHistoryEntryUnfiltered?.Invoke(history.MakeHistoryEntry(peek));
                         journalqueue.Dequeue();                     // remove it
-                        tomakehes.Add(peek);                        // add it to the list to make he's from so we send it thru unfiltered
                     }
                     else
                         break;                                      // not mergable and since we peeked not removed
                 }
-
-                HistoryEntry historyentry = null;
-
-                foreach( var j in tomakehes)                        // make all the he's in order required.. these are all merged into one, but we need to play them out for unfiltered
-                {
-                    OnNewJournalEntryUnfiltered?.Invoke(j);         // Called before any removal or merging, so this is the raw journal list
-
-                    var hentry = history.MakeHistoryEntry(j);       // get an history entry and update the databases
-
-                    if (historyentry == null)                       // first one is the one we save and fully add
-                        historyentry = hentry;
-
-                    OnNewHistoryEntryUnfiltered?.Invoke(hentry);    // Called before any removal or merging, so this is the raw history entry.  Not been added to HL
-                }
-
-                // now on the primary one, finish the job
 
                 var historyentries = history.AddHistoryEntryToListWithReorder(historyentry, h => LogLineHighlight(h));   // add a new one on top of the HL, reorder, remove, return a list of ones to process
 

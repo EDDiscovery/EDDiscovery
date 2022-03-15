@@ -85,7 +85,8 @@ namespace EDDiscovery
         // Called by controller before any HL removal reorder. The raw HE stream.  The MCMR etc databases have been updated
         public void Controller_NewHistoryEntryUnfiltered(HistoryEntry he)
         {
-            System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType} {he.EventSummary}");
+            //he.FillInformation(out string ed, out string edi);System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType} {he.EventSummary} {ed}");
+            System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType}");
 
             // EDSM needs the raw stream, so send it here..
 
