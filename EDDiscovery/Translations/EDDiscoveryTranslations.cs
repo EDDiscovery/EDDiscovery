@@ -73,6 +73,7 @@ namespace EDDiscovery
         EDDiscoveryForm_helpToolStripMenuItem_frontierForumThreadToolStripMenuItem, // ToolStrip control '&Frontier Forum Thread'
         EDDiscoveryForm_helpToolStripMenuItem_gitHubToolStripMenuItem, // ToolStrip control '&Project Page (GitHub)'
         EDDiscoveryForm_helpToolStripMenuItem_reportIssueIdeasToolStripMenuItem, // ToolStrip control '&Report Issue / Idea'
+        EDDiscoveryForm_helpToolStripMenuItem_toolStripMenuItemListBindings, // ToolStrip control 
         EDDiscoveryForm_helpToolStripMenuItem_checkForNewReleaseToolStripMenuItem, // ToolStrip control '&Check for Updates'
         EDDiscoveryForm_tabControlMain_ToolTip, // ToolTip 'Right click to add/remove tabs, Left click drag to reorder'
         EDDiscoveryForm_comboBoxCommander_ToolTip, // ToolTip 'Select the commander to view'

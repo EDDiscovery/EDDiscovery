@@ -216,7 +216,7 @@ namespace EDDiscovery
             bool found = BaseUtils.Translator.Instance.LoadTranslation(lang, 
                     CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
-                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, debugout:true);
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, debugout:false);
 
             if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
                 ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");
@@ -465,7 +465,8 @@ namespace EDDiscovery
                 EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_editLastActionPackToolStripMenuItem, EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_stopCurrentlyRunningActionProgramToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_helpToolStripMenuItem_aboutToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_wikiHelpToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_viewHelpVideosToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_helpToolStripMenuItem_eDDiscoveryChatDiscordToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_helpToolStripMenuItem_frontierForumThreadToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_gitHubToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_reportIssueIdeasToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_helpToolStripMenuItem_frontierForumThreadToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_gitHubToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_reportIssueIdeasToolStripMenuItem,
+                EDTx.EDDiscoveryForm_helpToolStripMenuItem_toolStripMenuItemListBindings,
                 EDTx.EDDiscoveryForm_helpToolStripMenuItem_checkForNewReleaseToolStripMenuItem };
 
             BaseUtils.Translator.Instance.TranslateToolstrip(mainMenu, enumlistcms3, this);
@@ -1263,6 +1264,14 @@ namespace EDDiscovery
             AboutBox(this);
         }
 
+        private void toolStripMenuItemListBindings_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
+            ifrm.Info("Bindings", this.Icon, actioncontroller.FrontierBindings.ListBindings());
+            ifrm.Show(this);
+        }
+
+
         #endregion
 
         #region Toolbar
@@ -1496,8 +1505,8 @@ namespace EDDiscovery
                 Show();
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

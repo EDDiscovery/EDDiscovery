@@ -202,6 +202,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" @
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" @
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" @
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" @
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" @
 .comboBoxCommander.ToolTip: "Select the commander to view" @

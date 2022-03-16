@@ -112,6 +112,8 @@ namespace EDDiscovery
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemListBindings = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuSeparatorBottom = new System.Windows.Forms.ToolStripSeparator();
             this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label_version = new System.Windows.Forms.Label();
@@ -749,6 +751,8 @@ namespace EDDiscovery
             this.frontierForumThreadToolStripMenuItem,
             this.gitHubToolStripMenuItem,
             this.reportIssueIdeasToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.toolStripMenuItemListBindings,
             this.helpMenuSeparatorBottom,
             this.checkForNewReleaseToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
@@ -817,6 +821,18 @@ namespace EDDiscovery
             this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.reportIssueIdeasToolStripMenuItem.Text = "&Report Issue / Idea";
             this.reportIssueIdeasToolStripMenuItem.Click += new System.EventHandler(this.reportIssueIdeasToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(239, 6);
+            // 
+            // toolStripMenuItemListBindings
+            // 
+            this.toolStripMenuItemListBindings.Name = "toolStripMenuItemListBindings";
+            this.toolStripMenuItemListBindings.Size = new System.Drawing.Size(242, 22);
+            this.toolStripMenuItemListBindings.Text = "List Elite Bindings";
+            this.toolStripMenuItemListBindings.Click += new System.EventHandler(this.toolStripMenuItemListBindings_Click);
             // 
             // helpMenuSeparatorBottom
             // 
@@ -1072,5 +1088,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem viewHelpVideosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rebuildUserDBIndexesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemListBindings;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
