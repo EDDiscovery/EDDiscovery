@@ -87,7 +87,7 @@ namespace EDDiscovery.Actions
             foreach (InputDeviceEvent je in list)
             {
                 string match = je.EventName();              // same as bindings name..
-                System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
+               // System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
 
                 ac.ActionRun(Actions.ActionEventEDList.onEliteInputRaw, additionalvars: new BaseUtils.Variables(new string[]
                         { "Device" , je.Device.ID().Name, "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
@@ -117,7 +117,7 @@ namespace EDDiscovery.Actions
                                 int isonindex = assignmentsinonstate.IndexOf(a);
                                 if ( isonindex != -1 )
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc + "-");
+                                   // System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc + "-");
                                     assignmentsinonstate.Remove(a);
                                     ac.ActionRun(Actions.ActionEventEDList.onEliteInputOff, additionalvars: new BaseUtils.Variables(new string[]
                                      { "Binding" , a.assignedfunc }));
@@ -136,7 +136,7 @@ namespace EDDiscovery.Actions
                                     assignmentsinonstate.Add(a);
 
                                 bindingstoexecute.Add(a.assignedfunc);
-                                System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc);
+                                //System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc);
                             }
                             else
                             {
