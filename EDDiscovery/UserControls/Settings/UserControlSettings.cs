@@ -19,6 +19,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -169,6 +170,14 @@ namespace EDDiscovery.UserControls
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged += ParentForm_TopMostChanged;
         }
+
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            groupBoxCommanders.Size = new Size(ClientRectangle.Width - extScrollBarSettings.Width - 16, groupBoxCommanders.Height);
+        }
+
 
         #region Commanders
 
