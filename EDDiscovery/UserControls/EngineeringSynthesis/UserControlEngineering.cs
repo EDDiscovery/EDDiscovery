@@ -109,7 +109,8 @@ namespace EDDiscovery.UserControls
                 row.Cells[UpgradeCol.Index].Value = r.Name; // debug rno + ":" + r.name;
                 row.Cells[ModuleCol.Index].Value = r.modulesstring;
                 row.Cells[LevelCol.Index].Value = r.level;
-                row.Cells[EngineersCol.Index].Value = r.engineersstring;
+                row.Cells[EngineersCol.Index].Tag = r.engineers;        // keep list in tag
+                row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.engineers);
                 row.Tag = recipeno;
                 row.Visible = false;
             }
@@ -213,6 +214,7 @@ namespace EDDiscovery.UserControls
             {
                 var totalmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity); 
                 var mclmats = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
+                var lastengprog = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he);
 
                 int fdrow = dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 
@@ -291,6 +293,13 @@ namespace EDDiscovery.UserControls
                     if (WantedPerRecipe[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {
                         wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]));
+                    }
+
+                    if (lastengprog != null)
+                    {
+                        string[] list = dataGridViewEngineering[EngineersCol.Index, i].Tag as string[];
+                        string[] state = ((EliteDangerousCore.JournalEvents.JournalEngineerProgress)lastengprog.journalEntry).ApplyProgress(list);
+                        dataGridViewEngineering[EngineersCol.Index, i].Value = string.Join(Environment.NewLine,state);
                     }
                 }
 
