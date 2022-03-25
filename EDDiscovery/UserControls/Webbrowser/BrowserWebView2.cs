@@ -47,7 +47,13 @@ namespace EDDiscovery.UserControls.Webbrowser
 
         private void Wv2_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
         {
+            if (!e.IsSuccess)
+            {
+                System.Diagnostics.Trace.WriteLine($"Webview 2 exception {e.InitializationException} {e.InitializationException.StackTrace}");
+            }
+
             LoadResult(e.IsSuccess);
+
             if ( e.IsSuccess )
             {
                 wv2.CoreWebView2.Settings.IsPasswordAutosaveEnabled = true;     // enable password saving
