@@ -481,7 +481,7 @@ namespace EDDiscovery.UserControls
                 j = j.Left(1000);
 
                 string state = $"{item.TravelState} Id {item.Status.ShipID}\r\n"
-                               + $"b[{item.Status.BodyName},{item.Status.BodyType},{item.Status.BodyID}]\r\n"
+                               + $"b[{item.Status.BodyName},{item.Status.BodyType},{item.Status.BodyID},ba {item.Status.BodyApproached}]\r\n"
                                + $"s[{item.Status.StationName},{item.Status.StationType}]\r\n"
                                + $"mc{item.MaterialCommodity}/w{item.Weapons}/s{item.Suits}/l{item.Loadouts}\r\n"
                                + $"b{item.journalEntry.IsBeta}/h{ item.journalEntry.IsHorizons}/o{ item.journalEntry.IsOdyssey}\r\n"
