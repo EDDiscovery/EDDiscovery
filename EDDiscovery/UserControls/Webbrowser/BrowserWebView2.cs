@@ -14,9 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Webbrowser
@@ -34,15 +36,21 @@ namespace EDDiscovery.UserControls.Webbrowser
         // we need to register the LoadResult before we start. If webview2 is not there, we get an immeidate initialisation complete with failed
         // if its there, it takes a while, and needs winforms to run, and then it sends a complete with success
 
-        public void Start()     
-        { 
+        public void Start()
+        {
             webbrowser = wv2 = new WebView2();
             wv2.CoreWebView2InitializationCompleted += Wv2_CoreWebView2InitializationCompleted;
             wv2.NavigationCompleted += Wv2_NavigationCompleted;
             wv2.NavigationStarting += Wv2_NavigationStarting;
-            var task = wv2.EnsureCoreWebView2Async();
+            CreateEnvironment(wv2).ConfigureAwait(false);
             wv2.Visible = false; // hide ugly white until load
            
+        }
+
+        private async Task CreateEnvironment(WebView2 wv2)
+        {
+            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: EDDOptions.Instance.WebView2ProfileDirectory());
+            await wv2.EnsureCoreWebView2Async(env);
         }
 
         private void Wv2_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
