@@ -55,12 +55,13 @@ Source: "EDDiscovery.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "x64\*.*"; DestDir: "{app}\x64"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
 Source: "x86\*.*"; DestDir: "{app}\x86"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
-Source: "runtimes\*.*"; DestDir: "{app}\x86"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
+Source: "runtimes\win-x64\*.*"; DestDir: "{app}\runtimes\win-x64"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
+Source: "runtimes\win-x86\*.*"; DestDir: "{app}\runtimes\win-x86"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
 Source: "*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "eddwebsite.zip"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\Translations\*.tlf"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "..\..\UserControls\Translations\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;                                             
+Source: "..\..\UserControls\Translations\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\Installer\ExtraFiles\EUROCAPS.TTF"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
@@ -72,7 +73,7 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent 
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Messages]
 SelectDirBrowseLabel=To continue, click Next.
@@ -112,7 +113,7 @@ procedure OnClickSetChangeDataFolder(Sender: TObject);
 var installunderpf:Boolean;
 begin
   if ( DataDirPage.Values[0] = 'c:\' ) then begin // if we have a c:\ default marker in there, we are installing to PFs, but they want a custom location, so pick a default one
-      DataDirPage.Values[0] := 'c:\EDDiscoveryData'; 
+      DataDirPage.Values[0] := 'c:\EDDiscoveryData';
   end;
 
   DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'Select location:';
@@ -125,7 +126,7 @@ end;
 
 procedure OnClickSettoAppData(Sender: TObject);
 begin
-  DataDirPage.Values[0] := 'c:\' 
+  DataDirPage.Values[0] := 'c:\'
 
   DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'User Data will be in c:\Users\<user>\AppData\Local\EDDiscovery';
 
@@ -146,7 +147,7 @@ begin
   DataDirIndex := DataDirPage.Add('');
   DataDirPage.Edits[DataDirIndex].Visible := false;
   DataDirPage.Buttons[DataDirIndex].Visible := false;
-  
+
   DataDirPage.Values[0] := 'c:\';    // c:\ means default appdata
 
   InstallChangeAppLocation:=TButton.Create(DataDirPage);
@@ -192,15 +193,15 @@ begin
         DataDirPage.Values[0] := prevdatafolder;
       end
       else begin
-        DataDirPage.Values[0] := WizardDirValue + '\Data'; 
+        DataDirPage.Values[0] := WizardDirValue + '\Data';
       end;
 
       DataDirPage.SubCaptionLabel.Caption := 'Installing under ' + WizardDirValue + #13#10#13#10 + 'User Data will be in ' + DataDirPage.Values[0];
     end;
 
-  end 
+  end
 
-  // after data page, just check we do not have a silly situation 
+  // after data page, just check we do not have a silly situation
   else if ( CurPageID = DataDirPage.ID) Then begin
       if ( installunderpf And WildCardMatch(DataDirPage.Values[0],'*Program Files*')) Then begin
           MsgBox('Cannot store data files in program files location', mbError, mb_Ok);
@@ -233,7 +234,7 @@ begin
   end;
 
   S := 'EDDiscovery will be installed into ' + NewLine + MemoDirInfo + NewLine + NewLine + 'User Data will be saved into ' + NewLine + Space + S + NewLine;
-  
+
   //S := S + ExpandConstant('{username}') + NewLine;
   //S := S + ExpandConstant('{localappdata}') + NewLine;
   //S := S + ExpandConstant('{userappdata}') + NewLine;
@@ -250,20 +251,20 @@ begin
     end else  begin
       Log('** Appdata is ' + DataDirPage.Values[0] + ' no need to write option file ');
     end;
-    
+
   end;
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
-var 
+var
   appdata: String;
 begin
   appdata := GetPreviousData('DataDir','');
-                                      
+
   if ( CurUninstallStep = usUninstall) then begin
     if ( appdata='c:\') then begin
       MsgBox('User data is stored in your c:\Users\<user>\AppData\Local\EDDiscovery folder.' + #13#10#13#10 +'If you want to remove the data, you need to manually delete it', mbConfirmation, MB_OK);
-    end else if ((appdata<>'')) Then begin   
+    end else if ((appdata<>'')) Then begin
       if MsgBox('Also, user data is stored in ' + appdata + #13#10 + 'Do you want to delete all data files in this location?' + #13#10#13#10 + '!!!WARNING your user settings will be lost!!!', mbConfirmation, MB_YESNO) = IDYES then begin
           DelTree( appdata, true, true, true);
       end
@@ -271,10 +272,10 @@ begin
   end;
 end;
 
-// Help: 
+// Help:
 // this thing is written in Dephi.
 // To find class heirachy, best to look at say the CreateInputDirPage return class (TInputDirWizardPage)
-// Then look it up, you can see its properties. 
+// Then look it up, you can see its properties.
 // and you can follow it up the class tree to find more properties and call backs
 // TButtons for instance, has a TButtonControl parent class, TWinControl, to TControl which has left/top etc.
 
