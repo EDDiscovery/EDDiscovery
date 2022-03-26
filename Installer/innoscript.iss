@@ -55,6 +55,7 @@ Source: "EDDiscovery.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "x64\*.*"; DestDir: "{app}\x64"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
 Source: "x86\*.*"; DestDir: "{app}\x86"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
+Source: "runtimes\*.*"; DestDir: "{app}\x86"; Flags: ignoreversion recursesubdirs createallsubdirs replacesameversion
 Source: "*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "eddwebsite.zip"; DestDir: "{app}"; Flags: ignoreversion;
