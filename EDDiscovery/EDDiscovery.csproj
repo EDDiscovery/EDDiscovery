@@ -1183,6 +1183,12 @@
       <Zipfiles Include="$(OutDir)x86\SQLite.Interop.dll">
         <Name>x86\SQLite.Interop.dll</Name>
       </Zipfiles>
+      <Zipfiles Include="$(OutDir)runtimes\win-x64\native\WebView2Loader.dll">
+        <Name>runtimes\win-x64\native\WebView2Loader.dll</Name>
+      </Zipfiles>
+      <Zipfiles Include="$(OutDir)runtimes\win-x86\native\WebView2Loader.dll">
+        <Name>runtimes\win-x86\native\WebView2Loader.dll</Name>
+      </Zipfiles>
     </ItemGroup>
     <Message Text="Portable build Zip up '@(ZipFiles)' -&gt; '$(OutDir)EDDiscovery.Portable.zip'" />
     <Zip OutputFileName="$(OutDir)EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
