@@ -212,13 +212,12 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                var totalmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity); 
-                var mclmats = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
+                var mcllist = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);      // mcl at this point
                 var lastengprog = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he);
 
                 int fdrow = dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 
-                var totals = MaterialCommoditiesRecipe.TotalList(mclmats);                  // start with totals present
+                var totals = MaterialCommoditiesRecipe.TotalList(mcllist);                  // start with totals present
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
@@ -236,7 +235,10 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.EngineeringRecipes[rno]).Item1.ToString();
+                    
+                    // maximum we can make, not taking any, so not changing totals
+
+                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcllist, totals, Recipes.EngineeringRecipes[rno]).Item1.ToString();
                     bool visible = true;
                     
                     if (!(engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All"))
@@ -277,15 +279,15 @@ namespace EDDiscovery.UserControls
                     {
                         Recipes.Recipe r = Recipes.EngineeringRecipes[i];
 
-                        var res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]);
-                        //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
+                        var res = MaterialCommoditiesRecipe.HowManyLeft(mcllist, totals, Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]);
+                      //  System.Diagnostics.Debug.WriteLine($"{i} Recipe {rno} executed {WantedPerRecipe[rno]}; {res.Item2}, {res.Item3} ");
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = WantedPerRecipe[rno].ToString();
                         dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToString();
                         dataGridViewEngineering[PercentageCol.Index, i].Value = res.Item5.ToString("N0");
                         dataGridViewEngineering[NotesCol.Index, i].Value = res.Item3;
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
-                        dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(totalmcl);
+                        dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(mcllist);
                         dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
                         if (res.Item5 >= 100.0)
                             dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridHighlightBack;
@@ -305,13 +307,13 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mclmats);
+                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcllist);
 
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
 
                     foreach (var c in shoppinglist)      // and add new..
                     {
-                        var cur = totalmcl.Find((x) => x.Details == c.Item1.Details);    // may be null
+                        var cur = mcllist.Find((x) => x.Details == c.Item1.Details);    // may be null
 
                         DataGridViewRow r = dataGridViewEngineering.RowTemplate.Clone() as DataGridViewRow;
                         r.CreateCells(dataGridViewEngineering, c.Item1.Details.Name, "", "", "", c.Item2.ToString(), (cur?.Count ?? 0).ToString(), "", c.Item1.Details.Shortname, "");
