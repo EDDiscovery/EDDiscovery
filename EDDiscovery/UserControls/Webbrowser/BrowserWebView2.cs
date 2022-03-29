@@ -36,28 +36,30 @@ namespace EDDiscovery.UserControls.Webbrowser
         // we need to register the LoadResult before we start. If webview2 is not there, we get an immeidate initialisation complete with failed
         // if its there, it takes a while, and needs winforms to run, and then it sends a complete with success
 
-        public void Start()
+        public async void Start()
         {
             webbrowser = wv2 = new WebView2();
             wv2.CoreWebView2InitializationCompleted += Wv2_CoreWebView2InitializationCompleted;
             wv2.NavigationCompleted += Wv2_NavigationCompleted;
             wv2.NavigationStarting += Wv2_NavigationStarting;
-            CreateEnvironment(wv2).ConfigureAwait(false);
             wv2.Visible = false; // hide ugly white until load
-           
-        }
 
-        private async Task CreateEnvironment(WebView2 wv2)
-        {
-            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: EDDOptions.Instance.WebView2ProfileDirectory());
-            await wv2.EnsureCoreWebView2Async(env);
+            try
+            {
+                var env = await CoreWebView2Environment.CreateAsync(userDataFolder: EDDOptions.Instance.WebView2ProfileDirectory());
+                var task = wv2.EnsureCoreWebView2Async(env);
+            }
+            catch (Exception ex )
+            {
+                System.Diagnostics.Trace.WriteLine($"Webview 2 Creating core enviroment failed {ex}");
+                LoadResult(false);
+            }
         }
-
         private void Wv2_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
         {
             if (!e.IsSuccess)
             {
-                System.Diagnostics.Trace.WriteLine($"Webview 2 exception {e.InitializationException} {e.InitializationException.StackTrace}");
+                System.Diagnostics.Trace.WriteLine($"Webview 2 exception {e.InitializationException} {e.InitializationException?.StackTrace}");
             }
 
             LoadResult(e.IsSuccess);
