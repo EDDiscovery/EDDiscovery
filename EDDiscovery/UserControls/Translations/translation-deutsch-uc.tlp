@@ -870,6 +870,7 @@ SECTION UserControlStarList
 .JUMP: "Show/Hide presence of Jumponium Materials" => "Zeige/Verbirg die Präsenz von Sprungmaterialien"
 .valueables: "Show valueable bodies" => "Zeige wertvolle Körper"
 .scanorganics: "Show organic scans" => "Zeige organische Scans"
+.showcodex: "Show codex entries" => "Zeige Codexeinträge"
 
 SECTION UserControlStats
 

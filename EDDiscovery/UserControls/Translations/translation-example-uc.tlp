@@ -926,7 +926,7 @@ SECTION UserControlStarList
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valueable bodies" @
 .scanorganics: "Show organic scans" @
-
+.showcodex: "Show codex entries" @
 
 
 SECTION UserControlStats

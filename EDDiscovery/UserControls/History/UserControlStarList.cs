@@ -735,7 +735,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("atmos", "Show atmospheres of landables".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
             displayfilter.AddStandardOption("rings", "Show rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
             displayfilter.AddStandardOption("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
-            displayfilter.AddStandardOption("codex", "Show codex entries".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Entries);
+            displayfilter.AddStandardOption("codex", "Show codex entries".T(EDTx.UserControlStarList_showcodex), global::EDDiscovery.Icons.Controls.Entries);
             displayfilter.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
             {
