@@ -731,6 +731,7 @@ namespace EDDiscovery
         UserControlStarList_JUMP, // discrete
         UserControlStarList_valueables, // discrete
         UserControlStarList_scanorganics, // discrete
+        UserControlStarList_showcodex, // discrete
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries
