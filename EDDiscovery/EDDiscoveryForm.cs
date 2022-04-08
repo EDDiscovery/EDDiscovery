@@ -631,7 +631,14 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Bindings");
 
             if (actioncontroller.FrontierBindings.FileLoaded != null)
-                LogLine(string.Format("Loaded Bindings {0}", actioncontroller.FrontierBindings.FileLoaded));
+            {
+                if (actioncontroller.FrontierBindings.FileLoaded.HasChars() )
+                    LogLine("Loaded Bindings " + actioncontroller.FrontierBindings.FileLoaded);
+                else
+                    LogLine("No Bindings File Found");
+                if (actioncontroller.FrontierBindings.ErrorList.HasChars())
+                    LogLineHighlight("Bindings Errors " + Environment.NewLine + actioncontroller.FrontierBindings.ErrorList);
+            }
             else
                 LogLine("Frontier bindings did not load");
 
@@ -1267,7 +1274,12 @@ namespace EDDiscovery
         private void toolStripMenuItemListBindings_Click(object sender, EventArgs e)
         {
             ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-            ifrm.Info("Bindings", this.Icon, actioncontroller.FrontierBindings.ListBindings());
+            string t = actioncontroller.FrontierBindings.ListBindings();
+            if (actioncontroller.FrontierBindings.ErrorList.HasChars())
+            {
+                t = actioncontroller.FrontierBindings.ErrorList + Environment.NewLine + t;
+            }
+            ifrm.Info("Bindings", this.Icon, t);
             ifrm.Show(this);
         }
 

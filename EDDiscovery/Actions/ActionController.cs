@@ -146,7 +146,7 @@ namespace EDDiscovery.Actions
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
-            frontierbindings.LoadBindingsFile();
+            frontierbindings.LoadBindingsFile(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Frontier Developments\Elite Dangerous\Options\Bindings"),true);
 
             ErrorList = actionfiles.LoadAllActionFiles(EDDOptions.Instance.ActionsAppDirectory());
 
@@ -165,16 +165,19 @@ namespace EDDiscovery.Actions
         {                                                       // the full system is available at this level of code heirarchy
             foreach (ActionFile af in actionfiles.Enumerable)
             {
-                foreach (ActionProgram p in af.ProgramList.Enumerable)
+                if (af.Enabled)
                 {
-                    foreach (ActionBase b in p.Enumerable)
+                    foreach (ActionProgram p in af.ProgramList.Enumerable)
                     {
-                        if (b.Name == "Key")
+                        foreach (ActionBase b in p.Enumerable)
                         {
-                            string err = ActionKeyED.VerifyBinding(b.UserData, frontierbindings);
-                            if (err.Length > 0)
-                            {   // just a warning.. not a full error, as we don't want to stop someone using the pack due to a missing key mapping
-                                LogLine("Key Mapping Warning: " + string.Format( "{0}:{1}:{2} {3}", af.Name, p.Name, b.LineNumber, err));
+                            if (b.Name == "Key")
+                            {
+                                string err = ActionKeyED.VerifyBinding(b.UserData, frontierbindings);
+                                if (err.Length > 0)
+                                {   // just a warning.. not a full error, as we don't want to stop someone using the pack due to a missing key mapping
+                                    LogLine("Key Mapping Warning: " + string.Format("{0}:{1}:{2} {3}", af.Name, p.Name, b.LineNumber, err));
+                                }
                             }
                         }
                     }
