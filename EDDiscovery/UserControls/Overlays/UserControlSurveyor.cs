@@ -251,7 +251,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Draw {sys?.Name} {sys?.HasCoordinate}");
 
             bool showit = true;
-            if (IsSet(CtrlList.autohide))
+            if (sys != null && IsSet(CtrlList.autohide))
             {
                 // if no focus, or fssmode and override
                 showit = uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode));
