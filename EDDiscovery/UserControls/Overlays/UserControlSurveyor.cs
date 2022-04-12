@@ -250,8 +250,9 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Draw {sys?.Name} {sys?.HasCoordinate}");
 
-            bool showit = true;
-            if (sys != null && IsSet(CtrlList.autohide))
+            bool showit = sys != null;
+
+            if (showit && IsSet(CtrlList.autohide))     // must check showit, otherwise we will get exception due to resize calling this before whole form is up
             {
                 // if no focus, or fssmode and override
                 showit = uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode));
@@ -260,7 +261,7 @@ namespace EDDiscovery.UserControls
             }
 
             // if system and show it..
-            if (sys != null && showit)
+            if (showit)
             {
                 //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Go for draw");
 
