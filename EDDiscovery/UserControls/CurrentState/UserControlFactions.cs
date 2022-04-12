@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
             public void AddCommoditiesSold(int a) { CommoditiesSold = CommoditiesSold ?? 0 - a; }
             public void AddCommoditiesBought(int a) { CommoditiesBought = CommoditiesBought ?? 0 + a; }
             public void AddMaterialsSold(int a) { MaterialsSold = MaterialsSold??0 - a; }
-            public void AddMaterialsBought(int a) { MaterialsBought = MaterialsBought??0 - a; }
+            public void AddMaterialsBought(int a) { MaterialsBought = MaterialsBought??0 + a; }
             public void AddBounties(int a) { Bounties = Bounties??0 + a; }
             public void AddBountyRewardsValue(long a) { BountyRewardsValue = BountyRewardsValue??0 + a; }
             public void AddKillBonds(int a) { KillBonds = KillBonds??0 + a; }
