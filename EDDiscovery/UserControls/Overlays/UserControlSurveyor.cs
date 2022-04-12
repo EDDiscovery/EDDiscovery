@@ -39,6 +39,7 @@ namespace EDDiscovery.UserControls
         const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        EliteDangerousCore.UIEvents.UIMode.MajorModeType uimajormode = EliteDangerousCore.UIEvents.UIMode.MajorModeType.None;
 
         private SavedRouteClass currentRoute = null;
         private string lastsystem;
@@ -209,15 +210,23 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)
         {
             EliteDangerousCore.UIEvents.UIGUIFocus gui = uievent as EliteDangerousCore.UIEvents.UIGUIFocus;
+            EliteDangerousCore.UIEvents.UIMode mode = uievent as EliteDangerousCore.UIEvents.UIMode;
+            bool refresh = false;
 
             if (gui != null)
             {
-                bool refresh = gui.GUIFocus != uistate;
+                refresh = gui.GUIFocus != uistate;
                 uistate = gui.GUIFocus;
 
-                if (refresh)
-                    DrawSystem(last_sys);
             }
+            else if ( mode != null)
+            {
+                refresh = mode.MajorMode != uimajormode;
+                uimajormode = mode.MajorMode;
+            }
+
+            if (refresh)
+                DrawSystem(last_sys);
         }
 
         public override void onControlTextVisibilityChanged(bool newvalue)       // user changed vis, update
@@ -241,9 +250,17 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Draw {sys?.Name} {sys?.HasCoordinate}");
 
-            // if system, and we are in no focus or don't care
-            if (sys != null && (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
-                                || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
+            bool showit = true;
+            if (IsSet(CtrlList.autohide))
+            {
+                // if no focus, or fssmode and override
+                showit = uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode));
+                // and we should be either in None or MainShip..
+                showit = showit && (uimajormode == EliteDangerousCore.UIEvents.UIMode.MajorModeType.None || uimajormode == EliteDangerousCore.UIEvents.UIMode.MajorModeType.MainShip);
+            }
+
+            // if system and show it..
+            if (sys != null && showit)
             {
                 //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Go for draw");
 
