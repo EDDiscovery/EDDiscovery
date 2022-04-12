@@ -294,6 +294,7 @@ SECTION UserControlLedger
 .buttonFilter.ToolTip: "Display entries matching this event type filter" @
 .textBoxFilter.ToolTip: "Search to particular items" @
 .comboBoxTime.ToolTip: "Select the entries by age" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .toolStripMenuItemGotoItem: "Go to entry on grid" @
 .CashTransactions: "Cash Transactions" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @

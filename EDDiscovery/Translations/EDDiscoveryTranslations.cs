@@ -1334,6 +1334,7 @@ namespace EDDiscovery
         UserControlLedger_textBoxFilter_ToolTip, // ToolTip 'Search to particular items'
         UserControlLedger_buttonFilter_ToolTip, // ToolTip 'Display entries matching this event type filter'
         UserControlLedger_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'
+        UserControlLedger_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
         UserControlLedger_CashTransactions, // Cash Transactions
         UserControlLedger_NOLG, // No Ledger available
 
