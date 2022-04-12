@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             public int Reputation { get; private set; }
             public long Credits { get; private set; }
             public Dictionary<string, MissionReward> Rewards { get; }
-            public Dictionary<long, SystemInfluence> Systems { get; }
+            public Dictionary<long, SystemInfluence> SystemsWithInfluence { get; }
             public Stats.FactionInfo FactionStats { get; private set; }
 
             public FactionStatistics(string name)
@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
                 Reputation = 0;
                 Credits = 0;
                 Rewards = new Dictionary<string, MissionReward>();
-                this.Systems = new Dictionary<long, SystemInfluence>();
+                this.SystemsWithInfluence = new Dictionary<long, SystemInfluence>();
                 FactionStats = defstats;
             }
 
@@ -140,10 +140,11 @@ namespace EDDiscovery.UserControls
             public void AddSystemInfluence(long systemAddress, int amount, ulong missionId)
             {
                 SystemInfluence si;
-                if (!Systems.TryGetValue(systemAddress, out si))
+                if (!SystemsWithInfluence.TryGetValue(systemAddress, out si))
                 {
                     si = new SystemInfluence(systemAddress, amount, missionId);
-                    Systems.Add(systemAddress, si);
+                    SystemsWithInfluence.Add(systemAddress, si);
+                    //System.Diagnostics.Debug.WriteLine($"Faction sys influence made for {systemAddress}");
                 }
                 else
                 {
@@ -167,14 +168,14 @@ namespace EDDiscovery.UserControls
             public int? KillBonds { get; private set; }
             public long? BondsRewardsValue { get; private set; }
 
-            public void AddCommoditiesSold(int a) { CommoditiesSold = CommoditiesSold ?? 0 - a; }
-            public void AddCommoditiesBought(int a) { CommoditiesBought = CommoditiesBought ?? 0 + a; }
-            public void AddMaterialsSold(int a) { MaterialsSold = MaterialsSold??0 - a; }
-            public void AddMaterialsBought(int a) { MaterialsBought = MaterialsBought??0 + a; }
-            public void AddBounties(int a) { Bounties = Bounties??0 + a; }
-            public void AddBountyRewardsValue(long a) { BountyRewardsValue = BountyRewardsValue??0 + a; }
-            public void AddKillBonds(int a) { KillBonds = KillBonds??0 + a; }
-            public void AddBondsRewardsValue(long a) { BondsRewardsValue = BondsRewardsValue??0 + a; }
+            public void AddCommoditiesSold(int a) { CommoditiesSold = (CommoditiesSold ?? 0) + a; }
+            public void AddCommoditiesBought(int a) { CommoditiesBought = (CommoditiesBought ?? 0) + a; }
+            public void AddMaterialsSold(int a) { MaterialsSold = (MaterialsSold??0) + a; }
+            public void AddMaterialsBought(int a) { MaterialsBought = (MaterialsBought??0) + a; }
+            public void AddBounties(int a) { Bounties = (Bounties??0) + a; }
+            public void AddBountyRewardsValue(long a) { BountyRewardsValue = (BountyRewardsValue??0) + a; }
+            public void AddKillBonds(int a) { KillBonds = (KillBonds??0) + a; }
+            public void AddBondsRewardsValue(long a) { BondsRewardsValue = (BondsRewardsValue??0) + a; }
         }
 
         private DateTime NextExpiry;
@@ -699,8 +700,12 @@ namespace EDDiscovery.UserControls
 
                 DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowSystemDetail");
 
+                // systems to present
                 var systems = new List<SystemInfo>();
-                foreach (var si in fs.Systems.Values)
+
+                // look thru the influence systems and add it to the list of systems
+
+                foreach (var si in fs.SystemsWithInfluence.Values)
                 {
                     string systemName = null;
                     if (last_he != null)
@@ -715,50 +720,47 @@ namespace EDDiscovery.UserControls
                     systems.Add(new SystemInfo { Name = systemName, Address = si.SystemAddress, Missions = si.Missions, Influence = si.Influence });
                 }
 
+                // find all the history entries with faction
+
                 var list = FilterHistory((x) => (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name) ||
                                                 (x.journalEntry is IStatsJournalEntryBountyOrBond &&
                                                  (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)));
                 foreach (var he in list)
                 {
-                    SystemInfo si = systems.Find(x =>
+                    SystemInfo si = systems.Find(x =>           // do we have this previous entry?
                         (he.System.SystemAddress != null && x.Address == he.System.SystemAddress) ||
                         (he.System.Name != null && x.Name == he.System.Name));
-                    if (si == null)
+
+                    if (si == null)     // no, add it to the system list
                     {
                         si = new SystemInfo { Name = he.System.Name, Address = he.System.SystemAddress };
                         systems.Add(si);
                     }
+
                     if (he.journalEntry is IStatsJournalEntryMatCommod)
                     {
                         var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
                         foreach (var i in items)
                         {
-                            if (he.journalEntry.EventTypeID == JournalTypeEnum.MaterialTrade)
+                            //System.Diagnostics.Debug.WriteLine($"Faction {fs.Name} {he.journalEntry.EventTypeStr} {he.EventTimeUTC} {he.System.Name} count {i.Count}");
+
+                            if (he.journalEntry.EventTypeID == JournalTypeEnum.MarketBuy)       // market buy count is positive
+                                si.AddCommoditiesBought(i.Count);
+                            else if (he.journalEntry.EventTypeID == JournalTypeEnum.MarketSell) // market sell count is number sold, negative
+                                si.AddCommoditiesSold(-i.Count);
+                            else if (he.journalEntry.EventTypeID == JournalTypeEnum.MaterialTrade)
                             {
                                 if (i.Count > 0)
-                                {
                                     si.AddMaterialsBought(i.Count);
-                                }
                                 else if (i.Count < 0)
-                                {
-                                    si.AddMaterialsSold(i.Count);
-                                }
-                            }
-                            else
-                            {
-                                if (i.Count > 0)
-                                {
-                                    si.AddCommoditiesBought(i.Count);
-                                }
-                                else if (i.Count < 0)
-                                {
-                                    si.AddCommoditiesSold(i.Count);
-                                }
+                                    si.AddMaterialsSold(-i.Count);
                             }
                         }
                     }
                     else
                     {
+                        //System.Diagnostics.Debug.WriteLine($"Faction {fs.Name} Journal entry {he.journalEntry.EventTypeStr} {he.System.Name}");
+
                         if (he.journalEntry.EventTypeID == JournalTypeEnum.Bounty)
                         {
                             si.AddBounties(1);
