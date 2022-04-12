@@ -723,8 +723,9 @@ namespace EDDiscovery.UserControls
                 // find all the history entries with faction
 
                 var list = FilterHistory((x) => (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name) ||
-                                                (x.journalEntry is IStatsJournalEntryBountyOrBond &&
-                                                 (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)));
+                        (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)) ||
+                        (x.journalEntry.EventTypeID == JournalTypeEnum.MissionCompleted && (x.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionCompleted).Faction == fs.Name)
+                        );
                 foreach (var he in list)
                 {
                     SystemInfo si = systems.Find(x =>           // do we have this previous entry?
@@ -742,24 +743,25 @@ namespace EDDiscovery.UserControls
                         var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
                         foreach (var i in items)
                         {
-                            //System.Diagnostics.Debug.WriteLine($"Faction {fs.Name} {he.journalEntry.EventTypeStr} {he.EventTimeUTC} {he.System.Name} count {i.Count}");
-
-                            if (he.journalEntry.EventTypeID == JournalTypeEnum.MarketBuy)       // market buy count is positive
-                                si.AddCommoditiesBought(i.Count);
-                            else if (he.journalEntry.EventTypeID == JournalTypeEnum.MarketSell) // market sell count is number sold, negative
-                                si.AddCommoditiesSold(-i.Count);
-                            else if (he.journalEntry.EventTypeID == JournalTypeEnum.MaterialTrade)
+                            if (he.journalEntry.EventTypeID == JournalTypeEnum.MaterialTrade)       // material trade is only counter for mats
                             {
                                 if (i.Count > 0)
                                     si.AddMaterialsBought(i.Count);
                                 else if (i.Count < 0)
                                     si.AddMaterialsSold(-i.Count);
                             }
+                            else
+                            {
+                                if (i.Count > 0)
+                                    si.AddCommoditiesBought(i.Count);
+                                else
+                                    si.AddCommoditiesSold(-i.Count);        // value is negative, invert
+                            }
                         }
                     }
                     else
                     {
-                        //System.Diagnostics.Debug.WriteLine($"Faction {fs.Name} Journal entry {he.journalEntry.EventTypeStr} {he.System.Name}");
+                      //  System.Diagnostics.Debug.WriteLine($"Faction {fs.Name} Journal entry {he.journalEntry.EventTypeStr} {he.System.Name}");
 
                         if (he.journalEntry.EventTypeID == JournalTypeEnum.Bounty)
                         {
