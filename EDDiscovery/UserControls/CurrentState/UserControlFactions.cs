@@ -723,8 +723,9 @@ namespace EDDiscovery.UserControls
                 // find all the history entries with faction
 
                 var list = FilterHistory((x) => (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name) ||
-                        (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)) ||
-                        (x.journalEntry.EventTypeID == JournalTypeEnum.MissionCompleted && (x.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionCompleted).Faction == fs.Name)
+                        (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)) 
+                        //||
+                        //(x.journalEntry.EventTypeID == JournalTypeEnum.MissionCompleted && (x.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionCompleted).Faction == fs.Name)
                         );
                 foreach (var he in list)
                 {
