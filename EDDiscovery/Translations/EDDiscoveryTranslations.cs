@@ -1467,6 +1467,7 @@ namespace EDDiscovery
         UserControlFactions_KillBondVictim, // Column Header 'Kill Bonds Victim'
         UserControlFactions_KillBondsAward, // Column Header 'Kill Bonds Awarded'
         UserControlFactions_KillBondsValue, // Column Header 'Kill Bonds Value'
+        UserControlFactions_CartoValue, // Column Header 'Cartographic Value'
         UserControlFactions_colInfo, // Column Header 'Other Info'
         UserControlFactions_labelTo, // Control 'to'
         UserControlFactions_showMissionsForFactionToolStripMenuItem, // ToolStrip control 'Show missions for faction'

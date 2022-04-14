@@ -152,32 +152,6 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
-        private class SystemInfo
-        {
-            public string Name { get; set; }
-            public long? Address { get; set; }
-            public int? Influence { get; set; }
-            public int? Missions { get; set; }
-            public int? CommoditiesSold { get; private set; }
-            public int? CommoditiesBought { get; private set; }
-            public int? MaterialsSold { get; private set; }
-            public int? MaterialsBought { get; private set; }
-            public int? Bounties { get; private set; }
-            public long? BountyRewardsValue { get; private set; }
-            public int? KillBonds { get; private set; }
-            public long? BondsRewardsValue { get; private set; }
-
-            public void AddCommoditiesSold(int a) { CommoditiesSold = (CommoditiesSold ?? 0) + a; }
-            public void AddCommoditiesBought(int a) { CommoditiesBought = (CommoditiesBought ?? 0) + a; }
-            public void AddMaterialsSold(int a) { MaterialsSold = (MaterialsSold??0) + a; }
-            public void AddMaterialsBought(int a) { MaterialsBought = (MaterialsBought??0) + a; }
-            public void AddBounties(int a) { Bounties = (Bounties??0) + a; }
-            public void AddBountyRewardsValue(long a) { BountyRewardsValue = (BountyRewardsValue??0) + a; }
-            public void AddKillBonds(int a) { KillBonds = (KillBonds??0) + a; }
-            public void AddBondsRewardsValue(long a) { BondsRewardsValue = (BondsRewardsValue??0) + a; }
-        }
-
         private DateTime NextExpiry;
         private HistoryEntry last_he = null;
 
@@ -212,7 +186,7 @@ namespace EDDiscovery.UserControls
             dataGridViewFactions.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewFactions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
 
-            var enumlist = new Enum[] { EDTx.UserControlFactions_colFaction, EDTx.UserControlFactions_colMissions, EDTx.UserControlFactions_colInfluence, EDTx.UserControlFactions_colReputation, EDTx.UserControlFactions_colMissionCredits, EDTx.UserControlFactions_CBought, EDTx.UserControlFactions_CSold, EDTx.UserControlFactions_CProfit, EDTx.UserControlFactions_MBought, EDTx.UserControlFactions_MSold, EDTx.UserControlFactions_CrimeCommitted, EDTx.UserControlFactions_BountyKills, EDTx.UserControlFactions_BountyValue, EDTx.UserControlFactions_BountyRewardsValue, EDTx.UserControlFactions_Interdicted, EDTx.UserControlFactions_Interdiction, EDTx.UserControlFactions_KillBondVictim, EDTx.UserControlFactions_KillBondsAward, EDTx.UserControlFactions_KillBondsValue, EDTx.UserControlFactions_colInfo, EDTx.UserControlFactions_labelTo };
+            var enumlist = new Enum[] { EDTx.UserControlFactions_colFaction, EDTx.UserControlFactions_colMissions, EDTx.UserControlFactions_colInfluence, EDTx.UserControlFactions_colReputation, EDTx.UserControlFactions_colMissionCredits, EDTx.UserControlFactions_CBought, EDTx.UserControlFactions_CSold, EDTx.UserControlFactions_CProfit, EDTx.UserControlFactions_MBought, EDTx.UserControlFactions_MSold, EDTx.UserControlFactions_CrimeCommitted, EDTx.UserControlFactions_BountyKills, EDTx.UserControlFactions_BountyValue, EDTx.UserControlFactions_BountyRewardsValue, EDTx.UserControlFactions_Interdicted, EDTx.UserControlFactions_Interdiction, EDTx.UserControlFactions_KillBondVictim, EDTx.UserControlFactions_KillBondsAward, EDTx.UserControlFactions_KillBondsValue, EDTx.UserControlFactions_colInfo, EDTx.UserControlFactions_labelTo, EDTx.UserControlFactions_CartoValue };
             var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem, EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, EDTx.UserControlFactions_showFactionSystemDetailToolStripMenuItem };
             var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTime_ToolTip, EDTx.UserControlFactions_endDateTime_ToolTip };
 
@@ -293,13 +267,15 @@ namespace EDDiscovery.UserControls
 
             dataGridViewFactions.Rows.Clear();
 
-            List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
-
             DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
             DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
 
+            // this accumulates factions info
             var factionslist = new Dictionary<string, FactionStatistics>();
 
+            // first do the mission lists and accumulate into factionslist
+
+            List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
             if (ml != null)
             {
                 foreach (MissionState ms in ml)
@@ -312,7 +288,7 @@ namespace EDDiscovery.UserControls
                     {
                         var faction = ms.Mission.Faction;
                         FactionStatistics factionStats;
-                        if (!factionslist.TryGetValue(faction, out factionStats))
+                        if (!factionslist.TryGetValue(faction, out factionStats))   // is faction present? if not create
                         {
                             factionStats = new FactionStatistics(faction);
                             factionslist.Add(faction, factionStats);
@@ -373,9 +349,11 @@ namespace EDDiscovery.UserControls
                 }
             }
 
+            // now either pick up the factioninfo stats accumulated by history (if no date range) or recalculate if date range
+
             Dictionary<string,Stats.FactionInfo> factioninfo = null;
 
-            if (startDateTime.Checked || endDateTime.Checked)                           // if we have a date range, can't rely on stats accumulated automatically
+            if (startDateTime.Checked || endDateTime.Checked)                           
             {
                 Stats stats = new Stats();      // reprocess this list completely
 
@@ -391,11 +369,13 @@ namespace EDDiscovery.UserControls
                 factioninfo = discoveryform.history.GetStatsAtGeneration(last_he?.Statistics ?? 0);
             }
 
+            // if we have some stats on factions accumulated via the history, add to the faction list
+
             if (factioninfo != null)
             {
                 foreach (var fkvp in factioninfo)
                 {
-                    if (!factionslist.TryGetValue(fkvp.Value.Faction, out FactionStatistics factionStats))
+                    if (!factionslist.TryGetValue(fkvp.Value.Faction, out FactionStatistics factionStats))  // is faction present? if not create
                     {
                         factionStats = new FactionStatistics(fkvp.Value.Faction);
                         factionslist.Add(fkvp.Value.Faction, factionStats);
@@ -404,6 +384,8 @@ namespace EDDiscovery.UserControls
                     factionslist[fkvp.Value.Faction].AddFactionStats(fkvp.Value);
                 }
             }
+
+            // now update the grid with faction info
 
             if (factionslist.Count > 0)
             {
@@ -433,6 +415,7 @@ namespace EDDiscovery.UserControls
                                         fs.FactionStats.BountyKill.ToString("N0"), fs.FactionStats.BountyRewards.ToString("N0"), fs.FactionStats.BountyRewardsValue.ToString("N0"),
                                         fs.FactionStats.Interdicted.ToString("N0"), fs.FactionStats.Interdiction.ToString("N0"),
                                         fs.FactionStats.KillBondAwardAsVictimFaction.ToString("N0"), fs.FactionStats.KillBondAwardAsAwaringFaction.ToString("N0"), fs.FactionStats.KillBondAwardAsAwaringFactionValue.ToString("N0"),
+                                        fs.FactionStats.CartographicDataSold.ToString("N0"),
                                         info };
 
                     var row = dataGridViewFactions.RowTemplate.Clone() as DataGridViewRow;
@@ -549,6 +532,8 @@ namespace EDDiscovery.UserControls
                 DGVSaveColumnLayout(mluc.dataGridView, "ShowMission");
             }
         }
+
+        // From last_he, and using the start/end time if required, filter history before this date, with the predicate
 
         private List<HistoryEntry> FilterHistory(Predicate<HistoryEntry> where)
         {
@@ -673,6 +658,35 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private class SystemInfo
+        {
+            public string Name { get; set; }
+            public long? Address { get; set; }
+            public int? Influence { get; set; }
+            public int? Missions { get; set; }
+            public int? CommoditiesSold { get; private set; }
+            public int? CommoditiesBought { get; private set; }
+            public int? MaterialsSold { get; private set; }
+            public int? MaterialsBought { get; private set; }
+            public int? Bounties { get; private set; }
+            public long? BountyRewardsValue { get; private set; }
+            public int? KillBonds { get; private set; }
+            public long? BondsRewardsValue { get; private set; }
+            public long? CartographicValue { get; private set; }
+
+            public void AddCommoditiesSold(int a) { CommoditiesSold = (CommoditiesSold ?? 0) + a; }
+            public void AddCommoditiesBought(int a) { CommoditiesBought = (CommoditiesBought ?? 0) + a; }
+            public void AddMaterialsSold(int a) { MaterialsSold = (MaterialsSold ?? 0) + a; }
+            public void AddMaterialsBought(int a) { MaterialsBought = (MaterialsBought ?? 0) + a; }
+            public void AddBounties(int a) { Bounties = (Bounties ?? 0) + a; }
+            public void AddBountyRewardsValue(long a) { BountyRewardsValue = (BountyRewardsValue ?? 0) + a; }
+            public void AddKillBonds(int a) { KillBonds = (KillBonds ?? 0) + a; }
+            public void AddBondsRewardsValue(long a) { BondsRewardsValue = (BondsRewardsValue ?? 0) + a; }
+            public void AddCartographicValue(long a) { CartographicValue = (CartographicValue ?? 0) + a; }
+        }
+
+
+
         private void showFactionSystemDetailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridViewFactions.RightClickRow >= 0)
@@ -691,7 +705,8 @@ namespace EDDiscovery.UserControls
                                                     "Bounties".T(EDTx.UserControlFactions_BountiesPlural), 50, 5,
                                                     "Rewards".T(EDTx.UserControlFactions_RewardsPlural), 60, 5,
                                                     "Bonds".T(EDTx.UserControlFactions_BondsPlural), 50, 5,
-                                                    "Rewards".T(EDTx.UserControlFactions_RewardsPlural), 60, 5);
+                                                    "Rewards".T(EDTx.UserControlFactions_RewardsPlural), 60, 5,
+                                                    "Cartographic Value".T(EDTx.UserControlFactions_CartoValue), 60, 5);
                 dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 1) ev.SortDataGridViewColumnNumeric(); };
                 dgvpanel.DataGrid.RowHeadersVisible = false;
                 dgvpanel.DataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -720,13 +735,14 @@ namespace EDDiscovery.UserControls
                     systems.Add(new SystemInfo { Name = systemName, Address = si.SystemAddress, Missions = si.Missions, Influence = si.Influence });
                 }
 
-                // find all the history entries with faction
+                // find all the history entries with faction, taking into account start/end date, and last_he position
 
-                var list = FilterHistory((x) => (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name) ||
-                        (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)) 
-                        //||
-                        //(x.journalEntry.EventTypeID == JournalTypeEnum.MissionCompleted && (x.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionCompleted).Faction == fs.Name)
+                var list = FilterHistory((x) =>
+                        (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name) ||  // he's with changes in stats due to MatCommod trading
+                        (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name) ) ||  // he's with Bountry/bond
+                        ((x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData || x.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData) && x.StationFaction == fs.Name)// he's for exploration
                         );
+
                 foreach (var he in list)
                 {
                     SystemInfo si = systems.Find(x =>           // do we have this previous entry?
@@ -739,7 +755,7 @@ namespace EDDiscovery.UserControls
                         systems.Add(si);
                     }
 
-                    if (he.journalEntry is IStatsJournalEntryMatCommod)
+                    if (he.journalEntry is IStatsJournalEntryMatCommod)         // is this a material or commodity trade?
                     {
                         var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
                         foreach (var i in items)
@@ -752,7 +768,7 @@ namespace EDDiscovery.UserControls
                                     si.AddMaterialsSold(-i.Count);
                             }
                             else
-                            {
+                            {                                               // all others are commds
                                 if (i.Count > 0)
                                     si.AddCommoditiesBought(i.Count);
                                 else
@@ -774,6 +790,14 @@ namespace EDDiscovery.UserControls
                             si.AddKillBonds(1);
                             si.AddBondsRewardsValue((he.journalEntry as IStatsJournalEntryBountyOrBond).FactionReward(fs.Name));
                         }
+                        else if (he.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData)
+                        {
+                            si.AddCartographicValue((he.journalEntry as EliteDangerousCore.JournalEvents.JournalSellExplorationData).TotalEarnings);
+                        }
+                        else if (he.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData)
+                        {
+                            si.AddCartographicValue((he.journalEntry as EliteDangerousCore.JournalEvents.JournalMultiSellExplorationData).TotalEarnings);
+                        }
                     }
                 }
 
@@ -790,7 +814,9 @@ namespace EDDiscovery.UserControls
                                         system.Bounties?.ToString("N0"),
                                         system.BountyRewardsValue?.ToString("N0"),
                                         system.KillBonds?.ToString("N0"),
-                                        system.BondsRewardsValue?.ToString("N0") };
+                                        system.BondsRewardsValue?.ToString("N0"),
+                                        system.CartographicValue?.ToString("N0"),
+                                    };
                     var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
                     row.CreateCells(dgvpanel.DataGrid, rowobj);
                     dgvpanel.DataGrid.Rows.Add(row);

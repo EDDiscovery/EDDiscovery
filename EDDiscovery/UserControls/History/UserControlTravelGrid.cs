@@ -453,48 +453,47 @@ namespace EDDiscovery.UserControls
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
-            item.FillInformation(out string EventDescription, out string EventDetailedInfo);
-            string note = (item.SNC != null) ? item.SNC.Note : "";
-
-            if (search.HasChars())
-            {
-                string timestr = time.ToString();
-                int rown = EDDConfig.Instance.OrderRowsInverted ? item.EntryNumber : (discoveryform.history.Count - item.EntryNumber + 1);
-                string entryrow = rown.ToStringInvariant();
-                bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                item.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                EventDescription.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                note.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                entryrow.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
-                if (!matched)
-                    return null;
-            }
-
-            var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
+            string colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(item.EventTimeUTC).ToString();
+            string colIcon = "";
+            string colDescription = item.EventSummary;
+            item.FillInformation(out string colInformation, out string eventDetailedInfo);
+            string colNote = (item.SNC != null) ? item.SNC.Note : "";
 
             if (debugmode)
             {
-                var js = item.journalEntry.GetJsonCloned();
-                js.Remove("event", "timestamp");
-                string j = js.ToString().Replace(",\"", ", \"");
-                j = j.Left(1000);
-
-                string state = $"{item.TravelState} Id {item.Status.ShipID}\r\n"
+                colIcon = $"{item.TravelState} Id {item.Status.ShipID}\r\n"
+                               + $"st[{item.System.Name}]\r\n"
                                + $"b[{item.Status.BodyName},{item.Status.BodyType},{item.Status.BodyID},ba {item.Status.BodyApproached}]\r\n"
                                + $"s[{item.Status.StationName},{item.Status.StationType}]\r\n"
                                + $"mc{item.MaterialCommodity}/w{item.Weapons}/s{item.Suits}/l{item.Loadouts}\r\n"
                                + $"b{item.journalEntry.IsBeta}/h{ item.journalEntry.IsHorizons}/o{ item.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{item.Status.BookedTaxi} d {item.Status.BookedDropship}";
 
-                string eventname = item.journalEntry.EventTypeStr.SplitCapsWord() == item.EventSummary ? item.EventSummary : (item.journalEntry.EventTypeStr + Environment.NewLine + item.EventSummary);
+                colDescription = item.journalEntry.EventTypeStr.SplitCapsWord() == item.EventSummary ? item.EventSummary : (item.journalEntry.EventTypeStr + Environment.NewLine + item.EventSummary);
 
-                rw.CreateCells(dataGridViewTravel, time, state, eventname, EventDescription, j);
+                var js = item.journalEntry.GetJsonCloned();
+                js.Remove("event", "timestamp");
+                string j = js.ToString().Replace(",\"", ", \"");
+                colNote = j.Left(1000);
             }
-            else
+
+            if (search.HasChars())
             {
-                rw.CreateCells(dataGridViewTravel, time, "", item.EventSummary, EventDescription, note);
+                int rown = EDDConfig.Instance.OrderRowsInverted ? item.EntryNumber : (discoveryform.history.Count - item.EntryNumber + 1);
+                string entryrow = rown.ToStringInvariant();
+                bool matched = entryrow.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colTime.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colIcon.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colDescription.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colInformation.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colNote.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                                
+                if (!matched)
+                    return null;
             }
+
+            var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
+            rw.CreateCells(dataGridViewTravel, colTime, colIcon, colDescription, colInformation, colNote);
 
             rw.Tag = item;  //tag on row
 
@@ -503,7 +502,7 @@ namespace EDDiscovery.UserControls
             else if ( item.EntryType == JournalTypeEnum.FSDJump || item.EntryType == JournalTypeEnum.CarrierJump)
                 rw.Cells[2].Style.ForeColor = (item.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
-            string tip = item.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
+            string tip = item.EventSummary + Environment.NewLine + colInformation + Environment.NewLine + eventDetailedInfo;
             if ( tip.Length>2000)
                 tip = tip.Substring(0, 2000);
 

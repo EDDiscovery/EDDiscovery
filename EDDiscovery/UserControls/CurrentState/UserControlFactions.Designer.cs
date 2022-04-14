@@ -62,6 +62,7 @@
             this.KillBondVictim = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.KillBondsAward = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.KillBondsValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CartoValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datePanel.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -228,6 +229,7 @@
             this.dataGridViewFactions.AllowUserToDeleteRows = false;
             this.dataGridViewFactions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewFactions.ColumnReorder = true;
             this.dataGridViewFactions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colFaction,
             this.colMissions,
@@ -248,6 +250,7 @@
             this.KillBondVictim,
             this.KillBondsAward,
             this.KillBondsValue,
+            this.CartoValue,
             this.colInfo});
             this.dataGridViewFactions.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewFactions.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -271,7 +274,6 @@
             this.colFaction.MinimumWidth = 8;
             this.colFaction.Name = "colFaction";
             this.colFaction.ReadOnly = true;
-            this.colFaction.ToolTipText = "Mission giver faction";
             // 
             // colMissions
             // 
@@ -280,7 +282,6 @@
             this.colMissions.MinimumWidth = 8;
             this.colMissions.Name = "colMissions";
             this.colMissions.ReadOnly = true;
-            this.colMissions.ToolTipText = "Number of missions";
             // 
             // colInfluence
             // 
@@ -289,7 +290,6 @@
             this.colInfluence.MinimumWidth = 8;
             this.colInfluence.Name = "colInfluence";
             this.colInfluence.ReadOnly = true;
-            this.colInfluence.ToolTipText = "Faction influence gained";
             // 
             // colReputation
             // 
@@ -298,7 +298,6 @@
             this.colReputation.MinimumWidth = 8;
             this.colReputation.Name = "colReputation";
             this.colReputation.ReadOnly = true;
-            this.colReputation.ToolTipText = "Faction reputation gained";
             // 
             // colMissionCredits
             // 
@@ -307,7 +306,6 @@
             this.colMissionCredits.MinimumWidth = 8;
             this.colMissionCredits.Name = "colMissionCredits";
             this.colMissionCredits.ReadOnly = true;
-            this.colMissionCredits.ToolTipText = "Mission Credits earned";
             // 
             // CBought
             // 
@@ -316,7 +314,6 @@
             this.CBought.MinimumWidth = 8;
             this.CBought.Name = "CBought";
             this.CBought.ReadOnly = true;
-            this.CBought.ToolTipText = "Commodities Bought";
             // 
             // CSold
             // 
@@ -324,7 +321,6 @@
             this.CSold.HeaderText = "Commds -";
             this.CSold.MinimumWidth = 8;
             this.CSold.Name = "CSold";
-            this.CSold.ToolTipText = "Commodities Sold";
             // 
             // CProfit
             // 
@@ -340,7 +336,6 @@
             this.MBought.MinimumWidth = 8;
             this.MBought.Name = "MBought";
             this.MBought.ReadOnly = true;
-            this.MBought.ToolTipText = "Materials Acquired";
             // 
             // MSold
             // 
@@ -349,7 +344,6 @@
             this.MSold.MinimumWidth = 8;
             this.MSold.Name = "MSold";
             this.MSold.ReadOnly = true;
-            this.MSold.ToolTipText = "Materials Given";
             // 
             // CrimeCommitted
             // 
@@ -357,7 +351,6 @@
             this.CrimeCommitted.HeaderText = "Crimes Committed";
             this.CrimeCommitted.MinimumWidth = 8;
             this.CrimeCommitted.Name = "CrimeCommitted";
-            this.CrimeCommitted.ToolTipText = "How many times you\'ve been naughty";
             // 
             // BountyKills
             // 
@@ -366,7 +359,6 @@
             this.BountyKills.MinimumWidth = 8;
             this.BountyKills.Name = "BountyKills";
             this.BountyKills.ReadOnly = true;
-            this.BountyKills.ToolTipText = "Number of bounty kills";
             // 
             // BountyValue
             // 
@@ -375,7 +367,6 @@
             this.BountyValue.MinimumWidth = 8;
             this.BountyValue.Name = "BountyValue";
             this.BountyValue.ReadOnly = true;
-            this.BountyValue.ToolTipText = "Number of bounty rewards";
             // 
             // BountyRewardsValue
             // 
@@ -384,7 +375,6 @@
             this.BountyRewardsValue.MinimumWidth = 8;
             this.BountyRewardsValue.Name = "BountyRewardsValue";
             this.BountyRewardsValue.ReadOnly = true;
-            this.BountyRewardsValue.ToolTipText = "Value of bounty rewards";
             // 
             // Interdicted
             // 
@@ -393,7 +383,6 @@
             this.Interdicted.MinimumWidth = 8;
             this.Interdicted.Name = "Interdicted";
             this.Interdicted.ReadOnly = true;
-            this.Interdicted.ToolTipText = "How many times you\'ve been pulled over";
             // 
             // Interdiction
             // 
@@ -402,7 +391,6 @@
             this.Interdiction.MinimumWidth = 8;
             this.Interdiction.Name = "Interdiction";
             this.Interdiction.ReadOnly = true;
-            this.Interdiction.ToolTipText = "Number of times you\'ve interdicted someone";
             // 
             // KillBondVictim
             // 
@@ -411,7 +399,6 @@
             this.KillBondVictim.MinimumWidth = 8;
             this.KillBondVictim.Name = "KillBondVictim";
             this.KillBondVictim.ReadOnly = true;
-            this.KillBondVictim.ToolTipText = "Number of kill bonds with faction as a victim";
             // 
             // KillBondsAward
             // 
@@ -420,7 +407,6 @@
             this.KillBondsAward.MinimumWidth = 8;
             this.KillBondsAward.Name = "KillBondsAward";
             this.KillBondsAward.ReadOnly = true;
-            this.KillBondsAward.ToolTipText = "Number of kill bonds with faction awarded";
             // 
             // KillBondsValue
             // 
@@ -429,7 +415,13 @@
             this.KillBondsValue.MinimumWidth = 8;
             this.KillBondsValue.Name = "KillBondsValue";
             this.KillBondsValue.ReadOnly = true;
-            this.KillBondsValue.ToolTipText = "Value of kill bonds awarded by the faction";
+            // 
+            // CartoValue
+            // 
+            this.CartoValue.HeaderText = "Cartographic Value";
+            this.CartoValue.MinimumWidth = 8;
+            this.CartoValue.Name = "CartoValue";
+            this.CartoValue.ReadOnly = true;
             // 
             // colInfo
             // 
@@ -438,7 +430,6 @@
             this.colInfo.MinimumWidth = 8;
             this.colInfo.Name = "colInfo";
             this.colInfo.ReadOnly = true;
-            this.colInfo.ToolTipText = "Other Information";
             // 
             // UserControlFactions
             // 
@@ -494,6 +485,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondVictim;
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondsAward;
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondsValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CartoValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn colInfo;
     }
 }

@@ -192,7 +192,6 @@ namespace EDDiscovery.UserControls
             this.colName.MinimumWidth = 20;
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
-            this.colName.ToolTipText = "Body name";
             // 
             // colClass
             // 
@@ -201,7 +200,6 @@ namespace EDDiscovery.UserControls
             this.colClass.MinimumWidth = 20;
             this.colClass.Name = "colClass";
             this.colClass.ReadOnly = true;
-            this.colClass.ToolTipText = "Body class";
             // 
             // colDistance
             // 
@@ -210,7 +208,6 @@ namespace EDDiscovery.UserControls
             this.colDistance.MinimumWidth = 20;
             this.colDistance.Name = "colDistance";
             this.colDistance.ReadOnly = true;
-            this.colDistance.ToolTipText = "Body relative distance";
             // 
             // colBriefing
             // 
@@ -219,7 +216,6 @@ namespace EDDiscovery.UserControls
             this.colBriefing.MinimumWidth = 20;
             this.colBriefing.Name = "colBriefing";
             this.colBriefing.ReadOnly = true;
-            this.colBriefing.ToolTipText = "Body detailed information";
             // 
             // vScrollBarCustom2
             // 
