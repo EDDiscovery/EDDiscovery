@@ -1186,6 +1186,8 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" @
 
+.SearchTerms: "system:body:station" => "system:body:station:stationfaction" 
+
 //.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
 //.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 

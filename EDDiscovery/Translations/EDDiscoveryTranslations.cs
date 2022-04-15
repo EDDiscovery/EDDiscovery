@@ -706,6 +706,8 @@ namespace EDDiscovery
         UserControlTravelGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
         UserControlTravelGrid_Remove, // Confirm you wish to remove this entry
 
+        UserControlTravelGrid_SearchTerms,      // you must define this one fully if you include it
+
         UserControlStarList_ColumnTime, // Column Header 'Last Visit'
         UserControlStarList_ColumnSystem, // Column Header 'System'
         UserControlStarList_ColumnVisits, // Column Header 'Visits'

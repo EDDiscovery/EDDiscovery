@@ -71,6 +71,8 @@ namespace EDDiscovery.UserControls
         private const string dbVisitedColour = "VisitedColour";
         private const string dbDebugMode = "DebugMode";
 
+        private string searchterms = "system:body:station:stationfaction";
+
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
@@ -176,6 +178,9 @@ namespace EDDiscovery.UserControls
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
+
+            if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it
+                searchterms = "".TxID(EDTx.UserControlTravelGrid_SearchTerms);
         }
 
         public override void LoadLayout()
@@ -259,13 +264,14 @@ namespace EDDiscovery.UserControls
                 chunks.Add(chunk);
             }
 
-            string filtertext = textBoxSearch.Text;
+            var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
+
             List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
             Outlining outlining = null;     // only outline if in normal time decend more with no filter text
             bool rollupscans = false;
             int rollupolder = 0;
-            if (filtertext.IsEmpty() && (sortcol < 0 || (sortcol == 0 && sortorder == SortOrder.Descending)) && outliningOnOffToolStripMenuItem.Checked)
+            if (!sst.Enabled && (sortcol < 0 || (sortcol == 0 && sortorder == SortOrder.Descending)) && outliningOnOffToolStripMenuItem.Checked)
             {
                 outlining = new Outlining();
                 rollupscans = scanEventsOutliningOnOffToolStripMenuItem.Checked;
@@ -288,7 +294,7 @@ namespace EDDiscovery.UserControls
                 List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
                 foreach (var item in chunk)
                 {
-                    var row = CreateHistoryRow(item, filtertext,debugmode);
+                    var row = CreateHistoryRow(item, sst,debugmode);
 
                     if (row != null)
                     {
@@ -316,7 +322,7 @@ namespace EDDiscovery.UserControls
                     bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
                     foreach (var item in chunk)
                     {
-                        var row = CreateHistoryRow(item, filtertext, debugmode);
+                        var row = CreateHistoryRow(item, sst, debugmode);
                         if (row != null)
                         {
                             //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
@@ -419,7 +425,8 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                var row = CreateHistoryRow(he, textBoxSearch.Text, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
+                var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
+                var row = CreateHistoryRow(he, sst, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
                 if (row != null)
                     dataGridViewTravel.Rows.Insert(0, row);
                 else
@@ -449,7 +456,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search, bool debugmode)
+        private DataGridViewRow CreateHistoryRow(HistoryEntry item, BaseUtils.StringSearchTerms search, bool debugmode)
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
@@ -477,17 +484,31 @@ namespace EDDiscovery.UserControls
                 colNote = j.Left(1000);
             }
 
-            if (search.HasChars())
+            if (search.Enabled)
             {
-                int rown = EDDConfig.Instance.OrderRowsInverted ? item.EntryNumber : (discoveryform.history.Count - item.EntryNumber + 1);
-                string entryrow = rown.ToStringInvariant();
-                bool matched = entryrow.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                colTime.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                colIcon.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                colDescription.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                colInformation.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                colNote.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
-                                
+                bool matched = false;
+
+                if (search.Terms[0] != null)
+                {
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? item.EntryNumber : (discoveryform.history.Count - item.EntryNumber + 1);
+                    string entryrow = rown.ToStringInvariant();
+                    matched = entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colTime.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colIcon.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colDescription.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colInformation.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                colNote.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0;
+                }
+
+                if (!matched && search.Terms[1] != null)       // system
+                    matched = item.System.Name.WildCardMatch(search.Terms[1],true);
+                if (!matched && search.Terms[2] != null)       // body
+                    matched = item.Status.BodyName?.WildCardMatch(search.Terms[2],true) ?? false;
+                if (!matched && search.Terms[3] != null)       // station
+                    matched = item.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
+                if (!matched && search.Terms[4] != null)       // stationfaction
+                    matched = item.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
+
                 if (!matched)
                     return null;
             }
