@@ -868,7 +868,7 @@ SECTION UserControlStarList
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
 .OB: "{0} Other bodies" @
 .JUMP: "Show/Hide presence of Jumponium Materials" @
-.valueables: "Show valueable bodies" @
+.valueables: "Show valuable bodies" @
 .scanorganics: "Show organic scans" @
 
 SECTION UserControlStats
