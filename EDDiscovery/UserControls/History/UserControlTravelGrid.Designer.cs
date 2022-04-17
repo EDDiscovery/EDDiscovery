@@ -234,7 +234,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
             this.textBoxSearch.TabIndex = 1;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxSearch, "Enter text to search in any fields for an item");
+            this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
             // 
@@ -312,7 +312,7 @@ namespace EDDiscovery.UserControls
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 576);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 554);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem

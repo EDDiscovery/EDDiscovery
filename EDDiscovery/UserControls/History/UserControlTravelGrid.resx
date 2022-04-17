@@ -128,6 +128,9 @@
         EQuAr3F3bnpms2RxizZZnKJUFjF6ysLMgZ8B6KDBfYNZaylsAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="textBoxSearch.ToolTip" xml:space="preserve">
+    <value>Specify a search term to filter events with by column contents. You can also use system:&lt;wildcard&gt;, body:&lt;wildcard&gt;, station:&lt;wildcard&gt; and stationfaction:&lt;wildcard&gt; to filter on events occurring with those properties</value>
+  </data>
   <metadata name="historyContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>107, 17</value>
   </metadata>
