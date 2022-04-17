@@ -82,10 +82,10 @@ SECTION UserControlCompass
 
 SECTION UserControlWebBrowser
 
-.extButtonIE11Warning: "Using IE11 - click here to get WebView2" @
-.extCheckBoxBack.ToolTip: "Back" @
-.checkBoxAutoTrack.ToolTip: "Track system in history panel" @
-.extCheckBoxAllowedList.ToolTip: "URLs" @
+.extButtonIE11Warning: "Using IE11 - click here to get WebView2" => "Benutze IE11 - hier klicken um WebView2 zu erhalten"
+.extCheckBoxBack.ToolTip: "Back" => "Zurück"
+.checkBoxAutoTrack.ToolTip: "Track system in history panel" => "Verfolge System im Historienpaneel"
+.extCheckBoxAllowedList.ToolTip: "URLs" => "URLs"
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Wähle ein anderes System zum Anzeigen"
 .System: "System: " => "System: "
 .EnterSys: "Show System" => "Zeige System"
@@ -143,7 +143,7 @@ SECTION DataGridViewStarResults
 .3d: "Go to star on 3D Map" => "Gehe in 3D-Karte zu Stern"
 .EDSM: "View on EDSM" => "Zeige auf EDSM"
 .Data: "View Data On Entry" => "Zeige Daten des Eintrags"
-.Goto: "Go to entry on grid" @
+.Goto: "Go to entry on grid" => "Gehe zu eintrag im Gitter"
 
 SECTION UserControlEngineering
 
@@ -198,7 +198,7 @@ SECTION UserControlExpedition
 .extButtonSave.ToolTip: "Save Expedition" => "Speichere Route"
 .extButtonDelete.ToolTip: "Delete Expedition" => "Lösche Route"
 .extButtonImportFile.ToolTip: "Import File" => "Importiere Datei"
-.extButtonImportRoute.ToolTip: "Import from Route Panel" => "Importiere Route"
+.extButtonImportRoute.ToolTip: "Import from Route Panel" => "Importiere aus Routenpaneel"
 .extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Importiere Nav-Route"
 .extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" => "Importiere letzte Nav-Route"
 .buttonExtExport.ToolTip: "Export to File" => "Exportiere"
@@ -407,7 +407,7 @@ SECTION MissionListUserControl
 .pColResult: "Result (cr)" => "Ergebnis (Cr)"
 .pColInfo: "Info" => "Info"
 .labelTo: "to" => "bis"
-.labelSearch: "Search" @
+.labelSearch: "Search" => "Suche"
 
 SECTION UserControlMissions
 
@@ -429,7 +429,7 @@ SECTION UserControlModules
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Sende an Coriolis"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten im Gitter an Excel"
 .ForceSell: "Force Sell" => "Verkaufen erzwingen"
-.ConfirmForceSell: "Condirm sell of ship" @
+.ConfirmForceSell: "Confirm sell of ship" => "Bestätige Verkauf von Schiff"
 .StoredModules: "Stored Modules" => "Gelagerte Module"
 .TravelHistoryEntry: "Travel History Entry" => "Reisehistorieneintrag"
 .System: "System" => "System"
@@ -438,7 +438,7 @@ SECTION UserControlModules
 .SlotCol: "Slot" => "Schacht"
 .ItemInfo: "Info" => "Info"
 .Value: "Value" => "Wert"
-.Stored: "Stored" @
+.Stored: "Stored" => "Gelagert"
 .AllModules: "All Modules" => "Alle Module"
 .FSDAvgJump: "FSD Avg Jump" => "FSA durchschn. Sprung"
 .HT: "Half tank, no cargo" => "Halber Tank, keine Fracht"
@@ -577,8 +577,8 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Zeige Abweichung von der Route"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Wegpunkt automatisch kopieren"
 .autoSetTargetToolStripMenuItem: "Auto set target" => "Ziel automatisch setzen"
-.showtargetinfo: "Show Target Information" @
-.showfuelinfo: "Show Fuel Information" @
+.showtargetinfo: "Show Target Information" => "Zeige Zielinformation"
+.showfuelinfo: "Show Fuel Information" => "Zeige Treibstoffinformation"
 .J1: "jump" => "Sprung"
 .TF: "To First WP " => "Zum ersten Wegpunkt"
 .JS: "jumps" => "Sprünge"
@@ -868,7 +868,7 @@ SECTION UserControlStarList
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "System konnte nicht gefunden werden - wurde nicht synchronisiert oder EDSM ist nicht verfügbar"
 .OB: "{0} Other bodies" => "{0} andere Körper"
 .JUMP: "Show/Hide presence of Jumponium Materials" => "Zeige/Verbirg die Präsenz von Sprungmaterialien"
-.valueables: "Show valueable bodies" => "Zeige wertvolle Körper"
+.valueables: "Show valuable bodies" => "Zeige wertvolle Körper"
 .scanorganics: "Show organic scans" => "Zeige organische Scans"
 .showcodex: "Show codex entries" => "Zeige Codexeinträge"
 
@@ -1324,7 +1324,7 @@ SECTION CSV
 
 SECTION InfoForm
 
-.Copyingtextfailed: "Copying text to clipboard failed" @
+.Copyingtextfailed: "Copying text to clipboard failed" => "Kopieren von Text in Zwischenablage fehlgeschlagen"
 
 SECTION UserControlSuitsWeapons
 
@@ -1352,5 +1352,5 @@ SECTION UserControlSuitsWeapons
 .CWRange: "Range m" => "Reichweite m"
 .CWDPS: "DPS" => "SPS"
 .CWHSD: "Head Shot Mult" => "Kopfschussmulti"
-.Confirm: "Confirm Selling of" @
-.forceSellShipToolStripMenuItem: "Force Suit Sale" @
+.Confirm: "Confirm Selling of" => "Bestätige Verkauf von"
+.forceSellShipToolStripMenuItem: "Force Suit Sale" => "Erzwinge Anzugsverkauf"

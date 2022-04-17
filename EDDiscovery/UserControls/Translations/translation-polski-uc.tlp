@@ -429,7 +429,7 @@ SECTION UserControlModules
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Prześlij do Coriolis"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .ForceSell: "Force Sell" @
-.ConfirmForceSell: "Condirm sell of ship" @
+.ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" => "Przechowywane Moduły"
 .TravelHistoryEntry: "Travel History Entry" => "Wpis Historii Podróży"
 .System: "System" => "Układ"
@@ -868,7 +868,7 @@ SECTION UserControlStarList
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
 .OB: "{0} Other bodies" => "{0} innych ciał niebieskich"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
-.valueables: "Show valueable bodies" @
+.valueables: "Show valuable bodies" @
 .scanorganics: "Show organic scans" @
 
 SECTION UserControlStats

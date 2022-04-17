@@ -429,7 +429,7 @@ SECTION UserControlModules
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "在Corolis网站上打开"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .ForceSell: "Force Sell" @
-.ConfirmForceSell: "Condirm sell of ship" @
+.ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
 .TravelHistoryEntry: "Travel History Entry" @
 .System: "System" => "星系"
@@ -868,7 +868,7 @@ SECTION UserControlStarList
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .OB: "{0} Other bodies" => "{0}个其他星体"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
-.valueables: "Show valueable bodies" @
+.valueables: "Show valuable bodies" @
 .scanorganics: "Show organic scans" @
 
 SECTION UserControlStats

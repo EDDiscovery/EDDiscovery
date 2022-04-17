@@ -18,7 +18,7 @@ Off: "Off" => "Aus"
 Unknown: "Unknown" => "Unbekannt"
 Information: "Information" => "Information"
 NoPos: "No Pos" => "Keine Position"
-RemoveAll: "Remove All" @
+RemoveAll: "Remove All" => "Alle entfernen"
 
 SECTION StartUp
 
@@ -29,9 +29,9 @@ SECTION SafeModeForm
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery abgesicherter Modus"
 .buttonCancel: "Cancel" => "Abbrechen"
 .buttonRun: "Run" => "Starten"
-.buttonRemoveJournals: "Remove Journals" @
-.buttonDeleteUserDB: "Delete/Rebuild User DB" @
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "System DB löschen/wiederaufbauen"
+.buttonRemoveJournals: "Remove Journals" => "Journale entfernen"
+.buttonDeleteUserDB: "Delete/Rebuild User DB" => "Benutzer-DB löschen/wiederaufbauen"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "System-DB löschen/wiederaufbauen"
 .buttonResetDBLoc: "Reset DB Location" => "Datenbankort zurücksetzen"
 .buttonBackup: "Backup Database" => "Datenbank sichern"
 .buttonDbs: "Move Databases" => "Verschiebe Datenbank"
@@ -44,7 +44,7 @@ SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery abgesicherter Modus"
 
 SECTION InfoForm
 
-.buttonAcknowledge: "Acknowledge" @
+.buttonAcknowledge: "Acknowledge" => "Bestätigen"
 
 SECTION PopOutInfo
 
@@ -126,7 +126,7 @@ SECTION PopOutInfo
 .Grid.Title: "Grid" => "Gitter"
 .SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Splitter (zum Einfügen beliebiger Paneele)"
 .SplitterControl.Title: "Splitter" => "Splitter"
-.PanelSelector.Description: "" @
+.PanelSelector.Description: "" => ""
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Suche"
 .Search.Description: "Search" => "Suche"
@@ -371,8 +371,8 @@ ExportForm: "Export Data" => "Exportformular"
 .radioButtonSemiColon: "Semicolon" => "Semikolon"
 .checkBoxIncludeHeader: "Include Header" => "Kopfzeile inkludieren"
 .checkBoxCustomAutoOpen: "Open" => "Öffnen"
-.labelUTCEnd: "UTC" @
-.labelUTCStart: "UTC" @
+.labelUTCEnd: "UTC" => "UTC"
+.labelUTCStart: "UTC" => "UTC"
 .buttonExport: "Export" => "Exportieren"
 .ECH: "Export current data {0}" => "Exportiere aktuelle Daten {0}"
 .ImportTitle: "Import Data" => "Daten importieren"
@@ -469,7 +469,7 @@ SECTION DataGridViewDialogs
 
 SECTION KeyForm
 
-KeyForm: "Define Key Sequence" => "Definiere Testensequenz"
+KeyForm: "Define Key Sequence" => "Definiere Tastensequenz"
 .radioButtonUp: "Up" => "Rauf"
 .radioButtonDown: "Down" => "Runter"
 .radioButtonPress: "Press" => "Drücken"
@@ -487,9 +487,9 @@ KeyForm: "Define Key Sequence" => "Definiere Testensequenz"
 .buttonNext: "Next" => "Nächste"
 .buttonTest: "Test" => "Test"
 .PK: "Press Key" => "Drücke Taste"
-.NOPN: "Name a process to test sending keys" @
-.KERR: "Error {0} - check entry" @
-.NOP: "No process names to send keys to" @
+.NOPN: "Name a process to test sending keys" => "Nenne einen Prozess um das Senden von Tasten zu testen"
+.KERR: "Error {0} - check entry" => "Error {0} - Eintrag prüfen"
+.NOP: "No process names to send keys to" => "Kein Prozessname an den Tasten gesendet werden können"
 
 SECTION UserControlForm
 
@@ -516,98 +516,98 @@ SECTION CommanderForm
 
 SECTION SpeechConfigure
 
-SpeechConfigure: "Configure Speech" @
-.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
-.buttonExtTest: "Test" @
-.buttonExtDevice: "Device" @
-.buttonExtEffects: "Effects" @
-.checkBoxCustomLiteral: "Literal" @
-.checkBoxCustomComplete: "Wait until speech completes" @
-.labelEndTrigger: "End Trigger" @
-.labelStartTrigger: "Start Trigger" @
-.labelRate: "Rate" @
-.labelVoice: "Voice" @
-.labelVolume: "Volume" @
-.checkBoxCustomR: "Override" @
-.checkBoxCustomV: "Override" @
+SpeechConfigure: "Configure Speech" => "Sprache konfigurieren"
+.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Text zur Aussprache festlegen (benutze ; um zufällig zu wählende Phrasen zu trennen und {} um zu gruppieren)"
+.buttonExtTest: "Test" => "Test"
+.buttonExtDevice: "Device" => "Gerät"
+.buttonExtEffects: "Effects" => "Effekte"
+.checkBoxCustomLiteral: "Literal" => "Literal"
+.checkBoxCustomComplete: "Wait until speech completes" => "Warte bis Rede endet"
+.labelEndTrigger: "End Trigger" => "Endtrigger"
+.labelStartTrigger: "Start Trigger" => "Starttrigger"
+.labelRate: "Rate" => "Rate"
+.labelVoice: "Voice" => "Stimme"
+.labelVolume: "Volume" => "Lautstärke"
+.checkBoxCustomR: "Override" => "Überschreiben"
+.checkBoxCustomV: "Override" => "Überschreiben"
 
 SECTION WaveConfigureDialog
 
-WaveConfigureDialog: "Configure Wave" @
-.buttonExtDevice: "Device" @
-.labelStartTrigger: "Start Trigger" @
-.labelEndTrigger: "End Trigger" @
-.labelTitle: "Select Default device, volume and effects" @
-.buttonExtBrowse: "Browse" @
-.checkBoxCustomComplete: "Wait until audio completes" @
-.buttonExtEffects: "Effects" @
-.buttonExtTest: "Test" @
-.checkBoxCustomV: "Override" @
-.labelVolume: "Volume" @
+WaveConfigureDialog: "Configure Wave" => "Wave konfigurieren"
+.buttonExtDevice: "Device" => "Gerät"
+.labelStartTrigger: "Start Trigger" => "Starttrigger"
+.labelEndTrigger: "End Trigger" => "Endtrigger"
+.labelTitle: "Select Default device, volume and effects" => "Wähle Standardgerät, Lautstärke und Effekte"
+.buttonExtBrowse: "Browse" => "Durchstöbern"
+.checkBoxCustomComplete: "Wait until audio completes" => "Warte bis Audio zu Ende ist"
+.buttonExtEffects: "Effects" => "Effekte"
+.buttonExtTest: "Test" => "Test"
+.checkBoxCustomV: "Override" => "Überschreiben"
+.labelVolume: "Volume" => "Lautstärke"
 
 SECTION SoundEffectsDialog
 
-SoundEffectsDialog: "Sound Effects" @
-.labelEcho: "Echo" @
-.buttonExtTest: "Test" @
-.labelEchoMix: "Mix" @
-.labelChorus: "Chorus" @
-.checkBoxCustomNone: "No effects" @
-.labelReverb: "Reverb" @
-.checkBoxP: "Enable" @
-.checkBoxG: "Enable" @
-.labelDistortion: "Distortion" @
-.checkBoxD: "Enable" @
-.labelEchoFeedback: "Feedback" @
-.labelPitch: "Pitch" @
-.labelGargle: "Gargle" @
-.labelChorusMix: "Mix" @
-.labelEchoDelay: "Delay" @
-.checkBoxR: "Enable" @
-.labelReverbMix: "Mix" @
-.labelDistortionGain: "Gain" @
-.labelChorusFeedback: "Feedback" @
-.checkBoxC: "Enable" @
-.labelPitchOctave: "Octave" @
-.labelGargleFrequency: "Frequency" @
-.checkBoxE: "Enable" @
-.labelReverbTime: "Time" @
-.labelDistortionEdge: "Edge" @
-.labelChorusDelay: "Delay" @
-.labelChorusDepth: "Depth" @
-.labelReverbHFRatio: "HF Ratio" @
-.labelDistortionCentreFreq: "Cent Freq" @
-.labelDistortionFreqWidth: "Freq Width" @
+SoundEffectsDialog: "Sound Effects" => "Soundeffekte"
+.labelEcho: "Echo" => "Echo"
+.buttonExtTest: "Test" => "Test"
+.labelEchoMix: "Mix" => "Mix"
+.labelChorus: "Chorus" => "Chor"
+.checkBoxCustomNone: "No effects" => "Keine Effekte"
+.labelReverb: "Reverb" => "Hall"
+.checkBoxP: "Enable" => "Aktivieren"
+.checkBoxG: "Enable" => "Aktivieren"
+.labelDistortion: "Distortion" => "Verzerrung"
+.checkBoxD: "Enable" => "Aktivieren"
+.labelEchoFeedback: "Feedback" => "Resonanz"
+.labelPitch: "Pitch" => "Höhe"
+.labelGargle: "Gargle" => "Gurgeln"
+.labelChorusMix: "Mix" => "Mix"
+.labelEchoDelay: "Delay" => "Verzögerung"
+.checkBoxR: "Enable" => "Aktivieren"
+.labelReverbMix: "Mix" => "Mix"
+.labelDistortionGain: "Gain" => "Zuwachs"
+.labelChorusFeedback: "Feedback" => "Resonanz"
+.checkBoxC: "Enable" => "Aktivieren"
+.labelPitchOctave: "Octave" => "Oktave"
+.labelGargleFrequency: "Frequency" => "Frequenz"
+.checkBoxE: "Enable" => "Aktivieren"
+.labelReverbTime: "Time" => "Zeit"
+.labelDistortionEdge: "Edge" => "Grenzer"
+.labelChorusDelay: "Delay" => "Verzögerung"
+.labelChorusDepth: "Depth" => "Tiefe"
+.labelReverbHFRatio: "HF Ratio" => "HF-Verhältnis"
+.labelDistortionCentreFreq: "Cent Freq" => "Frequenzmittelpunkt"
+.labelDistortionFreqWidth: "Freq Width" => "Frequenzbreite"
 
 SECTION AudioDeviceConfigure
 
-AudioDeviceConfigure: "Audio Device Select" @
-.labelText: "Select Device" @
+AudioDeviceConfigure: "Audio Device Select" => "Wähle Audiogerät"
+.labelText: "Select Device" => "Wähle Gerät"
 
 SECTION ActionPackEditPackForm
 
-.buttonInstallationVars: "Install Parameters" @
-.labelEditProg: "Program" @
+.buttonInstallationVars: "Install Parameters" => "Installationsparameter"
+.labelEditProg: "Program" => "Programm"
 
 SECTION ActionProgramEditForm
 
-ActionProgramEditForm: "Action Program" @
-.labelName: "Name:" @
-.buttonExtDisk: "As File" @
-.buttonExtLoad: "Load" @
-.buttonExtSave: "Save" @
-.buttonExtEdit: "Text Edit" @
+ActionProgramEditForm: "Action Program" => "Action-Programm"
+.labelName: "Name:" => "Name:"
+.buttonExtDisk: "As File" => "Als Datei"
+.buttonExtLoad: "Load" => "Laden"
+.buttonExtSave: "Save" => "Speichern"
+.buttonExtEdit: "Text Edit" => "Text ändern"
 
 SECTION ActionPackEditForm
 
-.ci: "Configuration items for installation - specialist use" @
-.ip: "Input parameters to pass to program on run" @
-.df: "Define Variable:" @
-.cp: "Variables to pass into called program" @
+.ci: "Configuration items for installation - specialist use" => "Konfigurationselemente für Installation - für Spezialisten"
+.ip: "Input parameters to pass to program on run" => "Eingangsparameter zur Weiterleitung an Programm im Betrieb"
+.df: "Define Variable:" => "Definiere Variable:"
+.cp: "Variables to pass into called program" => "Variablen zur Weiterleitung an aufgerufenes Programm"
 
 SECTION ActionPackVariablesForm
 
-.gv: "Global User variables to pass to program on run" @
+.gv: "Global User variables to pass to program on run" => "Globale Benutzervariablen zur Weiterleitung an Programm im Betrieb"
 
 include translation-deutsch-uc.tlp
 
