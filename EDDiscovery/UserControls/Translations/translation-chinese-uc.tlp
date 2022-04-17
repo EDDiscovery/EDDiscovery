@@ -429,7 +429,7 @@ SECTION UserControlModules
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "在Corolis网站上打开"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .ForceSell: "Force Sell" @
-.ConfirmForceSell: "Condirm sell of ship" @
+.ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
 .TravelHistoryEntry: "Travel History Entry" @
 .System: "System" => "星系"

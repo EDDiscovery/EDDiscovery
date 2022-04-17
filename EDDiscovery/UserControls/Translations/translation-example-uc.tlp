@@ -453,7 +453,7 @@ SECTION UserControlModules
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 
 .ForceSell: "Force Sell" @
-.ConfirmForceSell: "Condirm sell of ship" @
+.ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
 .TravelHistoryEntry: "Travel History Entry" @
 .System: "System" @

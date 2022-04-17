@@ -429,7 +429,7 @@ SECTION UserControlModules
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Enviar a Coriolis"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
 .ForceSell: "Force Sell" => "Forzar venta"
-.ConfirmForceSell: "Condirm sell of ship" @
+.ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" => "Módulos almacenados"
 .TravelHistoryEntry: "Travel History Entry" => "Entrada del historial de viajes"
 .System: "System" => "Sistema"
