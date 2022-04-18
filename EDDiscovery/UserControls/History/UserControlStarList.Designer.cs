@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
             this.textBoxSearch.TabIndex = 1;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxSearch, "Enter text to search in any fields for an item");
+            this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
             // 
@@ -336,6 +336,7 @@ namespace EDDiscovery.UserControls
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewStarList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewStarList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewStarList.ColumnReorder = true;
             this.dataGridViewStarList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
             this.ColumnSystem,

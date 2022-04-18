@@ -67,6 +67,8 @@ namespace EDDiscovery.UserControls
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
+        private string searchterms = "system:body:station:stationfaction";
+
         private Timer searchtimer;
 
         private Timer autoupdateedsm;
@@ -118,6 +120,9 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false);
+
+             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
+                searchterms = "".TxID(EDTx.UserControlTravelGrid_SearchTerms);
         }
 
         public override void LoadLayout()
@@ -211,8 +216,8 @@ namespace EDDiscovery.UserControls
 
                         if (visitlist.Count > 0 && visitlist[0].System.Name == he.System.Name) // if the filtered result has our system in (which must be the first, since its newest), its inside the filter, add
                         {
-                            string filtertext = textBoxSearch.Text;
-                            var row = CreateHistoryRow(visitlist[0], filtertext);
+                            var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
+                            var row = CreateHistoryRow(visitlist[0], sst);
                             if (row != null)    // text may have filtered it out
                             {
                                 dataGridViewStarList.Rows.Insert(0, row);
@@ -291,7 +296,7 @@ namespace EDDiscovery.UserControls
                 syslistchunks.Add(syslistchunk);
             }
 
-            string filtertext = textBoxSearch.Text;
+            var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
             //System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
 
@@ -303,7 +308,7 @@ namespace EDDiscovery.UserControls
 
                     foreach (var he in syslistchunk)
                     {
-                        var row = CreateHistoryRow(he, filtertext);
+                        var row = CreateHistoryRow(he, sst);
                         if (row != null)
                             rowstoadd.Add(row);
                     }
@@ -341,7 +346,7 @@ namespace EDDiscovery.UserControls
             todotimer.Start();
         }
 
-        private DataGridViewRow CreateHistoryRow(HistoryEntry he, string search)
+        private DataGridViewRow CreateHistoryRow(HistoryEntry he, BaseUtils.StringSearchTerms search)
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
@@ -351,13 +356,28 @@ namespace EDDiscovery.UserControls
             string visits = discoveryform.history.Visits(he.System.Name).ToString();
             string info = Infoline(he.System, node);  // lookup node, using star name, no EDSM lookup.
 
-            if (search.HasChars())
+            if (search.Enabled)
             {
-                string timestr = time.ToString();
-                bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                he.System.Name.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                visits.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                info.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                bool matched = false;
+
+                if (search.Terms[0] != null)
+                {
+                    string timestr = time.ToString();
+                    matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                he.System.Name.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                visits.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                info.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0;
+                }
+
+                if (!matched && search.Terms[1] != null)       // system
+                    matched = he.System.Name.WildCardMatch(search.Terms[1], true);
+                if (!matched && search.Terms[2] != null)       // body
+                    matched = he.Status.BodyName?.WildCardMatch(search.Terms[2], true) ?? false;
+                if (!matched && search.Terms[3] != null)       // station
+                    matched = he.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
+                if (!matched && search.Terms[4] != null)       // stationfaction
+                    matched = he.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
+
                 if (!matched)
                     return null;
             }

@@ -42,7 +42,10 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
+        private string searchterms = "system:body:station:stationfaction";
+
         public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
+
 
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Tag as HistoryEntry : null; } }
 
@@ -106,6 +109,9 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""));
+
+            if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
+                searchterms = "".TxID(EDTx.UserControlTravelGrid_SearchTerms);
         }
 
         public override void LoadLayout()
@@ -189,7 +195,7 @@ namespace EDDiscovery.UserControls
                 chunks.Add(chunk);
             }
 
-            string filtertext = textBoxSearch.Text;
+            var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
 
@@ -205,7 +211,7 @@ namespace EDDiscovery.UserControls
 
                     foreach (var item in chunk)
                     {
-                        var row = CreateHistoryRow(item, filtertext);
+                        var row = CreateHistoryRow(item, sst);
                         if (row != null)
                         {
                             //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
@@ -295,7 +301,8 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                var row = CreateHistoryRow(he, textBoxSearch.Text);     // we might be filtered out by search
+                var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
+                var row = CreateHistoryRow(he, sst);     // we might be filtered out by search
                 if (row != null)
                     dataGridViewJournal.Rows.Insert(0, row);
                 else
@@ -323,22 +330,37 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private DataGridViewRow CreateHistoryRow(HistoryEntry he, string search)
+        private DataGridViewRow CreateHistoryRow(HistoryEntry he, BaseUtils.StringSearchTerms search)
         {
             DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             he.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string detail = EventDescription;
             detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
 
-            if (search.HasChars())
+            if (search.Enabled)
             {
-                string timestr = time.ToString();
-                int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
-                string entryrow = rown.ToStringInvariant();
-                bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                he.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                detail.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                entryrow.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                bool matched = false;
+
+                if (search.Terms[0] != null)
+                {
+                    string timestr = time.ToString();
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                    string entryrow = rown.ToStringInvariant();
+                    matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                    he.EventSummary.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                    detail.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                    entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0;
+
+                }
+
+                if (!matched && search.Terms[1] != null)       // system
+                    matched = he.System.Name.WildCardMatch(search.Terms[1], true);
+                if (!matched && search.Terms[2] != null)       // body
+                    matched = he.Status.BodyName?.WildCardMatch(search.Terms[2], true) ?? false;
+                if (!matched && search.Terms[3] != null)       // station
+                    matched = he.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
+                if (!matched && search.Terms[4] != null)       // stationfaction
+                    matched = he.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
 
                 if (!matched)
                     return null;
