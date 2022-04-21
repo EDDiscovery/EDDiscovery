@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
         const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
-        EliteDangerousCore.UIEvents.UIMode.MajorModeType uimajormode = EliteDangerousCore.UIEvents.UIMode.MajorModeType.None;
+        EliteDangerousCore.UIEvents.UIMode.ModeType uimode = EliteDangerousCore.UIEvents.UIMode.ModeType.None;
 
         private SavedRouteClass currentRoute = null;
         private string lastsystem;
@@ -221,8 +221,8 @@ namespace EDDiscovery.UserControls
             }
             else if ( mode != null)
             {
-                refresh = mode.MajorMode != uimajormode;
-                uimajormode = mode.MajorMode;
+                refresh = mode.Mode != uimode;
+                uimode = mode.Mode;
             }
 
             if (refresh)
@@ -234,6 +234,23 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
+        public bool ShowIt(ISystem sys )        // compute if should show
+        {
+            bool showit = sys != null;
+
+            //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Draw {sys?.Name} {sys?.HasCoordinate} {showit}");
+
+            if (showit && IsSet(CtrlList.autohide))     // must check showit, otherwise we will get exception due to resize calling this before whole form is up
+            {
+                // if no focus, or fssmode and override
+                showit = uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode));
+                // and we should be either in None or MainShip..
+                showit = showit && (uimode == EliteDangerousCore.UIEvents.UIMode.ModeType.None || uimode == EliteDangerousCore.UIEvents.UIMode.ModeType.MainShipSupercruise);
+                //System.Diagnostics.Debug.WriteLine($"Surveyor uimode {uimode} uistate {uistate} decision {showit}");
+            }
+
+            return showit;
+        }
 
         #endregion
 
@@ -248,23 +265,8 @@ namespace EDDiscovery.UserControls
 
             var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
 
-            //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Draw {sys?.Name} {sys?.HasCoordinate}");
-
-            bool showit = sys != null;
-
-            if (showit && IsSet(CtrlList.autohide))     // must check showit, otherwise we will get exception due to resize calling this before whole form is up
+            if ( sys != null )      // if we have a system
             {
-                // if no focus, or fssmode and override
-                showit = uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode));
-                // and we should be either in None or MainShip..
-                showit = showit && (uimajormode == EliteDangerousCore.UIEvents.UIMode.MajorModeType.None || uimajormode == EliteDangerousCore.UIEvents.UIMode.MajorModeType.MainShip);
-            }
-
-            // if system and show it..
-            if (showit)
-            {
-                //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Go for draw");
-
                 int vpos = 0;
                 StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                 frmt.Alignment = alignment;
@@ -650,15 +652,15 @@ namespace EDDiscovery.UserControls
 
                 frmt.Dispose();
             }
-            else
-            {
-                //System.Diagnostics.Debug.WriteLine($"Surveyor ${displaynumber} display disabled");
-            }
 
             lock ( extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
             {
                 pictureBoxSurveyor.ClearImageList();
-                pictureBoxSurveyor.AddRange(picelements);
+                bool showit = ShowIt(sys);      // should we show it. Due to async, the decision may have been changed since the display launched
+
+                System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} draw in {picelements.Count} show it {showit}");
+                if ( showit )
+                    pictureBoxSurveyor.AddRange(picelements); 
                 extPictureBoxScroll.Render();
                 Refresh();
             }
