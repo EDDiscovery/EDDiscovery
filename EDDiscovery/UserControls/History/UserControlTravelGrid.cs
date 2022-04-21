@@ -468,7 +468,7 @@ namespace EDDiscovery.UserControls
 
             if (debugmode)
             {
-                colIcon = $"{item.TravelState} Id {item.Status.ShipID}\r\n"
+                colIcon = $"{item.TravelState} \r\n"
                                + $"st[{item.System.Name}]\r\n"
                                + $"b[{item.Status.BodyName},{item.Status.BodyType},{item.Status.BodyID},ba {item.Status.BodyApproached}]\r\n"
                                + $"s[{item.Status.StationName},{item.Status.StationType}]\r\n"
@@ -1062,11 +1062,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
+        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        
         {
-            BaseUtils.Variables cv = new BaseUtils.Variables();
-            cv.AddPropertiesFieldsOfClass(rightclickhe.journalEntry, "EventClass_", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);
-            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
+            // copies the work of action run for he's
+            BaseUtils.Variables eventvars = new BaseUtils.Variables();
+            var ev = Actions.ActionEventEDList.NewEntry(rightclickhe);
+            Actions.ActionVars.TriggerVars(eventvars, ev.TriggerName, ev.TriggerType);
+            Actions.ActionVars.HistoryEventVars(eventvars, rightclickhe, "Event");     // if HE is null, ignored
+            Actions.ActionVars.ShipBasicInformation(eventvars, rightclickhe?.ShipInformation, "Event");     // if He null, or si null, ignore
+            Actions.ActionVars.SystemVars(eventvars, rightclickhe?.System, "Event");
+            discoveryform.LogLine(eventvars.ToString(separ: Environment.NewLine));
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
