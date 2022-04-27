@@ -374,7 +374,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/QxViI2t6ryM.
         /// </summary>
         public static string URLReleaseVideo {
             get {

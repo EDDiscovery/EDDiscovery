@@ -337,8 +337,12 @@ namespace EDDiscovery.UserControls
                 typename = ItemData.Instance.GetShipModuleProperties(sm.ItemFD).ModType;
 
             string eng = "";
-            if ( sm.Engineering != null )
+            if (sm.Engineering != null)
+            {
                 eng = sm.Engineering.FriendlyBlueprintName + ":" + sm.Engineering.Level.ToStringInvariant();
+                if (sm.Engineering.ExperimentalEffect_Localised.HasChars())
+                    eng += ":" + sm.Engineering.ExperimentalEffect_Localised;
+            }
 
             object[] rowobj = { typename,
                                 sm.Item, sm.Slot, infoentry,
