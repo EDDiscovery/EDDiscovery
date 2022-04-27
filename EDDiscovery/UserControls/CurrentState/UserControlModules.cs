@@ -15,6 +15,7 @@
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
+using ExtendedControls;
 using System;
 using System.ComponentModel;
 using System.Data;
@@ -35,6 +36,9 @@ namespace EDDiscovery.UserControls
         private string fuellevelname;
         private string fuelresname;
 
+        private string dbDisplayFilters = "DisplayFilters";
+        private string[] displayfilters;
+
         #region Init
 
         public UserControlModules()
@@ -47,9 +51,9 @@ namespace EDDiscovery.UserControls
             DBBaseName = "ModulesGrid";
 
             var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo, EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable, EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle };
-            var enumlisttt = new Enum[] { EDTx.UserControlModules_comboBoxShips_ToolTip, EDTx.UserControlModules_extCheckBoxWordWrap_ToolTip, EDTx.UserControlModules_buttonExtCoriolis_ToolTip, EDTx.UserControlModules_buttonExtEDShipyard_ToolTip, EDTx.UserControlModules_buttonExtConfigure_ToolTip, EDTx.UserControlModules_buttonExtExcel_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            var enumlisttt = new Enum[] { EDTx.UserControlModules_extButtonShowControl_ToolTip, EDTx.UserControlModules_comboBoxShips_ToolTip, EDTx.UserControlModules_extCheckBoxWordWrap_ToolTip, EDTx.UserControlModules_buttonExtCoriolis_ToolTip, EDTx.UserControlModules_buttonExtEDShipyard_ToolTip, EDTx.UserControlModules_buttonExtConfigure_ToolTip, EDTx.UserControlModules_buttonExtExcel_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
@@ -57,6 +61,8 @@ namespace EDDiscovery.UserControls
             allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
             dataGridViewModules.MakeDoubleBuffered();
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+
+            displayfilters = GetSetting(dbDisplayFilters, "").Split(';');
 
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
@@ -337,11 +343,23 @@ namespace EDDiscovery.UserControls
                 typename = ItemData.Instance.GetShipModuleProperties(sm.ItemFD).ModType;
 
             string eng = "";
+            string engtooltip = null;
+
             if (sm.Engineering != null)
             {
-                eng = sm.Engineering.FriendlyBlueprintName + ":" + sm.Engineering.Level.ToStringInvariant();
+                eng = sm.Engineering.FriendlyBlueprintName + ": " + sm.Engineering.Level.ToStringInvariant();
                 if (sm.Engineering.ExperimentalEffect_Localised.HasChars())
-                    eng += ":" + sm.Engineering.ExperimentalEffect_Localised;
+                    eng += ": " + sm.Engineering.ExperimentalEffect_Localised;
+
+                engtooltip = sm.Engineering.ToString();
+                EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
+                if (spec != null)
+                    engtooltip += spec.ToString();
+
+                if (displayfilters.Contains("fullblueprint"))
+                {
+                    eng = engtooltip;
+                }
             }
 
             object[] rowobj = { typename,
@@ -352,14 +370,9 @@ namespace EDDiscovery.UserControls
 
             dataGridViewModules.Rows.Add(rowobj);
 
-            if (sm.Engineering != null)
+            if (engtooltip != null)
             {
-                string text = sm.Engineering.ToString();
-                EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
-                if (spec != null)
-                    text += spec.ToString();
-
-                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[5].ToolTipText = text;
+                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[5].ToolTipText = engtooltip;
             }
         }
 
@@ -445,6 +458,26 @@ namespace EDDiscovery.UserControls
                 Display();
             }
         }
+
+        private void extButtonShowControl_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AllOrNoneBack = false;
+
+            // not yet as only one item. displayfilter.AddAllNone();
+            displayfilter.AddStandardOption("fullblueprint", "Show full blueprint information".TxID(EDTx.UserControlModules_FullBluePrint));
+
+            displayfilter.ImageSize = new Size(24, 24);
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                displayfilters = s.Split(';');
+                PutSetting(dbDisplayFilters, string.Join(";", displayfilters));
+                Display();
+            };
+
+            displayfilter.Show(string.Join(";", displayfilters), extButtonShowControl, this.FindForm());
+        }
+
 
         private void buttonExtCoriolis_Click(object sender, EventArgs e)
         {

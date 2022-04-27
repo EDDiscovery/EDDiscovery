@@ -452,7 +452,10 @@ namespace EDDiscovery
         UserControlModules_labelShip, // Control 'Ship'
         UserControlModules_labelVehicle, // Control 'Unknown'
 
+        UserControlModules_FullBluePrint, // Show full blueprint information
+
         UserControlModules_comboBoxShips_ToolTip, // ToolTip 'Select ship to view'
+        UserControlModules_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
         UserControlModules_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
         UserControlModules_buttonExtCoriolis_ToolTip, // ToolTip 'Send to Coriolis'
         UserControlModules_buttonExtEDShipyard_ToolTip, // ToolTip 'Send to ED Ship Yard'
