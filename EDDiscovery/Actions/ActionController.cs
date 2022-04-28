@@ -390,9 +390,9 @@ namespace EDDiscovery.Actions
 
                 if (dmf.changelist.Count > 0)
                 {
-                    actionrunasync.TerminateAll();
-                    AudioQueueSpeech.StopAll();
-                    AudioQueueWave.StopAll();
+                    actionrunasync?.TerminateAll();
+                    AudioQueueSpeech?.StopAll();
+                    AudioQueueWave?.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
                     CheckWarn();
