@@ -910,7 +910,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" => "Boost basique"
 .JetConeBoost: "Jet Cone Boost" => "Boost par jet de matière"
 .Scans: "Scans" @
-.OrganicScans: "Organic Scans" @
+.OrganicScans: "Organic Scans Value" @
 .Mapped: "Mapped" => "Cartographié"
 .Scanvalue: "Scan value" => "Valeur de scan"
 .Beltcluster: "Belt Cluster: " @
