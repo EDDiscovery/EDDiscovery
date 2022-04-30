@@ -722,7 +722,7 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Scans".T(EDTx.UserControlStats_Scans), scanned);
                 StatToDGV(dataGridViewTravel, "Mapped".T(EDTx.UserControlStats_Mapped), mapped);
                 StatToDGV(dataGridViewTravel, "Scan value".T(EDTx.UserControlStats_Scanvalue), ucValue);
-                StatToDGV(dataGridViewTravel, "Organic Scans".T(EDTx.UserControlStats_OrganicScans), osValue);
+                StatToDGV(dataGridViewTravel, "Organic Scans Value".T(EDTx.UserControlStats_OrganicScans), osValue);
             }
             else // MAJOR
             {

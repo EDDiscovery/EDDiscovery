@@ -911,7 +911,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" => "einfacher Boost"
 .JetConeBoost: "Jet Cone Boost" => "Kegelstrahlboost"
 .Scans: "Scans" => "Scans"
-.OrganicScans: "Organic Scans" => "Organische Scans"
+.OrganicScans: "Organic Scans Value" => "Wert der organischen Scans"
 .Mapped: "Mapped" => "Kartographiert"
 .Scanvalue: "Scan value" => "Scanwert"
 .Beltcluster: "Belt Cluster: " => "Gürtelgruppen"

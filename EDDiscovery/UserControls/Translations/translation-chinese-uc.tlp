@@ -910,7 +910,7 @@ SECTION UserControlStats
 .BasicBoost: "Basic Boost" => "基础FSD助推剂"
 .JetConeBoost: "Jet Cone Boost" => "等离子喷流助推"
 .Scans: "Scans" => "扫描数"
-.OrganicScans: "Organic Scans" @
+.OrganicScans: "Organic Scans Value" @
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" => "扫描价值"
 .Beltcluster: "Belt Cluster: " @
