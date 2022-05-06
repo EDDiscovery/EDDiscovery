@@ -305,8 +305,9 @@ namespace EDDiscovery.UserControls.Map3D
                 starsprites = new GLPointSpriteShader(items.Tex("lensflare"), 64, 40);
                 items.Add(starsprites, "PS");
                 var p = GLPointsFactory.RandomStars4(1000, 0, 25899 / lyscale, 10000 / lyscale, 1000 / lyscale, -1000 / lyscale);
-                GLRenderState rps = GLRenderState.PointSprites();
-                rObjects.Add(starsprites, "starsprites", GLRenderableItem.CreateVector4Color4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Points, rps, p, new Color4[] { Color.White }));
+                GLRenderState rps = GLRenderState.PointsByProgram();
+                rObjects.Add(starsprites, "starsprites", GLRenderableItem.CreateVector4Color4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Points, rps, p, 
+                                                new Color4[] { Color.White }));
             }
 
             if ((parts & Parts.Grid) != 0)
@@ -316,7 +317,7 @@ namespace EDDiscovery.UserControls.Map3D
                 gridshader = new GLShaderPipeline(gridvertshader, gridfragshader);
                 items.Add(gridshader, "DYNGRID");
 
-                GLRenderState rl = GLRenderState.Lines(1);
+                GLRenderState rl = GLRenderState.Lines();
                 gridrenderable = GLRenderableItem.CreateNullVertex(OpenTK.Graphics.OpenGL4.PrimitiveType.Lines, rl, drawcount: 2);
                 rObjects.Add(gridshader, "DYNGRIDRENDER", gridrenderable);
             }
@@ -404,6 +405,17 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.Focusable = true;          // we want to be able to focus and receive key presses.
             displaycontrol.SetFocus();
 
+            displaycontrol.Paint += (ts) => {
+                System.Diagnostics.Debug.Assert(displaycontrol.IsCurrent());
+                // MCUB set up by Controller3DDraw which did the work first
+                galaxymenu?.UpdateCoords(gl3dcontroller);
+                displaycontrol.Animate(glwfc.ElapsedTimems);
+
+                GLStatics.ClearDepthBuffer();         // clear the depth buffer, so we are on top of all previous renders.
+                displaycontrol.Render(glwfc.RenderState, ts);
+            };
+
+
             GLBaseControl.Themer = MapThemer.Theme;
 
             // 3d controller
@@ -423,29 +435,13 @@ namespace EDDiscovery.UserControls.Map3D
                 return (float)ms * v;
             };
 
-            // hook gl3dcontroller to display control - its the slave. Do not register mouse UI, we will deal with that and feed any events thru we want
-            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: true);
-
-            if (displaycontrol != null)
-            {
-                displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
-                {
-                    System.Diagnostics.Debug.Assert(displaycontrol.IsCurrent());
-                    // MCUB set up by Controller3DDraw which did the work first
-                    galaxymenu?.UpdateCoords(gl3dcontroller);
-                    displaycontrol.Animate(glwfc.ElapsedTimems);
-
-                    GLStatics.ClearDepthBuffer();         // clear the depth buffer, so we are on top of all previous renders.
-                    displaycontrol.Render(glwfc.RenderState, ts);
-                };
-            }
+            // start hooks the glwfc paint function up, first, so it gets to go first
+            // No ui events from glwfc.
+            gl3dcontroller.Start(matrixcalc, glwfc, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: false);
+            gl3dcontroller.Hook(displaycontrol, glwfc); // we get 3dcontroller events from displaycontrol, so it will get them when everything else is unselected
+            displaycontrol.Hook();  // now we hook up display control to glwin, and paint
 
             displaycontrol.MouseClick += MouseClickOnMap;       // grab mouse UI
-            displaycontrol.MouseUp += MouseUpOnMap;
-            displaycontrol.MouseDown += MouseDownOnMap;
-            displaycontrol.MouseMove += MouseMoveOnMap;
-            displaycontrol.MouseWheel += MouseWheelOnMap;
-
 
             if ((parts & Parts.Menu) != 0)
             {
@@ -1270,22 +1266,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         #region UI
 
-        private void MouseDownOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseDown(s, e);
-        }
-
-        private void MouseUpOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseUp(s, e);
-        }
-
-        private void MouseMoveOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseMove(s, e);
-        }
-
-        private void MouseClickOnMap(Object s, GLMouseEventArgs e)
+        private void MouseClickOnMap(GLBaseControl s, GLMouseEventArgs e)
         {
             int distmovedsq = gl3dcontroller.MouseMovedSq(e);        //3dcontroller is monitoring mouse movements
             if (distmovedsq < 4)
@@ -1314,11 +1295,6 @@ namespace EDDiscovery.UserControls.Map3D
                     }
                 }
             }
-        }
-
-        private void MouseWheelOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseWheel(s, e);
         }
 
         private void OtherKeys(GLOFC.Controller.KeyboardMonitor kb)

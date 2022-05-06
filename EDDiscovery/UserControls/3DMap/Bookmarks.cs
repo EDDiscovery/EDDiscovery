@@ -36,8 +36,6 @@ namespace EDDiscovery.UserControls.Map3D
             var vert = new GLPLVertexScaleLookat(rotatetoviewer: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true,
                                                             autoscale: 30, autoscalemin: 1f, autoscalemax: 30f); // above autoscale, 1f
 
-            GLOFC.GLStatics.Check();
-
             const int texbindingpoint = 1;
             var frag = new GLPLFragmentShaderTexture(texbindingpoint);       // binding - simple texturer based on vs model coords
 

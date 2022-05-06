@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls.Map3D
             starrc.DepthTest = true;
             starrc.DepthClamp = true;
 
-            var textrc = GLRenderState.Quads();
+            var textrc = GLRenderState.Tri();
             textrc.DepthTest = true;
             textrc.ClipDistanceEnable = 1;  // we are going to cull primitives which are deleted
 

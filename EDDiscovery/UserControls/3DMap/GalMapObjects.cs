@@ -125,8 +125,6 @@ namespace EDDiscovery.UserControls.Map3D
             rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Patches, GLRenderState.Patches(4), modelworldbuffer, modelpos, ridisplay.DrawCount,
                                                                             modelworldbuffer, worldpos, null, ic: 0, seconddivisor: 1);
 
-            GLStatics.Check();
-
             // Text renderer for the labels
 
             textrenderer = new GLBitmaps("bm-galmapobjects", rObjects, textbitmapsize, depthtest: depthtest, cullface: false, textureformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);
@@ -221,7 +219,6 @@ namespace EDDiscovery.UserControls.Map3D
                 var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
                 geo.SetScreenCoords(viewportloc, viewportsize);
 
-                GLStatics.Check();
                 rifind.Execute(findshader, state); // execute, discard
 
                 var res = geo.GetResult();

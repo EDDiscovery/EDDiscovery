@@ -28,7 +28,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEngineers : UserControlCommonBase
     {
-        EngineerPanel[] engineerpanel;
+       // EngineerPanel[] engineerpanel;
 
         public UserControlEngineers()
         {
@@ -68,7 +68,6 @@ namespace EDDiscovery.UserControls
 
     public class EngineerPanel : UserControl
     {
-        public string Name { get; set; }
         public Image Image { get; set; }
         public EngineerPanel(string name, Image img)
         {

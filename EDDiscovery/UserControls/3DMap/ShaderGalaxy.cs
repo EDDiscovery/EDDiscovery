@@ -22,8 +22,7 @@ namespace EDDiscovery.UserControls.Map3D
     public class GalaxyFragmentPipeline : GLShaderPipelineComponentShadersBase
     {
         string fcode = @"
-#version 470 core
-www
+#version 460 core
 out vec4 color;
 
 in vec3 vs_texcoord;
