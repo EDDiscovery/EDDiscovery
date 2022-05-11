@@ -299,6 +299,8 @@ namespace EDDiscovery
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
             page.Padding = new System.Windows.Forms.Padding(3); // this is to allow a pad around the sides
 
+            page.SuspendLayout();
+
             page.Controls.Add(uccb);
 
             TabPages.Insert(posindex, page);        // with inherit above, no font autoscale
@@ -308,11 +310,14 @@ namespace EDDiscovery
                 // Mono does not automatically change SelectedIndex to +1 if you at or before it.  So it gets on the wrong tab. Fix it back
                 SelectedIndex = SelectedIndex + 1;
             }
+
             //Init control after it is added to the form
             uccb.Init(eddiscovery, dn);    // start the uccb up
 
             uccb.Scale(this.FindForm().CurrentAutoScaleFactor());       // scale and
             ExtendedControls.Theme.Current.ApplyStd(page);  // theme it.  Order as per the contract in UCCB
+
+            page.ResumeLayout();
 
             return page;
         }
