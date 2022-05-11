@@ -125,6 +125,8 @@ namespace EDDiscovery.UserControls.Map3D
         private int localareasize = 50;
         private UserControlCommonBase parent;
 
+        private bool mapcreatedokay = false; 
+
         public Map()
         {
         }
@@ -141,7 +143,7 @@ namespace EDDiscovery.UserControls.Map3D
         public ulong ElapsedTimems { get { return glwfc.ElapsedTimems; } }
 
         #region Initialise
-        public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
+        public bool Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
         {
             this.parent = parent;
 
@@ -151,7 +153,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             hptimer.Start();
 
-            Bitmap galaxybitmap = BaseUtils.Icons.IconSet.GetBitmap("GalMap.Galaxy_L180");
+            GLShaderLog.Reset();
+            GLShaderLog.AssertOnError = false;
 
             items.Add(new GLMatrixCalcUniformBlock(), "MCUB");     // create a matrix uniform block 
 
@@ -161,6 +164,8 @@ namespace EDDiscovery.UserControls.Map3D
             // parts = parts - (1 << 9);
 
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
+            Bitmap galaxybitmap = BaseUtils.Icons.IconSet.GetBitmap("GalMap.Galaxy_L180");
 
             if ((parts & Parts.Galaxy) != 0) // galaxy
             {
@@ -699,6 +704,17 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Start();
 
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
+            string shaderlog = GLShaderLog.ShaderLog;
+            if (shaderlog.HasChars())
+            {
+                var inf = new ExtendedControls.InfoForm();
+                inf.Info("Shader log - report to EDD team", Properties.Resources.edlogo_3mo_icon, shaderlog);
+                inf.Show();
+            }
+
+            mapcreatedokay = GLShaderLog.Okay;      // record shader status
+            return mapcreatedokay;
         }
         #endregion
 
@@ -706,7 +722,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateTravelPath()   // new history entry
         {
-            if (travelpath != null)
+            if (travelpath != null )
             {
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
@@ -717,7 +733,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateNavRoute()
         {
-            if (navroute != null)
+            if (navroute != null )
             {
                 var route = parent.discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                 if (route?.Route != null) // If a navroute with a valid route..
@@ -741,8 +757,11 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateEDSMStarsLocalArea()
         {
-            galaxystars?.ClearBoxAround();
-            CheckRefreshLocalArea();      
+            if (galaxystars != null )
+            {
+                galaxystars.ClearBoxAround();
+                CheckRefreshLocalArea();
+            }
         }
 
         public void CheckRefreshLocalArea()
@@ -786,6 +805,7 @@ namespace EDDiscovery.UserControls.Map3D
                                 if (dr == GLForm.DialogResultEnum.OK)
                                 {
                                     EliteDangerousCore.DB.GlobalBookMarkList.Instance.Delete(bkm);
+                                    UpdateBookmarks();
                                 }
                             }
                         );
@@ -1023,7 +1043,7 @@ namespace EDDiscovery.UserControls.Map3D
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
             TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
             TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
-            if ((TravelPathStartDateEnable || TravelPathEndDateEnable) && travelpath!=null)
+            if ((TravelPathStartDateEnable || TravelPathEndDateEnable) && travelpath != null)
                 travelpath.Refresh();       // and refresh it if we set the data
 
             GalObjectDisplay = defaults.GetSetting("GALOD", true);
@@ -1042,17 +1062,20 @@ namespace EDDiscovery.UserControls.Map3D
             Grid = defaults.GetSetting("GRIDS", true);
 
             GalaxyStars = defaults.GetSetting("GALSTARS", 3);
-            GalaxyStarsMaxObjects = (loadlimit==0) ? defaults.GetSetting("GALSTARSOBJ", 500000) : loadlimit;
+            GalaxyStarsMaxObjects = (loadlimit == 0) ? defaults.GetSetting("GALSTARSOBJ", 500000) : loadlimit;
             LocalAreaSize = defaults.GetSetting("LOCALAREALY", 50);
 
             ShowBookmarks = defaults.GetSetting("BKMK", true);
 
-            if (restorepos )
+            if (restorepos)
                 gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
         }
 
         public void SaveState(MapSaver defaults)
         {
+            if (!mapcreatedokay)
+                return;
+
             defaults.PutSetting("GD", GalaxyDisplay);
             defaults.PutSetting("SDD", StarDotsSpritesDisplay);
             defaults.PutSetting("TPD", TravelPathTapeDisplay);
@@ -1193,6 +1216,9 @@ namespace EDDiscovery.UserControls.Map3D
         // Context is set.
         private void Controller3DDraw(Controller3D c3d, ulong time)
         {
+            if (!mapcreatedokay)
+                return;
+
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));

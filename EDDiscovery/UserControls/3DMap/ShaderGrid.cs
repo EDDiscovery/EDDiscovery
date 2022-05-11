@@ -27,7 +27,7 @@ namespace EDDiscovery.UserControls.Map3D
         private const int yclamp = 4000;
         public DynamicGridVertexShader(Color c)
         {
-            CompileLink(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader, vcode(), new object[] { "color", c });
+            CompileLink(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader, vcode(), out string unusedcompilerreport, new object[] { "color", c });
         }
 
         public int ComputeGridSize(float y, float eyedistance, out int gridwidth)
@@ -88,9 +88,12 @@ namespace EDDiscovery.UserControls.Map3D
                 start = new Vector3(sx, sy, sz);
             }
 
-            GL.ProgramUniform1(this.Id, 10, lines);
-            GL.ProgramUniform1(this.Id, 11, gridwidth);
-            GL.ProgramUniform3(this.Id, 12, ref start);
+            if (Compiled)
+            {
+                GL.ProgramUniform1(this.Id, 10, lines);
+                GL.ProgramUniform1(this.Id, 11, gridwidth);
+                GL.ProgramUniform3(this.Id, 12, ref start);
+            }
         }
 
         string vcode()
@@ -177,7 +180,7 @@ void main(void)
                 texcoords.LoadBitmap(bmp, i, true, 1);
             }
 
-            CompileLink(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader, vcode());
+            CompileLink(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader, vcode(), out string unusedcompilerreport);
         }
 
         public void ComputeUniforms(int gridwidth, GLMatrixCalc mc, Vector2 cameradir, Color textcol, Color? backcol = null)
@@ -210,9 +213,13 @@ void main(void)
             sz = sz / majorlines * majorlines - 50000;         // round and adjust back
 
             Vector3 start = new Vector3(sx, sy, sz);
-            GL.ProgramUniform1(this.Id, 11, majorlines);
-            GL.ProgramUniform3(this.Id, 12, ref start);
-            GL.ProgramUniform1(this.Id, 13, lookbackwards ? 1 : 0);
+
+            if (Compiled)
+            {
+                GL.ProgramUniform1(this.Id, 11, majorlines);
+                GL.ProgramUniform3(this.Id, 12, ref start);
+                GL.ProgramUniform1(this.Id, 13, lookbackwards ? 1 : 0);
+            }
             //System.Diagnostics.Debug.WriteLine(majorlines + " " + start + " " + lookbackwards);
 
             if (lastsx != sx || lastsz != sz || lastsy != (int)sy || lasttextcol != textcol)

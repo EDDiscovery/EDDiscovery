@@ -83,17 +83,20 @@ void main(void)
 
         public GalaxyFragmentPipeline(int galtexbinding = 1, int noisebinding = 3, int gaussiandistbinding = 4)
         {
-            CompileLink(OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader, fcode, new object[] { "galtexbinding", galtexbinding, "noisebinding", noisebinding, "gaussiandistbinding",gaussiandistbinding });
+            CompileLink(OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader, fcode, out string unusedcompilerreport, new object[] { "galtexbinding", galtexbinding, "noisebinding", noisebinding, "gaussiandistbinding",gaussiandistbinding });
         }
 
         // use -1 to indicate no fade/alpha out
 
         public void SetFader(float eyedist)
         {
-            float dist = 3000f;
-            float fade = (eyedist<0) ? -1 : eyedist > dist ? 1.0f : eyedist/dist;
-           // System.Diagnostics.Debug.WriteLine("Fade out " + fade);
-            GL.ProgramUniform1(this.Id, 10, fade);
+            if (Compiled)
+            {
+                float dist = 3000f;
+                float fade = (eyedist < 0) ? -1 : eyedist > dist ? 1.0f : eyedist / dist;
+                // System.Diagnostics.Debug.WriteLine("Fade out " + fade);
+                GL.ProgramUniform1(this.Id, 10, fade);
+            }
         }
     }
 

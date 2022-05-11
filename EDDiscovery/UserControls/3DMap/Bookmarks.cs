@@ -77,15 +77,18 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Create(Vector4[] incomingsys)
         {
-            bookmarkposbuf.AllocateFill(incomingsys);
-            ridisplay.InstanceCount = rifind.InstanceCount = incomingsys.Length;
+            if (objectshader.Compiled)
+            {
+                bookmarkposbuf.AllocateFill(incomingsys);
+                ridisplay.InstanceCount = rifind.InstanceCount = incomingsys.Length;
+            }
         }
 
         public int? Find(Point loc, GLRenderState state, Size viewportsize, out float z)
         {
             z = float.MaxValue;
 
-            if (!objectshader.Enable)
+            if (!objectshader.Enable || !findshader.Compiled)
                 return null;
 
             var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
