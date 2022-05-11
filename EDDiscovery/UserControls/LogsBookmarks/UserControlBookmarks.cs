@@ -398,9 +398,9 @@ namespace EDDiscovery.UserControls
                             EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC).ToStringYearFirst(),
                             bk.isRegion ? bk.Heading : bk.StarName,
                             bk.Note,
-                            bk.x.ToString("0.##"),
-                            bk.y.ToString("0.##"),
-                            bk.z.ToString("0.##"),
+                            bk.x.ToString("0.####"),
+                            bk.y.ToString("0.####"),
+                            bk.z.ToString("0.####"),
                         };
 
                         System.Diagnostics.Debug.WriteLine("Export system " + bkrowno + " " + bk.StarName);
