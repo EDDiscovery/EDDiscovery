@@ -28,7 +28,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEngineers : UserControlCommonBase
     {
-       // EngineerPanel[] engineerpanel;
+        EngineerPanel[] engineerpanel;
 
         public UserControlEngineers()
         {
@@ -50,9 +50,9 @@ namespace EDDiscovery.UserControls
 
         public void Display()
         {
-            //List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
-            //engineers.Sort();
-            //engineerpanel = new EngineerPanel[engineers.Length];
+            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
+            engineers.Sort();
+            engineerpanel = new EngineerPanel[engineers.Count];
 
             //int index = 0;
             //foreach( var e in engineers)
