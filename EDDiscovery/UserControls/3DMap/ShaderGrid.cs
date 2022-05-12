@@ -147,7 +147,8 @@ void main(void)
 
     int ff = (gridwidth == 10000 ) ? 2 : 9;
     
-    float sf =  1.0 - clamp((dist - gridwidth)/float(ff*gridwidth),0,1f);
+    float sd = (dist - gridwidth)/float(ff*gridwidth);
+    float sf =  1.0 - clamp(sd,0,1);
         
     float a = 0.7 * sf;
     float b = 0.3;
