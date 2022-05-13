@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += UCTGChanged;
-      //      DGVLoadColumnLayout(dataGridViewEngineering);
+            DGVLoadColumnLayout(dataGridViewEngineering);
             chkNotHistoric.Checked = !isHistoric;       // upside down now
             chkNotHistoric.Visible = !isEmbedded;
         }
@@ -352,10 +352,9 @@ namespace EDDiscovery.UserControls
             if (e.ColumnIndex == WantedCol.Index)
             {
                 string v = (string)dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value;
-                int iv = 0;
                 int rno = (int)dataGridViewEngineering.Rows[e.RowIndex].Tag;
 
-                if (v.InvariantParse(out iv))
+                if (v.InvariantParse(out int iv))
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     WantedPerRecipe[rno] = iv;

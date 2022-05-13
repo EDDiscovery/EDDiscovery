@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2022 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,26 +13,26 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlEngineers : UserControlCommonBase
     {
-        private EngineerStatusPanel[] engineerpanel;
+        private List<EngineerStatusPanel> engineerpanels;
         private bool isHistoric = false;
         private HistoryEntry last_he = null;
+        RecipeFilterSelector efs;
 
-        private string dbHistoricMatsSave = "GridHistoricMaterials";
+        private string dbHistoricMatsSave = "HistoricMaterials";
+        private string dbWordWrap = "WordWrap";
+        private string dbEngFilterSave = "EngineerFilter";
+        private string dbWSave = "Wanted";
 
         public UserControlEngineers()
         {
@@ -43,6 +43,26 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             isHistoric = GetSetting(dbHistoricMatsSave, false);
+
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;     // install after setup
+
+            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
+            engineers.Sort();
+            efs = new RecipeFilterSelector(engineers);
+            efs.AddGroupOption(string.Join(";",ItemData.ShipEngineers()), "Ship Engineers");
+            efs.AddGroupOption(string.Join(";", ItemData.OnFootEngineers()), "On Foot Engineers");
+            efs.AddGroupOption("Guardian;Guardian Weapons;Human;Special Effect;Suit;Weapon;", "Other Enginnering");
+            efs.SaveSettings += (newvalue, e) => {
+                string prevsetting = GetSetting(dbEngFilterSave,"All");
+                if (prevsetting != newvalue)
+                {
+                    PutSetting(dbEngFilterSave, newvalue);
+                    SetupDisplay();
+                    UpdateDisplay();
+                }
+            };
+
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -119,93 +139,140 @@ namespace EDDiscovery.UserControls
 
         public void SetupDisplay()
         {
+            //System.Diagnostics.Debug.WriteLine($"Setup {BaseUtils.AppTicks.TickCountLap("s1", true)}");
+
+            if ( engineerpanels!=null)
+            {
+                foreach (var ep in engineerpanels)
+                    ep.UnInstallEvents();
+
+                panelEngineers.ClearControls();
+                engineerpanels = null;
+            }
+
+            //System.Diagnostics.Debug.WriteLine($"Cleaned {BaseUtils.AppTicks.TickCountLap("s1")}");
+
             List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
-            engineerpanel = new EngineerStatusPanel[engineers.Count];
+            engineerpanels = new List<EngineerStatusPanel>();
+
+            string engineerssetting = GetSetting(dbEngFilterSave, "All");
+            string colsetting = DGVSaveName();
 
             panelEngineers.SuspendLayout();
 
             int panelvspacing = 210;
             int vpos = 0;
-            int index = 0;
-            foreach (var e in engineers)
+
+            foreach (var name in engineers)
             {
-                engineerpanel[index] = new EngineerStatusPanel();
-                engineerpanel[index].Name = e;
-                ItemData.EngineeringInfo ei = ItemData.GetEngineerInfo(e);
-                //System.Diagnostics.Debug.WriteLine($"Engineers {e}");
+                if (engineerssetting == "All" || engineerssetting.Contains(name))
+                {
+                    var ep = new EngineerStatusPanel();
+                    ep.Name = name;
+                    ItemData.EngineeringInfo ei = ItemData.GetEngineerInfo(name);
+                    ep.Init(name, ei?.StarSystem ?? "", ei?.BaseName ?? "", ei?.Planet ?? "", ei, GetSetting(dbWSave + "_" + name, ""), colsetting);
+                    ep.UpdateWordWrap(extCheckBoxWordWrap.Checked);
 
-                engineerpanel[index].Init(e, ei?.StarSystem ?? "", ei?.BaseName ?? "", ei?.Planet ?? "", ei);
-                panelEngineers.Controls.Add(engineerpanel[index]);
-                engineerpanel[index].Bounds = new Rectangle(0, vpos, panelEngineers.Width, panelvspacing);
+                    ep.Redisplay += () =>
+                    {
+                        PutSetting(dbWSave + "_" + name, ep.WantedPerRecipe.ToString(","));
+                        UpdateDisplay();
+                    };
 
-                vpos += panelvspacing + 4;
-                index++;
+                    ep.ColumnSetupChanged += (panel) =>
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Panel {panel.Name} changed");
+                        panel.SaveDGV(colsetting);      
 
+                        foreach (var p in engineerpanels)
+                        {
+                            if (p != panel)
+                            {
+                                p.LoadDGV(colsetting);
+                            }
+                        }
+                    };
+
+                    //    System.Diagnostics.Debug.WriteLine($"Initial {name} {BaseUtils.AppTicks.TickCountLap("s1")}");
+
+                    panelEngineers.Controls.Add(ep);
+
+                    // need to set bounds after adding, for some reason
+                    ep.Bounds = new Rectangle(0, vpos, panelEngineers.Width - panelEngineers.ScrollBarWidth - 4, panelvspacing);
+
+                    ep.InstallColumnEvents();
+                    engineerpanels.Add(ep);
+
+
+                    vpos += panelvspacing + 4;
+             //       System.Diagnostics.Debug.WriteLine($"Made {name} Complete {BaseUtils.AppTicks.TickCountLap("s1")}");
+                }
             }
 
             panelEngineers.ResumeLayout();
+            //System.Diagnostics.Debug.WriteLine($"Setup Complete {BaseUtils.AppTicks.TickCountLap("s1")}");
 
         }
 
         // last_he is the position, may be null, present if null
         public void UpdateDisplay()
         {
+            //System.Diagnostics.Debug.WriteLine($"Update {BaseUtils.AppTicks.TickCountLap("s2", true)}");
+
             var lastengprog = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he); // may be null
             var system = last_he?.System;       // may be null
 
-            for (int i = 0; i < engineerpanel.Length; i++)
+            for (int i = 0; i < engineerpanels.Count; i++)
             {
-                string e = engineerpanel[i].Name;
+                var ep = engineerpanels[i];
+                string engineer = ep.Name;
+
                 string status = "";
 
-                if (lastengprog != null && engineerpanel[i].EngineerInfo != null)
+                if (lastengprog != null && engineerpanels[i].EngineerInfo != null)
                 {
-                    var state = (lastengprog.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerProgress).Progress(e);
+                    var state = (lastengprog.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerProgress).Progress(engineer);
                     if (state == EliteDangerousCore.JournalEvents.JournalEngineerProgress.InviteState.UnknownEngineer)
                         state = EliteDangerousCore.JournalEvents.JournalEngineerProgress.InviteState.None;      // frontier are not telling, presume none
                     status = state.ToString();
                 }
 
-                engineerpanel[i].UpdateStatus(status,system);
+                var mcllist = last_he != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
+
+                ep.UpdateStatus(status, system, mcllist);
             }
+
+            //System.Diagnostics.Debug.WriteLine($"Update Complete {BaseUtils.AppTicks.TickCountLap("s2")}");
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if ( engineerpanel != null )
+            if ( engineerpanels != null )
             {
-                for (int i = 0; i < engineerpanel.Length; i++)
+                for (int i = 0; i < engineerpanels.Count; i++)
                 {
-                    engineerpanel[i].Width = panelEngineers.Width;
+                    engineerpanels[i].Width = panelEngineers.Width - panelEngineers.ScrollBarWidth - 4;
                 }
             }
         }
+
+        #region UI
+
+        private void buttonFilterEngineer_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            efs.Open(GetSetting(dbEngFilterSave, "All"), b, this.FindForm());
+        }
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
+            foreach( var p in engineerpanels.DefaultIfEmpty())
+                p.UpdateWordWrap(extCheckBoxWordWrap.Checked);
+        }
+
+        #endregion
     }
 }
-
-
-
-//if (ei != null)
-//{
-//    var sys = EliteDangerousCore.DB.SystemCache.FindSystem(ei.StarSystem);
-//    //System.Diagnostics.Debug.WriteLine($"Engineer {e} at {sys.X} {sys.Y} {sys.Z}");
-//    System.Diagnostics.Debug.WriteLine(
-//        $"{{ \"{e}\", new EngineeringInfo( \"{e}\", \"{ei.StarSystem}\",\"{ei.BaseName}\",\r\n" +
-//        $"    {sys.X},{sys.Y},{sys.Z},\"\",\r\n" +
-//        $"    \"{ei.DiscoveryRequirements}\",\r\n" +
-//        $"    \"{ei.MeetingRequirements}\",\r\n" +
-//        $"    \"{ei.UnlockRequirements}\",\r\n" +
-//        $"    \"{ei.ReputationGain}\",\r\n" +
-//        $"    {ei.PermitRequired},{ei.OdysseyEnginner}) }},\r\n");
-
-
-//    // string url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(sys.Name);
-//    // BaseUtils.BrowserInfo.LaunchBrowser(url);
-
-//}
-//else
-//{
-//    System.Diagnostics.Debug.WriteLine($"!!!! Unknown {e}");
-//}

@@ -533,6 +533,12 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Engineers\Special Effect.png" />
+    <EmbeddedResource Include="Engineers\Weapon.png" />
+    <EmbeddedResource Include="Engineers\Suit.png" />
+    <EmbeddedResource Include="Engineers\Human.png" />
+    <EmbeddedResource Include="Engineers\Guardian Weapons.png" />
+    <EmbeddedResource Include="Engineers\Guardian.png" />
     <EmbeddedResource Include="Engineers\Baltanos.jpg" />
     <EmbeddedResource Include="Engineers\Domino Green.jpg" />
     <EmbeddedResource Include="Engineers\Eleanor Bresa.jpg" />

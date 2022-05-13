@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterEngineer.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterEngineer.TabIndex = 1;
             this.buttonFilterEngineer.UseVisualStyleBackColor = true;
+            this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
             // 
             // extCheckBoxWordWrap
             // 
@@ -126,7 +127,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.HideScrollBar = false;
             this.extScrollBar1.LargeChange = 10;
             this.extScrollBar1.Location = new System.Drawing.Point(732, 0);
-            this.extScrollBar1.Maximum = 100;
+            this.extScrollBar1.Maximum = -478;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -140,8 +141,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
-            this.extScrollBar1.Value = 0;
-            this.extScrollBar1.ValueLimited = 0;
+            this.extScrollBar1.Value = -478;
+            this.extScrollBar1.ValueLimited = -478;
             // 
             // UserControlEngineers
             // 

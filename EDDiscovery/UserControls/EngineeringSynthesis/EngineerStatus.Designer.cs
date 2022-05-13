@@ -33,24 +33,23 @@ namespace EDDiscovery.UserControls
             this.panelOuter = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewEngineering = new BaseUtils.DataGridViewColumnControl();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
+            this.engineerImage = new System.Windows.Forms.PictureBox();
+            this.labelBaseName = new System.Windows.Forms.Label();
+            this.labelEngineerStatus = new System.Windows.Forms.Label();
+            this.labelPlanet = new System.Windows.Forms.Label();
+            this.labelEngineerDistance = new System.Windows.Forms.Label();
+            this.labelEngineerStarSystem = new System.Windows.Forms.Label();
+            this.labelEngineerName = new System.Windows.Forms.Label();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ModuleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AvailableCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PercentageCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RecipeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EngineersCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.engineerImage = new System.Windows.Forms.PictureBox();
-            this.labelBaseName = new System.Windows.Forms.Label();
-            this.labelEngineerStatus = new System.Windows.Forms.Label();
-            this.labelEngineerDistance = new System.Windows.Forms.Label();
-            this.labelEngineerStarSystem = new System.Windows.Forms.Label();
-            this.labelEngineerName = new System.Windows.Forms.Label();
-            this.labelPlanet = new System.Windows.Forms.Label();
             this.panelOuter.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
@@ -80,9 +79,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(396, 0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(357, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(472, 309);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(511, 309);
             this.dataViewScrollerPanel.TabIndex = 2;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -101,7 +100,6 @@ namespace EDDiscovery.UserControls
             this.LevelCol,
             this.MaxCol,
             this.WantedCol,
-            this.AvailableCol,
             this.PercentageCol,
             this.NotesCol,
             this.RecipeCol,
@@ -113,91 +111,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.RowHeadersWidth = 25;
             this.dataGridViewEngineering.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewEngineering.SingleRowSelect = true;
-            this.dataGridViewEngineering.Size = new System.Drawing.Size(456, 309);
+            this.dataGridViewEngineering.Size = new System.Drawing.Size(495, 309);
             this.dataGridViewEngineering.TabIndex = 1;
-            // 
-            // UpgradeCol
-            // 
-            this.UpgradeCol.HeaderText = "Upgrade/Mat";
-            this.UpgradeCol.MinimumWidth = 50;
-            this.UpgradeCol.Name = "UpgradeCol";
-            this.UpgradeCol.ReadOnly = true;
-            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ModuleCol
-            // 
-            this.ModuleCol.HeaderText = "Module";
-            this.ModuleCol.MinimumWidth = 50;
-            this.ModuleCol.Name = "ModuleCol";
-            this.ModuleCol.ReadOnly = true;
-            this.ModuleCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // LevelCol
-            // 
-            this.LevelCol.FillWeight = 25F;
-            this.LevelCol.HeaderText = "Level";
-            this.LevelCol.MinimumWidth = 50;
-            this.LevelCol.Name = "LevelCol";
-            this.LevelCol.ReadOnly = true;
-            this.LevelCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // MaxCol
-            // 
-            this.MaxCol.FillWeight = 25F;
-            this.MaxCol.HeaderText = "Max";
-            this.MaxCol.MinimumWidth = 50;
-            this.MaxCol.Name = "MaxCol";
-            this.MaxCol.ReadOnly = true;
-            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // WantedCol
-            // 
-            this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Wanted";
-            this.WantedCol.MinimumWidth = 50;
-            this.WantedCol.Name = "WantedCol";
-            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // AvailableCol
-            // 
-            this.AvailableCol.FillWeight = 25F;
-            this.AvailableCol.HeaderText = "Avail.";
-            this.AvailableCol.MinimumWidth = 50;
-            this.AvailableCol.Name = "AvailableCol";
-            this.AvailableCol.ReadOnly = true;
-            this.AvailableCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // PercentageCol
-            // 
-            this.PercentageCol.FillWeight = 25F;
-            this.PercentageCol.HeaderText = "%";
-            this.PercentageCol.Name = "PercentageCol";
-            // 
-            // NotesCol
-            // 
-            this.NotesCol.FillWeight = 150F;
-            this.NotesCol.HeaderText = "Notes";
-            this.NotesCol.MinimumWidth = 50;
-            this.NotesCol.Name = "NotesCol";
-            this.NotesCol.ReadOnly = true;
-            this.NotesCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // RecipeCol
-            // 
-            this.RecipeCol.FillWeight = 50F;
-            this.RecipeCol.HeaderText = "Recipe";
-            this.RecipeCol.MinimumWidth = 15;
-            this.RecipeCol.Name = "RecipeCol";
-            this.RecipeCol.ReadOnly = true;
-            this.RecipeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // EngineersCol
-            // 
-            this.EngineersCol.HeaderText = "Engineers";
-            this.EngineersCol.MinimumWidth = 50;
-            this.EngineersCol.Name = "EngineersCol";
-            this.EngineersCol.ReadOnly = true;
-            this.EngineersCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewEngineering.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEngineering_CellEndEdit);
             // 
             // vScrollBarCustomMC
             // 
@@ -210,7 +126,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(456, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(495, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -255,6 +171,15 @@ namespace EDDiscovery.UserControls
             this.labelEngineerStatus.TabIndex = 0;
             this.labelEngineerStatus.Text = "<code>";
             // 
+            // labelPlanet
+            // 
+            this.labelPlanet.AutoSize = true;
+            this.labelPlanet.Location = new System.Drawing.Point(263, 63);
+            this.labelPlanet.Name = "labelPlanet";
+            this.labelPlanet.Size = new System.Drawing.Size(43, 13);
+            this.labelPlanet.TabIndex = 0;
+            this.labelPlanet.Text = "<code>";
+            // 
             // labelEngineerDistance
             // 
             this.labelEngineerDistance.AutoSize = true;
@@ -282,14 +207,79 @@ namespace EDDiscovery.UserControls
             this.labelEngineerName.TabIndex = 0;
             this.labelEngineerName.Text = "<code>";
             // 
-            // labelPlanet
+            // UpgradeCol
             // 
-            this.labelPlanet.AutoSize = true;
-            this.labelPlanet.Location = new System.Drawing.Point(263, 63);
-            this.labelPlanet.Name = "labelPlanet";
-            this.labelPlanet.Size = new System.Drawing.Size(43, 13);
-            this.labelPlanet.TabIndex = 0;
-            this.labelPlanet.Text = "<code>";
+            this.UpgradeCol.HeaderText = "Upgrade/Mat";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
+            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ModuleCol
+            // 
+            this.ModuleCol.HeaderText = "Module";
+            this.ModuleCol.MinimumWidth = 50;
+            this.ModuleCol.Name = "ModuleCol";
+            this.ModuleCol.ReadOnly = true;
+            this.ModuleCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // LevelCol
+            // 
+            this.LevelCol.FillWeight = 25F;
+            this.LevelCol.HeaderText = "Level";
+            this.LevelCol.MinimumWidth = 50;
+            this.LevelCol.Name = "LevelCol";
+            this.LevelCol.ReadOnly = true;
+            this.LevelCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // MaxCol
+            // 
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Max";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
+            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Wanted";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // PercentageCol
+            // 
+            this.PercentageCol.FillWeight = 25F;
+            this.PercentageCol.HeaderText = "%";
+            this.PercentageCol.Name = "PercentageCol";
+            // 
+            // NotesCol
+            // 
+            this.NotesCol.FillWeight = 150F;
+            this.NotesCol.HeaderText = "Notes";
+            this.NotesCol.MinimumWidth = 50;
+            this.NotesCol.Name = "NotesCol";
+            this.NotesCol.ReadOnly = true;
+            this.NotesCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // RecipeCol
+            // 
+            this.RecipeCol.FillWeight = 50F;
+            this.RecipeCol.HeaderText = "Recipe";
+            this.RecipeCol.MinimumWidth = 15;
+            this.RecipeCol.Name = "RecipeCol";
+            this.RecipeCol.ReadOnly = true;
+            this.RecipeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // EngineersCol
+            // 
+            this.EngineersCol.HeaderText = "Engineers";
+            this.EngineersCol.MinimumWidth = 50;
+            this.EngineersCol.Name = "EngineersCol";
+            this.EngineersCol.ReadOnly = true;
+            this.EngineersCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // EngineerStatusPanel
             // 
@@ -317,18 +307,17 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelEngineerStarSystem;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private BaseUtils.DataGridViewColumnControl dataGridViewEngineering;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
+        private System.Windows.Forms.Label labelBaseName;
+        private System.Windows.Forms.Label labelPlanet;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ModuleCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn LevelCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WantedCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AvailableCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn PercentageCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn RecipeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn EngineersCol;
-        private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
-        private System.Windows.Forms.Label labelBaseName;
-        private System.Windows.Forms.Label labelPlanet;
     }
 }
