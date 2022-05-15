@@ -236,7 +236,8 @@ namespace EDDiscovery
         public void Open3DMap(ISystem system, List<ISystem> route = null)     // current-map open/goto this system. system may be null. Optionally set a route
         {
             var map3d = Open3DMap();
-            map3d.SetRoute(route);
+            if ( route != null )
+                map3d.SetRoute(route);
             map3d.GotoSystem(system);
         }
 
