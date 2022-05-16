@@ -36,8 +36,6 @@ namespace EDDiscovery.UserControls.Map3D
             var vert = new GLPLVertexScaleLookat(rotatetoviewer: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true,
                                                             autoscale: 30, autoscalemin: 1f, autoscalemax: 30f); // above autoscale, 1f
 
-            GLOFC.GLStatics.Check();
-
             const int texbindingpoint = 1;
             var frag = new GLPLFragmentShaderTexture(texbindingpoint);       // binding - simple texturer based on vs model coords
 
@@ -79,15 +77,18 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Create(Vector4[] incomingsys)
         {
-            bookmarkposbuf.AllocateFill(incomingsys);
-            ridisplay.InstanceCount = rifind.InstanceCount = incomingsys.Length;
+            if (objectshader.Compiled)
+            {
+                bookmarkposbuf.AllocateFill(incomingsys);
+                ridisplay.InstanceCount = rifind.InstanceCount = incomingsys.Length;
+            }
         }
 
         public int? Find(Point loc, GLRenderState state, Size viewportsize, out float z)
         {
             z = float.MaxValue;
 
-            if (!objectshader.Enable)
+            if (!objectshader.Enable || !findshader.Compiled)
                 return null;
 
             var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);

@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Local3DMapPanel_";
 
-            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
+            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter,null,4,6);
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
         }
 
@@ -48,33 +48,36 @@ namespace EDDiscovery.UserControls
 
             // load setup restore settings of map
             map = new Map();
-            map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
+
+            if (map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this,
                   Map.Parts.None
                 | Map.Parts.Galaxy
-                | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute  
+                | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute
                 | Map.Parts.EDSMStars
-                | Map.Parts.PrepopulateEDSMLocalArea            
-                | Map.Parts.Menu        
-                | Map.Parts.SearchBox | Map.Parts.RightClick 
-                | Map.Parts.YHoldButton | Map.Parts.GalaxyResetPos 
+                | Map.Parts.PrepopulateEDSMLocalArea
+                | Map.Parts.Menu
+                | Map.Parts.SearchBox | Map.Parts.RightClick
+                | Map.Parts.YHoldButton | Map.Parts.GalaxyResetPos
                 | Map.Parts.Bookmarks
-                );
+                )
+                )
+            {
+                mapsave = new UserControl3DMap.MapSaverImpl(this);
+                map.LoadState(mapsave, true, 200000);
 
-            mapsave = new UserControl3DMap.MapSaverImpl(this);
-            map.LoadState(mapsave,true,200000);
+                map.UpdateEDSMStarsLocalArea();    // now try and ask for a populated update after loading the settings
 
-            map.UpdateEDSMStarsLocalArea();    // now try and ask for a populated update after loading the settings
+                map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
 
-            map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
+                // start clock
+                systemtimer.Interval = 50;
+                systemtimer.Tick += new EventHandler(SystemTick);
+                systemtimer.Start();
 
-            // start clock
-            systemtimer.Interval = 50;
-            systemtimer.Tick += new EventHandler(SystemTick);
-            systemtimer.Start();
-
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;
+                discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+                discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+                discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;
+            }
         }
 
         public override void Closing()

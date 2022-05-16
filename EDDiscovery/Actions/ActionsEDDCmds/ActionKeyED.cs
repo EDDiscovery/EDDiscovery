@@ -34,9 +34,9 @@ namespace EDDiscovery.Actions
         {
             public EliteDangerousCore.BindingsFile bindingsfile;
 
-            public Tuple<string, int, string> Parse(string s, bool beforeprefix)
+            public Tuple<string, string> Parse(ref string s)
             {
-                if ( !beforeprefix && s.Length > 0 && s.StartsWith("{"))     // frontier bindings start with decoration
+                if ( s.Length > 0 && s.StartsWith("{"))     // frontier bindings start with decoration
                 {
                     int endindex = s.IndexOf("}");
                     if ( endindex>=0 )                      // valid {}
@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
 
                         if (!bindingsfile.KeyNames.Contains(binding))       // first check its a valid name..
                         {
-                            return new Tuple<string, int, string>(null, 0, "Binding name " + binding + " is not an known binding");
+                            return new Tuple<string, string>(null, "Binding name " + binding + " is not an known binding");
                         }
 
                         List<Tuple<Device, Assignment>> matches 
@@ -58,25 +58,27 @@ namespace EDDiscovery.Actions
 
                             if ( !keys.Contains(Keys.None)) // if no errors
                             {
+                                s = s.Substring(endindex + 1);      // remove {binding}
+
                                 string keyseq = keys.GenerateSequence();
                                // System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
-                                return new Tuple<string, int, string>(keyseq, endindex + 1, null);
+                                return new Tuple<string, string>(keyseq, null);
                             }
                             else
                             {
                                 string[] names = (from x in matches[0].Item2.keys select x.Key).ToArray();
-                                return new Tuple<string, int, string>(null, 0, "Key name(s) not recognised: " + String.Join(",",names) );
+                                return new Tuple<string, string>(null, "Key name(s) not recognised: " + String.Join(",",names) );
                             }
                         }
                         else
                         {
                             System.Diagnostics.Debug.WriteLine("No key binding for " + binding);
-                            return new Tuple<string, int, string>(null, 0, errmsgforbinding + binding);
+                            return new Tuple<string, string>(null, errmsgforbinding + binding);
                         }
                     }
                 }
 
-                return new Tuple<string, int, string>(null, 0, null);
+                return null;
             }
         }
 

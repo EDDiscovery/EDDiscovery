@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += UCTGChanged;
-      //      DGVLoadColumnLayout(dataGridViewEngineering);
+            DGVLoadColumnLayout(dataGridViewEngineering);
             chkNotHistoric.Checked = !isHistoric;       // upside down now
             chkNotHistoric.Visible = !isEmbedded;
         }
@@ -163,14 +163,7 @@ namespace EDDiscovery.UserControls
         internal void SetHistoric(bool newVal)
         {
             isHistoric = newVal;
-            if (isHistoric)
-            {
-                last_he = uctg.GetCurrentHistoryEntry;
-            }
-            else
-            {
-                last_he = discoveryform.history.GetLast;
-            }
+            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
             Display();
         }
 
@@ -187,10 +180,13 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
-            if (he.journalEntry is ICommodityJournalEntry || he.journalEntry is IMaterialJournalEntry)
+            if (!isHistoric)    // only if current (not on history cursor)
             {
-                Display();
+                last_he = he;
+                if (he.journalEntry is ICommodityJournalEntry || he.journalEntry is IMaterialJournalEntry)
+                {
+                    Display();
+                }
             }
         }
 
@@ -289,8 +285,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
                         dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(mcllist);
                         dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
-                        if (res.Item5 >= 100.0)
-                            dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridHighlightBack;
+                        dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = (res.Item5 >= 100.0) ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                     }
                     if (WantedPerRecipe[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {
@@ -357,10 +352,9 @@ namespace EDDiscovery.UserControls
             if (e.ColumnIndex == WantedCol.Index)
             {
                 string v = (string)dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value;
-                int iv = 0;
                 int rno = (int)dataGridViewEngineering.Rows[e.RowIndex].Tag;
 
-                if (v.InvariantParse(out iv))
+                if (v.InvariantParse(out int iv))
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     WantedPerRecipe[rno] = iv;

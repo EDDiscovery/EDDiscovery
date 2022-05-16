@@ -288,6 +288,10 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public string DGVSaveName(string auxname = "")
+        {
+            return DBName(displaynumber, DBBaseName + auxname, "DGVCol");
+        }
 
         public void DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
         {

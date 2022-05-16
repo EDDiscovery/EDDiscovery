@@ -125,6 +125,8 @@ namespace EDDiscovery.UserControls.Map3D
         private int localareasize = 50;
         private UserControlCommonBase parent;
 
+        private bool mapcreatedokay = false; 
+
         public Map()
         {
         }
@@ -141,7 +143,7 @@ namespace EDDiscovery.UserControls.Map3D
         public ulong ElapsedTimems { get { return glwfc.ElapsedTimems; } }
 
         #region Initialise
-        public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
+        public bool Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
         {
             this.parent = parent;
 
@@ -151,7 +153,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             hptimer.Start();
 
-            Bitmap galaxybitmap = BaseUtils.Icons.IconSet.GetBitmap("GalMap.Galaxy_L180");
+            GLShaderLog.Reset();
+            GLShaderLog.AssertOnError = false;
 
             items.Add(new GLMatrixCalcUniformBlock(), "MCUB");     // create a matrix uniform block 
 
@@ -161,6 +164,8 @@ namespace EDDiscovery.UserControls.Map3D
             // parts = parts - (1 << 9);
 
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
+            Bitmap galaxybitmap = BaseUtils.Icons.IconSet.GetBitmap("GalMap.Galaxy_L180");
 
             if ((parts & Parts.Galaxy) != 0) // galaxy
             {
@@ -305,8 +310,9 @@ namespace EDDiscovery.UserControls.Map3D
                 starsprites = new GLPointSpriteShader(items.Tex("lensflare"), 64, 40);
                 items.Add(starsprites, "PS");
                 var p = GLPointsFactory.RandomStars4(1000, 0, 25899 / lyscale, 10000 / lyscale, 1000 / lyscale, -1000 / lyscale);
-                GLRenderState rps = GLRenderState.PointSprites();
-                rObjects.Add(starsprites, "starsprites", GLRenderableItem.CreateVector4Color4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Points, rps, p, new Color4[] { Color.White }));
+                GLRenderState rps = GLRenderState.PointsByProgram();
+                rObjects.Add(starsprites, "starsprites", GLRenderableItem.CreateVector4Color4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Points, rps, p, 
+                                                new Color4[] { Color.White }));
             }
 
             if ((parts & Parts.Grid) != 0)
@@ -316,7 +322,7 @@ namespace EDDiscovery.UserControls.Map3D
                 gridshader = new GLShaderPipeline(gridvertshader, gridfragshader);
                 items.Add(gridshader, "DYNGRID");
 
-                GLRenderState rl = GLRenderState.Lines(1);
+                GLRenderState rl = GLRenderState.Lines();
                 gridrenderable = GLRenderableItem.CreateNullVertex(OpenTK.Graphics.OpenGL4.PrimitiveType.Lines, rl, drawcount: 2);
                 rObjects.Add(gridshader, "DYNGRIDRENDER", gridrenderable);
             }
@@ -404,6 +410,17 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.Focusable = true;          // we want to be able to focus and receive key presses.
             displaycontrol.SetFocus();
 
+            displaycontrol.Paint += (ts) => {
+                System.Diagnostics.Debug.Assert(displaycontrol.IsCurrent());
+                // MCUB set up by Controller3DDraw which did the work first
+                galaxymenu?.UpdateCoords(gl3dcontroller);
+                displaycontrol.Animate(glwfc.ElapsedTimems);
+
+                GLStatics.ClearDepthBuffer();         // clear the depth buffer, so we are on top of all previous renders.
+                displaycontrol.Render(glwfc.RenderState, ts);
+            };
+
+
             GLBaseControl.Themer = MapThemer.Theme;
 
             // 3d controller
@@ -423,29 +440,13 @@ namespace EDDiscovery.UserControls.Map3D
                 return (float)ms * v;
             };
 
-            // hook gl3dcontroller to display control - its the slave. Do not register mouse UI, we will deal with that and feed any events thru we want
-            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: true);
-
-            if (displaycontrol != null)
-            {
-                displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
-                {
-                    System.Diagnostics.Debug.Assert(displaycontrol.IsCurrent());
-                    // MCUB set up by Controller3DDraw which did the work first
-                    galaxymenu?.UpdateCoords(gl3dcontroller);
-                    displaycontrol.Animate(glwfc.ElapsedTimems);
-
-                    GLStatics.ClearDepthBuffer();         // clear the depth buffer, so we are on top of all previous renders.
-                    displaycontrol.Render(glwfc.RenderState, ts);
-                };
-            }
+            // start hooks the glwfc paint function up, first, so it gets to go first
+            // No ui events from glwfc.
+            gl3dcontroller.Start(matrixcalc, glwfc, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: false);
+            gl3dcontroller.Hook(displaycontrol, glwfc); // we get 3dcontroller events from displaycontrol, so it will get them when everything else is unselected
+            displaycontrol.Hook();  // now we hook up display control to glwin, and paint
 
             displaycontrol.MouseClick += MouseClickOnMap;       // grab mouse UI
-            displaycontrol.MouseUp += MouseUpOnMap;
-            displaycontrol.MouseDown += MouseDownOnMap;
-            displaycontrol.MouseMove += MouseMoveOnMap;
-            displaycontrol.MouseWheel += MouseWheelOnMap;
-
 
             if ((parts & Parts.Menu) != 0)
             {
@@ -703,6 +704,17 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Start();
 
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+
+            string shaderlog = GLShaderLog.ShaderLog;
+            if (shaderlog.HasChars())
+            {
+                var inf = new ExtendedControls.InfoForm();
+                inf.Info("Shader log - report to EDD team", Properties.Resources.edlogo_3mo_icon, shaderlog);
+                inf.Show();
+            }
+
+            mapcreatedokay = GLShaderLog.Okay;      // record shader status
+            return mapcreatedokay;
         }
         #endregion
 
@@ -710,7 +722,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateTravelPath()   // new history entry
         {
-            if (travelpath != null)
+            if (travelpath != null )
             {
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
@@ -721,7 +733,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateNavRoute()
         {
-            if (navroute != null)
+            if (navroute != null )
             {
                 var route = parent.discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                 if (route?.Route != null) // If a navroute with a valid route..
@@ -745,8 +757,11 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateEDSMStarsLocalArea()
         {
-            galaxystars?.ClearBoxAround();
-            CheckRefreshLocalArea();      
+            if (galaxystars != null )
+            {
+                galaxystars.ClearBoxAround();
+                CheckRefreshLocalArea();
+            }
         }
 
         public void CheckRefreshLocalArea()
@@ -790,6 +805,7 @@ namespace EDDiscovery.UserControls.Map3D
                                 if (dr == GLForm.DialogResultEnum.OK)
                                 {
                                     EliteDangerousCore.DB.GlobalBookMarkList.Instance.Delete(bkm);
+                                    UpdateBookmarks();
                                 }
                             }
                         );
@@ -1027,7 +1043,7 @@ namespace EDDiscovery.UserControls.Map3D
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
             TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
             TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
-            if ((TravelPathStartDateEnable || TravelPathEndDateEnable) && travelpath!=null)
+            if ((TravelPathStartDateEnable || TravelPathEndDateEnable) && travelpath != null)
                 travelpath.Refresh();       // and refresh it if we set the data
 
             GalObjectDisplay = defaults.GetSetting("GALOD", true);
@@ -1046,17 +1062,20 @@ namespace EDDiscovery.UserControls.Map3D
             Grid = defaults.GetSetting("GRIDS", true);
 
             GalaxyStars = defaults.GetSetting("GALSTARS", 3);
-            GalaxyStarsMaxObjects = (loadlimit==0) ? defaults.GetSetting("GALSTARSOBJ", 500000) : loadlimit;
+            GalaxyStarsMaxObjects = (loadlimit == 0) ? defaults.GetSetting("GALSTARSOBJ", 500000) : loadlimit;
             LocalAreaSize = defaults.GetSetting("LOCALAREALY", 50);
 
             ShowBookmarks = defaults.GetSetting("BKMK", true);
 
-            if (restorepos )
+            if (restorepos)
                 gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
         }
 
         public void SaveState(MapSaver defaults)
         {
+            if (!mapcreatedokay)
+                return;
+
             defaults.PutSetting("GD", GalaxyDisplay);
             defaults.PutSetting("SDD", StarDotsSpritesDisplay);
             defaults.PutSetting("TPD", TravelPathTapeDisplay);
@@ -1197,6 +1216,9 @@ namespace EDDiscovery.UserControls.Map3D
         // Context is set.
         private void Controller3DDraw(Controller3D c3d, ulong time)
         {
+            if (!mapcreatedokay)
+                return;
+
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
@@ -1270,22 +1292,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         #region UI
 
-        private void MouseDownOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseDown(s, e);
-        }
-
-        private void MouseUpOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseUp(s, e);
-        }
-
-        private void MouseMoveOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseMove(s, e);
-        }
-
-        private void MouseClickOnMap(Object s, GLMouseEventArgs e)
+        private void MouseClickOnMap(GLBaseControl s, GLMouseEventArgs e)
         {
             int distmovedsq = gl3dcontroller.MouseMovedSq(e);        //3dcontroller is monitoring mouse movements
             if (distmovedsq < 4)
@@ -1314,11 +1321,6 @@ namespace EDDiscovery.UserControls.Map3D
                     }
                 }
             }
-        }
-
-        private void MouseWheelOnMap(Object s, GLMouseEventArgs e)
-        {
-            gl3dcontroller.MouseWheel(s, e);
         }
 
         private void OtherKeys(GLOFC.Controller.KeyboardMonitor kb)

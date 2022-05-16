@@ -142,7 +142,7 @@ namespace EDDiscovery
                         {
                             var retstate = FrontierCAPI.ManageJournalDownload(EDCommander.Current.ConsoleUploadHistory, EDDOptions.Instance.CAPIDirectory(), 
                                             EDCommander.Current.Name, 
-                                            new TimeSpan(0,30,0),       // journal poll interval
+                                            new TimeSpan(0,15,0),       // journal poll interval
                                             28);    // and days back in time to look
 
                             if (EDCommander.Current.ConsoleUploadHistory == null || !retstate.DeepEquals(EDCommander.Current.ConsoleUploadHistory))     // if changed

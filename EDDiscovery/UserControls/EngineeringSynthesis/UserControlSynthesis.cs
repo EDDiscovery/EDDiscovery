@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -152,14 +152,7 @@ namespace EDDiscovery.UserControls
         internal void SetHistoric(bool newVal)
         {
             isHistoric = newVal;
-            if (isHistoric)
-            {
-                last_he = uctg.GetCurrentHistoryEntry;
-            }
-            else
-            {
-                last_he = discoveryform.history.GetLast;
-            }
+            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
             Display();
         }
 
@@ -176,12 +169,15 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
-            //touchdown and liftoff ensure shopping list refresh in case displaying landed planet mats, scan for mat availability while flying in same
-            if (he.journalEntry is IMaterialJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff
-                || he.IsLocOrJump || he.journalEntry.EventTypeID == JournalTypeEnum.Scan)       // only scan can change material list
+            if (!isHistoric) // only if current (not on history cursor)
             {
-                Display();
+                last_he = he;
+                //touchdown and liftoff ensure shopping list refresh in case displaying landed planet mats, scan for mat availability while flying in same
+                if (he.journalEntry is IMaterialJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff
+                    || he.IsLocOrJump || he.journalEntry.EventTypeID == JournalTypeEnum.Scan)       // only scan can change material list
+                {
+                    Display();
+                }
             }
         }
 
@@ -266,8 +262,7 @@ namespace EDDiscovery.UserControls
                             row.Cells[6].ToolTipText = res.Item4;
                             row.Cells[7].Value = r.IngredientsStringvsCurrent(totalmcl);    // recipe
                             row.Cells[7].ToolTipText = r.IngredientsStringLong;
-                            if (res.Item5 >= 100.0)
-                                row.DefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridHighlightBack;
+                            row.DefaultCellStyle.BackColor = res.Item5 >= 100.0 ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                         }
                     }
                     if (WantedPerRecipe[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
@@ -326,10 +321,9 @@ namespace EDDiscovery.UserControls
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             string v = (string)dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            int iv = 0;
             int rno = (int)dataGridViewSynthesis.Rows[e.RowIndex].Tag;
 
-            if (v.InvariantParse(out iv))
+            if (v.InvariantParse(out int iv))
             {
                 if (e.ColumnIndex == 3)
                 {

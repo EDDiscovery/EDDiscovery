@@ -144,8 +144,8 @@
       <DependentUpon>Controls.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </None>
-    <Reference Include="GLOFC, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.0.9.0\lib\net48\GLOFC.dll</HintPath>
+    <Reference Include="GLOFC, Version=0.9.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.GLOFC.0.9.7\lib\net48\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
@@ -241,6 +241,18 @@
     </Compile>
     <Compile Include="UserControls\CurrentState\UserControlStatistics.Designer.cs">
       <DependentUpon>UserControlStatistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\EngineerStatus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\EngineerStatus.Designer.cs">
+      <DependentUpon>EngineerStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlEngineers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlEngineers.Designer.cs">
+      <DependentUpon>UserControlEngineers.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.cs">
       <SubType>UserControl</SubType>
@@ -788,6 +800,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlStatistics.resx">
       <DependentUpon>UserControlStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\EngineerStatus.resx">
+      <DependentUpon>EngineerStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineers.resx">
+      <DependentUpon>UserControlEngineers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Form\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>

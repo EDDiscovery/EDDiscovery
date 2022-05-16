@@ -83,6 +83,7 @@ namespace EDDiscovery
             Map3D = 53,
             LocalMap3D = 54,
             Organics = 55,
+            Engineers = 56,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -118,6 +119,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Engineering, typeof(UserControlEngineering), "Engineering", "Engineering", "Engineering planner") },
             { new PanelInfo( PanelIDs.ShoppingList, typeof(UserControlShoppingList), "Shopping List", "ShoppingList", "Shopping list planner combining synthesis and engineering") },
             { new PanelInfo( PanelIDs.MaterialTrader, typeof(UserControlMaterialTrader), "Material Trader", "MaterialTrader", "Material trader") },
+            { new PanelInfo( PanelIDs.Engineers, typeof(UserControlEngineers), "Engineers", "Engineers", "List of Engineers, status, recipes") },
 
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system") },

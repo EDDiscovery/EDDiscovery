@@ -85,7 +85,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "SuitsWeapons", ["wiki"] = "/Using-the-Suits-and-Weapons-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "MicroResources", ["wiki"] = "/Using-the-Micro-Resources-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Map3D", ["wiki"] = "/Using-the-3D-Map", ["video"] = "" },
+                new JObject() { ["panel"] = "Map3D", ["wiki"] = "/Using-the-3D-Map", ["video"] = "https://youtu.be/9c09d93zFB8" },
                 new JObject() { ["panel"] = "Organics", ["wiki"] = "/Using-the-Organic-Scans", ["video"] = "" },
                 new JObject() { ["panel"] = "Theming", ["wiki"] = "/Configuring-the-look-of-EDDiscovery", ["video"] = "" },
                 new JObject() { ["panel"] = "SafeMode", ["wiki"] = "/Safe-Mode", ["video"] = "" },

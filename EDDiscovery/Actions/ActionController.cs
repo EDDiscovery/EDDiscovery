@@ -146,7 +146,7 @@ namespace EDDiscovery.Actions
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
-            frontierbindings.LoadBindingsFile(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Frontier Developments\Elite Dangerous\Options\Bindings"),true);
+            frontierbindings.LoadBindingsFile(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments","Elite Dangerous","Options","Bindings"),true);
 
             ErrorList = actionfiles.LoadAllActionFiles(EDDOptions.Instance.ActionsAppDirectory());
 

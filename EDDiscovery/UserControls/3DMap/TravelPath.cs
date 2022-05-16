@@ -164,8 +164,11 @@ namespace EDDiscovery.UserControls.Map3D
         // currentfilteredlist set, go..
         private void CreatePathInt(Color? tapepathdefault = null)
         {
+            if (!tapeshader.Compiled || !sunshader.Compiled)
+                return;
+
             // Note W here selects the colour index of the stars, 0 = first, 1 = second etc
-            
+
             Vector4[] positionsv4 = currentfilteredlistsys.Select(x => new Vector4((float)x.X, (float)x.Y, (float)x.Z, 0)).ToArray();
           //   positionsv4 = positionsv4.Take(2).ToArray(); // debug
 
@@ -254,7 +257,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             z = float.MaxValue;
 
-            if (EnableStars && (currentfilteredlistsys?.Count ?? 0) > 0)
+            if (EnableStars && findshader.Compiled && (currentfilteredlistsys?.Count ?? 0) > 0)
             {
                 var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
                 geo.SetScreenCoords(viewportloc, viewportsize);

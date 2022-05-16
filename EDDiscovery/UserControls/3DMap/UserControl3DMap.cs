@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "3dMapPanel_";
 
-            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
+            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter,null,4,6);
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
         }
 
@@ -48,21 +48,22 @@ namespace EDDiscovery.UserControls
             glwfc.EnsureCurrentContext();
 
             map = new Map();
-            map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, Map.Parts.Map3D);
+            if (map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, Map.Parts.Map3D))
+            {
+                mapsave = new MapSaverImpl(this);
+                map.LoadState(mapsave, true, 0);
 
-            mapsave = new MapSaverImpl(this);
-            map.LoadState(mapsave,true,0);
+                map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
 
-            map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
+                // start clock
+                systemtimer.Interval = 50;
+                systemtimer.Tick += new EventHandler(SystemTick);
+                systemtimer.Start();
 
-            // start clock
-            systemtimer.Interval = 50;
-            systemtimer.Tick += new EventHandler(SystemTick);
-            systemtimer.Start();
-
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
+                discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+                discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+                EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
+            }
         }
 
         public override void Closing()
