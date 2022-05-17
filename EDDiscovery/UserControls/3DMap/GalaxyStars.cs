@@ -68,7 +68,7 @@ namespace EDDiscovery.UserControls.Map3D
             textrc.ClipDistanceEnable = 1;  // we are going to cull primitives which are deleted
 
             int texunitspergroup = 16;
-            textshader = items.NewShaderPipeline(null, new GLPLVertexShaderMatrixQuadTexture(), new GLPLFragmentShaderTexture2DIndexMulti(0, 0, true, texunitspergroup));
+            textshader = items.NewShaderPipeline(null, new GLPLVertexShaderMatrixTriStripTexture(), new GLPLFragmentShaderTexture2DIndexMulti(0, 0, true, texunitspergroup));
 
             slset = new GLSetOfObjectsWithLabels("SLSet", rObjects, texunitspergroup, 100, 10,
                                                             sunshader, shapebuf, shape.Length, starrc, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles,
@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls.Map3D
                                                 ForeText, BackText, 0.5f, textformat: fmt, length: d.systems);
                     }
 
-                    d.textpos = GLPLVertexShaderMatrixQuadTexture.CreateMatrices(d.positions, LabelOffset,  //offset
+                    d.textpos = GLPLVertexShaderMatrixTriStripTexture.CreateMatrices(d.positions, LabelOffset,  //offset
                                                                                 LabelSize, //size
                                                                                 new Vector3(0, 0, 0), // rot (unused due to below)
                                                                                 true, false, // rotate, no elevation
