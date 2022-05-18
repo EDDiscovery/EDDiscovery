@@ -1563,6 +1563,8 @@ namespace EDDiscovery
         UserControlEngineering_NotesCol, // Column Header 'Notes'
         UserControlEngineering_RecipeCol, // Column Header 'Recipe'
         UserControlEngineering_EngineersCol, // Column Header 'Engineers'
+        UserControlEngineering_CraftedCol, // Column Header 'Crafted'
+
         UserControlEngineering_ToolTip, // ToolTip 'Enable or disable word wrap'
         UserControlEngineering_buttonFilterUpgrade_ToolTip, // ToolTip 'Filter the table by upgrade type'
         UserControlEngineering_buttonFilterModule_ToolTip, // ToolTip 'Filter the table by module type'
@@ -1572,7 +1574,6 @@ namespace EDDiscovery
         UserControlEngineering_buttonClear_ToolTip, // ToolTip 'Set all wanted values to zero'
         UserControlEngineering_chkNotHistoric_ToolTip, // ToolTip 'When red, use the materials at the cursor to estimate, when green always use the latest materials.'
         UserControlEngineering_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
-
 
         UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, // ToolStrip control 'Show Max FSD Injections'
         UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, // ToolStrip control 'Show Body Materials When Landed'

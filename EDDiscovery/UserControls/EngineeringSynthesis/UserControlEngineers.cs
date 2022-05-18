@@ -169,8 +169,8 @@ namespace EDDiscovery.UserControls
                 if (engineerssetting == "All" || engineerssetting.Contains(name))
                 {
                     var ep = new EngineerStatusPanel();
-                    ep.Name = name;
                     ItemData.EngineeringInfo ei = ItemData.GetEngineerInfo(name);
+
                     ep.Init(name, ei?.StarSystem ?? "", ei?.BaseName ?? "", ei?.Planet ?? "", ei, GetSetting(dbWSave + "_" + name, ""), colsetting);
                     ep.UpdateWordWrap(extCheckBoxWordWrap.Checked);
 
@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        // last_he is the position, may be null, present if null
+        // last_he is the position, may be nul
         public void UpdateDisplay()
         {
             //System.Diagnostics.Debug.WriteLine($"Update {BaseUtils.AppTicks.TickCountLap("s2", true)}");
@@ -226,11 +226,12 @@ namespace EDDiscovery.UserControls
             for (int i = 0; i < engineerpanels.Count; i++)
             {
                 var ep = engineerpanels[i];
+
                 string engineer = ep.Name;
 
                 string status = "";
 
-                if (lastengprog != null && engineerpanels[i].EngineerInfo != null)
+                if (lastengprog != null && engineerpanels[i].EngineerInfo != null)      // if we have progress, and its an engineer
                 {
                     var state = (lastengprog.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerProgress).Progress(engineer);
                     if (state == EliteDangerousCore.JournalEvents.JournalEngineerProgress.InviteState.UnknownEngineer)
@@ -240,7 +241,17 @@ namespace EDDiscovery.UserControls
 
                 var mcllist = last_he != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
 
-                ep.UpdateStatus(status, system, mcllist);
+                List<HistoryEntry> crafts = null;
+
+                if ( last_he != null)
+                {
+                    if (ep.Name.Contains("Guardian") || ep.Name.Equals("Human"))
+                        crafts = discoveryform.history.Engineering.Get(last_he.Engineering, EngineeringList.TechBrokerID);
+                    else
+                        crafts = discoveryform.history.Engineering.Get(last_he.Engineering, ep.Name);
+                }
+                
+                ep.UpdateStatus(status, system, mcllist,crafts);
             }
 
             //System.Diagnostics.Debug.WriteLine($"Update Complete {BaseUtils.AppTicks.TickCountLap("s2")}");

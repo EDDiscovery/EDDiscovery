@@ -416,7 +416,7 @@ namespace EDDiscovery
                 AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder);
             }
 
-            if (!Directory.Exists(AppDataDirectory))        // make sure its there..
+            if (!Directory.Exists(AppDataDirectory))        // make sure its there, don't fail
                 BaseUtils.FileHelpers.CreateDirectoryNoError(AppDataDirectory);
 
             // here because 1 user did not have a big enough C: drive to holds the SQL temp files!  This may be an over-engineer!
@@ -436,16 +436,23 @@ namespace EDDiscovery
 
             ProcessCommandLineForOptionsFile(AppDataDirectory, ProcessOption);
 
-            // process appdata options files
-            foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
+            try  // protect.. check incase we could not create appdata, because the user gave us a bad location where we can't make directories in
             {
-                ProcessFile(f, ProcessOption);
-            }
+                // process appdata options files
+                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
+                {
+                    ProcessFile(f, ProcessOption);
+                }
 
-            // process appdata dboptions files
-            foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
+                // process appdata dboptions files
+                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
+                {
+                    ProcessFile(f, ProcessOption);
+                }
+            }
+            catch (Exception ex)
             {
-                ProcessFile(f, ProcessOption);
+                System.Diagnostics.Trace.WriteLine($"EDDOptions enumerate exception {ex}");
             }
 
             // do all of the command line except optionsfile and appfolder..

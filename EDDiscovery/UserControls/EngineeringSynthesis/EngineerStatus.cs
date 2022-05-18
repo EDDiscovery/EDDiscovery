@@ -25,7 +25,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class EngineerStatusPanel : UserControl
     {
-        public ItemData.EngineeringInfo EngineerInfo { get; private set; }
+        public ItemData.EngineeringInfo EngineerInfo { get; private set; }      // may be null if entry not associated with an engineer
+        public List<HistoryEntry> Crafts { get; private set; }  // may be null, no crafting, not an engineer, not updated yet
+
         public int RecipesCount { get { return dataGridViewEngineering.RowCount; } }
         public int[] WantedPerRecipe { get; private set; }
 
@@ -55,13 +57,15 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(string name, string starsystem, string planet, string basename, ItemData.EngineeringInfo ei, string wantedsettings, string colsetting)
+        public void Init(string name, string starsystem, string planet, string basename, ItemData.EngineeringInfo ei, 
+                          string wantedsettings, string colsetting)
         {
+            this.Name = name;
             EngineerInfo = ei;
 
             ExtendedControls.Theme.Current?.ApplyStd(this);
             var enumlist = new Enum[] { EDTx.UserControlEngineering_UpgradeCol, EDTx.UserControlEngineering_ModuleCol, EDTx.UserControlEngineering_LevelCol,
-                            EDTx.UserControlEngineering_MaxCol, EDTx.UserControlEngineering_WantedCol, 
+                            EDTx.UserControlEngineering_MaxCol, EDTx.UserControlEngineering_WantedCol, EDTx.UserControlEngineering_CraftedCol,
                             EDTx.UserControlEngineering_NotesCol, EDTx.UserControlEngineering_RecipeCol, EDTx.UserControlEngineering_EngineersCol,
                         };
 
@@ -77,6 +81,10 @@ namespace EDDiscovery.UserControls
             labelPlanet.Text = planet;
             labelBaseName.Text = basename;
             labelEngineerDistance.Text = "";
+            labelCrafts.Text = "";
+
+            if (name == "Weapon" || name == "Suit")        // these are not currently recorded in EngineerList
+                CraftedCol.HeaderText = "-";
 
             dataGridViewEngineering.MakeDoubleBuffered();
 
@@ -154,7 +162,9 @@ namespace EDDiscovery.UserControls
             dataGridViewEngineering.ColumnDisplayIndexChanged -= DataGridViewEngineering_ColumnDisplayIndexChanged;
         }
 
-        public void UpdateStatus(string status, ISystem cursystem, List<MaterialCommodityMicroResource> mcllist)
+        // mcllist may be null, cursystem may be null as may crafts
+
+        public void UpdateStatus(string status, ISystem cursystem, List<MaterialCommodityMicroResource> mcllist, List<HistoryEntry> crafts)
         {
             labelEngineerStatus.Text = status;
             string dist = "";
@@ -182,9 +192,38 @@ namespace EDDiscovery.UserControls
 
                     Recipes.EngineeringRecipe r = row.Tag as Recipes.EngineeringRecipe;
 
+                    string tooltip = "";
+                    int craftcount = 0;
+
+                    foreach (var c in crafts.EmptyIfNull())     // all crafts
+                    {
+                        var cb = c.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerCraftBase;
+                        if (cb != null)     // if an craft base type, check name and level
+                        {
+                            if (cb.Engineering.BlueprintName.Equals(r.fdname, StringComparison.InvariantCultureIgnoreCase) && cb.Engineering.Level == r.LevelInt)
+                            {
+                                tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (c.ShipInformation?.Name ?? "?") + " " + (cb.Engineering.ExperimentalEffect_Localised ?? ""), Environment.NewLine);
+                                craftcount++;
+                            }
+                        }
+                        else if (c.EntryType == JournalTypeEnum.TechnologyBroker)       // if tech broker, check name
+                        {
+                            var tb = c.journalEntry as EliteDangerousCore.JournalEvents.JournalTechnologyBroker;
+                            //string unl = string.Join(",", tb.ItemsUnlocked.Select(x=>x.Name));  System.Diagnostics.Debug.WriteLine($"{unl} {r.fdname}");
+                            if (tb.ItemsUnlocked != null && Array.FindIndex(tb.ItemsUnlocked, x => x.Name.Equals(r.fdname, StringComparison.InvariantCultureIgnoreCase)) >= 0)
+                            {
+                                tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (tb.BrokerType ?? "") + " " + string.Join(",", tb.ItemsUnlocked.Select(x => x.Name_Localised)));
+                                craftcount++;
+                            }
+                        }
+                    }
+
+                    row.Cells[CraftedCol.Index].ToolTipText = tooltip;
+
                     var res = MaterialCommoditiesRecipe.HowManyLeft(mcllist, totals, r, WantedPerRecipe[row.Index], reducetotals: false);    // recipes not chained not in order
 
                     row.Cells[MaxCol.Index].Value = res.Item1.ToString();
+                    row.Cells[CraftedCol.Index].Value = CraftedCol.HeaderText == "-" ? "" : craftcount.ToString();
                     row.Cells[PercentageCol.Index].Value = res.Item5.ToString("N0");
                     row.Cells[NotesCol.Index].Value = res.Item3;
                     row.Cells[NotesCol.Index].ToolTipText = res.Item4;
@@ -196,7 +235,10 @@ namespace EDDiscovery.UserControls
                 dataGridViewEngineering.ResumeLayout();
                 dataViewScrollerPanel.Resume();
             }
+
+            labelCrafts.Text = crafts != null ? (crafts.Count + " crafts") : "";
         }
+
 
         public void UpdateWordWrap(bool ww)
         {
@@ -227,6 +269,12 @@ namespace EDDiscovery.UserControls
                 else
                     dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = WantedPerRecipe[e.RowIndex].ToString();
             }
+        }
+
+        private void dataGridViewEngineering_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if ( e.Column.Index >= 2 && e.Column.Index <= 6)
+                e.SortDataGridViewColumnNumeric();
         }
     }
 }
