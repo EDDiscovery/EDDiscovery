@@ -106,9 +106,10 @@ namespace EDDiscovery.UserControls
             SortOrder sortorderprev = dataGridViewWeapons.SortedColumn != null ? dataGridViewWeapons.SortOrder : SortOrder.Ascending;
             int firstline = dataGridViewWeapons.SafeFirstDisplayedScrollingRowIndex();
 
-            dataGridViewWeapons.Rows.Clear();
-          //  System.Diagnostics.Debug.WriteLine("Clear Weapon grid");
             extPanelDataGridViewScrollWeapons.SuspendLayout();
+            dataGridViewWeapons.SuspendLayout();
+
+            dataGridViewWeapons.Rows.Clear();
 
             if (last_weapons >= 0)
             {
@@ -144,14 +145,14 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            dataGridViewWeapons.Update();
-            extPanelDataGridViewScrollWeapons.ResumeLayout();
 
             dataGridViewWeapons.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewWeapons.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
             if (firstline >= 0 && firstline < dataGridViewWeapons.RowCount)
                 dataGridViewWeapons.SafeFirstDisplayedScrollingRowIndex(firstline);
 
+            dataGridViewWeapons.ResumeLayout();
+            extPanelDataGridViewScrollWeapons.ResumeLayout();
         }
 
         private void dataGridViewWeapons_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -168,13 +169,16 @@ namespace EDDiscovery.UserControls
             SortOrder sortorderprev = dataGridViewSuits.SortedColumn != null ? dataGridViewSuits.SortOrder : SortOrder.Ascending;
             int firstline = dataGridViewSuits.SafeFirstDisplayedScrollingRowIndex();
 
+            extPanelDataGridViewScrollSuits.SuspendLayout();
+            dataGridViewSuits.SuspendLayout();
+
             dataGridViewSuits.Rows.Clear();
           //  System.Diagnostics.Debug.WriteLine("Clear Suit grid");
-            extPanelDataGridViewScrollSuits.SuspendLayout();
 
             if (last_suits >= 0)
             {
-                var suitlist = discoveryform.history.SuitList.Suits(last_suits); 
+                var suitlist = discoveryform.history.SuitList.Suits(last_suits);
+                //foreach (var su in suitlist) System.Diagnostics.Debug.WriteLine($"Suit gen {last_suits}: {su.Value.ID} {su.Value.FDName}");
 
                 var cursuit = discoveryform.history.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
                 var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
@@ -182,7 +186,7 @@ namespace EDDiscovery.UserControls
                 foreach (var s in suitlist)
                 {
                     string stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s.Value.EventTime).ToString();
-                    string sname = s.Value.FriendlyName; // + ":"+(s.Value.ID % 10000);
+                    string sname = s.Value.FriendlyName;// + ":"+(s.Value.ID % 10000);
                     string sprice = s.Value.Price.ToString("N0");
                     string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
 
@@ -231,13 +235,14 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            dataGridViewSuits.Update();
-            extPanelDataGridViewScrollSuits.ResumeLayout();
-
             dataGridViewSuits.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewSuits.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
             if (firstline >= 0 && firstline < dataGridViewSuits.RowCount)
                 dataGridViewSuits.SafeFirstDisplayedScrollingRowIndex(firstline);
+
+            dataGridViewSuits.ResumeLayout();
+            extPanelDataGridViewScrollSuits.ResumeLayout();
+
         }
 
         private void dataGridViewSuits_SortCompare(object sender, DataGridViewSortCompareEventArgs e)

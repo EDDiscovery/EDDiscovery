@@ -472,7 +472,7 @@ namespace EDDiscovery.UserControls
                                + $"st[{item.System.Name}]\r\n"
                                + $"b[{item.Status.BodyName},{item.Status.BodyType},{item.Status.BodyID},ba {item.Status.BodyApproached}]\r\n"
                                + $"s[{item.Status.StationName},{item.Status.StationType}]\r\n"
-                               + $"mc{item.MaterialCommodity}/w{item.Weapons}/s{item.Suits}/l{item.Loadouts}\r\n"
+                               + $"mc{item.MaterialCommodity}/w{item.Weapons}/s{item.Suits}/l{item.Loadouts}/e{item.Engineering}\r\n"
                                + $"b{item.journalEntry.IsBeta}/h{ item.journalEntry.IsHorizons}/o{ item.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{item.Status.BookedTaxi} d {item.Status.BookedDropship}";
 
