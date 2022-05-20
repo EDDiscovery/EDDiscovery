@@ -269,10 +269,15 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     //for (int i = 0; i < res.Length; i++) System.Diagnostics.Debug.WriteLine(i + " = " + res[i]);
                     z = res[0].Z;
-                    if (currentfilteredlisthe != null)
-                        return currentfilteredlisthe[(int)res[0].Y];
-                    else
-                        return currentfilteredlistsys[(int)res[0].Y];
+                    int index = (int)res[0].Y;
+
+                    if (index < currentfilteredlistsys.Count)
+                    {
+                        if (currentfilteredlisthe != null && index < currentfilteredlisthe.Count)       // #3266 has an exception here, no idea why, since sys+he should be the same length
+                            return currentfilteredlisthe[index];
+                        else
+                            return currentfilteredlistsys[index];
+                    }
                 }
             }
 
