@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls.Map3D
             var objtex = new GLTexture2DArray(images, bmpmipmaplevels: 1, wantedmipmaplevels: 3, texturesize: new Size(256, 256), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8, alignment: ContentAlignment.BottomCenter);
             IGLTexture texarray = items.Add(objtex, "GalObjTex");
 
-            const float objsize = 1.0f;        // size of object on screen
+            const float objsize = 2.0f;        // size of object on screen
             const float wavesize = 0.1f;
             Size textbitmapsize = new Size(128, 40);
             Vector3 labelsize = new Vector3(2, 0, 2.0f * textbitmapsize.Height / textbitmapsize.Width);   // size of text
@@ -198,7 +198,7 @@ namespace EDDiscovery.UserControls.Map3D
             foreach (var o in renderablegalmapobjects)
             {
                 bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);
-               // System.Diagnostics.Debug.WriteLine($"{o.Name} {o.GalMapType.TypeName} {en}");
+                //System.Diagnostics.Debug.WriteLine($"{o.Name} {o.GalMapType.TypeName} {en}");
 
                 if (en)
                 {
