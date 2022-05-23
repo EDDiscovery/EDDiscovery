@@ -125,6 +125,8 @@ namespace EDDiscovery.UserControls.Map3D
         private int localareasize = 50;
         private UserControlCommonBase parent;
 
+        private int autoscalemax = 30;
+
         private bool mapcreatedokay = false; 
 
         public Map()
@@ -1025,9 +1027,18 @@ namespace EDDiscovery.UserControls.Map3D
         public bool EliteRegionsShadingEnable { get { return elitemapregions?.Regions ?? false; } set { if (elitemapregions != null) elitemapregions.Regions = value; glwfc.Invalidate(); } }
         public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? true; } set { if (elitemapregions != null) elitemapregions.Text = value; glwfc.Invalidate(); } }
         public bool ShowBookmarks { get { return bookmarks?.Enable ?? true; } set { if (bookmarks != null) bookmarks.Enable = value; glwfc.Invalidate(); } }
-
         public int LocalAreaSize { get { return localareasize; } set { if ( value != localareasize ) { localareasize = value; UpdateEDSMStarsLocalArea(); } } }
 
+        public int AutoScaleMax { get { return autoscalemax; } set 
+            {
+                autoscalemax = value;
+                System.Diagnostics.Debug.WriteLine($"AutoScalemax to {autoscalemax}");
+                if (galmapobjects != null)
+                    galmapobjects.SetAutoScale(autoscalemax);
+                if (bookmarks != null)
+                    bookmarks.SetAutoScale(autoscalemax);
+            }
+        }
         #endregion
 
         #region State load
@@ -1067,6 +1078,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             ShowBookmarks = defaults.GetSetting("BKMK", true);
 
+            AutoScaleMax = defaults.GetSetting("AUTOSCALE", 30);
+
             if (restorepos)
                 gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
         }
@@ -1101,6 +1114,7 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("LOCALAREALY", LocalAreaSize);
             defaults.PutSetting("POSCAMERA", gl3dcontroller.PosCamera.StringPositionCamera);
             defaults.PutSetting("BKMK", bookmarks?.Enable ?? true);
+            defaults.PutSetting("AUTOSCALE", AutoScaleMax);
         }
 
         #endregion

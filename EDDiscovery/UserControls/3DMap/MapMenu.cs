@@ -369,11 +369,12 @@ namespace EDDiscovery.UserControls.Map3D
                 galgb.BackColor = Color.Transparent;
                 galgb.ForeColor = Color.Orange;
                 pform.Add(galgb);
+                vpos += galgb.Height + ypad;
+
                 GLFlowLayoutPanel galfp = new GLFlowLayoutPanel("GALFP", DockingType.Fill, 0);
                 galfp.FlowPadding = new PaddingType(2, 2, 2, 2);
                 galfp.BackColor = Color.Transparent;
                 galgb.Add(galfp);
-                vpos += galgb.Height + ypad;
 
                 IReadOnlyDictionary<GalMapType.VisibleObjectsType, Image> icons = new BaseUtils.Icons.IconGroup<GalMapType.VisibleObjectsType>("GalMap");
 
@@ -391,13 +392,28 @@ namespace EDDiscovery.UserControls.Map3D
                     galfp.Add(butg);
                 }
 
-                GLCheckBox butgonoff = new GLCheckBox("GMONOFF", new Rectangle(0, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowGalaxy") , null);
+                GLCheckBox butgonoff = new GLCheckBox("GMONOFF", new Rectangle(0, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowGalaxy"), null);
                 butgonoff.ToolTipText = "Enable/Disable Display";
                 butgonoff.Checked = map.GalObjectDisplay;
                 butgonoff.CheckChanged += (e1) => { map.GalObjectDisplay = !map.GalObjectDisplay; };
                 galfp.Add(butgonoff);
             }
 
+            if ((parts & Map.Parts.GalObjects) != 0 || (parts & Map.Parts.Bookmarks) != 0)
+            {
+                GLGroupBox scalegb = new GLGroupBox("Scalar", "Scaling", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
+                scalegb.ClientHeight = (iconsize + 4) * 1;
+                scalegb.BackColor = Color.Transparent;
+                scalegb.ForeColor = Color.Orange;
+                pform.Add(scalegb);
+                vpos += scalegb.Height + ypad;
+                GLTrackBar tb = new GLTrackBar("ScaleTB", new Rectangle(0, 0, iconsize*8, iconsize));
+                tb.Minimum = 1;
+                tb.Maximum = 500;
+                tb.Value = map.AutoScaleMax;
+                tb.ValueChanged += (s,v) => { map.AutoScaleMax = v; };
+                scalegb.Add(tb);
+            }
 
             if ((parts & Map.Parts.Regions) != 0)
             {

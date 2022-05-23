@@ -62,6 +62,11 @@ namespace EDDiscovery.UserControls.Map3D
             return s;
         }
 
+        public void SetAutoScale(int max)
+        {
+            objectshader.GetShader<GLPLVertexScaleLookatConfigurable>().SetScalars(30, 1, max);
+        }
+
         public static IReadOnlyDictionary<GalMapType.VisibleObjectsType, Image> GalMapTypeIcons { get; } = new BaseUtils.Icons.IconGroup<GalMapType.VisibleObjectsType>("GalMap");
 
         public void CreateObjects(GLItemsList items, GLRenderProgramSortedList rObjects, GalacticMapping galmap, GLStorageBlock findbufferresults, bool depthtest)
@@ -83,13 +88,15 @@ namespace EDDiscovery.UserControls.Map3D
             // now build the shaders
 
             const int texbindingpoint = 1;
-            var vert = new GLPLVertexScaleLookat(rotatetoviewer: dorotate, rotateelevation: doelevation,       // a look at vertex shader
-                                                        autoscale: 30, autoscalemin: 1f, autoscalemax: 30f, useeyedistance:false); 
+            var vert = new GLPLVertexScaleLookatConfigurable(rotatetoviewer: dorotate, rotateelevation: doelevation,       // a look at vertex shader
+                                                             useeyedistance:false); 
             var tcs = new GLPLTesselationControl(10f);  // number of intermediate points
             tes = new GLPLTesselationEvaluateSinewave(wavesize, 1f);         // 0.2f in size, 1 wave across the object
             var frag = new GLPLFragmentShaderTexture2DDiscard(texbindingpoint);       // binding - takes image pos from tes. imagepos < 0 means discard
             objectshader = new GLShaderPipeline(vert, tcs, tes, null, frag);
             items.Add(objectshader);
+
+            SetAutoScale(300);
 
             objectshader.StartAction += (s, m) =>
             {

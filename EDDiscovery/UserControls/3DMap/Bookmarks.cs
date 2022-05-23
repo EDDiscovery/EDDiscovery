@@ -30,17 +30,22 @@ namespace EDDiscovery.UserControls.Map3D
     {
         public bool Enable { get { return objectshader.Enable; } set { objectshader.Enable = value; } }
 
+        public void SetAutoScale(int max)
+        {
+            objectshader.GetShader<GLPLVertexScaleLookatConfigurable>().SetScalars(30, 1, max);
+        }
 
         public void Start(GLItemsList items, GLRenderProgramSortedList rObjects, float bookmarksize, GLStorageBlock findbufferresults, bool depthtest)
         {
-            var vert = new GLPLVertexScaleLookat(rotatetoviewer: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true,
-                                                            autoscale: 30, autoscalemin: 1f, autoscalemax: 30f); // above autoscale, 1f
+            var vert = new GLPLVertexScaleLookatConfigurable(rotatetoviewer: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true); // above autoscale, 1f
 
             const int texbindingpoint = 1;
             var frag = new GLPLFragmentShaderTexture(texbindingpoint);       // binding - simple texturer based on vs model coords
 
             objectshader = new GLShaderPipeline(vert, null, null, null, frag);
             items.Add(objectshader);
+
+            SetAutoScale(300);
 
             var objtex = items.NewTexture2D("Bookmarktex", BaseUtils.Icons.IconSet.GetBitmap("GalMap.Bookmark"), OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);
 
