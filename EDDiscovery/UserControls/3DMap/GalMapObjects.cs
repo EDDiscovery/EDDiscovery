@@ -36,12 +36,22 @@ namespace EDDiscovery.UserControls.Map3D
         {
         }
 
-        public bool Enable { get { return objectshader.Enable; } set { textrenderer.Enable = objectshader.Enable = value; } }
         public Font Font { get; set; } = new Font("Arial", 8.5f);
-
-        public void SetGalObjectTypeEnable(string id, bool state) { State[id] = state; UpdateEnables(); }
         public bool GetGalObjectTypeEnable(string id) { return !State.ContainsKey(id) || State[id] == true; }
-        public void SetAllEnables(string settings)
+
+        public bool Enable { get { return objectshader.Enable; } }
+
+        // all enable set functions return a list of current gal objects positions
+        public HashSet<ObjectPosXYZ> SetShaderEnable(bool enable)
+        {
+            textrenderer.Enable = objectshader.Enable = enable;
+            if (enable)
+                return UpdateEnables();
+            else
+                return new HashSet<ObjectPosXYZ>();
+        }
+        public HashSet<ObjectPosXYZ> SetGalObjectTypeEnable(string id, bool state) { State[id] = state; return UpdateEnables(); }
+        public HashSet<ObjectPosXYZ> SetAllEnables(string settings)
         {
             string[] ss = settings.Split(',');
             int i = 0;
@@ -50,7 +60,7 @@ namespace EDDiscovery.UserControls.Map3D
                 State[o.TypeName] = i >= ss.Length || !ss[i].Equals("-");              // on if we don't have enough, or on if its not -
                 i++;
             }
-            UpdateEnables();
+            return UpdateEnables();
         }
         public string GetAllEnables()
         {
@@ -67,9 +77,30 @@ namespace EDDiscovery.UserControls.Map3D
             objectshader.GetShader<GLPLVertexScaleLookatConfigurable>().SetScalars(30, 1, max);
         }
 
+        // used to pass back object positions used
+        public struct ObjectPosXYZ
+        {
+            public int x;       // these are in SystemClass.XYZScalar
+            public int y;
+            public int z;
+
+            public ObjectPosXYZ(float fx, float fy, float fz)
+            {
+                x = (int)(fx * EliteDangerousCore.SystemClass.XYZScalar);
+                y = (int)(fy * EliteDangerousCore.SystemClass.XYZScalar);
+                z = (int)(fz * EliteDangerousCore.SystemClass.XYZScalar);
+            }
+            public ObjectPosXYZ(int ix, int iy, int iz)
+            {
+                x = ix;
+                y = iy;
+                z = iz;
+            }
+        }
+
         public static IReadOnlyDictionary<GalMapType.VisibleObjectsType, Image> GalMapTypeIcons { get; } = new BaseUtils.Icons.IconGroup<GalMapType.VisibleObjectsType>("GalMap");
 
-        public void CreateObjects(GLItemsList items, GLRenderProgramSortedList rObjects, GalacticMapping galmap, GLStorageBlock findbufferresults, bool depthtest)
+        public HashSet<ObjectPosXYZ> CreateObjects(GLItemsList items, GLRenderProgramSortedList rObjects, GalacticMapping galmap, GLStorageBlock findbufferresults, bool depthtest)
         {
             this.galmap = galmap;
 
@@ -83,7 +114,7 @@ namespace EDDiscovery.UserControls.Map3D
             const float objsize = 1.5f;        // size of object on screen
             const float wavesize = 0.1f;
             Size textbitmapsize = new Size(128, 40);
-            Vector3 labelsize = new Vector3(2, 0, 2.0f * textbitmapsize.Height / textbitmapsize.Width);   // size of text
+            Vector3 labelsize = new Vector3(4, 0, 4.0f * textbitmapsize.Height / textbitmapsize.Width);   // size of text
 
             // now build the shaders
 
@@ -184,11 +215,13 @@ namespace EDDiscovery.UserControls.Map3D
                 }
             }
 
-            UpdateEnables();      // fill in worldpos's and update instance count, taking into 
+            return UpdateEnables();      // fill in worldpos's and update instance count, taking into 
         }
 
-        private void UpdateEnables()           // rewrite the modelworld buffer with the ones actually enabled
+        private HashSet<ObjectPosXYZ> UpdateEnables()           // rewrite the modelworld buffer with the ones actually enabled
         {
+            HashSet<ObjectPosXYZ> pos = new HashSet<ObjectPosXYZ>();
+
             modelworldbuffer.StartWrite(worldpos);                  // overwrite world positions
 
             var renderablegalmapobjects = galmap.VisibleMapObjects; // list of displayable entries
@@ -204,6 +237,7 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     modelworldbuffer.Write(new Vector4(o.Points[0].X, o.Points[0].Y, o.Points[0].Z, o.GalMapType.Index + (!Animate(o.GalMapType.VisibleType.Value) ? 65536 : 0)));
                     indextoentry[mwpos++] = entry;
+                    pos.Add(new ObjectPosXYZ(o.Points[0].X, o.Points[0].Y, o.Points[0].Z));
                 }
 
                 textrenderer.SetVisiblityRotation(o.ID, en, dorotate, doelevation);
@@ -213,9 +247,9 @@ namespace EDDiscovery.UserControls.Map3D
             modelworldbuffer.StopReadWrite();
             //var f = modelworldbuffer.ReadVector4(worldpos, renderablegalmapobjects.Count());  foreach (var v in f) System.Diagnostics.Debug.WriteLine("Vector " + v);
             ridisplay.InstanceCount = rifind.InstanceCount = mwpos;
-        }
 
-        // returns GMO, and z - if not found z = Max value, null
+            return pos;
+        }
 
         public GalacticMapObject FindPOI(Point viewportloc, GLRenderState state, Size viewportsize, out float z)
         {

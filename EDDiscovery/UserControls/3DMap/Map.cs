@@ -362,12 +362,6 @@ namespace EDDiscovery.UserControls.Map3D
                 UpdateNavRoute();
             }
 
-            if ((parts & Parts.GalObjects) != 0)
-            {
-                galmapobjects = new GalMapObjects();
-                galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
-            }
-
             if ((parts & Parts.Bookmarks) != 0)
             {
                 bookmarks = new Bookmarks();
@@ -387,6 +381,16 @@ namespace EDDiscovery.UserControls.Map3D
                 }
 
                 galaxystars.Create(items, rObjects, galaxysunsize, findresults);
+            }
+
+            if ((parts & Parts.GalObjects) != 0)
+            {
+                galmapobjects = new GalMapObjects();
+                var list = galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
+                if ( galaxystars != null )
+                {
+                    galaxystars.DisallowedList = list;
+                }
             }
 
             if ((parts & Parts.Route) != 0)
@@ -703,7 +707,9 @@ namespace EDDiscovery.UserControls.Map3D
             }
 
             if (galaxystars != null)
+            {
                 galaxystars.Start();
+            }
 
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
@@ -1013,10 +1019,48 @@ namespace EDDiscovery.UserControls.Map3D
         public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
         public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
-        public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? true; } set { if (galmapobjects != null) galmapobjects.Enable = value; glwfc.Invalidate(); } }
-        public void SetGalObjectTypeEnable(string id, bool state) { if (galmapobjects != null) galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
+        public bool GalObjectDisplay
+        {
+            get { return galmapobjects?.Enable ?? true; }
+            set
+            {
+                if (galmapobjects != null)
+                {
+                    var list = galmapobjects.SetShaderEnable(value);
+                    if (galaxystars != null)
+                    {
+                        galaxystars.DisallowedList = list;
+                        galaxystars.Clear();
+                    }
+                    glwfc.Invalidate();
+                }
+            }
+        }
+        public void SetGalObjectTypeEnable(string id, bool state) { 
+            if (galmapobjects != null) 
+            { 
+                var list = galmapobjects.SetGalObjectTypeEnable(id, state);
+                if (galaxystars != null)
+                {
+                    galaxystars.DisallowedList = list;
+                    galaxystars.Clear();
+                }
+                glwfc.Invalidate(); 
+            } 
+        }
+        public void SetAllGalObjectTypeEnables(string set) { 
+            if (galmapobjects != null) 
+            { 
+                var list = galmapobjects.SetAllEnables(set);
+                if (galaxystars != null)
+                {
+                    galaxystars.DisallowedList = list;
+                    galaxystars.Clear();
+                }
+                glwfc.Invalidate(); 
+            } 
+        }
         public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? true; }
-        public void SetAllGalObjectTypeEnables(string set) { if (galmapobjects != null) galmapobjects.SetAllEnables(set); glwfc.Invalidate(); }
         public string GetAllGalObjectTypeEnables() { return galmapobjects?.GetAllEnables() ?? ""; }
         public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Enable = value; glwfc.Invalidate(); } }
         public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
