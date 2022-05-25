@@ -54,6 +54,8 @@ namespace EDDiscovery.UserControls.Map3D
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
+        public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
+        public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
         public void Start(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
@@ -155,11 +157,6 @@ namespace EDDiscovery.UserControls.Map3D
             CreatePathInt(tapecolour);
         }
 
-        public void Refresh()           // must have drawn
-        {
-            if (lasthl != null)
-                CreatePath(lasthl);
-        }
 
         // currentfilteredlist set, go..
         private void CreatePathInt(Color? tapepathdefault = null)
@@ -169,7 +166,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             // Note W here selects the colour index of the stars, 0 = first, 1 = second etc
 
-            Vector4[] positionsv4 = currentfilteredlistsys.Select(x => new Vector4((float)x.X, (float)x.Y, (float)x.Z, 0)).ToArray();
+            Vector4[] positionsv4 = currentfilteredlistsys.Select(sys => new Vector4((float)sys.X, (float)sys.Y, (float)sys.Z, 
+                            NoSunList.Contains(new GalMapObjects.ObjectPosXYZ(sys.X,sys.Y,sys.Z)) ? -1 : 0)).ToArray();
           //   positionsv4 = positionsv4.Take(2).ToArray(); // debug
 
             Color[] color = new Color[currentfilteredlistsys.Count];

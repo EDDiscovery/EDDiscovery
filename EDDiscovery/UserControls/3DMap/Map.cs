@@ -383,21 +383,19 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Create(items, rObjects, galaxysunsize, findresults);
             }
 
-            if ((parts & Parts.GalObjects) != 0)
-            {
-                galmapobjects = new GalMapObjects();
-                var list = galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
-                if ( galaxystars != null )
-                {
-                    galaxystars.DisallowedList = list;
-                }
-            }
-
             if ((parts & Parts.Route) != 0)
             {
                 routepath = new TravelPath();
                 routepath.Start("Route", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
             }
+
+            if ((parts & Parts.GalObjects) != 0)
+            {
+                galmapobjects = new GalMapObjects();
+                galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
+                UpdateNoSunList();
+            }
+
 
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
@@ -763,6 +761,28 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
+        public void UpdateNoSunList()       // feed in list of galmapobject positions to other classes so they don't repeat
+        {
+            if (galmapobjects != null)
+            {
+                if (galaxystars != null)
+                {
+                    galaxystars.NoSunList = galmapobjects.Positions;
+                    galaxystars.Clear();
+                }
+                if (travelpath != null)
+                {
+                    travelpath.NoSunList = galmapobjects.Positions;
+                    UpdateTravelPath();
+                }
+                if (routepath != null)
+                {
+                    routepath.NoSunList = galmapobjects.Positions;
+                    UpdateNavRoute();
+                }
+            }
+        }
+
         public void UpdateEDSMStarsLocalArea()
         {
             if (galaxystars != null )
@@ -1013,7 +1033,7 @@ namespace EDDiscovery.UserControls.Map3D
         public bool NavRouteDisplay { get { return navroute?.EnableTape ?? true; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
         public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? true; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
         public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
-        public void TravelPathRefresh() { if (travelpath != null) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
+        public void TravelPathRefresh() { if (travelpath != null) UpdateTravelPath(); }   // travelpath.Refresh() manually after these have changed
         public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? new DateTime(2014,12,14); } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
         public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
         public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
@@ -1026,12 +1046,8 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 if (galmapobjects != null)
                 {
-                    var list = galmapobjects.SetShaderEnable(value);
-                    if (galaxystars != null)
-                    {
-                        galaxystars.DisallowedList = list;
-                        galaxystars.Clear();
-                    }
+                    galmapobjects.SetShaderEnable(value);
+                    UpdateNoSunList();
                     glwfc.Invalidate();
                 }
             }
@@ -1039,24 +1055,16 @@ namespace EDDiscovery.UserControls.Map3D
         public void SetGalObjectTypeEnable(string id, bool state) { 
             if (galmapobjects != null) 
             { 
-                var list = galmapobjects.SetGalObjectTypeEnable(id, state);
-                if (galaxystars != null)
-                {
-                    galaxystars.DisallowedList = list;
-                    galaxystars.Clear();
-                }
+                galmapobjects.SetGalObjectTypeEnable(id, state);
+                UpdateNoSunList();
                 glwfc.Invalidate(); 
             } 
         }
         public void SetAllGalObjectTypeEnables(string set) { 
             if (galmapobjects != null) 
             { 
-                var list = galmapobjects.SetAllEnables(set);
-                if (galaxystars != null)
-                {
-                    galaxystars.DisallowedList = list;
-                    galaxystars.Clear();
-                }
+                galmapobjects.SetAllEnables(set);
+                UpdateNoSunList();
                 glwfc.Invalidate(); 
             } 
         }
@@ -1099,7 +1107,7 @@ namespace EDDiscovery.UserControls.Map3D
             TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
             TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
             if ((TravelPathStartDateEnable || TravelPathEndDateEnable) && travelpath != null)
-                travelpath.Refresh();       // and refresh it if we set the data
+                UpdateTravelPath();
 
             GalObjectDisplay = defaults.GetSetting("GALOD", true);
             SetAllGalObjectTypeEnables(defaults.GetSetting("GALOBJLIST", ""));

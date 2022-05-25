@@ -50,8 +50,8 @@ namespace EDDiscovery.UserControls.Map3D
         public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
         public int SectorSize { get; set; } = 100;
 
-        public HashSet<GalMapObjects.ObjectPosXYZ> DisallowedList = new HashSet<GalMapObjects.ObjectPosXYZ>();
-        public Vector3 DisallowedOffset { get; set; } = new Vector3(0, -1.2f, 0);
+        public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
+        public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
         public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
         {
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
                                             (x, y, z) => { 
-                                                if ( DisallowedList.Contains( new GalMapObjects.ObjectPosXYZ(x,y,z)))
+                                                if ( NoSunList.Contains( new GalMapObjects.ObjectPosXYZ(x,y,z)))
                                                     return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, -1);
                                                 else
                                                     return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0);
@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls.Map3D
                                                 ForeText, BackText, 0.5f, textformat: fmt, length: d.systems);
                     }
 
-                    d.textpos = CreateMatrices2(d.positions, LabelOffset,  DisallowedOffset,
+                    d.textpos = CreateMatrices2(d.positions, LabelOffset,  NoSunTextOffset,
                                                                                 LabelSize, //size
                                                                                 new Vector3(0, 0, 0), // rot (unused due to below)
                                                                                 true, false, // rotate, no elevation
