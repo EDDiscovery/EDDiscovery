@@ -18,6 +18,7 @@ using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -48,6 +49,12 @@ namespace EDDiscovery.UserControls
             inchange = false;
         }
 
+        public int GetVSize(bool fullinfo)
+        {
+            System.Diagnostics.Debug.Write($"VSize {pictureBoxLockImage.Size} {Font.Height}");
+            return Font.ScalePixels(fullinfo ? 450 : 300);
+        }
+
         private bool inchange = true;
 
         private Timer delaytime = new Timer() { Interval = 500 };       // we get a storm of column widths changing, so using a timer we reduce them to one
@@ -57,8 +64,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(string name, string starsystem, string planet, string basename, ItemData.EngineeringInfo ei, 
-                          string wantedsettings, string colsetting)
+        public void Init(string name, ItemData.EngineeringInfo ei, string wantedsettings, string colsetting)
         {
             this.Name = name;
             EngineerInfo = ei;
@@ -77,11 +83,15 @@ namespace EDDiscovery.UserControls
             labelEngineerName.Text = name;
             labelEngineerStatus.Text = "";
             engineerImage.Image = BaseUtils.Icons.IconSet.GetIcon("Engineers." + name);
-            labelEngineerStarSystem.Text = starsystem;
-            labelPlanet.Text = planet;
-            labelBaseName.Text = basename;
+            labelEngineerStarSystem.Text = ei?.StarSystem ?? "";
+            labelEngineerPlanet.Text = ei?.Planet ?? "";
+            labelEngineerBaseName.Text = ei?.BaseName ?? "";
+            labelDiscovery.Text = ei?.DiscoveryRequirements ?? "";
+            labelMeeting.Text = ei?.MeetingRequirements ?? "";
+            labelUnlock.Text = ei?.UnlockRequirements ?? "";
             labelEngineerDistance.Text = "";
             labelCrafts.Text = "";
+            pictureBoxLockImage.Visible = ei != null && ei.PermitRequired;
 
             if (name == "Weapon" || name == "Suit")        // these are not currently recorded in EngineerList
                 CraftedCol.HeaderText = "-";
@@ -130,35 +140,33 @@ namespace EDDiscovery.UserControls
         public void InstallColumnEvents()
         {
             dataGridViewEngineering.ColumnStateChanged += DataGridViewEngineering_ColumnStateChanged;
-            dataGridViewEngineering.ColumnWidthChanged += DataGridViewEngineering_ColumnWidthChanged;
+            dataGridViewEngineering.ColumnFillWeightChanged += DataGridViewEngineering_ColumnFillWeightChanged;
             dataGridViewEngineering.ColumnDisplayIndexChanged += DataGridViewEngineering_ColumnDisplayIndexChanged;
             inchange = false;
         }
 
         private void DataGridViewEngineering_ColumnDisplayIndexChanged(object sender, DataGridViewColumnEventArgs e)
         {
-             if (delaytime.Enabled == false && !inchange)
+            if (delaytime.Enabled == false && !inchange)
                 delaytime.Start();
         }
 
-        private void DataGridViewEngineering_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        private void DataGridViewEngineering_ColumnFillWeightChanged(object sender, DataGridViewColumnEventArgs e, bool firsttime)
         {
-            if (delaytime.Enabled == false && !inchange)
+            if (delaytime.Enabled == false && !inchange && !firsttime)
                 delaytime.Start();
-         }
+        }
 
         private void DataGridViewEngineering_ColumnStateChanged(object sender, DataGridViewColumnStateChangedEventArgs e)
         {
-            if (e.StateChanged == DataGridViewElementStates.Visible && delaytime.Enabled == false && !inchange) 
-            {
+            if (e.StateChanged == DataGridViewElementStates.Visible && delaytime.Enabled == false && !inchange)
                 delaytime.Start();
-            }
         }
 
         public void UnInstallEvents()
         {
             dataGridViewEngineering.ColumnStateChanged -= DataGridViewEngineering_ColumnStateChanged;
-            dataGridViewEngineering.ColumnWidthChanged -= DataGridViewEngineering_ColumnWidthChanged;
+            dataGridViewEngineering.ColumnFillWeightChanged -= DataGridViewEngineering_ColumnFillWeightChanged;
             dataGridViewEngineering.ColumnDisplayIndexChanged -= DataGridViewEngineering_ColumnDisplayIndexChanged;
         }
 
@@ -250,8 +258,12 @@ namespace EDDiscovery.UserControls
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            dataViewScrollerPanel.Width = ClientRectangle.Width - labelEngineerStarSystem.Left - 200;
-//            System.Diagnostics.Debug.WriteLine($"width of {Name} {ClientRectangle} {dataViewScrollerPanel.Width}");
+            pictureBoxLockImage.Location = new Point(labelEngineerStarSystem.Right + 4, (labelEngineerStarSystem.Top+labelEngineerStarSystem.Bottom)/2 - pictureBoxLockImage.Height/2);
+            int maxlright = new int[] {
+                labelEngineerName.Right, pictureBoxLockImage.Right,labelEngineerDistance.Right, labelEngineerStatus.Right, labelEngineerPlanet.Right,
+                labelEngineerBaseName.Right, labelEngineerStatus.Right, labelCrafts.Right}.Max();
+            int normalproportion = Width * 6 / 16;
+            dataViewScrollerPanel.Size = new Size(ClientRectangle.Width - Math.Max(maxlright,normalproportion) - 8, Height);
         }
 
         private void dataGridViewEngineering_CellEndEdit(object sender, DataGridViewCellEventArgs e)

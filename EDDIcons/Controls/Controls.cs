@@ -232,5 +232,10 @@ namespace EDDiscovery.Icons
         public static Image EngineerApply { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.EngineerApply"); } }
         public static Image Synthesis { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Synthesis"); } }
         public static Image OrganicIncomplete { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.OrganicIncomplete"); } }
+        public static Image lockimage { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.lockimage"); } }
+        public static Image RoundPlus { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundPlus"); } }
+        public static Image RoundMinus { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundMinus"); } }
+        public static Image RoundExpand { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundExpand"); } }
+        public static Image RoundExpanded { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundExpanded"); } }
     }
 }

@@ -673,6 +673,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap lockimage {
+            get {
+                object obj = ResourceManager.GetObject("lockimage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap ManageAddOns {
             get {
                 object obj = ResourceManager.GetObject("ManageAddOns", resourceCulture);
@@ -1406,6 +1416,46 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap ResizeColumn {
             get {
                 object obj = ResourceManager.GetObject("ResizeColumn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap RoundExpand {
+            get {
+                object obj = ResourceManager.GetObject("RoundExpand", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap RoundExpanded {
+            get {
+                object obj = ResourceManager.GetObject("RoundExpanded", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap RoundMinus {
+            get {
+                object obj = ResourceManager.GetObject("RoundMinus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap RoundPlus {
+            get {
+                object obj = ResourceManager.GetObject("RoundPlus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
