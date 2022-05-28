@@ -489,6 +489,9 @@ namespace EDDiscovery.UserControls
                 try
                 {
                     var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
+
+                 //   foreach( var starnodes in sysnode.StarNodes) StarScan.ScanNode.DumpTree(starnodes.Value, starnodes.Key, 0);
+
                     var nodes = sysnode.OrderedSystemTree();
                     if ( nodes != null )
                     {
