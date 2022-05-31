@@ -85,6 +85,8 @@ namespace EDDiscovery.UserControls
                 new Tuple<string, string>("Surface Pressure (Pa)","nSurfacePressure >= 101325"),
                 new Tuple<string, string>("Surface Pressure (Earth Atmos)","nSurfacePressureEarth >= 1"),
                 new Tuple<string, string>("Landable","IsLandable == 1"),
+                new Tuple<string, string>("Planet within Rings","nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue"),
+                new Tuple<string, string>("Planet inside inner ring","nSemiMajorAxis <= Parent.RingsInnerm And Parent.IsPlanet IsTrue"),
             };
 
             public int StandardSearches;
@@ -268,13 +270,22 @@ namespace EDDiscovery.UserControls
 
                 ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-                var varusedincondition = cond.VariablesUsed();      // what variables are in use, so we don't enumerate the lots.
+                var varusedincondition = cond.VariablesUsed(true, true);      // what variables are in use, so we don't enumerate the lots.
+
+                bool parentvars = varusedincondition.StartsWithInList("Parent.", StringComparison.InvariantCultureIgnoreCase) >= 0;      // is there any parents in the condition?
+
+                if ( parentvars )       // if we are referencing one
+                    discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required)
 
                 var helist = discoveryform.history.FilterByScanFSSBodySAASignals();
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                var results = await Find(helist, cond, varusedincondition, cursystem);
+                var defaultvars = new BaseUtils.Variables();
+                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
+
+                var results = await Find(helist, cond, varusedincondition, defaultvars, cursystem);
 
                 foreach( var r in results)
                 {
@@ -292,22 +303,40 @@ namespace EDDiscovery.UserControls
 
         // Async task to find results given cond in helist, using only vars specified.
 
-        private System.Threading.Tasks.Task<List<Tuple<ISystem,object[]>>> Find(List<HistoryEntry> helist, BaseUtils.ConditionLists cond, HashSet<string> varsusedincondition, ISystem cursystem)
+        private System.Threading.Tasks.Task<List<Tuple<ISystem,object[]>>> Find(List<HistoryEntry> helist, BaseUtils.ConditionLists cond, HashSet<string> varsusedincondition, 
+                                    BaseUtils.Variables defaultvars, ISystem cursystem)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
+                bool parentvars = varsusedincondition.StartsWithInList("Parent.", StringComparison.InvariantCultureIgnoreCase) >= 0;      // is there any parents in the condition?
+                HashSet<string> pvars = varsusedincondition.Where(x => x.StartsWith("Parent.")).Select(x=>x.Substring(7)).ToHashSet();    // parent vars, stripped
+
                 List<Tuple<ISystem,object[]>> rows = new List<Tuple<ISystem,object[]>>();
                 foreach (var he in helist)
                 {
-                    BaseUtils.Variables scandata = new BaseUtils.Variables();
-                    scandata.AddPropertiesFieldsOfClass(he.journalEntry, "",
+                    BaseUtils.Variables scandatavars = new BaseUtils.Variables(defaultvars);
+                    scandatavars.AddPropertiesFieldsOfClass(he.journalEntry, "",
                             new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
                             varsusedincondition);
 
-                    bool? res = cond.CheckAll(scandata, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclass);  // need function handler..
+                    // for scans, with parent. vars, we need to find the scan data of the parent, if we have it, we can fill them in
+                    if ( parentvars && he.journalEntry.EventTypeID == JournalTypeEnum.Scan && he.ScanNode != null) 
+                    {
+                        var parentjs = he.ScanNode.Parent?.ScanData;
+                        if ( parentjs!=null)
+                        {
+                            scandatavars.AddPropertiesFieldsOfClass(parentjs, "Parent.",
+                                    new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
+                                    pvars);
+                        }
+                    }
+
+                    bool? res = cond.CheckAgainstVariables(scandatavars, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclassunused);  // need function handler..
 
                     if (res.HasValue && res.Value == true)
                     {
+                        //System.Diagnostics.Debug.WriteLine($"{he.System.Name} {scandatavars.ToString(separ: Environment.NewLine)}");
+
                         ISystem sys = he.System;
                         string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 

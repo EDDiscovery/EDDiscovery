@@ -197,9 +197,9 @@ namespace EDDiscovery.Versions
                                 DownloadItems.Add(it);
                             }
 
-                            int[] minedversion = cv["MinEDVersion"].VersionFromString();
+                            int[] minedversion = cv["MinEDVersion"].VersionFromString();        // may be null if robert has screwed up the vnumber
 
-                            if (minedversion.CompareVersion(edversion) > 0)     // if midedversion > edversion can't install
+                            if ( minedversion != null && minedversion.CompareVersion(edversion) > 0)     // if midedversion > edversion can't install
                                 it.state = ItemState.EDOutOfDate;
 
                             if ( cv.Exists("MaxEDInstallVersion"))      

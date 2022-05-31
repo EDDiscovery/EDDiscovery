@@ -124,8 +124,8 @@ namespace EDDiscovery.UserControls
                             }
 
                             mass = ri.MassMT.ToStringInvariant();
-                            innerrad = (ri.InnerRad / JournalScan.oneLS_m).ToStringInvariant("N3");
-                            outerrad = (ri.OuterRad / JournalScan.oneLS_m).ToStringInvariant("N3");
+                            innerrad = (ri.InnerRad / BodyPhysicalConstants.oneLS_m).ToStringInvariant("N3");
+                            outerrad = (ri.OuterRad / BodyPhysicalConstants.oneLS_m).ToStringInvariant("N3");
                         }
 
                         //string sig = string.Join(",", entry.Signals.Select(x=>x.Type)); // debug
