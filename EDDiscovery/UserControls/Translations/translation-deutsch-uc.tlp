@@ -310,8 +310,8 @@ SECTION UserControlMarketData
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Klicken um zwischen 'Verfolge Zeiger' oder 'Verfolge einen bestimmten Marktdatensatz' zu wechseln"
 .Conly: "Cargo only, no market data on this item" => "Nur Fracht, keine Marktdaten für diesen Gegenstand"
 .LEntry: "Travel History Entry Last" => "Reishistorie Letzter Eintrag"
-.checkBoxSellOnly: "Sell Only" => "Nur verkaufen"
-.checkBoxSellOnly.ToolTip: "Show items you can sell only" => "Zeige nur Gegenstände die du verkaufen kannst"
+.checkBoxHasDemand: "Has Demand" @
+.checkBoxHasDemand.ToolTip: "Show items that have demand" @
 
 SECTION UserControlMaterialCommodities
 

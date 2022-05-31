@@ -1301,12 +1301,12 @@ namespace EDDiscovery
         UserControlMarketData_labelLocation, // Control 'No Data'
         UserControlMarketData_labelVs, // Control 'Vs'
         UserControlMarketData_checkBoxBuyOnly, // Control 'Buy Only'
-        UserControlMarketData_checkBoxSellOnly, // Control 'Sell Only'
+        UserControlMarketData_checkBoxHasDemand, // Control 'Has Demand'
         UserControlMarketData_checkBoxAutoSwap, // Control 'AutoSwap'
         UserControlMarketData_comboBoxCustomFrom_ToolTip, // ToolTip 'Click to select between tracking the cursor or a particular market data set'
         UserControlMarketData_comboBoxCustomTo_ToolTip, // ToolTip 'Click to select a comparision market data set'
         UserControlMarketData_checkBoxBuyOnly_ToolTip, // ToolTip 'Show items you can buy only'
-        UserControlMarketData_checkBoxSellOnly_ToolTip, // ToolTip 'Show items you can sell only'
+        UserControlMarketData_checkBoxHasDemand_ToolTip, // ToolTip 'Show items that has demand'
 
         UserControlMarketData_Conly, // Cargo only, no market data on this item
         UserControlMarketData_LEntry, // Travel History Entry Last

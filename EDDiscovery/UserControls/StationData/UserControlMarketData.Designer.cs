@@ -64,8 +64,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomFrom = new ExtendedControls.ExtComboBox();
             this.labelLocation = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxHasDemand = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.checkBoxSellOnly = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarketData.AllowUserToDeleteRows = false;
             this.dataGridViewMarketData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewMarketData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMarketData.ColumnReorder = true;
             this.dataGridViewMarketData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CategoryCol,
             this.NameCol,
@@ -102,8 +103,10 @@ namespace EDDiscovery.UserControls
             this.ProfitFromCol});
             this.dataGridViewMarketData.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMarketData.Name = "dataGridViewMarketData";
+            this.dataGridViewMarketData.RowHeaderMenuStrip = null;
             this.dataGridViewMarketData.RowHeadersVisible = false;
             this.dataGridViewMarketData.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewMarketData.SingleRowSelect = true;
             this.dataGridViewMarketData.Size = new System.Drawing.Size(784, 549);
             this.dataGridViewMarketData.TabIndex = 1;
             this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
@@ -225,7 +228,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoSwap.ImageIndeterminate = null;
             this.checkBoxAutoSwap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoSwap.ImageUnchecked = null;
-            this.checkBoxAutoSwap.Location = new System.Drawing.Point(601, 1);
+            this.checkBoxAutoSwap.Location = new System.Drawing.Point(622, 1);
             this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxAutoSwap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
@@ -331,6 +334,28 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // checkBoxHasDemand
+            // 
+            this.checkBoxHasDemand.AutoSize = true;
+            this.checkBoxHasDemand.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxHasDemand.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxHasDemand.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxHasDemand.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxHasDemand.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxHasDemand.ImageIndeterminate = null;
+            this.checkBoxHasDemand.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxHasDemand.ImageUnchecked = null;
+            this.checkBoxHasDemand.Location = new System.Drawing.Point(526, 1);
+            this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxHasDemand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxHasDemand.Name = "checkBoxHasDemand";
+            this.checkBoxHasDemand.Size = new System.Drawing.Size(88, 17);
+            this.checkBoxHasDemand.TabIndex = 29;
+            this.checkBoxHasDemand.Text = "Has Demand";
+            this.checkBoxHasDemand.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxHasDemand, "Show items with demand");
+            this.checkBoxHasDemand.UseVisualStyleBackColor = true;
+            // 
             // panelTop
             // 
             this.panelTop.AutoSize = true;
@@ -339,35 +364,13 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.labelVs);
             this.panelTop.Controls.Add(this.comboBoxCustomTo);
             this.panelTop.Controls.Add(this.checkBoxBuyOnly);
-            this.panelTop.Controls.Add(this.checkBoxSellOnly);
+            this.panelTop.Controls.Add(this.checkBoxHasDemand);
             this.panelTop.Controls.Add(this.checkBoxAutoSwap);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(800, 23);
             this.panelTop.TabIndex = 2;
-            // 
-            // checkBoxSellOnly
-            // 
-            this.checkBoxSellOnly.AutoSize = true;
-            this.checkBoxSellOnly.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxSellOnly.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxSellOnly.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxSellOnly.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxSellOnly.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxSellOnly.ImageIndeterminate = null;
-            this.checkBoxSellOnly.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxSellOnly.ImageUnchecked = null;
-            this.checkBoxSellOnly.Location = new System.Drawing.Point(526, 1);
-            this.checkBoxSellOnly.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxSellOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxSellOnly.Name = "checkBoxSellOnly";
-            this.checkBoxSellOnly.Size = new System.Drawing.Size(67, 17);
-            this.checkBoxSellOnly.TabIndex = 29;
-            this.checkBoxSellOnly.Text = "Sell Only";
-            this.checkBoxSellOnly.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxSellOnly, "Show items you can sell only");
-            this.checkBoxSellOnly.UseVisualStyleBackColor = true;
             // 
             // UserControlMarketData
             // 
@@ -409,6 +412,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitFromCol;
         private ExtendedControls.ExtCheckBox checkBoxAutoSwap;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
-        private ExtendedControls.ExtCheckBox checkBoxSellOnly;
+        private ExtendedControls.ExtCheckBox checkBoxHasDemand;
     }
 }

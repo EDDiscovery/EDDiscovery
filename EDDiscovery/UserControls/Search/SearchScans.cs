@@ -85,8 +85,9 @@ namespace EDDiscovery.UserControls
                 new Tuple<string, string>("Surface Pressure (Pa)","nSurfacePressure >= 101325"),
                 new Tuple<string, string>("Surface Pressure (Earth Atmos)","nSurfacePressureEarth >= 1"),
                 new Tuple<string, string>("Landable","IsLandable == 1"),
-                new Tuple<string, string>("Planet within Rings","nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue"),
+                new Tuple<string, string>("Planet inside outer ring","nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue"),
                 new Tuple<string, string>("Planet inside inner ring","nSemiMajorAxis <= Parent.RingsInnerm And Parent.IsPlanet IsTrue"),
+                new Tuple<string, string>("Planet inside the rings","nSemiMajorAxis >= Parent.RingsInnerm And nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue And IsPlanet IsTrue"),
             };
 
             public int StandardSearches;
