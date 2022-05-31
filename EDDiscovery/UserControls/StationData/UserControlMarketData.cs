@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (CCommodities c in list)
                 {
-                    if (sellonly ? c.buyPrice == 0 : (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy)))
+                    if (sellonly ? !c.CanBeBought : (!buyonly || c.CanBeBought || c.ComparisionBuy))
                     {
                         MaterialCommodityMicroResourceType mc = MaterialCommodityMicroResourceType.GetByFDName(c.fdname);
 
