@@ -131,6 +131,7 @@ SECTION SearchScans
 .ColumnInformation: "Information" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
+.ColumnParent: "Parent" @
 
 SECTION SearchStars
 

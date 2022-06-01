@@ -1250,6 +1250,7 @@ namespace EDDiscovery
         SearchScans_ColumnDate, // Column Header 'Date'
         SearchScans_ColumnStar, // Column Header 'Star'
         SearchScans_ColumnInformation, // Column Header 'Information'
+        SearchScans_ColumnParent, // Column Header 'Parent'
         SearchScans_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchScans_ColumnPosition, // Column Header 'Position'
         SearchScans_buttonFind, // Control 'Find'

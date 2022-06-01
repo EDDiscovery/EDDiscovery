@@ -44,6 +44,26 @@ namespace EDDiscovery.UserControls
 
             public List<Tuple<string, string>> Searches = new List<Tuple<string, string>>()
             {
+                new Tuple<string, string>("Planet inside outer ring","nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue"),
+                new Tuple<string, string>("Planet inside inner ring","nSemiMajorAxis <= Parent.RingsInnerm And Parent.IsPlanet IsTrue"),
+                new Tuple<string, string>("Planet inside the rings","nSemiMajorAxis >= Parent.RingsInnerm And nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue And IsPlanet IsTrue"),
+
+                new Tuple<string, string>("Landable and Terraformable","IsPlanet IsTrue And IsLandable IsTrue And Terraformable IsTrue"),
+                new Tuple<string, string>("Landable with Atmosphere","IsPlanet IsTrue And IsLandable IsTrue And Atmosphere IsNotEmpty"),
+                new Tuple<string, string>("Landable with High G","IsPlanet IsTrue And IsLandable IsTrue And nSurfaceGravityG >= 3"),
+                new Tuple<string, string>("Landable large planet","IsPlanet IsTrue And IsLandable IsTrue And nRadius > 8000000"),
+
+                new Tuple<string, string>("Planet has wide rings vs radius","(IsPlanet IsTrue And HasRings IsTrue ) And ( Rings[1]_OuterRad-Rings[1]_InnerRad >= nRadius*5 Or Rings[2]_OuterRad-Rings[2]_InnerRad >= nRadius*5)"),
+
+                new Tuple<string, string>("Close orbit to parent","IsPlanet IsTrue And Parent.IsPlanet IsTrue And IsOrbitingBaryCentre IsFalse And Parent.nRadius*3 > nSemiMajorAxis"),
+                //new Tuple<string, string>("Close to ring","( IsPlanet IsTrue And Parent.HasRings IsTrue ) And ( Rings[1]_InnerRad-nSemiMajorAxis < nRadius * 10 And Rings[1]_InnerRad-nSemiMajorAxis > 0 )"),
+                new Tuple<string, string>("Close to ring",
+                                "( IsPlanet IsTrue And Parent.IsPlanet IsTrue And Parent.HasRings IsTrue And IsOrbitingBaryCentre IsFalse ) And " + 
+                                "( \"Abs(Parent.Rings[1]_InnerRad-nSemiMajorAxis)\" < nRadius*100 Or  \"Abs(Parent.Rings[1]_OuterRad-nSemiMajorAxis)\" < nRadius*100 " +
+                                         "Or \"Abs(Parent.Rings[2]_InnerRad-nSemiMajorAxis)\" < nRadius*100 Or  \"Abs(Parent.Rings[2]_OuterRad-nSemiMajorAxis)\" < nRadius*100 )"
+                    ),
+
+
                 new Tuple<string, string>("Body Name","BodyName contains <name>"),
                 new Tuple<string, string>("Scan Type","ScanType contains Detailed"),
                 new Tuple<string, string>("Distance (ls)","DistanceFromArrivalLS >= 20"),
@@ -70,24 +90,21 @@ namespace EDDiscovery.UserControls
                 new Tuple<string, string>("Star Luminosity","Luminosity $== V"),
 
                 new Tuple<string, string>("Planet Mass (Earths)","nMassEM >= 1"),
-                new Tuple<string, string>("Planet Materials","MaterialList contains iron"),
+                new Tuple<string, string>("Planet Materials","MaterialList contains \"iron\""),
                 new Tuple<string, string>("Planet Class","PlanetClass $== \"High metal content body\""),
                 new Tuple<string, string>("Tidal Lock","nTidalLock == 1"),
-                new Tuple<string, string>("Terraformable","TerraformState $== Terraformable"),
+                new Tuple<string, string>("Terraformable","Terraformable IsTrue"),
                 new Tuple<string, string>("Atmosphere","Atmosphere $== \"thin sulfur dioxide atmosphere\""),
-                new Tuple<string, string>("Atmosphere ID","AtmosphereID $== Carbon_dioxide"),
-                new Tuple<string, string>("Atmosphere Property","AtmosphereProperty $== Rich"),
+                new Tuple<string, string>("Atmosphere ID","AtmosphereID $== \"Carbon_dioxide\""),
+                new Tuple<string, string>("Atmosphere Property","AtmosphereProperty $== \"Rich\""),
                 new Tuple<string, string>("Volcanism","Volcanism $== \"minor metallic magma volcanism\""),
-                new Tuple<string, string>("Volcanism ID","VolcanismID $== Ammonia_Magma"),
+                new Tuple<string, string>("Volcanism ID","VolcanismID $== \"Ammonia_Magma\""),
                 new Tuple<string, string>("Surface Gravity m/s","nSurfaceGravity >= 9.6"),
                 new Tuple<string, string>("Surface Gravity G","nSurfaceGravityG >= 1.0"),
                 new Tuple<string, string>("Surface Gravity Landable G","nSurfaceGravityG >= 1.0 And IsLandable == 1"),
                 new Tuple<string, string>("Surface Pressure (Pa)","nSurfacePressure >= 101325"),
                 new Tuple<string, string>("Surface Pressure (Earth Atmos)","nSurfacePressureEarth >= 1"),
                 new Tuple<string, string>("Landable","IsLandable == 1"),
-                new Tuple<string, string>("Planet inside outer ring","nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue"),
-                new Tuple<string, string>("Planet inside inner ring","nSemiMajorAxis <= Parent.RingsInnerm And Parent.IsPlanet IsTrue"),
-                new Tuple<string, string>("Planet inside the rings","nSemiMajorAxis >= Parent.RingsInnerm And nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue And IsPlanet IsTrue"),
             };
 
             public int StandardSearches;
@@ -156,7 +173,8 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, EDTx.SearchScans_ColumnPosition, EDTx.SearchScans_buttonFind, EDTx.SearchScans_buttonSave, EDTx.SearchScans_buttonDelete };
+            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
+                EDTx.SearchScans_ColumnPosition, EDTx.SearchScans_buttonFind, EDTx.SearchScans_buttonSave, EDTx.SearchScans_buttonDelete ,EDTx.SearchScans_ColumnParent };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
@@ -271,12 +289,11 @@ namespace EDDiscovery.UserControls
 
                 ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-                var varusedincondition = cond.VariablesUsed(true, true);      // what variables are in use, so we don't enumerate the lots.
+                // what variables are in use, so we don't enumerate the lot.
+                // Remove any array syntax as AddPropertiesFielsOfClass does not take into consideration those when deciding if to enumerate
+                var varusedincondition = cond.EvalVariablesUsed(true);      
 
-                bool parentvars = varusedincondition.StartsWithInList("Parent.", StringComparison.InvariantCultureIgnoreCase) >= 0;      // is there any parents in the condition?
-
-                if ( parentvars )       // if we are referencing one
-                    discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required)
+                discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
                 var helist = discoveryform.history.FilterByScanFSSBodySAASignals();
 
@@ -315,24 +332,29 @@ namespace EDDiscovery.UserControls
                 List<Tuple<ISystem,object[]>> rows = new List<Tuple<ISystem,object[]>>();
                 foreach (var he in helist)
                 {
+                    if (he.EntryType != JournalTypeEnum.Scan)   // debug
+                        continue;
+
                     BaseUtils.Variables scandatavars = new BaseUtils.Variables(defaultvars);
                     scandatavars.AddPropertiesFieldsOfClass(he.journalEntry, "",
                             new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
                             varsusedincondition);
 
+                    var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
+
                     // for scans, with parent. vars, we need to find the scan data of the parent, if we have it, we can fill them in
-                    if ( parentvars && he.journalEntry.EventTypeID == JournalTypeEnum.Scan && he.ScanNode != null) 
+                    if ( parentvars && he.journalEntry.EventTypeID == JournalTypeEnum.Scan && parentjs != null) 
                     {
-                        var parentjs = he.ScanNode.Parent?.ScanData;
-                        if ( parentjs!=null)
-                        {
-                            scandatavars.AddPropertiesFieldsOfClass(parentjs, "Parent.",
-                                    new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
-                                    pvars);
-                        }
+                        scandatavars.AddPropertiesFieldsOfClass(parentjs, "Parent.",
+                                new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
+                                pvars);
                     }
 
-                    bool? res = cond.CheckAgainstVariables(scandatavars, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclassunused);  // need function handler..
+                    bool debugit = false; // (he.journalEntry as JournalScan).BodyName.Equals("Beta Catonis 10 a");
+
+                    bool? res = cond.CheckEval(scandatavars, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclassunused, debugit);
+
+                    //if (errlist.HasChars())  System.Diagnostics.Debug.WriteLine($"Eval {errlist}");
 
                     if (res.HasValue && res.Value == true)
                     {
@@ -345,11 +367,12 @@ namespace EDDiscovery.UserControls
                         JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
                         JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
 
-                        string name, info;
+                        string name, info,pinfo = "";
                         if ( js != null )
                         {
                             name = js.BodyName;
-                            info = js.DisplayString(0);
+                            info = js.DisplayString();
+                            pinfo = parentjs != null ? parentjs.DisplayString() : "";
                         }
                         else if ( jb != null )
                         {
@@ -362,11 +385,13 @@ namespace EDDiscovery.UserControls
                             jbs.FillInformation(he.System, "", out info, out string d);
                         }
 
+
                         object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             name,
-                                            info,
+                                            sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                            sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
+                                            info,
+                                            pinfo,
                                             };
                         rows.Add(new Tuple<ISystem, object[]>(sys, rowobj));
                     }
