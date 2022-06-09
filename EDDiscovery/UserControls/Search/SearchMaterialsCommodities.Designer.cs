@@ -186,20 +186,20 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(521, 14);
+            this.buttonExtExcel.Location = new System.Drawing.Point(514, 14);
             this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 37;
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // buttonExtFind
             // 
-            this.buttonExtFind.Location = new System.Drawing.Point(386, 14);
+            this.buttonExtFind.Image = global::EDDiscovery.Icons.Controls.Find;
+            this.buttonExtFind.Location = new System.Drawing.Point(480, 14);
             this.buttonExtFind.Name = "buttonExtFind";
-            this.buttonExtFind.Size = new System.Drawing.Size(120, 23);
+            this.buttonExtFind.Size = new System.Drawing.Size(28, 28);
             this.buttonExtFind.TabIndex = 3;
-            this.buttonExtFind.Text = "Find";
             this.buttonExtFind.UseVisualStyleBackColor = true;
             this.buttonExtFind.Click += new System.EventHandler(this.buttonExtFind_Click);
             // 

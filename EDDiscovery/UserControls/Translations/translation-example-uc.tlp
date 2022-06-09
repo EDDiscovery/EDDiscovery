@@ -123,9 +123,6 @@ SECTION SearchScans
 .DELNO: "Cannot delete this entry" @
 .CNV: "Condition is not valid" @
 .CD: "Condition" @
-.buttonDelete: "Delete" @
-.buttonSave: "Save" @
-.buttonFind: "Find" @
 .ColumnDate: "Date" @
 .ColumnStar: "Star" @
 .ColumnInformation: "Information" @

@@ -240,9 +240,7 @@ namespace EDDiscovery.UserControls
             {
                 List<HistoryEntry> result = current_historylist.LatestFirst();      // Standard filtering
 
-                int ftotal;         // event filter
-                result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotal);
-                result = HistoryFilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
+                HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -377,10 +375,13 @@ namespace EDDiscovery.UserControls
 
                         foreach (HistoryEntry rhe in result)
                         {
-                            rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour, dfont );
+                            if ( hef.IsIncluded(rhe))
+                            {
+                                rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour, dfont);
 
-                            if (rowpos > ClientRectangle.Height)                // stop when off of screen
-                                break;
+                                if (rowpos > ClientRectangle.Height)                // stop when off of screen
+                                    break;
+                            }
                         }
                     }
                 }
@@ -391,7 +392,7 @@ namespace EDDiscovery.UserControls
             pictureBox.Render();
         }
 
-        int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour, Font dfont )
+         int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour, Font dfont )
         {
             List<string> coldata = new List<string>();                      // First we accumulate the strings
             List<int> tooltipattach = new List<int>();
@@ -617,20 +618,17 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
         {
-            bool add = WouldAddEntry(he);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
 
-            if (add)
+            if (hef.IsIncluded(he))
+            {
                 Display(hl);
+            }
 
             if (he.journalEntry.EventTypeID == JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
             {
                 ShowScanData(he.journalEntry as JournalScan);
             }
-        }
-
-        public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
-        {
-            return he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All")) && HistoryFilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion

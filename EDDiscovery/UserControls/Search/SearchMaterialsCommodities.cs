@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            var enumlist = new Enum[] { EDTx.SearchMaterialsCommodities_ColumnDate, EDTx.SearchMaterialsCommodities_ColumnStar, EDTx.SearchMaterialsCommodities_ColumnLocation, EDTx.SearchMaterialsCommodities_ColumnCurrentDistance, EDTx.SearchMaterialsCommodities_ColumnPosition, EDTx.SearchMaterialsCommodities_buttonExtFind, EDTx.SearchMaterialsCommodities_label2, EDTx.SearchMaterialsCommodities_label1 };
+            var enumlist = new Enum[] { EDTx.SearchMaterialsCommodities_ColumnDate, EDTx.SearchMaterialsCommodities_ColumnStar, EDTx.SearchMaterialsCommodities_ColumnLocation, EDTx.SearchMaterialsCommodities_ColumnCurrentDistance, EDTx.SearchMaterialsCommodities_ColumnPosition, EDTx.SearchMaterialsCommodities_label2, EDTx.SearchMaterialsCommodities_label1 };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] {  });
 
             dataGridView.Init(discoveryform);

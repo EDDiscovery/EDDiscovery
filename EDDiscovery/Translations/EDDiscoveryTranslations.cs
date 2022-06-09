@@ -1253,9 +1253,6 @@ namespace EDDiscovery
         SearchScans_ColumnParent, // Column Header 'Parent'
         SearchScans_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchScans_ColumnPosition, // Column Header 'Position'
-        SearchScans_buttonFind, // Control 'Find'
-        SearchScans_buttonSave, // Control 'Save'
-        SearchScans_buttonDelete, // Control 'Delete'
         SearchScans_Select, // Select
         SearchScans_Name, // Name:
         SearchScans_SN, // Enter Search Name:
@@ -1269,7 +1266,6 @@ namespace EDDiscovery
         SearchMaterialsCommodities_ColumnLocation, // Column Header 'Location'
         SearchMaterialsCommodities_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchMaterialsCommodities_ColumnPosition, // Column Header 'Position'
-        SearchMaterialsCommodities_buttonExtFind, // Control 'Find'
         SearchMaterialsCommodities_label2, // Control 'Item 2'
         SearchMaterialsCommodities_label1, // Control 'Item 1'
         SearchMaterialsCommodities_RareCommodity, // , Rare Commodity

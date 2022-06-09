@@ -31,130 +31,8 @@ namespace EDDiscovery.UserControls
 
     public partial class SearchScans : UserControlCommonBase
     {
-        class Queries
-        {
-            public static Queries Instance      // one instance across all profiles/panels so list is unified.
-            {
-                get
-                {
-                    if (instance == null)
-                        instance = new Queries();
-                    return instance;                }
-            }
-
-            public List<Tuple<string, string>> Searches = new List<Tuple<string, string>>()
-            {
-                new Tuple<string, string>("Planet inside outer ring","nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue"),
-                new Tuple<string, string>("Planet inside inner ring","nSemiMajorAxis <= Parent.RingsInnerm And Parent.IsPlanet IsTrue"),
-                new Tuple<string, string>("Planet inside the rings","nSemiMajorAxis >= Parent.RingsInnerm And nSemiMajorAxis <= Parent.RingsOuterm And Parent.IsPlanet IsTrue And IsPlanet IsTrue"),
-
-                new Tuple<string, string>("Landable and Terraformable","IsPlanet IsTrue And IsLandable IsTrue And Terraformable IsTrue"),
-                new Tuple<string, string>("Landable with Atmosphere","IsPlanet IsTrue And IsLandable IsTrue And Atmosphere IsNotEmpty"),
-                new Tuple<string, string>("Landable with High G","IsPlanet IsTrue And IsLandable IsTrue And nSurfaceGravityG >= 3"),
-                new Tuple<string, string>("Landable large planet","IsPlanet IsTrue And IsLandable IsTrue And nRadius > 8000000"),
-
-                new Tuple<string, string>("Planet has wide rings vs radius","(IsPlanet IsTrue And HasRings IsTrue ) And ( Rings[1]_OuterRad-Rings[1]_InnerRad >= nRadius*5 Or Rings[2]_OuterRad-Rings[2]_InnerRad >= nRadius*5)"),
-
-                new Tuple<string, string>("Close orbit to parent","IsPlanet IsTrue And Parent.IsPlanet IsTrue And IsOrbitingBaryCentre IsFalse And Parent.nRadius*3 > nSemiMajorAxis"),
-                //new Tuple<string, string>("Close to ring","( IsPlanet IsTrue And Parent.HasRings IsTrue ) And ( Rings[1]_InnerRad-nSemiMajorAxis < nRadius * 10 And Rings[1]_InnerRad-nSemiMajorAxis > 0 )"),
-                new Tuple<string, string>("Close to ring",
-                                "( IsPlanet IsTrue And Parent.IsPlanet IsTrue And Parent.HasRings IsTrue And IsOrbitingBaryCentre IsFalse ) And " + 
-                                "( \"Abs(Parent.Rings[1]_InnerRad-nSemiMajorAxis)\" < nRadius*100 Or  \"Abs(Parent.Rings[1]_OuterRad-nSemiMajorAxis)\" < nRadius*100 " +
-                                         "Or \"Abs(Parent.Rings[2]_InnerRad-nSemiMajorAxis)\" < nRadius*100 Or  \"Abs(Parent.Rings[2]_OuterRad-nSemiMajorAxis)\" < nRadius*100 )"
-                    ),
-
-
-                new Tuple<string, string>("Body Name","BodyName contains <name>"),
-                new Tuple<string, string>("Scan Type","ScanType contains Detailed"),
-                new Tuple<string, string>("Distance (ls)","DistanceFromArrivalLS >= 20"),
-                new Tuple<string, string>("Rotation Period (s)","nRotationPeriod >= 30"),
-                new Tuple<string, string>("Rotation Period (days)","nRotationPeriodDays >= 1"),
-                new Tuple<string, string>("Surface Temperature (K)","nSurfaceTemperature >= 273"),
-                new Tuple<string, string>("Radius (m)","nRadius >= 100000"),
-                new Tuple<string, string>("Radius (sols)","nRadiusSols >= 1"),
-                new Tuple<string, string>("Radius (Earth)","nRadiusEarths >= 1"),
-                new Tuple<string, string>("Has Rings","HasRings == 1"),
-                new Tuple<string, string>("Semi Major Axis (m)","nSemiMajorAxis >= 20000000"),
-                new Tuple<string, string>("Semi Major Axis (AU)","nSemiMajorAxisAU >= 1"),
-                new Tuple<string, string>("Eccentricity ","nEccentricity >= 0.1"),
-                new Tuple<string, string>("Orbital Inclination (Deg)","nOrbitalInclination > 1"),
-                new Tuple<string, string>("Periapsis (Deg)","nPeriapsis > 1"),
-                new Tuple<string, string>("Orbital period (s)","nOrbitalPeriod > 200"),
-                new Tuple<string, string>("Orbital period (days)","nOrbitalPeriodDays > 200"),
-                new Tuple<string, string>("Axial Tilt (Deg)","nAxialTiltDeg > 1"),
-
-                new Tuple<string, string>("Star Type","StarType $== A"),
-                new Tuple<string, string>("Star Mass (Sols)","nStellarMass >= 1"),
-                new Tuple<string, string>("Star Magnitude","nAbsoluteMagnitude >= 1"),
-                new Tuple<string, string>("Star Age (MY)","nAge >= 2000"),
-                new Tuple<string, string>("Star Luminosity","Luminosity $== V"),
-
-                new Tuple<string, string>("Planet Mass (Earths)","nMassEM >= 1"),
-                new Tuple<string, string>("Planet Materials","MaterialList contains \"iron\""),
-                new Tuple<string, string>("Planet Class","PlanetClass $== \"High metal content body\""),
-                new Tuple<string, string>("Tidal Lock","nTidalLock == 1"),
-                new Tuple<string, string>("Terraformable","Terraformable IsTrue"),
-                new Tuple<string, string>("Atmosphere","Atmosphere $== \"thin sulfur dioxide atmosphere\""),
-                new Tuple<string, string>("Atmosphere ID","AtmosphereID $== \"Carbon_dioxide\""),
-                new Tuple<string, string>("Atmosphere Property","AtmosphereProperty $== \"Rich\""),
-                new Tuple<string, string>("Volcanism","Volcanism $== \"minor metallic magma volcanism\""),
-                new Tuple<string, string>("Volcanism ID","VolcanismID $== \"Ammonia_Magma\""),
-                new Tuple<string, string>("Surface Gravity m/s","nSurfaceGravity >= 9.6"),
-                new Tuple<string, string>("Surface Gravity G","nSurfaceGravityG >= 1.0"),
-                new Tuple<string, string>("Surface Gravity Landable G","nSurfaceGravityG >= 1.0 And IsLandable == 1"),
-                new Tuple<string, string>("Surface Pressure (Pa)","nSurfacePressure >= 101325"),
-                new Tuple<string, string>("Surface Pressure (Earth Atmos)","nSurfacePressureEarth >= 1"),
-                new Tuple<string, string>("Landable","IsLandable == 1"),
-            };
-
-            public int StandardSearches;
-
-            static private Queries instance = null;
-            private string DbUserQueries { get { return "UCSearchScansUserQuery"; } }  // not keyed to profile or to panel, global
-
-            private char splitmarker = (char)0x2b1c; // horrible but i can't be bothered to do a better implementation at this point
-
-            private Queries()
-            {
-                StandardSearches = Searches.Count();
-                string[] userqueries = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUserQueries, "").Split(new char[] { splitmarker }); // allowed use
-
-                for (int i = 0; i+1 < userqueries.Length; i += 2)
-                    Searches.Add(new Tuple<string, string>(userqueries[i], userqueries[i + 1]));
-            }
-
-            public void Save()
-            {
-                string userqueries = "";
-                for (int i = StandardSearches; i < Searches.Count(); i++)
-                {
-                    userqueries += Searches[i].Item1 + splitmarker + Searches[i].Item2 + splitmarker;
-                }
-
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbUserQueries, userqueries); // allowed use
-            }
-
-            public void Update(string name, string expr)
-            {
-                var entry = Searches.FindIndex(x => x.Item1.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-                if (entry != -1)
-                    Searches[entry] = new Tuple<string, string>(name, expr);
-                else
-                    Searches.Add(new Tuple<string, string>(name, expr));
-            }
-
-            public void Delete(string name)
-            {
-                var entry = Searches.FindIndex(x => x.Item1.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-                if (entry != -1)
-                    Searches.RemoveAt(entry);
-            }
-
-        };
-
         private string dbQuerySave = "Query";
         private string dbSplitterSave = "Splitter";
-
 
         #region Init
 
@@ -174,13 +52,18 @@ namespace EDDiscovery.UserControls
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
-                EDTx.SearchScans_ColumnPosition, EDTx.SearchScans_buttonFind, EDTx.SearchScans_buttonSave, EDTx.SearchScans_buttonDelete ,EDTx.SearchScans_ColumnParent };
+                EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeUTC", "Date Time in UTC", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Level", "Level of body in system, 0 =star, 1 = Planet, 2 = moon, 3 = submoon", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on ones we synthesise
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Sibling.Count", "Number of siblings", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on ones we synthesise
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Child.Count", "Number of child moons", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on ones we synthesise
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("JumponiumCount", "Number of jumponium materials available", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual));     // add on ones we synthesise
 
             // from FSSBodySignals or SAASignalsFound
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsGeoSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
@@ -191,14 +74,23 @@ namespace EDDiscovery.UserControls
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsOtherSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsUncategorisedSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
 
-            string query = GetSetting(dbQuerySave, "");
+            var defaultvars = new BaseUtils.Variables();
+            defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+            foreach(var v in defaultvars.NameEnumuerable)
+                classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo(v, "Constant", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on a few from the base class..
+
+            classnames.Sort(delegate (BaseUtils.TypeHelpers.PropertyNameInfo left, BaseUtils.TypeHelpers.PropertyNameInfo right) { return left.Name.CompareTo(right.Name); });
 
             conditionFilterUC.VariableNames = classnames;
+
+           // foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")}"); // debug output for wiki
+
+            string query = GetSetting(dbQuerySave, "");
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
 
             dataGridView.Init(discoveryform);
 
-            comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
+            comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
@@ -220,7 +112,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridView);
             conditionFilterUC.Check();      // checks, ignore string return errors, fills in Result
             PutSetting(dbQuerySave, conditionFilterUC.Result.ToString());
-            Queries.Instance.Save();
+            HistoryListQueries.Instance.Save();
             PutSetting(dbSplitterSave, splitContainer.GetSplitterDistance());
         }
 
@@ -237,7 +129,7 @@ namespace EDDiscovery.UserControls
         private void ComboBoxSearches_SelectedIndexChanged(object sender, EventArgs e)
         {
             conditionFilterUC.Clear();
-            conditionFilterUC.LoadConditions(new BaseUtils.ConditionLists(Queries.Instance.Searches[comboBoxSearches.SelectedIndex].Item2));
+            conditionFilterUC.LoadConditions(new BaseUtils.ConditionLists(HistoryListQueries.Instance.Searches[comboBoxSearches.SelectedIndex].Condition));
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -248,9 +140,9 @@ namespace EDDiscovery.UserControls
                 string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".T(EDTx.SearchScans_Name), "", "Enter Search Name:".T(EDTx.SearchScans_SN), this.FindForm().Icon);
                 if (name != null)
                 {
-                    Queries.Instance.Update(name,cond.ToString());
+                    HistoryListQueries.Instance.Update(name,cond.ToString());
                     comboBoxSearches.Items.Clear();
-                    comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
+                    comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
                     comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
                     comboBoxSearches.SelectedItem = name;
                     comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
@@ -261,18 +153,17 @@ namespace EDDiscovery.UserControls
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             string name = comboBoxSearches.Text;
-            if (comboBoxSearches.SelectedIndex >= Queries.Instance.StandardSearches && name.HasChars())
+            if (comboBoxSearches.SelectedIndex>= 0 && HistoryListQueries.Instance.Searches[comboBoxSearches.SelectedIndex].User && name.HasChars())
             {
                 if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".T(EDTx.SearchScans_DEL) + " " + name, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    Queries.Instance.Delete(name);
+                    HistoryListQueries.Instance.Delete(name);
                     comboBoxSearches.Items.Clear();
-                    comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
+                    comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
                 }
             }
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
         }
 
 
@@ -291,7 +182,6 @@ namespace EDDiscovery.UserControls
 
                 // what variables are in use, so we don't enumerate the lot.
                 // Remove any array syntax as AddPropertiesFielsOfClass does not take into consideration those when deciding if to enumerate
-                var varusedincondition = cond.EvalVariablesUsed(true);      
 
                 discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
@@ -300,105 +190,59 @@ namespace EDDiscovery.UserControls
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
                 var defaultvars = new BaseUtils.Variables();
-                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
-                System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
+                //    defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                //System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
 
-                var results = await Find(helist, cond, varusedincondition, defaultvars, cursystem);
+                var heresults = await HistoryListQueries.Find(helist, cond, defaultvars);
 
-                foreach( var r in results)
+                foreach( var he in heresults)
                 {
-                    dataGridView.Rows.Add(r.Item2);
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = r.Item1;
-                }
+                    ISystem sys = he.System;
+                    string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                System.Diagnostics.Debug.Write($"Search took {sw.ElapsedMilliseconds}");
-                dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                this.Cursor = Cursors.Default;
-            }
+                    JournalScan js = he.journalEntry as JournalScan;
+                    JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
+                    JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
 
-        }
-
-        // Async task to find results given cond in helist, using only vars specified.
-
-        private System.Threading.Tasks.Task<List<Tuple<ISystem,object[]>>> Find(List<HistoryEntry> helist, BaseUtils.ConditionLists cond, HashSet<string> varsusedincondition, 
-                                    BaseUtils.Variables defaultvars, ISystem cursystem)
-        {
-            return System.Threading.Tasks.Task.Run(() =>
-            {
-                bool parentvars = varsusedincondition.StartsWithInList("Parent.", StringComparison.InvariantCultureIgnoreCase) >= 0;      // is there any parents in the condition?
-                HashSet<string> pvars = varsusedincondition.Where(x => x.StartsWith("Parent.")).Select(x=>x.Substring(7)).ToHashSet();    // parent vars, stripped
-
-                List<Tuple<ISystem,object[]>> rows = new List<Tuple<ISystem,object[]>>();
-                foreach (var he in helist)
-                {
-                    if (he.EntryType != JournalTypeEnum.Scan)   // debug
-                        continue;
-
-                    BaseUtils.Variables scandatavars = new BaseUtils.Variables(defaultvars);
-                    scandatavars.AddPropertiesFieldsOfClass(he.journalEntry, "",
-                            new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
-                            varsusedincondition);
-
-                    var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
-
-                    // for scans, with parent. vars, we need to find the scan data of the parent, if we have it, we can fill them in
-                    if ( parentvars && he.journalEntry.EventTypeID == JournalTypeEnum.Scan && parentjs != null) 
+                    string name, info, pinfo = "";
+                    if (js != null)
                     {
-                        scandatavars.AddPropertiesFieldsOfClass(parentjs, "Parent.",
-                                new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
-                                pvars);
+                        name = js.BodyName;
+                        info = js.DisplayString();
+                        if (he.ScanNode?.Parent != null)
+                        {
+                            var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
+                            pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
+                        }
+                    }
+                    else if (jb != null)
+                    {
+                        name = jb.BodyName;
+                        jb.FillInformation(he.System, "", out info, out string d);
+                    }
+                    else
+                    {
+                        name = jbs.BodyName;
+                        jbs.FillInformation(he.System, "", out info, out string d);
                     }
 
-                    bool debugit = false; // (he.journalEntry as JournalScan).BodyName.Equals("Beta Catonis 10 a");
-
-                    bool? res = cond.CheckEval(scandatavars, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclassunused, debugit);
-
-                    //if (errlist.HasChars())  System.Diagnostics.Debug.WriteLine($"Eval {errlist}");
-
-                    if (res.HasValue && res.Value == true)
-                    {
-                        //System.Diagnostics.Debug.WriteLine($"{he.System.Name} {scandatavars.ToString(separ: Environment.NewLine)}");
-
-                        ISystem sys = he.System;
-                        string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-
-                        JournalScan js = he.journalEntry as JournalScan;
-                        JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
-                        JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
-
-                        string name, info,pinfo = "";
-                        if ( js != null )
-                        {
-                            name = js.BodyName;
-                            info = js.DisplayString();
-                            pinfo = parentjs != null ? parentjs.DisplayString() : "";
-                        }
-                        else if ( jb != null )
-                        {
-                            name = jb.BodyName;
-                            jb.FillInformation(he.System, "", out info, out string d);
-                        }
-                        else
-                        {
-                            name = jbs.BodyName;
-                            jbs.FillInformation(he.System, "", out info, out string d);
-                        }
-
-
-                        object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
+                    object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             name,
                                             sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             info,
                                             pinfo,
                                             };
-                        rows.Add(new Tuple<ISystem, object[]>(sys, rowobj));
-                    }
+
+                    dataGridView.Rows.Add(rowobj);
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = he.System;
                 }
 
-                return rows;
-            });
+                System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {heresults.Count}");
+                dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private BaseUtils.ConditionLists Valid()
