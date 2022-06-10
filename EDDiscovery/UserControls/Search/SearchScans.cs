@@ -193,13 +193,19 @@ namespace EDDiscovery.UserControls
 
                 var helist = discoveryform.history.FilterByScanFSSBodySAASignals();
 
-                var sw = new System.Diagnostics.Stopwatch(); sw.Start();
-
                 var defaultvars = new BaseUtils.Variables();
-                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
+
+                if (allvars.StartsWith("one") >= 0)
+                    defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                else
+                    defaultvars = null;
+    
                 //System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
 
                 Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
+
+                var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
                 lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, false);
 
