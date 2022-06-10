@@ -34,6 +34,8 @@ namespace EDDiscovery.UserControls
         private string dbQuerySave = "Query";
         private string dbSplitterSave = "Splitter";
 
+        private string lastresultlog = "";
+
         #region Init
 
         public SearchScans()
@@ -54,6 +56,9 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
                 EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeUTC", "Date Time in UTC", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
@@ -94,6 +99,7 @@ namespace EDDiscovery.UserControls
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
+            extButtonResultsLog.Enabled = false;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -190,13 +196,16 @@ namespace EDDiscovery.UserControls
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
                 var defaultvars = new BaseUtils.Variables();
-                //    defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
                 //System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
 
-                var heresults = await HistoryListQueries.Find(helist, cond, defaultvars);
+                Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
 
-                foreach( var he in heresults)
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars);     
+
+                foreach ( var kvp in results.EmptyIfNull())
                 {
+                    HistoryEntry he = kvp.Value.HistoryEntry;
                     ISystem sys = he.System;
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
@@ -238,11 +247,21 @@ namespace EDDiscovery.UserControls
                     dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = he.System;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {heresults.Count}");
+                System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {results.Count}");
                 dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+
                 this.Cursor = Cursors.Default;
+                extButtonResultsLog.Enabled = true;
             }
+
+        }
+
+        private void extButtonResultsLog_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
+            ifrm.Info("Bindings", discoveryform.Icon, lastresultlog);
+            ifrm.Show(this);
         }
 
         private BaseUtils.ConditionLists Valid()
@@ -261,5 +280,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridView.Excel(4);
         }
+
+        
     }
 }

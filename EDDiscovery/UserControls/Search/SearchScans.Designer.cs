@@ -61,12 +61,14 @@ namespace EDDiscovery.UserControls
             this.buttonSave = new ExtendedControls.ExtButton();
             this.buttonDelete = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.extButtonResultsLog = new ExtendedControls.ExtButton();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -238,6 +240,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxSearches.Size = new System.Drawing.Size(199, 21);
             this.comboBoxSearches.TabIndex = 1;
             this.comboBoxSearches.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxSearches, "Select a predefined condition");
             this.comboBoxSearches.ValueMember = "";
             // 
             // panelTop
@@ -248,6 +251,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonSave);
             this.panelTop.Controls.Add(this.buttonDelete);
             this.panelTop.Controls.Add(this.buttonExtExcel);
+            this.panelTop.Controls.Add(this.extButtonResultsLog);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
@@ -262,6 +266,7 @@ namespace EDDiscovery.UserControls
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(28, 28);
             this.buttonFind.TabIndex = 0;
+            this.toolTip.SetToolTip(this.buttonFind, "Search for condition below");
             this.buttonFind.UseVisualStyleBackColor = true;
             this.buttonFind.Click += new System.EventHandler(this.buttonFind_Click);
             // 
@@ -273,6 +278,7 @@ namespace EDDiscovery.UserControls
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(28, 28);
             this.buttonSave.TabIndex = 0;
+            this.toolTip.SetToolTip(this.buttonSave, "Save current condition");
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
@@ -284,6 +290,7 @@ namespace EDDiscovery.UserControls
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
             this.buttonDelete.TabIndex = 0;
+            this.toolTip.SetToolTip(this.buttonDelete, "Delete current condition");
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
@@ -296,8 +303,21 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 37;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Output results grid to CSV");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // extButtonResultsLog
+            // 
+            this.extButtonResultsLog.Image = global::EDDiscovery.Icons.Controls.ShowLogFiles;
+            this.extButtonResultsLog.Location = new System.Drawing.Point(351, 1);
+            this.extButtonResultsLog.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonResultsLog.Name = "extButtonResultsLog";
+            this.extButtonResultsLog.Size = new System.Drawing.Size(28, 28);
+            this.extButtonResultsLog.TabIndex = 0;
+            this.toolTip.SetToolTip(this.extButtonResultsLog, "Show search report");
+            this.extButtonResultsLog.UseVisualStyleBackColor = true;
+            this.extButtonResultsLog.Click += new System.EventHandler(this.extButtonResultsLog_Click);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -351,6 +371,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumn6.ReadOnly = true;
             this.dataGridViewTextBoxColumn6.Width = 206;
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // SearchScans
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -396,5 +420,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private ExtendedControls.ExtButton extButtonResultsLog;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

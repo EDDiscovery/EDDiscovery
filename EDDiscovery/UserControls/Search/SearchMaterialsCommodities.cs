@@ -56,6 +56,9 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.SearchMaterialsCommodities_ColumnDate, EDTx.SearchMaterialsCommodities_ColumnStar, EDTx.SearchMaterialsCommodities_ColumnLocation, EDTx.SearchMaterialsCommodities_ColumnCurrentDistance, EDTx.SearchMaterialsCommodities_ColumnPosition, EDTx.SearchMaterialsCommodities_label2, EDTx.SearchMaterialsCommodities_label1 };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] {  });
 
+            var enumlisttt = new Enum[] { EDTx.SearchMaterialsCommodities_buttonExtExcel_ToolTip, EDTx.SearchMaterialsCommodities_buttonExtFind_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCMANDOR_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM1_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
             dataGridView.Init(discoveryform);
 
             itemlist = MaterialCommodityMicroResourceType.GetAll();

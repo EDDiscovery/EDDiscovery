@@ -112,7 +112,11 @@ SECTION SearchMaterialsCommodities
 .ColumnLocation: "Location" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
-
+.buttonExtExcel.ToolTip: "Output grid to CSV" @
+.buttonExtFind.ToolTip: "Find materials/commodities" @
+.comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" @
+.comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" @
+.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" @
 
 SECTION SearchScans
 
@@ -129,6 +133,13 @@ SECTION SearchScans
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
 .ColumnParent: "Parent" @
+.comboBoxSearches.ToolTip: "Select a predefined condition" @
+.buttonFind.ToolTip: "Search for condition below" @
+.buttonSave.ToolTip: "Save current condition" @
+.buttonDelete.ToolTip: "Delete current condition" @
+.buttonExtExcel.ToolTip: "Output results grid to CSV" @
+.extButtonResultsLog.ToolTip: "Show search report" @
+
 
 SECTION SearchStars
 
@@ -411,6 +422,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
+.extButtonSearches.ToolTip: "Search Filter list from search scans panel" @
 
 
 .navroute: "Nav Route" @

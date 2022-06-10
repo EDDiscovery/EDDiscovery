@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             string thisname = typeof(UserControlSurveyor).Name;
-            var enumlisttt = new Enum[] { EDTx.UserControlSurveyor_extButtonPlanets_ToolTip, EDTx.UserControlSurveyor_extButtonStars_ToolTip, EDTx.UserControlSurveyor_extButtonShowControl_ToolTip, EDTx.UserControlSurveyor_extButtonAlignment_ToolTip, EDTx.UserControlSurveyor_extButtonFSS_ToolTip, EDTx.UserControlSurveyor_checkBoxEDSM_ToolTip, EDTx.UserControlSurveyor_extButtonSetRoute_ToolTip, EDTx.UserControlSurveyor_extButtonControlRoute_ToolTip, EDTx.UserControlSurveyor_extButtonFont_ToolTip, EDTx.UserControlSurveyor_extCheckBoxWordWrap_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlSurveyor_extButtonPlanets_ToolTip, EDTx.UserControlSurveyor_extButtonStars_ToolTip, EDTx.UserControlSurveyor_extButtonShowControl_ToolTip, EDTx.UserControlSurveyor_extButtonAlignment_ToolTip, EDTx.UserControlSurveyor_extButtonFSS_ToolTip, EDTx.UserControlSurveyor_checkBoxEDSM_ToolTip, EDTx.UserControlSurveyor_extButtonSetRoute_ToolTip, EDTx.UserControlSurveyor_extButtonControlRoute_ToolTip, EDTx.UserControlSurveyor_extButtonFont_ToolTip, EDTx.UserControlSurveyor_extCheckBoxWordWrap_ToolTip, EDTx.UserControlSurveyor_extButtonSearches_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, thisname);
             rollUpPanelTop.SetToolTip(toolTip);
 
@@ -436,6 +436,7 @@ namespace EDDiscovery.UserControls
                     routelinefueltext = routelinefueltext.AppendPrePad(addtext, Environment.NewLine);
                 }
 
+
                 //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} last route text '{routelinefueltext}'");
 
                 if (routelinefueltext.HasChars())     // if we have any characters, display it
@@ -502,6 +503,8 @@ namespace EDDiscovery.UserControls
 
                         value = 0;
 
+                        SortedDictionary<string, string> textresults = new SortedDictionary<string, string>();      // we dump all test into this sorted dictionary
+
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
                             if (sn.ScanData != null && sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
@@ -544,7 +547,7 @@ namespace EDDiscovery.UserControls
                                         bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
 
 
-                                        var il = sd.SurveyorInfoLine(sys,
+                                        var silstring = sd.SurveyorInfoLine(sys,
                                             hasminingsignals && sigchecked,  // show signals if we have some andthe all signals filter is checked
                                             hasgeosignals && (sigchecked || geosignalschecked || biosignalschecked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
                                             hasbiosignals && (sigchecked || biosignalschecked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
@@ -562,40 +565,76 @@ namespace EDDiscovery.UserControls
                                             IsSet(CtrlList.showRinged),          // show rings
                                             lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
-                                        //System.Diagnostics.Debug.WriteLine("Display " + il);
-                                        var i = new ExtPictureBox.ImageElement();
-                                        i.TextAutoSize(
-                                                new Point(3, vpos),
-                                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                                                il,
-                                                dfont,
-                                                textcolour,
-                                                backcolour,
-                                                1.0F,
-                                                frmt: frmt);
-                                        picelements.Add(i);
-                                        vpos += i.Location.Height;
+                                        textresults[sd.BodyName] = silstring;
                                         value += sd.EstimatedValue;
                                     }
                                 }
                             }
                         }
 
-                        if (value > 0 && IsSet(CtrlList.showValues))
+                        // then we do the searching..
+
+                        if (searchesactive.Length > 0)       // if any searches
+                        {
+                            List<HistoryEntry> helist = discoveryform.history.FilterByScanFSSBodySAASignals(sys);       // find all relevant records on this system
+
+                            var defaultvars = new BaseUtils.Variables();
+                            defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+
+                            Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
+
+                            foreach (var searchname in searchesactive)
+                            {
+                                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars); // execute the searches
+                            }
+
+                            foreach (var kvp in searchresults.EmptyIfNull())        // now we update the textresults, merging the two finds together.
+                            {
+                                string bodyname = kvp.Key;
+                                string info = string.Join(", ", kvp.Value.FiltersPassed);
+
+                                if ( textresults.ContainsKey(bodyname))
+                                {
+                                    textresults[bodyname] += ", " + info;
+                                }
+                                else
+                                {
+                                    textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)} {info}";
+                                }
+                            }
+                        }
+
+                        foreach (var kvp in textresults)        // and present any text results in sorted order
                         {
                             var i = new ExtPictureBox.ImageElement();
                             i.TextAutoSize(
-                                new Point(3, vpos),
-                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                                "^^ ~ " + value.ToString("N0") + " cr",
-                                dfont,
-                                textcolour,
-                                backcolour,
-                                1.0F,
-                                frmt: frmt);
+                                    new Point(3, vpos),
+                                    new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
+                                    kvp.Value,
+                                    dfont,
+                                    textcolour,
+                                    backcolour,
+                                    1.0F,
+                                    frmt: frmt);
                             picelements.Add(i);
                             vpos += i.Location.Height;
                         }
+                    }
+
+                    if (value > 0 && IsSet(CtrlList.showValues))
+                    {
+                        var i = new ExtPictureBox.ImageElement();
+                        i.TextAutoSize(
+                            new Point(3, vpos),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
+                            "^^ ~ " + value.ToString("N0") + " cr",
+                            dfont,
+                            textcolour,
+                            backcolour,
+                            1.0F,
+                            frmt: frmt);
+                        picelements.Add(i);
+                        vpos += i.Location.Height;
                     }
 
                     if (fsssignalsdisplayed.HasChars())
@@ -644,14 +683,16 @@ namespace EDDiscovery.UserControls
                                                             backcolour,
                                                             1.0F,
                                                             frmt: frmt);
+                            vpos += i.Location.Height;
                             picelements.Add(i);
                         }
 
                     }
-                }
+                } // end system node
+
 
                 frmt.Dispose();
-            }
+            } // end sys
 
             lock ( extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
             {
@@ -695,11 +736,14 @@ namespace EDDiscovery.UserControls
             return ctrlset[(int)v];
         }
 
+        private string[] searchesactive;
+
         // from DB, set up ctrlset, and set the defaults
         private void PopulateCtrlList()
         {
             ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
             alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
+            searchesactive = GetSetting("Searches", "None").SplitNoEmptyStartFinish('\u2188');
         }
 
         protected virtual bool DefaultSetting(CtrlList e)
@@ -735,6 +779,19 @@ namespace EDDiscovery.UserControls
 
             CommonCtrl(displayfilter, extButtonPlanets);
 
+        }
+
+        private void extButtonSearches_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddAllNone();
+            displayfilter.SettingsSplittingChar = '\u2188';     // pick a crazy one soe
+
+            var searches = HistoryListQueries.Instance.Searches.Where(x => x.Standard || x.User).ToList();
+            foreach (var s in searches)
+                displayfilter.AddStandardOption(s.Name, s.Name);
+
+            CommonCtrl(displayfilter, extButtonPlanets, "Searches");
         }
 
         private void extButtonStars_Click(object sender, EventArgs e)
@@ -781,7 +838,7 @@ namespace EDDiscovery.UserControls
             CommonCtrl(displayfilter, extButtonAlignment);
         }
 
-        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
+        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under, string saveasstring = null)
         {
             displayfilter.AllOrNoneBack = false;
             displayfilter.ImageSize = new Size(24, 24);
@@ -789,12 +846,19 @@ namespace EDDiscovery.UserControls
 
             displayfilter.SaveSettings = (s, o) =>
             {
-                PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
+                if (saveasstring == null)
+                    PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
+                else
+                    PutSetting(saveasstring, s);
+
                 PopulateCtrlList();
                 DrawSystem(last_sys);
             };
 
-            displayfilter.Show(typeof(CtrlList), ctrlset, under, this.FindForm());
+            if ( saveasstring == null)
+                displayfilter.Show(typeof(CtrlList), ctrlset, under, this.FindForm());
+            else
+                displayfilter.Show(GetSetting(saveasstring,"None"), under, this.FindForm());
         }
 
         private void extButtonFont_Click(object sender, EventArgs e)
@@ -982,6 +1046,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
 
     }
 

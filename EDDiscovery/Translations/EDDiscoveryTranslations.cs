@@ -889,6 +889,7 @@ namespace EDDiscovery
         UserControlSurveyor_extButtonControlRoute_ToolTip, // ToolTip 'Route Settings'
         UserControlSurveyor_extButtonFont_ToolTip, // ToolTip 'Font'
         UserControlSurveyor_extCheckBoxWordWrap_ToolTip, // ToolTip 'Word Wrap'
+        UserControlSurveyor_extButtonSearches_ToolTip,
         UserControlSurveyor_Scan, //  Scan
         UserControlSurveyor_Systemscancomplete, // System scan complete.
         UserControlSurveyor_bodiesfound, //  bodies found.
@@ -1260,6 +1261,12 @@ namespace EDDiscovery
         SearchScans_DELNO, // Cannot delete this entry
         SearchScans_CNV, // Condition is not valid
         SearchScans_CD, // Condition
+        SearchScans_comboBoxSearches_ToolTip,
+        SearchScans_buttonFind_ToolTip,
+        SearchScans_buttonSave_ToolTip,
+        SearchScans_buttonDelete_ToolTip, 
+        SearchScans_buttonExtExcel_ToolTip, 
+        SearchScans_extButtonResultsLog_ToolTip,
 
         SearchMaterialsCommodities_ColumnDate, // Column Header 'Date'
         SearchMaterialsCommodities_ColumnStar, // Column Header 'Star'
@@ -1274,6 +1281,12 @@ namespace EDDiscovery
         SearchMaterialsCommodities_DIS, // Discovered at
         SearchMaterialsCommodities_COL, // Collected at
         SearchMaterialsCommodities_MR, // Mission Reward at
+
+        SearchMaterialsCommodities_buttonExtExcel_ToolTip, 
+        SearchMaterialsCommodities_buttonExtFind_ToolTip, 
+        SearchMaterialsCommodities_comboBoxCustomCMANDOR_ToolTip,
+        SearchMaterialsCommodities_comboBoxCustomCM1_ToolTip,
+        SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip,
 
         SearchStars_ColumnStar, // Column Header 'Star'
         SearchStars_ColumnCentreDistance, // Column Header 'Centre Distance'

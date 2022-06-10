@@ -60,6 +60,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCM1 = new ExtendedControls.ExtComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -190,6 +191,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 37;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Output grid to CSV");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
@@ -200,6 +202,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtFind.Name = "buttonExtFind";
             this.buttonExtFind.Size = new System.Drawing.Size(28, 28);
             this.buttonExtFind.TabIndex = 3;
+            this.toolTip.SetToolTip(this.buttonExtFind, "Find materials/commodities");
             this.buttonExtFind.UseVisualStyleBackColor = true;
             this.buttonExtFind.Click += new System.EventHandler(this.buttonExtFind_Click);
             // 
@@ -223,6 +226,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCMANDOR.Size = new System.Drawing.Size(79, 21);
             this.comboBoxCustomCMANDOR.TabIndex = 2;
             this.comboBoxCustomCMANDOR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxCustomCMANDOR, "Select the condition between Item 1 and 2");
             this.comboBoxCustomCMANDOR.ValueMember = "";
             // 
             // comboBoxCustomCM2
@@ -245,6 +249,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCM2.Size = new System.Drawing.Size(283, 21);
             this.comboBoxCustomCM2.TabIndex = 2;
             this.comboBoxCustomCM2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxCustomCM2, "Secondary material or commodity to search for");
             this.comboBoxCustomCM2.ValueMember = "";
             // 
             // comboBoxCustomCM1
@@ -267,6 +272,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCM1.Size = new System.Drawing.Size(283, 21);
             this.comboBoxCustomCM1.TabIndex = 2;
             this.comboBoxCustomCM1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxCustomCM1, "Primary material or commodity to search for");
             this.comboBoxCustomCM1.ValueMember = "";
             // 
             // label2
@@ -286,6 +292,10 @@ namespace EDDiscovery.UserControls
             this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Item 1";
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // SearchMaterialsCommodities
             // 
@@ -322,5 +332,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocation;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
