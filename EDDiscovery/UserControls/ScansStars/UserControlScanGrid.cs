@@ -400,7 +400,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     // have some belt, ring or other special structure?
-                    if (sn.ScanData.HasRings)
+                    if (sn.ScanData.HasRingsOrBelts)
                     {
                         for (int r = 0; r < sn.ScanData.Rings.Length; r++)
                         {

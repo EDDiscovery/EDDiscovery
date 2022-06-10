@@ -526,7 +526,7 @@ namespace EDDiscovery.UserControls
                                     (sd.WaterWorld && IsSet(CtrlList.showWaterWorld)) ||
                                     (sd.PlanetTypeID == EDPlanet.High_metal_content_body && IsSet(CtrlList.showHMC)) ||
                                     (sd.PlanetTypeID == EDPlanet.Metal_rich_body && IsSet(CtrlList.showMR)) ||
-                                    (sd.HasRings && IsSet(CtrlList.showRinged)) ||
+                                    (sd.HasRingsOrBelts && IsSet(CtrlList.showRinged)) ||
                                     (sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism)) ||
                                     (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && IsSet(CtrlList.showEccentricity)) ||
                                     (sd.CanBeTerraformable && IsSet(CtrlList.showTerraformable)) ||
