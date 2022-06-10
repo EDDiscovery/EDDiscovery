@@ -585,7 +585,7 @@ namespace EDDiscovery.UserControls
 
                             foreach (var searchname in searchesactive)
                             {
-                                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars); // execute the searches
+                                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
                             }
 
                             foreach (var kvp in searchresults.EmptyIfNull())        // now we update the textresults, merging the two finds together.

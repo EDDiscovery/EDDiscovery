@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
-            extButtonResultsLog.Enabled = false;
+            extButtonResultsLog.Visible = false;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -201,7 +201,9 @@ namespace EDDiscovery.UserControls
 
                 Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars);     
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, false);
+
+                System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count}");
 
                 foreach ( var kvp in results.EmptyIfNull())
                 {
