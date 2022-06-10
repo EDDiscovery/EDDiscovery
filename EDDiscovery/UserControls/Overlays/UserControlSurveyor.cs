@@ -743,7 +743,7 @@ namespace EDDiscovery.UserControls
         {
             ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
             alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
-            searchesactive = GetSetting("Searches", "None").SplitNoEmptyStartFinish('\u2188');
+            searchesactive = GetSetting("Searches", "").SplitNoEmptyStartFinish('\u2188');
         }
 
         protected virtual bool DefaultSetting(CtrlList e)
@@ -858,7 +858,7 @@ namespace EDDiscovery.UserControls
             if ( saveasstring == null)
                 displayfilter.Show(typeof(CtrlList), ctrlset, under, this.FindForm());
             else
-                displayfilter.Show(GetSetting(saveasstring,"None"), under, this.FindForm());
+                displayfilter.Show(GetSetting(saveasstring,""), under, this.FindForm());
         }
 
         private void extButtonFont_Click(object sender, EventArgs e)
