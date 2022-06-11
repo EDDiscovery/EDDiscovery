@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            dataGridView.Excel(4);
+            dataGridView.Excel(dataGridView.ColumnCount);
         }
     }
 }

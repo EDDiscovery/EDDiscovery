@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             DBSettingsSaver db = new DBSettingsSaver(this, "SearchFindSys");
 
             findSystemsUserControl.Init(db, true, discoveryform);
-            findSystemsUserControl.Excel += () => { dataGridView.Excel(3); };
+            findSystemsUserControl.Excel += () => { dataGridView.Excel(dataGridView.ColumnCount); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
             var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };

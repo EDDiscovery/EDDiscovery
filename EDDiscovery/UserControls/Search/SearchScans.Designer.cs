@@ -62,6 +62,7 @@ namespace EDDiscovery.UserControls
             this.buttonDelete = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extButtonResultsLog = new ExtendedControls.ExtButton();
+            this.labelCount = new System.Windows.Forms.Label();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -252,6 +253,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonDelete);
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.extButtonResultsLog);
+            this.panelTop.Controls.Add(this.labelCount);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
@@ -315,9 +317,20 @@ namespace EDDiscovery.UserControls
             this.extButtonResultsLog.Name = "extButtonResultsLog";
             this.extButtonResultsLog.Size = new System.Drawing.Size(28, 28);
             this.extButtonResultsLog.TabIndex = 0;
-            this.toolTip.SetToolTip(this.extButtonResultsLog, "Show search report");
+            this.toolTip.SetToolTip(this.extButtonResultsLog, "Press to enable search reporting, then press after each sunsequent search for the" +
+        " report. Reporting can slow the search.");
             this.extButtonResultsLog.UseVisualStyleBackColor = true;
             this.extButtonResultsLog.Click += new System.EventHandler(this.extButtonResultsLog_Click);
+            // 
+            // labelCount
+            // 
+            this.labelCount.AutoSize = true;
+            this.labelCount.Location = new System.Drawing.Point(390, 4);
+            this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+            this.labelCount.Name = "labelCount";
+            this.labelCount.Size = new System.Drawing.Size(43, 13);
+            this.labelCount.TabIndex = 38;
+            this.labelCount.Text = "<code>";
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -390,6 +403,7 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -422,5 +436,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private ExtendedControls.ExtButton extButtonResultsLog;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label labelCount;
     }
 }

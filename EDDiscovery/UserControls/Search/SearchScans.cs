@@ -34,7 +34,8 @@ namespace EDDiscovery.UserControls
         private string dbQuerySave = "Query";
         private string dbSplitterSave = "Splitter";
 
-        private string lastresultlog = "";
+        private string lastresultlog = null;
+        private bool wantreport = false;
 
         #region Init
 
@@ -99,7 +100,7 @@ namespace EDDiscovery.UserControls
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
-            extButtonResultsLog.Visible = false;
+            labelCount.Visible = false;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -207,7 +208,7 @@ namespace EDDiscovery.UserControls
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, false);
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, wantreport);
 
                 System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count}");
 
@@ -260,16 +261,27 @@ namespace EDDiscovery.UserControls
                 dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
                 this.Cursor = Cursors.Default;
-                extButtonResultsLog.Enabled = true;
+
+                labelCount.Text = "Total".TxID(EDTx.UserControlMaterialCommodities_Total) + " " + dataGridView.Rows.Count.ToString();
+                labelCount.Visible = true;
             }
 
         }
 
         private void extButtonResultsLog_Click(object sender, EventArgs e)
         {
-            ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-            ifrm.Info("Bindings", discoveryform.Icon, lastresultlog);
-            ifrm.Show(this);
+            wantreport = true;
+            if (lastresultlog.HasChars())
+            {
+                ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
+                ifrm.Info("Log", discoveryform.Icon, lastresultlog);
+                ifrm.Show(this);
+            }
+            else
+            {
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(),"OK".TxID(EDTx.OK),"");
+            }
+
         }
 
         private BaseUtils.ConditionLists Valid()
@@ -286,7 +298,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            dataGridView.Excel(4);
+            dataGridView.Excel(dataGridView.ColumnCount);
         }
 
         

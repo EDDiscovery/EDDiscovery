@@ -150,7 +150,7 @@ namespace EDDiscovery
         // called from EDDApplicationContext .. continues on with the construction of the system
         public void Init(Action<string> msg)  
         {
-           // CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("de-DE");
+           //lin CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("de-DE");
 
             // previously in controller
 
