@@ -605,7 +605,7 @@ namespace EDDiscovery.UserControls
                                 }
                                 else
                                 {
-                                    textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)} {info}";
+                                    textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
                                 }
                             }
                         }
@@ -801,7 +801,7 @@ namespace EDDiscovery.UserControls
             foreach (var s in searches)
                 displayfilter.AddStandardOption(s.Name, s.Name);
 
-            CommonCtrl(displayfilter, extButtonPlanets, "Searches");
+            CommonCtrl(displayfilter, extButtonSearches, "Searches");
         }
 
         private void extButtonStars_Click(object sender, EventArgs e)

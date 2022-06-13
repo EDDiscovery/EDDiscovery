@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls
             this.extButtonSearches.Name = "extButtonSearches";
             this.extButtonSearches.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearches.TabIndex = 30;
-            this.toolTip.SetToolTip(this.extButtonSearches, "Search Filter list from search scans panel");
+            this.toolTip.SetToolTip(this.extButtonSearches, "Select discoveries to search for, taken from the search panel scan searches");
             this.extButtonSearches.UseVisualStyleBackColor = false;
             this.extButtonSearches.Click += new System.EventHandler(this.extButtonSearches_Click);
             // 

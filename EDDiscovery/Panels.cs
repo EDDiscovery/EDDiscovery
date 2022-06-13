@@ -84,6 +84,7 @@ namespace EDDiscovery
             LocalMap3D = 54,
             Organics = 55,
             Engineers = 56,
+            Discoveries = 57,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -136,6 +137,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Map3D, typeof(UserControl3DMap) ,"3D Map", "map3d", "3D Map of galaxy") },
             { new PanelInfo( PanelIDs.LocalMap3D, typeof(UserControlLocal3DMap) ,"Local 3D Map", "localmap3d", "Local 3D Map of systems near you") },
             { new PanelInfo( PanelIDs.Organics, typeof(UserControlOrganics) ,"Organic Scans", "OrganicScans", "Organic scans of current body and historic scans") },
+            { new PanelInfo( PanelIDs.Discoveries, typeof(UserControlDiscoveries) ,"Discoveries", "Discoveries", "Discoveries Observer List") },
 
             { new PanelInfo( "Bookmarks and Logs") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets")},

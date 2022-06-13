@@ -291,6 +291,12 @@
     <Compile Include="UserControls\Overlays\UserControlOrganics.Designer.cs">
       <DependentUpon>UserControlOrganics.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlDiscoveries.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlDiscoveries.Designer.cs">
+      <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Webbrowser\BrowserBase.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserWebView2.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserIE11.cs" />
@@ -914,6 +920,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\3DMap\UserControl3DMap.resx">
       <DependentUpon>UserControl3DMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlDiscoveries.resx">
+      <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Webbrowser\UserControlWebBrowser.resx">
       <DependentUpon>UserControlWebBrowser.cs</DependentUpon>

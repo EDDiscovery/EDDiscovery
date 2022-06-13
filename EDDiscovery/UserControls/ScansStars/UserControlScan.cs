@@ -49,7 +49,6 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
-            toolTip.ShowAlways = true;
         }
 
         public override void Init()

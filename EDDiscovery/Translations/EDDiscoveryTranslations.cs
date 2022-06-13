@@ -1248,12 +1248,15 @@ namespace EDDiscovery
         UserControlSearch_MaterialsCommodities, // Materials Commodities
         UserControlSearch_Scans, // Scans
 
+        // used across multiple panels, but so much shared with above may as well use the same 
+
         SearchScans_ColumnDate, // Column Header 'Date'
         SearchScans_ColumnStar, // Column Header 'Star'
         SearchScans_ColumnInformation, // Column Header 'Information'
         SearchScans_ColumnParent, // Column Header 'Parent'
         SearchScans_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchScans_ColumnPosition, // Column Header 'Position'
+        SearchScans_ColumnSearches, // Column Header 'Searches'
         SearchScans_Select, // Select
         SearchScans_Name, // Name:
         SearchScans_SN, // Enter Search Name:
@@ -1265,8 +1268,10 @@ namespace EDDiscovery
         SearchScans_buttonFind_ToolTip,
         SearchScans_buttonSave_ToolTip,
         SearchScans_buttonDelete_ToolTip, 
-        SearchScans_buttonExtExcel_ToolTip, 
+        SearchScans_buttonExtExcel_ToolTip,
         SearchScans_extButtonResultsLog_ToolTip,
+        SearchScans_labelTime,
+        SearchScans_labelSearch,
 
         SearchMaterialsCommodities_ColumnDate, // Column Header 'Date'
         SearchMaterialsCommodities_ColumnStar, // Column Header 'Star'
