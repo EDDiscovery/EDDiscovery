@@ -185,17 +185,15 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
-
-                // what variables are in use, so we don't enumerate the lot.
-                // Remove any array syntax as AddPropertiesFielsOfClass does not take into consideration those when deciding if to enumerate
-
                 discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
                 var helist = discoveryform.history.FilterByScanFSSBodySAASignals();
 
-                var defaultvars = new BaseUtils.Variables();
+                // what variables are in use, so we don't enumerate the lot.
                 var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
+
+                // see if we need any default vars, at the moment, they all start with one
+                var defaultvars = new BaseUtils.Variables();
 
                 if (allvars.StartsWith("one") >= 0)
                     defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
@@ -211,6 +209,8 @@ namespace EDDiscovery.UserControls
                 lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, wantreport);
 
                 System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count}");
+
+                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
                 foreach ( var kvp in results.EmptyIfNull())
                 {

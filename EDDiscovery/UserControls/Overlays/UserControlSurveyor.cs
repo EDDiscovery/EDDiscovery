@@ -579,6 +579,8 @@ namespace EDDiscovery.UserControls
                         {
                             List<HistoryEntry> helist = discoveryform.history.FilterByScanFSSBodySAASignals(sys);       // find all relevant records on this system
 
+                            discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
+
                             var defaultvars = new BaseUtils.Variables();
                             defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
 
