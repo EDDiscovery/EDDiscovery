@@ -201,6 +201,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he.journalEntry is IStarScan || he.EntryType == JournalTypeEnum.FuelScoop)      // an entry to a scan node
                 {
+                    System.Diagnostics.Debug.WriteLine($"Update due to IStarScan for {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
                     //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     DrawSystem(last_sys);
                 }
@@ -583,10 +584,13 @@ namespace EDDiscovery.UserControls
 
                             Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
 
+                            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor runs {searchesactive.Length} searches");
                             foreach (var searchname in searchesactive)
                             {
                                 await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
                             }
+
+                            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor reports {searchresults.Count} results");
 
                             foreach (var kvp in searchresults.EmptyIfNull())        // now we update the textresults, merging the two finds together.
                             {
@@ -689,6 +693,10 @@ namespace EDDiscovery.UserControls
 
                     }
                 } // end system node
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} No system node to check!");
+                }
 
 
                 frmt.Dispose();
