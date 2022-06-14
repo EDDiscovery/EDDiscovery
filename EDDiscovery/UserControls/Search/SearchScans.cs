@@ -119,7 +119,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridView);
             conditionFilterUC.Check();      // checks, ignore string return errors, fills in Result
             PutSetting(dbQuerySave, conditionFilterUC.Result.ToString());
-            HistoryListQueries.Instance.Save();
             PutSetting(dbSplitterSave, splitContainer.GetSplitterDistance());
         }
 

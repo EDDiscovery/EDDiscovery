@@ -48,10 +48,14 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonSearches = new ExtendedControls.ExtButton();
+            this.textBoxSearch = new ExtendedControls.ExtTextBox();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.labelTime = new System.Windows.Forms.Label();
             this.comboBoxTime = new ExtendedControls.ExtComboBox();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -60,10 +64,10 @@ namespace EDDiscovery.UserControls
             this.ColumnSearches = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labelSearch = new System.Windows.Forms.Label();
-            this.textBoxSearch = new ExtendedControls.ExtTextBox();
+            this.labelCount = new System.Windows.Forms.Label();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
+            this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -101,6 +105,35 @@ namespace EDDiscovery.UserControls
             this.extButtonSearches.UseVisualStyleBackColor = false;
             this.extButtonSearches.Click += new System.EventHandler(this.extButtonSearches_Click);
             // 
+            // textBoxSearch
+            // 
+            this.textBoxSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxSearch.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxSearch.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSearch.BorderColorScaling = 0.5F;
+            this.textBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSearch.ClearOnFirstChar = false;
+            this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxSearch.EndButtonEnable = true;
+            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
+            this.textBoxSearch.EndButtonVisible = false;
+            this.textBoxSearch.InErrorCondition = false;
+            this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
+            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxSearch.Multiline = false;
+            this.textBoxSearch.Name = "textBoxSearch";
+            this.textBoxSearch.ReadOnly = false;
+            this.textBoxSearch.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxSearch.SelectionLength = 0;
+            this.textBoxSearch.SelectionStart = 0;
+            this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
+            this.textBoxSearch.TabIndex = 31;
+            this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
+            this.textBoxSearch.WordWrap = true;
+            this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
+            // 
             // rollUpPanelTop
             // 
             this.rollUpPanelTop.AutoHeight = false;
@@ -132,6 +165,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.textBoxSearch);
             this.panelControls.Controls.Add(this.extButtonSearches);
             this.panelControls.Controls.Add(this.buttonExtExcel);
+            this.panelControls.Controls.Add(this.labelCount);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
@@ -172,6 +206,56 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.ValueMember = "";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(146, 1);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 32;
+            this.labelSearch.Text = "Search";
+            // 
+            // dataViewScrollerPanel
+            // 
+            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
+            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(748, 652);
+            this.dataViewScrollerPanel.TabIndex = 8;
+            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom
+            // 
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = false;
+            this.vScrollBarCustom.LargeChange = 0;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(732, 0);
+            this.vScrollBarCustom.Maximum = -1;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 652);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 7;
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -1;
+            this.vScrollBarCustom.ValueLimited = -1;
+            // 
             // dataGridView
             // 
             this.dataGridView.AllowUserToAddRows = false;
@@ -189,14 +273,14 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation,
             this.ColumnParent});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(0, 30);
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(748, 652);
-            this.dataGridView.TabIndex = 5;
+            this.dataGridView.Size = new System.Drawing.Size(732, 652);
+            this.dataGridView.TabIndex = 0;
             // 
             // ColumnDate
             // 
@@ -220,7 +304,7 @@ namespace EDDiscovery.UserControls
             // 
             // ColumnCurrentDistance
             // 
-            this.ColumnCurrentDistance.FillWeight = 60F;
+            this.ColumnCurrentDistance.FillWeight = 40F;
             this.ColumnCurrentDistance.HeaderText = "Current Distance";
             this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
             this.ColumnCurrentDistance.ReadOnly = true;
@@ -245,49 +329,21 @@ namespace EDDiscovery.UserControls
             this.ColumnParent.Name = "ColumnParent";
             this.ColumnParent.ReadOnly = true;
             // 
-            // labelSearch
+            // labelCount
             // 
-            this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(146, 1);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.labelSearch.Name = "labelSearch";
-            this.labelSearch.Size = new System.Drawing.Size(41, 13);
-            this.labelSearch.TabIndex = 32;
-            this.labelSearch.Text = "Search";
-            // 
-            // textBoxSearch
-            // 
-            this.textBoxSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxSearch.BackErrorColor = System.Drawing.Color.Red;
-            this.textBoxSearch.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSearch.BorderColorScaling = 0.5F;
-            this.textBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxSearch.ClearOnFirstChar = false;
-            this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxSearch.EndButtonEnable = true;
-            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
-            this.textBoxSearch.EndButtonVisible = false;
-            this.textBoxSearch.InErrorCondition = false;
-            this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
-            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.textBoxSearch.Multiline = false;
-            this.textBoxSearch.Name = "textBoxSearch";
-            this.textBoxSearch.ReadOnly = false;
-            this.textBoxSearch.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxSearch.SelectionLength = 0;
-            this.textBoxSearch.SelectionStart = 0;
-            this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
-            this.textBoxSearch.TabIndex = 31;
-            this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
-            this.textBoxSearch.WordWrap = true;
+            this.labelCount.AutoSize = true;
+            this.labelCount.Location = new System.Drawing.Point(434, 4);
+            this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+            this.labelCount.Name = "labelCount";
+            this.labelCount.Size = new System.Drawing.Size(43, 13);
+            this.labelCount.TabIndex = 39;
+            this.labelCount.Text = "<code>";
             // 
             // UserControlDiscoveries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataGridView);
+            this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.rollUpPanelTop);
             this.Name = "UserControlDiscoveries";
             this.Size = new System.Drawing.Size(748, 682);
@@ -295,6 +351,7 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.PerformLayout();
             this.panelControls.ResumeLayout(false);
             this.panelControls.PerformLayout();
+            this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -309,6 +366,10 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelTime;
         internal ExtendedControls.ExtComboBox comboBoxTime;
         private ExtendedControls.ExtButton extButtonSearches;
+        private System.Windows.Forms.Label labelSearch;
+        private ExtendedControls.ExtTextBox textBoxSearch;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private Search.DataGridViewStarResults dataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
@@ -317,7 +378,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSearches;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
-        private System.Windows.Forms.Label labelSearch;
-        private ExtendedControls.ExtTextBox textBoxSearch;
+        private System.Windows.Forms.Label labelCount;
     }
 }

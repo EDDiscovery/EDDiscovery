@@ -116,28 +116,35 @@ namespace EDDiscovery.UserControls
             return new TravelHistoryFilter(false, true, $"Start/End Flag".T(EDTx.TravelHistoryFilter_StartEnd));
         }
 
-        public List<HistoryEntry> Filter(List<HistoryEntry> list)      // list should be in entry order. oldest first
+        public List<HistoryEntry> Filter(List<HistoryEntry> list, JournalTypeEnum[] entries = null, bool reverse = true)      // list should be in entry order. oldest first
         {
             if (Lastdockflag)
             {
-                return HistoryList.LatestFirstToLastDock(list);
+                return HistoryList.ToLastDock(list, entries, reverse);
             }
             else if (Startendflag)
             {
-                return HistoryList.LatestFirstStartStopFlags(list);
+                return HistoryList.StartStopFlags(list, entries, reverse);
             }
             else if (MaximumNumberOfItems.HasValue)
             {
+                System.Diagnostics.Debug.Assert(entries == null && reverse == true);        // don't support this at present
                 return HistoryList.LatestFirstLimitNumber(list, MaximumNumberOfItems.Value);
             }
             else if (MaximumDataAge.HasValue)
             {
-                return HistoryList.LatestFirstLimitByDate(list, MaximumDataAge.Value);
+                return HistoryList.LimitByDate(list, MaximumDataAge.Value, entries, reverse);
             }
             else
             {
-                return HistoryList.LatestFirst(list);
+                if (entries != null)
+                {
+                    return reverse ? HistoryList.LatestFirst(list, entries) : HistoryList.OnlyEntries(list, entries);
+                }
+                else
+                    return reverse ? HistoryList.LatestFirst(list) : list;
             }
+
         }
 
         public List<HistoryEntry> FilterLatestFirst(List<HistoryEntry> list)      // list should be in latest first order, supports a limited set
@@ -173,7 +180,7 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public static void InitaliseComboBox( ExtendedControls.ExtComboBox cc , string last , bool incldockstartend = true )
+        public static void InitaliseComboBox(ExtendedControls.ExtComboBox cc, string last, bool incldockstartend = true, bool inclnumberlimit = true)
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
@@ -193,10 +200,14 @@ namespace EDDiscovery.UserControls
                 TravelHistoryFilter.LastYear(),
                 TravelHistoryFilter.LastTwoYears(),
                 TravelHistoryFilter.LastThreeYears(),
-                TravelHistoryFilter.Last(10),
-                TravelHistoryFilter.Last(20),
-                TravelHistoryFilter.Last(100),
-                TravelHistoryFilter.Last(500),
+            };
+
+            if (inclnumberlimit)
+            {
+                el.Add(TravelHistoryFilter.Last(10));
+                el.Add(TravelHistoryFilter.Last(20));
+                el.Add(TravelHistoryFilter.Last(100));
+                el.Add(TravelHistoryFilter.Last(500));
             };
 
             if (incldockstartend)
@@ -209,8 +220,8 @@ namespace EDDiscovery.UserControls
 
             int entry = el.FindIndex(x => x.Label == last);
             //System.Diagnostics.Debug.WriteLine(dbname + "=" + last + "=" + entry);
-            cc.SelectedIndex = (entry >=0) ? entry: 0;
-            
+            cc.SelectedIndex = (entry >= 0) ? entry : 0;
+
             cc.Enabled = true;
         }
     }

@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls
                 List<HistoryEntry> hel;
 
                 if (current.Type == FilterEntry.EntryType.Lastdock)
-                    hel = HistoryList.LatestFirstToLastDock(discoveryform.history.EntryOrder());
+                    hel = HistoryList.ToLastDock(discoveryform.history.EntryOrder());
                 else if (current.Type == FilterEntry.EntryType.All)
                     hel = discoveryform.history.LatestFirst();
                 else if (current.Type == FilterEntry.EntryType.Oneday)

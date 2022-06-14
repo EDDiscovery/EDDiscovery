@@ -149,14 +149,12 @@ namespace EDDiscovery.UserControls
             // 
             this.ColumnDate.FillWeight = 60F;
             this.ColumnDate.HeaderText = "Date";
-            this.ColumnDate.MinimumWidth = 50;
             this.ColumnDate.Name = "ColumnDate";
             // 
             // ColumnStar
             // 
             this.ColumnStar.FillWeight = 60F;
             this.ColumnStar.HeaderText = "Star";
-            this.ColumnStar.MinimumWidth = 50;
             this.ColumnStar.Name = "ColumnStar";
             this.ColumnStar.ReadOnly = true;
             // 
@@ -164,7 +162,6 @@ namespace EDDiscovery.UserControls
             // 
             this.ColumnPosition.FillWeight = 60F;
             this.ColumnPosition.HeaderText = "Position";
-            this.ColumnPosition.MinimumWidth = 50;
             this.ColumnPosition.Name = "ColumnPosition";
             this.ColumnPosition.ReadOnly = true;
             // 
@@ -172,7 +169,6 @@ namespace EDDiscovery.UserControls
             // 
             this.ColumnCurrentDistance.FillWeight = 40F;
             this.ColumnCurrentDistance.HeaderText = "Current Distance";
-            this.ColumnCurrentDistance.MinimumWidth = 50;
             this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
             this.ColumnCurrentDistance.ReadOnly = true;
             // 
@@ -180,7 +176,6 @@ namespace EDDiscovery.UserControls
             // 
             this.ColumnInformation.FillWeight = 200F;
             this.ColumnInformation.HeaderText = "Information";
-            this.ColumnInformation.MinimumWidth = 50;
             this.ColumnInformation.Name = "ColumnInformation";
             this.ColumnInformation.ReadOnly = true;
             // 
@@ -422,12 +417,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonDelete;
         private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
@@ -437,5 +426,11 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonResultsLog;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelCount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
     }
 }
