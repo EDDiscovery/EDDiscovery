@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
         public int displaynumber { get; protected set; }                // set on Init
         public EDDiscoveryForm discoveryform { get; protected set; }    // set on Init    
         public IHistoryCursor uctg { get; protected set; }              // valid at loadlayout
-        private bool IsClosed { get; set; }
+        public bool IsClosed { get; set; }                              // set after CloseDown called
 
         // in calling order..
         public void Init(EDDiscoveryForm ed, int dn)
@@ -75,8 +75,8 @@ namespace EDDiscovery.UserControls
 
         public void CloseDown()     // Call to close down.
         {
-            Closing();
             IsClosed = true;
+            Closing();
         }
 
         protected override void Dispose(bool disposing)     // ensure closed during disposal.

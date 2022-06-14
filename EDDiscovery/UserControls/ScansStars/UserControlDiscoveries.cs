@@ -145,6 +145,8 @@ namespace EDDiscovery.UserControls
                 foreach (var searchname in searchesactive)
                 {
                     await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
+                    if (IsClosed)       // may be closing during async process
+                        return;
                 }
 
                 System.Diagnostics.Debug.WriteLine($"Discoveries Find complete {sw.ElapsedMilliseconds} on {helist.Count}");
@@ -267,7 +269,13 @@ namespace EDDiscovery.UserControls
         private string[] searchesactive;
         private void PopulateCtrlList()
         {
-            searchesactive = GetSetting(dbSearches, "").SplitNoEmptyStartFinish('\u2188');
+            var searches = HistoryListQueries.Instance.Searches.Where(x => x.Standard || x.User).Select(y => y.Name).ToList();
+
+            var slist = string.Join('\u2188'.ToString(), searches);     // default is all
+            string set = GetSetting(dbSearches, slist);
+            PutSetting(dbSearches, set);    // make sure its back into memory
+
+            searchesactive = set.SplitNoEmptyStartFinish('\u2188');
         }
 
         private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under, string saveasstring)
@@ -286,6 +294,7 @@ namespace EDDiscovery.UserControls
                 PopulateCtrlList();
                 Draw();
             };
+
 
             displayfilter.Show(GetSetting(saveasstring, ""), under, this.FindForm());
         }
