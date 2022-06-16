@@ -138,9 +138,20 @@ namespace EDDiscovery
                 EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { he });
             }
 
+            //if ( FSS queue )
+            {
+               // see if can now resolve, if so, push to EDDN
+            }
+
             if (EDDNClass.IsEDDNMessage(he.EntryType) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
             {
-                EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> { he });
+                // if FSS Signal discovered, but the system address is not of the current system we think we are in, then queue it until location/jump comes about
+                if (he.EntryType == JournalTypeEnum.FSSSignalDiscovered && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)he.journalEntry).Signals[0].SystemAddress != he.System.SystemAddress )
+                {
+                    // queue entry
+                }
+                else
+                    EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> { he });
             }
 
             if (DLLManager.Count > 0)

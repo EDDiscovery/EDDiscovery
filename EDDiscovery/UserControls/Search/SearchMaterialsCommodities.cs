@@ -175,6 +175,25 @@ namespace EDDiscovery.UserControls
                         found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".T(EDTx.SearchMaterialsCommodities_DIS) + je.BodyName);
                 }
 
+                else if (he.EntryType == JournalTypeEnum.FCMaterials)
+                {
+                    var je = he.journalEntry as JournalFCMaterials;
+                    string tx = " @ " + he.WhereAmI + " " + je.CarrierName;
+
+                    if (je.HasItemToBuy(cm.FDName))
+                    {
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Buy".T(EDTx.UserControlMarketData_BuyCol) + tx);
+                    }
+                    if (je.HasItemToSell(cm.FDName))
+                    {
+                        if ( found == null )
+                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".T(EDTx.UserControlMarketData_SellCol) + tx);
+                        else
+                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".T(EDTx.UserControlMarketData_SellCol) +  " " + "Buy".T(EDTx.UserControlMarketData_BuyCol) + tx);
+                    }
+                    checkstation = true;
+                }
+
                 if (found != null)
                 {
                     string keyname = he.System.Name + (checkstation ? ":"+he.WhereAmI : "");
