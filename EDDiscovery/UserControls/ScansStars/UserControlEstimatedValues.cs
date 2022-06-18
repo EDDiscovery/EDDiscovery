@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-                SetControlText(string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV) + ": " + totalvalue.ToString() + "cr", last_sn.System.Name));
+                SetControlText(string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV) + ": " + totalvalue.ToString("N0") + " cr", last_sn.System.Name));
             }
             else
             {
