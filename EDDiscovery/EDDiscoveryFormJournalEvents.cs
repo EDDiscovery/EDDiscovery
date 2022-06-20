@@ -138,20 +138,26 @@ namespace EDDiscovery
                 EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { he });
             }
 
-            //if ( FSS queue )
+            if (EDCommander.Current.SyncToEddn == true)
             {
-               // see if can now resolve, if so, push to EDDN
-            }
-
-            if (EDDNClass.IsEDDNMessage(he.EntryType) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
-            {
-                // if FSS Signal discovered, but the system address is not of the current system we think we are in, then queue it until location/jump comes about
-                if (he.EntryType == JournalTypeEnum.FSSSignalDiscovered && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)he.journalEntry).Signals[0].SystemAddress != he.System.SystemAddress )
+                if (queuedfsssd != null && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)queuedfsssd.journalEntry).Signals[0].SystemAddress == he.System.SystemAddress)     // if queued, and we are now in its system
                 {
-                    // queue entry
+                    System.Diagnostics.Debug.WriteLine($"EDDN send of FSSSignalDiscovered is sent - now in system");
+                    EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> {queuedfsssd });
+                    queuedfsssd = null;
                 }
-                else
-                    EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> { he });
+
+                if (EDDNClass.IsEDDNMessage(he.EntryType) && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
+                {
+                    // if FSS Signal discovered, but the system address is not of the current system we think we are in, then queue it until location/jump comes about
+                    if (he.EntryType == JournalTypeEnum.FSSSignalDiscovered && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)he.journalEntry).Signals[0].SystemAddress != he.System.SystemAddress)
+                    {
+                        queuedfsssd = he;
+                        System.Diagnostics.Debug.WriteLine($"EDDN send of FSSSignalDiscovered is queued due to SystemAddress not being Isystem address");
+                    }
+                    else
+                        EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> { he });
+                }
             }
 
             if (DLLManager.Count > 0)
@@ -162,6 +168,8 @@ namespace EDDiscovery
             CheckActionProfile(he);
 
         }
+
+        private HistoryEntry queuedfsssd = null;
 
         private void Controller_NewUIEvent(UIEvent uievent)
         {

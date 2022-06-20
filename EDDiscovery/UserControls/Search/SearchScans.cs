@@ -207,6 +207,9 @@ namespace EDDiscovery.UserControls
 
                 lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, wantreport);
 
+                if (IsClosed)       // may be closing during async process
+                    return;
+
                 System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count}");
 
                 ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
