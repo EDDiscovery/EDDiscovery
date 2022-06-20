@@ -148,7 +148,7 @@ namespace EDDiscovery
         {
             EDDConfig.Instance.Update();    // lost in the midst of time why  
 
-            if (FrontierCAPI.ClientIDAvailable)     // if we have a clientid, we can do a login
+            if (FrontierCAPI.ClientIDAvailable && Environment.OSVersion.Platform == PlatformID.Win32NT)     // if we have a clientid, and on WIN32, we can do a login
             {
                 string ddeservername = "edd-dde-server";
                 string appPath = System.Reflection.Assembly.GetEntryAssembly()?.Location;
@@ -183,7 +183,6 @@ namespace EDDiscovery
             backgroundWorker.Name = "Background Worker Thread";
             backgroundWorker.Start();                                   
         }
-
         public void Shutdown()      // called to request a shutdown.. background thread co-ords the shutdown.
         {
             if (!PendingClose)
