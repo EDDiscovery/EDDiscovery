@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
             this.labelTime = new System.Windows.Forms.Label();
             this.comboBoxTime = new ExtendedControls.ExtComboBox();
             this.labelSearch = new System.Windows.Forms.Label();
+            this.labelCount = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
@@ -64,7 +65,6 @@ namespace EDDiscovery.UserControls
             this.ColumnSearches = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labelCount = new System.Windows.Forms.Label();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -216,6 +216,16 @@ namespace EDDiscovery.UserControls
             this.labelSearch.TabIndex = 32;
             this.labelSearch.Text = "Search";
             // 
+            // labelCount
+            // 
+            this.labelCount.AutoSize = true;
+            this.labelCount.Location = new System.Drawing.Point(434, 4);
+            this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+            this.labelCount.Name = "labelCount";
+            this.labelCount.Size = new System.Drawing.Size(43, 13);
+            this.labelCount.TabIndex = 39;
+            this.labelCount.Text = "<code>";
+            // 
             // dataViewScrollerPanel
             // 
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
@@ -328,16 +338,6 @@ namespace EDDiscovery.UserControls
             this.ColumnParent.HeaderText = "Parent";
             this.ColumnParent.Name = "ColumnParent";
             this.ColumnParent.ReadOnly = true;
-            // 
-            // labelCount
-            // 
-            this.labelCount.AutoSize = true;
-            this.labelCount.Location = new System.Drawing.Point(434, 4);
-            this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
-            this.labelCount.Name = "labelCount";
-            this.labelCount.Size = new System.Drawing.Size(43, 13);
-            this.labelCount.TabIndex = 39;
-            this.labelCount.Text = "<code>";
             // 
             // UserControlDiscoveries
             // 

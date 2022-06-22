@@ -139,6 +139,10 @@ SECTION SearchScans
 .buttonDelete.ToolTip: "Delete current condition" @
 .buttonExtExcel.ToolTip: "Output results grid to CSV" @
 .extButtonResultsLog.ToolTip: "Show search report" @
+.ColumnSearches: "Searches" @
+.labelTime: "Time" @
+.labelSearch: "Search" @
+
 
 
 SECTION SearchStars
@@ -166,6 +170,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" @
 .RecipeCol: "Recipe" @
 .EngineersCol: "Engineers" @
+.CraftedCol: "Crafted" @
 .ToolTip: "Left click and drag on grid to reorder" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .buttonFilterMaterial.ToolTip: "Filter the table by material" @

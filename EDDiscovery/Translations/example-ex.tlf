@@ -158,6 +158,9 @@ SECTION PopOutInfo
 .Organics.Description: "Current body organic information and history of scans" @
 .Engineers.Title: "Engineers" @
 .Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
+
 
 SECTION EDDiscoveryForm
 
