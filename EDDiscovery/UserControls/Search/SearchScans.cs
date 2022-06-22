@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
 
                 discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
-                var helist = discoveryform.history.FilterByScanFSSBodySAASignals();
+                var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes);
 
                 // what variables are in use, so we don't enumerate the lot.
                 var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);

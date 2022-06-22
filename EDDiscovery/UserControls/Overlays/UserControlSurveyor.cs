@@ -458,6 +458,8 @@ namespace EDDiscovery.UserControls
                 }
 
                 StarScan.SystemNode systemnode = await discoveryform.history.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
+                if (IsClosed)   // may close during await..
+                    return;
 
                 if (systemnode != null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -577,8 +579,14 @@ namespace EDDiscovery.UserControls
 
                         if (searchesactive.Length > 0)       // if any searches
                         {
-                            List<HistoryEntry> helist = discoveryform.history.FilterByScanFSSBodySAASignals(sys);       // find all relevant records on this system
+                            int visitstosystem = discoveryform.history.Visits(sys.Name);
 
+                            // grab the list, limited to the searchable journal types, in entry order. Optionally if we visited only once, only back to the last location/fsd jump
+                            // to produce the smallest list possible
+
+                            var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes, sys, 
+                                        visitstosystem <= 1 ? new HashSet<JournalTypeEnum> { JournalTypeEnum.FSDJump, JournalTypeEnum.CarrierJump, JournalTypeEnum.Location } : null);
+                            
                             discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
 
                             var defaultvars = new BaseUtils.Variables();
@@ -589,7 +597,11 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor runs {searchesactive.Length} searches");
                             foreach (var searchname in searchesactive)
                             {
+                                // await is horrible, anything can happen, even closing
                                 await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
+
+                                if (IsClosed)       // if we was ordered to close, abore
+                                    return;
                             }
 
                             System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor reports {searchresults.Count} results");

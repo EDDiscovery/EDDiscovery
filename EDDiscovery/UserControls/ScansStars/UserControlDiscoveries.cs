@@ -32,7 +32,6 @@ namespace EDDiscovery.UserControls
     {
         private string dbTimeWindow = "TimeWindow";
         private string dbSearches = "Searches";
-        private JournalTypeEnum[] journaltypes = new JournalTypeEnum[] { JournalTypeEnum.Scan, JournalTypeEnum.FSSBodySignals, JournalTypeEnum.SAASignalsFound };
         private string searchterms = "system:body:station:stationfaction";
         private Timer searchtimer;
 
@@ -99,7 +98,7 @@ namespace EDDiscovery.UserControls
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
             // Star scan type, or material entry type, or a bodyname/id entry, or not set, or not same system
-            if (journaltypes.Contains(he.EntryType))
+            if (HistoryListQueries.SearchableJournalTypes.Contains(he.EntryType))
             {
                 Draw();
             }
@@ -111,7 +110,7 @@ namespace EDDiscovery.UserControls
         }
         private void Draw()
         {
-            lock (journaltypes)     // Don't allow double drawing due to await in DrawAsync, and then another hisotyr/newentry occurs
+            lock (dbTimeWindow)     // Don't allow double drawing due to await in DrawAsync, and then another hisotyr/newentry occurs
                 DrawAsync();
         }
 
@@ -125,7 +124,7 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
             var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
-            List<HistoryEntry> helist = filter.Filter(discoveryform.history.EntryOrder(), journaltypes, false); // in entry order
+            List<HistoryEntry> helist = filter.Filter(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes, false); // in entry order
 
             labelCount.Text = "...";
 

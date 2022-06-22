@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
             return new TravelHistoryFilter(false, true, $"Start/End Flag".T(EDTx.TravelHistoryFilter_StartEnd));
         }
 
-        public List<HistoryEntry> Filter(List<HistoryEntry> list, JournalTypeEnum[] entries = null, bool reverse = true)      // list should be in entry order. oldest first
+        public List<HistoryEntry> Filter(List<HistoryEntry> list, HashSet<JournalTypeEnum> entries = null, bool reverse = true)      // list should be in entry order. oldest first
         {
             if (Lastdockflag)
             {
@@ -139,7 +139,7 @@ namespace EDDiscovery.UserControls
             {
                 if (entries != null)
                 {
-                    return reverse ? HistoryList.LatestFirst(list, entries) : HistoryList.OnlyEntries(list, entries);
+                    return reverse ? HistoryList.LatestFirst(list, entries) : HistoryList.FilterByEventEntryOrder(list, entries);
                 }
                 else
                     return reverse ? HistoryList.LatestFirst(list) : list;
