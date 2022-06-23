@@ -32,8 +32,9 @@ namespace EDDiscovery.UserControls
     {
         private string dbTimeWindow = "TimeWindow";
         private string dbSearches = "Searches";
-        private string searchterms = "system:body:station:stationfaction";
+        private string searchterms = "system:body";
         private Timer searchtimer;
+        private string defaultsearches = "Planet between inner and outer ringↈLandable and TerraformableↈLandable with High GↈLandable with RingsↈHotter than HadesↈPlanet has wide rings vs radiusↈClose orbit to parentↈClose to ringↈPlanet with a large number of MoonsↈMoons orbiting TerraformablesↈClose BinaryↈGas giant has a terraformable MoonↈTiny MoonↈFast Rotation of a non tidally locked bodyↈHigh Eccentric OrbitↈHigh number of Jumponium Materialsↈ";
 
         #region Init
         public UserControlDiscoveries()
@@ -215,10 +216,6 @@ namespace EDDiscovery.UserControls
                             matched = he.System.Name.WildCardMatch(search.Terms[1], true);
                         if (!matched && search.Terms[2] != null)       // body
                             matched = he.Status.BodyName?.WildCardMatch(search.Terms[2], true) ?? false;
-                        if (!matched && search.Terms[3] != null)       // station
-                            matched = he.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
-                        if (!matched && search.Terms[4] != null)       // stationfaction
-                            matched = he.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
 
                         if (!matched)
                             continue;
@@ -270,8 +267,7 @@ namespace EDDiscovery.UserControls
         {
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.Standard || x.User).Select(y => y.Name).ToList();
 
-            var slist = string.Join('\u2188'.ToString(), searches);     // default is all
-            string set = GetSetting(dbSearches, slist);
+            string set = GetSetting(dbSearches, defaultsearches);
             PutSetting(dbSearches, set);    // make sure its back into memory
 
             searchesactive = set.SplitNoEmptyStartFinish('\u2188');
@@ -285,13 +281,14 @@ namespace EDDiscovery.UserControls
 
             displayfilter.SaveSettings = (s, o) =>
             {
-                if (saveasstring == null)
-                    PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
-                else
-                    PutSetting(saveasstring, s);
-
-                PopulateCtrlList();
-                Draw();
+                string curset = GetSetting(saveasstring, "xx");
+                PutSetting(saveasstring, s);
+                if (s != curset)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Discoveries selected {s}");
+                    PopulateCtrlList();
+                    Draw();
+                }
             };
 
 

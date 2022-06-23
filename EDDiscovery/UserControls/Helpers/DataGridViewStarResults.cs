@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls.Search
                     List<string> colh = new List<string>();
                     for (int i = 0; i < columnsout; i++)
                         colh.Add(Columns[i].HeaderText);
-                    colh.AddRange(new string[] { "X", "Y", "Z", "ID" });
+                    colh.AddRange(new string[] { "X", "Y", "Z" });
 
                     grd.GetHeader += delegate (int c)
                     {
@@ -181,7 +181,6 @@ namespace EDDiscovery.UserControls.Search
                         data.Add(sys.X.ToString("0.#"));
                         data.Add(sys.Y.ToString("0.#"));
                         data.Add(sys.Z.ToString("0.#"));
-                        data.Add(sys.EDSMID);
 
                         return data.ToArray();
                     };
