@@ -98,6 +98,8 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "DLL", ["wiki"] = "/Using-the-Settings-Panel#DLLs", ["video"] = "" },
                 new JObject() { ["panel"] = "WindowOptions", ["wiki"] = "/Using-the-Settings-Panel#Window-Options", ["video"] = "" },
                 new JObject() { ["panel"] = "Commanders", ["wiki"] = "/Using-the-Settings-Panel#Commanders", ["video"] = "" },
+                new JObject() { ["panel"] = "Discoveries", ["wiki"] = "/Using-the-Discoveries-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "Engineers", ["wiki"] = "/Using-the-Engineers-Panel", ["video"] = "" },
             }
         };
 

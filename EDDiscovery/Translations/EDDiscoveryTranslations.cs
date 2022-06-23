@@ -1590,6 +1590,10 @@ namespace EDDiscovery
         UserControlEngineering_chkNotHistoric_ToolTip, // ToolTip 'When red, use the materials at the cursor to estimate, when green always use the latest materials.'
         UserControlEngineering_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
 
+        UserControlEngineers_buttonFilterEngineer_ToolTip, 
+        UserControlEngineers_extCheckBoxWordWrap_ToolTip, 
+        UserControlEngineers_extCheckBoxMoreInfo_ToolTip,
+
         UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, // ToolStrip control 'Show Max FSD Injections'
         UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, // ToolStrip control 'Show Body Materials When Landed'
         UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem_onlyCapacityToolStripMenuItem, // ToolStrip control 'Hide when storage full'

@@ -181,6 +181,11 @@ SECTION UserControlEngineering
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
+SECTION UserControlEngineers
+.buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
+.extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
+.extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
+
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" @

@@ -533,6 +533,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\Discoveries.png" />
     <EmbeddedResource Include="Controls\RoundExpand.png" />
     <EmbeddedResource Include="Controls\RoundExpanded.png" />
     <EmbeddedResource Include="Controls\RoundMinus.png" />
