@@ -473,36 +473,42 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false,new string[] { 
-                                    "JSON Orbital Parameters", 
-                                    },
-                    outputext: new string[] {  "JSON|*.json|All|*.*" },
-                    showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTCVSOI },
-                    suggestedfilenames:new string[] {last_he?.System.Name??""}
-                    
-            );
+            var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
 
-            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            if ( sysnode != null )
             {
-                try
+                foreach (StarScan.ScanNode starnode in sysnode.StarNodes.Values)
+                    StarScan.ScanNode.DumpTree(starnode, starnode.FullName, 0);
+
+                var nodes = sysnode?.OrderedSystemTree();
+
+                if (nodes != null)
                 {
-                    var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
 
-                 //   foreach( var starnodes in sysnode.StarNodes) StarScan.ScanNode.DumpTree(starnodes.Value, starnodes.Key, 0);
+                    StarScan.ScanNode.DumpTree(nodes, "Top", 0);
 
-                    var nodes = sysnode.OrderedSystemTree();
-                    if ( nodes != null )
+                    Forms.ExportForm frm = new Forms.ExportForm();
+                    frm.Init(false, new string[] {
+                                        "JSON Orbital Parameters",
+                                        },
+                        outputext: new string[] { "JSON|*.json|All|*.*" },
+                        showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTCVSOI },
+                        suggestedfilenames: new string[] { last_he?.System.Name ?? "" }
+                    );
+
+                    if (frm.ShowDialog(FindForm()) == DialogResult.OK)
                     {
-                        StarScan.ScanNode.DumpTree(nodes, "Top", 0);
-                        QuickJSON.JObject jobj = StarScan.ScanNode.DumpOrbitElements(nodes);
-                        File.WriteAllText(frm.Path, jobj.ToString(true)); // failure will be picked up below
+                        try
+                        {
+                            QuickJSON.JObject jobj = StarScan.ScanNode.DumpOrbitElements(nodes);
+                            File.WriteAllText(frm.Path, jobj.ToString(true)); // failure will be picked up below
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Scan excel " + ex);
+                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Scan excel " + ex);
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }

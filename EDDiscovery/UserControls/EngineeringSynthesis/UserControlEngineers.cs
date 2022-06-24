@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
 
                     ep.ColumnSetupChanged += (panel) =>
                     {
-                        System.Diagnostics.Debug.WriteLine($"Panel {panel.Name} changed");
+                        //System.Diagnostics.Debug.WriteLine($"Panel {panel.Name} changed");
                         panel.SaveDGV(colsetting);      
 
                         foreach (var p in engineerpanels)
@@ -198,36 +198,25 @@ namespace EDDiscovery.UserControls
                         }
                     };
 
-                    System.Diagnostics.Debug.WriteLine($"Init {name}");
-
                     panelEngineers.Controls.Add(ep);
-
-                    System.Diagnostics.Debug.WriteLine($"Added {name}");
 
                     int panelvspacing = ep.GetVSize(extCheckBoxMoreInfo.Checked);
 
                     // need to set bounds after adding, for some reason
                     ep.Bounds = new Rectangle(0, vpos, panelEngineers.Width - panelEngineers.ScrollBarWidth - 4, panelvspacing);
 
-                    System.Diagnostics.Debug.WriteLine($"Bounds {name}");
-
                     engineerpanels.Add(ep);
 
                     ep.InstallColumnEvents();
-
-                    System.Diagnostics.Debug.WriteLine($"Columns {name}");
 
                     vpos += panelvspacing + 4;
                     //       System.Diagnostics.Debug.WriteLine($"Made {name} Complete {BaseUtils.AppTicks.TickCountLap("s1")}");
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine($"Finished Eng");
-
             panelEngineers.ResumeLayout();
             //System.Diagnostics.Debug.WriteLine($"Setup Complete {BaseUtils.AppTicks.TickCountLap("s1")}");
 
-            System.Diagnostics.Debug.WriteLine($"Exit setup");
         }
 
         // last_he is the position, may be nul
