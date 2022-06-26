@@ -506,7 +506,7 @@ namespace EDDiscovery.UserControls
 
                         value = 0;
 
-                        SortedList<string, string> textresults = new SortedList<string, string>(new CollectionStaticHelpers.IntNumberComparitorAllowingExtraText<string>());      // we dump all test into this sorted dictionary
+                        SortedList<string, string> textresults = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());      // we dump all test into this sorted dictionary
 
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
