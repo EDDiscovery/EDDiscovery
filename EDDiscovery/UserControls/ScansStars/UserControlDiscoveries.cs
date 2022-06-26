@@ -67,6 +67,7 @@ namespace EDDiscovery.UserControls
             PopulateCtrlList();
 
             dataGridView.Init(discoveryform);
+            dataGridView.Columns[5].Tag = dataGridView.Columns[6].Tag = "TextPopOut";       // these two double click are text popouts
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;

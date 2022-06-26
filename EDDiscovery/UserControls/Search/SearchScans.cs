@@ -95,6 +95,7 @@ namespace EDDiscovery.UserControls
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
 
             dataGridView.Init(discoveryform);
+            dataGridView.Columns[4].Tag = dataGridView.Columns[5].Tag = "TextPopOut";  // these two double click are text popouts
 
             comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);

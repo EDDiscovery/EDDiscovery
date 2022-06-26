@@ -16,6 +16,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -123,8 +124,19 @@ namespace EDDiscovery.UserControls.Search
 
         private void cellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-                ShowScanPopOut(Rows[e.RowIndex].Tag);
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var coltag = Columns[e.ColumnIndex].Tag as string;
+
+                if (coltag != null && coltag == "TextPopOut")
+                {
+                    InfoForm frm = new InfoForm();
+                    frm.Info(this.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string);
+                    frm.Show(FindForm());
+                }
+                else
+                    ShowScanPopOut(Rows[e.RowIndex].Tag);
+            }
         }
 
         void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
