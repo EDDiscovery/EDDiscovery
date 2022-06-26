@@ -506,7 +506,7 @@ namespace EDDiscovery.UserControls
 
                         value = 0;
 
-                        SortedDictionary<string, string> textresults = new SortedDictionary<string, string>();      // we dump all test into this sorted dictionary
+                        SortedList<string, string> textresults = new SortedList<string, string>(new CollectionStaticHelpers.IntNumberComparitorAllowingExtraText<string>());      // we dump all test into this sorted dictionary
 
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
@@ -568,7 +568,7 @@ namespace EDDiscovery.UserControls
                                             IsSet(CtrlList.showRinged),          // show rings
                                             lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
-                                        textresults[sd.BodyName] = silstring;
+                                        textresults[sd.BodyName.ReplaceIfStartsWith(sys.Name)] = silstring;
                                         value += sd.EstimatedValue;
                                     }
                                 }
@@ -613,11 +613,11 @@ namespace EDDiscovery.UserControls
 
                                 if ( textresults.ContainsKey(bodyname))
                                 {
-                                    textresults[bodyname] += ", " + info;
+                                    textresults[bodyname.ReplaceIfStartsWith(sys.Name)] += ", " + info;
                                 }
                                 else
                                 {
-                                    textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
+                                    textresults[bodyname.ReplaceIfStartsWith(sys.Name)] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
                                 }
                             }
                         }
