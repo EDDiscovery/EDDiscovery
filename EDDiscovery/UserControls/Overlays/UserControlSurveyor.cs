@@ -568,7 +568,9 @@ namespace EDDiscovery.UserControls
                                             IsSet(CtrlList.showRinged),          // show rings
                                             lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
-                                        textresults[sd.BodyName.ReplaceIfStartsWith(sys.Name)] = silstring;
+                                        string keyname = sd.BodyName;
+                                        System.Diagnostics.Debug.WriteLine($"Add {keyname} = {silstring}");
+                                        textresults[keyname] = silstring;
                                         value += sd.EstimatedValue;
                                     }
                                 }
@@ -579,45 +581,45 @@ namespace EDDiscovery.UserControls
 
                         if (searchesactive.Length > 0)       // if any searches
                         {
-                            int visitstosystem = discoveryform.history.Visits(sys.Name);
-
-                            // grab the list, limited to the searchable journal types, in entry order. Optionally if we visited only once, only back to the last location/fsd jump
-                            // to produce the smallest list possible
-
-                            var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes, sys, 
-                                        visitstosystem <= 1 ? new HashSet<JournalTypeEnum> { JournalTypeEnum.FSDJump, JournalTypeEnum.CarrierJump, JournalTypeEnum.Location } : null);
-                            
                             discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
+                                                                        
+                            // all entries related to sys.  Can't really limit the pick up as tried before using the afterlastevent option in this call
+                            // due to being able to browse back in history. We may not be at the end of the list the system we are displaying. For now, just do a blind whole history search
 
-                            var defaultvars = new BaseUtils.Variables();
-                            defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                            var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes, sys); 
+                            
+                            if ( helist.Count>0)        // no point executing if nothing in helist
+                            { 
+                                var defaultvars = new BaseUtils.Variables();
+                                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
 
-                            Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
+                                Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
 
-                            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor runs {searchesactive.Length} searches");
-                            foreach (var searchname in searchesactive)
-                            {
-                                // await is horrible, anything can happen, even closing
-                                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
-
-                                if (IsClosed)       // if we was ordered to close, abore
-                                    return;
-                            }
-
-                            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor reports {searchresults.Count} results");
-
-                            foreach (var kvp in searchresults.EmptyIfNull())        // now we update the textresults, merging the two finds together.
-                            {
-                                string bodyname = kvp.Key;
-                                string info = string.Join(", ", kvp.Value.FiltersPassed);
-
-                                if ( textresults.ContainsKey(bodyname))
+                                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor runs {searchesactive.Length} searches");
+                                foreach (var searchname in searchesactive)
                                 {
-                                    textresults[bodyname.ReplaceIfStartsWith(sys.Name)] += ", " + info;
+                                    // await is horrible, anything can happen, even closing
+                                    await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
+
+                                    if (IsClosed)       // if we was ordered to close, abore
+                                        return;
                                 }
-                                else
+
+                                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor reports {searchresults.Count} results");
+
+                                foreach (var kvp in searchresults.EmptyIfNull())        // now we update the textresults, merging the two finds together.
                                 {
-                                    textresults[bodyname.ReplaceIfStartsWith(sys.Name)] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
+                                    string bodyname = kvp.Key;
+                                    string info = string.Join(", ", kvp.Value.FiltersPassed);
+
+                                    if (textresults.ContainsKey(bodyname))
+                                    {
+                                        textresults[bodyname] += ", " + info;
+                                    }
+                                    else
+                                    {
+                                        textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
+                                    }
                                 }
                             }
                         }

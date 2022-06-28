@@ -350,7 +350,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.TravelPath) != 0)
             {
                 travelpath = new TravelPath();
-                travelpath.Start("TP", 50000, travelsunsize, tapesize, findresults, true, items, rObjects);
+                travelpath.Start("TP", 200000, travelsunsize, tapesize, findresults, true, items, rObjects);
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
             }
