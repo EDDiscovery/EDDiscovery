@@ -80,8 +80,11 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Rows.Clear();
 
-            if (systems != null)
+            if ((systems?.Count??0) > 0)
             {
+                if ((dataGridView.SortedColumn==null || dataGridView.SortedColumn == ColumnCentreDistance) && systems[0].Item2 == -1 )       // if sorting on centre distance, but no data due to search
+                    dataGridView.Sort(ColumnStar, ListSortDirection.Ascending);
+
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[1];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Ascending;
 
@@ -113,6 +116,8 @@ namespace EDDiscovery.UserControls
         {
             if (e.Column.Index == 1 || e.Column.Index == 2)
                 e.SortDataGridViewColumnNumeric();
+            else if ( e.Column.Index == 0)
+                e.SortDataGridViewColumnAlphaInt();
         }
         
     }
