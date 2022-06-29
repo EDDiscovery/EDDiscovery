@@ -320,6 +320,8 @@ namespace EDDiscovery.UserControls
             var ja = HistoryListQueries.Instance.QueriesInJSON(HistoryListQueries.QueryType.User);
             if (ja.Count > 0)
             {
+                JObject hdr = new JObject() { ["Searches-Version"] = "1.0" , ["Searches"] = ja};
+
                 SaveFileDialog dlg = new SaveFileDialog();
 
                 dlg.Filter = "Query| *.edduserq";
@@ -328,7 +330,7 @@ namespace EDDiscovery.UserControls
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     string path = dlg.FileName;
-                    if (!BaseUtils.FileHelpers.TryWriteToFile(path, ja.ToString(true)))
+                    if (!BaseUtils.FileHelpers.TryWriteToFile(path, hdr.ToString(true)))
                     {
                         CSVHelpers.WriteFailed(this.FindForm(), path);
                     }
@@ -353,10 +355,12 @@ namespace EDDiscovery.UserControls
 
                 if ( text != null)
                 {
-                    JArray ja = JArray.Parse(text, JToken.ParseOptions.CheckEOL);
-                    if ( ja != null )
+                    JObject jo = JObject.Parse(text, JToken.ParseOptions.CheckEOL);
+                    if ( jo != null && jo.Contains("Searches-Version") && jo.Contains("Searches"))
                     {
-                        if (HistoryListQueries.Instance.ReadJSONQueries(ja))
+                        JArray ja = jo["Searches"].Array();
+
+                        if (ja != null && HistoryListQueries.Instance.ReadJSONQueries(ja))
                         {
                             UpdateComboBoxSearches();
                             HistoryListQueries.Instance.SaveUserQueries();
