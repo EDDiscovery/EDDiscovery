@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddAllNone();
             displayfilter.SettingsSplittingChar = '\u2188';     // pick a crazy one soe
 
-            var searches = HistoryListQueries.Instance.Searches.Where(x => x.Standard || x.User).ToList();
+            var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();
             foreach (var s in searches)
                 displayfilter.AddStandardOption(s.Name, s.Name);
 
@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls
         private string[] searchesactive;
         private void PopulateCtrlList()
         {
-            var searches = HistoryListQueries.Instance.Searches.Where(x => x.Standard || x.User).Select(y => y.Name).ToList();
+            var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).Select(y => y.Name).ToList();
 
             string set = GetSetting(dbSearches, defaultsearches);
             PutSetting(dbSearches, set);    // make sure its back into memory

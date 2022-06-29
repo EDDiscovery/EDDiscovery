@@ -16,6 +16,7 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,7 +59,8 @@ namespace EDDiscovery.UserControls
                 EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, 
+                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip ,EDTx.SearchScans_extButtonExport_ToolTip, EDTx.SearchScans_extButtonImport_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
@@ -97,7 +99,7 @@ namespace EDDiscovery.UserControls
             dataGridView.Init(discoveryform);
             dataGridView.Columns[4].Tag = dataGridView.Columns[5].Tag = "TextPopOut";  // these two double click are text popouts
 
-            comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
+            UpdateComboBoxSearches();
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
@@ -139,6 +141,12 @@ namespace EDDiscovery.UserControls
             conditionFilterUC.LoadConditions(new BaseUtils.ConditionLists(HistoryListQueries.Instance.Searches[comboBoxSearches.SelectedIndex].Condition));
         }
 
+        private void UpdateComboBoxSearches()
+        {
+            comboBoxSearches.Items.Clear();
+            comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
+        }
+
         private void buttonSave_Click(object sender, EventArgs e)
         {
             BaseUtils.ConditionLists cond = Valid();
@@ -147,9 +155,9 @@ namespace EDDiscovery.UserControls
                 string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".T(EDTx.SearchScans_Name), "", "Enter Search Name:".T(EDTx.SearchScans_SN), this.FindForm().Icon);
                 if (name != null)
                 {
-                    HistoryListQueries.Instance.Update(name,cond.ToString());
-                    comboBoxSearches.Items.Clear();
-                    comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
+                    HistoryListQueries.Instance.Set(name, cond.ToString(), HistoryListQueries.QueryType.User);
+                    HistoryListQueries.Instance.SaveUserQueries();
+                    UpdateComboBoxSearches();
                     comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
                     comboBoxSearches.SelectedItem = name;
                     comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
@@ -165,8 +173,11 @@ namespace EDDiscovery.UserControls
                 if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".T(EDTx.SearchScans_DEL) + " " + name, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     HistoryListQueries.Instance.Delete(name);
-                    comboBoxSearches.Items.Clear();
-                    comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
+                    HistoryListQueries.Instance.SaveUserQueries();
+                    UpdateComboBoxSearches();
+                    comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
+                    comboBoxSearches.SelectedIndex = -1;
+                    comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
                 }
             }
             else
@@ -304,6 +315,59 @@ namespace EDDiscovery.UserControls
             dataGridView.Excel(dataGridView.ColumnCount);
         }
 
-        
+        private void extButtonExport_Click(object sender, EventArgs e)
+        {
+            var ja = HistoryListQueries.Instance.QueriesInJSON(HistoryListQueries.QueryType.User);
+            if (ja.Count > 0)
+            {
+                SaveFileDialog dlg = new SaveFileDialog();
+
+                dlg.Filter = "Query| *.edduserq";
+                dlg.Title = "Export user searches".T(EDTx.SearchScans_Export);
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    string path = dlg.FileName;
+                    if (!BaseUtils.FileHelpers.TryWriteToFile(path, ja.ToString(true)))
+                    {
+                        CSVHelpers.WriteFailed(this.FindForm(), path);
+                    }
+                }
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No searches to export", "Searches", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+        }
+
+        private void extButtonImport_Click(object sender, EventArgs e)
+        {
+
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Query| *.edduserq";
+            dlg.Title = "Import user searches".T(EDTx.SearchScans_Import);
+
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                string path = dlg.FileName;
+                string text = BaseUtils.FileHelpers.TryReadAllTextFromFile(path);
+
+                if ( text != null)
+                {
+                    JArray ja = JArray.Parse(text, JToken.ParseOptions.CheckEOL);
+                    if ( ja != null )
+                    {
+                        if (HistoryListQueries.Instance.ReadJSONQueries(ja))
+                        {
+                            UpdateComboBoxSearches();
+                            HistoryListQueries.Instance.SaveUserQueries();
+                            return;     // all okay
+                        }
+                            
+                    }
+                }
+
+                CSVHelpers.FailedToOpen(this.FindForm(), path); // both fail to this
+            }
+        }
     }
 }

@@ -1270,8 +1270,12 @@ namespace EDDiscovery
         SearchScans_buttonDelete_ToolTip, 
         SearchScans_buttonExtExcel_ToolTip,
         SearchScans_extButtonResultsLog_ToolTip,
+        SearchScans_extButtonExport_ToolTip, 
+        SearchScans_extButtonImport_ToolTip,
         SearchScans_labelTime,
         SearchScans_labelSearch,
+        SearchScans_Export,
+        SearchScans_Import,
 
         SearchMaterialsCommodities_ColumnDate, // Column Header 'Date'
         SearchMaterialsCommodities_ColumnStar, // Column Header 'Star'

@@ -114,7 +114,7 @@ namespace EDDiscovery.Icons
         public static Image Map3D_Travel_WhiteStars { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Travel.WhiteStars"); } }
         public static Image Map3D_YellowDot { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.YellowDot"); } }
         #endregion
-        public static Image Export { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Export"); } }
+        public static Image ExportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ExportFile"); } }
         public static Image ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportFile"); } }
         public static Image ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportSphere"); } }
         public static Image ImportRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportRoute"); } }

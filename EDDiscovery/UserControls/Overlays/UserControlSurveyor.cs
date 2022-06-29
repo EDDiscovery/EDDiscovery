@@ -811,7 +811,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddAllNone();
             displayfilter.SettingsSplittingChar = '\u2188';     // pick a crazy one soe
 
-            var searches = HistoryListQueries.Instance.Searches.Where(x => x.Standard || x.User).ToList();
+            var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();
             foreach (var s in searches)
                 displayfilter.AddStandardOption(s.Name, s.Name);
 

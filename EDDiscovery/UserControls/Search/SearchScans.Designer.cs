@@ -60,6 +60,8 @@ namespace EDDiscovery.UserControls
             this.buttonFind = new ExtendedControls.ExtButton();
             this.buttonSave = new ExtendedControls.ExtButton();
             this.buttonDelete = new ExtendedControls.ExtButton();
+            this.extButtonExport = new ExtendedControls.ExtButton();
+            this.extButtonImport = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extButtonResultsLog = new ExtendedControls.ExtButton();
             this.labelCount = new System.Windows.Forms.Label();
@@ -246,6 +248,8 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonFind);
             this.panelTop.Controls.Add(this.buttonSave);
             this.panelTop.Controls.Add(this.buttonDelete);
+            this.panelTop.Controls.Add(this.extButtonExport);
+            this.panelTop.Controls.Add(this.extButtonImport);
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.extButtonResultsLog);
             this.panelTop.Controls.Add(this.labelCount);
@@ -291,11 +295,35 @@ namespace EDDiscovery.UserControls
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
+            // extButtonExport
+            // 
+            this.extButtonExport.Image = global::EDDiscovery.Icons.Controls.ExportFile;
+            this.extButtonExport.Location = new System.Drawing.Point(315, 1);
+            this.extButtonExport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonExport.Name = "extButtonExport";
+            this.extButtonExport.Size = new System.Drawing.Size(28, 28);
+            this.extButtonExport.TabIndex = 0;
+            this.toolTip.SetToolTip(this.extButtonExport, "Export user searches to a file");
+            this.extButtonExport.UseVisualStyleBackColor = true;
+            this.extButtonExport.Click += new System.EventHandler(this.extButtonExport_Click);
+            // 
+            // extButtonImport
+            // 
+            this.extButtonImport.Image = global::EDDiscovery.Icons.Controls.ImportFile;
+            this.extButtonImport.Location = new System.Drawing.Point(351, 1);
+            this.extButtonImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonImport.Name = "extButtonImport";
+            this.extButtonImport.Size = new System.Drawing.Size(28, 28);
+            this.extButtonImport.TabIndex = 0;
+            this.toolTip.SetToolTip(this.extButtonImport, "Import user queries from a file (overwrite existing queries if present)");
+            this.extButtonImport.UseVisualStyleBackColor = true;
+            this.extButtonImport.Click += new System.EventHandler(this.extButtonImport_Click);
+            // 
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(315, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(387, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -307,7 +335,7 @@ namespace EDDiscovery.UserControls
             // extButtonResultsLog
             // 
             this.extButtonResultsLog.Image = global::EDDiscovery.Icons.Controls.ShowLogFiles;
-            this.extButtonResultsLog.Location = new System.Drawing.Point(351, 1);
+            this.extButtonResultsLog.Location = new System.Drawing.Point(423, 1);
             this.extButtonResultsLog.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extButtonResultsLog.Name = "extButtonResultsLog";
             this.extButtonResultsLog.Size = new System.Drawing.Size(28, 28);
@@ -320,7 +348,7 @@ namespace EDDiscovery.UserControls
             // labelCount
             // 
             this.labelCount.AutoSize = true;
-            this.labelCount.Location = new System.Drawing.Point(390, 4);
+            this.labelCount.Location = new System.Drawing.Point(462, 4);
             this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
             this.labelCount.Name = "labelCount";
             this.labelCount.Size = new System.Drawing.Size(43, 13);
@@ -432,5 +460,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
+        private ExtendedControls.ExtButton extButtonExport;
+        private ExtendedControls.ExtButton extButtonImport;
     }
 }

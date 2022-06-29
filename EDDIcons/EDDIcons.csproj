@@ -1099,6 +1099,7 @@
     <EmbeddedResource Include="Controls\OrganicIncomplete.png" />
     <EmbeddedResource Include="Controls\lockimage.png" />
     <EmbeddedResource Include="Controls\Find.png" />
+    <EmbeddedResource Include="Controls\ExportFile.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

@@ -83,7 +83,7 @@ namespace EDDiscovery.Forms
                 BodyName.Items.Clear();
                 foreach (string s in bodies)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Add bookmark landable '{s}'");
+                    //System.Diagnostics.Debug.WriteLine($"Add bookmark landable '{s}'");
                     BodyName.Items.Add(s);
                 }
 
