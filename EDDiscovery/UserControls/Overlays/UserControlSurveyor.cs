@@ -611,6 +611,11 @@ namespace EDDiscovery.UserControls
                                 {
                                     string bodyname = kvp.Key;
                                     string info = string.Join(", ", kvp.Value.FiltersPassed);
+                                    string distance = "";
+                                    if (kvp.Value.HistoryEntry.ScanNode.ScanData.DistanceFromArrivalText != null)
+                                    {
+                                        distance = kvp.Value.HistoryEntry.ScanNode.ScanData.DistanceFromArrivalText;
+                                    }
 
                                     if (textresults.ContainsKey(bodyname))
                                     {
@@ -618,7 +623,7 @@ namespace EDDiscovery.UserControls
                                     }
                                     else
                                     {
-                                        textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
+                                        textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info} {distance}";
                                     }
                                 }
                             }
