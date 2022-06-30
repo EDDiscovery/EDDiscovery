@@ -312,6 +312,7 @@ namespace EDDiscovery.UserControls
             List<Tuple<string,string,Image>> options = (from x in Dickeys select new Tuple<string,string,Image>(x.ToString(),x.ToString(),EDDConfig.Instance.CaptainsLogTagImage[x])).ToList();
 
             ExtendedControls.CheckedIconListBoxFormGroup cfs = new ExtendedControls.CheckedIconListBoxFormGroup();
+            cfs.CloseBoundaryRegion = new Size(32, 32);
             cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
             cfs.SaveSettings += TagsChanged;
             cfs.AddAllNone();

@@ -99,21 +99,11 @@ namespace EDDiscovery.UserControls
             }
             else
             {
+                CloseBoundaryRegion = new Size(32, ctr.Height);
                 Show(settings, ctr, parent);     // use the quick helper. 
             }
         }
 
-        public void Open(string settings, Point p, Form parent)
-        {
-            if (this.Visible == true)
-            {
-                Hide();
-            }
-            else
-            {
-                Show(settings, p, parent);     // use the quick helper. 
-            }
-        }
     }
 }
 

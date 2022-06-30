@@ -39,6 +39,7 @@ namespace EDDiscovery.UserControls
 
         public void Open(string settings, Control ctr, Form parent)
         {
+            CloseBoundaryRegion = new Size(32, ctr.Height);
             if (this.Visible == true)
             {
                 Hide();

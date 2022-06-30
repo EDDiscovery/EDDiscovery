@@ -200,6 +200,7 @@ namespace EDDiscovery.UserControls
 
                 var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes);
 
+                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {discoveryform.history.EntryOrder().Count}");
                 // what variables are in use, so we don't enumerate the lot.
                 var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
 
@@ -222,7 +223,7 @@ namespace EDDiscovery.UserControls
                 if (IsClosed)       // may be closing during async process
                     return;
 
-                System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count}");
+                System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count} results {results.Count}");
 
                 ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 

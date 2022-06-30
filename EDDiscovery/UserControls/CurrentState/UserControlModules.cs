@@ -474,7 +474,7 @@ namespace EDDiscovery.UserControls
                 PutSetting(dbDisplayFilters, string.Join(";", displayfilters));
                 Display();
             };
-
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonShowControl.Height);
             displayfilter.Show(string.Join(";", displayfilters), extButtonShowControl, this.FindForm());
         }
 

@@ -718,6 +718,7 @@ namespace EDDiscovery.UserControls
                     }
                 };
                 navroutefilter.CloseOnChange = true;
+                navroutefilter.CloseBoundaryRegion = new Size(32, extButtonImportNavRoute.Height);
                 navroutefilter.Show("", extButtonImportNavRoute, this.FindForm());
             }
         }
@@ -920,6 +921,7 @@ namespace EDDiscovery.UserControls
                 UpdateSystemRows();
             };
 
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
             displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
         }
 

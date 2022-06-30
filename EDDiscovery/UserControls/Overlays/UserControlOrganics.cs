@@ -366,9 +366,11 @@ namespace EDDiscovery.UserControls
 
         private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
         {
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
             displayfilter.AllOrNoneBack = false;
             displayfilter.ImageSize = new Size(24, 24);
             displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {

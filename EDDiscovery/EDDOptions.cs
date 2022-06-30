@@ -90,6 +90,8 @@ namespace EDDiscovery
         public bool EnableTGRightDebugClicks { get; set; }
         public int HistoryLoadDayLimit { get; set; }    // default zero not set
 
+        public string Culture { get; set; }             // default null use system culture, use de-DE etc
+
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
             string path = Path.Combine(AppDataDirectory, subfolder);
@@ -272,6 +274,10 @@ namespace EDDiscovery
             else if (optname == "-journalfilematch")
             {
                 DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-culture")
+            {
+                Culture = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname == "-minjournaldateutc")
             {

@@ -423,6 +423,8 @@ namespace EDDiscovery.UserControls
                 DrawSystem();
             };
 
+            bodyfilter.CloseBoundaryRegion = new Size(32, extButtonFilter.Height);
+
             bodyfilter.Show(string.Join(";",bodyfilters), extButtonFilter, this.FindForm());
         }
 
@@ -450,6 +452,8 @@ namespace EDDiscovery.UserControls
                 ApplyDisplayFilters();
                 DrawSystem();
             };
+
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
 
             displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
         }

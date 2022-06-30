@@ -563,6 +563,7 @@ namespace EDDiscovery.UserControls
         {
             displayfilter.AllOrNoneBack = false;
             displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, button.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {

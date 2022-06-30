@@ -943,6 +943,7 @@ namespace EDDiscovery.UserControls
         {
             displayfilter.AllOrNoneBack = false;
             displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, button.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {
@@ -968,6 +969,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
             displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonColumnOrder.Height);
+
             displayfilter.SaveSettings = (s, o) =>
             {
                 var lr = s.Replace(";", "").InvariantParseInt(0);
@@ -1013,6 +1016,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(Configuration.showScanIndefinite, "Show until next scan".TxID(EDTx.UserControlSpanel_surfaceScanDetailsToolStripMenuItem_scanUntilNextToolStripMenuItem), null, "All", true);
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonScanShow.Height);
             displayfilter.ScreenMargin = new Size(0, 0);
             displayfilter.SaveSettings = (s, o) =>
             {
@@ -1035,6 +1039,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(Configuration.showScanOnTop, "Scan on top".TxID(EDTx.UserControlSpanel_showInPositionToolStripMenuItem_scanOnTopMenuItem), null, "All", true);
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtoScanPos.Height);
             displayfilter.ScreenMargin = new Size(0, 0);
             displayfilter.SaveSettings = (s, o) =>
             {
