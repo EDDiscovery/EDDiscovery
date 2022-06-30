@@ -31,7 +31,6 @@ namespace EDDiscovery.UserControls
         ISystem last_sys = null;
 
         private StringAlignment alignment = StringAlignment.Near;
-        private string titletext = "";
         private string fsssignalsdisplayed = "";
 
         const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
@@ -108,7 +107,9 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             last_sys = uctg.GetCurrentHistoryEntry?.System;
-            DrawSystem(last_sys, last_sys?.Name);    // may be null
+            SetTitle(last_sys?.Name);   // may be null
+            DrawSystem(last_sys);    // may be null
+            SetVisibility();
         }
 
         public override void Closing()
@@ -122,14 +123,6 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
-        public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
-        {
-            extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
-            extPictureBoxScroll.BackColor = pictureBoxSurveyor.BackColor = this.BackColor = curcol;
-            rollUpPanelTop.Visible = !on;
-        }
-
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             last_sys = hl.GetLast?.System;      // may be null
@@ -139,10 +132,12 @@ namespace EDDiscovery.UserControls
             LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber}  History Load '{currentRoute?.Name}' {currentRoute?.Id} systems {currentRoute?.Systems.Count} lastsys '{last_sys?.Name}'");
 
-            DrawSystem(last_sys, last_sys?.Name);    // may be null
+            SetTitle(last_sys?.Name);   // may be null
+            DrawSystem(last_sys);    // may be null
+            SetVisibility();
 
             //t.Interval = 200; t.Tick += (s, e) => { var sys = currentRoute.PosAlongRoute(percent, 0); DrawSystem(sys, sys.Name); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
-          //  t.Interval = 2000; t.Tick += (s, e) => { if (sysno < currentRoute.Systems.Count ){ var sys = currentRoute.KnownSystemList()[sysno++]; DrawSystem(sys.Item1, sys.Item1.Name); } }; t.Start();  // debug to make it play thru.. leave
+            //  t.Interval = 2000; t.Tick += (s, e) => { if (sysno < currentRoute.Systems.Count ){ var sys = currentRoute.KnownSystemList()[sysno++]; DrawSystem(sys.Item1, sys.Item1.Name); } }; t.Start();  // debug to make it play thru.. leave
         }
         //int sysno = 0; double percent = -10; Timer t = new Timer();// play thru harness
 
@@ -178,7 +173,8 @@ namespace EDDiscovery.UserControls
                 if (last_sys == null || last_sys.Name != he.System.Name || !last_sys.HasCoordinate) // If not got a system, or different name, or last does not have co-ord (StartJump)
                 {
                     last_sys = he.System;
-                    DrawSystem(last_sys, last_sys.Name);
+                    SetTitle(last_sys.Name);
+                    DrawSystem(last_sys);
                 }
                 else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
                 {
@@ -186,18 +182,20 @@ namespace EDDiscovery.UserControls
                     if (jsj.IsHyperspace)       // needs to be a hyperspace one, not supercruise
                     {
                         last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
-                        DrawSystem(last_sys, last_sys.Name);
+                        SetTitle(last_sys.Name);
+                        DrawSystem(last_sys);
                     }
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
                 {
-                    DrawSystem(last_sys, last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
+                    SetTitle(last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
                     var bodies_found = je.BodyCount;
-                    DrawSystem(last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
+                    SetTitle(last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
+                    DrawSystem(last_sys);
                 }
                 else if (he.journalEntry is IStarScan || he.EntryType == JournalTypeEnum.FuelScoop)      // an entry to a scan node
                 {
@@ -227,71 +225,94 @@ namespace EDDiscovery.UserControls
             }
 
             if (refresh)
-                DrawSystem(last_sys);
+            {
+                SetVisibility();
+            }
         }
 
-        public override void onControlTextVisibilityChanged(bool newvalue)       // user changed vis, update
+        public override void onControlTextVisibilityChanged(bool newvalue)       // user changed control text, but I don't think we need to know from testing. Leave as a reminder
         {
-            DrawSystem(last_sys);
         }
 
-        public bool ShowIt(ISystem sys )        // compute if should show
+        public override bool SupportTransparency { get { return true; } }       // turn it on
+        public override void SetTransparency(bool on, Color curcol)
         {
-            bool showit = sys != null;
+            extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
+            extPictureBoxScroll.BackColor = pictureBoxSurveyor.BackColor = this.BackColor = curcol;
+            rollUpPanelTop.Visible = !on;
+            SetVisibility(!on);     // set our visible mode for text, but override to on if we are not transparent
+        }
 
-            //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Draw {sys?.Name} {sys?.HasCoordinate} {showit}");
+        // normally we use uistate/uimode to determine if the output is visible. We can override this, for use when transparent mode is on but its not transparent
+        private void SetVisibility(bool overrideon = false)
+        {
+            bool showit = true;
 
-            if (showit && IsSet(CtrlList.autohide))     // must check showit, otherwise we will get exception due to resize calling this before whole form is up
+            // if in autohide, and a transparent option is turned on
+            if (!overrideon && IsSet(CtrlList.autohide) && IsTransparent )     
             {
                 // if no focus, or fssmode and override
                 showit = uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode));
                 // and we should be either in None or MainShip..
                 showit = showit && (uimode == EliteDangerousCore.UIEvents.UIMode.ModeType.None || uimode == EliteDangerousCore.UIEvents.UIMode.ModeType.MainShipSupercruise);
-                //System.Diagnostics.Debug.WriteLine($"Surveyor uimode {uimode} uistate {uistate} decision {showit}");
             }
 
-            return showit;
+            System.Diagnostics.Debug.WriteLine($"Surveyor uimode {uimode} uistate {uistate} Visibility {showit}");
+            extPictureBoxScroll.Visible = showit;
+            extPictureBoxTitle.Visible = IsSet(CtrlList.showsysinfo) && showit;
+        }
+
+        private void UserControlSurveyor_Resize(object sender, EventArgs e)
+        {
+            DrawSystem(last_sys);
         }
 
         #endregion
 
-        #region Main
-        async private void DrawSystem(ISystem sys, string tt = null)
-        {
-            if (tt != null)
-            {
-                titletext = tt;
-                SetControlText(tt);
-            }
+        #region Display
 
+        private void SetTitle(string s)     
+        {
+            if (s != null)      // update title string if set
+            {
+                SetControlText(s);
+
+                extPictureBoxTitle.ClearImageList();
+                var i = new ExtPictureBox.ImageElement();
+
+                StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
+                frmt.Alignment = alignment;
+                var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+                Font dfont = displayfont ?? this.Font;
+
+                i.TextAutoSize(
+                        new Point(3, 0),
+                        new Size(2000, 10000),
+                        s,
+                        dfont,
+                        textcolour,
+                        backcolour,
+                        1.0F,
+                        frmt: frmt);
+                extPictureBoxTitle.Add(i);
+                extPictureBoxTitle.Render();
+            }
+        }
+
+        async private void DrawSystem(ISystem sys)
+        {
             var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
 
             if ( sys != null )      // if we have a system
             {
                 int vpos = 0;
+
                 StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                 frmt.Alignment = alignment;
                 var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
-
                 Font dfont = displayfont ?? this.Font;
-
-                if (IsSet(CtrlList.showsysinfo))
-                {
-                    var i = new ExtPictureBox.ImageElement();
-                    i.TextAutoSize(
-                            new Point(3, vpos),
-                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                            titletext,
-                            dfont,
-                            textcolour,
-                            backcolour,
-                            1.0F,
-                            frmt: frmt);
-                    picelements.Add(i);
-
-                    vpos += i.Location.Height;
-                }
 
                 if (currentRoute != null && sys.HasCoordinate)      // if we have a route and a coord, we can work out the next route text
                 {
@@ -611,11 +632,12 @@ namespace EDDiscovery.UserControls
                                 {
                                     string bodyname = kvp.Key;
                                     string info = string.Join(", ", kvp.Value.FiltersPassed);
-                                    string distance = "";
-                                    if (kvp.Value.HistoryEntry.ScanNode.ScanData.DistanceFromArrivalText != null)
-                                    {
-                                        distance = kvp.Value.HistoryEntry.ScanNode.ScanData.DistanceFromArrivalText;
-                                    }
+
+                                    //string distance = ""; to be done
+                                    //if (kvp.Value.HistoryEntry.ScanNode?.ScanData?.DistanceFromArrivalText != null)
+                                    //{
+                                    //    distance = kvp.Value.HistoryEntry.ScanNode.ScanData.DistanceFromArrivalText;
+                                    //}
 
                                     if (textresults.ContainsKey(bodyname))
                                     {
@@ -623,7 +645,7 @@ namespace EDDiscovery.UserControls
                                     }
                                     else
                                     {
-                                        textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info} {distance}";
+                                        textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
                                     }
                                 }
                             }
@@ -726,19 +748,11 @@ namespace EDDiscovery.UserControls
             lock ( extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
             {
                 pictureBoxSurveyor.ClearImageList();
-                bool showit = ShowIt(sys);      // should we show it. Due to async, the decision may have been changed since the display launched
-
-                System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} draw in {picelements.Count} show it {showit}");
-                if ( showit )
-                    pictureBoxSurveyor.AddRange(picelements); 
+                System.Diagnostics.Debug.WriteLine($"Surveyor draw system {displaynumber} no {picelements.Count}");
+                pictureBoxSurveyor.AddRange(picelements); 
                 extPictureBoxScroll.Render();
                 Refresh();
             }
-        }
-
-        private void UserControlSurveyor_Resize(object sender, EventArgs e)
-        {
-            DrawSystem(last_sys);
         }
 
         #endregion
@@ -869,6 +883,7 @@ namespace EDDiscovery.UserControls
 
         private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under, string saveasstring = null)
         {
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
             displayfilter.AllOrNoneBack = false;
             displayfilter.ImageSize = new Size(24, 24);
             displayfilter.ScreenMargin = new Size(0, 0);
@@ -881,6 +896,7 @@ namespace EDDiscovery.UserControls
                     PutSetting(saveasstring, s);
 
                 PopulateCtrlList();
+                SetVisibility();
                 DrawSystem(last_sys);
             };
 

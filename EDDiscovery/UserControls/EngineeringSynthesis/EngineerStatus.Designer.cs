@@ -247,6 +247,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.SingleRowSelect = true;
             this.dataGridViewEngineering.Size = new System.Drawing.Size(495, 422);
             this.dataGridViewEngineering.TabIndex = 1;
+            this.dataGridViewEngineering.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEngineering_CellContentDoubleClick);
             this.dataGridViewEngineering.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEngineering_CellEndEdit);
             this.dataGridViewEngineering.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEngineering_SortCompare);
             // 

@@ -466,5 +466,20 @@ namespace EDDiscovery.UserControls
         {
             SetHistoric(!chkNotHistoric.Checked);      // upside down when changed appearance
         }
+
+        private void dataGridViewEngineering_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > 0 )
+            {
+                DataGridViewRow row = dataGridViewEngineering.Rows[e.RowIndex];
+                int rno = (int)row.Tag;
+                Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[rno];
+
+                if ( e.ColumnIndex == RecipeCol.Index)
+                {
+                    dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = r.IngredientsStringLong;
+                }
+            }
+        }
     }
 }

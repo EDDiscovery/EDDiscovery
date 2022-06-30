@@ -61,10 +61,12 @@ namespace EDDiscovery.UserControls
             this.extButtonControlRoute = new ExtendedControls.ExtButton();
             this.extButtonFont = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extPictureBoxTitle = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxTitle)).BeginInit();
             this.SuspendLayout();
             // 
             // extButtonPlanets
@@ -173,10 +175,10 @@ namespace EDDiscovery.UserControls
             this.extPictureBoxScroll.Controls.Add(this.extScrollBar);
             this.extPictureBoxScroll.Controls.Add(this.pictureBoxSurveyor);
             this.extPictureBoxScroll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extPictureBoxScroll.Location = new System.Drawing.Point(0, 30);
+            this.extPictureBoxScroll.Location = new System.Drawing.Point(0, 54);
             this.extPictureBoxScroll.Name = "extPictureBoxScroll";
             this.extPictureBoxScroll.ScrollBarEnabled = true;
-            this.extPictureBoxScroll.Size = new System.Drawing.Size(721, 373);
+            this.extPictureBoxScroll.Size = new System.Drawing.Size(721, 349);
             this.extPictureBoxScroll.TabIndex = 1;
             this.extPictureBoxScroll.VerticalScrollBarDockRight = true;
             // 
@@ -190,14 +192,14 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.BorderColor = System.Drawing.Color.White;
             this.extScrollBar.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar.HideScrollBar = true;
-            this.extScrollBar.LargeChange = 373;
+            this.extScrollBar.LargeChange = 349;
             this.extScrollBar.Location = new System.Drawing.Point(705, 0);
-            this.extScrollBar.Maximum = 199;
+            this.extScrollBar.Maximum = 23;
             this.extScrollBar.Minimum = 0;
             this.extScrollBar.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBar.Name = "extScrollBar";
-            this.extScrollBar.Size = new System.Drawing.Size(16, 373);
+            this.extScrollBar.Size = new System.Drawing.Size(16, 349);
             this.extScrollBar.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar.SmallChange = 16;
             this.extScrollBar.TabIndex = 1;
@@ -344,11 +346,21 @@ namespace EDDiscovery.UserControls
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
             // 
+            // extPictureBoxTitle
+            // 
+            this.extPictureBoxTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPictureBoxTitle.Location = new System.Drawing.Point(0, 30);
+            this.extPictureBoxTitle.Name = "extPictureBoxTitle";
+            this.extPictureBoxTitle.Size = new System.Drawing.Size(721, 24);
+            this.extPictureBoxTitle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.extPictureBoxTitle.TabIndex = 2;
+            // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.extPictureBoxScroll);
+            this.Controls.Add(this.extPictureBoxTitle);
             this.Controls.Add(this.rollUpPanelTop);
             this.Name = "UserControlSurveyor";
             this.Size = new System.Drawing.Size(721, 403);
@@ -359,7 +371,9 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.ResumeLayout(false);
             this.rollUpPanelTop.PerformLayout();
             this.panelControls.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxTitle)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -381,5 +395,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton extButtonFont;
         private ExtendedControls.ExtButton extButtonSearches;
+        private ExtendedControls.ExtPictureBox extPictureBoxTitle;
     }
 }

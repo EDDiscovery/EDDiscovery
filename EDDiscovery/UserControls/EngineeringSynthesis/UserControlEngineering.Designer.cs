@@ -46,6 +46,16 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewEngineering = new BaseUtils.DataGridViewColumnControl();
+            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ModuleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AvailableCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PercentageCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RecipeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EngineersCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonFilterUpgrade = new ExtendedControls.ExtButton();
@@ -57,16 +67,6 @@ namespace EDDiscovery.UserControls
             this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ModuleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AvailableCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PercentageCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RecipeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EngineersCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -113,11 +113,95 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.SingleRowSelect = true;
             this.dataGridViewEngineering.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewEngineering.TabIndex = 1;
+            this.dataGridViewEngineering.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEngineering_CellDoubleClick);
             this.dataGridViewEngineering.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
             this.dataGridViewEngineering.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewEngineering_DragDrop);
             this.dataGridViewEngineering.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewEngineering_DragOver);
             this.dataGridViewEngineering.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEngineering_MouseDown);
             this.dataGridViewEngineering.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEngineering_MouseMove);
+            // 
+            // UpgradeCol
+            // 
+            this.UpgradeCol.HeaderText = "Upgrade/Mat";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
+            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ModuleCol
+            // 
+            this.ModuleCol.HeaderText = "Module";
+            this.ModuleCol.MinimumWidth = 50;
+            this.ModuleCol.Name = "ModuleCol";
+            this.ModuleCol.ReadOnly = true;
+            this.ModuleCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // LevelCol
+            // 
+            this.LevelCol.FillWeight = 25F;
+            this.LevelCol.HeaderText = "Level";
+            this.LevelCol.MinimumWidth = 50;
+            this.LevelCol.Name = "LevelCol";
+            this.LevelCol.ReadOnly = true;
+            this.LevelCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // MaxCol
+            // 
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Max";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
+            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Wanted";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // AvailableCol
+            // 
+            this.AvailableCol.FillWeight = 25F;
+            this.AvailableCol.HeaderText = "Avail.";
+            this.AvailableCol.MinimumWidth = 50;
+            this.AvailableCol.Name = "AvailableCol";
+            this.AvailableCol.ReadOnly = true;
+            this.AvailableCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // PercentageCol
+            // 
+            this.PercentageCol.FillWeight = 25F;
+            this.PercentageCol.HeaderText = "%";
+            this.PercentageCol.Name = "PercentageCol";
+            // 
+            // NotesCol
+            // 
+            this.NotesCol.FillWeight = 150F;
+            this.NotesCol.HeaderText = "Notes";
+            this.NotesCol.MinimumWidth = 50;
+            this.NotesCol.Name = "NotesCol";
+            this.NotesCol.ReadOnly = true;
+            this.NotesCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // RecipeCol
+            // 
+            this.RecipeCol.FillWeight = 50F;
+            this.RecipeCol.HeaderText = "Recipe";
+            this.RecipeCol.MinimumWidth = 15;
+            this.RecipeCol.Name = "RecipeCol";
+            this.RecipeCol.ReadOnly = true;
+            this.RecipeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // EngineersCol
+            // 
+            this.EngineersCol.HeaderText = "Engineers";
+            this.EngineersCol.MinimumWidth = 50;
+            this.EngineersCol.Name = "EngineersCol";
+            this.EngineersCol.ReadOnly = true;
+            this.EngineersCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // vScrollBarCustomMC
             // 
@@ -298,89 +382,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 2;
-            // 
-            // UpgradeCol
-            // 
-            this.UpgradeCol.HeaderText = "Upgrade/Mat";
-            this.UpgradeCol.MinimumWidth = 50;
-            this.UpgradeCol.Name = "UpgradeCol";
-            this.UpgradeCol.ReadOnly = true;
-            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ModuleCol
-            // 
-            this.ModuleCol.HeaderText = "Module";
-            this.ModuleCol.MinimumWidth = 50;
-            this.ModuleCol.Name = "ModuleCol";
-            this.ModuleCol.ReadOnly = true;
-            this.ModuleCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // LevelCol
-            // 
-            this.LevelCol.FillWeight = 25F;
-            this.LevelCol.HeaderText = "Level";
-            this.LevelCol.MinimumWidth = 50;
-            this.LevelCol.Name = "LevelCol";
-            this.LevelCol.ReadOnly = true;
-            this.LevelCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // MaxCol
-            // 
-            this.MaxCol.FillWeight = 25F;
-            this.MaxCol.HeaderText = "Max";
-            this.MaxCol.MinimumWidth = 50;
-            this.MaxCol.Name = "MaxCol";
-            this.MaxCol.ReadOnly = true;
-            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // WantedCol
-            // 
-            this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Wanted";
-            this.WantedCol.MinimumWidth = 50;
-            this.WantedCol.Name = "WantedCol";
-            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // AvailableCol
-            // 
-            this.AvailableCol.FillWeight = 25F;
-            this.AvailableCol.HeaderText = "Avail.";
-            this.AvailableCol.MinimumWidth = 50;
-            this.AvailableCol.Name = "AvailableCol";
-            this.AvailableCol.ReadOnly = true;
-            this.AvailableCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // PercentageCol
-            // 
-            this.PercentageCol.FillWeight = 25F;
-            this.PercentageCol.HeaderText = "%";
-            this.PercentageCol.Name = "PercentageCol";
-            // 
-            // NotesCol
-            // 
-            this.NotesCol.FillWeight = 150F;
-            this.NotesCol.HeaderText = "Notes";
-            this.NotesCol.MinimumWidth = 50;
-            this.NotesCol.Name = "NotesCol";
-            this.NotesCol.ReadOnly = true;
-            this.NotesCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // RecipeCol
-            // 
-            this.RecipeCol.FillWeight = 50F;
-            this.RecipeCol.HeaderText = "Recipe";
-            this.RecipeCol.MinimumWidth = 15;
-            this.RecipeCol.Name = "RecipeCol";
-            this.RecipeCol.ReadOnly = true;
-            this.RecipeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // EngineersCol
-            // 
-            this.EngineersCol.HeaderText = "Engineers";
-            this.EngineersCol.MinimumWidth = 50;
-            this.EngineersCol.Name = "EngineersCol";
-            this.EngineersCol.ReadOnly = true;
-            this.EngineersCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // UserControlEngineering
             // 

@@ -320,7 +320,7 @@ namespace EDDiscovery.UserControls
             var ja = HistoryListQueries.Instance.QueriesInJSON(HistoryListQueries.QueryType.User);
             if (ja.Count > 0)
             {
-                JObject hdr = new JObject() { ["Searches-Version"] = "1.0" , ["Searches"] = ja};
+                JObject hdr = new JObject() { ["Searches-Version"] = "1.0" , ["Searches"] = ja};        // note the file format..
 
                 SaveFileDialog dlg = new SaveFileDialog();
 

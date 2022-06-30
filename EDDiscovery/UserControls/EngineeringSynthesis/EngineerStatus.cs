@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
 
         public int GetVSize(bool fullinfo)
         {
-            System.Diagnostics.Debug.Write($"VSize {pictureBoxLockImage.Size} {Font.Height}");
+            //System.Diagnostics.Debug.Write($"VSize {pictureBoxLockImage.Size} {Font.Height}");
             return Font.ScalePixels(fullinfo ? 450 : 300);
         }
 
@@ -287,6 +287,21 @@ namespace EDDiscovery.UserControls
         {
             if ( e.Column.Index >= 2 && e.Column.Index <= 6)
                 e.SortDataGridViewColumnNumeric();
+        }
+
+        private void dataGridViewEngineering_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > 0)
+            {
+                DataGridViewRow row = dataGridViewEngineering.Rows[e.RowIndex];
+                Recipes.EngineeringRecipe r = (Recipes.EngineeringRecipe)row.Tag;
+
+                if (e.ColumnIndex == RecipeCol.Index)
+                {
+                    dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = r.IngredientsStringLong;
+                }
+            }
+
         }
     }
 }
