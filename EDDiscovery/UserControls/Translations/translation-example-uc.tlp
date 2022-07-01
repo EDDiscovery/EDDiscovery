@@ -138,11 +138,19 @@ SECTION SearchScans
 .buttonSave.ToolTip: "Save current condition" @
 .buttonDelete.ToolTip: "Delete current condition" @
 .buttonExtExcel.ToolTip: "Output results grid to CSV" @
-.extButtonResultsLog.ToolTip: "Show search report" @
+.extButtonExport.ToolTip: "Export user searches to a file" @
+.extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.extButtonResultsLog.ToolTip: "Press to enable search reporting, then press after each sunsequent search for the report. Reporting can slow the search." @
 .ColumnSearches: "Searches" @
 .labelTime: "Time" @
 .labelSearch: "Search" @
 
+SECTION UserControlDiscoveries
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.buttonExtExcel.ToolTip: "Export" @
 
 
 SECTION SearchStars

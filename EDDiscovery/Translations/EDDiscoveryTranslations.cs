@@ -1272,10 +1272,16 @@ namespace EDDiscovery
         SearchScans_extButtonResultsLog_ToolTip,
         SearchScans_extButtonExport_ToolTip, 
         SearchScans_extButtonImport_ToolTip,
+        SearchScans_extCheckBoxWordWrap_ToolTip,
         SearchScans_labelTime,
         SearchScans_labelSearch,
         SearchScans_Export,
         SearchScans_Import,
+
+        UserControlDiscoveries_textBoxSearch_ToolTip, 
+        UserControlDiscoveries_extButtonSearches_ToolTip,
+        UserControlDiscoveries_extCheckBoxWordWrap_ToolTip, 
+        UserControlDiscoveries_buttonExtExcel_ToolTip,
 
         SearchMaterialsCommodities_ColumnDate, // Column Header 'Date'
         SearchMaterialsCommodities_ColumnStar, // Column Header 'Star'

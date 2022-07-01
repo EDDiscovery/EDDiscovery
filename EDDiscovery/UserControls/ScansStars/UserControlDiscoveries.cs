@@ -32,8 +32,11 @@ namespace EDDiscovery.UserControls
     {
         private string dbTimeWindow = "TimeWindow";
         private string dbSearches = "Searches";
+        private string dbWordWrap = "WordWrap";
+
         private string searchterms = "system:body";
         private Timer searchtimer;
+
         private string defaultsearches = "Planet between inner and outer ringↈLandable and TerraformableↈLandable with High GↈLandable with RingsↈHotter than HadesↈPlanet has wide rings vs radiusↈClose orbit to parentↈClose to ringↈPlanet with a large number of MoonsↈMoons orbiting TerraformablesↈClose BinaryↈGas giant has a terraformable MoonↈTiny MoonↈFast Rotation of a non tidally locked bodyↈHigh Eccentric OrbitↈHigh number of Jumponium Materialsↈ";
 
         #region Init
@@ -52,10 +55,18 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
+
             var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation,
                                         EDTx.SearchScans_ColumnCurrentDistance,  EDTx.SearchScans_ColumnSearches,  EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, 
                                         EDTx.SearchScans_labelTime , EDTx.SearchScans_labelSearch};
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, subname: "SearchScans");
+
+            var enumlisttt = new Enum[] { EDTx.UserControlDiscoveries_textBoxSearch_ToolTip, EDTx.UserControlDiscoveries_extButtonSearches_ToolTip,
+                                EDTx.UserControlDiscoveries_extCheckBoxWordWrap_ToolTip, EDTx.UserControlDiscoveries_buttonExtExcel_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -192,7 +203,7 @@ namespace EDDiscovery.UserControls
                                             name,
                                             sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                            string.Join(Environment.NewLine, kvp.Value.FiltersPassed),
+                                            string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),
                                             info,
                                             pinfo,
                                             };
@@ -308,6 +319,19 @@ namespace EDDiscovery.UserControls
         {
             searchtimer.Stop();
             Draw();
+        }
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
         }
 
         #endregion

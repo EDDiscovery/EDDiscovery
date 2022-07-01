@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
     {
         private string dbQuerySave = "Query";
         private string dbSplitterSave = "Splitter";
+        private string dbWordWrap = "WordWrap";
 
         private string lastresultlog = null;
         private bool wantreport = false;
@@ -55,12 +56,17 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
+
             var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
                 EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, 
-                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip ,EDTx.SearchScans_extButtonExport_ToolTip, EDTx.SearchScans_extButtonImport_ToolTip };
+                                EDTx.SearchScans_extButtonExport_ToolTip, EDTx.SearchScans_extButtonImport_ToolTip, EDTx.SearchScans_extCheckBoxWordWrap_ToolTip, 
+                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
@@ -297,6 +303,19 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(),"OK".TxID(EDTx.OK),"");
             }
 
+        }
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
         }
 
         private BaseUtils.ConditionLists Valid()

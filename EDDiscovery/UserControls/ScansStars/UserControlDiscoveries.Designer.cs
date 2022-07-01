@@ -65,6 +65,7 @@ namespace EDDiscovery.UserControls
             this.ColumnSearches = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -76,7 +77,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.BackColor = System.Drawing.SystemColors.Control;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(399, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(447, 2);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -96,7 +97,7 @@ namespace EDDiscovery.UserControls
             this.extButtonSearches.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonSearches.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonSearches.Image = global::EDDiscovery.Icons.Controls.Find;
-            this.extButtonSearches.Location = new System.Drawing.Point(359, 1);
+            this.extButtonSearches.Location = new System.Drawing.Point(367, 2);
             this.extButtonSearches.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonSearches.Name = "extButtonSearches";
             this.extButtonSearches.Size = new System.Drawing.Size(28, 28);
@@ -119,7 +120,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
-            this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
+            this.textBoxSearch.Location = new System.Drawing.Point(203, 2);
             this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textBoxSearch.Multiline = false;
             this.textBoxSearch.Name = "textBoxSearch";
@@ -151,7 +152,7 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.RollUpDelay = 1000;
             this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
             this.rollUpPanelTop.ShowHiddenMarker = true;
-            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 30);
+            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 32);
             this.rollUpPanelTop.TabIndex = 4;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
@@ -164,18 +165,20 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.labelSearch);
             this.panelControls.Controls.Add(this.textBoxSearch);
             this.panelControls.Controls.Add(this.extButtonSearches);
+            this.panelControls.Controls.Add(this.extCheckBoxWordWrap);
             this.panelControls.Controls.Add(this.buttonExtExcel);
             this.panelControls.Controls.Add(this.labelCount);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(748, 30);
+            this.panelControls.Padding = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.panelControls.Size = new System.Drawing.Size(748, 32);
             this.panelControls.TabIndex = 32;
             // 
             // labelTime
             // 
             this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(0, 1);
+            this.labelTime.Location = new System.Drawing.Point(8, 2);
             this.labelTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(30, 13);
@@ -191,7 +194,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DisplayMember = "";
             this.comboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
+            this.comboBoxTime.Location = new System.Drawing.Point(46, 2);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTime.Name = "comboBoxTime";
@@ -209,7 +212,7 @@ namespace EDDiscovery.UserControls
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(146, 1);
+            this.labelSearch.Location = new System.Drawing.Point(154, 2);
             this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
@@ -219,7 +222,7 @@ namespace EDDiscovery.UserControls
             // labelCount
             // 
             this.labelCount.AutoSize = true;
-            this.labelCount.Location = new System.Drawing.Point(434, 4);
+            this.labelCount.Location = new System.Drawing.Point(482, 5);
             this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
             this.labelCount.Name = "labelCount";
             this.labelCount.Size = new System.Drawing.Size(43, 13);
@@ -232,9 +235,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(748, 652);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(748, 650);
             this.dataViewScrollerPanel.TabIndex = 8;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -255,7 +258,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 652);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 650);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -289,7 +292,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(732, 652);
+            this.dataGridView.Size = new System.Drawing.Size(732, 650);
             this.dataGridView.TabIndex = 0;
             // 
             // ColumnDate
@@ -339,6 +342,36 @@ namespace EDDiscovery.UserControls
             this.ColumnParent.Name = "ColumnParent";
             this.ColumnParent.ReadOnly = true;
             // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(407, 2);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 40;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
+            // 
             // UserControlDiscoveries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,5 +412,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
         private System.Windows.Forms.Label labelCount;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
     }
 }
