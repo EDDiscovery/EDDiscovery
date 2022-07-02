@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
 
         private string searchterms = "system:body";
         private Timer searchtimer;
+        private Timer updatetimer;
 
         private string defaultsearches = "Planet between inner and outer ringↈLandable and TerraformableↈLandable with High GↈLandable with RingsↈHotter than HadesↈPlanet has wide rings vs radiusↈClose orbit to parentↈClose to ringↈPlanet with a large number of MoonsↈMoons orbiting TerraformablesↈClose BinaryↈGas giant has a terraformable MoonↈTiny MoonↈFast Rotation of a non tidally locked bodyↈHigh Eccentric OrbitↈHigh number of Jumponium Materialsↈ";
 
@@ -82,9 +83,10 @@ namespace EDDiscovery.UserControls
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
+            updatetimer = new Timer() { Interval = 1000 };
+            updatetimer.Tick += Updatetimer_Tick;
 
         }
-
 
         public override void LoadLayout()
         {
@@ -98,147 +100,233 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            searchtimer.Stop();
+            updatetimer.Stop();
+
             DGVSaveColumnLayout(dataGridView);
             PutSetting("PinState", rollUpPanelTop.PinState);
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
-        #endregion
-
-        #region Display
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            updatetimer.Stop();
+            Draw();
+        }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
             // Star scan type, or material entry type, or a bodyname/id entry, or not set, or not same system
             if (HistoryListQueries.SearchableJournalTypes.Contains(he.EntryType))
             {
-                Draw();
+                updatetimer.Stop();         // we kick the timer, to let multiple ones in, so we only search once when we get a glut of scans
+                updatetimer.Start();
+                DrawOnlySys = he.System;
+                System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} timer started new entry on {DrawOnlySys.Name}");
             }
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Updatetimer_Tick(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} timer expired");
+            updatetimer.Stop();
             Draw();
         }
-        private void Draw()
+
+        #endregion
+
+        #region Display
+
+        public int DrawCount = 0;       // incremented/decremeneted in UI thread to count number of draw requests
+        public ISystem DrawOnlySys = null;  // if to limit to one system
+
+        private async void Draw()       // we can, due to the await below, reenter this while the drawcount loop is executing, in the UI thread.
         {
-            lock (dbTimeWindow)     // Don't allow double drawing due to await in DrawAsync, and then another hisotyr/newentry occurs
-                DrawAsync();
+            bool todraw = DrawCount++ == 0;
+
+            if ( todraw )       // if DrawCount was zero, its the first draw, try it
+            {
+                this.Cursor = Cursors.WaitCursor;
+                labelCount.Text = "...";
+
+                while (DrawCount > 0)       // loop around while >0.   The execute search aboves if DrawCount>0 until we get to DrawCount=1 at which point we display result
+                {
+                    var entries = discoveryform.history.EntryOrder();
+                    bool updateit = false;
+
+                    if (DrawOnlySys != null)    // if filter by system
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} Search Limit to {DrawOnlySys.Name}");
+                        entries = entries.Where(x => x.System.Name == DrawOnlySys.Name).ToList();
+                        updateit = true;
+                        DrawOnlySys = null;     // cancel it. If another Draw is called, then this current one will abort and the next will be with the full list
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} Search All");
+                    }
+
+                    var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                    List<HistoryEntry> helist = filter.Filter(entries, HistoryListQueries.SearchableJournalTypes, false); // in entry order
+
+                    Dictionary<string, HistoryListQueries.Results> searchresults;
+                    if (helist.Count > 0 && searchesactive.Length > 0)      // if anything
+                    {
+                        searchresults = await ExecuteSearch(helist);
+                    }
+                    else
+                    {
+                        searchresults = null;
+                    }
+
+                    if (DrawCount == 1)     // if we have a single draw outstanding, then draw it, else don't bother, we are going to do another draw
+                        DrawGrid(searchresults, updateit);
+
+                    DrawCount--;
+                }
+
+                this.Cursor = Cursors.Default;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} We are drawing - ignoring");
+            }
         }
 
-        private async void DrawAsync()
+        private async Task<Dictionary<string, HistoryListQueries.Results>> ExecuteSearch(List<HistoryEntry> helist)
         {
-            this.Cursor = Cursors.WaitCursor;
+            discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
-            dataGridView.Rows.Clear();
+            var defaultvars = new BaseUtils.Variables();
+            defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+
+            Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
+
+            System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} DC {DrawCount} runs {searchesactive.Length} searches on {helist.Count} entries");
+
+            var sw = new System.Diagnostics.Stopwatch(); sw.Start();
+
+            foreach (var searchname in searchesactive)
+            {
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
+                //System.Threading.Thread.Sleep(1000);
+                if (IsClosed)       // may be closing during async process
+                    return null;
+
+                if (DrawCount > 1)      // if we have another draw request, stop
+                {
+                    System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} abort search due to multiple draw counts");
+                    return null;
+                }
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} find took {sw.ElapsedMilliseconds} Returned {searchresults.Count}");
+
+            return searchresults;
+        }
+
+        private void DrawGrid(Dictionary<string, HistoryListQueries.Results> searchresults, bool updategrid = false)
+        {
+            if (!updategrid)
+                dataGridView.Rows.Clear();
 
             DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
             SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-            var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
-            List<HistoryEntry> helist = filter.Filter(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes, false); // in entry order
+            ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-            labelCount.Text = "...";
+            var search = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
-            if (helist.Count > 0 && searchesactive.Length > 0)
+            foreach (var kvp in searchresults.EmptyIfNull())
             {
-                discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
+                HistoryEntry he = kvp.Value.HistoryEntry;
+                ISystem sys = he.System;
+                string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                var defaultvars = new BaseUtils.Variables();
-                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                JournalScan js = he.journalEntry as JournalScan;
+                JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
+                JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
 
-                Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
-
-                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Discoveries runs {searchesactive.Length} searches");
-
-                var sw = new System.Diagnostics.Stopwatch(); sw.Start();
-
-                foreach (var searchname in searchesactive)
+                string name, info, pinfo = "";
+                if (js != null)
                 {
-                    await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
-                    if (IsClosed)       // may be closing during async process
-                        return;
+                    name = js.BodyName;
+                    info = js.DisplayString();
+                    if (he.ScanNode?.Parent != null)
+                    {
+                        var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
+                        pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
+                    }
+                }
+                else if (jb != null)
+                {
+                    name = jb.BodyName;
+                    jb.FillInformation(he.System, "", out info, out string d);
+                }
+                else
+                {
+                    name = jbs.BodyName;
+                    jbs.FillInformation(he.System, "", out info, out string d);
                 }
 
-                System.Diagnostics.Debug.WriteLine($"Discoveries Find complete {sw.ElapsedMilliseconds} on {helist.Count}");
+                string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
+                                        name,       //1
+                                        sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),   //2
+                                        (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""), //3
+                                        string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),   //4
+                                        info,   //5
+                                        pinfo,  //6
+                                        };
 
-                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
-
-                var search = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
-
-                foreach (var kvp in searchresults.EmptyIfNull())
+                if ( search.Enabled )
                 {
-                    HistoryEntry he = kvp.Value.HistoryEntry;
-                    ISystem sys = he.System;
-                    string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
+                    bool matched = false;
 
-                    JournalScan js = he.journalEntry as JournalScan;
-                    JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
-                    JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
-
-                    string name, info, pinfo = "";
-                    if (js != null)
+                    if (search.Terms[0] != null)   // primary text
                     {
-                        name = js.BodyName;
-                        info = js.DisplayString();
-                        if (he.ScanNode?.Parent != null)
+                        foreach (var col in rowobj)
                         {
-                            var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
-                            pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
-                        }
-                    }
-                    else if (jb != null)
-                    {
-                        name = jb.BodyName;
-                        jb.FillInformation(he.System, "", out info, out string d);
-                    }
-                    else
-                    {
-                        name = jbs.BodyName;
-                        jbs.FillInformation(he.System, "", out info, out string d);
-                    }
-
-                    string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
-                                            name,
-                                            sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
-                                            (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                            string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),
-                                            info,
-                                            pinfo,
-                                            };
-
-                    if ( search.Enabled )
-                    {
-                        bool matched = false;
-
-                        if (search.Terms[0] != null)   // primary text
-                        {
-                            foreach (var col in rowobj)
+                            if (col.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
                             {
-                                if (col.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
-                                {
-                                    matched = true;
-                                    break;
-                                }
+                                matched = true;
+                                break;
                             }
                         }
-
-                        if (!matched && search.Terms[1] != null)       // system
-                            matched = he.System.Name.WildCardMatch(search.Terms[1], true);
-                        if (!matched && search.Terms[2] != null)       // body
-                            matched = he.Status.BodyName?.WildCardMatch(search.Terms[2], true) ?? false;
-
-                        if (!matched)
-                            continue;
                     }
 
+                    if (!matched && search.Terms[1] != null)       // system
+                        matched = he.System.Name.WildCardMatch(search.Terms[1], true);
+                    if (!matched && search.Terms[2] != null)       // body
+                        matched = he.Status.BodyName?.WildCardMatch(search.Terms[2], true) ?? false;
+
+                    if (!matched)
+                        continue;
+                }
+
+                bool addto = true;
+
+                if (updategrid)
+                {
+                    int existingrow = dataGridView.FindRowWithValue(1, name);       // is the result there with the name?
+                    if ( existingrow>=0)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Discoveries alter row {existingrow}");
+                        addto = false;
+                        dataGridView.Rows[existingrow].Cells[4].Value = rowobj[4];      // update what may have changed in 4,5,6. Rest will stay the same.
+                        dataGridView.Rows[existingrow].Cells[5].Value = rowobj[5];
+                        dataGridView.Rows[existingrow].Cells[6].Value = rowobj[6];
+                    }
+                }
+
+                if ( addto )
+                {
                     dataGridView.Rows.Add(rowobj);
                     dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = he.System;
                 }
-
-                System.Diagnostics.Debug.WriteLine($"Discoveries took {sw.ElapsedMilliseconds} Returned {searchresults.Count}");
             }
+
+            System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} grid drawn");
 
             if (dataGridView.Rows.Count > 0)
                 labelCount.Text = "Total".TxID(EDTx.UserControlMaterialCommodities_Total) + " " + dataGridView.Rows.Count.ToString();
@@ -248,7 +336,6 @@ namespace EDDiscovery.UserControls
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-            this.Cursor = Cursors.Default;
         }
 
         #endregion
@@ -344,5 +431,12 @@ namespace EDDiscovery.UserControls
         }
         #endregion
 
+        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 1)
+                e.SortDataGridViewColumnNumeric();
+        }
     }
 }

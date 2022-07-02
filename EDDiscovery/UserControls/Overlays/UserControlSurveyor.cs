@@ -50,6 +50,9 @@ namespace EDDiscovery.UserControls
 
         private Font displayfont;
 
+        private Timer updatetimer;
+        private int bodies_found;
+
         #region Initialisation
 
         public UserControlSurveyor()
@@ -89,6 +92,9 @@ namespace EDDiscovery.UserControls
             routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
+
+            updatetimer = new Timer() { Interval = 1000 };
+            updatetimer.Tick += Updatetimer_Tick;
         }
 
 
@@ -114,7 +120,10 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            updatetimer.Stop();
+
             PutSetting("PinState", rollUpPanelTop.PinState);
+
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -169,12 +178,12 @@ namespace EDDiscovery.UserControls
                 // something has changed and just blindly for now recalc the fsd info
                 shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
                 shipinfo = he.ShipInformation;
+                bool kicktimer = false;
 
                 if (last_sys == null || last_sys.Name != he.System.Name || !last_sys.HasCoordinate) // If not got a system, or different name, or last does not have co-ord (StartJump)
                 {
                     last_sys = he.System;
-                    SetTitle(last_sys.Name);
-                    DrawSystem(last_sys);
+                    kicktimer = true;
                 }
                 else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
                 {
@@ -182,8 +191,8 @@ namespace EDDiscovery.UserControls
                     if (jsj.IsHyperspace)       // needs to be a hyperspace one, not supercruise
                     {
                         last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
-                        SetTitle(last_sys.Name);
-                        DrawSystem(last_sys);
+                        bodies_found = 0;
+                        kicktimer = true;
                     }
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
@@ -193,17 +202,31 @@ namespace EDDiscovery.UserControls
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
-                    var bodies_found = je.BodyCount;
-                    SetTitle(last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
-                    DrawSystem(last_sys);
+                    bodies_found = je.BodyCount;
+                    kicktimer = true;
                 }
                 else if (he.journalEntry is IStarScan || he.EntryType == JournalTypeEnum.FuelScoop)      // an entry to a scan node
                 {
                     System.Diagnostics.Debug.WriteLine($"Update due to IStarScan for {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
                     //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
-                    DrawSystem(last_sys);
+                    kicktimer = true;
+                }
+
+                if ( kicktimer )
+                {
+                    updatetimer.Stop();
+                    updatetimer.Start();
+                    System.Diagnostics.Debug.WriteLine($"Surveyor {Environment.TickCount % 10000} start timer on {last_sys.Name}");
                 }
             }
+        }
+
+        private void Updatetimer_Tick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Surveyor {Environment.TickCount % 10000} timer expired on {last_sys.Name}");
+            updatetimer.Stop();
+            SetTitle(last_sys.Name + (bodies_found>0 ? (" " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound)) : ""));
+            DrawSystem(last_sys);
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)
