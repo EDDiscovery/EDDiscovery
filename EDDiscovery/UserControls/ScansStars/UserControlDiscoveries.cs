@@ -59,8 +59,8 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation,
-                                        EDTx.SearchScans_ColumnCurrentDistance,  EDTx.SearchScans_ColumnSearches,  EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, 
+            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation,
+                                       EDTx.SearchScans_ColumnSearches,  EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, 
                                         EDTx.SearchScans_labelTime , EDTx.SearchScans_labelSearch};
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, subname: "SearchScans");
 
@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             PopulateCtrlList();
 
             dataGridView.Init(discoveryform);
-            dataGridView.Columns[5].Tag = dataGridView.Columns[6].Tag = "TextPopOut";       // these two double click are text popouts
+            dataGridView.Columns[4].Tag = dataGridView.Columns[5].Tag = "TextPopOut";       // these two double click are text popouts
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
             SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-            ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+            //ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
             var search = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
@@ -272,10 +272,10 @@ namespace EDDiscovery.UserControls
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
                                         sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),   //2
-                                        (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""), //3
-                                        string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),   //4
-                                        info,   //5
-                                        pinfo,  //6
+                                        //(cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""), //3
+                                        string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),   //3
+                                        info,   //4
+                                        pinfo,  //5
                                         };
 
                 if ( search.Enabled )
@@ -312,9 +312,9 @@ namespace EDDiscovery.UserControls
                     {
                         System.Diagnostics.Debug.WriteLine($"Discoveries alter row {existingrow}");
                         addto = false;
-                        dataGridView.Rows[existingrow].Cells[4].Value = rowobj[4];      // update what may have changed in 4,5,6. Rest will stay the same.
+                        dataGridView.Rows[existingrow].Cells[3].Value = rowobj[3];      // update what may have changed in 4,5,6. Rest will stay the same.
+                        dataGridView.Rows[existingrow].Cells[4].Value = rowobj[4];
                         dataGridView.Rows[existingrow].Cells[5].Value = rowobj[5];
-                        dataGridView.Rows[existingrow].Cells[6].Value = rowobj[6];
                     }
                 }
 
@@ -437,6 +437,7 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnDate();
             else if (e.Column.Index == 1)
                 e.SortDataGridViewColumnNumeric();
+
         }
     }
 }

@@ -1251,6 +1251,7 @@ namespace EDDiscovery
         // used across multiple panels, but so much shared with above may as well use the same 
 
         SearchScans_ColumnDate, // Column Header 'Date'
+        SearchScans_ColumnBody, // Column Header 'Body'
         SearchScans_ColumnStar, // Column Header 'Star'
         SearchScans_ColumnInformation, // Column Header 'Information'
         SearchScans_ColumnParent, // Column Header 'Parent'
