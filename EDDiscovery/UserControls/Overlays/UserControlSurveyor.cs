@@ -197,6 +197,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
                 {
+                    bodies_found = -1;
                     SetTitle(last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts
@@ -225,7 +226,8 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.WriteLine($"Surveyor {Environment.TickCount % 10000} timer expired on {last_sys.Name}");
             updatetimer.Stop();
-            SetTitle(last_sys.Name + (bodies_found>0 ? (" " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound)) : ""));
+            SetTitle(last_sys.Name + (bodies_found>0 ? (" " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound)) : "") +
+                                     (bodies_found == -1 ? (" " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete)) : ""));
             DrawSystem(last_sys);
         }
 
@@ -851,6 +853,7 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
+            displayfilter.AddGroupOption(HistoryListQueries.DefaultSearches, "Default".T(EDTx.ProfileEditor_Default));
             displayfilter.SettingsSplittingChar = '\u2188';     // pick a crazy one soe
 
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();

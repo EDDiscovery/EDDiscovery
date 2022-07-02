@@ -38,7 +38,6 @@ namespace EDDiscovery.UserControls
         private Timer searchtimer;
         private Timer updatetimer;
 
-        private string defaultsearches = "Planet between inner and outer ringↈLandable and TerraformableↈLandable with High GↈLandable with RingsↈHotter than HadesↈPlanet has wide rings vs radiusↈClose orbit to parentↈClose to ringↈPlanet with a large number of MoonsↈMoons orbiting TerraformablesↈClose BinaryↈGas giant has a terraformable MoonↈTiny MoonↈFast Rotation of a non tidally locked bodyↈHigh Eccentric OrbitↈHigh number of Jumponium Materialsↈ";
 
         #region Init
         public UserControlDiscoveries()
@@ -352,6 +351,7 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
+            displayfilter.AddGroupOption(HistoryListQueries.DefaultSearches, "Default".T(EDTx.ProfileEditor_Default));
             displayfilter.SettingsSplittingChar = '\u2188';     // pick a crazy one soe
 
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();
@@ -366,7 +366,7 @@ namespace EDDiscovery.UserControls
         {
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).Select(y => y.Name).ToList();
 
-            string set = GetSetting(dbSearches, defaultsearches);
+            string set = GetSetting(dbSearches, HistoryListQueries.DefaultSearches);
             PutSetting(dbSearches, set);    // make sure its back into memory
 
             searchesactive = set.SplitNoEmptyStartFinish('\u2188');
