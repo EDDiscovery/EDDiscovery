@@ -69,7 +69,7 @@ namespace EDDiscovery.UserControls
                                 EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
+            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:false);
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeUTC", "Date Time in UTC", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
 
             conditionFilterUC.VariableNames = classnames;
 
-           // foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")}"); // debug output for wiki
+            foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")}"); // debug output for wiki
 
             string query = GetSetting(dbQuerySave, "");
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
@@ -294,9 +294,26 @@ namespace EDDiscovery.UserControls
             wantreport = true;
             if (lastresultlog.HasChars())
             {
-                ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-                ifrm.Info("Log", discoveryform.Icon, lastresultlog);
-                ifrm.Show(this);
+                if (lastresultlog.Length < 100000)
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
+                    ifrm.Info("Log", discoveryform.Icon, lastresultlog);
+                    ifrm.Show(this);
+                    this.Cursor = Cursors.Default;
+                }
+                else
+                {
+                    SaveFileDialog dlg = new SaveFileDialog();
+
+                    dlg.Filter = "Log| *.log";
+                    dlg.Title = "Export";
+
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        System.IO.File.WriteAllText(dlg.FileName, lastresultlog);
+                    }
+                }
             }
             else
             {
