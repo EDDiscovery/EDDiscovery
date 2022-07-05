@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
             // Star scan type, or material entry type, or a bodyname/id entry, or not set, or not same system
-            if (HistoryListQueries.SearchableJournalTypes.Contains(he.EntryType))
+            if (HistoryListQueries.AllSearchableJournalTypes.Contains(he.EntryType))
             {
                 updatetimer.Stop();         // we kick the timer, to let multiple ones in, so we only search once when we get a glut of scans
                 updatetimer.Start();
@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
-                    List<HistoryEntry> helist = filter.Filter(entries, HistoryListQueries.SearchableJournalTypes, false); // in entry order
+                    List<HistoryEntry> helist = filter.Filter(entries, HistoryListQueries.AllSearchableJournalTypes, false); // in entry order
 
                     Dictionary<string, HistoryListQueries.Results> searchresults;
                     if (helist.Count > 0 && searchesactive.Length > 0)      // if anything
@@ -244,24 +244,11 @@ namespace EDDiscovery.UserControls
                 ISystem sys = he.System;
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                JournalScan js = he.journalEntry as JournalScan;
-    
-                string name="", info="", pinfo = "";
-                if (js != null)
-                {
-                    name = js.BodyName;
-                    info = js.DisplayString();
-                    if (he.ScanNode?.Parent != null)
-                    {
-                        var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
-                        pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
-                    }
-                }
-   
+                SearchScans.GenerateReportFields(he, out string name, out string info, out string pinfo);
+
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
                                         sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),   //2
-                                        //(cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""), //3
                                         string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),   //3
                                         info,   //4
                                         pinfo,  //5

@@ -69,22 +69,7 @@ namespace EDDiscovery.UserControls
                                 EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:false);
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeUTC", "Date Time in UTC", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Level", "Level of body in system, 0 =star, 1 = Planet, 2 = moon, 3 = submoon", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on ones we synthesise
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Sibling.Count", "Number of siblings", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on ones we synthesise
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Child.Count", "Number of child moons", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on ones we synthesise
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("JumponiumCount", "Number of jumponium materials available", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual));     // add on ones we synthesise
-
-            var defaultvars = new BaseUtils.Variables();
-            defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
-            foreach(var v in defaultvars.NameEnumuerable)
-                classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo(v, "Constant", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on a few from the base class..
-
-            classnames.Sort(delegate (BaseUtils.TypeHelpers.PropertyNameInfo left, BaseUtils.TypeHelpers.PropertyNameInfo right) { return left.Name.CompareTo(right.Name); });
+            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = HistoryListQueries.PropertyList();
 
             conditionFilterUC.VariableNames = classnames;
 
@@ -181,6 +166,44 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        public static void GenerateReportFields(HistoryEntry he, out string name, out string info, out string pinfo)
+        {
+            name = "";
+            info = "";
+            pinfo = "";
+
+            JournalScan js = he.journalEntry as JournalScan;
+            JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
+            JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
+            JournalFSSSignalDiscovered jfsd = he.journalEntry as JournalFSSSignalDiscovered;
+
+            if (js != null)     // check with have a JS Back
+            {
+                name = js.BodyName;
+                info = js.DisplayString();
+                if (he.ScanNode?.Parent != null)
+                {
+                    var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
+                    pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
+                }
+            }
+            else if (jb != null)
+            {
+                name = jb.BodyName;
+                jb.FillInformation(he.System, "", out info, out string d);
+            }
+            else if (jfsd != null)
+            {
+                name = he.System.Name;
+                jfsd.FillInformation(he.System, "", out info, out string dunsed);
+            }
+            else
+            {
+                name = jbs.BodyName;
+                jbs.FillInformation(he.System, "", out info, out string d);
+            }
+        }
+
 
         private async void buttonFind_Click(object sender, EventArgs e)
         {
@@ -195,9 +218,6 @@ namespace EDDiscovery.UserControls
 
                 discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
-                var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes);
-
-                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {discoveryform.history.EntryOrder().Count}");
                 // what variables are in use, so we don't enumerate the lot.
                 var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
 
@@ -213,6 +233,10 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
 
                 Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
+
+                var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars);
+                var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), computedsearch);
+                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {discoveryform.history.EntryOrder().Count}");
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
@@ -231,19 +255,7 @@ namespace EDDiscovery.UserControls
                     ISystem sys = he.System;
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                    JournalScan js = he.journalEntry as JournalScan;
-
-                    string name="", info="", pinfo = "";
-                    if (js != null)     // check with have a JS Back
-                    {
-                        name = js.BodyName;
-                        info = js.DisplayString();
-                        if (he.ScanNode?.Parent != null)
-                        {
-                            var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
-                            pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
-                        }
-                    }
+                    GenerateReportFields(he, out string name, out string info, out string pinfo);
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             name,

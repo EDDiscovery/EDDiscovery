@@ -628,16 +628,16 @@ namespace EDDiscovery.UserControls
                         if (searchesactive.Length > 0)       // if any searches
                         {
                             discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
-                                                                        
+
                             // all entries related to sys.  Can't really limit the pick up as tried before using the afterlastevent option in this call
                             // due to being able to browse back in history. We may not be at the end of the list the system we are displaying. For now, just do a blind whole history search
 
-                            var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.SearchableJournalTypes, sys); 
+                            var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes, sys); 
                             
                             if ( helist.Count>0)        // no point executing if nothing in helist
                             { 
                                 var defaultvars = new BaseUtils.Variables();
-                                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep:true);
 
                                 Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
 
