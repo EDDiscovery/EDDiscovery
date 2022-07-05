@@ -37,7 +37,6 @@ namespace EDDiscovery.UserControls
         private string dbWordWrap = "WordWrap";
 
         private string lastresultlog = null;
-        private bool wantreport = false;
 
         #region Init
 
@@ -66,7 +65,7 @@ namespace EDDiscovery.UserControls
 
             var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, 
                                 EDTx.SearchScans_extButtonExport_ToolTip, EDTx.SearchScans_extButtonImport_ToolTip, EDTx.SearchScans_extCheckBoxWordWrap_ToolTip, 
-                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extButtonResultsLog_ToolTip };
+                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extCheckBoxDebug_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = HistoryListQueries.PropertyList();
@@ -240,7 +239,7 @@ namespace EDDiscovery.UserControls
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, wantreport);
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, extCheckBoxDebug.Checked);
 
                 if (IsClosed)       // may be closing during async process
                     return;
@@ -281,37 +280,41 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void extButtonResultsLog_Click(object sender, EventArgs e)
+        private void extCheckBoxDebug_CheckedChanged(object sender, EventArgs e)
         {
-            wantreport = true;
-            if (lastresultlog.HasChars())
+            if (extCheckBoxDebug.Enabled == true)
             {
-                if (lastresultlog.Length < 100000)
+                if (extCheckBoxDebug.Checked == false)  // if turning it off, we don't allow that..
                 {
-                    this.Cursor = Cursors.WaitCursor;
-                    ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-                    ifrm.Info("Log", discoveryform.Icon, lastresultlog);
-                    ifrm.Show(this);
-                    this.Cursor = Cursors.Default;
-                }
-                else
-                {
-                    SaveFileDialog dlg = new SaveFileDialog();
+                    extCheckBoxDebug.Enabled = false;
+                    extCheckBoxDebug.Checked = true;        // turn it back on, causes recursion, so use enable to say don't
+                    extCheckBoxDebug.Enabled = true;
 
-                    dlg.Filter = "Log| *.log";
-                    dlg.Title = "Export";
-
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    if (lastresultlog.HasChars())
                     {
-                        System.IO.File.WriteAllText(dlg.FileName, lastresultlog);
+                        if (lastresultlog.Length < 2000000)
+                        {
+                            this.Cursor = Cursors.WaitCursor;
+                            ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
+                            ifrm.Info("Log", discoveryform.Icon, lastresultlog);
+                            ifrm.Show(this);
+                            this.Cursor = Cursors.Default;
+                        }
+                        else
+                        {
+                            SaveFileDialog dlg = new SaveFileDialog();
+
+                            dlg.Filter = "Log| *.log";
+                            dlg.Title = "Export";
+
+                            if (dlg.ShowDialog(this) == DialogResult.OK)
+                            {
+                                System.IO.File.WriteAllText(dlg.FileName, lastresultlog);
+                            }
+                        }
                     }
                 }
             }
-            else
-            {
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(),"OK".TxID(EDTx.OK),"");
-            }
-
         }
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
@@ -402,5 +405,6 @@ namespace EDDiscovery.UserControls
                 CSVHelpers.FailedToOpen(this.FindForm(), path); // both fail to this
             }
         }
+
     }
 }

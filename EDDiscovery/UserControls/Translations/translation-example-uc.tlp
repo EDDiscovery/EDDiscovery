@@ -142,7 +142,7 @@ SECTION SearchScans
 .extButtonExport.ToolTip: "Export user searches to a file" @
 .extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extButtonResultsLog.ToolTip: "Press to enable search reporting, then press after each sunsequent search for the report. Reporting can slow the search." @
+.extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
 .ColumnSearches: "Searches" @
 .labelTime: "Time" @
 .labelSearch: "Search" @

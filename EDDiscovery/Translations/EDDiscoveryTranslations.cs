@@ -1270,7 +1270,7 @@ namespace EDDiscovery
         SearchScans_buttonSave_ToolTip,
         SearchScans_buttonDelete_ToolTip, 
         SearchScans_buttonExtExcel_ToolTip,
-        SearchScans_extButtonResultsLog_ToolTip,
+        SearchScans_extCheckBoxDebug_ToolTip,
         SearchScans_extButtonExport_ToolTip, 
         SearchScans_extButtonImport_ToolTip,
         SearchScans_extCheckBoxWordWrap_ToolTip,
