@@ -198,7 +198,8 @@ namespace EDDiscovery.UserControls
             discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
             var defaultvars = new BaseUtils.Variables();
-            defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+            // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
+            defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep:true);    
 
             Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
 
@@ -244,10 +245,8 @@ namespace EDDiscovery.UserControls
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
                 JournalScan js = he.journalEntry as JournalScan;
-                JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
-                JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
-
-                string name, info, pinfo = "";
+    
+                string name="", info="", pinfo = "";
                 if (js != null)
                 {
                     name = js.BodyName;
@@ -258,17 +257,7 @@ namespace EDDiscovery.UserControls
                         pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
                     }
                 }
-                else if (jb != null)
-                {
-                    name = jb.BodyName;
-                    jb.FillInformation(he.System, "", out info, out string d);
-                }
-                else
-                {
-                    name = jbs.BodyName;
-                    jbs.FillInformation(he.System, "", out info, out string d);
-                }
-
+   
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
                                         sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),   //2

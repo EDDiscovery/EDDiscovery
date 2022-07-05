@@ -79,15 +79,6 @@ namespace EDDiscovery.UserControls
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Child.Count", "Number of child moons", BaseUtils.ConditionEntry.MatchType.NumericEquals));     // add on ones we synthesise
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("JumponiumCount", "Number of jumponium materials available", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual));     // add on ones we synthesise
 
-            // from FSSBodySignals or SAASignalsFound
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsGeoSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsBioSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsThargoidSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsGuardianSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsHumanSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsOtherSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsUncategorisedSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-
             var defaultvars = new BaseUtils.Variables();
             defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
             foreach(var v in defaultvars.NameEnumuerable)
@@ -213,8 +204,9 @@ namespace EDDiscovery.UserControls
                 // see if we need any default vars, at the moment, they all start with one
                 var defaultvars = new BaseUtils.Variables();
 
-                if (allvars.StartsWith("one") >= 0)
-                    defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10);
+                // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
+                if (allvars.StartsWithInList("one") >= 0)
+                    defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10,ensuredoublerep:true);
                 else
                     defaultvars = null;
     
@@ -240,11 +232,9 @@ namespace EDDiscovery.UserControls
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
                     JournalScan js = he.journalEntry as JournalScan;
-                    JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
-                    JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
 
-                    string name, info, pinfo = "";
-                    if (js != null)
+                    string name="", info="", pinfo = "";
+                    if (js != null)     // check with have a JS Back
                     {
                         name = js.BodyName;
                         info = js.DisplayString();
@@ -253,16 +243,6 @@ namespace EDDiscovery.UserControls
                             var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
                             pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
                         }
-                    }
-                    else if (jb != null)
-                    {
-                        name = jb.BodyName;
-                        jb.FillInformation(he.System, "", out info, out string d);
-                    }
-                    else
-                    {
-                        name = jbs.BodyName;
-                        jbs.FillInformation(he.System, "", out info, out string d);
                     }
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
