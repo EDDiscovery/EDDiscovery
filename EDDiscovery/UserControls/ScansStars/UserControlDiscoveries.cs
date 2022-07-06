@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
 
             foreach (var searchname in searchesactive)
             {
-                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, discoveryform.history.StarScan, false); // execute the searches
                 //System.Threading.Thread.Sleep(1000);
                 if (IsClosed)       // may be closing during async process
                     return null;
@@ -240,11 +240,11 @@ namespace EDDiscovery.UserControls
 
             foreach (var kvp in searchresults.EmptyIfNull())
             {
-                HistoryEntry he = kvp.Value.HistoryEntry;
+                HistoryEntry he = kvp.Value.EntryList.Last();
                 ISystem sys = he.System;
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                SearchScans.GenerateReportFields(he, out string name, out string info, out string pinfo);
+                SearchScans.GenerateReportFields(kvp.Value.EntryList, out string name, out string info, out string pinfo);
 
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
                                         pinfo,  //5
                                         };
 
-                if ( search.Enabled )
+                if (search.Enabled)
                 {
                     bool matched = false;
 
@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
                 if (updategrid)
                 {
                     int existingrow = dataGridView.FindRowWithValue(1, name);       // is the result there with the name?
-                    if ( existingrow>=0)
+                    if (existingrow >= 0)
                     {
                         System.Diagnostics.Debug.WriteLine($"Discoveries alter row {existingrow}");
                         addto = false;
@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if ( addto )
+                if (addto)
                 {
                     dataGridView.Rows.Add(rowobj);
                     dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = he.System;

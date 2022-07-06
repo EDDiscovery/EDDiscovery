@@ -645,7 +645,7 @@ namespace EDDiscovery.UserControls
                                 foreach (var searchname in searchesactive)
                                 {
                                     // await is horrible, anything can happen, even closing
-                                    await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, false); // execute the searches
+                                    await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, discoveryform.history.StarScan, false); // execute the searches
 
                                     if (IsClosed)       // if we was ordered to close, abore
                                         return;
@@ -714,12 +714,14 @@ namespace EDDiscovery.UserControls
                         string siglist = "";
                         string[] filter = fsssignalsdisplayed.Split(';');
 
+                        var signallist = JournalFSSSignalDiscovered.SignalList(systemnode.FSSSignalList);
+
                         // mirrors scandisplaynodes
 
-                        var notexpired = systemnode.FSSSignalList.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
+                        var notexpired = signallist.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
                         notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
 
-                        var expired = systemnode.FSSSignalList.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
+                        var expired = signallist.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
                         expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
 
                         int expiredpos = notexpired.Count;

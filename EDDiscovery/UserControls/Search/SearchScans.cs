@@ -165,11 +165,13 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        public static void GenerateReportFields(HistoryEntry he, out string name, out string info, out string pinfo)
+        public static void GenerateReportFields(List<HistoryEntry> hes, out string name, out string info, out string pinfo)
         {
             name = "";
             info = "";
             pinfo = "";
+
+            HistoryEntry he = hes.Last();
 
             JournalScan js = he.journalEntry as JournalScan;
             JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
@@ -194,7 +196,15 @@ namespace EDDiscovery.UserControls
             else if (jfsd != null)
             {
                 name = he.System.Name;
-                jfsd.FillInformation(he.System, "", out info, out string dunsed);
+                foreach (var h in hes)
+                {
+                    string time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
+                    h.journalEntry.FillInformation(he.System, "", out string info2, out string dunsed);
+                    if ( hes.Count>1)
+                        info = info.AppendPrePad(time + ": " + info2, Environment.NewLine);
+                    else
+                        info = info.AppendPrePad(info2, Environment.NewLine);
+                }
             }
             else
             {
@@ -239,7 +249,7 @@ namespace EDDiscovery.UserControls
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, extCheckBoxDebug.Checked);
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, discoveryform.history.StarScan, extCheckBoxDebug.Checked);
 
                 if (IsClosed)       // may be closing during async process
                     return;
@@ -250,15 +260,16 @@ namespace EDDiscovery.UserControls
 
                 foreach ( var kvp in results.EmptyIfNull())
                 {
-                    HistoryEntry he = kvp.Value.HistoryEntry;
-                    ISystem sys = he.System;
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                    GenerateReportFields(he, out string name, out string info, out string pinfo);
+                    GenerateReportFields(kvp.Value.EntryList, out string name, out string info, out string pinfo);
+
+                    HistoryEntry he = kvp.Value.EntryList.Last();
+                    ISystem sys = he.System;
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             name,
-                                            sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
+                                            he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             info,
                                             pinfo,
