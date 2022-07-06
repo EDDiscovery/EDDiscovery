@@ -129,18 +129,32 @@ namespace EDDiscovery.UserControls.Search
                 var coltag = Columns[e.ColumnIndex].Tag as string;
                 var cell = Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                if (coltag != null && coltag == "TextPopOut")
-                {
-                    string text = cell.Value as string;
-                    if (cell.ToolTipText != null)
-                        text = text.AppendPrePad(cell.ToolTipText, Environment.NewLine);
+                string text = null;
 
-                    if (text.HasChars())
+                bool textpopout = coltag?.Contains("TextPopOut") ?? false;
+                bool tooltippopout = coltag?.Contains("TooltipPopOut") ?? false;
+
+                if (textpopout)
+                {
+                    if (tooltippopout)
                     {
-                        InfoForm frm = new InfoForm();
-                        frm.Info(this.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
-                        frm.Show(FindForm());
+                        text = cell.ToolTipText.HasChars() ? cell.ToolTipText : cell.Value as string;
                     }
+                    else
+                    {
+                        text = cell.Value as string;
+                    }
+                }
+                else if ( tooltippopout)
+                {
+                    text = cell.ToolTipText;
+                }
+
+                if (text.HasChars())
+                {
+                    InfoForm frm = new InfoForm();
+                    frm.Info(this.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
+                    frm.Show(FindForm());
                 }
                 else
                     ShowScanPopOut(Rows[e.RowIndex].Tag);
