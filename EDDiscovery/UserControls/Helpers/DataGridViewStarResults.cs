@@ -127,12 +127,20 @@ namespace EDDiscovery.UserControls.Search
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 var coltag = Columns[e.ColumnIndex].Tag as string;
+                var cell = Rows[e.RowIndex].Cells[e.ColumnIndex];
 
                 if (coltag != null && coltag == "TextPopOut")
                 {
-                    InfoForm frm = new InfoForm();
-                    frm.Info(this.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string);
-                    frm.Show(FindForm());
+                    string text = cell.Value as string;
+                    if (cell.ToolTipText != null)
+                        text = text.AppendPrePad(cell.ToolTipText, Environment.NewLine);
+
+                    if (text.HasChars())
+                    {
+                        InfoForm frm = new InfoForm();
+                        frm.Info(this.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
+                        frm.Show(FindForm());
+                    }
                 }
                 else
                     ShowScanPopOut(Rows[e.RowIndex].Tag);

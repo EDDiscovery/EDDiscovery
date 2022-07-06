@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
                 ISystem sys = he.System;
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                SearchScans.GenerateReportFields(kvp.Value.EntryList, out string name, out string info, out string pinfo);
+                SearchScans.GenerateReportFields(kvp.Value.EntryList, out string name, out string info, out string infotooltip, out string pinfo);
 
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
@@ -291,13 +291,15 @@ namespace EDDiscovery.UserControls
                         dataGridView.Rows[existingrow].Cells[3].Value = rowobj[3];      // update what may have changed in 4,5,6. Rest will stay the same.
                         dataGridView.Rows[existingrow].Cells[4].Value = rowobj[4];
                         dataGridView.Rows[existingrow].Cells[5].Value = rowobj[5];
+                        dataGridView.Rows[existingrow].Cells[4].ToolTipText = infotooltip;
                     }
                 }
 
                 if (addto)
                 {
-                    dataGridView.Rows.Add(rowobj);
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = he.System;
+                    int row = dataGridView.Rows.Add(rowobj);
+                    dataGridView.Rows[row].Tag = he.System;
+                    dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
                 }
             }
 

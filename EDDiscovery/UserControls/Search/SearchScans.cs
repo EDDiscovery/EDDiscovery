@@ -165,11 +165,12 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        public static void GenerateReportFields(List<HistoryEntry> hes, out string name, out string info, out string pinfo)
+        public static void GenerateReportFields(List<HistoryEntry> hes, out string name, out string info, out string infotooltip, out string pinfo)
         {
             name = "";
             info = "";
             pinfo = "";
+            infotooltip = "";
 
             HistoryEntry he = hes.Last();
 
@@ -199,11 +200,13 @@ namespace EDDiscovery.UserControls
                 foreach (var h in hes)
                 {
                     string time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
-                    h.journalEntry.FillInformation(he.System, "", out string info2, out string dunsed);
+                    ((JournalFSSSignalDiscovered)h.journalEntry).FillInformation(he.System, "", 20, out string info2, out string detailed);
                     if ( hes.Count>1)
                         info = info.AppendPrePad(time + ": " + info2, Environment.NewLine);
                     else
                         info = info.AppendPrePad(info2, Environment.NewLine);
+
+                    infotooltip += time + Environment.NewLine + detailed.LineIndentation("    ") + Environment.NewLine;
                 }
             }
             else
@@ -262,21 +265,22 @@ namespace EDDiscovery.UserControls
                 {
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                    GenerateReportFields(kvp.Value.EntryList, out string name, out string info, out string pinfo);
+                    GenerateReportFields(kvp.Value.EntryList, out string name, out string info, out string infotooltip, out string pinfo);
 
                     HistoryEntry he = kvp.Value.EntryList.Last();
                     ISystem sys = he.System;
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             name,
-                                            he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
+                                            he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"), //2
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                            info,
+                                            info,   //4
                                             pinfo,
                                             };
 
-                    dataGridView.Rows.Add(rowobj);
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = he.System;
+                    int row = dataGridView.Rows.Add(rowobj);
+                    dataGridView.Rows[row].Tag = he.System;
+                    dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
                 }
 
                 System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {results.Count}");
