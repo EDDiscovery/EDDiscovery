@@ -238,6 +238,7 @@
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColTime,
             this.ColSystem,
@@ -318,6 +319,10 @@
             this.openAScanPanelViewToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.openAScanPanelViewToolStripMenuItem.Text = "Open a Scan Panel View";
             this.openAScanPanelViewToolStripMenuItem.Click += new System.EventHandler(this.openAScanPanelViewToolStripMenuItem_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // flowLayoutPanel1
             // 

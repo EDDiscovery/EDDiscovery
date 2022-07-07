@@ -92,6 +92,7 @@ namespace EDDiscovery.UserControls
             this.toolTip.AutoPopDelay = 20000;
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
+            this.toolTip.ShowAlways = true;
             // 
             // checkBoxAutoTrack
             // 

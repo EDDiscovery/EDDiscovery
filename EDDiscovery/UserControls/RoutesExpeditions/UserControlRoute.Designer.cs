@@ -762,6 +762,10 @@
             this.showScanToolStripMenuItem.Text = "View Scan Display";
             this.showScanToolStripMenuItem.Click += new System.EventHandler(this.showScanToolStripMenuItem_Click);
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // dataViewScrollerPanel1
             // 
             this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);

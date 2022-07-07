@@ -142,6 +142,10 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extComboBoxChartOptions, "Select chart options");
             this.extComboBoxChartOptions.ValueMember = "";
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // UserControlMiningOverlay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

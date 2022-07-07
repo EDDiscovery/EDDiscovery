@@ -511,6 +511,10 @@ namespace EDDiscovery.UserControls
             this.buttonExt0.MouseMove += new System.Windows.Forms.MouseEventHandler(this.divider_MouseMove);
             this.buttonExt0.MouseUp += new System.Windows.Forms.MouseEventHandler(this.divider_MouseUp);
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // UserControlSpanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

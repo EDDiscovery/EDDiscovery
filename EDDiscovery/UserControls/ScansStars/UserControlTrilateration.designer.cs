@@ -292,6 +292,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripTextBoxSystem
             // 
+            this.toolStripTextBoxSystem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxSystem.Name = "toolStripTextBoxSystem";
             this.toolStripTextBoxSystem.ReadOnly = true;
             this.toolStripTextBoxSystem.Size = new System.Drawing.Size(200, 32);
@@ -588,6 +589,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumnClosestSystemsSystem.MinimumWidth = 100;
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlTrilateration
             // 

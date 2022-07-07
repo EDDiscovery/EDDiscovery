@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.HideScrollBar = true;
             this.extScrollBar.LargeChange = 349;
             this.extScrollBar.Location = new System.Drawing.Point(705, 0);
-            this.extScrollBar.Maximum = 23;
+            this.extScrollBar.Maximum = 199;
             this.extScrollBar.Minimum = 0;
             this.extScrollBar.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -345,6 +345,10 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extButtonFont, "Font");
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // extPictureBoxTitle
             // 

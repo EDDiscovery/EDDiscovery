@@ -106,6 +106,10 @@ namespace EDDiscovery.UserControls
             this.comboBoxYards.ValueMember = "";
             this.comboBoxYards.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // dataViewScrollerPanel1
             // 
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewShips);
@@ -124,6 +128,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewShips.AllowUserToDeleteRows = false;
             this.dataGridViewShips.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewShips.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewShips.ColumnReorder = true;
             this.dataGridViewShips.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col1,
             this.Col2,

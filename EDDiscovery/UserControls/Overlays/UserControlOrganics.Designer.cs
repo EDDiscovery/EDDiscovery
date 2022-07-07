@@ -338,6 +338,10 @@ namespace EDDiscovery.UserControls
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // extCheckBoxShowIncomplete
             // 
             this.extCheckBoxShowIncomplete.Appearance = System.Windows.Forms.Appearance.Button;

@@ -319,6 +319,10 @@
             this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 205);
             this.userControlSurfaceBookmarks.TabIndex = 5;
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // extButtonEditSystem
             // 
             this.extButtonEditSystem.Image = global::EDDiscovery.Icons.Controls.EditSystem;

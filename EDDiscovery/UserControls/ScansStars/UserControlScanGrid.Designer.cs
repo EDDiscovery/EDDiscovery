@@ -69,6 +69,10 @@ namespace EDDiscovery.UserControls
             this.statusStripSummary.SuspendLayout();
             this.SuspendLayout();
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // extButtonShowControl
             // 
             this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
