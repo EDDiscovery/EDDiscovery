@@ -503,11 +503,52 @@ namespace EDDiscovery.UserControls
                     vpos += i.Location.Height;
                 }
 
+                // now perform searches, and store them in searchresults, keyed by body name matched
+               
+                Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
+
+                if (searchesactive.Length > 0)       // if any searches
+                {
+                    discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
+
+                    // all entries related to sys.  Can't really limit the pick up as tried before using the afterlastevent option in this call
+                    // due to being able to browse back in history. We may not be at the end of the list the system we are displaying. For now, just do a blind whole history search
+
+                    var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes, sys);
+
+                    if (helist.Count > 0)        // no point executing if nothing in helist
+                    {
+                        var defaultvars = new BaseUtils.Variables();
+                        defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep: true);
+
+                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor runs {searchesactive.Length} searches");
+                        foreach (var searchname in searchesactive)
+                        {
+                            // await is horrible, anything can happen, even closing
+                            await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, discoveryform.history.StarScan, false); // execute the searches
+
+                            if (IsClosed)       // if we was ordered to close, abore
+                                return;
+                        }
+
+                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor reports {searchresults.Count} results");
+                    }
+                }
+
+                // we store strings in textresults, sorted by its body name, and accumulate them during nodes and finally render them search results
+                // this is because we have two goes at filling in text, nodes and remaining search results, but we want them alpha sorted
+
+                SortedList<string, string> textresults = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());      // we dump all test into this sorted dictionary
+
+                // find if we have system nodes
+
                 StarScan.SystemNode systemnode = await discoveryform.history.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
-                if (systemnode != null)     // no data, clear display, clear any last_he so samesys is false next time
+                long value = 0;     // accumulate value if required of shown bodies
+
+                if (systemnode != null)     // if we have a node (should do of course since july 22 due to AddLocation in scan node)
                 {
                     string infoline = "";
 
@@ -518,7 +559,7 @@ namespace EDDiscovery.UserControls
                         infoline = "Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "");
                     }
 
-                    long value = systemnode.ScanValue(false);
+                    value = systemnode.ScanValue(false);
 
                     if (value > 0 && IsSet(CtrlList.showValues))
                     {
@@ -542,235 +583,191 @@ namespace EDDiscovery.UserControls
                         vpos += i.Location.Height;
                     }
 
-                    var all_nodes = systemnode.Bodies.ToList();
+                    bool sigchecked = IsSet(CtrlList.signals);              // keep for convience in these bools - used a lot
+                    bool biosignalschecked = IsSet(CtrlList.BioSignals);
+                    bool geosignalschecked = IsSet(CtrlList.GeoSignals);
 
-                    if (all_nodes != null)
+                    value = 0;
+
+                    foreach (StarScan.ScanNode sn in systemnode.Bodies.EmptyIfNull().Where(x=>x.ScanData!=null))        // only nodes with scan data can be treated here
                     {
-                        bool sigchecked = IsSet(CtrlList.signals);
-                        bool biosignalschecked = IsSet(CtrlList.BioSignals);
-                        bool geosignalschecked = IsSet(CtrlList.GeoSignals);
+                        var sd = sn.ScanData;
 
-                        value = 0;
+                        searchresults.TryGetValue(sn.FullName, out HistoryListQueries.Results searchresultfornode);     // will be null if not found
 
-                        SortedList<string, string> textresults = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());      // we dump all test into this sorted dictionary
+                        var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
 
-                        foreach (StarScan.ScanNode sn in all_nodes)
+                        bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null;
+                        bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null;
+                        bool showlandablewithatmosphere = sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere);
+                        bool showlandablevolcanism =  sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
+                        bool showvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
+
+                        if ( surveyordisplay == false && (!sd.IsEDSMBody || checkBoxEDSM.Checked)) // if to perform inbuilt checks - must have scan data to do this
                         {
-                            if (sn.ScanData != null && sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                            // work out if we want to display
+                            surveyordisplay = (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
+                                showlandablewithatmosphere ||
+                                showlandablevolcanism ||
+                                (sd.IsLandable && sd.nRadius.HasValue && sd.nRadius >= largeRadiusLimit && IsSet(CtrlList.largelandable)) ||
+                                (sd.AmmoniaWorld && IsSet(CtrlList.showAmmonia)) ||
+                                (sd.Earthlike && IsSet(CtrlList.showEarthlike)) ||
+                                (sd.WaterWorld && IsSet(CtrlList.showWaterWorld)) ||
+                                (sd.PlanetTypeID == EDPlanet.High_metal_content_body && IsSet(CtrlList.showHMC)) ||
+                                (sd.PlanetTypeID == EDPlanet.Metal_rich_body && IsSet(CtrlList.showMR)) ||
+                                (sd.HasRingsOrBelts && IsSet(CtrlList.showRinged)) ||
+                                showvolcanism ||
+                                (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && IsSet(CtrlList.showEccentricity)) ||
+                                (sd.CanBeTerraformable && IsSet(CtrlList.showTerraformable)) ||
+                                (sd.IsPlanet && IsSet(CtrlList.lowradius) && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
+                                (sn.Signals != null && sigchecked) ||
+                                (hasgeosignals && geosignalschecked) ||
+                                (hasbiosignals && biosignalschecked) ||
+                                (sd.IsStar && IsSet(CtrlList.allstars)) ||
+                                (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
+                                (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
 
-                            {
-                                var sd = sn.ScanData;
-
-                                bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null;
-                                bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null;
-
-
-                                if (
-                                    (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
-                                    (sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere)) ||
-                                    (sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism)) ||
-                                    (sd.IsLandable && sd.nRadius.HasValue && sd.nRadius >= largeRadiusLimit && IsSet(CtrlList.largelandable)) ||
-                                    (sd.AmmoniaWorld && IsSet(CtrlList.showAmmonia)) ||
-                                    (sd.Earthlike && IsSet(CtrlList.showEarthlike)) ||
-                                    (sd.WaterWorld && IsSet(CtrlList.showWaterWorld)) ||
-                                    (sd.PlanetTypeID == EDPlanet.High_metal_content_body && IsSet(CtrlList.showHMC)) ||
-                                    (sd.PlanetTypeID == EDPlanet.Metal_rich_body && IsSet(CtrlList.showMR)) ||
-                                    (sd.HasRingsOrBelts && IsSet(CtrlList.showRinged)) ||
-                                    (sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism)) ||
-                                    (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && IsSet(CtrlList.showEccentricity)) ||
-                                    (sd.CanBeTerraformable && IsSet(CtrlList.showTerraformable)) ||
-                                    (sd.IsPlanet && IsSet(CtrlList.lowradius) && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
-                                    (sn.Signals != null && sigchecked) ||
-                                    (hasgeosignals && geosignalschecked) ||
-                                    (hasbiosignals && biosignalschecked) ||
-                                    (sd.IsStar && IsSet(CtrlList.allstars)) ||
-                                    (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
-                                    (sd.IsBeltCluster && IsSet(CtrlList.beltclusters)))
-                                {
-                                    if (!sd.Mapped || IsSet(CtrlList.hideMapped) == false)      // if not mapped, or show mapped
-                                    {
-                                        bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null;
-                                        bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
-                                        bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null;
-                                        bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
-                                        bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
-
-
-                                        var silstring = sd.SurveyorInfoLine(sys,
-                                            hasminingsignals && sigchecked,  // show signals if we have some andthe all signals filter is checked
-                                            hasgeosignals && (sigchecked || geosignalschecked || biosignalschecked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
-                                            hasbiosignals && (sigchecked || biosignalschecked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
-                                            hasthargoidsignals && sigchecked, // show thargoid signals if there are any and the all signals filter is checked
-                                            hasguardiansignals && sigchecked, // show guardian signals if there are any and the all signals filter is checked
-                                            hashumansignals && sigchecked, // show human signals if there are any and the all signals filter is checked
-                                            hasothersignals && sigchecked, // show other signals if there are any and the all signals filter is checked
-                                            false,      // so this is the surveyor, we don't want to bother with showing if its got organics, since you have to scan them
-                                            IsSet(CtrlList.showVolcanism) || (sd.IsLandable && IsSet(CtrlList.isLandableWithVolcanism))
-                                                || (sd.IsLandable && IsSet(CtrlList.volcanism)), // any of these makes us need to show volcanic state
-                                            IsSet(CtrlList.showValues),        // show values
-                                            IsSet(CtrlList.moreinfo),   // show extra info such as mass/radius
-                                            IsSet(CtrlList.showGravity),       // show gravity select
-                                            sd.IsLandable && IsSet(CtrlList.atmos), // show atmosphere if landable (surveyor shows this if landable)
-                                            IsSet(CtrlList.showRinged),          // show rings
-                                            lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
-
-                                        string keyname = sd.BodyName;
-                                        System.Diagnostics.Debug.WriteLine($"Add {keyname} = {silstring}");
-                                        textresults[keyname] = silstring;
-                                        value += sd.EstimatedValue;
-                                    }
-                                }
-                            }
+                            // qualify choice by mapped
+                            surveyordisplay &= !sd.Mapped || IsSet(CtrlList.hideMapped) == false;
                         }
 
-                        // then we do the searching..
+                        if ( surveyordisplay )
+                        { 
+                            bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null;
+                            bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
+                            bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null;
+                            bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
+                            bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
 
-                        if (searchesactive.Length > 0)       // if any searches
-                        {
-                            discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
+                            var silstring = sd.SurveyorInfoLine(sys,
+                                    hasminingsignals,  // show signals if we have some andthe all signals filter is checked
+                                    hasgeosignals, // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
+                                    hasbiosignals, // show biological signals if there are any and the all signal filter or the bio signal filter is checked
+                                    hasthargoidsignals, // show thargoid signals if there are any and the all signals filter is checked
+                                    hasguardiansignals, // show guardian signals if there are any and the all signals filter is checked
+                                    hashumansignals, // show human signals if there are any and the all signals filter is checked
+                                    hasothersignals, // show other signals if there are any and the all signals filter is checked
+                                    false,      // so this is the surveyor, we don't want to bother with showing if its got organics, since you have to scan them
+                                    IsSet(CtrlList.volcanism) || showlandablevolcanism || showvolcanism, // any of these causes a show
+                                    IsSet(CtrlList.showValues),        // show values
+                                    IsSet(CtrlList.moreinfo),   // show extra info such as mass/radius
+                                    IsSet(CtrlList.showGravity),       // show gravity select
+                                    IsSet(CtrlList.atmos) || showlandablewithatmosphere, // show atmosphere if landable (surveyor shows this if landable)
+                                    IsSet(CtrlList.showRinged),          // show rings
+                                    lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
-                            // all entries related to sys.  Can't really limit the pick up as tried before using the afterlastevent option in this call
-                            // due to being able to browse back in history. We may not be at the end of the list the system we are displaying. For now, just do a blind whole history search
-
-                            var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes, sys); 
-                            
-                            if ( helist.Count>0)        // no point executing if nothing in helist
-                            { 
-                                var defaultvars = new BaseUtils.Variables();
-                                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep:true);
-
-                                Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
-
-                                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor runs {searchesactive.Length} searches");
-                                foreach (var searchname in searchesactive)
+                                if (searchresultfornode!= null) // if search results are set for this body, add text
                                 {
-                                    // await is horrible, anything can happen, even closing
-                                    await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, discoveryform.history.StarScan, false); // execute the searches
-
-                                    if (IsClosed)       // if we was ordered to close, abore
-                                        return;
+                                    searchresults.Remove(sn.FullName);  // we have processed it, finish
+                                    string info = string.Join(", ", searchresultfornode.FiltersPassed);
+                                    silstring += " : " + info;
                                 }
 
-                                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Surveyor reports {searchresults.Count} results");
+                                textresults[sd.BodyName] = silstring;
 
-                                foreach (var kvp in searchresults.EmptyIfNull())        // now we update the textresults, merging the two finds together.
-                                {
-                                    string bodyname = kvp.Key;
-                                    string info = string.Join(", ", kvp.Value.FiltersPassed);
-
-                                    //string distance = ""; to be done
-                                    //if (kvp.Value.HistoryEntry.ScanNode?.ScanData?.DistanceFromArrivalText != null)
-                                    //{
-                                    //    distance = kvp.Value.HistoryEntry.ScanNode.ScanData.DistanceFromArrivalText;
-                                    //}
-
-                                    if (textresults.ContainsKey(bodyname))
-                                    {
-                                        textresults[bodyname] += ", " + info;
-                                    }
-                                    else
-                                    {
-                                        textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
-                                    }
-                                }
-                            }
+                                value += sd.EstimatedValue;
                         }
 
-                        foreach (var kvp in textresults)        // and present any text results in sorted order
-                        {
-                            var i = new ExtPictureBox.ImageElement();
-                            i.TextAutoSize(
-                                    new Point(3, vpos),
-                                    new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                                    kvp.Value,
-                                    dfont,
-                                    textcolour,
-                                    backcolour,
-                                    1.0F,
-                                    frmt: frmt);
-                            picelements.Add(i);
-                            vpos += i.Location.Height;
-                        }
-                    }
+                    }   // end for..
+                }       // end of system node look thru
 
-                    if (value > 0 && IsSet(CtrlList.showValues))
-                    {
-                        var i = new ExtPictureBox.ImageElement();
-                        i.TextAutoSize(
+                // we may have searches without scan nodes, so present
+                        
+                foreach (var kvp in searchresults.EmptyIfNull())            // by bodyname
+                {
+                    string info = string.Join(", ", kvp.Value.FiltersPassed);
+                    string bodyname = kvp.Key;
+                    textresults[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
+                }
+
+                foreach (var kvp in textresults)        // and present any text results in sorted order
+                {
+                    var i = new ExtPictureBox.ImageElement();
+                    i.TextAutoSize(
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                            "^^ ~ " + value.ToString("N0") + " cr",
+                            kvp.Value,
                             dfont,
                             textcolour,
                             backcolour,
                             1.0F,
                             frmt: frmt);
-                        picelements.Add(i);
-                        vpos += i.Location.Height;
-                    }
-
-                    if (fsssignalsdisplayed.HasChars())
-                    {
-                        string siglist = "";
-                        string[] filter = fsssignalsdisplayed.Split(';');
-
-                        var signallist = JournalFSSSignalDiscovered.SignalList(systemnode.FSSSignalList);
-
-                        // mirrors scandisplaynodes
-
-                        var notexpired = signallist.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
-                        notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
-
-                        var expired = signallist.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
-                        expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
-
-                        int expiredpos = notexpired.Count;
-                        notexpired.AddRange(expired);
-
-                        int pos = 0;
-                        foreach (var fsssig in notexpired)
-                        {
-                            if (filter.ComparisionContains(fsssig.SignalName.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                filter.ComparisionContains(fsssig.SignalName_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                filter.ComparisionContains(fsssig.SpawningState_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                filter.ComparisionContains(fsssig.SpawningFaction_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                filter.ComparisionContains(fsssig.USSTypeLocalised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                filter.ComparisionContains(fsssig.ClassOfSignal.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                fsssignalsdisplayed.Equals("*"))
-                            {
-                                if (pos++ == expiredpos)
-                                    siglist = siglist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
-
-                                siglist = siglist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
-                            }
-                        }
-
-                        if (siglist.HasChars())
-                        {
-                            //System.Diagnostics.Debug.WriteLine("Display " + siglist);
-                            var i = new ExtPictureBox.ImageElement();
-                            i.TextAutoSize(new Point(3, vpos),
-                                                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                                                            siglist,
-                                                            dfont,
-                                                            textcolour,
-                                                            backcolour,
-                                                            1.0F,
-                                                            frmt: frmt);
-                            vpos += i.Location.Height;
-                            picelements.Add(i);
-                        }
-
-                    }
-                } // end system node
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} No system node to check!");
+                    picelements.Add(i);
+                    vpos += i.Location.Height;
                 }
 
+                if (value > 0 && IsSet(CtrlList.showValues))
+                {
+                    var i = new ExtPictureBox.ImageElement();
+                    i.TextAutoSize(
+                        new Point(3, vpos),
+                        new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
+                        "^^ ~ " + value.ToString("N0") + " cr",
+                        dfont,
+                        textcolour,
+                        backcolour,
+                        1.0F,
+                        frmt: frmt);
+                    picelements.Add(i);
+                    vpos += i.Location.Height;
+                }
+
+                if (fsssignalsdisplayed.HasChars())
+                {
+                    string siglist = "";
+                    string[] filter = fsssignalsdisplayed.Split(';');
+
+                    var signallist = JournalFSSSignalDiscovered.SignalList(systemnode.FSSSignalList);
+
+                    // mirrors scandisplaynodes
+
+                    var notexpired = signallist.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
+                    notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
+
+                    var expired = signallist.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
+                    expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
+
+                    int expiredpos = notexpired.Count;
+                    notexpired.AddRange(expired);
+
+                    int pos = 0;
+                    foreach (var fsssig in notexpired)
+                    {
+                        if (filter.ComparisionContains(fsssig.SignalName.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                            filter.ComparisionContains(fsssig.SignalName_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                            filter.ComparisionContains(fsssig.SpawningState_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                            filter.ComparisionContains(fsssig.SpawningFaction_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                            filter.ComparisionContains(fsssig.USSTypeLocalised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                            filter.ComparisionContains(fsssig.ClassOfSignal.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                            fsssignalsdisplayed.Equals("*"))
+                        {
+                            if (pos++ == expiredpos)
+                                siglist = siglist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
+
+                            siglist = siglist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
+                        }
+                    }
+
+                    if (siglist.HasChars())
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Display " + siglist);
+                        var i = new ExtPictureBox.ImageElement();
+                        i.TextAutoSize(new Point(3, vpos),
+                                                        new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
+                                                        siglist,
+                                                        dfont,
+                                                        textcolour,
+                                                        backcolour,
+                                                        1.0F,
+                                                        frmt: frmt);
+                        vpos += i.Location.Height;
+                        picelements.Add(i);
+                    }
+
+                }
 
                 frmt.Dispose();
-            } // end sys
+            }       // end sys
 
             lock ( extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
             {
@@ -884,8 +881,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.moreinfo.ToString(), "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.atmos.ToString(), "Show atmosphere of landables".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.volcanism.ToString(), "Show volcanism of landables".TxID(EDTx.UserControlSurveyor_showVolcanismToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.atmos.ToString(), "Show atmospheres".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.volcanism.ToString(), "Show volcanism".TxID(EDTx.UserControlSurveyor_showVolcanismToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID(EDTx.UserControlSurveyor_dontHideInFSSModeToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID(EDTx.UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem));

@@ -424,8 +424,8 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.showAtmosToolStripMenuItem: "Show atmospheres" @
+.showVolcanismToolStripMenuItem: "Show volcanism " @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
