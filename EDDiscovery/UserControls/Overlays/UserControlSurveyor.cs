@@ -714,7 +714,7 @@ namespace EDDiscovery.UserControls
                     vpos += i.Location.Height;
                 }
 
-                if (fsssignalsdisplayed.HasChars())
+                if (systemnode != null && fsssignalsdisplayed.HasChars())
                 {
                     string siglist = "";
                     string[] filter = fsssignalsdisplayed.Split(';');
