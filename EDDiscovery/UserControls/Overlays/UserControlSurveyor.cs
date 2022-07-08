@@ -583,10 +583,6 @@ namespace EDDiscovery.UserControls
                         vpos += i.Location.Height;
                     }
 
-                    bool sigchecked = IsSet(CtrlList.signals);              // keep for convience in these bools - used a lot
-                    bool biosignalschecked = IsSet(CtrlList.BioSignals);
-                    bool geosignalschecked = IsSet(CtrlList.GeoSignals);
-
                     value = 0;
 
                     foreach (StarScan.ScanNode sn in systemnode.Bodies.EmptyIfNull().Where(x=>x.ScanData!=null))        // only nodes with scan data can be treated here
@@ -597,18 +593,32 @@ namespace EDDiscovery.UserControls
 
                         var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
 
-                        bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null;
-                        bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null;
-                        bool showlandablewithatmosphere = sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere);
-                        bool showlandablevolcanism =  sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
-                        bool showvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
+                        bool hasgeosignals = sn.CountGeoSignals>0;
+                        bool hasbiosignals = sn.CountBioSignals>0;
+                        bool hasthargoidsignals = sn.CountThargoidSignals > 0;
+                        bool hasguardiansignals = sn.CountGuardianSignals > 0;
+                        bool hashumansignals = sn.CountHumanSignals > 0;
+                        bool hasothersignals = sn.CountOtherSignals > 0;
+                        bool hasminingsignals = sn.CountUncategorisedSignals > 0;
+
+                        bool matchedgeosignals = hasgeosignals && IsSet(CtrlList.GeoSignals);           // these are filters, to determine if to display
+                        bool matchedbiosignals = hasbiosignals && IsSet(CtrlList.BioSignals);
+                        bool matchedthargoidsignals = hasthargoidsignals && IsSet(CtrlList.signals);
+                        bool matchedguardiansignals = hasguardiansignals && IsSet(CtrlList.signals);
+                        bool matchedhumansignals = hashumansignals && IsSet(CtrlList.signals);
+                        bool matchedothersignals = hasothersignals && IsSet(CtrlList.signals);
+                        bool matchedminingsignals = hasminingsignals && IsSet(CtrlList.signals);
+
+                        bool matchedlandablewithatmosphere = sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere);
+                        bool matchedlandablevolcanism =  sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
+                        bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
                         if ( surveyordisplay == false && (!sd.IsEDSMBody || checkBoxEDSM.Checked)) // if to perform inbuilt checks - must have scan data to do this
                         {
                             // work out if we want to display
                             surveyordisplay = (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
-                                showlandablewithatmosphere ||
-                                showlandablevolcanism ||
+                                matchedlandablewithatmosphere ||
+                                matchedlandablevolcanism ||
                                 (sd.IsLandable && sd.nRadius.HasValue && sd.nRadius >= largeRadiusLimit && IsSet(CtrlList.largelandable)) ||
                                 (sd.AmmoniaWorld && IsSet(CtrlList.showAmmonia)) ||
                                 (sd.Earthlike && IsSet(CtrlList.showEarthlike)) ||
@@ -616,13 +626,11 @@ namespace EDDiscovery.UserControls
                                 (sd.PlanetTypeID == EDPlanet.High_metal_content_body && IsSet(CtrlList.showHMC)) ||
                                 (sd.PlanetTypeID == EDPlanet.Metal_rich_body && IsSet(CtrlList.showMR)) ||
                                 (sd.HasRingsOrBelts && IsSet(CtrlList.showRinged)) ||
-                                showvolcanism ||
+                                matchedvolcanism ||
                                 (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && IsSet(CtrlList.showEccentricity)) ||
                                 (sd.CanBeTerraformable && IsSet(CtrlList.showTerraformable)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.lowradius) && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
-                                (sn.Signals != null && sigchecked) ||
-                                (hasgeosignals && geosignalschecked) ||
-                                (hasbiosignals && biosignalschecked) ||
+                                matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals ||
                                 (sd.IsStar && IsSet(CtrlList.allstars)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
                                 (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
@@ -632,27 +640,21 @@ namespace EDDiscovery.UserControls
                         }
 
                         if ( surveyordisplay )
-                        { 
-                            bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null;
-                            bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
-                            bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null;
-                            bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
-                            bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
-
+                        {
                             var silstring = sd.SurveyorInfoLine(sys,
-                                    hasminingsignals,  // show signals if we have some andthe all signals filter is checked
-                                    hasgeosignals, // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
-                                    hasbiosignals, // show biological signals if there are any and the all signal filter or the bio signal filter is checked
-                                    hasthargoidsignals, // show thargoid signals if there are any and the all signals filter is checked
-                                    hasguardiansignals, // show guardian signals if there are any and the all signals filter is checked
-                                    hashumansignals, // show human signals if there are any and the all signals filter is checked
-                                    hasothersignals, // show other signals if there are any and the all signals filter is checked
+                                    matchedminingsignals || (hasminingsignals && IsSet(CtrlList.showsignals)), 
+                                    matchedgeosignals || (hasgeosignals && IsSet(CtrlList.showsignals)), 
+                                    matchedbiosignals || (hasbiosignals && IsSet(CtrlList.showsignals)), 
+                                    matchedthargoidsignals || (hasthargoidsignals && IsSet(CtrlList.showsignals)),
+                                    matchedguardiansignals || (hasguardiansignals && IsSet(CtrlList.showsignals)),
+                                    matchedhumansignals || (hashumansignals && IsSet(CtrlList.showsignals)),
+                                    matchedothersignals || (hasothersignals && IsSet(CtrlList.showsignals)),
                                     false,      // so this is the surveyor, we don't want to bother with showing if its got organics, since you have to scan them
-                                    IsSet(CtrlList.volcanism) || showlandablevolcanism || showvolcanism, // any of these causes a show
+                                    IsSet(CtrlList.volcanism) || matchedlandablevolcanism || matchedvolcanism, // any of these causes a show
                                     IsSet(CtrlList.showValues),        // show values
                                     IsSet(CtrlList.moreinfo),   // show extra info such as mass/radius
                                     IsSet(CtrlList.showGravity),       // show gravity select
-                                    IsSet(CtrlList.atmos) || showlandablewithatmosphere, // show atmosphere if landable (surveyor shows this if landable)
+                                    IsSet(CtrlList.atmos) || matchedlandablewithatmosphere, // show atmosphere if landable (surveyor shows this if landable)
                                     IsSet(CtrlList.showRinged),          // show rings
                                     lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
@@ -791,7 +793,7 @@ namespace EDDiscovery.UserControls
             // 18
             allstars, beltclusters,
             // 20
-            showValues, moreinfo, showGravity, atmos, volcanism, autohide, donthidefssmode, hideMapped, showsysinfo,
+            showValues, moreinfo, showGravity, atmos, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo,
             // 29
             alignleft, aligncenter, alignright
         };
@@ -883,6 +885,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.atmos.ToString(), "Show atmospheres".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.volcanism.ToString(), "Show volcanism".TxID(EDTx.UserControlSurveyor_showVolcanismToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showsignals.ToString(), "Show signals".TxID(EDTx.UserControlSurveyor_showSignalsToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID(EDTx.UserControlSurveyor_dontHideInFSSModeToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID(EDTx.UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem));

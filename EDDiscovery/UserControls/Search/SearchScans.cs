@@ -225,6 +225,7 @@ namespace EDDiscovery.UserControls
             {
                 this.Cursor = Cursors.WaitCursor;
                 dataGridView.Rows.Clear();
+                labelCount.Text = "...";
 
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
@@ -262,7 +263,9 @@ namespace EDDiscovery.UserControls
 
                 ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-                foreach ( var kvp in results.EmptyIfNull())
+                int max = 100000;
+
+                foreach ( var kvp in results.Take(max).EmptyIfNull())
                 {
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
@@ -284,13 +287,19 @@ namespace EDDiscovery.UserControls
                     dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
                 }
 
+                if ( results.Count > max )
+                {
+                    object[] rowobj = { "Too many" };
+                    dataGridView.Rows.Add(rowobj);
+                }
+
                 System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {results.Count}");
                 dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
                 this.Cursor = Cursors.Default;
 
-                labelCount.Text = "Total".TxID(EDTx.UserControlMaterialCommodities_Total) + " " + dataGridView.Rows.Count.ToString();
+                labelCount.Text = "Total".TxID(EDTx.UserControlMaterialCommodities_Total) + " " + results.Count + " / " + helist.Count.ToString();
                 labelCount.Visible = true;
             }
 

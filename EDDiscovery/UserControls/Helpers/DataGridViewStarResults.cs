@@ -156,8 +156,10 @@ namespace EDDiscovery.UserControls.Search
                     frm.Info(this.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
                     frm.Show(FindForm());
                 }
-                else
+                else if (Rows[e.RowIndex].Tag != null)
+                {
                     ShowScanPopOut(Rows[e.RowIndex].Tag);
+                }
             }
         }
 

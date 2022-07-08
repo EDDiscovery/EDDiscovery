@@ -922,6 +922,7 @@ namespace EDDiscovery
         UserControlSurveyor_showGravityToolStripMenuItem,
         UserControlSurveyor_showAtmosToolStripMenuItem,
         UserControlSurveyor_showVolcanismToolStripMenuItem,
+        UserControlSurveyor_showSignalsToolStripMenuItem,
         UserControlSurveyor_autoHideToolStripMenuItem,
         UserControlSurveyor_dontHideInFSSModeToolStripMenuItem,
         UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem,
