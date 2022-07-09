@@ -28,8 +28,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSurveyor : UserControlCommonBase
     {
-        ISystem last_sys = null;
-
         private StringAlignment alignment = StringAlignment.Near;
         private string fsssignalsdisplayed = "";
 
@@ -37,19 +35,22 @@ namespace EDDiscovery.UserControls
         const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
         const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
-        EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
-        EliteDangerousCore.UIEvents.UIMode.ModeType uimode = EliteDangerousCore.UIEvents.UIMode.ModeType.None;
+        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        private EliteDangerousCore.UIEvents.UIMode.ModeType uimode = EliteDangerousCore.UIEvents.UIMode.ModeType.None;
 
-        private SavedRouteClass currentRoute = null;
-        private string lastsystem;
-        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
-        private ShipInformation shipinfo;   // and last ship info
         const string NavRouteNameLabel = "!*NavRoute";      // special label to identify a save of using the nav route - not user presented
         private string lastroutetext = "";      // cached so we can represent it even if we pass a sys into drawsystem with no coord
         private string translatednavroutename = "";
+        private SavedRouteClass currentRoute = null;
+        private string lastsystemroute;
+
+        private ShipInformation shipinfo;   // and last ship info
+        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
 
         private Font displayfont;
 
+        private ISystem last_sys = null;
+        private string starclass = "";
         private Timer updatetimer;
         private int bodies_found;
 
@@ -191,6 +192,7 @@ namespace EDDiscovery.UserControls
                     if (jsj.IsHyperspace)       // needs to be a hyperspace one, not supercruise
                     {
                         last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
+                        starclass = jsj.FriendlyStarClass;
                         bodies_found = 0;
                         kicktimer = true;
                     }
@@ -198,7 +200,7 @@ namespace EDDiscovery.UserControls
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
                 {
                     bodies_found = -1;
-                    SetTitle(last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
+                    SetTitle();
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts
                 {
@@ -226,8 +228,7 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.WriteLine($"Surveyor {Environment.TickCount % 10000} timer expired on {last_sys.Name}");
             updatetimer.Stop();
-            SetTitle(last_sys.Name + (bodies_found>0 ? (" " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound)) : "") +
-                                     (bodies_found == -1 ? (" " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete)) : ""));
+            SetTitle();
             DrawSystem(last_sys);
         }
 
@@ -296,6 +297,13 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
+        // default title
+        private void SetTitle()
+        {
+            SetTitle(last_sys.Name + (starclass.HasChars() ? " " + starclass : "") +
+                                    (bodies_found > 0 ? (" " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound)) : "") + 
+                                    (bodies_found == -1 ? (" " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete)) : ""));
+        }
         private void SetTitle(string s)     
         {
             if (s != null)      // update title string if set
@@ -418,7 +426,7 @@ namespace EDDiscovery.UserControls
 
                             string name = closest.nextsystem.Name;
 
-                            if (lastsystem == null || name.CompareTo(lastsystem) != 0)
+                            if (lastsystemroute == null || name.CompareTo(lastsystemroute) != 0)
                             {
                                 if (IsSet(RouteControl.autocopy))
                                     SetClipboardText(name);
@@ -432,7 +440,7 @@ namespace EDDiscovery.UserControls
                                         TargetHelpers.SetTargetSystem(this, discoveryform, name, false);
                                 }
 
-                                lastsystem = name;
+                                lastsystemroute = name;
                             }
                         }
                     }
