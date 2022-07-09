@@ -917,6 +917,7 @@ namespace EDDiscovery
         UserControlSurveyor_bodyFeaturesToolStripMenuItem_landableWithVolcanismToolStripMenuItem,
         UserControlSurveyor_showAllStarsToolStripMenuItem,
         UserControlSurveyor_showBeltClustersToolStripMenuItem,
+        UserControlSurveyor_showstarclassToolStripMenuItem,
         UserControlSurveyor_showValuesToolStripMenuItem,
         UserControlSurveyor_showMoreInformationToolStripMenuItem,
         UserControlSurveyor_showGravityToolStripMenuItem,

@@ -197,7 +197,7 @@ namespace EDDiscovery.UserControls
                         kicktimer = true;
                     }
                 }
-                else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
+                else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound && bodies_found != -1)     // since we present body counts
                 {
                     bodies_found = -1;
                     SetTitle();
@@ -300,9 +300,16 @@ namespace EDDiscovery.UserControls
         // default title
         private void SetTitle()
         {
-            SetTitle(last_sys.Name + (starclass.HasChars() ? " " + starclass : "") +
-                                    (bodies_found > 0 ? (" " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound)) : "") + 
-                                    (bodies_found == -1 ? (" " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete)) : ""));
+            string text = last_sys.Name;
+            if (starclass.HasChars() && IsSet(CtrlList.showstarclass))
+                text += " | " + starclass;
+            if (bodies_found > 0)
+                text += " | " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
+            if (bodies_found == -1)
+                text += " | " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete);
+
+
+            SetTitle(text);
         }
         private void SetTitle(string s)     
         {
@@ -801,8 +808,8 @@ namespace EDDiscovery.UserControls
             // 18
             allstars, beltclusters,
             // 20
-            showValues, moreinfo, showGravity, atmos, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo,
-            // 29
+            showValues, moreinfo, showGravity, atmos, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo, showstarclass,
+            // 30
             alignleft, aligncenter, alignright
         };
 
@@ -888,6 +895,7 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
             displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(CtrlList.showstarclass.ToString(), "Show star class".TxID(EDTx.UserControlSurveyor_showstarclassToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.moreinfo.ToString(), "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem));
@@ -934,6 +942,7 @@ namespace EDDiscovery.UserControls
                 PopulateCtrlList();
                 SetVisibility();
                 DrawSystem(last_sys);
+                SetTitle();
             };
 
             if ( saveasstring == null)
