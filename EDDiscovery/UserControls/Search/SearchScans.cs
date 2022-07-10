@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
+            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
                 EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
@@ -166,56 +166,6 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        public static void GenerateReportFields(List<HistoryEntry> hes, out string name, out string info, out string infotooltip, out string pinfo)
-        {
-            name = "";
-            info = "";
-            pinfo = "";
-            infotooltip = "";
-
-            HistoryEntry he = hes.Last();
-
-            JournalScan js = he.journalEntry as JournalScan;
-            JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
-            JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
-            JournalFSSSignalDiscovered jfsd = he.journalEntry as JournalFSSSignalDiscovered;
-
-            if (js != null)     // check with have a JS Back
-            {
-                name = js.BodyName;
-                info = js.DisplayString();
-                if (he.ScanNode?.Parent != null)
-                {
-                    var parentjs = he.ScanNode?.Parent?.ScanData;               // parent journal entry, may be null
-                    pinfo = parentjs != null ? parentjs.DisplayString() : he.ScanNode.Parent.CustomNameOrOwnname + " " + he.ScanNode.Parent.NodeType;
-                }
-            }
-            else if (jb != null)
-            {
-                name = jb.BodyName;
-                jb.FillInformation(he.System, "", out info, out string d);
-            }
-            else if (jfsd != null)
-            {
-                name = he.System.Name;
-                foreach (var h in hes)
-                {
-                    string time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
-                    ((JournalFSSSignalDiscovered)h.journalEntry).FillInformation(he.System, "", 20, out string info2, out string detailed);
-                    if ( hes.Count>1)
-                        info = info.AppendPrePad(time + ": " + info2, Environment.NewLine);
-                    else
-                        info = info.AppendPrePad(info2, Environment.NewLine);
-
-                    infotooltip += time + Environment.NewLine + detailed.LineIndentation("    ") + Environment.NewLine;
-                }
-            }
-            else
-            {
-                name = jbs.BodyName;
-                jbs.FillInformation(he.System, "", out info, out string d);
-            }
-        }
 
 
         private async void buttonFind_Click(object sender, EventArgs e)
@@ -269,7 +219,7 @@ namespace EDDiscovery.UserControls
                 {
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                    GenerateReportFields(kvp.Value.EntryList, out string name, out string info, out string infotooltip, out string pinfo);
+                    HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip, out string pinfo);
 
                     HistoryEntry he = kvp.Value.EntryList.Last();
                     ISystem sys = he.System;

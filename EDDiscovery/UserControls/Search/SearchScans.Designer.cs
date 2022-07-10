@@ -47,12 +47,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
-            this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.conditionFilterUC = new ExtendedConditionsForms.ConditionFilterUC();
             this.comboBoxSearches = new ExtendedControls.ExtComboBox();
@@ -73,6 +67,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnBody = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnDate,
-            this.ColumnStar,
+            this.ColumnBody,
             this.ColumnPosition,
             this.ColumnCurrentDistance,
             this.ColumnInformation,
@@ -147,47 +147,6 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Size = new System.Drawing.Size(788, 342);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
-            // 
-            // ColumnDate
-            // 
-            this.ColumnDate.FillWeight = 60F;
-            this.ColumnDate.HeaderText = "Date";
-            this.ColumnDate.Name = "ColumnDate";
-            // 
-            // ColumnStar
-            // 
-            this.ColumnStar.FillWeight = 60F;
-            this.ColumnStar.HeaderText = "Star";
-            this.ColumnStar.Name = "ColumnStar";
-            this.ColumnStar.ReadOnly = true;
-            // 
-            // ColumnPosition
-            // 
-            this.ColumnPosition.FillWeight = 60F;
-            this.ColumnPosition.HeaderText = "Position";
-            this.ColumnPosition.Name = "ColumnPosition";
-            this.ColumnPosition.ReadOnly = true;
-            // 
-            // ColumnCurrentDistance
-            // 
-            this.ColumnCurrentDistance.FillWeight = 40F;
-            this.ColumnCurrentDistance.HeaderText = "Current Distance";
-            this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
-            this.ColumnCurrentDistance.ReadOnly = true;
-            // 
-            // ColumnInformation
-            // 
-            this.ColumnInformation.FillWeight = 200F;
-            this.ColumnInformation.HeaderText = "Information";
-            this.ColumnInformation.Name = "ColumnInformation";
-            this.ColumnInformation.ReadOnly = true;
-            // 
-            // ColumnParent
-            // 
-            this.ColumnParent.FillWeight = 150F;
-            this.ColumnParent.HeaderText = "Parent";
-            this.ColumnParent.Name = "ColumnParent";
-            this.ColumnParent.ReadOnly = true;
             // 
             // splitContainer
             // 
@@ -461,6 +420,47 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // ColumnDate
+            // 
+            this.ColumnDate.FillWeight = 60F;
+            this.ColumnDate.HeaderText = "Date";
+            this.ColumnDate.Name = "ColumnDate";
+            // 
+            // ColumnBody
+            // 
+            this.ColumnBody.FillWeight = 60F;
+            this.ColumnBody.HeaderText = "Body";
+            this.ColumnBody.Name = "ColumnBody";
+            this.ColumnBody.ReadOnly = true;
+            // 
+            // ColumnPosition
+            // 
+            this.ColumnPosition.FillWeight = 60F;
+            this.ColumnPosition.HeaderText = "Position";
+            this.ColumnPosition.Name = "ColumnPosition";
+            this.ColumnPosition.ReadOnly = true;
+            // 
+            // ColumnCurrentDistance
+            // 
+            this.ColumnCurrentDistance.FillWeight = 40F;
+            this.ColumnCurrentDistance.HeaderText = "Current Distance";
+            this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
+            this.ColumnCurrentDistance.ReadOnly = true;
+            // 
+            // ColumnInformation
+            // 
+            this.ColumnInformation.FillWeight = 200F;
+            this.ColumnInformation.HeaderText = "Information";
+            this.ColumnInformation.Name = "ColumnInformation";
+            this.ColumnInformation.ReadOnly = true;
+            // 
+            // ColumnParent
+            // 
+            this.ColumnParent.FillWeight = 150F;
+            this.ColumnParent.HeaderText = "Parent";
+            this.ColumnParent.Name = "ColumnParent";
+            this.ColumnParent.ReadOnly = true;
+            // 
             // SearchScans
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -503,15 +503,15 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelCount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
         private ExtendedControls.ExtButton extButtonExport;
         private ExtendedControls.ExtButton extButtonImport;
         private ExtendedControls.ExtCheckBox extCheckBoxDebug;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBody;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
     }
 }
