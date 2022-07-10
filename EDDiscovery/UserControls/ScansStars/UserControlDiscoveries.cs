@@ -229,6 +229,8 @@ namespace EDDiscovery.UserControls
 
         private void DrawGrid(Dictionary<string, HistoryListQueries.Results> searchresults, bool updategrid = false)
         {
+            if (IsClosed)       // may be closing during async process
+                return;
             if (!updategrid)
                 dataGridView.Rows.Clear();
 
