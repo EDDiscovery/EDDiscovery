@@ -94,7 +94,7 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
 
-            updatetimer = new Timer() { Interval = 1000 };
+            updatetimer = new Timer() { Interval = 250 };
             updatetimer.Tick += Updatetimer_Tick;
         }
 
@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             last_sys = uctg.GetCurrentHistoryEntry?.System;
-            SetTitle(last_sys?.Name);   // may be null
+            SetTitle();   // may be null
             DrawSystem(last_sys);    // may be null
             SetVisibility();
         }
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber}  History Load '{currentRoute?.Name}' {currentRoute?.Id} systems {currentRoute?.Systems.Count} lastsys '{last_sys?.Name}'");
 
-            SetTitle(last_sys?.Name);   // may be null
+            SetTitle();   // may be null
             DrawSystem(last_sys);    // may be null
             SetVisibility();
 
@@ -179,14 +179,20 @@ namespace EDDiscovery.UserControls
                 // something has changed and just blindly for now recalc the fsd info
                 shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
                 shipinfo = he.ShipInformation;
+
                 bool kicktimer = false;
 
-                if (last_sys == null || last_sys.Name != he.System.Name || !last_sys.HasCoordinate) // If not got a system, or different name, or last does not have co-ord (StartJump)
+                if (last_sys == null || last_sys.Name != he.System.Name) // If not got a system, or different name
                 {
-                    last_sys = he.System;
-                    kicktimer = true;
+                    starclass = null;           // we cancel out the text info fields
+                    bodies_found = 0;
+                    last_sys = he.System;       // and set, then
+                    kicktimer = true;           // kick for redisplay
                 }
-                else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
+                else
+                    last_sys = he.System;       // its the same system, but since we may have synthesised a last_sys in startjump, and we have a real one from the journal, make sure its updated
+                
+                if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
                     if (jsj.IsHyperspace)       // needs to be a hyperspace one, not supercruise
@@ -197,20 +203,32 @@ namespace EDDiscovery.UserControls
                         kicktimer = true;
                     }
                 }
-                else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound && bodies_found != -1)     // since we present body counts
+                else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts in title, we update. Not used in search 
                 {
-                    bodies_found = -1;
+                    JournalFSSAllBodiesFound fs = he.journalEntry as JournalFSSAllBodiesFound;
+                    bodies_found = -fs.Count-1;     // set negative, ensure at least -1
                     SetTitle();
                 }
-                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts
+                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts in title, we update. Discovery scans are not used in search so no need to kick
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
                     bodies_found = je.BodyCount;
-                    kicktimer = true;
+                    SetTitle();
                 }
-                else if (he.journalEntry is IStarScan || he.EntryType == JournalTypeEnum.FuelScoop)      // an entry to a scan node
+
+                // these are in IStarScan, but we don't need to do anything here, as they don't affect the display
+                else if ( he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.SAAScanComplete || he.EntryType == JournalTypeEnum.Location || he.EntryType == JournalTypeEnum.CarrierJump )         
                 {
-                    System.Diagnostics.Debug.WriteLine($"Update due to IStarScan for {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
+                   // System.Diagnostics.Debug.WriteLine($"Surveyor Ignore {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
+                }
+
+                // IStarScan : FSSSignalDiscovery, SAASignalsFound, FSSBodySignals, Scan all involved in Searches
+                // Scan is involved in inbuilt presentations
+                // ScanBaryCentre is also indirectly involved in Searches
+
+                else if (he.journalEntry is IStarScan || he.EntryType == JournalTypeEnum.FuelScoop)      
+                {
+                    System.Diagnostics.Debug.WriteLine($"Surveyor Update due to {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
                     //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     kicktimer = true;
                 }
@@ -300,44 +318,36 @@ namespace EDDiscovery.UserControls
         // default title
         private void SetTitle()
         {
-            string text = last_sys.Name;
+            string text = last_sys?.Name ?? "";
             if (starclass.HasChars() && IsSet(CtrlList.showstarclass))
                 text += " | " + starclass;
             if (bodies_found > 0)
                 text += " | " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
-            if (bodies_found == -1)
-                text += " | " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete);
+            if (bodies_found < 0 )
+                text += " | " + "System scan complete".T(EDTx.UserControlSurveyor_Systemscancomplete) + " " + (-bodies_found-1) + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
 
+            SetControlText(text);
 
-            SetTitle(text);
-        }
-        private void SetTitle(string s)     
-        {
-            if (s != null)      // update title string if set
-            {
-                SetControlText(s);
+            extPictureBoxTitle.ClearImageList();
+            var i = new ExtPictureBox.ImageElement();
 
-                extPictureBoxTitle.ClearImageList();
-                var i = new ExtPictureBox.ImageElement();
+            StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
+            frmt.Alignment = alignment;
+            var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+            var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+            Font dfont = displayfont ?? this.Font;
 
-                StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
-                frmt.Alignment = alignment;
-                var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
-                Font dfont = displayfont ?? this.Font;
-
-                i.TextAutoSize(
-                        new Point(3, 0),
-                        new Size(2000, 10000),
-                        s,
-                        dfont,
-                        textcolour,
-                        backcolour,
-                        1.0F,
-                        frmt: frmt);
-                extPictureBoxTitle.Add(i);
-                extPictureBoxTitle.Render();
-            }
+            i.TextAutoSize(
+                    new Point(3, 0),
+                    new Size(2000, 10000),
+                    text,
+                    dfont,
+                    textcolour,
+                    backcolour,
+                    1.0F,
+                    frmt: frmt);
+            extPictureBoxTitle.Add(i);
+            extPictureBoxTitle.Render();
         }
 
         async private void DrawSystem(ISystem sys)
