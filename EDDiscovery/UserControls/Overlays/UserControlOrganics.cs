@@ -215,9 +215,12 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                    //System.Diagnostics.Debug.WriteLine($"Pbox size {pictureBox.Size}");
-                    string l = string.Format("At {0}, {1}, Radius {2}, {3} G, {4}", node.FullName, node.ScanData?.PlanetTypeText ?? "Unknown", node.ScanData?.RadiusText() ?? "Unknown", 
-                                                node.ScanData?.nSurfaceGravityG?.ToString("N1")  ?? "Unknown" , node.ScanData?.Atmosphere);
+                    string l = string.Format("At {0}", node.FullName);
+                    if (node.ScanData != null)
+                    {
+                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals {4}", node.ScanData.PlanetTypeText, node.ScanData.RadiusText(),
+                                                (node.ScanData.nSurfaceGravityG?.ToString("N1") ?? "?") + "G", node.ScanData.Atmosphere, node.CountBioSignals.ToString());
+                    }
 
                     string s = node.Organics != null ? JournalScanOrganic.OrganicList(node.Organics) : "No organic scanned";
 

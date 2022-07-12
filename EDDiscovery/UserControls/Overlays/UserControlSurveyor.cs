@@ -53,6 +53,7 @@ namespace EDDiscovery.UserControls
         private string starclass = "";
         private Timer updatetimer;
         private int bodies_found;
+        private bool all_found = false;
 
         #region Initialisation
 
@@ -191,6 +192,7 @@ namespace EDDiscovery.UserControls
                 {
                     starclass = null;           // we cancel out the text info fields
                     bodies_found = 0;
+                    all_found = false;
                     last_sys = he.System;       // and set, then
                     kicktimer = true;           // kick for redisplay
                 }
@@ -205,13 +207,15 @@ namespace EDDiscovery.UserControls
                         last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
                         starclass = jsj.FriendlyStarClass;
                         bodies_found = 0;
+                        all_found = false;
                         kicktimer = true;
                     }
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts in title, we update. Not used in search 
                 {
                     JournalFSSAllBodiesFound fs = he.journalEntry as JournalFSSAllBodiesFound;
-                    bodies_found = -fs.Count-1;     // set negative, ensure at least -1
+                    all_found = true;
+                    bodies_found = fs.Count;     // set negative, ensure at least -1
                     SetTitle();
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts in title, we update. Discovery scans are not used in search so no need to kick
@@ -326,10 +330,10 @@ namespace EDDiscovery.UserControls
             string text = last_sys?.Name ?? "";
             if (starclass.HasChars() && IsSet(CtrlList.showstarclass))
                 text += " | " + starclass;
-            if (bodies_found > 0)
+            if (bodies_found > 0 && !all_found)
                 text += " | " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
-            if (bodies_found < 0 )
-                text += " | " + "System scan complete".T(EDTx.UserControlSurveyor_Systemscancomplete) + " " + (-bodies_found-1) + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
+            if (all_found )
+                text += " | " + "System scan complete".T(EDTx.UserControlSurveyor_Systemscancomplete) + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
 
             SetControlText(text);
 
