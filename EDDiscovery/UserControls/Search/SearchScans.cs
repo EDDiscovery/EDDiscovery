@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls
 
             conditionFilterUC.VariableNames = classnames;
 
-            foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")}"); // debug output for wiki
+            foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")} | {pni.Comment}"); // debug output for wiki
 
             string query = GetSetting(dbQuerySave, "");
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
