@@ -215,10 +215,10 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                    string l = string.Format("At {0}", node.FullName);
+                    string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.FullName);
                     if (node.ScanData != null)
                     {
-                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals {4}", node.ScanData.PlanetTypeText, node.ScanData.RadiusText(),
+                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText(),
                                                 (node.ScanData.nSurfaceGravityG?.ToString("N1") ?? "?") + "G", node.ScanData.Atmosphere, node.CountBioSignals.ToString());
                     }
 

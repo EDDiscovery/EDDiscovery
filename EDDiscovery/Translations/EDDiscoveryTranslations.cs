@@ -583,6 +583,10 @@ namespace EDDiscovery
         UserControlOrganics_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
         UserControlOrganics_extButtonFont_ToolTip, // ToolTip 'Font'
         UserControlOrganics_extCheckBoxWordWrap_ToolTip, // ToolTip 'Word Wrap'
+        UserControlOrganics_at, // At {0}
+        UserControlOrganics_sysinfo, // 
+
+
 
 
         UserControlShoppingList_NM, // Needed Mats

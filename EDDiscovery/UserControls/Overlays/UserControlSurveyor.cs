@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls
                 {
                     JournalFSSAllBodiesFound fs = he.journalEntry as JournalFSSAllBodiesFound;
                     all_found = true;
-                    bodies_found = fs.Count;     // set negative, ensure at least -1
+                    bodies_found = fs.Count;     
                     SetTitle();
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts in title, we update. Discovery scans are not used in search so no need to kick
