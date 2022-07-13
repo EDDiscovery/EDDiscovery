@@ -8,7 +8,6 @@ Cancel: "Cancel" @
 Delete: "Delete" @
 Campaign: "Campaign" @
 NoScan: "No Scan" @
-Travel: "Travel" @
 GameTime: "Game Time" @
 Time: "Time" @
 NoData: "No Data" @
@@ -598,6 +597,7 @@ ActionProgramEditForm : "Action Program" @
 .buttonExtLoad: "Load" @
 .buttonExtSave: "Save" @
 .buttonExtEdit: "Text Edit" @
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 .ci: "Configuration items for installation - specialist use" @

@@ -106,7 +106,6 @@ SECTION SearchMaterialsCommodities
 .MR: "Mission Reward at " @
 .label2: "Item 2" @
 .label1: "Item 1" @
-.buttonExtFind: "Find" @
 .ColumnDate: "Date" @
 .ColumnStar: "Star" @
 .ColumnLocation: "Location" @
@@ -129,7 +128,6 @@ SECTION SearchScans
 .CD: "Condition" @
 .ColumnDate: "Date" @
 .ColumnBody: "Body" @
-.ColumnStar: "Star" @
 .ColumnInformation: "Information" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
@@ -146,6 +144,8 @@ SECTION SearchScans
 .ColumnSearches: "Searches" @
 .labelTime: "Time" @
 .labelSearch: "Search" @
+.Export: "Export user searches" @
+.Import: "Import user searches" @
 
 SECTION UserControlDiscoveries
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
@@ -301,10 +301,6 @@ SECTION UserControlJournalGrid
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
 .TTSelAge: "Select the entries by age, " @
-.TTFilt2: "Filtered {0}" @
-.TTEvent: "Filter out entries based on event type, " @
-.TTFilt3: "Total filtered out {0}" @
-.TTTotal: "Filter out entries matching the field selection, " @
 .JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 
@@ -1159,10 +1155,6 @@ SECTION UserControlTravelGrid
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
 .TTSelAge: "Select the entries by age, " @
-.TTFilt2: "Filtered {0}" @
-.TTEvent: "Filter out entries based on event type, " @
-.TTFilt3: "Total filtered out {0}" @
-.TTTotal: "Filter out entries matching the field selection, " @
 .CSTART: "Clear Start marker" @
 .CSTOP: "Clear Stop marker" @
 .SETSTOPTC: "Set Stop marker for travel calculations" @

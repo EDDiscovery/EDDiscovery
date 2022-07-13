@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 
+// procedure for translation normalisation
+// 1. cd \code\eddiscovery.
+// 2. Use eddtest scanforenums stdenums . *.cs  - check for any enums not in use
+// 3. Use eddtest  normalisetranslate c:\code\eddiscovery\eddiscovery\translations 2 example-ex - "NS NoOutput" c:\code\renames.lst stdenums
+//      check example against enum list and check all ids are there vs enums
+// 4. run normalisetranslate.bat to fix up other languages to example
+
 namespace EDDiscovery
 {
     internal enum EDTx
@@ -16,7 +23,6 @@ namespace EDDiscovery
         Delete, // Delete
         Campaign, // Campaign
         NoScan, // No Scan
-        Travel, // Travel
         GameTime, // Game Time
         Time, // Time
         NoData, // No Data
@@ -634,10 +640,6 @@ namespace EDDiscovery
         UserControlJournalGrid_TT1, //  showing {0} original {1}
         UserControlJournalGrid_TTFilt1, // Filtered {0}
         UserControlJournalGrid_TTSelAge, // Select the entries by age,
-        UserControlJournalGrid_TTFilt2, // Filtered {0}
-        UserControlJournalGrid_TTEvent, // Filter out entries based on event type,
-        UserControlJournalGrid_TTFilt3, // Total filtered out {0}
-        UserControlJournalGrid_TTTotal, // Filter out entries matching the field selection,
         UserControlJournalGrid_JHF, // Journal: Filter out fields
         UserControlJournalGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
 
@@ -701,10 +703,6 @@ namespace EDDiscovery
         UserControlTravelGrid_TT1, //  showing {0} original {1}
         UserControlTravelGrid_TTFilt1, // Filtered {0}
         UserControlTravelGrid_TTSelAge, // Select the entries by age,
-        UserControlTravelGrid_TTFilt2, // Filtered {0}
-        UserControlTravelGrid_TTEvent, // Filter out entries based on event type,
-        UserControlTravelGrid_TTFilt3, // Total filtered out {0}
-        UserControlTravelGrid_TTTotal, // Filter out entries matching the field selection,
         UserControlTravelGrid_CSTART, // Clear Start marker
         UserControlTravelGrid_CSTOP, // Clear Stop marker
         UserControlTravelGrid_SETSTOPTC, // Set Stop marker for travel calculations
@@ -1258,7 +1256,6 @@ namespace EDDiscovery
 
         SearchScans_ColumnDate, // Column Header 'Date'
         SearchScans_ColumnBody, // Column Header 'Body'
-        SearchScans_ColumnStar, // Column Header 'Star'
         SearchScans_ColumnInformation, // Column Header 'Information'
         SearchScans_ColumnParent, // Column Header 'Parent'
         SearchScans_ColumnCurrentDistance, // Column Header 'Current Distance'
