@@ -8,7 +8,6 @@ Cancel: "Cancel" => "Cancela"
 Delete: "Delete" => "Elimina"
 Campaign: "Campaign" => "Campanha"
 NoScan: "No Scan" => "Nenhum Escaneamento"
-Travel: "Travel" => "Viajem"
 GameTime: "Game Time" => "Horário do Jogo"
 Time: "Time" => "Horário"
 NoData: "No Data" => "Nenhum Dado"
@@ -158,6 +157,10 @@ SECTION PopOutInfo
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
 .Organics.Description: "Current body organic information and history of scans" @
+.Engineers.Title: "Engineers" @
+.Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
 
 SECTION EDDiscoveryForm
 
@@ -204,6 +207,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Paginas do Projeto (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reportar um Problema o uma Sugestão"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Verificar por atualizações"
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Botão direito para incluir/remover abas, botão esquerdo para reordenar"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa para selecionar um nuovo perfil o para modificar o perfil de configuração"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Seleciona o comandante a visualizar"
@@ -597,6 +601,7 @@ ActionProgramEditForm: "Action Program" @
 .buttonExtLoad: "Load" @
 .buttonExtSave: "Save" @
 .buttonExtEdit: "Text Edit" @
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 

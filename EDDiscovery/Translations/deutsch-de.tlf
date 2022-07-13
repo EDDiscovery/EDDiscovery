@@ -8,7 +8,6 @@ Cancel: "Cancel" => "Abbrechen"
 Delete: "Delete" => "Löschen"
 Campaign: "Campaign" => "Kampagne"
 NoScan: "No Scan" => "Kein Scan"
-Travel: "Travel" => "Reise"
 GameTime: "Game Time" => "Spielzeit"
 Time: "Time" => "Uhrzeit"
 NoData: "No Data" => "Keine Daten"
@@ -126,7 +125,7 @@ SECTION PopOutInfo
 .Grid.Title: "Grid" => "Gitter"
 .SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Splitter (zum Einfügen beliebiger Paneele)"
 .SplitterControl.Title: "Splitter" => "Splitter"
-.PanelSelector.Description: "" => ""
+.PanelSelector.Description: "" @
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Suche"
 .Search.Description: "Search" => "Suche"
@@ -158,6 +157,10 @@ SECTION PopOutInfo
 .LocalMap3D.Description: "Local 3D Map of systems near you" => "3D-Karte der lokalen Systeme in deiner Umgebung"
 .Organics.Title: "Organic Scans" => "Organische Scans"
 .Organics.Description: "Current body organic information and history of scans" => "Informationen über organische Scans des aktuellen Planeten sowie Scanhistorie"
+.Engineers.Title: "Engineers" @
+.Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
 
 SECTION EDDiscoveryForm
 
@@ -204,6 +207,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Projektseite (Github)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "Be&richte Probleme / Ideen"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "Über&prüfe auf Updates"
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Rechtsklick um Registerkarten hinzuzufügen/zu entfernen - Linksklick und ziehen um neu zu ordnen"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Benutzen um ein neues Profil zu wählen oder Profileinstellungen zu bearbeiten"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Wähle den anzuzeigenden Kommandanten"
@@ -597,6 +601,7 @@ ActionProgramEditForm: "Action Program" => "Action-Programm"
 .buttonExtLoad: "Load" => "Laden"
 .buttonExtSave: "Save" => "Speichern"
 .buttonExtEdit: "Text Edit" => "Text ändern"
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 

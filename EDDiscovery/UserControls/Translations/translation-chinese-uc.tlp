@@ -106,12 +106,16 @@ SECTION SearchMaterialsCommodities
 .MR: "Mission Reward at " @
 .label2: "Item 2" => "物件2"
 .label1: "Item 1" => "物件1"
-.buttonExtFind: "Find" => "查找"
 .ColumnDate: "Date" => "日期"
 .ColumnStar: "Star" => "星系"
 .ColumnLocation: "Location" => "地点"
 .ColumnCurrentDistance: "Current Distance" => "距离(ly)"
 .ColumnPosition: "Position" => "坐标(X,Y,Z)"
+.buttonExtExcel.ToolTip: "Output grid to CSV" @
+.buttonExtFind.ToolTip: "Find materials/commodities" @
+.comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" @
+.comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" @
+.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" @
 
 SECTION SearchScans
 
@@ -122,14 +126,33 @@ SECTION SearchScans
 .DELNO: "Cannot delete this entry" => "无法删除此项"
 .CNV: "Condition is not valid" => "条件无效"
 .CD: "Condition" => "条件"
-.buttonDelete: "Delete" => "删除"
-.buttonSave: "Save" => "保存"
-.buttonFind: "Find" => "搜索"
 .ColumnDate: "Date" => "日期"
-.ColumnStar: "Star" => "星系"
+.ColumnBody: "Body" @
 .ColumnInformation: "Information" => "信息"
 .ColumnCurrentDistance: "Current Distance" => "距离(ly)"
 .ColumnPosition: "Position" => "坐标(X,Y,Z)"
+.ColumnParent: "Parent" @
+.comboBoxSearches.ToolTip: "Select a predefined condition" @
+.buttonFind.ToolTip: "Search for condition below" @
+.buttonSave.ToolTip: "Save current condition" @
+.buttonDelete.ToolTip: "Delete current condition" @
+.buttonExtExcel.ToolTip: "Output results grid to CSV" @
+.extButtonExport.ToolTip: "Export user searches to a file" @
+.extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
+.ColumnSearches: "Searches" @
+.labelTime: "Time" @
+.labelSearch: "Search" @
+.Export: "Export user searches" @
+.Import: "Import user searches" @
+
+SECTION UserControlDiscoveries
+
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.buttonExtExcel.ToolTip: "Export" @
 
 SECTION SearchStars
 
@@ -156,6 +179,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" => "笔记"
 .RecipeCol: "Recipe" => "配方"
 .EngineersCol: "Engineers" => "工程师"
+.CraftedCol: "Crafted" @
 .ToolTip: "Left click and drag on grid to reorder" => "鼠标左键拖拽可以重新排列行与列的顺序"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "把所有愿望单内的改装尝试次数设为零"
 .buttonFilterMaterial.ToolTip: "Filter the table by material" => "按材料筛选表格"
@@ -165,6 +189,12 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "按模组筛选表格"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+
+SECTION UserControlEngineers
+
+.buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
+.extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
+.extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 
 SECTION UserControlEstimatedValues
 
@@ -257,10 +287,6 @@ SECTION UserControlJournalGrid
 .TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
 .TTFilt1: "Filtered {0}" => "过滤掉了{0}"
 .TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
-.TTFilt2: "Filtered {0}" => "过滤掉了{0}"
-.TTEvent: "Filter out entries based on event type, " => "根据事件类型筛选条目，"
-.TTFilt3: "Total filtered out {0}" => "总共过滤掉了{0}"
-.TTTotal: "Filter out entries matching the field selection, " => "筛选匹配域选项的条目，"
 .JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 
@@ -278,6 +304,7 @@ SECTION UserControlLedger
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "显示匹配筛选事件类型的条目"
 .textBoxFilter.ToolTip: "Search to particular items" => "搜索特定的条目"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "跳转到表格中的条目"
 .CashTransactions: "Cash Transactions" => "金融交易"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -372,11 +399,13 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
+.showstarclassToolStripMenuItem: "Show star class" @
+.showSignalsToolStripMenuItem: "Show signals" @
 .showValuesToolStripMenuItem: "Show values" @
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.showAtmosToolStripMenuItem: "Show atmospheres" @
+.showVolcanismToolStripMenuItem: "Show volcanism " @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
@@ -391,6 +420,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
+.extButtonSearches.ToolTip: "Search Filter list from search scans panel" @
 .navroute: "Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 .fsssignals: "List signals to display, semicolon seperated" @
@@ -423,11 +453,13 @@ SECTION UserControlModules
 .labelShip: "Ship" => "飞船"
 .labelVehicle: "Unknown" => "未知"
 .comboBoxShips.ToolTip: "Select ship to view" => "选择飞船以查看"
+.extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "添加游戏日志文件缺失的数据"
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "在ED Ship Yard网站上打开"
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "在Corolis网站上打开"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.FullBluePrint: "Show full blueprint information" @
 .ForceSell: "Force Sell" @
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
@@ -870,6 +902,7 @@ SECTION UserControlStarList
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valuable bodies" @
 .scanorganics: "Show organic scans" @
+.showcodex: "Show codex entries" @
 
 SECTION UserControlStats
 
@@ -1058,10 +1091,6 @@ SECTION UserControlTravelGrid
 .TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
 .TTFilt1: "Filtered {0}" => "过滤掉了{0}"
 .TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
-.TTFilt2: "Filtered {0}" => "过滤掉了{0}"
-.TTEvent: "Filter out entries based on event type, " => "根据事件类型筛选条目，"
-.TTFilt3: "Total filtered out {0}" => "总共过滤掉了{0}"
-.TTTotal: "Filter out entries matching the field selection, " => "筛选匹配域选项的条目，"
 .CSTART: "Clear Start marker" => "清除起点标记"
 .CSTOP: "Clear Stop marker" => "清除终点标记"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "设为航行计算的终点"
@@ -1112,6 +1141,7 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "纲要模式控制"
+.SearchTerms: "system:body:station" @
 
 SECTION UserControlCaptainsLog
 
@@ -1254,6 +1284,7 @@ SECTION UserControlFactions
 .KillBondVictim: "Kill Bonds Victim" @
 .KillBondsAward: "Kill Bonds Awarded" @
 .KillBondsValue: "Kill Bonds Value" @
+.CartoValue: "Cartographic Value" @
 .colInfo: "Other Info" @
 .labelTo: "to" @
 .startDateTime.ToolTip: "Include from" @
@@ -1286,6 +1317,8 @@ SECTION UserControlOrganics
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
+.at: "At {0}" @
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}" @
 
 SECTION ScanDisplayForm
 

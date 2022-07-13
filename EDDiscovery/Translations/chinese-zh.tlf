@@ -8,7 +8,6 @@ Cancel: "Cancel" => "取消"
 Delete: "Delete" => "删除"
 Campaign: "Campaign" => "战役"
 NoScan: "No Scan" => "无扫描"
-Travel: "Travel" => "航行"
 GameTime: "Game Time" => "游戏事件"
 Time: "Time" => "时间"
 NoData: "No Data" => "无数据"
@@ -158,6 +157,10 @@ SECTION PopOutInfo
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
 .Organics.Description: "Current body organic information and history of scans" @
+.Engineers.Title: "Engineers" @
+.Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
 
 SECTION EDDiscoveryForm
 
@@ -204,6 +207,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "项目GitHub页面(&P)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "反馈问题/提供建议(&R)"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "检查更新(&C)"
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "右击添加/移除标签页，左键拖拽排序"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "选择新的配置文件或更改配置文件设置"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "选择要查看的指挥官"
@@ -597,6 +601,7 @@ ActionProgramEditForm: "Action Program" @
 .buttonExtLoad: "Load" @
 .buttonExtSave: "Save" @
 .buttonExtEdit: "Text Edit" @
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 

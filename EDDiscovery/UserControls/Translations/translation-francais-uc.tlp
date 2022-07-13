@@ -106,12 +106,16 @@ SECTION SearchMaterialsCommodities
 .MR: "Mission Reward at " @
 .label2: "Item 2" => "Objet 2"
 .label1: "Item 1" => "Objet 1"
-.buttonExtFind: "Find" => "Chercher"
 .ColumnDate: "Date" @
 .ColumnStar: "Star" => "Étoile"
 .ColumnLocation: "Location" => "Localisationn"
 .ColumnCurrentDistance: "Current Distance" => "Distance actuelle"
 .ColumnPosition: "Position" @
+.buttonExtExcel.ToolTip: "Output grid to CSV" @
+.buttonExtFind.ToolTip: "Find materials/commodities" @
+.comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" @
+.comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" @
+.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" @
 
 SECTION SearchScans
 
@@ -122,14 +126,33 @@ SECTION SearchScans
 .DELNO: "Cannot delete this entry" => "Impossible de supprimer l'entrée"
 .CNV: "Condition is not valid" => "Condition invalide"
 .CD: "Condition" @
-.buttonDelete: "Delete" => "Supprimer"
-.buttonSave: "Save" => "Sauvegarder"
-.buttonFind: "Find" => "Chercher"
 .ColumnDate: "Date" @
-.ColumnStar: "Star" => "Étoile"
+.ColumnBody: "Body" @
 .ColumnInformation: "Information" @
 .ColumnCurrentDistance: "Current Distance" => "Distance actuelle"
 .ColumnPosition: "Position" @
+.ColumnParent: "Parent" @
+.comboBoxSearches.ToolTip: "Select a predefined condition" @
+.buttonFind.ToolTip: "Search for condition below" @
+.buttonSave.ToolTip: "Save current condition" @
+.buttonDelete.ToolTip: "Delete current condition" @
+.buttonExtExcel.ToolTip: "Output results grid to CSV" @
+.extButtonExport.ToolTip: "Export user searches to a file" @
+.extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
+.ColumnSearches: "Searches" @
+.labelTime: "Time" @
+.labelSearch: "Search" @
+.Export: "Export user searches" @
+.Import: "Import user searches" @
+
+SECTION UserControlDiscoveries
+
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.buttonExtExcel.ToolTip: "Export" @
 
 SECTION SearchStars
 
@@ -156,6 +179,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" @
 .RecipeCol: "Recipe" => "Recette"
 .EngineersCol: "Engineers" => "Ingénieurs"
+.CraftedCol: "Crafted" @
 .ToolTip: "Left click and drag on grid to reorder" => "Clicl gauche et glisser sur la grille pour réorganiser"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Définir touts les valeurs souhaité à zéro"
 .buttonFilterMaterial.ToolTip: "Filter the table by material" => "Filtrer le tableau par matériau"
@@ -165,6 +189,12 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtrer le tableau par type de module"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Quand c'est rouge, utiliser les matériaux au niveau du curseur pour estimer. Quand c'est vert utiliser les derniers matériaux"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Activer/Désactiver le retour à la ligne"
+
+SECTION UserControlEngineers
+
+.buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
+.extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
+.extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 
 SECTION UserControlEstimatedValues
 
@@ -257,10 +287,6 @@ SECTION UserControlJournalGrid
 .TT1: " showing {0} original {1}" => " montre {0} original {1}"
 .TTFilt1: "Filtered {0}" => "Filtré {0}"
 .TTSelAge: "Select the entries by age, " => "Sélection des entrées par age, "
-.TTFilt2: "Filtered {0}" => "Filtré {0}"
-.TTEvent: "Filter out entries based on event type, " => "Filtrer les entrées sur le type d'événement, "
-.TTFilt3: "Total filtered out {0}" => "Total filtré {0}"
-.TTTotal: "Filter out entries matching the field selection, " => "Filtrer les entrées qui correspondent au champs sélectionné, "
 .JHF: "Journal: Filter out fields" => "Journal: Filtrer les champs"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => " Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
 
@@ -278,6 +304,7 @@ SECTION UserControlLedger
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "Affiche les entrées qui correspondent à ce type d'événement"
 .textBoxFilter.ToolTip: "Search to particular items" => "Recherche d'entrée précise"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Filtre les entrées par ancienneté"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Aller à l'entrée dans le tableau"
 .CashTransactions: "Cash Transactions" => "Transaction d'argent"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoie les données de tableau dans Excel"
@@ -372,11 +399,13 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" => "Affiche toutes les étoiles"
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Affiche les ceintures d'astéroides"
+.showstarclassToolStripMenuItem: "Show star class" @
+.showSignalsToolStripMenuItem: "Show signals" @
 .showValuesToolStripMenuItem: "Show values" => "Afficher les valeurs"
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Afficher plus d'informations"
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.showAtmosToolStripMenuItem: "Show atmospheres" @
+.showVolcanismToolStripMenuItem: "Show volcanism " @
 .autoHideToolStripMenuItem: "Auto Hide" => "Masquer automatiquement"
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "Ne pas masquer en mode ACS"
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Masquer les corps déjà cartographiés"
@@ -391,6 +420,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
+.extButtonSearches.ToolTip: "Search Filter list from search scans panel" @
 .navroute: "Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 .fsssignals: "List signals to display, semicolon seperated" @
@@ -423,11 +453,13 @@ SECTION UserControlModules
 .labelShip: "Ship" => "Vaiseau"
 .labelVehicle: "Unknown" => "Inconnu"
 .comboBoxShips.ToolTip: "Select ship to view" => "Selectionner un vaisseau à visualiser"
+.extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Activer/Désactiver retour à la ligne"
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Configurer des données manquante du journal d'Elite"
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Envoyer vers ED Shipyard"
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Envoyer vers Coriolis"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi des données vers Excel"
+.FullBluePrint: "Show full blueprint information" @
 .ForceSell: "Force Sell" @
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" => "Modules stockés"
@@ -870,6 +902,7 @@ SECTION UserControlStarList
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valuable bodies" @
 .scanorganics: "Show organic scans" @
+.showcodex: "Show codex entries" @
 
 SECTION UserControlStats
 
@@ -1058,10 +1091,6 @@ SECTION UserControlTravelGrid
 .TT1: " showing {0} original {1}" => " affiche {0} original {1}"
 .TTFilt1: "Filtered {0}" => "Filtre {0}"
 .TTSelAge: "Select the entries by age, " => "Selection des entrées par âge, "
-.TTFilt2: "Filtered {0}" => "Filtre {0}"
-.TTEvent: "Filter out entries based on event type, " => "Filtre des entrées par type d'événement, "
-.TTFilt3: "Total filtered out {0}" => "Total filtrés {0}"
-.TTTotal: "Filter out entries matching the field selection, " => "Filtre les entrées correspondantes à la selection de champs, "
 .CSTART: "Clear Start marker" => "Supprimer le marqueur de début"
 .CSTOP: "Clear Stop marker" => "Supprimer le marqueur de fin"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "Définir le marqueur de fin pour le calcul d'itinéraire"
@@ -1112,6 +1141,7 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplace automatiquement le curseur sur la dernière entrée lorsqu'elle arrive"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Activer/Désactiver le retour à la ligne"
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Contrôle du contour"
+.SearchTerms: "system:body:station" @
 
 SECTION UserControlCaptainsLog
 
@@ -1254,6 +1284,7 @@ SECTION UserControlFactions
 .KillBondVictim: "Kill Bonds Victim" @
 .KillBondsAward: "Kill Bonds Awarded" @
 .KillBondsValue: "Kill Bonds Value" @
+.CartoValue: "Cartographic Value" @
 .colInfo: "Other Info" @
 .labelTo: "to" @
 .startDateTime.ToolTip: "Include from" @
@@ -1286,6 +1317,8 @@ SECTION UserControlOrganics
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
+.at: "At {0}" @
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}" @
 
 SECTION ScanDisplayForm
 
