@@ -115,7 +115,7 @@ SECTION SearchMaterialsCommodities
 .buttonExtFind.ToolTip: "Find materials/commodities" => "Finde Materialien/Handelswaren"
 .comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" => "Wähle die Bedingung von Element 1 zu Element 2"
 .comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" => "Primäre(s) Material oder Handelsware für die Suche"
-.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" => "Sekundäre(s) MAterial oder Handelsware für die Suche"
+.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" => "Sekundäre(s) Material oder Handelsware für die Suche"
 
 SECTION SearchScans
 
