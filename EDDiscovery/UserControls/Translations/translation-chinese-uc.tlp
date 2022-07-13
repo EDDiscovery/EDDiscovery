@@ -35,7 +35,7 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn: "Grid" => "网格"
 .buttonExtEditCampaign: "Edit" => "编辑"
 .labelCredits.ToolTip: "Current Credits" => "当前账户余额"
-.labelTotalKills.ToolTip: "Total kills in campaign" => "战斗中的总杀敌数"
+.labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "战斗中的总杀敌数"
 .labelFactionKills.ToolTip: "Faction Kills" => "派系杀敌数"
 .labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "净收入（收入减去弹药，维修等费用）"
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "你被抓了几次？"
@@ -180,7 +180,6 @@ SECTION UserControlEngineering
 .RecipeCol: "Recipe" => "配方"
 .EngineersCol: "Engineers" => "工程师"
 .CraftedCol: "Crafted" @
-.ToolTip: "Left click and drag on grid to reorder" => "鼠标左键拖拽可以重新排列行与列的顺序"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "把所有愿望单内的改装尝试次数设为零"
 .buttonFilterMaterial.ToolTip: "Filter the table by material" => "按材料筛选表格"
 .buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "按改装筛选表格"
@@ -240,12 +239,12 @@ SECTION UserControlExpedition
 .SystemName: "System Name" => "星系名称"
 .Distance: "Dist." => "距离(ly)"
 .Note: "Note" => "笔记"
-.labelCml: "Cml Distance: " => "总距离："
-.labelP2P: "P2P Distance: " => "直线距离："
+.labelCml: "Cml Distance:" => "总距离："
+.labelP2P: "P2P Distance:" => "直线距离："
 .buttonReverseRoute: "Reverse" => "反转"
-.labelEndDate: "End Date: " => "结束日期："
-.labelDateStart: "Start Date: " => "开始日期："
-.labelRouteName: "Route Name: " => "航线名称："
+.labelEndDate: "End Date:" => "结束日期："
+.labelDateStart: "Start Date:" => "开始日期："
+.labelRouteName: "Route Name:" => "航线名称："
 .copyToolStripMenuItem: "Copy" => "复制"
 .pasteToolStripMenuItem: "Paste" => "粘贴"
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" => "插入复制的行"
@@ -273,7 +272,7 @@ SECTION UserControlJournalGrid
 .ColumnText: "Information" => "信息"
 .labelTime: "Time" => "时间"
 .labelSearch: "Search" => "搜索"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
@@ -338,7 +337,7 @@ SECTION UserControlMarketData
 .Conly: "Cargo only, no market data on this item" => "只有货物，没有这项物品的市场数据"
 .LEntry: "Travel History Entry Last" => "最后一项航行记录"
 .checkBoxHasDemand: "Has Demand" @
-.checkBoxHasDemand.ToolTip: "Show items that have demand" @
+.checkBoxHasDemand.ToolTip: "Show items with demand" @
 
 SECTION UserControlMaterialCommodities
 
@@ -420,7 +419,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
-.extButtonSearches.ToolTip: "Search Filter list from search scans panel" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
 .navroute: "Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 .fsssignals: "List signals to display, semicolon seperated" @
@@ -592,7 +591,7 @@ SECTION UserControlRoute
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "这将导致大量的FSD跳跃（{0}次）\r\n是否继续？"
 .NoRoute: "No route set up, retry" => "没有创建任何路径，请重试"
 .checkBox_FsdBoost: "Use Boosts" @
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
 .showScanToolStripMenuItem: "View Scan Display" @
 .M1: "Nearest to Waypoint" @
 .M2: "Minimum Deviation from Path" @
@@ -650,7 +649,7 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" @
 .StarClass: "Show Classes of Stars" @
 .Distance: "Show distance of bodies" @
-.Expired: "Expired: " @
+.Expired: "Expired:" @
 
 SECTION UserControlScanGrid
 
@@ -697,7 +696,7 @@ SECTION UserControlSettings
 .buttonSaveTheme: "Save Theme" => "保存主题"
 .groupBoxCustomHistoryLoad: "History" => "航行记录选项"
 .checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "按照升序方式对事件进行排序"
-.labelTimeDisplay: "Time: " @
+.labelTimeDisplay: "Time:" @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
@@ -705,12 +704,12 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" => "激活窗口热键"
 .groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries: " => "重要条目为："
-.labelHistorySel: "Entries to read: " => "仅读取重要的条目"
+.labelHistoryEssItems: "Essential entries:" => "重要条目为："
+.labelHistorySel: "Entries to read:" => "仅读取重要的条目"
 .groupBoxCustomScreenShots: "Screenshots conversion" => "截图"
 .buttonExtScreenshot: "Configure" => "配置"
 .checkBoxCustomEnableScreenshots: "Enable" => "启用截图格式转换"
-.groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB选项"
+.groupBoxCustomEDSM: "EDSM Control" => "EDSM/EDDB选项"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "选择星域"
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" => "启用星系数据下载"
 .groupBoxPopOuts: "Window Options" => "界面设置"
@@ -725,7 +724,7 @@ SECTION UserControlSettings
 .groupBoxCustomLanguage: "Language" => "语言 (Language)"
 .groupBoxCustomSafeMode: "Advanced" => "安全模式"
 .buttonExtSafeMode: "Restart in Safe Mode" => "重启至安全模式"
-.labelSafeMode: "Click this to perform special operations like to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "单击这个按钮以进行特殊操作"
+.labelSafeMode: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "单击这个按钮以进行特殊操作"
 .btnDeleteCommander.ToolTip: "Delete selected commander" => "删除选定的指挥官"
 .buttonEditCommander.ToolTip: "Edit selected commander" => "编辑选定的指挥官"
 .buttonAddCommander.ToolTip: "Add a new commander" => "添加一个新的指挥官"
@@ -739,7 +738,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "进一步配置截图选项"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "打开/关闭截图转换格式功能"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "选择想要储存在数据库里的银河星域"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "面板列表使用字母顺序进行排序，而不是安装类别排序。注意需要重启。（目前中文界面下无效）"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "所有窗口置顶"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "选中后会允许EDDiscovery的窗口在被缩放时实时改变窗口内容的尺寸。\r\n如果卡顿的话可以把此项关闭。"
@@ -889,14 +888,14 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "添加笔记"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" => "{0}个恒星 {1}"
-.FSD: "This system has materials for FSD boost: " => "这个行星存在合成FSD助推剂用的材料："
+.FSD: "This system has materials for FSD boost" => "这个行星存在合成FSD助推剂用的材料："
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .OB: "{0} Other bodies" => "{0}个其他星体"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
@@ -935,7 +934,7 @@ SECTION UserControlStats
 .Name: "Name" => "飞船名"
 .Ident: "Ident" => "飞船牌号"
 .Jumps: "Jumps" => "跳跃次数"
-.TravelledLy: "Traveled Ly" => "航行距离(ly)"
+.TravelledLy: "Travelled Ly" => "航行距离(ly)"
 .BodiesScanned: "Bodies Scanned" => "扫描的星体"
 .Destroyed: "Destroyed" => "被摧毁次数"
 .PremiumBoost: "Premium Boost" => "高级FSD助推剂"
@@ -1134,14 +1133,14 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "第一个游戏日志之后"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "第五个游戏日志之后"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "筛选匹配域选项的条目"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "纲要模式控制"
-.SearchTerms: "system:body:station" @
+.SearchTerms: "system:body:station:stationfaction" @
 
 SECTION UserControlCaptainsLog
 
@@ -1167,8 +1166,8 @@ SECTION CaptainsLogEntries
 .ColBodyName: "Body" @
 .ColNote: "Note" @
 .ColTags: "Tags" @
-.labelEndDate: "End Date: " @
-.labelDateStart: "Start Date: " @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
 .buttonTags.ToolTip: "Edit Tags" @
 .buttonDelete.ToolTip: "Delete selected entries" @
 .buttonNew.ToolTip: "New Entry" @

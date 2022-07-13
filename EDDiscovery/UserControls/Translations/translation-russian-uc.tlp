@@ -35,7 +35,7 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn: "Grid" => "Сетка"
 .buttonExtEditCampaign: "Edit" => "Изм."
 .labelCredits.ToolTip: "Current Credits" => "Текущие кредиты"
-.labelTotalKills.ToolTip: "Total kills in campaign" => "Всего убийств за кампанию"
+.labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "Всего убийств за кампанию"
 .labelFactionKills.ToolTip: "Faction Kills" => "Фракционных убийств"
 .labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "Общая награда за вычетом всех расходов (штрафы, выкуп и пр.)"
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Сколько раз вас поймали"
@@ -180,7 +180,6 @@ SECTION UserControlEngineering
 .RecipeCol: "Recipe" => "Рецепт"
 .EngineersCol: "Engineers" => "Инженеры"
 .CraftedCol: "Crafted" @
-.ToolTip: "Left click and drag on grid to reorder" => "Столбцы можно перетаскивать с зажатой левой кнопкой мыши"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Сбросить все значения в столбце «Требуется»"
 .buttonFilterMaterial.ToolTip: "Filter the table by material" => "Фильтровать таблицу по материалам"
 .buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "Фильтровать таблицу по улучшениям"
@@ -240,12 +239,12 @@ SECTION UserControlExpedition
 .SystemName: "System Name" => "Название системы"
 .Distance: "Dist." => "Расстояние"
 .Note: "Note" => "Примечание"
-.labelCml: "Cml Distance: " => "Суммарное: "
-.labelP2P: "P2P Distance: " => "Точка-точка: "
+.labelCml: "Cml Distance:" => "Суммарное: "
+.labelP2P: "P2P Distance:" => "Точка-точка: "
 .buttonReverseRoute: "Reverse" => "Реверс"
-.labelEndDate: "End Date: " => "Окончание: "
-.labelDateStart: "Start Date: " => "Начало: "
-.labelRouteName: "Route Name: " => "Маршрут: "
+.labelEndDate: "End Date:" => "Окончание: "
+.labelDateStart: "Start Date:" => "Начало: "
+.labelRouteName: "Route Name:" => "Маршрут: "
 .copyToolStripMenuItem: "Copy" => "Копировать"
 .pasteToolStripMenuItem: "Paste" => "Вставить"
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Вставить скопированные строки"
@@ -273,7 +272,7 @@ SECTION UserControlJournalGrid
 .ColumnText: "Information" => "Информация"
 .labelTime: "Time" => "Время"
 .labelSearch: "Search" => "Поиск"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Введите текст для поиска в любых полях"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Фильтровать события по типу"
@@ -338,7 +337,7 @@ SECTION UserControlMarketData
 .Conly: "Cargo only, no market data on this item" => "Только груз, нет рыночных данных в этом списке"
 .LEntry: "Travel History Entry Last" => "Последняя запись в истории полетов"
 .checkBoxHasDemand: "Has Demand" @
-.checkBoxHasDemand.ToolTip: "Show items that have demand" @
+.checkBoxHasDemand.ToolTip: "Show items with demand" @
 
 SECTION UserControlMaterialCommodities
 
@@ -420,7 +419,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
-.extButtonSearches.ToolTip: "Search Filter list from search scans panel" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
 .navroute: "Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 .fsssignals: "List signals to display, semicolon seperated" @
@@ -592,7 +591,7 @@ SECTION UserControlRoute
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "Это приведет к большому количеству  ({0}) прыжков\r\nВы уверены?"
 .NoRoute: "No route set up, retry" => "Маршрут не задан, попробуйте еще раз"
 .checkBox_FsdBoost: "Use Boosts" @
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
 .showScanToolStripMenuItem: "View Scan Display" @
 .M1: "Nearest to Waypoint" @
 .M2: "Minimum Deviation from Path" @
@@ -650,7 +649,7 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" @
 .StarClass: "Show Classes of Stars" @
 .Distance: "Show distance of bodies" @
-.Expired: "Expired: " @
+.Expired: "Expired:" @
 
 SECTION UserControlScanGrid
 
@@ -697,7 +696,7 @@ SECTION UserControlSettings
 .buttonSaveTheme: "Save Theme" => "Сохранить тему"
 .groupBoxCustomHistoryLoad: "History" => "Настройки истории"
 .checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "Нумерация строк снизу вверх"
-.labelTimeDisplay: "Time: " @
+.labelTimeDisplay: "Time:" @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
@@ -705,12 +704,12 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" => "Клавиша для включения прозрачности"
 .groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries: " => "Важные события это"
-.labelHistorySel: "Entries to read: " => "Только важные события"
+.labelHistoryEssItems: "Essential entries:" => "Важные события это"
+.labelHistorySel: "Entries to read:" => "Только важные события"
 .groupBoxCustomScreenShots: "Screenshots conversion" => "Скриншоты"
 .buttonExtScreenshot: "Configure" => "Настройки"
 .checkBoxCustomEnableScreenshots: "Enable" => "Преобразовывать скриншоты"
-.groupBoxCustomEDSM: "EDSM/EDDB Control" => "Управление EDSM/EDDB"
+.groupBoxCustomEDSM: "EDSM Control" => "Управление EDSM/EDDB"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Размер Галактики"
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Загрузка данных о системах"
 .groupBoxPopOuts: "Window Options" => "Параметры окна"
@@ -725,7 +724,7 @@ SECTION UserControlSettings
 .groupBoxCustomLanguage: "Language" => "Язык"
 .groupBoxCustomSafeMode: "Advanced" @
 .buttonExtSafeMode: "Restart in Safe Mode" => "Перезапуск в безопасном режиме"
-.labelSafeMode: "Click this to perform special operations like to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "Выполнение специфичных действий"
+.labelSafeMode: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "Выполнение специфичных действий"
 .btnDeleteCommander.ToolTip: "Delete selected commander" => "Удалить выбранного командира"
 .buttonEditCommander.ToolTip: "Edit selected commander" => "Редактировать настройки выбранного командира"
 .buttonAddCommander.ToolTip: "Add a new commander" => "Добавить нового командира"
@@ -739,7 +738,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Дополнительные настройки для скриншотов"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Включить / выключить преобразование скриншотов"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Выберите, какая часть Галактики будет храниться в базе данных"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Список панелей отсортирован по алфавиту, а не по группам. Потребуется перезапуск."
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Закрепить это окно (и все дочерние) поверх других окон"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Разрешить EDD перерисовать окна при изменении размера главного окна. Помогает, если EDD работает слишком медленно"
@@ -889,14 +888,14 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "Добавить примечание"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Показать/скрыть EDSM-данные о телах. Из-за ограничений сервера нужно нажать на систему, чтобы получить данные из EDSM."
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." => "Показать/скрыть EDSM-данные о телах. Из-за ограничений сервера нужно нажать на систему, чтобы получить данные из EDSM."
 .comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" => "Число звезд: {0} {1}"
-.FSD: "This system has materials for FSD boost: " => "В этой системе есть материалы для вброса в FSD: "
+.FSD: "This system has materials for FSD boost" => "В этой системе есть материалы для вброса в FSD: "
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
 .OB: "{0} Other bodies" => "число других небесных тел: {0}"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
@@ -935,7 +934,7 @@ SECTION UserControlStats
 .Name: "Name" => "Название"
 .Ident: "Ident" => "Идентификатор"
 .Jumps: "Jumps" => "Прыжков"
-.TravelledLy: "Traveled Ly" => "Пройдено св. л."
+.TravelledLy: "Travelled Ly" => "Пройдено св. л."
 .BodiesScanned: "Bodies Scanned" => "Отсканировано тел"
 .Destroyed: "Destroyed" => "Разрушено"
 .PremiumBoost: "Premium Boost" => "Премиум вбросов"
@@ -1134,14 +1133,14 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "После первой группы"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "После первых пяти групп"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Введите текст для поиска в любых полях"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Фильтровать события по типу"
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "Фильтровать записи в соответствии с указанными условиями"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Группировать"
-.SearchTerms: "system:body:station" @
+.SearchTerms: "system:body:station:stationfaction" @
 
 SECTION UserControlCaptainsLog
 
@@ -1167,8 +1166,8 @@ SECTION CaptainsLogEntries
 .ColBodyName: "Body" => "Тело"
 .ColNote: "Note" => "Заметка"
 .ColTags: "Tags" => "Теги"
-.labelEndDate: "End Date: " => "Окончание: "
-.labelDateStart: "Start Date: " => "Начало: "
+.labelEndDate: "End Date:" => "Окончание: "
+.labelDateStart: "Start Date:" => "Начало: "
 .buttonTags.ToolTip: "Edit Tags" => "Редактировать теги"
 .buttonDelete.ToolTip: "Delete selected entries" => "Удалить выбранные записи"
 .buttonNew.ToolTip: "New Entry" => "Новая запись"

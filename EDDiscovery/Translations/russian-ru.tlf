@@ -47,14 +47,14 @@ SECTION InfoForm
 
 SECTION PopOutInfo
 
-.Log.Description: "Program log" => "Логи программы"
+.Log.Description: "Log of program information" => "Логи программы"
 .Log.Title: "Log" => "Логи"
 .Journal.Description: "Journal grid view" => "Журнал (таблицей)"
 .Journal.Title: "Journal" => "Журнал"
 .TravelGrid.Description: "History grid view" => "История (таблицей)"
-.TravelGrid.Title: "Travel History" => "История полетов"
-.StarList.Description: "Visited star list" => "Список посещенных систем"
-.StarList.Title: "Star List" => "Список систем"
+.TravelGrid.Title: "History" => "История полетов"
+.StarList.Description: "Visited Star list" => "Список посещенных систем"
+.StarList.Title: "Visited Stars" => "Список систем"
 .Materials.Description: "Materials count" => "Список материалов"
 .Materials.Title: "Materials" => "Материалы"
 .Commodities.Description: "Commodity count" => "Список товаров"
@@ -69,9 +69,9 @@ SECTION PopOutInfo
 .Statistics.Title: "Statistics" => "Статистика"
 .MarketData.Description: "Market data view, giving commodity price information where available" => "Рыночные данные, включая цены на товары (если есть)"
 .MarketData.Title: "Market Data" => "Рынок"
-.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "Информация о посещенных космоверфях"
+.ShipYardPanel.Description: "Ship yards information from places you have visited" => "Информация о посещенных космоверфях"
 .ShipYardPanel.Title: "Ship Yards" => "Космоверфи"
-.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "Информация о снаряжении на посещенных космоверфях"
+.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" => "Информация о снаряжении на посещенных космоверфях"
 .OutfittingPanel.Title: "Outfitting" => "Снаряжение"
 .Synthesis.Description: "Synthesis planner" => "Планировщик синтеза"
 .Synthesis.Title: "Synthesis" => "Синтез"
@@ -83,9 +83,9 @@ SECTION PopOutInfo
 .Scan.Title: "Scan" => "Сканы"
 .ScanGrid.Description: "Scan data on system in a grid" => "Имеющиеся данные сканирования систем (таблицей)"
 .ScanGrid.Title: "Scan Grid" => "Сканы (таблицей)"
-.StarDistance.Description: "List of nearest stars" => "Список ближайших систем"
+.StarDistance.Description: "Nearest stars from current position" => "Список ближайших систем"
 .StarDistance.Title: "Nearest Stars" => "Ближайшие системы"
-.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Примерная стоимость данных сканирования систем"
+.EstimatedValues.Description: "Estimated Scan values of bodies in system" => "Примерная стоимость данных сканирования систем"
 .EstimatedValues.Title: "Estimated Values" => "Стоимость сканов"
 .Map2D.Title: "2D Map" @
 .Map2D.Description: "2D Map of galaxy" @
@@ -97,9 +97,9 @@ SECTION PopOutInfo
 .Plot.Title: "2D Plot" => "2D-карта"
 .Trilateration.Description: "Trilateration of stars with unknown positions" => "Трилатерация систем с неизвестным положением"
 .Trilateration.Title: "Trilateration" => "Трилатерация "
-.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Редактирование закладок для систем и планет"
+.BookmarkManager.Description: "Bookmarks on systems and planets" => "Редактирование закладок для систем и планет"
 .BookmarkManager.Title: "Bookmarks" => "Закладки"
-.CombatPanel.Description: "Display combat statistics" => "Боевая статистика"
+.CombatPanel.Description: "Combat statistics" => "Боевая статистика"
 .CombatPanel.Title: "Combat" => "Бой"
 .Route.Description: "Route Finder from stored star data" => "Поиск маршрута с использованием сохраненных данных"
 .Route.Title: "Route Finder" => "Поиск маршрута"
@@ -111,11 +111,11 @@ SECTION PopOutInfo
 .Spanel.Title: "Summary Panel" => "Сводка"
 .Trippanel.Description: "Trip computer overlay" => "Бортовой компьютер (оверлей)"
 .Trippanel.Title: "Trip Computer" => "Бортовой комп"
-.NotePanel.Description: "System notes overlay" => "Примечания к системам (оверлей)"
+.NotePanel.Description: "Notes overlay" => "Примечания к системам (оверлей)"
 .NotePanel.Title: "Notes" => "Примечания"
 .RouteTracker.Description: "Route tracker overlay" => "Маршрут (оверлей)"
 .RouteTracker.Title: "Route Tracker" => "Маршрут"
-.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Компас (оверлей), показывающий направление к координатам на планете"
+.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Компас (оверлей), показывающий направление к координатам на планете"
 .Compass.Title: "Compass" => "Компас"
 .Settings.Description: "Settings for ED Discovery " => "Настройки ED Discovery "
 .Settings.Title: "Settings" => "Настройки"
@@ -132,13 +132,13 @@ SECTION PopOutInfo
 .CaptainsLog.Title: "Captain's Log" => "Журнал капитана"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Заметки о путешествиях"
 .Surveyor.Title: "Surveyor" => "Топограф"
-.Surveyor.Description: "Surface map aid" => "Помощь по картам поверхности"
+.Surveyor.Description: "Surveyor - Exploration and route overlay" => "Помощь по картам поверхности"
 .MissionOverlay.Title: "Mission Overlay" => "Миссии (оверлей)"
 .MissionOverlay.Description: "Mission List overlay" => "Список миссий (оверлей)"
 .MaterialTrader.Title: "Material Trader" @
-.MaterialTrader.Description: "Material Trader" @
+.MaterialTrader.Description: "Material trader" @
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" @
+.EDSM.Description: "EDSM - Automatic web view of system" @
 .Inara.Title: "Inara" @
 .Inara.Description: "Inara - Automatic web view of system" @
 .Factions.Title: "Factions" @
@@ -156,7 +156,7 @@ SECTION PopOutInfo
 .LocalMap3D.Title: "Local 3D Map" @
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
-.Organics.Description: "Current body organic information and history of scans" @
+.Organics.Description: "Organic scans of current body and historic scans" @
 .Engineers.Title: "Engineers" @
 .Engineers.Description: "List of Engineers, status, recipes" @
 .Discoveries.Title: "Discoveries" @
@@ -175,7 +175,7 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "Инструменты"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Настройки"
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "3D-карта"
+.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" => "3D-карта"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "Отдельные окна"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "Показать все в панели задач"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "Отключить прозрачность"

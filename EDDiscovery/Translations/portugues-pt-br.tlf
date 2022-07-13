@@ -47,14 +47,14 @@ SECTION InfoForm
 
 SECTION PopOutInfo
 
-.Log.Description: "Program log" => "Registro do Programa"
+.Log.Description: "Log of program information" => "Registro do Programa"
 .Log.Title: "Log" => "Registro"
 .Journal.Description: "Journal grid view" => "Tabela do Jornal"
 .Journal.Title: "Journal" => "Jornal"
 .TravelGrid.Description: "History grid view" => "Tabela do Histórico"
-.TravelGrid.Title: "Travel History" => "Histórico de Viajem"
-.StarList.Description: "Visited star list" => "Lista dos Sistemas visitados"
-.StarList.Title: "Star List" => "Lista dos Sistemas"
+.TravelGrid.Title: "History" => "Histórico de Viajem"
+.StarList.Description: "Visited Star list" => "Lista dos Sistemas visitados"
+.StarList.Title: "Visited Stars" => "Lista dos Sistemas"
 .Materials.Description: "Materials count" => "Listas dos Materiais"
 .Materials.Title: "Materials" => "Materiais"
 .Commodities.Description: "Commodity count" => "Lista das Mercadorias"
@@ -69,9 +69,9 @@ SECTION PopOutInfo
 .Statistics.Title: "Statistics" => "Estatísticas"
 .MarketData.Description: "Market data view, giving commodity price information where available" => "Dados de Mercado, mostrando os preços das mercadorias quando disponíveis"
 .MarketData.Title: "Market Data" => "Dados de Mercado"
-.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "Informações sobre os estaleiros do histórico de visitação"
+.ShipYardPanel.Description: "Ship yards information from places you have visited" => "Informações sobre os estaleiros do histórico de visitação"
 .ShipYardPanel.Title: "Ship Yards" => "Estaleiros de naves"
-.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "Informações sobre equipamentos e modulos do histórico de visitação"
+.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" => "Informações sobre equipamentos e modulos do histórico de visitação"
 .OutfittingPanel.Title: "Outfitting" => "Equipamentos/Modulos"
 .Synthesis.Description: "Synthesis planner" => "Plano de Sintese"
 .Synthesis.Title: "Synthesis" => "Sintese"
@@ -83,9 +83,9 @@ SECTION PopOutInfo
 .Scan.Title: "Scan" => "Escaneamentos"
 .ScanGrid.Description: "Scan data on system in a grid" => "Registros das Escaneamentos por sistema, em tabela"
 .ScanGrid.Title: "Scan Grid" => "Tabela de Escaneamentos"
-.StarDistance.Description: "List of nearest stars" => "Lista dos Sistemas proximos"
+.StarDistance.Description: "Nearest stars from current position" => "Lista dos Sistemas proximos"
 .StarDistance.Title: "Nearest Stars" => "Sistemas proximos"
-.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Estima do valor dos dados de Escaneamento"
+.EstimatedValues.Description: "Estimated Scan values of bodies in system" => "Estima do valor dos dados de Escaneamento"
 .EstimatedValues.Title: "Estimated Values" => "Valores Estimados"
 .Map2D.Title: "2D Map" @
 .Map2D.Description: "2D Map of galaxy" @
@@ -97,9 +97,9 @@ SECTION PopOutInfo
 .Plot.Title: "2D Plot" => "Gráfico 2D"
 .Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilateração dos sistemas com posição desconhecida"
 .Trilateration.Title: "Trilateration" => "Trilateração"
-.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Gestão favoritos de Planetas e Sistemas"
+.BookmarkManager.Description: "Bookmarks on systems and planets" => "Gestão favoritos de Planetas e Sistemas"
 .BookmarkManager.Title: "Bookmarks" => "Favoritos"
-.CombatPanel.Description: "Display combat statistics" => "Visualiza estatísticas de combate"
+.CombatPanel.Description: "Combat statistics" => "Visualiza estatísticas de combate"
 .CombatPanel.Title: "Combat" => "Combate"
 .Route.Description: "Route Finder from stored star data" => "Preparação di Itinerário usando os dados da banco dados"
 .Route.Title: "Route Finder" => "Itinerário"
@@ -111,11 +111,11 @@ SECTION PopOutInfo
 .Spanel.Title: "Summary Panel" => "Somário"
 .Trippanel.Description: "Trip computer overlay" => "Computador de Viajem"
 .Trippanel.Title: "Trip Computer" => "Computador de Viajem"
-.NotePanel.Description: "System notes overlay" => "Anotações sobre o Sistema"
+.NotePanel.Description: "Notes overlay" => "Anotações sobre o Sistema"
 .NotePanel.Title: "Notes" => "Anotações"
 .RouteTracker.Description: "Route tracker overlay" => "Traçador de Itinerário"
 .RouteTracker.Title: "Route Tracker" => "Traçador de Itinerário"
-.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Bussola planetária; mostra a direção a seguir para chegar às coordenadas desejadas"
+.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetária; mostra a direção a seguir para chegar às coordenadas desejadas"
 .Compass.Title: "Compass" => "Bussola Planetária"
 .Settings.Description: "Settings for ED Discovery " => "Configurações de ED Discovery "
 .Settings.Title: "Settings" => "Configurações"
@@ -132,13 +132,13 @@ SECTION PopOutInfo
 .CaptainsLog.Title: "Captain's Log" => "Diário do Capitão"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diário do Capitão - anotações pessoais"
 .Surveyor.Title: "Surveyor" => "Topógrafo"
-.Surveyor.Description: "Surface map aid" => "Auxílio para mapeamento de corpos celestes"
+.Surveyor.Description: "Surveyor - Exploration and route overlay" => "Auxílio para mapeamento de corpos celestes"
 .MissionOverlay.Title: "Mission Overlay" => "Overlay das missões"
 .MissionOverlay.Description: "Mission List overlay" => "Overlays das listas de missões"
 .MaterialTrader.Title: "Material Trader" => "Mercador de Materiais"
-.MaterialTrader.Description: "Material Trader" => "Mercador de Materiais"
+.MaterialTrader.Description: "Material trader" => "Mercador de Materiais"
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" => "Visualização automática da página web EDSM no sistema"
+.EDSM.Description: "EDSM - Automatic web view of system" => "Visualização automática da página web EDSM no sistema"
 .Inara.Title: "Inara" @
 .Inara.Description: "Inara - Automatic web view of system" @
 .Factions.Title: "Factions" @
@@ -156,7 +156,7 @@ SECTION PopOutInfo
 .LocalMap3D.Title: "Local 3D Map" @
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
-.Organics.Description: "Current body organic information and history of scans" @
+.Organics.Description: "Organic scans of current body and historic scans" @
 .Engineers.Title: "Engineers" @
 .Engineers.Description: "List of Engineers, status, recipes" @
 .Discoveries.Title: "Discoveries" @
@@ -175,7 +175,7 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "In&strumentos"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configuração"
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "Visualizar mapa &3D"
+.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" => "Visualizar mapa &3D"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Janelas"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tudo na taskbar"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Disabilita todas as transparencias"
