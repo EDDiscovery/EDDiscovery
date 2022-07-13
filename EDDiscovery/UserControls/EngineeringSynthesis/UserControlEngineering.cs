@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
 
             var enumlist = new Enum[] { EDTx.UserControlEngineering_UpgradeCol, EDTx.UserControlEngineering_ModuleCol, EDTx.UserControlEngineering_LevelCol, EDTx.UserControlEngineering_MaxCol, EDTx.UserControlEngineering_WantedCol, EDTx.UserControlEngineering_AvailableCol, EDTx.UserControlEngineering_NotesCol, EDTx.UserControlEngineering_RecipeCol, EDTx.UserControlEngineering_EngineersCol };
             BaseUtils.Translator.Instance.TranslateControls(this,enumlist);
-            var enumlisttt = new Enum[] { EDTx.UserControlEngineering_ToolTip, EDTx.UserControlEngineering_buttonFilterUpgrade_ToolTip, EDTx.UserControlEngineering_buttonFilterModule_ToolTip, EDTx.UserControlEngineering_buttonFilterLevel_ToolTip, EDTx.UserControlEngineering_buttonFilterEngineer_ToolTip, EDTx.UserControlEngineering_buttonFilterMaterial_ToolTip, EDTx.UserControlEngineering_buttonClear_ToolTip, EDTx.UserControlEngineering_chkNotHistoric_ToolTip, EDTx.UserControlEngineering_extCheckBoxWordWrap_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlEngineering_buttonFilterUpgrade_ToolTip, EDTx.UserControlEngineering_buttonFilterModule_ToolTip, EDTx.UserControlEngineering_buttonFilterLevel_ToolTip, EDTx.UserControlEngineering_buttonFilterEngineer_ToolTip, EDTx.UserControlEngineering_buttonFilterMaterial_ToolTip, EDTx.UserControlEngineering_buttonClear_ToolTip, EDTx.UserControlEngineering_chkNotHistoric_ToolTip, EDTx.UserControlEngineering_extCheckBoxWordWrap_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
         }

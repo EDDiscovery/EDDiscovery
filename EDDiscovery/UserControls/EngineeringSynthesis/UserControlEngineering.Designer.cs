@@ -391,7 +391,6 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlEngineering";
             this.Size = new System.Drawing.Size(800, 572);
-            this.toolTip.SetToolTip(this, "Enable or disable word wrap");
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).EndInit();
             this.panelTop.ResumeLayout(false);

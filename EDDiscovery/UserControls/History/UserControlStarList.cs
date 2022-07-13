@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false);
 
              if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
-                searchterms = "".TxID(EDTx.UserControlTravelGrid_SearchTerms);
+                searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
         }
 
         public override void LoadLayout()

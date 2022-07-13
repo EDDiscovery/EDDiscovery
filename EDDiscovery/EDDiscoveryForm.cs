@@ -216,10 +216,23 @@ namespace EDDiscovery
                 EDDConfig.Instance.Language = "None";
 
             string lang = EDDOptions.Instance.SelectLanguage ?? EDDConfig.Instance.Language;
+
+            bool loadorgenglish = false;
+
+#if DEBUG
+            if (lang == "example-ex")       // if we are loading english, turn on code vs english comparision to see if we can find any out of date english.ex
+            {
+                Translator.Instance.CompareTranslatedToCode = true;
+                loadorgenglish = true;
+            }
+#endif
             bool found = BaseUtils.Translator.Instance.LoadTranslation(lang, 
                     CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
-                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, debugout:false);
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, 
+                    loadorgenglish:loadorgenglish,
+                    debugout:false);
+
 
             if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
                 ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");

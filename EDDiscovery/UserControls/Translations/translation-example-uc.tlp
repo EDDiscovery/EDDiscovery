@@ -35,7 +35,7 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn: "Grid" @
 .buttonExtEditCampaign: "Edit" @
 .labelCredits.ToolTip: "Current Credits" @
-.labelTotalKills.ToolTip: "Total kills in campaign" @
+.labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" @
 .labelFactionKills.ToolTip: "Faction Kills" @
 .labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" @
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" @
@@ -180,7 +180,6 @@ SECTION UserControlEngineering
 .RecipeCol: "Recipe" @
 .EngineersCol: "Engineers" @
 .CraftedCol: "Crafted" @
-.ToolTip: "Left click and drag on grid to reorder" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .buttonFilterMaterial.ToolTip: "Filter the table by material" @
 .buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" @
@@ -248,12 +247,12 @@ SECTION UserControlExpedition
 .SystemName: "System Name" @
 .Distance: "Dist." @
 .Note: "Note" @
-.labelCml: "Cml Distance: " @
-.labelP2P: "P2P Distance: " @
+.labelCml: "Cml Distance:" @
+.labelP2P: "P2P Distance:" @
 .buttonReverseRoute: "Reverse" @
-.labelEndDate: "End Date: " @
-.labelDateStart: "Start Date: " @
-.labelRouteName: "Route Name: " @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
+.labelRouteName: "Route Name:" @
 
 .copyToolStripMenuItem: "Copy" @
 .pasteToolStripMenuItem: "Paste" @
@@ -285,7 +284,7 @@ SECTION UserControlJournalGrid
 
 .labelTime: "Time" @
 .labelSearch: "Search" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
@@ -352,7 +351,7 @@ SECTION UserControlMarketData
 .Conly: "Cargo only, no market data on this item" @
 .LEntry: "Travel History Entry Last" @
 .checkBoxHasDemand: "Has Demand" @
-.checkBoxHasDemand.ToolTip: "Show items that have demand" @
+.checkBoxHasDemand.ToolTip: "Show items with demand" @
 
 SECTION UserControlMaterialCommodities
 
@@ -439,7 +438,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
-.extButtonSearches.ToolTip: "Search Filter list from search scans panel" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
 
 
 .navroute: "Nav Route" @
@@ -615,7 +614,7 @@ SECTION UserControlRoute
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
 .NoRoute: "No route set up, retry" @
 .checkBox_FsdBoost: "Use Boosts" @
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
 .showScanToolStripMenuItem: "View Scan Display" @
 
 .M1: "Nearest to Waypoint" @
@@ -679,7 +678,7 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" @
 .StarClass: "Show Classes of Stars" @
 .Distance: "Show distance of bodies" @
-.Expired: "Expired: " @
+.Expired: "Expired:" @
 
 SECTION UserControlScanGrid
 
@@ -730,7 +729,7 @@ SECTION UserControlSettings
 
 .groupBoxCustomHistoryLoad: "History" @
 .checkBoxOrderRowsInverted: "Number Rows by Date Ascending" @
-.labelTimeDisplay: "Time: " @
+.labelTimeDisplay: "Time:" @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
@@ -738,13 +737,13 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" @
 .groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries: " @
-.labelHistorySel: "Entries to read: " @
+.labelHistoryEssItems: "Essential entries:" @
+.labelHistorySel: "Entries to read:" @
 .groupBoxCustomScreenShots: "Screenshots conversion" @
 
 .buttonExtScreenshot: "Configure" @
 .checkBoxCustomEnableScreenshots: "Enable" @
-.groupBoxCustomEDSM: "EDSM/EDDB Control" @
+.groupBoxCustomEDSM: "EDSM Control" @
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" @
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" @
 .groupBoxPopOuts: "Window Options" @
@@ -760,7 +759,7 @@ SECTION UserControlSettings
 .groupBoxCustomLanguage: "Language" @
 .groupBoxCustomSafeMode: "Advanced" @
 .buttonExtSafeMode: "Restart in Safe Mode" @
-.labelSafeMode: "Click this to perform special operations like to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" @
+.labelSafeMode: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" @
 .btnDeleteCommander.ToolTip: "Delete selected commander" @
 .buttonEditCommander.ToolTip: "Edit selected commander" @
 .buttonAddCommander.ToolTip: "Add a new commander" @
@@ -775,7 +774,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" @
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" @
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" @
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." @
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." @
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" @
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @
@@ -940,16 +939,16 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .comboBoxTime.ToolTip: "Select the entries by age" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 
 
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" @
-.FSD: "This system has materials for FSD boost: " @
+.FSD: "This system has materials for FSD boost" @
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
 .OB: "{0} Other bodies" @
 
@@ -992,7 +991,7 @@ SECTION UserControlStats
 .Name: "Name" @
 .Ident: "Ident" @
 .Jumps: "Jumps" @
-.TravelledLy: "Traveled Ly" @
+.TravelledLy: "Travelled Ly" @
 .BodiesScanned: "Bodies Scanned" @
 .Destroyed: "Destroyed" @
 .PremiumBoost: "Premium Boost" @
@@ -1203,7 +1202,7 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" @
 
 .comboBoxTime.ToolTip: "Select the entries by age" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
 .buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -1211,7 +1210,7 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" @
 
-.SearchTerms: "system:body:station" => "system:body:station:stationfaction" 
+.SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction" 
 
 //.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
 //.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
@@ -1240,8 +1239,8 @@ SECTION CaptainsLogEntries
 .ColBodyName: "Body" @
 .ColNote: "Note" @
 .ColTags: "Tags" @
-.labelEndDate: "End Date: " @
-.labelDateStart: "Start Date: " @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
 .buttonTags.ToolTip: "Edit Tags" @
 .buttonDelete.ToolTip: "Delete selected entries" @
 .buttonNew.ToolTip: "New Entry" @

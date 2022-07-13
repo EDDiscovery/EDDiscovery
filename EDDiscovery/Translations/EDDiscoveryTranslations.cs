@@ -1594,7 +1594,6 @@ namespace EDDiscovery
         UserControlEngineering_EngineersCol, // Column Header 'Engineers'
         UserControlEngineering_CraftedCol, // Column Header 'Crafted'
 
-        UserControlEngineering_ToolTip, // ToolTip 'Enable or disable word wrap'
         UserControlEngineering_buttonFilterUpgrade_ToolTip, // ToolTip 'Filter the table by upgrade type'
         UserControlEngineering_buttonFilterModule_ToolTip, // ToolTip 'Filter the table by module type'
         UserControlEngineering_buttonFilterLevel_ToolTip, // ToolTip 'Filter the table by level'
