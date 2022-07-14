@@ -234,7 +234,7 @@ namespace EDDiscovery.Forms
             var list = DefaultGalaxyOptions.Where(x => x.Item2 != "Custom" && x.Item2 != "Reset").Select(x => x.Item1).ToList();
 
             int width = 500;
-            string text = "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if your using a HDD.".T(EDTx.GalaxySectorSelect_GALSELEX);
+            string text = "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD.".T(EDTx.GalaxySectorSelect_GALSELEX);
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), text,  new Point(10, 30), new Size(width-50, 100), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 130), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", DefaultGalaxyOptions[2].Item1,
