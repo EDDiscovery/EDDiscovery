@@ -930,6 +930,7 @@ namespace EDDiscovery
         UserControlSurveyor_dontHideInFSSModeToolStripMenuItem,
         UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem,
         UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem,
+        UserControlSurveyor_showDividersToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_rightToolStripMenuItem,

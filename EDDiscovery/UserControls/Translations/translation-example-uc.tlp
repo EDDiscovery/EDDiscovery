@@ -427,6 +427,7 @@ SECTION UserControlSurveyor
 .dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.showDividersToolStripMenuItem: "Show Dividers" @
 
 .extButtonPlanets.ToolTip: "Planet Filter" @
 .extButtonStars.ToolTip: "Star Filter" @

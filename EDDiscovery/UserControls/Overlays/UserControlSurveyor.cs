@@ -829,8 +829,8 @@ namespace EDDiscovery.UserControls
                     frmt: frmt);
             pb.ClearImageList();
             pb.Add(i);
-            if ( text.HasChars())
-                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0,i.Location.Height, pb.Width, 8), 1, 4);
+            if ( text.HasChars() && IsSet(CtrlList.showdividers))
+                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0,i.Location.Height, i.Location.Width, 8), 1, 4);
             pb.Render();
 
             frmt.Dispose();
@@ -849,8 +849,8 @@ namespace EDDiscovery.UserControls
             // 18
             allstars, beltclusters,
             // 20
-            showValues, moreinfo, showGravity, atmos, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo, showstarclass,
-            // 30
+            showValues, moreinfo, showGravity, atmos, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo, showstarclass, showdividers,
+            // 31
             alignleft, aligncenter, alignright
         };
 
@@ -947,6 +947,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID(EDTx.UserControlSurveyor_dontHideInFSSModeToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID(EDTx.UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show System Info Always".TxID(EDTx.UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showdividers.ToString(), "Show Dividers".TxID(EDTx.UserControlSurveyor_showDividersToolStripMenuItem));
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
@@ -982,9 +983,7 @@ namespace EDDiscovery.UserControls
 
                 PopulateCtrlList();
                 SetVisibility();
-                DrawTitle();
-                DrawScanSummary(last_sys);
-                DrawSystem(last_sys);
+                DrawAll(last_sys);
             };
 
             if ( saveasstring == null)
