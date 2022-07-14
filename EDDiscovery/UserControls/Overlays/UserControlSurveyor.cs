@@ -936,7 +936,6 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.showstarclass.ToString(), "Show star class".TxID(EDTx.UserControlSurveyor_showstarclassToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.moreinfo.ToString(), "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem));
@@ -946,8 +945,9 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID(EDTx.UserControlSurveyor_dontHideInFSSModeToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID(EDTx.UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show System Info Always".TxID(EDTx.UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showdividers.ToString(), "Show Dividers".TxID(EDTx.UserControlSurveyor_showDividersToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show system info always".TxID(EDTx.UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showstarclass.ToString(), "Show star class in system info".TxID(EDTx.UserControlSurveyor_showstarclassToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showdividers.ToString(), "Show dividers".TxID(EDTx.UserControlSurveyor_showDividersToolStripMenuItem));
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }

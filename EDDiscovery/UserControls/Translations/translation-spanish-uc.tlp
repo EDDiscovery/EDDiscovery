@@ -385,30 +385,31 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" => "Terraformable"
-.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" => "Tiene vulcanismo"
+.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has volcanism" => "Tiene vulcanismo"
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "Tiene anillos"
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" => "Radio bajo"
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Tiene señales"
-.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
-.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
+.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
+.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "Aterrizable"
 .bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" => "Mostrar todas las estrellas"
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Mostrar grupos de cinturones"
-.showstarclassToolStripMenuItem: "Show star class" @
 .showSignalsToolStripMenuItem: "Show signals" @
 .showValuesToolStripMenuItem: "Show values" => "Mostrar valores"
-.showMoreInformationToolStripMenuItem: "Show More Information" => "Mostrar más información"
+.showMoreInformationToolStripMenuItem: "Show more information" => "Mostrar más información"
 .showGravityToolStripMenuItem: "Show gravity of landables" @
 .showAtmosToolStripMenuItem: "Show atmospheres" @
-.showVolcanismToolStripMenuItem: "Show volcanism " @
+.showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" => "Auto-escondite"
-.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "No te escondas en el modo FSS"
+.dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" => "No te escondas en el modo FSS"
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Ocultar cuerpos ya asignados"
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Mostrar información del sistema siempre"
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" => "Mostrar información del sistema siempre"
+.showstarclassToolStripMenuItem: "Show star class in system info" @
+.showDividersToolStripMenuItem: "Show dividers" @
 .extButtonPlanets.ToolTip: "Planet Filter" @
 .extButtonStars.ToolTip: "Star Filter" @
 .extButtonShowControl.ToolTip: "Display Settings" @
