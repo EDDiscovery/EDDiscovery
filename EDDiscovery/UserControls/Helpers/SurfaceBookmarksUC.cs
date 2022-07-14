@@ -43,6 +43,10 @@ namespace EDDiscovery.Forms
         public SurfaceBookmarkUserControl()
         {
             InitializeComponent();
+            var enumlist = new Enum[] { EDTx.SurfaceBookmarkUserControl_BodyName, EDTx.SurfaceBookmarkUserControl_SurfaceName, EDTx.SurfaceBookmarkUserControl_SurfaceDesc, EDTx.SurfaceBookmarkUserControl_Latitude, EDTx.SurfaceBookmarkUserControl_Longitude, EDTx.SurfaceBookmarkUserControl_Valid, EDTx.SurfaceBookmarkUserControl_labelSurface };
+            var enumlistcms = new Enum[] { EDTx.SurfaceBookmarkUserControl_sendToCompassToolStripMenuItem, EDTx.SurfaceBookmarkUserControl_deleteToolStripMenuItem, EDTx.SurfaceBookmarkUserControl_addPlanetManuallyToolStripMenuItem };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
         public void Init(string systemName, HistoryList helist, PlanetMarks pm = null)
@@ -56,12 +60,6 @@ namespace EDDiscovery.Forms
             dataGridViewMarks.Enabled = true;
             sendToCompassToolStripMenuItem.Enabled = false;
             dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
-
-            var enumlist = new Enum[] { EDTx.SurfaceBookmarkUserControl_BodyName, EDTx.SurfaceBookmarkUserControl_SurfaceName, EDTx.SurfaceBookmarkUserControl_SurfaceDesc, EDTx.SurfaceBookmarkUserControl_Latitude, EDTx.SurfaceBookmarkUserControl_Longitude, EDTx.SurfaceBookmarkUserControl_Valid, EDTx.SurfaceBookmarkUserControl_labelSurface };
-            var enumlistcms = new Enum[] { EDTx.SurfaceBookmarkUserControl_sendToCompassToolStripMenuItem, EDTx.SurfaceBookmarkUserControl_deleteToolStripMenuItem, EDTx.SurfaceBookmarkUserControl_addPlanetManuallyToolStripMenuItem };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
 
             LoadGrid(systemName, helist);
         }
