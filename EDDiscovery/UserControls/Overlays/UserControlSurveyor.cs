@@ -288,18 +288,19 @@ namespace EDDiscovery.UserControls
                 else
                     last_sys = he.System;       // its the same system, but since we may have synthesised a last_sys in startjump, and we have a real one from the journal, make sure its updated
 
-                if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts in title, we update. Not used in search 
+                if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // title uses body count and all found, so update it
                 {
                     JournalFSSAllBodiesFound fs = he.journalEntry as JournalFSSAllBodiesFound;
                     all_found = true;
                     bodies_found = fs.Count;
-                    DrawTitle();        // only title uses bodies_found
+                    DrawTitle();      
                 }
-                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts in title, we update. Discovery scans are not used in search so no need to kick
+                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan) // title and summary are affected    
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
                     bodies_found = je.BodyCount;
-                    DrawTitle(); // only title uses bodies_found
+                    DrawTitle();                //  title uses bodies_found
+                    DrawScanSummary(last_sys);  // but scan summary also uses FSS body count, via the value stored inside the scan star structures
                 }
                 else if ( he.EntryType == JournalTypeEnum.FuelScoop || he.EntryType == JournalTypeEnum.ReservoirReplenished )
                 {
@@ -312,7 +313,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 // these are in IStarScan, but we don't need to do anything here, as they don't affect the display
-                else if (he.EntryType == JournalTypeEnum.SAAScanComplete || he.EntryType == JournalTypeEnum.Location || he.EntryType == JournalTypeEnum.CarrierJump)
+                else if (he.EntryType == JournalTypeEnum.SAAScanComplete || he.EntryType == JournalTypeEnum.Location)
                 {
                     // System.Diagnostics.Debug.WriteLine($"Surveyor Ignore {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
                 }
