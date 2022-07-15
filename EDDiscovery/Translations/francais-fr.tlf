@@ -369,7 +369,10 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" @
+ExportForm: "Export data" @
+.buttonExport: "Export" => "Exporter"
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "Séparateur CSV"
 .radioButtonComma: "Comma" => "Virgule"
 .radioButtonSemiColon: "Semicolon" => "point-virgule"
@@ -377,11 +380,6 @@ ExportForm: "Export Data" @
 .checkBoxCustomAutoOpen: "Open" => "Ouvrir"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" => "Exporter"
-.ECH: "Export current data {0}" => "Exporte les donnnées courantes {0}"
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -414,7 +412,7 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" @
+MoveToCommander: "Move To Commander" @
 .buttonTransfer: "Transfer" => "Transférer"
 .label1: "Move selected history to commander." => "Déplacer l'historique selectionné vers le commandant"
 
@@ -446,11 +444,11 @@ ProfileEditor: "ProfileEditor" @
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Définir une note"
-.labelTTimestamp: "Timestamp: " @
+.labelTTimestamp: "Timestamp:" @
 .buttonSave: "Save" => "Sauvegarder"
-.labelTSystem: "System: " => "Système : "
-.labelTSummary: "Summary: " => "Résumé : "
-.labelTDetails: "Details: " => "Détails : "
+.labelTSystem: "System:" => "Système : "
+.labelTSummary: "Summary:" => "Résumé : "
+.labelTDetails: "Details:" => "Détails : "
 
 SECTION MessageBoxTheme
 

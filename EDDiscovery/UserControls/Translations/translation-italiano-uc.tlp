@@ -46,18 +46,18 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Mostra tabella quando in modo trasparente"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Seleziona la campagna da visualizzare"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "Modifica campagna definita dall'utente"
-.Kills: "Kills: " @
-.Faction: "Faction: " @
-.Crimes: "Crimes: " @
-.Bal: "Bal: " @
+.Kills: "Kills:" @
+.Faction: "Faction:" @
+.Crimes: "Crimes:" @
+.Bal: "Bal:" @
 .NewCampaign: "New Campaign" @
 .SinceLastDock: "Since Last Dock" @
-.Name: "Name: " @
+.Name: "Name:" @
 .C1: "Give name to campaign" @
 .C2: "Optional faction to target" @
-.Start: "Start: " @
+.Start: "Start:" @
 .C3: "Select Start time" @
-.End: "End: " @
+.End: "End:" @
 .C4: "Select Start time" @
 .C5: "Press to Accept" @
 .C6: "Press to Cancel" @
@@ -235,13 +235,13 @@ SECTION UserControlExpedition
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Aggiungi Systemi"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
+.buttonReverseRoute.ToolTip: "Reverse" => "Inverti"
 .AddSys: "Add Systems" => "Aggiungi Systemi"
 .SystemName: "System Name" => "Nome del Sistema"
 .Distance: "Dist." @
 .Note: "Note" => "Nota"
 .labelCml: "Cml Distance:" => "Cml Distanza: "
 .labelP2P: "P2P Distance:" => "P2P Distanza: "
-.buttonReverseRoute.ToolTip: "Reverse" => "Inverti"
 .labelEndDate: "End Date:" => "Data di Termine: "
 .labelDateStart: "Start Date:" => "Data di Inizio: "
 .labelRouteName: "Route Name:" => "Nome di Itinerario: "
@@ -811,7 +811,7 @@ SECTION UserControlSpanel
 .toolStripMenuItemTargetLine: "Show Target Line" @
 .blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
 .expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
-.EDSMButtonToolStripMenuItem: "EDSM Button" @
+.EDSMButtonToolStripMenuItem: "Show EDSM Button" @
 .toolStripMenuItemTime: "Show Time" @
 .iconToolStripMenuItem: "Show Event Icon" @
 .showDescriptionToolStripMenuItem: "Show Description" @
@@ -820,25 +820,25 @@ SECTION UserControlSpanel
 .showXYZToolStripMenuItem: "Show XYZ" @
 .showTargetToolStripMenuItem: "Show Target Distance per Star" @
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" @
-.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" @
-.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" @
-.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" @
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
+.showCircumstellarZonesToolStripMenuItem: "Show Habitation Zone" @
+.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Show Metal Rich Planet Zone" @
+.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Show Water World Zone" @
+.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" @
+.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" @
+.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Show Icy Planets Zone" @
 .OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
 .OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance, XYZ, Notes" @
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do not show" @
 .surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
 .surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
 .surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
 .surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
+.showInPositionToolStripMenuItem.scanRightMenuItem: "Scan right" @
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "Scan left" @
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Scan above" @
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Scan below" @
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" @
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" @
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" @
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" @
@@ -917,9 +917,9 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
 .tabControlCustomStats.tabPageGameStats: "In Game" @
 .tabControlCustomStats.tabPageByShip: "By Ship" @
-.TotalNoofjumps: "Total No of jumps: " @
-.FSDjumps: "FSD Jumps" @
-.JumpHistory: "Jump History" @
+.TotalNoofjumps: "Total No of jumps" @
+.FSDjumps: "FSD jumps" @
+.JumpHistory: "FSD Jump History" @
 .24hc: "24 Hours: " @
 .OneWeek: ", One Week: " @
 .30Days: ", 30 Days: " @
@@ -946,7 +946,7 @@ SECTION UserControlStats
 .OrganicScans: "Organic Scans Value" @
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
-.Beltcluster: "Belt Cluster: " @
+.Beltcluster: "Belt Cluster" @
 .Lastdock: "Last dock" @
 .Trip: "Trip" @
 .All: "All" @
@@ -1196,10 +1196,9 @@ SECTION UserControlTrilateration
 .viewOnEDSMToolStripMenuItem: "View on EDSM" @
 .pasteToolStripMenuItem: "Paste" @
 .toolStripButtonSubmitDistances: "&Submit Distances" @
-.toolStripButtonNew: "Start &new" @
-.toolStripLabelSystem: "From System: " @
-.toolStripTextBoxSystem: "Press Start New" @
-.toolStripLabel1: "Visited without coordinates: " @
+.toolStripButtonNew: "Start New" @
+.toolStripLabelSystem: "From System:" @
+.toolStripLabel1: "Visited without coordinates:" @
 .toolStripAddFromHistory: "Add 20 oldest" @
 .toolStripAddRecentHistory: "Add 20 newest" @
 .ToolStripText: "Press Start New" @

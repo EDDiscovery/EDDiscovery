@@ -369,7 +369,10 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" => "导出"
+ExportForm: "Export data" => "导出"
+.buttonExport: "Export" => "导出"
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "CSV 分隔符"
 .radioButtonComma: "Comma" => "逗号"
 .radioButtonSemiColon: "Semicolon" => "分号"
@@ -377,11 +380,6 @@ ExportForm: "Export Data" => "导出"
 .checkBoxCustomAutoOpen: "Open" => "导出后打开"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" => "导出"
-.ECH: "Export current data {0}" => "导出当前的航行记录视图为{0}"
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -414,7 +412,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" => "转移至指挥官..."
+MoveToCommander: "Move To Commander" => "转移至指挥官..."
 .buttonTransfer: "Transfer" => "转移"
 .label1: "Move selected history to commander." => "将选中的航行记录转移到另一位指挥官那里。"
 
@@ -446,11 +444,11 @@ ProfileEditor: "ProfileEditor" => "配置编辑器"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "创建笔记"
-.labelTTimestamp: "Timestamp: " => "时间："
+.labelTTimestamp: "Timestamp:" => "时间："
 .buttonSave: "Save" => "保存"
-.labelTSystem: "System: " => "星系："
-.labelTSummary: "Summary: " => "概要："
-.labelTDetails: "Details: " => "详情："
+.labelTSystem: "System:" => "星系："
+.labelTSummary: "Summary:" => "概要："
+.labelTDetails: "Details:" => "详情："
 
 SECTION MessageBoxTheme
 

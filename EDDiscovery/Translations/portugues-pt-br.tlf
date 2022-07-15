@@ -369,7 +369,10 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" => "Exportar"
+ExportForm: "Export data" => "Exportar"
+.buttonExport: "Export" => "Exportar"
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "Separador CVS"
 .radioButtonComma: "Comma" => "Vírgula"
 .radioButtonSemiColon: "Semicolon" => "Ponto e Vírgula"
@@ -377,11 +380,6 @@ ExportForm: "Export Data" => "Exportar"
 .checkBoxCustomAutoOpen: "Open" => "Abrir no excel"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" => "Exportar"
-.ECH: "Export current data {0}" => "Exortar o hístorico atual para {0}"
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -414,7 +412,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seletor de Setores Galácticos"
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" => "Move para o comandante"
+MoveToCommander: "Move To Commander" => "Move para o comandante"
 .buttonTransfer: "Transfer" => "Transfira"
 .label1: "Move selected history to commander." => "Move o histórico selecionado ao comandante."
 
@@ -446,11 +444,11 @@ ProfileEditor: "ProfileEditor" => "Editor de Perfil"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Definir nota"
-.labelTTimestamp: "Timestamp: " => "Timestamp"
+.labelTTimestamp: "Timestamp:" => "Timestamp"
 .buttonSave: "Save" => "Salvar"
-.labelTSystem: "System: " => "Sistema: "
-.labelTSummary: "Summary: " => "Somário"
-.labelTDetails: "Details: " => "Detalhes"
+.labelTSystem: "System:" => "Sistema: "
+.labelTSummary: "Summary:" => "Somário"
+.labelTDetails: "Details:" => "Detalhes"
 
 SECTION MessageBoxTheme
 
