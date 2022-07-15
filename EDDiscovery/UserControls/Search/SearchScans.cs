@@ -70,6 +70,7 @@ namespace EDDiscovery.UserControls
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = HistoryListQueries.PropertyList();
 
+            conditionFilterUC.AutoCompleteOnMatch = true;
             conditionFilterUC.VariableNames = classnames;
 
             foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")} | {pni.Comment}"); // debug output for wiki
