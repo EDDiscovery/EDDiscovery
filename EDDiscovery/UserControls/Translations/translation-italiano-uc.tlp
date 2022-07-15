@@ -241,7 +241,7 @@ SECTION UserControlExpedition
 .Note: "Note" => "Nota"
 .labelCml: "Cml Distance:" => "Cml Distanza: "
 .labelP2P: "P2P Distance:" => "P2P Distanza: "
-.buttonReverseRoute: "Reverse" => "Inverti"
+.buttonReverseRoute.ToolTip: "Reverse" => "Inverti"
 .labelEndDate: "End Date:" => "Data di Termine: "
 .labelDateStart: "Start Date:" => "Data di Inizio: "
 .labelRouteName: "Route Name:" => "Nome di Itinerario: "

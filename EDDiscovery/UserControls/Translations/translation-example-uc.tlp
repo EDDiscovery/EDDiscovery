@@ -46,18 +46,18 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" @
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" @
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" @
-.Kills: "Kills: " @
-.Faction: "Faction: " @
-.Crimes: "Crimes: " @
-.Bal: "Bal: " @
+.Kills: "Kills:" @
+.Faction: "Faction:" @
+.Crimes: "Crimes:" @
+.Bal: "Bal:" @
 .NewCampaign: "New Campaign" @
 .SinceLastDock: "Since Last Dock" @
-.Name: "Name: " @
+.Name: "Name:" @
 .C1: "Give name to campaign" @
 .C2: "Optional faction to target" @
-.Start: "Start: " @
+.Start: "Start:" @
 .C3: "Select Start time" @
-.End: "End: " @
+.End: "End:" @
 .C4: "Select Start time" @
 .C5: "Press to Accept" @
 .C6: "Press to Cancel" @
@@ -239,6 +239,7 @@ SECTION UserControlExpedition
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" @
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
+.buttonReverseRoute.ToolTip: "Reverse" @
 
 .AddSys: "Add Systems" @
 
@@ -249,7 +250,6 @@ SECTION UserControlExpedition
 .Note: "Note" @
 .labelCml: "Cml Distance:" @
 .labelP2P: "P2P Distance:" @
-.buttonReverseRoute: "Reverse" @
 .labelEndDate: "End Date:" @
 .labelDateStart: "Start Date:" @
 .labelRouteName: "Route Name:" @
@@ -854,7 +854,7 @@ SECTION UserControlSpanel
 .blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
 .expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
 
-.EDSMButtonToolStripMenuItem: "EDSM Button" @
+.EDSMButtonToolStripMenuItem: "Show EDSM Button" @
 .toolStripMenuItemTime: "Show Time" @
 .iconToolStripMenuItem: "Show Event Icon" @
 .showDescriptionToolStripMenuItem: "Show Description" @
@@ -864,28 +864,28 @@ SECTION UserControlSpanel
 .showTargetToolStripMenuItem: "Show Target Distance per Star" @
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" @
 
-.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" @
-.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" @
-.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" @
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
+.showCircumstellarZonesToolStripMenuItem: "Show Habitation Zone" @
+.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Show Metal Rich Planet Zone" @
+.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Show Water World Zone" @
+.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" @
+.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" @
+.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Show Icy Planets Zone" @
 
 .OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
 .OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance, XYZ, Notes" @
 
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do not show" @
 .surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
 .surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
 .surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
 .surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
 
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
+.showInPositionToolStripMenuItem.scanRightMenuItem: "Scan right" @
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "Scan left" @
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Scan above" @
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Scan below" @
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" @
 
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" @
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" @
@@ -973,9 +973,9 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageGameStats: "In Game" @
 .tabControlCustomStats.tabPageByShip: "By Ship" @
 
-.TotalNoofjumps: "Total No of jumps: " @
-.FSDjumps: "FSD Jumps" @
-.JumpHistory: "Jump History" @
+.TotalNoofjumps: "Total No of jumps" @
+.FSDjumps: "FSD jumps" @
+.JumpHistory: "FSD Jump History" @
 .24hc: "24 Hours: " @
 .OneWeek: ", One Week: " @
 .30Days: ", 30 Days: " @
@@ -1004,7 +1004,7 @@ SECTION UserControlStats
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
 
-.Beltcluster: "Belt Cluster: " @
+.Beltcluster: "Belt Cluster" @
 
 .Lastdock: "Last dock" @
 .Trip: "Trip" @
@@ -1268,11 +1268,11 @@ SECTION UserControlTrilateration
 .addToWantedSystemsToolStripMenuItem: "Add to wanted systems" @
 .viewOnEDSMToolStripMenuItem: "View on EDSM" @
 .pasteToolStripMenuItem: "Paste" @
+
 .toolStripButtonSubmitDistances: "&Submit Distances" @
-.toolStripButtonNew: "Start &new" @
-.toolStripLabelSystem: "From System: " @
-.toolStripTextBoxSystem: "Press Start New" @
-.toolStripLabel1: "Visited without coordinates: " @
+.toolStripButtonNew: "Start New" @
+.toolStripLabelSystem: "From System:" @
+.toolStripLabel1: "Visited without coordinates:" @
 .toolStripAddFromHistory: "Add 20 oldest" @
 .toolStripAddRecentHistory: "Add 20 newest" @
 .ToolStripText: "Press Start New" @

@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             // labelCml
             // 
             this.labelCml.AutoSize = true;
-            this.labelCml.Location = new System.Drawing.Point(444, 58);
+            this.labelCml.Location = new System.Drawing.Point(444, 61);
             this.labelCml.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.labelCml.Name = "labelCml";
             this.labelCml.Size = new System.Drawing.Size(72, 13);
@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             // labelP2P
             // 
             this.labelP2P.AutoSize = true;
-            this.labelP2P.Location = new System.Drawing.Point(444, 34);
+            this.labelP2P.Location = new System.Drawing.Point(444, 37);
             this.labelP2P.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.labelP2P.Name = "labelP2P";
             this.labelP2P.Size = new System.Drawing.Size(75, 13);
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
             this.txtP2PDIstance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtP2PDIstance.EndButtonImage")));
             this.txtP2PDIstance.EndButtonVisible = false;
             this.txtP2PDIstance.InErrorCondition = false;
-            this.txtP2PDIstance.Location = new System.Drawing.Point(529, 34);
+            this.txtP2PDIstance.Location = new System.Drawing.Point(529, 37);
             this.txtP2PDIstance.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.txtP2PDIstance.Multiline = false;
             this.txtP2PDIstance.Name = "txtP2PDIstance";
@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
             this.txtCmlDistance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtCmlDistance.EndButtonImage")));
             this.txtCmlDistance.EndButtonVisible = false;
             this.txtCmlDistance.InErrorCondition = false;
-            this.txtCmlDistance.Location = new System.Drawing.Point(529, 58);
+            this.txtCmlDistance.Location = new System.Drawing.Point(529, 61);
             this.txtCmlDistance.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.txtCmlDistance.Multiline = false;
             this.txtCmlDistance.Name = "txtCmlDistance";
@@ -183,12 +183,13 @@ namespace EDDiscovery.UserControls
             // 
             // buttonReverseRoute
             // 
+            this.buttonReverseRoute.Image = global::EDDiscovery.Icons.Controls.Reverse;
             this.buttonReverseRoute.Location = new System.Drawing.Point(299, 5);
             this.buttonReverseRoute.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.buttonReverseRoute.Name = "buttonReverseRoute";
-            this.buttonReverseRoute.Size = new System.Drawing.Size(100, 25);
+            this.buttonReverseRoute.Size = new System.Drawing.Size(28, 28);
             this.buttonReverseRoute.TabIndex = 8;
-            this.buttonReverseRoute.Text = "Reverse";
+            this.toolTip.SetToolTip(this.buttonReverseRoute, "Reverse");
             this.buttonReverseRoute.UseVisualStyleBackColor = true;
             this.buttonReverseRoute.Click += new System.EventHandler(this.buttonReverseRoute_Click);
             // 
@@ -199,7 +200,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerEndTime.Checked = false;
             this.dateTimePickerEndTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerEndTime.Location = new System.Drawing.Point(299, 58);
+            this.dateTimePickerEndTime.Location = new System.Drawing.Point(299, 61);
             this.dateTimePickerEndTime.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerEndTime.Name = "dateTimePickerEndTime";
             this.dateTimePickerEndTime.SelectedColor = System.Drawing.Color.Yellow;
@@ -217,7 +218,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerEndDate.Checked = false;
             this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerEndDate.Location = new System.Drawing.Point(78, 58);
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(78, 61);
             this.dateTimePickerEndDate.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
             this.dateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
@@ -231,7 +232,7 @@ namespace EDDiscovery.UserControls
             // labelEndDate
             // 
             this.labelEndDate.AutoSize = true;
-            this.labelEndDate.Location = new System.Drawing.Point(3, 56);
+            this.labelEndDate.Location = new System.Drawing.Point(3, 59);
             this.labelEndDate.Name = "labelEndDate";
             this.labelEndDate.Size = new System.Drawing.Size(55, 13);
             this.labelEndDate.TabIndex = 5;
@@ -244,7 +245,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartTime.Checked = false;
             this.dateTimePickerStartTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerStartTime.Location = new System.Drawing.Point(299, 34);
+            this.dateTimePickerStartTime.Location = new System.Drawing.Point(299, 37);
             this.dateTimePickerStartTime.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerStartTime.Name = "dateTimePickerStartTime";
             this.dateTimePickerStartTime.SelectedColor = System.Drawing.Color.Yellow;
@@ -262,7 +263,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate.Checked = false;
             this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerStartDate.Location = new System.Drawing.Point(78, 34);
+            this.dateTimePickerStartDate.Location = new System.Drawing.Point(78, 37);
             this.dateTimePickerStartDate.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
             this.dateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
@@ -276,7 +277,7 @@ namespace EDDiscovery.UserControls
             // labelDateStart
             // 
             this.labelDateStart.AutoSize = true;
-            this.labelDateStart.Location = new System.Drawing.Point(3, 32);
+            this.labelDateStart.Location = new System.Drawing.Point(3, 35);
             this.labelDateStart.Name = "labelDateStart";
             this.labelDateStart.Size = new System.Drawing.Size(58, 13);
             this.labelDateStart.TabIndex = 2;
@@ -346,7 +347,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(1118, 560);
+            this.dataGridView.Size = new System.Drawing.Size(1118, 557);
             this.dataGridView.TabIndex = 2;
             this.dataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
@@ -531,7 +532,7 @@ namespace EDDiscovery.UserControls
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1134, 83);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1134, 86);
             this.tableLayoutPanel1.TabIndex = 12;
             // 
             // extPanelDataGridViewScroll
@@ -540,9 +541,9 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScroll.Controls.Add(this.dataGridView);
             this.extPanelDataGridViewScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScroll.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScroll.Location = new System.Drawing.Point(0, 113);
+            this.extPanelDataGridViewScroll.Location = new System.Drawing.Point(0, 116);
             this.extPanelDataGridViewScroll.Name = "extPanelDataGridViewScroll";
-            this.extPanelDataGridViewScroll.Size = new System.Drawing.Size(1134, 560);
+            this.extPanelDataGridViewScroll.Size = new System.Drawing.Size(1134, 557);
             this.extPanelDataGridViewScroll.TabIndex = 13;
             this.extPanelDataGridViewScroll.VerticalScrollBarDockRight = true;
             // 
@@ -563,7 +564,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGV.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarDGV.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarDGV.Name = "extScrollBarDGV";
-            this.extScrollBarDGV.Size = new System.Drawing.Size(16, 560);
+            this.extScrollBarDGV.Size = new System.Drawing.Size(16, 557);
             this.extScrollBarDGV.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarDGV.SmallChange = 1;
             this.extScrollBarDGV.TabIndex = 14;
@@ -804,8 +805,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(480, 1);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxEDSM.Location = new System.Drawing.Point(488, 1);
+            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSM.Name = "checkBoxEDSM";
             this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);

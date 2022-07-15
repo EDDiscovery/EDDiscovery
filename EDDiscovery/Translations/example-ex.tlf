@@ -370,7 +370,11 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" @
+ExportForm: "Export data" @
+.buttonExport: "Export" @
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
+
 .labelCVSSep: "CSV Separator" @
 .radioButtonComma: "Comma" @
 .radioButtonSemiColon: "Semicolon" @
@@ -378,11 +382,6 @@ ExportForm: "Export Data" @
 .checkBoxCustomAutoOpen: "Open" @
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" @
-.ECH: "Export current data {0}" @
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -415,7 +414,7 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" @
+MoveToCommander: "Move To Commander" @
 .buttonTransfer: "Transfer" @
 .label1: "Move selected history to commander." @
 
@@ -447,11 +446,11 @@ ProfileEditor: "ProfileEditor" @
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" @
-.labelTTimestamp: "Timestamp: " @
+.labelTTimestamp: "Timestamp:" @
 .buttonSave: "Save" @
-.labelTSystem: "System: " @
-.labelTSummary: "Summary: " @
-.labelTDetails: "Details: " @
+.labelTSystem: "System:" @
+.labelTSummary: "Summary:" @
+.labelTDetails: "Details:" @
 
 SECTION MessageBoxTheme
 

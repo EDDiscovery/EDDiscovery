@@ -219,6 +219,7 @@ namespace EDDiscovery.UserControls
             // toolStripButtonSubmitDistances
             // 
             this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButtonSubmitDistances.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripButtonSubmitDistances.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSubmitDistances.Image")));
             this.toolStripButtonSubmitDistances.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -229,52 +230,57 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
+            this.toolStripButtonNew.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.ManyStars;
             this.toolStripButtonNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Size = new System.Drawing.Size(61, 29);
-            this.toolStripButtonNew.Text = "Start &new";
+            this.toolStripButtonNew.Size = new System.Drawing.Size(86, 29);
+            this.toolStripButtonNew.Text = "Start New";
             this.toolStripButtonNew.ToolTipText = "Enter distances to systems with unknown coordinates";
             this.toolStripButtonNew.Click += new System.EventHandler(this.buttonStartNew_Click);
             // 
             // toolStripSeparator1
             // 
+            this.toolStripSeparator1.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButtonRemoveUnused
             // 
+            this.toolStripButtonRemoveUnused.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripButtonRemoveUnused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveUnused.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveUnused.Image")));
+            this.toolStripButtonRemoveUnused.Image = global::EDDiscovery.Icons.Controls.Cross;
             this.toolStripButtonRemoveUnused.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
-            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(23, 29);
+            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(28, 29);
             this.toolStripButtonRemoveUnused.Text = "<code>";
             this.toolStripButtonRemoveUnused.ToolTipText = "Remove unused";
             this.toolStripButtonRemoveUnused.Click += new System.EventHandler(this.toolStripButtonRemoveUnused_Click);
             // 
             // toolStripButtonRemoveAll
             // 
+            this.toolStripButtonRemoveAll.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveAll.Image")));
+            this.toolStripButtonRemoveAll.Image = global::EDDiscovery.Icons.Controls.Delete;
             this.toolStripButtonRemoveAll.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
-            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 29);
+            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(28, 29);
             this.toolStripButtonRemoveAll.Text = "<code>";
             this.toolStripButtonRemoveAll.ToolTipText = "Remove all";
             this.toolStripButtonRemoveAll.Click += new System.EventHandler(this.toolStripButtonRemoveAll_Click);
             // 
             // toolStripButtonMap
             // 
+            this.toolStripButtonMap.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
+            this.toolStripButtonMap.Image = global::EDDiscovery.Icons.Controls.Globe;
             this.toolStripButtonMap.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMap.Name = "toolStripButtonMap";
-            this.toolStripButtonMap.Size = new System.Drawing.Size(23, 29);
+            this.toolStripButtonMap.Size = new System.Drawing.Size(28, 29);
             this.toolStripButtonMap.Text = "<code>";
             this.toolStripButtonMap.ToolTipText = "Show 3d map";
             this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
@@ -311,6 +317,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripAddFromHistory
             // 
+            this.toolStripAddFromHistory.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripAddFromHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripAddFromHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripAddFromHistory.Name = "toolStripAddFromHistory";
@@ -321,6 +328,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripAddRecentHistory
             // 
+            this.toolStripAddRecentHistory.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripAddRecentHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripAddRecentHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripAddRecentHistory.Name = "toolStripAddRecentHistory";
@@ -336,6 +344,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonSector
             // 
+            this.toolStripButtonSector.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStripButtonSector.CheckOnClick = true;
             this.toolStripButtonSector.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButtonSector.ImageTransparentColor = System.Drawing.Color.Magenta;

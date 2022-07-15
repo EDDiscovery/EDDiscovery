@@ -223,6 +223,9 @@ namespace EDDiscovery
 
 
         ExportForm, // Control 'Export'
+        ExportForm_buttonExport, // Control 'Export'
+        ExportForm_ImportTitle,
+        ExportForm_ImportButton,
         ExportForm_labelCVSSep, // Control 'CSV Separator'
         ExportForm_radioButtonComma, // Control 'Comma'
         ExportForm_radioButtonSemiColon, // Control 'Semicolon'
@@ -230,11 +233,6 @@ namespace EDDiscovery
         ExportForm_checkBoxCustomAutoOpen, // Control 'Open'
         ExportForm_labelUTCEnd, // Control 'UTC'
         ExportForm_labelUTCStart, // Control 'UTC'
-        ExportForm_buttonExport, // Control 'Export'
-        ExportForm_ECH, // Export current History view to {0}
-        ExportForm_ImportTitle,
-        ExportForm_ImportButton,
-        ExportForm_ImportData,
 
         Form2DMap_LastWeek, // Last Week
         Form2DMap_LastMonth, // Last Month
@@ -1044,7 +1042,7 @@ namespace EDDiscovery
         UserControlExpedition_labelEndDate, // Control 'End Date:'
         UserControlExpedition_labelCml, // Control 'Cml Distance:'
         UserControlExpedition_labelP2P, // Control 'P2P Distance:'
-        UserControlExpedition_buttonReverseRoute, // Control 'Reverse'
+        UserControlExpedition_buttonReverseRoute_ToolTip, // Control 'Reverse'
         UserControlExpedition_extButtonLoadRoute_ToolTip, // ToolTip 'Load Route'
         UserControlExpedition_extButtonNew_ToolTip, // ToolTip 'New Expedition'
         UserControlExpedition_extButtonSave_ToolTip, // ToolTip 'Save Expedition'
@@ -1224,7 +1222,6 @@ namespace EDDiscovery
         UserControlTrilateration_toolStripButtonSubmitDistances, // ToolStrip control '&Submit Distances'
         UserControlTrilateration_toolStripButtonNew, // ToolStrip control 'Start &new'
         UserControlTrilateration_toolStripLabelSystem, // ToolStrip control 'From System:'
-        UserControlTrilateration_toolStripTextBoxSystem, // ToolStrip control '''Press Start New'''
         UserControlTrilateration_toolStripLabel1, // ToolStrip control 'Visited without coordinates:'
         UserControlTrilateration_toolStripAddFromHistory, // ToolStrip control 'Add 20 oldest'
         UserControlTrilateration_toolStripAddRecentHistory, // ToolStrip control 'Add 20 newest'

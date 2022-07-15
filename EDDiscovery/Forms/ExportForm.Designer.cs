@@ -380,7 +380,7 @@
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "ExportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Export";
+            this.Text = "Export data";
             this.panelBottom.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();

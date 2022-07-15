@@ -241,7 +241,7 @@ SECTION UserControlExpedition
 .Note: "Note" => "笔记"
 .labelCml: "Cml Distance:" => "总距离："
 .labelP2P: "P2P Distance:" => "直线距离："
-.buttonReverseRoute: "Reverse" => "反转"
+.buttonReverseRoute.ToolTip: "Reverse" => "反转"
 .labelEndDate: "End Date:" => "结束日期："
 .labelDateStart: "Start Date:" => "开始日期："
 .labelRouteName: "Route Name:" => "航线名称："

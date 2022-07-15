@@ -238,5 +238,6 @@ namespace EDDiscovery.Icons
         public static Image RoundExpand { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundExpand"); } }
         public static Image RoundExpanded { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundExpanded"); } }
         public static Image Find { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Find"); } }
+        public static Image Reverse { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Reverse"); } }
     }
 }
