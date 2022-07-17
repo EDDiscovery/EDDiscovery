@@ -374,6 +374,7 @@ SECTION UserControlSurveyor
 
 .Scan: "Scan" @
 .Systemscancomplete: "System scan complete." => "Scan du système terminé."
+.bodiesdetected: " bodies detected." => " corps détectés."
 .bodiesfound: " bodies found." => " corps trouvés."
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Gauche"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "Centre"
@@ -389,7 +390,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "a des anneaux"
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "a des signaux"
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other Signals" => "a d'autres signaux"
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
