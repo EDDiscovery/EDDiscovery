@@ -387,7 +387,7 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.Systemscancomplete: "System scan complete." @
+.Systemscancomplete: "System scan complete" @
 .bodiesdetected: " bodies detected." @
 .bodiesfound: " bodies found." @
 

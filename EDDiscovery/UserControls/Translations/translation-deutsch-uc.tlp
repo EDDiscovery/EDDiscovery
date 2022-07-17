@@ -373,7 +373,7 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" => "Scan"
-.Systemscancomplete: "System scan complete." => "Systemscan komplett"
+.Systemscancomplete: "System scan complete" => "Systemscan komplett"
 .bodiesdetected: " bodies detected." => " Körper erkannt."
 .bodiesfound: " bodies found." => " Körper gefunden."
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Links"
