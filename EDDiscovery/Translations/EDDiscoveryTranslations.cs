@@ -1043,6 +1043,7 @@ namespace EDDiscovery
         UserControlExpedition_labelCml, // Control 'Cml Distance:'
         UserControlExpedition_labelP2P, // Control 'P2P Distance:'
         UserControlExpedition_buttonReverseRoute_ToolTip, // Control 'Reverse'
+        UserControlExpedition_extCheckBoxWordWrap_ToolTip, // Control 'Enable or disable word wrap'
         UserControlExpedition_extButtonLoadRoute_ToolTip, // ToolTip 'Load Route'
         UserControlExpedition_extButtonNew_ToolTip, // ToolTip 'New Expedition'
         UserControlExpedition_extButtonSave_ToolTip, // ToolTip 'Save Expedition'

@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         private string[] displayfilters;        // display filters
         private string dbDisplayFilters = "DisplayFilters";
         private string dbRolledUp = "RolledUp";
-
+        private string dbWordWrap = "WordWrap";
         private string dbEDSM = "EDSM";
 
         const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
@@ -70,6 +70,10 @@ namespace EDDiscovery.UserControls
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
 
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
+
             displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics").Split(';');
 
             checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
@@ -87,7 +91,7 @@ namespace EDDiscovery.UserControls
                                           EDTx.UserControlExpedition_extButtonAddSystems_ToolTip, 
                                           EDTx.UserControlExpedition_buttonExtExport_ToolTip, EDTx.UserControlExpedition_extButtonShow3DMap_ToolTip, 
                                           EDTx.UserControlExpedition_extButtonDisplayFilters_ToolTip, EDTx.UserControlExpedition_checkBoxEDSM_ToolTip,
-                                         EDTx.UserControlExpedition_buttonReverseRoute_ToolTip };
+                                         EDTx.UserControlExpedition_buttonReverseRoute_ToolTip, EDTx.UserControlExpedition_extCheckBoxWordWrap_ToolTip };
             var enumlistcms = new Enum[] { EDTx.UserControlExpedition_copyToolStripMenuItem, EDTx.UserControlExpedition_pasteToolStripMenuItem, EDTx.UserControlExpedition_insertCopiedToolStripMenuItem, EDTx.UserControlExpedition_deleteRowsToolStripMenuItem, EDTx.UserControlExpedition_setTargetToolStripMenuItem, EDTx.UserControlExpedition_editBookmarkToolStripMenuItem };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
@@ -936,6 +940,19 @@ namespace EDDiscovery.UserControls
             UpdateSystemRows();
         }
 
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            extPanelDataGridViewScroll.UpdateScroll();
+        }
+
         private void buttonReverseRoute_Click(object sender, EventArgs e)
         {
             var route = SaveGridIntoRoute();
@@ -1025,6 +1042,27 @@ namespace EDDiscovery.UserControls
                 var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
                 InsertRows(insertIndex, rows);
             }
+        }
+
+        #endregion
+
+        #region Double click
+        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && (e.ColumnIndex == Note.Index || e.ColumnIndex == Info.Index))
+            {
+                var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                string text = cell.Value as string;
+
+                if (text.HasChars())
+                {
+                    InfoForm frm = new InfoForm();
+                    frm.Info(dataGridView.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
+                    frm.Show(FindForm());
+                }
+            }
+
         }
 
         #endregion

@@ -83,7 +83,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "" },
                 new JObject() { ["panel"] = "HistoryTab", ["wiki"] = "/Using-the-History-Tab", ["video"] = "https://youtu.be/PwTbnFikBgA" },
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "SuitsWeapons", ["wiki"] = "/Using-the-Suits-and-Weapons-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "SuitsWeapons", ["wiki"] = "/Using-the-Suits-and-Weapons-Panel", ["video"] = "https://youtu.be/qKyhIXRfrAE" },
                 new JObject() { ["panel"] = "MicroResources", ["wiki"] = "/Using-the-Micro-Resources-Panel", ["video"] = "https://youtu.be/q_a1gmY9VGM" },
                 new JObject() { ["panel"] = "Map3D", ["wiki"] = "/Using-the-3D-Map", ["video"] = "https://youtu.be/9c09d93zFB8" },
                 new JObject() { ["panel"] = "Organics", ["wiki"] = "/Using-the-Organic-Scans", ["video"] = "https://youtu.be/Uhw4zHnsorI" },

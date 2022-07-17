@@ -240,7 +240,7 @@ SECTION UserControlExpedition
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .buttonReverseRoute.ToolTip: "Reverse" @
-
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
 
 // old stuff
