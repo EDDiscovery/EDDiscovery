@@ -236,6 +236,7 @@ SECTION UserControlExpedition
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .buttonReverseRoute.ToolTip: "Reverse" => "Реверс"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" => "Добавить системы"
 .SystemName: "System Name" => "Название системы"
 .Distance: "Dist." => "Расстояние"
@@ -374,6 +375,7 @@ SECTION UserControlSurveyor
 
 .Scan: "Scan" @
 .Systemscancomplete: "System scan complete" => "Сканирование системы завершено"
+.bodiesdetected: " bodies detected." @
 .bodiesfound: " bodies found." => " тел найдено."
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "По левому краю"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "По центру"
@@ -389,7 +391,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "С кольцами"
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other signals" @
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @

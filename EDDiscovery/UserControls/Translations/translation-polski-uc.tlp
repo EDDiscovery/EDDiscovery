@@ -236,6 +236,7 @@ SECTION UserControlExpedition
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .buttonReverseRoute.ToolTip: "Reverse" => "Odwróć"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" => "Dodaj Układy"
 .SystemName: "System Name" => "Nazwa Układu"
 .Distance: "Dist." => "Odległość"
@@ -390,7 +391,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "Ma Pierścienie"
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other Signals" @
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other signals" @
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @

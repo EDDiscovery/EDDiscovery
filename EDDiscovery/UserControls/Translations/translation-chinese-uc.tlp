@@ -236,6 +236,7 @@ SECTION UserControlExpedition
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .buttonReverseRoute.ToolTip: "Reverse" => "反转"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
 .SystemName: "System Name" => "星系名称"
 .Distance: "Dist." => "距离(ly)"
@@ -390,7 +391,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other Signals" @
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other signals" @
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
