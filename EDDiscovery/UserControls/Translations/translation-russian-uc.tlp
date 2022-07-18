@@ -373,7 +373,7 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.Systemscancomplete: "System scan complete." => "Сканирование системы завершено"
+.Systemscancomplete: "System scan complete" => "Сканирование системы завершено"
 .bodiesfound: " bodies found." => " тел найдено."
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "По левому краю"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "По центру"

@@ -373,7 +373,8 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" => "Escanear"
-.Systemscancomplete: "System scan complete." => "Análisis del sistema completo"
+.Systemscancomplete: "System scan complete" => "Análisis del sistema completo"
+.bodiesdetected: " bodies detected." => " cadáveres detectados"
 .bodiesfound: " bodies found." => " cadáveres encontrados"
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Izquierda"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "Centro"
@@ -389,7 +390,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "Tiene anillos"
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" => "Radio bajo"
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Tiene señales"
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other Signals" => "Tiene otras señales"
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "Aterrizable"

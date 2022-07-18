@@ -892,6 +892,7 @@ namespace EDDiscovery
         UserControlSurveyor_extButtonSearches_ToolTip,
         UserControlSurveyor_Scan, //  Scan
         UserControlSurveyor_Systemscancomplete, // System scan complete.
+        UserControlSurveyor_bodiesdetected, //  bodies detected.
         UserControlSurveyor_bodiesfound, //  bodies found.
         UserControlSurveyor_fuel, //  bodies found.
         UserControlSurveyor_navroute, //  bodies found.
