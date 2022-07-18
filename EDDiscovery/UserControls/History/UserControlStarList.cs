@@ -720,8 +720,20 @@ namespace EDDiscovery.UserControls
         {
             if (e.RowIndex >= 0)
             {
-                var he = dataGridViewStarList.Rows[e.RowIndex].Tag as HistoryEntry;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, checkBoxEDSM.Checked, discoveryform.history);
+                if (e.ColumnIndex == ColumnInformation.Index)
+                {
+                    var cell = dataGridViewStarList.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    string text = cell.Value as string;
+                    InfoForm frm = new InfoForm();
+                    frm.Info(dataGridViewStarList.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
+                    frm.Show(FindForm());
+
+                }
+                else
+                {
+                    var he = dataGridViewStarList.Rows[e.RowIndex].Tag as HistoryEntry;
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, checkBoxEDSM.Checked, discoveryform.history);
+                }
             }
         }
 
