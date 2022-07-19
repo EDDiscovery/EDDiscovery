@@ -626,24 +626,6 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewModules.RowCount)
-            {
-                DataGridViewRow row = dataGridViewModules.Rows[e.RowIndex];
-
-                bool expanded = row.Cells[0].Tag != null && (bool)row.Cells[0].Tag == true;     // cell 0 tag holds expanded state
-
-                for (int i = 0; i < dataGridViewModules.ColumnCount; i++)
-                {
-                    DataGridViewCell cell = row.Cells[i];
-                    cell.Style.WrapMode = expanded ? DataGridViewTriState.NotSet : DataGridViewTriState.True;
-                }
-
-                row.Cells[0].Tag = !expanded;
-            }
-        }
-
-        private void dataGridViewModules_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 string tt = dataGridViewModules.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText;

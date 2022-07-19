@@ -63,9 +63,9 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
-            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.buttonExtConfigure = new ExtendedControls.ExtButton();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -107,7 +107,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.SingleRowSelect = true;
             this.dataGridViewModules.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewModules.TabIndex = 1;
-            this.dataGridViewModules.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellClick);
             this.dataGridViewModules.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellDoubleClick);
             this.dataGridViewModules.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewModules_SortCompare);
             // 
@@ -321,24 +320,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
-            // panelTop
-            // 
-            this.panelTop.AutoSize = true;
-            this.panelTop.Controls.Add(this.labelShip);
-            this.panelTop.Controls.Add(this.comboBoxShips);
-            this.panelTop.Controls.Add(this.extButtonShowControl);
-            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
-            this.panelTop.Controls.Add(this.buttonExtCoriolis);
-            this.panelTop.Controls.Add(this.buttonExtEDShipyard);
-            this.panelTop.Controls.Add(this.buttonExtConfigure);
-            this.panelTop.Controls.Add(this.buttonExtExcel);
-            this.panelTop.Controls.Add(this.labelVehicle);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 30);
-            this.panelTop.TabIndex = 30;
-            // 
             // extButtonShowControl
             // 
             this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
@@ -365,6 +346,24 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
             this.buttonExtConfigure.UseVisualStyleBackColor = false;
             this.buttonExtConfigure.Click += new System.EventHandler(this.buttonExtConfigure_Click);
+            // 
+            // panelTop
+            // 
+            this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.labelShip);
+            this.panelTop.Controls.Add(this.comboBoxShips);
+            this.panelTop.Controls.Add(this.extButtonShowControl);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
+            this.panelTop.Controls.Add(this.buttonExtCoriolis);
+            this.panelTop.Controls.Add(this.buttonExtEDShipyard);
+            this.panelTop.Controls.Add(this.buttonExtConfigure);
+            this.panelTop.Controls.Add(this.buttonExtExcel);
+            this.panelTop.Controls.Add(this.labelVehicle);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(800, 30);
+            this.panelTop.TabIndex = 30;
             // 
             // UserControlModules
             // 
