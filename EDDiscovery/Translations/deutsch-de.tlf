@@ -369,7 +369,7 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export data" => "Exportformular"
+ExportForm: "Export data" => "Daten exportieren"
 .buttonExport: "Export" => "Exportieren"
 .ImportTitle: "Import data" => "Daten importieren"
 .ImportButton: "Import" => "Import"
@@ -412,7 +412,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Galaxiesektor wählen"
 
 SECTION MoveToCommander
 
-MoveToCommander: "Move To Commander" => "VerschiebezuKommandanten"
+MoveToCommander: "Move To Commander" => "Verschiebe zu Kommandanten"
 .buttonTransfer: "Transfer" => "Transferieren"
 .label1: "Move selected history to commander." => "Verschiebe ausgewählte Historie zu Kommandanten"
 
@@ -444,11 +444,11 @@ ProfileEditor: "ProfileEditor" => "Profileditor"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Notizerstellung"
-.labelTTimestamp: "Timestamp:" => "Zeitstempel: "
+.labelTTimestamp: "Timestamp:" => "Zeitstempel:"
 .buttonSave: "Save" => "Speichern"
-.labelTSystem: "System:" => "System: "
-.labelTSummary: "Summary:" => "Zusammenfassung: "
-.labelTDetails: "Details:" => "Details: "
+.labelTSystem: "System:" => "System:"
+.labelTSummary: "Summary:" => "Zusammenfassung:"
+.labelTDetails: "Details:" => "Details:"
 
 SECTION MessageBoxTheme
 
