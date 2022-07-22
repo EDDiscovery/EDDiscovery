@@ -22,6 +22,9 @@ RemoveAll : "Remove All" @
 SECTION StartUp
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
 
+SECTION DataGridView
+.WordWrap: "Column Word Wrap (Override)" @
+
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @

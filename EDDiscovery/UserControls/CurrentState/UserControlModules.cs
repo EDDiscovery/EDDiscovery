@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
             allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
             dataGridViewModules.MakeDoubleBuffered();
-            dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             displayfilters = GetSetting(dbDisplayFilters, "").Split(';');
 
@@ -408,8 +407,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewModules.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewModules.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewModules.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 

@@ -1177,8 +1177,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewTravel.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewTravel.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewTravel.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 

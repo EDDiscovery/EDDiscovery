@@ -313,8 +313,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewSynthesis.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewSynthesis.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewSynthesis.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 

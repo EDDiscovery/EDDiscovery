@@ -51,7 +51,6 @@ namespace EDDiscovery.UserControls
 
             dataGridView.CheckEDSM = false; // for this, only our data is shown
             dataGridView.MakeDoubleBuffered();
-            dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
@@ -397,8 +396,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridView.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 

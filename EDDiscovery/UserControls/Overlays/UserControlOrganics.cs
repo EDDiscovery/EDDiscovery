@@ -53,13 +53,14 @@ namespace EDDiscovery.UserControls
         {
             ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
 
-            extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
-            extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
             dataGridView.MakeDoubleBuffered();
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
             dataGridView.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(0, 1, 0, 1);
-            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+
+            extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -398,8 +399,14 @@ namespace EDDiscovery.UserControls
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
-            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            UpdateWordWrap();
             DrawBodyInfo();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridView.SetWordWrap(extCheckBoxWordWrap.Checked);
+            dataViewScrollerPanel.UpdateScroll();
         }
 
         private void ExtCheckBoxShowIncomplete_Click(object sender, EventArgs e)

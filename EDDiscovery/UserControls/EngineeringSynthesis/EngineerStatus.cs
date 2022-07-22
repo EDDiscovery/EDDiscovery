@@ -250,8 +250,7 @@ namespace EDDiscovery.UserControls
 
         public void UpdateWordWrap(bool ww)
         {
-            dataGridViewEngineering.DefaultCellStyle.WrapMode = ww ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewEngineering.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewEngineering.SetWordWrap(ww);
             dataViewScrollerPanel.UpdateScroll();
         }
 
