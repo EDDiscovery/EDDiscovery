@@ -262,7 +262,6 @@ namespace EDDiscovery
         NewReleaseForm, // Control 'EDDiscovery Release'
         NewReleaseForm_labelName, // Control 'Name'
         NewReleaseForm_btnClose, // Control '&Close'
-        NewReleaseForm_buttonMsiInstaller, // Control '&Msi Installer'
         NewReleaseForm_labelURL, // Control 'GitHub URL'
         NewReleaseForm_labelDownload, // Control 'Download'
         NewReleaseForm_buttonPortablezip, // Control '&Portable Zip'

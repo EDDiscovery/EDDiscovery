@@ -423,7 +423,6 @@ SECTION NewReleaseForm
 NewReleaseForm: "EDDiscovery Release" @
 .labelName: "Name" @
 .btnClose: "&Close" @
-.buttonMsiInstaller: "&Msi Installer" @
 .labelURL: "GitHub URL" @
 .labelDownload: "Download" @
 .buttonPortablezip: "&Portable Zip" @
