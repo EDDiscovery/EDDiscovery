@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
-                EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent };
+                EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar};
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, 
@@ -82,6 +82,8 @@ namespace EDDiscovery.UserControls
             dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
             dataGridView.Columns[5].Tag = "TextPopOut";  // these two double click are text popouts
 
+            dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
+
             UpdateComboBoxSearches();
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
@@ -96,7 +98,15 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView);
+            bool loaded = DGVLoadColumnLayout(dataGridView);
+            
+            if (!loaded)        // in this panel, we hide some when we have no stored setting to simplify the default view
+            {
+                ColumnParentParent.Visible = false;
+                ColumnStar.Visible = false;
+                ColumnStarStar.Visible = false;
+            }
+
             splitContainer.SplitterDistance(GetSetting(dbSplitterSave, 0.2));
         }
 
@@ -109,6 +119,19 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void ChangeColumnVisibility(int c)
+        {
+            if (c >= ColumnParent.Index)    // parent onwards is optional
+            {
+                DataGridViewColumn col = dataGridView.Columns[c];
+                if (col.Visible == true)    // if gone visible, then we need to clear the grid and make the user refind
+                {
+                    labelCount.Visible = false;
+                    dataGridView.Rows.Clear();
+                }
+            }
+        }
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
@@ -220,17 +243,24 @@ namespace EDDiscovery.UserControls
                 {
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                    HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip, out string pinfo);
+                    HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip, 
+                                                            ColumnParent.Visible, out string pinfo,
+                                                            ColumnParentParent.Visible, out string ppinfo, 
+                                                            ColumnStar.Visible, out string sinfo, 
+                                                            ColumnStarStar.Visible, out string ssinfo);
 
                     HistoryEntry he = kvp.Value.EntryList.Last();
                     ISystem sys = he.System;
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             name,
-                                            he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"), //2
+                                            he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                            info,   //4
+                                            info,  
                                             pinfo,
+                                            ppinfo,
+                                            sinfo,
+                                            ssinfo,
                                             };
 
                     int row = dataGridView.Rows.Add(rowobj);

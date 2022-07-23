@@ -293,11 +293,11 @@ namespace EDDiscovery.UserControls
             return DBName(displaynumber, DBBaseName + auxname, "DGVCol");
         }
 
-        public void DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
+        public bool DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine("Get Column Name " + root);
-            dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+            return dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                                         (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
         }
 
@@ -305,8 +305,8 @@ namespace EDDiscovery.UserControls
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine("Set Column Name " + root);
-            dgv.SaveColumnSettings(root, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                        (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+            dgv.SaveColumnSettings(root, (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                        (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }
 
         public void DGVTransparent(DataGridView dgv, bool on, Color curcol)

@@ -246,7 +246,11 @@ namespace EDDiscovery.UserControls
                 ISystem sys = he.System;
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip, out string pinfo);
+                HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip,
+                                                                 true, out string pinfo,
+                                                                false, out string ppinfo,
+                                                                false, out string sinfo,
+                                                                false, out string ssinfo);
 
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
