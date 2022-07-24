@@ -75,6 +75,8 @@ namespace EDDiscovery.UserControls
 
             foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")} | {pni.Comment}"); // debug output for wiki
 
+            splitContainer.SplitterDistance(GetSetting(dbSplitterSave, 0.2));
+
             string query = GetSetting(dbQuerySave, "");
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
 
@@ -107,7 +109,6 @@ namespace EDDiscovery.UserControls
                 ColumnStarStar.Visible = false;
             }
 
-            splitContainer.SplitterDistance(GetSetting(dbSplitterSave, 0.2));
         }
 
         public override void Closing()
@@ -153,7 +154,12 @@ namespace EDDiscovery.UserControls
             comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void extButtonNew_Click(object sender, EventArgs e)
+        {
+            conditionFilterUC.Clear();
+        }
+
+        private void extButtonSave_Click(object sender, EventArgs e)
         {
             BaseUtils.ConditionLists cond = Valid();
             if (cond != null)

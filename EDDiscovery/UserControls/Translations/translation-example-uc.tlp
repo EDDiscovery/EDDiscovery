@@ -132,9 +132,9 @@ SECTION SearchScans
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
 .ColumnParent: "Parent" @
-.ColumnParentParent: "Parent.Parent" @
 .ColumnStar: "Star" @
-.ColumnStarStar: "Star.Star" @
+.ColumnParentParent: "Grandparent" @
+.ColumnStarStar: "Parent of Star" @
 .comboBoxSearches.ToolTip: "Select a predefined condition" @
 .buttonFind.ToolTip: "Search for condition below" @
 .buttonSave.ToolTip: "Save current condition" @

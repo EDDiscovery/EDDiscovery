@@ -59,7 +59,8 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation,
-                                       EDTx.SearchScans_ColumnSearches,  EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, 
+                                       EDTx.SearchScans_ColumnSearches,  EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent,
+                                       EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar,
                                         EDTx.SearchScans_labelTime , EDTx.SearchScans_labelSearch};
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, subname: "SearchScans");
 
@@ -89,7 +90,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView);                
+            if ( !DGVLoadColumnLayout(dataGridView))        // in this panel, we hide some when we have no stored setting to simplify the default view
+            {
+                ColumnParentParent.Visible = false;
+                ColumnStar.Visible = false;
+                ColumnStarStar.Visible = false;
+            }
         }
 
         public override void InitialDisplay()
@@ -247,10 +253,10 @@ namespace EDDiscovery.UserControls
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
                 HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip,
-                                                                 true, out string pinfo,
-                                                                false, out string ppinfo,
-                                                                false, out string sinfo,
-                                                                false, out string ssinfo);
+                                                            ColumnParent.Visible, out string pinfo,
+                                                            ColumnParentParent.Visible, out string ppinfo,
+                                                            ColumnStar.Visible, out string sinfo,
+                                                            ColumnStarStar.Visible, out string ssinfo);
 
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
@@ -258,6 +264,9 @@ namespace EDDiscovery.UserControls
                                         string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),   //3
                                         info,   //4
                                         pinfo,  //5
+                                        ppinfo,
+                                        sinfo,
+                                        ssinfo,
                                         };
 
                 if (search.Enabled)

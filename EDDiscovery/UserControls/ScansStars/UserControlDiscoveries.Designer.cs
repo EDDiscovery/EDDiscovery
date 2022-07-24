@@ -65,6 +65,9 @@ namespace EDDiscovery.UserControls
             this.ColumnSearches = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnParentParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStarStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -313,10 +316,14 @@ namespace EDDiscovery.UserControls
             this.ColumnPosition,
             this.ColumnSearches,
             this.ColumnInformation,
-            this.ColumnParent});
+            this.ColumnParent,
+            this.ColumnParentParent,
+            this.ColumnStar,
+            this.ColumnStarStar});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.PerColumnWordWrapControl = true;
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -365,6 +372,27 @@ namespace EDDiscovery.UserControls
             this.ColumnParent.Name = "ColumnParent";
             this.ColumnParent.ReadOnly = true;
             // 
+            // ColumnParentParent
+            // 
+            this.ColumnParentParent.FillWeight = 150F;
+            this.ColumnParentParent.HeaderText = "Grandparent";
+            this.ColumnParentParent.Name = "ColumnParentParent";
+            this.ColumnParentParent.ReadOnly = true;
+            // 
+            // ColumnStar
+            // 
+            this.ColumnStar.FillWeight = 150F;
+            this.ColumnStar.HeaderText = "Star";
+            this.ColumnStar.Name = "ColumnStar";
+            this.ColumnStar.ReadOnly = true;
+            // 
+            // ColumnStarStar
+            // 
+            this.ColumnStarStar.FillWeight = 150F;
+            this.ColumnStarStar.HeaderText = "Parent of Star";
+            this.ColumnStarStar.Name = "ColumnStarStar";
+            this.ColumnStarStar.ReadOnly = true;
+            // 
             // UserControlDiscoveries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -405,5 +433,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSearches;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParentParent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStarStar;
     }
 }
