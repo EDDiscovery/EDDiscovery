@@ -148,12 +148,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public bool IsTransparent           // this means the transparent mode is on, not that its currently transparent.
+        public bool IsTransparentModeOn           // this means the transparent mode is on, not that its currently transparent.
         {
             get
             {
                 if (this.Parent is UserControlForm)
-                    return ((UserControlForm)(this.Parent)).IsTransparent;
+                    return ((UserControlForm)(this.Parent)).IsTransparentModeOn;
                 else
                     return false;
             }

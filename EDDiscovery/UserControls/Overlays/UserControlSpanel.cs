@@ -246,8 +246,8 @@ namespace EDDiscovery.UserControls
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
 
                 Font dfont = displayfont ?? this.Font;
-                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
+                Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                Color backcolour = IsTransparentModeOn ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
 
                 bool drawnnootherstuff = DrawScanText(true, textcolour, backcolour, dfont);                    // go 1 for some of the scan positions
 
@@ -527,7 +527,7 @@ namespace EDDiscovery.UserControls
                         {
                             ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
 
-                            if (IsTransparent)        // if transparent, the roll up panel is not visible, we can set the whole size to the text
+                            if (IsTransparentModeOn)        // if transparent, the roll up panel is not visible, we can set the whole size to the text
                                 RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));        // match exactly to use minimum space
                             return true;
                         }

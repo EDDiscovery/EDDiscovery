@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
         private void ControlVisibility()
         {
             // if not in transparent mode, OR in No focus, or not autohiding, or FSSMode and don't hide in FSS mode
-            if ( !IsTransparent ||  uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide))
+            if ( !IsTransparentModeOn ||  uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide))
             {
                 // these are controlled by tranparency
                 flowLayoutPanelGridControl.Visible = dataViewScrollerPanel.Visible = extPictureBoxScroll.ScrollBarEnabled =
@@ -213,8 +213,8 @@ namespace EDDiscovery.UserControls
                     int vpos = 0;
                     StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                     frmt.Alignment = StringAlignment.Near;
-                    var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                    var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+                    var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                    var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
                     string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.FullName);
                     if (node.ScanData != null)

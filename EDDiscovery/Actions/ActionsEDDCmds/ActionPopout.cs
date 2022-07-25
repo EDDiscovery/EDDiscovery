@@ -91,7 +91,7 @@ namespace EDDiscovery.Actions
 
                         if (ucf != null)
                         {
-                            ap[prefix + "Transparent"] = ucf.IsTransparent ? "1" : "0";
+                            ap[prefix + "Transparent"] = ucf.IsTransparentModeOn ? "1" : "0";
                             ap[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
                             ap[prefix + "DisplayTitle"] = ucf.DisplayTitle ? "1" : "0";
                             ap[prefix + "ShowInTaskbar"] = ucf.ShowInTaskbar ? "1" : "0";

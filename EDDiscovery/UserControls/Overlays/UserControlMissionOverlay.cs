@@ -155,8 +155,8 @@ namespace EDDiscovery.UserControls
 
             if ( currentHE != null  )
             {
-                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+                Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                Color backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
                 DateTime hetime = currentHE.EventTimeUTC;
 

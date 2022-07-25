@@ -217,7 +217,7 @@ namespace EDDiscovery.UserControls
             bool showit = true;
 
             // if in autohide, and a transparent option is turned on
-            if (!overrideon && IsSet(CtrlList.autohide) && IsTransparent )
+            if (!overrideon && IsSet(CtrlList.autohide) && IsTransparentModeOn )
             { 
                 // if no focus, or fssmode and override
                 showit = uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode));
@@ -704,8 +704,8 @@ namespace EDDiscovery.UserControls
 
                 StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                 frmt.Alignment = alignment;
-                var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+                var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
                 Font dfont = displayfont ?? this.Font;
 
                 foreach (var kvp in textresults)        // and present any text results in sorted order
@@ -813,8 +813,8 @@ namespace EDDiscovery.UserControls
         {
             StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
             frmt.Alignment = alignment;
-            var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-            var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+            var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+            var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
             Font dfont = displayfont ?? this.Font;
 
             var i = new ExtPictureBox.ImageElement();

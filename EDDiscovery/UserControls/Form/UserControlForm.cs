@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
 
         public TransparencyMode TransparentMode = TransparencyMode.Off;
         public Color TransparencyColorKey = Color.Transparent;     // if required, the control could modify this during its Init
-        public bool IsTransparent { get { return TransparentMode != TransparencyMode.Off; } }
+        public bool IsTransparentModeOn { get { return TransparentMode != TransparencyMode.Off; } }
         public bool IsClickThruOn { get { return TransparentMode == TransparencyMode.OnClickThru || TransparentMode == TransparencyMode.OnFullyTransparent; } }
 
         public bool DisplayTitle = true;            // we are displaying the title
@@ -40,13 +40,13 @@ namespace EDDiscovery.UserControls
         public string WinTitle;
 
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
-        private bool defwindowsborder;
+        private bool defwindowsborder;          // what we started with border style
         private bool curwindowsborder;          // applied setting
         private Color beforetransparency = Color.Transparent;
         private Color tkey = Color.Transparent;
         private Color labelnormalcolour, labeltransparentcolour;
 
-        private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
+        private Timer checkmousepositiontimer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost;
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
@@ -61,8 +61,8 @@ namespace EDDiscovery.UserControls
 
             InitializeComponent();
 
-            timer.Interval = 500;
-            timer.Tick += CheckMouse;
+            checkmousepositiontimer.Interval = 500;
+            checkmousepositiontimer.Tick += CheckMouse;
 
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
             extButtonDrawnHelp.Text = "";
@@ -186,9 +186,11 @@ namespace EDDiscovery.UserControls
 
         public void UpdateTransparency()
         {
-            //System.Diagnostics.Debug.WriteLine("UCF UpdateTrans+");
-            curwindowsborder = (!IsTransparent && defwindowsborder);    // we have a border if not transparent and we have a def border
-            bool showtransparent = IsTransparent && !inpanelshow;           // are we transparent..  must not be in panel show
+            bool showtransparent = IsTransparentModeOn && !inpanelshow;    // do we want to be transparent.. mode is on and not in panel show
+
+            curwindowsborder = (!showtransparent && defwindowsborder);    // we have a border if not transparent and we have a default border turned on
+
+            //System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency border={curwindowsborder} trans={showtransparent}");
 
             if (beforetransparency.IsFullyTransparent())        // record colour before transparency, dynamically
             {
@@ -197,7 +199,7 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Record colour " + beforetransparency.ToString() + " tkey " + this.TransparencyKey);
             }
 
-            UpdateControls();
+            UpdateControls();       // turn on/off controls accordingly
 
             //System.Diagnostics.Debug.WriteLine(Text + " tr " + transparentmode);
 
@@ -211,8 +213,9 @@ namespace EDDiscovery.UserControls
 
             label_index.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
 
-            UserControl.SetTransparency(showtransparent, togo);
-            PerformLayout();
+            UserControl.SetTransparency(showtransparent, togo);     // tell the UCCB about the change
+
+            PerformLayout();        // need to position the UCCB
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -222,27 +225,32 @@ namespace EDDiscovery.UserControls
             }
 
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
-                timer.Start();
+                checkmousepositiontimer.Start();
             else
-                timer.Stop();
+                checkmousepositiontimer.Stop();
 
             //System.Diagnostics.Debug.WriteLine("UCF UpdateTrans-");
         }
 
+
+        // fix up controls to current transparency state
         private void UpdateControls()
         {
-            bool transparent = IsTransparent && !inpanelshow;           // are we transparent..
+            bool showtransparent = IsTransparentModeOn && !inpanelshow;           // are we transparent..
 
+            // border style, if transparent we use the curwindowsborder, else the defwindowsborder, to select the window frame
             FormBorderStyle = curwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            panelTop.Visible = !curwindowsborder;       // this also has the effect of removing the label_ and panel_ buttons
 
-            statusStripBottom.Visible = !transparent && !curwindowsborder;      // status strip on, when not transparent, and when we don't have border
+            // the extensive controls in panel top is shown if we are not in transparent mode with no windows border, or if in transparent mode and we are in a panel show
+            panelTop.Visible = (!IsTransparentModeOn && !curwindowsborder) || (IsTransparentModeOn && inpanelshow);
 
-            panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = extButtonDrawnHelp.Visible = !transparent;
+            statusStripBottom.Visible = !showtransparent && !curwindowsborder;      // status strip on, when not transparent, and when we don't have border
 
-            panel_transparent.Visible = IsTransparencySupported && !transparent;
-            panel_showtitle.Visible = IsTransparencySupported && !transparent;
-            panel_showtitle.Visible = IsTransparencySupported && !transparent;
+            panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = extButtonDrawnHelp.Visible = !showtransparent;
+
+            panel_transparent.Visible = IsTransparencySupported && !showtransparent;
+            panel_showtitle.Visible = IsTransparencySupported && !showtransparent;
+            panel_showtitle.Visible = IsTransparencySupported && !showtransparent;
 
             if (TransparentMode == TransparencyMode.On)
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
@@ -253,7 +261,7 @@ namespace EDDiscovery.UserControls
             else
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
 
-            label_index.Visible = labelControlText.Visible = (DisplayTitle || !transparent);   //  titles are on, or transparent is off
+            label_index.Visible = labelControlText.Visible = (DisplayTitle || !showtransparent);   //  titles are on, or transparent is off
 
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
             panel_showtitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
@@ -266,7 +274,7 @@ namespace EDDiscovery.UserControls
         {
             if (UserControl != null)
             {
-                UserControl.Location = new Point(3, curwindowsborder ? 2 : panelTop.Location.Y + panelTop.Height);
+                UserControl.Location = new Point(3, panelTop.Visible ? panelTop.Bottom+1 : 2);
                 UserControl.Size = new Size(ClientRectangle.Width - UCPaddingWidth*2, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
             }
         }
@@ -366,12 +374,13 @@ namespace EDDiscovery.UserControls
             SetShowTitleInTransparency(!DisplayTitle);
         }
 
-        private void CheckMouse(object sender, EventArgs e)     // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
+        // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
+        private void CheckMouse(object sender, EventArgs e)     
         {
             if (IsLoaded)
             {
-                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick " + Name + " " + Text + " " + transparentmode + " " + inpanelshow);
-                if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
+                //System.Diagnostics.Debug.WriteLine($"UCF Check {Bounds} vs {MousePosition}");
+                if (Bounds.Contains(MousePosition))     // bounds of window contains the mouse pointer
                 {
                     //System.Diagnostics.Debug.WriteLine(Environment.TickCount + "In area");
                     if (!inpanelshow)
