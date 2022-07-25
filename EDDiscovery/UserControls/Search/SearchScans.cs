@@ -121,6 +121,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Data Grid View
         private void ChangeColumnVisibility(int c)
         {
             if (c >= ColumnParent.Index)    // parent onwards is optional
@@ -138,9 +139,15 @@ namespace EDDiscovery.UserControls
         {
             if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 1)
+                e.SortDataGridViewColumnAlphaInt();
             else if (e.Column.Index == 3)
                 e.SortDataGridViewColumnNumeric();
         }
+
+        #endregion
+
+        #region UI
 
         private void ComboBoxSearches_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -176,6 +183,17 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+        private BaseUtils.ConditionLists Valid()
+        {
+            string errs = conditionFilterUC.Check();
+            if (errs.HasChars())
+            {
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Condition is not valid".T(EDTx.SearchScans_CNV), "Condition".T(EDTx.SearchScans_CD), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return null;
+            }
+            else
+                return conditionFilterUC.Result;
+        }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
@@ -195,8 +213,6 @@ namespace EDDiscovery.UserControls
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
-
-
 
         private async void buttonFind_Click(object sender, EventArgs e)
         {
@@ -341,18 +357,6 @@ namespace EDDiscovery.UserControls
             dataViewScrollerPanel.UpdateScroll();
         }
 
-        private BaseUtils.ConditionLists Valid()
-        {
-            string errs = conditionFilterUC.Check();
-            if (errs.HasChars())
-            {
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Condition is not valid".T(EDTx.SearchScans_CNV), "Condition".T(EDTx.SearchScans_CD), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return null;
-            }
-            else
-                return conditionFilterUC.Result;
-        }
-
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             dataGridView.Excel(dataGridView.ColumnCount);
@@ -416,6 +420,9 @@ namespace EDDiscovery.UserControls
                 CSVHelpers.FailedToOpen(this.FindForm(), path); // both fail to this
             }
         }
+
+
+        #endregion
 
     }
 }

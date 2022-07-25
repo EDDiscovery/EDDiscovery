@@ -81,11 +81,12 @@ namespace EDDiscovery.UserControls
             dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
             dataGridView.Columns[5].Tag = "TextPopOut";       // these two double click are text popouts
 
+            dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
+
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
             updatetimer = new Timer() { Interval = 1000 };
             updatetimer.Tick += Updatetimer_Tick;
-
         }
 
         public override void LoadLayout()
@@ -413,23 +414,34 @@ namespace EDDiscovery.UserControls
             dataViewScrollerPanel.UpdateScroll();
         }
 
-        #endregion
-
-        #region Export
-
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             dataGridView.Excel(dataGridView.ColumnCount);
         }
+
         #endregion
+
+        #region Data Grid View
+        private void ChangeColumnVisibility(int c)
+        {
+            if (c >= ColumnParent.Index)    // parent onwards is optional
+            {
+                DataGridViewColumn col = dataGridView.Columns[c];
+                if (col.Visible == true)    // if gone visible, then we need to clear the grid and make the user refind
+                {
+                    Draw();
+                }
+            }
+        }
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
             else if (e.Column.Index == 1)
-                e.SortDataGridViewColumnNumeric();
-
+                e.SortDataGridViewColumnAlphaInt();
         }
+
+        #endregion
     }
 }
