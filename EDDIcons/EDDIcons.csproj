@@ -246,7 +246,6 @@
     <EmbeddedResource Include="Panels\Commodities.png" />
     <EmbeddedResource Include="Panels\EstimatedValues.png" />
     <EmbeddedResource Include="Panels\Expedition.png" />
-    <EmbeddedResource Include="Panels\Exploration.png" />
     <EmbeddedResource Include="Panels\Grid.png" />
     <EmbeddedResource Include="Panels\Journal.png" />
     <EmbeddedResource Include="Panels\Ledger.png" />
