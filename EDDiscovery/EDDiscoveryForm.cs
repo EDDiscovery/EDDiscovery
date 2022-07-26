@@ -24,7 +24,6 @@ using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -72,7 +71,8 @@ namespace EDDiscovery
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
-                                                                        // theme has changed by settings, hook if you have some UI which needs refreshing due to it. 
+                                                                        // theme is changing/ then has been changed by settings, hook if you have some UI which needs refreshing due to it. 
+        public event Action OnThemeChanging;                            // Note you won't get it on startup because theme is applied to form before tabs/panels are setup. Before themeing
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
         #endregion

@@ -396,6 +396,8 @@ namespace EDDiscovery
             // note in no border mode, this is not visible on the title bar but it is in the taskbar..
             this.Text = "EDDiscovery" + (EDDOptions.Instance.DisableVersionDisplay ? "" : " " + label_version.Text);
 
+            OnThemeChanging?.Invoke();
+
             ExtendedControls.Theme.Current.ApplyStd(this);
 
             statusStripEDD.Font = contextMenuStripTabs.Font = this.Font;
