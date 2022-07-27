@@ -69,6 +69,27 @@ namespace EDDiscovery.UserControls
             float brigthness = ExtendedControls.Theme.Current.Form.GetBrightness();
             Bitmap selback = (Bitmap)(brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2);
 
+            {
+                Versions.VersioningManager mgr = new Versions.VersioningManager();
+                AddOnManagerForm.ReadLocalFiles(mgr, true);
+
+                int i = mgr.DownloadItems.Count;
+
+                CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
+                            selback,
+                            (i == 0) ? "NO ADD ONS!".T(EDTx.UserControlPanelSelector_NOADDONS) : i.ToString() + " Add Ons".T(EDTx.UserControlPanelSelector_AddOns),
+                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns },
+                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns },
+                            ButtonPress);
+
+                    cb.Name = "Add on";
+                    cb.Tag = null;
+                    toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".T(EDTx.UserControlPanelSelector_TTA));
+                    toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".T(EDTx.UserControlPanelSelector_TTB));
+
+                    panelVScroll.Controls.Add(cb);
+            }
+
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
 
             for (int i = 0; i < pids.Length; i++)
