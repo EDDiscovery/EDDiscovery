@@ -78,16 +78,16 @@ namespace EDDiscovery.UserControls
                 CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
                             (i == 0) ? "NO ADD ONS!".T(EDTx.UserControlPanelSelector_NOADDONS) : i.ToString() + " Add Ons".T(EDTx.UserControlPanelSelector_AddOns),
-                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns },
-                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns },
-                            ButtonPress);
+                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns48 },
+                            new Image[] { EDDiscovery.Icons.Controls.Popout },
+                            ButtonPress,
+                            2);
+                cb.Name = "Add on";
+                cb.Tag = null;
+                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".T(EDTx.UserControlPanelSelector_TTA));
+                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".T(EDTx.UserControlPanelSelector_TTB));
 
-                    cb.Name = "Add on";
-                    cb.Tag = null;
-                    toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".T(EDTx.UserControlPanelSelector_TTA));
-                    toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".T(EDTx.UserControlPanelSelector_TTB));
-
-                    panelVScroll.Controls.Add(cb);
+                panelVScroll.Controls.Add(cb);
             }
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);

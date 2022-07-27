@@ -29,6 +29,7 @@ namespace EDDiscovery.Icons
         public static Image ConfigureAddOnActions { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ConfigureAddOnActions"); } }
         public static Image EditLastActionPack { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EditLastActionPack"); } }
         public static Image ManageAddOns { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ManageAddOns"); } }
+        public static Image ManageAddOns48 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ManageAddOns48"); } }
         public static Image Pause { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Pause"); } }
         public static Image FSDJumps { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.FSDJumps"); } }
         public static Image ReadNetLogs { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ReadNetLogs"); } }
