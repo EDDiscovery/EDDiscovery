@@ -196,6 +196,7 @@ namespace EDDiscovery.Icons
         public static Image Selector { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Selector"); } }
         public static Image Selector2 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Selector2"); } }
         public static Image AddTab { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Addtab"); } }
+        public static Image Addtab48 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Addtab48"); } }
         public static Image Edit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Edit"); } }
         public static Image EditSystem { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EditSystem"); } }
         public static Image New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.New"); } }

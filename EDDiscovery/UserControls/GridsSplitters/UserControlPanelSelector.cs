@@ -101,7 +101,7 @@ namespace EDDiscovery.UserControls
                             selback,
                             pi.WindowTitle,
                             new Image[] { pi.TabIcon },
-                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.AddTab },
+                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Addtab48 },
                             ButtonPress);
 
                 cb.Tag = pi.PopoutID;
