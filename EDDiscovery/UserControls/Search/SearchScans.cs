@@ -164,6 +164,9 @@ namespace EDDiscovery.UserControls
         private void extButtonNew_Click(object sender, EventArgs e)
         {
             conditionFilterUC.Clear();
+            comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
+            comboBoxSearches.SelectedIndex = -1;
+            comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
         }
 
         private void extButtonSave_Click(object sender, EventArgs e)

@@ -290,6 +290,10 @@ namespace EDDiscovery
             this.TopMost = EDDConfig.Instance.KeepOnTop;
             notifyIconEDD.Visible = EDDConfig.Instance.UseNotifyIcon;
 
+            // create the action controller and install commands before we executre tabs, since some tabs need these set up
+
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
+
             // open all the major tabs except the built in ones
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");        // STAGE 3 Tabs
 
@@ -390,8 +394,6 @@ namespace EDDiscovery
                 }
 
             }
-
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
 
             // Stage 5 Misc
 

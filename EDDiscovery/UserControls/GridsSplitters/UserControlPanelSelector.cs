@@ -96,7 +96,8 @@ namespace EDDiscovery.UserControls
             {
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pids[i]);
 
-                System.Diagnostics.Debug.WriteLine($"Panel {pi.WindowTitle} {pi.TabIcon.Width} x {pi.TabIcon.Height}");
+                //System.Diagnostics.Debug.WriteLine($"Panel {pi.WindowTitle} {pi.TabIcon.Width} x {pi.TabIcon.Height}");
+
                 CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
                             pi.WindowTitle,
