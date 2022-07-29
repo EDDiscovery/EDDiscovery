@@ -73,7 +73,8 @@ namespace EDDiscovery.UserControls
             conditionFilterUC.AutoCompleteOnMatch = true;
             conditionFilterUC.VariableNames = classnames;
 
-            foreach (var pni in classnames) System.Diagnostics.Debug.WriteLine($"{pni.Name} | {pni.Help.Replace(Environment.NewLine,", ")} | {pni.Comment}"); // debug output for wiki
+            // output for wiki
+            // string t = "";  foreach (var pni in classnames) t += $"{pni.Name} | {pni.Help.Replace(Environment.NewLine, ", ")} | {pni.Comment} {Environment.NewLine}"; System.IO.File.WriteAllText(@"c:\code\props.txt", t);
 
             splitContainer.SplitterDistance(GetSetting(dbSplitterSave, 0.2));
 
