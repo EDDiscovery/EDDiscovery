@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
 
             var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, 
                                 EDTx.SearchScans_extButtonExport_ToolTip, EDTx.SearchScans_extButtonImport_ToolTip, EDTx.SearchScans_extCheckBoxWordWrap_ToolTip, 
-                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extCheckBoxDebug_ToolTip};
+                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extCheckBoxDebug_ToolTip, EDTx.SearchScans_extButtonNew_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = HistoryListQueries.PropertyList();
@@ -164,6 +164,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNew_Click(object sender, EventArgs e)
         {
+            UpdateComboBoxSearches();
             conditionFilterUC.Clear();
             comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
             comboBoxSearches.SelectedIndex = -1;
