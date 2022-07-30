@@ -144,7 +144,6 @@ SECTION SearchScans
 .extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
-.extButtonNew.ToolTip: "Clear current condition" @
 .ColumnSearches: "Searches" @
 .labelTime: "Time" @
 .labelSearch: "Search" @

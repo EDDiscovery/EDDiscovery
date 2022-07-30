@@ -314,7 +314,6 @@ namespace EDDiscovery.UserControls
             this.extButtonNew.Name = "extButtonNew";
             this.extButtonNew.Size = new System.Drawing.Size(28, 28);
             this.extButtonNew.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonNew, "Clear current condition");
             this.extButtonNew.UseVisualStyleBackColor = false;
             this.extButtonNew.Click += new System.EventHandler(this.extButtonNew_Click);
             // 
