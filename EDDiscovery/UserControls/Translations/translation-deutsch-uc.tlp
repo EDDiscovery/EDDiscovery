@@ -235,8 +235,8 @@ SECTION UserControlExpedition
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Systeme hinzufügen"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" => "Wähle Filter für Info"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." => "Zeige/Verberge EDSM-Körperdaten"
-.buttonReverseRoute.ToolTip: "Reverse" => "Umgekehrt"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.buttonReverseRoute.ToolTip: "Reverse" => "Umkehren"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .AddSys: "Add Systems" => "System hinzufügen"
 .SystemName: "System Name" => "Systemname"
 .Distance: "Dist." => "Entf."
