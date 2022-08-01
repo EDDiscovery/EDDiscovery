@@ -407,7 +407,7 @@ namespace EDDiscovery.UserControls
             string system = he?.System.Name ?? "?";
             string body = he?.WhereAmI ?? "?";
 
-            if (dateTimePickerEndDate.Checked)      // we are not at the current time..
+            if (dateTimePickerEndDate.Checked && dateTimePickerEndDate.Value.ToUniversalTime() < DateTime.UtcNow)      // we are not at the current time..
             {
                 entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value);
                 entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddMinutes(DateTime.UtcNow.Minute);
