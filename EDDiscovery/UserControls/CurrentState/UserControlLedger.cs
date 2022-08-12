@@ -45,7 +45,6 @@ namespace EDDiscovery.UserControls
             DBBaseName = "LedgerGrid";
 
             dataGridViewLedger.MakeDoubleBuffered();
-            dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger" });
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
@@ -237,8 +236,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewLedger.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewLedger.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewLedger.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 

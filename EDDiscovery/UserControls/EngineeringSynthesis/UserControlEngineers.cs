@@ -33,6 +33,7 @@ namespace EDDiscovery.UserControls
         private string dbWordWrap = "WordWrap";
         private string dbEngFilterSave = "EngineerFilter";
         private string dbWSave = "Wanted";
+        private string dbMoreInfo = "MoreInfo";
 
         public UserControlEngineers()
         {
@@ -46,6 +47,8 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;     // install after setup
+            extCheckBoxMoreInfo.Checked = GetSetting(dbMoreInfo, false);
+            extCheckBoxMoreInfo.Click += extCheckBoxMoreInfo_Click;
 
             List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
@@ -63,6 +66,8 @@ namespace EDDiscovery.UserControls
                 }
             };
 
+            var enumlisttt = new Enum[] { EDTx.UserControlEngineers_buttonFilterEngineer_ToolTip, EDTx.UserControlEngineers_extCheckBoxWordWrap_ToolTip, EDTx.UserControlEngineers_extCheckBoxMoreInfo_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -161,7 +166,6 @@ namespace EDDiscovery.UserControls
 
             panelEngineers.SuspendLayout();
 
-            int panelvspacing = 210;
             int vpos = 0;
 
             foreach (var name in engineers)
@@ -171,7 +175,7 @@ namespace EDDiscovery.UserControls
                     var ep = new EngineerStatusPanel();
                     ItemData.EngineeringInfo ei = ItemData.GetEngineerInfo(name);
 
-                    ep.Init(name, ei?.StarSystem ?? "", ei?.BaseName ?? "", ei?.Planet ?? "", ei, GetSetting(dbWSave + "_" + name, ""), colsetting);
+                    ep.Init(name, ei, GetSetting(dbWSave + "_" + name, ""), colsetting);
                     ep.UpdateWordWrap(extCheckBoxWordWrap.Checked);
 
                     ep.Redisplay += () =>
@@ -182,7 +186,7 @@ namespace EDDiscovery.UserControls
 
                     ep.ColumnSetupChanged += (panel) =>
                     {
-                        System.Diagnostics.Debug.WriteLine($"Panel {panel.Name} changed");
+                        //System.Diagnostics.Debug.WriteLine($"Panel {panel.Name} changed");
                         panel.SaveDGV(colsetting);      
 
                         foreach (var p in engineerpanels)
@@ -194,19 +198,19 @@ namespace EDDiscovery.UserControls
                         }
                     };
 
-                    //    System.Diagnostics.Debug.WriteLine($"Initial {name} {BaseUtils.AppTicks.TickCountLap("s1")}");
-
                     panelEngineers.Controls.Add(ep);
+
+                    int panelvspacing = ep.GetVSize(extCheckBoxMoreInfo.Checked);
 
                     // need to set bounds after adding, for some reason
                     ep.Bounds = new Rectangle(0, vpos, panelEngineers.Width - panelEngineers.ScrollBarWidth - 4, panelvspacing);
 
-                    ep.InstallColumnEvents();
                     engineerpanels.Add(ep);
 
+                    ep.InstallColumnEvents();
 
                     vpos += panelvspacing + 4;
-             //       System.Diagnostics.Debug.WriteLine($"Made {name} Complete {BaseUtils.AppTicks.TickCountLap("s1")}");
+                    //       System.Diagnostics.Debug.WriteLine($"Made {name} Complete {BaseUtils.AppTicks.TickCountLap("s1")}");
                 }
             }
 
@@ -280,10 +284,31 @@ namespace EDDiscovery.UserControls
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
             PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
-            foreach( var p in engineerpanels.DefaultIfEmpty())
+            foreach ( var p in engineerpanels.DefaultIfEmpty())
                 p.UpdateWordWrap(extCheckBoxWordWrap.Checked);
         }
 
-        #endregion
-    }
+        private void extCheckBoxMoreInfo_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbMoreInfo, extCheckBoxMoreInfo.Checked);
+            int vpos = 0;
+
+            panelEngineers.SuspendLayout();
+
+            for (int i = 0; i < engineerpanels.Count; i++)
+            {
+                var ep = engineerpanels[i];
+                int panelvspacing = ep.GetVSize(extCheckBoxMoreInfo.Checked);
+
+                // need to set bounds after adding, for some reason
+                ep.Bounds = new Rectangle(0, vpos, panelEngineers.Width - panelEngineers.ScrollBarWidth - 4, panelvspacing);
+                vpos += panelvspacing + 4;
+            }
+            panelEngineers.ResumeLayout();
+        }
+
+
+
+            #endregion
+        }
 }

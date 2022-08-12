@@ -29,6 +29,7 @@ namespace EDDiscovery.Icons
         public static Image ConfigureAddOnActions { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ConfigureAddOnActions"); } }
         public static Image EditLastActionPack { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EditLastActionPack"); } }
         public static Image ManageAddOns { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ManageAddOns"); } }
+        public static Image ManageAddOns48 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ManageAddOns48"); } }
         public static Image Pause { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Pause"); } }
         public static Image FSDJumps { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.FSDJumps"); } }
         public static Image ReadNetLogs { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ReadNetLogs"); } }
@@ -114,7 +115,7 @@ namespace EDDiscovery.Icons
         public static Image Map3D_Travel_WhiteStars { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Travel.WhiteStars"); } }
         public static Image Map3D_YellowDot { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.YellowDot"); } }
         #endregion
-        public static Image Export { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Export"); } }
+        public static Image ExportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ExportFile"); } }
         public static Image ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportFile"); } }
         public static Image ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportSphere"); } }
         public static Image ImportRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportRoute"); } }
@@ -195,6 +196,7 @@ namespace EDDiscovery.Icons
         public static Image Selector { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Selector"); } }
         public static Image Selector2 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Selector2"); } }
         public static Image AddTab { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Addtab"); } }
+        public static Image Addtab48 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Addtab48"); } }
         public static Image Edit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Edit"); } }
         public static Image EditSystem { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EditSystem"); } }
         public static Image New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.New"); } }
@@ -232,5 +234,16 @@ namespace EDDiscovery.Icons
         public static Image EngineerApply { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.EngineerApply"); } }
         public static Image Synthesis { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Synthesis"); } }
         public static Image OrganicIncomplete { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.OrganicIncomplete"); } }
+        public static Image lockimage { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.lockimage"); } }
+        public static Image RoundPlus { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundPlus"); } }
+        public static Image RoundMinus { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundMinus"); } }
+        public static Image RoundExpand { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundExpand"); } }
+        public static Image RoundExpanded { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundExpanded"); } }
+        public static Image RoundUp { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundUp"); } }
+        public static Image RoundDown { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RoundDown"); } }
+        public static Image Find { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Find"); } }
+        public static Image Reverse { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Reverse"); } }
+        public static Image Stop { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Stop"); } }
+        public static Image Ledger { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"); } }
     }
 }

@@ -68,10 +68,12 @@ namespace EDDiscovery
         public event Action<Object, HistoryEntry, bool> OnNoteChanged;  // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action OnAddOnsChanged;                            // add on changed
+        public event Action OnPanelAdded;                            // add on changed
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
-                                                                        // theme has changed by settings, hook if you have some UI which needs refreshing due to it. 
+                                                                        // theme is changing/ then has been changed by settings, hook if you have some UI which needs refreshing due to it. 
+        public event Action OnThemeChanging;                            // Note you won't get it on startup because theme is applied to form before tabs/panels are setup. Before themeing
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
         #endregion
@@ -83,7 +85,7 @@ namespace EDDiscovery
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
-        public event Action<long,long> OnSyncComplete { add { Controller.OnSyncComplete += value; } remove { Controller.OnSyncComplete -= value; } }
+        public event Action<long, long> OnSyncComplete { add { Controller.OnSyncComplete += value; } remove { Controller.OnSyncComplete -= value; } }
 
         #endregion
 
@@ -118,7 +120,8 @@ namespace EDDiscovery
         private BaseUtils.GitHubRelease newRelease;
         private Timer periodicchecktimer;
         private bool in_system_sync = false;        // between start/end sync of databases
-
+        private Tuple<string, string, string, string> dllresults;   // hold results between load and shown
+        private string dllsalloweddisallowed; // holds DLL allowed between load and shown
 
         #endregion
 
@@ -150,6 +153,9 @@ namespace EDDiscovery
         // called from EDDApplicationContext .. continues on with the construction of the system
         public void Init(Action<string> msg)  
         {
+            if (EDDOptions.Instance.Culture != null)
+                CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
+
             // previously in controller
 
             string logpath = EDDOptions.Instance.LogAppDirectory();
@@ -213,10 +219,23 @@ namespace EDDiscovery
                 EDDConfig.Instance.Language = "None";
 
             string lang = EDDOptions.Instance.SelectLanguage ?? EDDConfig.Instance.Language;
+
+            bool loadorgenglish = false;
+
+#if DEBUG
+            if (lang == "example-ex")       // if we are loading english, turn on code vs english comparision to see if we can find any out of date english.ex
+            {
+                Translator.Instance.CompareTranslatedToCode = true;
+                loadorgenglish = true;
+            }
+#endif
             bool found = BaseUtils.Translator.Instance.LoadTranslation(lang, 
                     CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
-                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, debugout:false);
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, 
+                    loadorgenglish:loadorgenglish,
+                    debugout:false);
+
 
             if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
                 ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");
@@ -273,73 +292,13 @@ namespace EDDiscovery
             this.TopMost = EDDConfig.Instance.KeepOnTop;
             notifyIconEDD.Visible = EDDConfig.Instance.UseNotifyIcon;
 
-            // open all the major tabs except the built in ones
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");        // STAGE 3 Tabs
+            // create the action controller and install commands before we executre tabs, since some tabs need these set up
 
-            if (EDDOptions.Instance.TabsReset)
-            {
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("ProfilePowerOnID");                 // back to base profile
-            }
-
-            //Make sure the primary splitter is set up.. and rational
-
-            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings(EDDOptions.Instance.TabsReset); // Double check, use TravelControlBottom etc as the old lookup name if its nonsence
-
-            if (!EDDOptions.Instance.NoTabs)
-            {
-                tabControlMain.MinimumTabWidth = 32;
-                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
-                if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
-                {
-                    MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
-                                    "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
-                                    "To try and clear it, hold down shift and then launch the program." + Environment.NewLine +
-                                    "Click on Reset tabs, then Run program, which may clear the problem.").T(EDTx.EDDiscoveryForm_TSF));
-                    Application.Exit();
-                }
-            }
-
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
-
-            var enumlistcms = new Enum[] { EDTx.EDDiscoveryForm_addTabToolStripMenuItem, EDTx.EDDiscoveryForm_removeTabToolStripMenuItem, EDTx.EDDiscoveryForm_renameTabToolStripMenuItem, EDTx.EDDiscoveryForm_popOutPanelToolStripMenuItem, EDTx.EDDiscoveryForm_helpTabToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripTabs, enumlistcms, this);        // need to translate BEFORE we add in extra items
-
-            var enumlistcms2 = new Enum[] { EDTx.EDDiscoveryForm_notifyIconMenu_Open, EDTx.EDDiscoveryForm_notifyIconMenu_Hide, EDTx.EDDiscoveryForm_notifyIconMenu_Exit };
-            BaseUtils.Translator.Instance.TranslateToolstrip(notifyIconContextMenuStrip, enumlistcms2, this);        // need to translate BEFORE we add in extra items
-
-            foreach (PanelInformation.PanelIDs pid in pids)
-            {
-                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid,
-                    (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
-
-                if (tsmi != null)
-                    addTabToolStripMenuItem.DropDownItems.Add(tsmi);
-
-                ToolStripMenuItem tsmi2 = PanelInformation.MakeToolStripMenuItem(pid,
-                    (s, e) => PopOuts.PopOut((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag)));
-
-                if ( tsmi2 != null)
-                    popOutPanelToolStripMenuItem.DropDownItems.Add(tsmi2);
-            }
-
-            removeTabToolStripMenuItem.Click += (s, e) => tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
-            renameTabToolStripMenuItem.Click += (s, e) => 
-            {
-                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this, 
-                                "Name:".T(EDTx.EDDiscoveryForm_RTABL), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text, 
-                                "Rename Tab".T(EDTx.EDDiscoveryForm_RTABT), this.Icon, false, "Enter a new name for the tab".T(EDTx.EDDiscoveryForm_RTABTT));
-                if (newvalue != null)
-                    tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
-            };
-
-            helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this,contextMenuStripTabs.PointToScreen(new Point(0,0)), tabControlMain.LastTabClicked); };
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
-            // Finish up any installing/deleting which failed during the upgrade process because the files were in use
+            // ---------------------------------------------------------------- Finish up any installing/deleting which failed during the upgrade process because the files were in use
 
             {
                 List<string> alloweddllslist = EDDConfig.Instance.DLLPermissions.Split(",").ToList();
@@ -371,12 +330,9 @@ namespace EDDiscovery
                         BaseUtils.FileHelpers.DeleteFileNoError(f.FullName);
                     }
                 }
-
             }
 
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
-
-            // Stage 5 Misc
+            // ---------------------------------------------------------------- Event hook
 
             EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
@@ -408,6 +364,19 @@ namespace EDDiscovery
                 });
             };
 
+            //----------------------------------------------------------------- Do translations before any thing else gets added to these toolbars
+
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
+
+            var enumlistcms = new Enum[] { EDTx.EDDiscoveryForm_addTabToolStripMenuItem, EDTx.EDDiscoveryForm_removeTabToolStripMenuItem, EDTx.EDDiscoveryForm_renameTabToolStripMenuItem, EDTx.EDDiscoveryForm_popOutPanelToolStripMenuItem, EDTx.EDDiscoveryForm_helpTabToolStripMenuItem };
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripTabs, enumlistcms, this);        // need to translate BEFORE we add in extra items
+
+            var enumlistcms2 = new Enum[] { EDTx.EDDiscoveryForm_notifyIconMenu_Open, EDTx.EDDiscoveryForm_notifyIconMenu_Hide, EDTx.EDDiscoveryForm_notifyIconMenu_Exit };
+            BaseUtils.Translator.Instance.TranslateToolstrip(notifyIconContextMenuStrip, enumlistcms2, this);        // need to translate BEFORE we add in extra items
+
+            // ---------------------------------------------------------------- DLL Load
+
+            msg.Invoke("Loading Extension DLLs");
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " DLL setup");
 
             EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(EDDOptions.Instance.DLLAppDirectory());      // any needed assemblies from here
@@ -418,8 +387,22 @@ namespace EDDiscovery
 
             DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
             DLLCallBacks = new EDDDLLInterfaces.EDDDLLIF.EDDCallBacks();
+            DLLCallBacks.ver = 2;
+            DLLCallBacks.RequestHistory = DLLRequestHistory;
+            DLLCallBacks.RunAction = DLLRunAction;
+            DLLCallBacks.GetShipLoadout = (s) => { return null; };
+            dllsalloweddisallowed = EDDConfig.Instance.DLLPermissions;
+            dllresults = DLLStart(ref dllsalloweddisallowed);       // we run it, and keep the results for processing in Shown
+
+           // temp example - will be removed later.
+           //AddPanel(20100, typeof(UserControls.UserControlExtPanel), typeof(UserControls.NewPanel1), "New Panel 1", "newpanel1", "New panel 1 auto installed", BaseUtils.Icons.IconSet.Instance.Get("fred"));
+           //AddPanel(20200, typeof(UserControls.UserControlExtPanel), typeof(UserControls.NewPanel2), "New Panel 2", "newpanel2", "New panel 2 auto installed", BaseUtils.Icons.IconSet.Instance.Get("fred"));
+
+            // ---------------------------------------------------------------- Web server
 
             WebServer = new WebServer.EDDWebServer(this);
+
+            //----------------------------------------------------------------- GMO etc load
 
             string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
 
@@ -449,6 +432,8 @@ namespace EDDiscovery
 
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
+
+            //---------------------------------------------------------------------- Tool tips
 
             var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_show3DMapsToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
@@ -484,8 +469,53 @@ namespace EDDiscovery
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
-            if ( Environment.OSVersion.Platform != PlatformID.Win32NT )
+            // ---------------------------------------------------------------- open all the major tabs except the built in ones
+
+            msg.Invoke("Loading Tabs");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");        // STAGE 3 Tabs
+
+            if (EDDOptions.Instance.TabsReset)
+            {
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("ProfilePowerOnID");                 // back to base profile
+            }
+
+            // Make sure the primary splitter is set up.. and rational
+
+            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings(EDDOptions.Instance.TabsReset); // Double check, use TravelControlBottom etc as the old lookup name if its nonsence
+
+            if (!EDDOptions.Instance.NoTabs)
+            {
+                tabControlMain.MinimumTabWidth = 32;
+                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+                if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
+                {
+                    MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
+                                    "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
+                                    "To try and clear it, hold down shift and then launch the program." + Environment.NewLine +
+                                    "Click on Reset tabs, then Run program, which may clear the problem.").T(EDTx.EDDiscoveryForm_TSF));
+                    Application.Exit();
+                }
+            }
+
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
                 tabControlMain.AllowDragReorder = false;
+
+            UpdatePanelListInContextMenuStrip();
+
+            removeTabToolStripMenuItem.Click += (s, e) => tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
+            renameTabToolStripMenuItem.Click += (s, e) =>
+            {
+                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this,
+                                "Name:".T(EDTx.EDDiscoveryForm_RTABL), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text,
+                                "Rename Tab".T(EDTx.EDDiscoveryForm_RTABT), this.Icon, false, "Enter a new name for the tab".T(EDTx.EDDiscoveryForm_RTABTT));
+                if (newvalue != null)
+                    tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
+            };
+
+            helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this, contextMenuStripTabs.PointToScreen(new Point(0, 0)), tabControlMain.LastTabClicked); };
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
         }
@@ -495,10 +525,13 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load");
+
             if (!EDDOptions.Instance.NoTabs)        // load the tabs so when shown is done they are there..
                 tabControlMain.LoadTabs();
+
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load Complete");
         }
+
 
         // OnShown is called once
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
@@ -561,32 +594,11 @@ namespace EDDiscovery
                     ActionRun(Actions.ActionEventEDList.onTabChange, new BaseUtils.Variables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
             };
 
-
-            // DLL loads
-
-            DLLCallBacks.RequestHistory = DLLRequestHistory;
-            DLLCallBacks.RunAction = DLLRunAction;
-            DLLCallBacks.GetShipLoadout = (s) => { return null; };
-
-            string verstring = EDDApplicationContext.AppVersion;
-            string[] options = new string[] { EDDDLLInterfaces.EDDDLLIF.FLAG_HOSTNAME + "EDDiscovery",
-                                              EDDDLLInterfaces.EDDDLLIF.FLAG_JOURNALVERSION + "2",
-                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLBACKVERSION + "2",
-                                            };
-
-            string alloweddlls = EDDConfig.Instance.DLLPermissions;
-
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load DLL");
-
-            string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
-            bool[] autodisallow = new bool[] { false, true };
-            Tuple<string, string, string,string> res = DLLManager.Load(dllpaths, autodisallow,
-                                                                    verstring, options, DLLCallBacks, ref alloweddlls,
-                                                                    (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
-
-            if (res.Item3.HasChars())       // new DLLs
+            // Check on DLL load result and see if new DLLs
+ 
+            if (dllresults.Item3.HasChars())       // new DLLs
             {
-                string[] list = res.Item3.Split(',');
+                string[] list = dllresults.Item3.Split(',');
                 bool changed = false;
                 foreach (var dll in list)
                 {
@@ -598,12 +610,12 @@ namespace EDDiscovery
                                     "Warning".T(EDTx.Warning),
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
-                        alloweddlls = alloweddlls.AppendPrePad("+" + dll, ",");
+                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("+" + dll, ",");
                         changed = true;
                     }
                     else
                     {
-                        alloweddlls = alloweddlls.AppendPrePad("-" + dll, ",");
+                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("-" + dll, ",");
                     }
                 }
 
@@ -611,19 +623,18 @@ namespace EDDiscovery
                 {
                     DLLManager.UnLoad();
                     Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Reload DLL");
-                    res = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls,
-                                    (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" +name, set));
+                    dllresults = DLLStart(ref dllsalloweddisallowed);
                 }
             }
 
-            EDDConfig.Instance.DLLPermissions = alloweddlls;
+            EDDConfig.Instance.DLLPermissions = dllsalloweddisallowed;        // write back the permission string
 
-            if (res.Item1.HasChars())   // ok
-                LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), res.Item1));
-            if (res.Item2.HasChars())   // failed
-                LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), res.Item2));
-            if (res.Item4.HasChars())   // failed
-                LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), res.Item4));
+            if (dllresults.Item1.HasChars())   // ok
+                LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), dllresults.Item1));
+            if (dllresults.Item2.HasChars())   // failed
+                LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), dllresults.Item2));
+            if (dllresults.Item4.HasChars())   // failed
+                LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), dllresults.Item4));
 
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
@@ -813,6 +824,8 @@ namespace EDDiscovery
                 }
             }
 
+            DLLManager.Shown();     // tell the DLLs form has shown
+
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " End shown");
         }
 
@@ -927,6 +940,26 @@ namespace EDDiscovery
 
             removeTabToolStripMenuItem.Enabled = validtab && !IsNonRemovableTab(n);
             renameTabToolStripMenuItem.Enabled = validtab && !(tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector);
+        }
+
+        private void UpdatePanelListInContextMenuStrip()
+        {
+            addTabToolStripMenuItem.DropDownItems.Clear();
+
+            foreach (PanelInformation.PanelIDs pid in PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName))
+            {
+                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid,
+                    (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
+
+                if (tsmi != null)
+                    addTabToolStripMenuItem.DropDownItems.Add(tsmi);
+
+                ToolStripMenuItem tsmi2 = PanelInformation.MakeToolStripMenuItem(pid,
+                    (s, e) => PopOuts.PopOut((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag)));
+
+                if (tsmi2 != null)
+                    popOutPanelToolStripMenuItem.DropDownItems.Add(tsmi2);
+            }
         }
 
         private bool IsNonRemovableTab(int n)

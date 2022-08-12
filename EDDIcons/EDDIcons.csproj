@@ -246,7 +246,6 @@
     <EmbeddedResource Include="Panels\Commodities.png" />
     <EmbeddedResource Include="Panels\EstimatedValues.png" />
     <EmbeddedResource Include="Panels\Expedition.png" />
-    <EmbeddedResource Include="Panels\Exploration.png" />
     <EmbeddedResource Include="Panels\Grid.png" />
     <EmbeddedResource Include="Panels\Journal.png" />
     <EmbeddedResource Include="Panels\Ledger.png" />
@@ -533,6 +532,16 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\NavRouteClear.png" />
+    <EmbeddedResource Include="Controls\RoundDown.png" />
+    <EmbeddedResource Include="Controls\RoundUp.png" />
+    <EmbeddedResource Include="Controls\Stop.png" />
+    <EmbeddedResource Include="Controls\Reverse.png" />
+    <EmbeddedResource Include="Panels\Discoveries.png" />
+    <EmbeddedResource Include="Controls\RoundExpand.png" />
+    <EmbeddedResource Include="Controls\RoundExpanded.png" />
+    <EmbeddedResource Include="Controls\RoundMinus.png" />
+    <EmbeddedResource Include="Controls\RoundPlus.png" />
     <EmbeddedResource Include="Engineers\Special Effect.png" />
     <EmbeddedResource Include="Engineers\Weapon.png" />
     <EmbeddedResource Include="Engineers\Suit.png" />
@@ -1092,6 +1101,12 @@
     <EmbeddedResource Include="Controls\Level.png" />
     <EmbeddedResource Include="Controls\EngineerRecipe.png" />
     <EmbeddedResource Include="Controls\OrganicIncomplete.png" />
+    <EmbeddedResource Include="Controls\lockimage.png" />
+    <EmbeddedResource Include="Controls\Find.png" />
+    <EmbeddedResource Include="Controls\ExportFile.png" />
+    <EmbeddedResource Include="Controls\ManageAddOns48.png" />
+    <EmbeddedResource Include="Controls\Addtab48.png" />
+    <EmbeddedResource Include="Controls\Ledger.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

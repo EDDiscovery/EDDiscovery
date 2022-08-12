@@ -8,7 +8,6 @@ Cancel: "Cancel" @
 Delete: "Delete" @
 Campaign: "Campaign" @
 NoScan: "No Scan" @
-Travel: "Travel" @
 GameTime: "Game Time" @
 Time: "Time" @
 NoData: "No Data" @
@@ -22,6 +21,9 @@ RemoveAll : "Remove All" @
 
 SECTION StartUp
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
+
+SECTION DataGridView
+.WordWrap: "Word Wrap (Override)" @
 
 SECTION SafeModeForm
 
@@ -46,14 +48,14 @@ SECTION InfoForm
 
 SECTION PopOutInfo
 
-.Log.Description: "Program log" @
+.Log.Description: "Log of program information" @
 .Log.Title: "Log" @
 .Journal.Description: "Journal grid view" @
 .Journal.Title: "Journal" @
 .TravelGrid.Description: "History grid view" @
-.TravelGrid.Title: "Travel History" @
-.StarList.Description: "Visited star list" @
-.StarList.Title: "Star List" @
+.TravelGrid.Title: "History" @
+.StarList.Description: "Visited Star list" @
+.StarList.Title: "Visited Stars" @
 .Materials.Description: "Materials count" @
 .Materials.Title: "Materials" @
 .Commodities.Description: "Commodity count" @
@@ -68,9 +70,9 @@ SECTION PopOutInfo
 .Statistics.Title: "Statistics" @
 .MarketData.Description: "Market data view, giving commodity price information where available" @
 .MarketData.Title: "Market Data" @
-.ShipYardPanel.Description: "Information on ship yards from places you have visited" @
+.ShipYardPanel.Description: "Ship yards information from places you have visited" @
 .ShipYardPanel.Title: "Ship Yards" @
-.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" @
+.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" @
 .OutfittingPanel.Title: "Outfitting" @
 .Synthesis.Description: "Synthesis planner" @
 .Synthesis.Title: "Synthesis" @
@@ -82,9 +84,9 @@ SECTION PopOutInfo
 .Scan.Title: "Scan" @
 .ScanGrid.Description: "Scan data on system in a grid" @
 .ScanGrid.Title: "Scan Grid" @
-.StarDistance.Description: "List of nearest stars" @
+.StarDistance.Description: "Nearest stars from current position" @
 .StarDistance.Title: "Nearest Stars" @
-.EstimatedValues.Description: "Estimated scan values of bodies in system" @
+.EstimatedValues.Description: "Estimated Scan values of bodies in system" @
 .EstimatedValues.Title: "Estimated Values" @
 .Map2D.Title: "2D Map" @
 .Map2D.Description: "2D Map of galaxy" @
@@ -96,9 +98,9 @@ SECTION PopOutInfo
 .Plot.Title: "2D Plot" @
 .Trilateration.Description: "Trilateration of stars with unknown positions" @
 .Trilateration.Title: "Trilateration" @
-.BookmarkManager.Description: "Manage System and planetary bookmarks" @
+.BookmarkManager.Description: "Bookmarks on systems and planets" @
 .BookmarkManager.Title: "Bookmarks" @
-.CombatPanel.Description: "Display combat statistics" @
+.CombatPanel.Description: "Combat statistics" @
 .CombatPanel.Title: "Combat" @
 .Route.Description: "Route Finder from stored star data" @
 .Route.Title: "Route Finder" @
@@ -110,11 +112,11 @@ SECTION PopOutInfo
 .Spanel.Title: "Summary Panel" @
 .Trippanel.Description: "Trip computer overlay" @
 .Trippanel.Title: "Trip Computer" @
-.NotePanel.Description: "System notes overlay" @
+.NotePanel.Description: "Notes overlay" @
 .NotePanel.Title: "Notes" @
 .RouteTracker.Description: "Route tracker overlay" @
 .RouteTracker.Title: "Route Tracker" @
-.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" @
+.Compass.Description: "Compass overlay to show bearing to planetary coordinates" @
 .Compass.Title: "Compass" @
 .Settings.Description: "Settings for ED Discovery " @
 .Settings.Title: "Settings" @
@@ -131,13 +133,13 @@ SECTION PopOutInfo
 .CaptainsLog.Title: "Captain's Log" @
 .CaptainsLog.Description: "Captain's Log - notes on your travels" @
 .Surveyor.Title: "Surveyor" @
-.Surveyor.Description: "Surface map aid" @
+.Surveyor.Description: "Surveyor - Exploration and route overlay" @
 .MissionOverlay.Title: "Mission Overlay" @
 .MissionOverlay.Description: "Mission List overlay" @
 .MaterialTrader.Title: "Material Trader" @
-.MaterialTrader.Description: "Material Trader" @
+.MaterialTrader.Description: "Material trader" @
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" @
+.EDSM.Description: "EDSM - Automatic web view of system" @
 .Inara.Title: "Inara" @
 .Inara.Description: "Inara - Automatic web view of system" @
 .Factions.Title: "Factions" @
@@ -155,9 +157,12 @@ SECTION PopOutInfo
 .LocalMap3D.Title: "Local 3D Map" @
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
-.Organics.Description: "Current body organic information and history of scans" @
+.Organics.Description: "Organic scans of current body and historic scans" @
 .Engineers.Title: "Engineers" @
 .Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
+
 
 SECTION EDDiscoveryForm
 
@@ -172,7 +177,7 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" @
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" @
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" @
+.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" @
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" @
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" @
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" @
@@ -368,7 +373,11 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" @
+ExportForm: "Export data" @
+.buttonExport: "Export" @
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
+
 .labelCVSSep: "CSV Separator" @
 .radioButtonComma: "Comma" @
 .radioButtonSemiColon: "Semicolon" @
@@ -376,11 +385,6 @@ ExportForm: "Export Data" @
 .checkBoxCustomAutoOpen: "Open" @
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" @
-.ECH: "Export current data {0}" @
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -413,7 +417,7 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" @
+MoveToCommander: "Move To Commander" @
 .buttonTransfer: "Transfer" @
 .label1: "Move selected history to commander." @
 
@@ -422,7 +426,6 @@ SECTION NewReleaseForm
 NewReleaseForm: "EDDiscovery Release" @
 .labelName: "Name" @
 .btnClose: "&Close" @
-.buttonMsiInstaller: "&Msi Installer" @
 .labelURL: "GitHub URL" @
 .labelDownload: "Download" @
 .buttonPortablezip: "&Portable Zip" @
@@ -445,11 +448,11 @@ ProfileEditor: "ProfileEditor" @
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" @
-.labelTTimestamp: "Timestamp: " @
+.labelTTimestamp: "Timestamp:" @
 .buttonSave: "Save" @
-.labelTSystem: "System: " @
-.labelTSummary: "Summary: " @
-.labelTDetails: "Details: " @
+.labelTSystem: "System:" @
+.labelTSummary: "Summary:" @
+.labelTDetails: "Details:" @
 
 SECTION MessageBoxTheme
 
@@ -595,6 +598,7 @@ ActionProgramEditForm : "Action Program" @
 .buttonExtLoad: "Load" @
 .buttonExtSave: "Save" @
 .buttonExtEdit: "Text Edit" @
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 .ci: "Configuration items for installation - specialist use" @

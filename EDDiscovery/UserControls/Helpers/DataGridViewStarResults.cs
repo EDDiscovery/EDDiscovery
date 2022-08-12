@@ -16,6 +16,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -123,8 +124,43 @@ namespace EDDiscovery.UserControls.Search
 
         private void cellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-                ShowScanPopOut(Rows[e.RowIndex].Tag);
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var coltag = Columns[e.ColumnIndex].Tag as string;
+                var cell = Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                string text = null;
+
+                bool textpopout = coltag?.Contains("TextPopOut") ?? false;
+                bool tooltippopout = coltag?.Contains("TooltipPopOut") ?? false;
+
+                if (textpopout)
+                {
+                    if (tooltippopout)
+                    {
+                        text = cell.ToolTipText.HasChars() ? cell.ToolTipText : cell.Value as string;
+                    }
+                    else
+                    {
+                        text = cell.Value as string;
+                    }
+                }
+                else if ( tooltippopout)
+                {
+                    text = cell.ToolTipText;
+                }
+
+                if (text.HasChars())
+                {
+                    InfoForm frm = new InfoForm();
+                    frm.Info(this.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
+                    frm.Show(FindForm());
+                }
+                else if (Rows[e.RowIndex].Tag != null)
+                {
+                    ShowScanPopOut(Rows[e.RowIndex].Tag);
+                }
+            }
         }
 
         void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
@@ -163,7 +199,7 @@ namespace EDDiscovery.UserControls.Search
                     List<string> colh = new List<string>();
                     for (int i = 0; i < columnsout; i++)
                         colh.Add(Columns[i].HeaderText);
-                    colh.AddRange(new string[] { "X", "Y", "Z", "ID" });
+                    colh.AddRange(new string[] { "X", "Y", "Z" });
 
                     grd.GetHeader += delegate (int c)
                     {
@@ -181,7 +217,6 @@ namespace EDDiscovery.UserControls.Search
                         data.Add(sys.X.ToString("0.#"));
                         data.Add(sys.Y.ToString("0.#"));
                         data.Add(sys.Z.ToString("0.#"));
-                        data.Add(sys.EDSMID);
 
                         return data.ToArray();
                     };

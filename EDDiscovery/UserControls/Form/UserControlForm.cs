@@ -25,33 +25,23 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlForm : Forms.DraggableFormPos
     {
-        public UserControlCommonBase UserControl;
+        public UserControlCommonBase UserControl { get; private set; }
         public bool IsLoaded { get; private set; } = false;         // After shown, but before closing
 
         public enum TransparencyMode { Off, On, OnClickThru, OnFullyTransparent };
 
-        public TransparencyMode TransparentMode = TransparencyMode.Off;
-        public Color TransparencyColorKey = Color.Transparent;     // if required, the control could modify this during its Init
-        public bool IsTransparent { get { return TransparentMode != TransparencyMode.Off; } }
+        public TransparencyMode TransparentMode { get; private set; } = TransparencyMode.Off;
+        public Color TransparencyColorKey { get; private set; }  = Color.Transparent;     // if required, the control could modify this during its Init
+        public bool IsTransparentModeOn { get { return TransparentMode != TransparencyMode.Off; } }
         public bool IsClickThruOn { get { return TransparentMode == TransparencyMode.OnClickThru || TransparentMode == TransparencyMode.OnFullyTransparent; } }
 
-        public bool DisplayTitle = true;            // we are displaying the title
-        public string DBRefName;
-        public string WinTitle;
-
-        private bool inpanelshow = false;       // if we are in a panel show when we were transparent
-        private bool defwindowsborder;
-        private bool curwindowsborder;          // applied setting
-        private Color beforetransparency = Color.Transparent;
-        private Color tkey = Color.Transparent;
-        private Color labelnormalcolour, labeltransparentcolour;
-
-        private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
-        private bool deftopmost;
-
-        private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
+        public bool DisplayTitle { get; private set; }  = true;            // we are displaying the title
+        public string DBRefName { get; private set; }
+        public string WinTitle { get; private set; }
 
         public bool IsTransparencySupported { get { return !TransparencyColorKey.IsFullyTransparent(); } }
+
+        public PanelInformation.PanelIDs PanelID { get { return UserControl?.panelid ?? PanelInformation.PanelIDs.GroupMarker; } }  // May not be open, if so, return an impossible
 
         public UserControlForm()
         {
@@ -61,8 +51,8 @@ namespace EDDiscovery.UserControls
 
             InitializeComponent();
 
-            timer.Interval = 500;
-            timer.Tick += CheckMouse;
+            checkmousepositiontimer.Interval = 500;
+            checkmousepositiontimer.Tick += CheckMouse;
 
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
             extButtonDrawnHelp.Text = "";
@@ -70,7 +60,7 @@ namespace EDDiscovery.UserControls
 
         #region Public Interface
 
-        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
+        public void Init(UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
                          Color labelnormal , Color labeltransparent, Color transparentkey )
         {
             //System.Diagnostics.Debug.WriteLine("UCF Init+");
@@ -186,9 +176,11 @@ namespace EDDiscovery.UserControls
 
         public void UpdateTransparency()
         {
-            //System.Diagnostics.Debug.WriteLine("UCF UpdateTrans+");
-            curwindowsborder = (!IsTransparent && defwindowsborder);    // we have a border if not transparent and we have a def border
-            bool showtransparent = IsTransparent && !inpanelshow;           // are we transparent..  must not be in panel show
+            bool showtransparent = IsTransparentModeOn && !inpanelshow;    // do we want to be transparent.. mode is on and not in panel show
+
+            curwindowsborder = (!showtransparent && defwindowsborder);    // we have a border if not transparent and we have a default border turned on
+
+            //System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency border={curwindowsborder} trans={showtransparent}");
 
             if (beforetransparency.IsFullyTransparent())        // record colour before transparency, dynamically
             {
@@ -197,7 +189,7 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Record colour " + beforetransparency.ToString() + " tkey " + this.TransparencyKey);
             }
 
-            UpdateControls();
+            UpdateControls();       // turn on/off controls accordingly
 
             //System.Diagnostics.Debug.WriteLine(Text + " tr " + transparentmode);
 
@@ -211,8 +203,9 @@ namespace EDDiscovery.UserControls
 
             label_index.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
 
-            UserControl.SetTransparency(showtransparent, togo);
-            PerformLayout();
+            UserControl.SetTransparency(showtransparent, togo);     // tell the UCCB about the change
+
+            PerformLayout();        // need to position the UCCB
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -222,27 +215,32 @@ namespace EDDiscovery.UserControls
             }
 
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
-                timer.Start();
+                checkmousepositiontimer.Start();
             else
-                timer.Stop();
+                checkmousepositiontimer.Stop();
 
             //System.Diagnostics.Debug.WriteLine("UCF UpdateTrans-");
         }
 
+
+        // fix up controls to current transparency state
         private void UpdateControls()
         {
-            bool transparent = IsTransparent && !inpanelshow;           // are we transparent..
+            bool showtransparent = IsTransparentModeOn && !inpanelshow;           // are we transparent..
 
+            // border style, if transparent we use the curwindowsborder, else the defwindowsborder, to select the window frame
             FormBorderStyle = curwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            panelTop.Visible = !curwindowsborder;       // this also has the effect of removing the label_ and panel_ buttons
 
-            statusStripBottom.Visible = !transparent && !curwindowsborder;      // status strip on, when not transparent, and when we don't have border
+            // the extensive controls in panel top is shown if we are not in transparent mode with no windows border, or if in transparent mode and we are in a panel show
+            panelTop.Visible = (!IsTransparentModeOn && !curwindowsborder) || (IsTransparentModeOn && inpanelshow);
 
-            panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = extButtonDrawnHelp.Visible = !transparent;
+            statusStripBottom.Visible = !showtransparent && !curwindowsborder;      // status strip on, when not transparent, and when we don't have border
 
-            panel_transparent.Visible = IsTransparencySupported && !transparent;
-            panel_showtitle.Visible = IsTransparencySupported && !transparent;
-            panel_showtitle.Visible = IsTransparencySupported && !transparent;
+            panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = extButtonDrawnHelp.Visible = !showtransparent;
+
+            panel_transparent.Visible = IsTransparencySupported && !showtransparent;
+            panel_showtitle.Visible = IsTransparencySupported && !showtransparent;
+            panel_showtitle.Visible = IsTransparencySupported && !showtransparent;
 
             if (TransparentMode == TransparencyMode.On)
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
@@ -253,7 +251,7 @@ namespace EDDiscovery.UserControls
             else
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
 
-            label_index.Visible = labelControlText.Visible = (DisplayTitle || !transparent);   //  titles are on, or transparent is off
+            label_index.Visible = labelControlText.Visible = (DisplayTitle || !showtransparent);   //  titles are on, or transparent is off
 
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
             panel_showtitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
@@ -266,7 +264,7 @@ namespace EDDiscovery.UserControls
         {
             if (UserControl != null)
             {
-                UserControl.Location = new Point(3, curwindowsborder ? 2 : panelTop.Location.Y + panelTop.Height);
+                UserControl.Location = new Point(3, panelTop.Visible ? panelTop.Bottom+1 : 2);
                 UserControl.Size = new Size(ClientRectangle.Width - UCPaddingWidth*2, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
             }
         }
@@ -366,12 +364,13 @@ namespace EDDiscovery.UserControls
             SetShowTitleInTransparency(!DisplayTitle);
         }
 
-        private void CheckMouse(object sender, EventArgs e)     // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
+        // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
+        private void CheckMouse(object sender, EventArgs e)     
         {
             if (IsLoaded)
             {
-                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick " + Name + " " + Text + " " + transparentmode + " " + inpanelshow);
-                if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
+                //System.Diagnostics.Debug.WriteLine($"UCF Check {Bounds} vs {MousePosition}");
+                if (Bounds.Contains(MousePosition))     // bounds of window contains the mouse pointer
                 {
                     //System.Diagnostics.Debug.WriteLine(Environment.TickCount + "In area");
                     if (!inpanelshow)
@@ -455,7 +454,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
-            EDDHelp.Help(this, extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Height)), UserControl);
+            EDDHelp.Help(this, extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Height)), UserControl.HelpKeyOrAddress());
         }
 
         #endregion
@@ -479,33 +478,42 @@ namespace EDDiscovery.UserControls
         {
             OnCaptionMouseUp((Control)sender, e);
         }
+
+        private bool inpanelshow = false;       // if we are in a panel show when we were transparent
+        private bool defwindowsborder;          // what we started with border style
+        private bool curwindowsborder;          // applied setting
+        private Color beforetransparency = Color.Transparent;
+        private Color tkey = Color.Transparent;
+        private Color labelnormalcolour, labeltransparentcolour;
+
+        private Timer checkmousepositiontimer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
+        private bool deftopmost;
+
+        private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
     }
 
+    ///-------------------------------------------------------------------- List of forms
 
     public class UserControlFormList
     {
-        private List<UserControlForm> tabforms;
-        EDDiscoveryForm discoveryform;
-
-        public int Count { get { return tabforms.Count; } }
+        public int Count { get { return forms.Count; } }
+        public UserControlForm this[int i] { get { return forms[i]; } }
 
         public UserControlFormList(EDDiscoveryForm ed)
         {
-            tabforms = new List<UserControlForm>();
+            forms = new List<UserControlForm>();
             discoveryform = ed;
         }
 
-        public UserControlForm this[int i] { get { return tabforms[i]; } }
-
         public UserControlForm GetByWindowsRefName(string name)
         {
-            foreach (UserControlForm u in tabforms)     // first complete name
+            foreach (UserControlForm u in forms)     // first complete name
             {
                 if (u.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) )
                     return u;
             }
 
-            foreach (UserControlForm u in tabforms)     // then partial start name
+            foreach (UserControlForm u in forms)     // then partial start name
             {
                 if (u.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase) )
                     return u;
@@ -514,12 +522,11 @@ namespace EDDiscovery.UserControls
             return null;
         }
 
-        // find UCCB of type t
-        public UserControlForm FindUCCB(Type t)
+        public UserControlForm Find(PanelInformation.PanelIDs p)
         {
-            foreach (UserControlForm u in tabforms)     
+            foreach (UserControlForm u in forms)     
             {
-                if (u.UserControl != null && u.UserControl.GetType() == t)
+                if (u.UserControl != null && u.UserControl.panelid == p)
                     return u;
             }
 
@@ -529,7 +536,7 @@ namespace EDDiscovery.UserControls
         public UserControlForm NewForm()                // a new form is needed
         {
             UserControlForm tcf = new UserControlForm();
-            tabforms.Add(tcf);
+            forms.Add(tcf);
             tcf.FormClosed += FormClosedCallback;
             return tcf;
         }
@@ -537,34 +544,17 @@ namespace EDDiscovery.UserControls
         private void FormClosedCallback(Object sender, FormClosedEventArgs e)       // called when form closes.. by user or by us.  Remove from list
         {
             UserControlForm tcf = (UserControlForm)sender;
-            tabforms.Remove(tcf);
+            forms.Remove(tcf);
             discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, new BaseUtils.Variables(new string[] { "PopOutName", tcf.DBRefName.Substring(9), "PopOutTitle", tcf.WinTitle }));
         }
 
-        public List<UserControlCommonBase> GetListOfControls(Type c)
-        {
-            List<UserControlCommonBase> lc = new List<UserControlCommonBase>();
-
-            foreach (UserControlForm tcf in tabforms)
-            {
-                if (tcf.IsLoaded)
-                {
-                    UserControlCommonBase uc = tcf.FindUserControl(c);
-                    if (uc != null)
-                        lc.Add(uc);
-                }
-            }
-
-            return lc;
-        }
-
-        public int CountOf(Type c)
+        public int CountOf(PanelInformation.PanelIDs p)
         {
             int count = 0;
 
-            foreach (UserControlForm tcf in tabforms)
+            foreach (UserControlForm tcf in forms)
             {
-                if (tcf.FindUserControl(c) != null)
+                if (tcf.PanelID == p)
                     count++;
             }
 
@@ -573,7 +563,7 @@ namespace EDDiscovery.UserControls
 
         public void ShowAllInTaskBar()
         {
-            foreach (UserControlForm ucf in tabforms)
+            foreach (UserControlForm ucf in forms)
             {
                 if (ucf.IsLoaded)
                     ucf.SetShowInTaskBar(true);
@@ -582,7 +572,7 @@ namespace EDDiscovery.UserControls
 
         public void MakeAllOpaque()
         {
-            foreach (UserControlForm ucf in tabforms)
+            foreach (UserControlForm ucf in forms)
             {
                 if (ucf.IsLoaded)
                 {
@@ -594,7 +584,7 @@ namespace EDDiscovery.UserControls
 
         public void CloseAll()
         {
-            List<UserControlForm> list = new List<UserControlForm>(tabforms);       // so, closing it ends up calling back to FormCloseCallBack
+            List<UserControlForm> list = new List<UserControlForm>(forms);       // so, closing it ends up calling back to FormCloseCallBack
                                                                                     // and it changes tabforms. So we need a copy to safely do this
             foreach (UserControlForm ucf in list)
             {
@@ -604,7 +594,7 @@ namespace EDDiscovery.UserControls
 
         public bool AllowClose()
         {
-            foreach( var f in tabforms )
+            foreach( var f in forms )
             {
                 if (!f.AllowClose())
                     return false;
@@ -612,5 +602,7 @@ namespace EDDiscovery.UserControls
             return true;
         }
 
+        private List<UserControlForm> forms;
+        private EDDiscoveryForm discoveryform;
     }
 }

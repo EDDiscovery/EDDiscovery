@@ -27,7 +27,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMarketData : UserControlCommonBase
     {
         private string dbBuyOnly = "BuyOnly";
-        private string dbSellOnly = "SellOnly";
+        private string dbHasDemand = "HasDemand";
         private string dbAutoSwap = "AutoSwap";
 
         #region Init
@@ -47,16 +47,16 @@ namespace EDDiscovery.UserControls
             checkBoxBuyOnly.Checked = GetSetting(dbBuyOnly, false);
             this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
 
-            checkBoxSellOnly.Checked = GetSetting(dbSellOnly, false);
-            this.checkBoxSellOnly.CheckedChanged += new System.EventHandler(this.checkBoxSellOnly_CheckedChanged);
+            checkBoxHasDemand.Checked = GetSetting(dbHasDemand, false);
+            this.checkBoxHasDemand.CheckedChanged += new System.EventHandler(this.checkBoxHasDemand_CheckedChanged);
 
             checkBoxAutoSwap.Checked = GetSetting(dbAutoSwap, false);
 
             discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
-            var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol, EDTx.UserControlMarketData_labelLocation, EDTx.UserControlMarketData_labelVs, EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxSellOnly, EDTx.UserControlMarketData_checkBoxAutoSwap };
-            var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxSellOnly_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol, EDTx.UserControlMarketData_labelLocation, EDTx.UserControlMarketData_labelVs, EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxHasDemand, EDTx.UserControlMarketData_checkBoxAutoSwap };
+            var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMarketData);
             PutSetting(dbBuyOnly, checkBoxBuyOnly.Checked);
-            PutSetting(dbSellOnly, checkBoxSellOnly.Checked);
+            PutSetting(dbHasDemand, checkBoxHasDemand.Checked);
             PutSetting(dbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnNewEntry;
             uctg.OnTravelSelectionChanged -= OnChanged;
@@ -207,11 +207,15 @@ namespace EDDiscovery.UserControls
 
                 FontFamily ff = new FontFamily(this.Font.Name);
                 bool buyonly = checkBoxBuyOnly.Checked;
-                bool sellonly = checkBoxSellOnly.Checked;
+                bool hasdemand = checkBoxHasDemand.Checked;
 
                 foreach (CCommodities c in list)
                 {
-                    if (sellonly ? c.buyPrice == 0 : (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy)))
+                    // logic here is:
+                    // if hasdemand is set, we display if we have demand, or if we have a comparision to display
+                    // else if not buy toggle is off, or when on its when it can be bought or we have a comparision to display
+
+                    if (hasdemand ? (c.HasDemand || c.ComparisionBuy) : (!buyonly || c.CanBeBought || c.ComparisionBuy))
                     {
                         MaterialCommodityMicroResourceType mc = MaterialCommodityMicroResourceType.GetByFDName(c.fdname);
 
@@ -224,7 +228,7 @@ namespace EDDiscovery.UserControls
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
                                             c.CargoCarried,
-                                            c.demand > 1 ? c.demand.ToString() : "" ,
+                                            c.demand > 1 ? c.demand.ToString() : "" ,       // 1 because lots of them are marked with 1, which is a frontier marker showing they want it weakly
                                             c.stock > 0 ? c.stock.ToString() : "" ,
                                             c.meanPrice > 0 ? c.meanPrice.ToString() : "",
                                             c.ComparisionLR,
@@ -387,14 +391,14 @@ namespace EDDiscovery.UserControls
         private void checkBoxBuyOnly_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxBuyOnly.Checked)
-                checkBoxSellOnly.Checked = false;
+                checkBoxHasDemand.Checked = false;
 
             Display();
         }
 
-        private void checkBoxSellOnly_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxHasDemand_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxSellOnly.Checked)
+            if (checkBoxHasDemand.Checked)
                 checkBoxBuyOnly.Checked = false;
 
             Display();

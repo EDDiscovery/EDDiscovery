@@ -570,7 +570,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(870, 580);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(859, 616);
             this.dataViewScrollerPanel.TabIndex = 28;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -579,7 +579,7 @@ namespace EDDiscovery.UserControls
             this.panelOutlining.KeepLastEntriesVisibleOnRollUp = 1;
             this.panelOutlining.Location = new System.Drawing.Point(0, 0);
             this.panelOutlining.Name = "panelOutlining";
-            this.panelOutlining.Size = new System.Drawing.Size(10, 580);
+            this.panelOutlining.Size = new System.Drawing.Size(10, 616);
             this.panelOutlining.TabIndex = 5;
             // 
             // vScrollBarCustom
@@ -593,13 +593,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(851, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(840, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 580);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 616);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 4;
@@ -627,11 +627,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(10, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.PerColumnWordWrapControl = true;
             this.dataGridViewTravel.RowHeaderMenuStrip = null;
             this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTravel.SingleRowSelect = true;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(841, 580);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(830, 616);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
@@ -759,7 +760,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(870, 30);
+            this.panelTop.Size = new System.Drawing.Size(859, 30);
             this.panelTop.TabIndex = 31;
             // 
             // extButtonDrawnHelp
@@ -791,7 +792,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlTravelGrid";
-            this.Size = new System.Drawing.Size(870, 610);
+            this.Size = new System.Drawing.Size(859, 646);
             this.historyContextMenu.ResumeLayout(false);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();

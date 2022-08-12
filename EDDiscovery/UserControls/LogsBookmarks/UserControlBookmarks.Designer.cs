@@ -229,6 +229,7 @@
             this.dataGridViewBookMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewBookMarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewBookMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewBookMarks.ColumnReorder = true;
             this.dataGridViewBookMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColType,
             this.ColBookmarkName,
@@ -317,6 +318,10 @@
             this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
             this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 205);
             this.userControlSurfaceBookmarks.TabIndex = 5;
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // extButtonEditSystem
             // 

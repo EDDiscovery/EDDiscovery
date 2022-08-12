@@ -251,7 +251,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayCompass()
         {
-            SetCompassVisibility(IsTransparent);
+            SetCompassVisibility(IsTransparentModeOn);
 
             if (compassControl.Visible)
             {

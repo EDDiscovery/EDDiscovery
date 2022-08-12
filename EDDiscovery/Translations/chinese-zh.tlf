@@ -8,7 +8,6 @@ Cancel: "Cancel" => "取消"
 Delete: "Delete" => "删除"
 Campaign: "Campaign" => "战役"
 NoScan: "No Scan" => "无扫描"
-Travel: "Travel" => "航行"
 GameTime: "Game Time" => "游戏事件"
 Time: "Time" => "时间"
 NoData: "No Data" => "无数据"
@@ -48,14 +47,14 @@ SECTION InfoForm
 
 SECTION PopOutInfo
 
-.Log.Description: "Program log" => "EDDiscovery的程序日志"
+.Log.Description: "Log of program information" => "EDDiscovery的程序日志"
 .Log.Title: "Log" => "系统日志"
 .Journal.Description: "Journal grid view" => "航行日志（表格模式）"
 .Journal.Title: "Journal" => "航行日志"
 .TravelGrid.Description: "History grid view" => "航行历史记录（表格模式）"
-.TravelGrid.Title: "Travel History" => "航行记录"
-.StarList.Description: "Visited star list" => "访问过的星系列表"
-.StarList.Title: "Star List" => "星系访问记录"
+.TravelGrid.Title: "History" => "航行记录"
+.StarList.Description: "Visited Star list" => "访问过的星系列表"
+.StarList.Title: "Visited Stars" => "星系访问记录"
 .Materials.Description: "Materials count" => "所持材料列表"
 .Materials.Title: "Materials" => "材料"
 .Commodities.Description: "Commodity count" => "商品列表"
@@ -70,9 +69,9 @@ SECTION PopOutInfo
 .Statistics.Title: "Statistics" => "统计资料"
 .MarketData.Description: "Market data view, giving commodity price information where available" => "查看市场数据，基于空间站访问记录的数据"
 .MarketData.Title: "Market Data" => "市场数据"
-.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "查看船坞信息，基于空间站访问记录的数据"
+.ShipYardPanel.Description: "Ship yards information from places you have visited" => "查看船坞信息，基于空间站访问记录的数据"
 .ShipYardPanel.Title: "Ship Yards" => "船坞"
-.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "查看装备信息，基于空间站访问记录的数据"
+.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" => "查看装备信息，基于空间站访问记录的数据"
 .OutfittingPanel.Title: "Outfitting" => "装备"
 .Synthesis.Description: "Synthesis planner" => "合成规划助手"
 .Synthesis.Title: "Synthesis" => "合成"
@@ -84,9 +83,9 @@ SECTION PopOutInfo
 .Scan.Title: "Scan" => "扫描"
 .ScanGrid.Description: "Scan data on system in a grid" => "星系扫描数据（表格模式）"
 .ScanGrid.Title: "Scan Grid" => "扫描列表"
-.StarDistance.Description: "List of nearest stars" => "距离当前位置最近的星系列表"
+.StarDistance.Description: "Nearest stars from current position" => "距离当前位置最近的星系列表"
 .StarDistance.Title: "Nearest Stars" => "附近的星系"
-.EstimatedValues.Description: "Estimated scan values of bodies in system" => "预计的星系扫描价值"
+.EstimatedValues.Description: "Estimated Scan values of bodies in system" => "预计的星系扫描价值"
 .EstimatedValues.Title: "Estimated Values" => "预计价值"
 .Map2D.Title: "2D Map" @
 .Map2D.Description: "2D Map of galaxy" @
@@ -98,9 +97,9 @@ SECTION PopOutInfo
 .Plot.Title: "2D Plot" => "2D绘图"
 .Trilateration.Description: "Trilateration of stars with unknown positions" => "使用三遍测量法计算星系坐标"
 .Trilateration.Title: "Trilateration" => "三边测量"
-.BookmarkManager.Description: "Manage System and planetary bookmarks" => "管理星系及星体标签"
+.BookmarkManager.Description: "Bookmarks on systems and planets" => "管理星系及星体标签"
 .BookmarkManager.Title: "Bookmarks" => "书签"
-.CombatPanel.Description: "Display combat statistics" => "显示战斗数据"
+.CombatPanel.Description: "Combat statistics" => "显示战斗数据"
 .CombatPanel.Title: "Combat" => "战斗"
 .Route.Description: "Route Finder from stored star data" => "用储存的星系数据来规划航线"
 .Route.Title: "Route Finder" => "航线规划"
@@ -112,11 +111,11 @@ SECTION PopOutInfo
 .Spanel.Title: "Summary Panel" => "概要面板"
 .Trippanel.Description: "Trip computer overlay" => "导航仪(遮罩)"
 .Trippanel.Title: "Trip Computer" => "导航仪"
-.NotePanel.Description: "System notes overlay" => "笔记(遮罩)"
+.NotePanel.Description: "Notes overlay" => "笔记(遮罩)"
 .NotePanel.Title: "Notes" => "笔记"
 .RouteTracker.Description: "Route tracker overlay" => "航线导航(遮罩)"
 .RouteTracker.Title: "Route Tracker" => "航线导航"
-.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "指南针 (遮罩), 用来显示地表坐标的方向"
+.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "指南针 (遮罩), 用来显示地表坐标的方向"
 .Compass.Title: "Compass" => "指南针"
 .Settings.Description: "Settings for ED Discovery " => "EDDiscovery的设置"
 .Settings.Title: "Settings" => "设置"
@@ -133,13 +132,13 @@ SECTION PopOutInfo
 .CaptainsLog.Title: "Captain's Log" @
 .CaptainsLog.Description: "Captain's Log - notes on your travels" @
 .Surveyor.Title: "Surveyor" @
-.Surveyor.Description: "Surface map aid" @
+.Surveyor.Description: "Surveyor - Exploration and route overlay" @
 .MissionOverlay.Title: "Mission Overlay" => "任务遮罩"
 .MissionOverlay.Description: "Mission List overlay" => "任务列表(遮罩)"
 .MaterialTrader.Title: "Material Trader" @
-.MaterialTrader.Description: "Material Trader" @
+.MaterialTrader.Description: "Material trader" @
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" @
+.EDSM.Description: "EDSM - Automatic web view of system" @
 .Inara.Title: "Inara" @
 .Inara.Description: "Inara - Automatic web view of system" @
 .Factions.Title: "Factions" @
@@ -157,7 +156,11 @@ SECTION PopOutInfo
 .LocalMap3D.Title: "Local 3D Map" @
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
-.Organics.Description: "Current body organic information and history of scans" @
+.Organics.Description: "Organic scans of current body and historic scans" @
+.Engineers.Title: "Engineers" @
+.Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
 
 SECTION EDDiscoveryForm
 
@@ -172,7 +175,7 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "工具(&T)"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "设置(&S)"
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "显示&3D星图"
+.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" => "显示&3D星图"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "弹窗(&P)"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "显示所有弹窗的任务栏图标(&S)"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "重置所有透明弹窗(&T)"
@@ -204,6 +207,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "项目GitHub页面(&P)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "反馈问题/提供建议(&R)"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "检查更新(&C)"
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "右击添加/移除标签页，左键拖拽排序"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "选择新的配置文件或更改配置文件设置"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "选择要查看的指挥官"
@@ -365,7 +369,10 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" => "导出"
+ExportForm: "Export data" => "导出"
+.buttonExport: "Export" => "导出"
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "CSV 分隔符"
 .radioButtonComma: "Comma" => "逗号"
 .radioButtonSemiColon: "Semicolon" => "分号"
@@ -373,11 +380,6 @@ ExportForm: "Export Data" => "导出"
 .checkBoxCustomAutoOpen: "Open" => "导出后打开"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" => "导出"
-.ECH: "Export current data {0}" => "导出当前的航行记录视图为{0}"
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -410,7 +412,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" => "转移至指挥官..."
+MoveToCommander: "Move To Commander" => "转移至指挥官..."
 .buttonTransfer: "Transfer" => "转移"
 .label1: "Move selected history to commander." => "将选中的航行记录转移到另一位指挥官那里。"
 
@@ -442,11 +444,11 @@ ProfileEditor: "ProfileEditor" => "配置编辑器"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "创建笔记"
-.labelTTimestamp: "Timestamp: " => "时间："
+.labelTTimestamp: "Timestamp:" => "时间："
 .buttonSave: "Save" => "保存"
-.labelTSystem: "System: " => "星系："
-.labelTSummary: "Summary: " => "概要："
-.labelTDetails: "Details: " => "详情："
+.labelTSystem: "System:" => "星系："
+.labelTSummary: "Summary:" => "概要："
+.labelTDetails: "Details:" => "详情："
 
 SECTION MessageBoxTheme
 
@@ -597,6 +599,7 @@ ActionProgramEditForm: "Action Program" @
 .buttonExtLoad: "Load" @
 .buttonExtSave: "Save" @
 .buttonExtEdit: "Text Edit" @
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 

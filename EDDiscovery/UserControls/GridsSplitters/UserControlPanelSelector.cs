@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,67 +13,59 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
 using EDDiscovery.Forms;
 using ExtendedControls;
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlPanelSelector : UserControlCommonBase
     {
-        private int curhorz = 0;
+        private bool doresize = false;
 
         public UserControlPanelSelector()
         {
             InitializeComponent();
         }
 
-        public override void InitialDisplay()
-        {
-            Redraw();
-        }
-
         public override void Init()
         {
-            discoveryform.OnAddOnsChanged += Discoveryform_OnAddOnsChanged;
-            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
+            Draw();
+            discoveryform.OnAddOnsChanged += Redraw;
+            discoveryform.OnThemeChanging += Redraw;     // because we pick the image for the composite button based on theme
+            discoveryform.OnPanelAdded += Redraw;
+        }
+
+        public override void LoadLayout()
+        {
+            base.LoadLayout();
+            Position();
+        }
+
+        public override void InitialDisplay()
+        {
+            doresize = true;                            // now allow resizing actions, before, resizes were due to setups, now due to user interactions
         }
 
         public override void Closing()
         {
-            discoveryform.OnAddOnsChanged -= Discoveryform_OnAddOnsChanged;
-            discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
+            discoveryform.OnAddOnsChanged -= Redraw;
+            discoveryform.OnThemeChanging -= Redraw;
+            discoveryform.OnPanelAdded -= Redraw;
         }
-
-        private void Discoveryform_OnThemeChanged()
+        public void Draw()
         {
-            Redraw();
-        }
-
-        private void Redraw()
-        {
-            panelVScroll.SuspendLayout();
-
             panelVScroll.RemoveAllControls();
-
-            // design for std 8.25 font sizes
 
             Bitmap backimage = new Bitmap(EDDiscovery.Icons.Controls.Selector);
             Color centre = backimage.GetPixel(48, 48);
-            Size iconsize = new Size(24,24);
-            int width = 96;
-            int padbot = 6, padbetween = 5;
 
             float brigthness = ExtendedControls.Theme.Current.Form.GetBrightness();
-            Image selback = brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2;
+            Bitmap selback = (Bitmap)(brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2);
 
             {
                 Versions.VersioningManager mgr = new Versions.VersioningManager();
@@ -81,27 +73,19 @@ namespace EDDiscovery.UserControls
 
                 int i = mgr.DownloadItems.Count;
 
-                CompositeButton cb = CompositeButton.QuickInit(
+                CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
                             (i == 0) ? "NO ADD ONS!".T(EDTx.UserControlPanelSelector_NOADDONS) : i.ToString() + " Add Ons".T(EDTx.UserControlPanelSelector_AddOns),
-                            ExtendedControls.Theme.Current.GetFont,
-                            (i == 0) ? Color.Red : (ExtendedControls.Theme.Current.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : ExtendedControls.Theme.Current.TextBlockColor),
-                            Color.Transparent,
-                            EDDiscovery.Icons.Controls.ManageAddOns, iconsize,
-                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns }, iconsize,
-                            padbetween,
-                            ButtonPress);
-
-                panelVScroll.Controls.Add(cb);
+                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns48 },
+                            new Image[] { EDDiscovery.Icons.Controls.Popout },
+                            ButtonPress,
+                            2);
                 cb.Name = "Add on";
                 cb.Tag = null;
                 toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".T(EDTx.UserControlPanelSelector_TTA));
                 toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".T(EDTx.UserControlPanelSelector_TTB));
 
-                ExtendedControls.Theme.Current.ApplyStd(cb);       // need to theme up the button
-                cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
-                cb.Label.BackColor = cb.Decals[0].BackColor = Color.Transparent;
-                cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
+                panelVScroll.Controls.Add(cb);
             }
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
@@ -110,73 +94,60 @@ namespace EDDiscovery.UserControls
             {
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pids[i]);
 
-                CompositeButton cb = CompositeButton.QuickInit(
+                //System.Diagnostics.Debug.WriteLine($"Panel {pi.WindowTitle} {pi.TabIcon.Width} x {pi.TabIcon.Height}");
+
+                CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
                             pi.WindowTitle,
-                            ExtendedControls.Theme.Current.GetFont,
-                            ExtendedControls.Theme.Current.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : ExtendedControls.Theme.Current.TextBlockColor,
-                            Color.Transparent,
-                            pi.TabIcon, iconsize,
-                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.AddTab }, iconsize,
-                            padbetween,
+                            new Image[] { pi.TabIcon },
+                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Addtab48 },
                             ButtonPress);
-                cb.SuspendLayout();
-                panelVScroll.Controls.Add(cb);
+
                 cb.Tag = pi.PopoutID;
                 toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".T(EDTx.UserControlPanelSelector_PP1));
                 toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".T(EDTx.UserControlPanelSelector_MT1));
                 toolTip.SetToolTip(cb.Decals[0], pi.Description);
 
-                ExtendedControls.Theme.Current.ApplyStd(cb);
-                cb.ResumeLayout();
+                panelVScroll.Controls.Add(cb);
+            }
+        }
 
-                cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
-                cb.Label.BackColor =  cb.Decals[0].BackColor = Color.Transparent;
-                cb.Buttons[0].BackColor = centre; // need to reset the colour back!
-                cb.Buttons[1].BackColor = centre; // need to reset the colour back!
+        public void Position()
+        {
+            var cblist = panelVScroll.Controls.OfType<CompositeAutoScaleButton>().ToList();
+
+            int widthavailable = ClientRectangle.Width - panelVScroll.ScrollBarWidth;
+            int heightavailable = ClientRectangle.Height;
+
+            int width = 300;
+            while( width > 72)      // tried a programatic way, but because the area is not square, sqrt does not work well. best to search for the first fit
+            {
+                int no = (widthavailable / width) * (heightavailable / width);
+                int delta = no - cblist.Count();
+                if (delta >= 0)
+                    break;
+                width -= 2;
             }
 
-            panelVScroll.Scale(this.FindForm().CurrentAutoScaleFactor());
-            Reposition();
+            int spacing = ClientRectangle.Width / 150;
+            width = width - spacing;
 
-            panelVScroll.ResumeLayout();
-        }
+            //System.Diagnostics.Debug.WriteLine($"Panel Selector {widthavailable} {ClientRectangle.Height} -> {width}");
 
+            int hpos = 0;
+            int vpos = 0;
 
-        private int MarginAround()
-        {
-            return Font.ScalePixels(10);
-        }
-
-        private Tuple<int,int> Spacing()
-        {
-            CompositeButton cb = panelVScroll.Controls.OfType<CompositeButton>().First();
-            return new Tuple<int,int> (cb.Width + MarginAround(), cb.Height + MarginAround());
-        }
-
-
-        private int NumberAcross()
-        {
-            return Math.Max((panelVScroll.Width - panelVScroll.ScrollBarWidth) / Spacing().Item1, 1);
-        }
-
-        private void Reposition()
-        {
             panelVScroll.SuspendLayout();
 
-            curhorz = NumberAcross();
-            int margin = MarginAround();
-            var spacing = Spacing();
-
-            int i = 0;
-            foreach ( Control c in panelVScroll.Controls)
+            foreach ( Control c  in cblist )
             {
-                if (c is CompositeButton)
+                c.Bounds = new Rectangle(hpos, vpos, width, width);
+                hpos += width + spacing;
+                if ( hpos + width > widthavailable)
                 {
-                    c.Location = new Point(margin + spacing.Item1 * (i % curhorz), margin + spacing.Item2 * (i / curhorz));
-                    i++;
+                    hpos = 0;
+                    vpos += width + spacing;
                 }
-
             }
 
             panelVScroll.ResumeLayout();
@@ -184,15 +155,13 @@ namespace EDDiscovery.UserControls
 
         private void panelVScroll_Resize(object sender, EventArgs e)
         {
-            if (panelVScroll.Controls.Count > 1 && NumberAcross() != curhorz)
-            {
-                Reposition();
-            }
+            if (!IsClosed && doresize)
+                Position();
         }
 
         private void ButtonPress(Object o, int i)
         {
-            Object cbtag = ((CompositeButton)o).Tag;
+            Object cbtag = ((Control)o).Tag;
 
             if ( cbtag is null )        // tag being null means
                 discoveryform.manageAddOnsToolStripMenuItem_Click(null, null);
@@ -209,10 +178,11 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void Discoveryform_OnAddOnsChanged()
+        private void Redraw()
         {
-            Redraw();
+            Draw();
+            ExtendedControls.Theme.Current.ApplyStd(this);
+            Position();
         }
-
     }
 }

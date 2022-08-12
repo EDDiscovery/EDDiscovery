@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls.Helpers
                                     EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString(),
                                     ms.OriginatingSystem + ": " + ms.OriginatingStation,
                                     ms.Mission.Faction,
-                                    ms.DestinationSystemStation(),
+                                    ms.DestinationSystemStationSettlement(),
                                     ms.Mission.TargetFaction,
                                     previousmissions ? ms.StateText : ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                     ms.MissionInfoColumn()

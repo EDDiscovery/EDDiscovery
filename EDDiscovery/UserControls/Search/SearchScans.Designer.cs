@@ -48,18 +48,36 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnBody = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnParentParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStarStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.conditionFilterUC = new ExtendedConditionsForms.ConditionFilterUC();
-            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.scanSortControl = new EDDiscovery.UserControls.Search.ScanSortControl();
             this.comboBoxSearches = new ExtendedControls.ExtComboBox();
-            this.buttonDelete = new ExtendedControls.ExtButton();
-            this.buttonSave = new ExtendedControls.ExtButton();
-            this.buttonFind = new ExtendedControls.ExtButton();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonFind = new ExtendedControls.ExtButton();
+            this.extButtonNew = new ExtendedControls.ExtButton();
+            this.buttonSave = new ExtendedControls.ExtButton();
+            this.buttonDelete = new ExtendedControls.ExtButton();
+            this.extButtonExport = new ExtendedControls.ExtButton();
+            this.extButtonImport = new ExtendedControls.ExtButton();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.extCheckBoxDebug = new ExtendedControls.ExtCheckBox();
+            this.labelCount = new System.Windows.Forms.Label();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -77,7 +95,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 343);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 342);
             this.dataViewScrollerPanel.TabIndex = 7;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -98,7 +116,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 343);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 342);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -119,18 +137,23 @@ namespace EDDiscovery.UserControls
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnDate,
-            this.ColumnStar,
-            this.ColumnInformation,
+            this.ColumnBody,
+            this.ColumnPosition,
             this.ColumnCurrentDistance,
-            this.ColumnPosition});
+            this.ColumnInformation,
+            this.ColumnParent,
+            this.ColumnParentParent,
+            this.ColumnStar,
+            this.ColumnStarStar});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.PerColumnWordWrapControl = true;
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(788, 343);
+            this.dataGridView.Size = new System.Drawing.Size(788, 342);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
@@ -138,79 +161,104 @@ namespace EDDiscovery.UserControls
             // 
             this.ColumnDate.FillWeight = 60F;
             this.ColumnDate.HeaderText = "Date";
-            this.ColumnDate.MinimumWidth = 50;
             this.ColumnDate.Name = "ColumnDate";
             // 
-            // ColumnStar
+            // ColumnBody
             // 
-            this.ColumnStar.HeaderText = "Star";
-            this.ColumnStar.MinimumWidth = 50;
-            this.ColumnStar.Name = "ColumnStar";
-            this.ColumnStar.ReadOnly = true;
+            this.ColumnBody.FillWeight = 60F;
+            this.ColumnBody.HeaderText = "Body";
+            this.ColumnBody.Name = "ColumnBody";
+            this.ColumnBody.ReadOnly = true;
             // 
-            // ColumnInformation
+            // ColumnPosition
             // 
-            this.ColumnInformation.FillWeight = 200F;
-            this.ColumnInformation.HeaderText = "Information";
-            this.ColumnInformation.MinimumWidth = 50;
-            this.ColumnInformation.Name = "ColumnInformation";
-            this.ColumnInformation.ReadOnly = true;
+            this.ColumnPosition.FillWeight = 60F;
+            this.ColumnPosition.HeaderText = "Position";
+            this.ColumnPosition.Name = "ColumnPosition";
+            this.ColumnPosition.ReadOnly = true;
             // 
             // ColumnCurrentDistance
             // 
             this.ColumnCurrentDistance.FillWeight = 40F;
             this.ColumnCurrentDistance.HeaderText = "Current Distance";
-            this.ColumnCurrentDistance.MinimumWidth = 50;
             this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
             this.ColumnCurrentDistance.ReadOnly = true;
             // 
-            // ColumnPosition
+            // ColumnInformation
             // 
-            this.ColumnPosition.FillWeight = 75F;
-            this.ColumnPosition.HeaderText = "Position";
-            this.ColumnPosition.MinimumWidth = 50;
-            this.ColumnPosition.Name = "ColumnPosition";
-            this.ColumnPosition.ReadOnly = true;
+            this.ColumnInformation.FillWeight = 200F;
+            this.ColumnInformation.HeaderText = "Information";
+            this.ColumnInformation.Name = "ColumnInformation";
+            this.ColumnInformation.ReadOnly = true;
+            // 
+            // ColumnParent
+            // 
+            this.ColumnParent.FillWeight = 150F;
+            this.ColumnParent.HeaderText = "Parent";
+            this.ColumnParent.Name = "ColumnParent";
+            this.ColumnParent.ReadOnly = true;
+            // 
+            // ColumnParentParent
+            // 
+            this.ColumnParentParent.FillWeight = 150F;
+            this.ColumnParentParent.HeaderText = "Grandparent";
+            this.ColumnParentParent.Name = "ColumnParentParent";
+            this.ColumnParentParent.ReadOnly = true;
+            // 
+            // ColumnStar
+            // 
+            this.ColumnStar.FillWeight = 150F;
+            this.ColumnStar.HeaderText = "Star";
+            this.ColumnStar.Name = "ColumnStar";
+            this.ColumnStar.ReadOnly = true;
+            // 
+            // ColumnStarStar
+            // 
+            this.ColumnStarStar.FillWeight = 150F;
+            this.ColumnStarStar.HeaderText = "Parent of Star";
+            this.ColumnStarStar.Name = "ColumnStarStar";
+            this.ColumnStarStar.ReadOnly = true;
             // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 26);
+            this.splitContainer.Location = new System.Drawing.Point(0, 30);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.conditionFilterUC);
+            this.splitContainer.Panel1.Controls.Add(this.scanSortControl);
             // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.dataViewScrollerPanel);
-            this.splitContainer.Size = new System.Drawing.Size(804, 690);
-            this.splitContainer.SplitterDistance = 343;
+            this.splitContainer.Size = new System.Drawing.Size(804, 686);
+            this.splitContainer.SplitterDistance = 340;
             this.splitContainer.TabIndex = 8;
             // 
             // conditionFilterUC
             // 
+            this.conditionFilterUC.AutoCompleteOnMatch = false;
+            this.conditionFilterUC.AutoCompleteStringCropLength = 132;
             this.conditionFilterUC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.conditionFilterUC.Location = new System.Drawing.Point(0, 0);
             this.conditionFilterUC.Name = "conditionFilterUC";
-            this.conditionFilterUC.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.conditionFilterUC.Size = new System.Drawing.Size(804, 343);
+            this.conditionFilterUC.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.conditionFilterUC.Size = new System.Drawing.Size(804, 312);
             this.conditionFilterUC.TabIndex = 0;
             this.conditionFilterUC.VariableNames = null;
             // 
-            // buttonExtExcel
+            // scanSortControl
             // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(531, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtExcel.TabIndex = 37;
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            this.scanSortControl.Ascending = false;
+            this.scanSortControl.Condition = "";
+            this.scanSortControl.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.scanSortControl.Location = new System.Drawing.Point(0, 312);
+            this.scanSortControl.Name = "scanSortControl";
+            this.scanSortControl.Size = new System.Drawing.Size(804, 28);
+            this.scanSortControl.TabIndex = 42;
             // 
             // comboBoxSearches
             // 
@@ -221,7 +269,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxSearches.DisplayMember = "";
             this.comboBoxSearches.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxSearches.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxSearches.Location = new System.Drawing.Point(108, 1);
+            this.comboBoxSearches.Location = new System.Drawing.Point(0, 1);
             this.comboBoxSearches.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxSearches.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxSearches.Name = "comboBoxSearches";
@@ -233,57 +281,242 @@ namespace EDDiscovery.UserControls
             this.comboBoxSearches.Size = new System.Drawing.Size(199, 21);
             this.comboBoxSearches.TabIndex = 1;
             this.comboBoxSearches.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxSearches, "Select a predefined condition");
             this.comboBoxSearches.ValueMember = "";
-            // 
-            // buttonDelete
-            // 
-            this.buttonDelete.AutoSize = true;
-            this.buttonDelete.Location = new System.Drawing.Point(423, 1);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(100, 23);
-            this.buttonDelete.TabIndex = 0;
-            this.buttonDelete.Text = "Delete";
-            this.buttonDelete.UseVisualStyleBackColor = true;
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.AutoSize = true;
-            this.buttonSave.Location = new System.Drawing.Point(315, 1);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(100, 23);
-            this.buttonSave.TabIndex = 0;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
-            // 
-            // buttonFind
-            // 
-            this.buttonFind.AutoSize = true;
-            this.buttonFind.Location = new System.Drawing.Point(0, 1);
-            this.buttonFind.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonFind.Name = "buttonFind";
-            this.buttonFind.Size = new System.Drawing.Size(100, 23);
-            this.buttonFind.TabIndex = 0;
-            this.buttonFind.Text = "Find";
-            this.buttonFind.UseVisualStyleBackColor = true;
-            this.buttonFind.Click += new System.EventHandler(this.buttonFind_Click);
             // 
             // panelTop
             // 
             this.panelTop.AutoSize = true;
-            this.panelTop.Controls.Add(this.buttonFind);
             this.panelTop.Controls.Add(this.comboBoxSearches);
+            this.panelTop.Controls.Add(this.buttonFind);
+            this.panelTop.Controls.Add(this.extButtonNew);
             this.panelTop.Controls.Add(this.buttonSave);
             this.panelTop.Controls.Add(this.buttonDelete);
+            this.panelTop.Controls.Add(this.extButtonExport);
+            this.panelTop.Controls.Add(this.extButtonImport);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Controls.Add(this.buttonExtExcel);
+            this.panelTop.Controls.Add(this.extCheckBoxDebug);
+            this.panelTop.Controls.Add(this.labelCount);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(804, 26);
+            this.panelTop.Size = new System.Drawing.Size(804, 30);
             this.panelTop.TabIndex = 1;
+            // 
+            // buttonFind
+            // 
+            this.buttonFind.Image = global::EDDiscovery.Icons.Controls.Find;
+            this.buttonFind.Location = new System.Drawing.Point(207, 1);
+            this.buttonFind.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFind.Name = "buttonFind";
+            this.buttonFind.Size = new System.Drawing.Size(28, 28);
+            this.buttonFind.TabIndex = 0;
+            this.toolTip.SetToolTip(this.buttonFind, "Search for condition below");
+            this.buttonFind.UseVisualStyleBackColor = true;
+            this.buttonFind.Click += new System.EventHandler(this.buttonFind_Click);
+            // 
+            // extButtonNew
+            // 
+            this.extButtonNew.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonNew.Image = global::EDDiscovery.Icons.Controls.Stop;
+            this.extButtonNew.Location = new System.Drawing.Point(251, 1);
+            this.extButtonNew.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonNew.Name = "extButtonNew";
+            this.extButtonNew.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNew.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonNew, "Clear current condition");
+            this.extButtonNew.UseVisualStyleBackColor = false;
+            this.extButtonNew.Click += new System.EventHandler(this.extButtonNew_Click);
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Image = global::EDDiscovery.Icons.Controls.Save;
+            this.buttonSave.Location = new System.Drawing.Point(283, 1);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(28, 28);
+            this.buttonSave.TabIndex = 0;
+            this.toolTip.SetToolTip(this.buttonSave, "Save current condition");
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.extButtonSave_Click);
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
+            this.buttonDelete.Location = new System.Drawing.Point(319, 1);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(28, 28);
+            this.buttonDelete.TabIndex = 0;
+            this.toolTip.SetToolTip(this.buttonDelete, "Delete current condition");
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
+            // extButtonExport
+            // 
+            this.extButtonExport.Image = global::EDDiscovery.Icons.Controls.ExportFile;
+            this.extButtonExport.Location = new System.Drawing.Point(355, 1);
+            this.extButtonExport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonExport.Name = "extButtonExport";
+            this.extButtonExport.Size = new System.Drawing.Size(28, 28);
+            this.extButtonExport.TabIndex = 0;
+            this.toolTip.SetToolTip(this.extButtonExport, "Export user searches to a file");
+            this.extButtonExport.UseVisualStyleBackColor = true;
+            this.extButtonExport.Click += new System.EventHandler(this.extButtonExport_Click);
+            // 
+            // extButtonImport
+            // 
+            this.extButtonImport.Image = global::EDDiscovery.Icons.Controls.ImportFile;
+            this.extButtonImport.Location = new System.Drawing.Point(391, 1);
+            this.extButtonImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonImport.Name = "extButtonImport";
+            this.extButtonImport.Size = new System.Drawing.Size(28, 28);
+            this.extButtonImport.TabIndex = 0;
+            this.toolTip.SetToolTip(this.extButtonImport, "Import user queries from a file (overwrite existing queries if present)");
+            this.extButtonImport.UseVisualStyleBackColor = true;
+            this.extButtonImport.Click += new System.EventHandler(this.extButtonImport_Click);
+            // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(427, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 41;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(463, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 37;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Output results grid to CSV");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // extCheckBoxDebug
+            // 
+            this.extCheckBoxDebug.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxDebug.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxDebug.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxDebug.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxDebug.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxDebug.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxDebug.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxDebug.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxDebug.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxDebug.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxDebug.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxDebug.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxDebug.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxDebug.Image = global::EDDiscovery.Icons.Controls.ConfigureAddOnActions;
+            this.extCheckBoxDebug.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxDebug.ImageIndeterminate = null;
+            this.extCheckBoxDebug.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxDebug.ImageUnchecked = global::EDDiscovery.Icons.Controls.SafeModeHelp;
+            this.extCheckBoxDebug.Location = new System.Drawing.Point(499, 1);
+            this.extCheckBoxDebug.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxDebug.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxDebug.Name = "extCheckBoxDebug";
+            this.extCheckBoxDebug.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxDebug.TabIndex = 41;
+            this.extCheckBoxDebug.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxDebug, "Click to enable debug log production on search");
+            this.extCheckBoxDebug.UseVisualStyleBackColor = false;
+            this.extCheckBoxDebug.CheckedChanged += new System.EventHandler(this.extCheckBoxDebug_CheckedChanged);
+            // 
+            // labelCount
+            // 
+            this.labelCount.AutoSize = true;
+            this.labelCount.Location = new System.Drawing.Point(538, 4);
+            this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+            this.labelCount.Name = "labelCount";
+            this.labelCount.Size = new System.Drawing.Size(43, 13);
+            this.labelCount.TabIndex = 38;
+            this.labelCount.Text = "<code>";
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.FillWeight = 60F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Date";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 83;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.FillWeight = 60F;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Star";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Width = 82;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.FillWeight = 60F;
+            this.dataGridViewTextBoxColumn3.HeaderText = "Position";
+            this.dataGridViewTextBoxColumn3.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.Width = 83;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.FillWeight = 40F;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Current Distance";
+            this.dataGridViewTextBoxColumn4.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.Width = 55;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.FillWeight = 200F;
+            this.dataGridViewTextBoxColumn5.HeaderText = "Information";
+            this.dataGridViewTextBoxColumn5.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
+            this.dataGridViewTextBoxColumn5.Width = 276;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.FillWeight = 150F;
+            this.dataGridViewTextBoxColumn6.HeaderText = "Parent";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.ReadOnly = true;
+            this.dataGridViewTextBoxColumn6.Width = 206;
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // SearchScans
             // 
@@ -317,12 +550,30 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtComboBox comboBoxSearches;
         private ExtendedControls.ExtButton buttonSave;
         private ExtendedControls.ExtButton buttonDelete;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
         private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label labelCount;
+        private ExtendedControls.ExtButton extButtonExport;
+        private ExtendedControls.ExtButton extButtonImport;
+        private ExtendedControls.ExtCheckBox extCheckBoxDebug;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBody;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParentParent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStarStar;
+        private ExtendedControls.ExtButton extButtonNew;
+        private Search.ScanSortControl scanSortControl;
     }
 }

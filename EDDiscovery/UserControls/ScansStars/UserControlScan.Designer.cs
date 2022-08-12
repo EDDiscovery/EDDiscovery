@@ -51,10 +51,10 @@ namespace EDDiscovery.UserControls
             this.extButtonHighValue = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
-            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonFilter = new ExtendedControls.ExtButton();
             this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
+            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
+            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.panelStars = new EDDiscovery.UserControls.ScanDisplayUserControl();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
@@ -168,6 +168,35 @@ namespace EDDiscovery.UserControls
             this.toolTip.AutoPopDelay = 20000;
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
+            this.toolTip.ShowAlways = true;
+            // 
+            // extButtonFilter
+            // 
+            this.extButtonFilter.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
+            this.extButtonFilter.Location = new System.Drawing.Point(40, 1);
+            this.extButtonFilter.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonFilter.Name = "extButtonFilter";
+            this.extButtonFilter.Size = new System.Drawing.Size(28, 28);
+            this.extButtonFilter.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonFilter, "Filter Bodies");
+            this.extButtonFilter.UseVisualStyleBackColor = false;
+            this.extButtonFilter.Click += new System.EventHandler(this.extButtonFilter_Click);
+            // 
+            // extButtonDisplayFilters
+            // 
+            this.extButtonDisplayFilters.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonDisplayFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonDisplayFilters.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extButtonDisplayFilters.Location = new System.Drawing.Point(80, 1);
+            this.extButtonDisplayFilters.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
+            this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
+            this.extButtonDisplayFilters.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonDisplayFilters, "Settings");
+            this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
+            this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
             // rollUpPanelTop
             // 
@@ -206,34 +235,6 @@ namespace EDDiscovery.UserControls
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(748, 30);
             this.panelControls.TabIndex = 32;
-            // 
-            // extButtonFilter
-            // 
-            this.extButtonFilter.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.extButtonFilter.Location = new System.Drawing.Point(40, 1);
-            this.extButtonFilter.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonFilter.Name = "extButtonFilter";
-            this.extButtonFilter.Size = new System.Drawing.Size(28, 28);
-            this.extButtonFilter.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonFilter, "Filter Bodies");
-            this.extButtonFilter.UseVisualStyleBackColor = false;
-            this.extButtonFilter.Click += new System.EventHandler(this.extButtonFilter_Click);
-            // 
-            // extButtonDisplayFilters
-            // 
-            this.extButtonDisplayFilters.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonDisplayFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonDisplayFilters.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonDisplayFilters.Location = new System.Drawing.Point(80, 1);
-            this.extButtonDisplayFilters.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
-            this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
-            this.extButtonDisplayFilters.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonDisplayFilters, "Settings");
-            this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
-            this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
             // panelStars
             // 

@@ -53,13 +53,14 @@ namespace EDDiscovery.UserControls
         {
             ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
 
-            extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
-            extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
             dataGridView.MakeDoubleBuffered();
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
             dataGridView.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(0, 1, 0, 1);
-            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+
+            extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -177,7 +178,7 @@ namespace EDDiscovery.UserControls
         private void ControlVisibility()
         {
             // if not in transparent mode, OR in No focus, or not autohiding, or FSSMode and don't hide in FSS mode
-            if ( !IsTransparent ||  uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide))
+            if ( !IsTransparentModeOn ||  uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide))
             {
                 // these are controlled by tranparency
                 flowLayoutPanelGridControl.Visible = dataViewScrollerPanel.Visible = extPictureBoxScroll.ScrollBarEnabled =
@@ -212,12 +213,15 @@ namespace EDDiscovery.UserControls
                     int vpos = 0;
                     StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                     frmt.Alignment = StringAlignment.Near;
-                    var textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                    var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+                    var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                    var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
-                    //System.Diagnostics.Debug.WriteLine($"Pbox size {pictureBox.Size}");
-                    string l = string.Format("At {0}, {1}, Radius {2}, {3} G, {4}", node.FullName, node.ScanData?.PlanetTypeText ?? "Unknown", node.ScanData?.RadiusText() ?? "Unknown", 
-                                                node.ScanData?.nSurfaceGravityG?.ToString("N1")  ?? "Unknown" , node.ScanData?.Atmosphere);
+                    string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.FullName);
+                    if (node.ScanData != null)
+                    {
+                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText(),
+                                                (node.ScanData.nSurfaceGravityG?.ToString("N1") ?? "?") + "G", node.ScanData.Atmosphere, node.CountBioSignals.ToString());
+                    }
 
                     string s = node.Organics != null ? JournalScanOrganic.OrganicList(node.Organics) : "No organic scanned";
 
@@ -366,9 +370,11 @@ namespace EDDiscovery.UserControls
 
         private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
         {
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
             displayfilter.AllOrNoneBack = false;
             displayfilter.ImageSize = new Size(24, 24);
             displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {
@@ -393,8 +399,14 @@ namespace EDDiscovery.UserControls
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
-            dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            UpdateWordWrap();
             DrawBodyInfo();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridView.SetWordWrap(extCheckBoxWordWrap.Checked);
+            dataViewScrollerPanel.UpdateScroll();
         }
 
         private void ExtCheckBoxShowIncomplete_Click(object sender, EventArgs e)

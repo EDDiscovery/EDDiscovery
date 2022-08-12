@@ -155,8 +155,8 @@ namespace EDDiscovery.UserControls
 
             if ( currentHE != null  )
             {
-                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+                Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                Color backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
                 DateTime hetime = currentHE.EventTimeUTC;
 
@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
                         text = text.AppendPrePad(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString(), startDateToolStripMenuItem.Checked ? "-" : ", ");
 
                     string mainpart = BaseUtils.FieldBuilder.Build(
-                                        "< ", ms.DestinationSystemStation(),
+                                        "< ", ms.DestinationSystemStationSettlement(),
                                         " ", factionInformationToolStripMenuItem.Checked ? ms.Mission.TargetFaction : null,
                                         "< ", ms.Mission.TargetLocalised,
                                         "< ", ms.Mission.KillCount?.ToString("N") ?? null,

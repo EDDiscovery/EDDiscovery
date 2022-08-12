@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
             this.labelTotalKills = new ExtendedControls.ExtLabel();
             this.labelFactionKills = new ExtendedControls.ExtLabel();
             this.labelBalance = new ExtendedControls.ExtLabel();
+            this.labelDied = new ExtendedControls.ExtLabel();
             this.labelTotalCrimes = new ExtendedControls.ExtLabel();
             this.labelTarget = new ExtendedControls.ExtLabel();
             this.labelFaction = new ExtendedControls.ExtLabel();
@@ -69,7 +70,6 @@ namespace EDDiscovery.UserControls
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Reward = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelDied = new ExtendedControls.ExtLabel();
             this.panelStatus.SuspendLayout();
             this.dataViewScrollerPanelCombat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).BeginInit();
@@ -133,6 +133,15 @@ namespace EDDiscovery.UserControls
             this.labelBalance.Text = "Balance";
             this.labelBalance.TextBackColor = System.Drawing.SystemColors.Control;
             this.toolTip.SetToolTip(this.labelBalance, "Total reward less any costs (fines, rebuys etc)");
+            // 
+            // labelDied
+            // 
+            this.labelDied.Location = new System.Drawing.Point(570, 25);
+            this.labelDied.Name = "labelDied";
+            this.labelDied.Size = new System.Drawing.Size(100, 24);
+            this.labelDied.TabIndex = 4;
+            this.labelDied.Text = "Died";
+            this.labelDied.TextBackColor = System.Drawing.SystemColors.Control;
             // 
             // labelTotalCrimes
             // 
@@ -242,6 +251,10 @@ namespace EDDiscovery.UserControls
             this.buttonExtEditCampaign.UseVisualStyleBackColor = true;
             this.buttonExtEditCampaign.Click += new System.EventHandler(this.buttonExtEditCampaign_Click);
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // dataViewScrollerPanelCombat
             // 
             this.dataViewScrollerPanelCombat.Controls.Add(this.vScrollBarCustom1);
@@ -296,6 +309,7 @@ namespace EDDiscovery.UserControls
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewCombat.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewCombat.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewCombat.ColumnReorder = true;
             this.dataGridViewCombat.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Time,
             this.Event,
@@ -363,15 +377,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(713, 26);
             this.panelTop.TabIndex = 4;
-            // 
-            // labelDied
-            // 
-            this.labelDied.Location = new System.Drawing.Point(570, 25);
-            this.labelDied.Name = "labelDied";
-            this.labelDied.Size = new System.Drawing.Size(100, 24);
-            this.labelDied.TabIndex = 4;
-            this.labelDied.Text = "Died";
-            this.labelDied.TextBackColor = System.Drawing.SystemColors.Control;
             // 
             // UserControlCombatPanel
             // 

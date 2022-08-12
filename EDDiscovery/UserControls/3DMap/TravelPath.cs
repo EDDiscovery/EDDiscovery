@@ -54,6 +54,8 @@ namespace EDDiscovery.UserControls.Map3D
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
+        public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
+        public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
         public void Start(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
@@ -104,9 +106,11 @@ namespace EDDiscovery.UserControls.Map3D
 
             var shape = GLSphereObjectFactory.CreateSphereFromTriangles(2, sunsize);
 
-            GLRenderState rt = GLRenderState.Tri();     // render is triangles, with no depth test so we always appear
+            GLRenderState rt = GLRenderState.Tri();     // render is triangles
             rt.DepthTest = depthtest;
             rt.DepthClamp = true;
+            rt.ClipDistanceEnable =1;       // and we enable clipping and culling
+
             renderersun = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, rt, shape, starposbuf, 0, null, 0, 1);
             renderersun.Visible = false;            // until its filled, not visible
 
@@ -114,9 +118,13 @@ namespace EDDiscovery.UserControls.Map3D
 
             // find compute
 
+            // find shader has obey culling enabled!
             var geofind = new GLPLGeoShaderFindTriangles(bufferfindresults, 16);
+
             findshader = items.NewShaderPipeline(null, sunvertex, null, null, geofind, null, null, null);
-            rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, GLRenderState.Tri(), shape, starposbuf, ic: 0, seconddivisor: 1);
+
+            // we reuse the render state from above for the find, so it enables culling
+            rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, rt, shape, starposbuf, ic: 0, seconddivisor: 1);
 
             // Sun names, handled by textrenderer
             textrenderer = new GLBitmaps( name + "-text", rObjects, BitMapSize, depthtest: depthtest, cullface: false);
@@ -155,11 +163,6 @@ namespace EDDiscovery.UserControls.Map3D
             CreatePathInt(tapecolour);
         }
 
-        public void Refresh()           // must have drawn
-        {
-            if (lasthl != null)
-                CreatePath(lasthl);
-        }
 
         // currentfilteredlist set, go..
         private void CreatePathInt(Color? tapepathdefault = null)
@@ -169,8 +172,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             // Note W here selects the colour index of the stars, 0 = first, 1 = second etc
 
-            Vector4[] positionsv4 = currentfilteredlistsys.Select(x => new Vector4((float)x.X, (float)x.Y, (float)x.Z, 0)).ToArray();
-          //   positionsv4 = positionsv4.Take(2).ToArray(); // debug
+            Vector4[] positionsv4 = currentfilteredlistsys.Select(sys => new Vector4((float)sys.X, (float)sys.Y, (float)sys.Z,
+                            NoSunList.Contains(new GalMapObjects.ObjectPosXYZ(sys.X, sys.Y, sys.Z)) ? -1 : 0)).ToArray();
 
             Color[] color = new Color[currentfilteredlistsys.Count];
 
@@ -267,7 +270,7 @@ namespace EDDiscovery.UserControls.Map3D
                 var res = geo.GetResult();
                 if (res != null)
                 {
-                    //for (int i = 0; i < res.Length; i++) System.Diagnostics.Debug.WriteLine(i + " = " + res[i]);
+                    //for (int i = 0; i < res.Length; i++) System.Diagnostics.Debug.WriteLine($" TP Find {i} {res[i]}");
                     z = res[0].Z;
                     int index = (int)res[0].Y;
 

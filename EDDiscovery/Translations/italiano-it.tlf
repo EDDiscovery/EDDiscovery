@@ -8,7 +8,6 @@ Cancel: "Cancel" => "Cancella"
 Delete: "Delete" => "Elimina"
 Campaign: "Campaign" => "Campagna"
 NoScan: "No Scan" => "Nessuna Scansione"
-Travel: "Travel" => "Viaggio"
 GameTime: "Game Time" => "Orario del Gioco"
 Time: "Time" => "Orario"
 NoData: "No Data" => "Nienti Dati"
@@ -48,14 +47,14 @@ SECTION InfoForm
 
 SECTION PopOutInfo
 
-.Log.Description: "Program log" => "Registro del Programma"
+.Log.Description: "Log of program information" => "Registro del Programma"
 .Log.Title: "Log" => "Registro"
 .Journal.Description: "Journal grid view" => "Tabella del Giornale"
 .Journal.Title: "Journal" => "Giornale"
 .TravelGrid.Description: "History grid view" => "Tabella dello Storico"
-.TravelGrid.Title: "Travel History" => "Storico di Viaggio"
-.StarList.Description: "Visited star list" => "List dei Sistemi visitati"
-.StarList.Title: "Star List" => "List dei Sistemi"
+.TravelGrid.Title: "History" => "Storico di Viaggio"
+.StarList.Description: "Visited Star list" => "List dei Sistemi visitati"
+.StarList.Title: "Visited Stars" => "List dei Sistemi"
 .Materials.Description: "Materials count" => "Liste dei Materiali"
 .Materials.Title: "Materials" => "Materiali"
 .Commodities.Description: "Commodity count" => "List deelle Merci"
@@ -70,9 +69,9 @@ SECTION PopOutInfo
 .Statistics.Title: "Statistics" => "Statistiche"
 .MarketData.Description: "Market data view, giving commodity price information where available" => "Dati di Mercato, mostrando i prezzi delle merci quando disponibili"
 .MarketData.Title: "Market Data" => "Dati di Mercato"
-.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "Informazioni sui cantieri dallo storico di visitazione"
+.ShipYardPanel.Description: "Ship yards information from places you have visited" => "Informazioni sui cantieri dallo storico di visitazione"
 .ShipYardPanel.Title: "Ship Yards" => "Cantieri"
-.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "Informazioni sugli impianti e moduli dallo storico di visitazione"
+.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" => "Informazioni sugli impianti e moduli dallo storico di visitazione"
 .OutfittingPanel.Title: "Outfitting" => "Impianti/Moduli"
 .Synthesis.Description: "Synthesis planner" => "Pianifica di Sintesi"
 .Synthesis.Title: "Synthesis" => "Sintesi"
@@ -84,9 +83,9 @@ SECTION PopOutInfo
 .Scan.Title: "Scan" => "Scansioni"
 .ScanGrid.Description: "Scan data on system in a grid" => "Registri di Scansioni per sistema, in tabella"
 .ScanGrid.Title: "Scan Grid" => "Tabella di Scansioni"
-.StarDistance.Description: "List of nearest stars" => "Lista dei Sistemi prossimi"
+.StarDistance.Description: "Nearest stars from current position" => "Lista dei Sistemi prossimi"
 .StarDistance.Title: "Nearest Stars" => "Sistemi prossimi"
-.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Stima del valore dei dati di Scansione"
+.EstimatedValues.Description: "Estimated Scan values of bodies in system" => "Stima del valore dei dati di Scansione"
 .EstimatedValues.Title: "Estimated Values" => "Valori Stimati"
 .Map2D.Title: "2D Map" @
 .Map2D.Description: "2D Map of galaxy" @
@@ -98,9 +97,9 @@ SECTION PopOutInfo
 .Plot.Title: "2D Plot" => "Grafico 2D"
 .Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilaterazione di sistemi con posizione sconosciuta"
 .Trilateration.Title: "Trilateration" => "Trilaterazione"
-.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Gestire favoriti di Pianeti e Sistemi"
+.BookmarkManager.Description: "Bookmarks on systems and planets" => "Gestire favoriti di Pianeti e Sistemi"
 .BookmarkManager.Title: "Bookmarks" @
-.CombatPanel.Description: "Display combat statistics" => "Visualizza statistiche di combattimento"
+.CombatPanel.Description: "Combat statistics" => "Visualizza statistiche di combattimento"
 .CombatPanel.Title: "Combat" => "Combattimento"
 .Route.Description: "Route Finder from stored star data" => "Preparazione di Itinerario usando i dati nella banca dati"
 .Route.Title: "Route Finder" => "Itinerario"
@@ -112,11 +111,11 @@ SECTION PopOutInfo
 .Spanel.Title: "Summary Panel" => "Sommario"
 .Trippanel.Description: "Trip computer overlay" => "Computer di Viaggio"
 .Trippanel.Title: "Trip Computer" => "Computer di Viaggio"
-.NotePanel.Description: "System notes overlay" => "Annotazioni sul Sistema"
+.NotePanel.Description: "Notes overlay" => "Annotazioni sul Sistema"
 .NotePanel.Title: "Notes" => "Annotazioni"
 .RouteTracker.Description: "Route tracker overlay" => "Tracciatore di Itinerario"
 .RouteTracker.Title: "Route Tracker" => "Tracciatore di Itinerario"
-.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate"
+.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate"
 .Compass.Title: "Compass" => "Bussola Planetaria"
 .Settings.Description: "Settings for ED Discovery " => "Configurazioni di ED Discovery "
 .Settings.Title: "Settings" => "Configurazioni"
@@ -133,13 +132,13 @@ SECTION PopOutInfo
 .CaptainsLog.Title: "Captain's Log" => "Diario del Comandante"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diario del Comandante - note di viaggio"
 .Surveyor.Title: "Surveyor" => "Topografo"
-.Surveyor.Description: "Surface map aid" => "Assistente di mappatura di superfice"
+.Surveyor.Description: "Surveyor - Exploration and route overlay" => "Assistente di mappatura di superfice"
 .MissionOverlay.Title: "Mission Overlay" => "Simbolo di Missione"
 .MissionOverlay.Description: "Mission List overlay" => "Simbolo della lista di missioni"
 .MaterialTrader.Title: "Material Trader" => "Commerciante di Materiali"
-.MaterialTrader.Description: "Material Trader" => "Commerciante di Materiali"
+.MaterialTrader.Description: "Material trader" => "Commerciante di Materiali"
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" => "Visualizzazione automatica della pagina di EDSM sul sistema"
+.EDSM.Description: "EDSM - Automatic web view of system" => "Visualizzazione automatica della pagina di EDSM sul sistema"
 .Inara.Title: "Inara" @
 .Inara.Description: "Inara - Automatic web view of system" @
 .Factions.Title: "Factions" @
@@ -157,7 +156,11 @@ SECTION PopOutInfo
 .LocalMap3D.Title: "Local 3D Map" @
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
-.Organics.Description: "Current body organic information and history of scans" @
+.Organics.Description: "Organic scans of current body and historic scans" @
+.Engineers.Title: "Engineers" @
+.Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
 
 SECTION EDDiscoveryForm
 
@@ -172,7 +175,7 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "&Strumenti"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "Visualizza mappa &3D"
+.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" => "Visualizza mappa &3D"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Finestre"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tutti nella taskbar"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Disabilita tutte le trasparenze"
@@ -204,6 +207,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Pagine del progetto (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reporta un Problema o un Suggerimento"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Verifica per aggiornamenti"
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Premi con il bottone destro per aggiungere/rimuovere una scheda, trascina con il sinistro per riordinare"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Seleziona il comandante da visualizzare"
@@ -365,7 +369,10 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" => "Esporta"
+ExportForm: "Export data" => "Esporta"
+.buttonExport: "Export" => "Esporta"
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "Separatore CVS"
 .radioButtonComma: "Comma" => "Virgola"
 .radioButtonSemiColon: "Semicolon" => "Punto e Virgola"
@@ -373,11 +380,6 @@ ExportForm: "Export Data" => "Esporta"
 .checkBoxCustomAutoOpen: "Open" => "Apri in excel"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" => "Esporta"
-.ECH: "Export current data {0}" => "Esporta lo storico corrente a {0}"
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -410,7 +412,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seleziona Settori Galattici"
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" => "Sposta al Comandante"
+MoveToCommander: "Move To Commander" => "Sposta al Comandante"
 .buttonTransfer: "Transfer" => "Trasferisci"
 .label1: "Move selected history to commander." => "Muovi lo storico selezionato al comandante."
 
@@ -442,11 +444,11 @@ ProfileEditor: "ProfileEditor" => "Editor di Profilo"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Imposta Nota"
-.labelTTimestamp: "Timestamp: " => "Data e ora"
+.labelTTimestamp: "Timestamp:" => "Data e ora"
 .buttonSave: "Save" => "Salva"
-.labelTSystem: "System: " => "Sistema"
-.labelTSummary: "Summary: " => "Sommario"
-.labelTDetails: "Details: " => "Dettagli"
+.labelTSystem: "System:" => "Sistema"
+.labelTSummary: "Summary:" => "Sommario"
+.labelTDetails: "Details:" => "Dettagli"
 
 SECTION MessageBoxTheme
 
@@ -597,6 +599,7 @@ ActionProgramEditForm: "Action Program" @
 .buttonExtLoad: "Load" @
 .buttonExtSave: "Save" @
 .buttonExtEdit: "Text Edit" @
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 

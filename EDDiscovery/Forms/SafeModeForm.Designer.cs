@@ -46,9 +46,9 @@
             // 
             // buttonDbs
             // 
-            this.buttonDbs.Location = new System.Drawing.Point(89, 293);
+            this.buttonDbs.Location = new System.Drawing.Point(55, 293);
             this.buttonDbs.Name = "buttonDbs";
-            this.buttonDbs.Size = new System.Drawing.Size(193, 23);
+            this.buttonDbs.Size = new System.Drawing.Size(250, 23);
             this.buttonDbs.TabIndex = 0;
             this.buttonDbs.Text = "Move Databases";
             this.buttonDbs.UseVisualStyleBackColor = true;
@@ -56,9 +56,9 @@
             // 
             // buttonRun
             // 
-            this.buttonRun.Location = new System.Drawing.Point(89, 399);
+            this.buttonRun.Location = new System.Drawing.Point(55, 399);
             this.buttonRun.Name = "buttonRun";
-            this.buttonRun.Size = new System.Drawing.Size(193, 23);
+            this.buttonRun.Size = new System.Drawing.Size(250, 23);
             this.buttonRun.TabIndex = 0;
             this.buttonRun.Text = "Run";
             this.buttonRun.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -67,9 +67,9 @@
             // 
             // buttonPositions
             // 
-            this.buttonPositions.Location = new System.Drawing.Point(89, 40);
+            this.buttonPositions.Location = new System.Drawing.Point(55, 40);
             this.buttonPositions.Name = "buttonPositions";
-            this.buttonPositions.Size = new System.Drawing.Size(193, 23);
+            this.buttonPositions.Size = new System.Drawing.Size(250, 23);
             this.buttonPositions.TabIndex = 0;
             this.buttonPositions.Text = "Reset Window Positions";
             this.buttonPositions.UseVisualStyleBackColor = true;
@@ -77,9 +77,9 @@
             // 
             // buttonResetTheme
             // 
-            this.buttonResetTheme.Location = new System.Drawing.Point(89, 10);
+            this.buttonResetTheme.Location = new System.Drawing.Point(55, 10);
             this.buttonResetTheme.Name = "buttonResetTheme";
-            this.buttonResetTheme.Size = new System.Drawing.Size(193, 23);
+            this.buttonResetTheme.Size = new System.Drawing.Size(250, 23);
             this.buttonResetTheme.TabIndex = 0;
             this.buttonResetTheme.Text = "Reset Theme";
             this.buttonResetTheme.UseVisualStyleBackColor = true;
@@ -87,9 +87,9 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(89, 437);
+            this.buttonCancel.Location = new System.Drawing.Point(55, 437);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(193, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(250, 23);
             this.buttonCancel.TabIndex = 0;
             this.buttonCancel.Text = "Exit";
             this.buttonCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -98,9 +98,9 @@
             // 
             // buttonDeleteSystemDB
             // 
-            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 201);
+            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(55, 201);
             this.buttonDeleteSystemDB.Name = "buttonDeleteSystemDB";
-            this.buttonDeleteSystemDB.Size = new System.Drawing.Size(193, 23);
+            this.buttonDeleteSystemDB.Size = new System.Drawing.Size(250, 23);
             this.buttonDeleteSystemDB.TabIndex = 0;
             this.buttonDeleteSystemDB.Text = "Delete/Rebuild System DB";
             this.buttonDeleteSystemDB.UseVisualStyleBackColor = true;
@@ -108,9 +108,9 @@
             // 
             // buttonResetTabs
             // 
-            this.buttonResetTabs.Location = new System.Drawing.Point(89, 70);
+            this.buttonResetTabs.Location = new System.Drawing.Point(55, 70);
             this.buttonResetTabs.Name = "buttonResetTabs";
-            this.buttonResetTabs.Size = new System.Drawing.Size(193, 23);
+            this.buttonResetTabs.Size = new System.Drawing.Size(250, 23);
             this.buttonResetTabs.TabIndex = 0;
             this.buttonResetTabs.Text = "Reset Tabs, Remove PopOuts";
             this.buttonResetTabs.UseVisualStyleBackColor = true;
@@ -118,9 +118,9 @@
             // 
             // buttonRemoveDLLs
             // 
-            this.buttonRemoveDLLs.Location = new System.Drawing.Point(89, 100);
+            this.buttonRemoveDLLs.Location = new System.Drawing.Point(55, 100);
             this.buttonRemoveDLLs.Name = "buttonRemoveDLLs";
-            this.buttonRemoveDLLs.Size = new System.Drawing.Size(193, 23);
+            this.buttonRemoveDLLs.Size = new System.Drawing.Size(250, 23);
             this.buttonRemoveDLLs.TabIndex = 0;
             this.buttonRemoveDLLs.Text = "Remove all Extension DLLs";
             this.buttonRemoveDLLs.UseVisualStyleBackColor = true;
@@ -128,9 +128,9 @@
             // 
             // buttonActionPacks
             // 
-            this.buttonActionPacks.Location = new System.Drawing.Point(89, 130);
+            this.buttonActionPacks.Location = new System.Drawing.Point(55, 130);
             this.buttonActionPacks.Name = "buttonActionPacks";
-            this.buttonActionPacks.Size = new System.Drawing.Size(193, 23);
+            this.buttonActionPacks.Size = new System.Drawing.Size(250, 23);
             this.buttonActionPacks.TabIndex = 0;
             this.buttonActionPacks.Text = "Remove all Action Packs";
             this.buttonActionPacks.UseVisualStyleBackColor = true;
@@ -138,9 +138,9 @@
             // 
             // buttonLang
             // 
-            this.buttonLang.Location = new System.Drawing.Point(89, 159);
+            this.buttonLang.Location = new System.Drawing.Point(55, 159);
             this.buttonLang.Name = "buttonLang";
-            this.buttonLang.Size = new System.Drawing.Size(193, 23);
+            this.buttonLang.Size = new System.Drawing.Size(250, 23);
             this.buttonLang.TabIndex = 0;
             this.buttonLang.Text = "Reset Language to English";
             this.buttonLang.UseVisualStyleBackColor = true;
@@ -148,9 +148,9 @@
             // 
             // buttonResetDBLoc
             // 
-            this.buttonResetDBLoc.Location = new System.Drawing.Point(89, 360);
+            this.buttonResetDBLoc.Location = new System.Drawing.Point(55, 360);
             this.buttonResetDBLoc.Name = "buttonResetDBLoc";
-            this.buttonResetDBLoc.Size = new System.Drawing.Size(193, 23);
+            this.buttonResetDBLoc.Size = new System.Drawing.Size(250, 23);
             this.buttonResetDBLoc.TabIndex = 0;
             this.buttonResetDBLoc.Text = "Reset DB Location";
             this.buttonResetDBLoc.UseVisualStyleBackColor = true;
@@ -158,9 +158,9 @@
             // 
             // buttonBackup
             // 
-            this.buttonBackup.Location = new System.Drawing.Point(89, 320);
+            this.buttonBackup.Location = new System.Drawing.Point(55, 320);
             this.buttonBackup.Name = "buttonBackup";
-            this.buttonBackup.Size = new System.Drawing.Size(193, 23);
+            this.buttonBackup.Size = new System.Drawing.Size(250, 23);
             this.buttonBackup.TabIndex = 0;
             this.buttonBackup.Text = "Backup Database";
             this.buttonBackup.UseVisualStyleBackColor = true;
@@ -168,9 +168,9 @@
             // 
             // buttonDeleteUserDB
             // 
-            this.buttonDeleteUserDB.Location = new System.Drawing.Point(89, 230);
+            this.buttonDeleteUserDB.Location = new System.Drawing.Point(55, 230);
             this.buttonDeleteUserDB.Name = "buttonDeleteUserDB";
-            this.buttonDeleteUserDB.Size = new System.Drawing.Size(193, 23);
+            this.buttonDeleteUserDB.Size = new System.Drawing.Size(250, 23);
             this.buttonDeleteUserDB.TabIndex = 0;
             this.buttonDeleteUserDB.Text = "Delete/Rebuild User DB";
             this.buttonDeleteUserDB.UseVisualStyleBackColor = true;
@@ -178,9 +178,9 @@
             // 
             // buttonRemoveJournals
             // 
-            this.buttonRemoveJournals.Location = new System.Drawing.Point(89, 259);
+            this.buttonRemoveJournals.Location = new System.Drawing.Point(55, 259);
             this.buttonRemoveJournals.Name = "buttonRemoveJournals";
-            this.buttonRemoveJournals.Size = new System.Drawing.Size(193, 23);
+            this.buttonRemoveJournals.Size = new System.Drawing.Size(250, 23);
             this.buttonRemoveJournals.TabIndex = 0;
             this.buttonRemoveJournals.Text = "Remove Journal Entries";
             this.buttonRemoveJournals.UseVisualStyleBackColor = true;

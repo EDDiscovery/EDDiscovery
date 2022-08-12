@@ -24,9 +24,6 @@ namespace EDDiscovery
 {
     public class PopOutControl
     {
-        public UserControlFormList usercontrolsforms;
-        EDDiscoveryForm discoveryform;
-
         public PopOutControl( EDDiscoveryForm ed )
         {
             discoveryform = ed;
@@ -36,7 +33,8 @@ namespace EDDiscovery
         public int Count { get { return usercontrolsforms.Count;  } }
         public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
 
-        public UserControlForm FindUCCB(Type t) { return usercontrolsforms.FindUCCB(t); }
+        public UserControlForm Find(PanelInformation.PanelIDs p) { return usercontrolsforms.Find(p); }
+
         public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
         private static string PopOutSaveID(PanelInformation.PanelIDs p)
@@ -61,33 +59,29 @@ namespace EDDiscovery
 
         public void SaveCurrentPopouts()
         {
-            foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
+            PanelInformation.PanelIDs[] userselectablepanels = PanelInformation.GetUserSelectablePanelIDs(false);        // get list of panels in system
+
+            foreach (var p in userselectablepanels)
             {
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
-                if (pi != null) // paranoia
-                {
-                    int numopened = usercontrolsforms.CountOf(pi.PopoutType);
-                    if ( numopened>0) System.Diagnostics.Debug.WriteLine($"Save Popout {p} {numopened}");
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(PopOutSaveID(p), numopened);
-                }
+                int numopened = usercontrolsforms.CountOf(p);
+                //System.Diagnostics.Debug.WriteLine($"Popout {PopOutSaveID(p)} = {numopened}");
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(PopOutSaveID(p), numopened);
             }
         }
 
         public void LoadSavedPopouts()
         {
-            foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
+            PanelInformation.PanelIDs[] userselectablepanels = PanelInformation.GetUserSelectablePanelIDs(false);        // get list of panels in system
+
+            foreach( var p in userselectablepanels)
             {
-                int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(PopOutSaveID(p), 0);
+                int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(PopOutSaveID(p), 0);          // get number, from id
 
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
-
-                //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
-
-                if (pi != null && numtoopen > 0) // paranoia on first..
+                if (numtoopen > 0) 
                 {
                     System.Diagnostics.Debug.WriteLine($"Load Popout {p} {numtoopen}");
 
-                    int numopened = usercontrolsforms.CountOf(pi.PopoutType);
+                    int numopened = usercontrolsforms.CountOf(p);                                                       // see how many we already have..
                     if (numopened < numtoopen)
                     {
                         for (int i = numopened + 1; i <= numtoopen; i++)
@@ -97,23 +91,26 @@ namespace EDDiscovery
             }
         }
 
-
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
+            // tcf holds the panel
+
             UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
+            // uccb creation of selected panel
             UserControlCommonBase ctrl = PanelInformation.Create(selected);
 
             PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByPanelID(selected);
 
             if (ctrl != null && poi != null )
             {
-                int numopened = usercontrolsforms.CountOf(ctrl.GetType()) + 1;
+                // we make up the title and refname based on how many previously opened of this type
+                int numopened = usercontrolsforms.CountOf(selected) + 1;
                 string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
 
-                System.Diagnostics.Trace.WriteLine("PO:Make " + windowtitle + " ucf " + ctrl.GetType().Name);
+                System.Diagnostics.Trace.WriteLine("Popout Make " + windowtitle + " ucf " + ctrl.GetType().Name);
 
                 //System.Diagnostics.Debug.WriteLine("TCF init");
                 tcf.Init(ctrl, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
@@ -137,5 +134,8 @@ namespace EDDiscovery
         {
             return usercontrolsforms.AllowClose();
         }
+
+        private UserControlFormList usercontrolsforms;
+        private EDDiscoveryForm discoveryform;
     }
 }

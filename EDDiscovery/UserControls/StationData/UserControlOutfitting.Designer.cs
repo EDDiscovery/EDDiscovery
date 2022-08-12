@@ -80,6 +80,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewOutfitting.AllowUserToDeleteRows = false;
             this.dataGridViewOutfitting.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewOutfitting.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewOutfitting.ColumnReorder = true;
             this.dataGridViewOutfitting.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col1,
             this.Col2,
@@ -88,9 +89,11 @@ namespace EDDiscovery.UserControls
             this.ColPrice});
             this.dataGridViewOutfitting.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewOutfitting.Name = "dataGridViewOutfitting";
+            this.dataGridViewOutfitting.RowHeaderMenuStrip = null;
             this.dataGridViewOutfitting.RowHeadersVisible = false;
             this.dataGridViewOutfitting.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewOutfitting.Size = new System.Drawing.Size(787, 549);
+            this.dataGridViewOutfitting.SingleRowSelect = true;
+            this.dataGridViewOutfitting.Size = new System.Drawing.Size(784, 549);
             this.dataGridViewOutfitting.TabIndex = 1;
             this.dataGridViewOutfitting.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
@@ -136,13 +139,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(13, 549);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 549);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -197,6 +200,10 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.comboBoxYards, "Select ship to view");
             this.comboBoxYards.ValueMember = "";
             this.comboBoxYards.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // topPanel
             // 

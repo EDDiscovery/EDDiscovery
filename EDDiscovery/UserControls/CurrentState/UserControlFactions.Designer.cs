@@ -180,6 +180,10 @@
             this.showFactionSystemDetailToolStripMenuItem.Text = "Show system detail for faction";
             this.showFactionSystemDetailToolStripMenuItem.Click += new System.EventHandler(this.showFactionSystemDetailToolStripMenuItem_Click);
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // dataViewScrollerPanelFactions
             // 
             this.dataViewScrollerPanelFactions.Controls.Add(this.scrollBarFactions);

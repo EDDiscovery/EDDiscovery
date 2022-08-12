@@ -84,6 +84,7 @@ namespace EDDiscovery
             LocalMap3D = 54,
             Organics = 55,
             Engineers = 56,
+            Discoveries = 57,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -119,7 +120,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Engineering, typeof(UserControlEngineering), "Engineering", "Engineering", "Engineering planner") },
             { new PanelInfo( PanelIDs.ShoppingList, typeof(UserControlShoppingList), "Shopping List", "ShoppingList", "Shopping list planner combining synthesis and engineering") },
             { new PanelInfo( PanelIDs.MaterialTrader, typeof(UserControlMaterialTrader), "Material Trader", "MaterialTrader", "Material trader") },
-       //     { new PanelInfo( PanelIDs.Engineers, typeof(UserControlEngineers), "Engineers", "Engineers", "List of Engineers, status, recipes") },
+            { new PanelInfo( PanelIDs.Engineers, typeof(UserControlEngineers), "Engineers", "Engineers", "List of Engineers, status, recipes") },
 
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system") },
@@ -136,6 +137,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Map3D, typeof(UserControl3DMap) ,"3D Map", "map3d", "3D Map of galaxy") },
             { new PanelInfo( PanelIDs.LocalMap3D, typeof(UserControlLocal3DMap) ,"Local 3D Map", "localmap3d", "Local 3D Map of systems near you") },
             { new PanelInfo( PanelIDs.Organics, typeof(UserControlOrganics) ,"Organic Scans", "OrganicScans", "Organic scans of current body and historic scans") },
+            { new PanelInfo( PanelIDs.Discoveries, typeof(UserControlDiscoveries) ,"Discoveries", "Discoveries", "Discoveries Observer List") },
 
             { new PanelInfo( "Bookmarks and Logs") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets")},
@@ -151,7 +153,7 @@ namespace EDDiscovery
             { new PanelInfo( "Overlay Panels") },
             { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information"  ) },
             { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay"  ) },
-            { new PanelInfo( PanelIDs.Surveyor, typeof(UserControlSurveyor), "Surveyor", "Surveyor", "Surveyor - Surface map aid"  ) },
+            { new PanelInfo( PanelIDs.Surveyor, typeof(UserControlSurveyor), "Surveyor", "Surveyor", "Surveyor - Exploration and route overlay"  ) },
             { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "Notes overlay" ) },
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay") },
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates") },
@@ -197,6 +199,8 @@ namespace EDDiscovery
 
             foreach (PanelInfo i in paneldefinition)
             {
+                i.TabIcon =  PanelTypeIcons[i.PopoutID];
+
                 if (i.PopoutID == PanelIDs.GroupMarker)     // if group, work separs
                 {
                     if ( offset>0)
@@ -217,6 +221,13 @@ namespace EDDiscovery
             userselectablepanellist = (from x in displayablepanels where x.Description.Length>0 select x).ToList(); //remove non selectables..
         }
 
+        public static void AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image)
+        {
+            PanelInfo p = new PanelInfo((PanelIDs)id, uccbtype, wintitle, refname, description, image, tag);
+            displayablepanels.Add(p);
+            userselectablepanellist.Add(p);
+        }
+
         [System.Diagnostics.DebuggerDisplay("{PopoutID} {WindowTitle}")]
         public class PanelInfo      // can hold user selectable, group or non user selectable panels
         {
@@ -224,16 +235,19 @@ namespace EDDiscovery
             public Type PopoutType;
             public string WindowTitle;
             public string WindowRefName;
-            public Image TabIcon { get { return PanelTypeIcons[PopoutID]; } }
+            public Image TabIcon;
             public string Description;          // must be non zero length to be user selectable
+            public Object Tag;                  // any other info
 
-            public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description)
+            public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description, Image icon = null, Object tag = null)
             {
                 PopoutID = p;
                 PopoutType = t;
                 WindowTitle = wintitle;
                 WindowRefName = refname;
                 Description = description;
+                TabIcon = icon;
+                Tag = tag;
             }
 
             public PanelInfo(string s)
@@ -290,20 +304,10 @@ namespace EDDiscovery
             return displayablepanels.Find(x => x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
         }
 
-        static public PanelIDs? GetPanelIDByControltype( Type ctrl) // null if not found
-        {
-            return displayablepanels.Find(x => x.PopoutType == ctrl)?.PopoutID;
-        }
-
         static public PanelInfo GetPanelInfoByPanelID(PanelIDs p)    // null if p is invalid
         {
             int i = displayablepanels.FindIndex(x => x.PopoutID == p);
             return i>=0 ? displayablepanels[i] : null;
-        }
-
-        static public PanelInfo GetPanelInfoByType(Type t)  // null if not found
-        {
-            return displayablepanels.Find(x => x.PopoutType == t);
         }
 
         public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
@@ -312,7 +316,7 @@ namespace EDDiscovery
             if (pi != null)
             {
                 var uccb = (UserControls.UserControlCommonBase)Activator.CreateInstance(pi.PopoutType, null);
-                uccb.panelid = p;
+                uccb.Creation(GetPanelInfoByPanelID(p));
                 return uccb;
             }
 

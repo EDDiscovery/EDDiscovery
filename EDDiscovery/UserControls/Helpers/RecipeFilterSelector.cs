@@ -39,11 +39,12 @@ namespace EDDiscovery.UserControls
 
         public void Open(string settings, Control ctr, Form parent)
         {
+            CloseBoundaryRegion = new Size(32, ctr.Height);
             if (this.Visible == true)
             {
                 Hide();
             }
-            else
+            else if (!this.DeactivatedWithin(250))     // when we hide due to clicking on the button, we still get the click back thru. So debounce it
             {
                 Show(settings, ctr, parent);     // use the quick helper. 
             }

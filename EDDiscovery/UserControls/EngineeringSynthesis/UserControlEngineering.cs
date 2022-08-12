@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
 
             var enumlist = new Enum[] { EDTx.UserControlEngineering_UpgradeCol, EDTx.UserControlEngineering_ModuleCol, EDTx.UserControlEngineering_LevelCol, EDTx.UserControlEngineering_MaxCol, EDTx.UserControlEngineering_WantedCol, EDTx.UserControlEngineering_AvailableCol, EDTx.UserControlEngineering_NotesCol, EDTx.UserControlEngineering_RecipeCol, EDTx.UserControlEngineering_EngineersCol };
             BaseUtils.Translator.Instance.TranslateControls(this,enumlist);
-            var enumlisttt = new Enum[] { EDTx.UserControlEngineering_ToolTip, EDTx.UserControlEngineering_buttonFilterUpgrade_ToolTip, EDTx.UserControlEngineering_buttonFilterModule_ToolTip, EDTx.UserControlEngineering_buttonFilterLevel_ToolTip, EDTx.UserControlEngineering_buttonFilterEngineer_ToolTip, EDTx.UserControlEngineering_buttonFilterMaterial_ToolTip, EDTx.UserControlEngineering_buttonClear_ToolTip, EDTx.UserControlEngineering_chkNotHistoric_ToolTip, EDTx.UserControlEngineering_extCheckBoxWordWrap_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlEngineering_buttonFilterUpgrade_ToolTip, EDTx.UserControlEngineering_buttonFilterModule_ToolTip, EDTx.UserControlEngineering_buttonFilterLevel_ToolTip, EDTx.UserControlEngineering_buttonFilterEngineer_ToolTip, EDTx.UserControlEngineering_buttonFilterMaterial_ToolTip, EDTx.UserControlEngineering_buttonClear_ToolTip, EDTx.UserControlEngineering_chkNotHistoric_ToolTip, EDTx.UserControlEngineering_extCheckBoxWordWrap_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
         }
@@ -342,8 +342,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewEngineering.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewEngineering.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewEngineering.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 
@@ -465,6 +464,21 @@ namespace EDDiscovery.UserControls
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
             SetHistoric(!chkNotHistoric.Checked);      // upside down when changed appearance
+        }
+
+        private void dataGridViewEngineering_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 )
+            {
+                DataGridViewRow row = dataGridViewEngineering.Rows[e.RowIndex];
+                int rno = (int)row.Tag;
+                Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[rno];
+
+                if ( e.ColumnIndex == RecipeCol.Index)
+                {
+                    dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = r.IngredientsStringLong;
+                }
+            }
         }
     }
 }

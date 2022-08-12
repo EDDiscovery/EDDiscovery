@@ -105,27 +105,28 @@ namespace EDDiscovery.UserControls
                         if (scanof != null)
                         {
                             var ri = scanof.FindRing(entry.BodyName);
-                            ringtype = ri.RingClassNormalised();
-                            if (ringtype.Contains("metalic", StringComparison.InvariantCultureIgnoreCase))
+                            ringtype = ri.RingClassID.ToString().SplitCapsWordFull();
+
+                            if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Metalic)
                             {
                                 showicy = showrocky = showmr = false;
                             }
-                            else if (ringtype.Contains("Metal", StringComparison.InvariantCultureIgnoreCase))
+                            else if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.MetalRich)
                             {
                                 showicy = showrocky = showmetalic = false;
                             }
-                            else if (ringtype.Contains("rocky", StringComparison.InvariantCultureIgnoreCase))
+                            else if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Rocky)
                             {
                                 showicy = showmetalic = showmr = false;
                             }
-                            else if (ringtype.Contains("icy", StringComparison.InvariantCultureIgnoreCase))
+                            else if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Icy)
                             {
                                 showrocky = showmetalic = showmr = false;
                             }
 
                             mass = ri.MassMT.ToStringInvariant();
-                            innerrad = (ri.InnerRad / JournalScan.oneLS_m).ToStringInvariant("N3");
-                            outerrad = (ri.OuterRad / JournalScan.oneLS_m).ToStringInvariant("N3");
+                            innerrad = (ri.InnerRad / BodyPhysicalConstants.oneLS_m).ToStringInvariant("N3");
+                            outerrad = (ri.OuterRad / BodyPhysicalConstants.oneLS_m).ToStringInvariant("N3");
                         }
 
                         //string sig = string.Join(",", entry.Signals.Select(x=>x.Type)); // debug

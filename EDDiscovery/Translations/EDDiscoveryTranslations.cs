@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 
+// procedure for translation normalisation
+// 1. cd \code\eddiscovery.
+// 2. Use eddtest scanforenums stdenums . *.cs  - check for any enums not in use
+// 3. Use eddtest  normalisetranslate c:\code\eddiscovery\eddiscovery\translations 2 example-ex - "NS NoOutput" c:\code\renames.lst stdenums
+//      check example against enum list and check all ids are there vs enums
+// 4. run normalisetranslate.bat to fix up other languages to example
+
 namespace EDDiscovery
 {
     internal enum EDTx
@@ -16,7 +23,6 @@ namespace EDDiscovery
         Delete, // Delete
         Campaign, // Campaign
         NoScan, // No Scan
-        Travel, // Travel
         GameTime, // Game Time
         Time, // Time
         NoData, // No Data
@@ -217,6 +223,9 @@ namespace EDDiscovery
 
 
         ExportForm, // Control 'Export'
+        ExportForm_buttonExport, // Control 'Export'
+        ExportForm_ImportTitle,
+        ExportForm_ImportButton,
         ExportForm_labelCVSSep, // Control 'CSV Separator'
         ExportForm_radioButtonComma, // Control 'Comma'
         ExportForm_radioButtonSemiColon, // Control 'Semicolon'
@@ -224,11 +233,6 @@ namespace EDDiscovery
         ExportForm_checkBoxCustomAutoOpen, // Control 'Open'
         ExportForm_labelUTCEnd, // Control 'UTC'
         ExportForm_labelUTCStart, // Control 'UTC'
-        ExportForm_buttonExport, // Control 'Export'
-        ExportForm_ECH, // Export current History view to {0}
-        ExportForm_ImportTitle,
-        ExportForm_ImportButton,
-        ExportForm_ImportData,
 
         Form2DMap_LastWeek, // Last Week
         Form2DMap_LastMonth, // Last Month
@@ -258,7 +262,6 @@ namespace EDDiscovery
         NewReleaseForm, // Control 'EDDiscovery Release'
         NewReleaseForm_labelName, // Control 'Name'
         NewReleaseForm_btnClose, // Control '&Close'
-        NewReleaseForm_buttonMsiInstaller, // Control '&Msi Installer'
         NewReleaseForm_labelURL, // Control 'GitHub URL'
         NewReleaseForm_labelDownload, // Control 'Download'
         NewReleaseForm_buttonPortablezip, // Control '&Portable Zip'
@@ -583,6 +586,10 @@ namespace EDDiscovery
         UserControlOrganics_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
         UserControlOrganics_extButtonFont_ToolTip, // ToolTip 'Font'
         UserControlOrganics_extCheckBoxWordWrap_ToolTip, // ToolTip 'Word Wrap'
+        UserControlOrganics_at, // At {0}
+        UserControlOrganics_sysinfo, // 
+
+
 
 
         UserControlShoppingList_NM, // Needed Mats
@@ -630,10 +637,6 @@ namespace EDDiscovery
         UserControlJournalGrid_TT1, //  showing {0} original {1}
         UserControlJournalGrid_TTFilt1, // Filtered {0}
         UserControlJournalGrid_TTSelAge, // Select the entries by age,
-        UserControlJournalGrid_TTFilt2, // Filtered {0}
-        UserControlJournalGrid_TTEvent, // Filter out entries based on event type,
-        UserControlJournalGrid_TTFilt3, // Total filtered out {0}
-        UserControlJournalGrid_TTTotal, // Filter out entries matching the field selection,
         UserControlJournalGrid_JHF, // Journal: Filter out fields
         UserControlJournalGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
 
@@ -697,10 +700,6 @@ namespace EDDiscovery
         UserControlTravelGrid_TT1, //  showing {0} original {1}
         UserControlTravelGrid_TTFilt1, // Filtered {0}
         UserControlTravelGrid_TTSelAge, // Select the entries by age,
-        UserControlTravelGrid_TTFilt2, // Filtered {0}
-        UserControlTravelGrid_TTEvent, // Filter out entries based on event type,
-        UserControlTravelGrid_TTFilt3, // Total filtered out {0}
-        UserControlTravelGrid_TTTotal, // Filter out entries matching the field selection,
         UserControlTravelGrid_CSTART, // Clear Start marker
         UserControlTravelGrid_CSTOP, // Clear Stop marker
         UserControlTravelGrid_SETSTOPTC, // Set Stop marker for travel calculations
@@ -889,8 +888,10 @@ namespace EDDiscovery
         UserControlSurveyor_extButtonControlRoute_ToolTip, // ToolTip 'Route Settings'
         UserControlSurveyor_extButtonFont_ToolTip, // ToolTip 'Font'
         UserControlSurveyor_extCheckBoxWordWrap_ToolTip, // ToolTip 'Word Wrap'
+        UserControlSurveyor_extButtonSearches_ToolTip,
         UserControlSurveyor_Scan, //  Scan
         UserControlSurveyor_Systemscancomplete, // System scan complete.
+        UserControlSurveyor_bodiesdetected, //  bodies detected.
         UserControlSurveyor_bodiesfound, //  bodies found.
         UserControlSurveyor_fuel, //  bodies found.
         UserControlSurveyor_navroute, //  bodies found.
@@ -916,15 +917,18 @@ namespace EDDiscovery
         UserControlSurveyor_bodyFeaturesToolStripMenuItem_landableWithVolcanismToolStripMenuItem,
         UserControlSurveyor_showAllStarsToolStripMenuItem,
         UserControlSurveyor_showBeltClustersToolStripMenuItem,
+        UserControlSurveyor_showstarclassToolStripMenuItem,
         UserControlSurveyor_showValuesToolStripMenuItem,
         UserControlSurveyor_showMoreInformationToolStripMenuItem,
         UserControlSurveyor_showGravityToolStripMenuItem,
         UserControlSurveyor_showAtmosToolStripMenuItem,
         UserControlSurveyor_showVolcanismToolStripMenuItem,
+        UserControlSurveyor_showSignalsToolStripMenuItem,
         UserControlSurveyor_autoHideToolStripMenuItem,
         UserControlSurveyor_dontHideInFSSModeToolStripMenuItem,
         UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem,
         UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem,
+        UserControlSurveyor_showDividersToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_rightToolStripMenuItem,
@@ -1038,7 +1042,8 @@ namespace EDDiscovery
         UserControlExpedition_labelEndDate, // Control 'End Date:'
         UserControlExpedition_labelCml, // Control 'Cml Distance:'
         UserControlExpedition_labelP2P, // Control 'P2P Distance:'
-        UserControlExpedition_buttonReverseRoute, // Control 'Reverse'
+        UserControlExpedition_buttonReverseRoute_ToolTip, // Control 'Reverse'
+        UserControlExpedition_extCheckBoxWordWrap_ToolTip, // Control 'Enable or disable word wrap'
         UserControlExpedition_extButtonLoadRoute_ToolTip, // ToolTip 'Load Route'
         UserControlExpedition_extButtonNew_ToolTip, // ToolTip 'New Expedition'
         UserControlExpedition_extButtonSave_ToolTip, // ToolTip 'Save Expedition'
@@ -1218,7 +1223,6 @@ namespace EDDiscovery
         UserControlTrilateration_toolStripButtonSubmitDistances, // ToolStrip control '&Submit Distances'
         UserControlTrilateration_toolStripButtonNew, // ToolStrip control 'Start &new'
         UserControlTrilateration_toolStripLabelSystem, // ToolStrip control 'From System:'
-        UserControlTrilateration_toolStripTextBoxSystem, // ToolStrip control '''Press Start New'''
         UserControlTrilateration_toolStripLabel1, // ToolStrip control 'Visited without coordinates:'
         UserControlTrilateration_toolStripAddFromHistory, // ToolStrip control 'Add 20 oldest'
         UserControlTrilateration_toolStripAddRecentHistory, // ToolStrip control 'Add 20 newest'
@@ -1247,14 +1251,18 @@ namespace EDDiscovery
         UserControlSearch_MaterialsCommodities, // Materials Commodities
         UserControlSearch_Scans, // Scans
 
+        // used across multiple panels, but so much shared with above may as well use the same 
+
         SearchScans_ColumnDate, // Column Header 'Date'
-        SearchScans_ColumnStar, // Column Header 'Star'
+        SearchScans_ColumnBody, // Column Header 'Body'
         SearchScans_ColumnInformation, // Column Header 'Information'
+        SearchScans_ColumnParent, // Column Header 'Parent'
+        SearchScans_ColumnParentParent, // Column Header 'Parent.Parent'
+        SearchScans_ColumnStar, // Column Header 'Star'
+        SearchScans_ColumnStarStar, // Column Header 'Star.Star'
         SearchScans_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchScans_ColumnPosition, // Column Header 'Position'
-        SearchScans_buttonFind, // Control 'Find'
-        SearchScans_buttonSave, // Control 'Save'
-        SearchScans_buttonDelete, // Control 'Delete'
+        SearchScans_ColumnSearches, // Column Header 'Searches'
         SearchScans_Select, // Select
         SearchScans_Name, // Name:
         SearchScans_SN, // Enter Search Name:
@@ -1262,13 +1270,34 @@ namespace EDDiscovery
         SearchScans_DELNO, // Cannot delete this entry
         SearchScans_CNV, // Condition is not valid
         SearchScans_CD, // Condition
+        SearchScans_comboBoxSearches_ToolTip,
+        SearchScans_buttonFind_ToolTip,
+        SearchScans_buttonSave_ToolTip,
+        SearchScans_buttonDelete_ToolTip, 
+        SearchScans_buttonExtExcel_ToolTip,
+        SearchScans_extCheckBoxDebug_ToolTip,
+        SearchScans_extButtonNew_ToolTip,
+        SearchScans_extButtonExport_ToolTip, 
+        SearchScans_extButtonImport_ToolTip,
+        SearchScans_extCheckBoxWordWrap_ToolTip,
+        SearchScans_labelTime,
+        SearchScans_labelSearch,
+        SearchScans_Export,
+        SearchScans_Import,
+        SearchScans_TooMany,
+
+        SearchScans_scanSortControl_labelSort,
+
+        UserControlDiscoveries_textBoxSearch_ToolTip, 
+        UserControlDiscoveries_extButtonSearches_ToolTip,
+        UserControlDiscoveries_extCheckBoxWordWrap_ToolTip, 
+        UserControlDiscoveries_buttonExtExcel_ToolTip,
 
         SearchMaterialsCommodities_ColumnDate, // Column Header 'Date'
         SearchMaterialsCommodities_ColumnStar, // Column Header 'Star'
         SearchMaterialsCommodities_ColumnLocation, // Column Header 'Location'
         SearchMaterialsCommodities_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchMaterialsCommodities_ColumnPosition, // Column Header 'Position'
-        SearchMaterialsCommodities_buttonExtFind, // Control 'Find'
         SearchMaterialsCommodities_label2, // Control 'Item 2'
         SearchMaterialsCommodities_label1, // Control 'Item 1'
         SearchMaterialsCommodities_RareCommodity, // , Rare Commodity
@@ -1277,6 +1306,12 @@ namespace EDDiscovery
         SearchMaterialsCommodities_DIS, // Discovered at
         SearchMaterialsCommodities_COL, // Collected at
         SearchMaterialsCommodities_MR, // Mission Reward at
+
+        SearchMaterialsCommodities_buttonExtExcel_ToolTip, 
+        SearchMaterialsCommodities_buttonExtFind_ToolTip, 
+        SearchMaterialsCommodities_comboBoxCustomCMANDOR_ToolTip,
+        SearchMaterialsCommodities_comboBoxCustomCM1_ToolTip,
+        SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip,
 
         SearchStars_ColumnStar, // Column Header 'Star'
         SearchStars_ColumnCentreDistance, // Column Header 'Centre Distance'
@@ -1301,12 +1336,12 @@ namespace EDDiscovery
         UserControlMarketData_labelLocation, // Control 'No Data'
         UserControlMarketData_labelVs, // Control 'Vs'
         UserControlMarketData_checkBoxBuyOnly, // Control 'Buy Only'
-        UserControlMarketData_checkBoxSellOnly, // Control 'Sell Only'
+        UserControlMarketData_checkBoxHasDemand, // Control 'Has Demand'
         UserControlMarketData_checkBoxAutoSwap, // Control 'AutoSwap'
         UserControlMarketData_comboBoxCustomFrom_ToolTip, // ToolTip 'Click to select between tracking the cursor or a particular market data set'
         UserControlMarketData_comboBoxCustomTo_ToolTip, // ToolTip 'Click to select a comparision market data set'
         UserControlMarketData_checkBoxBuyOnly_ToolTip, // ToolTip 'Show items you can buy only'
-        UserControlMarketData_checkBoxSellOnly_ToolTip, // ToolTip 'Show items you can sell only'
+        UserControlMarketData_checkBoxHasDemand_ToolTip, // ToolTip 'Show items that has demand'
 
         UserControlMarketData_Conly, // Cargo only, no market data on this item
         UserControlMarketData_LEntry, // Travel History Entry Last
@@ -1565,7 +1600,6 @@ namespace EDDiscovery
         UserControlEngineering_EngineersCol, // Column Header 'Engineers'
         UserControlEngineering_CraftedCol, // Column Header 'Crafted'
 
-        UserControlEngineering_ToolTip, // ToolTip 'Enable or disable word wrap'
         UserControlEngineering_buttonFilterUpgrade_ToolTip, // ToolTip 'Filter the table by upgrade type'
         UserControlEngineering_buttonFilterModule_ToolTip, // ToolTip 'Filter the table by module type'
         UserControlEngineering_buttonFilterLevel_ToolTip, // ToolTip 'Filter the table by level'
@@ -1574,6 +1608,10 @@ namespace EDDiscovery
         UserControlEngineering_buttonClear_ToolTip, // ToolTip 'Set all wanted values to zero'
         UserControlEngineering_chkNotHistoric_ToolTip, // ToolTip 'When red, use the materials at the cursor to estimate, when green always use the latest materials.'
         UserControlEngineering_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
+
+        UserControlEngineers_buttonFilterEngineer_ToolTip, 
+        UserControlEngineers_extCheckBoxWordWrap_ToolTip, 
+        UserControlEngineers_extCheckBoxMoreInfo_ToolTip,
 
         UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, // ToolStrip control 'Show Max FSD Injections'
         UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, // ToolStrip control 'Show Body Materials When Landed'

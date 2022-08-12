@@ -35,7 +35,7 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn: "Grid" @
 .buttonExtEditCampaign: "Edit" @
 .labelCredits.ToolTip: "Current Credits" @
-.labelTotalKills.ToolTip: "Total kills in campaign" @
+.labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" @
 .labelFactionKills.ToolTip: "Faction Kills" @
 .labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" @
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" @
@@ -46,18 +46,18 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" @
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" @
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" @
-.Kills: "Kills: " @
-.Faction: "Faction: " @
-.Crimes: "Crimes: " @
-.Bal: "Bal: " @
+.Kills: "Kills:" @
+.Faction: "Faction:" @
+.Crimes: "Crimes:" @
+.Bal: "Bal:" @
 .NewCampaign: "New Campaign" @
 .SinceLastDock: "Since Last Dock" @
-.Name: "Name: " @
+.Name: "Name:" @
 .C1: "Give name to campaign" @
 .C2: "Optional faction to target" @
-.Start: "Start: " @
+.Start: "Start:" @
 .C3: "Select Start time" @
-.End: "End: " @
+.End: "End:" @
 .C4: "Select Start time" @
 .C5: "Press to Accept" @
 .C6: "Press to Cancel" @
@@ -106,12 +106,16 @@ SECTION SearchMaterialsCommodities
 .MR: "Mission Reward at " @
 .label2: "Item 2" @
 .label1: "Item 1" @
-.buttonExtFind: "Find" @
 .ColumnDate: "Date" @
 .ColumnStar: "Star" @
 .ColumnLocation: "Location" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
+.buttonExtExcel.ToolTip: "Output grid to CSV" @
+.buttonExtFind.ToolTip: "Find materials/commodities" @
+.comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" @
+.comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" @
+.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" @
 
 SECTION SearchScans
 
@@ -122,14 +126,33 @@ SECTION SearchScans
 .DELNO: "Cannot delete this entry" @
 .CNV: "Condition is not valid" @
 .CD: "Condition" @
-.buttonDelete: "Delete" @
-.buttonSave: "Save" @
-.buttonFind: "Find" @
 .ColumnDate: "Date" @
-.ColumnStar: "Star" @
+.ColumnBody: "Body" @
 .ColumnInformation: "Information" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
+.ColumnParent: "Parent" @
+.comboBoxSearches.ToolTip: "Select a predefined condition" @
+.buttonFind.ToolTip: "Search for condition below" @
+.buttonSave.ToolTip: "Save current condition" @
+.buttonDelete.ToolTip: "Delete current condition" @
+.buttonExtExcel.ToolTip: "Output results grid to CSV" @
+.extButtonExport.ToolTip: "Export user searches to a file" @
+.extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
+.ColumnSearches: "Searches" @
+.labelTime: "Time" @
+.labelSearch: "Search" @
+.Export: "Export user searches" @
+.Import: "Import user searches" @
+
+SECTION UserControlDiscoveries
+
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.buttonExtExcel.ToolTip: "Export" @
 
 SECTION SearchStars
 
@@ -156,7 +179,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" @
 .RecipeCol: "Recipe" @
 .EngineersCol: "Engineers" @
-.ToolTip: "Left click and drag on grid to reorder" @
+.CraftedCol: "Crafted" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .buttonFilterMaterial.ToolTip: "Filter the table by material" @
 .buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" @
@@ -165,6 +188,12 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" @
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+
+SECTION UserControlEngineers
+
+.buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
+.extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
+.extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 
 SECTION UserControlEstimatedValues
 
@@ -206,16 +235,17 @@ SECTION UserControlExpedition
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" @
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
+.buttonReverseRoute.ToolTip: "Reverse" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
 .SystemName: "System Name" @
 .Distance: "Dist." @
 .Note: "Note" @
-.labelCml: "Cml Distance: " @
-.labelP2P: "P2P Distance: " @
-.buttonReverseRoute: "Reverse" @
-.labelEndDate: "End Date: " @
-.labelDateStart: "Start Date: " @
-.labelRouteName: "Route Name: " @
+.labelCml: "Cml Distance:" @
+.labelP2P: "P2P Distance:" @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
+.labelRouteName: "Route Name:" @
 .copyToolStripMenuItem: "Copy" @
 .pasteToolStripMenuItem: "Paste" @
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" @
@@ -243,7 +273,7 @@ SECTION UserControlJournalGrid
 .ColumnText: "Information" @
 .labelTime: "Time" @
 .labelSearch: "Search" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
@@ -257,10 +287,6 @@ SECTION UserControlJournalGrid
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
 .TTSelAge: "Select the entries by age, " @
-.TTFilt2: "Filtered {0}" @
-.TTEvent: "Filter out entries based on event type, " @
-.TTFilt3: "Total filtered out {0}" @
-.TTTotal: "Filter out entries matching the field selection, " @
 .JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 
@@ -278,6 +304,7 @@ SECTION UserControlLedger
 .buttonFilter.ToolTip: "Display entries matching this event type filter" @
 .textBoxFilter.ToolTip: "Search to particular items" @
 .comboBoxTime.ToolTip: "Select the entries by age" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .toolStripMenuItemGotoItem: "Go to entry on grid" @
 .CashTransactions: "Cash Transactions" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -310,8 +337,8 @@ SECTION UserControlMarketData
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" @
 .Conly: "Cargo only, no market data on this item" @
 .LEntry: "Travel History Entry Last" @
-.checkBoxSellOnly: "Sell Only" @
-.checkBoxSellOnly.ToolTip: "Show items you can sell only" @
+.checkBoxHasDemand: "Has Demand" @
+.checkBoxHasDemand.ToolTip: "Show items with demand" @
 
 SECTION UserControlMaterialCommodities
 
@@ -347,7 +374,8 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.Systemscancomplete: "System scan complete." @
+.Systemscancomplete: "System scan complete" @
+.bodiesdetected: " bodies detected." @
 .bodiesfound: " bodies found." @
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" @
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" @
@@ -359,28 +387,31 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
-.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
+.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has volcanism" @
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
-.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
-.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other signals" @
+.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
+.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
+.showSignalsToolStripMenuItem: "Show signals" @
 .showValuesToolStripMenuItem: "Show values" @
-.showMoreInformationToolStripMenuItem: "Show More Information" @
+.showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.showAtmosToolStripMenuItem: "Show atmospheres" @
+.showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
+.dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
+.showstarclassToolStripMenuItem: "Show star class in system info" @
+.showDividersToolStripMenuItem: "Show dividers" @
 .extButtonPlanets.ToolTip: "Planet Filter" @
 .extButtonStars.ToolTip: "Star Filter" @
 .extButtonShowControl.ToolTip: "Display Settings" @
@@ -391,6 +422,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
 .navroute: "Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 .fsssignals: "List signals to display, semicolon seperated" @
@@ -423,11 +455,13 @@ SECTION UserControlModules
 .labelShip: "Ship" @
 .labelVehicle: "Unknown" @
 .comboBoxShips.ToolTip: "Select ship to view" @
+.extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.FullBluePrint: "Show full blueprint information" @
 .ForceSell: "Force Sell" @
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
@@ -560,7 +594,7 @@ SECTION UserControlRoute
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
 .NoRoute: "No route set up, retry" @
 .checkBox_FsdBoost: "Use Boosts" @
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
 .showScanToolStripMenuItem: "View Scan Display" @
 .M1: "Nearest to Waypoint" @
 .M2: "Minimum Deviation from Path" @
@@ -618,7 +652,7 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" @
 .StarClass: "Show Classes of Stars" @
 .Distance: "Show distance of bodies" @
-.Expired: "Expired: " @
+.Expired: "Expired:" @
 
 SECTION UserControlScanGrid
 
@@ -665,7 +699,7 @@ SECTION UserControlSettings
 .buttonSaveTheme: "Save Theme" @
 .groupBoxCustomHistoryLoad: "History" @
 .checkBoxOrderRowsInverted: "Number Rows by Date Ascending" @
-.labelTimeDisplay: "Time: " @
+.labelTimeDisplay: "Time:" @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
@@ -673,12 +707,12 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" @
 .groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries: " @
-.labelHistorySel: "Entries to read: " @
+.labelHistoryEssItems: "Essential entries:" @
+.labelHistorySel: "Entries to read:" @
 .groupBoxCustomScreenShots: "Screenshots conversion" @
 .buttonExtScreenshot: "Configure" @
 .checkBoxCustomEnableScreenshots: "Enable" @
-.groupBoxCustomEDSM: "EDSM/EDDB Control" @
+.groupBoxCustomEDSM: "EDSM Control" @
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" @
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" @
 .groupBoxPopOuts: "Window Options" @
@@ -693,7 +727,7 @@ SECTION UserControlSettings
 .groupBoxCustomLanguage: "Language" @
 .groupBoxCustomSafeMode: "Advanced" @
 .buttonExtSafeMode: "Restart in Safe Mode" @
-.labelSafeMode: "Click this to perform special operations like to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" @
+.labelSafeMode: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" @
 .btnDeleteCommander.ToolTip: "Delete selected commander" @
 .buttonEditCommander.ToolTip: "Edit selected commander" @
 .buttonAddCommander.ToolTip: "Add a new commander" @
@@ -707,7 +741,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" @
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" @
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" @
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." @
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." @
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" @
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @
@@ -779,7 +813,7 @@ SECTION UserControlSpanel
 .toolStripMenuItemTargetLine: "Show Target Line" @
 .blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
 .expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
-.EDSMButtonToolStripMenuItem: "EDSM Button" @
+.EDSMButtonToolStripMenuItem: "Show EDSM Button" @
 .toolStripMenuItemTime: "Show Time" @
 .iconToolStripMenuItem: "Show Event Icon" @
 .showDescriptionToolStripMenuItem: "Show Description" @
@@ -788,25 +822,25 @@ SECTION UserControlSpanel
 .showXYZToolStripMenuItem: "Show XYZ" @
 .showTargetToolStripMenuItem: "Show Target Distance per Star" @
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" @
-.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" @
-.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" @
-.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" @
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
+.showCircumstellarZonesToolStripMenuItem: "Show Habitation Zone" @
+.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Show Metal Rich Planet Zone" @
+.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Show Water World Zone" @
+.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" @
+.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" @
+.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Show Icy Planets Zone" @
 .OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
 .OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance, XYZ, Notes" @
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do not show" @
 .surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
 .surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
 .surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
 .surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
+.showInPositionToolStripMenuItem.scanRightMenuItem: "Scan right" @
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "Scan left" @
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Scan above" @
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Scan below" @
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" @
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" @
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" @
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" @
@@ -857,19 +891,20 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .comboBoxTime.ToolTip: "Select the entries by age" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" @
-.FSD: "This system has materials for FSD boost: " @
+.FSD: "This system has materials for FSD boost" @
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
 .OB: "{0} Other bodies" @
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valuable bodies" @
 .scanorganics: "Show organic scans" @
+.showcodex: "Show codex entries" @
 
 SECTION UserControlStats
 
@@ -884,9 +919,9 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
 .tabControlCustomStats.tabPageGameStats: "In Game" @
 .tabControlCustomStats.tabPageByShip: "By Ship" @
-.TotalNoofjumps: "Total No of jumps: " @
-.FSDjumps: "FSD Jumps" @
-.JumpHistory: "Jump History" @
+.TotalNoofjumps: "Total No of jumps" @
+.FSDjumps: "FSD jumps" @
+.JumpHistory: "FSD Jump History" @
 .24hc: "24 Hours: " @
 .OneWeek: ", One Week: " @
 .30Days: ", 30 Days: " @
@@ -902,7 +937,7 @@ SECTION UserControlStats
 .Name: "Name" @
 .Ident: "Ident" @
 .Jumps: "Jumps" @
-.TravelledLy: "Traveled Ly" @
+.TravelledLy: "Travelled Ly" @
 .BodiesScanned: "Bodies Scanned" @
 .Destroyed: "Destroyed" @
 .PremiumBoost: "Premium Boost" @
@@ -913,7 +948,7 @@ SECTION UserControlStats
 .OrganicScans: "Organic Scans Value" @
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
-.Beltcluster: "Belt Cluster: " @
+.Beltcluster: "Belt Cluster" @
 .Lastdock: "Last dock" @
 .Trip: "Trip" @
 .All: "All" @
@@ -1058,10 +1093,6 @@ SECTION UserControlTravelGrid
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
 .TTSelAge: "Select the entries by age, " @
-.TTFilt2: "Filtered {0}" @
-.TTEvent: "Filter out entries based on event type, " @
-.TTFilt3: "Total filtered out {0}" @
-.TTTotal: "Filter out entries matching the field selection, " @
 .CSTART: "Clear Start marker" @
 .CSTOP: "Clear Stop marker" @
 .SETSTOPTC: "Set Stop marker for travel calculations" @
@@ -1105,13 +1136,14 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" @
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" @
 .comboBoxTime.ToolTip: "Select the entries by age" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
 .buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" @
+.SearchTerms: "system:body:station:stationfaction" @
 
 SECTION UserControlCaptainsLog
 
@@ -1137,8 +1169,8 @@ SECTION CaptainsLogEntries
 .ColBodyName: "Body" @
 .ColNote: "Note" @
 .ColTags: "Tags" @
-.labelEndDate: "End Date: " @
-.labelDateStart: "Start Date: " @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
 .buttonTags.ToolTip: "Edit Tags" @
 .buttonDelete.ToolTip: "Delete selected entries" @
 .buttonNew.ToolTip: "New Entry" @
@@ -1166,10 +1198,9 @@ SECTION UserControlTrilateration
 .viewOnEDSMToolStripMenuItem: "View on EDSM" @
 .pasteToolStripMenuItem: "Paste" @
 .toolStripButtonSubmitDistances: "&Submit Distances" @
-.toolStripButtonNew: "Start &new" @
-.toolStripLabelSystem: "From System: " @
-.toolStripTextBoxSystem: "Press Start New" @
-.toolStripLabel1: "Visited without coordinates: " @
+.toolStripButtonNew: "Start New" @
+.toolStripLabelSystem: "From System:" @
+.toolStripLabel1: "Visited without coordinates:" @
 .toolStripAddFromHistory: "Add 20 oldest" @
 .toolStripAddRecentHistory: "Add 20 newest" @
 .ToolStripText: "Press Start New" @
@@ -1254,6 +1285,7 @@ SECTION UserControlFactions
 .KillBondVictim: "Kill Bonds Victim" @
 .KillBondsAward: "Kill Bonds Awarded" @
 .KillBondsValue: "Kill Bonds Value" @
+.CartoValue: "Cartographic Value" @
 .colInfo: "Other Info" @
 .labelTo: "to" @
 .startDateTime.ToolTip: "Include from" @
@@ -1286,6 +1318,8 @@ SECTION UserControlOrganics
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
+.at: "At {0}" @
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}" @
 
 SECTION ScanDisplayForm
 

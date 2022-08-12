@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -23,15 +23,12 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlContainerSplitter: UserControlCommonBase        // circular, huh! neat!
     {
-        private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
-        private IHistoryCursor ucursor_inuse;  // one in use
+        public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(PanelInformation.PanelIDs.TravelGrid); } }
 
-        public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(); } }
-
-        public T GetUserControl<T>() where T:class
+        public T GetUserControl<T>(PanelInformation.PanelIDs p) where T:class
         {
             T v = default(T);
-            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c.GetType() == typeof(T), (c) => { v = c as T; }); // see if we can find a TG
+            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).panelid == p, (c) => { v = c as T; }); // see if we can find a TG
             return v;
         }
 
@@ -59,8 +56,9 @@ namespace EDDiscovery.UserControls
 
         public string dbWindows = "Windows";
 
-        const int FixedPanelOffset = 1000;        // panel IDs, 1000+ are fixed windows, 0-999 are embedded in tab strips
-        const int NoTabPanelSelected = -1;        // -1 is no tab selected
+        const int FixedPanelOffsetLow = 1000;        // panel IDs, 1000-1999 are fixed windows, 0-999 are embedded in tab strips
+        const int FixedPanelOffsetHigh = 1999;        
+        const int NoTabPanelSelected = -1;          // -1 is no tab selected
 
         private bool TabListSortAlpha;            // constant across run of splitter, even if user changes the alpha sort later
 
@@ -105,10 +103,12 @@ namespace EDDiscovery.UserControls
             {
                 int tagid = (int)c.Tag;
                 int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                System.Diagnostics.Trace.WriteLine("SP:Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
+                System.Diagnostics.Trace.WriteLine($"SP: Make {uccb.panelid} tag {tagid} dno {displaynumber}");
 
                 uccb.Init(discoveryform, displaynumber);
             });
+
+            discoveryform.OnPanelAdded += PanelAdded;
 
             // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
@@ -164,12 +164,14 @@ namespace EDDiscovery.UserControls
                     int tagid = (int)c.Tag;
                     if (ts != null)       // if tab strip..
                     {
-                        return tagid.ToStringInvariant() + "," + (ts.SelectedIndex >= 0 ? (int)pids[ts.SelectedIndex] : NoTabPanelSelected).ToStringInvariant();
+                        // pick out the uccb, if currentcontrol is null it will be null. Then using that pick out the panelid from it, which is the definitive one used to create it
+                        UserControlCommonBase uccb = ((c as ExtendedControls.TabStrip).CurrentControl) as UserControlCommonBase;
+                        return tagid.ToStringInvariant() + "," + (uccb != null ? (int)uccb.panelid : NoTabPanelSelected).ToStringInvariant();
                     }
                     else
                     {
-                        PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(c.GetType());       // must return, as it must be one of the UCCB types
-                        return tagid.ToStringInvariant() + "," + (FixedPanelOffset + ((int)pi.PopoutID)).ToStringInvariant();
+                        UserControlCommonBase uccb = c as UserControlCommonBase;
+                        return tagid.ToStringInvariant() + "," + (FixedPanelOffsetLow + ((int)uccb.panelid)).ToStringInvariant();
                     }
                 });
 
@@ -182,16 +184,33 @@ namespace EDDiscovery.UserControls
                 if (uccb != null)     // tab strip may not have a control set..
                 {
                     uccb.CloseDown();
-                    //System.Diagnostics.Debug.WriteLine("Closing " + c.Name + " " + c.GetType().Name + " " + uccb.Name);
+                    //System.Diagnostics.Trace.WriteLine($"Splitter Close {uccb.panelid} tag {tagid} dno {displaynumber}");
+                }
+            });
+
+            discoveryform.OnPanelAdded -= PanelAdded;
+        }
+
+        public void PanelAdded()
+        {
+            RunActionOnSplitterTree((sp, c, uccb) =>
+            {
+                ExtendedControls.TabStrip tabstrip = c as ExtendedControls.TabStrip;
+                if (tabstrip != null)       // reset the tab strip list. This will affect the order of SelectedIndex, but won't cause a change in panel type.
+                {
+                    tabstrip.ImageList = PanelInformation.GetUserSelectablePanelImages(TabListSortAlpha);
+                    tabstrip.TextList = PanelInformation.GetUserSelectablePanelDescriptions(TabListSortAlpha);
+                    tabstrip.TagList = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha).Cast<Object>().ToArray();
+                    tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha);
                 }
             });
         }
 
-        public override UserControlCommonBase Find(Type t)              // find UCCB of this type in
+        public override UserControlCommonBase Find(PanelInformation.PanelIDs p)              // find UCCB of this type in
         {
             UserControlCommonBase found = null;
 
-            RunActionOnSplitterTree( (sp,c,uccb)=> { var f = uccb.Find(t); if (found == null && f != null) found = f; });       // run this action on all UCCB in splitter
+            RunActionOnSplitterTree( (sp,c,uccb)=> { var f = uccb.Find(p); if (found == null && f != null) found = f; });       // run this action on all UCCB in splitter
             return found;
         }
 
@@ -214,9 +233,9 @@ namespace EDDiscovery.UserControls
             sp.IsCharMoveOn(',');
             int panelid = sp.NextInt(",") ?? NoTabPanelSelected;  // if not valid, we get an empty tab control
 
-            if (panelid >= FixedPanelOffset)           // this range of ids are UCCB directly in the splitter, so are not changeable
+            if (panelid >= FixedPanelOffsetLow && panelid <= FixedPanelOffsetHigh)           // this range of ids are UCCB directly in the splitter, so are not changeable
             {
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID((PanelInformation.PanelIDs)(panelid - FixedPanelOffset));
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID((PanelInformation.PanelIDs)(panelid - FixedPanelOffsetLow));
                 if (pi == null)
                     pi = PanelInformation.GetPanelInfoByPanelID(PanelInformation.PanelIDs.Log);      // make sure we have a valid one - can't return nothing
 
@@ -238,6 +257,7 @@ namespace EDDiscovery.UserControls
 
                 tabstrip.Dock = DockStyle.Fill;
                 tabstrip.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
+                tabstrip.DropDownFitImagesToItemHeight = true;
 
                 tabstrip.Tag = tagid;                         // Tag stores the ID index of this view
                 tabstrip.Name = Name + "." + tagid.ToStringInvariant();
@@ -264,7 +284,7 @@ namespace EDDiscovery.UserControls
                     var uccb = (c as UserControlCommonBase);
                     uccb.AutoScaleMode = AutoScaleMode.Inherit;
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
-                    tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb); };
+                    tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
 
                     System.Diagnostics.Trace.WriteLine("SP:Create Tab " + c.Name );
                     return c;
@@ -340,17 +360,15 @@ namespace EDDiscovery.UserControls
 
         private IHistoryCursor FindTHC()
         {
-            UserControlCommonBase v = null;
-            panelPlayfield.Controls[0].RunActionOnTree((c) => c.GetType() == typeof(UserControlTravelGrid), (c) => { v = c as UserControlCommonBase; }); // see if we can find a TG
+            IHistoryCursor ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.TravelGrid);
 
-            if (v == null)
-                panelPlayfield.Controls[0].RunActionOnTree((c) => c.GetType() == typeof(UserControlJournalGrid), (c) => { v = c as UserControlCommonBase; }); // see if we can find a TG
+            if (ihc == null)
+                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.Journal);
 
-            if (v == null)
-                panelPlayfield.Controls[0].RunActionOnTree((c) => c.GetType() == typeof(UserControlStarList), (c) => { v = c as UserControlCommonBase; }); // see if we can find a TG
+            if (ihc == null)
+                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.StarList);
 
-            IHistoryCursor uctgfound = (v != null) ? (v as IHistoryCursor) : null;    // if found, set to it
-            return uctgfound;
+            return ihc;
         }
 
         private void AssignTHC()
@@ -390,7 +408,7 @@ namespace EDDiscovery.UserControls
         {
             if (note)           // links a TG with a system info to allow note taking
             {
-                UserControlSysInfo s = GetUserControl<UserControlSysInfo>();
+                UserControlSysInfo s = GetUserControl<UserControlSysInfo>(PanelInformation.PanelIDs.SystemInformation);
                 if (s != null && s.IsNotesShowing)
                 {
                     s.FocusOnNote(asciikeycode);
@@ -575,5 +593,9 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion 
+
+        private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
+        private IHistoryCursor ucursor_inuse;  // one in use
+
     }
 }

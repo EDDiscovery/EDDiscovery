@@ -16,6 +16,7 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,110 +32,13 @@ namespace EDDiscovery.UserControls
 
     public partial class SearchScans : UserControlCommonBase
     {
-        class Queries
-        {
-            public static Queries Instance      // one instance across all profiles/panels so list is unified.
-            {
-                get
-                {
-                    if (instance == null)
-                        instance = new Queries();
-                    return instance;                }
-            }
-
-            public List<Tuple<string, string>> Searches = new List<Tuple<string, string>>()
-            {
-                new Tuple<string, string>("Body Name","BodyName contains <name>"),
-                new Tuple<string, string>("Scan Type","ScanType contains Detailed"),
-                new Tuple<string, string>("Distance (ls)","DistanceFromArrivalLS >= 20"),
-                new Tuple<string, string>("Rotation Period (s)","nRotationPeriod >= 30"),
-                new Tuple<string, string>("Rotation Period (days)","nRotationPeriodDays >= 1"),
-                new Tuple<string, string>("Surface Temperature (K)","nSurfaceTemperature >= 273"),
-                new Tuple<string, string>("Radius (m)","nRadius >= 100000"),
-                new Tuple<string, string>("Radius (sols)","nRadiusSols >= 1"),
-                new Tuple<string, string>("Radius (Earth)","nRadiusEarths >= 1"),
-                new Tuple<string, string>("Has Rings","HasRings == 1"),
-                new Tuple<string, string>("Semi Major Axis (m)","nSemiMajorAxis >= 20000000"),
-                new Tuple<string, string>("Semi Major Axis (AU)","nSemiMajorAxisAU >= 1"),
-                new Tuple<string, string>("Eccentricity ","nEccentricity >= 0.1"),
-                new Tuple<string, string>("Orbital Inclination (Deg)","nOrbitalInclination > 1"),
-                new Tuple<string, string>("Periapsis (Deg)","nPeriapsis > 1"),
-                new Tuple<string, string>("Orbital period (s)","nOrbitalPeriod > 200"),
-                new Tuple<string, string>("Orbital period (days)","nOrbitalPeriodDays > 200"),
-                new Tuple<string, string>("Axial Tilt (Deg)","nAxialTiltDeg > 1"),
-
-                new Tuple<string, string>("Star Type","StarType $== A"),
-                new Tuple<string, string>("Star Mass (Sols)","nStellarMass >= 1"),
-                new Tuple<string, string>("Star Magnitude","nAbsoluteMagnitude >= 1"),
-                new Tuple<string, string>("Star Age (MY)","nAge >= 2000"),
-                new Tuple<string, string>("Star Luminosity","Luminosity $== V"),
-
-                new Tuple<string, string>("Planet Mass (Earths)","nMassEM >= 1"),
-                new Tuple<string, string>("Planet Materials","MaterialList contains iron"),
-                new Tuple<string, string>("Planet Class","PlanetClass $== \"High metal content body\""),
-                new Tuple<string, string>("Tidal Lock","nTidalLock == 1"),
-                new Tuple<string, string>("Terraformable","TerraformState $== Terraformable"),
-                new Tuple<string, string>("Atmosphere","Atmosphere $== \"thin sulfur dioxide atmosphere\""),
-                new Tuple<string, string>("Atmosphere ID","AtmosphereID $== Carbon_dioxide"),
-                new Tuple<string, string>("Atmosphere Property","AtmosphereProperty $== Rich"),
-                new Tuple<string, string>("Volcanism","Volcanism $== \"minor metallic magma volcanism\""),
-                new Tuple<string, string>("Volcanism ID","VolcanismID $== Ammonia_Magma"),
-                new Tuple<string, string>("Surface Gravity m/s","nSurfaceGravity >= 9.6"),
-                new Tuple<string, string>("Surface Gravity G","nSurfaceGravityG >= 1.0"),
-                new Tuple<string, string>("Surface Gravity Landable G","nSurfaceGravityG >= 1.0 And IsLandable == 1"),
-                new Tuple<string, string>("Surface Pressure (Pa)","nSurfacePressure >= 101325"),
-                new Tuple<string, string>("Surface Pressure (Earth Atmos)","nSurfacePressureEarth >= 1"),
-                new Tuple<string, string>("Landable","IsLandable == 1"),
-            };
-
-            public int StandardSearches;
-
-            static private Queries instance = null;
-            private string DbUserQueries { get { return "UCSearchScansUserQuery"; } }  // not keyed to profile or to panel, global
-
-            private char splitmarker = (char)0x2b1c; // horrible but i can't be bothered to do a better implementation at this point
-
-            private Queries()
-            {
-                StandardSearches = Searches.Count();
-                string[] userqueries = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUserQueries, "").Split(new char[] { splitmarker }); // allowed use
-
-                for (int i = 0; i+1 < userqueries.Length; i += 2)
-                    Searches.Add(new Tuple<string, string>(userqueries[i], userqueries[i + 1]));
-            }
-
-            public void Save()
-            {
-                string userqueries = "";
-                for (int i = StandardSearches; i < Searches.Count(); i++)
-                {
-                    userqueries += Searches[i].Item1 + splitmarker + Searches[i].Item2 + splitmarker;
-                }
-
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbUserQueries, userqueries); // allowed use
-            }
-
-            public void Update(string name, string expr)
-            {
-                var entry = Searches.FindIndex(x => x.Item1.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-                if (entry != -1)
-                    Searches[entry] = new Tuple<string, string>(name, expr);
-                else
-                    Searches.Add(new Tuple<string, string>(name, expr));
-            }
-
-            public void Delete(string name)
-            {
-                var entry = Searches.FindIndex(x => x.Item1.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-                if (entry != -1)
-                    Searches.RemoveAt(entry);
-            }
-
-        };
-
         private string dbQuerySave = "Query";
-        private string dbSplitterSave = "Splitter";
+        private string dbQuerySortCondition = "QuerySortCondition";
+        private string dbQuerySortAscending = "QuerySortAscending";
+        private string dbSplitterSave = "ScanSplitter";
+        private string dbWordWrap = "ScanWordWrap";
 
+        private string lastresultlog = null;
 
         #region Init
 
@@ -153,34 +57,66 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, EDTx.SearchScans_ColumnPosition, EDTx.SearchScans_buttonFind, EDTx.SearchScans_buttonSave, EDTx.SearchScans_buttonDelete };
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
+
+            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
+                EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar,
+                EDTx.SearchScans_scanSortControl_labelSort};
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan), bf: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly, excludearrayslist:true);
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeUTC", "Date Time in UTC", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, 
+                                EDTx.SearchScans_extButtonExport_ToolTip, EDTx.SearchScans_extButtonImport_ToolTip, EDTx.SearchScans_extCheckBoxWordWrap_ToolTip, 
+                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extCheckBoxDebug_ToolTip, EDTx.SearchScans_extButtonNew_ToolTip};
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            // from FSSBodySignals or SAASignalsFound
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsGeoSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsBioSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsThargoidSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsGuardianSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsHumanSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsOtherSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
-            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("ContainsUncategorisedSignals", "Bodies with these signals, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
+            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = HistoryListQueries.PropertyList();
+
+            conditionFilterUC.AutoCompleteOnMatch = true;
+            conditionFilterUC.VariableNames = classnames;
+
+            // output for wiki
+            // string t = "";  foreach (var pni in classnames) t += $"{pni.Name} | {pni.Help.Replace(Environment.NewLine, ", ")} | {pni.Comment} {Environment.NewLine}"; System.IO.File.WriteAllText(@"c:\code\props.txt", t);
+
+            splitContainer.SplitterDistance(GetSetting(dbSplitterSave, 0.2));
 
             string query = GetSetting(dbQuerySave, "");
-
-            conditionFilterUC.VariableNames = classnames;
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
+            scanSortControl.Set(GetSetting(dbQuerySortCondition, ""), GetSetting(dbQuerySortAscending, false));
+            scanSortControl.AutoCompletes = new List<string>() 
+            {
+                "Compare(left.nMassKG,right.nMassKG)",
+                "Compare(left.nEccentricity,right.nEccentricity)",
+                "Compare(left.nOrbitalPeriod,right.nOrbitalPeriod)",
+                "Compare(left.DistanceFromArrivallm,right.DistanceFromArrivallm)",
+                "Compare(left.nRadius,right.nRadius)" ,
+                "Compare(left.nRotationPeriod,right.nRotationPeriod)",
+                "Compare(left.nSemiMajorAxis,right.nSemiMajorAxis)",
+                "Compare(left.nAxialTilt,right.nAxialTilt)",
+
+                "Compare(left.nSurfaceGravityG,right.nSurfaceGravityG)", 
+                "Compare(left.nSurfaceTemperature,right.nSurfaceTemperature)",
+                "Compare(left.nSurfacePressure,right.nSurfacePressure)",
+
+                "Compare(left.nStellarMass,right.nStellarMass)",
+                "Compare(left.nAbsoluteMagnitude,right.nAbsoluteMagnitude)",
+                "Compare(left.nAge,right.nAge)",
+            };
+
+            scanSortControl.SortDirectionClicked += (chk) => { if (scanSortControl.Condition.HasChars()) SortGridBySortCriteria(); };
 
             dataGridView.Init(discoveryform);
+            dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
+            dataGridView.Columns[5].Tag = "TextPopOut";  // these two double click are text popouts
 
-            comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
+            dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
+
+            UpdateComboBoxSearches();
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
+            labelCount.Visible = false;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -190,8 +126,15 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView);
-            splitContainer.SplitterDistance(GetSetting(dbSplitterSave, 0.2));
+            bool loaded = DGVLoadColumnLayout(dataGridView);
+            
+            if (!loaded)        // in this panel, we hide some when we have no stored setting to simplify the default view
+            {
+                ColumnParentParent.Visible = false;
+                ColumnStar.Visible = false;
+                ColumnStarStar.Visible = false;
+            }
+
         }
 
         public override void Closing()
@@ -199,27 +142,39 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridView);
             conditionFilterUC.Check();      // checks, ignore string return errors, fills in Result
             PutSetting(dbQuerySave, conditionFilterUC.Result.ToString());
-            Queries.Instance.Save();
+            PutSetting(dbQuerySortCondition, scanSortControl.Condition);
+            PutSetting(dbQuerySortAscending, scanSortControl.Ascending);
             PutSetting(dbSplitterSave, splitContainer.GetSplitterDistance());
         }
 
         #endregion
 
-        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate();
-            else if (e.Column.Index == 3)
-                e.SortDataGridViewColumnNumeric();
-        }
+        #region UI
 
         private void ComboBoxSearches_SelectedIndexChanged(object sender, EventArgs e)
         {
             conditionFilterUC.Clear();
-            conditionFilterUC.LoadConditions(new BaseUtils.ConditionLists(Queries.Instance.Searches[comboBoxSearches.SelectedIndex].Item2));
+            var entry = HistoryListQueries.Instance.Searches[comboBoxSearches.SelectedIndex];
+            conditionFilterUC.LoadConditions(new BaseUtils.ConditionLists(entry.Condition));
+            scanSortControl.Set(entry.SortCondition, entry.SortAscending);
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void UpdateComboBoxSearches()
+        {
+            comboBoxSearches.Items.Clear();
+            comboBoxSearches.Items.AddRange(HistoryListQueries.Instance.Searches.Select(x => x.Name));
+        }
+
+        private void extButtonNew_Click(object sender, EventArgs e)
+        {
+            UpdateComboBoxSearches();
+            conditionFilterUC.Clear();
+            comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
+            comboBoxSearches.SelectedIndex = -1;
+            comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
+        }
+
+        private void extButtonSave_Click(object sender, EventArgs e)
         {
             BaseUtils.ConditionLists cond = Valid();
             if (cond != null)
@@ -227,125 +182,15 @@ namespace EDDiscovery.UserControls
                 string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".T(EDTx.SearchScans_Name), "", "Enter Search Name:".T(EDTx.SearchScans_SN), this.FindForm().Icon);
                 if (name != null)
                 {
-                    Queries.Instance.Update(name,cond.ToString());
-                    comboBoxSearches.Items.Clear();
-                    comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
+                    HistoryListQueries.Instance.Set(name, cond.ToString(), HistoryListQueries.QueryType.User);
+                    HistoryListQueries.Instance.SaveUserQueries();
+                    UpdateComboBoxSearches();
                     comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
                     comboBoxSearches.SelectedItem = name;
                     comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
                 }
             }
         }
-
-        private void buttonDelete_Click(object sender, EventArgs e)
-        {
-            string name = comboBoxSearches.Text;
-            if (comboBoxSearches.SelectedIndex >= Queries.Instance.StandardSearches && name.HasChars())
-            {
-                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".T(EDTx.SearchScans_DEL) + " " + name, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-                {
-                    Queries.Instance.Delete(name);
-                    comboBoxSearches.Items.Clear();
-                    comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
-                }
-            }
-            else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-        }
-
-
-        private async void buttonFind_Click(object sender, EventArgs e)
-        {
-            BaseUtils.ConditionLists cond = Valid();
-            if (cond != null)
-            {
-                this.Cursor = Cursors.WaitCursor;
-                dataGridView.Rows.Clear();
-
-                DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
-                SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
-
-                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
-
-                var varusedincondition = cond.VariablesUsed();      // what variables are in use, so we don't enumerate the lots.
-
-                var helist = discoveryform.history.FilterByScanFSSBodySAASignals();
-
-                var sw = new System.Diagnostics.Stopwatch(); sw.Start();
-
-                var results = await Find(helist, cond, varusedincondition, cursystem);
-
-                foreach( var r in results)
-                {
-                    dataGridView.Rows.Add(r.Item2);
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = r.Item1;
-                }
-
-                System.Diagnostics.Debug.Write($"Search took {sw.ElapsedMilliseconds}");
-                dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                this.Cursor = Cursors.Default;
-            }
-
-        }
-
-        // Async task to find results given cond in helist, using only vars specified.
-
-        private System.Threading.Tasks.Task<List<Tuple<ISystem,object[]>>> Find(List<HistoryEntry> helist, BaseUtils.ConditionLists cond, HashSet<string> varsusedincondition, ISystem cursystem)
-        {
-            return System.Threading.Tasks.Task.Run(() =>
-            {
-                List<Tuple<ISystem,object[]>> rows = new List<Tuple<ISystem,object[]>>();
-                foreach (var he in helist)
-                {
-                    BaseUtils.Variables scandata = new BaseUtils.Variables();
-                    scandata.AddPropertiesFieldsOfClass(he.journalEntry, "",
-                            new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5,
-                            varsusedincondition);
-
-                    bool? res = cond.CheckAll(scandata, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclass);  // need function handler..
-
-                    if (res.HasValue && res.Value == true)
-                    {
-                        ISystem sys = he.System;
-                        string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-
-                        JournalScan js = he.journalEntry as JournalScan;
-                        JournalFSSBodySignals jb = he.journalEntry as JournalFSSBodySignals;
-                        JournalSAASignalsFound jbs = he.journalEntry as JournalSAASignalsFound;
-
-                        string name, info;
-                        if ( js != null )
-                        {
-                            name = js.BodyName;
-                            info = js.DisplayString(0);
-                        }
-                        else if ( jb != null )
-                        {
-                            name = jb.BodyName;
-                            jb.FillInformation(he.System, "", out info, out string d);
-                        }
-                        else
-                        {
-                            name = jbs.BodyName;
-                            jbs.FillInformation(he.System, "", out info, out string d);
-                        }
-
-                        object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
-                                            name,
-                                            info,
-                                            (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                            sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
-                                            };
-                        rows.Add(new Tuple<ISystem, object[]>(sys, rowobj));
-                    }
-                }
-
-                return rows;
-            });
-        }
-
         private BaseUtils.ConditionLists Valid()
         {
             string errs = conditionFilterUC.Check();
@@ -358,9 +203,360 @@ namespace EDDiscovery.UserControls
                 return conditionFilterUC.Result;
         }
 
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            string name = comboBoxSearches.Text;
+            if (comboBoxSearches.SelectedIndex>= 0 && HistoryListQueries.Instance.Searches[comboBoxSearches.SelectedIndex].User && name.HasChars())
+            {
+                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".T(EDTx.SearchScans_DEL) + " " + name, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    HistoryListQueries.Instance.Delete(name);
+                    HistoryListQueries.Instance.SaveUserQueries();
+                    UpdateComboBoxSearches();
+                    comboBoxSearches.SelectedIndexChanged -= ComboBoxSearches_SelectedIndexChanged;
+                    comboBoxSearches.SelectedIndex = -1;
+                    comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
+                }
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private async void buttonFind_Click(object sender, EventArgs e)
+        {
+            BaseUtils.ConditionLists cond = Valid();
+            if (cond != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                dataGridView.Rows.Clear();
+                labelCount.Text = "...";
+
+                DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
+                SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
+
+                discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
+
+                // what variables are in use, so we don't enumerate the lot.
+                var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
+
+                // see if we need any default vars, at the moment, they all start with one
+                var defaultvars = new BaseUtils.Variables();
+
+                // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
+                if (allvars.StartsWithInList("one") >= 0)
+                    defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10,ensuredoublerep:true);
+                else
+                    defaultvars = null;
+    
+                //System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
+
+                Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
+
+                var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars);
+                var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), computedsearch);
+                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {discoveryform.history.EntryOrder().Count}");
+
+                var sw = new System.Diagnostics.Stopwatch(); sw.Start();
+
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, discoveryform.history.StarScan, extCheckBoxDebug.Checked);
+
+                if (IsClosed)       // may be closing during async process
+                    return;
+
+                System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count} results {results.Count}");
+
+                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+
+                if (scanSortControl.Condition.HasChars())       // before we present, and we have a sort condition, update the sort vars
+                {
+                }
+
+                int max = 10000;
+
+                foreach ( var kvp in results.Take(max).EmptyIfNull())
+                {
+                    string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
+
+                    HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip, 
+                                                            ColumnParent.Visible, out string pinfo,
+                                                            ColumnParentParent.Visible, out string ppinfo, 
+                                                            ColumnStar.Visible, out string sinfo, 
+                                                            ColumnStarStar.Visible, out string ssinfo);
+
+                    HistoryEntry he = kvp.Value.EntryList.Last();
+                    ISystem sys = he.System;
+
+                    object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
+                                            name,
+                                            he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
+                                            (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
+                                            info,  
+                                            pinfo,
+                                            ppinfo,
+                                            sinfo,
+                                            ssinfo,
+                                            };
+
+                    int row = dataGridView.Rows.Add(rowobj);
+                    dataGridView.Rows[row].Tag = he.System;
+                    dataGridView.Rows[row].Cells[0].Tag = kvp.Value;
+                    dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
+                }
+
+                if ( results.Count > max )
+                {
+                    object[] rowobj = { "","", "","",string.Format("Too many results to display, truncating to the first {0}".TxID(EDTx.SearchScans_TooMany), max) };
+                    dataGridView.Rows.Add(rowobj);
+                }
+
+                System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {results.Count}");
+
+                if (scanSortControl.Condition.HasChars())       // custom sort, apply
+                {
+                    SortGridBySortCriteria();
+                }
+                else
+                {
+                    dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                    dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                }
+
+                this.Cursor = Cursors.Default;
+
+                labelCount.Text = "Total".TxID(EDTx.UserControlMaterialCommodities_Total) + " " + results.Count + " / " + helist.Count.ToString();
+                labelCount.Visible = true;
+            }
+
+        }
+
+        private void extCheckBoxDebug_CheckedChanged(object sender, EventArgs e)
+        {
+            if (extCheckBoxDebug.Enabled == true)
+            {
+                if (extCheckBoxDebug.Checked == false)  // if turning it off, we don't allow that..
+                {
+                    extCheckBoxDebug.Enabled = false;
+                    extCheckBoxDebug.Checked = true;        // turn it back on, causes recursion, so use enable to say don't
+                    extCheckBoxDebug.Enabled = true;
+
+                    if (lastresultlog.HasChars())
+                    {
+                        if (lastresultlog.Length < 2000000)
+                        {
+                            this.Cursor = Cursors.WaitCursor;
+                            ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
+                            ifrm.Info("Log", discoveryform.Icon, lastresultlog);
+                            ifrm.Show(this);
+                            this.Cursor = Cursors.Default;
+                        }
+                        else
+                        {
+                            SaveFileDialog dlg = new SaveFileDialog();
+
+                            dlg.Filter = "Log| *.log";
+                            dlg.Title = "Export";
+
+                            if (dlg.ShowDialog(this) == DialogResult.OK)
+                            {
+                                System.IO.File.WriteAllText(dlg.FileName, lastresultlog);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridView.SetWordWrap(extCheckBoxWordWrap.Checked);
+            dataViewScrollerPanel.UpdateScroll();
+        }
+
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            dataGridView.Excel(4);
+            dataGridView.Excel(dataGridView.ColumnCount);
         }
+
+        private void extButtonExport_Click(object sender, EventArgs e)
+        {
+            var ja = HistoryListQueries.Instance.QueriesInJSON(HistoryListQueries.QueryType.User);
+            if (ja != null && ja.Count > 0)
+            {
+                JObject hdr = new JObject() { ["Searches-Version"] = "1.0" , ["Searches"] = ja};        // note the file format..
+
+                SaveFileDialog dlg = new SaveFileDialog();
+
+                dlg.Filter = "Query| *.edduserq";
+                dlg.Title = "Export user searches".T(EDTx.SearchScans_Export);
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    string path = dlg.FileName;
+                    if (!BaseUtils.FileHelpers.TryWriteToFile(path, hdr.ToString(true)))
+                    {
+                        CSVHelpers.WriteFailed(this.FindForm(), path);
+                    }
+                }
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No searches to export", "Searches", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+        }
+
+        private void extButtonImport_Click(object sender, EventArgs e)
+        {
+
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Query| *.edduserq";
+            dlg.Title = "Import user searches".T(EDTx.SearchScans_Import);
+
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                string path = dlg.FileName;
+                string text = BaseUtils.FileHelpers.TryReadAllTextFromFile(path);
+
+                if ( text != null)
+                {
+                    JObject jo = JObject.Parse(text, JToken.ParseOptions.CheckEOL);
+                    if ( jo != null && jo.Contains("Searches-Version") && jo.Contains("Searches"))
+                    {
+                        JArray ja = jo["Searches"].Array();
+
+                        if (ja != null && HistoryListQueries.Instance.ReadJSONQueries(ja, HistoryListQueries.QueryType.User))
+                        {
+                            UpdateComboBoxSearches();
+                            HistoryListQueries.Instance.SaveUserQueries();
+                            return;     // all okay
+                        }
+                            
+                    }
+                }
+
+                CSVHelpers.FailedToOpen(this.FindForm(), path); // both fail to this
+            }
+        }
+
+
+        #endregion
+
+        #region Data Grid View/Sort
+
+        public class RowComparer : System.Collections.IComparer
+        {
+            public string InError { get; private set; }
+
+            private bool ascending;
+            private string condition;
+            private BaseUtils.EvalVariables sorteval = new BaseUtils.EvalVariables();
+
+            public RowComparer(string c, bool ad)
+            {
+                condition = c;
+                ascending = ad;
+                InError = null;
+
+                var vars = BaseUtils.Eval.VarsInUse((evl) => { evl.Evaluate(condition); });
+                sorteval.VarsInUse = new HashSet<string>[2];
+                sorteval.VarsInUse[0] = vars.Where(x => x.StartsWith("left.")).Select(x => x.Substring(5)).ToHashSet();
+                sorteval.VarsInUse[1] = vars.Where(x => x.StartsWith("right.")).Select(x => x.Substring(6)).ToHashSet();
+            }
+
+            public int Compare(object lo, object ro)
+            {
+                DataGridViewRow leftrow = (DataGridViewRow)lo;
+                DataGridViewRow rightrow = (DataGridViewRow)ro;
+
+                HistoryListQueries.Results left = leftrow.Cells[0].Tag as HistoryListQueries.Results;
+                HistoryListQueries.Results right = rightrow.Cells[0].Tag as HistoryListQueries.Results;
+
+                HistoryEntry lefthe = left?.EntryList.Where(x => x.EntryType == JournalTypeEnum.Scan).FirstOrDefault();
+                HistoryEntry righthe = right?.EntryList.Where(x => x.EntryType == JournalTypeEnum.Scan).FirstOrDefault();
+
+                // if we have left, and right, we can compare
+                if (lefthe != null)
+                {
+                    if (righthe != null)
+                    {
+                        JournalScan leftscan = lefthe.journalEntry as JournalScan;
+                        JournalScan rightscan = righthe.journalEntry as JournalScan;
+                        Type[] ignoretypes = new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) };
+
+                        // sorteval already has varsinuse computed, extract variables from scans
+
+                        sorteval.Values = new BaseUtils.Variables();
+                        sorteval.Values.AddPropertiesFieldsOfClass(leftscan, "left.", ignoretypes, 5, sorteval.VarsInUse[0], ensuredoublerep: true, classsepar: ".");
+                        sorteval.Values.AddPropertiesFieldsOfClass(rightscan, "right.", ignoretypes, 5, sorteval.VarsInUse[1], ensuredoublerep: true, classsepar: ".");
+                        sorteval.Values["left.Child.Count"] = ((lefthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
+                        sorteval.Values["right.Child.Count"] = ((righthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
+
+                        object res = sorteval.Evaluate(condition);  // eval
+
+                        if (res is long)       // long, we have a result, convert and store
+                        {
+                            int ires = (int)(long)res;
+                            return ascending ? ires : -ires;
+                        }
+                        else
+                        {
+                            var err = res as BaseUtils.StringParser.ConvertError;       // if we have an error, record it
+                            if (err != null)
+                                InError = err.ErrorValue;
+                        }
+                    }
+                    else
+                    {
+                        return ascending ? -1 : 1;
+                    }
+                }
+                else if (righthe != null) // right has scan, so its greater
+                {
+                    return ascending ? 1 : -1;
+                }
+
+                return 0;
+            }
+        }
+
+        private void SortGridBySortCriteria()
+        {
+            var rc = new RowComparer(scanSortControl.Condition, scanSortControl.Ascending);
+            dataGridView.Sort(rc);
+            if ( rc.InError != null )
+            {
+                ExtendedControls.MessageBoxTheme.Show(FindForm(),rc.InError, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void ChangeColumnVisibility(int c)
+        {
+            if (c >= ColumnParent.Index)    // parent onwards is optional
+            {
+                DataGridViewColumn col = dataGridView.Columns[c];
+                if (col.Visible == true)    // if gone visible, then we need to clear the grid and make the user refind
+                {
+                    labelCount.Visible = false;
+                    dataGridView.Rows.Clear();
+                }
+            }
+        }
+
+        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 1)
+                e.SortDataGridViewColumnAlphaInt();
+            else if (e.Column.Index == 3)
+                e.SortDataGridViewColumnNumeric();
+        }
+
+        #endregion
+
     }
 }

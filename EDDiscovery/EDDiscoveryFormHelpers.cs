@@ -210,7 +210,7 @@ namespace EDDiscovery
 
             UserControls.UserControlCommonBase uccb = null;
 
-            var tabfind3dmap = tabControlMain.Find(t3dmap);
+            var tabfind3dmap = tabControlMain.Find(PanelInformation.PanelIDs.Map3D);
 
             if ( tabfind3dmap != null )
             {
@@ -219,7 +219,7 @@ namespace EDDiscovery
             }
             else
             { 
-                var findpopoutform = PopOuts.FindUCCB(t3dmap);
+                var findpopoutform = PopOuts.Find(PanelInformation.PanelIDs.Map3D);
                 if (findpopoutform != null)
                     uccb = findpopoutform.UserControl;
             }
@@ -382,6 +382,30 @@ namespace EDDiscovery
             return he != null;
         }
 
+        public Tuple<string, string, string, string> DLLStart(ref string alloweddlls)
+        {
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load DLL");
+
+            string verstring = EDDApplicationContext.AppVersion;
+            string[] options = new string[] { EDDDLLInterfaces.EDDDLLIF.FLAG_HOSTNAME + "EDDiscovery",
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_JOURNALVERSION + EliteDangerousCore.DLL.EDDDLLCallerHE.JournalVersion.ToString(), 
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLBACKVERSION + DLLCallBacks.ver.ToString(),
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLVERSION + EDDDLLInterfaces.EDDDLLIF.CallBackVersion,
+                                            };
+
+            string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
+            bool[] autodisallow = new bool[] { false, true };
+            return DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls,
+                                                             (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
+        }
+
+        // add a panel. Use null for underlyingtype to indicate ext panel. Use tag if required for panel
+        public void AddPanel(int id, Type underlyingtype, Object tag, string wintitle, string refname, string description, Image image)
+        {
+            PanelInformation.AddPanel(id, underlyingtype, tag, wintitle, refname, description, image);
+            UpdatePanelListInContextMenuStrip();
+            OnPanelAdded?.Invoke();
+        }
 
         #endregion
 
@@ -395,6 +419,8 @@ namespace EDDiscovery
 
             // note in no border mode, this is not visible on the title bar but it is in the taskbar..
             this.Text = "EDDiscovery" + (EDDOptions.Instance.DisableVersionDisplay ? "" : " " + label_version.Text);
+
+            OnThemeChanging?.Invoke();
 
             ExtendedControls.Theme.Current.ApplyStd(this);
 

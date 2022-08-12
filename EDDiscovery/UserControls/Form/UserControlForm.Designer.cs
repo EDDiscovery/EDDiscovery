@@ -233,6 +233,7 @@ namespace EDDiscovery.UserControls
             this.label_index.Size = new System.Drawing.Size(43, 13);
             this.label_index.TabIndex = 23;
             this.label_index.Text = "<code>";
+            this.label_index.UseMnemonic = false;
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // labelControlText
@@ -243,6 +244,7 @@ namespace EDDiscovery.UserControls
             this.labelControlText.Size = new System.Drawing.Size(43, 13);
             this.labelControlText.TabIndex = 23;
             this.labelControlText.Text = "<code>";
+            this.labelControlText.UseMnemonic = false;
             this.labelControlText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelControlText_MouseDown);
             // 
             // extButtonDrawnHelp

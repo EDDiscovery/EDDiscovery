@@ -144,8 +144,8 @@
       <DependentUpon>Controls.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </None>
-    <Reference Include="GLOFC, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.1.0.1\lib\net48\GLOFC.dll</HintPath>
+    <Reference Include="GLOFC, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.GLOFC.1.0.2\lib\net48\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
@@ -273,6 +273,12 @@
     <Compile Include="UserControls\History\UserControlTravelGrid2.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ExtPanel\UserControlExtPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ExtPanel\UserControlExtPanel.Designer.cs">
+      <DependentUpon>UserControlExtPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Overlays\UserControlMiningOverlay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -290,6 +296,18 @@
     </Compile>
     <Compile Include="UserControls\Overlays\UserControlOrganics.Designer.cs">
       <DependentUpon>UserControlOrganics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlDiscoveries.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlDiscoveries.Designer.cs">
+      <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Search\ScanSortControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Search\ScanSortControl.Designer.cs">
+      <DependentUpon>ScanSortControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Webbrowser\BrowserBase.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserWebView2.cs" />
@@ -807,6 +825,9 @@
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineers.resx">
       <DependentUpon>UserControlEngineers.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ExtPanel\UserControlExtPanel.resx">
+      <DependentUpon>UserControlExtPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Form\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -914,6 +935,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\3DMap\UserControl3DMap.resx">
       <DependentUpon>UserControl3DMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlDiscoveries.resx">
+      <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\ScanSortControl.resx">
+      <DependentUpon>ScanSortControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Webbrowser\UserControlWebBrowser.resx">
       <DependentUpon>UserControlWebBrowser.cs</DependentUpon>

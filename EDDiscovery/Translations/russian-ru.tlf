@@ -8,7 +8,6 @@ Cancel: "Cancel" => "Отмена"
 Delete: "Delete" => "Удалить"
 Campaign: "Campaign" => "Кампания"
 NoScan: "No Scan" => "Нет сканов"
-Travel: "Travel" => "Полет"
 GameTime: "Game Time" => "Время в игре"
 Time: "Time" => "Время"
 NoData: "No Data" => "Нет данных"
@@ -48,14 +47,14 @@ SECTION InfoForm
 
 SECTION PopOutInfo
 
-.Log.Description: "Program log" => "Логи программы"
+.Log.Description: "Log of program information" => "Логи программы"
 .Log.Title: "Log" => "Логи"
 .Journal.Description: "Journal grid view" => "Журнал (таблицей)"
 .Journal.Title: "Journal" => "Журнал"
 .TravelGrid.Description: "History grid view" => "История (таблицей)"
-.TravelGrid.Title: "Travel History" => "История полетов"
-.StarList.Description: "Visited star list" => "Список посещенных систем"
-.StarList.Title: "Star List" => "Список систем"
+.TravelGrid.Title: "History" => "История полетов"
+.StarList.Description: "Visited Star list" => "Список посещенных систем"
+.StarList.Title: "Visited Stars" => "Список систем"
 .Materials.Description: "Materials count" => "Список материалов"
 .Materials.Title: "Materials" => "Материалы"
 .Commodities.Description: "Commodity count" => "Список товаров"
@@ -70,9 +69,9 @@ SECTION PopOutInfo
 .Statistics.Title: "Statistics" => "Статистика"
 .MarketData.Description: "Market data view, giving commodity price information where available" => "Рыночные данные, включая цены на товары (если есть)"
 .MarketData.Title: "Market Data" => "Рынок"
-.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "Информация о посещенных космоверфях"
+.ShipYardPanel.Description: "Ship yards information from places you have visited" => "Информация о посещенных космоверфях"
 .ShipYardPanel.Title: "Ship Yards" => "Космоверфи"
-.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "Информация о снаряжении на посещенных космоверфях"
+.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" => "Информация о снаряжении на посещенных космоверфях"
 .OutfittingPanel.Title: "Outfitting" => "Снаряжение"
 .Synthesis.Description: "Synthesis planner" => "Планировщик синтеза"
 .Synthesis.Title: "Synthesis" => "Синтез"
@@ -84,9 +83,9 @@ SECTION PopOutInfo
 .Scan.Title: "Scan" => "Сканы"
 .ScanGrid.Description: "Scan data on system in a grid" => "Имеющиеся данные сканирования систем (таблицей)"
 .ScanGrid.Title: "Scan Grid" => "Сканы (таблицей)"
-.StarDistance.Description: "List of nearest stars" => "Список ближайших систем"
+.StarDistance.Description: "Nearest stars from current position" => "Список ближайших систем"
 .StarDistance.Title: "Nearest Stars" => "Ближайшие системы"
-.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Примерная стоимость данных сканирования систем"
+.EstimatedValues.Description: "Estimated Scan values of bodies in system" => "Примерная стоимость данных сканирования систем"
 .EstimatedValues.Title: "Estimated Values" => "Стоимость сканов"
 .Map2D.Title: "2D Map" @
 .Map2D.Description: "2D Map of galaxy" @
@@ -98,9 +97,9 @@ SECTION PopOutInfo
 .Plot.Title: "2D Plot" => "2D-карта"
 .Trilateration.Description: "Trilateration of stars with unknown positions" => "Трилатерация систем с неизвестным положением"
 .Trilateration.Title: "Trilateration" => "Трилатерация "
-.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Редактирование закладок для систем и планет"
+.BookmarkManager.Description: "Bookmarks on systems and planets" => "Редактирование закладок для систем и планет"
 .BookmarkManager.Title: "Bookmarks" => "Закладки"
-.CombatPanel.Description: "Display combat statistics" => "Боевая статистика"
+.CombatPanel.Description: "Combat statistics" => "Боевая статистика"
 .CombatPanel.Title: "Combat" => "Бой"
 .Route.Description: "Route Finder from stored star data" => "Поиск маршрута с использованием сохраненных данных"
 .Route.Title: "Route Finder" => "Поиск маршрута"
@@ -112,11 +111,11 @@ SECTION PopOutInfo
 .Spanel.Title: "Summary Panel" => "Сводка"
 .Trippanel.Description: "Trip computer overlay" => "Бортовой компьютер (оверлей)"
 .Trippanel.Title: "Trip Computer" => "Бортовой комп"
-.NotePanel.Description: "System notes overlay" => "Примечания к системам (оверлей)"
+.NotePanel.Description: "Notes overlay" => "Примечания к системам (оверлей)"
 .NotePanel.Title: "Notes" => "Примечания"
 .RouteTracker.Description: "Route tracker overlay" => "Маршрут (оверлей)"
 .RouteTracker.Title: "Route Tracker" => "Маршрут"
-.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Компас (оверлей), показывающий направление к координатам на планете"
+.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Компас (оверлей), показывающий направление к координатам на планете"
 .Compass.Title: "Compass" => "Компас"
 .Settings.Description: "Settings for ED Discovery " => "Настройки ED Discovery "
 .Settings.Title: "Settings" => "Настройки"
@@ -133,13 +132,13 @@ SECTION PopOutInfo
 .CaptainsLog.Title: "Captain's Log" => "Журнал капитана"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Заметки о путешествиях"
 .Surveyor.Title: "Surveyor" => "Топограф"
-.Surveyor.Description: "Surface map aid" => "Помощь по картам поверхности"
+.Surveyor.Description: "Surveyor - Exploration and route overlay" => "Помощь по картам поверхности"
 .MissionOverlay.Title: "Mission Overlay" => "Миссии (оверлей)"
 .MissionOverlay.Description: "Mission List overlay" => "Список миссий (оверлей)"
 .MaterialTrader.Title: "Material Trader" @
-.MaterialTrader.Description: "Material Trader" @
+.MaterialTrader.Description: "Material trader" @
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" @
+.EDSM.Description: "EDSM - Automatic web view of system" @
 .Inara.Title: "Inara" @
 .Inara.Description: "Inara - Automatic web view of system" @
 .Factions.Title: "Factions" @
@@ -157,7 +156,11 @@ SECTION PopOutInfo
 .LocalMap3D.Title: "Local 3D Map" @
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
 .Organics.Title: "Organic Scans" @
-.Organics.Description: "Current body organic information and history of scans" @
+.Organics.Description: "Organic scans of current body and historic scans" @
+.Engineers.Title: "Engineers" @
+.Engineers.Description: "List of Engineers, status, recipes" @
+.Discoveries.Title: "Discoveries" @
+.Discoveries.Description: "Discoveries Observer List" @
 
 SECTION EDDiscoveryForm
 
@@ -172,7 +175,7 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "Инструменты"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Настройки"
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "3D-карта"
+.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" => "3D-карта"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "Отдельные окна"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "Показать все в панели задач"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "Отключить прозрачность"
@@ -204,6 +207,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "Страница проекта (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "Сообщить о проблеме / идее"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "Проверить обновления"
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Правая кнопка мыши — добавить/удалить вкладку, перетаскивание с зажатой левой кнопкой — сортировка"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Выберите новый профиль или измените настройки профиля"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Выбрать командира для просмотра"
@@ -365,7 +369,10 @@ SECTION AddOnManagerForm
 
 SECTION ExportForm
 
-ExportForm: "Export Data" => "Экспорт"
+ExportForm: "Export data" => "Экспорт"
+.buttonExport: "Export" => "Экспорт"
+.ImportTitle: "Import data" @
+.ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "Разделитель CSV"
 .radioButtonComma: "Comma" => "Запятая"
 .radioButtonSemiColon: "Semicolon" => "Точка с запятой"
@@ -373,11 +380,6 @@ ExportForm: "Export Data" => "Экспорт"
 .checkBoxCustomAutoOpen: "Open" => "Открыть в Excel"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.buttonExport: "Export" => "Экспорт"
-.ECH: "Export current data {0}" => "Экспорт текущей выкладки «История» в {0}"
-.ImportTitle: "Import Data" @
-.ImportButton: "Import" @
-.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 
@@ -410,7 +412,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Выбор секторов Га�
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" => "Передать командиру"
+MoveToCommander: "Move To Commander" => "Передать командиру"
 .buttonTransfer: "Transfer" => "Переместить"
 .label1: "Move selected history to commander." => "Передать выбранную историю командиру"
 
@@ -442,11 +444,11 @@ ProfileEditor: "ProfileEditor" @
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Создать примечание"
-.labelTTimestamp: "Timestamp: " => "Отметка времени: "
+.labelTTimestamp: "Timestamp:" => "Отметка времени: "
 .buttonSave: "Save" => "Сохранить"
-.labelTSystem: "System: " => "Система: "
-.labelTSummary: "Summary: " => "Сводка: "
-.labelTDetails: "Details: " => "Подробности: "
+.labelTSystem: "System:" => "Система: "
+.labelTSummary: "Summary:" => "Сводка: "
+.labelTDetails: "Details:" => "Подробности: "
 
 SECTION MessageBoxTheme
 
@@ -597,6 +599,7 @@ ActionProgramEditForm: "Action Program" @
 .buttonExtLoad: "Load" @
 .buttonExtSave: "Save" @
 .buttonExtEdit: "Text Edit" @
+.extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
 

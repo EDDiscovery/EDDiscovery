@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls.Map3D
             var but = s as GLButton;
             if (but != null)
             {
-                but.ButtonFaceColour = buttonface;
+                but.ButtonFaceColor = buttonface;
                 but.ForeColor = texc;
                 but.BackColor = buttonface;
                 but.BorderColor = buttonface;
@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls.Map3D
             var cb = s as GLCheckBox;
             if (cb != null)
             {
-                cb.ButtonFaceColour = buttonface;
+                cb.ButtonFaceColor = buttonface;
                 return;
             }
             var cmb = s as GLComboBox;
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (mi != null)
             {
                 mi.BackColor = cmbck;
-                mi.ButtonFaceColour = cmbck;
+                mi.ButtonFaceColor = cmbck;
                 mi.ForeColor = texc;
                 mi.BackDisabledScaling = 1.0f;
                 return;
@@ -121,6 +121,16 @@ namespace EDDiscovery.UserControls.Map3D
                 dgv.ScrollBarTheme.ArrowColor = Color.DarkOrange;
 
                 dgv.DefaultRowHeaderStyle.SelectedColor = dgv.DefaultCellStyle.SelectedColor = Color.FromArgb(128, 128, 128, 0);
+            }
+
+            var trb = s as GLTrackBar;
+            if ( trb != null )
+            {
+                trb.BackColor = formback;
+                trb.TickColor = texc;
+                trb.ForeColor = buttonface;     // of bar
+                trb.ButtonFaceColor = Color.FromArgb(255, 190, 190, 190);
+                trb.FaceColorScaling = 0.5f;
             }
         }
     }

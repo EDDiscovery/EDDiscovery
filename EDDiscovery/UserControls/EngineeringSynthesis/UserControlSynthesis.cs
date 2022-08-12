@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             rfs.SaveSettings += (newvalue, e) => { PutSetting(dbRecipeFilterSave, newvalue); Display(); };
 
             var lvls = Recipes.SynthesisRecipes.Select(r => r.level).Distinct().ToList();
-            lvls.Sort();
+            lvls.Reverse();     // because the table starts with premium-std-basic, thats the order it gets picked up in. reverse it
             lfs = new RecipeFilterSelector(lvls);
             lfs.SaveSettings += (newvalue, e) => { PutSetting(dbLevelFilterSave, newvalue); Display(); };
 
@@ -313,8 +313,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewSynthesis.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewSynthesis.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewSynthesis.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 
@@ -334,6 +333,22 @@ namespace EDDiscovery.UserControls
             }
             else
                 dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = WantedPerRecipe[rno].ToString();
+        }
+        private void dataGridViewSynthesis_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dataGridViewSynthesis.Rows[e.RowIndex];
+                int rno = (int)row.Tag;
+                Recipes.SynthesisRecipe r = Recipes.SynthesisRecipes[rno];
+
+                if (e.ColumnIndex == Recipe.Index)
+                {
+                    dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = r.IngredientsStringLong;
+                }
+            }
+
+
         }
 
         private Rectangle moveMoveDragBox;
@@ -428,5 +443,6 @@ namespace EDDiscovery.UserControls
         {
             SetHistoric(!chkNotHistoric.Checked);       // button sense changed
         }
+
     }
 }

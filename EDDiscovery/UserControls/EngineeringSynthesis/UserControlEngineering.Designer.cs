@@ -106,6 +106,7 @@ namespace EDDiscovery.UserControls
             this.EngineersCol});
             this.dataGridViewEngineering.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEngineering.Name = "dataGridViewEngineering";
+            this.dataGridViewEngineering.PerColumnWordWrapControl = true;
             this.dataGridViewEngineering.RowHeaderMenuStrip = null;
             this.dataGridViewEngineering.RowHeadersVisible = false;
             this.dataGridViewEngineering.RowHeadersWidth = 25;
@@ -113,6 +114,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.SingleRowSelect = true;
             this.dataGridViewEngineering.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewEngineering.TabIndex = 1;
+            this.dataGridViewEngineering.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEngineering_CellDoubleClick);
             this.dataGridViewEngineering.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
             this.dataGridViewEngineering.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewEngineering_DragDrop);
             this.dataGridViewEngineering.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewEngineering_DragOver);
@@ -355,6 +357,7 @@ namespace EDDiscovery.UserControls
             this.PercentageCol.FillWeight = 25F;
             this.PercentageCol.HeaderText = "%";
             this.PercentageCol.Name = "PercentageCol";
+            this.PercentageCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // NotesCol
             // 
@@ -390,7 +393,6 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlEngineering";
             this.Size = new System.Drawing.Size(800, 572);
-            this.toolTip.SetToolTip(this, "Enable or disable word wrap");
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).EndInit();
             this.panelTop.ResumeLayout(false);

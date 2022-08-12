@@ -122,7 +122,7 @@ namespace EDDiscovery.Forms
             {
                 OpenFileDialog dlg = new OpenFileDialog();
                 dlg.Filter = fileextensions != null ? fileextensions[SelectedIndex] : "CSV import| *.csv";
-                dlg.Title = string.Format("Import data {0}".T(EDTx.ExportForm_ImportData), dlg.Filter);
+                dlg.Title = "Import data".T(EDTx.ExportForm_ImportTitle) + " " + dlg.Filter;
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
@@ -144,7 +144,7 @@ namespace EDDiscovery.Forms
                 SaveFileDialog dlg = new SaveFileDialog();
 
                 dlg.Filter = fileextensions != null ? fileextensions[SelectedIndex] : "CSV export| *.csv";
-                dlg.Title = string.Format("Export current data {0}".T(EDTx.ExportForm_ECH), dlg.Filter);
+                dlg.Title = "Export data".T(EDTx.ExportForm) + " " + dlg.Filter;
                 if (suggestedfilenames != null)
                     dlg.FileName = suggestedfilenames[SelectedIndex];
 

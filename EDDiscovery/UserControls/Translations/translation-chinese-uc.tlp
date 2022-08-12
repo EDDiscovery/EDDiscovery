@@ -35,7 +35,7 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn: "Grid" => "网格"
 .buttonExtEditCampaign: "Edit" => "编辑"
 .labelCredits.ToolTip: "Current Credits" => "当前账户余额"
-.labelTotalKills.ToolTip: "Total kills in campaign" => "战斗中的总杀敌数"
+.labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "战斗中的总杀敌数"
 .labelFactionKills.ToolTip: "Faction Kills" => "派系杀敌数"
 .labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "净收入（收入减去弹药，维修等费用）"
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "你被抓了几次？"
@@ -46,18 +46,18 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "透明模式下显示网格"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "选择要浏览的战役"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "编辑用户创建的战役"
-.Kills: "Kills: " => "杀敌数："
-.Faction: "Faction: " => "派系："
-.Crimes: "Crimes: " => "犯罪次数："
-.Bal: "Bal: " => "净收入："
+.Kills: "Kills:" => "杀敌数："
+.Faction: "Faction:" => "派系："
+.Crimes: "Crimes:" => "犯罪次数："
+.Bal: "Bal:" => "净收入："
 .NewCampaign: "New Campaign" => "新建战役"
 .SinceLastDock: "Since Last Dock" => "自最近降落后"
-.Name: "Name: " => "名称"
+.Name: "Name:" => "名称"
 .C1: "Give name to campaign" => "给战役输入名称"
 .C2: "Optional faction to target" => "目标派系（可选）"
-.Start: "Start: " => "开始："
+.Start: "Start:" => "开始："
 .C3: "Select Start time" => "选择开始时间"
-.End: "End: " => "结束："
+.End: "End:" => "结束："
 .C4: "Select Start time" => "选择结束时间"
 .C5: "Press to Accept" => "确认"
 .C6: "Press to Cancel" => "取消"
@@ -106,12 +106,16 @@ SECTION SearchMaterialsCommodities
 .MR: "Mission Reward at " @
 .label2: "Item 2" => "物件2"
 .label1: "Item 1" => "物件1"
-.buttonExtFind: "Find" => "查找"
 .ColumnDate: "Date" => "日期"
 .ColumnStar: "Star" => "星系"
 .ColumnLocation: "Location" => "地点"
 .ColumnCurrentDistance: "Current Distance" => "距离(ly)"
 .ColumnPosition: "Position" => "坐标(X,Y,Z)"
+.buttonExtExcel.ToolTip: "Output grid to CSV" @
+.buttonExtFind.ToolTip: "Find materials/commodities" @
+.comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" @
+.comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" @
+.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" @
 
 SECTION SearchScans
 
@@ -122,14 +126,33 @@ SECTION SearchScans
 .DELNO: "Cannot delete this entry" => "无法删除此项"
 .CNV: "Condition is not valid" => "条件无效"
 .CD: "Condition" => "条件"
-.buttonDelete: "Delete" => "删除"
-.buttonSave: "Save" => "保存"
-.buttonFind: "Find" => "搜索"
 .ColumnDate: "Date" => "日期"
-.ColumnStar: "Star" => "星系"
+.ColumnBody: "Body" @
 .ColumnInformation: "Information" => "信息"
 .ColumnCurrentDistance: "Current Distance" => "距离(ly)"
 .ColumnPosition: "Position" => "坐标(X,Y,Z)"
+.ColumnParent: "Parent" @
+.comboBoxSearches.ToolTip: "Select a predefined condition" @
+.buttonFind.ToolTip: "Search for condition below" @
+.buttonSave.ToolTip: "Save current condition" @
+.buttonDelete.ToolTip: "Delete current condition" @
+.buttonExtExcel.ToolTip: "Output results grid to CSV" @
+.extButtonExport.ToolTip: "Export user searches to a file" @
+.extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
+.ColumnSearches: "Searches" @
+.labelTime: "Time" @
+.labelSearch: "Search" @
+.Export: "Export user searches" @
+.Import: "Import user searches" @
+
+SECTION UserControlDiscoveries
+
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.buttonExtExcel.ToolTip: "Export" @
 
 SECTION SearchStars
 
@@ -156,7 +179,7 @@ SECTION UserControlEngineering
 .NotesCol: "Notes" => "笔记"
 .RecipeCol: "Recipe" => "配方"
 .EngineersCol: "Engineers" => "工程师"
-.ToolTip: "Left click and drag on grid to reorder" => "鼠标左键拖拽可以重新排列行与列的顺序"
+.CraftedCol: "Crafted" @
 .buttonClear.ToolTip: "Set all wanted values to zero" => "把所有愿望单内的改装尝试次数设为零"
 .buttonFilterMaterial.ToolTip: "Filter the table by material" => "按材料筛选表格"
 .buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "按改装筛选表格"
@@ -165,6 +188,12 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "按模组筛选表格"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+
+SECTION UserControlEngineers
+
+.buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
+.extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
+.extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 
 SECTION UserControlEstimatedValues
 
@@ -206,16 +235,17 @@ SECTION UserControlExpedition
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "添加星系"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
+.buttonReverseRoute.ToolTip: "Reverse" => "反转"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
 .SystemName: "System Name" => "星系名称"
 .Distance: "Dist." => "距离(ly)"
 .Note: "Note" => "笔记"
-.labelCml: "Cml Distance: " => "总距离："
-.labelP2P: "P2P Distance: " => "直线距离："
-.buttonReverseRoute: "Reverse" => "反转"
-.labelEndDate: "End Date: " => "结束日期："
-.labelDateStart: "Start Date: " => "开始日期："
-.labelRouteName: "Route Name: " => "航线名称："
+.labelCml: "Cml Distance:" => "总距离："
+.labelP2P: "P2P Distance:" => "直线距离："
+.labelEndDate: "End Date:" => "结束日期："
+.labelDateStart: "Start Date:" => "开始日期："
+.labelRouteName: "Route Name:" => "航线名称："
 .copyToolStripMenuItem: "Copy" => "复制"
 .pasteToolStripMenuItem: "Paste" => "粘贴"
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" => "插入复制的行"
@@ -243,7 +273,7 @@ SECTION UserControlJournalGrid
 .ColumnText: "Information" => "信息"
 .labelTime: "Time" => "时间"
 .labelSearch: "Search" => "搜索"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
@@ -257,10 +287,6 @@ SECTION UserControlJournalGrid
 .TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
 .TTFilt1: "Filtered {0}" => "过滤掉了{0}"
 .TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
-.TTFilt2: "Filtered {0}" => "过滤掉了{0}"
-.TTEvent: "Filter out entries based on event type, " => "根据事件类型筛选条目，"
-.TTFilt3: "Total filtered out {0}" => "总共过滤掉了{0}"
-.TTTotal: "Filter out entries matching the field selection, " => "筛选匹配域选项的条目，"
 .JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 
@@ -278,6 +304,7 @@ SECTION UserControlLedger
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "显示匹配筛选事件类型的条目"
 .textBoxFilter.ToolTip: "Search to particular items" => "搜索特定的条目"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "跳转到表格中的条目"
 .CashTransactions: "Cash Transactions" => "金融交易"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -310,8 +337,8 @@ SECTION UserControlMarketData
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "单击以切换跟随模式或显示特定市场的数据"
 .Conly: "Cargo only, no market data on this item" => "只有货物，没有这项物品的市场数据"
 .LEntry: "Travel History Entry Last" => "最后一项航行记录"
-.checkBoxSellOnly: "Sell Only" @
-.checkBoxSellOnly.ToolTip: "Show items you can sell only" @
+.checkBoxHasDemand: "Has Demand" @
+.checkBoxHasDemand.ToolTip: "Show items with demand" @
 
 SECTION UserControlMaterialCommodities
 
@@ -347,7 +374,8 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.Systemscancomplete: "System scan complete." @
+.Systemscancomplete: "System scan complete" @
+.bodiesdetected: " bodies detected." @
 .bodiesfound: " bodies found." @
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" @
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" @
@@ -359,28 +387,31 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
-.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
+.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has volcanism" @
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
-.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
-.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other signals" @
+.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
+.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
+.showSignalsToolStripMenuItem: "Show signals" @
 .showValuesToolStripMenuItem: "Show values" @
-.showMoreInformationToolStripMenuItem: "Show More Information" @
+.showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.showAtmosToolStripMenuItem: "Show atmospheres" @
+.showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
+.dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
+.showstarclassToolStripMenuItem: "Show star class in system info" @
+.showDividersToolStripMenuItem: "Show dividers" @
 .extButtonPlanets.ToolTip: "Planet Filter" @
 .extButtonStars.ToolTip: "Star Filter" @
 .extButtonShowControl.ToolTip: "Display Settings" @
@@ -391,6 +422,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
 .navroute: "Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 .fsssignals: "List signals to display, semicolon seperated" @
@@ -423,11 +455,13 @@ SECTION UserControlModules
 .labelShip: "Ship" => "飞船"
 .labelVehicle: "Unknown" => "未知"
 .comboBoxShips.ToolTip: "Select ship to view" => "选择飞船以查看"
+.extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "添加游戏日志文件缺失的数据"
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "在ED Ship Yard网站上打开"
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "在Corolis网站上打开"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.FullBluePrint: "Show full blueprint information" @
 .ForceSell: "Force Sell" @
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
@@ -560,7 +594,7 @@ SECTION UserControlRoute
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "这将导致大量的FSD跳跃（{0}次）\r\n是否继续？"
 .NoRoute: "No route set up, retry" => "没有创建任何路径，请重试"
 .checkBox_FsdBoost: "Use Boosts" @
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
 .showScanToolStripMenuItem: "View Scan Display" @
 .M1: "Nearest to Waypoint" @
 .M2: "Minimum Deviation from Path" @
@@ -618,7 +652,7 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" @
 .StarClass: "Show Classes of Stars" @
 .Distance: "Show distance of bodies" @
-.Expired: "Expired: " @
+.Expired: "Expired:" @
 
 SECTION UserControlScanGrid
 
@@ -665,7 +699,7 @@ SECTION UserControlSettings
 .buttonSaveTheme: "Save Theme" => "保存主题"
 .groupBoxCustomHistoryLoad: "History" => "航行记录选项"
 .checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "按照升序方式对事件进行排序"
-.labelTimeDisplay: "Time: " @
+.labelTimeDisplay: "Time:" @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
@@ -673,12 +707,12 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" => "激活窗口热键"
 .groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries: " => "重要条目为："
-.labelHistorySel: "Entries to read: " => "仅读取重要的条目"
+.labelHistoryEssItems: "Essential entries:" => "重要条目为："
+.labelHistorySel: "Entries to read:" => "仅读取重要的条目"
 .groupBoxCustomScreenShots: "Screenshots conversion" => "截图"
 .buttonExtScreenshot: "Configure" => "配置"
 .checkBoxCustomEnableScreenshots: "Enable" => "启用截图格式转换"
-.groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB选项"
+.groupBoxCustomEDSM: "EDSM Control" => "EDSM/EDDB选项"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "选择星域"
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" => "启用星系数据下载"
 .groupBoxPopOuts: "Window Options" => "界面设置"
@@ -693,7 +727,7 @@ SECTION UserControlSettings
 .groupBoxCustomLanguage: "Language" => "语言 (Language)"
 .groupBoxCustomSafeMode: "Advanced" => "安全模式"
 .buttonExtSafeMode: "Restart in Safe Mode" => "重启至安全模式"
-.labelSafeMode: "Click this to perform special operations like to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "单击这个按钮以进行特殊操作"
+.labelSafeMode: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "单击这个按钮以进行特殊操作"
 .btnDeleteCommander.ToolTip: "Delete selected commander" => "删除选定的指挥官"
 .buttonEditCommander.ToolTip: "Edit selected commander" => "编辑选定的指挥官"
 .buttonAddCommander.ToolTip: "Add a new commander" => "添加一个新的指挥官"
@@ -707,7 +741,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "进一步配置截图选项"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "打开/关闭截图转换格式功能"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "选择想要储存在数据库里的银河星域"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "面板列表使用字母顺序进行排序，而不是安装类别排序。注意需要重启。（目前中文界面下无效）"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "所有窗口置顶"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "选中后会允许EDDiscovery的窗口在被缩放时实时改变窗口内容的尺寸。\r\n如果卡顿的话可以把此项关闭。"
@@ -779,7 +813,7 @@ SECTION UserControlSpanel
 .toolStripMenuItemTargetLine: "Show Target Line" => "显示目标行"
 .blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "透明模式下显示黑色文本背景"
 .expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "扩展文本到空白列"
-.EDSMButtonToolStripMenuItem: "EDSM Button" => "显示EDSM按钮"
+.EDSMButtonToolStripMenuItem: "Show EDSM Button" => "显示EDSM按钮"
 .toolStripMenuItemTime: "Show Time" => "显示时间"
 .iconToolStripMenuItem: "Show Event Icon" => "显示事件图标"
 .showDescriptionToolStripMenuItem: "Show Description" => "显示描述"
@@ -788,25 +822,25 @@ SECTION UserControlSpanel
 .showXYZToolStripMenuItem: "Show XYZ" => "显示星系坐标"
 .showTargetToolStripMenuItem: "Show Target Distance per Star" => "显示每个星系与目标的距离"
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "仅在FSD跳跃事件后显示距离以及坐标"
-.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" => "显示星体出现范围"
-.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" => "富金属行星 (Metal Rich Bodies)"
-.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" => "水质行星 (Water Worlds)"
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" => "类地行星 (Earth Like Worlds)"
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "氨质行星 (Ammonia Worlds)"
-.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "冰质行星 (Icy Bodies)"
+.showCircumstellarZonesToolStripMenuItem: "Show Habitation Zone" => "显示星体出现范围"
+.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Show Metal Rich Planet Zone" => "富金属行星 (Metal Rich Bodies)"
+.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Show Water World Zone" => "水质行星 (Water Worlds)"
+.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" => "类地行星 (Earth Like Worlds)"
+.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" => "氨质行星 (Ammonia Worlds)"
+.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Show Icy Planets Zone" => "冰质行星 (Icy Bodies)"
 .OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "标准"
 .OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "笔记显示在坐标之后"
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" => "目标距离，坐标，笔记"
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" => "不显示"
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance, XYZ, Notes" => "目标距离，坐标，笔记"
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do not show" => "不显示"
 .surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "显示15秒"
 .surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "显示30秒"
 .surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "显示60秒"
 .surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "显示至下次扫描时"
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" => "右"
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" => "左"
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" => "上"
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" => "下"
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" => "顶端"
+.showInPositionToolStripMenuItem.scanRightMenuItem: "Scan right" => "右"
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "Scan left" => "左"
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Scan above" => "上"
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Scan below" => "下"
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "顶端"
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "在以下情况下隐藏面板"
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "降落在空间站或着陆在星球时"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "在银河系星图面板时"
@@ -857,19 +891,20 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "添加笔记"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" => "{0}个恒星 {1}"
-.FSD: "This system has materials for FSD boost: " => "这个行星存在合成FSD助推剂用的材料："
+.FSD: "This system has materials for FSD boost" => "这个行星存在合成FSD助推剂用的材料："
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .OB: "{0} Other bodies" => "{0}个其他星体"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valuable bodies" @
 .scanorganics: "Show organic scans" @
+.showcodex: "Show codex entries" @
 
 SECTION UserControlStats
 
@@ -884,9 +919,9 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "时间"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "游戏记录"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "飞船"
-.TotalNoofjumps: "Total No of jumps: " => "总跳跃次数"
-.FSDjumps: "FSD Jumps" @
-.JumpHistory: "Jump History" => "跳跃记录"
+.TotalNoofjumps: "Total No of jumps" => "总跳跃次数"
+.FSDjumps: "FSD jumps" @
+.JumpHistory: "FSD Jump History" => "跳跃记录"
 .24hc: "24 Hours: " => "24小时内："
 .OneWeek: ", One Week: " => "，一周内："
 .30Days: ", 30 Days: " => "，30天内："
@@ -902,7 +937,7 @@ SECTION UserControlStats
 .Name: "Name" => "飞船名"
 .Ident: "Ident" => "飞船牌号"
 .Jumps: "Jumps" => "跳跃次数"
-.TravelledLy: "Traveled Ly" => "航行距离(ly)"
+.TravelledLy: "Travelled Ly" => "航行距离(ly)"
 .BodiesScanned: "Bodies Scanned" => "扫描的星体"
 .Destroyed: "Destroyed" => "被摧毁次数"
 .PremiumBoost: "Premium Boost" => "高级FSD助推剂"
@@ -913,7 +948,7 @@ SECTION UserControlStats
 .OrganicScans: "Organic Scans Value" @
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" => "扫描价值"
-.Beltcluster: "Belt Cluster: " @
+.Beltcluster: "Belt Cluster" @
 .Lastdock: "Last dock" => "自最近降落后"
 .Trip: "Trip" => "旅程"
 .All: "All" @
@@ -1058,10 +1093,6 @@ SECTION UserControlTravelGrid
 .TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
 .TTFilt1: "Filtered {0}" => "过滤掉了{0}"
 .TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
-.TTFilt2: "Filtered {0}" => "过滤掉了{0}"
-.TTEvent: "Filter out entries based on event type, " => "根据事件类型筛选条目，"
-.TTFilt3: "Total filtered out {0}" => "总共过滤掉了{0}"
-.TTTotal: "Filter out entries matching the field selection, " => "筛选匹配域选项的条目，"
 .CSTART: "Clear Start marker" => "清除起点标记"
 .CSTOP: "Clear Stop marker" => "清除终点标记"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "设为航行计算的终点"
@@ -1105,13 +1136,14 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "第一个游戏日志之后"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "第五个游戏日志之后"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
-.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "筛选匹配域选项的条目"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "纲要模式控制"
+.SearchTerms: "system:body:station:stationfaction" @
 
 SECTION UserControlCaptainsLog
 
@@ -1137,8 +1169,8 @@ SECTION CaptainsLogEntries
 .ColBodyName: "Body" @
 .ColNote: "Note" @
 .ColTags: "Tags" @
-.labelEndDate: "End Date: " @
-.labelDateStart: "Start Date: " @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
 .buttonTags.ToolTip: "Edit Tags" @
 .buttonDelete.ToolTip: "Delete selected entries" @
 .buttonNew.ToolTip: "New Entry" @
@@ -1166,10 +1198,9 @@ SECTION UserControlTrilateration
 .viewOnEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
 .pasteToolStripMenuItem: "Paste" => "粘贴"
 .toolStripButtonSubmitDistances: "&Submit Distances" => "提交距离(&S)"
-.toolStripButtonNew: "Start &new" => "新开始(&N)"
-.toolStripLabelSystem: "From System: " => "自星系："
-.toolStripTextBoxSystem: "Press Start New" @
-.toolStripLabel1: "Visited without coordinates: " => "访问过但无坐标的星系："
+.toolStripButtonNew: "Start New" => "新开始(&N)"
+.toolStripLabelSystem: "From System:" => "自星系："
+.toolStripLabel1: "Visited without coordinates:" => "访问过但无坐标的星系："
 .toolStripAddFromHistory: "Add 20 oldest" => "添加20个最老的"
 .toolStripAddRecentHistory: "Add 20 newest" => "添加20个最新的"
 .ToolStripText: "Press Start New" => "点击“新开始”按钮"
@@ -1254,6 +1285,7 @@ SECTION UserControlFactions
 .KillBondVictim: "Kill Bonds Victim" @
 .KillBondsAward: "Kill Bonds Awarded" @
 .KillBondsValue: "Kill Bonds Value" @
+.CartoValue: "Cartographic Value" @
 .colInfo: "Other Info" @
 .labelTo: "to" @
 .startDateTime.ToolTip: "Include from" @
@@ -1286,6 +1318,8 @@ SECTION UserControlOrganics
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
+.at: "At {0}" @
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}" @
 
 SECTION ScanDisplayForm
 

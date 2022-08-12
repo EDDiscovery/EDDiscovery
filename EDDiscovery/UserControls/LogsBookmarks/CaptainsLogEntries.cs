@@ -312,6 +312,7 @@ namespace EDDiscovery.UserControls
             List<Tuple<string,string,Image>> options = (from x in Dickeys select new Tuple<string,string,Image>(x.ToString(),x.ToString(),EDDConfig.Instance.CaptainsLogTagImage[x])).ToList();
 
             ExtendedControls.CheckedIconListBoxFormGroup cfs = new ExtendedControls.CheckedIconListBoxFormGroup();
+            cfs.CloseBoundaryRegion = new Size(32, 32);
             cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
             cfs.SaveSettings += TagsChanged;
             cfs.AddAllNone();
@@ -406,7 +407,7 @@ namespace EDDiscovery.UserControls
             string system = he?.System.Name ?? "?";
             string body = he?.WhereAmI ?? "?";
 
-            if (dateTimePickerEndDate.Checked)      // we are not at the current time..
+            if (dateTimePickerEndDate.Checked && dateTimePickerEndDate.Value.ToUniversalTime() < DateTime.UtcNow)      // we are not at the current time..
             {
                 entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value);
                 entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddMinutes(DateTime.UtcNow.Minute);

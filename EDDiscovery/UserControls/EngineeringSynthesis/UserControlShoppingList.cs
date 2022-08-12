@@ -172,7 +172,7 @@ namespace EDDiscovery.UserControls
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
-                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
 
@@ -306,7 +306,7 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("Shop list exception " + e);         // swallow the exception - seen an instance of it but wan't reproduce. #2512.
                 }
 
-                if (IsTransparent)
+                if (IsTransparentModeOn)
                 {
                     RevertToNormalSize();
                     int minWidth = Math.Max(((UserControlForm)FindForm()).TitleBarMinWidth(), displayList.Image.Width) + 8;
@@ -320,8 +320,8 @@ namespace EDDiscovery.UserControls
             }
 
             // if transparent, we don't show the eng/synth panels
-            userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
-            userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
+            userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparentModeOn;
+            userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparentModeOn;
         }
 
         #endregion

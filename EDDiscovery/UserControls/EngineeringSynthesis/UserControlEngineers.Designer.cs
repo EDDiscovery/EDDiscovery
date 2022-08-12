@@ -43,11 +43,14 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonFilterEngineer = new ExtendedControls.ExtButton();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxMoreInfo = new ExtendedControls.ExtCheckBox();
             this.panelEngineers = new ExtendedControls.ExtPanelScroll();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelEngineers.SuspendLayout();
             this.SuspendLayout();
@@ -57,6 +60,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.buttonFilterEngineer);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
+            this.panelTop.Controls.Add(this.extCheckBoxMoreInfo);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
@@ -71,6 +75,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterEngineer.Name = "buttonFilterEngineer";
             this.buttonFilterEngineer.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterEngineer.TabIndex = 1;
+            this.toolTip.SetToolTip(this.buttonFilterEngineer, "Select which engineers are shown");
             this.buttonFilterEngineer.UseVisualStyleBackColor = true;
             this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
             // 
@@ -101,7 +106,38 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 31;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Turn on and off word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
+            // 
+            // extCheckBoxMoreInfo
+            // 
+            this.extCheckBoxMoreInfo.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxMoreInfo.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxMoreInfo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxMoreInfo.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxMoreInfo.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxMoreInfo.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxMoreInfo.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxMoreInfo.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxMoreInfo.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxMoreInfo.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxMoreInfo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxMoreInfo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxMoreInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxMoreInfo.Image = global::EDDiscovery.Icons.Controls.RoundExpanded;
+            this.extCheckBoxMoreInfo.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxMoreInfo.ImageIndeterminate = null;
+            this.extCheckBoxMoreInfo.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxMoreInfo.ImageUnchecked = global::EDDiscovery.Icons.Controls.RoundExpand;
+            this.extCheckBoxMoreInfo.Location = new System.Drawing.Point(88, 1);
+            this.extCheckBoxMoreInfo.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxMoreInfo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxMoreInfo.Name = "extCheckBoxMoreInfo";
+            this.extCheckBoxMoreInfo.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxMoreInfo.TabIndex = 31;
+            this.extCheckBoxMoreInfo.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxMoreInfo, "Increase size of engineers grid and show more engineer details");
+            this.extCheckBoxMoreInfo.UseVisualStyleBackColor = false;
             // 
             // panelEngineers
             // 
@@ -144,6 +180,10 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.Value = -478;
             this.extScrollBar1.ValueLimited = -478;
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // UserControlEngineers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -166,5 +206,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private ExtendedControls.ExtPanelScroll panelEngineers;
         private ExtendedControls.ExtScrollBar extScrollBar1;
+        private ExtendedControls.ExtCheckBox extCheckBoxMoreInfo;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

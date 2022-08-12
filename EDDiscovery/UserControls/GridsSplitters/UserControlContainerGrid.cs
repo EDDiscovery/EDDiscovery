@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2019 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -24,25 +24,12 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlContainerGrid : UserControlCommonBase        // circular, huh! neat!
     {
-        private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
-        private IHistoryCursor ucursor_inuse;  // one in use
-
-        private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
-
-        private string dbWindowNames = "Windows";
-        private string dbPositionSize = "Positons";     //sic, leave
-        private string dbZOrder = "ZOrder";
-        private string dbRolledUp = "RolledUp";
-
-        ExtendedControls.ExtListBoxForm popoutdropdown;
-
         public UserControlContainerGrid()
         {
             InitializeComponent();
         }
 
         #region UCCB interface
-
 
         public override void Init()
         {
@@ -197,20 +184,20 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override UserControlCommonBase Find(Type t)              // find UCCB of this type in
+        public override UserControlCommonBase Find(PanelInformation.PanelIDs p)              // find UCCB of this type in
         {
             foreach( var x in uccrlist)
             {
                 if ( x.control != null )
                 {
-                    var f = ((UserControlCommonBase)x.control).Find(t);     // need to use find on it, since it may be embedded the same
+                    var f = ((UserControlCommonBase)x.control).Find(p);     // need to use find on it, since it may be embedded the same
                     if (f != null)
                         return f;
                 }
             }
             return null;
         }
-
+        
         #endregion
 
         #region Panel control
@@ -219,7 +206,7 @@ namespace EDDiscovery.UserControls
         {
             UserControlContainerResizable uccr = new UserControlContainerResizable();
 
-            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
+            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(uccb.panelid);
             uccr.Init(uccb, pi.WindowTitle);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
@@ -302,18 +289,23 @@ namespace EDDiscovery.UserControls
             UpdateButtons();
         }
 
+        private T GetUserControl<T>(PanelInformation.PanelIDs p) where T : class
+        {
+            var uccrfound = uccrlist.Find(x => ((UserControlCommonBase)x.control).panelid == p);
+            return uccrfound != null ? uccrfound.control as T: null;
+        }
+
         private IHistoryCursor FindTHC()
         {
-            var v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlTravelGrid));   // find one with TG
+            IHistoryCursor ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.TravelGrid);
 
-            if (v == null)
-                v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlJournalGrid));   // find one with Journal grid if no TG
+            if (ihc == null)
+                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.Journal);
 
-            if (v == null)
-                v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlStarList));   // find one with Journal grid if no TG
+            if (ihc == null)
+                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.StarList);
 
-            IHistoryCursor uctgfound = (v != null) ? (v.control as IHistoryCursor) : null;    // if found, set to it
-            return uctgfound;
+            return ihc;
         }
 
         private void AssignTHC()
@@ -349,6 +341,8 @@ namespace EDDiscovery.UserControls
         {
             if (!dragged && wasselected)
                 Select(null);
+
+            uccr.Refresh();
         }
 
         #endregion
@@ -458,22 +452,7 @@ namespace EDDiscovery.UserControls
                 var ret = new List<Tuple<PanelInformation.PanelIDs, Point, Size, int>>();
                 for (int i = 0; i < names.Length; i++)
                 {
-                    PanelInformation.PanelIDs pid = PanelInformation.PanelIDs.Log;
-                    if (names[i].Contains("UserControl"))
-                    {
-                        Type t = Type.GetType("EDDiscovery.UserControls." + names[i]);      // previously saved by name, now we are going to save by id from now on for future use
-                        if (t == null)
-                            return null;
-
-                        var pi = PanelInformation.GetPanelInfoByType(t);            // look it up
-                        if (pi == null)
-                            return null;
-
-                        pid = pi.PopoutID;
-                    }
-                    else
-                        pid = (PanelInformation.PanelIDs)names[i].InvariantParseInt(0); // convert to panel ID, default is 0 (log)
-
+                    PanelInformation.PanelIDs pid = (PanelInformation.PanelIDs)names[i].InvariantParseInt(0); // convert to panel ID, default is 0 (log)
                     int ppos = i * 4;
                     ret.Add(new Tuple<PanelInformation.PanelIDs, Point, Size, int>(pid, new Point(positions[ppos++], positions[ppos++]),
                                     new Size(positions[ppos++], positions[ppos++]), zorder[i]));
@@ -485,5 +464,18 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
+        private IHistoryCursor ucursor_inuse;  // one in use
+
+        private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
+
+        private string dbWindowNames = "Windows";
+        private string dbPositionSize = "Positons";     //sic, leave
+        private string dbZOrder = "ZOrder";
+        private string dbRolledUp = "RolledUp";
+
+        private ExtendedControls.ExtListBoxForm popoutdropdown;
+
     }
 }

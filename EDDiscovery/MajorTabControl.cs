@@ -110,7 +110,8 @@ namespace EDDiscovery
                 // so force size. tried perform layout to no avail
                 p.Size = TabPages[SelectedIndex].Size;
                 UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
-                uccb.SetCursor(primary.GetTravelGrid);
+                var tg = primary.GetTravelGrid;
+                uccb.SetCursor(tg);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             }
@@ -137,14 +138,11 @@ namespace EDDiscovery
 
             string tabnames = "";
 
-            UserControls.UserControlContainerSplitter primary = PrimaryTab;
-
             foreach (TabPage p in TabPages)      // all main tabs, close down
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.CloseDown();
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
-                idlist.Add( Object.ReferenceEquals(uccb,primary) ? -1 : (int)pi.PopoutID);      // primary is marked -1
+                idlist.Add( Object.ReferenceEquals(uccb, PrimaryTab) ? -1 : (int)uccb.panelid);      // primary is marked -1
                 idlist.Add(uccb.displaynumber);
                 tabnames += p.Text + ";";
             }
@@ -180,7 +178,7 @@ namespace EDDiscovery
                 else
                 {
                     UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                    EDDHelp.Help(parent, pt, uccb);
+                    EDDHelp.Help(parent, pt, uccb.HelpKeyOrAddress());
                 }
             }
 
@@ -216,8 +214,7 @@ namespace EDDiscovery
 
         public TabPage GetMajorTab(PanelInformation.PanelIDs ptype)
         {
-            Type t = PanelInformation.GetPanelInfoByPanelID(ptype).PopoutType;
-            return (from TabPage x in TabPages where x.Controls[0].GetType() == t select x).FirstOrDefault();
+            return (from TabPage x in TabPages where ((UserControls.UserControlCommonBase)x.Controls[0]).panelid == ptype select x).FirstOrDefault();
         }
 
         // placed it at the end of the tab line, but before the +
@@ -240,11 +237,11 @@ namespace EDDiscovery
         }
 
         // find first tab containing UCCB type t.
-        public Tuple<TabPage, UserControls.UserControlCommonBase> Find(Type t)
+        public Tuple<TabPage, UserControls.UserControlCommonBase> Find(PanelInformation.PanelIDs p)
         {
             foreach ( TabPage tp in TabPages)
             {
-                var f = ((UserControls.UserControlCommonBase)tp.Controls[0]).Find(t);
+                var f = ((UserControls.UserControlCommonBase)tp.Controls[0]).Find(p);
                 if (f != null)
                     return new Tuple<TabPage, UserControls.UserControlCommonBase>(tp, f);
             }
@@ -267,7 +264,9 @@ namespace EDDiscovery
 
             if (dn == -1) // if work out display number
             {
-                List<int> idlist = (from TabPage p in TabPages where p.Controls[0].GetType() == uccb.GetType() select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
+                // go thru the tabs trying to find another page with the same panelid as ptype
+
+                List<int> idlist = (from TabPage p in TabPages where ((UserControls.UserControlCommonBase)p.Controls[0]).panelid == ptype select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
 
                 if (!idlist.Contains(UserControls.UserControlCommonBase.DisplayNumberPrimaryTab))
                     dn = UserControls.UserControlCommonBase.DisplayNumberPrimaryTab;

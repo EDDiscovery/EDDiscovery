@@ -214,6 +214,7 @@ namespace EDDiscovery.Actions
                 vars[mp + "Faction"] = ms.Mission.Faction;
                 vars[mp + "DestSystem"] = ms.Mission.DestinationSystem;
                 vars[mp + "DestStation"] = ms.Mission.DestinationStation;
+                vars[mp + "DestSettlement"] = ms.Mission.DestinationSettlement;
                 vars[mp + "Influence"] = ms.Mission.Influence;
                 vars[mp + "Reputation"] = ms.Mission.Reputation;
                 vars[mp + "Commodity"] = ms.Mission.CommodityLocalised.Alt(ms.Mission.FriendlyCommodity);

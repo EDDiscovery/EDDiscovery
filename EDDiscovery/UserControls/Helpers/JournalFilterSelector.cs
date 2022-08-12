@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
 
             var lle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
-            AddGroupOption(legtype, "Ledger".T(EDTx.FilterSelector_Ledger), BaseUtils.Icons.IconSet.GetIcon("Panels.Ledger"));
+            AddGroupOption(legtype, "Ledger".T(EDTx.FilterSelector_Ledger), BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"));
 
             var sle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "ShipInformation" });
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";
@@ -97,23 +97,13 @@ namespace EDDiscovery.UserControls
             {
                 Hide();
             }
-            else
+            else if (!this.DeactivatedWithin(250))     // when we hide due to clicking on the button, we still get the click back thru. So debounce it
             {
+                CloseBoundaryRegion = new Size(32, ctr.Height);
                 Show(settings, ctr, parent);     // use the quick helper. 
             }
         }
 
-        public void Open(string settings, Point p, Form parent)
-        {
-            if (this.Visible == true)
-            {
-                Hide();
-            }
-            else
-            {
-                Show(settings, p, parent);     // use the quick helper. 
-            }
-        }
     }
 }
 

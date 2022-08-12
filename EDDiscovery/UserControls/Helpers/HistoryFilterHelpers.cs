@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,12 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using BaseUtils;
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EDDiscovery.UserControls
 {
@@ -31,37 +30,16 @@ namespace EDDiscovery.UserControls
                 return he;
             else
             {
-                string er;
-                List<HistoryEntry> ret = (from s in he where cond.CheckFilterTrue(s.journalEntry, new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.SNC?.Note ?? "") }, out er, null) select s).ToList();
+                List<HistoryEntry> ret = he.Where(s => BaseUtils.ConditionLists.CheckConditionWithObjectData(cond.List,
+                                                    s.journalEntry,
+                                                    new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.SNC?.Note ?? "") },
+                                                    out string eliststring, out BaseUtils.ConditionLists.ErrorClass errclass) == true).
+                                                    Select(x => x).ToList();
                 return ret;
             }
         }
 
-        static public bool FilterHistory(HistoryEntry he, BaseUtils.ConditionLists cond, BaseUtils.Variables othervars)                // true if it should be included
-        {
-            string er;
-            return cond.CheckFilterFalse(he.journalEntry, he.journalEntry.EventTypeStr,
-                new BaseUtils.Variables[] { othervars , new BaseUtils.Variables("Note", he.SNC?.Note ?? "") }, out er, null);     // true it should be included
-        }
-
-        static public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, BaseUtils.ConditionLists cond, BaseUtils.Variables othervars, out int count)    // filter in all entries
-        {
-            count = 0;
-            if (cond.Count == 0)       // no filters, all in
-                return he;
-            else
-            {
-                string er;
-                List<HistoryEntry> ret = (from s in he where cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr,
-                            new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.SNC?.Note ?? "") }, 
-                            out er, null) select s).ToList();
-
-                count = he.Count - ret.Count;
-                return ret;
-            }
-        }
-
-        static public BaseUtils.ConditionLists ShowDialog(System.Windows.Forms.Form parent, BaseUtils.ConditionLists fieldfilter, EDDiscoveryForm discoveryform, string title )
+        static public ConditionLists ShowDialog(System.Windows.Forms.Form parent, BaseUtils.ConditionLists fieldfilter, EDDiscoveryForm discoveryform, string title )
         {
             ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
 
@@ -81,6 +59,39 @@ namespace EDDiscovery.UserControls
             else
                 return null;
         }
+    }
 
+    public class HistoryEventFilter
+    {
+        private Dictionary<string, List<Condition>> filterbyeventname;
+        private Variables filtervars;
+        private HashSet<string> eventfilter;
+
+        public HistoryEventFilter(string eventfilterset,ConditionLists filters, Variables def)      // operates the event and field filter
+        {
+            eventfilter = eventfilterset.Split(';').ToHashSet();
+            filterbyeventname = filters.GetConditionListDictionaryByEventName();
+            filtervars = new Variables(def);
+        }
+
+        public bool IsIncluded(HistoryEntry he)
+        {
+            if (!eventfilter.Contains(he.journalEntry.EventFilterName) && !eventfilter.Contains("All"))        // All or event name must be in list
+                return false;
+
+            List<Condition> filterrules;
+
+            if (filterbyeventname.TryGetValue(he.journalEntry.EventFilterName, out filterrules) || filterbyeventname.TryGetValue("All", out filterrules))     // if we have rules for this event..
+            {
+                filtervars["Note"] = he.SNC?.Note ?? "";  // add in SNC Note
+
+                var fres = ConditionLists.CheckConditionWithObjectData(filterrules, he, new Variables[] { filtervars }, out string errlist, out ConditionLists.ErrorClass errclass);
+
+                if (fres == true)
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

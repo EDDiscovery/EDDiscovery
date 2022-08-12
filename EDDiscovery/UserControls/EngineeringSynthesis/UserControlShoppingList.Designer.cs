@@ -121,7 +121,6 @@ namespace EDDiscovery.UserControls
             this.userControlSynthesis.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlSynthesis.Location = new System.Drawing.Point(0, 0);
             this.userControlSynthesis.Name = "userControlSynthesis";
-            this.userControlSynthesis.panelid = EDDiscovery.PanelInformation.PanelIDs.Log;
             this.userControlSynthesis.Size = new System.Drawing.Size(1019, 234);
             this.userControlSynthesis.TabIndex = 0;
             // 
@@ -133,7 +132,6 @@ namespace EDDiscovery.UserControls
             this.userControlEngineering.DBBaseName = "Engineering";
             this.userControlEngineering.Location = new System.Drawing.Point(0, -1);
             this.userControlEngineering.Name = "userControlEngineering";
-            this.userControlEngineering.panelid = EDDiscovery.PanelInformation.PanelIDs.Log;
             this.userControlEngineering.Size = new System.Drawing.Size(1016, 386);
             this.userControlEngineering.TabIndex = 0;
             // 

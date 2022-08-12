@@ -99,6 +99,7 @@ namespace EDDiscovery.UserControls
             this.Recipe});
             this.dataGridViewSynthesis.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewSynthesis.Name = "dataGridViewSynthesis";
+            this.dataGridViewSynthesis.PerColumnWordWrapControl = true;
             this.dataGridViewSynthesis.RowHeaderMenuStrip = null;
             this.dataGridViewSynthesis.RowHeadersVisible = false;
             this.dataGridViewSynthesis.RowHeadersWidth = 25;
@@ -106,6 +107,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSynthesis.SingleRowSelect = true;
             this.dataGridViewSynthesis.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewSynthesis.TabIndex = 1;
+            this.dataGridViewSynthesis.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSynthesis_CellDoubleClick);
             this.dataGridViewSynthesis.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
             this.dataGridViewSynthesis.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewSynthesis_DragDrop);
             this.dataGridViewSynthesis.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewSynthesis_DragOver);
@@ -314,6 +316,7 @@ namespace EDDiscovery.UserControls
             this.Percentage.FillWeight = 25F;
             this.Percentage.HeaderText = "%";
             this.Percentage.Name = "Percentage";
+            this.Percentage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Notes
             // 

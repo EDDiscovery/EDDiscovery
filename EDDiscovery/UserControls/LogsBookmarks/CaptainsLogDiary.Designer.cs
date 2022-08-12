@@ -34,6 +34,10 @@
             this.buttonRight = new ExtendedControls.ExtButton();
             this.SuspendLayout();
             // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // buttonLeft
             // 
             this.buttonLeft.Location = new System.Drawing.Point(71, 177);

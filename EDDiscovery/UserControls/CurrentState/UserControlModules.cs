@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
             allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
             dataGridViewModules.MakeDoubleBuffered();
-            dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             displayfilters = GetSetting(dbDisplayFilters, "").Split(';');
 
@@ -408,8 +407,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewModules.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewModules.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewModules.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 
@@ -474,7 +472,7 @@ namespace EDDiscovery.UserControls
                 PutSetting(dbDisplayFilters, string.Join(";", displayfilters));
                 Display();
             };
-
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonShowControl.Height);
             displayfilter.Show(string.Join(";", displayfilters), extButtonShowControl, this.FindForm());
         }
 
@@ -625,24 +623,6 @@ namespace EDDiscovery.UserControls
         }
 
         private void dataGridViewModules_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewModules.RowCount)
-            {
-                DataGridViewRow row = dataGridViewModules.Rows[e.RowIndex];
-
-                bool expanded = row.Cells[0].Tag != null && (bool)row.Cells[0].Tag == true;     // cell 0 tag holds expanded state
-
-                for (int i = 0; i < dataGridViewModules.ColumnCount; i++)
-                {
-                    DataGridViewCell cell = row.Cells[i];
-                    cell.Style.WrapMode = expanded ? DataGridViewTriState.NotSet : DataGridViewTriState.True;
-                }
-
-                row.Cells[0].Tag = !expanded;
-            }
-        }
-
-        private void dataGridViewModules_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {

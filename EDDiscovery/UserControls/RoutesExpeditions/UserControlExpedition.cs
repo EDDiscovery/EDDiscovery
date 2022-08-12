@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         private string[] displayfilters;        // display filters
         private string dbDisplayFilters = "DisplayFilters";
         private string dbRolledUp = "RolledUp";
-
+        private string dbWordWrap = "WordWrap";
         private string dbEDSM = "EDSM";
 
         const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
@@ -70,6 +70,10 @@ namespace EDDiscovery.UserControls
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
 
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
+
             displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics").Split(';');
 
             checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
@@ -81,8 +85,13 @@ namespace EDDiscovery.UserControls
             autoupdateedsm.Tick += Autoupdateedsm_Tick;
             autoupdateedsm.Start();     // something to display..
 
-            var enumlist = new Enum[] { EDTx.UserControlExpedition_SystemName, EDTx.UserControlExpedition_Distance, EDTx.UserControlExpedition_Note, EDTx.UserControlExpedition_CurDist, EDTx.UserControlExpedition_Visits, EDTx.UserControlExpedition_Scans, EDTx.UserControlExpedition_FSSBodies, EDTx.UserControlExpedition_KnownBodies, EDTx.UserControlExpedition_Stars, EDTx.UserControlExpedition_Info, EDTx.UserControlExpedition_labelRouteName, EDTx.UserControlExpedition_labelDateStart, EDTx.UserControlExpedition_labelEndDate, EDTx.UserControlExpedition_labelCml, EDTx.UserControlExpedition_labelP2P, EDTx.UserControlExpedition_buttonReverseRoute };
-            var enumlisttt = new Enum[] { EDTx.UserControlExpedition_extButtonLoadRoute_ToolTip, EDTx.UserControlExpedition_extButtonNew_ToolTip, EDTx.UserControlExpedition_extButtonSave_ToolTip, EDTx.UserControlExpedition_extButtonDelete_ToolTip, EDTx.UserControlExpedition_extButtonImportFile_ToolTip, EDTx.UserControlExpedition_extButtonImportRoute_ToolTip, EDTx.UserControlExpedition_extButtonImportNavRoute_ToolTip, EDTx.UserControlExpedition_extButtonNavRouteLatest_ToolTip, EDTx.UserControlExpedition_extButtonAddSystems_ToolTip, EDTx.UserControlExpedition_buttonExtExport_ToolTip, EDTx.UserControlExpedition_extButtonShow3DMap_ToolTip, EDTx.UserControlExpedition_extButtonDisplayFilters_ToolTip, EDTx.UserControlExpedition_checkBoxEDSM_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlExpedition_SystemName, EDTx.UserControlExpedition_Distance, EDTx.UserControlExpedition_Note, EDTx.UserControlExpedition_CurDist, EDTx.UserControlExpedition_Visits, EDTx.UserControlExpedition_Scans, EDTx.UserControlExpedition_FSSBodies, EDTx.UserControlExpedition_KnownBodies, EDTx.UserControlExpedition_Stars, EDTx.UserControlExpedition_Info, EDTx.UserControlExpedition_labelRouteName, EDTx.UserControlExpedition_labelDateStart, EDTx.UserControlExpedition_labelEndDate, EDTx.UserControlExpedition_labelCml, EDTx.UserControlExpedition_labelP2P};
+            var enumlisttt = new Enum[] { EDTx.UserControlExpedition_extButtonLoadRoute_ToolTip, EDTx.UserControlExpedition_extButtonNew_ToolTip, EDTx.UserControlExpedition_extButtonSave_ToolTip, EDTx.UserControlExpedition_extButtonDelete_ToolTip, 
+                                          EDTx.UserControlExpedition_extButtonImportFile_ToolTip, EDTx.UserControlExpedition_extButtonImportRoute_ToolTip, EDTx.UserControlExpedition_extButtonImportNavRoute_ToolTip, EDTx.UserControlExpedition_extButtonNavRouteLatest_ToolTip, 
+                                          EDTx.UserControlExpedition_extButtonAddSystems_ToolTip, 
+                                          EDTx.UserControlExpedition_buttonExtExport_ToolTip, EDTx.UserControlExpedition_extButtonShow3DMap_ToolTip, 
+                                          EDTx.UserControlExpedition_extButtonDisplayFilters_ToolTip, EDTx.UserControlExpedition_checkBoxEDSM_ToolTip,
+                                         EDTx.UserControlExpedition_buttonReverseRoute_ToolTip, EDTx.UserControlExpedition_extCheckBoxWordWrap_ToolTip };
             var enumlistcms = new Enum[] { EDTx.UserControlExpedition_copyToolStripMenuItem, EDTx.UserControlExpedition_pasteToolStripMenuItem, EDTx.UserControlExpedition_insertCopiedToolStripMenuItem, EDTx.UserControlExpedition_deleteRowsToolStripMenuItem, EDTx.UserControlExpedition_setTargetToolStripMenuItem, EDTx.UserControlExpedition_editBookmarkToolStripMenuItem };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
@@ -718,6 +727,7 @@ namespace EDDiscovery.UserControls
                     }
                 };
                 navroutefilter.CloseOnChange = true;
+                navroutefilter.CloseBoundaryRegion = new Size(32, extButtonImportNavRoute.Height);
                 navroutefilter.Show("", extButtonImportNavRoute, this.FindForm());
             }
         }
@@ -920,6 +930,7 @@ namespace EDDiscovery.UserControls
                 UpdateSystemRows();
             };
 
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
             displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
         }
 
@@ -927,6 +938,18 @@ namespace EDDiscovery.UserControls
         {
             PutSetting(dbEDSM, checkBoxEDSM.Checked);
             UpdateSystemRows();
+        }
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridView.SetWordWrap(extCheckBoxWordWrap.Checked);
+            extPanelDataGridViewScroll.UpdateScroll();
         }
 
         private void buttonReverseRoute_Click(object sender, EventArgs e)
@@ -1018,6 +1041,27 @@ namespace EDDiscovery.UserControls
                 var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
                 InsertRows(insertIndex, rows);
             }
+        }
+
+        #endregion
+
+        #region Double click
+        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && (e.ColumnIndex == Note.Index || e.ColumnIndex == Info.Index))
+            {
+                var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                string text = cell.Value as string;
+
+                if (text.HasChars())
+                {
+                    InfoForm frm = new InfoForm();
+                    frm.Info(dataGridView.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
+                    frm.Show(FindForm());
+                }
+            }
+
         }
 
         #endregion

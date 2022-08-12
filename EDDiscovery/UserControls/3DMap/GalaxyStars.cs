@@ -27,12 +27,13 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 
 namespace EDDiscovery.UserControls.Map3D
 {
-    class GalaxyStars
+    public class GalaxyStars
     {
         private Vector3 InvalidPos = new Vector3(-1000000, -1000000, -1000000);
         public Vector3 CurrentPos { get; set; } = new Vector3(-1000000, -1000000, -1000000);
@@ -41,13 +42,16 @@ namespace EDDiscovery.UserControls.Map3D
         public Color ForeText { get; set; } = Color.FromArgb(255,220,220,220);
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
-        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
+        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1f, 0);
         // 0 = off, bit 0= stars, bit1 = labels
         public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode==3; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
         public bool DBActive { get { return subthreadsrunning > 0; ; } }
         public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
         public int SectorSize { get; set; } = 100;
+
+        public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
+        public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
         public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
         {
@@ -150,7 +154,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 var sec = new Sector(pos, SectorSize);
                 slset.ReserveTag(sec.pos);      // important, stops repeated adds in the situation where it takes a while to add to set
-                //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
+                //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request box");
                 requestedsectors.Add(sec);
             }
             else
@@ -166,13 +170,16 @@ namespace EDDiscovery.UserControls.Map3D
             previousboxaroundsize = size;
             var sec = new Sector(new Vector3(pos.X - size / 2, pos.Y - size / 2, pos.Z - size / 2), size);
             slset.ReserveTag(sec.pos);      // unconditional reserve of this tag
-            //System.Diagnostics.Debug.WriteLine($"Galaxy: {sec.pos} request");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} Galaxy {sec.pos} request box around");
             requestedsectors.Add(sec);
         }
         public void ClearBoxAround()        // clear the box around
         {
+            // removing the sector from the list, we still might have its operation outstanding, so be careful with the draw in Update
+
             var sec = new Vector3(CurrentPos.X - previousboxaroundsize / 2, CurrentPos.Y - previousboxaroundsize / 2, CurrentPos.Z - previousboxaroundsize / 2);
-            slset.Remove(sec);
+            slset.Remove(sec);   
+            
             CurrentPos = InvalidPos;
         }
 
@@ -212,7 +219,7 @@ namespace EDDiscovery.UserControls.Map3D
                             }
                         }
 
-                        //System.Diagnostics.Debug.WriteLine($"Galaxy: {sector.pos} requestor accepts");
+                        //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} Galaxy {sector.pos} requestor accepts");
 
                         Interlocked.Add(ref subthreadsrunning, 1);      // committed to run, and count subthreads
 
@@ -238,7 +245,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             Sector d = (Sector)seco;
 
-            //System.Diagnostics.Debug.WriteLine($"Galaxy: Thread start for {d.pos}");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} Galaxy Thread start for {d.pos}");
 
             // note d.text/d.positions may be much longer than d.systems
 
@@ -249,13 +256,22 @@ namespace EDDiscovery.UserControls.Map3D
                     Vector4 pos = new Vector4(d.pos.X + d.searchsize / 2, d.pos.Y + d.searchsize / 2, d.pos.Z + d.searchsize / 2, 0);       // from centre of box
 
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                        (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
-                        (v, s) => { var dist = (pos - v).Length; return s + $" @ {dist:0.#}ly"; });
+                        (x, y, z) => { 
+                            return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); 
+                        },
+                        (v, s) => { 
+                            var dist = (pos - v).Length; return s + $" @ {dist:0.#}ly"; 
+                        });
                 }
                 else
                 {
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                                            (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
+                                            (x, y, z) => { 
+                                                if ( NoSunList.Contains( new GalMapObjects.ObjectPosXYZ(x,y,z)))
+                                                    return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, -1);
+                                                else
+                                                    return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0);
+                                            },
                                             null);
                 }
 
@@ -270,7 +286,7 @@ namespace EDDiscovery.UserControls.Map3D
                                                 ForeText, BackText, 0.5f, textformat: fmt, length: d.systems);
                     }
 
-                    d.textpos = GLPLVertexShaderMatrixTriStripTexture.CreateMatrices(d.positions, LabelOffset,  //offset
+                    d.textpos = CreateMatrices2(d.positions, LabelOffset,  NoSunTextOffset,
                                                                                 LabelSize, //size
                                                                                 new Vector3(0, 0, 0), // rot (unused due to below)
                                                                                 true, false, // rotate, no elevation
@@ -280,10 +296,33 @@ namespace EDDiscovery.UserControls.Map3D
             }
 
             generatedsectors.Enqueue(d);       // d has been filled
-            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} {d.systems} end");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} Galaxy Thread End {d.pos} {d.systems}");
 
             Interlocked.Add(ref subthreadsrunning, -1);
         }
+
+        public Matrix4[] CreateMatrices2(Vector4[] worldpos, Vector3 offset, Vector3 disallowedoffset,
+                                            Vector3 size, Vector3 rotationradians,
+                                            bool rotatetoviewer, bool rotateelevation,
+                                            float alphafadescalar = 0,
+                                            float alphafadepos = 0,
+                                            int imagepos = 0,
+                                            bool visible = true,
+                                            int pos = 0, int length = -1        // allowing you to pick out a part of the worldpos array
+                                            )
+        {
+            if (length == -1)
+                length = worldpos.Length - pos;
+
+            Matrix4[] mats = new Matrix4[length];
+            for (int i = 0; i < length; i++)
+            {
+                Vector3 doff = worldpos[i + pos].W < 0 ? (disallowedoffset + offset) : offset;
+                mats[i] = GLPLVertexShaderMatrixTriStripTexture.CreateMatrix(worldpos[i + pos].Xyz + doff, size, rotationradians, rotatetoviewer, rotateelevation, alphafadescalar, alphafadepos, imagepos, visible);
+            }
+            return mats;
+        }
+
 
         ulong timelastchecked = 0;
         ulong timelastbitmapcheck = 0;
@@ -298,10 +337,13 @@ namespace EDDiscovery.UserControls.Map3D
                     int max = 2;
                     while (max-- > 0 && generatedsectors.TryDequeue(out Sector d) )      // limit fill rate.. (max first)
                     {
-                        //System.Diagnostics.Debug.WriteLine($"Galaxy: Add {d.pos} number {d.systems} total {slset.Objects}");
-                        if (d.systems > 0)      // may return zero
+                        //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} Galaxy Add {d.pos} number {d.systems} total {slset.Objects}");
+                        
+                        // so due to the threads being async, as we can get in a condition where we cancel a block using ClearBoxAround
+                        // we could be get a completed block which is not required. So use ContainsKey to make sure the system still wants
+                        // that system.
+                        if (d.systems > 0 && slset.TagsToBlocks.ContainsKey(d.pos))
                         {
-                            System.Diagnostics.Debug.Assert(slset.TagsToBlocks.ContainsKey(d.pos));
                             slset.Add(d.pos, d.text, d.positions, d.textpos, d.bitmaps, 0, d.systems);
                             cleanbitmaps.Enqueue(d);            // ask for cleaning of these bitmaps
                         }

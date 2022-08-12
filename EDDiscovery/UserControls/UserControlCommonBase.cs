@@ -37,25 +37,38 @@ namespace EDDiscovery.UserControls
 
         // Common parameters of a UCCB
 
-        public PanelInformation.PanelIDs panelid { get; set; }          // set on creation in PanelAndPopOuts, panel ID type
-        public int displaynumber { get; protected set; }                // set on Init
-        public EDDiscoveryForm discoveryform { get; protected set; }    // set on Init    
-        public IHistoryCursor uctg { get; protected set; }              // valid at loadlayout
-        private bool IsClosed { get; set; }
+        public PanelInformation.PanelIDs panelid { get; private set; }  // set on creation 
+        public int displaynumber { get; private set; }                // set on Init
+        public EDDiscoveryForm discoveryform { get; private set; }    // set on Init    
+        public IHistoryCursor uctg { get; protected set; }            // valid at loadlayout
+        public bool IsClosed { get; private set; }                    // set after CloseDown called. Use this if your doing await stuff which may mean your class gets called after close
 
-        // in calling order..
+        /////////////////////////////////////////////////////////////// in calling order..
+        
+        // called when class is created. Override to get panel info if required
+
+        public virtual void Creation(PanelInformation.PanelInfo p)      
+        {
+            System.Diagnostics.Debug.WriteLine("Create UCCB " + this.Name + " of " + this.GetType().Name + " with " + p.PopoutID);
+            panelid = p.PopoutID;
+        }
+
+        // called after set up on init
+
         public void Init(EDDiscoveryForm ed, int dn)
         {
-            //System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
+            System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
             discoveryform = ed;
             displaynumber = dn;
             Init();
         }
 
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
+
         // For forms, the transparency key color is set by theme during UserControlForm init. The Init function above for a UC could override if required
         // themeing and scaling happens at this point.  Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab
+
         public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
         public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
@@ -75,8 +88,8 @@ namespace EDDiscovery.UserControls
 
         public void CloseDown()     // Call to close down.
         {
-            Closing();
             IsClosed = true;
+            Closing();
         }
 
         protected override void Dispose(bool disposing)     // ensure closed during disposal.
@@ -95,6 +108,7 @@ namespace EDDiscovery.UserControls
 
         public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
 
+        public virtual string HelpKeyOrAddress() { return panelid.ToString(); }     // default help key is panel id as a string
 
         // set the control text for the panel. 
         // for tabstrips, for forms, for resizable containers
@@ -148,12 +162,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public bool IsTransparent           // this means the transparent mode is on, not that its currently transparent.
+        public bool IsTransparentModeOn           // this means the transparent mode is on, not that its currently transparent.
         {
             get
             {
                 if (this.Parent is UserControlForm)
-                    return ((UserControlForm)(this.Parent)).IsTransparent;
+                    return ((UserControlForm)(this.Parent)).IsTransparentModeOn;
                 else
                     return false;
             }
@@ -165,10 +179,10 @@ namespace EDDiscovery.UserControls
                 ((UserControlForm)(this.Parent)).UpdateTransparency();
         }
 
-        public virtual UserControlCommonBase Find( Type t)      // find a UCCB of type T - this simple case just compares, overriden in splitter/grid
+        public virtual UserControlCommonBase Find( PanelInformation.PanelIDs p)      // find a UCCB of type T - this simple case just compares, overriden in splitter/grid
         {
             //System.Diagnostics.Debug.WriteLine($"UCCB Find of {t.Name} on {this.GetType().Name}");
-            return this.GetType() == t ? this : null;
+            return panelid == p ? this : null;
         }
 
         #region Resize
@@ -293,11 +307,11 @@ namespace EDDiscovery.UserControls
             return DBName(displaynumber, DBBaseName + auxname, "DGVCol");
         }
 
-        public void DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
+        public bool DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine("Get Column Name " + root);
-            dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+            return dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                                         (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
         }
 
@@ -305,8 +319,8 @@ namespace EDDiscovery.UserControls
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine("Set Column Name " + root);
-            dgv.SaveColumnSettings(root, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                        (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+            dgv.SaveColumnSettings(root, (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                        (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }
 
         public void DGVTransparent(DataGridView dgv, bool on, Color curcol)

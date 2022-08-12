@@ -240,16 +240,14 @@ namespace EDDiscovery.UserControls
             {
                 List<HistoryEntry> result = current_historylist.LatestFirst();      // Standard filtering
 
-                int ftotal;         // event filter
-                result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotal);
-                result = HistoryFilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
+                HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
 
                 Font dfont = displayfont ?? this.Font;
-                Color textcolour = IsTransparent ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
+                Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                Color backcolour = IsTransparentModeOn ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
 
                 bool drawnnootherstuff = DrawScanText(true, textcolour, backcolour, dfont);                    // go 1 for some of the scan positions
 
@@ -377,10 +375,13 @@ namespace EDDiscovery.UserControls
 
                         foreach (HistoryEntry rhe in result)
                         {
-                            rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour, dfont );
+                            if ( hef.IsIncluded(rhe))
+                            {
+                                rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour, dfont);
 
-                            if (rowpos > ClientRectangle.Height)                // stop when off of screen
-                                break;
+                                if (rowpos > ClientRectangle.Height)                // stop when off of screen
+                                    break;
+                            }
                         }
                     }
                 }
@@ -391,7 +392,7 @@ namespace EDDiscovery.UserControls
             pictureBox.Render();
         }
 
-        int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour, Font dfont )
+         int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour, Font dfont )
         {
             List<string> coldata = new List<string>();                      // First we accumulate the strings
             List<int> tooltipattach = new List<int>();
@@ -526,7 +527,7 @@ namespace EDDiscovery.UserControls
                         {
                             ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
 
-                            if (IsTransparent)        // if transparent, the roll up panel is not visible, we can set the whole size to the text
+                            if (IsTransparentModeOn)        // if transparent, the roll up panel is not visible, we can set the whole size to the text
                                 RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));        // match exactly to use minimum space
                             return true;
                         }
@@ -617,20 +618,17 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
         {
-            bool add = WouldAddEntry(he);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
 
-            if (add)
+            if (hef.IsIncluded(he))
+            {
                 Display(hl);
+            }
 
             if (he.journalEntry.EventTypeID == JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
             {
                 ShowScanData(he.journalEntry as JournalScan);
             }
-        }
-
-        public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
-        {
-            return he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All")) && HistoryFilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion
@@ -945,6 +943,7 @@ namespace EDDiscovery.UserControls
         {
             displayfilter.AllOrNoneBack = false;
             displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, button.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {
@@ -970,6 +969,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
             displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonColumnOrder.Height);
+
             displayfilter.SaveSettings = (s, o) =>
             {
                 var lr = s.Replace(";", "").InvariantParseInt(0);
@@ -1015,6 +1016,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(Configuration.showScanIndefinite, "Show until next scan".TxID(EDTx.UserControlSpanel_surfaceScanDetailsToolStripMenuItem_scanUntilNextToolStripMenuItem), null, "All", true);
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtonScanShow.Height);
             displayfilter.ScreenMargin = new Size(0, 0);
             displayfilter.SaveSettings = (s, o) =>
             {
@@ -1037,6 +1039,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(Configuration.showScanOnTop, "Scan on top".TxID(EDTx.UserControlSpanel_showInPositionToolStripMenuItem_scanOnTopMenuItem), null, "All", true);
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseOnChange = true;
+            displayfilter.CloseBoundaryRegion = new Size(32, extButtoScanPos.Height);
             displayfilter.ScreenMargin = new Size(0, 0);
             displayfilter.SaveSettings = (s, o) =>
             {

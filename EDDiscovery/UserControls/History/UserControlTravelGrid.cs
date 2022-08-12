@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -27,6 +27,7 @@ using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
 using EDDiscovery.Forms;
 using QuickJSON;
+using BaseUtils;
 
 namespace EDDiscovery.UserControls
 {
@@ -86,6 +87,8 @@ namespace EDDiscovery.UserControls
         private Timer todotimer;
         private Queue<Action> todo = new Queue<Action>();
         private Queue<HistoryEntry> queuedadds = new Queue<HistoryEntry>();
+
+        private int fdropdown;     // filter total
 
         public UserControlTravelGrid()
         {
@@ -180,7 +183,7 @@ namespace EDDiscovery.UserControls
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it
-                searchterms = "".TxID(EDTx.UserControlTravelGrid_SearchTerms);
+                searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
         }
 
         public override void LoadLayout()
@@ -206,7 +209,6 @@ namespace EDDiscovery.UserControls
             HistoryChanged(discoveryform.history);
         }
 
-        int fdropdown, ftotalevents, ftotalfilters;     // filter totals
         public void HistoryChanged(HistoryList hl)           // on History change
         {
             HistoryChanged(hl, false);
@@ -242,10 +244,6 @@ namespace EDDiscovery.UserControls
             fdropdown = hl.Count - result.Count();
 
             //for (int i = 0; i < 10 && i < result.Count; i++)  System.Diagnostics.Debug.WriteLine("Hist {0} {1} {2}", result[i].EventTimeUTC, result[i].Indexno , result[i].EventSummary);
-
-            result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotalevents);
-
-            result = HistoryFilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
             panelOutlining.Clear();
             dataGridViewTravel.Rows.Clear();
@@ -284,6 +282,8 @@ namespace EDDiscovery.UserControls
 
             int lrowno = 0;
 
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+
             if (chunks.Count != 0)
             {
                 var chunk = chunks[0];
@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
                 List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
                 foreach (var item in chunk)
                 {
-                    var row = CreateHistoryRow(item, sst,debugmode);
+                    var row = CreateHistoryRow(item, sst, hef, debugmode);
 
                     if (row != null)
                     {
@@ -322,7 +322,7 @@ namespace EDDiscovery.UserControls
                     bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
                     foreach (var item in chunk)
                     {
-                        var row = CreateHistoryRow(item, sst, debugmode);
+                        var row = CreateHistoryRow(item, sst, hef, debugmode);
                         if (row != null)
                         {
                             //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
@@ -408,33 +408,16 @@ namespace EDDiscovery.UserControls
 
         private void AddEntry(HistoryEntry he)      // from either a delayed queue or from addnewentry
         { 
-            bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All"));
+            var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
-            if (!add)                   // filtered out, update filter total and display
-            {
-                ftotalevents++;
-                UpdateToolTipsForFilter();
-            }
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
 
-            if (add && !HistoryFilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
-            {
-                add = false;
-                ftotalfilters++;
-                UpdateToolTipsForFilter();
-            }
+            var row = CreateHistoryRow(he, sst, hef, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
 
-            if (add)
-            {
-                var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
-                var row = CreateHistoryRow(he, sst, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
-                if (row != null)
-                    dataGridViewTravel.Rows.Insert(0, row);
-                else
-                    add = false;
-            }
+            if (row != null)
+            { 
+                dataGridViewTravel.Rows.Insert(0, row);
 
-            if (add)            // its been added, we have at least 1 row visible, at row 0
-            {
                 var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
                 if (filter.MaximumNumberOfItems != null)            // this one won't remove the latest one
@@ -456,29 +439,32 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private DataGridViewRow CreateHistoryRow(HistoryEntry item, BaseUtils.StringSearchTerms search, bool debugmode)
+        private DataGridViewRow CreateHistoryRow(HistoryEntry he, BaseUtils.StringSearchTerms search, HistoryEventFilter hef, bool debugmode)
         {
+            if (!hef.IsIncluded(he))
+                return null;
+
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            string colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(item.EventTimeUTC).ToString();
+            string colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
             string colIcon = "";
-            string colDescription = item.EventSummary;
-            item.FillInformation(out string colInformation, out string eventDetailedInfo);
-            string colNote = (item.SNC != null) ? item.SNC.Note : "";
+            string colDescription = he.EventSummary;
+            he.FillInformation(out string colInformation, out string eventDetailedInfo);
+            string colNote = (he.SNC != null) ? he.SNC.Note : "";
 
             if (debugmode)
             {
-                colIcon = $"{item.TravelState} \r\n"
-                               + $"st[{item.System.Name}]\r\n"
-                               + $"b[{item.Status.BodyName},{item.Status.BodyType},{item.Status.BodyID},ba {item.Status.BodyApproached}]\r\n"
-                               + $"s[{item.Status.StationName},{item.Status.StationType}]\r\n"
-                               + $"mc{item.MaterialCommodity}/w{item.Weapons}/s{item.Suits}/l{item.Loadouts}/e{item.Engineering}\r\n"
-                               + $"b{item.journalEntry.IsBeta}/h{ item.journalEntry.IsHorizons}/o{ item.journalEntry.IsOdyssey}\r\n"
-                               + $"bkt{item.Status.BookedTaxi} d {item.Status.BookedDropship}";
+                colIcon = $"{he.TravelState} \r\n"
+                               + $"st[{he.System.Name}]\r\n"
+                               + $"b[{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}]\r\n"
+                               + $"s[{he.Status.StationName},{he.Status.StationType}]\r\n"
+                               + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}\r\n"
+                               + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
+                               + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship}";
 
-                colDescription = item.journalEntry.EventTypeStr.SplitCapsWord() == item.EventSummary ? item.EventSummary : (item.journalEntry.EventTypeStr + Environment.NewLine + item.EventSummary);
+                colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
 
-                var js = item.journalEntry.GetJsonCloned();
+                var js = he.journalEntry.GetJsonCloned();
                 js.Remove("event", "timestamp");
                 string j = js.ToString().Replace(",\"", ", \"");
                 colNote = j.Left(1000);
@@ -490,7 +476,7 @@ namespace EDDiscovery.UserControls
 
                 if (search.Terms[0] != null)
                 {
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? item.EntryNumber : (discoveryform.history.Count - item.EntryNumber + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
                     matched = entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 colTime.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -501,13 +487,13 @@ namespace EDDiscovery.UserControls
                 }
 
                 if (!matched && search.Terms[1] != null)       // system
-                    matched = item.System.Name.WildCardMatch(search.Terms[1],true);
+                    matched = he.System.Name.WildCardMatch(search.Terms[1],true);
                 if (!matched && search.Terms[2] != null)       // body
-                    matched = item.Status.BodyName?.WildCardMatch(search.Terms[2],true) ?? false;
+                    matched = he.Status.BodyName?.WildCardMatch(search.Terms[2],true) ?? false;
                 if (!matched && search.Terms[3] != null)       // station
-                    matched = item.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
+                    matched = he.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
                 if (!matched && search.Terms[4] != null)       // stationfaction
-                    matched = item.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
+                    matched = he.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
 
                 if (!matched)
                     return null;
@@ -516,20 +502,20 @@ namespace EDDiscovery.UserControls
             var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
             rw.CreateCells(dataGridViewTravel, colTime, colIcon, colDescription, colInformation, colNote);
 
-            rw.Tag = item;  //tag on row
+            rw.Tag = he;  //tag on row
 
             if ( showSystemVisitedForeColourToolStripMenuItem.Checked )
-                rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate) ? ExtendedControls.Theme.Current.KnownSystemColor : ExtendedControls.Theme.Current.UnknownSystemColor;
-            else if ( item.EntryType == JournalTypeEnum.FSDJump || item.EntryType == JournalTypeEnum.CarrierJump)
-                rw.Cells[2].Style.ForeColor = (item.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
+                rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate) ? ExtendedControls.Theme.Current.KnownSystemColor : ExtendedControls.Theme.Current.UnknownSystemColor;
+            else if ( he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump)
+                rw.Cells[2].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
-            string tip = item.EventSummary + Environment.NewLine + colInformation + Environment.NewLine + eventDetailedInfo;
+            string tip = he.EventSummary + Environment.NewLine + colInformation + Environment.NewLine + eventDetailedInfo;
             if ( tip.Length>2000)
                 tip = tip.Substring(0, 2000);
 
             rw.Cells[3].ToolTipText = tip;
 
-            rowsbyjournalid[item.Journalid] = rw;
+            rowsbyjournalid[he.Journalid] = rw;
             return rw;
 
         }
@@ -538,8 +524,6 @@ namespace EDDiscovery.UserControls
         {
             string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlTravelGrid_TT1), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
             comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlTravelGrid_TTSelAge) + ms);
-            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlTravelGrid_TTEvent) + ms);
-            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlTravelGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlTravelGrid_TTTotal) + ms);
         }
 
         private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -1193,8 +1177,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateWordWrap()
         {
-            dataGridViewTravel.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            dataGridViewTravel.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataGridViewTravel.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
         }
 
@@ -1270,7 +1253,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
-            EDDHelp.Help(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Bottom)),this);
+            EDDHelp.Help(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Bottom)),this.HelpKeyOrAddress());
         }
 
         private void runSelectionThroughEDAstroDebugToolStripMenuItem_Click(object sender, EventArgs e)

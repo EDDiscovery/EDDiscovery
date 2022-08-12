@@ -43,6 +43,7 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewReleaseForm));
             this.textBoxReleaseName = new ExtendedControls.ExtTextBox();
             this.labelName = new System.Windows.Forms.Label();
             this.labelURL = new System.Windows.Forms.Label();
@@ -53,7 +54,6 @@ namespace EDDiscovery.Forms
             this.buttonExeInstaller = new ExtendedControls.ExtButton();
             this.buttonPortablezip = new ExtendedControls.ExtButton();
             this.labelDownload = new System.Windows.Forms.Label();
-            this.buttonMsiInstaller = new ExtendedControls.ExtButton();
             this.btnClose = new ExtendedControls.ExtButton();
             this.panelMain = new System.Windows.Forms.Panel();
             this.pnlCaption = new System.Windows.Forms.Panel();
@@ -77,6 +77,9 @@ namespace EDDiscovery.Forms
             this.textBoxReleaseName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxReleaseName.ClearOnFirstChar = false;
             this.textBoxReleaseName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxReleaseName.EndButtonEnable = true;
+            this.textBoxReleaseName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxReleaseName.EndButtonImage")));
+            this.textBoxReleaseName.EndButtonVisible = false;
             this.textBoxReleaseName.InErrorCondition = false;
             this.textBoxReleaseName.Location = new System.Drawing.Point(146, 9);
             this.textBoxReleaseName.Multiline = false;
@@ -120,6 +123,9 @@ namespace EDDiscovery.Forms
             this.textBoxGitHubURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGitHubURL.ClearOnFirstChar = false;
             this.textBoxGitHubURL.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxGitHubURL.EndButtonEnable = true;
+            this.textBoxGitHubURL.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxGitHubURL.EndButtonImage")));
+            this.textBoxGitHubURL.EndButtonVisible = false;
             this.textBoxGitHubURL.InErrorCondition = false;
             this.textBoxGitHubURL.Location = new System.Drawing.Point(146, 37);
             this.textBoxGitHubURL.Multiline = false;
@@ -155,6 +161,9 @@ namespace EDDiscovery.Forms
             this.richTextBoxReleaseInfo.Location = new System.Drawing.Point(146, 67);
             this.richTextBoxReleaseInfo.Name = "richTextBoxReleaseInfo";
             this.richTextBoxReleaseInfo.ReadOnly = true;
+            this.richTextBoxReleaseInfo.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBoxReleaseInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBoxReleaseInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBoxReleaseInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -213,17 +222,6 @@ namespace EDDiscovery.Forms
             this.labelDownload.TabIndex = 9;
             this.labelDownload.Text = "Download";
             // 
-            // buttonMsiInstaller
-            // 
-            this.buttonMsiInstaller.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMsiInstaller.Location = new System.Drawing.Point(491, 385);
-            this.buttonMsiInstaller.Name = "buttonMsiInstaller";
-            this.buttonMsiInstaller.Size = new System.Drawing.Size(150, 23);
-            this.buttonMsiInstaller.TabIndex = 10;
-            this.buttonMsiInstaller.Text = "&Msi Installer";
-            this.buttonMsiInstaller.UseVisualStyleBackColor = true;
-            this.buttonMsiInstaller.Click += new System.EventHandler(this.buttonMsiInstaller_Click);
-            // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -241,7 +239,6 @@ namespace EDDiscovery.Forms
             this.panelMain.Controls.Add(this.labelName);
             this.panelMain.Controls.Add(this.btnClose);
             this.panelMain.Controls.Add(this.textBoxReleaseName);
-            this.panelMain.Controls.Add(this.buttonMsiInstaller);
             this.panelMain.Controls.Add(this.labelURL);
             this.panelMain.Controls.Add(this.labelDownload);
             this.panelMain.Controls.Add(this.textBoxGitHubURL);
@@ -271,12 +268,22 @@ namespace EDDiscovery.Forms
             // pnlClose
             // 
             this.pnlClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlClose.AutoEllipsis = false;
+            this.pnlClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pnlClose.Image = null;
+            this.pnlClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.pnlClose.Location = new System.Drawing.Point(839, 0);
+            this.pnlClose.MouseOverColor = System.Drawing.Color.White;
+            this.pnlClose.MouseSelectedColor = System.Drawing.Color.Green;
+            this.pnlClose.MouseSelectedColorEnable = true;
             this.pnlClose.Name = "pnlClose";
+            this.pnlClose.PanelDisabledScaling = 0.25F;
             this.pnlClose.Selectable = false;
             this.pnlClose.Size = new System.Drawing.Size(24, 24);
             this.pnlClose.TabIndex = 1;
             this.pnlClose.TabStop = false;
+            this.pnlClose.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlClose.UseMnemonic = true;
             this.pnlClose.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlClose_MouseClick);
             // 
             // lblCaption
@@ -342,7 +349,6 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtButton buttonExeInstaller;
         private ExtendedControls.ExtButton buttonPortablezip;
         private System.Windows.Forms.Label labelDownload;
-        private ExtendedControls.ExtButton buttonMsiInstaller;
         private ExtendedControls.ExtButton btnClose;
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Panel pnlCaption;

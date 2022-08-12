@@ -53,8 +53,11 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            var enumlist = new Enum[] { EDTx.SearchMaterialsCommodities_ColumnDate, EDTx.SearchMaterialsCommodities_ColumnStar, EDTx.SearchMaterialsCommodities_ColumnLocation, EDTx.SearchMaterialsCommodities_ColumnCurrentDistance, EDTx.SearchMaterialsCommodities_ColumnPosition, EDTx.SearchMaterialsCommodities_buttonExtFind, EDTx.SearchMaterialsCommodities_label2, EDTx.SearchMaterialsCommodities_label1 };
+            var enumlist = new Enum[] { EDTx.SearchMaterialsCommodities_ColumnDate, EDTx.SearchMaterialsCommodities_ColumnStar, EDTx.SearchMaterialsCommodities_ColumnLocation, EDTx.SearchMaterialsCommodities_ColumnCurrentDistance, EDTx.SearchMaterialsCommodities_ColumnPosition, EDTx.SearchMaterialsCommodities_label2, EDTx.SearchMaterialsCommodities_label1 };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] {  });
+
+            var enumlisttt = new Enum[] { EDTx.SearchMaterialsCommodities_buttonExtExcel_ToolTip, EDTx.SearchMaterialsCommodities_buttonExtFind_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCMANDOR_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM1_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             dataGridView.Init(discoveryform);
 
@@ -172,6 +175,25 @@ namespace EDDiscovery.UserControls
                         found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".T(EDTx.SearchMaterialsCommodities_DIS) + je.BodyName);
                 }
 
+                else if (he.EntryType == JournalTypeEnum.FCMaterials)
+                {
+                    var je = he.journalEntry as JournalFCMaterials;
+                    string tx = " @ " + he.WhereAmI + " " + je.CarrierName;
+
+                    if (je.HasItemToBuy(cm.FDName))
+                    {
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Buy".T(EDTx.UserControlMarketData_BuyCol) + tx);
+                    }
+                    if (je.HasItemToSell(cm.FDName))
+                    {
+                        if ( found == null )
+                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".T(EDTx.UserControlMarketData_SellCol) + tx);
+                        else
+                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".T(EDTx.UserControlMarketData_SellCol) +  " " + "Buy".T(EDTx.UserControlMarketData_BuyCol) + tx);
+                    }
+                    checkstation = true;
+                }
+
                 if (found != null)
                 {
                     string keyname = he.System.Name + (checkstation ? ":"+he.WhereAmI : "");
@@ -263,7 +285,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            dataGridView.Excel(4);
+            dataGridView.Excel(dataGridView.ColumnCount);
         }
     }
 }

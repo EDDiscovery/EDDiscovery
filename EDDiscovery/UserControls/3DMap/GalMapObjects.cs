@@ -36,11 +36,23 @@ namespace EDDiscovery.UserControls.Map3D
         {
         }
 
-        public bool Enable { get { return objectshader.Enable; } set { textrenderer.Enable = objectshader.Enable = value; } }
         public Font Font { get; set; } = new Font("Arial", 8.5f);
-
-        public void SetGalObjectTypeEnable(string id, bool state) { State[id] = state; UpdateEnables(); }
         public bool GetGalObjectTypeEnable(string id) { return !State.ContainsKey(id) || State[id] == true; }
+
+        public bool Enable { get { return objectshader.Enable; } }
+
+        public HashSet<ObjectPosXYZ> Positions { get; private set; } = new HashSet<ObjectPosXYZ>();     // positions of gal map objects
+
+        // all enable set functions return a list of current gal objects positions
+        public void SetShaderEnable(bool enable)
+        {
+            textrenderer.Enable = objectshader.Enable = enable;
+            if (enable)
+                UpdateEnables();
+            else
+                Positions = new HashSet<ObjectPosXYZ>();
+        }
+        public void SetGalObjectTypeEnable(string id, bool state) { State[id] = state; UpdateEnables(); }
         public void SetAllEnables(string settings)
         {
             string[] ss = settings.Split(',');
@@ -62,6 +74,38 @@ namespace EDDiscovery.UserControls.Map3D
             return s;
         }
 
+        public void SetAutoScale(int max)
+        {
+            objectshader.GetShader<GLPLVertexScaleLookatConfigurable>().SetScalars(30, 1, max);
+        }
+
+        // used to pass back object positions used
+        public struct ObjectPosXYZ
+        {
+            public int x;       // these are in SystemClass.XYZScalar
+            public int y;
+            public int z;
+
+            public ObjectPosXYZ(float fx, float fy, float fz)
+            {
+                x = (int)(fx * EliteDangerousCore.SystemClass.XYZScalar);
+                y = (int)(fy * EliteDangerousCore.SystemClass.XYZScalar);
+                z = (int)(fz * EliteDangerousCore.SystemClass.XYZScalar);
+            }
+            public ObjectPosXYZ(double fx, double fy, double fz)
+            {
+                x = (int)(fx * EliteDangerousCore.SystemClass.XYZScalar);
+                y = (int)(fy * EliteDangerousCore.SystemClass.XYZScalar);
+                z = (int)(fz * EliteDangerousCore.SystemClass.XYZScalar);
+            }
+            public ObjectPosXYZ(int ix, int iy, int iz)
+            {
+                x = ix;
+                y = iy;
+                z = iz;
+            }
+        }
+
         public static IReadOnlyDictionary<GalMapType.VisibleObjectsType, Image> GalMapTypeIcons { get; } = new BaseUtils.Icons.IconGroup<GalMapType.VisibleObjectsType>("GalMap");
 
         public void CreateObjects(GLItemsList items, GLRenderProgramSortedList rObjects, GalacticMapping galmap, GLStorageBlock findbufferresults, bool depthtest)
@@ -75,21 +119,23 @@ namespace EDDiscovery.UserControls.Map3D
             var objtex = new GLTexture2DArray(images, bmpmipmaplevels: 1, wantedmipmaplevels: 3, texturesize: new Size(256, 256), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8, alignment: ContentAlignment.BottomCenter);
             IGLTexture texarray = items.Add(objtex, "GalObjTex");
 
-            const float objsize = 1.0f;        // size of object on screen
+            const float objsize = 1.5f;        // size of object on screen
             const float wavesize = 0.1f;
             Size textbitmapsize = new Size(128, 40);
-            Vector3 labelsize = new Vector3(2, 0, 2.0f * textbitmapsize.Height / textbitmapsize.Width);   // size of text
+            Vector3 labelsize = new Vector3(4, 0, 4.0f * textbitmapsize.Height / textbitmapsize.Width);   // size of text
 
             // now build the shaders
 
             const int texbindingpoint = 1;
-            var vert = new GLPLVertexScaleLookat(rotatetoviewer: dorotate, rotateelevation: doelevation,       // a look at vertex shader
-                                                        autoscale: 30, autoscalemin: 1f, autoscalemax: 30f, useeyedistance:false); 
+            var vert = new GLPLVertexScaleLookatConfigurable(rotatetoviewer: dorotate, rotateelevation: doelevation,       // a look at vertex shader
+                                                             useeyedistance:false); 
             var tcs = new GLPLTesselationControl(10f);  // number of intermediate points
             tes = new GLPLTesselationEvaluateSinewave(wavesize, 1f);         // 0.2f in size, 1 wave across the object
             var frag = new GLPLFragmentShaderTexture2DDiscard(texbindingpoint);       // binding - takes image pos from tes. imagepos < 0 means discard
             objectshader = new GLShaderPipeline(vert, tcs, tes, null, frag);
             items.Add(objectshader);
+
+            SetAutoScale(300);
 
             objectshader.StartAction += (s, m) =>
             {
@@ -182,6 +228,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         private void UpdateEnables()           // rewrite the modelworld buffer with the ones actually enabled
         {
+            Positions = new HashSet<ObjectPosXYZ>();
+
             modelworldbuffer.StartWrite(worldpos);                  // overwrite world positions
 
             var renderablegalmapobjects = galmap.VisibleMapObjects; // list of displayable entries
@@ -191,12 +239,13 @@ namespace EDDiscovery.UserControls.Map3D
             foreach (var o in renderablegalmapobjects)
             {
                 bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);
-               // System.Diagnostics.Debug.WriteLine($"{o.Name} {o.GalMapType.TypeName} {en}");
+                //System.Diagnostics.Debug.WriteLine($"{o.Name} {o.GalMapType.TypeName} {en}");
 
                 if (en)
                 {
                     modelworldbuffer.Write(new Vector4(o.Points[0].X, o.Points[0].Y, o.Points[0].Z, o.GalMapType.Index + (!Animate(o.GalMapType.VisibleType.Value) ? 65536 : 0)));
                     indextoentry[mwpos++] = entry;
+                    Positions.Add(new ObjectPosXYZ(o.Points[0].X, o.Points[0].Y, o.Points[0].Z));
                 }
 
                 textrenderer.SetVisiblityRotation(o.ID, en, dorotate, doelevation);
@@ -207,8 +256,6 @@ namespace EDDiscovery.UserControls.Map3D
             //var f = modelworldbuffer.ReadVector4(worldpos, renderablegalmapobjects.Count());  foreach (var v in f) System.Diagnostics.Debug.WriteLine("Vector " + v);
             ridisplay.InstanceCount = rifind.InstanceCount = mwpos;
         }
-
-        // returns GMO, and z - if not found z = Max value, null
 
         public GalacticMapObject FindPOI(Point viewportloc, GLRenderState state, Size viewportsize, out float z)
         {

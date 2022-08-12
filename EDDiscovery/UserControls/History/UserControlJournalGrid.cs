@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2022I EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,6 @@
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
-using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
@@ -65,6 +64,8 @@ namespace EDDiscovery.UserControls
         private Queue<Action> todo = new Queue<Action>();
         private Queue<HistoryEntry> queuedadds = new Queue<HistoryEntry>();
 
+        private int fdropdown;     // filter totals
+
         public UserControlJournalGrid()
         {
             InitializeComponent();
@@ -111,7 +112,7 @@ namespace EDDiscovery.UserControls
             TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""));
 
             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
-                searchterms = "".TxID(EDTx.UserControlTravelGrid_SearchTerms);
+                searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
         }
 
         public override void LoadLayout()
@@ -140,7 +141,6 @@ namespace EDDiscovery.UserControls
             HistoryChanged(discoveryform.history);
         }
 
-        int fdropdown, ftotalevents, ftotalfilters;     // filter totals
 
         private void HistoryChanged(HistoryList hl)
         {
@@ -176,9 +176,6 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
             fdropdown = hl.Count - result.Count();
 
-            result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotalevents);
-            result = HistoryFilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
-
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
 
@@ -197,6 +194,8 @@ namespace EDDiscovery.UserControls
 
             var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
 
             //int lrowno = 0;
@@ -211,7 +210,7 @@ namespace EDDiscovery.UserControls
 
                     foreach (var item in chunk)
                     {
-                        var row = CreateHistoryRow(item, sst);
+                        var row = CreateHistoryRow(item, sst, hef);
                         if (row != null)
                         {
                             //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
@@ -284,33 +283,14 @@ namespace EDDiscovery.UserControls
 
         private void AddEntry(HistoryEntry he)
         { 
-            bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All"));
+            var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
 
-            if (!add)
-            {
-                ftotalevents++;
-                UpdateToolTipsForFilter();
-            }
-
-            if (add && !HistoryFilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
-            {
-                add = false;
-                ftotalfilters++;
-                UpdateToolTipsForFilter();
-            }
-
-            if (add)
-            {
-                var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
-                var row = CreateHistoryRow(he, sst);     // we might be filtered out by search
-                if (row != null)
-                    dataGridViewJournal.Rows.Insert(0, row);
-                else
-                    add = false;
-            }
-
-            if (add)                                // its been added, we have at least 1 row visible, at row 0
+            var row = CreateHistoryRow(he, sst, hef);     // we might be filtered out by search
+            if (row != null)
             { 
+                dataGridViewJournal.Rows.Insert(0, row);
+
                 var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
                 if (filter.MaximumNumberOfItems != null)        // this one won't remove the latest one
@@ -330,8 +310,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private DataGridViewRow CreateHistoryRow(HistoryEntry he, BaseUtils.StringSearchTerms search)
+        private DataGridViewRow CreateHistoryRow(HistoryEntry he, BaseUtils.StringSearchTerms search, HistoryEventFilter hef)
         {
+            if (!hef.IsIncluded(he))
+                return null;
+
             DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             he.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string detail = EventDescription;
@@ -379,8 +362,6 @@ namespace EDDiscovery.UserControls
         {
             string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
             comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
-            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlJournalGrid_TTEvent) + ms);
-            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlJournalGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlJournalGrid_TTTotal) + ms);
         }
 
 	    #endregion
