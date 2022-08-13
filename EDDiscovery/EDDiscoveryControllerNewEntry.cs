@@ -206,7 +206,7 @@ namespace EDDiscovery
 
                         if ( marketjson != null )
                         {
-                            System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
+                            //System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
 
                             CAPI.Market mk = new CAPI.Market(marketjson);
                             if (mk.IsValid && station.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
@@ -244,7 +244,9 @@ namespace EDDiscovery
                         if (shipyardjson != null)
                         {
                             CAPI.Shipyard sh = new CAPI.Shipyard(shipyardjson);
-                            System.IO.File.WriteAllText(@"c:\code\shipyard.json", shipyardjson);
+                            
+                            //System.IO.File.WriteAllText(@"c:\code\shipyard.json", shipyardjson);
+
                             if (sh.IsValid && station.Equals(sh.Name, StringComparison.InvariantCultureIgnoreCase))
                             {
                                 System.Diagnostics.Trace.WriteLine($"CAPI got shipyard {sh.Name}");
