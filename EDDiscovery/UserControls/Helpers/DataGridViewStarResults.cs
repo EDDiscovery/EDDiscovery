@@ -209,14 +209,18 @@ namespace EDDiscovery.UserControls.Search
                     grd.GetLine += delegate (int r)
                     {
                         DataGridViewRow rw = Rows[r];
-                        ISystem sys = SysFrom(rw.Tag);
                         List<Object> data = new List<object>();
                         for (int i = 0; i < columnsout; i++)
                             data.Add(rw.Cells[i].Value);
 
-                        data.Add(sys.X.ToString("0.#"));
-                        data.Add(sys.Y.ToString("0.#"));
-                        data.Add(sys.Z.ToString("0.#"));
+                        ISystem sys = SysFrom(rw.Tag);
+                        
+                        if (sys != null)        // in case we don't have a valid tag
+                        {
+                            data.Add(sys.X.ToString("0.#"));
+                            data.Add(sys.Y.ToString("0.#"));
+                            data.Add(sys.Z.ToString("0.#"));
+                        }
 
                         return data.ToArray();
                     };
