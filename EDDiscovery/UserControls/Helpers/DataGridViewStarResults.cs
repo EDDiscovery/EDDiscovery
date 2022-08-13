@@ -80,21 +80,25 @@ namespace EDDiscovery.UserControls.Search
             ContextMenuStrip.Items[3].Visible = rightclicktag is HistoryEntry;
         }
 
-        private ISystem SysFrom(Object t)   // given tag, find the isystem
+        private ISystem SysFrom(Object t)   // given tag, find the isystem, may be null. 
         {
             if (t is HistoryEntry)
                 return ((HistoryEntry)t).System;
-            else
+            else if (t is ISystem)
                 return (ISystem)t;
+            else
+                return null;
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicktag != null)
+            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+
+            if (sys != null)
             {
                 this.Cursor = Cursors.WaitCursor;
                 EDSMClass edsm = new EDSMClass();
-                if (!edsm.ShowSystemInEDSM(SysFrom(rightclicktag).Name))
+                if (!edsm.ShowSystemInEDSM(sys.Name))
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
                 this.Cursor = Cursors.Default;
@@ -103,7 +107,8 @@ namespace EDDiscovery.UserControls.Search
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicktag != null)
+            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+            if (sys != null)
             {
                 discoveryform.Open3DMap(SysFrom(rightclicktag));
             }
@@ -111,7 +116,7 @@ namespace EDDiscovery.UserControls.Search
 
         private void GotoEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicktag != null)
+            if (rightclicktag != null && rightclicktag is HistoryEntry)
             {
                 GotoEntryClicked?.Invoke(rightclicktag as HistoryEntry);
             }
