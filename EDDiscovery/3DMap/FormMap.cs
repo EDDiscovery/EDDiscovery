@@ -1812,24 +1812,6 @@ namespace EDDiscovery
                 info = hoversystem.Name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.X.ToString("0.00"), hoversystem.Y.ToString("0.00"), hoversystem.Z.ToString("0.00"));
 
                 pos = new Vector3d(hoversystem.X, hoversystem.Y, hoversystem.Z);
-
-                if (hoversystem.Allegiance != EDAllegiance.Unknown)
-                    info += Environment.NewLine + "Allegiance: " + hoversystem.Allegiance;
-
-                if (hoversystem.PrimaryEconomy != EDEconomy.Unknown)
-                    info += Environment.NewLine + "Economy: " + hoversystem.PrimaryEconomy;
-
-                if (hoversystem.Government != EDGovernment.Unknown)
-                    info += Environment.NewLine + "Government: " + hoversystem.Allegiance;
-
-                if (hoversystem.State != EDState.Unknown)
-                    info += Environment.NewLine + "State: " + hoversystem.State;
-
-                if (hoversystem.Allegiance != EDAllegiance.Unknown)
-                    info += Environment.NewLine + "Allegiance: " + hoversystem.Allegiance;
-
-                if (hoversystem.Population != 0)
-                    info += Environment.NewLine + "Population: " + hoversystem.Population;
             }
             else if (curbookmark != null && curbookmark.Heading != null)     // region bookmark (second check should be redundant but its protection).
             {

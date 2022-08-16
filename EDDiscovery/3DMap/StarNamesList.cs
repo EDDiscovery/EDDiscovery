@@ -33,7 +33,6 @@ namespace EDDiscovery
         {
             name = other.Name;
             pos = posf;
-            population = other.Population;
 
             nametexture = null;
             newnametexture = null;
