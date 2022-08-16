@@ -177,7 +177,6 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" @
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" @
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" @
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" @
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" @
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" @

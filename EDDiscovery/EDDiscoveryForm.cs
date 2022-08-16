@@ -433,7 +433,7 @@ namespace EDDiscovery
 
             //---------------------------------------------------------------------- Tool tips
 
-            var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_show3DMapsToolStripMenuItem, 
+            var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_exitToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, 

@@ -45,7 +45,6 @@ namespace EDDiscovery
         EDDiscoveryForm_notifyIconMenu_Exit, // ToolStrip control 'E&xit'
         EDDiscoveryForm_toolsToolStripMenuItem, // ToolStrip control '&Tools'
         EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, // ToolStrip control 'Settings'
-        EDDiscoveryForm_toolsToolStripMenuItem_show3DMapsToolStripMenuItem, // ToolStrip control 'Show old &3D maps (depreciated)'
         EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, // ToolStrip control '&Pop-outs'
         EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, // ToolStrip control '&Show All In Task Bar'
         EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, // ToolStrip control '&Turn Off All Transparency'
