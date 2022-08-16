@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (bk != null)
                 {
-                    e.Graphics.DrawImage(Icons.Controls.Map3D_Bookmarks_Star, new Rectangle(hstart, top, size, size));
+                    e.Graphics.DrawImage(Icons.Controls.Bookmarks, new Rectangle(hstart, top, size, size));
                 }
             }
         }

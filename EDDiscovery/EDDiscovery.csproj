@@ -344,11 +344,6 @@
     <Compile Include="UserControls\ScansStars\UserControl2DMap.Designer.cs">
       <DependentUpon>UserControl2DMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="3DMap\MapRecorder.cs" />
-    <Compile Include="3DMap\DatasetBuilder.cs" />
-    <Compile Include="3DMap\MapManager.cs" />
-    <Compile Include="3DMap\StarGrid.cs" />
-    <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="Actions\ActionEventList.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEliteBindings.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionKeyED.cs" />
@@ -575,12 +570,6 @@
     <Compile Include="Forms\TimedMessage.Designer.cs">
       <DependentUpon>TimedMessage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RecordStep.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RecordStep.Designer.cs">
-      <DependentUpon>RecordStep.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\Form\UserControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -588,12 +577,6 @@
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EDDConfig.cs" />
-    <Compile Include="3DMap\FormMap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="3DMap\FormMap.Designer.cs">
-      <DependentUpon>FormMap.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1013,9 +996,6 @@
     <EmbeddedResource Include="EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="3DMap\FormMap.resx">
-      <DependentUpon>FormMap.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -1030,9 +1010,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TimedMessage.resx">
       <DependentUpon>TimedMessage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RecordStep.resx">
-      <DependentUpon>RecordStep.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>

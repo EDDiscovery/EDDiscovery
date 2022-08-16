@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonNewBookmark
             // 
-            this.buttonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Map3D_Bookmarks_ShowBookmarks;
+            this.buttonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
             this.buttonNewBookmark.Location = new System.Drawing.Point(167, 3);
             this.buttonNewBookmark.Name = "buttonNewBookmark";
             this.buttonNewBookmark.Size = new System.Drawing.Size(32, 32);

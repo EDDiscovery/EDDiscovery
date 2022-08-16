@@ -56,7 +56,6 @@ namespace EDDiscovery
         public bool TabsReset { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
-        public bool No3DMap { get; private set; }
         public string TraceLog { get; private set; }        // null = auto file, or fixed name
         public bool LogExceptions { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
@@ -333,7 +332,6 @@ namespace EDDiscovery
                     case "notabs": NoTabs = true; break;
                     case "tabsreset": TabsReset = true; break;
                     case "nosound": NoSound = true; break;
-                    case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
                     case "resetlanguage": ResetLanguage = true; break;
                     case "tempdirindatadir": TempDirInDataDir = true; break;

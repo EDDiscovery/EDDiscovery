@@ -191,19 +191,6 @@ namespace EDDiscovery
         #endregion
 
         #region 3dmap
-        public void OpenOld3DMap()     // Old map open
-        {
-            if (!old3DMap.Is3DMapsRunning)            // if not running, click the 3dmap button
-            {
-                ISystem last = PrimaryCursor.GetCurrentHistoryEntry?.System;
-
-                old3DMap.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
-                            EDCommander.Current.HomeSystemIOrSol,
-                            1, Controller.history.FilterByTravelTime(null, null, true));
-                old3DMap.Show();
-            }
-        }
-
         public UserControls.UserControl3DMap Open3DMap()         // Current map - open at last position or configured position
         {
             var t3dmap = typeof(UserControls.UserControl3DMap);

@@ -116,7 +116,6 @@ namespace EDDiscovery
         private EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
-        private EDDiscovery._3DMap.MapManager old3DMap;
         private BaseUtils.GitHubRelease newRelease;
         private Timer periodicchecktimer;
         private bool in_system_sync = false;        // between start/end sync of databases
@@ -255,7 +254,6 @@ namespace EDDiscovery
 
             ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
-            old3DMap = new EDDiscovery._3DMap.MapManager(this);
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
             msg.Invoke("Applying Themes");
@@ -294,7 +292,7 @@ namespace EDDiscovery
 
             // create the action controller and install commands before we executre tabs, since some tabs need these set up
 
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { });
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
@@ -1056,10 +1054,6 @@ namespace EDDiscovery
             tabControlMain.EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Settings, true);
         }
 
-        private void showold3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenOld3DMap();
-        }
 
         private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
