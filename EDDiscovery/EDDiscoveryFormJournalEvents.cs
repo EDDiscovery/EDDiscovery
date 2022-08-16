@@ -143,6 +143,7 @@ namespace EDDiscovery
                 if (queuedfsssd != null && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)queuedfsssd.journalEntry).Signals[0].SystemAddress == he.System.SystemAddress)     // if queued, and we are now in its system
                 {
                     System.Diagnostics.Debug.WriteLine($"EDDN send of FSSSignalDiscovered is sent - now in system");
+                    ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)queuedfsssd.journalEntry).EDDNSystem = he.System; // override for EDDN purposes
                     EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> {queuedfsssd });
                     queuedfsssd = null;
                 }
