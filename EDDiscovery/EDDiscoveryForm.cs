@@ -584,7 +584,7 @@ namespace EDDiscovery
             };
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Web");
-            WebServerControl(EDDConfig.Instance.WebServerEnable);
+            WebServerControl(EDDConfig.Instance.WebServerEnable, EDDConfig.Instance.WebServerPort);
 
             tabControlMain.SelectedIndexChanged += (snd, ea) =>
             {

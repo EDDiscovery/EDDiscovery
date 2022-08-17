@@ -53,14 +53,14 @@ namespace EDDiscovery
 
         #region webserver
 
-        public bool WebServerControl(bool start)        // false if an error occurs
+        public bool WebServerControl(bool start, int portno)        // false if an error occurs
         {
             if (WebServer.Running)
                 WebServer.Stop();
 
             if (start)
             {
-                WebServer.Port = EDDConfig.Instance.WebServerPort;
+                WebServer.Port = portno;
 
                 string servefrom;
                 bool valid;
