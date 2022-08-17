@@ -759,16 +759,18 @@ namespace EDDiscovery.UserControls
                     //string cmd = "-Command new-netfirewallrule -Name EDDiscovery -DisplayName EDDiscovery -Description Webserver -Program \"" + exe + "\" -Direction Inbound -Action Allow -LocalPort " + EDDConfig.Instance.WebServerPort.ToStringInvariant() + " -Protocol TCP" +
 
                     string cmd = "-Command " +
+                                 "remove-netfirewallrule " +
+                                 "-Name EDDiscovery;" +
                                  "new-netfirewallrule " +
                                  "-Name EDDiscovery " +
                                  "-DisplayName EDDiscovery " +
                                  "-Description Webserver " +
                                  "-Direction Inbound " +
                                  "-Action Allow " +
-                                $"-LocalPort {EDDConfig.Instance.WebServerPort.ToStringInvariant()} " +
+                                $"-LocalPort {numberBoxLongPortNo.Value.ToStringInvariant()} " +
                                  "-Protocol TCP;" +
                                  "netsh http add urlacl " +
-                                $"url = http://*:{EDDConfig.Instance.WebServerPort.ToStringInvariant()}/ " +
+                                $"url = http://*:{numberBoxLongPortNo.Value.ToStringInvariant()}/ " +
                                 $"user=\"{Environment.GetEnvironmentVariable("USERDOMAIN")}\\{Environment.GetEnvironmentVariable("USERNAME")}\"";
 
                     int pid = process.StartProcess("Powershell.exe", cmd, "runas");
@@ -778,18 +780,20 @@ namespace EDDiscovery.UserControls
                         ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Configuration did not run", "Web Server");
                     }
                     else
-                    {
+                    {                        
                         process.WaitForProcess(pid, 25000);
                     }
                 }
             }
 
-            if ( !discoveryform.WebServerControl(runit) )
+            if ( !discoveryform.WebServerControl(runit, (int)numberBoxLongPortNo.Value) )
             {
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Did not start - click OK to configure windows".T(EDTx.UserControlSettings_WSF), "Web Server");
             }
             else
                 EDDConfig.Instance.WebServerEnable = runit;     // this is for next time at startup
+                EDDConfig.Instance.WebServerPort = (int)numberBoxLongPortNo.Value;
+
         }
 
         #endregion
@@ -798,7 +802,7 @@ namespace EDDiscovery.UserControls
         {
             string ipv4 = BaseUtils.BrowserInfo.EstimateLocalHostPreferredIPV4();
 
-            BaseUtils.BrowserInfo.LaunchBrowser("http://" + ipv4 + ":" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/");
+            BaseUtils.BrowserInfo.LaunchBrowser("http://" + ipv4 + ":" + numberBoxLongPortNo.Value.ToStringInvariant() + "/");
         }
 
         private void extButtonDLLPerms_Click(object sender, EventArgs e)
