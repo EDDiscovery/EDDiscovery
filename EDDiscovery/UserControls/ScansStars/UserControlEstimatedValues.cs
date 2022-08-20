@@ -201,6 +201,8 @@ namespace EDDiscovery.UserControls
                                         fdmappedstr ,
                                         estimatedvalue>0 ? estimatedvalue.ToString("N0") : "" });
 
+                        // column 0 is sorted by tag and has the full name in it.
+                        dataGridViewEstimatedValues.Rows[dataGridViewEstimatedValues.RowCount - 1].Cells[0].Tag = bodies.ScanData.BodyDesignationOrName;
                         totalvalue += estimatedvalue;
                     }
                 }
@@ -250,7 +252,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewEstimatedValues_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
-                e.SortDataGridViewColumnNumericThenAlpha();
+                e.SortDataGridViewColumnAlphaInt(true);     // use cell tag which has full name
             else if (e.Column.Index >= 6)
                 e.SortDataGridViewColumnNumeric();
             else if (e.Column.Index >= 3)
