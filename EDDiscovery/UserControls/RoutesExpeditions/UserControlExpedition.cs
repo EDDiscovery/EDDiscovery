@@ -353,10 +353,10 @@ namespace EDDiscovery.UserControls
                             if (sn?.ScanData != null)  // must have scan data..
                             {
                                 if (
-                                   (sn.ScanData.IsBeltCluster && showbeltclusters) ||     // major selectors for line display
-                                   (sn.ScanData.IsPlanet && showplanets) ||
-                                   (sn.ScanData.IsStar && showstars) ||
-                                   (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
+                                   (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||     // major selectors for line display
+                                   (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
+                                   (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
+                                   (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
                                    )
                                 {
                                     string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
