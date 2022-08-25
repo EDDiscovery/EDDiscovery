@@ -262,6 +262,7 @@ namespace EDDiscovery.UserControls
             bool showatmos = displayfilters.Contains("atmos");
             bool showrings = displayfilters.Contains("rings");
             bool showorganics = displayfilters.Contains("organics");
+            bool disablegmoshow = displayfilters.Contains("gmoinfooff");
 
             for (int rowindex = rowstart; rowindex <= Math.Min(rowendinc, dataGridView.Rows.Count-1); rowindex++)
             {
@@ -281,9 +282,12 @@ namespace EDDiscovery.UserControls
                 if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
                     note = note.AppendPrePad(bkmark.Note, "; ");
 
-                var gmo = discoveryform.galacticMapping.Find(sysname);
-                if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
-                    note = note.AppendPrePad(gmo.Description, "; ");
+                if (!disablegmoshow)
+                {
+                    var gmo = discoveryform.galacticMapping.Find(sysname);
+                    if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
+                        note = note.AppendPrePad(gmo.Description, "; ");
+                }
 
                 row.Cells[Note.Index].Value = note;
 
@@ -292,10 +296,10 @@ namespace EDDiscovery.UserControls
                 if ( edsmcheck )    // mark if edsm checked, so we don't do it again
                     row.Cells[0].Tag = edsmcheck;       // if been looked up via EDSM, do first before async lookup as it will return immediately due to await
 
-                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
+                //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
                 var lookup = edsmcheck;     // here so you can turn it off for speed
                 var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, lookup);
-                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
+                //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
 
                 if (closing)        // because its async, the await returns with void, and then this is called back, and we may be closing.
                     return;
@@ -306,7 +310,7 @@ namespace EDDiscovery.UserControls
 
                 row.Cells[Visits.Index].Value = discoveryform.history.Visits(sysname).ToString("0");
 
-                if ( sys == null )
+                if ( sys == null )      // no system found
                 {
                     row.Cells[Distance.Index].Tag = null;
 
@@ -922,6 +926,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("atmos", "Show atmospheres of landables".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
             displayfilter.AddStandardOption("rings", "Show rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
             displayfilter.AddStandardOption("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
+            displayfilter.AddStandardOption("gmoinfooff", "Disable showing GMO Info".T(EDTx.UserControlExpedition_GMOInfo), global::EDDiscovery.Icons.Controls.Globe);
             displayfilter.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
             {
@@ -1198,14 +1203,10 @@ namespace EDDiscovery.UserControls
             ISystem sc = SystemCache.FindSystem((string)obj,discoveryform.galacticMapping, true);     // use EDSM directly if required
 
             if (sc == null)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExpedition_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
-            }
-            else
-            {
-                TargetHelpers.ShowBookmarkForm(this, discoveryform, sc, null, false);
-                UpdateSystemRows();
-            }
+                sc = new SystemClass((string)obj,0,0,0);
+
+            TargetHelpers.ShowBookmarkForm(this, discoveryform, sc, null, false);
+            UpdateSystemRows();
         }
 
         #endregion

@@ -33,7 +33,6 @@ namespace EDDiscovery.Forms
         public PlanetMarks SurfaceLocations { get { return SurfaceBookmarks.PlanetMarks; } }
         
         private string edsmurl = null;
-        bool validatestarname = false;
 
         private HistoryList helist;
 
@@ -88,9 +87,7 @@ namespace EDDiscovery.Forms
             textBoxName.ClearOnFirstChar = true;
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             textBoxName.ReturnPressed += (ctrl) => { return true; };
-            textBoxX.ReadOnly = false;
-            textBoxY.ReadOnly = false;
-            textBoxZ.ReadOnly = false;
+            textBoxX.ReadOnly = textBoxY.ReadOnly = textBoxZ.ReadOnly = false;      // enable editing
 
             HideEDSM();
             HideTravelNote();   // in order
@@ -179,22 +176,21 @@ namespace EDDiscovery.Forms
             SurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
         }
 
-        public void NewFreeEntrySystemBookmark(DateTime timeutc)     // new system bookmark anywhere
+        public void NewFreeEntrySystemBookmark(DateTime timeutc)                     // new system bookmark anywhere
         {
             this.Text = "New System Bookmark".T(EDTx.BookmarkForm_NSB);
             textBoxName.Text = "Enter a system name...".T(EDTx.BookmarkForm_ESN);
             textBoxName.ClearOnFirstChar = true;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
-            validatestarname = true;
             textBoxName.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList,true);
             textBoxName.ClearOnFirstChar = true;
             textBoxName.SelectAll();
             textBoxName.Focus();
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
-            validatestarname = true;
             buttonDelete.Hide();
             buttonEDSM.Enabled = false;
             buttonOK.Enabled = false;
+            textBoxX.ReadOnly = textBoxY.ReadOnly = textBoxZ.ReadOnly = false;      // enable editing
             SurfaceBookmarks.Init("", helist);
         }
 
@@ -264,25 +260,24 @@ namespace EDDiscovery.Forms
             Close();
         }
 
-        private void textBox_TextChanged(object sender, EventArgs e)
+        private void textBox_TextNumChanged(object sender, EventArgs e)
         {
-            if ( validatestarname )
+             buttonOK.Enabled = ValidateData();
+        }
+        private void textBox_TextNameChanged(object sender, EventArgs e)
+        {
+            ISystem f = SystemCache.FindSystem(textBoxName.Text, null, false);       // no edsm lookup, too slow to do interactively.
+            if (f != null && f.HasCoordinate)
             {
-                ISystem f = SystemCache.FindSystem(textBoxName.Text,null,false);       // no edsm lookup, too slow to do interactively.
-                if (f != null && f.HasCoordinate)
-                {
-                    InitialisePos(f);
-                    var edsm = new EDSMClass();
-                    edsmurl = edsm.GetUrlToSystem(f.Name);
-                    SurfaceBookmarks.Init(f.Name, helist);
-                }
-                else
-                    textBoxX.Text = textBoxY.Text = textBoxZ.Text = "";
-
-                buttonEDSM.Enabled = buttonOK.Enabled = ValidateData() && f != null;
+                InitialisePos(f);
+                var edsm = new EDSMClass();
+                edsmurl = edsm.GetUrlToSystem(f.Name);
+                SurfaceBookmarks.Init(f.Name, helist);
             }
             else
-                buttonOK.Enabled = ValidateData();
+                textBoxX.Text = textBoxY.Text = textBoxZ.Text = "";
+
+            buttonEDSM.Enabled = buttonOK.Enabled = ValidateData() && f != null;
         }
 
         private bool ValidateData()
