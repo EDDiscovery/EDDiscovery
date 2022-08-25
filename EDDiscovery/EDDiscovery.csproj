@@ -144,8 +144,8 @@
       <DependentUpon>Controls.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </None>
-    <Reference Include="GLOFC, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.1.0.2\lib\net48\GLOFC.dll</HintPath>
+    <Reference Include="GLOFC, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.GLOFC.1.0.3\lib\net48\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>

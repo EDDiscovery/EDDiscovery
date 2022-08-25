@@ -1069,12 +1069,12 @@ namespace EDDiscovery
         UserControlExpedition_EDSMUnk,  // discrete
         UserControlExpedition_NoScanInfo, // discrete
         UserControlExpedition_Specify, // Please specify a name for the route.
-        UserControlExpedition_UnknownS, // Unknown system, system is without co-ordinates
         UserControlExpedition_Createroute, // Please create a route on a route panel
         UserControlExpedition_NoRouteExport, // There is no route to export
         UserControlExpedition_NoRoute, // No route set up. Please add at least two systems.
         UserControlExpedition_Delete, // Are you sure you want to delete this route?
-        UserControlExpedition_AddSys, 
+        UserControlExpedition_AddSys,
+        UserControlExpedition_GMOInfo, // Unknown system, system is without co-ordinates
 
         UserControlRoute_SystemCol, // Column Header 'System'
         UserControlRoute_DistanceCol, // Column Header 'Distance'

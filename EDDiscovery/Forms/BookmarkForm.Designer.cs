@@ -151,7 +151,7 @@ namespace EDDiscovery.Forms
             this.textBoxX.TabIndex = 4;
             this.textBoxX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxX.WordWrap = true;
-            this.textBoxX.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.textBoxX.TextChanged += new System.EventHandler(this.textBox_TextNumChanged);
             // 
             // textBoxY
             // 
@@ -178,7 +178,7 @@ namespace EDDiscovery.Forms
             this.textBoxY.TabIndex = 5;
             this.textBoxY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxY.WordWrap = true;
-            this.textBoxY.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.textBoxY.TextChanged += new System.EventHandler(this.textBox_TextNumChanged);
             // 
             // textBoxZ
             // 
@@ -205,7 +205,7 @@ namespace EDDiscovery.Forms
             this.textBoxZ.TabIndex = 6;
             this.textBoxZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxZ.WordWrap = true;
-            this.textBoxZ.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.textBoxZ.TextChanged += new System.EventHandler(this.textBox_TextNumChanged);
             // 
             // labelX
             // 
@@ -395,7 +395,7 @@ namespace EDDiscovery.Forms
             this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxName.TextChangedEvent = "";
             this.textBoxName.WordWrap = true;
-            this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextNameChanged);
             // 
             // statusStripCustom
             // 
