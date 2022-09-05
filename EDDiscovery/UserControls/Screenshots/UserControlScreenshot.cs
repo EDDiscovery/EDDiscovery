@@ -137,7 +137,7 @@ namespace EDDiscovery.UserControls
                 double ratiopicture = (double)imagesize.Width / (double)imagesize.Height;
 
                 int boxwidth = ClientRectangle.Width;
-                int boxheight = ClientRectangle.Height;
+                int boxheight = ClientRectangle.Height - rollUpPanelTop.Height;
 
                 int imagewidth = boxwidth;
                 int imageheight = (int)((double)imagewidth / ratiopicture);
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 imageheight = (int)((double)imagewidth / ratiopicture);
-                pictureBox.Location = new Point((boxwidth - imagewidth) / 2, (boxheight - imageheight) / 2);
+                pictureBox.Location = new Point((boxwidth - imagewidth) / 2, (boxheight - imageheight) / 2 + rollUpPanelTop.Height);
                 pictureBox.Size = new Size(imagewidth, imageheight);
 
                 pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;

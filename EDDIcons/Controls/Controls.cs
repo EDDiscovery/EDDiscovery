@@ -60,61 +60,6 @@ namespace EDDiscovery.Icons
         public static Image ZoomIn { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ZoomIn"); } }
         public static Image ZoomOut { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ZoomOut"); } }
         public static Image ZoomToFit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ZoomToFit"); } }
-        #region EDDiscovery.FormMap
-        public static Image Map3D_Bookmarks_AddRegionBookmark { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.AddRegionBookmark"); } }
-        public static Image Map3D_Bookmarks_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.Menu"); } }
-        public static Image Map3D_Bookmarks_ShowBookmarks { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.ShowBookmarks"); } }
-        public static Image Map3D_Bookmarks_ShowNotemarks { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.ShowNotemarks"); } }
-        public static Image Map3D_Bookmarks_Noted { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.Noted"); } }
-        public static Image Map3D_Bookmarks_Region { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.Region"); } }
-        public static Image Map3D_Bookmarks_Star { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.Star"); } }
-        public static Image Map3d_Bookmarks_StarWithPlanets { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.StarWithPlanets"); } }
-        public static Image Map3D_Bookmarks_Target { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Bookmarks.Target"); } }
-        public static Image Map3D_EliteMovement { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.EliteMovement"); } }
-        public static Image Map3D_Filter_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Filter.Menu"); } }
-        public static Image Map3D_Filter_ShowAllStars { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Filter.ShowAllStars"); } }
-        public static Image Map3D_FilterDate { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.FilterDate"); } }
-        public static Image Map3D_GalObjects { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.GalObjects"); } }
-        public static Image Map3D_Grid_Coords { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Grid.Coords"); } }
-        public static Image Map3D_Grid_FineGrid { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Grid.FineGrid"); } }
-        public static Image Map3D_Grid_Grid { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Grid.Grid"); } }
-        public static Image Map3D_Help { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Help"); } }
-        public static Image Map3D_MapNames { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.MapNames"); } }
-        public static Image Map3D_Markers_Selected { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Markers.Selected"); } }
-        public static Image Map3D_Navigation_CenterOnSystem { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.CenterOnSystem"); } }
-        public static Image Map3D_Navigation_GoBackward { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.GoBackward"); } }
-        public static Image Map3D_Navigation_GoForward { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.GoForward"); } }
-        public static Image Map3D_Navigation_GoForwardOnJump { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.GoForwardOnJump"); } }
-        public static Image Map3D_Navigation_GoToHistorySelection { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.GoToHistorySelection"); } }
-        public static Image Map3D_Navigation_GoToHomeSystem { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.GoToHomeSystem"); } }
-        public static Image Map3D_Navigation_GoToTarget { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.GoToTarget"); } }
-        public static Image Map3D_Navigation_LastKnownPosition { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.LastKnownPosition"); } }
-        public static Image Map3D_Navigation_LookAtSystem { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Navigation.LookAtSystem"); } }
-        public static Image Map3D_OrangeDot { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.OrangeDot"); } }
-        public static Image Map3D_Perspective { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Perspective"); } }
-        public static Image Map3D_Recorder_Clear { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.Clear"); } }
-        public static Image Map3D_Recorder_Load { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.Load"); } }
-        public static Image Map3D_Recorder_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.Menu"); } }
-        public static Image Map3D_Recorder_NewRecordStep { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.NewRecordStep"); } }
-        public static Image Map3D_Recorder_PausePlay { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.PausePlay"); } }
-        public static Image Map3D_Recorder_PauseRecord { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.PauseRecord"); } }
-        public static Image Map3D_Recorder_Pause { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.Pause"); } }
-        public static Image Map3D_Recorder_Play { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.Play"); } }
-        public static Image Map3D_Recorder_Record { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.Record"); } }
-        public static Image Map3D_Recorder_RecordStep { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.RecordStep"); } }
-        public static Image Map3D_Recorder_Save { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.Save"); } }
-        public static Image Map3D_Recorder_StopRecord { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.StopRecord"); } }
-        public static Image Map3D_Recorder_StopPlay { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Recorder.StopPlay"); } }
-        public static Image Map3D_Stars_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Stars.Menu"); } }
-        public static Image Map3D_Stars_ShowDiscs { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Stars.ShowDiscs"); } }
-        public static Image Map3D_Stars_ShowNames { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Stars.ShowNames"); } }
-        public static Image Map3D_Stars_DisplayColours { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Stars.DisplayColours"); } }
-        public static Image Map3D_Travel_DrawLines { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Travel.DrawLines"); } }
-        public static Image Map3D_Travel_DrawStars { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Travel.DrawStars"); } }
-        public static Image Map3D_Travel_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Travel.Menu"); } }
-        public static Image Map3D_Travel_WhiteStars { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Travel.WhiteStars"); } }
-        public static Image Map3D_YellowDot { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.YellowDot"); } }
-        #endregion
         public static Image ExportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ExportFile"); } }
         public static Image ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportFile"); } }
         public static Image ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportSphere"); } }

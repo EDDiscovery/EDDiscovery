@@ -286,49 +286,6 @@
     <EmbeddedResource Include="Controls\ZoomIn.png" />
     <EmbeddedResource Include="Controls\ZoomOut.png" />
     <EmbeddedResource Include="Controls\ZoomToFit.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\CenterOnSystem.png" />
-    <EmbeddedResource Include="Controls\Map3D\FilterDate.png" />
-    <EmbeddedResource Include="Controls\Map3D\MapNames.png" />
-    <EmbeddedResource Include="Controls\Map3D\Stars\DisplayColours.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\LookAtSystem.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\Load.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\Save.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\GoToHomeSystem.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\NewRecordStep.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\RecordStep.png" />
-    <EmbeddedResource Include="Controls\Map3D\Stars\ShowDiscs.png" />
-    <EmbeddedResource Include="Controls\Map3D\Travel\DrawStars.png" />
-    <EmbeddedResource Include="Controls\Map3D\Travel\WhiteStars.png" />
-    <EmbeddedResource Include="Controls\Map3D\Travel\DrawLines.png" />
-    <EmbeddedResource Include="Controls\Map3D\Travel\Menu.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\AddRegionBookmark.png" />
-    <EmbeddedResource Include="Controls\Map3D\OrangeDot.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\Pause.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\Play.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\Record.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\ShowBookmarks.png" />
-    <EmbeddedResource Include="Controls\Map3D\Stars\ShowNames.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\ShowNotemarks.png" />
-    <EmbeddedResource Include="Controls\Map3D\Filter\ShowAllStars.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\Clear.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\GoForwardOnJump.png" />
-    <EmbeddedResource Include="Controls\Map3D\Grid\Coords.png" />
-    <EmbeddedResource Include="Controls\Map3D\EliteMovement.png" />
-    <EmbeddedResource Include="Controls\Map3D\Grid\FineGrid.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\GoBackward.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\GoForward.png" />
-    <EmbeddedResource Include="Controls\Map3D\Grid\Grid.png" />
-    <EmbeddedResource Include="Controls\Map3D\Help.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\LastKnownPosition.png" />
-    <EmbeddedResource Include="Controls\Map3D\Perspective.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\GoToTarget.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Menu.png" />
-    <EmbeddedResource Include="Controls\Map3D\Filter\Menu.png" />
-    <EmbeddedResource Include="Controls\Map3D\GalObjects.png" />
-    <EmbeddedResource Include="Controls\Map3D\Stars\Menu.png" />
-    <EmbeddedResource Include="Controls\Map3D\Navigation\GoToHistorySelection.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\Menu.png" />
-    <EmbeddedResource Include="Controls\Map3D\YellowDot.png" />
     <EmbeddedResource Include="Controls\Panels.png" />
     <EmbeddedResource Include="Controls\Tile.png" />
   </ItemGroup>
@@ -390,15 +347,6 @@
     <EmbeddedResource Include="Controls\Cross.png" />
     <EmbeddedResource Include="Controls\Globe.png" />
     <EmbeddedResource Include="Controls\SubmitDistances.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Noted.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Star.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Target.png" />
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Region.png" />
-    <EmbeddedResource Include="Controls\Map3D\Markers\Selected.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\PausePlay.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\PauseRecord.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\StopPlay.png" />
-    <EmbeddedResource Include="Controls\Map3D\Recorder\StopRecord.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Barycentre.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Belt.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Landable.png" />
@@ -496,9 +444,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\UnderAttack.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\Map3D\Bookmarks\StarWithPlanets.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Panels\BookmarkManager.png" />
