@@ -477,6 +477,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
+            if (showing_system == null)
+                return;
             var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
 
             if ( sysnode != null )
