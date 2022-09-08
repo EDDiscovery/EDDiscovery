@@ -46,9 +46,8 @@ namespace EDDiscovery.UserControls
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.extCheckBrowse = new ExtendedControls.ExtCheckBox();
-            this.extButtonSelect = new ExtendedControls.ExtButton();
-            this.extButtonCopy = new ExtendedControls.ExtButton();
+            this.extComboBoxImage = new ExtendedControls.ExtComboBox();
+            this.extButtonRemoveImage = new ExtendedControls.ExtButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
@@ -89,67 +88,49 @@ namespace EDDiscovery.UserControls
             // 
             this.panelControls.AutoSize = true;
             this.panelControls.BackColor = System.Drawing.SystemColors.Control;
-            this.panelControls.Controls.Add(this.extCheckBrowse);
-            this.panelControls.Controls.Add(this.extButtonSelect);
-            this.panelControls.Controls.Add(this.extButtonCopy);
+            this.panelControls.Controls.Add(this.extComboBoxImage);
+            this.panelControls.Controls.Add(this.extButtonRemoveImage);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(810, 30);
             this.panelControls.TabIndex = 32;
             // 
-            // extCheckBrowse
+            // extComboBoxImage
             // 
-            this.extCheckBrowse.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBrowse.BackColor = System.Drawing.SystemColors.Control;
-            this.extCheckBrowse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBrowse.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBrowse.CheckBoxDisabledScaling = 0.5F;
-            this.extCheckBrowse.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.extCheckBrowse.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBrowse.Cursor = System.Windows.Forms.Cursors.Default;
-            this.extCheckBrowse.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.extCheckBrowse.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.extCheckBrowse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.extCheckBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.extCheckBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.extCheckBrowse.Image = global::EDDiscovery.Icons.Controls.Scan_Star;
-            this.extCheckBrowse.ImageButtonDisabledScaling = 0.5F;
-            this.extCheckBrowse.ImageIndeterminate = null;
-            this.extCheckBrowse.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBrowse.ImageUnchecked = null;
-            this.extCheckBrowse.Location = new System.Drawing.Point(0, 1);
-            this.extCheckBrowse.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
-            this.extCheckBrowse.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.extCheckBrowse.Name = "extCheckBrowse";
-            this.extCheckBrowse.Size = new System.Drawing.Size(28, 28);
-            this.extCheckBrowse.TabIndex = 2;
-            this.extCheckBrowse.TickBoxReductionRatio = 0.75F;
-            this.extCheckBrowse.UseVisualStyleBackColor = false;
+            this.extComboBoxImage.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxImage.ButtonColorScaling = 0.5F;
+            this.extComboBoxImage.DataSource = null;
+            this.extComboBoxImage.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxImage.DisplayMember = "";
+            this.extComboBoxImage.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.extComboBoxImage.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxImage.Location = new System.Drawing.Point(3, 3);
+            this.extComboBoxImage.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.extComboBoxImage.Name = "extComboBoxImage";
+            this.extComboBoxImage.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.extComboBoxImage.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.extComboBoxImage.SelectedIndex = -1;
+            this.extComboBoxImage.SelectedItem = null;
+            this.extComboBoxImage.SelectedValue = null;
+            this.extComboBoxImage.Size = new System.Drawing.Size(419, 21);
+            this.extComboBoxImage.TabIndex = 30;
+            this.extComboBoxImage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxImage.ValueMember = "";
+            this.extComboBoxImage.SelectedIndexChanged += new System.EventHandler(this.extComboBoxImage_SelectedIndexChanged);
             // 
-            // extButtonSelect
+            // extButtonRemoveImage
             // 
-            this.extButtonSelect.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonSelect.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.extButtonSelect.Location = new System.Drawing.Point(40, 1);
-            this.extButtonSelect.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonSelect.Name = "extButtonSelect";
-            this.extButtonSelect.Size = new System.Drawing.Size(28, 28);
-            this.extButtonSelect.TabIndex = 29;
-            this.extButtonSelect.UseVisualStyleBackColor = false;
-            // 
-            // extButtonCopy
-            // 
-            this.extButtonCopy.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonCopy.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonCopy.Location = new System.Drawing.Point(80, 1);
-            this.extButtonCopy.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonCopy.Name = "extButtonCopy";
-            this.extButtonCopy.Size = new System.Drawing.Size(28, 28);
-            this.extButtonCopy.TabIndex = 29;
-            this.extButtonCopy.UseVisualStyleBackColor = false;
+            this.extButtonRemoveImage.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonRemoveImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonRemoveImage.Image = global::EDDiscovery.Icons.Controls.Cross;
+            this.extButtonRemoveImage.Location = new System.Drawing.Point(433, 1);
+            this.extButtonRemoveImage.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonRemoveImage.Name = "extButtonRemoveImage";
+            this.extButtonRemoveImage.Size = new System.Drawing.Size(28, 28);
+            this.extButtonRemoveImage.TabIndex = 29;
+            this.extButtonRemoveImage.UseVisualStyleBackColor = false;
+            this.extButtonRemoveImage.Click += new System.EventHandler(this.extButtonRemoveImage_Click);
             // 
             // UserControlScreenshot
             // 
@@ -174,8 +155,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.PictureBox pictureBox;
         private ExtendedControls.ExtPanelRollUp rollUpPanelTop;
         private System.Windows.Forms.FlowLayoutPanel panelControls;
-        private ExtendedControls.ExtCheckBox extCheckBrowse;
-        private ExtendedControls.ExtButton extButtonSelect;
-        private ExtendedControls.ExtButton extButtonCopy;
+        private ExtendedControls.ExtButton extButtonRemoveImage;
+        private ExtendedControls.ExtComboBox extComboBoxImage;
     }
 }
