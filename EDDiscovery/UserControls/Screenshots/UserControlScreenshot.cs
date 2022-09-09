@@ -112,53 +112,22 @@ namespace EDDiscovery.UserControls
             {
                 if (extComboBoxImage.SelectedIndex == 0)      // if on Auto..
                 {
-                    Display(he);
+                    Display(he.journalEntry as JournalScreenshot);
                 }
             }
         }
 
         // Display he
-        private void Display(HistoryEntry he)
+        private void Display(JournalScreenshot js)
         {
-            var ss = (JournalScreenshot)he.journalEntry;
-            if (!String.IsNullOrEmpty(ss.EDDOutputFile) && File.Exists(ss.EDDOutputFile))
+            var pathsize = js.GetScreenshotPath(discoveryform.ScreenshotConverter.InputFolder);
+
+            if (pathsize != null)
             {
-                Display(ss.EDDOutputFile, new Size(ss.EDDOutputWidth, ss.EDDOutputHeight));
+                Display(pathsize.Item1, pathsize.Item2);
             }
             else
-            {
-                var filename = GetScreenshotPath(ss.Filename);
-
-                if (filename != null && File.Exists(filename) && ss.Width != 0 && ss.Height != 0)
-                {
-                    Display(filename, new Size(ss.Width, ss.Height));
-                }
-                else
-                    Display("");
-            }
-        }
-
-        private string GetScreenshotPath(string filepart)
-        {
-            var filenameout = filepart;
-
-            if (filepart.StartsWith("\\ED_Pictures\\"))     // if its an ss record, try and find it either in watchedfolder or in default loc
-            {
-                filepart = filepart.Substring(13);
-                filenameout = Path.Combine(discoveryform.ScreenshotConverter.InputFolder, filepart);
-
-                if (!File.Exists(filenameout))
-                {
-                    filenameout = Path.Combine(DefaultInputDir(), filepart);
-                }
-            }
-
-            return filenameout;
-        }
-
-        private string DefaultInputDir()
-        {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+                Display("");
         }
 
         // Display file, give size if you know
@@ -180,7 +149,7 @@ namespace EDDiscovery.UserControls
                     imagesize = s.Value;
                     FitToWindow();
 
-                    SetControlText(file.ReplaceIfStartsWith(DefaultInputDir(),"ED:"));
+                    SetControlText(file.ReplaceIfStartsWith(JournalScreenshot.DefaultInputDir(),"ED:"));
 
                     extButtonCopy.Enabled = true;
                     return;
@@ -248,7 +217,30 @@ namespace EDDiscovery.UserControls
             extComboBoxImage.Items.Add(autotext);
             extComboBoxImage.Items.Add(imagetext);
             extComboBoxImage.Items.AddRange(extimages);
-            extComboBoxImage.Items.AddRange(sslist.Select(x => $"{((JournalScreenshot)x.journalEntry).EventTimeUTC.ToString()} {x.WhereAmI}"));
+            foreach (var x in sslist)
+            {
+                var j = x.journalEntry as JournalScreenshot;
+                var pathsize = j.GetScreenshotPath(discoveryform.ScreenshotConverter.InputFolder);
+                if (pathsize != null)
+                {
+                 //   System.Diagnostics.Debug.WriteLine($"Accept {pathsize.Item1} {x.WhereAmI} {File.Exists(pathsize.Item1)}");
+                    try
+                    {
+                        var ct = File.GetCreationTimeUtc(pathsize.Item1);
+                        var diff = j.EventTimeUTC - ct;
+
+                        extComboBoxImage.Items.Add($"{EDDConfig.Instance.ConvertTimeToSelectedFromUTC(j.EventTimeUTC).ToString()} {x.WhereAmI}{(Math.Abs(diff.TotalSeconds)>120?" *": "")}");
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                else
+                {
+                  //  System.Diagnostics.Debug.WriteLine($"Reject {j.Filename} {x.WhereAmI}");
+                }
+            }
 
             if (cur == "" || !extComboBoxImage.Items.Contains(cur))
                 cur =  autotext;
@@ -298,7 +290,7 @@ namespace EDDiscovery.UserControls
                     {
                         var helist = extComboBoxImage.Tag as List<HistoryEntry>;
                         var he = helist[extComboBoxImage.SelectedIndex - hepos];
-                        Display(he);
+                        Display(he.journalEntry as JournalScreenshot);
                     }
                 }
             }
