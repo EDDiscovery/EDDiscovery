@@ -149,12 +149,16 @@ namespace EDDiscovery.UserControls
 
                 if (!File.Exists(filenameout))
                 {
-                    string defaultInputDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
-                    filenameout = Path.Combine(defaultInputDir, filepart);
+                    filenameout = Path.Combine(DefaultInputDir(), filepart);
                 }
             }
 
             return filenameout;
+        }
+
+        private string DefaultInputDir()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
         }
 
         // Display file, give size if you know
@@ -176,7 +180,7 @@ namespace EDDiscovery.UserControls
                     imagesize = s.Value;
                     FitToWindow();
 
-                    SetControlText(file);
+                    SetControlText(file.ReplaceIfStartsWith(DefaultInputDir(),"ED:"));
 
                     extButtonCopy.Enabled = true;
                     return;
