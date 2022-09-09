@@ -127,6 +127,7 @@ namespace EDDiscovery.Icons
         public static Image WordWrapOff { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.WordWrapOff"); } }
         public static Image WordWrapOn { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.WordWrapOn"); } }
         public static Image Cross { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Cross"); } }
+        public static Image Copy { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Copy"); } }
         public static Image Globe { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Globe"); } }
         public static Image SubmitDistances { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SubmitDistances"); } }
         public static Image Panels { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Panels"); } }

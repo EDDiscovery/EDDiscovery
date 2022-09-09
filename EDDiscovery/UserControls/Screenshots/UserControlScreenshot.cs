@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            extButtonRemoveImage.Enabled = false;
+            extButtonRemoveImage.Enabled = extButtonCopy.Enabled = false;
 
             discoveryform.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -133,6 +133,8 @@ namespace EDDiscovery.UserControls
                 {
                     Display(filename, new Size(ss.Width, ss.Height));
                 }
+                else
+                    Display("");
             }
         }
 
@@ -173,19 +175,19 @@ namespace EDDiscovery.UserControls
                     pictureBox.ImageLocation = file;                       // this could except, so protect..
                     imagesize = s.Value;
                     FitToWindow();
-                }
-                else
-                {
-                    pictureBox.Visible = false;
-                    pictureBox.ImageLocation = null;
+
+                    extButtonCopy.Enabled = true;
+                    return;
                 }
             }
             catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Cannot assign " + file + " to screenshot img " + ex);
-                pictureBox.Visible = false;
-                pictureBox.ImageLocation = null;
             }
+
+            extButtonCopy.Enabled = false;
+            pictureBox.Visible = false;
+            pictureBox.ImageLocation = null;
         }
 
         void FitToWindow()
@@ -311,6 +313,14 @@ namespace EDDiscovery.UserControls
 
                 UpdateComboBox();       // and update 
                 Display("");            // clear display
+            }
+        }
+
+        private void extButtonCopy_Click(object sender, EventArgs e)
+        {
+            if ( pictureBox.ImageLocation.HasChars())
+            {
+                SetClipboardImage(pictureBox.ImageLocation);
             }
         }
     }

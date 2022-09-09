@@ -48,6 +48,7 @@ namespace EDDiscovery.UserControls
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extComboBoxImage = new ExtendedControls.ExtComboBox();
             this.extButtonRemoveImage = new ExtendedControls.ExtButton();
+            this.extButtonCopy = new ExtendedControls.ExtButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
@@ -90,6 +91,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.BackColor = System.Drawing.SystemColors.Control;
             this.panelControls.Controls.Add(this.extComboBoxImage);
             this.panelControls.Controls.Add(this.extButtonRemoveImage);
+            this.panelControls.Controls.Add(this.extButtonCopy);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
@@ -132,6 +134,19 @@ namespace EDDiscovery.UserControls
             this.extButtonRemoveImage.UseVisualStyleBackColor = false;
             this.extButtonRemoveImage.Click += new System.EventHandler(this.extButtonRemoveImage_Click);
             // 
+            // extButtonCopy
+            // 
+            this.extButtonCopy.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonCopy.Image = global::EDDiscovery.Icons.Controls.Copy;
+            this.extButtonCopy.Location = new System.Drawing.Point(473, 1);
+            this.extButtonCopy.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonCopy.Name = "extButtonCopy";
+            this.extButtonCopy.Size = new System.Drawing.Size(28, 28);
+            this.extButtonCopy.TabIndex = 29;
+            this.extButtonCopy.UseVisualStyleBackColor = false;
+            this.extButtonCopy.Click += new System.EventHandler(this.extButtonCopy_Click);
+            // 
             // UserControlScreenshot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -157,5 +172,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel panelControls;
         private ExtendedControls.ExtButton extButtonRemoveImage;
         private ExtendedControls.ExtComboBox extComboBoxImage;
+        private ExtendedControls.ExtButton extButtonCopy;
     }
 }

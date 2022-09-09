@@ -161,6 +161,31 @@ namespace EDDiscovery.UserControls
                 discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
             }
         }
+        public void SetClipboardImage(Image s)
+        {
+            try
+            {
+                Clipboard.SetImage(s);
+            }
+            catch
+            {
+                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+            }
+        }
+        public void SetClipboardImage(string file)
+        {
+            try
+            {
+                using (Image s = Image.FromFile(file))
+                {
+                    Clipboard.SetImage(s);
+                }
+            }
+            catch
+            {
+                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+            }
+        }
 
         public bool IsTransparentModeOn           // this means the transparent mode is on, not that its currently transparent.
         {
