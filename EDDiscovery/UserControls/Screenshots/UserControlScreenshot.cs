@@ -176,6 +176,8 @@ namespace EDDiscovery.UserControls
                     imagesize = s.Value;
                     FitToWindow();
 
+                    SetControlText(file);
+
                     extButtonCopy.Enabled = true;
                     return;
                 }
