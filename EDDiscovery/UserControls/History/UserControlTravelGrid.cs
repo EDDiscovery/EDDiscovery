@@ -345,7 +345,7 @@ namespace EDDiscovery.UserControls
             {
                 if (chunks.Count != 0)
                 {
-                    if (outlining != null)
+                    if (outlining != null && dataGridViewTravel.Rows.Count > 0)     // if outlining, and #3317 we have rows!
                     {
                         dataGridViewTravel.Rows[dataGridViewTravel.Rows.Count - 1].Visible = true;
                         outlining.Finished(dataGridViewTravel.Rows.Count - 1, rollupolder, panelOutlining);     // ensures we have a group at the end..
