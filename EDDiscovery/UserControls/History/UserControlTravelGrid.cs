@@ -116,13 +116,7 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            writeEventInfoToLogDebugToolStripMenuItem.Visible =
-            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
-            runSelectionThroughInaraSystemToolStripMenuItem.Visible =
-            runEntryThroughProfileSystemToolStripMenuItem.Visible =
-            runSelectionThroughIGAUDebugToolStripMenuItem.Visible =
-            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
-            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;
+            System.Diagnostics.Trace.WriteLine($"TGR={EDDOptions.Instance.EnableTGRightDebugClicks}");
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
@@ -149,21 +143,18 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-#if DEBUG
-            travelGridInDebugModeToolStripMenuItem.Checked = GetSetting(dbDebugMode, false);
+            writeEventInfoToLogDebugToolStripMenuItem.Visible =
+            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
+            runSelectionThroughInaraSystemToolStripMenuItem.Visible =
+            runEntryThroughProfileSystemToolStripMenuItem.Visible =
+            runSelectionThroughIGAUDebugToolStripMenuItem.Visible =
+            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
+            sendJournalEntriesToDLLsToolStripMenuItem.Visible =
+            travelGridInDebugModeToolStripMenuItem.Visible = 
+            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;
+            travelGridInDebugModeToolStripMenuItem.Checked = EDDOptions.Instance.EnableTGRightDebugClicks ? GetSetting(dbDebugMode, false) : false;
             travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
-#else
-            travelGridInDebugModeToolStripMenuItem.Checked = travelGridInDebugModeToolStripMenuItem.Visible = false;
-            writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
-            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
-            runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
-            runEntryThroughProfileSystemToolStripMenuItem.Visible = false;
-            runSelectionThroughIGAUDebugToolStripMenuItem.Visible = false;
-            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = false;
-            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = false;
-            sendJournalEntriesToDLLsToolStripMenuItem.Visible = false;
-            
-#endif
+
             var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_Icon, EDTx.UserControlTravelGrid_ColumnSystem, EDTx.UserControlTravelGrid_ColumnDistance, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime, EDTx.UserControlTravelGrid_labelSearch };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
