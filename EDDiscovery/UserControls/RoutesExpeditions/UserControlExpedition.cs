@@ -1292,7 +1292,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewRouteSystems_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index >= 1 && e.Column.Index <= 8)
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnAlphaInt();
+            else if (e.Column.Index == 1 || (e.Column.Index>=3 && e.Column.Index <= 10))
                 e.SortDataGridViewColumnNumeric();
 
         }
