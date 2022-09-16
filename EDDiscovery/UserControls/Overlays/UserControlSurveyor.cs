@@ -255,8 +255,8 @@ namespace EDDiscovery.UserControls
             {
                 bool islatest = Object.ReferenceEquals(hl.GetLast, he);        // is this the latest
 
-                if (islatest && he.EntryType == JournalTypeEnum.Friends)        // if latest, and its friends, we ignore, so we don't let Friends interrupt the start jump sequence..
-                    return;                                                     // friends can occur between startjump/fsdjump
+                if (islatest && (he.EntryType == JournalTypeEnum.Friends || he.EntryType == JournalTypeEnum.ReceiveText))        // if latest, and its friends, we ignore, so we don't let Friends interrupt the start jump sequence..
+                    return;                                                     // friends and texts can occur between startjump/fsdjump
 
                 // something has changed and just blindly for now recalc the fsd info
                 shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
