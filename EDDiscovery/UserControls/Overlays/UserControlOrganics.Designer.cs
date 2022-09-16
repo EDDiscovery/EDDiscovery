@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonFont = new ExtendedControls.ExtButton();
+            this.extButtonAlignment = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxShowIncomplete = new ExtendedControls.ExtCheckBox();
             this.flowLayoutPanelGridControl = new System.Windows.Forms.FlowLayoutPanel();
@@ -114,7 +115,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(88, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(128, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
@@ -235,6 +236,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.PerColumnWordWrapControl = true;
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -317,6 +319,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.BackColor = System.Drawing.SystemColors.Control;
             this.panelControls.Controls.Add(this.extButtonShowControl);
             this.panelControls.Controls.Add(this.extButtonFont);
+            this.panelControls.Controls.Add(this.extButtonAlignment);
             this.panelControls.Controls.Add(this.extCheckBoxWordWrap);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
@@ -337,6 +340,20 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extButtonFont, "Font");
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
+            // 
+            // extButtonAlignment
+            // 
+            this.extButtonAlignment.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonAlignment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonAlignment.Image = global::EDDiscovery.Icons.Controls.AlignCentre;
+            this.extButtonAlignment.Location = new System.Drawing.Point(88, 1);
+            this.extButtonAlignment.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonAlignment.Name = "extButtonAlignment";
+            this.extButtonAlignment.Size = new System.Drawing.Size(28, 28);
+            this.extButtonAlignment.TabIndex = 35;
+            this.toolTip.SetToolTip(this.extButtonAlignment, "Alignment");
+            this.extButtonAlignment.UseVisualStyleBackColor = false;
+            this.extButtonAlignment.Click += new System.EventHandler(this.extButtonAlignment_Click);
             // 
             // toolTip
             // 
@@ -505,5 +522,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtDateTimePicker extDateTimePickerEndDate;
         private System.Windows.Forms.Label labelValue;
         private ExtendedControls.ExtCheckBox extCheckBoxShowIncomplete;
+        private ExtendedControls.ExtButton extButtonAlignment;
     }
 }

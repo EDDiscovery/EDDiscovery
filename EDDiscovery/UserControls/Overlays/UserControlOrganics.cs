@@ -33,7 +33,9 @@ namespace EDDiscovery.UserControls
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
         private Font displayfont;
-        
+
+        private StringAlignment alignment = StringAlignment.Near;
+
         private string dbStartDate = "StartDate";
         private string dbStartDateOn = "StartDateChecked";
         private string dbEndDate = "EndDate";
@@ -51,8 +53,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
-
+            PopulateCtrlList();
 
             dataGridView.MakeDoubleBuffered();
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
@@ -66,7 +67,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
-            var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip, EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip,
+                                        EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip ,
+                                        EDTx.UserControlOrganics_extButtonAlignment_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             rollUpPanelTop.SetToolTip(toolTip);
 
@@ -212,7 +215,7 @@ namespace EDDiscovery.UserControls
 
                     int vpos = 0;
                     StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
-                    frmt.Alignment = StringAlignment.Near;
+                    frmt.Alignment = alignment;
                     var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
@@ -340,10 +343,17 @@ namespace EDDiscovery.UserControls
 
         protected enum CtrlList
         {
-            autohide
+            autohide,
+            alignleft, aligncenter, alignright
         };
 
         private bool[] ctrlset; // holds current state of each control above
+
+        private void PopulateCtrlList()
+        {
+            ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
+            alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
+        }
 
         private bool IsSet(CtrlList v)
         {
@@ -352,7 +362,7 @@ namespace EDDiscovery.UserControls
 
         protected virtual bool DefaultSetting(CtrlList e)
         {
-            bool def = true;
+            bool def = e == CtrlList.autohide || e == CtrlList.alignleft;
             return def;
         }
 
@@ -365,6 +375,22 @@ namespace EDDiscovery.UserControls
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
+
+        private void extButtonAlignment_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+
+            string lt = CtrlList.alignleft.ToString();
+            string ct = CtrlList.aligncenter.ToString();
+            string rt = CtrlList.alignright.ToString();
+
+            displayfilter.AddStandardOption(lt, "Alignment Left".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
+            displayfilter.AddStandardOption(ct, "Alignment Center".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
+            displayfilter.AddStandardOption(rt, "Alignment Right".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_rightToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
+            displayfilter.CloseOnChange = true;
+            CommonCtrl(displayfilter, extButtonAlignment);
+        }
+
 
         #endregion
 
@@ -379,7 +405,7 @@ namespace EDDiscovery.UserControls
             displayfilter.SaveSettings = (s, o) =>
             {
                 PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
-                ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
+                PopulateCtrlList();
                 DrawAll();
             };
 
