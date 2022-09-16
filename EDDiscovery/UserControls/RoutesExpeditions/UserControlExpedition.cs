@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
 
         private Timer autoupdateedsm;
         private bool closing = false;
-        private bool disablebuttonssilently = false;    // set during row update, to stop user interfering with the async processor without flashing icons if we just disabled them
+        private bool updatingsystemrows = false;    // set during row update, to stop user interfering with the async processor without flashing icons if we just disabled them
 
         #region Standard UC Interfaces
 
@@ -246,7 +246,7 @@ namespace EDDiscovery.UserControls
         private async void UpdateSystemRows(int rowstart = 0, int rowendinc = int.MaxValue, bool edsmcheck = false)
         {
             Cursor = Cursors.WaitCursor;
-            disablebuttonssilently = true;
+            updatingsystemrows = true;
 
             ISystem currentSystem = discoveryform.history.CurrentSystem(); // may be null
 
@@ -418,7 +418,7 @@ namespace EDDiscovery.UserControls
 
             Cursor = Cursors.Default;
 
-            disablebuttonssilently = false;
+            updatingsystemrows = false;
         }
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
@@ -597,7 +597,7 @@ namespace EDDiscovery.UserControls
         ExtendedControls.ExtListBoxForm dropdown;
         private void extButtonLoadRoute_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             ExtendedControls.ExtButton but = sender as ExtendedControls.ExtButton;
@@ -627,7 +627,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNew_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             if (PromptAndSaveIfNeeded())
@@ -639,7 +639,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonSave_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             SaveGrid();
@@ -647,7 +647,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDelete_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             if ( loadedroute != null && loadedroute.EDSM == false && !IsDirty() )        // if loaded and unchanged, and not EDSM route
@@ -663,7 +663,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImport_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             var frm = new Forms.ExportForm();
@@ -704,7 +704,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportRoute_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             if (latestplottedroute == null || latestplottedroute.Count == 0)
@@ -723,7 +723,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportNavRoute_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             var navroutes = discoveryform.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(20).ToList();
@@ -764,7 +764,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNavLatest_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
@@ -785,7 +785,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExport_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             var rt = SaveGridIntoRoute();
@@ -883,7 +883,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShow3DMap_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             var route = dataGridView.Rows.OfType<DataGridViewRow>()
@@ -904,7 +904,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonAddSystems_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
@@ -948,7 +948,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDisplayFilters_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
@@ -982,18 +982,14 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
-                return;
+            PutSetting(dbEDSM, checkBoxEDSM.Checked);       // update the store
 
-            PutSetting(dbEDSM, checkBoxEDSM.Checked);
-            UpdateSystemRows();
+            if (!updatingsystemrows)    // if we are not in the update system rows, redraw it
+                UpdateSystemRows();
         }
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
-                return;
-
             PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
             UpdateWordWrap();
         }
@@ -1006,7 +1002,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonReverseRoute_Click(object sender, EventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             var route = SaveGridIntoRoute();
@@ -1025,7 +1021,7 @@ namespace EDDiscovery.UserControls
         Rectangle dragBox;
         private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             if (e.Button.HasFlag(MouseButtons.Left))
@@ -1106,7 +1102,7 @@ namespace EDDiscovery.UserControls
         #region Double click
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
                 return;
 
             if (e.RowIndex >= 0 && (e.ColumnIndex == Note.Index || e.ColumnIndex == Info.Index))
@@ -1131,7 +1127,7 @@ namespace EDDiscovery.UserControls
 
         private void contextMenuCopyPaste_Opening(object sender, CancelEventArgs e)
         {
-            if (disablebuttonssilently)
+            if (updatingsystemrows)
             {
                 e.Cancel = true;
                 return;
