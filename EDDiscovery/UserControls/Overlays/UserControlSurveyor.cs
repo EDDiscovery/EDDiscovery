@@ -255,8 +255,17 @@ namespace EDDiscovery.UserControls
             {
                 bool islatest = Object.ReferenceEquals(hl.GetLast, he);        // is this the latest
 
-                if (islatest && he.EntryType == JournalTypeEnum.Friends)        // if latest, and its friends, we ignore, so we don't let Friends interrupt the start jump sequence..
-                    return;                                                     // friends can occur between startjump/fsdjump
+                // can't say i love this idea, there must be a better solution, but..
+                // from scan of logs on 18/9/22 these are ones which I saw between startjump and fsdjump. Excluding the ones turned in ui events in edjournalreader.cs
+
+                var excludedevents = new JournalTypeEnum[] { JournalTypeEnum.Friends, JournalTypeEnum.HeatDamage, JournalTypeEnum.HeatWarning, JournalTypeEnum.ReceiveText,
+                                                            JournalTypeEnum.ShieldState, JournalTypeEnum.Scanned, JournalTypeEnum.ShipTargeted,JournalTypeEnum.UnderAttack,
+                                                            JournalTypeEnum.FuelScoop, JournalTypeEnum.ApproachBody, JournalTypeEnum.LeaveBody, JournalTypeEnum.FSSSignalDiscovered,
+                                                            JournalTypeEnum.ReservoirReplenished, JournalTypeEnum.ShipLocker, JournalTypeEnum.Scan,
+                                                            };
+
+                if (islatest && Array.IndexOf(excludedevents,he.EntryType)>=0)        // if latest, and its an excluded event, we ignore, so we don't let it interrupt the start jump sequence..
+                    return;                                                     
 
                 // something has changed and just blindly for now recalc the fsd info
                 shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
