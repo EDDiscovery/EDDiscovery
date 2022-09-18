@@ -201,8 +201,9 @@ namespace EDDiscovery.Actions
                 if (excludejournaluitranslatedevents)
                 {
                     jevents.Remove("Music");        // manually synchronise with EDJournalReader . 
-                    jevents.Remove("UnderAttack"); 
-                    jevents.Remove("FSDTarget");   
+                    jevents.Remove("UnderAttack");
+                    jevents.Remove("FSDTarget");
+                    jevents.Remove("NavRouteClear");
                 }
 
                 jevents.Sort();
