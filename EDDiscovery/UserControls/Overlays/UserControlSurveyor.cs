@@ -260,8 +260,8 @@ namespace EDDiscovery.UserControls
 
                 var excludedevents = new JournalTypeEnum[] { JournalTypeEnum.Friends, JournalTypeEnum.HeatDamage, JournalTypeEnum.HeatWarning, JournalTypeEnum.ReceiveText,
                                                             JournalTypeEnum.ShieldState, JournalTypeEnum.Scanned, JournalTypeEnum.ShipTargeted,JournalTypeEnum.UnderAttack,
-                                                            JournalTypeEnum.FuelScoop, JournalTypeEnum.ApproachBody, JournalTypeEnum.LeaveBody, JournalTypeEnum.FSSSignalDiscovered,
-                                                            JournalTypeEnum.ReservoirReplenished, JournalTypeEnum.ShipLocker, JournalTypeEnum.Scan,
+                                                            JournalTypeEnum.FuelScoop, JournalTypeEnum.ApproachBody, JournalTypeEnum.LeaveBody, 
+                                                            JournalTypeEnum.ReservoirReplenished, JournalTypeEnum.ShipLocker, 
                                                             };
 
                 if (islatest && Array.IndexOf(excludedevents,he.EntryType)>=0)        // if latest, and its an excluded event, we ignore, so we don't let it interrupt the start jump sequence..
@@ -294,6 +294,7 @@ namespace EDDiscovery.UserControls
                     bodies_found = 0;
                     all_found = false;
                     last_sys = he.System;       // and set, then
+                    DrawTitle();
                     DrawAll(last_sys);
                     return;
                 }
