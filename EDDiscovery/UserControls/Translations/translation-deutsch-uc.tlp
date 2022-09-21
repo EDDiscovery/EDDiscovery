@@ -1320,7 +1320,7 @@ SECTION UserControlOrganics
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Zeilenumbruch"
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" => "Zeige unvollständige Scans"
 .at: "At {0}" => "Bei {0}"
-.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}" => ", {0}, Radius {1}, {2}, {3}, Biosignale: {4}"
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Radius {1}, {2}, {3}, Biosignale: {4}{5}"
 
 SECTION ScanDisplayForm
 
