@@ -1399,7 +1399,7 @@ SECTION UserControlOrganics
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
 .extButtonAlignment_ToolTip: "Alignment" @
 .at: "At {0}" @
-.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}" @
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 
 
 SECTION ScanDisplayForm
