@@ -224,6 +224,12 @@
     <Compile Include="UserControls\3DMap\UserControlLocal3DMap.Designer.cs">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlCarrier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlCarrier.Designer.cs">
+      <DependentUpon>UserControlCarrier.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CurrentState\UserControlFactions.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -795,6 +801,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\3DMap\UserControlLocal3DMap.resx">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlCarrier.resx">
+      <DependentUpon>UserControlCarrier.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlSuitsWeapons.resx">
       <DependentUpon>UserControlSuitsWeapons.cs</DependentUpon>

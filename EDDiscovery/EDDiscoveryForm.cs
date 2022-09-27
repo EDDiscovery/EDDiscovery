@@ -1035,6 +1035,7 @@ namespace EDDiscovery
             PopOuts.SaveCurrentPopouts();
 
             notifyIconEDD.Visible = false;
+            notifyIconEDD.Dispose();
 
             actioncontroller.CloseDown();
 
