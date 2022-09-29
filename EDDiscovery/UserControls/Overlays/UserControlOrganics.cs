@@ -75,9 +75,9 @@ namespace EDDiscovery.UserControls
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
-            extDateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
+            extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting(dbStartDate, new DateTime(2014, 12, 14)));
             var startchecked = extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
-            extDateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            extDateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)));
             var endchecked = extDateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
 
             extDateTimePickerStartDate.ValueChanged += DateTimePicker_ValueChangedStart;
@@ -253,8 +253,8 @@ namespace EDDiscovery.UserControls
         { 
             if ( discoveryform.history != null )
             {
-                DateTime? start = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerStartDate.Value) : default(DateTime?);
-                DateTime? end = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
+                DateTime? start = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting(dbStartDate, default(DateTime))) : default(DateTime?);
+                DateTime? end = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
                 DataGridViewColumn sortcolprev = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
@@ -275,7 +275,7 @@ namespace EDDiscovery.UserControls
 
                                 if (start != null || end != null)      // if sorting by date, knock out ones outside range
                                 {
-                                    orglist = orglist.Where(x => (start == null || x.Item2.EventTimeUTC >= start) && (end == null || x.Item2.EventTimeUTC <= end)).ToList();
+                                    orglist = orglist.Where(x => (start == null || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(x.Item2.EventTimeUTC) >= start) && (end == null || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(x.Item2.EventTimeUTC) <= end)).ToList();
                                 }
 
                                 foreach (var os in orglist)
@@ -443,14 +443,14 @@ namespace EDDiscovery.UserControls
 
         private void DateTimePicker_ValueChangedStart(object sender, EventArgs e)
         {
-            PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
+            PutSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerStartDate.Value));
             PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
             DrawGrid();
         }
 
         private void DateTimePicker_ValueChangedEnd(object sender, EventArgs e)
         {
-            PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
+            PutSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerEndDate.Value));
             PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
             DrawGrid();
        }
