@@ -85,6 +85,7 @@ namespace EDDiscovery
             Organics = 55,
             Engineers = 56,
             Discoveries = 57,
+            Carrier=58,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -109,6 +110,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
+            { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier Statistics", "Carrier", "Data about your fleet carrier") },
 
             { new PanelInfo( "Shipyard Data") },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Market data view, giving commodity price information where available" ) },
