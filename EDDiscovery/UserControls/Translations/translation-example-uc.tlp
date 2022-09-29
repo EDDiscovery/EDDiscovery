@@ -1427,6 +1427,7 @@ SECTION FilterSelector
 .Mining: "Mining" @
 .MicroResources: "Micro Resources" @
 .Suits: "Suits" @
+.Carrier: "Carrier" @
 
 SECTION UserControlCommonBase
 

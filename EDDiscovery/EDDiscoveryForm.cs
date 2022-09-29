@@ -270,14 +270,16 @@ namespace EDDiscovery
             ThemeList = new ExtendedControls.ThemeList();
             ThemeList.LoadBaseThemes();                                         // default themes and ones on disk loaded
             ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(), "*.eddtheme"); // load any file stored themes
-            ThemeList.SetThemeByName("Windows Default");                        // this is the default theme we use
 
             if (!EDDOptions.Instance.NoTheme)
             {
+                ThemeList.SetThemeByName("Elite Verdana Small");                // this is the default theme we use normally
                 var theme = GetThemeFromDB();
                 if (theme != null)
                     ExtendedControls.Theme.Current = theme;
             }
+            else
+                ThemeList.SetThemeByName("Windows Default");                    // this is the default theme we use for notheme
 
             if (EDDOptions.Instance.FontSize > 0)
                 ExtendedControls.Theme.Current.FontSize = EDDOptions.Instance.FontSize;

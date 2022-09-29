@@ -1444,6 +1444,7 @@ namespace EDDiscovery
         FilterSelector_Mining, // Mining
         FilterSelector_MicroResources,
         FilterSelector_Suits,
+        FilterSelector_Carrier,
 
         ScanDisplayForm_Sys, // System
         ScanDisplayForm_Station, // Station
