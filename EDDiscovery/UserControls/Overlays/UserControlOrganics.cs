@@ -75,8 +75,10 @@ namespace EDDiscovery.UserControls
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
+            extDateTimePickerStartDate.DisplayTimeIndex = EDDConfig.Instance.DisplayTimeIndex;
             extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting(dbStartDate, new DateTime(2014, 12, 14)));
             var startchecked = extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
+            extDateTimePickerEndDate.DisplayTimeIndex = EDDConfig.Instance.DisplayTimeIndex;
             extDateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)));
             var endchecked = extDateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
 
@@ -275,7 +277,7 @@ namespace EDDiscovery.UserControls
 
                                 if (start != null || end != null)      // if sorting by date, knock out ones outside range
                                 {
-                                    orglist = orglist.Where(x => (start == null || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(x.Item2.EventTimeUTC) >= start) && (end == null || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(x.Item2.EventTimeUTC) <= end)).ToList();
+                                    orglist = orglist.Where(x => (start == null || x.Item2.GetSelectedEventTime(EDDConfig.Instance.DisplayTimeIndex) >= start) && (end == null || x.Item2.GetSelectedEventTime(EDDConfig.Instance.DisplayTimeIndex) <= end)).ToList();
                                 }
 
                                 foreach (var os in orglist)
@@ -454,6 +456,5 @@ namespace EDDiscovery.UserControls
             PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
             DrawGrid();
        }
-
     }
 }
