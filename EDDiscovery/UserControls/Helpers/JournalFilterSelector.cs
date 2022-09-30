@@ -68,9 +68,8 @@ namespace EDDiscovery.UserControls
             string suittype = string.Join(";", suitle.Select(x => x.Item1)) + ";";
             AddGroupOption(suittype, "Suits".T(EDTx.FilterSelector_Suits), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
 
-            string carriertype = "CarrierBankTransfer;CarrierBuy;CarrierCancelDecommission;CarrierCrewServices;CarrierDecommission;"+
-                        "CarrierDepositFuel;CarrierDockingPermission;CarrierFinance;CarrierJumpRequest;CarrierJump;" + 
-                        "CarrierModulePack;CarrierShipPack;CarrierStats;CarrierTradeOrder;CarrierNameChange;CarrierJumpCancelled";
+            var carriere = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCarrierStats" });
+            string carriertype = string.Join(";", carriere.Select(x => x.Item1)) + ";";
 
             AddGroupOption(carriertype, "Carrier".T(EDTx.FilterSelector_Carrier), JournalEntry.JournalTypeIcons[JournalTypeEnum.CarrierStats]);
 
