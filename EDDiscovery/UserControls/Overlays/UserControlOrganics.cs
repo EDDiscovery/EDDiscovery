@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
             if ( discoveryform.history != null )
             {
                 DateTime? start = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting(dbStartDate, default(DateTime))) : default(DateTime?);
-                DateTime? end = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
+                DateTime? end = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting(dbEndDate, default(DateTime)).EndOfDay()) : default(DateTime?);
 
                 DataGridViewColumn sortcolprev = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
