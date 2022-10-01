@@ -86,7 +86,7 @@ namespace EDDiscovery
         public void Controller_NewHistoryEntryUnfiltered(HistoryEntry he)
         {
             //he.FillInformation(out string ed, out string edi);System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType} {he.EventSummary} {ed}");
-            System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType}");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} EDF Unfiltered {he.EntryType}");
 
             // EDSM needs the raw stream, so send it here..
 
