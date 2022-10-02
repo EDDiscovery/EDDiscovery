@@ -445,7 +445,7 @@ namespace EDDiscovery.UserControls
 
             if (debugmode)
             {
-                colIcon = $"{he.TravelState} \r\n"
+                colTime += Environment.NewLine + $"{he.TravelState} \r\n"
                                + $"st[{he.System.Name}]\r\n"
                                + $"b[{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}]\r\n"
                                + $"s[{he.Status.StationName},{he.Status.StationType}]\r\n"
@@ -651,7 +651,7 @@ namespace EDDiscovery.UserControls
 
             PaintHelpers.PaintEventColumn(grid, e,
                         discoveryform.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag,
-                        travelGridInDebugModeToolStripMenuItem.Checked ? -1 : Columns.Icon, 
+                        Columns.Icon, 
                         true);
         }
 
