@@ -1,7 +1,6 @@
 [submodule "ExtendedControls"]
 	path = ExtendedControls
-	url = https://github.com/RadarCZ/ExtendedControls.git
-	branch = master
+	url = https://github.com/EDDiscovery/ExtendedControls.git
 [submodule "BaseUtilities"]
 	path = BaseUtilities
 	url = https://github.com/EDDiscovery/BaseUtilities.git
@@ -10,8 +9,7 @@
 	url = https://github.com/EDDiscovery/ActionLanguage.git
 [submodule "EliteDangerousCore"]
 	path = EliteDangerousCore
-	url = https://github.com/RadarCZ/EliteDangerousCore.git
-	branch = master
+	url = https://github.com/EDDiscovery/EliteDangerousCore.git
 [submodule "CAPI"]
 	path = CAPI
 	url = https://github.com/EDDiscovery/CAPI.git
