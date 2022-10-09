@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
             {
                 filtervars["Note"] = he.SNC?.Note ?? "";  // add in SNC Note
 
-                var fres = ConditionLists.CheckConditionWithObjectData(filterrules, he, new Variables[] { filtervars }, out string errlist, out ConditionLists.ErrorClass errclass);
+                var fres = ConditionLists.CheckConditionWithObjectData(filterrules, he.journalEntry, new Variables[] { filtervars }, out string errlist, out ConditionLists.ErrorClass errclass);
 
                 if (fres == true)
                     return false;

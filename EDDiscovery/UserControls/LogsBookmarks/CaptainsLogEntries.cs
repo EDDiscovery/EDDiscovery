@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            VerifyDates();
+            VerifyDates();      // if date time mode changes, history change is fired by settings. check date validation
 
             Display();
         }

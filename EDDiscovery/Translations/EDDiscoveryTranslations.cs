@@ -33,6 +33,9 @@ namespace EDDiscovery
         Information, // Information
         NoPos, // No Pos
 
+        MessageBoxTheme_No,
+        MessageBoxTheme_Yes,
+
         StartUp_DUPLOAD,        // EDDiscovery is already running. Launch anyway? in program.cs
 
         EDDiscoveryForm_addTabToolStripMenuItem, // ToolStrip control 'Insert Tab with panel..'

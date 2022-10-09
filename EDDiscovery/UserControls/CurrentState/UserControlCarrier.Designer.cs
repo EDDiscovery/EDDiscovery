@@ -33,40 +33,69 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extTabControlOverall = new ExtendedControls.ExtTabControl();
             this.tabPageOverall = new System.Windows.Forms.TabPage();
-            this.labelStarSystem = new System.Windows.Forms.Label();
-            this.labelCallSign = new System.Windows.Forms.Label();
-            this.labelNotoriusAccess = new System.Windows.Forms.Label();
+            this.labelNotorious = new System.Windows.Forms.Label();
             this.labelDockingAccess = new System.Windows.Forms.Label();
-            this.labelFuel = new System.Windows.Forms.Label();
+            this.labelFuelLevel = new System.Windows.Forms.Label();
+            this.labelJumpMax = new System.Windows.Forms.Label();
+            this.labelJumpRange = new System.Windows.Forms.Label();
+            this.labelCrewServicesSpace = new System.Windows.Forms.Label();
+            this.labelFreeSpace = new System.Windows.Forms.Label();
+            this.labelModulePacks = new System.Windows.Forms.Label();
+            this.labelShipPacks = new System.Windows.Forms.Label();
+            this.labelCargo = new System.Windows.Forms.Label();
+            this.labelItin5 = new System.Windows.Forms.Label();
+            this.labelItin4 = new System.Windows.Forms.Label();
+            this.labelItin3 = new System.Windows.Forms.Label();
+            this.labelItin2 = new System.Windows.Forms.Label();
+            this.labelItin1 = new System.Windows.Forms.Label();
+            this.pictureBoxGoto = new System.Windows.Forms.PictureBox();
+            this.pictureBoxFleetCarrier = new System.Windows.Forms.PictureBox();
+            this.labelDestSystemTime = new System.Windows.Forms.Label();
+            this.labelStarSystem = new System.Windows.Forms.Label();
             this.labelBalance = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
             this.tabPageItinerary = new System.Windows.Forms.TabPage();
+            this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.scrollBarFactions = new ExtendedControls.ExtScrollBar();
+            this.dataGridViewItinerary = new BaseUtils.DataGridViewColumnControl();
+            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBody = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colJumpDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDistFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageFinances = new System.Windows.Forms.TabPage();
+            this.labelFCarrierBalance = new System.Windows.Forms.Label();
             this.tabPageServices = new System.Windows.Forms.TabPage();
-            this.tabPageCargo = new System.Windows.Forms.TabPage();
-            this.tabPagePacks = new System.Windows.Forms.TabPage();
-            this.tabPageMarket = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.tabPageCargo = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
+            this.tabPagePacks = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tabPageMarket = new System.Windows.Forms.TabPage();
+            this.label15 = new System.Windows.Forms.Label();
             this.tabPageOrders = new System.Windows.Forms.TabPage();
             this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
+            this.labelFReserveBalance = new System.Windows.Forms.Label();
+            this.labelFAvailableBalance = new System.Windows.Forms.Label();
+            this.labelFTaxPioneerSupplies = new System.Windows.Forms.Label();
+            this.labelFReservePercent = new System.Windows.Forms.Label();
+            this.labelFTaxRearm = new System.Windows.Forms.Label();
+            this.labelFTaxShipyard = new System.Windows.Forms.Label();
+            this.labelFTaxOutfitting = new System.Windows.Forms.Label();
+            this.labelFTaxRefuel = new System.Windows.Forms.Label();
+            this.labelFTaxRepair = new System.Windows.Forms.Label();
             this.extTabControlOverall.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGoto)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFleetCarrier)).BeginInit();
             this.tabPageItinerary.SuspendLayout();
+            this.dataViewScrollerPanelFactions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItinerary)).BeginInit();
             this.tabPageFinances.SuspendLayout();
             this.tabPageServices.SuspendLayout();
             this.tabPageCargo.SuspendLayout();
@@ -109,22 +138,28 @@
             this.extTabControlOverall.TabStyle = tabStyleSquare1;
             this.extTabControlOverall.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.extTabControlOverall.TextSelectedColor = System.Drawing.SystemColors.ControlText;
-            this.extTabControlOverall.SelectedIndexChanged += new System.EventHandler(this.extTabControl1_SelectedIndexChanged);
             // 
             // tabPageOverall
             // 
-            this.tabPageOverall.Controls.Add(this.label6);
-            this.tabPageOverall.Controls.Add(this.labelStarSystem);
-            this.tabPageOverall.Controls.Add(this.labelCallSign);
-            this.tabPageOverall.Controls.Add(this.labelNotoriusAccess);
-            this.tabPageOverall.Controls.Add(this.label5);
-            this.tabPageOverall.Controls.Add(this.label14);
-            this.tabPageOverall.Controls.Add(this.label17);
-            this.tabPageOverall.Controls.Add(this.label2);
+            this.tabPageOverall.Controls.Add(this.labelNotorious);
             this.tabPageOverall.Controls.Add(this.labelDockingAccess);
-            this.tabPageOverall.Controls.Add(this.label4);
-            this.tabPageOverall.Controls.Add(this.label3);
-            this.tabPageOverall.Controls.Add(this.labelFuel);
+            this.tabPageOverall.Controls.Add(this.labelFuelLevel);
+            this.tabPageOverall.Controls.Add(this.labelJumpMax);
+            this.tabPageOverall.Controls.Add(this.labelJumpRange);
+            this.tabPageOverall.Controls.Add(this.labelCrewServicesSpace);
+            this.tabPageOverall.Controls.Add(this.labelFreeSpace);
+            this.tabPageOverall.Controls.Add(this.labelModulePacks);
+            this.tabPageOverall.Controls.Add(this.labelShipPacks);
+            this.tabPageOverall.Controls.Add(this.labelCargo);
+            this.tabPageOverall.Controls.Add(this.labelItin5);
+            this.tabPageOverall.Controls.Add(this.labelItin4);
+            this.tabPageOverall.Controls.Add(this.labelItin3);
+            this.tabPageOverall.Controls.Add(this.labelItin2);
+            this.tabPageOverall.Controls.Add(this.labelItin1);
+            this.tabPageOverall.Controls.Add(this.pictureBoxGoto);
+            this.tabPageOverall.Controls.Add(this.pictureBoxFleetCarrier);
+            this.tabPageOverall.Controls.Add(this.labelDestSystemTime);
+            this.tabPageOverall.Controls.Add(this.labelStarSystem);
             this.tabPageOverall.Controls.Add(this.labelBalance);
             this.tabPageOverall.Controls.Add(this.labelName);
             this.tabPageOverall.Location = new System.Drawing.Point(4, 22);
@@ -135,72 +170,200 @@
             this.tabPageOverall.Text = "Overall";
             this.tabPageOverall.UseVisualStyleBackColor = true;
             // 
-            // labelStarSystem
+            // labelNotorious
             // 
-            this.labelStarSystem.AutoSize = true;
-            this.labelStarSystem.Location = new System.Drawing.Point(6, 77);
-            this.labelStarSystem.Name = "labelStarSystem";
-            this.labelStarSystem.Size = new System.Drawing.Size(66, 13);
-            this.labelStarSystem.TabIndex = 0;
-            this.labelStarSystem.Text = "Star System:";
-            // 
-            // labelCallSign
-            // 
-            this.labelCallSign.AutoSize = true;
-            this.labelCallSign.Location = new System.Drawing.Point(6, 47);
-            this.labelCallSign.Name = "labelCallSign";
-            this.labelCallSign.Size = new System.Drawing.Size(46, 13);
-            this.labelCallSign.TabIndex = 0;
-            this.labelCallSign.Text = "Callsign:";
-            // 
-            // labelNotoriusAccess
-            // 
-            this.labelNotoriusAccess.AutoSize = true;
-            this.labelNotoriusAccess.Location = new System.Drawing.Point(657, 426);
-            this.labelNotoriusAccess.Name = "labelNotoriusAccess";
-            this.labelNotoriusAccess.Size = new System.Drawing.Size(93, 13);
-            this.labelNotoriusAccess.TabIndex = 0;
-            this.labelNotoriusAccess.Text = "Notorious Access:";
+            this.labelNotorious.AutoSize = true;
+            this.labelNotorious.Location = new System.Drawing.Point(734, 290);
+            this.labelNotorious.Name = "labelNotorious";
+            this.labelNotorious.Size = new System.Drawing.Size(91, 13);
+            this.labelNotorious.TabIndex = 22;
+            this.labelNotorious.Text = "<code Notorious>";
             // 
             // labelDockingAccess
             // 
             this.labelDockingAccess.AutoSize = true;
-            this.labelDockingAccess.Location = new System.Drawing.Point(657, 400);
+            this.labelDockingAccess.Location = new System.Drawing.Point(736, 255);
             this.labelDockingAccess.Name = "labelDockingAccess";
-            this.labelDockingAccess.Size = new System.Drawing.Size(88, 13);
-            this.labelDockingAccess.TabIndex = 0;
-            this.labelDockingAccess.Text = "Docking Access:";
+            this.labelDockingAccess.Size = new System.Drawing.Size(123, 13);
+            this.labelDockingAccess.TabIndex = 22;
+            this.labelDockingAccess.Text = "<code docking accessl>";
             // 
-            // labelFuel
+            // labelFuelLevel
             // 
-            this.labelFuel.AutoSize = true;
-            this.labelFuel.Location = new System.Drawing.Point(715, 47);
-            this.labelFuel.Name = "labelFuel";
-            this.labelFuel.Size = new System.Drawing.Size(30, 13);
-            this.labelFuel.TabIndex = 0;
-            this.labelFuel.Text = "Fuel:";
+            this.labelFuelLevel.AutoSize = true;
+            this.labelFuelLevel.Location = new System.Drawing.Point(739, 225);
+            this.labelFuelLevel.Name = "labelFuelLevel";
+            this.labelFuelLevel.Size = new System.Drawing.Size(66, 13);
+            this.labelFuelLevel.TabIndex = 22;
+            this.labelFuelLevel.Text = "<code Fuel>";
+            // 
+            // labelJumpMax
+            // 
+            this.labelJumpMax.AutoSize = true;
+            this.labelJumpMax.Location = new System.Drawing.Point(736, 199);
+            this.labelJumpMax.Name = "labelJumpMax";
+            this.labelJumpMax.Size = new System.Drawing.Size(91, 13);
+            this.labelJumpMax.TabIndex = 22;
+            this.labelJumpMax.Text = "<code JumpMax>";
+            // 
+            // labelJumpRange
+            // 
+            this.labelJumpRange.AutoSize = true;
+            this.labelJumpRange.Location = new System.Drawing.Point(734, 172);
+            this.labelJumpRange.Name = "labelJumpRange";
+            this.labelJumpRange.Size = new System.Drawing.Size(103, 13);
+            this.labelJumpRange.TabIndex = 22;
+            this.labelJumpRange.Text = "<code JumpRange>";
+            // 
+            // labelCrewServicesSpace
+            // 
+            this.labelCrewServicesSpace.AutoSize = true;
+            this.labelCrewServicesSpace.Location = new System.Drawing.Point(731, 145);
+            this.labelCrewServicesSpace.Name = "labelCrewServicesSpace";
+            this.labelCrewServicesSpace.Size = new System.Drawing.Size(84, 13);
+            this.labelCrewServicesSpace.TabIndex = 22;
+            this.labelCrewServicesSpace.Text = "<code SUC.FS>";
+            // 
+            // labelFreeSpace
+            // 
+            this.labelFreeSpace.AutoSize = true;
+            this.labelFreeSpace.Location = new System.Drawing.Point(731, 131);
+            this.labelFreeSpace.Name = "labelFreeSpace";
+            this.labelFreeSpace.Size = new System.Drawing.Size(84, 13);
+            this.labelFreeSpace.TabIndex = 22;
+            this.labelFreeSpace.Text = "<code SUC.FS>";
+            // 
+            // labelModulePacks
+            // 
+            this.labelModulePacks.AutoSize = true;
+            this.labelModulePacks.Location = new System.Drawing.Point(731, 105);
+            this.labelModulePacks.Name = "labelModulePacks";
+            this.labelModulePacks.Size = new System.Drawing.Size(87, 13);
+            this.labelModulePacks.TabIndex = 22;
+            this.labelModulePacks.Text = "<code SUC.MP>";
+            // 
+            // labelShipPacks
+            // 
+            this.labelShipPacks.AutoSize = true;
+            this.labelShipPacks.Location = new System.Drawing.Point(731, 79);
+            this.labelShipPacks.Name = "labelShipPacks";
+            this.labelShipPacks.Size = new System.Drawing.Size(85, 13);
+            this.labelShipPacks.TabIndex = 22;
+            this.labelShipPacks.Text = "<code SUC.SP>";
+            // 
+            // labelCargo
+            // 
+            this.labelCargo.AutoSize = true;
+            this.labelCargo.Location = new System.Drawing.Point(731, 54);
+            this.labelCargo.Name = "labelCargo";
+            this.labelCargo.Size = new System.Drawing.Size(99, 13);
+            this.labelCargo.TabIndex = 22;
+            this.labelCargo.Text = "<code SUC.Cargo>";
+            // 
+            // labelItin5
+            // 
+            this.labelItin5.AutoSize = true;
+            this.labelItin5.Location = new System.Drawing.Point(17, 507);
+            this.labelItin5.Name = "labelItin5";
+            this.labelItin5.Size = new System.Drawing.Size(60, 13);
+            this.labelItin5.TabIndex = 21;
+            this.labelItin5.Text = "<code Itin>";
+            // 
+            // labelItin4
+            // 
+            this.labelItin4.AutoSize = true;
+            this.labelItin4.Location = new System.Drawing.Point(18, 484);
+            this.labelItin4.Name = "labelItin4";
+            this.labelItin4.Size = new System.Drawing.Size(60, 13);
+            this.labelItin4.TabIndex = 21;
+            this.labelItin4.Text = "<code Itin>";
+            // 
+            // labelItin3
+            // 
+            this.labelItin3.AutoSize = true;
+            this.labelItin3.Location = new System.Drawing.Point(17, 460);
+            this.labelItin3.Name = "labelItin3";
+            this.labelItin3.Size = new System.Drawing.Size(60, 13);
+            this.labelItin3.TabIndex = 21;
+            this.labelItin3.Text = "<code Itin>";
+            // 
+            // labelItin2
+            // 
+            this.labelItin2.AutoSize = true;
+            this.labelItin2.Location = new System.Drawing.Point(17, 438);
+            this.labelItin2.Name = "labelItin2";
+            this.labelItin2.Size = new System.Drawing.Size(60, 13);
+            this.labelItin2.TabIndex = 21;
+            this.labelItin2.Text = "<code Itin>";
+            // 
+            // labelItin1
+            // 
+            this.labelItin1.AutoSize = true;
+            this.labelItin1.Location = new System.Drawing.Point(17, 412);
+            this.labelItin1.Name = "labelItin1";
+            this.labelItin1.Size = new System.Drawing.Size(60, 13);
+            this.labelItin1.TabIndex = 21;
+            this.labelItin1.Text = "<code Itin>";
+            // 
+            // pictureBoxGoto
+            // 
+            this.pictureBoxGoto.Image = global::EDDiscovery.Icons.Controls.ArrowsRight;
+            this.pictureBoxGoto.Location = new System.Drawing.Point(147, 23);
+            this.pictureBoxGoto.Name = "pictureBoxGoto";
+            this.pictureBoxGoto.Size = new System.Drawing.Size(48, 32);
+            this.pictureBoxGoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxGoto.TabIndex = 1;
+            this.pictureBoxGoto.TabStop = false;
+            // 
+            // pictureBoxFleetCarrier
+            // 
+            this.pictureBoxFleetCarrier.Image = global::EDDiscovery.Icons.Controls.FleetCarrier;
+            this.pictureBoxFleetCarrier.Location = new System.Drawing.Point(493, 18);
+            this.pictureBoxFleetCarrier.Name = "pictureBoxFleetCarrier";
+            this.pictureBoxFleetCarrier.Size = new System.Drawing.Size(161, 140);
+            this.pictureBoxFleetCarrier.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxFleetCarrier.TabIndex = 1;
+            this.pictureBoxFleetCarrier.TabStop = false;
+            // 
+            // labelDestSystemTime
+            // 
+            this.labelDestSystemTime.AutoSize = true;
+            this.labelDestSystemTime.Location = new System.Drawing.Point(278, 42);
+            this.labelDestSystemTime.Name = "labelDestSystemTime";
+            this.labelDestSystemTime.Size = new System.Drawing.Size(84, 13);
+            this.labelDestSystemTime.TabIndex = 2;
+            this.labelDestSystemTime.Text = "<code dest sys>";
+            // 
+            // labelStarSystem
+            // 
+            this.labelStarSystem.AutoSize = true;
+            this.labelStarSystem.Location = new System.Drawing.Point(6, 67);
+            this.labelStarSystem.Name = "labelStarSystem";
+            this.labelStarSystem.Size = new System.Drawing.Size(81, 13);
+            this.labelStarSystem.TabIndex = 2;
+            this.labelStarSystem.Text = "<code star sys>";
             // 
             // labelBalance
             // 
             this.labelBalance.AutoSize = true;
-            this.labelBalance.Location = new System.Drawing.Point(715, 18);
+            this.labelBalance.Location = new System.Drawing.Point(731, 18);
             this.labelBalance.Name = "labelBalance";
-            this.labelBalance.Size = new System.Drawing.Size(49, 13);
+            this.labelBalance.Size = new System.Drawing.Size(84, 13);
             this.labelBalance.TabIndex = 0;
-            this.labelBalance.Text = "Balance:";
+            this.labelBalance.Text = "<code balance>";
             // 
             // labelName
             // 
             this.labelName.AutoSize = true;
             this.labelName.Location = new System.Drawing.Point(6, 18);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(38, 13);
+            this.labelName.Size = new System.Drawing.Size(72, 13);
             this.labelName.TabIndex = 0;
-            this.labelName.Text = "Name:";
+            this.labelName.Text = "<code name>";
             // 
             // tabPageItinerary
             // 
-            this.tabPageItinerary.Controls.Add(this.label1);
+            this.tabPageItinerary.Controls.Add(this.dataViewScrollerPanelFactions);
             this.tabPageItinerary.Location = new System.Drawing.Point(4, 22);
             this.tabPageItinerary.Name = "tabPageItinerary";
             this.tabPageItinerary.Padding = new System.Windows.Forms.Padding(3);
@@ -208,13 +371,164 @@
             this.tabPageItinerary.TabIndex = 1;
             this.tabPageItinerary.Text = "Itinerary";
             this.tabPageItinerary.UseVisualStyleBackColor = true;
-            this.tabPageItinerary.Click += new System.EventHandler(this.tabPage2_Click);
+            // 
+            // dataViewScrollerPanelFactions
+            // 
+            this.dataViewScrollerPanelFactions.Controls.Add(this.scrollBarFactions);
+            this.dataViewScrollerPanelFactions.Controls.Add(this.dataGridViewItinerary);
+            this.dataViewScrollerPanelFactions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanelFactions.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanelFactions.Location = new System.Drawing.Point(3, 3);
+            this.dataViewScrollerPanelFactions.Margin = new System.Windows.Forms.Padding(2);
+            this.dataViewScrollerPanelFactions.Name = "dataViewScrollerPanelFactions";
+            this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(839, 540);
+            this.dataViewScrollerPanelFactions.TabIndex = 2;
+            this.dataViewScrollerPanelFactions.VerticalScrollBarDockRight = true;
+            // 
+            // scrollBarFactions
+            // 
+            this.scrollBarFactions.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.scrollBarFactions.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.scrollBarFactions.ArrowColorScaling = 0.5F;
+            this.scrollBarFactions.ArrowDownDrawAngle = 270F;
+            this.scrollBarFactions.ArrowUpDrawAngle = 90F;
+            this.scrollBarFactions.BorderColor = System.Drawing.Color.White;
+            this.scrollBarFactions.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.scrollBarFactions.HideScrollBar = false;
+            this.scrollBarFactions.LargeChange = 0;
+            this.scrollBarFactions.Location = new System.Drawing.Point(823, 0);
+            this.scrollBarFactions.Margin = new System.Windows.Forms.Padding(2);
+            this.scrollBarFactions.Maximum = -1;
+            this.scrollBarFactions.Minimum = 0;
+            this.scrollBarFactions.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.scrollBarFactions.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.scrollBarFactions.Name = "scrollBarFactions";
+            this.scrollBarFactions.Size = new System.Drawing.Size(16, 540);
+            this.scrollBarFactions.SliderColor = System.Drawing.Color.DarkGray;
+            this.scrollBarFactions.SmallChange = 1;
+            this.scrollBarFactions.TabIndex = 1;
+            this.scrollBarFactions.Text = "extScrollBar1";
+            this.scrollBarFactions.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.scrollBarFactions.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.scrollBarFactions.ThumbColorScaling = 0.5F;
+            this.scrollBarFactions.ThumbDrawAngle = 0F;
+            this.scrollBarFactions.Value = -1;
+            this.scrollBarFactions.ValueLimited = -1;
+            // 
+            // dataGridViewItinerary
+            // 
+            this.dataGridViewItinerary.AllowUserToAddRows = false;
+            this.dataGridViewItinerary.AllowUserToDeleteRows = false;
+            this.dataGridViewItinerary.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewItinerary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewItinerary.ColumnReorder = true;
+            this.dataGridViewItinerary.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colDate,
+            this.colSystem,
+            this.colBody,
+            this.colX,
+            this.colY,
+            this.colZ,
+            this.colJumpDist,
+            this.colDistFrom,
+            this.colInformation});
+            this.dataGridViewItinerary.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewItinerary.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewItinerary.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridViewItinerary.Name = "dataGridViewItinerary";
+            this.dataGridViewItinerary.PerColumnWordWrapControl = true;
+            this.dataGridViewItinerary.RowHeaderMenuStrip = null;
+            this.dataGridViewItinerary.RowHeadersVisible = false;
+            this.dataGridViewItinerary.RowHeadersWidth = 62;
+            this.dataGridViewItinerary.RowTemplate.Height = 28;
+            this.dataGridViewItinerary.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewItinerary.SingleRowSelect = true;
+            this.dataGridViewItinerary.Size = new System.Drawing.Size(823, 540);
+            this.dataGridViewItinerary.TabIndex = 0;
+            this.dataGridViewItinerary.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewItinerary_SortCompare);
+            // 
+            // colDate
+            // 
+            this.colDate.FillWeight = 200.039F;
+            this.colDate.HeaderText = "Date";
+            this.colDate.MinimumWidth = 8;
+            this.colDate.Name = "colDate";
+            this.colDate.ReadOnly = true;
+            // 
+            // colSystem
+            // 
+            this.colSystem.FillWeight = 100.0195F;
+            this.colSystem.HeaderText = "System";
+            this.colSystem.MinimumWidth = 8;
+            this.colSystem.Name = "colSystem";
+            this.colSystem.ReadOnly = true;
+            // 
+            // colBody
+            // 
+            this.colBody.FillWeight = 100.0195F;
+            this.colBody.HeaderText = "Body";
+            this.colBody.MinimumWidth = 8;
+            this.colBody.Name = "colBody";
+            this.colBody.ReadOnly = true;
+            // 
+            // colX
+            // 
+            this.colX.FillWeight = 100.0195F;
+            this.colX.HeaderText = "X";
+            this.colX.MinimumWidth = 8;
+            this.colX.Name = "colX";
+            this.colX.ReadOnly = true;
+            // 
+            // colY
+            // 
+            this.colY.FillWeight = 130.0254F;
+            this.colY.HeaderText = "Y";
+            this.colY.MinimumWidth = 8;
+            this.colY.Name = "colY";
+            this.colY.ReadOnly = true;
+            // 
+            // colZ
+            // 
+            this.colZ.FillWeight = 100.0195F;
+            this.colZ.HeaderText = "Z";
+            this.colZ.MinimumWidth = 8;
+            this.colZ.Name = "colZ";
+            this.colZ.ReadOnly = true;
+            // 
+            // colJumpDist
+            // 
+            this.colJumpDist.FillWeight = 100.0195F;
+            this.colJumpDist.HeaderText = "Jump Dist";
+            this.colJumpDist.MinimumWidth = 8;
+            this.colJumpDist.Name = "colJumpDist";
+            // 
+            // colDistFrom
+            // 
+            this.colDistFrom.FillWeight = 100.0195F;
+            this.colDistFrom.HeaderText = "Dist From";
+            this.colDistFrom.MinimumWidth = 8;
+            this.colDistFrom.Name = "colDistFrom";
+            this.colDistFrom.ReadOnly = true;
+            // 
+            // colInformation
+            // 
+            this.colInformation.FillWeight = 99.59389F;
+            this.colInformation.HeaderText = "Information";
+            this.colInformation.MinimumWidth = 8;
+            this.colInformation.Name = "colInformation";
             // 
             // tabPageFinances
             // 
-            this.tabPageFinances.Controls.Add(this.label9);
-            this.tabPageFinances.Controls.Add(this.label8);
-            this.tabPageFinances.Controls.Add(this.label7);
+            this.tabPageFinances.Controls.Add(this.labelFTaxShipyard);
+            this.tabPageFinances.Controls.Add(this.labelFTaxRepair);
+            this.tabPageFinances.Controls.Add(this.labelFTaxRefuel);
+            this.tabPageFinances.Controls.Add(this.labelFTaxOutfitting);
+            this.tabPageFinances.Controls.Add(this.labelFTaxRearm);
+            this.tabPageFinances.Controls.Add(this.labelFReservePercent);
+            this.tabPageFinances.Controls.Add(this.labelFTaxPioneerSupplies);
+            this.tabPageFinances.Controls.Add(this.labelFAvailableBalance);
+            this.tabPageFinances.Controls.Add(this.labelFReserveBalance);
+            this.tabPageFinances.Controls.Add(this.labelFCarrierBalance);
             this.tabPageFinances.Location = new System.Drawing.Point(4, 22);
             this.tabPageFinances.Name = "tabPageFinances";
             this.tabPageFinances.Padding = new System.Windows.Forms.Padding(3);
@@ -222,6 +536,15 @@
             this.tabPageFinances.TabIndex = 2;
             this.tabPageFinances.Text = "Finances";
             this.tabPageFinances.UseVisualStyleBackColor = true;
+            // 
+            // labelFCarrierBalance
+            // 
+            this.labelFCarrierBalance.AutoSize = true;
+            this.labelFCarrierBalance.Location = new System.Drawing.Point(6, 17);
+            this.labelFCarrierBalance.Name = "labelFCarrierBalance";
+            this.labelFCarrierBalance.Size = new System.Drawing.Size(85, 13);
+            this.labelFCarrierBalance.TabIndex = 0;
+            this.labelFCarrierBalance.Text = "<code Balance>";
             // 
             // tabPageServices
             // 
@@ -234,6 +557,15 @@
             this.tabPageServices.Text = "Services";
             this.tabPageServices.UseVisualStyleBackColor = true;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(103, 109);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(377, 13);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "Set of boxes, each with a image of the service, and its state from servicesCrew";
+            // 
             // tabPageCargo
             // 
             this.tabPageCargo.Controls.Add(this.label11);
@@ -244,6 +576,15 @@
             this.tabPageCargo.TabIndex = 4;
             this.tabPageCargo.Text = "Cargo";
             this.tabPageCargo.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(234, 267);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(191, 13);
+            this.label11.TabIndex = 1;
+            this.label11.Text = "Grid, cargo array, carrier Locker as well";
             // 
             // tabPagePacks
             // 
@@ -257,6 +598,25 @@
             this.tabPagePacks.Text = "Packs";
             this.tabPagePacks.UseVisualStyleBackColor = true;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(224, 214);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(433, 13);
+            this.label16.TabIndex = 0;
+            this.label16.Text = "From CAPI ships+modules it lists the actual ships - we can work out real cost usi" +
+    "ng taxation";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(242, 165);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(234, 13);
+            this.label13.TabIndex = 0;
+            this.label13.Text = "from carrierstats and packs, it gives pack names";
+            // 
             // tabPageMarket
             // 
             this.tabPageMarket.Controls.Add(this.label15);
@@ -268,104 +628,14 @@
             this.tabPageMarket.Text = "Market";
             this.tabPageMarket.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // label15
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(211, 155);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(269, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "set of boxes, scrollable, image of fc, and itinernary detail";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(294, 207);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Image of FC";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(690, 175);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Cergo Details";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(645, 259);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(131, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Capacity Values - 11 items";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 241);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(76, 13);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Next Depature";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 111);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(37, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Jumps";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(162, 72);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(237, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "marketFinances, BlackMarket, Service_Taxation";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(162, 130);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(73, 13);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "Finance costs";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(162, 186);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(84, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "Bartender profits";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(103, 109);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(377, 13);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "Set of boxes, each with a image of the service, and its state from servicesCrew";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(234, 267);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(191, 13);
-            this.label11.TabIndex = 1;
-            this.label11.Text = "Grid, cargo array, carrier Locker as well";
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(287, 214);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(177, 13);
+            this.label15.TabIndex = 0;
+            this.label15.Text = "Market.Commodities array? Not sure";
             // 
             // tabPageOrders
             // 
@@ -387,52 +657,86 @@
             this.label12.TabIndex = 0;
             this.label12.Text = "Grid, all the commodities and MR orders and purchases";
             // 
-            // label13
+            // labelFReserveBalance
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(242, 165);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(234, 13);
-            this.label13.TabIndex = 0;
-            this.label13.Text = "from carrierstats and packs, it gives pack names";
+            this.labelFReserveBalance.AutoSize = true;
+            this.labelFReserveBalance.Location = new System.Drawing.Point(6, 41);
+            this.labelFReserveBalance.Name = "labelFReserveBalance";
+            this.labelFReserveBalance.Size = new System.Drawing.Size(65, 13);
+            this.labelFReserveBalance.TabIndex = 0;
+            this.labelFReserveBalance.Text = "<code Res>";
             // 
-            // label14
+            // labelFAvailableBalance
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(294, 363);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(59, 13);
-            this.label14.TabIndex = 0;
-            this.label14.Text = "Reputation";
+            this.labelFAvailableBalance.AutoSize = true;
+            this.labelFAvailableBalance.Location = new System.Drawing.Point(6, 65);
+            this.labelFAvailableBalance.Name = "labelFAvailableBalance";
+            this.labelFAvailableBalance.Size = new System.Drawing.Size(69, 13);
+            this.labelFAvailableBalance.TabIndex = 0;
+            this.labelFAvailableBalance.Text = "<code Avail>";
             // 
-            // label15
+            // labelFTaxPioneerSupplies
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(287, 214);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(177, 13);
-            this.label15.TabIndex = 0;
-            this.label15.Text = "Market.Commodities array? Not sure";
+            this.labelFTaxPioneerSupplies.AutoSize = true;
+            this.labelFTaxPioneerSupplies.Location = new System.Drawing.Point(258, 17);
+            this.labelFTaxPioneerSupplies.Name = "labelFTaxPioneerSupplies";
+            this.labelFTaxPioneerSupplies.Size = new System.Drawing.Size(74, 13);
+            this.labelFTaxPioneerSupplies.TabIndex = 0;
+            this.labelFTaxPioneerSupplies.Text = "<code Tax P>";
             // 
-            // label16
+            // labelFReservePercent
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(224, 214);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(433, 13);
-            this.label16.TabIndex = 0;
-            this.label16.Text = "From CAPI ships+modules it lists the actual ships - we can work out real cost usi" +
-    "ng taxation";
+            this.labelFReservePercent.AutoSize = true;
+            this.labelFReservePercent.Location = new System.Drawing.Point(6, 84);
+            this.labelFReservePercent.Name = "labelFReservePercent";
+            this.labelFReservePercent.Size = new System.Drawing.Size(94, 13);
+            this.labelFReservePercent.TabIndex = 0;
+            this.labelFReservePercent.Text = "<code Reserve%>";
             // 
-            // label17
+            // labelFTaxRearm
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(207, 18);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(410, 13);
-            this.label17.TabIndex = 0;
-            this.label17.Text = "Data is from CAPI, backed up by last carrier stat, unless carrier stat is newer s" +
-    "omehow";
+            this.labelFTaxRearm.AutoSize = true;
+            this.labelFTaxRearm.Location = new System.Drawing.Point(258, 65);
+            this.labelFTaxRearm.Name = "labelFTaxRearm";
+            this.labelFTaxRearm.Size = new System.Drawing.Size(98, 13);
+            this.labelFTaxRearm.TabIndex = 0;
+            this.labelFTaxRearm.Text = "<code Tax Rearm>";
+            // 
+            // labelFTaxShipyard
+            // 
+            this.labelFTaxShipyard.AutoSize = true;
+            this.labelFTaxShipyard.Location = new System.Drawing.Point(258, 41);
+            this.labelFTaxShipyard.Name = "labelFTaxShipyard";
+            this.labelFTaxShipyard.Size = new System.Drawing.Size(88, 13);
+            this.labelFTaxShipyard.TabIndex = 0;
+            this.labelFTaxShipyard.Text = "<code Tax Ship>";
+            // 
+            // labelFTaxOutfitting
+            // 
+            this.labelFTaxOutfitting.AutoSize = true;
+            this.labelFTaxOutfitting.Location = new System.Drawing.Point(258, 84);
+            this.labelFTaxOutfitting.Name = "labelFTaxOutfitting";
+            this.labelFTaxOutfitting.Size = new System.Drawing.Size(90, 13);
+            this.labelFTaxOutfitting.TabIndex = 0;
+            this.labelFTaxOutfitting.Text = "<code Tax outfit>";
+            // 
+            // labelFTaxRefuel
+            // 
+            this.labelFTaxRefuel.AutoSize = true;
+            this.labelFTaxRefuel.Location = new System.Drawing.Point(258, 108);
+            this.labelFTaxRefuel.Name = "labelFTaxRefuel";
+            this.labelFTaxRefuel.Size = new System.Drawing.Size(98, 13);
+            this.labelFTaxRefuel.TabIndex = 0;
+            this.labelFTaxRefuel.Text = "<code Tax Refuel>";
+            // 
+            // labelFTaxRepair
+            // 
+            this.labelFTaxRepair.AutoSize = true;
+            this.labelFTaxRepair.Location = new System.Drawing.Point(258, 131);
+            this.labelFTaxRepair.Name = "labelFTaxRepair";
+            this.labelFTaxRepair.Size = new System.Drawing.Size(98, 13);
+            this.labelFTaxRepair.TabIndex = 0;
+            this.labelFTaxRepair.Text = "<code Tax Repair>";
             // 
             // UserControlCarrier
             // 
@@ -446,8 +750,11 @@
             this.extTabControlOverall.ResumeLayout(false);
             this.tabPageOverall.ResumeLayout(false);
             this.tabPageOverall.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGoto)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFleetCarrier)).EndInit();
             this.tabPageItinerary.ResumeLayout(false);
-            this.tabPageItinerary.PerformLayout();
+            this.dataViewScrollerPanelFactions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItinerary)).EndInit();
             this.tabPageFinances.ResumeLayout(false);
             this.tabPageFinances.PerformLayout();
             this.tabPageServices.ResumeLayout(false);
@@ -469,10 +776,6 @@
         private ExtendedControls.ExtTabControl extTabControlOverall;
         private System.Windows.Forms.TabPage tabPageOverall;
         private System.Windows.Forms.Label labelStarSystem;
-        private System.Windows.Forms.Label labelCallSign;
-        private System.Windows.Forms.Label labelNotoriusAccess;
-        private System.Windows.Forms.Label labelDockingAccess;
-        private System.Windows.Forms.Label labelFuel;
         private System.Windows.Forms.Label labelBalance;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.TabPage tabPageItinerary;
@@ -481,23 +784,52 @@
         private System.Windows.Forms.TabPage tabPageCargo;
         private System.Windows.Forms.TabPage tabPagePacks;
         private System.Windows.Forms.TabPage tabPageMarket;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label labelFCarrierBalance;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TabPage tabPageOrders;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.PictureBox pictureBoxFleetCarrier;
+        private System.Windows.Forms.Label labelDestSystemTime;
+        private System.Windows.Forms.PictureBox pictureBoxGoto;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelFactions;
+        private ExtendedControls.ExtScrollBar scrollBarFactions;
+        private BaseUtils.DataGridViewColumnControl dataGridViewItinerary;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBody;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colZ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colJumpDist;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDistFrom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colInformation;
+        private System.Windows.Forms.Label labelItin1;
+        private System.Windows.Forms.Label labelItin5;
+        private System.Windows.Forms.Label labelItin4;
+        private System.Windows.Forms.Label labelItin3;
+        private System.Windows.Forms.Label labelItin2;
+        private System.Windows.Forms.Label labelFuelLevel;
+        private System.Windows.Forms.Label labelJumpMax;
+        private System.Windows.Forms.Label labelJumpRange;
+        private System.Windows.Forms.Label labelFreeSpace;
+        private System.Windows.Forms.Label labelModulePacks;
+        private System.Windows.Forms.Label labelShipPacks;
+        private System.Windows.Forms.Label labelCargo;
+        private System.Windows.Forms.Label labelCrewServicesSpace;
+        private System.Windows.Forms.Label labelNotorious;
+        private System.Windows.Forms.Label labelDockingAccess;
+        private System.Windows.Forms.Label labelFTaxShipyard;
+        private System.Windows.Forms.Label labelFTaxRepair;
+        private System.Windows.Forms.Label labelFTaxRefuel;
+        private System.Windows.Forms.Label labelFTaxOutfitting;
+        private System.Windows.Forms.Label labelFTaxRearm;
+        private System.Windows.Forms.Label labelFReservePercent;
+        private System.Windows.Forms.Label labelFTaxPioneerSupplies;
+        private System.Windows.Forms.Label labelFAvailableBalance;
+        private System.Windows.Forms.Label labelFReserveBalance;
     }
 }
