@@ -49,10 +49,10 @@ namespace EDDiscovery.UserControls
             righttopalignedfinancecontrols = new Control[] { labelFTaxPioneerSupplies, labelFTaxShipyard, labelFTaxRearm, labelFTaxOutfitting, labelFTaxRefuel, labelFTaxRepair };
 
             var org = global::EDDiscovery.Icons.Controls.FleetCarrier;
-            overallImageControl.ImageSize = org.Size;     // same size as FC PNG
-            overallImageControl.ImageDepth = 3;         // 0 is most text, 1 is destination, 2 is carrier flashes
+            T.ImageSize = org.Size;     // same size as FC PNG
+            T.ImageDepth = 3;         // 0 is most text, 1 is destination, 2 is carrier flashes
 
-            using (Graphics gr = overallImageControl.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
+            using (Graphics gr = T.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
             {
                 using (Brush br = new SolidBrush(Color.FromArgb(200, 92, 79, 75)))
                 {
@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnThemeChanged()
         {
-            bigfont = new Font(ExtendedControls.Theme.Current.FontName, 14f);
+            bigfont = new Font(ExtendedControls.Theme.Current.FontName, 16f);
             normfont = new Font(ExtendedControls.Theme.Current.FontName, 12f);
 
             using (Font medium = ExtendedControls.Theme.Current.GetScaledFont(1.2f))
@@ -170,8 +170,8 @@ namespace EDDiscovery.UserControls
 
             if ( ++periodtickcounter % 4 == 0)     // every N go, change
             {
-                overallImageControl.ImageVisible[2] = periodtickcounter % 8 == 0;
-                overallImageControl.Invalidate();       
+                T.ImageVisible[2] = periodtickcounter % 8 == 0;
+                T.Invalidate();       
             }
         }
 
@@ -183,6 +183,7 @@ namespace EDDiscovery.UserControls
         private void ClearAndDisplay()
         {
             dataGridViewItinerary.Rows.Clear();
+            dataGridViewLedger.Rows.Clear();
             Display();
         }
 
@@ -194,9 +195,9 @@ namespace EDDiscovery.UserControls
 
             Color color = ExtendedControls.Theme.Current.SPanelColor;
 
-            int rightpos = overallImageControl.ImageWidth - 270;
+            int rightpos = T.ImageWidth - 350;
 
-            overallImageControl.Clear(0);
+            T.Clear(0);
 
             if (dataGridViewItinerary.RowCount != cs.JumpHistory.Count)     // only update if we have not displayed all rows
             {
@@ -246,10 +247,39 @@ namespace EDDiscovery.UserControls
 
                 string[] text = new string[] { cs.LastJumpText(1), cs.LastJumpText(2), cs.LastJumpText(3), cs.LastJumpText(4), cs.LastJumpText(5), cs.LastJumpText(6) };
                 int lines = text.Where(x => x != null).Count();
-                overallImageControl.DrawText(new Point(hspacing, overallImageControl.ImageHeight - linemargin - lines * (normfont.Height + linemargin)),
+                T.DrawText(new Point(hspacing, T.ImageHeight - linemargin - lines * (normfont.Height + linemargin)),
                                     new Size(30000, 30000), text, normfont, linemargin, color);
             }
 
+            if ( dataGridViewLedger.RowCount != cs.Ledger.Count)
+            {
+                DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
+                SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
+
+                dataGridViewLedger.Rows.Clear();
+
+                for (int i = cs.Ledger.Count - 1; i >= 0; i--)
+                {
+                    var le = cs.Ledger[i];
+                    long diff = i > 0 ? (le.Balance - cs.Ledger[i - 1].Balance) : 0;        // difference between us and previous, + if credit, - if not
+
+
+                    object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(le.JournalEntry.EventTimeUTC),
+                                        le.StarSystem.Name,
+                                        le.Body,
+                                        le.JournalEntry.EventTypeStr.SplitCapsWordFull(),
+                                        diff>0 ? diff.ToString("N0") : "",
+                                        diff<0 ? (-diff).ToString("N0") : "",
+                                        le.Balance.ToString("N0"),
+                                        le.Notes
+                    };
+
+                    dataGridViewLedger.Rows.Add(rowobj);
+                }
+
+                dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            }
 
             {                                           // main tab
                 int vposl = linemargin, vposr = linemargin;
@@ -265,13 +295,13 @@ namespace EDDiscovery.UserControls
                         name += " (" + "Decommissioning on".TxID(EDTx.Unknown) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
                     }
 
-                    overallImageControl.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);
+                    T.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);
                     vposl += bigfont.Height + linemargin;
 
-                    overallImageControl.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), cs.CurrentPositionText, bigfont, color);
+                    T.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), cs.CurrentPositionText, bigfont, color);
                     vposl += bigfont.Height + linemargin;
 
-                    overallImageControl.DrawText(new Point(rightpos, vposr), new Size(30000, 30000), (cs.State.Finance.AvailableBalance * 1).ToString("N0") + "cr",
+                    T.DrawText(new Point(rightpos, vposr), new Size(30000, 30000), (cs.State.Finance.AvailableBalance * 1).ToString("N0") + "cr",
                                                 bigfont, color);
                     vposr += bigfont.Height + linemargin;
 
@@ -288,7 +318,7 @@ namespace EDDiscovery.UserControls
                         "Notorious".TxID(EDTx.Unknown) + ": " + (cs.State.AllowNotorious ? "Yes".TxID(EDTx.MessageBoxTheme_Yes) : "No".TxID(EDTx.MessageBoxTheme_No)),
                     };
 
-                    overallImageControl.DrawText(new Point(rightpos, vposr + linemargin), new Size(30000, 30000), text, normfont, linemargin, color);
+                    T.DrawText(new Point(rightpos, vposr + linemargin), new Size(30000, 30000), text, normfont, linemargin, color);
 
                     labelFCarrierBalance.Text = "Balance".TxID(EDTx.Unknown) + ": " + cs.State.Finance.CarrierBalance.ToString("N0") + "cr";
                     labelFReserveBalance.Text = "Reserve".TxID(EDTx.Unknown) + ": " + cs.State.Finance.ReserveBalance.ToString("N0") + "cr";
@@ -304,7 +334,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    overallImageControl.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.Unknown), bigfont,color);
+                    T.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.Unknown), bigfont,color);
                 }
 
                 DestinationSystem();
@@ -318,7 +348,7 @@ namespace EDDiscovery.UserControls
             // add display of Crew Services activation
             // add display of Ship and module packs
 
-            overallImageControl.Invalidate();       // force overall image stack 
+            T.Invalidate();       // force overall image stack 
             PositionControls();
         }
 
@@ -328,7 +358,7 @@ namespace EDDiscovery.UserControls
 
             if (cs.State.HaveCarrier && cs.IsJumping)
             {
-                overallImageControl.Clear(1);       // clear destination bitmap plane - plane 1
+                T.Clear(1);       // clear destination bitmap plane - plane 1
 
                 int vpos = bigfont.Height + linemargin * 2;
                 int hpos = hspacing + (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap(cs.CurrentPositionText, bigfont).Width + hspacing;
@@ -336,43 +366,23 @@ namespace EDDiscovery.UserControls
                 var timetogo = cs.TimeTillJump;
                 string jumptext = cs.NextDestinationText + " " + (timetogo.TotalSeconds > 0 ? timetogo.ToString(@"mm\.ss") : "Jumping".TxID(EDTx.Unknown));
 
-                overallImageControl.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
+                T.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
                 hpos += 48;
 
-                overallImageControl.DrawText(new Point(hpos, vpos), new Size(30000, 30000), jumptext, bigfont, ExtendedControls.Theme.Current.SPanelColor, bitmap: 1);
+                T.DrawText(new Point(hpos, vpos), new Size(30000, 30000), jumptext, bigfont, ExtendedControls.Theme.Current.SPanelColor, bitmap: 1);
 
                 if (!period.Enabled)
                     period.Start();     // jumping, make sure its started
 
-                overallImageControl.Invalidate();
+                T.Invalidate();
 
                 paintedlayer1 = true;
             }
             else if ( paintedlayer1)
             {
-                overallImageControl.Clear(1);       // clear destination bitmap plane
-                overallImageControl.Invalidate();
+                T.Clear(1);       // clear destination bitmap plane
+                T.Invalidate();
                 paintedlayer1 = false;              // and don't repaint again
-            }
-        }
-
-
-        private void PositionControls()
-        {
-            int ypos = linemargin;
-            foreach (var x in lefttopalignedfinancecontrols)
-            {
-                x.Location = new Point(hspacing, ypos);
-                ypos += x.Height + linemargin;
-            }
-
-            int rightpos = Width- 270;
-            ypos = linemargin;
-            foreach (var x in righttopalignedfinancecontrols)
-            {
-                x.Location = new Point(rightpos, ypos);
-                if (x.Text.HasChars())
-                    ypos += x.Height + linemargin;
             }
         }
 
@@ -384,10 +394,30 @@ namespace EDDiscovery.UserControls
                 l.Text = "";
         }
 
+        private void PositionControls()
+        {
+            int lypos = linemargin;
+            foreach (var x in lefttopalignedfinancecontrols)
+            {
+                x.Location = new Point(hspacing, lypos);
+                lypos += x.Height + linemargin;
+            }
+
+            int rightpos = Width- 270;
+            int rypos = linemargin;
+            foreach (var x in righttopalignedfinancecontrols)
+            {
+                x.Location = new Point(rightpos, rypos);
+                if (x.Text.HasChars())
+                    rypos += x.Height + linemargin;
+            }
+
+            panelFinancesTop.Height = Math.Max(rypos, lypos);
+        }
 
         #endregion
 
-        #region Interactivity
+        #region Helpers
 
 
         private void dataGridViewItinerary_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -399,6 +429,15 @@ namespace EDDiscovery.UserControls
             else if (e.Column.Index <= 7)
                 e.SortDataGridViewColumnNumeric();
         }
+
+        private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 2)
+                e.SortDataGridViewColumnNumeric();
+        }
+
 
         #endregion
 

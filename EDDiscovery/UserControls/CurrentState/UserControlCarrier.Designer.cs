@@ -33,30 +33,43 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extTabControlOverall = new ExtendedControls.ExtTabControl();
             this.tabPageOverall = new System.Windows.Forms.TabPage();
+            this.T = new ExtendedControls.Controls.ImageControl();
             this.tabPageItinerary = new System.Windows.Forms.TabPage();
             this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.scrollBarFactions = new ExtendedControls.ExtScrollBar();
+            this.extScrollBarFactions = new ExtendedControls.ExtScrollBar();
             this.dataGridViewItinerary = new BaseUtils.DataGridViewColumnControl();
-            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colBody = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colJumpDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDistFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinBody = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinJumpDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinDistFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItinInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageFinances = new System.Windows.Forms.TabPage();
+            this.extPanelDataGridViewScrollLedger = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.extScrollBarLedger = new ExtendedControls.ExtScrollBar();
+            this.dataGridViewLedger = new BaseUtils.DataGridViewColumnControl();
+            this.colLedgerDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLedgerStarsystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLedgerBody = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLedgerEvent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLedgerCredit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLedgerDebit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLedgerBalance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLedgerNotes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panelFinancesTop = new System.Windows.Forms.Panel();
+            this.labelFCarrierBalance = new System.Windows.Forms.Label();
+            this.labelFReserveBalance = new System.Windows.Forms.Label();
             this.labelFTaxShipyard = new System.Windows.Forms.Label();
+            this.labelFAvailableBalance = new System.Windows.Forms.Label();
             this.labelFTaxRepair = new System.Windows.Forms.Label();
+            this.labelFTaxPioneerSupplies = new System.Windows.Forms.Label();
             this.labelFTaxRefuel = new System.Windows.Forms.Label();
+            this.labelFReservePercent = new System.Windows.Forms.Label();
             this.labelFTaxOutfitting = new System.Windows.Forms.Label();
             this.labelFTaxRearm = new System.Windows.Forms.Label();
-            this.labelFReservePercent = new System.Windows.Forms.Label();
-            this.labelFTaxPioneerSupplies = new System.Windows.Forms.Label();
-            this.labelFAvailableBalance = new System.Windows.Forms.Label();
-            this.labelFReserveBalance = new System.Windows.Forms.Label();
-            this.labelFCarrierBalance = new System.Windows.Forms.Label();
             this.tabPageServices = new System.Windows.Forms.TabPage();
             this.label10 = new System.Windows.Forms.Label();
             this.tabPageCargo = new System.Windows.Forms.TabPage();
@@ -68,13 +81,15 @@
             this.label15 = new System.Windows.Forms.Label();
             this.tabPageOrders = new System.Windows.Forms.TabPage();
             this.label12 = new System.Windows.Forms.Label();
-            this.overallImageControl = new ExtendedControls.Controls.ImageControl();
             this.extTabControlOverall.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
             this.tabPageItinerary.SuspendLayout();
             this.dataViewScrollerPanelFactions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItinerary)).BeginInit();
             this.tabPageFinances.SuspendLayout();
+            this.extPanelDataGridViewScrollLedger.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
+            this.panelFinancesTop.SuspendLayout();
             this.tabPageServices.SuspendLayout();
             this.tabPageCargo.SuspendLayout();
             this.tabPagePacks.SuspendLayout();
@@ -119,7 +134,7 @@
             // 
             // tabPageOverall
             // 
-            this.tabPageOverall.Controls.Add(this.overallImageControl);
+            this.tabPageOverall.Controls.Add(this.T);
             this.tabPageOverall.Location = new System.Drawing.Point(4, 22);
             this.tabPageOverall.Name = "tabPageOverall";
             this.tabPageOverall.Padding = new System.Windows.Forms.Padding(3);
@@ -127,6 +142,24 @@
             this.tabPageOverall.TabIndex = 0;
             this.tabPageOverall.Text = "Overall";
             this.tabPageOverall.UseVisualStyleBackColor = true;
+            // 
+            // T
+            // 
+            this.T.BackColor = System.Drawing.Color.Black;
+            this.T.BackgroundImage = global::EDDiscovery.Icons.Controls.FleetCarrier;
+            this.T.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.T.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.T.ImageBackgroundColor = System.Drawing.Color.Transparent;
+            this.T.ImageDepth = 1;
+            this.T.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.T.ImageSize = new System.Drawing.Size(128, 128);
+            this.T.ImageVisible = new bool[] {
+        false};
+            this.T.Location = new System.Drawing.Point(3, 3);
+            this.T.Name = "T";
+            this.T.Size = new System.Drawing.Size(839, 540);
+            this.T.TabIndex = 0;
+            this.T.Text = "imageControl1";
             // 
             // tabPageItinerary
             // 
@@ -141,7 +174,7 @@
             // 
             // dataViewScrollerPanelFactions
             // 
-            this.dataViewScrollerPanelFactions.Controls.Add(this.scrollBarFactions);
+            this.dataViewScrollerPanelFactions.Controls.Add(this.extScrollBarFactions);
             this.dataViewScrollerPanelFactions.Controls.Add(this.dataGridViewItinerary);
             this.dataViewScrollerPanelFactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelFactions.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -152,35 +185,35 @@
             this.dataViewScrollerPanelFactions.TabIndex = 2;
             this.dataViewScrollerPanelFactions.VerticalScrollBarDockRight = true;
             // 
-            // scrollBarFactions
+            // extScrollBarFactions
             // 
-            this.scrollBarFactions.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.scrollBarFactions.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.scrollBarFactions.ArrowColorScaling = 0.5F;
-            this.scrollBarFactions.ArrowDownDrawAngle = 270F;
-            this.scrollBarFactions.ArrowUpDrawAngle = 90F;
-            this.scrollBarFactions.BorderColor = System.Drawing.Color.White;
-            this.scrollBarFactions.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.scrollBarFactions.HideScrollBar = false;
-            this.scrollBarFactions.LargeChange = 0;
-            this.scrollBarFactions.Location = new System.Drawing.Point(823, 0);
-            this.scrollBarFactions.Margin = new System.Windows.Forms.Padding(2);
-            this.scrollBarFactions.Maximum = -1;
-            this.scrollBarFactions.Minimum = 0;
-            this.scrollBarFactions.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.scrollBarFactions.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.scrollBarFactions.Name = "scrollBarFactions";
-            this.scrollBarFactions.Size = new System.Drawing.Size(16, 540);
-            this.scrollBarFactions.SliderColor = System.Drawing.Color.DarkGray;
-            this.scrollBarFactions.SmallChange = 1;
-            this.scrollBarFactions.TabIndex = 1;
-            this.scrollBarFactions.Text = "extScrollBar1";
-            this.scrollBarFactions.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.scrollBarFactions.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.scrollBarFactions.ThumbColorScaling = 0.5F;
-            this.scrollBarFactions.ThumbDrawAngle = 0F;
-            this.scrollBarFactions.Value = -1;
-            this.scrollBarFactions.ValueLimited = -1;
+            this.extScrollBarFactions.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBarFactions.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarFactions.ArrowColorScaling = 0.5F;
+            this.extScrollBarFactions.ArrowDownDrawAngle = 270F;
+            this.extScrollBarFactions.ArrowUpDrawAngle = 90F;
+            this.extScrollBarFactions.BorderColor = System.Drawing.Color.White;
+            this.extScrollBarFactions.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBarFactions.HideScrollBar = false;
+            this.extScrollBarFactions.LargeChange = 0;
+            this.extScrollBarFactions.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarFactions.Margin = new System.Windows.Forms.Padding(2);
+            this.extScrollBarFactions.Maximum = -1;
+            this.extScrollBarFactions.Minimum = 0;
+            this.extScrollBarFactions.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarFactions.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarFactions.Name = "extScrollBarFactions";
+            this.extScrollBarFactions.Size = new System.Drawing.Size(16, 540);
+            this.extScrollBarFactions.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarFactions.SmallChange = 1;
+            this.extScrollBarFactions.TabIndex = 1;
+            this.extScrollBarFactions.Text = "extScrollBar1";
+            this.extScrollBarFactions.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBarFactions.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarFactions.ThumbColorScaling = 0.5F;
+            this.extScrollBarFactions.ThumbDrawAngle = 0F;
+            this.extScrollBarFactions.Value = -1;
+            this.extScrollBarFactions.ValueLimited = -1;
             // 
             // dataGridViewItinerary
             // 
@@ -190,15 +223,15 @@
             this.dataGridViewItinerary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewItinerary.ColumnReorder = true;
             this.dataGridViewItinerary.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colDate,
-            this.colSystem,
-            this.colBody,
-            this.colX,
-            this.colY,
-            this.colZ,
-            this.colJumpDist,
-            this.colDistFrom,
-            this.colInformation});
+            this.colItinDate,
+            this.colItinSystem,
+            this.colItinBody,
+            this.colItinX,
+            this.colItinY,
+            this.colItinZ,
+            this.colItinJumpDist,
+            this.colItinDistFrom,
+            this.colItinInformation});
             this.dataGridViewItinerary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewItinerary.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewItinerary.Margin = new System.Windows.Forms.Padding(2);
@@ -214,88 +247,80 @@
             this.dataGridViewItinerary.TabIndex = 0;
             this.dataGridViewItinerary.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewItinerary_SortCompare);
             // 
-            // colDate
+            // colItinDate
             // 
-            this.colDate.FillWeight = 200.039F;
-            this.colDate.HeaderText = "Date";
-            this.colDate.MinimumWidth = 8;
-            this.colDate.Name = "colDate";
-            this.colDate.ReadOnly = true;
+            this.colItinDate.FillWeight = 200.039F;
+            this.colItinDate.HeaderText = "Date";
+            this.colItinDate.MinimumWidth = 8;
+            this.colItinDate.Name = "colItinDate";
+            this.colItinDate.ReadOnly = true;
             // 
-            // colSystem
+            // colItinSystem
             // 
-            this.colSystem.FillWeight = 100.0195F;
-            this.colSystem.HeaderText = "System";
-            this.colSystem.MinimumWidth = 8;
-            this.colSystem.Name = "colSystem";
-            this.colSystem.ReadOnly = true;
+            this.colItinSystem.FillWeight = 100.0195F;
+            this.colItinSystem.HeaderText = "System";
+            this.colItinSystem.MinimumWidth = 8;
+            this.colItinSystem.Name = "colItinSystem";
+            this.colItinSystem.ReadOnly = true;
             // 
-            // colBody
+            // colItinBody
             // 
-            this.colBody.FillWeight = 100.0195F;
-            this.colBody.HeaderText = "Body";
-            this.colBody.MinimumWidth = 8;
-            this.colBody.Name = "colBody";
-            this.colBody.ReadOnly = true;
+            this.colItinBody.FillWeight = 100.0195F;
+            this.colItinBody.HeaderText = "Body";
+            this.colItinBody.MinimumWidth = 8;
+            this.colItinBody.Name = "colItinBody";
+            this.colItinBody.ReadOnly = true;
             // 
-            // colX
+            // colItinX
             // 
-            this.colX.FillWeight = 100.0195F;
-            this.colX.HeaderText = "X";
-            this.colX.MinimumWidth = 8;
-            this.colX.Name = "colX";
-            this.colX.ReadOnly = true;
+            this.colItinX.FillWeight = 100.0195F;
+            this.colItinX.HeaderText = "X";
+            this.colItinX.MinimumWidth = 8;
+            this.colItinX.Name = "colItinX";
+            this.colItinX.ReadOnly = true;
             // 
-            // colY
+            // colItinY
             // 
-            this.colY.FillWeight = 130.0254F;
-            this.colY.HeaderText = "Y";
-            this.colY.MinimumWidth = 8;
-            this.colY.Name = "colY";
-            this.colY.ReadOnly = true;
+            this.colItinY.FillWeight = 130.0254F;
+            this.colItinY.HeaderText = "Y";
+            this.colItinY.MinimumWidth = 8;
+            this.colItinY.Name = "colItinY";
+            this.colItinY.ReadOnly = true;
             // 
-            // colZ
+            // colItinZ
             // 
-            this.colZ.FillWeight = 100.0195F;
-            this.colZ.HeaderText = "Z";
-            this.colZ.MinimumWidth = 8;
-            this.colZ.Name = "colZ";
-            this.colZ.ReadOnly = true;
+            this.colItinZ.FillWeight = 100.0195F;
+            this.colItinZ.HeaderText = "Z";
+            this.colItinZ.MinimumWidth = 8;
+            this.colItinZ.Name = "colItinZ";
+            this.colItinZ.ReadOnly = true;
             // 
-            // colJumpDist
+            // colItinJumpDist
             // 
-            this.colJumpDist.FillWeight = 100.0195F;
-            this.colJumpDist.HeaderText = "Jump Dist";
-            this.colJumpDist.MinimumWidth = 8;
-            this.colJumpDist.Name = "colJumpDist";
+            this.colItinJumpDist.FillWeight = 100.0195F;
+            this.colItinJumpDist.HeaderText = "Jump Dist";
+            this.colItinJumpDist.MinimumWidth = 8;
+            this.colItinJumpDist.Name = "colItinJumpDist";
             // 
-            // colDistFrom
+            // colItinDistFrom
             // 
-            this.colDistFrom.FillWeight = 100.0195F;
-            this.colDistFrom.HeaderText = "Dist From";
-            this.colDistFrom.MinimumWidth = 8;
-            this.colDistFrom.Name = "colDistFrom";
-            this.colDistFrom.ReadOnly = true;
+            this.colItinDistFrom.FillWeight = 100.0195F;
+            this.colItinDistFrom.HeaderText = "Dist From";
+            this.colItinDistFrom.MinimumWidth = 8;
+            this.colItinDistFrom.Name = "colItinDistFrom";
+            this.colItinDistFrom.ReadOnly = true;
             // 
-            // colInformation
+            // colItinInformation
             // 
-            this.colInformation.FillWeight = 99.59389F;
-            this.colInformation.HeaderText = "Information";
-            this.colInformation.MinimumWidth = 8;
-            this.colInformation.Name = "colInformation";
+            this.colItinInformation.FillWeight = 99.59389F;
+            this.colItinInformation.HeaderText = "Information";
+            this.colItinInformation.MinimumWidth = 8;
+            this.colItinInformation.Name = "colItinInformation";
             // 
             // tabPageFinances
             // 
-            this.tabPageFinances.Controls.Add(this.labelFTaxShipyard);
-            this.tabPageFinances.Controls.Add(this.labelFTaxRepair);
-            this.tabPageFinances.Controls.Add(this.labelFTaxRefuel);
-            this.tabPageFinances.Controls.Add(this.labelFTaxOutfitting);
-            this.tabPageFinances.Controls.Add(this.labelFTaxRearm);
-            this.tabPageFinances.Controls.Add(this.labelFReservePercent);
-            this.tabPageFinances.Controls.Add(this.labelFTaxPioneerSupplies);
-            this.tabPageFinances.Controls.Add(this.labelFAvailableBalance);
-            this.tabPageFinances.Controls.Add(this.labelFReserveBalance);
-            this.tabPageFinances.Controls.Add(this.labelFCarrierBalance);
+            this.tabPageFinances.Controls.Add(this.extPanelDataGridViewScrollLedger);
+            this.tabPageFinances.Controls.Add(this.panelFinancesTop);
             this.tabPageFinances.Location = new System.Drawing.Point(4, 22);
             this.tabPageFinances.Name = "tabPageFinances";
             this.tabPageFinances.Padding = new System.Windows.Forms.Padding(3);
@@ -304,37 +329,226 @@
             this.tabPageFinances.Text = "Finances";
             this.tabPageFinances.UseVisualStyleBackColor = true;
             // 
+            // extPanelDataGridViewScrollLedger
+            // 
+            this.extPanelDataGridViewScrollLedger.Controls.Add(this.extScrollBarLedger);
+            this.extPanelDataGridViewScrollLedger.Controls.Add(this.dataGridViewLedger);
+            this.extPanelDataGridViewScrollLedger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelDataGridViewScrollLedger.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.extPanelDataGridViewScrollLedger.Location = new System.Drawing.Point(3, 103);
+            this.extPanelDataGridViewScrollLedger.Margin = new System.Windows.Forms.Padding(2);
+            this.extPanelDataGridViewScrollLedger.Name = "extPanelDataGridViewScrollLedger";
+            this.extPanelDataGridViewScrollLedger.Size = new System.Drawing.Size(839, 440);
+            this.extPanelDataGridViewScrollLedger.TabIndex = 3;
+            this.extPanelDataGridViewScrollLedger.VerticalScrollBarDockRight = true;
+            // 
+            // extScrollBarLedger
+            // 
+            this.extScrollBarLedger.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBarLedger.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarLedger.ArrowColorScaling = 0.5F;
+            this.extScrollBarLedger.ArrowDownDrawAngle = 270F;
+            this.extScrollBarLedger.ArrowUpDrawAngle = 90F;
+            this.extScrollBarLedger.BorderColor = System.Drawing.Color.White;
+            this.extScrollBarLedger.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBarLedger.HideScrollBar = false;
+            this.extScrollBarLedger.LargeChange = 0;
+            this.extScrollBarLedger.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarLedger.Margin = new System.Windows.Forms.Padding(2);
+            this.extScrollBarLedger.Maximum = -1;
+            this.extScrollBarLedger.Minimum = 0;
+            this.extScrollBarLedger.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarLedger.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarLedger.Name = "extScrollBarLedger";
+            this.extScrollBarLedger.Size = new System.Drawing.Size(16, 440);
+            this.extScrollBarLedger.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarLedger.SmallChange = 1;
+            this.extScrollBarLedger.TabIndex = 1;
+            this.extScrollBarLedger.Text = "extScrollBar1";
+            this.extScrollBarLedger.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBarLedger.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarLedger.ThumbColorScaling = 0.5F;
+            this.extScrollBarLedger.ThumbDrawAngle = 0F;
+            this.extScrollBarLedger.Value = -1;
+            this.extScrollBarLedger.ValueLimited = -1;
+            // 
+            // dataGridViewLedger
+            // 
+            this.dataGridViewLedger.AllowUserToAddRows = false;
+            this.dataGridViewLedger.AllowUserToDeleteRows = false;
+            this.dataGridViewLedger.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewLedger.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewLedger.ColumnReorder = true;
+            this.dataGridViewLedger.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colLedgerDate,
+            this.colLedgerStarsystem,
+            this.colLedgerBody,
+            this.colLedgerEvent,
+            this.colLedgerCredit,
+            this.colLedgerDebit,
+            this.colLedgerBalance,
+            this.colLedgerNotes});
+            this.dataGridViewLedger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewLedger.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridViewLedger.Name = "dataGridViewLedger";
+            this.dataGridViewLedger.PerColumnWordWrapControl = true;
+            this.dataGridViewLedger.RowHeaderMenuStrip = null;
+            this.dataGridViewLedger.RowHeadersVisible = false;
+            this.dataGridViewLedger.RowHeadersWidth = 62;
+            this.dataGridViewLedger.RowTemplate.Height = 28;
+            this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewLedger.SingleRowSelect = true;
+            this.dataGridViewLedger.Size = new System.Drawing.Size(823, 440);
+            this.dataGridViewLedger.TabIndex = 0;
+            this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
+            // 
+            // colLedgerDate
+            // 
+            this.colLedgerDate.HeaderText = "Date";
+            this.colLedgerDate.MinimumWidth = 8;
+            this.colLedgerDate.Name = "colLedgerDate";
+            this.colLedgerDate.ReadOnly = true;
+            // 
+            // colLedgerStarsystem
+            // 
+            this.colLedgerStarsystem.HeaderText = "System";
+            this.colLedgerStarsystem.Name = "colLedgerStarsystem";
+            this.colLedgerStarsystem.ReadOnly = true;
+            // 
+            // colLedgerBody
+            // 
+            this.colLedgerBody.HeaderText = "Body";
+            this.colLedgerBody.Name = "colLedgerBody";
+            this.colLedgerBody.ReadOnly = true;
+            // 
+            // colLedgerEvent
+            // 
+            this.colLedgerEvent.HeaderText = "Event";
+            this.colLedgerEvent.MinimumWidth = 8;
+            this.colLedgerEvent.Name = "colLedgerEvent";
+            this.colLedgerEvent.ReadOnly = true;
+            // 
+            // colLedgerCredit
+            // 
+            this.colLedgerCredit.HeaderText = "Credits";
+            this.colLedgerCredit.Name = "colLedgerCredit";
+            this.colLedgerCredit.ReadOnly = true;
+            // 
+            // colLedgerDebit
+            // 
+            this.colLedgerDebit.HeaderText = "Debits";
+            this.colLedgerDebit.Name = "colLedgerDebit";
+            this.colLedgerDebit.ReadOnly = true;
+            // 
+            // colLedgerBalance
+            // 
+            this.colLedgerBalance.HeaderText = "Balance cr";
+            this.colLedgerBalance.MinimumWidth = 8;
+            this.colLedgerBalance.Name = "colLedgerBalance";
+            this.colLedgerBalance.ReadOnly = true;
+            // 
+            // colLedgerNotes
+            // 
+            this.colLedgerNotes.FillWeight = 150F;
+            this.colLedgerNotes.HeaderText = "Notes";
+            this.colLedgerNotes.Name = "colLedgerNotes";
+            this.colLedgerNotes.ReadOnly = true;
+            // 
+            // panelFinancesTop
+            // 
+            this.panelFinancesTop.Controls.Add(this.labelFCarrierBalance);
+            this.panelFinancesTop.Controls.Add(this.labelFReserveBalance);
+            this.panelFinancesTop.Controls.Add(this.labelFTaxShipyard);
+            this.panelFinancesTop.Controls.Add(this.labelFAvailableBalance);
+            this.panelFinancesTop.Controls.Add(this.labelFTaxRepair);
+            this.panelFinancesTop.Controls.Add(this.labelFTaxPioneerSupplies);
+            this.panelFinancesTop.Controls.Add(this.labelFTaxRefuel);
+            this.panelFinancesTop.Controls.Add(this.labelFReservePercent);
+            this.panelFinancesTop.Controls.Add(this.labelFTaxOutfitting);
+            this.panelFinancesTop.Controls.Add(this.labelFTaxRearm);
+            this.panelFinancesTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelFinancesTop.Location = new System.Drawing.Point(3, 3);
+            this.panelFinancesTop.Name = "panelFinancesTop";
+            this.panelFinancesTop.Size = new System.Drawing.Size(839, 100);
+            this.panelFinancesTop.TabIndex = 4;
+            // 
+            // labelFCarrierBalance
+            // 
+            this.labelFCarrierBalance.AutoSize = true;
+            this.labelFCarrierBalance.Location = new System.Drawing.Point(42, 7);
+            this.labelFCarrierBalance.Name = "labelFCarrierBalance";
+            this.labelFCarrierBalance.Size = new System.Drawing.Size(85, 13);
+            this.labelFCarrierBalance.TabIndex = 0;
+            this.labelFCarrierBalance.Text = "<code Balance>";
+            // 
+            // labelFReserveBalance
+            // 
+            this.labelFReserveBalance.AutoSize = true;
+            this.labelFReserveBalance.Location = new System.Drawing.Point(42, 31);
+            this.labelFReserveBalance.Name = "labelFReserveBalance";
+            this.labelFReserveBalance.Size = new System.Drawing.Size(65, 13);
+            this.labelFReserveBalance.TabIndex = 0;
+            this.labelFReserveBalance.Text = "<code Res>";
+            // 
             // labelFTaxShipyard
             // 
             this.labelFTaxShipyard.AutoSize = true;
-            this.labelFTaxShipyard.Location = new System.Drawing.Point(258, 41);
+            this.labelFTaxShipyard.Location = new System.Drawing.Point(294, 31);
             this.labelFTaxShipyard.Name = "labelFTaxShipyard";
             this.labelFTaxShipyard.Size = new System.Drawing.Size(88, 13);
             this.labelFTaxShipyard.TabIndex = 0;
             this.labelFTaxShipyard.Text = "<code Tax Ship>";
             // 
+            // labelFAvailableBalance
+            // 
+            this.labelFAvailableBalance.AutoSize = true;
+            this.labelFAvailableBalance.Location = new System.Drawing.Point(42, 55);
+            this.labelFAvailableBalance.Name = "labelFAvailableBalance";
+            this.labelFAvailableBalance.Size = new System.Drawing.Size(69, 13);
+            this.labelFAvailableBalance.TabIndex = 0;
+            this.labelFAvailableBalance.Text = "<code Avail>";
+            // 
             // labelFTaxRepair
             // 
             this.labelFTaxRepair.AutoSize = true;
-            this.labelFTaxRepair.Location = new System.Drawing.Point(258, 131);
+            this.labelFTaxRepair.Location = new System.Drawing.Point(294, 121);
             this.labelFTaxRepair.Name = "labelFTaxRepair";
             this.labelFTaxRepair.Size = new System.Drawing.Size(98, 13);
             this.labelFTaxRepair.TabIndex = 0;
             this.labelFTaxRepair.Text = "<code Tax Repair>";
             // 
+            // labelFTaxPioneerSupplies
+            // 
+            this.labelFTaxPioneerSupplies.AutoSize = true;
+            this.labelFTaxPioneerSupplies.Location = new System.Drawing.Point(294, 7);
+            this.labelFTaxPioneerSupplies.Name = "labelFTaxPioneerSupplies";
+            this.labelFTaxPioneerSupplies.Size = new System.Drawing.Size(74, 13);
+            this.labelFTaxPioneerSupplies.TabIndex = 0;
+            this.labelFTaxPioneerSupplies.Text = "<code Tax P>";
+            // 
             // labelFTaxRefuel
             // 
             this.labelFTaxRefuel.AutoSize = true;
-            this.labelFTaxRefuel.Location = new System.Drawing.Point(258, 108);
+            this.labelFTaxRefuel.Location = new System.Drawing.Point(294, 98);
             this.labelFTaxRefuel.Name = "labelFTaxRefuel";
             this.labelFTaxRefuel.Size = new System.Drawing.Size(98, 13);
             this.labelFTaxRefuel.TabIndex = 0;
             this.labelFTaxRefuel.Text = "<code Tax Refuel>";
             // 
+            // labelFReservePercent
+            // 
+            this.labelFReservePercent.AutoSize = true;
+            this.labelFReservePercent.Location = new System.Drawing.Point(42, 74);
+            this.labelFReservePercent.Name = "labelFReservePercent";
+            this.labelFReservePercent.Size = new System.Drawing.Size(94, 13);
+            this.labelFReservePercent.TabIndex = 0;
+            this.labelFReservePercent.Text = "<code Reserve%>";
+            // 
             // labelFTaxOutfitting
             // 
             this.labelFTaxOutfitting.AutoSize = true;
-            this.labelFTaxOutfitting.Location = new System.Drawing.Point(258, 84);
+            this.labelFTaxOutfitting.Location = new System.Drawing.Point(294, 74);
             this.labelFTaxOutfitting.Name = "labelFTaxOutfitting";
             this.labelFTaxOutfitting.Size = new System.Drawing.Size(90, 13);
             this.labelFTaxOutfitting.TabIndex = 0;
@@ -343,56 +557,11 @@
             // labelFTaxRearm
             // 
             this.labelFTaxRearm.AutoSize = true;
-            this.labelFTaxRearm.Location = new System.Drawing.Point(258, 65);
+            this.labelFTaxRearm.Location = new System.Drawing.Point(294, 55);
             this.labelFTaxRearm.Name = "labelFTaxRearm";
             this.labelFTaxRearm.Size = new System.Drawing.Size(98, 13);
             this.labelFTaxRearm.TabIndex = 0;
             this.labelFTaxRearm.Text = "<code Tax Rearm>";
-            // 
-            // labelFReservePercent
-            // 
-            this.labelFReservePercent.AutoSize = true;
-            this.labelFReservePercent.Location = new System.Drawing.Point(6, 84);
-            this.labelFReservePercent.Name = "labelFReservePercent";
-            this.labelFReservePercent.Size = new System.Drawing.Size(94, 13);
-            this.labelFReservePercent.TabIndex = 0;
-            this.labelFReservePercent.Text = "<code Reserve%>";
-            // 
-            // labelFTaxPioneerSupplies
-            // 
-            this.labelFTaxPioneerSupplies.AutoSize = true;
-            this.labelFTaxPioneerSupplies.Location = new System.Drawing.Point(258, 17);
-            this.labelFTaxPioneerSupplies.Name = "labelFTaxPioneerSupplies";
-            this.labelFTaxPioneerSupplies.Size = new System.Drawing.Size(74, 13);
-            this.labelFTaxPioneerSupplies.TabIndex = 0;
-            this.labelFTaxPioneerSupplies.Text = "<code Tax P>";
-            // 
-            // labelFAvailableBalance
-            // 
-            this.labelFAvailableBalance.AutoSize = true;
-            this.labelFAvailableBalance.Location = new System.Drawing.Point(6, 65);
-            this.labelFAvailableBalance.Name = "labelFAvailableBalance";
-            this.labelFAvailableBalance.Size = new System.Drawing.Size(69, 13);
-            this.labelFAvailableBalance.TabIndex = 0;
-            this.labelFAvailableBalance.Text = "<code Avail>";
-            // 
-            // labelFReserveBalance
-            // 
-            this.labelFReserveBalance.AutoSize = true;
-            this.labelFReserveBalance.Location = new System.Drawing.Point(6, 41);
-            this.labelFReserveBalance.Name = "labelFReserveBalance";
-            this.labelFReserveBalance.Size = new System.Drawing.Size(65, 13);
-            this.labelFReserveBalance.TabIndex = 0;
-            this.labelFReserveBalance.Text = "<code Res>";
-            // 
-            // labelFCarrierBalance
-            // 
-            this.labelFCarrierBalance.AutoSize = true;
-            this.labelFCarrierBalance.Location = new System.Drawing.Point(6, 17);
-            this.labelFCarrierBalance.Name = "labelFCarrierBalance";
-            this.labelFCarrierBalance.Size = new System.Drawing.Size(85, 13);
-            this.labelFCarrierBalance.TabIndex = 0;
-            this.labelFCarrierBalance.Text = "<code Balance>";
             // 
             // tabPageServices
             // 
@@ -505,21 +674,6 @@
             this.label12.TabIndex = 0;
             this.label12.Text = "Grid, all the commodities and MR orders and purchases";
             // 
-            // imageControl1
-            // 
-            this.overallImageControl.BackColor = System.Drawing.Color.Black;
-            this.overallImageControl.BackgroundImage = global::EDDiscovery.Icons.Controls.FleetCarrier;
-            this.overallImageControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.overallImageControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.overallImageControl.ImageBackgroundColor = System.Drawing.Color.Transparent;
-            this.overallImageControl.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.overallImageControl.ImageSize = new System.Drawing.Size(128, 128);
-            this.overallImageControl.Location = new System.Drawing.Point(3, 3);
-            this.overallImageControl.Name = "imageControl1";
-            this.overallImageControl.Size = new System.Drawing.Size(839, 540);
-            this.overallImageControl.TabIndex = 0;
-            this.overallImageControl.Text = "imageControl1";
-            // 
             // UserControlCarrier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -535,7 +689,10 @@
             this.dataViewScrollerPanelFactions.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItinerary)).EndInit();
             this.tabPageFinances.ResumeLayout(false);
-            this.tabPageFinances.PerformLayout();
+            this.extPanelDataGridViewScrollLedger.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).EndInit();
+            this.panelFinancesTop.ResumeLayout(false);
+            this.panelFinancesTop.PerformLayout();
             this.tabPageServices.ResumeLayout(false);
             this.tabPageServices.PerformLayout();
             this.tabPageCargo.ResumeLayout(false);
@@ -569,17 +726,8 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label15;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelFactions;
-        private ExtendedControls.ExtScrollBar scrollBarFactions;
+        private ExtendedControls.ExtScrollBar extScrollBarFactions;
         private BaseUtils.DataGridViewColumnControl dataGridViewItinerary;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colBody;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colX;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colY;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colZ;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colJumpDist;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDistFrom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colInformation;
         private System.Windows.Forms.Label labelFTaxShipyard;
         private System.Windows.Forms.Label labelFTaxRepair;
         private System.Windows.Forms.Label labelFTaxRefuel;
@@ -589,6 +737,27 @@
         private System.Windows.Forms.Label labelFTaxPioneerSupplies;
         private System.Windows.Forms.Label labelFAvailableBalance;
         private System.Windows.Forms.Label labelFReserveBalance;
-        private ExtendedControls.Controls.ImageControl overallImageControl;
+        private ExtendedControls.Controls.ImageControl T;
+        private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollLedger;
+        private ExtendedControls.ExtScrollBar extScrollBarLedger;
+        private BaseUtils.DataGridViewColumnControl dataGridViewLedger;
+        private System.Windows.Forms.Panel panelFinancesTop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinBody;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinZ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinJumpDist;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinDistFrom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItinInformation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerStarsystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerBody;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerEvent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerCredit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerDebit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerBalance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerNotes;
     }
 }
