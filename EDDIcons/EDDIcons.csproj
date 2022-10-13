@@ -477,6 +477,13 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Shipyard.png" />
+    <EmbeddedResource Include="Controls\TritiumDepot.png" />
+    <EmbeddedResource Include="Controls\VistaGenomics.png" />
+    <EmbeddedResource Include="Controls\VoucherRedemption.png" />
+    <EmbeddedResource Include="Controls\Rearm.png" />
+    <EmbeddedResource Include="Controls\Refuel.png" />
+    <EmbeddedResource Include="Controls\Repair.png" />
     <EmbeddedResource Include="Journal\NavRouteClear.png" />
     <EmbeddedResource Include="Controls\RoundDown.png" />
     <EmbeddedResource Include="Controls\RoundUp.png" />
@@ -1056,6 +1063,13 @@
     <EmbeddedResource Include="Controls\Copy.png" />
     <EmbeddedResource Include="Controls\FleetCarrier.png" />
     <EmbeddedResource Include="Controls\ArrowsRight.png" />
+    <EmbeddedResource Include="Controls\Bartender.png" />
+    <EmbeddedResource Include="Controls\BlackMarket.png" />
+    <EmbeddedResource Include="Controls\BridgeCrew.png" />
+    <EmbeddedResource Include="Controls\CommodityTrading.png" />
+    <EmbeddedResource Include="Controls\Exploration.png" />
+    <EmbeddedResource Include="Controls\Outfitting.png" />
+    <EmbeddedResource Include="Controls\PioneerSupplies.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

@@ -15,6 +15,7 @@
  */
 
 using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Data;
 using System.Drawing;
@@ -29,12 +30,15 @@ namespace EDDiscovery.UserControls
         private int periodtickcounter = 0;
 
         private Control[] lefttopalignedfinancecontrols;
+        private Control[] midtopalignedfinancecontrols;
         private Control[] righttopalignedfinancecontrols;
         private bool loadlayouthappened = false;
         private Font bigfont, normfont;
         private bool paintedlayer1 = false;
         private const int linemargin = 8;
         private const int hspacing = 8;
+        private const int servicewidth = 2000;
+        private const int serviceheight = 140;
 
         #region Init
 
@@ -46,13 +50,14 @@ namespace EDDiscovery.UserControls
             period.Tick += Period_Tick;
 
             lefttopalignedfinancecontrols = new Control[] { labelFCarrierBalance, labelFReserveBalance, labelFAvailableBalance, labelFReservePercent };
+            midtopalignedfinancecontrols = new Control[] { labelFCoreCost, labelFServicesCost };
             righttopalignedfinancecontrols = new Control[] { labelFTaxPioneerSupplies, labelFTaxShipyard, labelFTaxRearm, labelFTaxOutfitting, labelFTaxRefuel, labelFTaxRepair };
 
             var org = global::EDDiscovery.Icons.Controls.FleetCarrier;
-            T.ImageSize = org.Size;     // same size as FC PNG
-            T.ImageDepth = 3;         // 0 is most text, 1 is destination, 2 is carrier flashes
+            imageControlOverall.ImageSize = org.Size;     // same size as FC PNG
+            imageControlOverall.ImageDepth = 3;         // 0 is most text, 1 is destination, 2 is carrier flashes
 
-            using (Graphics gr = T.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
+            using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
             {
                 using (Brush br = new SolidBrush(Color.FromArgb(200, 92, 79, 75)))
                 {
@@ -83,6 +88,10 @@ namespace EDDiscovery.UserControls
                     gr.FillRectangle(br5, new Rectangle(1096, 625, 5, 4));
                 }
             }
+
+            imageControlServices.ImageSize = new Size(2000, (serviceheight + linemargin) * EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.GetServiceCount() + linemargin);
+            imageControlServices.Height = imageControlServices.ImageSize.Height;
+
         }
 
         public override void Init()
@@ -136,13 +145,11 @@ namespace EDDiscovery.UserControls
             using (Font medium = ExtendedControls.Theme.Current.GetScaledFont(1.2f))
             {
                 foreach (var x in lefttopalignedfinancecontrols)
-                {
                     x.Font = medium;
-                }
+                foreach (var x in midtopalignedfinancecontrols)
+                    x.Font = medium;
                 foreach (var x in righttopalignedfinancecontrols)
-                {
                     x.Font = medium;
-                }
             }
 
             tabPageOverall.BackColor = Color.Black;
@@ -154,8 +161,10 @@ namespace EDDiscovery.UserControls
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if ( loadlayouthappened)
+            if (loadlayouthappened)
+            {
                 PositionControls();
+            }
         }
 
 
@@ -170,8 +179,8 @@ namespace EDDiscovery.UserControls
 
             if ( ++periodtickcounter % 4 == 0)     // every N go, change
             {
-                T.ImageVisible[2] = periodtickcounter % 8 == 0;
-                T.Invalidate();       
+                imageControlOverall.ImageVisible[2] = periodtickcounter % 8 == 0;
+                imageControlOverall.Invalidate();       
             }
         }
 
@@ -195,9 +204,9 @@ namespace EDDiscovery.UserControls
 
             Color color = ExtendedControls.Theme.Current.SPanelColor;
 
-            int rightpos = T.ImageWidth - 350;
+            int rightpos = imageControlOverall.ImageWidth - 350;
 
-            T.Clear(0);
+            imageControlOverall.Clear(0);
 
             if (dataGridViewItinerary.RowCount != cs.JumpHistory.Count)     // only update if we have not displayed all rows
             {
@@ -247,7 +256,7 @@ namespace EDDiscovery.UserControls
 
                 string[] text = new string[] { cs.LastJumpText(1), cs.LastJumpText(2), cs.LastJumpText(3), cs.LastJumpText(4), cs.LastJumpText(5), cs.LastJumpText(6) };
                 int lines = text.Where(x => x != null).Count();
-                T.DrawText(new Point(hspacing, T.ImageHeight - linemargin - lines * (normfont.Height + linemargin)),
+                imageControlOverall.DrawText(new Point(hspacing, imageControlOverall.ImageHeight - linemargin - lines * (normfont.Height + linemargin)),
                                     new Size(30000, 30000), text, normfont, linemargin, color);
             }
 
@@ -295,13 +304,13 @@ namespace EDDiscovery.UserControls
                         name += " (" + "Decommissioning on".TxID(EDTx.Unknown) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
                     }
 
-                    T.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);
+                    imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);
                     vposl += bigfont.Height + linemargin;
 
-                    T.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), cs.CurrentPositionText, bigfont, color);
+                    imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), cs.CurrentPositionText, bigfont, color);
                     vposl += bigfont.Height + linemargin;
 
-                    T.DrawText(new Point(rightpos, vposr), new Size(30000, 30000), (cs.State.Finance.AvailableBalance * 1).ToString("N0") + "cr",
+                    imageControlOverall.DrawText(new Point(rightpos, vposr), new Size(30000, 30000), (cs.State.Finance.AvailableBalance * 1).ToString("N0") + "cr",
                                                 bigfont, color);
                     vposr += bigfont.Height + linemargin;
 
@@ -318,7 +327,7 @@ namespace EDDiscovery.UserControls
                         "Notorious".TxID(EDTx.Unknown) + ": " + (cs.State.AllowNotorious ? "Yes".TxID(EDTx.MessageBoxTheme_Yes) : "No".TxID(EDTx.MessageBoxTheme_No)),
                     };
 
-                    T.DrawText(new Point(rightpos, vposr + linemargin), new Size(30000, 30000), text, normfont, linemargin, color);
+                    imageControlOverall.DrawText(new Point(rightpos, vposr + linemargin), new Size(30000, 30000), text, normfont, linemargin, color);
 
                     labelFCarrierBalance.Text = "Balance".TxID(EDTx.Unknown) + ": " + cs.State.Finance.CarrierBalance.ToString("N0") + "cr";
                     labelFReserveBalance.Text = "Reserve".TxID(EDTx.Unknown) + ": " + cs.State.Finance.ReserveBalance.ToString("N0") + "cr";
@@ -331,24 +340,106 @@ namespace EDDiscovery.UserControls
                     TaxRate(labelFTaxOutfitting, "Outfitting Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateOutfitting);
                     TaxRate(labelFTaxRefuel, "Refuel Tax".TxID(EDTx.Unknown),  cs.State.Finance.TaxRateRefuel);
                     TaxRate(labelFTaxRepair, "Repair Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateRepair);
+
+                    labelFCoreCost.Text = "Core Cost: ".TxID(EDTx.Unknown) + cs.State.GetCoreCost().ToString("N0") + "cr";
+                    labelFServicesCost.Text = "Services Cost: ".TxID(EDTx.Unknown) + cs.State.GetServicesCost().ToString("N0") + "cr";
                 }
                 else
                 {
-                    T.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.Unknown), bigfont,color);
+                    imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.Unknown), bigfont,color);
                 }
 
                 DestinationSystem();
 
                 foreach (var x in righttopalignedfinancecontrols)
                     x.Visible = cs.State.HaveCarrier;
+                foreach (var x in midtopalignedfinancecontrols)
+                    x.Visible = cs.State.HaveCarrier;
                 foreach (var x in lefttopalignedfinancecontrols)
                     x.Visible = cs.State.HaveCarrier;
             }
 
-            // add display of Crew Services activation
+            {
+                imageControlServices.Clear();
+
+                Graphics gr = imageControlServices.GetGraphics();
+                int vpos = linemargin;
+
+                foreach (JournalCarrierCrewServices.ServiceType en in Enum.GetValues(typeof(JournalCarrierCrewServices.ServiceType)))
+                {
+                    if (JournalCarrierCrewServices.IsValidService(en))
+                    {
+                        var area = new Rectangle(hspacing, vpos, servicewidth, serviceheight);
+
+                        using (Brush br = new SolidBrush(Color.FromArgb(255, 53, 36, 2)))
+                        {
+                            gr.FillRectangle(br, area);
+                        }
+
+                        var pointtextleft = new Point(hspacing * 3, vpos + linemargin * 2);
+
+                        const int titlewidth = 200;
+
+                        var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(en), bigfont, color);
+                        pointtextleft.Y += (int)(size.Height + 1);
+                        string coreoroptional = en <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service" : "Optional Service";
+                        imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
+
+                        Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + en.ToString());
+                        imageControlServices.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height,img.Width,img.Height));
+
+                        var servicestate = cs.State.GetService(en);     // may be null for a core or non listed service
+                        var optional = JournalCarrierCrewServices.IsOptionalService(en);
+                        bool active = servicestate != null && servicestate.Enabled == true && servicestate.Activated == true;
+                        bool disabled= servicestate != null && servicestate.Enabled == false && servicestate.Activated == true;
+
+                        var servicecol1top = new Point(titlewidth + 50, vpos + linemargin * 2);
+
+                        JournalCarrierCrewServices.ServicesData si = JournalCarrierCrewServices.GetDataOnServiceType(en);
+                        if (si != null)
+                        {
+                            int lineh = normfont.Height + linemargin * 2;
+                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost: " + si.InstallCost.ToString("N0"), normfont, color);
+                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated: " + si.CargoSize.ToString("N0") + " Units", normfont, color);
+
+                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost: " + si.UpkeepCost.ToString("N0"), normfont, color);
+                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost: " + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
+                        }
+
+                        // TBD add tick
+
+                        if ( !optional || active )
+                        {
+                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active", normfont, color);
+                        }
+                        else if ( disabled )
+                        {
+                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Suspended", normfont, color);
+                            using (Brush br2 = new SolidBrush(Color.FromArgb(80, 255, 255, 0)))
+                            {
+                                gr.FillRectangle(br2, area);
+                            }
+                        }
+                        else
+                        {
+                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Inactive", normfont, color);
+                            using (Brush br2 = new SolidBrush(Color.FromArgb(80, 255, 0, 0)))
+                            {
+                                gr.FillRectangle(br2, area);
+                            }
+                        }
+
+
+                        vpos += serviceheight + linemargin;
+                    }
+                }
+
+                imageControlServices.Invalidate();
+            }
+
             // add display of Ship and module packs
 
-            T.Invalidate();       // force overall image stack 
+            imageControlOverall.Invalidate();       // force overall image stack 
             PositionControls();
         }
 
@@ -358,7 +449,7 @@ namespace EDDiscovery.UserControls
 
             if (cs.State.HaveCarrier && cs.IsJumping)
             {
-                T.Clear(1);       // clear destination bitmap plane - plane 1
+                imageControlOverall.Clear(1);       // clear destination bitmap plane - plane 1
 
                 int vpos = bigfont.Height + linemargin * 2;
                 int hpos = hspacing + (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap(cs.CurrentPositionText, bigfont).Width + hspacing;
@@ -366,22 +457,22 @@ namespace EDDiscovery.UserControls
                 var timetogo = cs.TimeTillJump;
                 string jumptext = cs.NextDestinationText + " " + (timetogo.TotalSeconds > 0 ? timetogo.ToString(@"mm\.ss") : "Jumping".TxID(EDTx.Unknown));
 
-                T.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
+                imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
                 hpos += 48;
 
-                T.DrawText(new Point(hpos, vpos), new Size(30000, 30000), jumptext, bigfont, ExtendedControls.Theme.Current.SPanelColor, bitmap: 1);
+                imageControlOverall.DrawText(new Point(hpos, vpos), new Size(30000, 30000), jumptext, bigfont, ExtendedControls.Theme.Current.SPanelColor, bitmap: 1);
 
                 if (!period.Enabled)
                     period.Start();     // jumping, make sure its started
 
-                T.Invalidate();
+                imageControlOverall.Invalidate();
 
                 paintedlayer1 = true;
             }
             else if ( paintedlayer1)
             {
-                T.Clear(1);       // clear destination bitmap plane
-                T.Invalidate();
+                imageControlOverall.Clear(1);       // clear destination bitmap plane
+                imageControlOverall.Invalidate();
                 paintedlayer1 = false;              // and don't repaint again
             }
         }
@@ -401,6 +492,14 @@ namespace EDDiscovery.UserControls
             {
                 x.Location = new Point(hspacing, lypos);
                 lypos += x.Height + linemargin;
+            }
+
+            int midpos = Width / 2 - 200;
+            int lmpos = linemargin;
+            foreach (var x in midtopalignedfinancecontrols)
+            {
+                x.Location = new Point(midpos, lmpos);
+                lmpos += x.Height + linemargin;
             }
 
             int rightpos = Width- 270;

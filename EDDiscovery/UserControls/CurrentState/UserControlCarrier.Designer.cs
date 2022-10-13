@@ -33,7 +33,7 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extTabControlOverall = new ExtendedControls.ExtTabControl();
             this.tabPageOverall = new System.Windows.Forms.TabPage();
-            this.T = new ExtendedControls.Controls.ImageControl();
+            this.imageControlOverall = new ExtendedControls.Controls.ImageControl();
             this.tabPageItinerary = new System.Windows.Forms.TabPage();
             this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarFactions = new ExtendedControls.ExtScrollBar();
@@ -71,7 +71,9 @@
             this.labelFTaxOutfitting = new System.Windows.Forms.Label();
             this.labelFTaxRearm = new System.Windows.Forms.Label();
             this.tabPageServices = new System.Windows.Forms.TabPage();
-            this.label10 = new System.Windows.Forms.Label();
+            this.imageControlScrollServices = new ExtendedControls.Controls.ImageControlScroll();
+            this.imageControlServices = new ExtendedControls.Controls.ImageControl();
+            this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.tabPageCargo = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.tabPagePacks = new System.Windows.Forms.TabPage();
@@ -81,6 +83,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.tabPageOrders = new System.Windows.Forms.TabPage();
             this.label12 = new System.Windows.Forms.Label();
+            this.labelFCoreCost = new System.Windows.Forms.Label();
+            this.labelFServicesCost = new System.Windows.Forms.Label();
             this.extTabControlOverall.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
             this.tabPageItinerary.SuspendLayout();
@@ -91,6 +95,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.panelFinancesTop.SuspendLayout();
             this.tabPageServices.SuspendLayout();
+            this.imageControlScrollServices.SuspendLayout();
             this.tabPageCargo.SuspendLayout();
             this.tabPagePacks.SuspendLayout();
             this.tabPageMarket.SuspendLayout();
@@ -134,7 +139,7 @@
             // 
             // tabPageOverall
             // 
-            this.tabPageOverall.Controls.Add(this.T);
+            this.tabPageOverall.Controls.Add(this.imageControlOverall);
             this.tabPageOverall.Location = new System.Drawing.Point(4, 22);
             this.tabPageOverall.Name = "tabPageOverall";
             this.tabPageOverall.Padding = new System.Windows.Forms.Padding(3);
@@ -143,23 +148,23 @@
             this.tabPageOverall.Text = "Overall";
             this.tabPageOverall.UseVisualStyleBackColor = true;
             // 
-            // T
+            // imageControlOverall
             // 
-            this.T.BackColor = System.Drawing.Color.Black;
-            this.T.BackgroundImage = global::EDDiscovery.Icons.Controls.FleetCarrier;
-            this.T.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.T.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.T.ImageBackgroundColor = System.Drawing.Color.Transparent;
-            this.T.ImageDepth = 1;
-            this.T.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.T.ImageSize = new System.Drawing.Size(128, 128);
-            this.T.ImageVisible = new bool[] {
+            this.imageControlOverall.BackColor = System.Drawing.Color.Black;
+            this.imageControlOverall.BackgroundImage = global::EDDiscovery.Icons.Controls.FleetCarrier;
+            this.imageControlOverall.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imageControlOverall.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageControlOverall.ImageBackgroundColor = System.Drawing.Color.Transparent;
+            this.imageControlOverall.ImageDepth = 1;
+            this.imageControlOverall.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imageControlOverall.ImageSize = new System.Drawing.Size(128, 128);
+            this.imageControlOverall.ImageVisible = new bool[] {
         false};
-            this.T.Location = new System.Drawing.Point(3, 3);
-            this.T.Name = "T";
-            this.T.Size = new System.Drawing.Size(839, 540);
-            this.T.TabIndex = 0;
-            this.T.Text = "imageControl1";
+            this.imageControlOverall.Location = new System.Drawing.Point(3, 3);
+            this.imageControlOverall.Name = "imageControlOverall";
+            this.imageControlOverall.Size = new System.Drawing.Size(839, 540);
+            this.imageControlOverall.TabIndex = 0;
+            this.imageControlOverall.Text = "imageControl1";
             // 
             // tabPageItinerary
             // 
@@ -462,6 +467,8 @@
             this.panelFinancesTop.Controls.Add(this.labelFTaxShipyard);
             this.panelFinancesTop.Controls.Add(this.labelFAvailableBalance);
             this.panelFinancesTop.Controls.Add(this.labelFTaxRepair);
+            this.panelFinancesTop.Controls.Add(this.labelFServicesCost);
+            this.panelFinancesTop.Controls.Add(this.labelFCoreCost);
             this.panelFinancesTop.Controls.Add(this.labelFTaxPioneerSupplies);
             this.panelFinancesTop.Controls.Add(this.labelFTaxRefuel);
             this.panelFinancesTop.Controls.Add(this.labelFReservePercent);
@@ -565,7 +572,7 @@
             // 
             // tabPageServices
             // 
-            this.tabPageServices.Controls.Add(this.label10);
+            this.tabPageServices.Controls.Add(this.imageControlScrollServices);
             this.tabPageServices.Location = new System.Drawing.Point(4, 22);
             this.tabPageServices.Name = "tabPageServices";
             this.tabPageServices.Padding = new System.Windows.Forms.Padding(3);
@@ -574,14 +581,61 @@
             this.tabPageServices.Text = "Services";
             this.tabPageServices.UseVisualStyleBackColor = true;
             // 
-            // label10
+            // imageControlScrollServices
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(103, 109);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(377, 13);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "Set of boxes, each with a image of the service, and its state from servicesCrew";
+            this.imageControlScrollServices.Controls.Add(this.imageControlServices);
+            this.imageControlScrollServices.Controls.Add(this.extScrollBar1);
+            this.imageControlScrollServices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageControlScrollServices.Location = new System.Drawing.Point(3, 3);
+            this.imageControlScrollServices.Name = "imageControlScrollServices";
+            this.imageControlScrollServices.ScrollBarEnabled = true;
+            this.imageControlScrollServices.Size = new System.Drawing.Size(839, 540);
+            this.imageControlScrollServices.TabIndex = 0;
+            this.imageControlScrollServices.VerticalScrollBarDockRight = true;
+            // 
+            // imageControlServices
+            // 
+            this.imageControlServices.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.imageControlServices.ImageBackgroundColor = System.Drawing.Color.Transparent;
+            this.imageControlServices.ImageDepth = 1;
+            this.imageControlServices.ImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.imageControlServices.ImageSize = new System.Drawing.Size(128, 128);
+            this.imageControlServices.ImageVisible = new bool[] {
+        false};
+            this.imageControlServices.Location = new System.Drawing.Point(0, 0);
+            this.imageControlServices.Name = "imageControlServices";
+            this.imageControlServices.Size = new System.Drawing.Size(823, 217);
+            this.imageControlServices.TabIndex = 1;
+            this.imageControlServices.Text = "imageControl1";
+            // 
+            // extScrollBar1
+            // 
+            this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBar1.ArrowColorScaling = 0.5F;
+            this.extScrollBar1.ArrowDownDrawAngle = 270F;
+            this.extScrollBar1.ArrowUpDrawAngle = 90F;
+            this.extScrollBar1.BorderColor = System.Drawing.Color.White;
+            this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBar1.HideScrollBar = false;
+            this.extScrollBar1.LargeChange = 540;
+            this.extScrollBar1.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBar1.Maximum = 216;
+            this.extScrollBar1.Minimum = 0;
+            this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBar1.Name = "extScrollBar1";
+            this.extScrollBar1.Size = new System.Drawing.Size(16, 540);
+            this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBar1.SmallChange = 1;
+            this.extScrollBar1.TabIndex = 0;
+            this.extScrollBar1.Text = "extScrollBar1";
+            this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBar1.ThumbColorScaling = 0.5F;
+            this.extScrollBar1.ThumbDrawAngle = 0F;
+            this.extScrollBar1.Value = 0;
+            this.extScrollBar1.ValueLimited = 0;
             // 
             // tabPageCargo
             // 
@@ -674,6 +728,24 @@
             this.label12.TabIndex = 0;
             this.label12.Text = "Grid, all the commodities and MR orders and purchases";
             // 
+            // labelCoreCost
+            // 
+            this.labelFCoreCost.AutoSize = true;
+            this.labelFCoreCost.Location = new System.Drawing.Point(175, 7);
+            this.labelFCoreCost.Name = "labelCoreCost";
+            this.labelFCoreCost.Size = new System.Drawing.Size(97, 13);
+            this.labelFCoreCost.TabIndex = 0;
+            this.labelFCoreCost.Text = "<code Core Costs>";
+            // 
+            // labelServicesCost
+            // 
+            this.labelFServicesCost.AutoSize = true;
+            this.labelFServicesCost.Location = new System.Drawing.Point(175, 31);
+            this.labelFServicesCost.Name = "labelServicesCost";
+            this.labelFServicesCost.Size = new System.Drawing.Size(111, 13);
+            this.labelFServicesCost.TabIndex = 0;
+            this.labelFServicesCost.Text = "<code Services Cost>";
+            // 
             // UserControlCarrier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -694,7 +766,7 @@
             this.panelFinancesTop.ResumeLayout(false);
             this.panelFinancesTop.PerformLayout();
             this.tabPageServices.ResumeLayout(false);
-            this.tabPageServices.PerformLayout();
+            this.imageControlScrollServices.ResumeLayout(false);
             this.tabPageCargo.ResumeLayout(false);
             this.tabPageCargo.PerformLayout();
             this.tabPagePacks.ResumeLayout(false);
@@ -718,7 +790,6 @@
         private System.Windows.Forms.TabPage tabPagePacks;
         private System.Windows.Forms.TabPage tabPageMarket;
         private System.Windows.Forms.Label labelFCarrierBalance;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TabPage tabPageOrders;
         private System.Windows.Forms.Label label12;
@@ -737,7 +808,7 @@
         private System.Windows.Forms.Label labelFTaxPioneerSupplies;
         private System.Windows.Forms.Label labelFAvailableBalance;
         private System.Windows.Forms.Label labelFReserveBalance;
-        private ExtendedControls.Controls.ImageControl T;
+        private ExtendedControls.Controls.ImageControl imageControlOverall;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollLedger;
         private ExtendedControls.ExtScrollBar extScrollBarLedger;
         private BaseUtils.DataGridViewColumnControl dataGridViewLedger;
@@ -759,5 +830,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerDebit;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerBalance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLedgerNotes;
+        private ExtendedControls.Controls.ImageControlScroll imageControlScrollServices;
+        private ExtendedControls.ExtScrollBar extScrollBar1;
+        private ExtendedControls.Controls.ImageControl imageControlServices;
+        private System.Windows.Forms.Label labelFServicesCost;
+        private System.Windows.Forms.Label labelFCoreCost;
     }
 }
