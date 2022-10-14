@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         private bool paintedlayer1 = false;
         private const int linemargin = 8;
         private const int hspacing = 8;
-        private const int servicewidth = 2000;
+        private const int servicewidth = 1400;
         private const int serviceheight = 140;
 
         #region Init
@@ -56,6 +56,14 @@ namespace EDDiscovery.UserControls
             var org = global::EDDiscovery.Icons.Controls.FleetCarrier;
             imageControlOverall.ImageSize = org.Size;     // same size as FC PNG
             imageControlOverall.ImageDepth = 3;         // 0 is most text, 1 is destination, 2 is carrier flashes
+
+            extScrollBarServices.SmallChange = serviceheight / 2;
+            imageControlServices.ImageSize = new Size(servicewidth, (serviceheight + linemargin) * EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.GetServiceCount() + linemargin);
+            imageControlServices.ImageLayout = ImageLayout.Stretch;     // stretch horizonally/vertically to fix, excepting that a min height is set
+            imageControlScrollServices.ImageControlMinimumHeight = imageControlServices.ImageSize.Height;           // setting minimum height mak
+
+            extScrollBarPacks.SmallChange = serviceheight / 2;
+            imageControlPacks.ImageLayout = ImageLayout.Stretch;     // stretch horizonally/vertically to fix, excepting that a min height is set
 
             using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
             {
@@ -88,9 +96,6 @@ namespace EDDiscovery.UserControls
                     gr.FillRectangle(br5, new Rectangle(1096, 625, 5, 4));
                 }
             }
-
-            imageControlServices.ImageSize = new Size(2000, (serviceheight + linemargin) * EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.GetServiceCount() + linemargin);
-            imageControlServices.Height = imageControlServices.ImageSize.Height;
 
         }
 
@@ -359,6 +364,8 @@ namespace EDDiscovery.UserControls
                     x.Visible = cs.State.HaveCarrier;
             }
 
+            imageControlOverall.Invalidate();       // force overall image stack 
+
             {
                 imageControlServices.Clear();
 
@@ -369,9 +376,14 @@ namespace EDDiscovery.UserControls
                 {
                     if (JournalCarrierCrewServices.IsValidService(en))
                     {
+                        var servicestate = cs.State.GetService(en);     // may be null for a core or non listed service
+                        var optional = JournalCarrierCrewServices.IsOptionalService(en);
+                        bool active = !optional || (servicestate != null && servicestate.Enabled == true && servicestate.Activated == true);
+                        bool disabled = servicestate != null && servicestate.Enabled == false && servicestate.Activated == true;
+
                         var area = new Rectangle(hspacing, vpos, servicewidth, serviceheight);
 
-                        using (Brush br = new SolidBrush(Color.FromArgb(255, 53, 36, 2)))
+                        using (Brush br = new SolidBrush(Color.FromArgb(255, 53, 36, 2).Multiply(active ? 1f : 0.75f)))
                         {
                             gr.FillRectangle(br, area);
                         }
@@ -386,12 +398,7 @@ namespace EDDiscovery.UserControls
                         imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
 
                         Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + en.ToString());
-                        imageControlServices.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height,img.Width,img.Height));
-
-                        var servicestate = cs.State.GetService(en);     // may be null for a core or non listed service
-                        var optional = JournalCarrierCrewServices.IsOptionalService(en);
-                        bool active = servicestate != null && servicestate.Enabled == true && servicestate.Activated == true;
-                        bool disabled= servicestate != null && servicestate.Enabled == false && servicestate.Activated == true;
+                        imageControlServices.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height, img.Width, img.Height));
 
                         var servicecol1top = new Point(titlewidth + 50, vpos + linemargin * 2);
 
@@ -399,31 +406,38 @@ namespace EDDiscovery.UserControls
                         if (si != null)
                         {
                             int lineh = normfont.Height + linemargin * 2;
-                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost: " + si.InstallCost.ToString("N0"), normfont, color);
-                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated: " + si.CargoSize.ToString("N0") + " Units", normfont, color);
+                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost: ".TxID(EDTx.Unknown) + si.InstallCost.ToString("N0"), normfont, color);
+                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated: ".TxID(EDTx.Unknown) + si.CargoSize.ToString("N0") + " Units", normfont, color);
 
-                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost: " + si.UpkeepCost.ToString("N0"), normfont, color);
-                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost: " + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
+                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost: ".TxID(EDTx.Unknown) + si.UpkeepCost.ToString("N0"), normfont, color);
+                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost: ".TxID(EDTx.Unknown) + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
+
+                            if (!cs.CrewNames.TryGetValue(en, out string crewname))
+                                crewname = "??";
+
+                            imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name: ".TxID(EDTx.Unknown) + crewname, normfont, color);
                         }
 
                         // TBD add tick
 
-                        if ( !optional || active )
+                        if (active)
                         {
-                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active", normfont, color);
+                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active".TxID(EDTx.Unknown), normfont, color);
+                            Image img2 = BaseUtils.Icons.IconSet.Instance.Get("Controls.ServicesTick");
+                            imageControlServices.DrawImage(img2, new Rectangle(titlewidth, vpos, img.Width, img.Height));
                         }
-                        else if ( disabled )
+                        else if (disabled)
                         {
-                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Suspended", normfont, color);
-                            using (Brush br2 = new SolidBrush(Color.FromArgb(80, 255, 255, 0)))
+                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Suspended".TxID(EDTx.Unknown), normfont, color);
+                            using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 255, 0)))
                             {
                                 gr.FillRectangle(br2, area);
                             }
                         }
                         else
                         {
-                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Inactive", normfont, color);
-                            using (Brush br2 = new SolidBrush(Color.FromArgb(80, 255, 0, 0)))
+                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Not Installed".TxID(EDTx.Unknown), normfont, color);
+                            using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 0, 0)))
                             {
                                 gr.FillRectangle(br2, area);
                             }
@@ -434,13 +448,109 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
+                gr.Dispose();
+
                 imageControlServices.Invalidate();
             }
 
-            // add display of Ship and module packs
+            {
+                imageControlPacks.ImageSize = new Size(servicewidth, (serviceheight + linemargin) * (cs.State.ModulePacksCount() + cs.State.ShipPacksCount()) + linemargin);
+                imageControlScrollPacks.ImageControlMinimumHeight = imageControlPacks.ImageSize.Height;           // setting minimum height mak
+                imageControlPacks.Clear();
 
-            imageControlOverall.Invalidate();       // force overall image stack 
+                Graphics gr = imageControlPacks.GetGraphics();
+                int vpos = linemargin;
+
+                foreach (CarrierState.PackClass sp in cs.State.ShipPacks.EmptyIfNull())
+                {
+                    vpos += DisplayPack(gr, sp, false, vpos, color);
+                }
+                foreach (CarrierState.PackClass mp in cs.State.ModulePacks.EmptyIfNull())
+                {
+                    vpos += DisplayPack(gr, mp, true, vpos, color);
+                }
+
+                gr.Dispose();
+                imageControlPacks.Invalidate();
+            }
+
+            if (dataGridViewOrders.RowCount != cs.TradeOrders.Count)
+            {
+                DataGridViewColumn sortcol = dataGridViewOrders.SortedColumn != null ? dataGridViewOrders.SortedColumn : dataGridViewOrders.Columns[0];
+                SortOrder sortorder = dataGridViewOrders.SortOrder != SortOrder.None ? dataGridViewOrders.SortOrder : SortOrder.Descending;
+
+                dataGridViewOrders.Rows.Clear();
+
+                for (int i = 0; i < cs.TradeOrders.Count; i++)
+                {
+                    var ord = cs.TradeOrders[i];
+
+                    string mname = ord.Commodity_Localised ?? ord.Commodity;
+                    string cat = "";
+                    string type = "";
+
+                    MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Commodity);
+
+                    if ( ty != null)        // if we have found it, use the translated names and cat etc from
+                    {
+                        mname = ty.Name;
+                        cat = ty.TranslatedCategory;
+                        type = ty.TranslatedType;
+                        if (ty.IsMicroResources)
+                            type = "Micro Resource".TxID(EDTx.FilterSelector_MicroResources);
+                    }
+
+                    object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ord.Placed),
+                                        mname,
+                                        cat,
+                                        type,
+                                        ord.PurchaseOrder.HasValue ? ord.PurchaseOrder.Value.ToString("N0") : "",
+                                        ord.SaleOrder.HasValue ? ord.SaleOrder.Value.ToString("N0") : "",
+                                        ord.Price.ToString("N0"),
+                                        ord.BlackMarket ? "\u2713" : "",
+                    };
+
+                    dataGridViewOrders.Rows.Add(rowobj);
+                }
+
+                dataGridViewOrders.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                dataGridViewOrders.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            }
+
             PositionControls();
+     
+        
+        }
+
+        private int DisplayPack(Graphics gr, CarrierState.PackClass sp, bool module, int vpos, Color color)
+        {
+            const int titlewidth = 600;
+
+            var area = new Rectangle(hspacing, vpos, servicewidth, serviceheight);
+
+            using (Brush br = new SolidBrush(Color.FromArgb(255, 53, 36, 2)))
+            {
+                gr.FillRectangle(br, area);
+            }
+
+            var pointtextleft = new Point(hspacing * 3, vpos + linemargin * 2);
+
+            var size = imageControlPacks.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), sp.PackTheme.SplitCapsWordFull(), bigfont, color);
+            pointtextleft.Y += (int)(size.Height + 1) + linemargin;
+            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".TxID(EDTx.Unknown) + sp.PackTier.ToString("N0"), bigfont, color);
+
+
+            var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
+
+            if (discoveryform.history.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
+            {
+                imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), "Cost: ".TxID(EDTx.Unknown) + value.ToString("N0"), normfont, color);
+            }
+
+            Image img = BaseUtils.Icons.IconSet.Instance.Get(module ? "Controls.ModulePack" : "Controls.Shipyard");
+            imageControlPacks.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height, img.Width, img.Height));
+
+            return serviceheight + linemargin;
         }
 
         private void DestinationSystem()
@@ -526,6 +636,14 @@ namespace EDDiscovery.UserControls
             else if (e.Column.Index <= 2 )
                 e.SortDataGridViewColumnAlphaInt();
             else if (e.Column.Index <= 7)
+                e.SortDataGridViewColumnNumeric();
+        }
+
+        private void dataGridViewColumnControlOrders_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index >= 2 && e.Column.Index <= 4)
                 e.SortDataGridViewColumnNumeric();
         }
 
