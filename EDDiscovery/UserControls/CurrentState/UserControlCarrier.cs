@@ -110,6 +110,9 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             loadlayouthappened = true;
+            DGVLoadColumnLayout(dataGridViewLedger, "Ledger");
+            DGVLoadColumnLayout(dataGridViewItinerary, "Itinerary");
+            DGVLoadColumnLayout(dataGridViewOrders, "Orders");
         }
 
         public override void InitialDisplay()
@@ -121,6 +124,10 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             period.Stop();
+
+            DGVSaveColumnLayout(dataGridViewLedger, "Ledger");
+            DGVSaveColumnLayout(dataGridViewItinerary, "Itinerary");
+            DGVSaveColumnLayout(dataGridViewOrders, "Orders");
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
