@@ -462,7 +462,6 @@ namespace EDDiscovery.UserControls
 
             {
                 int no = cs.State.ModulePacksCount() + cs.State.ShipPacksCount();
-                no = 0;
                 int packhpixels = (serviceheight + linemargin) * no + linemargin;
                 // we need to give it a fair number of pixels, otherwise the stretch is too big. So use the image control to min size it
                 imageControlPacks.ImageSize = new Size(servicewidth, Math.Max(packhpixels,imageControlOverall.ImageSize.Height));
