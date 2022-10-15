@@ -454,20 +454,31 @@ namespace EDDiscovery.UserControls
             }
 
             {
-                imageControlPacks.ImageSize = new Size(servicewidth, (serviceheight + linemargin) * (cs.State.ModulePacksCount() + cs.State.ShipPacksCount()) + linemargin);
+                int no = cs.State.ModulePacksCount() + cs.State.ShipPacksCount();
+                no = 0;
+                int packhpixels = (serviceheight + linemargin) * no + linemargin;
+                // we need to give it a fair number of pixels, otherwise the stretch is too big. So use the image control to min size it
+                imageControlPacks.ImageSize = new Size(servicewidth, Math.Max(packhpixels,imageControlOverall.ImageSize.Height));
                 imageControlScrollPacks.ImageControlMinimumHeight = imageControlPacks.ImageSize.Height;           // setting minimum height mak
                 imageControlPacks.Clear();
 
                 Graphics gr = imageControlPacks.GetGraphics();
                 int vpos = linemargin;
 
-                foreach (CarrierState.PackClass sp in cs.State.ShipPacks.EmptyIfNull())
+                if (no == 0)
                 {
-                    vpos += DisplayPack(gr, sp, false, vpos, color);
+                    imageControlPacks.DrawText(new Point(hspacing,linemargin), new Size(2000, 2000), "No Module or Ship packs installed".TxID(EDTx.Unknown), bigfont, color);
                 }
-                foreach (CarrierState.PackClass mp in cs.State.ModulePacks.EmptyIfNull())
+                else
                 {
-                    vpos += DisplayPack(gr, mp, true, vpos, color);
+                    foreach (CarrierState.PackClass sp in cs.State.ShipPacks.EmptyIfNull())
+                    {
+                        vpos += DisplayPack(gr, sp, false, vpos, color);
+                    }
+                    foreach (CarrierState.PackClass mp in cs.State.ModulePacks.EmptyIfNull())
+                    {
+                        vpos += DisplayPack(gr, mp, true, vpos, color);
+                    }
                 }
 
                 gr.Dispose();
