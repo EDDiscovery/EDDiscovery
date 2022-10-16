@@ -17,6 +17,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -40,11 +41,18 @@ namespace EDDiscovery.UserControls
         private const int servicewidth = 1400;
         private const int serviceheight = 140;
 
+        private string dbSplitterSaveCAPI1 = "CAPISplitter1";
+        private string dbSplitterSaveCAPI2 = "CAPISplitter2";
+        private string dbTabSave = "TabPage";
+
+
         #region Init
 
         public UserControlCarrier()
         {
             InitializeComponent();
+
+            DBBaseName = "CarrierPanel";
 
             period.Interval = 1000;
             period.Tick += Period_Tick;
@@ -64,6 +72,9 @@ namespace EDDiscovery.UserControls
 
             extScrollBarPacks.SmallChange = serviceheight / 2;
             imageControlPacks.ImageLayout = ImageLayout.Stretch;     // stretch horizonally/vertically to fix, excepting that a min height is set
+
+            splitContainerCAPI1.SplitterDistance(GetSetting(dbSplitterSaveCAPI1, 0.5));
+            splitContainerCAPI2.SplitterDistance(GetSetting(dbSplitterSaveCAPI2, 0.5));
 
             using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
             {
@@ -101,7 +112,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            DBBaseName = "CarrierPanel";
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
@@ -109,10 +119,21 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            extTabControl.TabStyle = new ExtendedControls.TabStyleSquare();        // after themeing, set to differentiate
+
             loadlayouthappened = true;
-            DGVLoadColumnLayout(dataGridViewLedger, "Ledger");
             DGVLoadColumnLayout(dataGridViewItinerary, "Itinerary");
+            DGVLoadColumnLayout(dataGridViewLedger, "Ledger");
             DGVLoadColumnLayout(dataGridViewOrders, "Orders");
+            DGVLoadColumnLayout(dataGridViewCAPIStats, "CAPIStats");
+            DGVLoadColumnLayout(dataGridViewCAPIShips, "CAPIShips");
+            DGVLoadColumnLayout(dataGridViewCAPIModules, "CAPIModules");
+            DGVLoadColumnLayout(dataGridViewCAPICargo, "CAPICargo");
+            DGVLoadColumnLayout(dataGridViewCAPILocker, "CAPILocker");
+
+            int index = GetSetting(dbTabSave, 0);
+            if (index >= 0 && index < extTabControl.TabCount)
+                extTabControl.SelectedIndex = index;
         }
 
         public override void InitialDisplay()
@@ -125,9 +146,19 @@ namespace EDDiscovery.UserControls
         {
             period.Stop();
 
-            DGVSaveColumnLayout(dataGridViewLedger, "Ledger");
             DGVSaveColumnLayout(dataGridViewItinerary, "Itinerary");
+            DGVSaveColumnLayout(dataGridViewLedger, "Ledger");
             DGVSaveColumnLayout(dataGridViewOrders, "Orders");
+            DGVSaveColumnLayout(dataGridViewCAPIStats, "CAPIStats");
+            DGVSaveColumnLayout(dataGridViewCAPIShips, "CAPIShips");
+            DGVSaveColumnLayout(dataGridViewCAPIModules, "CAPIModules");
+            DGVSaveColumnLayout(dataGridViewCAPICargo, "CAPICargo");
+            DGVSaveColumnLayout(dataGridViewCAPILocker, "CAPILocker");
+
+            PutSetting(dbSplitterSaveCAPI1, splitContainerCAPI1.GetSplitterDistance());
+            PutSetting(dbSplitterSaveCAPI2, splitContainerCAPI2.GetSplitterDistance());
+            PutSetting(dbTabSave, extTabControl.SelectedIndex);
+
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
@@ -643,37 +674,259 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region CAPI
+
+        private void extButtonDoCAPI1_Click(object sender, EventArgs e)
+        {
+            if (discoveryform.FrontierCAPI.Active)
+            {
+                extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = false;
+
+                // don't hold up the main thread, do it in a task, as its a HTTP operation
+
+                // set beta flag from last history entry
+                discoveryform.FrontierCAPI.GameIsBeta = discoveryform.history.GetLast?.journalEntry.IsBeta ?? false;
+
+                System.Threading.Tasks.Task.Run(() =>           
+                {
+                    CAPI.FleetCarrier fc = null;
+
+                    int tries = 3;
+                    while( tries-- > 0 )        // goes at getting the valid data from frontier
+                    {
+                        string fleetcarrier = discoveryform.FrontierCAPI.FleetCarrier();
+
+                        if (fleetcarrier != null)
+                        {
+                            fc = new CAPI.FleetCarrier(fleetcarrier);
+
+                            if (fc.IsValid)
+                            {
+                                System.IO.File.WriteAllText(@"c:\code\fc.json", fc.Json.ToString(true));
+                                System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
+                                break;
+                            }
+                            else
+                                fc = null;
+                        }
+                        else
+                            System.Threading.Thread.Sleep(2000);        // pause before another try
+                    }
+
+                    this.Invoke(new Action(() =>
+                    {
+                        System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+                        if ( fc != null )
+                        {
+                            {
+                                List<CAPI.FleetCarrier.Cargo> cargo = fc.GetCargo();
+
+                                DataGridViewColumn sortcol = dataGridViewCAPICargo.SortedColumn != null ? dataGridViewCAPICargo.SortedColumn : dataGridViewCAPICargo.Columns[0];
+                                SortOrder sortorder = dataGridViewCAPICargo.SortOrder != SortOrder.None ? dataGridViewCAPICargo.SortOrder : SortOrder.Ascending;
+
+                                dataGridViewCAPICargo.Rows.Clear();
+
+                                for (int i = 0; i < cargo.Count; i++)
+                                {
+                                    var ord = cargo[i];
+
+                                    string mname = ord.LocName ?? ord.Commodity;
+                                    string cat = "";
+                                    string type = "";
+
+                                    MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Commodity);
+
+                                    if (ty != null)        // if we have found it, use the translated names and cat etc from
+                                    {
+                                        mname = ty.Name;
+                                        cat = ty.TranslatedCategory;
+                                        type = ty.TranslatedType;
+                                    }
+
+                                    object[] rowobj = {
+                                            mname,
+                                            cat,
+                                            type,
+                                            ord.Quantity.ToString("N0"),
+                                            ord.Value.ToString("N0"),
+                                            ord.Stolen? "\u2713" : "",
+                                    };
+
+                                    dataGridViewCAPICargo.Rows.Add(rowobj);
+                                }
+                            }
+
+                            {
+                                List<CAPI.FleetCarrier.LockerItem> locker = fc.GetCarrierLockerAll();
+
+                                DataGridViewColumn sortcol = dataGridViewCAPILocker.SortedColumn != null ? dataGridViewCAPILocker.SortedColumn : dataGridViewCAPILocker.Columns[0];
+                                SortOrder sortorder = dataGridViewCAPILocker.SortOrder != SortOrder.None ? dataGridViewCAPILocker.SortOrder : SortOrder.Ascending;
+
+                                dataGridViewCAPILocker.Rows.Clear();
+
+                                for (int i = 0; i < locker.Count; i++)
+                                {
+                                    var ord = locker[i];
+
+                                    string mname = ord.LocName ?? ord.Name;
+                                    string cat = ord.Category.ToString();
+
+                                    MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Name);
+
+                                    if (ty != null)        // if we have found it, use the translated names and cat etc from
+                                    {
+                                        mname = ty.Name;
+                                        cat = ty.TranslatedCategory;
+                                    }
+
+                                    object[] rowobj = {
+                                        mname,
+                                        cat,
+                                        ord.Quantity.ToString("N0"),
+                                    };
+
+                                    dataGridViewCAPILocker.Rows.Add(rowobj);
+                                }
+
+
+                                dataGridViewCAPILocker.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                                dataGridViewCAPILocker.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                            }
+
+                            {
+                                List<CAPI.FleetCarrier.Ship> ships = fc.GetShips();
+
+                                DataGridViewColumn sortcol = dataGridViewCAPIShips.SortedColumn != null ? dataGridViewCAPIShips.SortedColumn : dataGridViewCAPIShips.Columns[0];
+                                SortOrder sortorder = dataGridViewCAPIShips.SortOrder != SortOrder.None ? dataGridViewCAPIShips.SortOrder : SortOrder.Ascending;
+
+                                dataGridViewCAPIShips.Rows.Clear();
+
+                                for (int i = 0; i < ships.Count; i++)
+                                {
+                                    var ord = ships[i];
+
+                                    string name = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
+                                    string manu = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
+                                    string speed = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                                    string boost = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                                    string mass = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                                    string classv = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+
+                                    object[] rowobj = {
+                                        name,
+                                        manu,
+                                        ord.BaseValue.ToString("N0"),
+                                        speed,
+                                        boost,
+                                        mass,
+                                        classv,
+                                    };
+
+                                    dataGridViewCAPIShips.Rows.Add(rowobj);
+                                }
+
+
+                                dataGridViewCAPIShips.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                                dataGridViewCAPIShips.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                            }
+
+                            {
+                                List<CAPI.FleetCarrier.Module> modules = fc.GetModules();
+
+                                DataGridViewColumn sortcol = dataGridViewCAPIModules.SortedColumn != null ? dataGridViewCAPIModules.SortedColumn : dataGridViewCAPIModules.Columns[0];
+                                SortOrder sortorder = dataGridViewCAPIModules.SortOrder != SortOrder.None ? dataGridViewCAPIModules.SortOrder : SortOrder.Ascending;
+
+                                dataGridViewCAPIModules.Rows.Clear();
+
+                                for (int i = 0; i < modules.Count; i++)
+                                {
+                                    var ord = modules[i];
+                                    var modp = ItemData.Instance.GetShipModuleProperties(ord.Name);
+
+                                    string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
+                                    string mtype = modp?.ModType ?? ord.Category ?? "";
+                                    string mass = modp?.Mass.ToString("N1") ?? "";
+                                    string power = modp?.Power.ToString("N1") ?? "";
+                                    string info = modp?.Info ?? "";
+
+                                    object[] rowobj = {
+                                        name,
+                                        mtype,
+                                        mass,
+                                        power,
+                                        ord.Cost.ToString("N0"),
+                                        ord.Stock.ToString("N0"),
+                                        info,
+                                    };
+
+                                    dataGridViewCAPIModules.Rows.Add(rowobj);
+                                }
+
+                                dataGridViewCAPIModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                                dataGridViewCAPIModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                            }
+
+                            {
+                                DataGridViewColumn sortcol = dataGridViewCAPIStats.SortedColumn != null ? dataGridViewCAPIStats.SortedColumn : dataGridViewCAPIStats.Columns[0];
+                                SortOrder sortorder = dataGridViewCAPIStats.SortOrder != SortOrder.None ? dataGridViewCAPIStats.SortOrder : SortOrder.Ascending;
+
+                                dataGridViewCAPIStats.Rows.Clear();
+
+                                Type jtype = fc.GetType();
+
+                                foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+                                {
+                                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                                    dynamic value = getter.Invoke(fc, null);
+
+                                    string res = value is string ? (string)value :
+                                                    value is int ? ((int)value).ToString("N0") :
+                                                    value is long ? ((long)value).ToString("N0") :
+                                                    value is double ? ((double)value).ToString("") : 
+                                                    value is bool ? (((bool)value)?"True":"False") : null;
+                                    if ( res != null)
+                                    {
+                                        object[] rowobj = {
+                                            pi.Name.SplitCapsWordFull(),
+                                            res,
+                                        };
+
+                                        dataGridViewCAPIStats.Rows.Add(rowobj);
+                                    }
+                                }
+
+                                dataGridViewCAPIStats.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                                dataGridViewCAPIStats.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                            }
+                        }
+                        else
+                        {
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to get CAPI data from Frontier".TxID(EDTx.Unknown),
+                                "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+
+                        System.Diagnostics.Debug.WriteLine("Capi function complete");
+                        extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = true;
+                    }));
+
+                    System.Threading.Thread.Sleep(2000);
+                });
+            }
+            else
+            {
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You are not logged into CAPI." + Environment.NewLine +
+                    "Go to the settings page and select your commanders settings, and log into CAPI.".TxID(EDTx.Unknown),
+                    "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+
+        #endregion
+
         #region Helpers
 
 
-        private void dataGridViewItinerary_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate();
-            else if (e.Column.Index <= 2 )
-                e.SortDataGridViewColumnAlphaInt();
-            else if (e.Column.Index <= 7)
-                e.SortDataGridViewColumnNumeric();
-        }
-
-        private void dataGridViewColumnControlOrders_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate();
-            else if (e.Column.Index >= 2 && e.Column.Index <= 4)
-                e.SortDataGridViewColumnNumeric();
-        }
-
-        private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate();
-            else if (e.Column.Index == 2)
-                e.SortDataGridViewColumnNumeric();
-        }
-
-
-        #endregion
+         #endregion
 
 
     }
