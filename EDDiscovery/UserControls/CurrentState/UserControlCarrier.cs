@@ -726,38 +726,41 @@ namespace EDDiscovery.UserControls
 
                                 dataGridViewCAPICargo.Rows.Clear();
 
-                                for (int i = 0; i < cargo.Count; i++)
+                                if (cargo != null)
                                 {
-                                    var ord = cargo[i];
-
-                                    string mname = ord.LocName ?? ord.Commodity;
-                                    string cat = "";
-                                    string type = "";
-
-                                    MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Commodity);
-
-                                    if (ty != null)        // if we have found it, use the translated names and cat etc from
+                                    for (int i = 0; i < cargo.Count; i++)
                                     {
-                                        mname = ty.Name;
-                                        cat = ty.TranslatedCategory;
-                                        type = ty.TranslatedType;
+                                        var ord = cargo[i];
+
+                                        string mname = ord.LocName ?? ord.Commodity;
+                                        string cat = "";
+                                        string type = "";
+
+                                        MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Commodity);
+
+                                        if (ty != null)        // if we have found it, use the translated names and cat etc from
+                                        {
+                                            mname = ty.Name;
+                                            cat = ty.TranslatedCategory;
+                                            type = ty.TranslatedType;
+                                        }
+
+                                        object[] rowobj = {
+                                                mname,
+                                                cat,
+                                                type,
+                                                ord.Quantity.ToString("N0"),
+                                                ord.Value.ToString("N0"),
+                                                ord.Stolen? "\u2713" : "",
+                                        };
+
+                                        dataGridViewCAPICargo.Rows.Add(rowobj);
                                     }
-
-                                    object[] rowobj = {
-                                            mname,
-                                            cat,
-                                            type,
-                                            ord.Quantity.ToString("N0"),
-                                            ord.Value.ToString("N0"),
-                                            ord.Stolen? "\u2713" : "",
-                                    };
-
-                                    dataGridViewCAPICargo.Rows.Add(rowobj);
                                 }
                             }
 
                             {
-                                List<CAPI.FleetCarrier.LockerItem> locker = fc.GetCarrierLockerAll();
+                                List<CAPI.FleetCarrier.LockerItem> locker = fc.GetCarrierLockerAll();       // always get an list, even if all empty
 
                                 DataGridViewColumn sortcol = dataGridViewCAPILocker.SortedColumn != null ? dataGridViewCAPILocker.SortedColumn : dataGridViewCAPILocker.Columns[0];
                                 SortOrder sortorder = dataGridViewCAPILocker.SortOrder != SortOrder.None ? dataGridViewCAPILocker.SortOrder : SortOrder.Ascending;
@@ -801,30 +804,32 @@ namespace EDDiscovery.UserControls
 
                                 dataGridViewCAPIShips.Rows.Clear();
 
-                                for (int i = 0; i < ships.Count; i++)
+                                if (ships != null)
                                 {
-                                    var ord = ships[i];
+                                    for (int i = 0; i < ships.Count; i++)
+                                    {
+                                        var ord = ships[i];
 
-                                    string name = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
-                                    string manu = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
-                                    string speed = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                                    string boost = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                                    string mass = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                                    string classv = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                                        string name = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
+                                        string manu = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
+                                        string speed = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                                        string boost = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                                        string mass = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                                        string classv = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
 
-                                    object[] rowobj = {
-                                        name,
-                                        manu,
-                                        ord.BaseValue.ToString("N0"),
-                                        speed,
-                                        boost,
-                                        mass,
-                                        classv,
-                                    };
+                                        object[] rowobj = {
+                                            name,
+                                            manu,
+                                            ord.BaseValue.ToString("N0"),
+                                            speed,
+                                            boost,
+                                            mass,
+                                            classv,
+                                        };
 
-                                    dataGridViewCAPIShips.Rows.Add(rowobj);
+                                        dataGridViewCAPIShips.Rows.Add(rowobj);
+                                    }
                                 }
-
 
                                 dataGridViewCAPIShips.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                                 dataGridViewCAPIShips.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
@@ -838,28 +843,31 @@ namespace EDDiscovery.UserControls
 
                                 dataGridViewCAPIModules.Rows.Clear();
 
-                                for (int i = 0; i < modules.Count; i++)
+                                if (modules != null)
                                 {
-                                    var ord = modules[i];
-                                    var modp = ItemData.Instance.GetShipModuleProperties(ord.Name);
+                                    for (int i = 0; i < modules.Count; i++)
+                                    {
+                                        var ord = modules[i];
+                                        var modp = ItemData.Instance.GetShipModuleProperties(ord.Name);
 
-                                    string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
-                                    string mtype = modp?.ModType ?? ord.Category ?? "";
-                                    string mass = modp?.Mass.ToString("N1") ?? "";
-                                    string power = modp?.Power.ToString("N1") ?? "";
-                                    string info = modp?.Info ?? "";
+                                        string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
+                                        string mtype = modp?.ModType ?? ord.Category ?? "";
+                                        string mass = modp?.Mass.ToString("N1") ?? "";
+                                        string power = modp?.Power.ToString("N1") ?? "";
+                                        string info = modp?.Info ?? "";
 
-                                    object[] rowobj = {
-                                        name,
-                                        mtype,
-                                        mass,
-                                        power,
-                                        ord.Cost.ToString("N0"),
-                                        ord.Stock.ToString("N0"),
-                                        info,
-                                    };
+                                        object[] rowobj = {
+                                            name,
+                                            mtype,
+                                            mass,
+                                            power,
+                                            ord.Cost.ToString("N0"),
+                                            ord.Stock.ToString("N0"),
+                                            info,
+                                        };
 
-                                    dataGridViewCAPIModules.Rows.Add(rowobj);
+                                        dataGridViewCAPIModules.Rows.Add(rowobj);
+                                    }
                                 }
 
                                 dataGridViewCAPIModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
