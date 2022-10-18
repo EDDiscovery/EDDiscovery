@@ -507,7 +507,7 @@ namespace EDDiscovery.Actions
         public void ActionRunOnRefresh()
         {
             string prevcommander = Globals.Exists("Commander") ? Globals["Commander"] : "None";
-            string commander = (discoverycontroller.history.CommanderId < 0) ? "Hidden" : EDCommander.Current.Name;
+            string commander = discoverycontroller.history.IsRealCommanderId ? EDCommander.Current.Name : "Hidden";
 
             string refreshcount = prevcommander.Equals(commander) ? Globals.AddToVar("RefreshCount", 1, 1) : "1";
             SetInternalGlobal("RefreshCount", refreshcount);

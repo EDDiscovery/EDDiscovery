@@ -44,7 +44,9 @@ namespace EDDiscovery.UserControls
         private string dbSplitterSaveCAPI1 = "CAPISplitter1";
         private string dbSplitterSaveCAPI2 = "CAPISplitter2";
         private string dbTabSave = "TabPage";
-
+        private string dbCAPISave = "CAPI_Fleetcarrier_Data";           // global across all panels
+        private string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
+        private string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
 
         #region Init
 
@@ -75,6 +77,9 @@ namespace EDDiscovery.UserControls
 
             splitContainerCAPI1.SplitterDistance(GetSetting(dbSplitterSaveCAPI1, 0.5));
             splitContainerCAPI2.SplitterDistance(GetSetting(dbSplitterSaveCAPI2, 0.5));
+
+            labelCAPICarrierBalance.Text = labelCAPIDateTime.Text = "";
+            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;     // off until period poll
 
             using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
             {
@@ -114,7 +119,7 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
+            discoveryform.OnThemeChanged += ClearDisplayFontJournalCAPI;
         }
 
         public override void LoadLayout()
@@ -138,7 +143,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Discoveryform_OnThemeChanged();
+            ClearDisplayFontJournalCAPI();     // do the lot
             period.Start();
         }
 
@@ -161,45 +166,23 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
+            discoveryform.OnThemeChanged -= ClearDisplayFontJournalCAPI;
             bigfont.Dispose();
             normfont.Dispose();
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)     
         {
-            // discoveryform.history.Carrier.SetCarrierJump("Fred", 20202, "fredplanet", 22, DateTime.UtcNow);//debug check
-            ClearAndDisplay();
+            ClearDisplayFontJournalCAPI();   // do the lot, including the capi, etc.
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)     
         {
             if ( he.journalEntry is ICarrierStats)
             {
-                Display();
+                DisplayJournal();
             }
         }
-
-        private void Discoveryform_OnThemeChanged()
-        {
-            bigfont = new Font(ExtendedControls.Theme.Current.FontName, 16f);
-            normfont = new Font(ExtendedControls.Theme.Current.FontName, 12f);
-
-            using (Font medium = ExtendedControls.Theme.Current.GetScaledFont(1.2f))
-            {
-                foreach (var x in lefttopalignedfinancecontrols)
-                    x.Font = medium;
-                foreach (var x in midtopalignedfinancecontrols)
-                    x.Font = medium;
-                foreach (var x in righttopalignedfinancecontrols)
-                    x.Font = medium;
-            }
-
-            tabPageOverall.BackColor = Color.Black;
-            ClearAndDisplay();
-            PositionControls();
-        }
-
 
         protected override void OnResize(EventArgs e)
         {
@@ -216,30 +199,65 @@ namespace EDDiscovery.UserControls
             var cs = discoveryform.history.Carrier;
 
             if (cs.CheckCarrierJump(DateTime.UtcNow)) // if autojump happened
-                Display();      // redisplay all - including destinationsystem
+                DisplayJournal();      // redisplay all - including destinationsystem
             else
-                DestinationSystem();     // redisplay just the time
+                DisplayDestinationSystem();     // redisplay just the time
 
-            if ( ++periodtickcounter % 4 == 0)     // every N go, change
+            if ( ++periodtickcounter % 4 == 0)     // every N go, change the flashy lights on the image overall
             {
                 imageControlOverall.ImageVisible[2] = periodtickcounter % 8 == 0;
                 imageControlOverall.Invalidate();       
             }
+
+            // capi enable/disable  - get stats
+            DateTime capitime = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPIDateUTC, DateTime.UtcNow);
+            int capicmdrid = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPICommander, -1);
+            bool capisamecmdr = discoveryform.history.CommanderId == capicmdrid;
+
+            // enabled if greater than this time ago or not same commander
+            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = discoveryform.history.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
+
+            // if its the same commander, and our display is in the past, another panel fetched it, redisplay
+            if (capisamecmdr && capitime > capidisplayedtime)
+                DisplayCAPIFromDB();
+
         }
 
+        private void ClearDisplayFontJournalCAPI()         // the lot
+        {
+            bigfont = new Font(ExtendedControls.Theme.Current.FontName, 16f);
+            normfont = new Font(ExtendedControls.Theme.Current.FontName, 12f);
+
+            using (Font medium = ExtendedControls.Theme.Current.GetScaledFont(1.2f))
+            {
+                foreach (var x in lefttopalignedfinancecontrols)
+                    x.Font = medium;
+                foreach (var x in midtopalignedfinancecontrols)
+                    x.Font = medium;
+                foreach (var x in righttopalignedfinancecontrols)
+                    x.Font = medium;
+            }
+
+            tabPageOverall.BackColor = Color.Black;
+
+            ClearDisplayJournal();
+
+            DisplayCAPIFromDB();
+        }
 
         #endregion
 
-        #region Display
+        #region Journal
 
-        private void ClearAndDisplay()
+        private void ClearDisplayJournal()          // the non CAPI bits
         {
             dataGridViewItinerary.Rows.Clear();
             dataGridViewLedger.Rows.Clear();
-            Display();
+            dataGridViewOrders.Rows.Clear();
+            DisplayJournal();
         }
 
-        private async void Display()
+        private async void DisplayJournal()
         {
             var cs = discoveryform.history.Carrier;
 
@@ -303,7 +321,7 @@ namespace EDDiscovery.UserControls
                                     new Size(30000, 30000), text, normfont, linemargin, color);
             }
 
-            if ( dataGridViewLedger.RowCount != cs.Ledger.Count)
+            if (dataGridViewLedger.RowCount != cs.Ledger.Count)
             {
                 DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
                 SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
@@ -342,7 +360,7 @@ namespace EDDiscovery.UserControls
 
                     if (cs.IsDecommisioned)
                         name += " (" + "Decommisioned".TxID(EDTx.Unknown) + ")";
-                    else if ( cs.IsDecommisioning )
+                    else if (cs.IsDecommisioning)
                     {
                         name += " (" + "Decommissioning on".TxID(EDTx.Unknown) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
                     }
@@ -381,7 +399,7 @@ namespace EDDiscovery.UserControls
                     TaxRate(labelFTaxShipyard, "Shipyard Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateShipyard);
                     TaxRate(labelFTaxRearm, "Rearm Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateRearm);
                     TaxRate(labelFTaxOutfitting, "Outfitting Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateOutfitting);
-                    TaxRate(labelFTaxRefuel, "Refuel Tax".TxID(EDTx.Unknown),  cs.State.Finance.TaxRateRefuel);
+                    TaxRate(labelFTaxRefuel, "Refuel Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateRefuel);
                     TaxRate(labelFTaxRepair, "Repair Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateRepair);
 
                     labelFCoreCost.Text = "Core Cost: ".TxID(EDTx.Unknown) + cs.State.GetCoreCost().ToString("N0") + "cr";
@@ -389,10 +407,10 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.Unknown), bigfont,color);
+                    imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.Unknown), bigfont, color);
                 }
 
-                DestinationSystem();
+                DisplayDestinationSystem();
 
                 foreach (var x in righttopalignedfinancecontrols)
                     x.Visible = cs.State.HaveCarrier;
@@ -407,86 +425,90 @@ namespace EDDiscovery.UserControls
             {
                 imageControlServices.Clear();
 
-                Graphics gr = imageControlServices.GetGraphics();
-                int vpos = linemargin;
-
-                foreach (JournalCarrierCrewServices.ServiceType en in Enum.GetValues(typeof(JournalCarrierCrewServices.ServiceType)))
+                if (cs.State.HaveCarrier)
                 {
-                    if (JournalCarrierCrewServices.IsValidService(en))
+
+                    Graphics gr = imageControlServices.GetGraphics();
+                    int vpos = linemargin;
+
+                    foreach (JournalCarrierCrewServices.ServiceType en in Enum.GetValues(typeof(JournalCarrierCrewServices.ServiceType)))
                     {
-                        var servicestate = cs.State.GetService(en);     // may be null for a core or non listed service
-                        var optional = JournalCarrierCrewServices.IsOptionalService(en);
-                        bool active = !optional || (servicestate != null && servicestate.Enabled == true && servicestate.Activated == true);
-                        bool disabled = servicestate != null && servicestate.Enabled == false && servicestate.Activated == true;
-
-                        var area = new Rectangle(hspacing, vpos, servicewidth, serviceheight);
-
-                        using (Brush br = new SolidBrush(Color.FromArgb(255, 53, 36, 2).Multiply(active ? 1f : 0.75f)))
+                        if (JournalCarrierCrewServices.IsValidService(en))
                         {
-                            gr.FillRectangle(br, area);
-                        }
+                            var servicestate = cs.State.GetService(en);     // may be null for a core or non listed service
+                            var optional = JournalCarrierCrewServices.IsOptionalService(en);
+                            bool active = !optional || (servicestate != null && servicestate.Enabled == true && servicestate.Activated == true);
+                            bool disabled = servicestate != null && servicestate.Enabled == false && servicestate.Activated == true;
 
-                        var pointtextleft = new Point(hspacing * 3, vpos + linemargin * 2);
+                            var area = new Rectangle(hspacing, vpos, servicewidth, serviceheight);
 
-                        const int titlewidth = 200;
-
-                        var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(en), bigfont, color);
-                        pointtextleft.Y += (int)(size.Height + 1);
-                        string coreoroptional = en <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service" : "Optional Service";
-                        imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
-
-                        Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + en.ToString());
-                        imageControlServices.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height, img.Width, img.Height));
-
-                        var servicecol1top = new Point(titlewidth + 50, vpos + linemargin * 2);
-
-                        JournalCarrierCrewServices.ServicesData si = JournalCarrierCrewServices.GetDataOnServiceType(en);
-                        if (si != null)
-                        {
-                            int lineh = normfont.Height + linemargin * 2;
-                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost: ".TxID(EDTx.Unknown) + si.InstallCost.ToString("N0"), normfont, color);
-                            imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated: ".TxID(EDTx.Unknown) + si.CargoSize.ToString("N0") + " Units", normfont, color);
-
-                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost: ".TxID(EDTx.Unknown) + si.UpkeepCost.ToString("N0"), normfont, color);
-                            imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost: ".TxID(EDTx.Unknown) + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
-
-                            if (!cs.CrewNames.TryGetValue(en, out string crewname))
-                                crewname = "??";
-
-                            imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name: ".TxID(EDTx.Unknown) + crewname, normfont, color);
-                        }
-
-                        // TBD add tick
-
-                        if (active)
-                        {
-                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active".TxID(EDTx.Unknown), normfont, color);
-                            Image img2 = BaseUtils.Icons.IconSet.Instance.Get("Controls.ServicesTick");
-                            imageControlServices.DrawImage(img2, new Rectangle(titlewidth, vpos, img.Width, img.Height));
-                        }
-                        else if (disabled)
-                        {
-                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Suspended".TxID(EDTx.Unknown), normfont, color);
-                            using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 255, 0)))
+                            using (Brush br = new SolidBrush(Color.FromArgb(255, 53, 36, 2).Multiply(active ? 1f : 0.75f)))
                             {
-                                gr.FillRectangle(br2, area);
+                                gr.FillRectangle(br, area);
                             }
-                        }
-                        else
-                        {
-                            imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Not Installed".TxID(EDTx.Unknown), normfont, color);
-                            using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 0, 0)))
+
+                            var pointtextleft = new Point(hspacing * 3, vpos + linemargin * 2);
+
+                            const int titlewidth = 200;
+
+                            var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(en), bigfont, color);
+                            pointtextleft.Y += (int)(size.Height + 1);
+                            string coreoroptional = en <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service" : "Optional Service";
+                            imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
+
+                            Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + en.ToString());
+                            imageControlServices.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height, img.Width, img.Height));
+
+                            var servicecol1top = new Point(titlewidth + 50, vpos + linemargin * 2);
+
+                            JournalCarrierCrewServices.ServicesData si = JournalCarrierCrewServices.GetDataOnServiceType(en);
+                            if (si != null)
                             {
-                                gr.FillRectangle(br2, area);
+                                int lineh = normfont.Height + linemargin * 2;
+                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost: ".TxID(EDTx.Unknown) + si.InstallCost.ToString("N0"), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated: ".TxID(EDTx.Unknown) + si.CargoSize.ToString("N0") + " Units", normfont, color);
+
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost: ".TxID(EDTx.Unknown) + si.UpkeepCost.ToString("N0"), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost: ".TxID(EDTx.Unknown) + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
+
+                                if (!cs.CrewNames.TryGetValue(en, out string crewname))
+                                    crewname = "??";
+
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name: ".TxID(EDTx.Unknown) + crewname, normfont, color);
                             }
+
+                            // TBD add tick
+
+                            if (active)
+                            {
+                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active".TxID(EDTx.Unknown), normfont, color);
+                                Image img2 = BaseUtils.Icons.IconSet.Instance.Get("Controls.ServicesTick");
+                                imageControlServices.DrawImage(img2, new Rectangle(titlewidth, vpos, img.Width, img.Height));
+                            }
+                            else if (disabled)
+                            {
+                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Suspended".TxID(EDTx.Unknown), normfont, color);
+                                using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 255, 0)))
+                                {
+                                    gr.FillRectangle(br2, area);
+                                }
+                            }
+                            else
+                            {
+                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Not Installed".TxID(EDTx.Unknown), normfont, color);
+                                using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 0, 0)))
+                                {
+                                    gr.FillRectangle(br2, area);
+                                }
+                            }
+
+
+                            vpos += serviceheight + linemargin;
                         }
-
-
-                        vpos += serviceheight + linemargin;
                     }
-                }
 
-                gr.Dispose();
+                    gr.Dispose();
+                }
 
                 imageControlServices.Invalidate();
             }
@@ -495,30 +517,33 @@ namespace EDDiscovery.UserControls
                 int no = cs.State.ModulePacksCount() + cs.State.ShipPacksCount();
                 int packhpixels = (serviceheight + linemargin) * no + linemargin;
                 // we need to give it a fair number of pixels, otherwise the stretch is too big. So use the image control to min size it
-                imageControlPacks.ImageSize = new Size(servicewidth, Math.Max(packhpixels,imageControlOverall.ImageSize.Height));
+                imageControlPacks.ImageSize = new Size(servicewidth, Math.Max(packhpixels, imageControlOverall.ImageSize.Height));
                 imageControlScrollPacks.ImageControlMinimumHeight = imageControlPacks.ImageSize.Height;           // setting minimum height mak
                 imageControlPacks.Clear();
 
-                Graphics gr = imageControlPacks.GetGraphics();
-                int vpos = linemargin;
-
-                if (no == 0)
+                if (cs.State.HaveCarrier)
                 {
-                    imageControlPacks.DrawText(new Point(hspacing,linemargin), new Size(2000, 2000), "No Module or Ship packs installed".TxID(EDTx.Unknown), bigfont, color);
-                }
-                else
-                {
-                    foreach (CarrierState.PackClass sp in cs.State.ShipPacks.EmptyIfNull())
-                    {
-                        vpos += DisplayPack(gr, sp, false, vpos, color);
-                    }
-                    foreach (CarrierState.PackClass mp in cs.State.ModulePacks.EmptyIfNull())
-                    {
-                        vpos += DisplayPack(gr, mp, true, vpos, color);
-                    }
-                }
+                    Graphics gr = imageControlPacks.GetGraphics();
+                    int vpos = linemargin;
 
-                gr.Dispose();
+                    if (no == 0)
+                    {
+                        imageControlPacks.DrawText(new Point(hspacing, linemargin), new Size(2000, 2000), "No Module or Ship packs installed".TxID(EDTx.Unknown), bigfont, color);
+                    }
+                    else
+                    {
+                        foreach (CarrierState.PackClass sp in cs.State.ShipPacks.EmptyIfNull())
+                        {
+                            vpos += DisplayPackItem(gr, sp, false, vpos, color);
+                        }
+                        foreach (CarrierState.PackClass mp in cs.State.ModulePacks.EmptyIfNull())
+                        {
+                            vpos += DisplayPackItem(gr, mp, true, vpos, color);
+                        }
+                    }
+
+                    gr.Dispose();
+                }
                 imageControlPacks.Invalidate();
             }
 
@@ -539,7 +564,7 @@ namespace EDDiscovery.UserControls
 
                     MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Commodity);
 
-                    if ( ty != null)        // if we have found it, use the translated names and cat etc from
+                    if (ty != null)        // if we have found it, use the translated names and cat etc from
                     {
                         mname = ty.Name;
                         cat = ty.TranslatedCategory;
@@ -566,11 +591,9 @@ namespace EDDiscovery.UserControls
             }
 
             PositionControls();
-     
-        
         }
 
-        private int DisplayPack(Graphics gr, CarrierState.PackClass sp, bool module, int vpos, Color color)
+        private int DisplayPackItem(Graphics gr, CarrierState.PackClass sp, bool module, int vpos, Color color)
         {
             const int titlewidth = 600;
 
@@ -601,7 +624,7 @@ namespace EDDiscovery.UserControls
             return serviceheight + linemargin;
         }
 
-        private void DestinationSystem()
+        private void DisplayDestinationSystem()
         {
             var cs = discoveryform.history.Carrier;
 
@@ -669,6 +692,7 @@ namespace EDDiscovery.UserControls
                     rypos += x.Height + linemargin;
             }
 
+            labelCAPICarrierBalance.Location = new Point(rightpos, labelCAPICarrierBalance.Top);
             panelFinancesTop.Height = Math.Max(rypos, lypos);
         }
 
@@ -680,34 +704,50 @@ namespace EDDiscovery.UserControls
         {
             if (discoveryform.FrontierCAPI.Active)
             {
-                extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = false;
+                extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;
 
-                // don't hold up the main thread, do it in a task, as its a HTTP operation
+                // record when and who did capi, and clear data.  
+
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPIDateUTC, DateTime.UtcNow);                 
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPICommander, discoveryform.history.CommanderId);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPISave, "");
 
                 // set beta flag from last history entry
                 discoveryform.FrontierCAPI.GameIsBeta = discoveryform.history.GetLast?.journalEntry.IsBeta ?? false;
 
-                System.Threading.Tasks.Task.Run(() =>           
+                // don't hold up the main thread, do it in a task, as its a HTTP operation
+
+                System.Threading.Tasks.Task.Run(() =>
                 {
                     CAPI.FleetCarrier fc = null;
+                    bool nocarrier = false;
 
                     int tries = 3;
-                    while( tries-- > 0 )        // goes at getting the valid data from frontier
+                    while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
-                        string fleetcarrier = discoveryform.FrontierCAPI.FleetCarrier();
+                        string fleetcarrier = discoveryform.FrontierCAPI.FleetCarrier(nocontentreturnemptystring:true);
 
                         if (fleetcarrier != null)
                         {
-                            fc = new CAPI.FleetCarrier(fleetcarrier);
-
-                            if (fc.IsValid)
+                            if (fleetcarrier.Length == 0)       // an empty string means no carrier
                             {
-                                System.IO.File.WriteAllText(@"c:\code\fc.json", fc.Json.ToString(true));
-                                System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
+                                nocarrier = true;
                                 break;
                             }
                             else
-                                fc = null;
+                            {
+                                fc = new CAPI.FleetCarrier(fleetcarrier);
+
+                                if (fc.IsValid)
+                                {
+                                    System.IO.File.WriteAllText(@"c:\code\fc.json", fc.Json.ToString(true));
+                                    System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
+                                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPISave, fleetcarrier);       // store data into global capi slot
+                                    break;
+                                }
+                                else
+                                    fc = null;
+                            }
                         }
                         else
                             System.Threading.Thread.Sleep(2000);        // pause before another try
@@ -716,36 +756,94 @@ namespace EDDiscovery.UserControls
                     this.Invoke(new Action(() =>
                     {
                         System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                        if ( fc != null )
+
+                        DisplayCAPI(fc);        // may be null, this will clear it if it is
+
+                        if ( nocarrier )
                         {
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Commander has no carrier".TxID(EDTx.Unknown),
+                                "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                        else if ( fc == null  )
+                        {
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No CAPI data from frontier, due to either or server/network failure".TxID(EDTx.Unknown),
+                                "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+
+                        System.Diagnostics.Debug.WriteLine("Capi function complete");
+                    }));
+                });
+            }
+            else
+            {
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You are not logged into CAPI." + Environment.NewLine +
+                    "Go to the settings page and select your commanders settings, and log into CAPI.".TxID(EDTx.Unknown),
+                    "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void DisplayCAPIFromDB()
+        {
+            string capi = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPISave, "");
+            int capicmd = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPICommander, -1);
+
+            // if its a valid capi for commander, turn it into a FC entity
+            var fc = (capi.Length > 0 && capicmd == discoveryform.history.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
+
+            DisplayCAPI(fc);
+        }
+
+        private DateTime capidisplayedtime;
+
+        // fc = null means invalid capi data, clear display
+        private void DisplayCAPI(CAPI.FleetCarrier fc)
+        {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            if (fc == null || fc.IsValid == false)      // if not valid
+            {
+                labelCAPIDateTime.Text = "";
+                dataGridViewCAPICargo.Rows.Clear();
+                dataGridViewCAPIShips.Rows.Clear();
+                dataGridViewCAPIModules.Rows.Clear();
+                dataGridViewCAPIStats.Rows.Clear();
+            }
+            else
+            {
+                DateTime capitime = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPIDateUTC, DateTime.UtcNow);
+                labelCAPIDateTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
+                capidisplayedtime = capitime;
+
+                labelCAPICarrierBalance.Text = fc.Balance.ToString("N0") + "cr";
+
+                {
+                    List<CAPI.FleetCarrier.Cargo> cargo = fc.GetCargo();
+
+                    DataGridViewColumn sortcol = dataGridViewCAPICargo.SortedColumn != null ? dataGridViewCAPICargo.SortedColumn : dataGridViewCAPICargo.Columns[0];
+                    SortOrder sortorder = dataGridViewCAPICargo.SortOrder != SortOrder.None ? dataGridViewCAPICargo.SortOrder : SortOrder.Ascending;
+
+                    dataGridViewCAPICargo.Rows.Clear();
+
+                    if (cargo != null)
+                    {
+                        for (int i = 0; i < cargo.Count; i++)
+                        {
+                            var ord = cargo[i];
+
+                            string mname = ord.LocName ?? ord.Commodity;
+                            string cat = "";
+                            string type = "";
+
+                            MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Commodity);
+
+                            if (ty != null)        // if we have found it, use the translated names and cat etc from
                             {
-                                List<CAPI.FleetCarrier.Cargo> cargo = fc.GetCargo();
+                                mname = ty.Name;
+                                cat = ty.TranslatedCategory;
+                                type = ty.TranslatedType;
+                            }
 
-                                DataGridViewColumn sortcol = dataGridViewCAPICargo.SortedColumn != null ? dataGridViewCAPICargo.SortedColumn : dataGridViewCAPICargo.Columns[0];
-                                SortOrder sortorder = dataGridViewCAPICargo.SortOrder != SortOrder.None ? dataGridViewCAPICargo.SortOrder : SortOrder.Ascending;
-
-                                dataGridViewCAPICargo.Rows.Clear();
-
-                                if (cargo != null)
-                                {
-                                    for (int i = 0; i < cargo.Count; i++)
-                                    {
-                                        var ord = cargo[i];
-
-                                        string mname = ord.LocName ?? ord.Commodity;
-                                        string cat = "";
-                                        string type = "";
-
-                                        MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Commodity);
-
-                                        if (ty != null)        // if we have found it, use the translated names and cat etc from
-                                        {
-                                            mname = ty.Name;
-                                            cat = ty.TranslatedCategory;
-                                            type = ty.TranslatedType;
-                                        }
-
-                                        object[] rowobj = {
+                            object[] rowobj = {
                                                 mname,
                                                 cat,
                                                 type,
@@ -754,70 +852,70 @@ namespace EDDiscovery.UserControls
                                                 ord.Stolen? "\u2713" : "",
                                         };
 
-                                        dataGridViewCAPICargo.Rows.Add(rowobj);
-                                    }
-                                }
-                            }
+                            dataGridViewCAPICargo.Rows.Add(rowobj);
+                        }
+                    }
+                }
 
-                            {
-                                List<CAPI.FleetCarrier.LockerItem> locker = fc.GetCarrierLockerAll();       // always get an list, even if all empty
+                {
+                    List<CAPI.FleetCarrier.LockerItem> locker = fc.GetCarrierLockerAll();       // always get an list, even if all empty
 
-                                DataGridViewColumn sortcol = dataGridViewCAPILocker.SortedColumn != null ? dataGridViewCAPILocker.SortedColumn : dataGridViewCAPILocker.Columns[0];
-                                SortOrder sortorder = dataGridViewCAPILocker.SortOrder != SortOrder.None ? dataGridViewCAPILocker.SortOrder : SortOrder.Ascending;
+                    DataGridViewColumn sortcol = dataGridViewCAPILocker.SortedColumn != null ? dataGridViewCAPILocker.SortedColumn : dataGridViewCAPILocker.Columns[0];
+                    SortOrder sortorder = dataGridViewCAPILocker.SortOrder != SortOrder.None ? dataGridViewCAPILocker.SortOrder : SortOrder.Ascending;
 
-                                dataGridViewCAPILocker.Rows.Clear();
+                    dataGridViewCAPILocker.Rows.Clear();
 
-                                for (int i = 0; i < locker.Count; i++)
-                                {
-                                    var ord = locker[i];
+                    for (int i = 0; i < locker.Count; i++)
+                    {
+                        var ord = locker[i];
 
-                                    string mname = ord.LocName ?? ord.Name;
-                                    string cat = ord.Category.ToString();
+                        string mname = ord.LocName ?? ord.Name;
+                        string cat = ord.Category.ToString();
 
-                                    MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Name);
+                        MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(ord.Name);
 
-                                    if (ty != null)        // if we have found it, use the translated names and cat etc from
-                                    {
-                                        mname = ty.Name;
-                                        cat = ty.TranslatedCategory;
-                                    }
+                        if (ty != null)        // if we have found it, use the translated names and cat etc from
+                        {
+                            mname = ty.Name;
+                            cat = ty.TranslatedCategory;
+                        }
 
-                                    object[] rowobj = {
+                        object[] rowobj = {
                                         mname,
                                         cat,
                                         ord.Quantity.ToString("N0"),
                                     };
 
-                                    dataGridViewCAPILocker.Rows.Add(rowobj);
-                                }
+                        dataGridViewCAPILocker.Rows.Add(rowobj);
+                    }
 
 
-                                dataGridViewCAPILocker.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
-                                dataGridViewCAPILocker.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                            }
+                    dataGridViewCAPILocker.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                    dataGridViewCAPILocker.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                }
 
-                            {
-                                List<CAPI.FleetCarrier.Ship> ships = fc.GetShips();
+                {
+                    List<CAPI.FleetCarrier.Ship> ships = fc.GetShips();
 
-                                DataGridViewColumn sortcol = dataGridViewCAPIShips.SortedColumn != null ? dataGridViewCAPIShips.SortedColumn : dataGridViewCAPIShips.Columns[0];
-                                SortOrder sortorder = dataGridViewCAPIShips.SortOrder != SortOrder.None ? dataGridViewCAPIShips.SortOrder : SortOrder.Ascending;
+                    DataGridViewColumn sortcol = dataGridViewCAPIShips.SortedColumn != null ? dataGridViewCAPIShips.SortedColumn : dataGridViewCAPIShips.Columns[0];
+                    SortOrder sortorder = dataGridViewCAPIShips.SortOrder != SortOrder.None ? dataGridViewCAPIShips.SortOrder : SortOrder.Ascending;
 
-                                dataGridViewCAPIShips.Rows.Clear();
+                    dataGridViewCAPIShips.Rows.Clear();
 
-                                if (ships != null)
-                                {
-                                    for (int i = 0; i < ships.Count; i++)
-                                    {
-                                        var ord = ships[i];
+                    if (ships != null)
+                    {
+                        for (int i = 0; i < ships.Count; i++)
+                        {
+                            var ord = ships[i];
 
-                                        string name = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
-                                        string manu = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
-                                        string speed = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                                        string boost = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                                        string mass = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                                        string classv = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string name = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
+                            string manu = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
+                            string speed = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string boost = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string mass = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string classv = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
 
-                                        object[] rowobj = {
+                            object[] rowobj = {
                                             name,
                                             manu,
                                             ord.BaseValue.ToString("N0"),
@@ -827,36 +925,36 @@ namespace EDDiscovery.UserControls
                                             classv,
                                         };
 
-                                        dataGridViewCAPIShips.Rows.Add(rowobj);
-                                    }
-                                }
+                            dataGridViewCAPIShips.Rows.Add(rowobj);
+                        }
+                    }
 
-                                dataGridViewCAPIShips.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
-                                dataGridViewCAPIShips.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                            }
+                    dataGridViewCAPIShips.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                    dataGridViewCAPIShips.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                }
 
-                            {
-                                List<CAPI.FleetCarrier.Module> modules = fc.GetModules();
+                {
+                    List<CAPI.FleetCarrier.Module> modules = fc.GetModules();
 
-                                DataGridViewColumn sortcol = dataGridViewCAPIModules.SortedColumn != null ? dataGridViewCAPIModules.SortedColumn : dataGridViewCAPIModules.Columns[0];
-                                SortOrder sortorder = dataGridViewCAPIModules.SortOrder != SortOrder.None ? dataGridViewCAPIModules.SortOrder : SortOrder.Ascending;
+                    DataGridViewColumn sortcol = dataGridViewCAPIModules.SortedColumn != null ? dataGridViewCAPIModules.SortedColumn : dataGridViewCAPIModules.Columns[0];
+                    SortOrder sortorder = dataGridViewCAPIModules.SortOrder != SortOrder.None ? dataGridViewCAPIModules.SortOrder : SortOrder.Ascending;
 
-                                dataGridViewCAPIModules.Rows.Clear();
+                    dataGridViewCAPIModules.Rows.Clear();
 
-                                if (modules != null)
-                                {
-                                    for (int i = 0; i < modules.Count; i++)
-                                    {
-                                        var ord = modules[i];
-                                        var modp = ItemData.Instance.GetShipModuleProperties(ord.Name);
+                    if (modules != null)
+                    {
+                        for (int i = 0; i < modules.Count; i++)
+                        {
+                            var ord = modules[i];
+                            var modp = ItemData.Instance.GetShipModuleProperties(ord.Name);
 
-                                        string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
-                                        string mtype = modp?.ModType ?? ord.Category ?? "";
-                                        string mass = modp?.Mass.ToString("N1") ?? "";
-                                        string power = modp?.Power.ToString("N1") ?? "";
-                                        string info = modp?.Info ?? "";
+                            string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
+                            string mtype = modp?.ModType ?? ord.Category ?? "";
+                            string mass = modp?.Mass.ToString("N1") ?? "";
+                            string power = modp?.Power.ToString("N1") ?? "";
+                            string info = modp?.Info ?? "";
 
-                                        object[] rowobj = {
+                            object[] rowobj = {
                                             name,
                                             mtype,
                                             mass,
@@ -866,76 +964,52 @@ namespace EDDiscovery.UserControls
                                             info,
                                         };
 
-                                        dataGridViewCAPIModules.Rows.Add(rowobj);
-                                    }
-                                }
+                            dataGridViewCAPIModules.Rows.Add(rowobj);
+                        }
+                    }
 
-                                dataGridViewCAPIModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
-                                dataGridViewCAPIModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                            }
+                    dataGridViewCAPIModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                    dataGridViewCAPIModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                }
 
-                            {
-                                DataGridViewColumn sortcol = dataGridViewCAPIStats.SortedColumn != null ? dataGridViewCAPIStats.SortedColumn : dataGridViewCAPIStats.Columns[0];
-                                SortOrder sortorder = dataGridViewCAPIStats.SortOrder != SortOrder.None ? dataGridViewCAPIStats.SortOrder : SortOrder.Ascending;
+                {
+                    DataGridViewColumn sortcol = dataGridViewCAPIStats.SortedColumn != null ? dataGridViewCAPIStats.SortedColumn : dataGridViewCAPIStats.Columns[0];
+                    SortOrder sortorder = dataGridViewCAPIStats.SortOrder != SortOrder.None ? dataGridViewCAPIStats.SortOrder : SortOrder.Ascending;
 
-                                dataGridViewCAPIStats.Rows.Clear();
+                    dataGridViewCAPIStats.Rows.Clear();
 
-                                Type jtype = fc.GetType();
+                    Type jtype = fc.GetType();
 
-                                foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
-                                {
-                                    System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                                    dynamic value = getter.Invoke(fc, null);
+                    foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+                    {
+                        System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                        dynamic value = getter.Invoke(fc, null);
 
-                                    string res = value is string ? (string)value :
-                                                    value is int ? ((int)value).ToString("N0") :
-                                                    value is long ? ((long)value).ToString("N0") :
-                                                    value is double ? ((double)value).ToString("") : 
-                                                    value is bool ? (((bool)value)?"True":"False") : null;
-                                    if ( res != null)
-                                    {
-                                        object[] rowobj = {
+                        string res = value is string ? (string)value :
+                                        value is int ? ((int)value).ToString("N0") :
+                                        value is long ? ((long)value).ToString("N0") :
+                                        value is double ? ((double)value).ToString("") :
+                                        value is bool ? (((bool)value) ? "True" : "False") : null;
+                        if (res != null)
+                        {
+                            object[] rowobj = {
                                             pi.Name.SplitCapsWordFull(),
                                             res,
                                         };
 
-                                        dataGridViewCAPIStats.Rows.Add(rowobj);
-                                    }
-                                }
-
-                                dataGridViewCAPIStats.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
-                                dataGridViewCAPIStats.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                            }
+                            dataGridViewCAPIStats.Rows.Add(rowobj);
                         }
-                        else
-                        {
-                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to get CAPI data from Frontier".TxID(EDTx.Unknown),
-                                "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
+                    }
 
-                        System.Diagnostics.Debug.WriteLine("Capi function complete");
-                        extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = true;
-                    }));
-
-                    System.Threading.Thread.Sleep(2000);
-                });
+                    dataGridViewCAPIStats.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                    dataGridViewCAPIStats.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                }
             }
-            else
-            {
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You are not logged into CAPI." + Environment.NewLine +
-                    "Go to the settings page and select your commanders settings, and log into CAPI.".TxID(EDTx.Unknown),
-                    "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
         }
 
         #endregion
 
-        #region Helpers
-
-
-         #endregion
-
+        
 
     }
 }

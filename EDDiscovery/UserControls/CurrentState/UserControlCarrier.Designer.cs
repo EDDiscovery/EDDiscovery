@@ -99,6 +99,8 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCAPI3 = new System.Windows.Forms.Panel();
+            this.labelCAPICarrierBalance = new System.Windows.Forms.Label();
+            this.labelCAPIDateTime = new System.Windows.Forms.Label();
             this.extButtonDoCAPI3 = new ExtendedControls.ExtButton();
             this.tabPageCAPI1 = new System.Windows.Forms.TabPage();
             this.splitContainerCAPI1 = new System.Windows.Forms.SplitContainer();
@@ -1049,6 +1051,8 @@
             // 
             // panelCAPI3
             // 
+            this.panelCAPI3.Controls.Add(this.labelCAPICarrierBalance);
+            this.panelCAPI3.Controls.Add(this.labelCAPIDateTime);
             this.panelCAPI3.Controls.Add(this.extButtonDoCAPI3);
             this.panelCAPI3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelCAPI3.Location = new System.Drawing.Point(3, 3);
@@ -1056,13 +1060,31 @@
             this.panelCAPI3.Size = new System.Drawing.Size(839, 32);
             this.panelCAPI3.TabIndex = 6;
             // 
+            // labelCAPICarrierBalance
+            // 
+            this.labelCAPICarrierBalance.AutoSize = true;
+            this.labelCAPICarrierBalance.Location = new System.Drawing.Point(681, 9);
+            this.labelCAPICarrierBalance.Name = "labelCAPICarrierBalance";
+            this.labelCAPICarrierBalance.Size = new System.Drawing.Size(85, 13);
+            this.labelCAPICarrierBalance.TabIndex = 1;
+            this.labelCAPICarrierBalance.Text = "<code Balance>";
+            // 
+            // labelCAPIDateTime
+            // 
+            this.labelCAPIDateTime.AutoSize = true;
+            this.labelCAPIDateTime.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPIDateTime.Name = "labelCAPIDateTime";
+            this.labelCAPIDateTime.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPIDateTime.TabIndex = 1;
+            this.labelCAPIDateTime.Text = "<code DateTime>";
+            // 
             // extButtonDoCAPI3
             // 
+            this.extButtonDoCAPI3.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonDoCAPI3.Location = new System.Drawing.Point(3, 3);
             this.extButtonDoCAPI3.Name = "extButtonDoCAPI3";
-            this.extButtonDoCAPI3.Size = new System.Drawing.Size(75, 23);
+            this.extButtonDoCAPI3.Size = new System.Drawing.Size(24, 24);
             this.extButtonDoCAPI3.TabIndex = 0;
-            this.extButtonDoCAPI3.Text = "CAPI";
             this.extButtonDoCAPI3.UseVisualStyleBackColor = true;
             this.extButtonDoCAPI3.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
             // 
@@ -1360,11 +1382,11 @@
             // 
             // extButtonDoCAPI1
             // 
+            this.extButtonDoCAPI1.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonDoCAPI1.Location = new System.Drawing.Point(3, 3);
             this.extButtonDoCAPI1.Name = "extButtonDoCAPI1";
-            this.extButtonDoCAPI1.Size = new System.Drawing.Size(75, 23);
+            this.extButtonDoCAPI1.Size = new System.Drawing.Size(24, 24);
             this.extButtonDoCAPI1.TabIndex = 0;
-            this.extButtonDoCAPI1.Text = "CAPI";
             this.extButtonDoCAPI1.UseVisualStyleBackColor = true;
             this.extButtonDoCAPI1.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
             // 
@@ -1612,11 +1634,11 @@
             // 
             // extButtonDoCAPI2
             // 
+            this.extButtonDoCAPI2.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonDoCAPI2.Location = new System.Drawing.Point(3, 3);
             this.extButtonDoCAPI2.Name = "extButtonDoCAPI2";
-            this.extButtonDoCAPI2.Size = new System.Drawing.Size(75, 23);
+            this.extButtonDoCAPI2.Size = new System.Drawing.Size(24, 24);
             this.extButtonDoCAPI2.TabIndex = 0;
-            this.extButtonDoCAPI2.Text = "CAPI";
             this.extButtonDoCAPI2.UseVisualStyleBackColor = true;
             this.extButtonDoCAPI2.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
             // 
@@ -1650,6 +1672,7 @@
             this.extPanelDataGridViewScrollCAPIStats.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCAPIStats)).EndInit();
             this.panelCAPI3.ResumeLayout(false);
+            this.panelCAPI3.PerformLayout();
             this.tabPageCAPI1.ResumeLayout(false);
             this.splitContainerCAPI1.Panel1.ResumeLayout(false);
             this.splitContainerCAPI1.Panel2.ResumeLayout(false);
@@ -1788,5 +1811,7 @@
         private BaseUtils.DataGridViewColumnControl dataGridViewCAPIStats;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnValue;
+        private System.Windows.Forms.Label labelCAPIDateTime;
+        private System.Windows.Forms.Label labelCAPICarrierBalance;
     }
 }

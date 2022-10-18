@@ -280,7 +280,7 @@ namespace EDDiscovery
                     });
                 }
 
-                if (history.CommanderId >= 0)
+                if (history.IsRealCommanderId)
                     EdsmLogFetcher.Start(EDCommander.Current);
 
                 refreshHistoryRequestedFlag = 0;

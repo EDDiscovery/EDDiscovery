@@ -107,7 +107,7 @@ namespace EDDiscovery
         public void ChangeToCommander(int id)
         {
             EDCommander.CurrentCmdrID = id;
-            Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+            Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause Display to be called as some point
         }
         #endregion
 
@@ -1120,7 +1120,7 @@ namespace EDDiscovery
 
         private void Read21Folders(bool force)
         {
-            if (Controller.history.CommanderId >= 0)
+            if (Controller.history.IsRealCommanderId)
             {
                 EDCommander cmdr = EDCommander.Current;
                 if (cmdr != null)
@@ -1331,7 +1331,7 @@ namespace EDDiscovery
             else
             {
                 comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
-                if (history.CommanderId == -1)
+                if (history.CommanderId == -1)  // is hidden log
                 {
                     comboBoxCommander.SelectedIndex = 0;
                 }
