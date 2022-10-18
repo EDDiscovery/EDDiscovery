@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             splitContainerCAPI1.SplitterDistance(GetSetting(dbSplitterSaveCAPI1, 0.5));
             splitContainerCAPI2.SplitterDistance(GetSetting(dbSplitterSaveCAPI2, 0.5));
 
-            labelCAPICarrierBalance.Text = labelCAPIDateTime.Text = "";
+            labelCAPICarrierBalance.Text = labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
             extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;     // off until period poll
 
             using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
@@ -802,7 +802,7 @@ namespace EDDiscovery.UserControls
 
             if (fc == null || fc.IsValid == false)      // if not valid
             {
-                labelCAPIDateTime.Text = "";
+                labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
                 dataGridViewCAPICargo.Rows.Clear();
                 dataGridViewCAPIShips.Rows.Clear();
                 dataGridViewCAPIModules.Rows.Clear();
@@ -811,7 +811,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 DateTime capitime = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPIDateUTC, DateTime.UtcNow);
-                labelCAPIDateTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
+                labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
                 capidisplayedtime = capitime;
 
                 labelCAPICarrierBalance.Text = fc.Balance.ToString("N0") + "cr";

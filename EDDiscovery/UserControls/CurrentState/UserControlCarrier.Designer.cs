@@ -100,7 +100,7 @@
             this.dataGridViewTextBoxColumnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCAPI3 = new System.Windows.Forms.Panel();
             this.labelCAPICarrierBalance = new System.Windows.Forms.Label();
-            this.labelCAPIDateTime = new System.Windows.Forms.Label();
+            this.labelCAPIDateTime1 = new System.Windows.Forms.Label();
             this.extButtonDoCAPI3 = new ExtendedControls.ExtButton();
             this.tabPageCAPI1 = new System.Windows.Forms.TabPage();
             this.splitContainerCAPI1 = new System.Windows.Forms.SplitContainer();
@@ -125,6 +125,7 @@
             this.colCAPIModulesStockNumeric = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCAPIModulesInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCAPI1 = new System.Windows.Forms.Panel();
+            this.labelCAPIDateTime2 = new System.Windows.Forms.Label();
             this.extButtonDoCAPI1 = new ExtendedControls.ExtButton();
             this.tabPageCAPI2 = new System.Windows.Forms.TabPage();
             this.splitContainerCAPI2 = new System.Windows.Forms.SplitContainer();
@@ -144,6 +145,7 @@
             this.colCAPILockerType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCAPILockerQuantityNumeric = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCAPI2 = new System.Windows.Forms.Panel();
+            this.labelCAPIDateTime3 = new System.Windows.Forms.Label();
             this.extButtonDoCAPI2 = new ExtendedControls.ExtButton();
             this.extTabControl.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
@@ -1052,7 +1054,7 @@
             // panelCAPI3
             // 
             this.panelCAPI3.Controls.Add(this.labelCAPICarrierBalance);
-            this.panelCAPI3.Controls.Add(this.labelCAPIDateTime);
+            this.panelCAPI3.Controls.Add(this.labelCAPIDateTime1);
             this.panelCAPI3.Controls.Add(this.extButtonDoCAPI3);
             this.panelCAPI3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelCAPI3.Location = new System.Drawing.Point(3, 3);
@@ -1069,14 +1071,14 @@
             this.labelCAPICarrierBalance.TabIndex = 1;
             this.labelCAPICarrierBalance.Text = "<code Balance>";
             // 
-            // labelCAPIDateTime
+            // labelCAPIDateTime1
             // 
-            this.labelCAPIDateTime.AutoSize = true;
-            this.labelCAPIDateTime.Location = new System.Drawing.Point(33, 9);
-            this.labelCAPIDateTime.Name = "labelCAPIDateTime";
-            this.labelCAPIDateTime.Size = new System.Drawing.Size(92, 13);
-            this.labelCAPIDateTime.TabIndex = 1;
-            this.labelCAPIDateTime.Text = "<code DateTime>";
+            this.labelCAPIDateTime1.AutoSize = true;
+            this.labelCAPIDateTime1.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPIDateTime1.Name = "labelCAPIDateTime1";
+            this.labelCAPIDateTime1.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPIDateTime1.TabIndex = 1;
+            this.labelCAPIDateTime1.Text = "<code DateTime>";
             // 
             // extButtonDoCAPI3
             // 
@@ -1373,12 +1375,22 @@
             // 
             // panelCAPI1
             // 
+            this.panelCAPI1.Controls.Add(this.labelCAPIDateTime2);
             this.panelCAPI1.Controls.Add(this.extButtonDoCAPI1);
             this.panelCAPI1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelCAPI1.Location = new System.Drawing.Point(3, 3);
             this.panelCAPI1.Name = "panelCAPI1";
             this.panelCAPI1.Size = new System.Drawing.Size(839, 32);
             this.panelCAPI1.TabIndex = 5;
+            // 
+            // labelCAPIDateTime2
+            // 
+            this.labelCAPIDateTime2.AutoSize = true;
+            this.labelCAPIDateTime2.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPIDateTime2.Name = "labelCAPIDateTime2";
+            this.labelCAPIDateTime2.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPIDateTime2.TabIndex = 2;
+            this.labelCAPIDateTime2.Text = "<code DateTime>";
             // 
             // extButtonDoCAPI1
             // 
@@ -1625,12 +1637,22 @@
             // 
             // panelCAPI2
             // 
+            this.panelCAPI2.Controls.Add(this.labelCAPIDateTime3);
             this.panelCAPI2.Controls.Add(this.extButtonDoCAPI2);
             this.panelCAPI2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelCAPI2.Location = new System.Drawing.Point(3, 3);
             this.panelCAPI2.Name = "panelCAPI2";
             this.panelCAPI2.Size = new System.Drawing.Size(839, 32);
             this.panelCAPI2.TabIndex = 5;
+            // 
+            // labelCAPIDateTime3
+            // 
+            this.labelCAPIDateTime3.AutoSize = true;
+            this.labelCAPIDateTime3.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPIDateTime3.Name = "labelCAPIDateTime3";
+            this.labelCAPIDateTime3.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPIDateTime3.TabIndex = 2;
+            this.labelCAPIDateTime3.Text = "<code DateTime>";
             // 
             // extButtonDoCAPI2
             // 
@@ -1683,6 +1705,7 @@
             this.extPanelDataGridViewCAPIModules.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCAPIModules)).EndInit();
             this.panelCAPI1.ResumeLayout(false);
+            this.panelCAPI1.PerformLayout();
             this.tabPageCAPI2.ResumeLayout(false);
             this.splitContainerCAPI2.Panel1.ResumeLayout(false);
             this.splitContainerCAPI2.Panel2.ResumeLayout(false);
@@ -1693,6 +1716,7 @@
             this.extPanelDataGridViewScrollCAPILocker.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCAPILocker)).EndInit();
             this.panelCAPI2.ResumeLayout(false);
+            this.panelCAPI2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1811,7 +1835,9 @@
         private BaseUtils.DataGridViewColumnControl dataGridViewCAPIStats;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnValue;
-        private System.Windows.Forms.Label labelCAPIDateTime;
+        private System.Windows.Forms.Label labelCAPIDateTime1;
         private System.Windows.Forms.Label labelCAPICarrierBalance;
+        private System.Windows.Forms.Label labelCAPIDateTime2;
+        private System.Windows.Forms.Label labelCAPIDateTime3;
     }
 }
