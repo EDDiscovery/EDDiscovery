@@ -81,6 +81,40 @@ namespace EDDiscovery.UserControls
             labelCAPICarrierBalance.Text = labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
             extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;     // off until period poll
 
+            var enumlist = new Enum[] {EDTx.UserControlCarrier_extTabControl_tabPageOverall, EDTx.UserControlCarrier_extTabControl_tabPageOverall_imageControlOverall,
+                EDTx.UserControlCarrier_extTabControl_tabPageItinerary, EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinDate,
+                EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinSystemAlphaInt, EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinBodyAlphaInt,
+                EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinJumpDistNumeric, EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinDistFromNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinInformation, EDTx.UserControlCarrier_extTabControl_tabPageFinances,
+                EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerDate, EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerStarsystemAlphaInt,
+                EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerBodyAlphaInt, EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerEvent,
+                EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerCreditNumeric, EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerDebitNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerBalanceNumeric, EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerNotes,
+                EDTx.UserControlCarrier_extTabControl_tabPageServices, EDTx.UserControlCarrier_extTabControl_tabPageServices_imageControlServices,
+                EDTx.UserControlCarrier_extTabControl_tabPagePacks, EDTx.UserControlCarrier_extTabControl_tabPagePacks_imageControlPacks,
+                EDTx.UserControlCarrier_extTabControl_tabPageOrders, EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersDate,
+                EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersCommodity, EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersType,
+                EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersGroup, EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersPurchaseNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersSaleNumeric, EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersPriceNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersBlackmarket, EDTx.UserControlCarrier_extTabControl_tabPageCAPI3,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI3_dataGridViewTextBoxColumn1,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI3_dataGridViewTextBoxColumnValue, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsName, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsManu,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsPriceNumeric, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsSpeedNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsBoostNumeric, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsMassNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsLandingPadNumeric, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesName,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesCat, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesMassNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesPowerNumeric, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesCostNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesStockNumeric, EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesInfo,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI2, EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoCommodity,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoType, EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoGroup,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoQuantityNumeric, EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoPriceNumeric,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoStolen, EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerName,
+                EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerType, EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric};
+
+            BaseUtils.Translator.Instance.TranslateControls(this,enumlist);
+
+
             using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
             {
                 using (Brush br = new SolidBrush(Color.FromArgb(200, 92, 79, 75)))
@@ -210,8 +244,8 @@ namespace EDDiscovery.UserControls
             }
 
             // capi enable/disable  - get stats
-            DateTime capitime = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPIDateUTC, DateTime.UtcNow);
-            int capicmdrid = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPICommander, -1);
+            DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global:true);
+            int capicmdrid = GetSetting(dbCAPICommander, -1, global:true);
             bool capisamecmdr = discoveryform.history.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
@@ -359,10 +393,10 @@ namespace EDDiscovery.UserControls
                     string name = cs.State.Name + " " + cs.State.Callsign;
 
                     if (cs.IsDecommisioned)
-                        name += " (" + "Decommisioned".TxID(EDTx.Unknown) + ")";
+                        name += " (" + "Decommisioned".TxID(EDTx.UserControlCarrier_Decommisioned) + ")";
                     else if (cs.IsDecommisioning)
                     {
-                        name += " (" + "Decommissioning on".TxID(EDTx.Unknown) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
+                        name += " (" + "Decommissioning on".TxID(EDTx.UserControlCarrier_DecommisionedOn) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
                     }
 
                     imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);
@@ -376,38 +410,38 @@ namespace EDDiscovery.UserControls
                     vposr += bigfont.Height + linemargin;
 
                     string[] text = new string[] {
-                        "Cargo".TxID(EDTx.Unknown) + ": " + cs.State.SpaceUsage.Cargo.ToString("N0") + "t",
-                        "Services".TxID(EDTx.Unknown) + ": " + cs.State.SpaceUsage.Crew.ToString("N0") + "t",
-                        "Ship packs".TxID(EDTx.Unknown) + ": " + cs.State.SpaceUsage.ShipPacks.ToString("N0") + "t",
-                        "Module Packs".TxID(EDTx.Unknown) + ": " + cs.State.SpaceUsage.ModulePacks.ToString("N0") + "t",
-                        "Free Space".TxID(EDTx.Unknown) + ": " + cs.State.SpaceUsage.FreeSpace.ToString("N0") + "t",
-                        "Jump Range".TxID(EDTx.Unknown) + ": " + cs.State.JumpRangeCurr.ToString("N0") + "ly",
-                        "Max Jump".TxID(EDTx.Unknown) + ": " + cs.State.JumpRangeMax.ToString("N0") + "ly",
-                        "Fuel".TxID(EDTx.Unknown) + ": " + cs.State.FuelLevel.ToString("N0") + "t",
-                        "Docking Access".TxID(EDTx.Unknown) + ": " + cs.State.DockingAccessSplittable.SplitCapsWordFull(),
-                        "Notorious".TxID(EDTx.Unknown) + ": " + (cs.State.AllowNotorious ? "Yes".TxID(EDTx.MessageBoxTheme_Yes) : "No".TxID(EDTx.MessageBoxTheme_No)),
+                        "Cargo".TxID(EDTx.UserControlCarrier_Cargo) + ": " + cs.State.SpaceUsage.Cargo.ToString("N0") + "t",
+                        "Services".TxID(EDTx.UserControlCarrier_Services) + ": " + cs.State.SpaceUsage.Crew.ToString("N0") + "t",
+                        "Ship packs".TxID(EDTx.UserControlCarrier_Shippacks) + ": " + cs.State.SpaceUsage.ShipPacks.ToString("N0") + "t",
+                        "Module Packs".TxID(EDTx.UserControlCarrier_Modulepacks) + ": " + cs.State.SpaceUsage.ModulePacks.ToString("N0") + "t",
+                        "Free Space".TxID(EDTx.UserControlCarrier_Freespace) + ": " + cs.State.SpaceUsage.FreeSpace.ToString("N0") + "t",
+                        "Jump Range".TxID(EDTx.UserControlCarrier_Jumprange) + ": " + cs.State.JumpRangeCurr.ToString("N0") + "ly",
+                        "Max Jump".TxID(EDTx.UserControlCarrier_Maxjump) + ": " + cs.State.JumpRangeMax.ToString("N0") + "ly",
+                        "Fuel".TxID(EDTx.UserControlCarrier_Fuel) + ": " + cs.State.FuelLevel.ToString("N0") + "t",
+                        "Docking Access".TxID(EDTx.UserControlCarrier_DockingAccess) + ": " + cs.State.DockingAccessSplittable.SplitCapsWordFull(),
+                        "Notorious".TxID(EDTx.UserControlCarrier_Notorious) + ": " + (cs.State.AllowNotorious ? "Yes".TxID(EDTx.MessageBoxTheme_Yes) : "No".TxID(EDTx.MessageBoxTheme_No)),
                     };
 
                     imageControlOverall.DrawText(new Point(rightpos, vposr + linemargin), new Size(30000, 30000), text, normfont, linemargin, color);
 
-                    labelFCarrierBalance.Text = "Balance".TxID(EDTx.Unknown) + ": " + cs.State.Finance.CarrierBalance.ToString("N0") + "cr";
-                    labelFReserveBalance.Text = "Reserve".TxID(EDTx.Unknown) + ": " + cs.State.Finance.ReserveBalance.ToString("N0") + "cr";
-                    labelFAvailableBalance.Text = "Available".TxID(EDTx.Unknown) + ": " + cs.State.Finance.AvailableBalance.ToString("N0") + "cr";
-                    labelFReservePercent.Text = "Reserve".TxID(EDTx.Unknown) + ": " + cs.State.Finance.ReservePercent.ToString("N0") + "%";
+                    labelFCarrierBalance.Text = "Balance".TxID(EDTx.UserControlCarrier_Balance) + ": " + cs.State.Finance.CarrierBalance.ToString("N0") + "cr";
+                    labelFReserveBalance.Text = "Reserve".TxID(EDTx.UserControlCarrier_Reserve) + ": " + cs.State.Finance.ReserveBalance.ToString("N0") + "cr";
+                    labelFAvailableBalance.Text = "Available".TxID(EDTx.UserControlCarrier_Available) + ": " + cs.State.Finance.AvailableBalance.ToString("N0") + "cr";
+                    labelFReservePercent.Text = "Reserve".TxID(EDTx.UserControlCarrier_Reserve) + ": " + cs.State.Finance.ReservePercent.ToString("N0") + "%";
 
-                    TaxRate(labelFTaxPioneerSupplies, "Pioneer Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRatePioneersupplies);
-                    TaxRate(labelFTaxShipyard, "Shipyard Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateShipyard);
-                    TaxRate(labelFTaxRearm, "Rearm Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateRearm);
-                    TaxRate(labelFTaxOutfitting, "Outfitting Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateOutfitting);
-                    TaxRate(labelFTaxRefuel, "Refuel Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateRefuel);
-                    TaxRate(labelFTaxRepair, "Repair Tax".TxID(EDTx.Unknown), cs.State.Finance.TaxRateRepair);
+                    TaxRate(labelFTaxPioneerSupplies, "Pioneer Tax".TxID(EDTx.UserControlCarrier_PioneerTax), cs.State.Finance.TaxRatePioneersupplies);
+                    TaxRate(labelFTaxShipyard, "Shipyard Tax".TxID(EDTx.UserControlCarrier_ShipyardTax), cs.State.Finance.TaxRateShipyard);
+                    TaxRate(labelFTaxRearm, "Rearm Tax".TxID(EDTx.UserControlCarrier_RearmTax), cs.State.Finance.TaxRateRearm);
+                    TaxRate(labelFTaxOutfitting, "Outfitting Tax".TxID(EDTx.UserControlCarrier_OutfittingTax), cs.State.Finance.TaxRateOutfitting);
+                    TaxRate(labelFTaxRefuel, "Refuel Tax".TxID(EDTx.UserControlCarrier_RefuelTax), cs.State.Finance.TaxRateRefuel);
+                    TaxRate(labelFTaxRepair, "Repair Tax".TxID(EDTx.UserControlCarrier_RepairTax), cs.State.Finance.TaxRateRepair);
 
-                    labelFCoreCost.Text = "Core Cost: ".TxID(EDTx.Unknown) + cs.State.GetCoreCost().ToString("N0") + "cr";
-                    labelFServicesCost.Text = "Services Cost: ".TxID(EDTx.Unknown) + cs.State.GetServicesCost().ToString("N0") + "cr";
+                    labelFCoreCost.Text = "Core Cost".TxID(EDTx.UserControlCarrier_CoreCost) + ": " + cs.State.GetCoreCost().ToString("N0") + "cr";
+                    labelFServicesCost.Text = "Services Cost".TxID(EDTx.UserControlCarrier_ServicesCost) + ": " + cs.State.GetServicesCost().ToString("N0") + "cr";
                 }
                 else
                 {
-                    imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.Unknown), bigfont, color);
+                    imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), "No Carrier".TxID(EDTx.UserControlCarrier_NoCarrier), bigfont, color);
                 }
 
                 DisplayDestinationSystem();
@@ -453,7 +487,7 @@ namespace EDDiscovery.UserControls
 
                             var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(en), bigfont, color);
                             pointtextleft.Y += (int)(size.Height + 1);
-                            string coreoroptional = en <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service" : "Optional Service";
+                            string coreoroptional = en <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".TxID(EDTx.UserControlCarrier_CoreService) : "Optional Service".TxID(EDTx.UserControlCarrier_OptionalService);
                             imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
 
                             Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + en.ToString());
@@ -465,29 +499,29 @@ namespace EDDiscovery.UserControls
                             if (si != null)
                             {
                                 int lineh = normfont.Height + linemargin * 2;
-                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost: ".TxID(EDTx.Unknown) + si.InstallCost.ToString("N0"), normfont, color);
-                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated: ".TxID(EDTx.Unknown) + si.CargoSize.ToString("N0") + " Units", normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost".TxID(EDTx.UserControlCarrier_InstallCost) + ": " + si.InstallCost.ToString("N0"), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated".TxID(EDTx.UserControlCarrier_CapacityAllocated) + ": " + si.CargoSize.ToString("N0") + " Units", normfont, color);
 
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost: ".TxID(EDTx.Unknown) + si.UpkeepCost.ToString("N0"), normfont, color);
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost: ".TxID(EDTx.Unknown) + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost".TxID(EDTx.UserControlCarrier_Upkeepcost) + ": " + si.UpkeepCost.ToString("N0"), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost".TxID(EDTx.UserControlCarrier_Suspendedupkeepcost) + ": " + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
 
                                 if (!cs.CrewNames.TryGetValue(en, out string crewname))
                                     crewname = "??";
 
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name: ".TxID(EDTx.Unknown) + crewname, normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".TxID(EDTx.UserControlCarrier_CrewName) + ": " + crewname, normfont, color);
                             }
 
                             // TBD add tick
 
                             if (active)
                             {
-                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active".TxID(EDTx.Unknown), normfont, color);
+                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active".TxID(EDTx.UserControlCarrier_ServiceActive), normfont, color);
                                 Image img2 = BaseUtils.Icons.IconSet.Instance.Get("Controls.ServicesTick");
                                 imageControlServices.DrawImage(img2, new Rectangle(titlewidth, vpos, img.Width, img.Height));
                             }
                             else if (disabled)
                             {
-                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Suspended".TxID(EDTx.Unknown), normfont, color);
+                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Suspended".TxID(EDTx.UserControlCarrier_ServiceSuspended), normfont, color);
                                 using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 255, 0)))
                                 {
                                     gr.FillRectangle(br2, area);
@@ -495,7 +529,7 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Not Installed".TxID(EDTx.Unknown), normfont, color);
+                                imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Not Installed".TxID(EDTx.UserControlCarrier_ServiceNotInstalled), normfont, color);
                                 using (Brush br2 = new SolidBrush(Color.FromArgb(40, 255, 0, 0)))
                                 {
                                     gr.FillRectangle(br2, area);
@@ -528,7 +562,7 @@ namespace EDDiscovery.UserControls
 
                     if (no == 0)
                     {
-                        imageControlPacks.DrawText(new Point(hspacing, linemargin), new Size(2000, 2000), "No Module or Ship packs installed".TxID(EDTx.Unknown), bigfont, color);
+                        imageControlPacks.DrawText(new Point(hspacing, linemargin), new Size(2000, 2000), "No Module or Ship packs installed".TxID(EDTx.UserControlCarrier_NoPacks), bigfont, color);
                     }
                     else
                     {
@@ -570,7 +604,7 @@ namespace EDDiscovery.UserControls
                         cat = ty.TranslatedCategory;
                         type = ty.TranslatedType;
                         if (ty.IsMicroResources)
-                            type = "Micro Resource".TxID(EDTx.FilterSelector_MicroResources);
+                            type = "Micro Resources".TxID(EDTx.FilterSelector_MicroResources);
                     }
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ord.Placed),
@@ -608,14 +642,14 @@ namespace EDDiscovery.UserControls
 
             var size = imageControlPacks.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), sp.PackTheme.SplitCapsWordFull(), bigfont, color);
             pointtextleft.Y += (int)(size.Height + 1) + linemargin;
-            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".TxID(EDTx.Unknown) + sp.PackTier.ToString("N0"), bigfont, color);
+            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier".TxID(EDTx.UserControlCarrier_Tier) +" "+ sp.PackTier.ToString("N0"), bigfont, color);
 
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
 
             if (discoveryform.history.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
-                imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), "Cost: ".TxID(EDTx.Unknown) + value.ToString("N0"), normfont, color);
+                imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), "Cost".TxID(EDTx.UserControlCarrier_Cost) + ": " + value.ToString("N0"), normfont, color);
             }
 
             Image img = BaseUtils.Icons.IconSet.Instance.Get(module ? "Controls.ModulePack" : "Controls.Shipyard");
@@ -636,7 +670,7 @@ namespace EDDiscovery.UserControls
                 int hpos = hspacing + (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap(cs.CurrentPositionText, bigfont).Width + hspacing;
 
                 var timetogo = cs.TimeTillJump;
-                string jumptext = cs.NextDestinationText + " " + (timetogo.TotalSeconds > 0 ? timetogo.ToString(@"mm\.ss") : "Jumping".TxID(EDTx.Unknown));
+                string jumptext = cs.NextDestinationText + " " + (timetogo.TotalSeconds > 0 ? timetogo.ToString(@"mm\.ss") : "Jumping".TxID(EDTx.UserControlCarrier_Jumping));
 
                 imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
                 hpos += 48;
@@ -708,9 +742,9 @@ namespace EDDiscovery.UserControls
 
                 // record when and who did capi, and clear data.  
 
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPIDateUTC, DateTime.UtcNow);                 
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPICommander, discoveryform.history.CommanderId);
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPISave, "");
+                PutSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);                 
+                PutSetting(dbCAPICommander, discoveryform.history.CommanderId, global: true);
+                PutSetting(dbCAPISave, "", global: true);
 
                 // set beta flag from last history entry
                 discoveryform.FrontierCAPI.GameIsBeta = discoveryform.history.GetLast?.journalEntry.IsBeta ?? false;
@@ -742,7 +776,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     System.IO.File.WriteAllText(@"c:\code\fc.json", fc.Json.ToString(true));
                                     System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
-                                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbCAPISave, fleetcarrier);       // store data into global capi slot
+                                    PutSetting(dbCAPISave, fleetcarrier, global: true);       // store data into global capi slot
                                     break;
                                 }
                                 else
@@ -761,12 +795,12 @@ namespace EDDiscovery.UserControls
 
                         if ( nocarrier )
                         {
-                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Commander has no carrier".TxID(EDTx.Unknown),
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Commander has no carrier".TxID(EDTx.UserControlCarrier_NoCarrier),
                                 "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                         else if ( fc == null  )
                         {
-                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No CAPI data from frontier, due to either or server/network failure".TxID(EDTx.Unknown),
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No CAPI data from frontier, due to either or server/network failure".TxID(EDTx.UserControlCarrier_NetworkFailure),
                                 "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
 
@@ -777,15 +811,15 @@ namespace EDDiscovery.UserControls
             else
             {
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You are not logged into CAPI." + Environment.NewLine +
-                    "Go to the settings page and select your commanders settings, and log into CAPI.".TxID(EDTx.Unknown),
+                    "Go to the settings page and select your commanders settings, and log into CAPI.".TxID(EDTx.UserControlCarrier_NotLoggedIn),
                     "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void DisplayCAPIFromDB()
         {
-            string capi = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPISave, "");
-            int capicmd = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPICommander, -1);
+            string capi = GetSetting(dbCAPISave, "", global: true);
+            int capicmd = GetSetting(dbCAPICommander, -1, global: true);
 
             // if its a valid capi for commander, turn it into a FC entity
             var fc = (capi.Length > 0 && capicmd == discoveryform.history.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
@@ -810,7 +844,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                DateTime capitime = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbCAPIDateUTC, DateTime.UtcNow);
+                DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);
                 labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
                 capidisplayedtime = capitime;
 

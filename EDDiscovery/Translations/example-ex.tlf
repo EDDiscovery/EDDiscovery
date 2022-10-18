@@ -162,7 +162,7 @@ SECTION PopOutInfo
 .Engineers.Description: "List of Engineers, status, recipes" @
 .Discoveries.Title: "Discoveries" @
 .Discoveries.Description: "Discoveries Observer List" @
-.Carrier.Title: "Carrier Stats" @
+.Carrier.Title: "Carrier" @
 .Carrier.Description: "Data about your fleet carrier" @
 
 
