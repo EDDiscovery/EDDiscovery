@@ -88,8 +88,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            PutSetting("StartDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerStart.Value));
-            PutSetting("EndDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerEnd.Value));
+            PutSetting("StartDate", EDDConfig.Instance.ConvertTimeToUTCFromPicker(missionListPrevious.customDateTimePickerStart.Value));
+            PutSetting("EndDate", EDDConfig.Instance.ConvertTimeToUTCFromPicker(missionListPrevious.customDateTimePickerEnd.Value));
 
             PutSetting("StartDateChecked", missionListPrevious.customDateTimePickerStart.Checked);
             PutSetting("EndDateChecked", missionListPrevious.customDateTimePickerEnd.Checked);

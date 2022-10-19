@@ -22,8 +22,8 @@ namespace EDDiscovery.Forms
     public partial class ExportForm : ExtendedControls.DraggableForm
     {
         public int SelectedIndex { get; private set; }
-        public DateTime StartTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerFrom.Value); } }
-        public DateTime EndTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerTo.Value); } }
+        public DateTime StartTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerFrom.Value); } }
+        public DateTime EndTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerTo.Value); } }
         public bool Comma { get { return radioButtonComma.Checked; } }
         public bool AutoOpen { get { return checkBoxCustomAutoOpen.Checked; } }
         public bool IncludeHeader { get { return checkBoxIncludeHeader.Checked; } }
@@ -66,7 +66,8 @@ namespace EDDiscovery.Forms
             comboBoxSelectedType.SelectedIndex = 0;
             comboBoxSelectedType.SelectedIndexChanged += ComboBoxSelectedType_SelectedIndexChanged;
 
-            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
+            // note we don't care what the picker has as its Kind.. the convert functions at the top force it into the right mode
+            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc));
             customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 59, 59));
 
             if (System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals("."))

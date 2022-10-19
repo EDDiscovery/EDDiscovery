@@ -141,6 +141,7 @@ namespace EDDiscovery
 
         public DateTime ConvertTimeToSelectedFromUTC(DateTime t)        // from UTC->Display format
         {
+            System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Utc);
             if (displayTimeFormat == 1)     // UTC
             {
                 if (!DateTimeInRangeForGame(t))
@@ -178,22 +179,47 @@ namespace EDDiscovery
             return t;
         }
 
-        public DateTime ConvertTimeToSelectedNoKind(DateTime t)         // from a date time (no kind) -> Display format
+        // place datetime into selected time.  UTC for UTC/Gametime, Local for local
+        public DateTime ConvertTimeToSelected(DateTime t)
+        {
+            if (displayTimeFormat == 0)
+                return new DateTime(t.Year, t.Month, t.Day, t.Hour, t.Minute, t.Second, t.Millisecond, DateTimeKind.Local);
+            else
+                return new DateTime(t.Year, t.Month, t.Day, t.Hour, t.Minute, t.Second, t.Millisecond, DateTimeKind.Utc);
+        }
+
+        public DateTime ConvertTimeToUTCFromSelected(DateTime t)        // from selected format back to UTC
+        {
+            if (displayTimeFormat == 1) // UTC
+            {
+                System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Utc);        // should be in UTC, direct to UTC
+                return t;
+            }
+            else if (displayTimeFormat == 2)    // Gametime
+            {
+                System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Utc);        // should be in UTC, convert from gametime to utc
+                return t.AddYears(-1286);
+            }
+            else  // local
+            {
+                System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Local);
+                return t.ToUniversalTime();
+            }
+        }
+
+        // picker is time format less (although its normally in UTC mode due to the way the value is picked up)
+        public DateTime ConvertTimeToUTCFromPicker(DateTime t)
+        {
+            t = ConvertTimeToSelected(t);                           // put the correct Kind on it
+            return ConvertTimeToUTCFromSelected(t);                // and convert to UTC
+        }
+
+        public DateTime ConvertTimeToSelectedNoKind(DateTime t)     // from a date time (no kind) -> Display format
         {
             if (displayTimeFormat == 2)
                 return t.AddYears(1286);   // 2 is UTC+years
             else
                 return t;
-        }
-
-        public DateTime ConvertTimeToUTCFromSelected(DateTime t)        // from selected format back to UTC
-        {
-            if (displayTimeFormat == 1)
-                return t;
-            else if (displayTimeFormat == 2)
-                return t.AddYears(-1286);
-            else
-                return t.ToUniversalTime();
         }
 
         public bool DisplayTimeLocal

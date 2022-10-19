@@ -95,8 +95,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
-            CustomDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(DateTime.Today.AddMonths(-1));
-            CustomDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(DateTime.Today);
+            CustomDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelected(DateTime.Today.AddMonths(-1));
+            CustomDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelected(DateTime.Today);
             CustomDateTimePickerFrom.CustomFormat = "yyyy-MM-dd";
             CustomDateTimePickerTo.CustomFormat = "yyyy-MM-dd";
             PositionControls();

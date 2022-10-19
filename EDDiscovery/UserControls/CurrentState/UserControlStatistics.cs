@@ -101,6 +101,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
+            // datetime picker kind is not used
             dateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
             startchecked = dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
             dateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
@@ -358,8 +359,8 @@ namespace EDDiscovery.UserControls
 
                 };
 
-                DateTime? start = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerStartDate.Value) : default(DateTime?);
-                DateTime? end = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
+                DateTime? start = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) : default(DateTime?);
+                DateTime? end = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
                 // read journal for cmdr with these events and pass thru NewJE.
                 var jlist = JournalEntry.GetAll(cmdrid, ids: events, startdateutc: start, enddateutc: end);

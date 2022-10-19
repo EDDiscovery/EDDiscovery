@@ -75,6 +75,7 @@ namespace EDDiscovery.UserControls
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
+            // pickers we don't worry about the Kind, we use the picker convert functions later 
             extDateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
             extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
             extDateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
@@ -256,8 +257,8 @@ namespace EDDiscovery.UserControls
             if ( discoveryform.history != null )
             {
                 // change display time to utc
-                DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerStartDate.Value) : default(DateTime?);
-                DateTime? endutc = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
+                DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value) : default(DateTime?);
+                DateTime? endutc = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
                 DataGridViewColumn sortcolprev = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;

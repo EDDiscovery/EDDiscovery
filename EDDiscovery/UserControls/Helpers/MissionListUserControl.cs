@@ -83,8 +83,8 @@ namespace EDDiscovery.UserControls.Helpers
             bool show = true;
             if (panelButtons.Visible)
             {
-                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerStart.Value) : new DateTime(1980, 1, 1);
-                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerEnd.Value) : new DateTime(8999, 1, 1);
+                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerStart.Value) : new DateTime(1980, 1, 1);
+                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerEnd.Value) : new DateTime(8999, 1, 1);
                 show = DateTime.Compare(ms.Mission.EventTimeUTC, startdateutc) >= 0 && DateTime.Compare(ms.Mission.EventTimeUTC, enddateutc) <= 0;
             }
 

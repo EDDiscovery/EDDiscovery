@@ -171,6 +171,7 @@ namespace EDDiscovery.UserControls
             for (int col = 1; col < dataGridViewFactions.ColumnCount - 1; col++)
                 dataGridViewFactions.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+            // saved in UTC and converted to selected time. Picker Kind is not used
             startDateTime.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting("StartDate", DateTime.UtcNow));
             startDateTime.Checked = GetSetting("StartDateChecked", false);
             endDateTime.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(GetSetting("EndDate", DateTime.UtcNow));
@@ -221,9 +222,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            PutSetting("StartDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value));
+            PutSetting("StartDate", EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTime.Value));
             PutSetting("StartDateChecked", startDateTime.Checked);
-            PutSetting("EndDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value));
+            PutSetting("EndDate", EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTime.Value));
             PutSetting("EndDateChecked", endDateTime.Checked);
         }
 
@@ -268,8 +269,8 @@ namespace EDDiscovery.UserControls
 
             dataGridViewFactions.Rows.Clear();
 
-            DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
-            DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
+            DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTime.Value) : new DateTime(1980, 1, 1);
+            DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTime.Value) : new DateTime(8999, 1, 1);
 
             // this accumulates factions info
             var factionslist = new Dictionary<string, FactionStatistics>();
@@ -497,8 +498,8 @@ namespace EDDiscovery.UserControls
                 mluc.Clear();
                 List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
 
-                DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
-                DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
+                DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTime.Value) : new DateTime(1980, 1, 1);
+                DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTime.Value) : new DateTime(8999, 1, 1);
 
                 if (ml != null)
                 {
@@ -541,8 +542,8 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
-                DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
+                DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTime.Value) : new DateTime(1980, 1, 1);
+                DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTime.Value) : new DateTime(8999, 1, 1);
                 return HistoryList.FilterBefore(discoveryform.history.EntryOrder(), last_he, 
                                     (x) => ((DateTime.Compare(x.EventTimeUTC, startdateutc) >= 0 &&
                                              DateTime.Compare(x.EventTimeUTC, enddateutc) <= 0) &&

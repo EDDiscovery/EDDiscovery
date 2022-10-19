@@ -410,7 +410,7 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerEndDate.Checked && dateTimePickerEndDate.Value.ToUniversalTime() < DateTime.UtcNow)      // we are not at the current time..
             {
-                entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value);
+                entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value);
                 entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddMinutes(DateTime.UtcNow.Minute);
                 system = "?";
                 body = "?";

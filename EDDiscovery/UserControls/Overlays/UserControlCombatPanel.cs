@@ -683,8 +683,8 @@ namespace EDDiscovery.UserControls
             if (res == DialogResult.OK)
             {
                 entry.Reset(f.Get("Name"), f.Get("Faction"),
-                                EDDConfig.Instance.ConvertTimeToUTCFromSelected(f.GetDateTime("DTS").Value),
-                                EDDConfig.Instance.ConvertTimeToUTCFromSelected(f.GetDateTime("DTE").Value));
+                                EDDConfig.Instance.ConvertTimeToUTCFromPicker(f.GetDateTime("DTS").Value),
+                                EDDConfig.Instance.ConvertTimeToUTCFromPicker(f.GetDateTime("DTE").Value));
             }
 
             return res;
