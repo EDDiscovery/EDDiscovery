@@ -23,6 +23,10 @@ SECTION StartUp
 
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
 
+SECTION DataGridView
+
+.WordWrap: "Word Wrap (Override)" @
+
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @
@@ -161,6 +165,8 @@ SECTION PopOutInfo
 .Engineers.Description: "List of Engineers, status, recipes" @
 .Discoveries.Title: "Discoveries" @
 .Discoveries.Description: "Discoveries Observer List" @
+.Carrier.Title: "Carrier" @
+.Carrier.Description: "Data about your fleet carrier" @
 
 SECTION EDDiscoveryForm
 
@@ -175,7 +181,6 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "&Strumenti"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" => "Visualizza mappa &3D"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Finestre"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tutti nella taskbar"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Disabilita tutte le trasparenze"
@@ -421,7 +426,6 @@ SECTION NewReleaseForm
 NewReleaseForm: "EDDiscovery Release" => "Versione EDDiscovery"
 .labelName: "Name" => "Nome"
 .btnClose: "&Close" => "&Chiudi"
-.buttonMsiInstaller: "&Msi Installer" => "Installatore &Msi"
 .labelURL: "GitHub URL" => "URL GitHUB"
 .labelDownload: "Download" => "Scarica"
 .buttonPortablezip: "&Portable Zip" => "Zip &Portatile"

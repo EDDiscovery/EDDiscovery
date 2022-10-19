@@ -132,6 +132,9 @@ SECTION SearchScans
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
 .ColumnParent: "Parent" @
+.ColumnStar: "Star" @
+.ColumnParentParent: "Grandparent" @
+.ColumnStarStar: "Parent of Star" @
 .comboBoxSearches.ToolTip: "Select a predefined condition" @
 .buttonFind.ToolTip: "Search for condition below" @
 .buttonSave.ToolTip: "Save current condition" @
@@ -141,11 +144,14 @@ SECTION SearchScans
 .extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
+.extButtonNew.ToolTip: "Clear current condition" @
 .ColumnSearches: "Searches" @
 .labelTime: "Time" @
 .labelSearch: "Search" @
 .Export: "Export user searches" @
 .Import: "Import user searches" @
+.scanSortControl.labelSort: "Sort:" @
+.TooMany: "Too many results to display, truncating to the first {0}" @
 
 SECTION UserControlDiscoveries
 
@@ -256,7 +262,7 @@ SECTION UserControlExpedition
 .Delete: "Are you sure you want to delete this route?" @
 .Createroute: "Please create a route on a route panel" @
 .NoRouteExport: "There is no route to export " @
-.UnknownS: "Unknown system, system is without co-ordinates" @
+.GMOInfo: "Disable showing GMO Info" @
 .Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" @
 .Specify: "Please specify a name for the route." @
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
@@ -1318,6 +1324,7 @@ SECTION UserControlOrganics
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
+.extButtonAlignment_ToolTip: "Alignment" @
 .at: "At {0}" @
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 
@@ -1345,6 +1352,7 @@ SECTION FilterSelector
 .Mining: "Mining" @
 .MicroResources: "Micro Resources" @
 .Suits: "Suits" @
+.Carrier: "Carrier" @
 
 SECTION UserControlCommonBase
 
@@ -1387,3 +1395,97 @@ SECTION UserControlSuitsWeapons
 .CWHSD: "Head Shot Mult" @
 .Confirm: "Confirm Selling of" @
 .forceSellShipToolStripMenuItem: "Force Suit Sale" @
+
+SECTION UserControlCarrier
+
+.NoCarrier: "No Carrier" @
+.Cargo: "Cargo" @
+.Services: "Services" @
+.Shippacks: "Ship packs" @
+.Modulepacks: "Module Packs" @
+.Freespace: "Free Space" @
+.Jumprange: "Jump Range" @
+.Maxjump: "Max Jump" @
+.Fuel: "Fuel" @
+.DockingAccess: "Docking Access" @
+.Notorious: "Notorious" @
+.Balance: "Balance" @
+.Reserve: "Reserve" @
+.Available: "Available" @
+.PioneerTax: "Pioneer Tax" @
+.ShipyardTax: "Shipyard Tax" @
+.RearmTax: "Rearm Tax" @
+.OutfittingTax: "Outfitting Tax" @
+.RefuelTax: "Refuel Tax" @
+.RepairTax: "Repair Tax" @
+.CoreCost: "Core Cost" @
+.ServicesCost: "Services Cost" @
+.ServiceActive: "This Service is Active" @
+.InstallCost: "Install cost" @
+.CapacityAllocated: "Capacity Allocated" @
+.Upkeepcost: "Upkeep cost" @
+.Suspendedupkeepcost: "Suspended upkeep cost" @
+.CrewName: "Crew Name" @
+.Tier: "Tier" @
+.Cost: "Cost" @
+.CoreService: "Core Service" @
+.OptionalService: "Optional Service" @
+.extTabControl.tabPageOverall: "Overall" @
+.extTabControl.tabPageOverall.imageControlOverall: "imageControl1" @
+.extTabControl.tabPageItinerary: "Itinerary" @
+.extTabControl.tabPageItinerary.colItinDate: "Date" @
+.extTabControl.tabPageItinerary.colItinSystemAlphaInt: "System" @
+.extTabControl.tabPageItinerary.colItinBodyAlphaInt: "Body" @
+.extTabControl.tabPageItinerary.colItinJumpDistNumeric: "Jump Dist" @
+.extTabControl.tabPageItinerary.colItinDistFromNumeric: "Dist From" @
+.extTabControl.tabPageItinerary.colItinInformation: "Information" @
+.extTabControl.tabPageFinances: "Finances" @
+.extTabControl.tabPageFinances.colLedgerDate: "Date" @
+.extTabControl.tabPageFinances.colLedgerStarsystemAlphaInt: "System" @
+.extTabControl.tabPageFinances.colLedgerBodyAlphaInt: "Body" @
+.extTabControl.tabPageFinances.colLedgerEvent: "Event" @
+.extTabControl.tabPageFinances.colLedgerCreditNumeric: "Credits" @
+.extTabControl.tabPageFinances.colLedgerDebitNumeric: "Debits" @
+.extTabControl.tabPageFinances.colLedgerBalanceNumeric: "Balance cr" @
+.extTabControl.tabPageFinances.colLedgerNotes: "Notes" @
+.extTabControl.tabPageServices: "Services" @
+.extTabControl.tabPageServices.imageControlServices: "imageControl1" @
+.extTabControl.tabPagePacks: "Packs" @
+.extTabControl.tabPagePacks.imageControlPacks: "imageControl1" @
+.extTabControl.tabPageOrders: "Orders" @
+.extTabControl.tabPageOrders.colOrdersDate: "Date" @
+.extTabControl.tabPageOrders.colOrdersCommodity: "Commodity" @
+.extTabControl.tabPageOrders.colOrdersType: "Type" @
+.extTabControl.tabPageOrders.colOrdersGroup: "Group" @
+.extTabControl.tabPageOrders.colOrdersPurchaseNumeric: "Purchase" @
+.extTabControl.tabPageOrders.colOrdersSaleNumeric: "Sale" @
+.extTabControl.tabPageOrders.colOrdersPriceNumeric: "Price" @
+.extTabControl.tabPageOrders.colOrdersBlackmarket: "Blackmarket" @
+.extTabControl.tabPageCAPI3: "CAPI Stats" @
+.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumn1: "Name" @
+.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" @
+.extTabControl.tabPageCAPI1: "CAPI Ships/Modules" @
+.extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" @
+.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" @
+.extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" @
+.extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" @
+.extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" @
+.extTabControl.tabPageCAPI1.colCAPIShipsMassNumeric: "Mass" @
+.extTabControl.tabPageCAPI1.colCAPIShipsLandingPadNumeric: "Landing Pad" @
+.extTabControl.tabPageCAPI1.colCAPIModulesName: "Name" @
+.extTabControl.tabPageCAPI1.colCAPIModulesCat: "Category" @
+.extTabControl.tabPageCAPI1.colCAPIModulesMassNumeric: "Mass" @
+.extTabControl.tabPageCAPI1.colCAPIModulesPowerNumeric: "Power" @
+.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" @
+.extTabControl.tabPageCAPI1.colCAPIModulesStockNumeric: "Stock" @
+.extTabControl.tabPageCAPI1.colCAPIModulesInfo: "Info" @
+.extTabControl.tabPageCAPI2: "CAPI Items" @
+.extTabControl.tabPageCAPI2.colCAPICargoCommodity: "Commodity" @
+.extTabControl.tabPageCAPI2.colCAPICargoType: "Type" @
+.extTabControl.tabPageCAPI2.colCAPICargoGroup: "Group" @
+.extTabControl.tabPageCAPI2.colCAPICargoQuantityNumeric: "Quantity" @
+.extTabControl.tabPageCAPI2.colCAPICargoPriceNumeric: "Price" @
+.extTabControl.tabPageCAPI2.colCAPICargoStolen: "Stolen" @
+.extTabControl.tabPageCAPI2.colCAPILockerName: "Microresource" @
+.extTabControl.tabPageCAPI2.colCAPILockerType: "Type" @
+.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" @
