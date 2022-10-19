@@ -99,11 +99,14 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
             discoveryform.OnNewEntry += AddNewEntry;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             dateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
             startchecked = dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
             dateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
             endchecked = dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
+
+            VerifyDates();
 
             dateTimePickerStartDate.ValueChanged += DateTimePicker_ValueChangedStart;
             dateTimePickerEndDate.ValueChanged += DateTimePicker_ValueChangedEnd;
@@ -115,6 +118,12 @@ namespace EDDiscovery.UserControls
         {
             if ( discoveryform.history.Count>0 )        // if we loaded a history, this is a new panel, so work
                 StartThread();
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        {
+            VerifyDates();      // date range may have changed
+            StartThread();
         }
 
         public override void Closing()
@@ -131,6 +140,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
             discoveryform.OnNewEntry -= AddNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         protected override void OnLayout(LayoutEventArgs e)
@@ -170,22 +180,41 @@ namespace EDDiscovery.UserControls
             StartThread();
         }
 
+        bool updateprogramatically = false;
+        private void VerifyDates()
+        {
+            updateprogramatically = true;
+            if (!EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerEndDate.Value))
+            {
+                dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = false;
+                dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 12, 14));
+            }
+            updateprogramatically = false;
+        }
+
         private void DateTimePicker_ValueChangedStart(object sender, EventArgs e)
         {
-            if (startchecked != dateTimePickerStartDate.Checked || dateTimePickerStartDate.Checked)     // if check changed, or date changed and its checked
-                StartThread();
-            startchecked = dateTimePickerStartDate.Checked;
-            PutSetting(dbStartDate, dateTimePickerStartDate.Value);
-            PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
+            if (!updateprogramatically)
+            {
+                if (startchecked != dateTimePickerStartDate.Checked || dateTimePickerStartDate.Checked)     // if check changed, or date changed and its checked
+                    StartThread();
+                startchecked = dateTimePickerStartDate.Checked;
+                PutSetting(dbStartDate, dateTimePickerStartDate.Value);
+                PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
+            }
         }
 
         private void DateTimePicker_ValueChangedEnd(object sender, EventArgs e)
         {
-            if (endchecked != dateTimePickerEndDate.Checked || dateTimePickerEndDate.Checked)
-                StartThread();
-            endchecked = dateTimePickerEndDate.Checked;
-            PutSetting(dbEndDate, dateTimePickerEndDate.Value);
-            PutSetting(dbEndDateOn, dateTimePickerEndDate.Checked);
+            if (!updateprogramatically)
+            {
+                if (endchecked != dateTimePickerEndDate.Checked || dateTimePickerEndDate.Checked)
+                    StartThread();
+                endchecked = dateTimePickerEndDate.Checked;
+                PutSetting(dbEndDate, dateTimePickerEndDate.Value);
+                PutSetting(dbEndDateOn, dateTimePickerEndDate.Checked);
+            }
         }
 
         #endregion

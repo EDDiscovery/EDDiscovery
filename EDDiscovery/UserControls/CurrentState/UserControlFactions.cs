@@ -230,6 +230,7 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnHistoryChange(HistoryList obj)     // may have changed date system, this causes this
         {
             VerifyDates();
+            Display();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
@@ -455,7 +456,8 @@ namespace EDDiscovery.UserControls
             if (!EDDConfig.Instance.DateTimeInRangeForGame(startDateTime.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(endDateTime.Value))
             {
                 startDateTime.Checked = endDateTime.Checked = false;
-                endDateTime.Value = startDateTime.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                endDateTime.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                startDateTime.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 12, 14));
             }
         }
 

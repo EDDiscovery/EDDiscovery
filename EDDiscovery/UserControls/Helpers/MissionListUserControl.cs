@@ -172,7 +172,8 @@ namespace EDDiscovery.UserControls.Helpers
             if (!EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerStart.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerEnd.Value))
             {
                 customDateTimePickerStart.Checked = customDateTimePickerEnd.Checked = false;
-                customDateTimePickerEnd.Value = customDateTimePickerStart.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                customDateTimePickerEnd.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                customDateTimePickerStart.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 12, 14));
             }
         }
 
