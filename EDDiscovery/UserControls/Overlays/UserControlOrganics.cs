@@ -76,12 +76,11 @@ namespace EDDiscovery.UserControls
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
             // pickers we don't worry about the Kind, we use the picker convert functions later 
-            extDateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
+            extDateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.GameLaunchTimeUTC()).StartOfDay();
             extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
-            extDateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            extDateTimePickerEndDate.Value = GetSetting(dbEndDate, DateTime.UtcNow.EndOfDay()).EndOfDay();
             extDateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
             VerifyDates();
-
             extDateTimePickerStartDate.ValueChanged += DateTimePicker_ValueChangedStart;
             extDateTimePickerEndDate.ValueChanged += DateTimePicker_ValueChangedEnd;
 
@@ -279,6 +278,7 @@ namespace EDDiscovery.UserControls
 
                                 if (startutc != null || endutc != null)      // if sorting by date, knock out ones outside range
                                 {
+                                    System.Diagnostics.Debug.Assert((startutc?.IsStartOfDay() ?? true) || (endutc?.IsEndOfDay() ?? true));
                                     orglist = orglist.Where(x => (startutc == null || x.Item2.EventTimeUTC >= startutc) && (endutc == null || x.Item2.EventTimeUTC <= endutc)).ToList();
                                 }
 
@@ -474,8 +474,8 @@ namespace EDDiscovery.UserControls
             if (!EDDConfig.Instance.DateTimeInRangeForGame(extDateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(extDateTimePickerEndDate.Value))
             {
                 extDateTimePickerStartDate.Checked = extDateTimePickerEndDate.Checked = false;
-                extDateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 12, 14));
+                extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                extDateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
             }
             updatedprogramatically = false;
         }

@@ -54,11 +54,12 @@ namespace EDDiscovery.UserControls.Helpers
             dataGridView.RowTemplate.MinimumHeight = m;
         }
 
-        public void SetDateTime(DateTime start, bool startchecked, DateTime end, bool endchecked)
+        // time and dates are in picker time, ie whatever they were set to last.
+        public void SetDateTime(DateTime startpickertime, bool startchecked, DateTime endpickertime, bool endchecked)
         {
-            customDateTimePickerStart.Value = start;
+            customDateTimePickerStart.Value = startpickertime.StartOfDay();     // force start/end days
             customDateTimePickerStart.Checked = startchecked;
-            customDateTimePickerEnd.Value = end;
+            customDateTimePickerEnd.Value = endpickertime.EndOfDay();
             customDateTimePickerEnd.Checked = endchecked;
             VerifyDates();
             panelButtons.Visible = true;
@@ -83,8 +84,9 @@ namespace EDDiscovery.UserControls.Helpers
             bool show = true;
             if (panelButtons.Visible)
             {
-                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerStart.Value) : new DateTime(1980, 1, 1);
-                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerEnd.Value) : new DateTime(8999, 1, 1);
+                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerStart.Value) : EDDConfig.GameLaunchTimeUTC();
+                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerEnd.Value) : EDDConfig.GameEndTimeUTC();
+                System.Diagnostics.Debug.Assert(startdateutc.IsStartOfDay() && enddateutc.IsEndOfDay());
                 show = DateTime.Compare(ms.Mission.EventTimeUTC, startdateutc) >= 0 && DateTime.Compare(ms.Mission.EventTimeUTC, enddateutc) <= 0;
             }
 
@@ -172,8 +174,8 @@ namespace EDDiscovery.UserControls.Helpers
             if (!EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerStart.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerEnd.Value))
             {
                 customDateTimePickerStart.Checked = customDateTimePickerEnd.Checked = false;
-                customDateTimePickerEnd.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                customDateTimePickerStart.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 12, 14));
+                customDateTimePickerStart.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                customDateTimePickerEnd.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
             }
         }
 

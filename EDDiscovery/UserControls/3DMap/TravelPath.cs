@@ -43,7 +43,7 @@ namespace EDDiscovery.UserControls.Map3D
         public bool EnableText { get { return textrenderer.Enable; } set { textrenderer.Enable = value; } }
         public bool EnableStars { get { return sunshader.Enable; } set { sunshader.Enable = value; } }
         public int MaxStars { get; private set; }
-        public DateTime TravelPathStartDate { get; set; } = new DateTime(2014, 12, 14);
+        public DateTime TravelPathStartDate { get; set; } = EDDConfig.GameLaunchTimeUTC();
         public DateTime TravelPathEndDate { get; set; } = DateTime.UtcNow.AddMonths(1);
         public bool TravelPathStartDateEnable { get; set; } = false;
         public bool TravelPathEndDateEnable { get; set; } = false;

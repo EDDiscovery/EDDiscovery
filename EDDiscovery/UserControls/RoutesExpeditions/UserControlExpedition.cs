@@ -735,7 +735,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < navroutes.Count; i++)
                 {
                     var jroute = navroutes[i].journalEntry as JournalNavRoute;
-                    navroutefilter.AddStandardOption(i.ToStringInvariant(), navroutes[i].EventTimeUTC.ToLocalTime().ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
+                    navroutefilter.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(navroutes[i].EventTimeUTC).ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
                 }
 
                 navroutefilter.SaveSettings = (s, o) =>

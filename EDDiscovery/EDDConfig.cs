@@ -164,12 +164,21 @@ namespace EDDiscovery
             }
         }
 
+        public static DateTime GameLaunchTimeUTC()
+        {
+            return new DateTime(2014, 12, 14, 0, 0, 0, DateTimeKind.Utc);
+        }
+        public static DateTime GameEndTimeUTC()     // only an estimate! used when the code needs an end date with UTC.  DateTime.MinValue/MaxValue is not kinded.
+        {
+            return new DateTime(2999, 12, 14, 23, 59, 59, DateTimeKind.Utc);
+        }
+
         public bool DateTimeInRangeForGame(DateTime t)
         {
             if (displayTimeFormat == 2)
-                return t.Year >= 3300 && t.Year <= 3399;
+                return t.Year >= 3300 && t.Year <= 4300;
             else
-                return t.Year >= 2014 && t.Year <= 2114;
+                return t.Year >= 2014 && t.Year <= 2999;
         }
 
         public DateTime EnsureTimeInRangeForGame(DateTime t)
@@ -212,14 +221,6 @@ namespace EDDiscovery
         {
             t = ConvertTimeToSelected(t);                           // put the correct Kind on it
             return ConvertTimeToUTCFromSelected(t);                // and convert to UTC
-        }
-
-        public DateTime ConvertTimeToSelectedNoKind(DateTime t)     // from a date time (no kind) -> Display format
-        {
-            if (displayTimeFormat == 2)
-                return t.AddYears(1286);   // 2 is UTC+years
-            else
-                return t;
         }
 
         public bool DisplayTimeLocal

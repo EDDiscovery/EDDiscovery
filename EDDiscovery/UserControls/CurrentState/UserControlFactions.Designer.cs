@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.datePanel = new System.Windows.Forms.Panel();
-            this.startDateTime = new ExtendedControls.ExtDateTimePicker();
+            this.startDateTimePicker = new ExtendedControls.ExtDateTimePicker();
             this.labelTo = new System.Windows.Forms.Label();
-            this.endDateTime = new ExtendedControls.ExtDateTimePicker();
+            this.endDateTimePicker = new ExtendedControls.ExtDateTimePicker();
             this.labelValue = new System.Windows.Forms.Label();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMissionsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,9 +72,9 @@
             // 
             // datePanel
             // 
-            this.datePanel.Controls.Add(this.startDateTime);
+            this.datePanel.Controls.Add(this.startDateTimePicker);
             this.datePanel.Controls.Add(this.labelTo);
-            this.datePanel.Controls.Add(this.endDateTime);
+            this.datePanel.Controls.Add(this.endDateTimePicker);
             this.datePanel.Controls.Add(this.labelValue);
             this.datePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.datePanel.Location = new System.Drawing.Point(0, 0);
@@ -85,22 +85,22 @@
             // 
             // startDateTime
             // 
-            this.startDateTime.BorderColor = System.Drawing.Color.Transparent;
-            this.startDateTime.BorderColorScaling = 0.5F;
-            this.startDateTime.Checked = false;
-            this.startDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
-            this.startDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.startDateTime.Location = new System.Drawing.Point(0, 1);
-            this.startDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.startDateTime.Name = "startDateTime";
-            this.startDateTime.SelectedColor = System.Drawing.Color.Yellow;
-            this.startDateTime.ShowCheckBox = true;
-            this.startDateTime.ShowUpDown = false;
-            this.startDateTime.Size = new System.Drawing.Size(220, 20);
-            this.startDateTime.TabIndex = 2;
-            this.startDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.startDateTime, "Include from");
-            this.startDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            this.startDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
+            this.startDateTimePicker.BorderColorScaling = 0.5F;
+            this.startDateTimePicker.Checked = false;
+            this.startDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.startDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.startDateTimePicker.Location = new System.Drawing.Point(0, 1);
+            this.startDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.startDateTimePicker.Name = "startDateTime";
+            this.startDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
+            this.startDateTimePicker.ShowCheckBox = true;
+            this.startDateTimePicker.ShowUpDown = false;
+            this.startDateTimePicker.Size = new System.Drawing.Size(220, 20);
+            this.startDateTimePicker.TabIndex = 2;
+            this.startDateTimePicker.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolTip.SetToolTip(this.startDateTimePicker, "Include from");
+            this.startDateTimePicker.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             // 
             // labelTo
             // 
@@ -114,22 +114,22 @@
             // 
             // endDateTime
             // 
-            this.endDateTime.BorderColor = System.Drawing.Color.Transparent;
-            this.endDateTime.BorderColorScaling = 0.5F;
-            this.endDateTime.Checked = false;
-            this.endDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
-            this.endDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.endDateTime.Location = new System.Drawing.Point(251, 1);
-            this.endDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.endDateTime.Name = "endDateTime";
-            this.endDateTime.SelectedColor = System.Drawing.Color.Yellow;
-            this.endDateTime.ShowCheckBox = true;
-            this.endDateTime.ShowUpDown = false;
-            this.endDateTime.Size = new System.Drawing.Size(218, 20);
-            this.endDateTime.TabIndex = 3;
-            this.endDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.endDateTime, "Include to");
-            this.endDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            this.endDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
+            this.endDateTimePicker.BorderColorScaling = 0.5F;
+            this.endDateTimePicker.Checked = false;
+            this.endDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.endDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.endDateTimePicker.Location = new System.Drawing.Point(251, 1);
+            this.endDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.endDateTimePicker.Name = "endDateTime";
+            this.endDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
+            this.endDateTimePicker.ShowCheckBox = true;
+            this.endDateTimePicker.ShowUpDown = false;
+            this.endDateTimePicker.Size = new System.Drawing.Size(218, 20);
+            this.endDateTimePicker.TabIndex = 3;
+            this.endDateTimePicker.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolTip.SetToolTip(this.endDateTimePicker, "Include to");
+            this.endDateTimePicker.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             // 
             // labelValue
             // 
@@ -457,9 +457,9 @@
         #endregion
 
         private System.Windows.Forms.Panel datePanel;
-        private ExtendedControls.ExtDateTimePicker startDateTime;
+        private ExtendedControls.ExtDateTimePicker startDateTimePicker;
         private System.Windows.Forms.Label labelTo;
-        private ExtendedControls.ExtDateTimePicker endDateTime;
+        private ExtendedControls.ExtDateTimePicker endDateTimePicker;
         private System.Windows.Forms.Label labelValue;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelFactions;
         private ExtendedControls.ExtScrollBar scrollBarFactions;

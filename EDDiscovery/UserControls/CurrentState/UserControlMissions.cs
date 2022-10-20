@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Missions";
 
-            missionListPrevious.SetDateTime(GetSetting("StartDate", DateTime.UtcNow),
+            missionListPrevious.SetDateTime(GetSetting("StartDate", DateTime.UtcNow),       // set up by picker
                                             GetSetting("StartDateChecked", false),
                                             GetSetting("EndDate", DateTime.UtcNow),
                                             GetSetting("EndDateChecked", false));
@@ -88,10 +88,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            PutSetting("StartDate", EDDConfig.Instance.ConvertTimeToUTCFromPicker(missionListPrevious.customDateTimePickerStart.Value));
-            PutSetting("EndDate", EDDConfig.Instance.ConvertTimeToUTCFromPicker(missionListPrevious.customDateTimePickerEnd.Value));
-
+            PutSetting("StartDate", missionListPrevious.customDateTimePickerStart.Value);
             PutSetting("StartDateChecked", missionListPrevious.customDateTimePickerStart.Checked);
+            PutSetting("EndDate", missionListPrevious.customDateTimePickerEnd.Value);
             PutSetting("EndDateChecked", missionListPrevious.customDateTimePickerEnd.Checked);
 
             PutSetting("Splitter", splitContainerMissions.GetSplitterDistance());

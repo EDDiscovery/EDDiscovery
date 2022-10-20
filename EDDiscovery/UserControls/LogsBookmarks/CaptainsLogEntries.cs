@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2018-2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -68,12 +68,11 @@ namespace EDDiscovery.UserControls
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
 
-            dateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.GameLaunchTimeUTC()).StartOfDay();
             dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
-            dateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            dateTimePickerEndDate.Value = GetSetting(dbEndDate, DateTime.UtcNow).EndOfDay();
             dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
             VerifyDates();
-
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
@@ -119,7 +118,6 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
             VerifyDates();      // if date time mode changes, history change is fired by settings. check date validation
-
             Display();
         }
 
@@ -134,22 +132,19 @@ namespace EDDiscovery.UserControls
             dataViewScrollerPanel.SuspendLayout();
             dataGridView.SuspendLayout();
 
-            System.Diagnostics.Debug.WriteLine("Redraw");
             dataGridView.Rows.Clear();
 
-            bool pickstart = dateTimePickerStartDate.Checked;       // Picker is UTC or local dependent on UTC Config selection.. just changes compare against entry
-            bool pickend = dateTimePickerEndDate.Checked;
-            DateTime pickenddate = dateTimePickerEndDate.Value.EndOfDay();
-
+            DateTime startutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) : EDDConfig.GameLaunchTimeUTC();
+            DateTime endutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) : EDDConfig.GameEndTimeUTC();
+            System.Diagnostics.Debug.Assert(startutc.IsStartOfDay() && endutc.IsEndOfDay());
+            //System.Diagnostics.Debug.WriteLine($"CL Filter {startutc} {endutc}");
 
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
             {
                 if (entry.Commander == EDCommander.CurrentCmdrID)
                 {
-                    if ((pickstart == false || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC) >= dateTimePickerStartDate.Value) &&     // >= <= does not care about kind.
-                        (pickend == false || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC) <= pickenddate))
+                    if ( entry.TimeUTC >= startutc && entry.TimeUTC <= endutc)
                     {
-                        //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
                         var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
                         rw.CreateCells(dataGridView,
                             EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC),
@@ -192,7 +187,7 @@ namespace EDDiscovery.UserControls
 
             if (tagstring != null)
             {
-                System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
+                //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
 
                 Rectangle area = dataGridView.GetCellDisplayRectangle(4, rw.Index, false);
                 area.Width = 24;
@@ -372,8 +367,8 @@ namespace EDDiscovery.UserControls
             if (!EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerEndDate.Value))
             {
                 dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = false;
-                dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 12, 14));
+                dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
             }
             updateprogramatically = false;
         }
@@ -382,11 +377,14 @@ namespace EDDiscovery.UserControls
 
         #region Interactions with other tabs
 
-        public void SelectDate(DateTime datestart, DateTime dateend, bool createnew)       // date is in real time (12/1/2019), not in game (3305) time, but has no kind (its just plain).
+        public void SelectDate(DateTime datestartutc, DateTime dateendutc, bool createnew)
         {
+            System.Diagnostics.Debug.WriteLine($"Selected date range {datestartutc}-{dateendutc}");
+
             updateprogramatically = true;
-            dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(datestart);
-            dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(dateend);
+
+            dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(datestartutc);      // will assert if not utc
+            dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(dateendutc);
             dateTimePickerEndDate.Checked = dateTimePickerStartDate.Checked = true;
 
             updateprogramatically = false;
