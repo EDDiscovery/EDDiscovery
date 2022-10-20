@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
             if ( discoveryform.history != null )
             {
                 // change display time to utc
-                DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value) : default(DateTime?);
+                DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);
                 DateTime? endutc = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
                 DataGridViewColumn sortcolprev = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
@@ -278,7 +278,6 @@ namespace EDDiscovery.UserControls
 
                                 if (startutc != null || endutc != null)      // if sorting by date, knock out ones outside range
                                 {
-                                    System.Diagnostics.Debug.Assert((startutc?.IsStartOfDay() ?? true) || (endutc?.IsEndOfDay() ?? true));
                                     orglist = orglist.Where(x => (startutc == null || x.Item2.EventTimeUTC >= startutc) && (endutc == null || x.Item2.EventTimeUTC <= endutc)).ToList();
                                 }
 

@@ -84,9 +84,9 @@ namespace EDDiscovery.UserControls.Helpers
             bool show = true;
             if (panelButtons.Visible)
             {
-                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerStart.Value) : EDDConfig.GameLaunchTimeUTC();
-                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerEnd.Value) : EDDConfig.GameEndTimeUTC();
-                System.Diagnostics.Debug.Assert(startdateutc.IsStartOfDay() && enddateutc.IsEndOfDay());
+                // Start of day/end is being paranoid
+                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerStart.Value.StartOfDay()) : EDDConfig.GameLaunchTimeUTC();
+                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerEnd.Value.EndOfDay()) : EDDConfig.GameEndTimeUTC();
                 show = DateTime.Compare(ms.Mission.EventTimeUTC, startdateutc) >= 0 && DateTime.Compare(ms.Mission.EventTimeUTC, enddateutc) <= 0;
             }
 

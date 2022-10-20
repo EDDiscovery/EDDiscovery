@@ -134,9 +134,9 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Rows.Clear();
 
-            DateTime startutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) : EDDConfig.GameLaunchTimeUTC();
-            DateTime endutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) : EDDConfig.GameEndTimeUTC();
-            System.Diagnostics.Debug.Assert(startutc.IsStartOfDay() && endutc.IsEndOfDay());
+            // be paranoid about end/start of day
+            DateTime startutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : EDDConfig.GameLaunchTimeUTC();
+            DateTime endutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : EDDConfig.GameEndTimeUTC();
             //System.Diagnostics.Debug.WriteLine($"CL Filter {startutc} {endutc}");
 
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)

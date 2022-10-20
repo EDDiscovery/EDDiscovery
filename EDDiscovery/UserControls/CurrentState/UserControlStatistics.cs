@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
                 entriesqueued.Clear();      // clear the queue, any new entries will just be stored into entriesqueued and not displayed until the end
 
                 statscomputer.Start(EDCommander.CurrentCmdrID,
-                                                dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) : default(DateTime?),
+                                                dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?),
                                                 dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?),
                                                 (rs) => 
                                                 {
