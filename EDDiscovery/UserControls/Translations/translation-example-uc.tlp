@@ -975,9 +975,7 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" @
 .tabControlCustomStats.tabPageGeneral.Information: "Information" @
 .tabControlCustomStats.tabPageTravel: "Travel" @
-.tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" @
 .tabControlCustomStats.tabPageScan: "Scan" @
-.tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
 .tabControlCustomStats.tabPageGameStats: "In Game" @
 .tabControlCustomStats.tabPageByShip: "By Ship" @
 

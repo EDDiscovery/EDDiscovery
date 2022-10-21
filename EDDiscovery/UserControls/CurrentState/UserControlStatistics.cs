@@ -63,9 +63,13 @@ namespace EDDiscovery.UserControls
             DBBaseName = "Stats";
 
             tabControlCustomStats.SelectedIndex = GetSetting(dbSelectedTabSave, 0);
-            userControlStatsTimeScan.EnableDisplayStarsPlanetSelector();
+            userControlStatsTimeScan.DisplayStarsPlanetSelector(true);
 
-            var enumlist = new Enum[] { EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_Information, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel_userControlStatsTimeTravel_labelTime, EDTx.UserControlStats_tabControlCustomStats_tabPageScan, EDTx.UserControlStats_tabControlCustomStats_tabPageScan_userControlStatsTimeScan_labelTime, EDTx.UserControlStats_tabControlCustomStats_tabPageGameStats, EDTx.UserControlStats_tabControlCustomStats_tabPageByShip, EDTx.UserControlStats_labelStart, EDTx.UserControlStats_labelEndDate };
+            var enumlist = new Enum[] { EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName, 
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_Information, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel, 
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageScan, 
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGameStats, 
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageByShip, EDTx.UserControlStats_labelStart, EDTx.UserControlStats_labelEndDate };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             try
@@ -643,7 +647,7 @@ namespace EDDiscovery.UserControls
 
             string[] strarr = new string[intervals];
 
-            if (userControlStatsTimeScan.StarPlanetMode)
+            if (userControlStatsTimeScan.StarMode)
             {
                 foreach (EDStar startype in Enum.GetValues(typeof(EDStar)))
                 {
@@ -691,10 +695,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void userControlStatsTimeScan_DrawModeChanged(object sender, EventArgs e)
-        {
-            userControlStatsTimeScan_TimeModeChanged(sender, e);
-        }
         private void dataGridViewScan_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Tag == null)     // tag null means numeric sort.

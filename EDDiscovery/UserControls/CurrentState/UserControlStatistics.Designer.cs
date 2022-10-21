@@ -96,6 +96,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewGeneral.AllowUserToAddRows = false;
             this.dataGridViewGeneral.AllowUserToDeleteRows = false;
             this.dataGridViewGeneral.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewGeneral.AutoSortByColumnName = false;
             this.dataGridViewGeneral.ColumnHeaderMenuStrip = null;
             this.dataGridViewGeneral.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewGeneral.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -259,11 +260,13 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.AllowUserToAddRows = false;
             this.dataGridViewTravel.AllowUserToDeleteRows = false;
             this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewTravel.AutoSortByColumnName = false;
             this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTravel.ColumnReorder = true;
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.PerColumnWordWrapControl = true;
             this.dataGridViewTravel.RowHeaderMenuStrip = null;
             this.dataGridViewTravel.RowHeadersVisible = false;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -274,7 +277,6 @@ namespace EDDiscovery.UserControls
             // 
             // userControlStatsTimeTravel
             // 
-            this.userControlStatsTimeTravel.AllowCustomTime = false;
             this.userControlStatsTimeTravel.AutoSize = true;
             this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
@@ -312,11 +314,13 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.AllowUserToAddRows = false;
             this.dataGridViewScan.AllowUserToDeleteRows = false;
             this.dataGridViewScan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewScan.AutoSortByColumnName = false;
             this.dataGridViewScan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewScan.ColumnReorder = true;
             this.dataGridViewScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewScan.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewScan.Name = "dataGridViewScan";
+            this.dataGridViewScan.PerColumnWordWrapControl = true;
             this.dataGridViewScan.RowHeaderMenuStrip = null;
             this.dataGridViewScan.RowHeadersVisible = false;
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -355,7 +359,6 @@ namespace EDDiscovery.UserControls
             // 
             // userControlStatsTimeScan
             // 
-            this.userControlStatsTimeScan.AllowCustomTime = false;
             this.userControlStatsTimeScan.AutoSize = true;
             this.userControlStatsTimeScan.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeScan.Location = new System.Drawing.Point(0, 0);
@@ -364,7 +367,6 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
-            this.userControlStatsTimeScan.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeScan_DrawModeChanged);
             // 
             // tabPageGameStats
             // 
@@ -432,11 +434,13 @@ namespace EDDiscovery.UserControls
             this.dataGridViewByShip.AllowUserToAddRows = false;
             this.dataGridViewByShip.AllowUserToDeleteRows = false;
             this.dataGridViewByShip.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewByShip.AutoSortByColumnName = false;
             this.dataGridViewByShip.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewByShip.ColumnReorder = true;
             this.dataGridViewByShip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewByShip.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewByShip.Name = "dataGridViewByShip";
+            this.dataGridViewByShip.PerColumnWordWrapControl = true;
             this.dataGridViewByShip.RowHeaderMenuStrip = null;
             this.dataGridViewByShip.RowHeadersVisible = false;
             this.dataGridViewByShip.ScrollBars = System.Windows.Forms.ScrollBars.None;
