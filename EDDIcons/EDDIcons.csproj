@@ -477,6 +477,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\FCMaterials.png" />
     <EmbeddedResource Include="Controls\ServicesTick.png" />
     <EmbeddedResource Include="Controls\Shipyard.png" />
     <EmbeddedResource Include="Controls\TritiumDepot.png" />
@@ -1072,6 +1073,7 @@
     <EmbeddedResource Include="Controls\Outfitting.png" />
     <EmbeddedResource Include="Controls\PioneerSupplies.png" />
     <EmbeddedResource Include="Controls\ModulePack.png" />
+    <EmbeddedResource Include="Panels\Carrier.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

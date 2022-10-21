@@ -164,7 +164,7 @@ namespace EDDiscovery.UserControls
                     DateTime start = CurrentMonthFirstDayUTC.AddDays(i);
                     DateTime end = CurrentMonthFirstDayUTC.AddDays(i).EndOfDay();
                     int noentries = GlobalCaptainsLogList.Instance.FindUTC(start,end, EDCommander.CurrentCmdrID).Length;    // UTC comparision..  CL class is UTC
-                    System.Diagnostics.Debug.WriteLine($"CL Check {start}-{end} = {noentries}");
+                    //System.Diagnostics.Debug.WriteLine($"CL Check {start}-{end} = {noentries}");
 
                     daybuttons[i].Tag = noentries;
 
