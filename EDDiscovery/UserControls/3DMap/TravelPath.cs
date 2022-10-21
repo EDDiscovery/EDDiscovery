@@ -43,8 +43,8 @@ namespace EDDiscovery.UserControls.Map3D
         public bool EnableText { get { return textrenderer.Enable; } set { textrenderer.Enable = value; } }
         public bool EnableStars { get { return sunshader.Enable; } set { sunshader.Enable = value; } }
         public int MaxStars { get; private set; }
-        public DateTime TravelPathStartDate { get; set; } = EDDConfig.GameLaunchTimeUTC();
-        public DateTime TravelPathEndDate { get; set; } = DateTime.UtcNow.AddMonths(1);
+        public DateTime TravelPathStartDateUTC { get; set; } = EDDConfig.GameLaunchTimeUTC();
+        public DateTime TravelPathEndDateUTC { get; set; } = DateTime.UtcNow.AddMonths(1);
         public bool TravelPathStartDateEnable { get; set; } = false;
         public bool TravelPathEndDateEnable { get; set; } = false;
         public Font Font { get; set; } = new Font("Arial", 8.5f);
@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls.Map3D
             ISystem lastone = CurrentPos != -1 && CurrentPos < currentfilteredlistsys.Count ? currentfilteredlistsys[CurrentPos] : null;  // see if lastpos is there, and store it
 
             // create current filter list..
-            currentfilteredlisthe = hl.FilterByTravelTime(TravelPathStartDateEnable ? TravelPathStartDate : default(DateTime?), TravelPathEndDateEnable ? TravelPathEndDate : default(DateTime?), true);
+            currentfilteredlisthe = hl.FilterByTravelTime(TravelPathStartDateEnable ? TravelPathStartDateUTC : default(DateTime?), TravelPathEndDateEnable ? TravelPathEndDateUTC : default(DateTime?), true);
 
             if (currentfilteredlisthe.Count > MaxStars)
                 currentfilteredlisthe = currentfilteredlisthe.Skip(currentfilteredlisthe.Count - MaxStars).ToList();

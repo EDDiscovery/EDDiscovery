@@ -333,9 +333,9 @@ namespace EDDiscovery.UserControls.Map3D
                 dtps.SuspendLayout();
                 dtps.AutoSize = true;
                 dtps.ShowCheckBox = dtps.ShowCalendar = true;
-                dtps.Value = map.TravelPathStartDate;
+                dtps.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(map.TravelPathStartDateUTC);
                 dtps.Checked = map.TravelPathStartDateEnable;
-                dtps.ValueChanged += (e1) => { map.TravelPathStartDate = dtps.Value; map.TravelPathRefresh(); };
+                dtps.ValueChanged += (e1) => { map.TravelPathStartDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dtps.Value); map.TravelPathRefresh(); };
                 dtps.CheckChanged += (e1) => { map.TravelPathStartDateEnable = dtps.Checked; map.TravelPathRefresh(); };
                 dtps.ShowUpDown = true;
                 dtps.ResumeLayout();
@@ -351,9 +351,9 @@ namespace EDDiscovery.UserControls.Map3D
                 dtpe.SuspendLayout();
                 dtpe.AutoSize = true;
                 dtpe.ShowCheckBox = dtps.ShowCalendar = true;
-                dtpe.Value = map.TravelPathEndDate;
+                dtpe.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(map.TravelPathEndDateUTC);
                 dtpe.Checked = map.TravelPathEndDateEnable;
-                dtpe.ValueChanged += (e1) => { map.TravelPathEndDate = dtpe.Value; map.TravelPathRefresh(); };
+                dtpe.ValueChanged += (e1) => { map.TravelPathEndDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dtpe.Value); map.TravelPathRefresh(); };
                 dtpe.CheckChanged += (e1) => { map.TravelPathEndDateEnable = dtpe.Checked; map.TravelPathRefresh(); };
                 dtpe.ShowUpDown = true;
                 dtpe.ResumeLayout();
