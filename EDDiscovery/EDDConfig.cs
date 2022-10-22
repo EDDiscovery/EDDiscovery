@@ -190,8 +190,11 @@ namespace EDDiscovery
 
         public DateTime SelectedEndOfTodayUTC()     // respecting the display time, what is the UTC of the end of today?
         {
-            if (displayTimeFormat == 2)
+            if (displayTimeFormat == 0)
+            {
+                //System.Diagnostics.Debug.WriteLine($"Now {DateTime.Now} {DateTime.Now.EndOfDay()} {DateTime.Now.EndOfDay().ToUniversalTime()}");
                 return DateTime.Now.EndOfDay().ToUniversalTime();
+            }
             else
                 return DateTime.UtcNow.EndOfDay();
         }
