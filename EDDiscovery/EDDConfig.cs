@@ -150,7 +150,7 @@ namespace EDDiscovery
             }
             else if (displayTimeFormat == 2)    // Game time
             {
-                t = t.AddYears(1286);  
+                t = t.AddYears(1286);
                 if (!DateTimeInRangeForGame(t))
                     t = DateTime.UtcNow.AddYears(1286);
                 return t;
@@ -186,6 +186,14 @@ namespace EDDiscovery
             if (!DateTimeInRangeForGame(t))
                 t = ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
             return t;
+        }
+
+        public DateTime SelectedEndOfTodayUTC()     // respecting the display time, what is the UTC of the end of today?
+        {
+            if (displayTimeFormat == 2)
+                return DateTime.Now.EndOfDay().ToUniversalTime();
+            else
+                return DateTime.UtcNow.EndOfDay();
         }
 
         // place datetime into selected time.  UTC for UTC/Gametime, Local for local

@@ -104,9 +104,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             // datetime picker kind is not used
-            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.GameLaunchTimeUTC()).StartOfDay();
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC())).StartOfDay();
+            dateTimePickerEndDate.Value = GetSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow)).EndOfDay();
             startchecked = dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
-            dateTimePickerEndDate.Value = GetSetting(dbEndDate, DateTime.UtcNow).EndOfDay();
             endchecked = dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
             VerifyDates();
             dateTimePickerStartDate.ValueChanged += DateTimePicker_ValueChangedStart;
@@ -276,9 +276,11 @@ namespace EDDiscovery.UserControls
                 currentstats.Process(entriesqueued.Dequeue());            // process any queued entries
             }
 
-            // the picker is in selected time mode, get the utc end time from it
+            // the picker is in selected time mode, get the end of the day of the picker and switch to UTC.
+            // or if its not on, get the selected mode end of today, and switch to UTC.
 
-            DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : DateTime.UtcNow.EndOfDay();
+            DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : 
+                                                                    EDDConfig.Instance.SelectedEndOfTodayUTC();
 
             if (tabControlCustomStats.SelectedIndex == 0)
                 StatsGeneral(endtimeutc);
