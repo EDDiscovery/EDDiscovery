@@ -281,7 +281,7 @@ namespace EDDiscovery
             else if (optname == "-minjournaldateutc")
             {
                 string s = toeol ? ca.Rest() : ca.NextEmpty();
-                MinJournalDateUTC = s.ParseDateTime(DateTime.MinValue, System.Globalization.CultureInfo.CurrentCulture);
+                MinJournalDateUTC = s.ParseDateTime(ObjectExtensionsDates.MinValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
             }
             else if (optname == "-historyloaddaylimit")
             {
