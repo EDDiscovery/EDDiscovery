@@ -1169,6 +1169,7 @@ SECTION UserControlTravelGrid
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
 
+.quickMarkToolStripMenuItem: "Marked" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" @
 .gotoEntryNumberToolStripMenuItem: "Jump to Entry" @
 .setNoteToolStripMenuItem: "Set Note" @

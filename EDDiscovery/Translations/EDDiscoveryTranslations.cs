@@ -641,7 +641,7 @@ namespace EDDiscovery
         UserControlJournalGrid_JHF, // Journal: Filter out fields
         UserControlJournalGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
 
-
+        UserControlTravelGrid_quickMarkToolStripMenuItem,
         UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, // ToolStrip control 'Remove Sorting of Columns'
         UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, // ToolStrip control 'Jump to Entry'
         UserControlTravelGrid_setNoteToolStripMenuItem, // ToolStrip control 'Set Note'
