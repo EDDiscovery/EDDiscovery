@@ -526,6 +526,7 @@ namespace EDDiscovery
         UserControlStats_tabControlCustomStats_tabPageScan, // Control 'Scan'
         UserControlStats_tabControlCustomStats_tabPageGameStats, // Control 'In Game'
         UserControlStats_tabControlCustomStats_tabPageByShip, // Control 'By Ship'
+        UserControlStats_tabControlCustomStats_tabPageCombat,
         UserControlStats_labelStart, // Control 'Start'
         UserControlStats_labelEndDate, // Control 'To'
         UserControlStats_TotalNoofjumps, // Total No of jumps:

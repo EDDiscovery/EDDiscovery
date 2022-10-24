@@ -62,6 +62,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan = new BaseUtils.DataGridViewColumnControl();
             this.extScrollBarScan = new ExtendedControls.ExtScrollBar();
             this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeUserControl();
+            this.tabPageCombat = new System.Windows.Forms.TabPage();
+            this.dataGridViewCombat = new BaseUtils.DataGridViewColumnControl();
+            this.statsTimeUserControlCombat = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
             this.treeViewStats = new ExtendedControls.Controls.ExtTreeView();
             this.tabPageByShip = new System.Windows.Forms.TabPage();
@@ -84,6 +87,8 @@ namespace EDDiscovery.UserControls
             this.tabPageScan.SuspendLayout();
             this.extPanelDataGridViewScrollScan.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).BeginInit();
+            this.tabPageCombat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).BeginInit();
             this.tabPageGameStats.SuspendLayout();
             this.tabPageByShip.SuspendLayout();
             this.extPanelDataGridViewScrollByShip.SuspendLayout();
@@ -170,6 +175,7 @@ namespace EDDiscovery.UserControls
             this.tabControlCustomStats.Controls.Add(this.tabPageGeneral);
             this.tabControlCustomStats.Controls.Add(this.tabPageTravel);
             this.tabControlCustomStats.Controls.Add(this.tabPageScan);
+            this.tabControlCustomStats.Controls.Add(this.tabPageCombat);
             this.tabControlCustomStats.Controls.Add(this.tabPageGameStats);
             this.tabControlCustomStats.Controls.Add(this.tabPageByShip);
             this.tabControlCustomStats.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -221,9 +227,9 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollTravel.Controls.Add(this.dataGridViewTravel);
             this.extPanelDataGridViewScrollTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollTravel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollTravel.Location = new System.Drawing.Point(0, 23);
+            this.extPanelDataGridViewScrollTravel.Location = new System.Drawing.Point(0, 26);
             this.extPanelDataGridViewScrollTravel.Name = "extPanelDataGridViewScrollTravel";
-            this.extPanelDataGridViewScrollTravel.Size = new System.Drawing.Size(1065, 488);
+            this.extPanelDataGridViewScrollTravel.Size = new System.Drawing.Size(1065, 485);
             this.extPanelDataGridViewScrollTravel.TabIndex = 4;
             this.extPanelDataGridViewScrollTravel.VerticalScrollBarDockRight = true;
             // 
@@ -244,7 +250,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarTravel.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarTravel.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarTravel.Name = "extScrollBarTravel";
-            this.extScrollBarTravel.Size = new System.Drawing.Size(16, 488);
+            this.extScrollBarTravel.Size = new System.Drawing.Size(16, 485);
             this.extScrollBarTravel.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarTravel.SmallChange = 1;
             this.extScrollBarTravel.TabIndex = 4;
@@ -271,9 +277,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.RowHeadersVisible = false;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTravel.SingleRowSelect = true;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(1049, 488);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(1049, 485);
             this.dataGridViewTravel.TabIndex = 3;
-            this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTravel_SortCompare);
+            this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompareNull);
             // 
             // userControlStatsTimeTravel
             // 
@@ -281,7 +287,7 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
-            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(1065, 23);
+            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(1065, 26);
             this.userControlStatsTimeTravel.TabIndex = 0;
             this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
@@ -303,9 +309,9 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollScan.Controls.Add(this.extScrollBarScan);
             this.extPanelDataGridViewScrollScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollScan.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollScan.Location = new System.Drawing.Point(0, 23);
+            this.extPanelDataGridViewScrollScan.Location = new System.Drawing.Point(0, 26);
             this.extPanelDataGridViewScrollScan.Name = "extPanelDataGridViewScrollScan";
-            this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(1065, 488);
+            this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(1065, 485);
             this.extPanelDataGridViewScrollScan.TabIndex = 5;
             this.extPanelDataGridViewScrollScan.VerticalScrollBarDockRight = true;
             // 
@@ -325,9 +331,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.RowHeadersVisible = false;
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewScan.SingleRowSelect = true;
-            this.dataGridViewScan.Size = new System.Drawing.Size(1049, 488);
+            this.dataGridViewScan.Size = new System.Drawing.Size(1049, 485);
             this.dataGridViewScan.TabIndex = 4;
-            this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewScan_SortCompare);
+            this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompareNull);
             // 
             // extScrollBarScan
             // 
@@ -346,7 +352,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarScan.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarScan.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarScan.Name = "extScrollBarScan";
-            this.extScrollBarScan.Size = new System.Drawing.Size(16, 488);
+            this.extScrollBarScan.Size = new System.Drawing.Size(16, 485);
             this.extScrollBarScan.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarScan.SmallChange = 1;
             this.extScrollBarScan.TabIndex = 0;
@@ -363,10 +369,52 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeScan.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeScan.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
-            this.userControlStatsTimeScan.Size = new System.Drawing.Size(1065, 23);
+            this.userControlStatsTimeScan.Size = new System.Drawing.Size(1065, 26);
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
+            // 
+            // tabPageCombat
+            // 
+            this.tabPageCombat.Controls.Add(this.dataGridViewCombat);
+            this.tabPageCombat.Controls.Add(this.statsTimeUserControlCombat);
+            this.tabPageCombat.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCombat.Name = "tabPageCombat";
+            this.tabPageCombat.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCombat.Size = new System.Drawing.Size(1065, 511);
+            this.tabPageCombat.TabIndex = 7;
+            this.tabPageCombat.Text = "Combat";
+            this.tabPageCombat.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewCombat
+            // 
+            this.dataGridViewCombat.AllowUserToAddRows = false;
+            this.dataGridViewCombat.AllowUserToDeleteRows = false;
+            this.dataGridViewCombat.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewCombat.AutoSortByColumnName = false;
+            this.dataGridViewCombat.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewCombat.ColumnReorder = true;
+            this.dataGridViewCombat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewCombat.Location = new System.Drawing.Point(3, 29);
+            this.dataGridViewCombat.Name = "dataGridViewCombat";
+            this.dataGridViewCombat.PerColumnWordWrapControl = true;
+            this.dataGridViewCombat.RowHeaderMenuStrip = null;
+            this.dataGridViewCombat.RowHeadersVisible = false;
+            this.dataGridViewCombat.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewCombat.SingleRowSelect = true;
+            this.dataGridViewCombat.Size = new System.Drawing.Size(1059, 479);
+            this.dataGridViewCombat.TabIndex = 5;
+            // 
+            // statsTimeUserControlCombat
+            // 
+            this.statsTimeUserControlCombat.AutoSize = true;
+            this.statsTimeUserControlCombat.Dock = System.Windows.Forms.DockStyle.Top;
+            this.statsTimeUserControlCombat.Location = new System.Drawing.Point(3, 3);
+            this.statsTimeUserControlCombat.Name = "statsTimeUserControlCombat";
+            this.statsTimeUserControlCombat.Size = new System.Drawing.Size(1059, 26);
+            this.statsTimeUserControlCombat.TabIndex = 4;
+            this.statsTimeUserControlCombat.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
+            this.statsTimeUserControlCombat.TimeModeChanged += new System.EventHandler(this.statsTimeUserControlCombat_TimeModeChanged);
             // 
             // tabPageGameStats
             // 
@@ -582,6 +630,9 @@ namespace EDDiscovery.UserControls
             this.tabPageScan.PerformLayout();
             this.extPanelDataGridViewScrollScan.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).EndInit();
+            this.tabPageCombat.ResumeLayout(false);
+            this.tabPageCombat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).EndInit();
             this.tabPageGameStats.ResumeLayout(false);
             this.tabPageByShip.ResumeLayout(false);
             this.extPanelDataGridViewScrollByShip.ResumeLayout(false);
@@ -623,5 +674,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelRollUp extPanelRollUp;
         private ExtendedControls.ExtDateTimePicker dateTimePickerEndDate;
         private System.Windows.Forms.Label labelStart;
+        private System.Windows.Forms.TabPage tabPageCombat;
+        private BaseUtils.DataGridViewColumnControl dataGridViewCombat;
+        private StatsTimeUserControl statsTimeUserControlCombat;
     }
 }

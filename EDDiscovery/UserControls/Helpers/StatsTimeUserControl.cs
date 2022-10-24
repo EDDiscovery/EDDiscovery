@@ -26,6 +26,7 @@ namespace EDDiscovery.UserControls
             Day = 1,
             Week = 2,
             Month = 3,
+            Year = 4,
         }
 
         public event EventHandler TimeModeChanged;      // time or planet/stars changed
@@ -61,6 +62,7 @@ namespace EDDiscovery.UserControls
             comboBoxTimeMode.Items.Add("Day".T(EDTx.StatsTimeUserControl_Day));
             comboBoxTimeMode.Items.Add("Week".T(EDTx.StatsTimeUserControl_Week));
             comboBoxTimeMode.Items.Add("Month".T(EDTx.StatsTimeUserControl_Month));
+            comboBoxTimeMode.Items.Add("Year".T(EDTx.TravelHistoryFilter_Year));
             comboBoxTimeMode.SelectedIndex = 0;
         }
 
