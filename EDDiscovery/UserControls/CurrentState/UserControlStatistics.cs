@@ -585,8 +585,12 @@ namespace EDDiscovery.UserControls
 
             StatRow(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_Jumps), intervals);
             StatRow(dataGridViewCombat, "PVP Elite".T(EDTx.UserControlStats_Jumps), intervals);
+            StatRow(dataGridViewCombat, "PVP Deadly".T(EDTx.UserControlStats_Jumps), intervals);
+            StatRow(dataGridViewCombat, "PVP Dangerous".T(EDTx.UserControlStats_Jumps), intervals);
+            StatRow(dataGridViewCombat, "PVP <= Master".T(EDTx.UserControlStats_Jumps), intervals);
             StatRow(dataGridViewCombat, "Bounties".T(EDTx.UserControlStats_Jumps), intervals);
             StatRow(dataGridViewCombat, "Bounty Value".T(EDTx.UserControlStats_Jumps), intervals);
+            StatRow(dataGridViewCombat, "Thargoids".T(EDTx.UserControlStats_Jumps), intervals);
             StatRow(dataGridViewCombat, "Crimes".T(EDTx.UserControlStats_Jumps), intervals);
             StatRow(dataGridViewCombat, "Crime Cost".T(EDTx.UserControlStats_Jumps), intervals);
             StatRow(dataGridViewCombat, "Faction Kill Bonds".T(EDTx.UserControlStats_Jumps), intervals);
@@ -610,10 +614,14 @@ namespace EDDiscovery.UserControls
                 var pvpStats = currentstats.PVPKills.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
                 dataGridViewCombat.Rows[row++].Cells[col].Value = pvpStats.Count.ToString("N0");
                 dataGridViewCombat.Rows[row++].Cells[col].Value = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count().ToString("N0");
+                dataGridViewCombat.Rows[row++].Cells[col].Value = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count().ToString("N0");
+                dataGridViewCombat.Rows[row++].Cells[col].Value = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count().ToString("N0");
+                dataGridViewCombat.Rows[row++].Cells[col].Value = pvpStats.Where(x => x.CombatRank <= CombatRank.Master).Count().ToString("N0");
 
                 var bountyStats = currentstats.Bounties.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
                 dataGridViewCombat.Rows[row++].Cells[col].Value = bountyStats.Count.ToString("N0");
                 dataGridViewCombat.Rows[row++].Cells[col].Value = bountyStats.Select(x => x.TotalReward).Sum().ToString("N0");
+                dataGridViewCombat.Rows[row++].Cells[col].Value = bountyStats.Where(x => x.IsThargoid).Count().ToString("N0");
 
                 var crimesStats = currentstats.Crimes.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
                 dataGridViewCombat.Rows[row++].Cells[col].Value = crimesStats.Count.ToString("N0");
@@ -634,6 +642,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewCombat.Rows[row++].Cells[col].Value = interdicted.Where(x => !x.Submitted && x.IsPlayer).Count().ToString("N0");
                 dataGridViewCombat.Rows[row++].Cells[col].Value = interdicted.Where(x => x.Submitted && !x.IsPlayer).Count().ToString("N0");
                 dataGridViewCombat.Rows[row++].Cells[col].Value = interdicted.Where(x => !x.Submitted && !x.IsPlayer).Count().ToString("N0");
+
 
             }
 
