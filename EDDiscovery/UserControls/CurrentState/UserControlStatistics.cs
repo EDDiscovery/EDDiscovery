@@ -441,13 +441,13 @@ namespace EDDiscovery.UserControls
                 var jetconeboosts = currentstats.JetConeBoost.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
                 dataGridViewTravel.Rows[row++].Cells[col].Value = jetconeboosts.Count().ToString("N0");
 
-                var scanStats = currentstats.Scans.Where(x => x.utc >= startutc && x.utc < endutc).Distinct(new JournalStats.ScansAreForSameBody()).ToList();
+                var scanStats = currentstats.Scans.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
                 dataGridViewTravel.Rows[row++].Cells[col].Value = scanStats.Count.ToString("N0");       // scan count
 
-                var saascancomplete = currentstats.ScanComplete.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
+                var saascancomplete = currentstats.SAAScanComplete.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
                 dataGridViewTravel.Rows[row++].Cells[col].Value = saascancomplete.Count().ToString("N0");   // mapped
 
-                dataGridViewTravel.Rows[row++].Cells[col].Value = scanStats.Sum(x => (long)x.ev.EstimatedValue(x.wasdiscovered, x.wasmapped, x.mapped, x.efficientlymapped, false)).ToString("N0");
+                dataGridViewTravel.Rows[row++].Cells[col].Value = scanStats.Sum(x=>(long)x.EstimatedValue).ToString("N0");
 
                 var organicscans = currentstats.OrganicScans.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
                 dataGridViewTravel.Rows[row++].Cells[col].Value = organicscans.Sum(x => (long)(x.EstimatedValue ?? 0)).ToString("N0");
@@ -495,9 +495,9 @@ namespace EDDiscovery.UserControls
                                     SetupSummary(endtimeutc, isTravelling ? tripStartutc : DateTime.UtcNow, dataGridViewScan, dbScanSummary) :
                              SetUpDaysMonthsYear(endtimeutc, dataGridViewScan, timemode, intervals, dbScanDWM);
 
-            var scanlists = new List<EliteDangerousCore.JournalStats.ScanInfo>[intervals];
+            var scanlists = new List<JournalScan>[intervals];
             for (int ii = 0; ii < intervals; ii++)
-                scanlists[ii] = currentstats.Scans.Where(x => x.utc >= tupletimes.Item1[ii] && x.utc < tupletimes.Item2[ii]).Distinct(new JournalStats.ScansAreForSameBody()).ToList();
+                scanlists[ii] = currentstats.Scans.Values.Where(x => x.EventTimeUTC >= tupletimes.Item1[ii] && x.EventTimeUTC < tupletimes.Item2[ii]).ToList();
 
             for (int i = 1; i < dataGridViewScan.Columns.Count; i++)
                 ColumnValueAlignment(dataGridViewScan.Columns[i] as DataGridViewTextBoxColumn);
@@ -514,11 +514,11 @@ namespace EDDiscovery.UserControls
                         int num = 0;
                         for (int jj = 0; jj < scanlists[ii].Count; jj++)
                         {
-                            if (scanlists[ii][jj].starid == startype)
+                            if (scanlists[ii][jj].StarTypeID == startype && scanlists[ii][jj].IsStar)
                                 num++;
                         }
 
-                        dataGridViewScan.Rows[row].Cells[ii+1].Value = num.ToString("N0");
+                        dataGridViewScan.Rows[row].Cells[ii + 1].Value = num.ToString("N0");
                     }
 
                     row++;
@@ -536,11 +536,12 @@ namespace EDDiscovery.UserControls
                         int num = 0;
                         for (int jj = 0; jj < scanlists[ii].Count; jj++)
                         {
-                            if (scanlists[ii][jj].planetid == planettype && scanlists[ii][jj].starid == null)
+                           // System.Diagnostics.Debug.WriteLine($"Planet for {planettype} {scanlists[ii][jj].PlanetTypeID} {scanlists[ii][jj].EventTimeUTC}");
+                            if (scanlists[ii][jj].PlanetTypeID == planettype && !scanlists[ii][jj].IsStar)
                                 num++;
                         }
 
-                        dataGridViewScan.Rows[row].Cells[ii+1].Value = num.ToString("N0");
+                        dataGridViewScan.Rows[row].Cells[ii + 1].Value = num.ToString("N0");
                     }
                     row++;
                 }
@@ -761,7 +762,7 @@ namespace EDDiscovery.UserControls
             foreach (var kvp in currentstats.Ships)
             {
                 var fsd = currentstats.FSDJumps.Where(x => x.shipid == kvp.Key);
-                var scans = currentstats.Scans.Where(x => x.shipid == kvp.Key);
+                var scans = currentstats.Scans.Values.Where(x => x.ShipIDForStatsOnly == kvp.Key);
                 strarr[0] = kvp.Value.name?? "-";
                 strarr[1] = kvp.Value.ident ?? "-";
 
