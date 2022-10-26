@@ -45,7 +45,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
@@ -84,11 +83,6 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Discoveryform_OnRefreshCommanders()
-        {
-            Display();
-        }
-
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
             Display();
@@ -98,7 +92,6 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             PutSetting(dbDateSave, CurrentMonthFirstDayUTC);
-            discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 

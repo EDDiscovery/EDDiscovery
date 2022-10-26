@@ -76,7 +76,6 @@ namespace EDDiscovery.UserControls
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
-            discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
         }
@@ -98,7 +97,6 @@ namespace EDDiscovery.UserControls
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
 
-            discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
         #endregion
@@ -106,11 +104,6 @@ namespace EDDiscovery.UserControls
         #region display
 
         public override void InitialDisplay()
-        {
-            Display();
-        }
-
-        private void Discoveryform_OnRefreshCommanders()
         {
             Display();
         }
