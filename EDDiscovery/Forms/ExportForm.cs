@@ -21,7 +21,7 @@ namespace EDDiscovery.Forms
 {
     public partial class ExportForm : ExtendedControls.DraggableForm
     {
-        public int SelectedIndex { get; private set; }
+        public int SelectedIndex { get; private set; }      // item selected
         public DateTime StartTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerFrom.Value); } }
         public DateTime EndTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerTo.Value); } }
         public bool Comma { get { return radioButtonComma.Checked; } }
@@ -45,11 +45,17 @@ namespace EDDiscovery.Forms
         { 
             DisableDateTime = 1,
             DisableCVS = 2,
-            DisableOpenInclude = 4,
-            DTCVSOI = 7,
-            DTOI = 5,
+            DisableOpenInclude = 4,     // the open and include options are shown
+            DTCVSOI = 7,                // disable datetime, cvs, open/include
+            DTOI = 5,                   // disable open/include and date time
             None = 0,
         }
+
+        // Init, export or import
+        // selectionlist: Is the text to present in the drop down. frm.SelectedIndex tells you what they picked
+        // outputext : per selection, the dialog formatted list of extensions ie. "JSON|*.json|All|*.*"
+        // showflags : options per selection, see show flags above
+        // suggestedfilenames : name given per selection as the suggested name
 
         public void Init(bool import, string[] selectionlist, string[] outputext = null, ShowFlags[] showflags = null, string[] suggestedfilenames= null)
         {

@@ -511,7 +511,7 @@ namespace EDDiscovery.UserControls
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Debug.WriteLine("Scan excel " + ex);
+                            System.Diagnostics.Debug.WriteLine("Scan json " + ex);
                             ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
