@@ -27,6 +27,7 @@ namespace EDDiscovery.UserControls
             Week = 2,
             Month = 3,
             Year = 4,
+            NotSet = 999,
         }
 
         public event EventHandler TimeModeChanged;      // time or planet/stars changed

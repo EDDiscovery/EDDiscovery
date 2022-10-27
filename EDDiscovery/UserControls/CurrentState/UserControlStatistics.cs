@@ -16,12 +16,12 @@
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -48,11 +48,17 @@ namespace EDDiscovery.UserControls
 
         private bool endchecked, startchecked;
 
-        private EliteDangerousCore.JournalStatisticsComputer statscomputer = new JournalStatisticsComputer();
-        private EliteDangerousCore.JournalStats currentstats;
+        private JournalStatisticsComputer statscomputer = new JournalStatisticsComputer();
+        private JournalStats currentstats;
+        private JournalStats pendingstats;
+        private bool redisplay = false;
+
+        private Timer timerupdate;
+
+        // because of the async awaits, we are in effect multithreaded, best to have a concurrent queue
+        private ConcurrentQueue<JournalEntry> entriesqueued = new ConcurrentQueue<JournalEntry>();    
 
         private Chart mostVisitedChart { get; set; }
-        Queue<JournalEntry> entriesqueued = new Queue<JournalEntry>();     // we queue into here new entries, and dequeue in update.
 
         #region Init
 
@@ -117,18 +123,24 @@ namespace EDDiscovery.UserControls
             dateTimePickerEndDate.ValueChanged += DateTimePicker_ValueChangedEnd;
 
             labelStatus.Text = "";
+
+            timerupdate = new System.Windows.Forms.Timer();
+            timerupdate.Interval = 2000;
+            timerupdate.Tick += Timerupdate_Tick;
         }
 
         public override void InitialDisplay()
         {
             if ( discoveryform.history.Count>0 )        // if we loaded a history, this is a new panel, so work
-                Start();
+                KickComputer();
+
+            timerupdate.Start();
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             VerifyDates();      // date range may have changed
-            Start();
+            KickComputer();
         }
 
         public override void Closing()
@@ -176,12 +188,11 @@ namespace EDDiscovery.UserControls
             base.OnLayout(e);
         }
 
-        private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)     // tab change.
+        private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)     // tab change, UI will see tab has changed
         {
             PutSetting(dbSelectedTabSave, tabControlCustomStats.SelectedIndex);
-            Display();
+            redisplay = true;
         }
-
 
         bool updateprogramatically = false;
         private void VerifyDates()
@@ -201,7 +212,7 @@ namespace EDDiscovery.UserControls
             if (!updateprogramatically)
             {
                 if (startchecked != dateTimePickerStartDate.Checked || dateTimePickerStartDate.Checked)     // if check changed, or date changed and its checked
-                    Start();
+                    KickComputer();
                 startchecked = dateTimePickerStartDate.Checked;
                 PutSetting(dbStartDate, dateTimePickerStartDate.Value);
                 PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
@@ -213,7 +224,7 @@ namespace EDDiscovery.UserControls
             if (!updateprogramatically)
             {
                 if (endchecked != dateTimePickerEndDate.Checked || dateTimePickerEndDate.Checked)
-                    Start();
+                    KickComputer();
                 endchecked = dateTimePickerEndDate.Checked;
                 PutSetting(dbEndDate, dateTimePickerEndDate.Value);
                 PutSetting(dbEndDateOn, dateTimePickerEndDate.Checked);
@@ -224,13 +235,16 @@ namespace EDDiscovery.UserControls
 
         #region Stats Computation
 
-        private void Start()
+
+        // Computation of stats may have changed
+        private void KickComputer()
         {
             statscomputer.Stop();
 
             if (EDCommander.CurrentCmdrID >= 0)  // real commander
             {
-                entriesqueued.Clear();      // clear the queue, any new entries will just be stored into entriesqueued and not displayed until the end
+                while (entriesqueued.TryDequeue(out JournalEntry unused))       // empty queue
+                    ;
 
                 statscomputer.Start(EDCommander.CurrentCmdrID,
                                                 dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?),
@@ -247,19 +261,20 @@ namespace EDDiscovery.UserControls
         private void EndComputation(JournalStats rs)
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            currentstats = rs;
+            pendingstats = rs;              // the UI tick will see we have new pending stats and apply them..
             labelStatus.Text = "";
-            Display();
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)
         {
-            // ignore if past the end of of the current sel range
-            if (!dateTimePickerEndDate.Checked || he.journalEntry.EventTimeUTC <= EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()))
+            if (JournalStatisticsComputer.IsJournalEntryForStats(he.journalEntry))     // only if its got something to do with stats
             {
-                entriesqueued.Enqueue(he.journalEntry);
-                if (!statscomputer.Running)                           // Running is true between foreground thread OnRefreshCommanders and foreground EndComputation, so no race condition
-                    Display();
+                bool withintime = !dateTimePickerEndDate.Checked || he.journalEntry.EventTimeUTC <= EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay());
+
+                if (withintime)
+                {
+                    entriesqueued.Enqueue(he.journalEntry);     // queue, the UI tick will see we have new events and add
+                }
             }
         }
 
@@ -267,65 +282,107 @@ namespace EDDiscovery.UserControls
 
         #region Update
 
-        private void Display()
+        private void Timerupdate_Tick(object sender, EventArgs e)
         {
-            if (currentstats == null)       // double check
-                return;
+            bool newstats = pendingstats != null;                        // this means kick computation happened..
+            bool enqueued = entriesqueued.Count > 0;                    // queued entries
 
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display", true)} Display starts");
-
-            while (entriesqueued.Count > 0)
+            if ( newstats || enqueued || redisplay)                      // redisplay is due to tab change or time mode change
             {
-                currentstats.Process(entriesqueued.Dequeue());            // process any queued entries
+                timerupdate.Stop();     // in case we take a long time, stop the timer, so we don't reenter
+
+                //System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display", true)} Stats display starts {tabControlCustomStats.SelectedIndex}");
+
+                if ( newstats )                                         // new kick computation
+                {
+                    currentstats = pendingstats;                        // swap stats structure
+                    pendingstats = null;
+                }
+
+                if (currentstats != null)                               // if we have stats..
+                {
+                    while (entriesqueued.TryDequeue(out JournalEntry result))       // if any entries are queued, process them off
+                    {
+                        currentstats.Process(result);
+                    }
+
+                    if ( newstats || enqueued )     // if we did newstate, or enqueued, all of the below can now be out of date
+                    {                               // we may not be currently displaying them, but we will need to refresh if we select them again
+                        System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Stats clear flags due to ns{newstats} eq{enqueued} ");
+                        lasttraveltimemode = lastscantimemode = lastcombattimemode = StatsTimeUserControl.TimeModeType.NotSet;
+                        laststatsgeneraldisplayed = laststatsbyshipdisplayed = false;
+                    }
+
+                    DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) :
+                                                                            EDDConfig.Instance.SelectedEndOfTodayUTC();
+
+                    if (tabControlCustomStats.SelectedTab == tabPageGeneral)
+                    {
+                        if ( laststatsgeneraldisplayed == false)
+                            StatsGeneral(currentstats, endtimeutc);
+                    }
+                    else if (tabControlCustomStats.SelectedTab == tabPageTravel)
+                    {
+                        if ( lasttraveltimemode != userControlStatsTimeTravel.TimeMode)    
+                            StatsTravel(currentstats, endtimeutc);        
+                    }
+                    else if (tabControlCustomStats.SelectedTab == tabPageScan)
+                    {
+                        if (lastscantimemode != userControlStatsTimeScan.TimeMode)
+                            StatsScan(currentstats, endtimeutc);
+                    }
+                    else if (tabControlCustomStats.SelectedTab == tabPageCombat)
+                    {
+                        if (lastcombattimemode != statsTimeUserControlCombat.TimeMode)
+                            StatsCombat(currentstats, endtimeutc);
+                    }
+                    else if (tabControlCustomStats.SelectedTab == tabPageGameStats)
+                    {
+                        if (lastgamestatsdisplayed != currentstats.laststats)       // if different game stats structure (will apply on newstats or enqueued)
+                            StatsGame(currentstats);
+                    }
+                    else if (tabControlCustomStats.SelectedTab == tabPageByShip)
+                    {
+                        if ( laststatsbyshipdisplayed == false)
+                            StatsByShip(currentstats);
+                    }
+                }
+
+                redisplay = false;
+
+                //System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display")} Stats display ends");
+
+                timerupdate.Start();
             }
 
-            // the picker is in selected time mode, get the end of the day of the picker and switch to UTC.
-            // or if its not on, get the selected mode end of today, and switch to UTC.
-
-            DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : 
-                                                                    EDDConfig.Instance.SelectedEndOfTodayUTC();
-
-            if (tabControlCustomStats.SelectedTab == tabPageGeneral)
-                StatsGeneral(endtimeutc);
-            else if (tabControlCustomStats.SelectedTab == tabPageTravel)
-                StatsTravel(endtimeutc);
-            else if (tabControlCustomStats.SelectedTab == tabPageScan)
-                StatsScan(endtimeutc);
-            else if (tabControlCustomStats.SelectedTab == tabPageGameStats)
-                StatsGame();
-            else if (tabControlCustomStats.SelectedTab == tabPageByShip)
-                StatsByShip();
-            else if (tabControlCustomStats.SelectedTab == tabPageCombat)
-                StatsCombat(endtimeutc);
-
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display")} Display ends");
         }
 
         #endregion
 
         #region Stats General **************************************************************************************************************
 
-        private void StatsGeneral(DateTime endtimeutc)
+        private bool laststatsgeneraldisplayed = false;
+        private void StatsGeneral(JournalStats currentstat, DateTime endtimeutc)
         {
-            DGVGeneral("Total No of jumps".T(EDTx.UserControlStats_TotalNoofjumps), currentstats.fsdcarrierjumps.ToString());
+            DGVGeneral("Total No of jumps".T(EDTx.UserControlStats_TotalNoofjumps), currentstat.fsdcarrierjumps.ToString());
 
-            if (currentstats.FSDJumps.Count > 0)        // these will be null unless there are jumps
+            if (currentstat.FSDJumps.Count > 0)        // these will be null unless there are jumps
             {
-                DGVGeneral("FSD jumps".T(EDTx.UserControlStats_FSDjumps), currentstats.FSDJumps.Count.ToString());
+                DGVGeneral("FSD jumps".T(EDTx.UserControlStats_FSDjumps), currentstat.FSDJumps.Count.ToString());
 
                 DGVGeneral("FSD Jump History".T(EDTx.UserControlStats_JumpHistory),
-                                        "24 Hours: ".T(EDTx.UserControlStats_24hc) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
-                                        ", One Week: ".T(EDTx.UserControlStats_OneWeek) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
-                                        ", 30 Days: ".T(EDTx.UserControlStats_30Days) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
-                                        ", One Year: ".T(EDTx.UserControlStats_OneYear) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
+                                        "24 Hours: ".T(EDTx.UserControlStats_24hc) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
+                                        ", One Week: ".T(EDTx.UserControlStats_OneWeek) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
+                                        ", 30 Days: ".T(EDTx.UserControlStats_30Days) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
+                                        ", One Year: ".T(EDTx.UserControlStats_OneYear) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
                                         );
 
-                DGVGeneral("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(currentstats.MostNorth));
-                DGVGeneral("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(currentstats.MostSouth));
-                DGVGeneral("Most East".T(EDTx.UserControlStats_MostEast), GetSystemDataString(currentstats.MostEast));
-                DGVGeneral("Most West".T(EDTx.UserControlStats_MostWest), GetSystemDataString(currentstats.MostWest));
-                DGVGeneral("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(currentstats.MostUp));
-                DGVGeneral("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(currentstats.MostDown));
+                DGVGeneral("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(currentstat.MostNorth));
+                DGVGeneral("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(currentstat.MostSouth));
+                DGVGeneral("Most East".T(EDTx.UserControlStats_MostEast), GetSystemDataString(currentstat.MostEast));
+                DGVGeneral("Most West".T(EDTx.UserControlStats_MostWest), GetSystemDataString(currentstat.MostWest));
+                DGVGeneral("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(currentstat.MostUp));
+                DGVGeneral("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(currentstat.MostDown));
 
                 if (mostVisitedChart != null)        // chart exists
                 {
@@ -351,7 +408,7 @@ namespace EDDiscovery.UserControls
                     mostVisitedChart.Series[0].Color = GridC;
                     mostVisitedChart.BorderlineColor = Color.Transparent;
 
-                    var fsdbodies = currentstats.FSDJumps.GroupBy(x => x.bodyname).ToDictionary(x => x.Key, y => y.Count()).ToList();       // get KVP list of distinct bodies
+                    var fsdbodies = currentstat.FSDJumps.GroupBy(x => x.bodyname).ToDictionary(x => x.Key, y => y.Count()).ToList();       // get KVP list of distinct bodies
                     fsdbodies.Sort(delegate (KeyValuePair<string, int> left, KeyValuePair<string, int> right) { return right.Value.CompareTo(left.Value); }); // and sort highest
 
                     int i = 0;
@@ -370,7 +427,9 @@ namespace EDDiscovery.UserControls
                     mostVisitedChart.Visible = false;
             }
 
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} General tab displayed");
 
+            laststatsgeneraldisplayed = true;
             PerformLayout();
         }
 
@@ -392,28 +451,32 @@ namespace EDDiscovery.UserControls
 
 
         #region Travel Panel *********************************************************************************************************************
-        
-        async void StatsTravel(DateTime endtimeutc)
+
+        private StatsTimeUserControl.TimeModeType lasttraveltimemode = StatsTimeUserControl.TimeModeType.NotSet;
+
+        async void StatsTravel(JournalStats currentstat, DateTime endtimeutc)
         {
+            var timemode = userControlStatsTimeTravel.TimeMode;
+
             userControlStatsTimeTravel.Enabled = false;
             int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 99;
             SortOrder sortorder = dataGridViewTravel.SortOrder;
 
-            var timemode = userControlStatsTimeTravel.TimeMode;
-
             int intervals = timemode == StatsTimeUserControl.TimeModeType.Summary ? 6 : timemode == StatsTimeUserControl.TimeModeType.Year ? Math.Min(12, DateTime.Now.Year - EDDConfig.GameLaunchTimeUTC().Year + 1) : 12;
+
+            // plainly wrong with dates...
 
             var isTravelling = discoveryform.history.IsTravellingUTC(out var tripStartutc);
             if (isTravelling && tripStartutc > endtimeutc)
                 isTravelling = false;
 
             var tupletimes = timemode == StatsTimeUserControl.TimeModeType.Summary ?
-                                    SetupSummary(endtimeutc, isTravelling ? tripStartutc : DateTime.UtcNow, dataGridViewTravel, dbTravelSummary) :
-                             SetUpDaysMonthsYear(endtimeutc, dataGridViewTravel, timemode, intervals, dbTravelDWM);
+                                    SetupSummary(endtimeutc, isTravelling ? tripStartutc : DateTime.UtcNow, currentstat.lastdockedutc, dataGridViewTravel, dbTravelSummary) :
+                                    SetUpDaysMonthsYear(endtimeutc, dataGridViewTravel, timemode, intervals, dbTravelDWM);
 
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Travel stats interval begin");
-            var res = await ComputeTravel(currentstats, tupletimes);
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Travel stats interval end");
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Travel stats interval begin {timemode}");
+            var res = await ComputeTravel(currentstat, tupletimes);
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Travel stats interval end {timemode}");
             if (IsClosed)
                 return;
 
@@ -439,8 +502,11 @@ namespace EDDiscovery.UserControls
             }
 
             userControlStatsTimeTravel.Enabled = true;
+
+            lasttraveltimemode = timemode;
         }
-        private static System.Threading.Tasks.Task<string[][]> ComputeTravel(JournalStats currentstats, Tuple<DateTime[], DateTime[]> tupletimes)
+
+        private static System.Threading.Tasks.Task<string[][]> ComputeTravel(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
@@ -455,11 +521,11 @@ namespace EDDiscovery.UserControls
                     var startutc = tupletimes.Item1[ii];
                     var endutc = tupletimes.Item2[ii];
 
-                    var fsdStats = currentstats.FSDJumps.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
-                    var jetconeboosts = currentstats.JetConeBoost.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
-                    var scanStats = currentstats.Scans.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var saascancomplete = currentstats.SAAScanComplete.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var organicscans = currentstats.OrganicScans.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var fsdStats = currentstat.FSDJumps.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
+                    var jetconeboosts = currentstat.JetConeBoost.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
+                    var scanStats = currentstat.Scans.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var saascancomplete = currentstat.SAAScanComplete.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var organicscans = currentstat.OrganicScans.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
 
                     int row = 0;
                     res[row++][ii] = fsdStats.Count.ToString("N0");
@@ -485,14 +551,16 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows.Clear();        // reset all
             DGVSaveColumnLayout(dataGridViewTravel, dataGridViewTravel.Columns.Count <= 8 ? dbTravelSummary : dbTravelDWM);
             dataGridViewTravel.Columns.Clear();
-            Display();
+            redisplay = true;
         }
 
         #endregion
 
         #region SCAN  ****************************************************************************************************************
 
-        async void StatsScan(DateTime endtimeutc )
+        private StatsTimeUserControl.TimeModeType lastscantimemode = StatsTimeUserControl.TimeModeType.NotSet;
+
+        async void StatsScan(JournalStats currentstat, DateTime endtimeutc )
         {
             userControlStatsTimeScan.Enabled = false;
             int sortcol = dataGridViewScan.SortedColumn?.Index ?? 0;
@@ -509,12 +577,12 @@ namespace EDDiscovery.UserControls
                 isTravelling = false;
 
             var tupletimes = timemode == StatsTimeUserControl.TimeModeType.Summary ?
-                                    SetupSummary(endtimeutc, isTravelling ? tripStartutc : DateTime.UtcNow, dataGridViewScan, dbScanSummary) :
+                                    SetupSummary(endtimeutc, isTravelling ? tripStartutc : DateTime.UtcNow, currentstat.lastdockedutc, dataGridViewScan, dbScanSummary) :
                              SetUpDaysMonthsYear(endtimeutc, dataGridViewScan, timemode, intervals, dbScanDWM);
 
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Scan stats interval begin");
-            var res = await ComputeScans(currentstats, tupletimes, userControlStatsTimeScan.StarMode);
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Scan stats interval end");
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Scan stats interval begin {timemode}");
+            var res = await ComputeScans(currentstat, tupletimes, userControlStatsTimeScan.StarMode);
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Scan stats interval end {timemode}");
             if (IsClosed)
                 return;
 
@@ -546,9 +614,10 @@ namespace EDDiscovery.UserControls
             }
 
             userControlStatsTimeScan.Enabled = true;
+            lastscantimemode = timemode;
         }
 
-        private static System.Threading.Tasks.Task<string[][]> ComputeScans(JournalStats currentstats, Tuple<DateTime[], DateTime[]> tupletimes, bool starmode)
+        private static System.Threading.Tasks.Task<string[][]> ComputeScans(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes, bool starmode)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
@@ -557,7 +626,7 @@ namespace EDDiscovery.UserControls
 
                 var scanlists = new List<JournalScan>[intervals];
                 for (int ii = 0; ii < intervals; ii++)
-                    scanlists[ii] = currentstats.Scans.Values.Where(x => x.EventTimeUTC >= tupletimes.Item1[ii] && x.EventTimeUTC < tupletimes.Item2[ii]).ToList();
+                    scanlists[ii] = currentstat.Scans.Values.Where(x => x.EventTimeUTC >= tupletimes.Item1[ii] && x.EventTimeUTC < tupletimes.Item2[ii]).ToList();
 
                 string[][] res = new string[results][];
                 for (var i = 0; i < results; i++)
@@ -615,14 +684,15 @@ namespace EDDiscovery.UserControls
             dataGridViewScan.Rows.Clear();        // reset all
             DGVSaveColumnLayout(dataGridViewScan, dataGridViewScan.Columns.Count <= 8 ? dbScanSummary : dbScanDWM);
             dataGridViewScan.Columns.Clear();
-            Display();
+            redisplay = true;
         }
 
         #endregion
 
         #region Combat  ****************************************************************************************************************************
 
-        async void StatsCombat(DateTime endtimeutc)
+        private StatsTimeUserControl.TimeModeType lastcombattimemode = StatsTimeUserControl.TimeModeType.NotSet;
+        async void StatsCombat(JournalStats currentstat, DateTime endtimeutc)
         {
             statsTimeUserControlCombat.Enabled = false;
 
@@ -638,12 +708,12 @@ namespace EDDiscovery.UserControls
                 isTravelling = false;
 
             var tupletimes = timemode == StatsTimeUserControl.TimeModeType.Summary ?
-                                    SetupSummary(endtimeutc, isTravelling ? tripStartutc : DateTime.UtcNow, dataGridViewCombat, dbCombatSummary) :
+                                    SetupSummary(endtimeutc, isTravelling ? tripStartutc : DateTime.UtcNow, currentstat.lastdockedutc, dataGridViewCombat, dbCombatSummary) :
                              SetUpDaysMonthsYear(endtimeutc, dataGridViewCombat, timemode, intervals, dbCombatDWM);
 
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Combat stats interval begin");
-            var res = await ComputeCombat(currentstats, tupletimes);
-            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Combat stats interval end");
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Combat stats interval begin {timemode}");
+            var res = await ComputeCombat(currentstat, tupletimes);
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Combat stats interval end {timemode}");
             if (IsClosed)
                 return;
 
@@ -676,9 +746,10 @@ namespace EDDiscovery.UserControls
             }
 
             statsTimeUserControlCombat.Enabled = true;
+            lastcombattimemode = timemode;
         }
 
-        private static System.Threading.Tasks.Task<string[][]> ComputeCombat(JournalStats currentstats, Tuple<DateTime[], DateTime[]> tupletimes)
+        private static System.Threading.Tasks.Task<string[][]> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
@@ -694,12 +765,12 @@ namespace EDDiscovery.UserControls
                     var startutc = tupletimes.Item1[ii];
                     var endutc = tupletimes.Item2[ii];
 
-                    var pvpStats = currentstats.PVPKills.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var bountyStats = currentstats.Bounties.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var crimesStats = currentstats.Crimes.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var sfactionkillbonds = currentstats.FactionKillBonds.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var interdictions = currentstats.Interdiction.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var interdicted = currentstats.Interdicted.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var pvpStats = currentstat.PVPKills.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var bountyStats = currentstat.Bounties.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var crimesStats = currentstat.Crimes.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var sfactionkillbonds = currentstat.FactionKillBonds.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var interdictions = currentstat.Interdiction.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
+                    var interdicted = currentstat.Interdicted.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
 
                     int row = 0;
                     res[row++][ii] = pvpStats.Count.ToString("N0");
@@ -740,14 +811,17 @@ namespace EDDiscovery.UserControls
             dataGridViewCombat.Rows.Clear();        // reset all
             DGVSaveColumnLayout(dataGridViewCombat, dataGridViewTravel.Columns.Count <= 8 ? dbCombatSummary : dbCombatDWM);
             dataGridViewCombat.Columns.Clear();
-            Display();
+            redisplay = true;
         }
 
         #endregion
 
 
         #region STATS IN GAME *************************************************************************************************************************
-        void StatsGame()
+
+        private JournalStatistics lastgamestatsdisplayed = null;
+
+        void StatsGame(JournalStats currentstat)
         {
             string collapseExpand = GameStatTreeState();
 
@@ -757,11 +831,11 @@ namespace EDDiscovery.UserControls
             if (collapseExpand.Length < 16)
                 collapseExpand += new string('Y', 16);
 
-            EliteDangerousCore.JournalEvents.JournalStatistics stats = currentstats.laststats;
+            JournalStatistics stats = currentstat.laststats;
 
             if (stats != null) // may not have one
             {
-                AddTreeList("N1", "@", new string[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(currentstats.laststats.EventTimeUTC).ToString() }, collapseExpand[0]);
+                AddTreeList("N1", "@", new string[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(stats.EventTimeUTC).ToString() }, collapseExpand[0]);
 
                 AddTreeList("N2", "Bank Account".T(EDTx.UserControlStats_BankAccount), stats.BankAccount.Format("").Split(Environment.NewLine),collapseExpand[1]);
                 AddTreeList("N3", "Combat".T(EDTx.UserControlStats_Combat), stats.Combat.Format("").Split(Environment.NewLine), collapseExpand[2]);
@@ -785,6 +859,9 @@ namespace EDDiscovery.UserControls
             }
             else
                 treeViewStats.Nodes.Clear();
+
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Game Stats displayed");
+            lastgamestatsdisplayed = stats;
         }
 
         // idea is to populate the tree, then next time, just replace the text of the children.
@@ -828,7 +905,8 @@ namespace EDDiscovery.UserControls
 
         #region STATS_BY_SHIP ****************************************************************************************************************************
 
-        void StatsByShip()
+        private bool laststatsbyshipdisplayed = false;
+        void StatsByShip(JournalStats currentstat)
         {
             int sortcol = dataGridViewByShip.SortedColumn?.Index ?? 0;
             SortOrder sortorder = dataGridViewByShip.SortOrder;
@@ -849,10 +927,10 @@ namespace EDDiscovery.UserControls
 
             dataGridViewByShip.Rows.Clear();
 
-            foreach (var kvp in currentstats.Ships)
+            foreach (var kvp in currentstat.Ships)
             {
-                var fsd = currentstats.FSDJumps.Where(x => x.shipid == kvp.Key);
-                var scans = currentstats.Scans.Values.Where(x => x.ShipIDForStatsOnly == kvp.Key);
+                var fsd = currentstat.FSDJumps.Where(x => x.shipid == kvp.Key);
+                var scans = currentstat.Scans.Values.Where(x => x.ShipIDForStatsOnly == kvp.Key);
                 strarr[0] = kvp.Value.name?? "-";
                 strarr[1] = kvp.Value.ident ?? "-";
 
@@ -868,6 +946,9 @@ namespace EDDiscovery.UserControls
                 dataGridViewByShip.Sort(dataGridViewByShip.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewByShip.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
+
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Stats by ship displayed");
+            laststatsbyshipdisplayed = true;
         }
 
         private void dataGridViewByShip_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -915,15 +996,15 @@ namespace EDDiscovery.UserControls
         }
 
         // set up a time date array with the limit times in utc, and set up the grid view columns
-        private Tuple<DateTime[],DateTime[]> SetupSummary(DateTime endtimenowutc, DateTime triptime, DataGridView view, string dbnameforlayout)
+        private Tuple<DateTime[],DateTime[]> SetupSummary(DateTime endtimenowutc, DateTime triptimeutc, DateTime lastdockedutc, DataGridView view, string dbnameforlayout)
         {
             DateTime[] starttimeutc = new DateTime[6];
             DateTime[] endtimeutc = new DateTime[6];
             starttimeutc[0] = endtimenowutc.AddDays(-1).AddSeconds(1);
             starttimeutc[1] = endtimenowutc.AddDays(-7).AddSeconds(1);
             starttimeutc[2] = endtimenowutc.AddMonths(-1).AddSeconds(1);
-            starttimeutc[3] = currentstats.lastdockedutc;
-            starttimeutc[4] = triptime;
+            starttimeutc[3] = lastdockedutc;
+            starttimeutc[4] = triptimeutc;
             starttimeutc[5] = EDDConfig.GameLaunchTimeUTC();
             endtimeutc[0] = endtimeutc[1] = endtimeutc[2] = endtimeutc[3] = endtimeutc[4] = endtimeutc[5] = endtimenowutc;
 
@@ -933,7 +1014,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < starttimeutc.Length; i++)
                     view.Columns.Add(new DataGridViewTextBoxColumn());          // day
 
-                DGVLoadColumnLayout(view, dbnameforlayout);
+                DGVLoadColumnLayout(view, dbnameforlayout);     // reload layout
             }
 
             view.Columns[1].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimeutc[0]).ToShortDateString();
