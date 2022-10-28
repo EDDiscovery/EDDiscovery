@@ -287,11 +287,15 @@ namespace EDDiscovery.UserControls
             bool newstats = pendingstats != null;                        // this means kick computation happened..
             bool enqueued = entriesqueued.Count > 0;                    // queued entries
 
+         //   System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Tick {newstats} {enqueued} {redisplay}");
+
             if ( newstats || enqueued || redisplay)                      // redisplay is due to tab change or time mode change
             {
                 timerupdate.Stop();     // in case we take a long time, stop the timer, so we don't reenter
 
-                //System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display", true)} Stats display starts {tabControlCustomStats.SelectedIndex}");
+                bool turnontimer = true; //default is back on
+
+                System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display", true)} Stats display starts {tabControlCustomStats.SelectedIndex}");
 
                 if ( newstats )                                         // new kick computation
                 {
@@ -316,6 +320,7 @@ namespace EDDiscovery.UserControls
                     DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) :
                                                                             EDDConfig.Instance.SelectedEndOfTodayUTC();
 
+
                     if (tabControlCustomStats.SelectedTab == tabPageGeneral)
                     {
                         if ( laststatsgeneraldisplayed == false)
@@ -323,18 +328,27 @@ namespace EDDiscovery.UserControls
                     }
                     else if (tabControlCustomStats.SelectedTab == tabPageTravel)
                     {
-                        if ( lasttraveltimemode != userControlStatsTimeTravel.TimeMode)    
-                            StatsTravel(currentstats, endtimeutc);        
+                        if ( lasttraveltimemode != userControlStatsTimeTravel.TimeMode)
+                        {
+                            turnontimer = false;
+                            StatsTravel(currentstats, endtimeutc);
+                        }
                     }
                     else if (tabControlCustomStats.SelectedTab == tabPageScan)
                     {
                         if (lastscantimemode != userControlStatsTimeScan.TimeMode)
+                        {
+                            turnontimer = false;
                             StatsScan(currentstats, endtimeutc);
+                        }
                     }
                     else if (tabControlCustomStats.SelectedTab == tabPageCombat)
                     {
                         if (lastcombattimemode != statsTimeUserControlCombat.TimeMode)
+                        {
+                            turnontimer = false;
                             StatsCombat(currentstats, endtimeutc);
+                        }
                     }
                     else if (tabControlCustomStats.SelectedTab == tabPageGameStats)
                     {
@@ -350,9 +364,10 @@ namespace EDDiscovery.UserControls
 
                 redisplay = false;
 
-                //System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display")} Stats display ends");
+                System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display")} Stats display ends");
 
-                timerupdate.Start();
+                if ( turnontimer )
+                    timerupdate.Start();                           
             }
 
         }
@@ -504,6 +519,9 @@ namespace EDDiscovery.UserControls
             userControlStatsTimeTravel.Enabled = true;
 
             lasttraveltimemode = timemode;
+
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Turn back on timer after travel");
+            timerupdate.Start();                                // we did an await above, we now turn the timer back on after the update
         }
 
         private static System.Threading.Tasks.Task<string[][]> ComputeTravel(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
@@ -615,6 +633,9 @@ namespace EDDiscovery.UserControls
 
             userControlStatsTimeScan.Enabled = true;
             lastscantimemode = timemode;
+
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Stats Turn back on timer after scan");
+            timerupdate.Start();                                // we did an await above, we now turn the timer back on after the update
         }
 
         private static System.Threading.Tasks.Task<string[][]> ComputeScans(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes, bool starmode)
@@ -747,6 +768,9 @@ namespace EDDiscovery.UserControls
 
             statsTimeUserControlCombat.Enabled = true;
             lastcombattimemode = timemode;
+
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Stats Turn back on timer after combat");
+            timerupdate.Start();                                // we did an await above, we now turn the timer back on after the update
         }
 
         private static System.Threading.Tasks.Task<string[][]> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
