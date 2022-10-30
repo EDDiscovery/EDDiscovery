@@ -527,6 +527,7 @@ namespace EDDiscovery
         UserControlStats_tabControlCustomStats_tabPageGameStats, // Control 'In Game'
         UserControlStats_tabControlCustomStats_tabPageByShip, // Control 'By Ship'
         UserControlStats_tabControlCustomStats_tabPageCombat,
+        UserControlStats_tabControlCustomStats_tabPageLedger,
         UserControlStats_labelStart, // Control 'Start'
         UserControlStats_labelEndDate, // Control 'To'
         UserControlStats_TotalNoofjumps, // Total No of jumps:
@@ -556,6 +557,7 @@ namespace EDDiscovery
         UserControlStats_OrganicScans, // Scan value
         UserControlStats_Lastdock, // Last dock
         UserControlStats_Trip, // Trip
+        UserControlStats_NoTrip, // No Trip
         UserControlStats_All, // All
         UserControlStats_Type, // Type
         UserControlStats_BankAccount, // Bank Account
@@ -582,6 +584,9 @@ namespace EDDiscovery
         UserControlStats_GoodsBought, // Goods Bought
         UserControlStats_GoodsSold, // Goods Sold
         UserControlStats_GoodsProfit, // Goods Sold
+
+        UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnLedgerDate,
+        UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnNumericCredits,
 
         UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, // ToolTip 'Display incomplete scans'
         UserControlOrganics_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
