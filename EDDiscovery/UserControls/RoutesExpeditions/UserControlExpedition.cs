@@ -486,7 +486,7 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerStartDate.Checked)
             {
-                route.StartDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerStartDate.Value.Date);
+                route.StartDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.Date);
                 if (dateTimePickerStartTime.Checked)
                     route.StartDateUTC += dateTimePickerStartTime.Value.TimeOfDay;
             }
@@ -497,7 +497,7 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerEndDate.Checked)
             {
-                route.EndDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value.Date);
+                route.EndDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.Date);
                 route.EndDateUTC += dateTimePickerEndTime.Checked ? dateTimePickerEndTime.Value.TimeOfDay : new TimeSpan(23, 59, 59);
             }
             else
@@ -735,7 +735,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < navroutes.Count; i++)
                 {
                     var jroute = navroutes[i].journalEntry as JournalNavRoute;
-                    navroutefilter.AddStandardOption(i.ToStringInvariant(), navroutes[i].EventTimeUTC.ToLocalTime().ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
+                    navroutefilter.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(navroutes[i].EventTimeUTC).ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
                 }
 
                 navroutefilter.SaveSettings = (s, o) =>

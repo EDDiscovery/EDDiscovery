@@ -141,6 +141,7 @@ namespace EDDiscovery
 
         public DateTime ConvertTimeToSelectedFromUTC(DateTime t)        // from UTC->Display format
         {
+            System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Utc);
             if (displayTimeFormat == 1)     // UTC
             {
                 if (!DateTimeInRangeForGame(t))
@@ -149,7 +150,7 @@ namespace EDDiscovery
             }
             else if (displayTimeFormat == 2)    // Game time
             {
-                t = t.AddYears(1286);  
+                t = t.AddYears(1286);
                 if (!DateTimeInRangeForGame(t))
                     t = DateTime.UtcNow.AddYears(1286);
                 return t;
@@ -163,12 +164,21 @@ namespace EDDiscovery
             }
         }
 
+        public static DateTime GameLaunchTimeUTC()
+        {
+            return new DateTime(2014, 12, 14, 0, 0, 0, DateTimeKind.Utc);
+        }
+        public static DateTime GameEndTimeUTC()     // only an estimate! used when the code needs an end date with UTC.  DateTime.MinValue/MaxValue is not kinded.
+        {
+            return new DateTime(2999, 12, 14, 23, 59, 59, DateTimeKind.Utc);
+        }
+
         public bool DateTimeInRangeForGame(DateTime t)
         {
             if (displayTimeFormat == 2)
-                return t.Year >= 3300 && t.Year <= 3399;
+                return t.Year >= 3300 && t.Year <= 4300;
             else
-                return t.Year >= 2014 && t.Year <= 2114;
+                return t.Year >= 2014 && t.Year <= 2999;
         }
 
         public DateTime EnsureTimeInRangeForGame(DateTime t)
@@ -178,22 +188,50 @@ namespace EDDiscovery
             return t;
         }
 
-        public DateTime ConvertTimeToSelectedNoKind(DateTime t)         // from a date time (no kind) -> Display format
+        public DateTime SelectedEndOfTodayUTC()     // respecting the display time, what is the UTC of the end of today?
         {
-            if (displayTimeFormat == 2)
-                return t.AddYears(1286);   // 2 is UTC+years
+            if (displayTimeFormat == 0)
+            {
+                //System.Diagnostics.Debug.WriteLine($"Now {DateTime.Now} {DateTime.Now.EndOfDay()} {DateTime.Now.EndOfDay().ToUniversalTime()}");
+                return DateTime.Now.EndOfDay().ToUniversalTime();
+            }
             else
-                return t;
+                return DateTime.UtcNow.EndOfDay();
+        }
+
+        // place datetime into selected time.  UTC for UTC/Gametime, Local for local
+        public DateTime ConvertTimeToSelected(DateTime t)
+        {
+            if (displayTimeFormat == 0)
+                return new DateTime(t.Year, t.Month, t.Day, t.Hour, t.Minute, t.Second, t.Millisecond, DateTimeKind.Local);
+            else
+                return new DateTime(t.Year, t.Month, t.Day, t.Hour, t.Minute, t.Second, t.Millisecond, DateTimeKind.Utc);
         }
 
         public DateTime ConvertTimeToUTCFromSelected(DateTime t)        // from selected format back to UTC
         {
-            if (displayTimeFormat == 1)
+            if (displayTimeFormat == 1) // UTC
+            {
+                System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Utc);        // should be in UTC, direct to UTC
                 return t;
-            else if (displayTimeFormat == 2)
+            }
+            else if (displayTimeFormat == 2)    // Gametime
+            {
+                System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Utc);        // should be in UTC, convert from gametime to utc
                 return t.AddYears(-1286);
-            else
+            }
+            else  // local
+            {
+                System.Diagnostics.Debug.Assert(t.Kind == DateTimeKind.Local);
                 return t.ToUniversalTime();
+            }
+        }
+
+        // picker is time format less (although its normally in UTC mode due to the way the value is picked up)
+        public DateTime ConvertTimeToUTCFromPicker(DateTime t)
+        {
+            t = ConvertTimeToSelected(t);                           // put the correct Kind on it
+            return ConvertTimeToUTCFromSelected(t);                // and convert to UTC
         }
 
         public bool DisplayTimeLocal

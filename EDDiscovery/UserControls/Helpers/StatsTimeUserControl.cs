@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016-2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -22,115 +22,39 @@ namespace EDDiscovery.UserControls
     {
         public enum TimeModeType
         {
-            Summary,
-            Day,
-            Week,
-            Month,
-            Custom
-        }
-
-        public enum DrawModeType
-        {
-            Text,
-            Graph
+            Summary = 0,
+            Day = 1,
+            Week = 2,
+            Month = 3,
+            Year = 4,
+            NotSet = 999,
         }
 
         public event EventHandler TimeModeChanged;      // time or planet/stars changed
-        public event EventHandler DrawModeChanged;
 
-        public DrawModeType DrawMode { get { return (checkBoxCustomText.Checked) ? DrawModeType.Text : DrawModeType.Graph; } }
-        public bool StarPlanetMode { get { return checkBoxCustomStars.Checked; } }
-
-        public bool AllowCustomTime { get; set; } = true;
+        public bool StarMode { get { return checkBoxCustomStars.Checked; } }
 
         public TimeModeType TimeMode
         {
             get
             {
-                if (comboBoxTimeMode.SelectedIndex == 0)
-                    return TimeModeType.Summary;
-                else if (comboBoxTimeMode.SelectedIndex == 1)
-                    return TimeModeType.Day;
-                else if (comboBoxTimeMode.SelectedIndex == 2)
-                    return TimeModeType.Week;
-                else if (comboBoxTimeMode.SelectedIndex == 3)
-                    return TimeModeType.Month;
-                else if (comboBoxTimeMode.SelectedIndex == 4)
-                    return TimeModeType.Custom;
-                else
-                    return TimeModeType.Summary;
+                return (TimeModeType)comboBoxTimeMode.SelectedIndex;
             }
-
             set
             {
-                if (comboBoxTimeMode.Items.Count > 0)
-                {
-                    switch (value)
-                    {
-                        case TimeModeType.Summary:
-                            comboBoxTimeMode.SelectedIndex = 0;
-                            break;
-                        case TimeModeType.Day:
-                            comboBoxTimeMode.SelectedIndex = 1;
-                            break;
-                        case TimeModeType.Week:
-                            comboBoxTimeMode.SelectedIndex = 2;
-                            break;
-                        case TimeModeType.Month:
-                            comboBoxTimeMode.SelectedIndex = 3;
-                            break;
-                        case TimeModeType.Custom:
-                            comboBoxTimeMode.SelectedIndex = 4;
-                            break;
-
-                        default:
-                            comboBoxTimeMode.SelectedIndex = 0;
-                            break;
-                    }
-                }
+                if ((int)value < comboBoxTimeMode.Items.Count)
+                    comboBoxTimeMode.SelectedIndex = (int)value;
             }
         }
 
         public StatsTimeUserControl()
         {
             InitializeComponent();
-
-            CustomDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(DateTime.Today.AddMonths(-1));
-            CustomDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(DateTime.Today);
-            CustomDateTimePickerFrom.CustomFormat = "yyyy-MM-dd";
-            CustomDateTimePickerTo.CustomFormat = "yyyy-MM-dd";
-            PositionControls();
         }
 
-        public void EnableDrawModeSelector()        // normally disabled.
+        public void DisplayStarsPlanetSelector(bool on)
         {
-            checkBoxCustomText.Visible = checkBoxCustomGraph.Visible = true;
-        }
-
-        public void EnableDisplayStarsPlanetSelector()
-        {
-            checkBoxCustomStars.Visible = checkBoxCustomPlanets.Visible = true;
-            PositionControls();
-        }
-
-        private void PositionControls()
-        {
-            bool pviz = CustomDateTimePickerFrom.Visible;
-            bool pstars = checkBoxCustomStars.Visible;
-
-            int widthbutton = checkBoxCustomStars.Width;
-
-            int left = CustomDateTimePickerFrom.Left;
-            int right = CustomDateTimePickerTo.Right+8;
-            int starpos = pviz ? right : left;
-            int textpos = starpos + (pstars ? widthbutton * 2 + 8 : 0);
-
-            checkBoxCustomStars.Left = starpos;
-            checkBoxCustomPlanets.Left = starpos + widthbutton + 4;
-            checkBoxCustomText.Left = textpos;
-            checkBoxCustomGraph.Left = textpos+ widthbutton + 4;
-            //System.Diagnostics.Debug.WriteLine("Picker " + pviz + " pstars" + pstars);
-            //System.Diagnostics.Debug.WriteLine("Starpos " + starpos + " " + textpos);
+            checkBoxCustomStars.Visible = checkBoxCustomPlanets.Visible = on;
         }
 
         private void UserControlStatsTime_Load(object sender, EventArgs e)
@@ -139,45 +63,16 @@ namespace EDDiscovery.UserControls
             comboBoxTimeMode.Items.Add("Day".T(EDTx.StatsTimeUserControl_Day));
             comboBoxTimeMode.Items.Add("Week".T(EDTx.StatsTimeUserControl_Week));
             comboBoxTimeMode.Items.Add("Month".T(EDTx.StatsTimeUserControl_Month));
-            if ( AllowCustomTime)
-                comboBoxTimeMode.Items.Add("Custom".T(EDTx.StatsTimeUserControl_Custom));
+            comboBoxTimeMode.Items.Add("Year".T(EDTx.TravelHistoryFilter_Year));
             comboBoxTimeMode.SelectedIndex = 0;
         }
 
         private void comboBoxTimeMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool showtime = comboBoxTimeMode.SelectedIndex == 4; // Custom'
-            CustomDateTimePickerFrom.Visible = showtime;
-            CustomDateTimePickerTo.Visible = showtime;
-            labelGameTime.Visible = showtime;
-            labelGameTime.Text = EDDConfig.Instance.GetTimeTitle();
-            PositionControls();
             TimeModeChanged?.Invoke(this, e);
         }
 
         bool preventrentry = false;
-
-        private void checkBoxCustomText_CheckedChanged(object sender, EventArgs e)
-        {
-            SetTextDraw(checkBoxCustomText.Checked,e);
-        }
-
-        private void checkBoxCustomGraph_CheckedChanged(object sender, EventArgs e)
-        {
-            SetTextDraw(!checkBoxCustomGraph.Checked,e);
-        }
-
-        void SetTextDraw(bool text, EventArgs e)
-        {
-            if (!preventrentry)
-            {
-                preventrentry = true;
-                checkBoxCustomGraph.Checked = !text;
-                checkBoxCustomText.Checked = text;
-                preventrentry = false;
-                DrawModeChanged?.Invoke(this, e);
-            }
-        }
 
         private void checkBoxCustomPlanets_CheckedChanged(object sender, EventArgs e)
         {
@@ -199,16 +94,6 @@ namespace EDDiscovery.UserControls
                 preventrentry = false;
                 TimeModeChanged?.Invoke(this, e);
             }
-        }
-
-        private void customDateTimePickerFrom_ValueChanged(object sender, EventArgs e)
-        {
-            TimeModeChanged?.Invoke(this, e);
-        }
-
-        private void customDateTimePickerTo_ValueChanged(object sender, EventArgs e)
-        {
-            TimeModeChanged?.Invoke(this, e);
         }
     }
 }

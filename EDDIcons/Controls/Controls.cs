@@ -193,5 +193,7 @@ namespace EDDiscovery.Icons
         public static Image Ledger { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"); } }
 
         public static Image Bookmarks { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bookmarks"); } }
+        public static Image FleetCarrier { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.FleetCarrier"); } }
+        public static Image ArrowsRight { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ArrowsRight"); } }
     }
 }

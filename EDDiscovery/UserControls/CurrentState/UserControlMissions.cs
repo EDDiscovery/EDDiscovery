@@ -25,7 +25,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMissions : UserControlCommonBase
     {
-        private DateTime NextExpiry;
+        private DateTime NextExpiryUTC;
 
         #region Init
 
@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Missions";
 
-            missionListPrevious.SetDateTime(GetSetting("StartDate", DateTime.UtcNow),
+            missionListPrevious.SetDateTime(GetSetting("StartDate", DateTime.UtcNow),       // set up by picker
                                             GetSetting("StartDateChecked", false),
                                             GetSetting("EndDate", DateTime.UtcNow),
                                             GetSetting("EndDateChecked", false));
@@ -88,10 +88,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            PutSetting("StartDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerStart.Value));
-            PutSetting("EndDate", EDDConfig.Instance.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerEnd.Value));
-
+            PutSetting("StartDate", missionListPrevious.customDateTimePickerStart.Value);
             PutSetting("StartDateChecked", missionListPrevious.customDateTimePickerStart.Checked);
+            PutSetting("EndDate", missionListPrevious.customDateTimePickerEnd.Value);
             PutSetting("EndDateChecked", missionListPrevious.customDateTimePickerEnd.Checked);
 
             PutSetting("Splitter", splitContainerMissions.GetSplitterDistance());
@@ -113,14 +112,14 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
-            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiry)
+            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiryUTC)
             {
                 last_he = he;
                 Display();
 
                 // he can be null
-                var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? DateTime.MaxValue);    // will always return an array
-                NextExpiry = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+                var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
+                NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? ObjectExtensionsDates.MaxValueUTC();
             }
         }
 
@@ -135,8 +134,8 @@ namespace EDDiscovery.UserControls
             Display();
 
             // he can be null
-            var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? DateTime.MaxValue);    // will always return an array
-            NextExpiry = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+            var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
+            NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? ObjectExtensionsDates.MaxValueUTC();
         }
 
         private void Display()

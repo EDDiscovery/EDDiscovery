@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2019 EDDiscovery development team
+ * Copyright © 2015 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,14 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
-using QuickJSON;
-using EliteDangerousCore;
 
 namespace EDDiscovery
 {
@@ -94,10 +91,10 @@ namespace EDDiscovery
 
         private void BackgroundHistoryRefreshWorkerThread()
         {
-            System.Diagnostics.Debug.WriteLine("Background history refresh worker thread going.. waiting for read for refresh");
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background history refresh worker thread going.. waiting for read for refresh");
             WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh after initial load caused by DoRefreshHistory, called by the controller. It sets the flag
 
-            System.Diagnostics.Debug.WriteLine("Background history refresh worker thread refresh given permission, close " + PendingClose);
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background history refresh worker running");
 
             int capirefreshinterval = 10000;        // how often we check CAPI system.  This is not the poll interval.
 
@@ -165,7 +162,7 @@ namespace EDDiscovery
             {
                 refreshWorkerArgs = args;
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name);
+                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Load history for Cmdr {args.CurrentCommander} {EDCommander.Current.Name}");
 
                 if (args.RemoveDuplicateFSDEntries)
                 {
@@ -180,14 +177,14 @@ namespace EDDiscovery
 
                     string[] stdfolders = stdfolder != null ? new string[] { stdfolder, EDDOptions.Instance.CAPIDirectory() } : new string[] { EDDOptions.Instance.CAPIDirectory() };
 
-                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Setup watchers " + string.Join(",", stdfolders));
+                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC setup watchers def {string.Join(";", stdfolders)}");
 
 
                     journalmonitor.SetupWatchers(stdfolders, EDDOptions.Instance.DefaultJournalMatchFilename, EDDOptions.Instance.MinJournalDateUTC);         // monitors are stopped, set up watchers
 
                     int forcereloadoflastn = args.ForceJournalReload ? int.MaxValue / 2 : 0;     // if forcing a reload, we indicate that by setting the reload count to a very high value, but not enough to cause int wrap
 
-                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Parse journal files");
+                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Parse journal files");
 
                     journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)), 
                                                                          EDDOptions.Instance.MinJournalDateUTC,
@@ -217,7 +214,7 @@ namespace EDDiscovery
 
                 ReportRefreshProgress(-1, "Done");
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + hist.Count + " records");
+                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()}  EDC Load history complete with {hist.Count} records");
             }
             catch (Exception ex)
             {
@@ -237,36 +234,41 @@ namespace EDDiscovery
 
             if (!PendingClose)
             {
-                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh history worker completed");
+                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC foreground history refresh start");
 
                 if (hist != null)
                 {
                     history = hist;
 
+                    EdsmLogFetcher.StopCheck();     // ensure edsm has stopped. previosly asked to stop above by an async call
+
+                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh commanders Invoke");
+
                     OnRefreshCommanders?.Invoke();
 
-                    EdsmLogFetcher.StopCheck();
-
-                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh Displays");
+                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Invoke");
 
                     OnHistoryChange?.Invoke(history);
 
-                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh Displays Completed");
+                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Completed");
                 }
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " JM On");
+                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Start monitor");
 
                 journalmonitor.StartMonitor(true);
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Call Refresh Complete");
+                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh Complete Invoke");
 
                 OnRefreshComplete?.Invoke();                            // History is completed
+
 
                 FrontierCAPI.Disconnect();         // Disconnect capi from current user, but don't clear their credential file
 
                 // available, and not hidden commander, and we have logged in before
                 if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && FrontierCAPI.GetUserState(EDCommander.Current.Name) != CAPI.CompanionAPI.UserState.NeverLoggedIn)
                 {
+                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Login with CAPI");
+
                     FrontierCAPI.GameIsBeta = EDCommander.Current.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase);
 
                     System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
@@ -280,18 +282,17 @@ namespace EDDiscovery
                     });
                 }
 
-                if (history.CommanderId >= 0)
+                if (history.IsRealCommanderId)
                     EdsmLogFetcher.Start(EDCommander.Current);
 
                 refreshHistoryRequestedFlag = 0;
                 readyForNewRefresh.Set();       // say i'm okay for another refresh
-                System.Diagnostics.Debug.WriteLine("Refresh completed, allow another refresh");
 
                 LogLine("History refresh complete.".T(EDTx.EDDiscoveryController_HRC));
 
                 ReportRefreshProgress(-1, "");
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh history complete");
+                System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC foreground refresh completed");
             }
         }
 

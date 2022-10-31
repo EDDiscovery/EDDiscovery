@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 - 2021 EDDiscovery development team
+ * Copyright © 2021-2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -75,11 +75,12 @@ namespace EDDiscovery.UserControls
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
-            extDateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
-            var startchecked = extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
-            extDateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
-            var endchecked = extDateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
-
+            // pickers we don't worry about the Kind, we use the picker convert functions later 
+            extDateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.GameLaunchTimeUTC()).StartOfDay();
+            extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
+            extDateTimePickerEndDate.Value = GetSetting(dbEndDate, DateTime.UtcNow.EndOfDay()).EndOfDay();
+            extDateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
+            VerifyDates();
             extDateTimePickerStartDate.ValueChanged += DateTimePicker_ValueChangedStart;
             extDateTimePickerEndDate.ValueChanged += DateTimePicker_ValueChangedEnd;
 
@@ -129,6 +130,7 @@ namespace EDDiscovery.UserControls
         }
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
+            VerifyDates();      // date range may have changed
             DrawGrid();             // don't do the Body info, its tied to the UCTG
             ControlVisibility();
         }
@@ -253,8 +255,9 @@ namespace EDDiscovery.UserControls
         { 
             if ( discoveryform.history != null )
             {
-                DateTime? start = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerStartDate.Value) : default(DateTime?);
-                DateTime? end = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
+                // change display time to utc
+                DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);
+                DateTime? endutc = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
                 DataGridViewColumn sortcolprev = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
@@ -273,9 +276,9 @@ namespace EDDiscovery.UserControls
                             {
                                 var orglist = JournalScanOrganic.SortList(body.Organics);
 
-                                if (start != null || end != null)      // if sorting by date, knock out ones outside range
+                                if (startutc != null || endutc != null)      // if sorting by date, knock out ones outside range
                                 {
-                                    orglist = orglist.Where(x => (start == null || x.Item2.EventTimeUTC >= start) && (end == null || x.Item2.EventTimeUTC <= end)).ToList();
+                                    orglist = orglist.Where(x => (startutc == null || x.Item2.EventTimeUTC >= startutc) && (endutc == null || x.Item2.EventTimeUTC <= endutc)).ToList();
                                 }
 
                                 foreach (var os in orglist)
@@ -441,19 +444,42 @@ namespace EDDiscovery.UserControls
             DrawGrid();
         }
 
+        bool updatedprogramatically = false;
         private void DateTimePicker_ValueChangedStart(object sender, EventArgs e)
         {
-            PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
-            PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
-            DrawGrid();
+            if (!updatedprogramatically)
+            {
+                PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
+                PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
+                DrawGrid();
+            }
         }
 
         private void DateTimePicker_ValueChangedEnd(object sender, EventArgs e)
         {
-            PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
-            PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
-            DrawGrid();
-       }
+            if (!updatedprogramatically)
+            {
+                PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
+                PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
+                DrawGrid();
+            }
+        }
+
+        private void VerifyDates()
+        {
+            updatedprogramatically = true;
+
+            // if out of range
+            if (!EDDConfig.Instance.DateTimeInRangeForGame(extDateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(extDateTimePickerEndDate.Value))
+            {
+                extDateTimePickerStartDate.Checked = extDateTimePickerEndDate.Checked = false;
+                extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                extDateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
+            }
+            updatedprogramatically = false;
+        }
+
+
 
     }
 }

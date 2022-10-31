@@ -71,6 +71,7 @@ namespace EDDiscovery.UserControls
         private const string dbWordWrap = "WordWrap";
         private const string dbVisitedColour = "VisitedColour";
         private const string dbDebugMode = "DebugMode";
+        private const string dbBookmarks = "Bookmarks";
 
         private string searchterms = "system:body:station:stationfaction";
 
@@ -89,6 +90,8 @@ namespace EDDiscovery.UserControls
         private Queue<HistoryEntry> queuedadds = new Queue<HistoryEntry>();
 
         private int fdropdown;     // filter total
+
+        private HashSet<long> quickMarkJIDs = new HashSet<long>();
 
         public UserControlTravelGrid()
         {
@@ -158,7 +161,7 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_Icon, EDTx.UserControlTravelGrid_ColumnSystem, EDTx.UserControlTravelGrid_ColumnDistance, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime, EDTx.UserControlTravelGrid_labelSearch };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlistcms = new Enum[] { EDTx.UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, EDTx.UserControlTravelGrid_setNoteToolStripMenuItem, EDTx.UserControlTravelGrid_createEditBookmarkToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripMenuItemStartStop, EDTx.UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, EDTx.UserControlTravelGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlTravelGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlTravelGrid_starMapColourToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_wantedSystemsToolStripMenuItem, 
+            var enumlistcms = new Enum[] { EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem, EDTx.UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, EDTx.UserControlTravelGrid_setNoteToolStripMenuItem, EDTx.UserControlTravelGrid_createEditBookmarkToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripMenuItemStartStop, EDTx.UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, EDTx.UserControlTravelGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlTravelGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlTravelGrid_starMapColourToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_wantedSystemsToolStripMenuItem, 
                 EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_bothToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_expeditionToolStripMenuItem, EDTx.UserControlTravelGrid_moveToAnotherCommanderToolStripMenuItem, EDTx.UserControlTravelGrid_hideSystemToolStripMenuItem, EDTx.UserControlTravelGrid_removeJournalEntryToolStripMenuItem, EDTx.UserControlTravelGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlTravelGrid_copyJournalEntryToClipboardToolStripMenuItem, EDTx.UserControlTravelGrid_writeEventInfoToLogDebugToolStripMenuItem, EDTx.UserControlTravelGrid_runActionsAcrossSelectionToolSpeechStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughInaraSystemToolStripMenuItem, EDTx.UserControlTravelGrid_runEntryThroughProfileSystemToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughIGAUDebugToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughEDDNThruTestToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughEDAstroDebugToolStripMenuItem, EDTx.UserControlTravelGrid_sendJournalEntriesToDLLsToolStripMenuItem, EDTx.UserControlTravelGrid_showSystemVisitedForeColourToolStripMenuItem, EDTx.UserControlTravelGrid_travelGridInDebugModeToolStripMenuItem };
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
 
@@ -203,6 +206,10 @@ namespace EDDiscovery.UserControls
         public void HistoryChanged(HistoryList hl)           // on History change
         {
             HistoryChanged(hl, false);
+
+            // quick marks are commander dependent
+            var str = GetSetting(dbBookmarks + ":" + hl.CommanderId, "").Split(';');
+            quickMarkJIDs = str.Select(x => x.InvariantParseLong(-1)).ToList().ToHashSet();
         }
 
         public void HistoryChanged(HistoryList hl, bool disablesorting)
@@ -217,7 +224,7 @@ namespace EDDiscovery.UserControls
             current_historylist = hl;
             this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
 
-            extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
+            extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -356,8 +363,10 @@ namespace EDDiscovery.UserControls
                     dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
 
+                UpdateQuickMarkComboBox();
+
                 this.dataGridViewTravel.Cursor = Cursors.Arrow;
-                extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
+                extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
@@ -366,6 +375,7 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("TG Dequeue paused adds");
                     AddEntry(queuedadds.Dequeue());
                 }
+
             });
 
             todotimer.Start();          // indicate the timer is going to start.. 
@@ -445,7 +455,7 @@ namespace EDDiscovery.UserControls
 
             if (debugmode)
             {
-                colIcon = $"{he.TravelState} \r\n"
+                colTime += Environment.NewLine + $"{he.TravelState} \r\n"
                                + $"st[{he.System.Name}]\r\n"
                                + $"b[{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}]\r\n"
                                + $"s[{he.Status.StationName},{he.Status.StationType}]\r\n"
@@ -532,7 +542,7 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        public void GotoPosByJID(long jid)
+        public int GotoPosByJID(long jid)       // -1 if fails
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid,jid, true);
             if (rowno >= 0)
@@ -541,6 +551,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
+            return rowno;
         }
 
         public void FireChangeSelection()
@@ -651,7 +662,7 @@ namespace EDDiscovery.UserControls
 
             PaintHelpers.PaintEventColumn(grid, e,
                         discoveryform.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag,
-                        travelGridInDebugModeToolStripMenuItem.Checked ? -1 : Columns.Icon, 
+                        Columns.Icon, 
                         true);
         }
 
@@ -823,6 +834,7 @@ namespace EDDiscovery.UserControls
                 toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".T(EDTx.UserControlTravelGrid_SETSTSTOP); ;
             }
 
+            quickMarkToolStripMenuItem.Checked = quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
             mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
             toolStripMenuItemStartStop.Enabled = (rightclickhe != null);
@@ -1124,6 +1136,41 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        // quickmarks.
+        private void quickMarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (quickMarkToolStripMenuItem.Checked)
+                quickMarkJIDs.Add(rightclickhe.journalEntry.Id);
+            else
+                quickMarkJIDs.Remove(rightclickhe.journalEntry.Id);
+
+            var str = quickMarkJIDs.Select(x => x.ToStringInvariant()).ToArray().Join(';');
+            PutSetting(dbBookmarks + ":" + discoveryform.history.CommanderId.ToStringInvariant(), str);
+            UpdateQuickMarkComboBox();
+        }
+
+        private void UpdateQuickMarkComboBox()
+        {
+            extComboBoxQuickMarks.Items.Clear();
+            List<long> jids = new List<long>();
+            foreach (var j in quickMarkJIDs)
+            {
+                if (rowsbyjournalid.TryGetValue(j, out DataGridViewRow row)) // if it parses and its in view, add it to combo box.
+                {
+                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value);
+                    jids.Add(j);
+                }
+            }
+            extComboBoxQuickMarks.Tag = jids;
+            extComboBoxQuickMarks.Text = "Marked".TxID(EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem);      // only works for custom
+        }
+        private void extComboBoxBookmark_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
+            long jid = jids[extComboBoxQuickMarks.SelectedIndex];
+            GotoPosByJID(jid);
+        }
+
         #endregion
 
         #region Event Filter
@@ -1311,7 +1358,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#endregion
+        #endregion
 
     }
 }

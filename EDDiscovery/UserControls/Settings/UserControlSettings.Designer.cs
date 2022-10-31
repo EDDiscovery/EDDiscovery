@@ -69,6 +69,7 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
             this.extScrollBarSettings = new ExtendedControls.ExtScrollBar();
             this.groupBoxCommanders = new ExtendedControls.ExtGroupBox();
+            this.extSplitterResizeParentGroupBoxCommanders = new ExtendedControls.ExtSplitterResizeParent();
             this.dataViewScrollerCommanders = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewCommanders = new BaseUtils.DataGridViewBaseEnhancements();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -545,6 +546,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.BorderColorScaling = 0.5F;
             this.groupBoxCommanders.Controls.Add(this.dataViewScrollerCommanders);
             this.groupBoxCommanders.Controls.Add(this.flowLayoutButtons);
+            this.groupBoxCommanders.Controls.Add(this.extSplitterResizeParentGroupBoxCommanders);
             this.groupBoxCommanders.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCommanders.Name = "groupBoxCommanders";
             this.groupBoxCommanders.Padding = new System.Windows.Forms.Padding(3, 3, 6, 3);
@@ -555,6 +557,17 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.TextPadding = 0;
             this.groupBoxCommanders.TextStartPosition = -1;
             // 
+            // extSplitterResizeParentGroupBoxCommanders
+            // 
+            this.extSplitterResizeParentGroupBoxCommanders.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.extSplitterResizeParentGroupBoxCommanders.Location = new System.Drawing.Point(3, 147);
+            this.extSplitterResizeParentGroupBoxCommanders.MaxSize = 2147483647;
+            this.extSplitterResizeParentGroupBoxCommanders.MinSize = 10;
+            this.extSplitterResizeParentGroupBoxCommanders.Name = "extSplitterResizeParentGroupBoxCommanders";
+            this.extSplitterResizeParentGroupBoxCommanders.Size = new System.Drawing.Size(956, 3);
+            this.extSplitterResizeParentGroupBoxCommanders.TabIndex = 27;
+            this.extSplitterResizeParentGroupBoxCommanders.TabStop = false;
+            // 
             // dataViewScrollerCommanders
             // 
             this.dataViewScrollerCommanders.Controls.Add(this.dataGridViewCommanders);
@@ -563,7 +576,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerCommanders.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerCommanders.Location = new System.Drawing.Point(3, 16);
             this.dataViewScrollerCommanders.Name = "dataViewScrollerCommanders";
-            this.dataViewScrollerCommanders.Size = new System.Drawing.Size(956, 104);
+            this.dataViewScrollerCommanders.Size = new System.Drawing.Size(956, 101);
             this.dataViewScrollerCommanders.TabIndex = 4;
             this.dataViewScrollerCommanders.VerticalScrollBarDockRight = true;
             // 
@@ -574,6 +587,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCommanders.AllowUserToResizeRows = false;
             this.dataGridViewCommanders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewCommanders.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewCommanders.AutoSortByColumnName = false;
             this.dataGridViewCommanders.ColumnHeaderMenuStrip = null;
             this.dataGridViewCommanders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewCommanders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -592,7 +606,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCommanders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewCommanders.SingleRowSelect = true;
-            this.dataGridViewCommanders.Size = new System.Drawing.Size(940, 104);
+            this.dataGridViewCommanders.Size = new System.Drawing.Size(940, 101);
             this.dataGridViewCommanders.TabIndex = 2;
             this.dataGridViewCommanders.TopLeftHeaderMenuStrip = null;
             this.dataGridViewCommanders.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCommanders_CellDoubleClick);
@@ -652,7 +666,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCommanders.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCommanders.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCommanders.Name = "vScrollBarCommanders";
-            this.vScrollBarCommanders.Size = new System.Drawing.Size(16, 104);
+            this.vScrollBarCommanders.Size = new System.Drawing.Size(16, 101);
             this.vScrollBarCommanders.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCommanders.SmallChange = 1;
             this.vScrollBarCommanders.TabIndex = 3;
@@ -671,7 +685,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutButtons.Controls.Add(this.buttonAddCommander);
             this.flowLayoutButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutButtons.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutButtons.Location = new System.Drawing.Point(3, 120);
+            this.flowLayoutButtons.Location = new System.Drawing.Point(3, 117);
             this.flowLayoutButtons.Name = "flowLayoutButtons";
             this.flowLayoutButtons.Size = new System.Drawing.Size(956, 30);
             this.flowLayoutButtons.TabIndex = 6;
@@ -1394,5 +1408,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpWindowOptions;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpDLL;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpCommanders;
+        private ExtendedControls.ExtSplitterResizeParent extSplitterResizeParentGroupBoxCommanders;
     }
 }

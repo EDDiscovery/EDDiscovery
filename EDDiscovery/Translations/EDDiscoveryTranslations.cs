@@ -33,6 +33,9 @@ namespace EDDiscovery
         Information, // Information
         NoPos, // No Pos
 
+        MessageBoxTheme_No,
+        MessageBoxTheme_Yes,
+
         StartUp_DUPLOAD,        // EDDiscovery is already running. Launch anyway? in program.cs
 
         EDDiscoveryForm_addTabToolStripMenuItem, // ToolStrip control 'Insert Tab with panel..'
@@ -520,11 +523,11 @@ namespace EDDiscovery
         UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName, // Column Header 'Item'
         UserControlStats_tabControlCustomStats_tabPageGeneral_Information, // Column Header 'Information'
         UserControlStats_tabControlCustomStats_tabPageTravel, // Control 'Travel'
-        UserControlStats_tabControlCustomStats_tabPageTravel_userControlStatsTimeTravel_labelTime, // Control 'Time'
         UserControlStats_tabControlCustomStats_tabPageScan, // Control 'Scan'
-        UserControlStats_tabControlCustomStats_tabPageScan_userControlStatsTimeScan_labelTime, // Control 'Time'
         UserControlStats_tabControlCustomStats_tabPageGameStats, // Control 'In Game'
         UserControlStats_tabControlCustomStats_tabPageByShip, // Control 'By Ship'
+        UserControlStats_tabControlCustomStats_tabPageCombat,
+        UserControlStats_tabControlCustomStats_tabPageLedger,
         UserControlStats_labelStart, // Control 'Start'
         UserControlStats_labelEndDate, // Control 'To'
         UserControlStats_TotalNoofjumps, // Total No of jumps:
@@ -554,6 +557,7 @@ namespace EDDiscovery
         UserControlStats_OrganicScans, // Scan value
         UserControlStats_Lastdock, // Last dock
         UserControlStats_Trip, // Trip
+        UserControlStats_NoTrip, // No Trip
         UserControlStats_All, // All
         UserControlStats_Type, // Type
         UserControlStats_BankAccount, // Bank Account
@@ -580,6 +584,9 @@ namespace EDDiscovery
         UserControlStats_GoodsBought, // Goods Bought
         UserControlStats_GoodsSold, // Goods Sold
         UserControlStats_GoodsProfit, // Goods Sold
+
+        UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnLedgerDate,
+        UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnNumericCredits,
 
         UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, // ToolTip 'Display incomplete scans'
         UserControlOrganics_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
@@ -640,7 +647,7 @@ namespace EDDiscovery
         UserControlJournalGrid_JHF, // Journal: Filter out fields
         UserControlJournalGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
 
-
+        UserControlTravelGrid_quickMarkToolStripMenuItem,
         UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, // ToolStrip control 'Remove Sorting of Columns'
         UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, // ToolStrip control 'Jump to Entry'
         UserControlTravelGrid_setNoteToolStripMenuItem, // ToolStrip control 'Set Note'
@@ -1444,6 +1451,7 @@ namespace EDDiscovery
         FilterSelector_Mining, // Mining
         FilterSelector_MicroResources,
         FilterSelector_Suits,
+        FilterSelector_Carrier,
 
         ScanDisplayForm_Sys, // System
         ScanDisplayForm_Station, // Station
@@ -1659,6 +1667,107 @@ namespace EDDiscovery
         UserControlSpanel_showInPositionToolStripMenuItem_scanAboveMenuItem,
         UserControlSpanel_showInPositionToolStripMenuItem_scanBelowMenuItem,
         UserControlSpanel_showInPositionToolStripMenuItem_scanOnTopMenuItem,
+
+        UserControlCarrier_Decommisioned,
+        UserControlCarrier_DecommisionedOn,
+        UserControlCarrier_Cargo,
+        UserControlCarrier_Services,
+        UserControlCarrier_Shippacks,
+        UserControlCarrier_Modulepacks,
+        UserControlCarrier_Freespace,
+        UserControlCarrier_Jumprange,
+        UserControlCarrier_Maxjump,
+        UserControlCarrier_Fuel,
+        UserControlCarrier_DockingAccess,
+        UserControlCarrier_Notorious,
+        UserControlCarrier_Balance,
+        UserControlCarrier_Reserve,
+        UserControlCarrier_Available,
+        UserControlCarrier_PioneerTax,
+        UserControlCarrier_ShipyardTax,
+        UserControlCarrier_RearmTax,
+        UserControlCarrier_OutfittingTax,
+        UserControlCarrier_RefuelTax,
+        UserControlCarrier_RepairTax,
+        UserControlCarrier_CoreCost,
+        UserControlCarrier_ServicesCost,
+        UserControlCarrier_NoCarrier,
+        UserControlCarrier_InstallCost,
+        UserControlCarrier_CapacityAllocated,
+        UserControlCarrier_Upkeepcost,
+        UserControlCarrier_Suspendedupkeepcost,
+        UserControlCarrier_CrewName,
+        UserControlCarrier_ServiceActive,
+        UserControlCarrier_ServiceSuspended,
+        UserControlCarrier_ServiceNotInstalled,
+        UserControlCarrier_NoPacks,
+        UserControlCarrier_Tier,
+        UserControlCarrier_Cost,
+        UserControlCarrier_Jumping,
+        UserControlCarrier_NetworkFailure,
+        UserControlCarrier_NotLoggedIn,
+        UserControlCarrier_OptionalService,
+        UserControlCarrier_CoreService,
+
+        UserControlCarrier_extTabControl_tabPageOverall,
+        UserControlCarrier_extTabControl_tabPageOverall_imageControlOverall,
+        UserControlCarrier_extTabControl_tabPageItinerary,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinDate,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinSystemAlphaInt,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinBodyAlphaInt,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinJumpDistNumeric,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinDistFromNumeric,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinInformation,
+        UserControlCarrier_extTabControl_tabPageFinances,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerDate,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerStarsystemAlphaInt,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerBodyAlphaInt,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerEvent,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerCreditNumeric,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerDebitNumeric,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerBalanceNumeric,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerNotes,
+        UserControlCarrier_extTabControl_tabPageServices,
+        UserControlCarrier_extTabControl_tabPageServices_imageControlServices,
+        UserControlCarrier_extTabControl_tabPagePacks,
+        UserControlCarrier_extTabControl_tabPagePacks_imageControlPacks,
+        UserControlCarrier_extTabControl_tabPageOrders,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersDate,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersCommodity,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersType,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersGroup,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersPurchaseNumeric,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersSaleNumeric,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersPriceNumeric,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersBlackmarket,
+        UserControlCarrier_extTabControl_tabPageCAPI3,
+        UserControlCarrier_extTabControl_tabPageCAPI3_dataGridViewTextBoxColumn1,
+        UserControlCarrier_extTabControl_tabPageCAPI3_dataGridViewTextBoxColumnValue,
+        UserControlCarrier_extTabControl_tabPageCAPI1,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsName,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsManu,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsPriceNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsSpeedNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsBoostNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsMassNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsLandingPadNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesName,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesCat,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesMassNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesPowerNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesCostNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesStockNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesInfo,
+        UserControlCarrier_extTabControl_tabPageCAPI2,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoCommodity,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoType,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoGroup,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoQuantityNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoPriceNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoStolen,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerName,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerType,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric,
 
         ActionPackVariablesForm_gv
     }

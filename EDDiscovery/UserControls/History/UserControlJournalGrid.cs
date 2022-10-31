@@ -514,7 +514,7 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        public void GotoPosByJID(long jid)
+        public int GotoPosByJID(long jid)       // -1 if fails
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
@@ -523,6 +523,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewJournal.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
+
+            return rowno;
         }
 
         public void FireChangeSelection()

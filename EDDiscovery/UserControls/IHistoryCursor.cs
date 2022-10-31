@@ -26,7 +26,7 @@ namespace EDDiscovery.UserControls
         event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         void FireChangeSelection();                                 // fire a change sel event to everyone
-        void GotoPosByJID(long jid);                                // goto a pos by JID
+        int GotoPosByJID(long jid);                                 // goto a pos by JID, return row number, or -1 if not found
         HistoryEntry GetCurrentHistoryEntry { get; }                // whats your current entry, null if not
     }
 

@@ -21,9 +21,9 @@ namespace EDDiscovery.Forms
 {
     public partial class ExportForm : ExtendedControls.DraggableForm
     {
-        public int SelectedIndex { get; private set; }
-        public DateTime StartTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerFrom.Value); } }
-        public DateTime EndTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerTo.Value); } }
+        public int SelectedIndex { get; private set; }      // item selected
+        public DateTime StartTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerFrom.Value); } }
+        public DateTime EndTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerTo.Value); } }
         public bool Comma { get { return radioButtonComma.Checked; } }
         public bool AutoOpen { get { return checkBoxCustomAutoOpen.Checked; } }
         public bool IncludeHeader { get { return checkBoxIncludeHeader.Checked; } }
@@ -45,11 +45,17 @@ namespace EDDiscovery.Forms
         { 
             DisableDateTime = 1,
             DisableCVS = 2,
-            DisableOpenInclude = 4,
-            DTCVSOI = 7,
-            DTOI = 5,
+            DisableOpenInclude = 4,     // the open and include options are shown
+            DTCVSOI = 7,                // disable datetime, cvs, open/include
+            DTOI = 5,                   // disable open/include and date time
             None = 0,
         }
+
+        // Init, export or import
+        // selectionlist: Is the text to present in the drop down. frm.SelectedIndex tells you what they picked
+        // outputext : per selection, the dialog formatted list of extensions ie. "JSON|*.json|All|*.*"
+        // showflags : options per selection, see show flags above
+        // suggestedfilenames : name given per selection as the suggested name
 
         public void Init(bool import, string[] selectionlist, string[] outputext = null, ShowFlags[] showflags = null, string[] suggestedfilenames= null)
         {
@@ -66,8 +72,9 @@ namespace EDDiscovery.Forms
             comboBoxSelectedType.SelectedIndex = 0;
             comboBoxSelectedType.SelectedIndexChanged += ComboBoxSelectedType_SelectedIndexChanged;
 
-            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
-            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 59, 59));
+            // note we don't care what the picker has as its Kind.. the convert functions at the top force it into the right mode
+            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
 
             if (System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals("."))
                 radioButtonComma.Checked = true;

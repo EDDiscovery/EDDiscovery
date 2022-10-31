@@ -68,6 +68,11 @@ namespace EDDiscovery.UserControls
             string suittype = string.Join(";", suitle.Select(x => x.Item1)) + ";";
             AddGroupOption(suittype, "Suits".T(EDTx.FilterSelector_Suits), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
 
+            var carriere = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCarrierStats" });
+            string carriertype = string.Join(";", carriere.Select(x => x.Item1)) + ";";
+
+            AddGroupOption(carriertype, "Carrier".T(EDTx.FilterSelector_Carrier), JournalEntry.JournalTypeIcons[JournalTypeEnum.CarrierStats]);
+
             AddGroupOption("MiningRefined;AsteroidCracked;ProspectedAsteroid;LaunchDrone","Mining".T(EDTx.FilterSelector_Mining), JournalEntry.JournalTypeIcons[JournalTypeEnum.MiningRefined]);
         }
 

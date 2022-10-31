@@ -144,23 +144,23 @@ namespace EDDiscovery
                             "I'll decide later, do nothing".T(EDTx.EDDiscoveryForm_SendEDSMCancel),
                              new Point(5, 330), new Size(width - 5 - 20, 24), null));
 
-                DateTime date = DateTime.UtcNow;
+                DateTime dateutc = DateTime.UtcNow;
 
                 cf.Trigger += (dialogname, controlname, tag) =>
                 {
                     if (controlname.Contains("All"))
                     {
-                        date = new DateTime(1900, 1, 1);
+                        dateutc = EDDConfig.GameLaunchTimeUTC();
                         cf.ReturnResult(DialogResult.OK);
                     }
                     else if (controlname.Contains("Today"))
                     {
-                        date = lasthe.AddDays(-1);
+                        dateutc = lasthe.AddDays(-1);
                         cf.ReturnResult(DialogResult.OK);
                     }
                     else if (controlname.Contains("Custom"))
                     {
-                        date = cf.GetDateTime("Date").Value.ToUniversalTime();
+                        dateutc = cf.GetDateTime("Date").Value.ToUniversalTime();
                         cf.ReturnResult(DialogResult.OK);
                     }
                     else if (controlname.Contains("None"))
@@ -176,7 +176,7 @@ namespace EDDiscovery
                 if (cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Sending a large number of EDSM Entries".T(EDTx.EDDiscoveryForm_SendEDSMTitle)) == DialogResult.Cancel)
                     return;
 
-                var jes = helist.Where(x => x.EventTimeUTC < date).Select(x => x.journalEntry).ToList();
+                var jes = helist.Where(x => x.EventTimeUTC < dateutc).Select(x => x.journalEntry).ToList();
                 JournalEntry.SetEdsmSyncList(jes);
 
                 helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..

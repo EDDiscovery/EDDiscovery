@@ -1047,9 +1047,9 @@ namespace EDDiscovery.UserControls.Map3D
         public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? true; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
         public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
         public void TravelPathRefresh() { if (travelpath != null) UpdateTravelPath(); }   // travelpath.Refresh() manually after these have changed
-        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? new DateTime(2014,12,14); } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
+        public DateTime TravelPathStartDateUTC { get { return travelpath?.TravelPathStartDateUTC ?? new DateTime(2014,12,14); } set { if (travelpath != null && travelpath.TravelPathStartDateUTC != value) { travelpath.TravelPathStartDateUTC = value; } } }
         public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
-        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
+        public DateTime TravelPathEndDateUTC { get { return travelpath?.TravelPathEndDateUTC ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDateUTC != value) { travelpath.TravelPathEndDateUTC = value; } } }
         public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
         public bool GalObjectDisplay
@@ -1115,9 +1115,9 @@ namespace EDDiscovery.UserControls.Map3D
             NavRouteDisplay = defaults.GetSetting("NRD", true);
             TravelPathTapeDisplay = defaults.GetSetting("TPD", true);
             TravelPathTextDisplay = defaults.GetSetting("TPText", true);
-            TravelPathStartDate = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
+            TravelPathStartDateUTC = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
-            TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
+            TravelPathEndDateUTC = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
             TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
             if ((TravelPathStartDateEnable || TravelPathEndDateEnable) && travelpath != null)
                 UpdateTravelPath();
@@ -1159,9 +1159,9 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("TPD", TravelPathTapeDisplay);
             defaults.PutSetting("TPText", TravelPathTextDisplay);
             defaults.PutSetting("NRD", NavRouteDisplay);
-            defaults.PutSetting("TPSD", TravelPathStartDate);
+            defaults.PutSetting("TPSD", TravelPathStartDateUTC);
             defaults.PutSetting("TPSDE", TravelPathStartDateEnable);
-            defaults.PutSetting("TPED", TravelPathEndDate);
+            defaults.PutSetting("TPED", TravelPathEndDateUTC);
             defaults.PutSetting("TPEDE", TravelPathEndDateEnable);
             defaults.PutSetting("GALOD", GalObjectDisplay);
             defaults.PutSetting("GALOBJLIST", GetAllGalObjectTypeEnables());

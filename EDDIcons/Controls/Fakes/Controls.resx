@@ -601,4 +601,10 @@
   <data name="Copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FleetCarrier" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\FleetCarrier.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ArrowsRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ArrowsRight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -16,6 +16,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,7 +40,7 @@ namespace EDDiscovery.UserControls
         private const double defaultMinRadius = 0;
         private const int maxitems = 500;
 
-        private double lookup_limit = 100;      // we start with a reasonable number, because if your in the bubble, you don't want to be looking up 1000
+        private double lookup_limit = 300;      // we start with a reasonable number, because if your in the bubble, you don't want to be looking up 1000
 
         public override void Init()
         {
@@ -115,10 +116,9 @@ namespace EDDiscovery.UserControls
             {
                 last_he = he;
 
-                //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
-
                 double lookup_max = Math.Min(textMaxRadius.Value, lookup_limit);
-                //System.Diagnostics.Debug.WriteLine("Lookup limit " + lookup_limit + " lookup " + lookup_max);
+
+                System.Diagnostics.Debug.WriteLine($"Star distance kick with min {textMinRadius.Value} - {textMaxRadius.Value} ll {lookup_limit} = {lookup_max}");
 
                 // Get nearby systems from the systems DB.
                 computer.CalculateClosestSystems(he.System,
@@ -181,30 +181,34 @@ namespace EDDiscovery.UserControls
 
                         var rw = dataGridViewNearest.RowTemplate.Clone() as DataGridViewRow;
                         rw.CreateCells(dataGridViewNearest, rowobj);
-                        rw.Tag = tvp.Value; 
+                        rw.Tag = tvp.Value;
                         rows.Add(rw);
                     }
                 }
 
                 dataGridViewNearest.Rows.AddRange(rows.ToArray());
 
-                if (csl.Count > maxitems / 2)           // if we filled up at least half the list, we limit to max distance plus
-                {
-                    lookup_limit = maxdist * 11 / 10;   // lookup limit is % more than max dist, to allow for growth
-                }
-                else if ( csl.Count > maxitems / 10 )
-                    lookup_limit = maxdist * 2;         // else we did not get close to filling the list, so double the limit and try again
-                else
-                    lookup_limit = 100;                 // got so few, lets reset
+                double proportionfilled = (double)csl.Count / maxitems;
 
-                System.Diagnostics.Debug.WriteLine("Star distance Lookup " + name + " found " + csl.Count + " max was " + maxdist + " New limit " + lookup_limit);
+                // scale the limiter dependent on how much we got.
+                lookup_limit = (int)(lookup_limit * (3.85 - proportionfilled * 3));         // 0.95 (1+3*0.95 = 3.85) seems a good figure
+
+                lookup_limit = Math.Max(lookup_limit,textMinRadius.Value + 50);     // make sure the limiter is above the min radius by a bit
+
+                System.Diagnostics.Debug.WriteLine($"Star distance Lookup {name} got {csl.Count} prop {proportionfilled} New limit {lookup_limit}");
+
+                if (csl.Count < maxitems / 2 && lookup_limit < textMaxRadius.Value) // if we have a low value, and the limiter is below the radius, try again
+                {
+                    System.Diagnostics.Debug.WriteLine($"Low lookup limit, try again");
+                    KickComputation(last_he,true);
+                }
             }
             else
             {
                 SetControlText(string.Empty);
             }
 
-            if ( sortcolprev != colDistance || sortorderprev != SortOrder.Ascending )   // speed optimising, only sort if not in sort order from distances
+            if (sortcolprev != colDistance || sortorderprev != SortOrder.Ascending)   // speed optimising, only sort if not in sort order from distances
                 dataGridViewNearest.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
 
             dataGridViewNearest.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
@@ -245,7 +249,7 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (dataGridViewNearest.RightClickRowValid) 
+            if (dataGridViewNearest.RightClickRowValid)
             {
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
@@ -276,13 +280,11 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            lookup_limit = textMaxRadius.Value;
             KickComputation(last_he, true);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            lookup_limit = textMaxRadius.Value;
             KickComputation(last_he, true);
         }
 
@@ -300,7 +302,7 @@ namespace EDDiscovery.UserControls
             {
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
-                if ( rightclicksystem != null )
+                if (rightclicksystem != null)
                     ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, discoveryform.history);
             }
         }
@@ -308,12 +310,117 @@ namespace EDDiscovery.UserControls
         private void dataGridViewNearest_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < dataGridViewNearest.Rows.Count)
-            { 
+            {
                 var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
-                if ( clicksystem != null )
+                if (clicksystem != null)
                     ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, discoveryform.history);
             }
 
+        }
+
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            if (last_he == null)
+                return;
+
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(false, new string[] { "View", "JSON" },
+                            new string[] { "CSV|*.csv", "JSON|*.json" },
+                            new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DTCVSOI },
+                            new string[] { "neareststars", "neareststars" }
+                );
+
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                if (frm.SelectedIndex == 0)
+                {
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+                    grd.GetLine += delegate (int r)
+                    {
+                        if (r < dataGridViewNearest.RowCount+1)
+                        {
+                            if ( r == 0 )
+                            {
+                                return new object[] { last_he.System.Name, "0", discoveryform.history.GetVisitsCount(last_he.System.Name).ToString("#"),
+                                            last_he.System.X.ToString("F2"), last_he.System.Y.ToString("F2"), last_he.System.Z.ToString("F2") };
+                            }
+                            else
+                            {
+                                r--;
+                                DataGridViewRow rw = dataGridViewNearest.Rows[r];
+                                var clicksystem = (ISystem)rw.Tag;
+
+                                return new Object[] {
+                                    rw.Cells[0].Value,
+                                    rw.Cells[1].Value,
+                                    rw.Cells[2].Value,
+                                    clicksystem.X.ToString("F2") ?? "",
+                                    clicksystem.Y.ToString("F2") ?? "",
+                                    clicksystem.Z.ToString("F2") ?? "",
+                                };
+                            }
+                        }
+                        else
+                            return null;
+                    };
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        if (frm.IncludeHeader)
+                        {
+                            if (c < dataGridViewNearest.ColumnCount)
+                                return dataGridViewNearest.Columns[c].HeaderText;
+                            else if (c < 6)
+                                return new string[] { "", "", "", "X", "Y", "Z" }[c];
+                        }
+                        return null;
+                    };
+
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+                }
+                else
+                {
+                    JObject data = new JObject();
+                    data["System"] = new JObject()
+                    {
+                        ["Name"] = last_he.System.Name,
+                        ["X"] = last_he.System.X,
+                        ["Y"] = last_he.System.Y,
+                        ["Z"] = last_he.System.Z,
+                    };
+
+                    var ja = new JArray();
+                    foreach (DataGridViewRow rw in dataGridViewNearest.Rows)
+                    {
+                        var clicksystem = (ISystem)rw.Tag;
+                        JObject entry = new JObject()
+                        {
+                            ["Name"] = rw.Cells[0].Value as string,
+                            ["Distance"] = ((string)rw.Cells[1].Value).InvariantParseDouble(0),
+                            ["Visits"] = ((string)rw.Cells[2].Value).InvariantParseInt(0),
+                            ["X"] = clicksystem.X,
+                            ["Y"] = clicksystem.Y,
+                            ["Z"] = clicksystem.Z,
+                        };
+
+                        ja.Add(entry);
+                    }
+
+                    data["Nearest"] = ja;
+
+                    try
+                    {
+                        System.IO.File.WriteAllText(frm.Path, data.ToString(true)); // failure will be picked up below
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("star distance json " + ex);
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+
+            }
         }
     }
 }

@@ -123,6 +123,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ArrowsRight {
+            get {
+                object obj = ResourceManager.GetObject("ArrowsRight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap backbutton {
             get {
                 object obj = ResourceManager.GetObject("backbutton", resourceCulture);
@@ -526,6 +536,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap FlagStop {
             get {
                 object obj = ResourceManager.GetObject("FlagStop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap FleetCarrier {
+            get {
+                object obj = ResourceManager.GetObject("FleetCarrier", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

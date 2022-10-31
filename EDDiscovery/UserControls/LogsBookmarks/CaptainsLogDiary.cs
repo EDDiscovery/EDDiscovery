@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2018-2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,15 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using EliteDangerousCore.EDSM;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -32,8 +28,8 @@ namespace EDDiscovery.UserControls
 
     public partial class CaptainsLogDiary : UserControlCommonBase
     {
-        public Action<DateTime,bool> ClickedonDate;
-        public DateTime CurrentMonth { get; private set; }
+        public Action<DateTime, bool> ClickedOnDate { get; set; }       // DateTime is in UTC
+        public DateTime CurrentMonthFirstDayUTC { get; private set; }      // this is day 1 of the month, in utc
 
         private string dbDateSave = "DiaryMonth";
         private ExtendedControls.ExtButton[] daybuttons = new ExtendedControls.ExtButton[31];
@@ -49,7 +45,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
@@ -57,8 +52,8 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "CaptainsLogPanel";
 
-            DateTime firstofmonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            CurrentMonth = GetSetting(dbDateSave, firstofmonth);
+            // get setting in utc
+            CurrentMonthFirstDayUTC = GetSetting(dbDateSave, DateTime.UtcNow.StartOfMonth());     
 
             string daynames = "Sun;Mon;Tue;Wed;Thu;Fri;Sat".T(EDTx.CaptainsLogDiary_Daysofweek);
             string[] daynamesplit = daynames.Split(';');
@@ -88,11 +83,6 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Discoveryform_OnRefreshCommanders()
-        {
-            Display();
-        }
-
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
             Display();
@@ -101,8 +91,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            PutSetting(dbDateSave, CurrentMonth);
-            discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
+            PutSetting(dbDateSave, CurrentMonthFirstDayUTC);
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
@@ -117,9 +106,9 @@ namespace EDDiscovery.UserControls
         {
             int buttop = Math.Max(16,this.Height/8);
 
-            int daysinmonth = CultureInfo.InvariantCulture.Calendar.GetDaysInMonth(CurrentMonth.Year, CurrentMonth.Month);
-            int dayofweek = (int)CurrentMonth.DayOfWeek;
-            int lastdayindex = dayofweek + daysinmonth - 1;
+            int daysinmonth = CultureInfo.InvariantCulture.Calendar.GetDaysInMonth(CurrentMonthFirstDayUTC.Year, CurrentMonthFirstDayUTC.Month);
+            int firstdayofmonth = (int)CurrentMonthFirstDayUTC.DayOfWeek;            // CurrentMonth is at 1/1 at 0:0, so first start day in month. Sunday is zero
+            int lastdayindex = firstdayofmonth + daysinmonth - 1;
             int numberrows = lastdayindex / 7 + 1;
 
             int hspacing = (this.Width)/8;
@@ -155,22 +144,20 @@ namespace EDDiscovery.UserControls
                 if (i < daysinmonth )
                 {
                     daybuttons[i].Size = new Size(butwidth, butheight);
-                    daybuttons[i].Location = new Point(butleft + hspacing * dayofweek, vpos);
+                    daybuttons[i].Location = new Point(butleft + hspacing * firstdayofmonth, vpos);
                     daybuttons[i].Font = calfont;
-                    dayofweek++;
-                    if (dayofweek >= 7)
+                    firstdayofmonth++;
+                    if (firstdayofmonth >= 7)
                     {
                         vpos += vspacing;
-                        dayofweek = 0;
+                        firstdayofmonth = 0;
                     }
 
                     // so nasty. Make up start/end markers with the correct kind (UTC or local) then go to universal
-                    DateTime start = new DateTime(CurrentMonth.Year, CurrentMonth.Month, i + 1, 0, 0, 0, EDDConfig.Instance.DisplayTimeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
-                    DateTime end = new DateTime(CurrentMonth.Year, CurrentMonth.Month, i + 1, 23, 59, 59, EDDConfig.Instance.DisplayTimeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
-                    start = start.ToUniversalTime();
-                    end = end.ToUniversalTime();
-
+                    DateTime start = CurrentMonthFirstDayUTC.AddDays(i);
+                    DateTime end = CurrentMonthFirstDayUTC.AddDays(i).EndOfDay();
                     int noentries = GlobalCaptainsLogList.Instance.FindUTC(start,end, EDCommander.CurrentCmdrID).Length;    // UTC comparision..  CL class is UTC
+                    //System.Diagnostics.Debug.WriteLine($"CL Check {start}-{end} = {noentries}");
 
                     daybuttons[i].Tag = noentries;
 
@@ -193,19 +180,19 @@ namespace EDDiscovery.UserControls
                     daybuttons[i].Visible = false;
             }
 
-            SetControlText(EDDConfig.Instance.ConvertTimeToSelectedNoKind(CurrentMonth).ToString("yyyy - MM"));
+            SetControlText(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(CurrentMonthFirstDayUTC).ToString("yyyy - MM"));
             //System.Diagnostics.Debug.WriteLine("Editing month " + curmonthnokind);
         }
 
         private void buttonRight_Click(object sender, EventArgs e)
         {
-            CurrentMonth = CurrentMonth.AddMonths(1);
+            CurrentMonthFirstDayUTC = CurrentMonthFirstDayUTC.AddMonths(1);
             Display();
         }
 
         private void buttonLeft_Click(object sender, EventArgs e)
         {
-            CurrentMonth = CurrentMonth.AddMonths(-1);
+            CurrentMonthFirstDayUTC = CurrentMonthFirstDayUTC.AddMonths(-1);
             Display();
 
         }
@@ -214,7 +201,8 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.ExtButton b = sender as ExtendedControls.ExtButton;
             int dayno = b.Text.Replace("*","").InvariantParseInt(-1);
-            ClickedonDate?.Invoke(new DateTime(CurrentMonth.Year, CurrentMonth.Month, dayno), (int)b.Tag == 0);
+            DateTime clickdate = CurrentMonthFirstDayUTC.AddDays(dayno-1);
+            ClickedOnDate?.Invoke(clickdate, (int)b.Tag == 0);
         }
 
     }

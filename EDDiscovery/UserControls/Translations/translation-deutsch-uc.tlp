@@ -1488,4 +1488,4 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI2.colCAPICargoStolen: "Stolen" => "Gestohlen"
 .extTabControl.tabPageCAPI2.colCAPILockerName: "Microresource" => "Mikroressource"
 .extTabControl.tabPageCAPI2.colCAPILockerType: "Type" => "Typ"
-.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" => ""Anzahl
+.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" => "Anzahl"

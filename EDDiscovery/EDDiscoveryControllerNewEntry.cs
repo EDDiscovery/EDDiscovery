@@ -54,7 +54,7 @@ namespace EDDiscovery
             {
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);  // stop the timer, but if it occurs before this, not the end of the world
                 journalqueue.Enqueue(je);  // add it to the play list.
-                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID );
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID);
                 PlayJournalList();    // and play
             }
         }
@@ -69,16 +69,16 @@ namespace EDDiscovery
             });
         }
 
-        public void PlayJournalList()                 // UI Threead play delay list out..
+        public void PlayJournalList()                 // UI Thread play delay list out..
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Play out list");
+            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Play out list of {journalqueue.Count}");
 
             while (journalqueue.Count > 0)
             {
                 var current = journalqueue.Dequeue();
 
-                System.Diagnostics.Trace.WriteLine($"New JEntry {current.EventTimeUTC} {current.EventTypeStr}");
+                System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} New JEntry {current.EventTimeUTC} {current.EventTypeStr}");
 
                 BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
 
@@ -86,6 +86,7 @@ namespace EDDiscovery
                     continue;
 
                 OnNewJournalEntryUnfiltered?.Invoke(current);         // Called before any removal or merging, so this is the raw journal list
+
                 HistoryEntry historyentry = history.MakeHistoryEntry(current);
                 OnNewHistoryEntryUnfiltered?.Invoke(historyentry);
 
@@ -102,6 +103,7 @@ namespace EDDiscovery
                         OnNewJournalEntryUnfiltered?.Invoke(peek);         // send the peeked, unmodified
                         OnNewHistoryEntryUnfiltered?.Invoke(history.MakeHistoryEntry(peek));
                         journalqueue.Dequeue();                     // remove it
+                        System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ..merged {peek.EventTimeUTC} {peek.EventTypeStr}");
                     }
                     else
                         break;                                      // not mergable and since we peeked not removed
@@ -111,17 +113,19 @@ namespace EDDiscovery
 
                 foreach (var he in historyentries.EmptyIfNull())
                 {
+                    System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** Process {he.EventTimeUTC} {he.EntryType}");
+
                     if (he.EntryType == JournalTypeEnum.CodexEntry)     // need to do some work on codex entry.. set bodyid as long as recorded body name matches tracking name, and update DB
                     {
                         var jce = he.journalEntry as EliteDangerousCore.JournalEvents.JournalCodexEntry;
                         if (jce.EDDBodyName == he.Status.BodyName)        // following EDDN advice, use status body name as master key
                         {
                             jce.EDDBodyId = he.Status.BodyID ?? -1;
-                            System.Diagnostics.Debug.WriteLine($"Journal Codex set body ID to {jce.EDDBodyId} as ID");
+                            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Journal Codex set body ID to {jce.EDDBodyId} as ID");
                         }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine($"Journal Codex WARNING name does not match {he.Status.BodyName} vs {jce.EDDBodyName} {jce.EDDBodyId}");
+                            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Journal Codex WARNING name does not match {he.Status.BodyName} vs {jce.EDDBodyName} {jce.EDDBodyId}");
                         }
                         jce.UpdateDB();                     // write back
                     }
@@ -132,14 +136,14 @@ namespace EDDiscovery
                         {
                             Stopwatch sw = new Stopwatch(); sw.Start();
                             e.DynamicInvoke(he, history);
-                            if (sw.ElapsedMilliseconds >= 20)
-                                System.Diagnostics.Trace.WriteLine(" NE Add Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
+                            if (sw.ElapsedMilliseconds >= 80)
+                                System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} OnNewEntry Add Method {e.Method.DeclaringType} took {sw.ElapsedMilliseconds}");
                         }
                     }
 
                     var t2 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
-                    if (t2.Item2 >= 40)
-                        System.Diagnostics.Trace.WriteLine(" NE First Slow " + t2.Item1);
+                    if (t2.Item2 >= 80)
+                        System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} OnNewEntry slow {t2.Item1}");
 
                     OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
 
@@ -152,7 +156,7 @@ namespace EDDiscovery
                     }
 
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
-                    System.Diagnostics.Trace.WriteLine("NE END " + t3.Item1 + " " + (t3.Item3 > 99 ? "!!!!!!!!!!!!!" : ""));
+                    System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** EndProcess {he.EventTimeUTC} {he.EntryType} {t3.Item1} {(t3.Item3 > 99 ? "!!!!!!!!!!!!!" : "")}");
                 }
 
                 if (historyentry.EntryType == JournalTypeEnum.LoadGame) // and issue this on Load game
