@@ -111,6 +111,7 @@ namespace EDDiscovery.UserControls
             extChartLedger.AddChartArea("LedgerCA1");
             extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
             extChartLedger.EnableZoomMouseWheelX();
+            extChartLedger.SetXAxisInterval(0, IntervalAutoMode.VariableCount);
             extChartLedger.XCursor();
             extChartLedger.XCursorSelection();
             extChartLedger.YAutoScale();
