@@ -110,9 +110,22 @@ namespace EDDiscovery.UserControls
 
             extChartLedger.AddChartArea("LedgerCA1");
             extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
-            extChartLedger.EnableXCursor();
+            extChartLedger.EnableZoomMouseWheelX();
+            extChartLedger.XCursor();
+            extChartLedger.XCursorSelection();
+            extChartLedger.YAutoScale();
             extChartLedger.SetSeriesXAxisLabelType(ChartValueType.Date);
             extChartLedger.SetYAxisFormat("N0");
+            extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
+            extChartLedger.AddContextMenu(new string[] { "Zoom out by 1", "Reset Zoom" },
+                                new Action<ToolStripMenuItem>[]
+                                    { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
+                                          new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomResetX(); } ),
+                                    },
+                                new Action<ToolStripMenuItem[]>((list) => {
+                                    list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
+                                })
+                                );
         }
 
         // themeing has been performed
