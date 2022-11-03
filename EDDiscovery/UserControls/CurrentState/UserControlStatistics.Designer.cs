@@ -153,11 +153,14 @@ namespace EDDiscovery.UserControls
             // 
             // extChartTravelDest
             // 
+            this.extChartTravelDest.AutoScaleYAddedPercent = 5D;
             this.extChartTravelDest.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extChartTravelDest.Location = new System.Drawing.Point(0, 0);
             this.extChartTravelDest.Name = "extChartTravelDest";
             this.extChartTravelDest.Size = new System.Drawing.Size(1059, 201);
             this.extChartTravelDest.TabIndex = 9;
+            this.extChartTravelDest.ZoomMouseWheelXMinimumInterval = 5D;
+            this.extChartTravelDest.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // vScrollBarGeneral
             // 
@@ -317,10 +320,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.RowHeaderMenuStrip = null;
             this.dataGridViewLedger.RowHeadersVisible = false;
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewLedger.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewLedger.SingleRowSelect = true;
             this.dataGridViewLedger.Size = new System.Drawing.Size(1043, 300);
             this.dataGridViewLedger.TabIndex = 2;
             this.dataGridViewLedger.TopLeftHeaderMenuStrip = null;
+            this.dataGridViewLedger.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_CellClick);
             // 
             // dataGridViewTextBoxColumnLedgerDate
             // 
@@ -364,13 +369,16 @@ namespace EDDiscovery.UserControls
             this.extScrollBarLedger.Value = -1;
             this.extScrollBarLedger.ValueLimited = -1;
             // 
-            // extSafeChartLedger
+            // extChartLedger
             // 
+            this.extChartLedger.AutoScaleYAddedPercent = 5D;
             this.extChartLedger.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extChartLedger.Location = new System.Drawing.Point(0, 0);
-            this.extChartLedger.Name = "extSafeChartLedger";
+            this.extChartLedger.Name = "extChartLedger";
             this.extChartLedger.Size = new System.Drawing.Size(1059, 201);
             this.extChartLedger.TabIndex = 10;
+            this.extChartLedger.ZoomMouseWheelXMinimumInterval = 5D;
+            this.extChartLedger.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // tabPageTravel
             // 

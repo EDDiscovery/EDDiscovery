@@ -48,6 +48,7 @@
             this.colItinDistFromNumeric = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItinInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageFinances = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.extPanelDataGridViewScrollLedger = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarLedger = new ExtendedControls.ExtScrollBar();
             this.dataGridViewLedger = new BaseUtils.DataGridViewColumnControl();
@@ -59,6 +60,7 @@
             this.colLedgerDebitNumeric = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colLedgerBalanceNumeric = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colLedgerNotes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.extChartLedger = new ExtendedControls.ExtSafeChart();
             this.panelFinancesTop = new System.Windows.Forms.Panel();
             this.labelFCarrierBalance = new System.Windows.Forms.Label();
             this.labelFReserveBalance = new System.Windows.Forms.Label();
@@ -153,6 +155,10 @@
             this.dataViewScrollerPanelItinerary.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItinerary)).BeginInit();
             this.tabPageFinances.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.extPanelDataGridViewScrollLedger.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.panelFinancesTop.SuspendLayout();
@@ -412,7 +418,7 @@
             // 
             // tabPageFinances
             // 
-            this.tabPageFinances.Controls.Add(this.extPanelDataGridViewScrollLedger);
+            this.tabPageFinances.Controls.Add(this.splitContainer1);
             this.tabPageFinances.Controls.Add(this.panelFinancesTop);
             this.tabPageFinances.Location = new System.Drawing.Point(4, 22);
             this.tabPageFinances.Name = "tabPageFinances";
@@ -422,16 +428,34 @@
             this.tabPageFinances.Text = "Finances";
             this.tabPageFinances.UseVisualStyleBackColor = true;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 103);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.extPanelDataGridViewScrollLedger);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.extChartLedger);
+            this.splitContainer1.Size = new System.Drawing.Size(839, 440);
+            this.splitContainer1.SplitterDistance = 220;
+            this.splitContainer1.TabIndex = 2;
+            // 
             // extPanelDataGridViewScrollLedger
             // 
             this.extPanelDataGridViewScrollLedger.Controls.Add(this.extScrollBarLedger);
             this.extPanelDataGridViewScrollLedger.Controls.Add(this.dataGridViewLedger);
             this.extPanelDataGridViewScrollLedger.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollLedger.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollLedger.Location = new System.Drawing.Point(3, 103);
+            this.extPanelDataGridViewScrollLedger.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollLedger.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewScrollLedger.Name = "extPanelDataGridViewScrollLedger";
-            this.extPanelDataGridViewScrollLedger.Size = new System.Drawing.Size(839, 440);
+            this.extPanelDataGridViewScrollLedger.Size = new System.Drawing.Size(839, 220);
             this.extPanelDataGridViewScrollLedger.TabIndex = 3;
             this.extPanelDataGridViewScrollLedger.VerticalScrollBarDockRight = true;
             // 
@@ -453,7 +477,7 @@
             this.extScrollBarLedger.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarLedger.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarLedger.Name = "extScrollBarLedger";
-            this.extScrollBarLedger.Size = new System.Drawing.Size(16, 440);
+            this.extScrollBarLedger.Size = new System.Drawing.Size(16, 220);
             this.extScrollBarLedger.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SmallChange = 1;
             this.extScrollBarLedger.TabIndex = 1;
@@ -492,9 +516,11 @@
             this.dataGridViewLedger.RowHeadersWidth = 62;
             this.dataGridViewLedger.RowTemplate.Height = 28;
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewLedger.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewLedger.SingleRowSelect = true;
-            this.dataGridViewLedger.Size = new System.Drawing.Size(823, 440);
+            this.dataGridViewLedger.Size = new System.Drawing.Size(823, 220);
             this.dataGridViewLedger.TabIndex = 0;
+            this.dataGridViewLedger.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_CellClick);
             // 
             // colLedgerDate
             // 
@@ -547,6 +573,17 @@
             this.colLedgerNotes.HeaderText = "Notes";
             this.colLedgerNotes.Name = "colLedgerNotes";
             this.colLedgerNotes.ReadOnly = true;
+            // 
+            // extChartLedger
+            // 
+            this.extChartLedger.AutoScaleYAddedPercent = 5D;
+            this.extChartLedger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extChartLedger.Location = new System.Drawing.Point(0, 0);
+            this.extChartLedger.Name = "extChartLedger";
+            this.extChartLedger.Size = new System.Drawing.Size(839, 216);
+            this.extChartLedger.TabIndex = 0;
+            this.extChartLedger.ZoomMouseWheelXMinimumInterval = 5D;
+            this.extChartLedger.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // panelFinancesTop
             // 
@@ -1679,6 +1716,10 @@
             this.dataViewScrollerPanelItinerary.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItinerary)).EndInit();
             this.tabPageFinances.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.extPanelDataGridViewScrollLedger.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).EndInit();
             this.panelFinancesTop.ResumeLayout(false);
@@ -1839,5 +1880,7 @@
         private System.Windows.Forms.Label labelCAPICarrierBalance;
         private System.Windows.Forms.Label labelCAPIDateTime2;
         private System.Windows.Forms.Label labelCAPIDateTime3;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private ExtendedControls.ExtSafeChart extChartLedger;
     }
 }

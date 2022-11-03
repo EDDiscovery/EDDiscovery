@@ -111,13 +111,20 @@ namespace EDDiscovery.UserControls
             extChartLedger.AddChartArea("LedgerCA1");
             extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
             extChartLedger.EnableZoomMouseWheelX();
-            extChartLedger.SetXAxisInterval(0, IntervalAutoMode.VariableCount);
-            extChartLedger.XCursor();
+            extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
+
+            extChartLedger.SetXAxisInterval(DateTimeIntervalType.Days, 0, IntervalAutoMode.VariableCount);
+            extChartLedger.SetXAxisFormat("g");
+
+            extChartLedger.XCursorShown();
             extChartLedger.XCursorSelection();
+            extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Minutes);
+
             extChartLedger.YAutoScale();
-            extChartLedger.SetSeriesXAxisLabelType(ChartValueType.Date);
             extChartLedger.SetYAxisFormat("N0");
+
             extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
+
             extChartLedger.AddContextMenu(new string[] { "Zoom out by 1", "Reset Zoom" },
                                 new Action<ToolStripMenuItem>[]
                                     { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
@@ -443,9 +450,11 @@ namespace EDDiscovery.UserControls
 
             foreach( var kvp in currentstat.Credits)
             {
-                object[] coldata = new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(kvp.Key).ToShortDateString(), kvp.Value.ToString("N0") };
-                dataGridViewLedger.Rows.Add(coldata);
-                extChartLedger.AddXY(kvp.Key, kvp.Value);
+                DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(kvp.Key);
+                object[] coldata = new object[] { seltime.ToString(), kvp.Value.ToString("N0") };
+                int row =dataGridViewLedger.Rows.Add(coldata);
+                dataGridViewLedger.Rows[row].Tag = seltime;
+                extChartLedger.AddXY(seltime, kvp.Value);
             }
 
             if (sortcol < dataGridViewTravel.Columns.Count)
@@ -457,6 +466,16 @@ namespace EDDiscovery.UserControls
             laststatsledgerdisplayed = true;
         }
 
+        private void dataGridViewLedger_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)
+            {
+                var row = dataGridViewLedger.Rows[e.RowIndex];
+                var datetime = (DateTime)row.Tag;
+                System.Diagnostics.Debug.WriteLine($"Stats Selected Graph cursor position {datetime}");
+                extChartLedger.SetXCursorPosition(datetime);
+            }
+        }
 
         #endregion
 

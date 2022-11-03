@@ -22,6 +22,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery.UserControls
 {
@@ -113,6 +114,37 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerType, EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric};
 
             BaseUtils.Translator.Instance.TranslateControls(this,enumlist);
+
+            extChartLedger.AddChartArea("LedgerCA1");
+            extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
+
+            extChartLedger.EnableZoomMouseWheelX();
+            extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
+
+            extChartLedger.SetXAxisInterval(DateTimeIntervalType.Days, 0, IntervalAutoMode.VariableCount);
+            extChartLedger.SetXAxisFormat("g");
+
+            extChartLedger.XCursorShown();
+            extChartLedger.XCursorSelection();
+            extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Minutes);
+
+            //extChartLedger.SetSeriesXAxisLabelType(ChartValueType.Date);
+
+            extChartLedger.YAutoScale();
+            extChartLedger.SetYAxisFormat("N0");
+
+            extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
+
+            extChartLedger.AddContextMenu(new string[] { "Zoom out by 1", "Reset Zoom" },
+                                new Action<ToolStripMenuItem>[]
+                                    { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
+                                          new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomResetX(); } ),
+                                    },
+                                new Action<ToolStripMenuItem[]>((list) => {
+                                    list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
+                                })
+                                );
+
 
 
             using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
@@ -287,6 +319,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewItinerary.Rows.Clear();
             dataGridViewLedger.Rows.Clear();
+            extChartLedger.ClearSeriesPoints();
             dataGridViewOrders.Rows.Clear();
             DisplayJournal();
         }
@@ -362,13 +395,16 @@ namespace EDDiscovery.UserControls
 
                 dataGridViewLedger.Rows.Clear();
 
+                extChartLedger.ClearSeriesPoints();
+
                 for (int i = cs.Ledger.Count - 1; i >= 0; i--)
                 {
                     var le = cs.Ledger[i];
                     long diff = i > 0 ? (le.Balance - cs.Ledger[i - 1].Balance) : 0;        // difference between us and previous, + if credit, - if not
 
+                    DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(le.JournalEntry.EventTimeUTC);
 
-                    object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(le.JournalEntry.EventTimeUTC),
+                    object[] rowobj = { seltime.ToString(),
                                         le.StarSystem.Name,
                                         le.Body,
                                         le.JournalEntry.EventTypeStr.SplitCapsWordFull(),
@@ -378,7 +414,10 @@ namespace EDDiscovery.UserControls
                                         le.Notes
                     };
 
-                    dataGridViewLedger.Rows.Add(rowobj);
+                    var row = dataGridViewLedger.Rows.Add(rowobj);
+                    dataGridViewLedger.Rows[row].Tag = seltime;
+                    extChartLedger.AddXY(seltime, le.Balance);
+                    //System.Diagnostics.Debug.WriteLine($"Add {seltime} {le.Balance}");
                 }
 
                 dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
@@ -730,6 +769,18 @@ namespace EDDiscovery.UserControls
             panelFinancesTop.Height = Math.Max(rypos, lypos);
         }
 
+        private void dataGridViewLedger_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)
+            {
+                var row = dataGridViewLedger.Rows[e.RowIndex];
+                var datetime = (DateTime)row.Tag;
+                //System.Diagnostics.Debug.WriteLine($"Stats Selected Graph cursor position {datetime}");
+                extChartLedger.SetXCursorPosition(datetime);
+            }
+        }
+
+
         #endregion
 
         #region CAPI
@@ -829,6 +880,7 @@ namespace EDDiscovery.UserControls
 
         private DateTime capidisplayedtime;
 
+       
         // fc = null means invalid capi data, clear display
         private void DisplayCAPI(CAPI.FleetCarrier fc)
         {
