@@ -145,6 +145,7 @@ namespace EDDiscovery.UserControls
                                 })
                                 );
 
+            extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
 
 
             using (Graphics gr = imageControlOverall.GetGraphics(2))        // paint this on plane 2, which is visibility toggled
@@ -319,7 +320,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewItinerary.Rows.Clear();
             dataGridViewLedger.Rows.Clear();
-            extChartLedger.ClearSeriesPoints();
+            extChartLedger.ClearPoints();
             dataGridViewOrders.Rows.Clear();
             DisplayJournal();
         }
@@ -395,7 +396,7 @@ namespace EDDiscovery.UserControls
 
                 dataGridViewLedger.Rows.Clear();
 
-                extChartLedger.ClearSeriesPoints();
+                extChartLedger.ClearPoints();
 
                 for (int i = cs.Ledger.Count - 1; i >= 0; i--)
                 {
@@ -777,6 +778,15 @@ namespace EDDiscovery.UserControls
                 var datetime = (DateTime)row.Tag;
                 //System.Diagnostics.Debug.WriteLine($"Stats Selected Graph cursor position {datetime}");
                 extChartLedger.SetXCursorPosition(datetime);
+            }
+        }
+        private void LedgerCursorPositionChanged(ExtendedControls.ExtSafeChart chart, string chartarea, AxisName axis, double pos)
+        {
+            var index = extChartLedger.FindIndexOfNearestPoint(pos);        // find nearest
+            if (index >= 0 && index < dataGridViewLedger.Rows.Count)        // in range, select
+            {
+                dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(index);
+                dataGridViewLedger.Rows[index].Selected = true;
             }
         }
 

@@ -134,6 +134,8 @@ namespace EDDiscovery.UserControls
                                     list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
                                 })
                                 );
+
+            extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
         }
 
         // themeing has been performed
@@ -379,7 +381,7 @@ namespace EDDiscovery.UserControls
         {
             TravelDGV("Total No of jumps".T(EDTx.UserControlStats_TotalNoofjumps), currentstat.fsdcarrierjumps.ToString());
 
-            extChartTravelDest.ClearSeriesPoints();
+            extChartTravelDest.ClearPoints();
 
             if (currentstat.FSDJumps.Count > 0)        // these will be null unless there are jumps
             {
@@ -445,7 +447,7 @@ namespace EDDiscovery.UserControls
             int sortcol = dataGridViewLedger.SortedColumn?.Index ?? 99;
             SortOrder sortorder = dataGridViewLedger.SortOrder;
 
-            extChartLedger.ClearSeriesPoints();
+            extChartLedger.ClearPoints();
             dataGridViewLedger.Rows.Clear();
 
             foreach( var kvp in currentstat.Credits)
@@ -476,6 +478,16 @@ namespace EDDiscovery.UserControls
                 extChartLedger.SetXCursorPosition(datetime);
             }
         }
+        private void LedgerCursorPositionChanged(ExtendedControls.ExtSafeChart chart, string chartarea, AxisName axis, double pos)
+        {
+            var index = extChartLedger.FindIndexOfNearestPoint(pos);        // find nearest
+            if (index >= 0 && index < dataGridViewLedger.Rows.Count)        // in range, select
+            {
+                dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(index);
+                dataGridViewLedger.Rows[index].Selected = true;
+            }
+        }
+
 
         #endregion
 
