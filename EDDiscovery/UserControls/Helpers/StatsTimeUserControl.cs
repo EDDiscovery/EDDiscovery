@@ -30,9 +30,10 @@ namespace EDDiscovery.UserControls
             NotSet = 999,
         }
 
-        public event EventHandler TimeModeChanged;      // time or planet/stars changed
+        public Action<TimeModeType, TimeModeType> TimeModeChanged;          // time mode changed
+        public Action StarPlanetModeChanged;                                // Star planet changed
 
-        public bool StarMode { get { return checkBoxCustomStars.Checked; } }
+        public bool StarMode { get; private set; } = false;
 
         public TimeModeType TimeMode
         {
@@ -47,53 +48,49 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public TimeModeType PreviousTimeMode { get; private set; }
+
         public StatsTimeUserControl()
         {
             InitializeComponent();
-        }
-
-        public void DisplayStarsPlanetSelector(bool on)
-        {
-            checkBoxCustomStars.Visible = checkBoxCustomPlanets.Visible = on;
-        }
-
-        private void UserControlStatsTime_Load(object sender, EventArgs e)
-        {
             comboBoxTimeMode.Items.Add("Summary".T(EDTx.StatsTimeUserControl_Summary));
             comboBoxTimeMode.Items.Add("Day".T(EDTx.StatsTimeUserControl_Day));
             comboBoxTimeMode.Items.Add("Week".T(EDTx.StatsTimeUserControl_Week));
             comboBoxTimeMode.Items.Add("Month".T(EDTx.StatsTimeUserControl_Month));
             comboBoxTimeMode.Items.Add("Year".T(EDTx.TravelHistoryFilter_Year));
-            comboBoxTimeMode.SelectedIndex = 0;
+            PreviousTimeMode = TimeModeType.Summary;
+        }
+
+        public void DisplayStarsPlanetSelector(bool on)
+        {
+            extButtonPlanet.Visible = extButtonStar.Visible = true;
+            SetEnables();
+        }
+
+        private void SetEnables()
+        {
+            extButtonPlanet.Enabled = StarMode;
+            extButtonStar.Enabled = !StarMode;
         }
 
         private void comboBoxTimeMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TimeModeChanged?.Invoke(this, e);
+            TimeModeChanged?.Invoke(PreviousTimeMode, TimeMode);
+            PreviousTimeMode = TimeMode;
         }
 
-        bool preventrentry = false;
-
-        private void checkBoxCustomPlanets_CheckedChanged(object sender, EventArgs e)
+        private void extButtonPlanet_Click(object sender, EventArgs e)
         {
-            SetStarDraw(!checkBoxCustomPlanets.Checked,e);
+            StarMode = false;
+            SetEnables();
+            StarPlanetModeChanged?.Invoke();
         }
 
-        private void checkBoxCustomStars_CheckedChanged(object sender, EventArgs e)
+        private void extButtonStar_Click(object sender, EventArgs e)
         {
-            SetStarDraw(checkBoxCustomStars.Checked,e);
-        }
-
-        void SetStarDraw(bool text, EventArgs e)
-        {
-            if (!preventrentry)
-            {
-                preventrentry = true;
-                checkBoxCustomStars.Checked = text;
-                checkBoxCustomPlanets.Checked = !text;
-                preventrentry = false;
-                TimeModeChanged?.Invoke(this, e);
-            }
+            StarMode = true;
+            SetEnables();
+            StarPlanetModeChanged?.Invoke();
         }
     }
 }

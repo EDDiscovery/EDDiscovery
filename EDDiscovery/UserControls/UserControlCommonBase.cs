@@ -335,7 +335,7 @@ namespace EDDiscovery.UserControls
         public bool DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
-            //System.Diagnostics.Debug.WriteLine("Get Column Name " + root);
+            //System.Diagnostics.Debug.WriteLine($"DGV Layout Load {root} {auxname}");
             return dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                                         (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
         }
@@ -343,7 +343,7 @@ namespace EDDiscovery.UserControls
         public void DGVSaveColumnLayout(DataGridView dgv, string auxname = "")
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
-            //System.Diagnostics.Debug.WriteLine("Set Column Name " + root);
+            //System.Diagnostics.Debug.WriteLine($"DGV Layout Save {root} {auxname}");
             dgv.SaveColumnSettings(root, (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
                                         (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }

@@ -45,63 +45,12 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkBoxCustomStars = new ExtendedControls.ExtCheckBox();
-            this.checkBoxCustomPlanets = new ExtendedControls.ExtCheckBox();
             this.comboBoxTimeMode = new ExtendedControls.ExtComboBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonPlanet = new ExtendedControls.ExtButton();
+            this.extButtonStar = new ExtendedControls.ExtButton();
             this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // checkBoxCustomStars
-            // 
-            this.checkBoxCustomStars.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCustomStars.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomStars.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxCustomStars.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomStars.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomStars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCustomStars.Image = global::EDDiscovery.Icons.Controls.Stars;
-            this.checkBoxCustomStars.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomStars.ImageIndeterminate = null;
-            this.checkBoxCustomStars.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCustomStars.ImageUnchecked = null;
-            this.checkBoxCustomStars.Location = new System.Drawing.Point(140, 1);
-            this.checkBoxCustomStars.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxCustomStars.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomStars.Name = "checkBoxCustomStars";
-            this.checkBoxCustomStars.Size = new System.Drawing.Size(24, 24);
-            this.checkBoxCustomStars.TabIndex = 6;
-            this.checkBoxCustomStars.TickBoxReductionRatio = 0.75F;
-            this.checkBoxCustomStars.UseVisualStyleBackColor = true;
-            this.checkBoxCustomStars.Visible = false;
-            this.checkBoxCustomStars.CheckedChanged += new System.EventHandler(this.checkBoxCustomStars_CheckedChanged);
-            // 
-            // checkBoxCustomPlanets
-            // 
-            this.checkBoxCustomPlanets.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCustomPlanets.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxCustomPlanets.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomPlanets.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxCustomPlanets.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomPlanets.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomPlanets.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.checkBoxCustomPlanets.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
-            this.checkBoxCustomPlanets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCustomPlanets.Image = global::EDDiscovery.Icons.Controls.Planets;
-            this.checkBoxCustomPlanets.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomPlanets.ImageIndeterminate = null;
-            this.checkBoxCustomPlanets.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCustomPlanets.ImageUnchecked = null;
-            this.checkBoxCustomPlanets.Location = new System.Drawing.Point(108, 1);
-            this.checkBoxCustomPlanets.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxCustomPlanets.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomPlanets.Name = "checkBoxCustomPlanets";
-            this.checkBoxCustomPlanets.Size = new System.Drawing.Size(24, 24);
-            this.checkBoxCustomPlanets.TabIndex = 5;
-            this.checkBoxCustomPlanets.TickBoxReductionRatio = 0.75F;
-            this.checkBoxCustomPlanets.UseVisualStyleBackColor = true;
-            this.checkBoxCustomPlanets.Visible = false;
-            this.checkBoxCustomPlanets.CheckedChanged += new System.EventHandler(this.checkBoxCustomPlanets_CheckedChanged);
             // 
             // comboBoxTimeMode
             // 
@@ -131,13 +80,39 @@ namespace EDDiscovery.UserControls
             // 
             this.flowLayoutPanel2.AutoSize = true;
             this.flowLayoutPanel2.Controls.Add(this.comboBoxTimeMode);
-            this.flowLayoutPanel2.Controls.Add(this.checkBoxCustomPlanets);
-            this.flowLayoutPanel2.Controls.Add(this.checkBoxCustomStars);
+            this.flowLayoutPanel2.Controls.Add(this.extButtonPlanet);
+            this.flowLayoutPanel2.Controls.Add(this.extButtonStar);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(800, 32);
             this.flowLayoutPanel2.TabIndex = 9;
+            // 
+            // extButtonPlanet
+            // 
+            this.extButtonPlanet.Enabled = false;
+            this.extButtonPlanet.Image = global::EDDiscovery.Icons.Controls.Planets;
+            this.extButtonPlanet.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extButtonPlanet.Location = new System.Drawing.Point(111, 3);
+            this.extButtonPlanet.Name = "extButtonPlanet";
+            this.extButtonPlanet.Size = new System.Drawing.Size(24, 24);
+            this.extButtonPlanet.TabIndex = 7;
+            this.extButtonPlanet.UseVisualStyleBackColor = true;
+            this.extButtonPlanet.Visible = false;
+            this.extButtonPlanet.Click += new System.EventHandler(this.extButtonPlanet_Click);
+            // 
+            // extButtonStar
+            // 
+            this.extButtonStar.Enabled = false;
+            this.extButtonStar.Image = global::EDDiscovery.Icons.Controls.Stars;
+            this.extButtonStar.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extButtonStar.Location = new System.Drawing.Point(141, 3);
+            this.extButtonStar.Name = "extButtonStar";
+            this.extButtonStar.Size = new System.Drawing.Size(24, 24);
+            this.extButtonStar.TabIndex = 8;
+            this.extButtonStar.UseVisualStyleBackColor = true;
+            this.extButtonStar.Visible = false;
+            this.extButtonStar.Click += new System.EventHandler(this.extButtonStar_Click);
             // 
             // StatsTimeUserControl
             // 
@@ -146,7 +121,6 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.flowLayoutPanel2);
             this.Name = "StatsTimeUserControl";
             this.Size = new System.Drawing.Size(800, 32);
-            this.Load += new System.EventHandler(this.UserControlStatsTime_Load);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -155,8 +129,8 @@ namespace EDDiscovery.UserControls
 
         #endregion
         internal ExtendedControls.ExtComboBox comboBoxTimeMode;
-        private ExtendedControls.ExtCheckBox checkBoxCustomStars;
-        private ExtendedControls.ExtCheckBox checkBoxCustomPlanets;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private ExtButton extButtonPlanet;
+        private ExtButton extButtonStar;
     }
 }

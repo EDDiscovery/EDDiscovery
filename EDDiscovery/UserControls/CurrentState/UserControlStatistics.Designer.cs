@@ -461,7 +461,6 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeTravel.Size = new System.Drawing.Size(1065, 26);
             this.userControlStatsTimeTravel.TabIndex = 0;
             this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
-            this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
             // 
             // tabPageScan
             // 
@@ -542,7 +541,6 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeScan.Size = new System.Drawing.Size(1065, 26);
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
-            this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
             // 
             // tabPageCombat
             // 
@@ -584,7 +582,6 @@ namespace EDDiscovery.UserControls
             this.statsTimeUserControlCombat.Size = new System.Drawing.Size(1059, 26);
             this.statsTimeUserControlCombat.TabIndex = 4;
             this.statsTimeUserControlCombat.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
-            this.statsTimeUserControlCombat.TimeModeChanged += new System.EventHandler(this.statsTimeUserControlCombat_TimeModeChanged);
             // 
             // tabPageGameStats
             // 
