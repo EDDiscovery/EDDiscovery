@@ -121,6 +121,7 @@ namespace EDDiscovery.UserControls
             // 
             this.dataGridViewGeneral.AllowUserToAddRows = false;
             this.dataGridViewGeneral.AllowUserToDeleteRows = false;
+            this.dataGridViewGeneral.AllowUserToResizeRows = false;
             this.dataGridViewGeneral.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewGeneral.AutoSortByColumnName = false;
             this.dataGridViewGeneral.ColumnHeaderMenuStrip = null;
@@ -307,6 +308,7 @@ namespace EDDiscovery.UserControls
             // 
             this.dataGridViewLedger.AllowUserToAddRows = false;
             this.dataGridViewLedger.AllowUserToDeleteRows = false;
+            this.dataGridViewLedger.AllowUserToResizeRows = false;
             this.dataGridViewLedger.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewLedger.AutoSortByColumnName = true;
             this.dataGridViewLedger.ColumnHeaderMenuStrip = null;

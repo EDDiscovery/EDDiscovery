@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
 
             extChartLedger.XCursorShown();
             extChartLedger.XCursorSelection();
-            extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Minutes);
+            extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Seconds);
 
             extChartLedger.YAutoScale();
             extChartLedger.SetYAxisFormat("N0");
@@ -444,8 +444,8 @@ namespace EDDiscovery.UserControls
         private bool laststatsledgerdisplayed = false;
         private void StatsLedger(JournalStats currentstat)
         {
-            int sortcol = dataGridViewLedger.SortedColumn?.Index ?? 99;
-            SortOrder sortorder = dataGridViewLedger.SortOrder;
+            DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
+            SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
             extChartLedger.ClearPoints();
             dataGridViewLedger.Rows.Clear();
@@ -459,11 +459,8 @@ namespace EDDiscovery.UserControls
                 extChartLedger.AddXY(seltime, kvp.Value);
             }
 
-            if (sortcol < dataGridViewTravel.Columns.Count)
-            {
-                dataGridViewLedger.Sort(dataGridViewLedger.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridViewLedger.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
-            }
+            dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+            dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
             laststatsledgerdisplayed = true;
         }
@@ -480,11 +477,15 @@ namespace EDDiscovery.UserControls
         }
         private void LedgerCursorPositionChanged(ExtendedControls.ExtSafeChart chart, string chartarea, AxisName axis, double pos)
         {
-            var index = extChartLedger.FindIndexOfNearestPoint(pos);        // find nearest
-            if (index >= 0 && index < dataGridViewLedger.Rows.Count)        // in range, select
+            if (!double.IsNaN(pos))     // this means its off graph, ignore
             {
-                dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(index);
-                dataGridViewLedger.Rows[index].Selected = true;
+                DateTime dtgraph = DateTime.FromOADate(pos);                    // back to date/time
+                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => (DateTime)r.Tag, dtgraph, long.MaxValue);  // we accept any nearest
+                if (row >= 0)
+                {
+                    dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(row);
+                    dataGridViewLedger.Rows[row].Selected = true;
+                }
             }
         }
 

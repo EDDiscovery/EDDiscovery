@@ -493,6 +493,7 @@
             // 
             this.dataGridViewLedger.AllowUserToAddRows = false;
             this.dataGridViewLedger.AllowUserToDeleteRows = false;
+            this.dataGridViewLedger.AllowUserToResizeRows = false;
             this.dataGridViewLedger.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewLedger.AutoSortByColumnName = true;
             this.dataGridViewLedger.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;

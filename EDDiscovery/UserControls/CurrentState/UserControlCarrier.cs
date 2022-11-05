@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
 
             extChartLedger.XCursorShown();
             extChartLedger.XCursorSelection();
-            extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Minutes);
+            extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Seconds);
 
             //extChartLedger.SetSeriesXAxisLabelType(ChartValueType.Date);
 
@@ -782,14 +782,17 @@ namespace EDDiscovery.UserControls
         }
         private void LedgerCursorPositionChanged(ExtendedControls.ExtSafeChart chart, string chartarea, AxisName axis, double pos)
         {
-            var index = extChartLedger.FindIndexOfNearestPoint(pos);        // find nearest
-            if (index >= 0 && index < dataGridViewLedger.Rows.Count)        // in range, select
+            if (!double.IsNaN(pos))     // this means its off graph, ignore
             {
-                dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(index);
-                dataGridViewLedger.Rows[index].Selected = true;
+                DateTime dtgraph = DateTime.FromOADate(pos);                    // back to date/time
+                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => (DateTime)r.Tag, dtgraph, long.MaxValue);  // Find nearest row whatever
+                if (row >= 0)
+                {
+                    dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(row);
+                    dataGridViewLedger.Rows[row].Selected = true;
+                }
             }
         }
-
 
         #endregion
 
