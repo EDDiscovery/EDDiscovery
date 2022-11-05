@@ -139,6 +139,9 @@ namespace EDDiscovery.UserControls
                                 );
 
             extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
+
+            extChartCombat.AddChartArea("CombatCA1");
+            extChartScan.AddChartArea("ScanCA1");
         }
 
         // themeing has been performed
@@ -593,6 +596,8 @@ namespace EDDiscovery.UserControls
             if (previous != next)
             {
                 DGVSaveColumnLayout(dataGridViewTravel, dbTravel + previous.ToString());
+                dataGridViewTravel.Columns.Clear();
+                dataGridViewTravel.Rows.Clear();
                 redisplay = true;
             }
         }
@@ -624,9 +629,10 @@ namespace EDDiscovery.UserControls
             if (IsClosed)
                 return;
 
+            int row = 0;
+
             if (userControlStatsTimeScan.StarMode)
             {
-                int row = 0;
                 foreach (EDStar startype in Enum.GetValues(typeof(EDStar)))
                 {
                     StatToDGV(dataGridViewScan, Bodies.StarName(startype), res[row++]);
@@ -634,13 +640,13 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                int row = 0;
                 foreach (EDPlanet planettype in Enum.GetValues(typeof(EDPlanet)))
                 {
                     StatToDGV(dataGridViewScan, planettype == EDPlanet.Unknown_Body_Type ? "Belt Cluster".T(EDTx.UserControlStats_Beltcluster) : Bodies.PlanetTypeName(planettype), res[row++]);
-
                 }
             }
+
+            StatToDGV(dataGridViewScan, " ** Total Scans **", res[row++]);
 
             if (sortcol < dataGridViewScan.Columns.Count)
             {
@@ -662,6 +668,8 @@ namespace EDDiscovery.UserControls
             return System.Threading.Tasks.Task.Run(() =>
             {
                 int results = starmode ? Enum.GetValues(typeof(EDStar)).Length : Enum.GetValues(typeof(EDPlanet)).Length;
+                results++;      // 1 more for end totals
+
                 int intervals = tupletimes.Item1.Length;
 
                 var scanlists = new List<JournalScan>[intervals];
@@ -671,6 +679,8 @@ namespace EDDiscovery.UserControls
                 string[][] res = new string[results][];
                 for (var i = 0; i < results; i++)
                     res[i] = new string[intervals];
+
+                long[] totals = new long[intervals];
 
                 if (starmode)
                 {
@@ -687,11 +697,11 @@ namespace EDDiscovery.UserControls
                             }
 
                             res[row][ii] = num.ToString("N0");
+                            totals[ii] += num;
                         }
 
                         row++;
                     }
-                    System.Diagnostics.Debug.Assert(row == results);
                 }
                 else
                 {
@@ -709,11 +719,14 @@ namespace EDDiscovery.UserControls
                             }
 
                             res[row][ii] = num.ToString("N0");
+                            totals[ii] += num;
                         }
                         row++;
                     }
-                    System.Diagnostics.Debug.Assert(row == results);
                 }
+
+                for (int i = 0; i < intervals; i++)
+                    res[results-1][i] = totals[i].ToString("N0");
 
                 return res;
             });
@@ -724,6 +737,8 @@ namespace EDDiscovery.UserControls
             if (previous != next)
             {
                 DGVSaveColumnLayout(dataGridViewScan, dbScan + previous.ToString());
+                dataGridViewScan.Columns.Clear();
+                dataGridViewScan.Rows.Clear();
                 redisplay = true;
             }
         }
@@ -731,6 +746,8 @@ namespace EDDiscovery.UserControls
         private void userControlStatsTimeScan_StarPlanetModeChanged()
         {
             DGVSaveColumnLayout(dataGridViewScan, dbScan + userControlStatsTimeScan.TimeMode.ToString());        // we get a complete redisplay, with DGV load, so need to save it back even though don't really need to
+            dataGridViewScan.Columns.Clear();
+            dataGridViewScan.Rows.Clear();
             redisplay = true;
         }
 
@@ -753,22 +770,18 @@ namespace EDDiscovery.UserControls
                              SetUpDaysMonthsYear(endtimeutc, dataGridViewCombat, timemode, dbCombat);
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Combat stats interval begin {timemode}");
-            var res = await ComputeCombat(currentstat, tupletimes);
+            var cres = await ComputeCombat(currentstat, tupletimes);
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Combat stats interval end {timemode}");
             if (IsClosed)
                 return;
+            var res = cres.griddata;
 
-//TBD TX IDS
+   //TBD TX IDS
             int row = 0;
-            StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Elite Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Deadly Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Dangerous Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP <= Master Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            
             StatToDGV(dataGridViewCombat, "Bounties".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Bounty Value".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Bounties on Ships".T(EDTx.UserControlStats_Jumps), res[row++]);
+
             StatToDGV(dataGridViewCombat, "Bounties on Thargoids".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Bounties on On Foot NPC".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Bounties on Skimmers".T(EDTx.UserControlStats_Jumps), res[row++]);
@@ -776,7 +789,11 @@ namespace EDDiscovery.UserControls
             StatToDGV(dataGridViewCombat, "Ships Elite Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Ships Deadly Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Ships Dangerous Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships <= Master Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "Ships Master Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "Ships Expert Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "Ships Competent Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "Ships Novice Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "Ships Harmless Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
 
             StatToDGV(dataGridViewCombat, "Crimes".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Crime Cost".T(EDTx.UserControlStats_Jumps), res[row++]);
@@ -790,6 +807,16 @@ namespace EDDiscovery.UserControls
             StatToDGV(dataGridViewCombat, "Interdicted Player Failed".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Interdicted NPC Succeeded".T(EDTx.UserControlStats_Jumps), res[row++]);
             StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".T(EDTx.UserControlStats_Jumps), res[row++]);
+
+            StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Elite Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Deadly Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Dangerous Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Master Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Expert Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Competent Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Novice Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Harmless Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
 
             if (sortcol < dataGridViewCombat.Columns.Count)
             {
@@ -805,16 +832,31 @@ namespace EDDiscovery.UserControls
             labelStatus.Text = "";  // not working now
         }
 
-        private static System.Threading.Tasks.Task<string[][]> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
+        private class CombatReturn
+        {
+            public string[][] griddata;
+            public int[][] pvpchartdata;
+            public int[][] npcchartdata;
+        }
+
+        private static System.Threading.Tasks.Task<CombatReturn> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
-                int results = 28;
                 int intervals = tupletimes.Item1.Length;
 
-                string[][] res = new string[results][];
+                int results = 40;                               // does not need to be accurate
+                string[][] res = new string[results][];         // outer [] is results
                 for (var i = 0; i < results; i++)
                     res[i] = new string[intervals];
+
+                int[][] pvppiechart = new int[intervals][];        // outer [] is intervals
+                for (var i = 0; i < intervals; i++)
+                    pvppiechart[i] = new int[8];
+
+                int[][] npcpiechart = new int[intervals][];        // outer [] is intervals
+                for (var i = 0; i < intervals; i++)
+                    npcpiechart[i] = new int[12];
 
                 for (var ii = 0; ii < intervals; ii++)
                 {
@@ -828,25 +870,30 @@ namespace EDDiscovery.UserControls
                     var interdictions = currentstat.Interdiction.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
                     var interdicted = currentstat.Interdicted.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
 
-                    int row = 0;
-                    res[row++][ii] = pvpStats.Count.ToString("N0");
-                    res[row++][ii] = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count().ToString("N0");
-                    res[row++][ii] = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count().ToString("N0");
-                    res[row++][ii] = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count().ToString("N0");
-                    res[row++][ii] = pvpStats.Where(x => x.CombatRank <= CombatRank.Master).Count().ToString("N0");
+                    //foreach(var x in bountyStats) System.Diagnostics.Debug.WriteLine($"{ii} = {x.EventTimeUTC} {x.Target} {x.IsShip} {x.IsThargoid} {x.IsOnFootNPC} {x.VictimFaction}");
 
-                    res[row++][ii] = bountyStats.Count.ToString("N0");                                        
+                    int row = 0;
+
+                    res[row++][ii] = bountyStats.Count.ToString("N0");
                     res[row++][ii] = bountyStats.Select(x => x.TotalReward).Sum().ToString("N0");
                     res[row++][ii] = bountyStats.Where(x => x.IsShip).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.IsThargoid).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.IsOnFootNPC).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.IsSkimmer).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.StatsUnknownShip).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.StatsEliteShip).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.StatsDeadlyShip).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.StatsDangerousShip).Count().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.StatsMasterBelowShip).Count().ToString("N0");
 
+                    int p = 0;
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.IsThargoid).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.IsOnFootNPC).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.IsSkimmer).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsUnknownShip).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsEliteAboveShip).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Deadly)).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Dangerous)).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Master)).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Expert)).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Competent)).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Novice)).Count();
+                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsHarmlessShip).Count();
+
+                    for (int pp = 0; pp < p; pp++)
+                        res[row++][ii] = npcpiechart[ii][pp].ToString("N0");
 
                     res[row++][ii] = crimesStats.Count.ToString("N0");
                     res[row++][ii] = crimesStats.Select(x => x.Cost).Sum().ToString("N0");
@@ -864,10 +911,25 @@ namespace EDDiscovery.UserControls
                     res[row++][ii] = interdicted.Where(x => x.Submitted && !x.IsPlayer).Count().ToString("N0");
                     res[row++][ii] = interdicted.Where(x => !x.Submitted && !x.IsPlayer).Count().ToString("N0");
 
-                    System.Diagnostics.Debug.Assert(row == results);
+                    res[row++][ii] = pvpStats.Count.ToString("N0");
+
+                    pvppiechart[ii][0] = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count();
+                    pvppiechart[ii][1] = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count();
+                    pvppiechart[ii][2] = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count();
+                    pvppiechart[ii][3] = pvpStats.Where(x => x.CombatRank == CombatRank.Master).Count();
+                    pvppiechart[ii][4] = pvpStats.Where(x => x.CombatRank == CombatRank.Expert).Count();
+                    pvppiechart[ii][5] = pvpStats.Where(x => x.CombatRank == CombatRank.Competent).Count();
+                    pvppiechart[ii][6] = pvpStats.Where(x => x.CombatRank == CombatRank.Novice).Count();
+                    pvppiechart[ii][7] = pvpStats.Where(x => x.CombatRank <= CombatRank.Mostly_Harmless).Count();
+
+                    for (int pp = 0; pp < p; pp++)
+                        res[row++][ii] = pvppiechart[ii][pp].ToString("N0");
+//                        res[row++][ii] = pp.ToString("N0");
                 }
 
-                return res;
+                CombatReturn crs = new CombatReturn() { griddata = res , pvpchartdata = pvppiechart , npcchartdata = npcpiechart};
+
+                return crs;
             });
         }
 
@@ -876,6 +938,8 @@ namespace EDDiscovery.UserControls
             if (previous != next)
             {
                 DGVSaveColumnLayout(dataGridViewCombat, dbCombat + previous.ToString());
+                dataGridViewCombat.Columns.Clear();
+                dataGridViewCombat.Rows.Clear();
                 redisplay = true;
             }
         }
@@ -1066,19 +1130,15 @@ namespace EDDiscovery.UserControls
             starttimesutc[4] = istravelling ? (starttriphe?.EventTimeUTC ?? starttimeutc) : endtimeutc.AddDays(1); // if we are travelling, its either starttriphe or starttime, else disable
             endtimesutc[4] = istravelling ? (endtriphe?.EventTimeUTC ?? endtimeutc) : endtimeutc;   // same with end time
 
-            gridview.Rows.Clear();
-
-            if (gridview.Columns.Count != 6)
+            if (gridview.Columns.Count == 0)
             {
-                gridview.Columns.Clear();
-
                 gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type)});
                
                 for (int i = 0; i < starttimesutc.Length; i++)
                     gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol"+i });          // Name is important
-            }
 
-            DGVLoadColumnLayout(gridview, dbname + "Summary");           // changed mode, therefore load layout
+                DGVLoadColumnLayout(gridview, dbname + "Summary");           // changed mode, therefore load layout
+            }
 
             gridview.Columns[1].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[0]).ToShortDateString();
             gridview.Columns[2].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[1]).ToShortDateString();
@@ -1105,19 +1165,15 @@ namespace EDDiscovery.UserControls
         {
             int intervals = timemode == StatsTimeUserControl.TimeModeType.Year ? Math.Min(12, endtimenowutc.Year - 2013) : 12;
 
-            gridview.Rows.Clear();
-
-            if (gridview.Columns.Count != intervals)
+            if (gridview.Columns.Count == 0)
             {
-                gridview.Columns.Clear();
-
                 var Col1 = new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type) };
                 gridview.Columns.Add(Col1);
                 for (int i = 0; i < intervals; i++)
                     gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol" + i });          //Name is important for autosorting
-            }
 
-            DGVLoadColumnLayout(gridview, dbname + timemode.ToString());           // changed mode, therefore load layout
+                DGVLoadColumnLayout(gridview, dbname + timemode.ToString());           // changed mode, therefore load layout
+            }
 
             DateTime[] starttimeutc = new DateTime[intervals];
             DateTime[] endtimeutc = new DateTime[intervals];
