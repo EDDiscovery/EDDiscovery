@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
 
             extChartTravelDest.AddChartArea("TravelCA1");
             extChartTravelDest.AddSeries("TravelS1", "TravelCA1", SeriesChartType.Column);
-            extChartTravelDest.AddTitle("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top);
+            extChartTravelDest.AddTitle("MV1","Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top);
 
             extChartLedger.AddChartArea("LedgerCA1");
             extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
@@ -140,13 +140,34 @@ namespace EDDiscovery.UserControls
 
             extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
 
-            extChartCombat.AddChartArea("CombatCA1");
-            extChartScan.AddChartArea("ScanCA1");
+            const int cw = 48;
+            const int ch = 98;
+            const int ct = 1;
+            const int c1l = 1;
+            const int c2l = 51;
+            const int lw = 15;
+
+            extChartCombat.AddChartArea("CA-CA1", new ElementPosition(c1l, ct, cw, ch));
+            extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw*2, 0, 100-lw*2, 100));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
+            extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 1, ct + 1, lw, ch-2));
+            extChartCombat.AddSeries("CA-S1", "CA-CA1", SeriesChartType.Pie, legend: "CA-L1");
+
+            extChartCombat.AddChartArea("CA-CA2", new ElementPosition(c2l, ct, cw, ch));
+            extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 0, 100-lw*2, 100));
+            extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+            extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 1, ct + 1, lw, ch - 2));
+            extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
+
+            extComboBoxCombatChart.Text = "";
+            //            extChartScan.AddChartArea("ScanCA1");
         }
 
         // themeing has been performed
         public override void InitialDisplay()
         {
+            //extChartCombat.SetCurrentLegend(0);  extChartCombat.SetLegendColor(Color.Blue, Color.Green, Color.FromArgb(128, 0, 0, 0));
+
             dataGridViewTravel.RowTemplate.MinimumHeight =
                         dataGridViewScan.RowTemplate.MinimumHeight =
                         dataGridViewCombat.RowTemplate.MinimumHeight =
@@ -390,7 +411,7 @@ namespace EDDiscovery.UserControls
         {
             TravelDGV("Total No of jumps".T(EDTx.UserControlStats_TotalNoofjumps), currentstat.fsdcarrierjumps.ToString());
 
-            extChartTravelDest.ClearPoints();
+            extChartTravelDest.ClearSeriesPoints();
 
             if (currentstat.FSDJumps.Count > 0)        // these will be null unless there are jumps
             {
@@ -456,7 +477,7 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
             SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
-            extChartLedger.ClearPoints();
+            extChartLedger.ClearSeriesPoints();
             dataGridViewLedger.Rows.Clear();
 
             foreach( var kvp in currentstat.Credits)
@@ -778,51 +799,46 @@ namespace EDDiscovery.UserControls
 
    //TBD TX IDS
             int row = 0;
-            StatToDGV(dataGridViewCombat, "Bounties".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Bounty Value".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Bounties on Ships".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "Bounties".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounty Value".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounties on Ships".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "Bounties on Thargoids".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Bounties on On Foot NPC".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Bounties on Skimmers".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Unknown Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Elite Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Deadly Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Dangerous Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Master Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Expert Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Competent Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Novice Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Ships Harmless Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            foreach (var lab in cres.npclabels)
+                StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "Crimes".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Crime Cost".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Faction Kill Bonds".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "FKB Value".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions Player Succeeded".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions Player Failed".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions NPC Succeeded".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions NPC Failed".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted Player Succeeded".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted Player Failed".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted NPC Succeeded".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "Crimes".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Crime Cost".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Faction Kill Bonds".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "FKB Value".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions Player Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions Player Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions NPC Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions NPC Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted Player Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted Player Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted NPC Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Elite Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Deadly Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Dangerous Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Master Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Expert Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Competent Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Novice Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
-            StatToDGV(dataGridViewCombat, "PVP Harmless Rank".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            foreach (var lab in cres.pvplabels)
+                StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
             if (sortcol < dataGridViewCombat.Columns.Count)
             {
                 dataGridViewCombat.Sort(dataGridViewCombat.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewCombat.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
+
+            if (extComboBoxCombatChart.Items.Count == 0)   // if been cleared, fill
+            {
+                for( int c = 1; c < dataGridViewCombat.ColumnCount; c++)
+                    extComboBoxCombatChart.Items.Add(dataGridViewCombat.Columns[c].HeaderText);
+                extComboBoxCombatChart.SelectedIndex = 0;
+                extComboBoxCombatChart.SelectedIndexChanged += ExtComboBoxCombatChart_SelectedIndexChanged;
+            }
+
+            extChartCombat.Tag = cres;                  // tag remembers data to fill pie with
+            FillCombatChart();
 
             statsTimeUserControlCombat.Enabled = true;
             lastcombattimemode = timemode;
@@ -832,31 +848,105 @@ namespace EDDiscovery.UserControls
             labelStatus.Text = "";  // not working now
         }
 
+        private void FillCombatChart()
+        {
+            Color[] colors = new Color[] { Color.Red, Color.Green, Color.Blue, Color.DarkCyan, Color.Magenta, Color.Brown, Color.Orange, Color.Yellow, Color.Fuchsia };
+
+            CombatReturn res = (CombatReturn)extChartCombat.Tag;
+
+            extChartCombat.SetCurrentSeries(0);
+            int[] npcdata = res.npcchartdata[extComboBoxCombatChart.SelectedIndex];
+
+            if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
+            {
+                extChartCombat.ClearSeriesPoints();
+                int c = 0;
+                for (int i = 0; i < npcdata.Length; i++)
+                {
+                    if (npcdata[i] != 0)
+                        extChartCombat.AddPoint(npcdata[i], null, res.npclabels[i] + ": " + npcdata[i].ToString(), colors[c++ % colors.Length],false);  // null means no labels on actual graph, we do it via legend
+                }
+
+                extChartCombat.SetCurrentChartArea(0);
+                extChartCombat.SetChartAreaVisible(extChartCombat.GetNumberPoints() > 0);
+            }
+
+            extChartCombat.SetCurrentSeries(1);
+            int[] pvpdata = res.pvpchartdata[extComboBoxCombatChart.SelectedIndex];
+
+            if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
+            {
+                extChartCombat.ClearSeriesPoints();
+                int c = 0;
+                for (int i = 0; i < pvpdata.Length; i++)
+                {
+                    if (pvpdata[i] != 0)
+                        extChartCombat.AddPoint(pvpdata[i], null, res.pvplabels[i] + ": " + pvpdata[i].ToString(), colors[c++ % colors.Length],false);
+                }
+
+                extChartCombat.SetCurrentChartArea(1);
+                extChartCombat.SetChartAreaVisible(extChartCombat.GetNumberPoints() > 0);
+            }
+        }
+
+
         private class CombatReturn
         {
             public string[][] griddata;
             public int[][] pvpchartdata;
+            public string[] pvplabels;
             public int[][] npcchartdata;
+            public string[] npclabels;
         }
 
         private static System.Threading.Tasks.Task<CombatReturn> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
+                CombatReturn crs = new CombatReturn();
+
                 int intervals = tupletimes.Item1.Length;
 
                 int results = 40;                               // does not need to be accurate
-                string[][] res = new string[results][];         // outer [] is results
+                crs.griddata = new string[results][];         // outer [] is results
                 for (var i = 0; i < results; i++)
-                    res[i] = new string[intervals];
+                    crs.griddata[i] = new string[intervals];
 
-                int[][] pvppiechart = new int[intervals][];        // outer [] is intervals
+                crs.pvpchartdata = new int[intervals][];        // outer [] is intervals
                 for (var i = 0; i < intervals; i++)
-                    pvppiechart[i] = new int[8];
+                    crs.pvpchartdata[i] = new int[8];
 
-                int[][] npcpiechart = new int[intervals][];        // outer [] is intervals
+                crs.npcchartdata = new int[intervals][];        // outer [] is intervals
                 for (var i = 0; i < intervals; i++)
-                    npcpiechart[i] = new int[12];
+                    crs.npcchartdata[i] = new int[12];
+
+                crs.npclabels = new string[]
+                {
+                    "Bounties on Thargoids".T(EDTx.UserControlStats_Jumps),
+                    "Bounties on On Foot NPC".T(EDTx.UserControlStats_Jumps), 
+                    "Bounties on Skimmers".T(EDTx.UserControlStats_Jumps), 
+                    "Ships Unknown Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Elite Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Deadly Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Dangerous Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Master Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Expert Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Competent Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Novice Rank".T(EDTx.UserControlStats_Jumps),
+                    "Ships Harmless Rank".T(EDTx.UserControlStats_Jumps),
+                };
+
+                crs.pvplabels = new string[]
+                {
+                     "PVP Elite Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Deadly Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Dangerous Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Master Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Expert Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Competent Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Novice Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Harmless Rank".T(EDTx.UserControlStats_Jumps),
+                };
 
                 for (var ii = 0; ii < intervals; ii++)
                 {
@@ -874,60 +964,64 @@ namespace EDDiscovery.UserControls
 
                     int row = 0;
 
-                    res[row++][ii] = bountyStats.Count.ToString("N0");
-                    res[row++][ii] = bountyStats.Select(x => x.TotalReward).Sum().ToString("N0");
-                    res[row++][ii] = bountyStats.Where(x => x.IsShip).Count().ToString("N0");
+                    crs.griddata[row++][ii] = bountyStats.Count.ToString("N0");
+                    crs.griddata[row++][ii] = bountyStats.Select(x => x.TotalReward).Sum().ToString("N0");
+                    crs.griddata[row++][ii] = bountyStats.Where(x => x.IsShip).Count().ToString("N0");
 
                     int p = 0;
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.IsThargoid).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.IsOnFootNPC).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.IsSkimmer).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsUnknownShip).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsEliteAboveShip).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Deadly)).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Dangerous)).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Master)).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Expert)).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Competent)).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Novice)).Count();
-                    npcpiechart[ii][p++] = bountyStats.Where(x => x.StatsHarmlessShip).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.IsThargoid).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.IsOnFootNPC).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.IsSkimmer).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsUnknownShip).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsEliteAboveShip).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Deadly)).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Dangerous)).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Master)).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Expert)).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Competent)).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Novice)).Count();
+                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsHarmlessShip).Count();
 
                     for (int pp = 0; pp < p; pp++)
-                        res[row++][ii] = npcpiechart[ii][pp].ToString("N0");
+                    {
+                    //    crs.npcchartdata[ii][pp] = (pp + 1) * (ii + 1);
+                        crs.griddata[row++][ii] = crs.npcchartdata[ii][pp].ToString("N0");
+                    }
 
-                    res[row++][ii] = crimesStats.Count.ToString("N0");
-                    res[row++][ii] = crimesStats.Select(x => x.Cost).Sum().ToString("N0");
+                    crs.griddata[row++][ii] = crimesStats.Count.ToString("N0");
+                    crs.griddata[row++][ii] = crimesStats.Select(x => x.Cost).Sum().ToString("N0");
 
-                    res[row++][ii] = sfactionkillbonds.Count.ToString("N0");
-                    res[row++][ii] = sfactionkillbonds.Select(x => x.Reward).Sum().ToString("N0");
+                    crs.griddata[row++][ii] = sfactionkillbonds.Count.ToString("N0");
+                    crs.griddata[row++][ii] = sfactionkillbonds.Select(x => x.Reward).Sum().ToString("N0");
 
-                    res[row++][ii] = interdictions.Where(x => x.Success && x.IsPlayer).Count().ToString("N0");
-                    res[row++][ii] = interdictions.Where(x => !x.Success && x.IsPlayer).Count().ToString("N0");
-                    res[row++][ii] = interdictions.Where(x => x.Success && !x.IsPlayer).Count().ToString("N0");
-                    res[row++][ii] = interdictions.Where(x => !x.Success && !x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdictions.Where(x => x.Success && x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdictions.Where(x => !x.Success && x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdictions.Where(x => x.Success && !x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdictions.Where(x => !x.Success && !x.IsPlayer).Count().ToString("N0");
 
-                    res[row++][ii] = interdicted.Where(x => x.Submitted && x.IsPlayer).Count().ToString("N0");
-                    res[row++][ii] = interdicted.Where(x => !x.Submitted && x.IsPlayer).Count().ToString("N0");
-                    res[row++][ii] = interdicted.Where(x => x.Submitted && !x.IsPlayer).Count().ToString("N0");
-                    res[row++][ii] = interdicted.Where(x => !x.Submitted && !x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdicted.Where(x => x.Submitted && x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdicted.Where(x => !x.Submitted && x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdicted.Where(x => x.Submitted && !x.IsPlayer).Count().ToString("N0");
+                    crs.griddata[row++][ii] = interdicted.Where(x => !x.Submitted && !x.IsPlayer).Count().ToString("N0");
 
-                    res[row++][ii] = pvpStats.Count.ToString("N0");
+                    crs.griddata[row++][ii] = pvpStats.Count.ToString("N0");
 
-                    pvppiechart[ii][0] = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count();
-                    pvppiechart[ii][1] = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count();
-                    pvppiechart[ii][2] = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count();
-                    pvppiechart[ii][3] = pvpStats.Where(x => x.CombatRank == CombatRank.Master).Count();
-                    pvppiechart[ii][4] = pvpStats.Where(x => x.CombatRank == CombatRank.Expert).Count();
-                    pvppiechart[ii][5] = pvpStats.Where(x => x.CombatRank == CombatRank.Competent).Count();
-                    pvppiechart[ii][6] = pvpStats.Where(x => x.CombatRank == CombatRank.Novice).Count();
-                    pvppiechart[ii][7] = pvpStats.Where(x => x.CombatRank <= CombatRank.Mostly_Harmless).Count();
+                    p = 0;
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count();
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count();
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count();
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Master).Count();
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Expert).Count();
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Competent).Count();
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Novice).Count();
+                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank <= CombatRank.Mostly_Harmless).Count();
 
                     for (int pp = 0; pp < p; pp++)
-                        res[row++][ii] = pvppiechart[ii][pp].ToString("N0");
-//                        res[row++][ii] = pp.ToString("N0");
+                    {
+                    //    crs.pvpchartdata[ii][pp] = (pp + 1) * (ii + 1);
+                        crs.griddata[row++][ii] = crs.pvpchartdata[ii][pp].ToString("N0");
+                    }
                 }
-
-                CombatReturn crs = new CombatReturn() { griddata = res , pvpchartdata = pvppiechart , npcchartdata = npcpiechart};
 
                 return crs;
             });
@@ -940,8 +1034,16 @@ namespace EDDiscovery.UserControls
                 DGVSaveColumnLayout(dataGridViewCombat, dbCombat + previous.ToString());
                 dataGridViewCombat.Columns.Clear();
                 dataGridViewCombat.Rows.Clear();
+                extComboBoxCombatChart.Items.Clear();
+                extChartCombat.ClearAllSeriesPoints();          // clear the charts, remove items from selector box
+                extComboBoxCombatChart.SelectedIndexChanged -= ExtComboBoxCombatChart_SelectedIndexChanged;     
+                extComboBoxCombatChart.Items.Clear();
                 redisplay = true;
             }
+        }
+        private void ExtComboBoxCombatChart_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillCombatChart();
         }
 
         #endregion
@@ -1043,13 +1145,13 @@ namespace EDDiscovery.UserControls
 
             if (dataGridViewByShip.Columns.Count == 0)
             {
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha1", HeaderText = "Type".T(EDTx.UserControlStats_Type) });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha2", HeaderText = "Name".T(EDTx.UserControlStats_Name) });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha3", HeaderText = "Ident".T(EDTx.UserControlStats_Ident) });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric1", HeaderText = "Jumps".T(EDTx.UserControlStats_Jumps) });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric2", HeaderText = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy) });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric3", HeaderText = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned) });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric4", HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed) });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha1", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha2", HeaderText = "Name".T(EDTx.UserControlStats_Name), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha3", HeaderText = "Ident".T(EDTx.UserControlStats_Ident), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric1", HeaderText = "Jumps".T(EDTx.UserControlStats_Jumps), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric2", HeaderText = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric3", HeaderText = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric4", HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed), ReadOnly = true });
                 DGVLoadColumnLayout(dataGridViewByShip, dbShip);
             }
 
@@ -1132,10 +1234,10 @@ namespace EDDiscovery.UserControls
 
             if (gridview.Columns.Count == 0)
             {
-                gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type)});
+                gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true});
                
                 for (int i = 0; i < starttimesutc.Length; i++)
-                    gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol"+i });          // Name is important
+                    gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol"+i , ReadOnly = true});          // Name is important
 
                 DGVLoadColumnLayout(gridview, dbname + "Summary");           // changed mode, therefore load layout
             }
@@ -1167,10 +1269,10 @@ namespace EDDiscovery.UserControls
 
             if (gridview.Columns.Count == 0)
             {
-                var Col1 = new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type) };
+                var Col1 = new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true };
                 gridview.Columns.Add(Col1);
                 for (int i = 0; i < intervals; i++)
-                    gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol" + i });          //Name is important for autosorting
+                    gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol" + i, ReadOnly = true });          //Name is important for autosorting
 
                 DGVLoadColumnLayout(gridview, dbname + timemode.ToString());           // changed mode, therefore load layout
             }

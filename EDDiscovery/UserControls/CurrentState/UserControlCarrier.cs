@@ -320,7 +320,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewItinerary.Rows.Clear();
             dataGridViewLedger.Rows.Clear();
-            extChartLedger.ClearPoints();
+            extChartLedger.ClearSeriesPoints();
             dataGridViewOrders.Rows.Clear();
             DisplayJournal();
         }
@@ -396,7 +396,7 @@ namespace EDDiscovery.UserControls
 
                 dataGridViewLedger.Rows.Clear();
 
-                extChartLedger.ClearPoints();
+                extChartLedger.ClearSeriesPoints();
 
                 for (int i = cs.Ledger.Count - 1; i >= 0; i--)
                 {
