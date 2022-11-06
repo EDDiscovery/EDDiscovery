@@ -149,12 +149,12 @@ namespace EDDiscovery.UserControls
 
             extChartCombat.AddChartArea("CA-CA1", new ElementPosition(c1l, ct, cw, ch));
             extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw*2, 0, 100-lw*2, 100));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
+            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw*2, 1, 100-lw*2, 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
             extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 1, ct + 1, lw, ch-2));
             extChartCombat.AddSeries("CA-S1", "CA-CA1", SeriesChartType.Pie, legend: "CA-L1");
 
             extChartCombat.AddChartArea("CA-CA2", new ElementPosition(c2l, ct, cw, ch));
-            extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 0, 100-lw*2, 100));
+            extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 1, 100-lw*2, 98));
             extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
             extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 1, ct + 1, lw, ch - 2));
             extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
@@ -1242,9 +1242,9 @@ namespace EDDiscovery.UserControls
                 DGVLoadColumnLayout(gridview, dbname + "Summary");           // changed mode, therefore load layout
             }
 
-            gridview.Columns[1].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[0]).ToShortDateString();
-            gridview.Columns[2].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[1]).ToShortDateString();
-            gridview.Columns[3].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[2]).ToShortDateString();
+            gridview.Columns[1].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[0]).ToShortDateString() + "..";
+            gridview.Columns[2].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[1]).ToShortDateString() + "..";
+            gridview.Columns[3].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[2]).ToShortDateString() + "..";
             gridview.Columns[4].HeaderText = "Last dock".T(EDTx.UserControlStats_Lastdock);
 
             if ( istravelling )
