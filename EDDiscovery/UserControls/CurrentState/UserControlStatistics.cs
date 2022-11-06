@@ -53,7 +53,19 @@ namespace EDDiscovery.UserControls
         private Timer timerupdate;
 
         // because of the async awaits, we are in effect multithreaded, best to have a concurrent queue
-        private ConcurrentQueue<JournalEntry> entriesqueued = new ConcurrentQueue<JournalEntry>();    
+        private ConcurrentQueue<JournalEntry> entriesqueued = new ConcurrentQueue<JournalEntry>();
+
+        private class DataReturn        // used to pass data from thread back to user control
+        {
+            public string[][] griddata;
+            public int[][] chart1data;
+            public string[] chart2labels;
+            public int[][] chart2data;
+            public string[] chart1labels;
+        }
+
+        static Color[] piechartcolours = new Color[] { Color.Red, Color.Green, Color.Blue, Color.DarkCyan, Color.Magenta, Color.Brown, Color.Orange, Color.Yellow, Color.Fuchsia };
+
 
         #region Init
 
@@ -141,26 +153,31 @@ namespace EDDiscovery.UserControls
             extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
 
             const int cw = 48;
-            const int ch = 98;
-            const int ct = 1;
+            const int ch = 96;
+            const int ct = 2;
             const int c1l = 1;
             const int c2l = 51;
-            const int lw = 15;
+            const int lw = 20;
 
             extChartCombat.AddChartArea("CA-CA1", new ElementPosition(c1l, ct, cw, ch));
             extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw*2, 1, 100-lw*2, 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
+            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw * 2, 1, 100 - lw * 2, 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
             extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 1, ct + 1, lw, ch-2));
             extChartCombat.AddSeries("CA-S1", "CA-CA1", SeriesChartType.Pie, legend: "CA-L1");
 
             extChartCombat.AddChartArea("CA-CA2", new ElementPosition(c2l, ct, cw, ch));
-            extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 1, 100-lw*2, 98));
+            extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 1, 100 - lw * 2, 98));
             extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
             extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 1, ct + 1, lw, ch - 2));
             extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
 
-            extComboBoxCombatChart.Text = "";
-            //            extChartScan.AddChartArea("ScanCA1");
+            extChartScan.AddChartArea("SC-CA1", new ElementPosition(c1l, ct, cw*2, ch));
+            extChartScan.SetChartAreaPlotArea(new ElementPosition(lw, 1, 100 - lw, 98));        // 1 chart, so lw does not need scaling
+            extChartScan.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+            extChartScan.AddLegend("SC-L1", position: new ElementPosition(c1l + 1, ct + 1, lw, ch - 2));
+            extChartScan.AddSeries("SC-S1", "SC-CA1", SeriesChartType.Pie, legend: "SC-L1");
+
+            extComboBoxScanChart.Text = extComboBoxCombatChart.Text = "";
         }
 
         // themeing has been performed
@@ -645,35 +662,34 @@ namespace EDDiscovery.UserControls
                              SetUpDaysMonthsYear(endtimeutc, dataGridViewScan, timemode, dbScan);
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Scan stats interval begin {timemode}");
-            var res = await ComputeScans(currentstat, tupletimes, userControlStatsTimeScan.StarMode);
+            var cres = await ComputeScans(currentstat, tupletimes, userControlStatsTimeScan.StarMode);
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Scan stats interval end {timemode}");
             if (IsClosed)
                 return;
 
-            int row = 0;
-
-            if (userControlStatsTimeScan.StarMode)
+            for( int i = 0; i < cres.chart1labels.Length; i++)
             {
-                foreach (EDStar startype in Enum.GetValues(typeof(EDStar)))
-                {
-                    StatToDGV(dataGridViewScan, Bodies.StarName(startype), res[row++]);
-                }
-            }
-            else
-            {
-                foreach (EDPlanet planettype in Enum.GetValues(typeof(EDPlanet)))
-                {
-                    StatToDGV(dataGridViewScan, planettype == EDPlanet.Unknown_Body_Type ? "Belt Cluster".T(EDTx.UserControlStats_Beltcluster) : Bodies.PlanetTypeName(planettype), res[row++]);
-                }
+                StatToDGV(dataGridViewScan, cres.chart1labels[i], cres.griddata[i]);
             }
 
-            StatToDGV(dataGridViewScan, " ** Total Scans **", res[row++]);
+            StatToDGV(dataGridViewScan, " ** Total Scans **", cres.griddata[cres.chart1labels.Length]);
 
             if (sortcol < dataGridViewScan.Columns.Count)
             {
                 dataGridViewScan.Sort(dataGridViewScan.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewScan.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
+
+            if (extComboBoxScanChart.Items.Count == 0)   // if been cleared, fill
+            {
+                for (int c = 1; c < dataGridViewScan.ColumnCount; c++)
+                    extComboBoxScanChart.Items.Add(dataGridViewScan.Columns[c].HeaderText);
+                extComboBoxScanChart.SelectedIndex = 0;
+                extComboBoxScanChart.SelectedIndexChanged += ExtComboBoxScanChart_SelectedIndexChanged;
+            }
+
+            extChartScan.Tag = cres;
+            FillScanChart();
 
             userControlStatsTimeScan.Enabled = true;
             lastscantimemode = timemode;
@@ -684,22 +700,64 @@ namespace EDDiscovery.UserControls
             labelStatus.Text = "";  // not working now
         }
 
-        private static System.Threading.Tasks.Task<string[][]> ComputeScans(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes, bool starmode)
+        private void FillScanChart()
+        {
+            DataReturn res = (DataReturn)extChartScan.Tag;
+
+            int[] scandata = res.chart1data[extComboBoxScanChart.SelectedIndex];
+
+            if (!extChartScan.CompareYPoints(scandata.Select(x => (double)x).ToArray()))       // if not the same values
+            {
+                extChartScan.ClearSeriesPoints();
+                int c = 0;
+                for (int i = 0; i < scandata.Length; i++)
+                {
+                    if (scandata[i] != 0)
+                        extChartScan.AddPoint(scandata[i], null, res.chart1labels[i] + ": " + scandata[i].ToString(), piechartcolours[c++ % piechartcolours.Length], false);  // null means no labels on actual graph, we do it via legend
+                }
+
+                extChartScan.SetChartAreaVisible(extChartScan.GetNumberPoints() > 0);
+            }
+
+        }
+
+        private static System.Threading.Tasks.Task<DataReturn> ComputeScans(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes, bool starmode)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
+                DataReturn crs = new DataReturn();
+
                 int results = starmode ? Enum.GetValues(typeof(EDStar)).Length : Enum.GetValues(typeof(EDPlanet)).Length;
-                results++;      // 1 more for end totals
+
+                crs.chart1labels = new string[results];     // fill up chart labels
+                if (starmode)
+                {
+                    int i = 0;
+                    foreach (EDStar startype in Enum.GetValues(typeof(EDStar)))
+                        crs.chart1labels[i++] = Bodies.StarName(startype);
+                }
+                else
+                {
+                    int i = 0;
+                    foreach (EDPlanet planettype in Enum.GetValues(typeof(EDPlanet)))
+                        crs.chart1labels[i++] = planettype == EDPlanet.Unknown_Body_Type ? "Belt Cluster".T(EDTx.UserControlStats_Beltcluster) : Bodies.PlanetTypeName(planettype);
+                }
 
                 int intervals = tupletimes.Item1.Length;
+
+                crs.chart1data = new int[intervals][];        // outer [] is intervals      CHART 1 is PVP
+                for (var i = 0; i < intervals; i++)
+                    crs.chart1data[i] = new int[crs.chart1labels.Length];
 
                 var scanlists = new List<JournalScan>[intervals];
                 for (int ii = 0; ii < intervals; ii++)
                     scanlists[ii] = currentstat.Scans.Values.Where(x => x.EventTimeUTC >= tupletimes.Item1[ii] && x.EventTimeUTC < tupletimes.Item2[ii]).ToList();
 
-                string[][] res = new string[results][];
+                results++;      // 1 more for totals at end
+
+                crs.griddata = new string[results][];
                 for (var i = 0; i < results; i++)
-                    res[i] = new string[intervals];
+                    crs.griddata[i] = new string[intervals];
 
                 long[] totals = new long[intervals];
 
@@ -717,7 +775,8 @@ namespace EDDiscovery.UserControls
                                     num++;
                             }
 
-                            res[row][ii] = num.ToString("N0");
+                            crs.chart1data[ii][row] = num;
+                            crs.griddata[row][ii] = num.ToString("N0");
                             totals[ii] += num;
                         }
 
@@ -739,7 +798,8 @@ namespace EDDiscovery.UserControls
                                     num++;
                             }
 
-                            res[row][ii] = num.ToString("N0");
+                            crs.chart1data[ii][row] = planettype == EDPlanet.Unknown_Body_Type ? 0 : num;       // we knock out of the chart belt clusters
+                            crs.griddata[row][ii] = num.ToString("N0");
                             totals[ii] += num;
                         }
                         row++;
@@ -747,9 +807,9 @@ namespace EDDiscovery.UserControls
                 }
 
                 for (int i = 0; i < intervals; i++)
-                    res[results-1][i] = totals[i].ToString("N0");
+                    crs.griddata[results-1][i] = totals[i].ToString("N0");
 
-                return res;
+                return crs;
             });
         }
 
@@ -758,18 +818,31 @@ namespace EDDiscovery.UserControls
             if (previous != next)
             {
                 DGVSaveColumnLayout(dataGridViewScan, dbScan + previous.ToString());
-                dataGridViewScan.Columns.Clear();
-                dataGridViewScan.Rows.Clear();
-                redisplay = true;
+                ClearScanParts();
             }
         }
 
         private void userControlStatsTimeScan_StarPlanetModeChanged()
         {
             DGVSaveColumnLayout(dataGridViewScan, dbScan + userControlStatsTimeScan.TimeMode.ToString());        // we get a complete redisplay, with DGV load, so need to save it back even though don't really need to
+            ClearScanParts();
             dataGridViewScan.Columns.Clear();
             dataGridViewScan.Rows.Clear();
+        }
+
+        private void ClearScanParts()
+        {
+            dataGridViewScan.Columns.Clear();
+            dataGridViewScan.Rows.Clear();
+            extChartScan.ClearAllSeriesPoints();
+            extComboBoxScanChart.SelectedIndexChanged -= ExtComboBoxScanChart_SelectedIndexChanged;
+            extComboBoxScanChart.Items.Clear();
             redisplay = true;
+        }
+
+        private void ExtComboBoxScanChart_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillScanChart();
         }
 
         #endregion
@@ -803,7 +876,7 @@ namespace EDDiscovery.UserControls
             StatToDGV(dataGridViewCombat, "Bounty Value".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
             StatToDGV(dataGridViewCombat, "Bounties on Ships".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
 
-            foreach (var lab in cres.npclabels)
+            foreach (var lab in cres.chart1labels)
                 StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
             StatToDGV(dataGridViewCombat, "Crimes".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
@@ -820,7 +893,7 @@ namespace EDDiscovery.UserControls
             StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
 
             StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            foreach (var lab in cres.pvplabels)
+            foreach (var lab in cres.chart2labels)
                 StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
             if (sortcol < dataGridViewCombat.Columns.Count)
@@ -850,12 +923,11 @@ namespace EDDiscovery.UserControls
 
         private void FillCombatChart()
         {
-            Color[] colors = new Color[] { Color.Red, Color.Green, Color.Blue, Color.DarkCyan, Color.Magenta, Color.Brown, Color.Orange, Color.Yellow, Color.Fuchsia };
+            DataReturn res = (DataReturn)extChartCombat.Tag;
 
-            CombatReturn res = (CombatReturn)extChartCombat.Tag;
+            extChartCombat.SetCurrentSeries(0);     // 0 is NPC PIE
 
-            extChartCombat.SetCurrentSeries(0);
-            int[] npcdata = res.npcchartdata[extComboBoxCombatChart.SelectedIndex];
+            int[] npcdata = res.chart1data[extComboBoxCombatChart.SelectedIndex];
 
             if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
             {
@@ -864,15 +936,16 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < npcdata.Length; i++)
                 {
                     if (npcdata[i] != 0)
-                        extChartCombat.AddPoint(npcdata[i], null, res.npclabels[i] + ": " + npcdata[i].ToString(), colors[c++ % colors.Length],false);  // null means no labels on actual graph, we do it via legend
+                        extChartCombat.AddPoint(npcdata[i], null, res.chart1labels[i] + ": " + npcdata[i].ToString(), piechartcolours[c++ % piechartcolours.Length],false);  // null means no labels on actual graph, we do it via legend
                 }
 
                 extChartCombat.SetCurrentChartArea(0);
                 extChartCombat.SetChartAreaVisible(extChartCombat.GetNumberPoints() > 0);
             }
 
-            extChartCombat.SetCurrentSeries(1);
-            int[] pvpdata = res.pvpchartdata[extComboBoxCombatChart.SelectedIndex];
+            extChartCombat.SetCurrentSeries(1); // PVP
+
+            int[] pvpdata = res.chart2data[extComboBoxCombatChart.SelectedIndex];
 
             if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
             {
@@ -881,7 +954,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < pvpdata.Length; i++)
                 {
                     if (pvpdata[i] != 0)
-                        extChartCombat.AddPoint(pvpdata[i], null, res.pvplabels[i] + ": " + pvpdata[i].ToString(), colors[c++ % colors.Length],false);
+                        extChartCombat.AddPoint(pvpdata[i], null, res.chart2labels[i] + ": " + pvpdata[i].ToString(), piechartcolours[c++ % piechartcolours.Length],false);
                 }
 
                 extChartCombat.SetCurrentChartArea(1);
@@ -890,20 +963,12 @@ namespace EDDiscovery.UserControls
         }
 
 
-        private class CombatReturn
-        {
-            public string[][] griddata;
-            public int[][] pvpchartdata;
-            public string[] pvplabels;
-            public int[][] npcchartdata;
-            public string[] npclabels;
-        }
 
-        private static System.Threading.Tasks.Task<CombatReturn> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
+        private static System.Threading.Tasks.Task<DataReturn> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
-                CombatReturn crs = new CombatReturn();
+                DataReturn crs = new DataReturn();
 
                 int intervals = tupletimes.Item1.Length;
 
@@ -912,15 +977,7 @@ namespace EDDiscovery.UserControls
                 for (var i = 0; i < results; i++)
                     crs.griddata[i] = new string[intervals];
 
-                crs.pvpchartdata = new int[intervals][];        // outer [] is intervals
-                for (var i = 0; i < intervals; i++)
-                    crs.pvpchartdata[i] = new int[8];
-
-                crs.npcchartdata = new int[intervals][];        // outer [] is intervals
-                for (var i = 0; i < intervals; i++)
-                    crs.npcchartdata[i] = new int[12];
-
-                crs.npclabels = new string[]
+                crs.chart1labels = new string[]
                 {
                     "Bounties on Thargoids".T(EDTx.UserControlStats_Jumps),
                     "Bounties on On Foot NPC".T(EDTx.UserControlStats_Jumps), 
@@ -936,7 +993,11 @@ namespace EDDiscovery.UserControls
                     "Ships Harmless Rank".T(EDTx.UserControlStats_Jumps),
                 };
 
-                crs.pvplabels = new string[]
+                crs.chart1data = new int[intervals][];        // outer [] is intervals      CHART 1 is PVP
+                for (var i = 0; i < intervals; i++)
+                    crs.chart1data[i] = new int[crs.chart1labels.Length];
+
+                crs.chart2labels = new string[]
                 {
                      "PVP Elite Rank".T(EDTx.UserControlStats_Jumps),
                      "PVP Deadly Rank".T(EDTx.UserControlStats_Jumps),
@@ -947,6 +1008,10 @@ namespace EDDiscovery.UserControls
                      "PVP Novice Rank".T(EDTx.UserControlStats_Jumps),
                      "PVP Harmless Rank".T(EDTx.UserControlStats_Jumps),
                 };
+
+                crs.chart2data = new int[intervals][];        // outer [] is intervals
+                for (var i = 0; i < intervals; i++)
+                    crs.chart2data[i] = new int[crs.chart2labels.Length];
 
                 for (var ii = 0; ii < intervals; ii++)
                 {
@@ -969,23 +1034,23 @@ namespace EDDiscovery.UserControls
                     crs.griddata[row++][ii] = bountyStats.Where(x => x.IsShip).Count().ToString("N0");
 
                     int p = 0;
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.IsThargoid).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.IsOnFootNPC).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.IsSkimmer).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsUnknownShip).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsEliteAboveShip).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Deadly)).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Dangerous)).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Master)).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Expert)).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Competent)).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Novice)).Count();
-                    crs.npcchartdata[ii][p++] = bountyStats.Where(x => x.StatsHarmlessShip).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.IsThargoid).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.IsOnFootNPC).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.IsSkimmer).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsUnknownShip).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsEliteAboveShip).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Deadly)).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Dangerous)).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Master)).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Expert)).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Competent)).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Novice)).Count();
+                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsHarmlessShip).Count();
 
                     for (int pp = 0; pp < p; pp++)
                     {
-                    //    crs.npcchartdata[ii][pp] = (pp + 1) * (ii + 1);
-                        crs.griddata[row++][ii] = crs.npcchartdata[ii][pp].ToString("N0");
+                    //    crs.chart1data[ii][pp] = (pp + 1) * (ii + 1);
+                        crs.griddata[row++][ii] = crs.chart1data[ii][pp].ToString("N0");
                     }
 
                     crs.griddata[row++][ii] = crimesStats.Count.ToString("N0");
@@ -1007,19 +1072,19 @@ namespace EDDiscovery.UserControls
                     crs.griddata[row++][ii] = pvpStats.Count.ToString("N0");
 
                     p = 0;
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count();
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count();
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count();
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Master).Count();
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Expert).Count();
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Competent).Count();
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Novice).Count();
-                    crs.pvpchartdata[ii][p++] = pvpStats.Where(x => x.CombatRank <= CombatRank.Mostly_Harmless).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Master).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Expert).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Competent).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Novice).Count();
+                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank <= CombatRank.Mostly_Harmless).Count();
 
                     for (int pp = 0; pp < p; pp++)
                     {
-                    //    crs.pvpchartdata[ii][pp] = (pp + 1) * (ii + 1);
-                        crs.griddata[row++][ii] = crs.pvpchartdata[ii][pp].ToString("N0");
+                        //crs.chart2data[ii][pp] = (pp + 1);
+                        crs.griddata[row++][ii] = crs.chart2data[ii][pp].ToString("N0");
                     }
                 }
 

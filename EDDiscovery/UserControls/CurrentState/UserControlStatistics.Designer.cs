@@ -515,7 +515,7 @@ namespace EDDiscovery.UserControls
             this.splitContainerScan.Panel2.Controls.Add(this.extChartScan);
             this.splitContainerScan.Panel2.Controls.Add(this.panelScanChartControl);
             this.splitContainerScan.Size = new System.Drawing.Size(1065, 485);
-            this.splitContainerScan.SplitterDistance = 355;
+            this.splitContainerScan.SplitterDistance = 239;
             this.splitContainerScan.TabIndex = 10;
             // 
             // extPanelDataGridViewScrollScan
@@ -526,7 +526,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollScan.InternalMargin = new System.Windows.Forms.Padding(0);
             this.extPanelDataGridViewScrollScan.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollScan.Name = "extPanelDataGridViewScrollScan";
-            this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(1065, 355);
+            this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(1065, 239);
             this.extPanelDataGridViewScrollScan.TabIndex = 5;
             this.extPanelDataGridViewScrollScan.VerticalScrollBarDockRight = true;
             // 
@@ -548,7 +548,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewScan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewScan.SingleRowSelect = true;
-            this.dataGridViewScan.Size = new System.Drawing.Size(1049, 355);
+            this.dataGridViewScan.Size = new System.Drawing.Size(1049, 239);
             this.dataGridViewScan.TabIndex = 4;
             // 
             // extScrollBarScan
@@ -568,7 +568,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarScan.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarScan.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarScan.Name = "extScrollBarScan";
-            this.extScrollBarScan.Size = new System.Drawing.Size(16, 355);
+            this.extScrollBarScan.Size = new System.Drawing.Size(16, 239);
             this.extScrollBarScan.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarScan.SmallChange = 1;
             this.extScrollBarScan.TabIndex = 0;
@@ -585,7 +585,7 @@ namespace EDDiscovery.UserControls
             this.extChartScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extChartScan.Location = new System.Drawing.Point(0, 32);
             this.extChartScan.Name = "extChartScan";
-            this.extChartScan.Size = new System.Drawing.Size(1065, 94);
+            this.extChartScan.Size = new System.Drawing.Size(1065, 210);
             this.extChartScan.TabIndex = 0;
             this.extChartScan.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartScan.ZoomMouseWheelXZoomFactor = 1.5D;
