@@ -92,7 +92,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonPlanet.Enabled = false;
             this.extButtonPlanet.Image = global::EDDiscovery.Icons.Controls.Planets;
-            this.extButtonPlanet.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extButtonPlanet.Location = new System.Drawing.Point(111, 3);
             this.extButtonPlanet.Name = "extButtonPlanet";
             this.extButtonPlanet.Size = new System.Drawing.Size(24, 24);
@@ -105,7 +104,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonStar.Enabled = false;
             this.extButtonStar.Image = global::EDDiscovery.Icons.Controls.Stars;
-            this.extButtonStar.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extButtonStar.Location = new System.Drawing.Point(141, 3);
             this.extButtonStar.Name = "extButtonStar";
             this.extButtonStar.Size = new System.Drawing.Size(24, 24);

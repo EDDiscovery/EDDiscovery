@@ -1290,4 +1290,8 @@ namespace CAPI
     <WriteLinesToFile File="CapiClientID.cs" Overwrite="true" Lines="$(LauncherCmd)" />
   </Target>
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>rem xcopy /Y /S $(MSBuildProjectDirectory)\x86\Microsoft.VC100.CRT x86\Microsoft.VC100.CRT\
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -171,13 +171,35 @@ namespace EDDiscovery.UserControls
             extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 1, ct + 1, lw, ch - 2));
             extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
 
+            const float titlep = 5;
+            const float titleh = 5;
+            const float butw = 1.5f;
+            const float buth = 5;
+            const float ctc = 50;
+            const float ctw = 10;
+            extChartCombat.AddTitle("CA-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(ctc-ctw/2, titlep, ctw, titleh));
+            extChartCombat.SetTitleColorFont(border: Color.White);      // colour unimportant, but setting it will theme it
+            extChartCombat.LeftArrowPosition = new ElementPosition(ctc-ctw/2-0.1f, titlep, butw, buth);
+            extChartCombat.RightArrowPosition = new ElementPosition(ctc+ctw/2+0.1f, titlep, butw, buth);
+            extChartCombat.ArrowButtonPressed += CombatChartArrowPressed;
+            extChartCombat.LeftArrowEnable = extChartCombat.RightArrowEnable = false;     // disable
+
             extChartScan.AddChartArea("SC-CA1", new ElementPosition(c1l, ct, cw*2, ch));
-            extChartScan.SetChartAreaPlotArea(new ElementPosition(lw, 1, 100 - lw, 98));        // 1 chart, so lw does not need scaling
+            extChartScan.SetChartAreaPlotArea(new ElementPosition(lw, 1, 100-lw*2 , 98));        // 1 chart, so lw does not need scaling
             extChartScan.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
             extChartScan.AddLegend("SC-L1", position: new ElementPosition(c1l + 1, ct + 1, lw, ch - 2));
             extChartScan.AddSeries("SC-S1", "SC-CA1", SeriesChartType.Pie, legend: "SC-L1");
 
-            extComboBoxScanChart.Text = extComboBoxCombatChart.Text = "";
+            const float stw = 10;
+            const float stc = lw + stw+ 2;
+            extChartScan.AddTitle("SC-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(stc-stw/2, titlep, stw, titleh));
+            extChartScan.SetTitleColorFont(border: Color.White);      // colour unimportant, but setting it will theme it
+            extChartScan.LeftArrowPosition = new ElementPosition(stc-stw/2-butw-0.1f, titlep, butw, buth);
+            extChartScan.RightArrowPosition = new ElementPosition(stc+stw/2+0.1f, titlep, butw, buth);
+            extChartScan.ArrowButtonPressed += ScanChartArrowPressed;
+            extChartScan.LeftArrowEnable = extChartScan.RightArrowEnable = false;     // disable
+
+
         }
 
         // themeing has been performed
@@ -680,15 +702,10 @@ namespace EDDiscovery.UserControls
                 dataGridViewScan.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
 
-            if (extComboBoxScanChart.Items.Count == 0)   // if been cleared, fill
-            {
-                for (int c = 1; c < dataGridViewScan.ColumnCount; c++)
-                    extComboBoxScanChart.Items.Add(dataGridViewScan.Columns[c].HeaderText);
-                extComboBoxScanChart.SelectedIndex = 0;
-                extComboBoxScanChart.SelectedIndexChanged += ExtComboBoxScanChart_SelectedIndexChanged;
-            }
 
             extChartScan.Tag = cres;
+            scanchartcolumn = MoveChart(0, dataGridViewScan.ColumnCount - 1, cres.chart1data, cres.chart1data, scanchartcolumn);
+
             FillScanChart();
 
             userControlStatsTimeScan.Enabled = true;
@@ -700,11 +717,12 @@ namespace EDDiscovery.UserControls
             labelStatus.Text = "";  // not working now
         }
 
+        int scanchartcolumn = 0;
         private void FillScanChart()
         {
             DataReturn res = (DataReturn)extChartScan.Tag;
 
-            int[] scandata = res.chart1data[extComboBoxScanChart.SelectedIndex];
+            int[] scandata = res.chart1data[scanchartcolumn];
 
             if (!extChartScan.CompareYPoints(scandata.Select(x => (double)x).ToArray()))       // if not the same values
             {
@@ -719,8 +737,18 @@ namespace EDDiscovery.UserControls
                 extChartScan.SetChartAreaVisible(extChartScan.GetNumberPoints() > 0);
             }
 
+            bool showing = scandata.Sum() > 0;      // see if anything is displayed. We should have selected a filled area
+
+            extChartScan.SetTitleText(showing ? dataGridViewScan.Columns[scanchartcolumn + 1].HeaderText : "");
+            extChartScan.LeftArrowEnable = extChartScan.RightArrowEnable = showing;     // if we are not showing anything, nothing is present, disable arrows
         }
 
+        private void ScanChartArrowPressed(bool right)
+        {
+            DataReturn res = (DataReturn)extChartScan.Tag;
+            scanchartcolumn = MoveChart(right ? 1 : -1, dataGridViewScan.ColumnCount - 1, res.chart1data, res.chart1data, scanchartcolumn);
+            FillScanChart();
+        }
         private static System.Threading.Tasks.Task<DataReturn> ComputeScans(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes, bool starmode)
         {
             return System.Threading.Tasks.Task.Run(() =>
@@ -835,8 +863,7 @@ namespace EDDiscovery.UserControls
             dataGridViewScan.Columns.Clear();
             dataGridViewScan.Rows.Clear();
             extChartScan.ClearAllSeriesPoints();
-            extComboBoxScanChart.SelectedIndexChanged -= ExtComboBoxScanChart_SelectedIndexChanged;
-            extComboBoxScanChart.Items.Clear();
+            scanchartcolumn = 0;
             redisplay = true;
         }
 
@@ -868,7 +895,6 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Combat stats interval end {timemode}");
             if (IsClosed)
                 return;
-            var res = cres.griddata;
 
    //TBD TX IDS
             int row = 0;
@@ -902,15 +928,10 @@ namespace EDDiscovery.UserControls
                 dataGridViewCombat.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
 
-            if (extComboBoxCombatChart.Items.Count == 0)   // if been cleared, fill
-            {
-                for( int c = 1; c < dataGridViewCombat.ColumnCount; c++)
-                    extComboBoxCombatChart.Items.Add(dataGridViewCombat.Columns[c].HeaderText);
-                extComboBoxCombatChart.SelectedIndex = 0;
-                extComboBoxCombatChart.SelectedIndexChanged += ExtComboBoxCombatChart_SelectedIndexChanged;
-            }
-
             extChartCombat.Tag = cres;                  // tag remembers data to fill pie with
+
+            // try and find a filled column, then display.  If nothing is found, we will be on an empty position
+            combatchartcolumn = MoveChart(0, dataGridViewCombat.ColumnCount - 1, cres.chart1data, cres.chart2data, combatchartcolumn);
             FillCombatChart();
 
             statsTimeUserControlCombat.Enabled = true;
@@ -921,13 +942,14 @@ namespace EDDiscovery.UserControls
             labelStatus.Text = "";  // not working now
         }
 
+        int combatchartcolumn = 0;
         private void FillCombatChart()
         {
             DataReturn res = (DataReturn)extChartCombat.Tag;
 
             extChartCombat.SetCurrentSeries(0);     // 0 is NPC PIE
 
-            int[] npcdata = res.chart1data[extComboBoxCombatChart.SelectedIndex];
+            int[] npcdata = res.chart1data[combatchartcolumn];
 
             if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
             {
@@ -938,14 +960,11 @@ namespace EDDiscovery.UserControls
                     if (npcdata[i] != 0)
                         extChartCombat.AddPoint(npcdata[i], null, res.chart1labels[i] + ": " + npcdata[i].ToString(), piechartcolours[c++ % piechartcolours.Length],false);  // null means no labels on actual graph, we do it via legend
                 }
-
-                extChartCombat.SetCurrentChartArea(0);
-                extChartCombat.SetChartAreaVisible(extChartCombat.GetNumberPoints() > 0);
             }
 
             extChartCombat.SetCurrentSeries(1); // PVP
 
-            int[] pvpdata = res.chart2data[extComboBoxCombatChart.SelectedIndex];
+            int[] pvpdata = res.chart2data[combatchartcolumn];
 
             if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
             {
@@ -956,13 +975,20 @@ namespace EDDiscovery.UserControls
                     if (pvpdata[i] != 0)
                         extChartCombat.AddPoint(pvpdata[i], null, res.chart2labels[i] + ": " + pvpdata[i].ToString(), piechartcolours[c++ % piechartcolours.Length],false);
                 }
-
-                extChartCombat.SetCurrentChartArea(1);
-                extChartCombat.SetChartAreaVisible(extChartCombat.GetNumberPoints() > 0);
             }
+
+            bool showing = npcdata.Sum() > 0 || pvpdata.Sum() > 0;      // see if anything is displayed. We should have selected a filled area
+
+            extChartCombat.SetTitleText(showing ? dataGridViewCombat.Columns[combatchartcolumn + 1].HeaderText : "");
+            extChartCombat.LeftArrowEnable = extChartCombat.RightArrowEnable = showing;     // if we are not showing anything, nothing is present, disable arrows
         }
 
-
+        private void CombatChartArrowPressed(bool right)
+        {
+            DataReturn res = (DataReturn)extChartCombat.Tag;
+            combatchartcolumn = MoveChart(right ? 1 : -1, dataGridViewCombat.ColumnCount - 1, res.chart1data, res.chart2data, combatchartcolumn);
+            FillCombatChart();
+        }
 
         private static System.Threading.Tasks.Task<DataReturn> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
         {
@@ -1049,7 +1075,8 @@ namespace EDDiscovery.UserControls
 
                     for (int pp = 0; pp < p; pp++)
                     {
-                    //    crs.chart1data[ii][pp] = (pp + 1) * (ii + 1);
+                        //if ( ii==0)  crs.chart1data[ii][pp] = (pp + 1);
+                        //crs.chart1data[ii][pp] = 0;
                         crs.griddata[row++][ii] = crs.chart1data[ii][pp].ToString("N0");
                     }
 
@@ -1083,7 +1110,8 @@ namespace EDDiscovery.UserControls
 
                     for (int pp = 0; pp < p; pp++)
                     {
-                        //crs.chart2data[ii][pp] = (pp + 1);
+                        //if ( ii == 2) crs.chart2data[ii][pp] = (pp + 1);
+                        //crs.chart2data[ii][pp] = 0;
                         crs.griddata[row++][ii] = crs.chart2data[ii][pp].ToString("N0");
                     }
                 }
@@ -1099,17 +1127,12 @@ namespace EDDiscovery.UserControls
                 DGVSaveColumnLayout(dataGridViewCombat, dbCombat + previous.ToString());
                 dataGridViewCombat.Columns.Clear();
                 dataGridViewCombat.Rows.Clear();
-                extComboBoxCombatChart.Items.Clear();
                 extChartCombat.ClearAllSeriesPoints();          // clear the charts, remove items from selector box
-                extComboBoxCombatChart.SelectedIndexChanged -= ExtComboBoxCombatChart_SelectedIndexChanged;     
-                extComboBoxCombatChart.Items.Clear();
+                combatchartcolumn = 0;
                 redisplay = true;
             }
         }
-        private void ExtComboBoxCombatChart_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillCombatChart();
-        }
+
 
         #endregion
 
@@ -1376,6 +1399,38 @@ namespace EDDiscovery.UserControls
 
             return new Tuple<DateTime[], DateTime[]>(starttimeutc, endtimeutc);
         }
+
+        // moves curpos ignoring empty areas. dir  = +1 right, -1 left, 0 test and move right if empty
+        private int MoveChart(int dir, int cols, int[][] data, int[][] data2, int current)
+        {
+            current = Math.Min(Math.Max(0, current), cols - 1);     // limit to 0-cols
+
+            int curpos = current;
+
+            if (cols > 0)
+            {
+
+                if (dir == 0)
+                {
+                    if (data[curpos].Sum() != 0 || data2[curpos].Sum() != 0)          // if testing, and good, stay
+                        return curpos;
+                    dir = 1;
+                }
+
+                do
+                {
+                    System.Diagnostics.Debug.WriteLine($"Trying column {curpos} in {dir}");
+                    curpos += dir;
+                    if (curpos < 0)
+                        curpos = cols - 1;
+                    else if (curpos >= cols)
+                        curpos = 0;
+                } while (curpos != current && (data[curpos].Sum() == 0 && data2[curpos].Sum() == 0));     // if not wrapped, and sum = 0, around
+
+            }
+            return curpos;
+        }
+
 
         #endregion
     }

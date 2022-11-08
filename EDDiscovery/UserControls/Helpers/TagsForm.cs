@@ -96,7 +96,6 @@ namespace EDDiscovery.UserControls
             g.icon.Location = new Point(g.name.Right + 8, panelmargin);
             g.icon.Size = new Size(28, 28);     // override autosize after theming
             g.icon.Click += Icon_Click;
-            g.icon.ImageLayout = ImageLayout.Stretch;
             toolTip.SetToolTip(g.icon, "Select image for this tag".T(EDTx.TagsForm_SI));
             g.panel.Controls.Add(g.icon);
 
