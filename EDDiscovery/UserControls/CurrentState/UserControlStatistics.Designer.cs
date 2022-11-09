@@ -53,6 +53,8 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition6 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
             System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition7 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
             System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition8 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
+            System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition9 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
+            System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition10 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
             this.dataGridViewGeneral = new BaseUtils.DataGridViewBaseEnhancements();
             this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -92,9 +94,11 @@ namespace EDDiscovery.UserControls
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
             this.treeViewStats = new ExtendedControls.Controls.ExtTreeView();
             this.tabPageByShip = new System.Windows.Forms.TabPage();
+            this.splitContainerShips = new System.Windows.Forms.SplitContainer();
             this.extPanelDataGridViewScrollByShip = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewByShip = new BaseUtils.DataGridViewColumnControl();
             this.extScrollBarByShip = new ExtendedControls.ExtScrollBar();
+            this.extChartShips = new ExtendedControls.ExtSafeChart();
             this.labelEndDate = new System.Windows.Forms.Label();
             this.dateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
             this.labelStatus = new System.Windows.Forms.Label();
@@ -135,6 +139,10 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).BeginInit();
             this.tabPageGameStats.SuspendLayout();
             this.tabPageByShip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerShips)).BeginInit();
+            this.splitContainerShips.Panel1.SuspendLayout();
+            this.splitContainerShips.Panel2.SuspendLayout();
+            this.splitContainerShips.SuspendLayout();
             this.extPanelDataGridViewScrollByShip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewByShip)).BeginInit();
             this.extPanelRollUp.SuspendLayout();
@@ -770,7 +778,7 @@ namespace EDDiscovery.UserControls
             // 
             // tabPageByShip
             // 
-            this.tabPageByShip.Controls.Add(this.extPanelDataGridViewScrollByShip);
+            this.tabPageByShip.Controls.Add(this.splitContainerShips);
             this.tabPageByShip.Location = new System.Drawing.Point(4, 22);
             this.tabPageByShip.Name = "tabPageByShip";
             this.tabPageByShip.Padding = new System.Windows.Forms.Padding(3);
@@ -779,15 +787,33 @@ namespace EDDiscovery.UserControls
             this.tabPageByShip.Text = "By Ship";
             this.tabPageByShip.UseVisualStyleBackColor = true;
             // 
+            // splitContainerShips
+            // 
+            this.splitContainerShips.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerShips.Location = new System.Drawing.Point(3, 3);
+            this.splitContainerShips.Name = "splitContainerShips";
+            this.splitContainerShips.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainerShips.Panel1
+            // 
+            this.splitContainerShips.Panel1.Controls.Add(this.extPanelDataGridViewScrollByShip);
+            // 
+            // splitContainerShips.Panel2
+            // 
+            this.splitContainerShips.Panel2.Controls.Add(this.extChartShips);
+            this.splitContainerShips.Size = new System.Drawing.Size(1059, 505);
+            this.splitContainerShips.SplitterDistance = 252;
+            this.splitContainerShips.TabIndex = 4;
+            // 
             // extPanelDataGridViewScrollByShip
             // 
             this.extPanelDataGridViewScrollByShip.Controls.Add(this.dataGridViewByShip);
             this.extPanelDataGridViewScrollByShip.Controls.Add(this.extScrollBarByShip);
             this.extPanelDataGridViewScrollByShip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollByShip.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollByShip.Location = new System.Drawing.Point(3, 3);
+            this.extPanelDataGridViewScrollByShip.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollByShip.Name = "extPanelDataGridViewScrollByShip";
-            this.extPanelDataGridViewScrollByShip.Size = new System.Drawing.Size(1059, 505);
+            this.extPanelDataGridViewScrollByShip.Size = new System.Drawing.Size(1059, 252);
             this.extPanelDataGridViewScrollByShip.TabIndex = 4;
             this.extPanelDataGridViewScrollByShip.VerticalScrollBarDockRight = true;
             // 
@@ -808,7 +834,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewByShip.RowHeadersVisible = false;
             this.dataGridViewByShip.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewByShip.SingleRowSelect = true;
-            this.dataGridViewByShip.Size = new System.Drawing.Size(1043, 505);
+            this.dataGridViewByShip.Size = new System.Drawing.Size(1043, 252);
             this.dataGridViewByShip.TabIndex = 3;
             // 
             // extScrollBarByShip
@@ -828,7 +854,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarByShip.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarByShip.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarByShip.Name = "extScrollBarByShip";
-            this.extScrollBarByShip.Size = new System.Drawing.Size(16, 505);
+            this.extScrollBarByShip.Size = new System.Drawing.Size(16, 252);
             this.extScrollBarByShip.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarByShip.SmallChange = 1;
             this.extScrollBarByShip.TabIndex = 0;
@@ -838,6 +864,21 @@ namespace EDDiscovery.UserControls
             this.extScrollBarByShip.ThumbDrawAngle = 0F;
             this.extScrollBarByShip.Value = -1;
             this.extScrollBarByShip.ValueLimited = -1;
+            // 
+            // extChartShips
+            // 
+            this.extChartShips.AutoScaleYAddedPercent = 5D;
+            this.extChartShips.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extChartShips.LeftArrowEnable = true;
+            this.extChartShips.LeftArrowPosition = elementPosition9;
+            this.extChartShips.Location = new System.Drawing.Point(0, 0);
+            this.extChartShips.Name = "extChartShips";
+            this.extChartShips.RightArrowEnable = true;
+            this.extChartShips.RightArrowPosition = elementPosition10;
+            this.extChartShips.Size = new System.Drawing.Size(1059, 249);
+            this.extChartShips.TabIndex = 2;
+            this.extChartShips.ZoomMouseWheelXMinimumInterval = 5D;
+            this.extChartShips.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // labelEndDate
             // 
@@ -969,6 +1010,10 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).EndInit();
             this.tabPageGameStats.ResumeLayout(false);
             this.tabPageByShip.ResumeLayout(false);
+            this.splitContainerShips.Panel1.ResumeLayout(false);
+            this.splitContainerShips.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerShips)).EndInit();
+            this.splitContainerShips.ResumeLayout(false);
             this.extPanelDataGridViewScrollByShip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewByShip)).EndInit();
             this.extPanelRollUp.ResumeLayout(false);
@@ -1027,5 +1072,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtSafeChart extChartCombat;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Information;
+        private System.Windows.Forms.SplitContainer splitContainerShips;
+        private ExtendedControls.ExtSafeChart extChartShips;
     }
 }

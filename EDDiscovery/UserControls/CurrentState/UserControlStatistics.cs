@@ -34,14 +34,16 @@ namespace EDDiscovery.UserControls
         private string dbStartDateOn = "StartDateChecked";
         private string dbEndDate = "EndDate";
         private string dbEndDateOn = "EndDateChecked";
-
         private string dbStatsTreeStateSave = "TreeExpanded";
-
         private string dbScan = "Scan";     // these have with Summary or DWM on end
         private string dbTravel = "Travel";
         private string dbCombat = "Combat";     
-
         private string dbShip = "Ship";
+        private string dbSCCombat = "SCCombat";
+        private string dbSCGeneral = "SCGeneral";
+        private string dbSCLedger = "SCLedger";
+        private string dbSCScan = "SCScan";
+        private string dbSCShip = "SCShip";
 
         private bool endchecked, startchecked;
 
@@ -81,10 +83,10 @@ namespace EDDiscovery.UserControls
             tabControlCustomStats.SelectedIndex = GetSetting(dbSelectedTabSave, 0);
             userControlStatsTimeScan.DisplayStarsPlanetSelector(true);
 
-            var enumlist = new Enum[] { EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName, 
-                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_Information, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel, 
-                                        EDTx.UserControlStats_tabControlCustomStats_tabPageScan, 
-                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGameStats, 
+            var enumlist = new Enum[] { EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_Information, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageScan,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGameStats,
                                         EDTx.UserControlStats_tabControlCustomStats_tabPageByShip, EDTx.UserControlStats_labelStart, EDTx.UserControlStats_labelEndDate,
                                         EDTx.UserControlStats_tabControlCustomStats_tabPageCombat,
                                         EDTx.UserControlStats_tabControlCustomStats_tabPageLedger, EDTx.UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnLedgerDate,
@@ -112,6 +114,13 @@ namespace EDDiscovery.UserControls
             timerupdate.Interval = 2000;
             timerupdate.Tick += Timerupdate_Tick;
 
+            splitContainerCombat.SplitterDistance(GetSetting(dbSCCombat, 0.5));
+            splitContainerGeneral.SplitterDistance(GetSetting(dbSCGeneral, 0.5));
+            splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
+            splitContainerScan.SplitterDistance(GetSetting(dbSCScan, 0.5));
+            splitContainerShips.SplitterDistance(GetSetting(dbSCShip, 0.5));
+
+
             userControlStatsTimeTravel.TimeModeChanged += userControlStatsTimeTravel_TimeModeChanged;
             userControlStatsTimeScan.TimeModeChanged += userControlStatsTimeScan_TimeModeChanged;
             userControlStatsTimeScan.StarPlanetModeChanged += userControlStatsTimeScan_StarPlanetModeChanged;
@@ -121,7 +130,7 @@ namespace EDDiscovery.UserControls
 
             extChartTravelDest.AddChartArea("TravelCA1");
             extChartTravelDest.AddSeries("TravelS1", "TravelCA1", SeriesChartType.Column);
-            extChartTravelDest.AddTitle("MV1","Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top);
+            extChartTravelDest.AddTitle("MV1", "Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top);
 
             extChartLedger.AddChartArea("LedgerCA1");
             extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
@@ -152,53 +161,84 @@ namespace EDDiscovery.UserControls
 
             extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
 
-            const int cw = 48;
-            const int ch = 96;
-            const int ct = 2;
-            const int c1l = 1;
-            const int c2l = 51;
-            const int lw = 15;
+            {
+                const int cw = 48;
+                const int ch = 96;
+                const int ct = 2;
+                const int c1l = 1;
+                const int c2l = 51;
+                const int lw = 15;
+                const float titley = 3;
+                const float titleh = 7;
+                const float butw = 1.5f;
+                const float buth = 7;
+                const float ctc = 50;
+                const float ctw = 15;
 
-            extChartCombat.AddChartArea("CA-CA1", new ElementPosition(c1l, ct, cw, ch));
-            extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw * 2, 1, 100 - lw * 2 , 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
-            extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch-1.5f));
-            extChartCombat.AddSeries("CA-S1", "CA-CA1", SeriesChartType.Pie, legend: "CA-L1");
+                extChartCombat.AddChartArea("CA-CA1", new ElementPosition(c1l, ct, cw, ch));
+                extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+                extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw * 2, 1, 100 - lw * 2, 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
+                extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch - 1.5f));
+                extChartCombat.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
+                extChartCombat.AddSeries("CA-S1", "CA-CA1", SeriesChartType.Pie, legend: "CA-L1");
 
-            extChartCombat.AddChartArea("CA-CA2", new ElementPosition(c2l, ct, cw, ch));
-            extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 1, 100 - lw * 2, 98));
-            extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 0.2f, ct + 0.5f, lw, ch - 1.5f));
-            extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
+                extChartCombat.AddChartArea("CA-CA2", new ElementPosition(c2l, ct, cw, ch));
+                extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 1, 100 - lw * 2, 98));
+                extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+                extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 0.2f, ct + 0.5f, lw, ch - 1.5f));
+                extChartCombat.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
+                extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
 
-            const float titley = 3;
-            const float titleh = 7;
-            const float butw = 1.5f;
-            const float buth = 7;
-            const float ctc = 50;
-            const float ctw = 15;
+                extChartCombat.AddTitle("CA-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(ctc - ctw / 2, titley, ctw, titleh));
+                extChartCombat.SetTitleColorFont(backcolor:Color.White, border: Color.White);      // colour unimportant as themer will override, but setting it will theme it
+                extChartCombat.LeftArrowPosition = new ElementPosition(ctc - ctw / 2 - butw - 0.1f, titley, butw, buth);
+                extChartCombat.RightArrowPosition = new ElementPosition(ctc + ctw / 2 + 0.1f, titley, butw, buth);
+                extChartCombat.ArrowButtonPressed += CombatChartArrowPressed;
+                extChartCombat.LeftArrowEnable = extChartCombat.RightArrowEnable = false;     // disable
 
-            extChartCombat.AddTitle("CA-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(ctc-ctw/2, titley, ctw, titleh));
-            extChartCombat.SetTitleColorFont(border: Color.White);      // colour unimportant, but setting it will theme it
-            extChartCombat.LeftArrowPosition = new ElementPosition(ctc-ctw/2-butw-0.1f, titley, butw, buth);
-            extChartCombat.RightArrowPosition = new ElementPosition(ctc+ctw/2+0.1f, titley, butw, buth);
-            extChartCombat.ArrowButtonPressed += CombatChartArrowPressed;
-            extChartCombat.LeftArrowEnable = extChartCombat.RightArrowEnable = false;     // disable
+                extChartScan.AddChartArea("SC-CA1", new ElementPosition(c1l, ct, cw * 2, ch));
+                extChartScan.SetChartAreaPlotArea(new ElementPosition(lw, 1, 100 - lw * 2, 98));        // 1 chart, so lw does not need scaling
+                extChartScan.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+                extChartScan.AddLegend("SC-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch - 1.5f));
+                extChartScan.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
+                extChartScan.AddSeries("SC-S1", "SC-CA1", SeriesChartType.Pie, legend: "SC-L1");
 
-            extChartScan.AddChartArea("SC-CA1", new ElementPosition(c1l, ct, cw*2, ch));
-            extChartScan.SetChartAreaPlotArea(new ElementPosition(lw, 1, 100-lw*2 , 98));        // 1 chart, so lw does not need scaling
-            extChartScan.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartScan.AddLegend("SC-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch - 1.5f));
-            extChartScan.AddSeries("SC-S1", "SC-CA1", SeriesChartType.Pie, legend: "SC-L1");
+                const float stw = 10;
+                float stc = (c1l + 0.2f) + lw + stw / 2 + butw + 1f;
+                extChartScan.AddTitle("SC-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(stc - stw / 2, titley, stw, titleh));
+                extChartScan.SetTitleColorFont(backcolor:Color.White, border: Color.White);      // setting it will theme it
+                extChartScan.LeftArrowPosition = new ElementPosition(stc - stw / 2 - butw - 0.1f, titley, butw, buth);
+                extChartScan.RightArrowPosition = new ElementPosition(stc + stw / 2 + 0.1f, titley, butw, buth);
+                extChartScan.ArrowButtonPressed += ScanChartArrowPressed;
+                extChartScan.LeftArrowEnable = extChartScan.RightArrowEnable = false;     // disable
+            }
 
-            const float stw = 10;
-            float stc = (c1l + 0.2f) + lw + stw/2 + butw + 1f;
-            extChartScan.AddTitle("SC-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(stc-stw/2, titley, stw, titleh));
-            extChartScan.SetTitleColorFont(border: Color.White);      // colour unimportant, but setting it will theme it
-            extChartScan.LeftArrowPosition = new ElementPosition(stc-stw/2-butw-0.1f, titley, butw, buth);
-            extChartScan.RightArrowPosition = new ElementPosition(stc+stw/2+0.1f, titley, butw, buth);
-            extChartScan.ArrowButtonPressed += ScanChartArrowPressed;
-            extChartScan.LeftArrowEnable = extChartScan.RightArrowEnable = false;     // disable
+            {
+                const int c1l = 21;
+                const int ct = 2;
+                const int cw = 25;
+                const int ch = 96;
+                extChartShips.AddChartArea("SH-CA1", new ElementPosition(c1l, ct, cw, ch));
+                extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+                extChartShips.AddLegend("SH-L1", position: new ElementPosition(0, ct, c1l-1, ch));
+                extChartShips.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
+
+                extChartShips.AddSeries("SH-S1", "SH-CA1", SeriesChartType.Pie, legend: "SH-L1");
+
+                extChartShips.AddTitle("SH-T1", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l+1f, 3f, 8, 5));
+
+                extChartShips.AddChartArea("SH-CA2", new ElementPosition(c1l+cw+0.5f, ct, cw, ch));
+                extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+                extChartShips.AddSeries("SH-S2", "SH-CA2", SeriesChartType.Pie);      // setting legend blank means don't show
+                extChartShips.AddTitle("SH-T2", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + 1f, 3f, 8, 5));
+
+                extChartShips.AddChartArea("SH-CA3", new ElementPosition(c1l+cw+cw+1f, ct, cw, ch));
+                extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
+                extChartShips.AddSeries("SH-S3", "SH-CA3", SeriesChartType.Pie);
+                extChartShips.AddTitle("SH-T3", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + cw + 1.5f, 3f, 8, 5));
+
+            }
+
         }
 
         // themeing has been performed
@@ -242,6 +282,12 @@ namespace EDDiscovery.UserControls
 
             if (dataGridViewByShip.Columns.Count > 0)
                 DGVSaveColumnLayout(dataGridViewByShip, dbShip);
+
+            PutSetting(dbSCCombat, splitContainerCombat.GetSplitterDistance());
+            PutSetting(dbSCGeneral, splitContainerGeneral.GetSplitterDistance());
+            PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
+            PutSetting(dbSCScan, splitContainerScan.GetSplitterDistance());
+            PutSetting(dbSCShip, splitContainerShips.GetSplitterDistance());
 
             discoveryform.OnNewEntry -= AddNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -1075,7 +1121,7 @@ namespace EDDiscovery.UserControls
                     for (int pp = 0; pp < p; pp++)
                     {
                         //if ( ii==0)
-                        crs.chart1data[ii][pp] = (pp + 1);
+                        //crs.chart1data[ii][pp] = (pp + 1);
                         //crs.chart1data[ii][pp] = 0;
                         crs.griddata[row++][ii] = crs.chart1data[ii][pp].ToString("N0");
                     }
@@ -1111,7 +1157,7 @@ namespace EDDiscovery.UserControls
                     for (int pp = 0; pp < p; pp++)
                     {
                         //if ( ii == 2)
-                        crs.chart2data[ii][pp] = (pp + 1);
+                        //crs.chart2data[ii][pp] = (pp + 1);
                         //crs.chart2data[ii][pp] = 0;
                         crs.griddata[row++][ii] = crs.chart2data[ii][pp].ToString("N0");
                     }
@@ -1234,32 +1280,67 @@ namespace EDDiscovery.UserControls
 
             if (dataGridViewByShip.Columns.Count == 0)
             {
+                string jumpscolh = "Jumps".T(EDTx.UserControlStats_Jumps);
+                string travelledcolh = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy);
+                string bodiesscannedcolh = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned);
+
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha1", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha2", HeaderText = "Name".T(EDTx.UserControlStats_Name), ReadOnly = true });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha3", HeaderText = "Ident".T(EDTx.UserControlStats_Ident), ReadOnly = true });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric1", HeaderText = "Jumps".T(EDTx.UserControlStats_Jumps), ReadOnly = true });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric2", HeaderText = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), ReadOnly = true });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric3", HeaderText = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric1", HeaderText = jumpscolh, ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric2", HeaderText = travelledcolh, ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric3", HeaderText = bodiesscannedcolh, ReadOnly = true });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric4", HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed), ReadOnly = true });
                 DGVLoadColumnLayout(dataGridViewByShip, dbShip);
+
+                extChartShips.SetCurrentTitle(0);
+                extChartShips.SetTitleText(jumpscolh);
+                extChartShips.SetCurrentTitle(1);
+                extChartShips.SetTitleText(travelledcolh);
+                extChartShips.SetCurrentTitle(2);
+                extChartShips.SetTitleText(bodiesscannedcolh);
             }
 
             string[] strarr = new string[6];
 
             dataGridViewByShip.Rows.Clear();
 
+            double[] piejumpdist = new double[currentstat.Ships.Count];
+            int[] piescans = new int[currentstat.Ships.Count];
+            int[] piefsdjumps = new int[currentstat.Ships.Count];
+
+            int row = 0;
             foreach (var kvp in currentstat.Ships)
             {
                 var fsd = currentstat.FSDJumps.Where(x => x.shipid == kvp.Key);
                 var scans = currentstat.Scans.Values.Where(x => x.ShipIDForStatsOnly == kvp.Key);
-                strarr[0] = kvp.Value.name?? "-";
-                strarr[1] = kvp.Value.ident ?? "-";
+                strarr[0] = kvp.Value.Name?? "-";
+                strarr[1] = kvp.Value.Ident ?? "-";
 
-                strarr[2] = fsd.Count().ToString();
-                strarr[3] = fsd.Sum(x => x.jumpdist).ToString("N0");
-                strarr[4] = scans.Count().ToString("N0");
-                strarr[5] = kvp.Value.died.ToString();
+                piefsdjumps[row] = fsd.Count();
+                strarr[2] = piefsdjumps[row].ToString();
+                piejumpdist[row] = fsd.Sum(x => x.jumpdist);
+                strarr[3] = piejumpdist[row].ToString("N0");
+                piescans[row] = scans.Count();
+                strarr[4] = piescans[row].ToString("N0");
+                strarr[5] = kvp.Value.Died.ToString();
                 StatToDGV(dataGridViewByShip, kvp.Key, strarr, true);
+                row++;
+            }
+
+            extChartShips.ClearAllSeriesPoints();
+
+            row = 0;
+            int c = 0;
+            foreach (var kvp in currentstat.Ships)
+            {
+                extChartShips.SetCurrentSeries(0);
+                extChartShips.AddPoint(piefsdjumps[row], null, kvp.Key, piechartcolours[c % piechartcolours.Length], false);
+                extChartShips.SetCurrentSeries(1);
+                extChartShips.AddPoint(piejumpdist[row], null, null, piechartcolours[c % piechartcolours.Length], false);
+                extChartShips.SetCurrentSeries(2);
+                extChartShips.AddPoint(piescans[row], null, null, piechartcolours[c % piechartcolours.Length], false);
+                c++; row++;
             }
 
             if (sortcol < dataGridViewByShip.Columns.Count)
