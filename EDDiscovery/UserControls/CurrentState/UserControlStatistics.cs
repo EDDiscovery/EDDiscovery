@@ -157,18 +157,18 @@ namespace EDDiscovery.UserControls
             const int ct = 2;
             const int c1l = 1;
             const int c2l = 51;
-            const int lw = 20;
+            const int lw = 15;
 
             extChartCombat.AddChartArea("CA-CA1", new ElementPosition(c1l, ct, cw, ch));
             extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw * 2, 1, 100 - lw * 2, 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
-            extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 1, ct + 1, lw, ch-2));
+            extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw * 2, 1, 100 - lw * 2 , 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
+            extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch-1.5f));
             extChartCombat.AddSeries("CA-S1", "CA-CA1", SeriesChartType.Pie, legend: "CA-L1");
 
             extChartCombat.AddChartArea("CA-CA2", new ElementPosition(c2l, ct, cw, ch));
             extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 1, 100 - lw * 2, 98));
             extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 1, ct + 1, lw, ch - 2));
+            extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 0.2f, ct + 0.5f, lw, ch - 1.5f));
             extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
 
             const float titley = 3;
@@ -188,19 +188,17 @@ namespace EDDiscovery.UserControls
             extChartScan.AddChartArea("SC-CA1", new ElementPosition(c1l, ct, cw*2, ch));
             extChartScan.SetChartAreaPlotArea(new ElementPosition(lw, 1, 100-lw*2 , 98));        // 1 chart, so lw does not need scaling
             extChartScan.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-            extChartScan.AddLegend("SC-L1", position: new ElementPosition(c1l + 1, ct + 1, lw, ch - 2));
+            extChartScan.AddLegend("SC-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch - 1.5f));
             extChartScan.AddSeries("SC-S1", "SC-CA1", SeriesChartType.Pie, legend: "SC-L1");
 
             const float stw = 10;
-            const float stc = lw + stw/2 + butw;
+            float stc = (c1l + 0.2f) + lw + stw/2 + butw + 1f;
             extChartScan.AddTitle("SC-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(stc-stw/2, titley, stw, titleh));
             extChartScan.SetTitleColorFont(border: Color.White);      // colour unimportant, but setting it will theme it
             extChartScan.LeftArrowPosition = new ElementPosition(stc-stw/2-butw-0.1f, titley, butw, buth);
             extChartScan.RightArrowPosition = new ElementPosition(stc+stw/2+0.1f, titley, butw, buth);
             extChartScan.ArrowButtonPressed += ScanChartArrowPressed;
             extChartScan.LeftArrowEnable = extChartScan.RightArrowEnable = false;     // disable
-
-
         }
 
         // themeing has been performed
@@ -1076,7 +1074,8 @@ namespace EDDiscovery.UserControls
 
                     for (int pp = 0; pp < p; pp++)
                     {
-                        //if ( ii==0)  crs.chart1data[ii][pp] = (pp + 1);
+                        //if ( ii==0)
+                        crs.chart1data[ii][pp] = (pp + 1);
                         //crs.chart1data[ii][pp] = 0;
                         crs.griddata[row++][ii] = crs.chart1data[ii][pp].ToString("N0");
                     }
@@ -1111,7 +1110,8 @@ namespace EDDiscovery.UserControls
 
                     for (int pp = 0; pp < p; pp++)
                     {
-                        //if ( ii == 2) crs.chart2data[ii][pp] = (pp + 1);
+                        //if ( ii == 2)
+                        crs.chart2data[ii][pp] = (pp + 1);
                         //crs.chart2data[ii][pp] = 0;
                         crs.griddata[row++][ii] = crs.chart2data[ii][pp].ToString("N0");
                     }
