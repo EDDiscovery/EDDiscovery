@@ -171,16 +171,17 @@ namespace EDDiscovery.UserControls
             extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 1, ct + 1, lw, ch - 2));
             extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
 
-            const float titlep = 5;
-            const float titleh = 5;
+            const float titley = 3;
+            const float titleh = 7;
             const float butw = 1.5f;
-            const float buth = 5;
+            const float buth = 7;
             const float ctc = 50;
-            const float ctw = 10;
-            extChartCombat.AddTitle("CA-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(ctc-ctw/2, titlep, ctw, titleh));
+            const float ctw = 15;
+
+            extChartCombat.AddTitle("CA-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(ctc-ctw/2, titley, ctw, titleh));
             extChartCombat.SetTitleColorFont(border: Color.White);      // colour unimportant, but setting it will theme it
-            extChartCombat.LeftArrowPosition = new ElementPosition(ctc-ctw/2-0.1f, titlep, butw, buth);
-            extChartCombat.RightArrowPosition = new ElementPosition(ctc+ctw/2+0.1f, titlep, butw, buth);
+            extChartCombat.LeftArrowPosition = new ElementPosition(ctc-ctw/2-butw-0.1f, titley, butw, buth);
+            extChartCombat.RightArrowPosition = new ElementPosition(ctc+ctw/2+0.1f, titley, butw, buth);
             extChartCombat.ArrowButtonPressed += CombatChartArrowPressed;
             extChartCombat.LeftArrowEnable = extChartCombat.RightArrowEnable = false;     // disable
 
@@ -191,11 +192,11 @@ namespace EDDiscovery.UserControls
             extChartScan.AddSeries("SC-S1", "SC-CA1", SeriesChartType.Pie, legend: "SC-L1");
 
             const float stw = 10;
-            const float stc = lw + stw+ 2;
-            extChartScan.AddTitle("SC-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(stc-stw/2, titlep, stw, titleh));
+            const float stc = lw + stw/2 + butw;
+            extChartScan.AddTitle("SC-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(stc-stw/2, titley, stw, titleh));
             extChartScan.SetTitleColorFont(border: Color.White);      // colour unimportant, but setting it will theme it
-            extChartScan.LeftArrowPosition = new ElementPosition(stc-stw/2-butw-0.1f, titlep, butw, buth);
-            extChartScan.RightArrowPosition = new ElementPosition(stc+stw/2+0.1f, titlep, butw, buth);
+            extChartScan.LeftArrowPosition = new ElementPosition(stc-stw/2-butw-0.1f, titley, butw, buth);
+            extChartScan.RightArrowPosition = new ElementPosition(stc+stw/2+0.1f, titley, butw, buth);
             extChartScan.ArrowButtonPressed += ScanChartArrowPressed;
             extChartScan.LeftArrowEnable = extChartScan.RightArrowEnable = false;     // disable
 

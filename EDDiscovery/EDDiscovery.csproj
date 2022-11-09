@@ -1182,10 +1182,6 @@
     </Task>
   </UsingTask>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
-    <PostBuildEvent>xcopy /Y /S $(MSBuildProjectDirectory)\x86\Microsoft.VC100.CRT x86\Microsoft.VC100.CRT\
-</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -1290,8 +1286,4 @@ namespace CAPI
     <WriteLinesToFile File="CapiClientID.cs" Overwrite="true" Lines="$(LauncherCmd)" />
   </Target>
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" />
-  <PropertyGroup>
-    <PostBuildEvent>rem xcopy /Y /S $(MSBuildProjectDirectory)\x86\Microsoft.VC100.CRT x86\Microsoft.VC100.CRT\
-</PostBuildEvent>
-  </PropertyGroup>
 </Project>
