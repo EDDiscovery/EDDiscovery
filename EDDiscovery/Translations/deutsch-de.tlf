@@ -25,7 +25,8 @@ SECTION StartUp
 
 SECTION DataGridView
 
-.WordWrap: "Word Wrap (Override)" @
+
+.WordWrap: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
 
 SECTION SafeModeForm
 
@@ -165,8 +166,8 @@ SECTION PopOutInfo
 .Engineers.Description: "List of Engineers, status, recipes" => "Liste der Ingenieure, Status, Blaupausen"
 .Discoveries.Title: "Discoveries" => "Entdeckungen"
 .Discoveries.Description: "Discoveries Observer List" => "Discoveries Observer-Liste"
-.Carrier.Title: "Carrier" @
-.Carrier.Description: "Data about your fleet carrier" @
+.Carrier.Title: "Carrier" => "Carrier"
+.Carrier.Description: "Data about your fleet carrier" => "Daten über deinen Fleet Carrier"
 
 SECTION EDDiscoveryForm
 
