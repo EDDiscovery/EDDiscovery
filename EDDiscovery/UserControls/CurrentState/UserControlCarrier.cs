@@ -48,6 +48,7 @@ namespace EDDiscovery.UserControls
         private string dbCAPISave = "CAPI_Fleetcarrier_Data";           // global across all panels
         private string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
         private string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
+        private string dbSCLedger = "SCFinance";
 
         #region Init
 
@@ -78,6 +79,7 @@ namespace EDDiscovery.UserControls
 
             splitContainerCAPI1.SplitterDistance(GetSetting(dbSplitterSaveCAPI1, 0.5));
             splitContainerCAPI2.SplitterDistance(GetSetting(dbSplitterSaveCAPI2, 0.5));
+            splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
 
             labelCAPICarrierBalance.Text = labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
             extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;     // off until period poll
@@ -114,6 +116,7 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerType, EDTx.UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric};
 
             BaseUtils.Translator.Instance.TranslateControls(this,enumlist);
+
 
             extChartLedger.AddChartArea("LedgerCA1");
             extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
@@ -229,7 +232,9 @@ namespace EDDiscovery.UserControls
 
             PutSetting(dbSplitterSaveCAPI1, splitContainerCAPI1.GetSplitterDistance());
             PutSetting(dbSplitterSaveCAPI2, splitContainerCAPI2.GetSplitterDistance());
+            PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
             PutSetting(dbTabSave, extTabControl.SelectedIndex);
+
 
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -417,7 +422,7 @@ namespace EDDiscovery.UserControls
 
                     var row = dataGridViewLedger.Rows.Add(rowobj);
                     dataGridViewLedger.Rows[row].Tag = seltime;
-                    extChartLedger.AddXY(seltime, le.Balance);
+                    extChartLedger.AddXY(seltime, le.Balance,graphtooltip:$"{seltime.ToString()} {le.Balance:N0}cr");
                     //System.Diagnostics.Debug.WriteLine($"Add {seltime} {le.Balance}");
                 }
 
@@ -751,23 +756,39 @@ namespace EDDiscovery.UserControls
 
             int midpos = Width / 2 - 200;
             int lmpos = linemargin;
+            int maxmidwidth = midpos;
             foreach (var x in midtopalignedfinancecontrols)
             {
                 x.Location = new Point(midpos, lmpos);
+                maxmidwidth = Math.Max(x.Right, maxmidwidth);
                 lmpos += x.Height + linemargin;
             }
 
+            int maxh = Math.Max(lypos, lmpos);
+
             int rightpos = Width- 270;
+            int xpos = rightpos;
             int rypos = linemargin;
+            int shown = 0;
             foreach (var x in righttopalignedfinancecontrols)
             {
-                x.Location = new Point(rightpos, rypos);
                 if (x.Text.HasChars())
+                {
+                    x.Location = new Point(xpos, rypos);
                     rypos += x.Height + linemargin;
+                    maxh = Math.Max(maxh, rypos);
+
+                    if (++shown == 4 && xpos - 200 > maxmidwidth)
+                    {
+                        rypos = linemargin;
+                        xpos -= 200;
+                    }
+                }
             }
 
+            System.Diagnostics.Debug.WriteLine($"Max h {maxh}");
             labelCAPICarrierBalance.Location = new Point(rightpos, labelCAPICarrierBalance.Top);
-            panelFinancesTop.Height = Math.Max(rypos, lypos);
+            panelFinancesTop.Height = maxh;
         }
 
         private void dataGridViewLedger_CellClick(object sender, DataGridViewCellEventArgs e)

@@ -128,38 +128,43 @@ namespace EDDiscovery.UserControls
 
             // set the charts up before themeing so the themer helps us out
 
-            extChartTravelDest.AddChartArea("TravelCA1");
-            extChartTravelDest.AddSeries("TravelS1", "TravelCA1", SeriesChartType.Column);
-            extChartTravelDest.AddTitle("MV1", "Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top);
+            {
+                extChartTravelDest.AddChartArea("TravelCA1");
+                extChartTravelDest.AddSeries("TravelS1", "TravelCA1", SeriesChartType.Column);
+                extChartTravelDest.AddTitle("MV1", "Most Visited".T(EDTx.UserControlStats_MostVisited), dockingpos: Docking.Top);
+            }
 
-            extChartLedger.AddChartArea("LedgerCA1");
-            extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
-            extChartLedger.EnableZoomMouseWheelX();
-            extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
+            {
+                extChartLedger.AddChartArea("LedgerCA1");
+                extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
+                extChartLedger.EnableZoomMouseWheelX();
+                extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
 
-            extChartLedger.SetXAxisInterval(DateTimeIntervalType.Days, 0, IntervalAutoMode.VariableCount);
-            extChartLedger.SetXAxisFormat("g");
+                extChartLedger.SetXAxisInterval(DateTimeIntervalType.Days, 0, IntervalAutoMode.VariableCount);
+                extChartLedger.SetXAxisFormat("g");
 
-            extChartLedger.XCursorShown();
-            extChartLedger.XCursorSelection();
-            extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Seconds);
+                extChartLedger.XCursorShown();
+                extChartLedger.XCursorSelection();
+                extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Seconds);
 
-            extChartLedger.YAutoScale();
-            extChartLedger.SetYAxisFormat("N0");
+                extChartLedger.YAutoScale();
+                extChartLedger.SetYAxisFormat("N0");
 
-            extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
+                extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
 
-            extChartLedger.AddContextMenu(new string[] { "Zoom out by 1", "Reset Zoom" },
-                                new Action<ToolStripMenuItem>[]
-                                    { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
-                                          new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomResetX(); } ),
-                                    },
-                                new Action<ToolStripMenuItem[]>((list) => {
-                                    list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
-                                })
-                                );
+                extChartLedger.AddContextMenu(new string[] { "Zoom out by 1", "Reset Zoom" },
+                                    new Action<ToolStripMenuItem>[]
+                                        { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
+                                              new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomResetX(); } ),
+                                        },
+                                    new Action<ToolStripMenuItem[]>((list) =>
+                                    {
+                                        list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
+                                    })
+                                    );
 
-            extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
+                extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
+            }
 
             {
                 const int cw = 48;
@@ -179,18 +184,15 @@ namespace EDDiscovery.UserControls
                 extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartCombat.SetChartAreaPlotArea(new ElementPosition(lw * 2, 1, 100 - lw * 2, 98));       // its *2 because lw is specified in whole chart terms, and this is in chart area terms
                 extChartCombat.AddLegend("CA-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch - 1.5f));
-                extChartCombat.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
                 extChartCombat.AddSeries("CA-S1", "CA-CA1", SeriesChartType.Pie, legend: "CA-L1");
 
                 extChartCombat.AddChartArea("CA-CA2", new ElementPosition(c2l, ct, cw, ch));
                 extChartCombat.SetChartAreaPlotArea(new ElementPosition(0, 1, 100 - lw * 2, 98));
                 extChartCombat.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartCombat.AddLegend("CA-L2", position: new ElementPosition(c2l + cw - lw - 0.2f, ct + 0.5f, lw, ch - 1.5f));
-                extChartCombat.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
                 extChartCombat.AddSeries("CA-S2", "CA-CA2", SeriesChartType.Pie, legend: "CA-L2");
 
                 extChartCombat.AddTitle("CA-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(ctc - ctw / 2, titley, ctw, titleh));
-                extChartCombat.SetTitleColorFont(backcolor:Color.White, border: Color.White);      // colour unimportant as themer will override, but setting it will theme it
                 extChartCombat.LeftArrowPosition = new ElementPosition(ctc - ctw / 2 - butw - 0.1f, titley, butw, buth);
                 extChartCombat.RightArrowPosition = new ElementPosition(ctc + ctw / 2 + 0.1f, titley, butw, buth);
                 extChartCombat.ArrowButtonPressed += CombatChartArrowPressed;
@@ -200,13 +202,11 @@ namespace EDDiscovery.UserControls
                 extChartScan.SetChartAreaPlotArea(new ElementPosition(lw, 1, 100 - lw * 2, 98));        // 1 chart, so lw does not need scaling
                 extChartScan.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartScan.AddLegend("SC-L1", position: new ElementPosition(c1l + 0.2f, ct + 0.5f, lw, ch - 1.5f));
-                extChartScan.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
                 extChartScan.AddSeries("SC-S1", "SC-CA1", SeriesChartType.Pie, legend: "SC-L1");
 
                 const float stw = 10;
                 float stc = (c1l + 0.2f) + lw + stw / 2 + butw + 1f;
                 extChartScan.AddTitle("SC-T1", "", alignment: ContentAlignment.MiddleCenter, position: new ElementPosition(stc - stw / 2, titley, stw, titleh));
-                extChartScan.SetTitleColorFont(backcolor:Color.White, border: Color.White);      // setting it will theme it
                 extChartScan.LeftArrowPosition = new ElementPosition(stc - stw / 2 - butw - 0.1f, titley, butw, buth);
                 extChartScan.RightArrowPosition = new ElementPosition(stc + stw / 2 + 0.1f, titley, butw, buth);
                 extChartScan.ArrowButtonPressed += ScanChartArrowPressed;
@@ -221,21 +221,18 @@ namespace EDDiscovery.UserControls
                 extChartShips.AddChartArea("SH-CA1", new ElementPosition(c1l, ct, cw, ch));
                 extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartShips.AddLegend("SH-L1", position: new ElementPosition(0, ct, c1l-1, ch));
-                extChartShips.SetLegendColor(backcolor: Color.White, bordercolor: Color.White);        // set so themer will change it
-
                 extChartShips.AddSeries("SH-S1", "SH-CA1", SeriesChartType.Pie, legend: "SH-L1");
-
-                extChartShips.AddTitle("SH-T1", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l+1f, 3f, 8, 5));
+                extChartShips.AddTitle("SH-T1", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l+1f, 3f, 8, 5), bordercolor: ExtendedControls.ExtSafeChart.Disable);
 
                 extChartShips.AddChartArea("SH-CA2", new ElementPosition(c1l+cw+0.5f, ct, cw, ch));
                 extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartShips.AddSeries("SH-S2", "SH-CA2", SeriesChartType.Pie);      // setting legend blank means don't show
-                extChartShips.AddTitle("SH-T2", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + 1f, 3f, 8, 5));
+                extChartShips.AddTitle("SH-T2", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + 1f, 3f, 10, 5), bordercolor: ExtendedControls.ExtSafeChart.Disable);
 
                 extChartShips.AddChartArea("SH-CA3", new ElementPosition(c1l+cw+cw+1f, ct, cw, ch));
                 extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartShips.AddSeries("SH-S3", "SH-CA3", SeriesChartType.Pie);
-                extChartShips.AddTitle("SH-T3", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + cw + 1.5f, 3f, 8, 5));
+                extChartShips.AddTitle("SH-T3", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + cw + 1.5f, 3f, 10, 5), bordercolor: ExtendedControls.ExtSafeChart.Disable);
 
             }
 
@@ -244,7 +241,7 @@ namespace EDDiscovery.UserControls
         // themeing has been performed
         public override void InitialDisplay()
         {
-            //extChartCombat.SetCurrentLegend(0);  extChartCombat.SetLegendColor(Color.Blue, Color.Green, Color.FromArgb(128, 0, 0, 0));
+            tabControlCustomStats.TabStyle = new ExtendedControls.TabStyleSquare();        // after themeing, set to differentiate
 
             dataGridViewTravel.RowTemplate.MinimumHeight =
                         dataGridViewScan.RowTemplate.MinimumHeight =
@@ -570,7 +567,7 @@ namespace EDDiscovery.UserControls
                 object[] coldata = new object[] { seltime.ToString(), kvp.Value.ToString("N0") };
                 int row =dataGridViewLedger.Rows.Add(coldata);
                 dataGridViewLedger.Rows[row].Tag = seltime;
-                extChartLedger.AddXY(seltime, kvp.Value);
+                extChartLedger.AddXY(seltime, kvp.Value, graphtooltip: $"{seltime.ToString()} {kvp.Value:N0}cr");
             }
 
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
@@ -772,11 +769,18 @@ namespace EDDiscovery.UserControls
             if (!extChartScan.CompareYPoints(scandata.Select(x => (double)x).ToArray()))       // if not the same values
             {
                 extChartScan.ClearSeriesPoints();
+
+                double scantotal = scandata.Sum();
+
                 int c = 0;
                 for (int i = 0; i < scandata.Length; i++)
                 {
                     if (scandata[i] != 0)
-                        extChartScan.AddPoint(scandata[i], null, res.chart1labels[i] + ": " + scandata[i].ToString(), piechartcolours[c++ % piechartcolours.Length], false);  // null means no labels on actual graph, we do it via legend
+                    {
+                        string t = res.chart1labels[i] + ": " + scandata[i].ToString();
+                        string tt = $"{t} {(scandata[i] / scantotal) * 100:N2}%";
+                        extChartScan.AddPoint(scandata[i], null, t, piechartcolours[c++ % piechartcolours.Length], false, tt);  // null means no labels on actual graph, we do it via legend
+                    }
                 }
 
                 extChartScan.SetChartAreaVisible(extChartScan.GetNumberPoints() > 0);
@@ -999,13 +1003,20 @@ namespace EDDiscovery.UserControls
             if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
             {
                 extChartCombat.ClearSeriesPoints();
+                double total = npcdata.Sum();
                 int c = 0;
                 for (int i = 0; i < npcdata.Length; i++)
                 {
                     if (npcdata[i] != 0)
-                        extChartCombat.AddPoint(npcdata[i], null, res.chart1labels[i] + ": " + npcdata[i].ToString(), piechartcolours[c++ % piechartcolours.Length],false);  // null means no labels on actual graph, we do it via legend
+                    {
+                        string t = res.chart1labels[i] + ": " + npcdata[i].ToString();
+                        string tt = $"{t} {(npcdata[i] / total) * 100:N2}%";
+                        extChartCombat.AddPoint(npcdata[i], null, t, piechartcolours[c++ % piechartcolours.Length], false, tt);  // null means no labels on actual graph, we do it via legend
+                    }
                 }
             }
+
+            extChartCombat.SetChartAreaVisible(0,npcdata.Sum() > 0);
 
             extChartCombat.SetCurrentSeries(1); // PVP
 
@@ -1014,13 +1025,20 @@ namespace EDDiscovery.UserControls
             if (!extChartCombat.CompareYPoints(npcdata.Select(x => (double)x).ToArray()))       // if not the same values
             {
                 extChartCombat.ClearSeriesPoints();
+                double total = pvpdata.Sum();
                 int c = 0;
                 for (int i = 0; i < pvpdata.Length; i++)
                 {
                     if (pvpdata[i] != 0)
-                        extChartCombat.AddPoint(pvpdata[i], null, res.chart2labels[i] + ": " + pvpdata[i].ToString(), piechartcolours[c++ % piechartcolours.Length],false);
+                    {
+                        string t = res.chart2labels[i] + ": " + pvpdata[i].ToString();
+                        string tt = $"{t} {(pvpdata[i] / total) * 100:N2}%";
+                        extChartCombat.AddPoint(pvpdata[i], null, t, piechartcolours[c++ % piechartcolours.Length], false, tt);
+                    }
                 }
             }
+
+            extChartCombat.SetChartAreaVisible(1,pvpdata.Sum() > 0);
 
             bool showing = npcdata.Sum() > 0 || pvpdata.Sum() > 0;      // see if anything is displayed. We should have selected a filled area
 
@@ -1335,11 +1353,11 @@ namespace EDDiscovery.UserControls
             foreach (var kvp in currentstat.Ships)
             {
                 extChartShips.SetCurrentSeries(0);
-                extChartShips.AddPoint(piefsdjumps[row], null, kvp.Key, piechartcolours[c % piechartcolours.Length], false);
+                extChartShips.AddPoint(piefsdjumps[row], null, kvp.Key, piechartcolours[c % piechartcolours.Length], false, $"{kvp.Key}: {piefsdjumps[row]}");
                 extChartShips.SetCurrentSeries(1);
-                extChartShips.AddPoint(piejumpdist[row], null, null, piechartcolours[c % piechartcolours.Length], false);
+                extChartShips.AddPoint(piejumpdist[row], null, null, piechartcolours[c % piechartcolours.Length], false, $"{kvp.Key}: {piejumpdist[row]}ly");
                 extChartShips.SetCurrentSeries(2);
-                extChartShips.AddPoint(piescans[row], null, null, piechartcolours[c % piechartcolours.Length], false);
+                extChartShips.AddPoint(piescans[row], null, null, piechartcolours[c % piechartcolours.Length], false, $"{kvp.Key}: {piescans[row]}");
                 c++; row++;
             }
 
