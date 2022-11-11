@@ -32,9 +32,10 @@ namespace EDDiscovery.UserControls
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        private string dbFilter = "EventFilter2";
-        private string dbHistorySave = "EDUIHistory";
-        private string dbFieldFilter = "ControlFieldFilter";
+        private const string dbFilter = "EventFilter2";
+        private const string dbHistorySave = "EDUIHistory";
+        private const string dbFieldFilter = "ControlFieldFilter";
+        private const string dbUserGroups = "UserGroups";
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -84,6 +85,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             checkBoxCursorToTop.Checked = true;
@@ -127,6 +129,7 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal);
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();

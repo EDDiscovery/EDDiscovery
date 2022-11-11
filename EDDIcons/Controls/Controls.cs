@@ -195,5 +195,6 @@ namespace EDDiscovery.Icons
         public static Image Bookmarks { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bookmarks"); } }
         public static Image FleetCarrier { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.FleetCarrier"); } }
         public static Image ArrowsRight { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ArrowsRight"); } }
+        public static Image AddJournals { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.AddJournals"); } }
     }
 }

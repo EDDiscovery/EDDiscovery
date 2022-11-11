@@ -29,10 +29,11 @@ namespace EDDiscovery.UserControls
     public partial class UserControlLedger : UserControlCommonBase
     {
         private JournalFilterSelector cfs;
-        private string dbFilter = "EventFilter2";
-        private string dbHistorySave = "EDUIHistory";
-        private string dbSCLedger = "SCLedger";
+        private const string dbFilter = "EventFilter2";
+        private const string dbHistorySave = "EDUIHistory";
+        private const string dbSCLedger = "SCLedger";
         private const string dbWordWrap = "WordWrap";
+        private const string dbUserGroups = "UserGroups";
         private int transactioncountatdisplay = 0;
 
         #region Init
@@ -55,6 +56,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
@@ -125,6 +127,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewLedger);
             PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
             discoveryform.OnHistoryChange -= Redisplay;
             discoveryform.OnNewEntry -= NewEntry;
         }

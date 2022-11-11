@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls
         private const string dbVisitedColour = "VisitedColour";
         private const string dbDebugMode = "DebugMode";
         private const string dbBookmarks = "Bookmarks";
+        private const string dbUserGroups = "UserGroups";
 
         private string searchterms = "system:body:station:stationfaction";
 
@@ -108,6 +109,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             checkBoxCursorToTop.Checked = true;
@@ -191,6 +193,7 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewTravel);
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();

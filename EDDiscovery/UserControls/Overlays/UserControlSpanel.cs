@@ -32,8 +32,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpanel : UserControlCommonBase
     {
-        private string dbFilter = "EventFilter2";
-        private string dbFieldFilter = "FieldFilter";
+        private const string dbFilter = "EventFilter2";
+        private const string dbFieldFilter = "FieldFilter";
+        private const string dbUserGroups = "UserGroups";
 
         private JournalFilterSelector cfs;
         private ConditionLists fieldfilter = new ConditionLists();
@@ -164,6 +165,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
@@ -205,6 +207,7 @@ namespace EDDiscovery.UserControls
             PutSetting("Layout", layoutorder);
             string s = string.Join<int>(",", columnpos);
             PutSetting("PanelTabs", s);
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
         }
 
         public override bool SupportTransparency { get { return true; } }

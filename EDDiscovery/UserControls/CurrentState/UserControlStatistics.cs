@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
@@ -582,7 +580,7 @@ namespace EDDiscovery.UserControls
             {
                 var row = dataGridViewLedger.Rows[e.RowIndex];
                 var datetime = (DateTime)row.Tag;
-                System.Diagnostics.Debug.WriteLine($"Stats Selected Graph cursor position {datetime}");
+              //  System.Diagnostics.Debug.WriteLine($"Stats Selected Graph cursor position {datetime}");
                 extChartLedger.SetXCursorPosition(datetime);
             }
         }
@@ -947,27 +945,27 @@ namespace EDDiscovery.UserControls
 
    //TBD TX IDS
             int row = 0;
-            StatToDGV(dataGridViewCombat, "Bounties".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Bounty Value".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Bounties on Ships".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounties".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounty Value".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounties on Ships".T(EDTx.TBD), cres.griddata[row++]);
 
             foreach (var lab in cres.chart1labels)
                 StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "Crimes".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Crime Cost".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Faction Kill Bonds".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "FKB Value".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions Player Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions Player Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions NPC Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions NPC Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted Player Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted Player Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted NPC Succeeded".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Crimes".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Crime Cost".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Faction Kill Bonds".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "FKB Value".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions Player Succeeded".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions Player Failed".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions NPC Succeeded".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions NPC Failed".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted Player Succeeded".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted Player Failed".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted NPC Succeeded".T(EDTx.TBD), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".T(EDTx.TBD), cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_Jumps), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.TBD), cres.griddata[row++]);
             foreach (var lab in cres.chart2labels)
                 StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
@@ -1068,18 +1066,18 @@ namespace EDDiscovery.UserControls
 
                 crs.chart1labels = new string[]
                 {
-                    "Bounties on Thargoids".T(EDTx.UserControlStats_Jumps),
-                    "Bounties on On Foot NPC".T(EDTx.UserControlStats_Jumps), 
-                    "Bounties on Skimmers".T(EDTx.UserControlStats_Jumps), 
-                    "Ships Unknown Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Elite Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Deadly Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Dangerous Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Master Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Expert Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Competent Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Novice Rank".T(EDTx.UserControlStats_Jumps),
-                    "Ships Harmless Rank".T(EDTx.UserControlStats_Jumps),
+                    "Bounties on Thargoids".T(EDTx.TBD),
+                    "Bounties on On Foot NPC".T(EDTx.TBD), 
+                    "Bounties on Skimmers".T(EDTx.TBD), 
+                    "Ships Unknown Rank".T(EDTx.TBD),
+                    "Ships Elite Rank".T(EDTx.TBD),
+                    "Ships Deadly Rank".T(EDTx.TBD),
+                    "Ships Dangerous Rank".T(EDTx.TBD),
+                    "Ships Master Rank".T(EDTx.TBD),
+                    "Ships Expert Rank".T(EDTx.TBD),
+                    "Ships Competent Rank".T(EDTx.TBD),
+                    "Ships Novice Rank".T(EDTx.TBD),
+                    "Ships Harmless Rank".T(EDTx.TBD),
                 };
 
                 crs.chart1data = new int[intervals][];        // outer [] is intervals      CHART 1 is PVP
@@ -1088,14 +1086,14 @@ namespace EDDiscovery.UserControls
 
                 crs.chart2labels = new string[]
                 {
-                     "PVP Elite Rank".T(EDTx.UserControlStats_Jumps),
-                     "PVP Deadly Rank".T(EDTx.UserControlStats_Jumps),
-                     "PVP Dangerous Rank".T(EDTx.UserControlStats_Jumps),
-                     "PVP Master Rank".T(EDTx.UserControlStats_Jumps),
-                     "PVP Expert Rank".T(EDTx.UserControlStats_Jumps),
-                     "PVP Competent Rank".T(EDTx.UserControlStats_Jumps),
-                     "PVP Novice Rank".T(EDTx.UserControlStats_Jumps),
-                     "PVP Harmless Rank".T(EDTx.UserControlStats_Jumps),
+                     "PVP Elite Rank".T(EDTx.TBD),
+                     "PVP Deadly Rank".T(EDTx.TBD),
+                     "PVP Dangerous Rank".T(EDTx.TBD),
+                     "PVP Master Rank".T(EDTx.TBD),
+                     "PVP Expert Rank".T(EDTx.TBD),
+                     "PVP Competent Rank".T(EDTx.TBD),
+                     "PVP Novice Rank".T(EDTx.TBD),
+                     "PVP Harmless Rank".T(EDTx.TBD),
                 };
 
                 crs.chart2data = new int[intervals][];        // outer [] is intervals
