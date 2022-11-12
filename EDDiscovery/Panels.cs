@@ -181,6 +181,8 @@ namespace EDDiscovery
             PanelIDs.Spansh, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             PanelIDs.EDDB, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             PanelIDs.Inara, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
+            PanelIDs.LocalMap3D, // GLOFC performs an unchecked pinvoke into opengl32.dll
+            PanelIDs.Map3D, // GLOFC performs an unchecked pinvoke into opengl32.dll
         });
 
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed
