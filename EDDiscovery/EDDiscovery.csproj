@@ -164,8 +164,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.QuickJSON.0.9.0\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=0.9.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.QuickJSON.0.9.5\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -224,6 +224,12 @@
     <Compile Include="UserControls\3DMap\UserControlLocal3DMap.Designer.cs">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlCarrier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlCarrier.Designer.cs">
+      <DependentUpon>UserControlCarrier.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CurrentState\UserControlFactions.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -270,6 +276,7 @@
     <Compile Include="UserControls\Helpers\MissionListUserControl.Designer.cs">
       <DependentUpon>MissionListUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\BookmarkHelpers.cs" />
     <Compile Include="UserControls\History\UserControlTravelGrid2.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -344,11 +351,6 @@
     <Compile Include="UserControls\ScansStars\UserControl2DMap.Designer.cs">
       <DependentUpon>UserControl2DMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="3DMap\MapRecorder.cs" />
-    <Compile Include="3DMap\DatasetBuilder.cs" />
-    <Compile Include="3DMap\MapManager.cs" />
-    <Compile Include="3DMap\StarGrid.cs" />
-    <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="Actions\ActionEventList.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEliteBindings.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionKeyED.cs" />
@@ -533,7 +535,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\HistoryFilterHelpers.cs" />
-    <Compile Include="UserControls\Helpers\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="EDDiscoveryControllerMain.cs" />
     <Compile Include="Forms\AddOnManagerForm.cs">
@@ -575,12 +576,6 @@
     <Compile Include="Forms\TimedMessage.Designer.cs">
       <DependentUpon>TimedMessage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RecordStep.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RecordStep.Designer.cs">
-      <DependentUpon>RecordStep.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\Form\UserControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -588,12 +583,6 @@
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EDDConfig.cs" />
-    <Compile Include="3DMap\FormMap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="3DMap\FormMap.Designer.cs">
-      <DependentUpon>FormMap.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -813,6 +802,9 @@
     <EmbeddedResource Include="UserControls\3DMap\UserControlLocal3DMap.resx">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlCarrier.resx">
+      <DependentUpon>UserControlCarrier.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlSuitsWeapons.resx">
       <DependentUpon>UserControlSuitsWeapons.cs</DependentUpon>
     </EmbeddedResource>
@@ -1013,9 +1005,6 @@
     <EmbeddedResource Include="EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="3DMap\FormMap.resx">
-      <DependentUpon>FormMap.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -1030,9 +1019,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TimedMessage.resx">
       <DependentUpon>TimedMessage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RecordStep.resx">
-      <DependentUpon>RecordStep.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
@@ -1105,10 +1091,6 @@
     <ProjectReference Include="..\BaseUtilities\DirectInput\DirectInput.csproj">
       <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
       <Name>DirectInput</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BaseUtilities\OpenTKUtils\OpenTKUtils.csproj">
-      <Project>{4cfa37d5-4182-4cae-afc3-7563a13b44ee}</Project>
-      <Name>OpenTKUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj">
       <Project>{3d79de63-5eec-4f30-a879-fb4c6ba4b2dc}</Project>
@@ -1196,10 +1178,6 @@
     </Task>
   </UsingTask>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
-    <PostBuildEvent>xcopy /Y /S $(MSBuildProjectDirectory)\x86\Microsoft.VC100.CRT x86\Microsoft.VC100.CRT\
-</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

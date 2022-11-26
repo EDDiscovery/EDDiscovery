@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2021 - 2021 EDDiscovery development team
+ * Copyright © 2021 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore;
@@ -186,7 +184,7 @@ namespace EDDiscovery.UserControls
                 foreach (var s in suitlist)
                 {
                     string stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s.Value.EventTime).ToString();
-                    string sname = s.Value.FriendlyName;// + ":"+(s.Value.ID % 10000);
+                    string sname = s.Value.FriendlyName;// + ":"+ (s.Value.ID % 1000000).ToStringInvariant();
                     string sprice = s.Value.Price.ToString("N0");
                     string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
 
@@ -210,18 +208,19 @@ namespace EDDiscovery.UserControls
                             var rw = dataGridViewSuits.RowTemplate.Clone() as DataGridViewRow;
                             rw.CreateCells(dataGridViewSuits,
                                                 stime,      //0
-                                                (i==0 ? sname : "") + (cursuit == s.Value.ID && curloadout == l.Value.ID ? " *" : ""),
-                                                (i==0 ? smods : ""),
-                                                (i==0 ? sprice : ""),
+                                                (cursuit == s.Value.ID && curloadout == l.Value.ID ? "*** " : "") + sname,
+                                                smods,
+                                                sprice,
                                                 l.Value.Name + "(" + ((l.Value.ID % 10000).ToString()) + ")",
                                                 l.Value.GetModuleDescription("primaryweapon1"),
                                                 l.Value.GetModuleDescription("primaryweapon2"),
                                                 l.Value.GetModuleDescription("secondaryweapon")
                                                 );
 
-                            rw.Cells[1].Tag = sname;
-                            rw.Cells[2].Tag = smods;
-                            rw.Cells[3].Tag = sprice;
+                            rw.Cells[1].ToolTipText = "ID:" + s.Value.ID.ToStringInvariant();
+                            rw.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
+                            if (i > 0)
+                                rw.Cells[1].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
 
                             dataGridViewSuits.Rows.Add(rw);
 
@@ -249,11 +248,10 @@ namespace EDDiscovery.UserControls
         {
             if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
-            else if (e.Column.Index == 2)
-                e.SortDataGridViewColumnNumeric(usecelltag: true);
-            else
-                e.SortDataGridViewColumnAlpha(usecelltag: true);
-
+            else if (e.Column.Index == 1)
+                e.SortDataGridViewColumnNumeric(usecelltag: true);  // use numeric tag to sort
+            else if (e.Column.Index == 3)
+                e.SortDataGridViewColumnNumeric();
         }
 
 

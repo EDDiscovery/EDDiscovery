@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32413.511
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscovery", "EDDiscovery\EDDiscovery.csproj", "{6EE10D92-E3E4-44D9-8E6B-851801B0B510}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,8 +21,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseUtils", "BaseUtilities\BaseUtilities\BaseUtils.csproj", "{C657C881-F3E1-45BA-ACA5-966348010414}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectInput", "BaseUtilities\DirectInput\DirectInput.csproj", "{390B1547-A455-45E3-974F-E1F9B1613AD5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTKUtils", "BaseUtilities\OpenTKUtils\OpenTKUtils.csproj", "{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedControls", "ExtendedControls\ExtendedControls\ExtendedControls.csproj", "{2049403F-F4C7-45E6-B777-6390C78E4D2B}"
 EndProject
@@ -118,18 +116,6 @@ Global
 		{390B1547-A455-45E3-974F-E1F9B1613AD5}.Release|x64.Build.0 = Release|Any CPU
 		{390B1547-A455-45E3-974F-E1F9B1613AD5}.Release|x86.ActiveCfg = Release|Any CPU
 		{390B1547-A455-45E3-974F-E1F9B1613AD5}.Release|x86.Build.0 = Release|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Debug|x64.Build.0 = Debug|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Debug|x86.Build.0 = Debug|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Release|x64.ActiveCfg = Release|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Release|x64.Build.0 = Release|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Release|x86.ActiveCfg = Release|Any CPU
-		{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}.Release|x86.Build.0 = Release|Any CPU
 		{2049403F-F4C7-45E6-B777-6390C78E4D2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2049403F-F4C7-45E6-B777-6390C78E4D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2049403F-F4C7-45E6-B777-6390C78E4D2B}.Debug|x64.ActiveCfg = Debug|Any CPU

@@ -477,6 +477,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
+            if (showing_system == null)
+                return;
             var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
 
             if ( sysnode != null )
@@ -509,7 +511,7 @@ namespace EDDiscovery.UserControls
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Debug.WriteLine("Scan excel " + ex);
+                            System.Diagnostics.Debug.WriteLine("Scan json " + ex);
                             ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }

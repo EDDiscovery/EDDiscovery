@@ -169,12 +169,12 @@ namespace EDDiscovery.UserControls
         {                                                               // LASTDOCK not supported
             if (MaximumNumberOfItems.HasValue)
             {
-                return txlist.OrderByDescending(s => s.utctime).Take(MaximumNumberOfItems.Value).ToList();
+                return txlist.OrderByDescending(s => s.EventTimeUTC).Take(MaximumNumberOfItems.Value).ToList();
             }
             else if (MaximumDataAge.HasValue)
             {
                 var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
-                return (from tx in txlist where tx.utctime >= oldestData orderby tx.utctime descending select tx).ToList();
+                return (from tx in txlist where tx.EventTimeUTC >= oldestData orderby tx.EventTimeUTC descending select tx).ToList();
             }
             else
                 return txlist;

@@ -81,7 +81,7 @@ namespace EDDiscovery.Actions
                     }
 
                     Ledger ml = (ap.ActionController as ActionController).HistoryList.CashLedger;
-                    Ledger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
+                    Ledger.Transaction tx = ml.Transactions.Find(x => x.JID == jid);// try and find it in the ledger
                     int jidindex = (ap.ActionController as ActionController).HistoryList.EntryOrder().FindIndex(x => x.Journalid == jid);    // find it in the journal
 
                     if ( tx == null && nextvalidentry ) // if not directly found..
@@ -90,7 +90,7 @@ namespace EDDiscovery.Actions
                         {
                             jidindex--;            // predec so we don't test first one
                             jid = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].Journalid;
-                            tx = ml.Transactions.Find(x => x.jid == jid);
+                            tx = ml.Transactions.Find(x => x.JID == jid);
                             if (tx != null)
                                 break;
                         }
@@ -104,12 +104,12 @@ namespace EDDiscovery.Actions
 
                     ap[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     ap[prefix + "IndexOf"] = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].EntryNumber.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "UTCTime"] = tx.utctime.ToStringUSInvariant();
-                    ap[prefix + "EntryType"] = tx.jtype.ToString();
-                    ap[prefix + "Notes"] = tx.notes;
-                    ap[prefix + "Value"] = tx.cashadjust.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "PPU"] = tx.profitperunit.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "Credits"] = tx.cash.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "UTCTime"] = tx.EventTimeUTC.ToStringUSInvariant();
+                    ap[prefix + "EntryType"] = tx.EventType.ToString();
+                    ap[prefix + "Notes"] = tx.Notes;
+                    ap[prefix + "Value"] = tx.CashAdjust.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "PPU"] = tx.ProfitPerUnit.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "Credits"] = tx.CashTotal.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 }
                 else
                     ap.ReportError("Missing JID in Ledger");

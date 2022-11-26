@@ -27,9 +27,14 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
 
-            var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName, EDTx.UserControlBookmarks_ColDescription, EDTx.UserControlBookmarks_labelSearch };
+            var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName, EDTx.UserControlBookmarks_ColDescription, 
+                                            EDTx.UserControlBookmarks_labelSearch };
             var enumlistcms = new Enum[] { EDTx.UserControlBookmarks_toolStripMenuItemGotoStar3dmap, EDTx.UserControlBookmarks_openInEDSMToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip, EDTx.UserControlBookmarks_buttonEdit_ToolTip, EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip, EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip, EDTx.UserControlBookmarks_buttonExtImport_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip, 
+                                            EDTx.UserControlBookmarks_buttonEdit_ToolTip, EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip, 
+                                            EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip, 
+                                            EDTx.UserControlBookmarks_buttonExtImport_ToolTip,
+                                            EDTx.UserControlBookmarks_extButtonNewRegion_ToolTip};
             
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripBookmarks, enumlistcms, this);
@@ -164,7 +169,15 @@ namespace EDDiscovery.UserControls
         private void buttonNew_Click(object sender, EventArgs e)
         {
             updating = true;
-            UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, null, null, false);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, null, null);
+            updating = false;
+            Display();
+        }
+
+        private void extButtonNewRegion_Click(object sender, EventArgs e)
+        {
+            updating = true;
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, null, null, true);
             updating = false;
             Display();
         }
@@ -172,7 +185,7 @@ namespace EDDiscovery.UserControls
         private void extButtonEditSystem_Click(object sender, EventArgs e)
         {
             updating = true;
-            UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, discoveryform.history.GetLast?.System, null, false);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, discoveryform.history.GetLast?.System, null);
             updating = false;
             Display();
         }
@@ -193,7 +206,7 @@ namespace EDDiscovery.UserControls
                 EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, discoveryform.galacticMapping, true) : null;
 
                 updating = true;
-                UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, sys, bk, false);
+                BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, sys, bk);
                 updating = false;
                 Display();
             }
@@ -535,8 +548,6 @@ namespace EDDiscovery.UserControls
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-
-
 
     }
 }

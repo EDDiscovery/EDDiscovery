@@ -161,6 +161,31 @@ namespace EDDiscovery.UserControls
                 discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
             }
         }
+        public void SetClipboardImage(Image s)
+        {
+            try
+            {
+                Clipboard.SetImage(s);
+            }
+            catch
+            {
+                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+            }
+        }
+        public void SetClipboardImage(string file)
+        {
+            try
+            {
+                using (Image s = Image.FromFile(file))
+                {
+                    Clipboard.SetImage(s);
+                }
+            }
+            catch
+            {
+                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+            }
+        }
 
         public bool IsTransparentModeOn           // this means the transparent mode is on, not that its currently transparent.
         {
@@ -249,19 +274,19 @@ namespace EDDiscovery.UserControls
 
         // get/put a setting - type needs to be bool, int, double, long, DateTime, string
 
-        public T GetSetting<T>(string itemname, T defaultvalue)
+        public T GetSetting<T>(string itemname, T defaultvalue, bool global = false)
         {
             System.Diagnostics.Debug.Assert(DBBaseName != null);
-            string name = DBName(displaynumber, DBBaseName, itemname);
+            string name = global ? itemname : DBName(displaynumber, DBBaseName, itemname);
             var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue);
 
           //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
             return res;
         }
 
-        public bool PutSetting<T>(string itemname, T value)
+        public bool PutSetting<T>(string itemname, T value, bool global = false)
         {
-            string name = DBName(displaynumber, DBBaseName, itemname);
+            string name = global ? itemname : DBName(displaynumber, DBBaseName, itemname);
            // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
             return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
         }
@@ -310,7 +335,7 @@ namespace EDDiscovery.UserControls
         public bool DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
-            //System.Diagnostics.Debug.WriteLine("Get Column Name " + root);
+            //System.Diagnostics.Debug.WriteLine($"DGV Layout Load {root} {auxname}");
             return dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                                         (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
         }
@@ -318,7 +343,7 @@ namespace EDDiscovery.UserControls
         public void DGVSaveColumnLayout(DataGridView dgv, string auxname = "")
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
-            //System.Diagnostics.Debug.WriteLine("Set Column Name " + root);
+            //System.Diagnostics.Debug.WriteLine($"DGV Layout Save {root} {auxname}");
             dgv.SaveColumnSettings(root, (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
                                         (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }

@@ -74,7 +74,7 @@ namespace EDDiscovery.Actions
                             EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
                             ap[prefix + "TargetType"] =EliteDangerousCore.DB.TargetClass.GetTargetType().ToString();
                             ap[prefix + "TargetPositionFullName"] = name;
-                            ap[prefix + "TargetPositionName"] = EliteDangerousCore.DB.TargetClass.GetNameWithoutPrefix(name);
+                            ap[prefix + "TargetPositionName"] = name;
 
                             if (!double.IsNaN(x) && !double.IsNaN(y) && !double.IsNaN(z))
                             {
@@ -107,7 +107,7 @@ namespace EDDiscovery.Actions
 
                                 if (bk != null)
                                 {
-                                    TargetClass.SetTargetBookmark(name, bk.id, bk.x, bk.y, bk.z);
+                                    TargetClass.SetTargetOnBookmark(name, bk.id, bk.x, bk.y, bk.z);
                                     discoveryform.NewTargetSet(this);
                                 }
                                 else
@@ -120,21 +120,19 @@ namespace EDDiscovery.Actions
 
                                 if (gmo != null)
                                 {
-                                    TargetClass.SetTargetGMO("G:" + gmo.Name, gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
+                                    TargetClass.SetTargetOnGMO("G:" + gmo.Name, gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
                                     discoveryform.NewTargetSet(this);
                                 }
 
                                 else
                                     ap.ReportError("GMO '" + name + "' not found");
                             }
-                            else if (cmdname.Equals("NOTE", StringComparison.InvariantCultureIgnoreCase))
+                            else if (cmdname.Equals("System", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(name);        // has it got a note?
-                                ISystem sc = SystemCache.FindSystem(name, discoveryform.galacticMapping, true);
-
-                                if ( sc != null && sc.HasCoordinate && nc != null )
+                                ISystem sys = SystemCache.FindSystem(name);
+                                if ( sys != null && sys.HasCoordinate)
                                 {
-                                    TargetClass.SetTargetNotedSystem(name, nc.id, sc.X, sc.Y, sc.Z);
+                                    TargetClass.SetTargetOnSystem(name, sys.X, sys.Y, sys.Z);
                                     discoveryform.NewTargetSet(this);
                                 }
                                 else

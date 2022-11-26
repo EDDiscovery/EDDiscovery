@@ -73,6 +73,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap AddJournals {
+            get {
+                object obj = ResourceManager.GetObject("AddJournals", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Addtab {
             get {
                 object obj = ResourceManager.GetObject("Addtab", resourceCulture);
@@ -123,6 +133,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ArrowsRight {
+            get {
+                object obj = ResourceManager.GetObject("ArrowsRight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap backbutton {
             get {
                 object obj = ResourceManager.GetObject("backbutton", resourceCulture);
@@ -136,6 +156,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Belt {
             get {
                 object obj = ResourceManager.GetObject("Belt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Bookmarks {
+            get {
+                object obj = ResourceManager.GetObject("Bookmarks", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -186,6 +216,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap ConfigureAddOnActions {
             get {
                 object obj = ResourceManager.GetObject("ConfigureAddOnActions", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Copy {
+            get {
+                object obj = ResourceManager.GetObject("Copy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -513,6 +553,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap FleetCarrier {
+            get {
+                object obj = ResourceManager.GetObject("FleetCarrier", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Font {
             get {
                 object obj = ResourceManager.GetObject("Font", resourceCulture);
@@ -763,526 +813,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_AddRegionBookmark {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_AddRegionBookmark", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_Menu {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_Menu", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_Noted {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_Noted", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_Region {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_Region", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_ShowBookmarks {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_ShowBookmarks", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_ShowNotemarks {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_ShowNotemarks", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_Star {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_Star", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Bookmarks_Target {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Bookmarks_Target", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_EliteMovement {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_EliteMovement", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Filter_Menu {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Filter_Menu", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Filter_ShowAllStars {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Filter_ShowAllStars", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_FilterDate {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_FilterDate", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_GalObjects {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_GalObjects", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Grid_Coords {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Grid_Coords", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Grid_FineGrid {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Grid_FineGrid", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Grid_Grid {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Grid_Grid", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Help {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Help", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_MapNames {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_MapNames", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Markers_Selected {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Markers_Selected", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_CenterOnSystem {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_CenterOnSystem", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_GoBackward {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_GoBackward", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_GoForward {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_GoForward", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_GoForwardOnJump {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_GoForwardOnJump", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_GoToHistorySelection {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_GoToHistorySelection", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_GoToHomeSystem {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_GoToHomeSystem", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_GoToTarget {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_GoToTarget", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_LastKnownPosition {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_LastKnownPosition", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Navigation_LookAtSystem {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Navigation_LookAtSystem", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_OrangeDot {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_OrangeDot", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Perspective {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Perspective", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_Clear {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_Clear", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_Load {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_Load", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_Menu {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_Menu", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_NewRecordStep {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_NewRecordStep", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_Pause {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_Pause", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_PausePlay {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_PausePlay", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_PauseRecord {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_PauseRecord", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_Play {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_Play", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_Record {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_Record", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_RecordStep {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_RecordStep", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_Save {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_Save", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_StopPlay {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_StopPlay", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Recorder_StopRecord {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Recorder_StopRecord", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Stars_DisplayColours {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Stars_DisplayColours", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Stars_Menu {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Stars_Menu", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Stars_ShowDiscs {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Stars_ShowDiscs", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Stars_ShowNames {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Stars_ShowNames", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Travel_DrawLines {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Travel_DrawLines", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Travel_DrawStars {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Travel_DrawStars", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Travel_Menu {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Travel_Menu", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Travel_WhiteStars {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Travel_WhiteStars", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_YellowDot {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_YellowDot", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Materials {
             get {
                 object obj = ResourceManager.GetObject("Materials", resourceCulture);
@@ -1326,6 +856,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap NewPage {
             get {
                 object obj = ResourceManager.GetObject("NewPage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap NewRegion {
+            get {
+                object obj = ResourceManager.GetObject("NewRegion", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

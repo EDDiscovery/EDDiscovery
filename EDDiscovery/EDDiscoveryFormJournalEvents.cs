@@ -86,7 +86,7 @@ namespace EDDiscovery
         public void Controller_NewHistoryEntryUnfiltered(HistoryEntry he)
         {
             //he.FillInformation(out string ed, out string edi);System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType} {he.EventSummary} {ed}");
-            System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType}");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} EDF Unfiltered {he.EntryType}");
 
             // EDSM needs the raw stream, so send it here..
 
@@ -117,9 +117,6 @@ namespace EDDiscovery
             var t1 = BaseUtils.AppTicks.TickCountLapDelta("DFS");
             if (t1.Item2 >= 80)
                 System.Diagnostics.Trace.WriteLine("NE Second Actions slow " + t1.Item1);
-
-            // all notes committed
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, 0, he.Commander); });
 
             if (he.IsFSDCarrierJump)
             {

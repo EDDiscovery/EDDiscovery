@@ -469,11 +469,11 @@ namespace EDDiscovery.UserControls
             {
                 if (latitude.HasValue)
                 {
-                    frm.NewSystemBookmark(last_he.System, "", timeutc, last_he.WhereAmI, latitude.Value, longitude.Value);
+                    frm.NewSystemBookmark(last_he.System,timeutc, last_he.WhereAmI, latitude.Value, longitude.Value);
                 }
                 else
                 {
-                    frm.NewSystemBookmark(last_he.System, "", timeutc);
+                    frm.NewSystemBookmark(last_he.System, timeutc);
                 }
             }
             else

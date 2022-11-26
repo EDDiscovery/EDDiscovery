@@ -10,24 +10,20 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.EDDN;
+using EliteDangerousCore.EDSM;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EDDiscovery.Forms;
-using QuickJSON;
-using BaseUtils;
 
 namespace EDDiscovery.UserControls
 {
@@ -47,22 +43,9 @@ namespace EDDiscovery.UserControls
 
         public event OnNewStarsSubPanelsHandler OnNewStarList;
 
-        // for primary travel grid for auto note jump
-        public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
-        public event KeyDownInCell OnKeyDownInCell;   // After a change of selection
-
         #endregion
 
         #region Init
-
-        private class Columns
-        {
-            public const int Time = 0;
-            public const int Icon = 1;
-            public const int Description = 2;
-            public const int Information = 3;
-            public const int Note = 4;
-        }
 
         private const string dbFilter = "EventFilter2";                 // DB names
         private const string dbHistorySave = "EDUIHistory";
@@ -71,6 +54,8 @@ namespace EDDiscovery.UserControls
         private const string dbWordWrap = "WordWrap";
         private const string dbVisitedColour = "VisitedColour";
         private const string dbDebugMode = "DebugMode";
+        private const string dbBookmarks = "Bookmarks";
+        private const string dbUserGroups = "UserGroups";
 
         private string searchterms = "system:body:station:stationfaction";
 
@@ -90,6 +75,8 @@ namespace EDDiscovery.UserControls
 
         private int fdropdown;     // filter total
 
+        private HashSet<long> quickMarkJIDs = new HashSet<long>();
+
         public UserControlTravelGrid()
         {
             InitializeComponent();
@@ -105,6 +92,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             checkBoxCursorToTop.Checked = true;
@@ -158,7 +146,7 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_Icon, EDTx.UserControlTravelGrid_ColumnSystem, EDTx.UserControlTravelGrid_ColumnDistance, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime, EDTx.UserControlTravelGrid_labelSearch };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlistcms = new Enum[] { EDTx.UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, EDTx.UserControlTravelGrid_setNoteToolStripMenuItem, EDTx.UserControlTravelGrid_createEditBookmarkToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripMenuItemStartStop, EDTx.UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, EDTx.UserControlTravelGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlTravelGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlTravelGrid_starMapColourToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_wantedSystemsToolStripMenuItem, 
+            var enumlistcms = new Enum[] { EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem, EDTx.UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, EDTx.UserControlTravelGrid_setNoteToolStripMenuItem, EDTx.UserControlTravelGrid_createEditBookmarkToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripMenuItemStartStop, EDTx.UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, EDTx.UserControlTravelGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlTravelGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlTravelGrid_starMapColourToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_wantedSystemsToolStripMenuItem, 
                 EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_bothToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_expeditionToolStripMenuItem, EDTx.UserControlTravelGrid_moveToAnotherCommanderToolStripMenuItem, EDTx.UserControlTravelGrid_hideSystemToolStripMenuItem, EDTx.UserControlTravelGrid_removeJournalEntryToolStripMenuItem, EDTx.UserControlTravelGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlTravelGrid_copyJournalEntryToClipboardToolStripMenuItem, EDTx.UserControlTravelGrid_writeEventInfoToLogDebugToolStripMenuItem, EDTx.UserControlTravelGrid_runActionsAcrossSelectionToolSpeechStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughInaraSystemToolStripMenuItem, EDTx.UserControlTravelGrid_runEntryThroughProfileSystemToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughIGAUDebugToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughEDDNThruTestToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughEDAstroDebugToolStripMenuItem, EDTx.UserControlTravelGrid_sendJournalEntriesToDLLsToolStripMenuItem, EDTx.UserControlTravelGrid_showSystemVisitedForeColourToolStripMenuItem, EDTx.UserControlTravelGrid_travelGridInDebugModeToolStripMenuItem };
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
 
@@ -188,6 +176,7 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewTravel);
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();
@@ -203,6 +192,10 @@ namespace EDDiscovery.UserControls
         public void HistoryChanged(HistoryList hl)           // on History change
         {
             HistoryChanged(hl, false);
+
+            // quick marks are commander dependent
+            var str = GetSetting(dbBookmarks + ":" + hl.CommanderId, "").Split(';');
+            quickMarkJIDs = str.Select(x => x.InvariantParseLong(-1)).ToList().ToHashSet();
         }
 
         public void HistoryChanged(HistoryList hl, bool disablesorting)
@@ -217,7 +210,7 @@ namespace EDDiscovery.UserControls
             current_historylist = hl;
             this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
 
-            extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
+            extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -356,8 +349,10 @@ namespace EDDiscovery.UserControls
                     dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
 
+                UpdateQuickMarkComboBox();
+
                 this.dataGridViewTravel.Cursor = Cursors.Arrow;
-                extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
+                extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
@@ -366,6 +361,7 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("TG Dequeue paused adds");
                     AddEntry(queuedadds.Dequeue());
                 }
+
             });
 
             todotimer.Start();          // indicate the timer is going to start.. 
@@ -438,20 +434,25 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             string colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
+            //colTime += $" {he.journalEntry.Id}";
+
             string colIcon = "";
             string colDescription = he.EventSummary;
             he.FillInformation(out string colInformation, out string eventDetailedInfo);
-            string colNote = (he.SNC != null) ? he.SNC.Note : "";
+
+            string colNote = he.GetNoteText;
 
             if (debugmode)
             {
-                colIcon = $"{he.TravelState} \r\n"
-                               + $"st[{he.System.Name}]\r\n"
-                               + $"b[{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}]\r\n"
-                               + $"s[{he.Status.StationName},{he.Status.StationType}]\r\n"
+                colTime += Environment.NewLine + $"{he.TravelState} @ {he.System.Name}\r\n"
+                               + $"b{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n"
+                               + $"s{he.Status.StationName},{he.Status.StationType}\r\n"
                                + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}\r\n"
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
-                               + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship}";
+                               + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship}\r\n"
+                               + $"jcb{he.Status.CurrentBoost} fsds{he.FSDJumpSequence}\r\n"
+                               + $"jid{he.journalEntry.Id} tlu{he.journalEntry.TLUId}"
+                               ;
 
                 colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
 
@@ -532,7 +533,7 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        public void GotoPosByJID(long jid)
+        public int GotoPosByJID(long jid)       // -1 if fails
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid,jid, true);
             if (rowno >= 0)
@@ -541,6 +542,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
+            return rowno;
         }
 
         public void FireChangeSelection()
@@ -591,13 +593,16 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("KC " + (int)e.KeyCode + " " + (int)e.KeyData + " " + e.KeyValue);
         }
-
-        private void dataGridViewTravel_KeyPress(object sender, KeyPressEventArgs e)
+        private void dataGridViewTravel_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("KP " + (int)e.KeyChar);
-
-            if (OnKeyDownInCell != null && dataGridViewTravel.CurrentCell != null )
-                OnKeyDownInCell(e.KeyChar, dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, dataGridViewTravel.CurrentCell.ColumnIndex == Columns.Note);
+            var c = dataGridViewTravel.CurrentCell;
+            if (c != null && c.ColumnIndex == ColumnNote.Index)
+            {
+                var he = dataGridViewTravel.Rows[c.RowIndex].Tag as HistoryEntry;
+                var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;
+                he.journalEntry.UpdateSystemNote(str, he.System.Name, EDCommander.Current.SyncToEdsm);
+                discoveryform.NoteChanged(this, he);
+            }
         }
 
         private void dataGridViewTravel_KeyUp(object sender, KeyEventArgs e)
@@ -615,19 +620,19 @@ namespace EDDiscovery.UserControls
                 FireChangeSelection();
         }
 
-        private void OnNoteChanged(Object sender,HistoryEntry he, bool committed)
+        private void OnNoteChanged(Object sender,HistoryEntry he)
         {
             if (todotimer.Enabled)
             {
-                todo.Enqueue(() => OnNoteChanged(sender, he, committed));
+                todo.Enqueue(() => OnNoteChanged(sender, he));
                 return;
             }
 
-            if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
+            if ( rowsbyjournalid.TryGetValue(he.Journalid,out DataGridViewRow row))
             {
-                string s = (he.SNC != null) ? he.SNC.Note : "";     // snc may have gone null, so cope with it
-                //System.Diagnostics.Debug.WriteLine("TG:Note changed " + s);
-                rowsbyjournalid[he.Journalid].Cells[Columns.Note].Value = s;
+                System.Diagnostics.Debug.WriteLine($"TravelGrid update note due to external {row.Index} {he.GetNoteText} {he.EventSummary}");
+                string s = he.GetNoteText;  
+                row.Cells[ColumnNote.Index].Value = s;
             }
         }
 
@@ -647,12 +652,10 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            DataGridView grid = sender as DataGridView;
-
-            PaintHelpers.PaintEventColumn(grid, e,
-                        discoveryform.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag,
-                        travelGridInDebugModeToolStripMenuItem.Checked ? -1 : Columns.Icon, 
-                        true);
+            HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag;
+            bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
+            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1));
+            PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, Icon.Index, true);
         }
 
 
@@ -669,16 +672,19 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridViewTravel.LeftClickRowValid)                                                   // Click expands it..
+            if (dataGridViewTravel.LeftClickRowValid)                                                
             {
                 if (e.ColumnIndex == ColumnNote.Index)
                 {
-                    using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(leftclickhe, discoveryform))
+                    if (!dataGridViewTravel.IsCurrentCellInEditMode)
                     {
-                        if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
+                        using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(leftclickhe, discoveryform))
                         {
-                            leftclickhe.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
-                            discoveryform.NoteChanged(this, leftclickhe, true);
+                            if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
+                            {
+                                leftclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, leftclickhe.System.Name, EDCommander.Current.SyncToEdsm);
+                                discoveryform.NoteChanged(this, leftclickhe);
+                            }
                         }
                     }
                 }
@@ -687,14 +693,14 @@ namespace EDDiscovery.UserControls
                     leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
                     DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
-                    bool expanded = row.Cells[Columns.Information].Tag != null;
+                    bool expanded = row.Cells[ColumnDistance.Index].Tag != null;
 
                     if (expanded) // put it back to original text
                     {
-                        row.Cells[Columns.Information].Value = EventDescription;
+                        row.Cells[ColumnDistance.Index].Value = EventDescription;
                         for (int i = 0; i < row.Cells.Count; i++)
                             row.Cells[i].Style.WrapMode = DataGridViewTriState.NotSet;
-                        row.Cells[Columns.Information].Tag = null;
+                        row.Cells[ColumnDistance.Index].Tag = null;
                     }
                     else
                     {
@@ -713,7 +719,7 @@ namespace EDDiscovery.UserControls
                             {
                                 if (row.Cells[i].Value is string)
                                 {
-                                    string s = i == Columns.Information ? infodetailed : (string)row.Cells[i].Value;
+                                    string s = i == ColumnDistance.Index ? infodetailed : (string)row.Cells[i].Value;
                                     int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
                                     maxh = Math.Max(maxh, h);
                                 }
@@ -729,7 +735,7 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                row.Cells[Columns.Information].Value = infodetailed;
+                                row.Cells[ColumnDistance.Index].Value = infodetailed;
 
                                 if (!extCheckBoxWordWrap.Checked)
                                 {
@@ -738,7 +744,7 @@ namespace EDDiscovery.UserControls
                                 }
                             }
 
-                            row.Cells[Columns.Information].Tag = true;      // mark expanded
+                            row.Cells[ColumnDistance.Index].Tag = true;      // mark expanded
                         }
                     }
 
@@ -823,6 +829,7 @@ namespace EDDiscovery.UserControls
                 toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".T(EDTx.UserControlTravelGrid_SETSTSTOP); ;
             }
 
+            quickMarkToolStripMenuItem.Checked = quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
             mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
             toolStripMenuItemStartStop.Enabled = (rightclickhe != null);
@@ -1030,9 +1037,8 @@ namespace EDDiscovery.UserControls
             {
                 if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    rightclickhe.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
-
-                    discoveryform.NoteChanged(this, rightclickhe, true);
+                    rightclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, rightclickhe.System.Name, EDCommander.Current.SyncToEdsm);
+                    discoveryform.NoteChanged(this, rightclickhe);
                 }
             }
         }
@@ -1061,31 +1067,7 @@ namespace EDDiscovery.UserControls
 
         private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BookmarkForm bookmarkForm = new BookmarkForm(discoveryform.history);
-            BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclickhe.System.Name);
-            DateTime timeutc;
-            if (existing != null)
-            {
-                timeutc = existing.TimeUTC;
-                bookmarkForm.Bookmark(existing);
-            }
-            else
-            {
-                timeutc = DateTime.UtcNow;
-                bookmarkForm.NewSystemBookmark(rightclickhe.System, "", timeutc);
-            }
-            DialogResult dr = bookmarkForm.ShowDialog();
-            if (dr == DialogResult.OK)
-            {
-                GlobalBookMarkList.Instance.AddOrUpdateBookmark(existing, true, rightclickhe.System.Name, rightclickhe.System.X, rightclickhe.System.Y, rightclickhe.System.Z,
-                    timeutc, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
-            }
-            if (dr == DialogResult.Abort && existing != null)
-            {
-                GlobalBookMarkList.Instance.Delete(existing);
-            }
-
-            dataGridViewTravel.Refresh();
+            BookmarkHelpers.ShowBookmarkForm(discoveryform, discoveryform, rightclickhe.System, null);
         }
 
         private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1122,6 +1104,41 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
+        }
+
+        // quickmarks.
+        private void quickMarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (quickMarkToolStripMenuItem.Checked)
+                quickMarkJIDs.Add(rightclickhe.journalEntry.Id);
+            else
+                quickMarkJIDs.Remove(rightclickhe.journalEntry.Id);
+
+            var str = quickMarkJIDs.Select(x => x.ToStringInvariant()).ToArray().Join(';');
+            PutSetting(dbBookmarks + ":" + discoveryform.history.CommanderId.ToStringInvariant(), str);
+            UpdateQuickMarkComboBox();
+        }
+
+        private void UpdateQuickMarkComboBox()
+        {
+            extComboBoxQuickMarks.Items.Clear();
+            List<long> jids = new List<long>();
+            foreach (var j in quickMarkJIDs)
+            {
+                if (rowsbyjournalid.TryGetValue(j, out DataGridViewRow row)) // if it parses and its in view, add it to combo box.
+                {
+                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value);
+                    jids.Add(j);
+                }
+            }
+            extComboBoxQuickMarks.Tag = jids;
+            extComboBoxQuickMarks.Text = "Marked".TxID(EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem);      // only works for custom
+        }
+        private void extComboBoxBookmark_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
+            long jid = jids[extComboBoxQuickMarks.SelectedIndex];
+            GotoPosByJID(jid);
         }
 
         #endregion
@@ -1311,7 +1328,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#endregion
+        #endregion
 
     }
 }

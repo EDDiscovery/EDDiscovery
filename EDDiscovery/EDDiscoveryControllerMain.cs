@@ -46,10 +46,9 @@ namespace EDDiscovery
 
         // IN ORDER OF CALLING DURING A REFRESH
 
-        public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made (EDDiscoveryForm uses this to refresh commander stuff).  History is not valid here.
-                                                                            // ALSO called if Loadgame is received.
-
         public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
+        public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made And when a loadgame is seen.
+                                                                            // Commanders may have been added. 
         public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
         public event Action<int, string> OnReportRefreshProgress;           // UI. Refresh progress reporter
@@ -210,6 +209,8 @@ namespace EDDiscovery
         #region Background Worker Thread - kicked off by PostInit_Shown
         private void BackgroundWorkerThread()
         {
+            Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background worker thread start");
+
             // check first and download items
 
             string desigmapfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "bodydesignations.csv");
@@ -221,7 +222,6 @@ namespace EDDiscovery
 
             BodyDesignations.LoadBodyDesignationMap(desigmapfile);
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
             ReportSyncProgress("");
 
             bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
@@ -252,14 +252,14 @@ namespace EDDiscovery
 
             }
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
-
             SystemNoteClass.GetAllSystemNotes();
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.".T(EDTx.EDDiscoveryController_LN));
 
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
+                Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background Worker Load history");
+
                 LogLine("Reading travel history".T(EDTx.EDDiscoveryController_RTH));
 
                 if (EDDOptions.Instance.Commander != null)
@@ -274,7 +274,7 @@ namespace EDDiscovery
 
             CheckForSync();     // see if any EDSM sync is needed - this just sets some variables up
 
-            System.Diagnostics.Debug.WriteLine("Background worker setting up refresh worker");
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background worker starting background history refresh worker");
 
             backgroundRefreshWorker = new Thread(BackgroundHistoryRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
             backgroundRefreshWorker.Start();        // start the refresh worker, another thread which does subsequenct (not the primary one) refresh work in the background..
@@ -290,7 +290,7 @@ namespace EDDiscovery
                 {
                     int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
 
-                    System.Diagnostics.Debug.WriteLine("Background worker kicked by " + wh);
+                    System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background worker kicked by {wh}");
 
                     if (PendingClose)
                         break;
@@ -308,7 +308,7 @@ namespace EDDiscovery
 
             backgroundRefreshWorker.Join();     // this should terminate due to closeRequested..
 
-            System.Diagnostics.Debug.WriteLine("BW Refresh joined closing down background worker");
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background Worker closing down background worker");
 
             // Now we have been ordered to close down, so go thru the process
 
@@ -316,7 +316,7 @@ namespace EDDiscovery
 
             InvokeAsyncOnUiThread(() =>
             {
-                System.Diagnostics.Debug.WriteLine("Call Final close");
+                System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background worker invoke Final Close");
                 OnFinalClose?.Invoke();
             });
         }

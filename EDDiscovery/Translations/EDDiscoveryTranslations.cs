@@ -33,6 +33,11 @@ namespace EDDiscovery
         Information, // Information
         NoPos, // No Pos
 
+        MessageBoxTheme_No,
+        MessageBoxTheme_Yes,
+
+        TBD, // TBD - to be done
+
         StartUp_DUPLOAD,        // EDDiscovery is already running. Launch anyway? in program.cs
 
         EDDiscoveryForm_addTabToolStripMenuItem, // ToolStrip control 'Insert Tab with panel..'
@@ -45,7 +50,6 @@ namespace EDDiscovery
         EDDiscoveryForm_notifyIconMenu_Exit, // ToolStrip control 'E&xit'
         EDDiscoveryForm_toolsToolStripMenuItem, // ToolStrip control '&Tools'
         EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, // ToolStrip control 'Settings'
-        EDDiscoveryForm_toolsToolStripMenuItem_show3DMapsToolStripMenuItem, // ToolStrip control 'Show old &3D maps (depreciated)'
         EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, // ToolStrip control '&Pop-outs'
         EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, // ToolStrip control '&Show All In Task Bar'
         EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, // ToolStrip control '&Turn Off All Transparency'
@@ -147,12 +151,12 @@ namespace EDDiscovery
         EDDiscoveryController_HRC, // History refresh complete.
         EDDiscoveryController_EXPD, // Checking for new Expedition data
 
-        UserControlForm_panel_showtitle_ToolTip, // ToolTip 'Toggle title visibility for this window when transparent'
-        UserControlForm_panel_minimize_ToolTip, // ToolTip 'Minimise'
-        UserControlForm_panel_ontop_ToolTip, // ToolTip 'Toggle window on top of others'
-        UserControlForm_panel_taskbaricon_ToolTip, // ToolTip 'Toggle show taskbar icon for this window'
-        UserControlForm_panel_transparent_ToolTip, // ToolTip 'Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n'
-        UserControlForm_panel_close_ToolTip, // ToolTip 'Close'
+        UserControlForm_extButtonDrawnShowTitle_ToolTip, // ToolTip 'Toggle title visibility for this window when transparent'
+        UserControlForm_extButtonDrawnMinimize_ToolTip, // ToolTip 'Minimise'
+        UserControlForm_extButtonDrawnOnTop_ToolTip, // ToolTip 'Toggle window on top of others'
+        UserControlForm_extButtonDrawnTaskBarIcon_ToolTip, // ToolTip 'Toggle show taskbar icon for this window'
+        UserControlForm_extButtonDrawnTransparentMode_ToolTip, // ToolTip 'Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n'
+        UserControlForm_extButtonDrawnClose_ToolTip, // ToolTip 'Close'
 
         AddOnManagerForm_buttonExtGlobals,   // Control 'Globals'
 
@@ -298,6 +302,7 @@ namespace EDDiscovery
         SafeModeForm_buttonResetTabs, // Control 'Reset Tabs, Remove PopOuts'
         SafeModeForm_buttonPositions, // Control 'Reset Window Positions'
         SafeModeForm_buttonResetTheme, // Control 'Reset Theme'
+        SafeModeForm_buttonRemoveJournalsCommanders,
 
         SetNoteForm, // Control 'Set Note'
         SetNoteForm_labelTTimestamp, // Control 'Timestamp:'
@@ -521,11 +526,12 @@ namespace EDDiscovery
         UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName, // Column Header 'Item'
         UserControlStats_tabControlCustomStats_tabPageGeneral_Information, // Column Header 'Information'
         UserControlStats_tabControlCustomStats_tabPageTravel, // Control 'Travel'
-        UserControlStats_tabControlCustomStats_tabPageTravel_userControlStatsTimeTravel_labelTime, // Control 'Time'
         UserControlStats_tabControlCustomStats_tabPageScan, // Control 'Scan'
-        UserControlStats_tabControlCustomStats_tabPageScan_userControlStatsTimeScan_labelTime, // Control 'Time'
+        UserControlStats_tabControlCustomStats_tabPageRanks, // Control 'Scan'
         UserControlStats_tabControlCustomStats_tabPageGameStats, // Control 'In Game'
         UserControlStats_tabControlCustomStats_tabPageByShip, // Control 'By Ship'
+        UserControlStats_tabControlCustomStats_tabPageCombat,
+        UserControlStats_tabControlCustomStats_tabPageLedger,
         UserControlStats_labelStart, // Control 'Start'
         UserControlStats_labelEndDate, // Control 'To'
         UserControlStats_TotalNoofjumps, // Total No of jumps:
@@ -555,6 +561,7 @@ namespace EDDiscovery
         UserControlStats_OrganicScans, // Scan value
         UserControlStats_Lastdock, // Last dock
         UserControlStats_Trip, // Trip
+        UserControlStats_NoTrip, // No Trip
         UserControlStats_All, // All
         UserControlStats_Type, // Type
         UserControlStats_BankAccount, // Bank Account
@@ -581,6 +588,55 @@ namespace EDDiscovery
         UserControlStats_GoodsBought, // Goods Bought
         UserControlStats_GoodsSold, // Goods Sold
         UserControlStats_GoodsProfit, // Goods Sold
+
+        UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnLedgerDate,
+        UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnNumericCredits,
+
+        UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxColumnRank, 
+        UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxColumnAtStart, 
+        UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxAtEnd, 
+        UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxColumnLastPromotionDate,
+        UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextColumnRankProgressNumeric,
+
+        UserControlStats_Powerplay,
+        UserControlStats_Squadron,
+        UserControlStats_Bounties,
+        UserControlStats_Bountyvalue,
+        UserControlStats_Bountiesonships,
+        UserControlStats_Crimes,
+        UserControlStats_CrimeCost,
+        UserControlStats_FactionKillBonds,
+        UserControlStats_FKBValue,
+        UserControlStats_InterdictionPlayerSucceeded,
+        UserControlStats_InterdictionPlayerFailed,
+        UserControlStats_InterdictionNPCSucceeded,
+        UserControlStats_InterdictionNPCFailed,
+        UserControlStats_InterdictedPlayerSucceeded,
+        UserControlStats_InterdictedPlayerFailed,
+        UserControlStats_InterdictedNPCSucceeded,
+        UserControlStats_InterdictedNPCFailed,
+        UserControlStats_PVPKills,
+        UserControlStats_BountiesThargoid,
+        UserControlStats_BountiesOnFootNPC,
+        UserControlStats_BountiesSkimmers,
+        UserControlStats_ShipsUnknown,
+        UserControlStats_ShipsElite,
+        UserControlStats_ShipsDeadly,
+        UserControlStats_ShipsDangerous,
+        UserControlStats_ShipsMaster,
+        UserControlStats_ShipsExpert,
+        UserControlStats_ShipsCompetent,
+        UserControlStats_ShipsNovice,
+        UserControlStats_ShipsHarmless,
+        UserControlStats_PVPElite,
+        UserControlStats_PVPDeadly,
+        UserControlStats_PVPDangerous,
+        UserControlStats_PVPMaster,
+        UserControlStats_PVPExpert,
+        UserControlStats_PVPCompetent,
+        UserControlStats_PVPNovice,
+        UserControlStats_PVPHarmless,
+
 
         UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, // ToolTip 'Display incomplete scans'
         UserControlOrganics_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
@@ -641,7 +697,7 @@ namespace EDDiscovery
         UserControlJournalGrid_JHF, // Journal: Filter out fields
         UserControlJournalGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
 
-
+        UserControlTravelGrid_quickMarkToolStripMenuItem,
         UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, // ToolStrip control 'Remove Sorting of Columns'
         UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, // ToolStrip control 'Jump to Entry'
         UserControlTravelGrid_setNoteToolStripMenuItem, // ToolStrip control 'Set Note'
@@ -785,6 +841,7 @@ namespace EDDiscovery
         UserControlBookmarks_buttonDelete_ToolTip, // ToolTip 'Delete selected bookmark'
         UserControlBookmarks_buttonExtExcel_ToolTip, // ToolTip 'Export bookmarks to CSV file'
         UserControlBookmarks_buttonExtImport_ToolTip, // ToolTip 'Import bookmarks to EDD from CSV file'
+        UserControlBookmarks_extButtonNewRegion_ToolTip,
         UserControlBookmarks_CFN, // Do you really want to delete {0} bookmarks?
         UserControlBookmarks_CF, // Do you really want to delete the bookmark for {0}
         UserControlBookmarks_SysU, // System could not be found - has not been synched or EDSM is unavailable
@@ -970,7 +1027,6 @@ namespace EDDiscovery
         UserControlSysInfo_toolStripDistanceFrom, // ToolStrip control 'Display Distance From'
         UserControlSysInfo_toolStripSystemState, // ToolStrip control 'Display System State'
         UserControlSysInfo_displaySecurityToolStripMenuItem, // ToolStrip control 'Display Security'
-        UserControlSysInfo_toolStripNotes, // ToolStrip control 'Display Notes'
         UserControlSysInfo_toolStripTarget, // ToolStrip control 'Display Target'
         UserControlSysInfo_toolStripShip, // ToolStrip control 'Display Ship Information'
         UserControlSysInfo_displayShipButtonsToolStripMenuItem, // ToolStrip control 'Display Ship Buttons'
@@ -987,6 +1043,7 @@ namespace EDDiscovery
         UserControlSysInfo_toolStripSkinny, // ToolStrip control 'When transparent, use skinny look'
         UserControlSysInfo_toolStripReset, // ToolStrip control 'Reset'
         UserControlSysInfo_toolStripRemoveAll, // ToolStrip control 'Remove All'
+        UserControlSysInfo_displayNextDestinationToolStripMenuItem,
 
         UserControlSysInfo_ToolTip, // ToolTip 'Hold down Ctrl Key then left drag a item to reposition, 8 columns are available'
         UserControlSysInfo_textBoxTargetDist_ToolTip, // ToolTip 'Distance to target'
@@ -1013,7 +1070,6 @@ namespace EDDiscovery
         UserControlSysInfo_labelFuel, // Control 'Fuel'
         UserControlSysInfo_labelBodyName, // Control 'Body'
         UserControlSysInfo_labelPosition, // Control 'Pos'
-        UserControlSysInfo_labelNote, // Control 'Note'
         UserControlSysInfo_labelMissions, // Control 'Missions'
         UserControlSysInfo_labelEconomy, // Control 'Economy'
         UserControlSysInfo_labelGov, // Control 'Gov'
@@ -1021,6 +1077,7 @@ namespace EDDiscovery
         UserControlSysInfo_labelState, // Control 'State'
         UserControlSysInfo_labelSolDist, // Control 'Sol'
         UserControlSysInfo_labelHomeDist, // Control 'Home'
+        UserControlSysInfo_labelNextDestination,
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_SysUnk, // System unknown to EDSM
         UserControlSysInfo_Pos, // Position is {0:0.00},{1:0.00},{2:0.00}
@@ -1041,6 +1098,8 @@ namespace EDDiscovery
         UserControlExpedition_labelRouteName, // Control 'Route Name:'
         UserControlExpedition_labelDateStart, // Control 'Start Date:'
         UserControlExpedition_labelEndDate, // Control 'End Date:'
+        UserControlExpedition_ColumnDistStart,
+        UserControlExpedition_ColumnDistanceRemaining,
         UserControlExpedition_labelCml, // Control 'Cml Distance:'
         UserControlExpedition_labelP2P, // Control 'P2P Distance:'
         UserControlExpedition_buttonReverseRoute_ToolTip, // Control 'Reverse'
@@ -1315,6 +1374,7 @@ namespace EDDiscovery
         SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip,
 
         SearchStars_ColumnStar, // Column Header 'Star'
+        SearchStars_ColumnIndex, // Column Header 'Star'
         SearchStars_ColumnCentreDistance, // Column Header 'Centre Distance'
         SearchStars_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchStars_ColumnPosition, // Column Header 'Position'
@@ -1445,6 +1505,10 @@ namespace EDDiscovery
         FilterSelector_Mining, // Mining
         FilterSelector_MicroResources,
         FilterSelector_Suits,
+        FilterSelector_Carrier,
+        FilterSelector_NewGroup,
+        FilterSelector_Confirmremoval,
+        FilterSelector_Newgroupname,
 
         ScanDisplayForm_Sys, // System
         ScanDisplayForm_Station, // Station
@@ -1660,6 +1724,107 @@ namespace EDDiscovery
         UserControlSpanel_showInPositionToolStripMenuItem_scanAboveMenuItem,
         UserControlSpanel_showInPositionToolStripMenuItem_scanBelowMenuItem,
         UserControlSpanel_showInPositionToolStripMenuItem_scanOnTopMenuItem,
+
+        UserControlCarrier_Decommisioned,
+        UserControlCarrier_DecommisionedOn,
+        UserControlCarrier_Cargo,
+        UserControlCarrier_Services,
+        UserControlCarrier_Shippacks,
+        UserControlCarrier_Modulepacks,
+        UserControlCarrier_Freespace,
+        UserControlCarrier_Jumprange,
+        UserControlCarrier_Maxjump,
+        UserControlCarrier_Fuel,
+        UserControlCarrier_DockingAccess,
+        UserControlCarrier_Notorious,
+        UserControlCarrier_Balance,
+        UserControlCarrier_Reserve,
+        UserControlCarrier_Available,
+        UserControlCarrier_PioneerTax,
+        UserControlCarrier_ShipyardTax,
+        UserControlCarrier_RearmTax,
+        UserControlCarrier_OutfittingTax,
+        UserControlCarrier_RefuelTax,
+        UserControlCarrier_RepairTax,
+        UserControlCarrier_CoreCost,
+        UserControlCarrier_ServicesCost,
+        UserControlCarrier_NoCarrier,
+        UserControlCarrier_InstallCost,
+        UserControlCarrier_CapacityAllocated,
+        UserControlCarrier_Upkeepcost,
+        UserControlCarrier_Suspendedupkeepcost,
+        UserControlCarrier_CrewName,
+        UserControlCarrier_ServiceActive,
+        UserControlCarrier_ServiceSuspended,
+        UserControlCarrier_ServiceNotInstalled,
+        UserControlCarrier_NoPacks,
+        UserControlCarrier_Tier,
+        UserControlCarrier_Cost,
+        UserControlCarrier_Jumping,
+        UserControlCarrier_NetworkFailure,
+        UserControlCarrier_NotLoggedIn,
+        UserControlCarrier_OptionalService,
+        UserControlCarrier_CoreService,
+
+        UserControlCarrier_extTabControl_tabPageOverall,
+        UserControlCarrier_extTabControl_tabPageOverall_imageControlOverall,
+        UserControlCarrier_extTabControl_tabPageItinerary,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinDate,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinSystemAlphaInt,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinBodyAlphaInt,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinJumpDistNumeric,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinDistFromNumeric,
+        UserControlCarrier_extTabControl_tabPageItinerary_colItinInformation,
+        UserControlCarrier_extTabControl_tabPageFinances,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerDate,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerStarsystemAlphaInt,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerBodyAlphaInt,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerEvent,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerCreditNumeric,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerDebitNumeric,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerBalanceNumeric,
+        UserControlCarrier_extTabControl_tabPageFinances_colLedgerNotes,
+        UserControlCarrier_extTabControl_tabPageServices,
+        UserControlCarrier_extTabControl_tabPageServices_imageControlServices,
+        UserControlCarrier_extTabControl_tabPagePacks,
+        UserControlCarrier_extTabControl_tabPagePacks_imageControlPacks,
+        UserControlCarrier_extTabControl_tabPageOrders,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersDate,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersCommodity,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersType,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersGroup,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersPurchaseNumeric,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersSaleNumeric,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersPriceNumeric,
+        UserControlCarrier_extTabControl_tabPageOrders_colOrdersBlackmarket,
+        UserControlCarrier_extTabControl_tabPageCAPI3,
+        UserControlCarrier_extTabControl_tabPageCAPI3_dataGridViewTextBoxColumn1,
+        UserControlCarrier_extTabControl_tabPageCAPI3_dataGridViewTextBoxColumnValue,
+        UserControlCarrier_extTabControl_tabPageCAPI1,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsName,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsManu,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsPriceNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsSpeedNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsBoostNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsMassNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsLandingPadNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesName,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesCat,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesMassNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesPowerNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesCostNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesStockNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIModulesInfo,
+        UserControlCarrier_extTabControl_tabPageCAPI2,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoCommodity,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoType,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoGroup,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoQuantityNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoPriceNumeric,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPICargoStolen,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerName,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerType,
+        UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric,
 
         ActionPackVariablesForm_gv
     }

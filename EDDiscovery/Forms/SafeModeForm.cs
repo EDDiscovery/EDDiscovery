@@ -38,7 +38,11 @@ namespace EDDiscovery.Forms
             tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0,System.IO.Path.GetTempPath());
             //tx.LoadTranslation("example-ex", CultureInfo.CurrentUICulture, new string[] { @"c:\code\eddiscovery\eddiscovery\translations" }, 2,System.IO.Path.GetTempPath());
 
-            var enumlist = new Enum[] { EDTx.SafeModeForm, EDTx.SafeModeForm_buttonCancel, EDTx.SafeModeForm_buttonRun, EDTx.SafeModeForm_buttonRemoveJournals, EDTx.SafeModeForm_buttonDeleteUserDB, EDTx.SafeModeForm_buttonDeleteSystemDB, EDTx.SafeModeForm_buttonResetDBLoc, EDTx.SafeModeForm_buttonBackup, EDTx.SafeModeForm_buttonDbs, EDTx.SafeModeForm_buttonLang, EDTx.SafeModeForm_buttonActionPacks, EDTx.SafeModeForm_buttonRemoveDLLs, EDTx.SafeModeForm_buttonResetTabs, EDTx.SafeModeForm_buttonPositions, EDTx.SafeModeForm_buttonResetTheme };
+            var enumlist = new Enum[] { EDTx.SafeModeForm, EDTx.SafeModeForm_buttonCancel, EDTx.SafeModeForm_buttonRun, EDTx.SafeModeForm_buttonRemoveJournals, 
+                                        EDTx.SafeModeForm_buttonDeleteUserDB, EDTx.SafeModeForm_buttonDeleteSystemDB, EDTx.SafeModeForm_buttonResetDBLoc, 
+                                        EDTx.SafeModeForm_buttonBackup, EDTx.SafeModeForm_buttonDbs, EDTx.SafeModeForm_buttonLang, 
+                                        EDTx.SafeModeForm_buttonActionPacks, EDTx.SafeModeForm_buttonRemoveDLLs, EDTx.SafeModeForm_buttonResetTabs, 
+                                        EDTx.SafeModeForm_buttonPositions, EDTx.SafeModeForm_buttonResetTheme, EDTx.SafeModeForm_buttonRemoveJournalsCommanders };
             tx.TranslateControls(this, enumlist);
         }
 
@@ -295,17 +299,36 @@ namespace EDDiscovery.Forms
 
         private void buttonRemoveJournals_Click(object sender, EventArgs e)
         {
-            if ( UserDatabase.Instance.Name != "UserDB" )       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
+            if (UserDatabase.Instance.Name != "UserDB")       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
             {
-                if (MessageBox.Show(this, "Confirm you want all journal entries removed from the DB" + Environment.NewLine + 
-                                "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." +  Environment.NewLine +
-                                "EDD on start will then rescan any journal logs it finds",
+                if (MessageBox.Show(this, "Confirm you want all journal entries removed from the DB" + Environment.NewLine +
+                                "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." + Environment.NewLine +
+                                "EDD on start will then rescan any journal logs it finds from the folder locations of commanders listed in the settings panels" + Environment.NewLine + 
+                                "Notes will be kept but may be on the wrong entries",
                                 "Delete Journal Entries", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     UserDatabase.Instance.Initialize();
                     UserDatabase.Instance.ClearJournals();
                 }
             }
+        }
+
+        private void buttonRemoveJournalsCommanders_Click(object sender, EventArgs e)
+        {
+            if (UserDatabase.Instance.Name != "UserDB")       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
+            {
+                if (MessageBox.Show(this, "Confirm you want all journal entries and commanders removed from the DB" + Environment.NewLine +
+                                "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." + Environment.NewLine +
+                                "EDD on start will then rescan any journal logs it finds in the standard Elite folders and create only commanders found in those logs" + Environment.NewLine +
+                                "Notes will be kept but may be on the wrong entries",
+                                "Delete Journal Entries", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                {
+                    UserDatabase.Instance.Initialize();
+                    UserDatabase.Instance.ClearJournals();
+                    UserDatabase.Instance.ClearCommanderTable();
+                }
+            }
+
         }
     }
 }

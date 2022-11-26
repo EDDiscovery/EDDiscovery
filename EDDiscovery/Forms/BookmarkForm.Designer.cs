@@ -59,7 +59,7 @@ namespace EDDiscovery.Forms
             this.buttonCancel = new ExtendedControls.ExtButton();
             this.buttonDelete = new ExtendedControls.ExtButton();
             this.labelTravelNote = new System.Windows.Forms.Label();
-            this.textBoxTravelNote = new ExtendedControls.ExtTextBox();
+            this.textBoxTravelNote = new ExtendedControls.ExtRichTextBox();
             this.checkBoxTarget = new ExtendedControls.ExtCheckBox();
             this.buttonEDSM = new ExtendedControls.ExtButton();
             this.labelBadSystem = new System.Windows.Forms.Label();
@@ -300,29 +300,14 @@ namespace EDDiscovery.Forms
             // 
             // textBoxTravelNote
             // 
-            this.textBoxTravelNote.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxTravelNote.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxTravelNote.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelNote.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTravelNote.BorderColorScaling = 0.5F;
             this.textBoxTravelNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxTravelNote.ClearOnFirstChar = false;
-            this.textBoxTravelNote.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTravelNote.EndButtonEnable = true;
-            this.textBoxTravelNote.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelNote.EndButtonImage")));
-            this.textBoxTravelNote.EndButtonVisible = false;
-            this.textBoxTravelNote.InErrorCondition = false;
             this.textBoxTravelNote.Location = new System.Drawing.Point(139, 289);
-            this.textBoxTravelNote.Multiline = true;
             this.textBoxTravelNote.Name = "textBoxTravelNote";
             this.textBoxTravelNote.ReadOnly = true;
-            this.textBoxTravelNote.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxTravelNote.SelectionLength = 0;
-            this.textBoxTravelNote.SelectionStart = 0;
             this.textBoxTravelNote.Size = new System.Drawing.Size(726, 87);
             this.textBoxTravelNote.TabIndex = 8;
-            this.textBoxTravelNote.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.textBoxTravelNote.WordWrap = true;
             // 
             // checkBoxTarget
             // 
@@ -395,7 +380,6 @@ namespace EDDiscovery.Forms
             this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxName.TextChangedEvent = "";
             this.textBoxName.WordWrap = true;
-            this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextNameChanged);
             // 
             // statusStripCustom
             // 
@@ -507,7 +491,7 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtButton buttonCancel;
         private ExtendedControls.ExtButton buttonDelete;
         private System.Windows.Forms.Label labelTravelNote;
-        private ExtendedControls.ExtTextBox textBoxTravelNote;
+        private ExtendedControls.ExtRichTextBox textBoxTravelNote;
         private ExtendedControls.ExtCheckBox checkBoxTarget;
         private ExtendedControls.ExtButton buttonEDSM;
         private SurfaceBookmarkUserControl SurfaceBookmarks;

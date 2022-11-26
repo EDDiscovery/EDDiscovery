@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
             findSystemsUserControl.Excel += () => { dataGridView.Excel(dataGridView.ColumnCount); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
-            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };
+            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { findSystemsUserControl });
             dataGridView.Init(discoveryform);
         }
@@ -85,25 +85,28 @@ namespace EDDiscovery.UserControls
                 if ((dataGridView.SortedColumn==null || dataGridView.SortedColumn == ColumnCentreDistance) && systems[0].Item2 == -1 )       // if sorting on centre distance, but no data due to search
                     dataGridView.Sort(ColumnStar, ListSortDirection.Ascending);
 
-                DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[1];
+                DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Ascending;
 
                 ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
                 bool centresort = false;
 
+                int index = 1;
                 foreach (Tuple<ISystem, double> ret in systems)
                 {
                     ISystem sys = ret.Item1;
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-                    object[] rowobj = {     sys.Name,
+                    object[] rowobj = {     index.ToString(),
+                                            sys.Name,
                                             (ret.Item2>=0 ? ret.Item2.ToString("0.#") : ""),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
                                            };
 
-                    dataGridView.Rows.Add(rowobj);
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = sys;
+                    var rowindex = dataGridView.Rows.Add(rowobj);
+                    dataGridView.Rows[rowindex].Tag = sys;
                     centresort |= ret.Item2 >= 0;
+                    index++;
                 }
 
                 dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
@@ -114,9 +117,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 1 || e.Column.Index == 2)
+            if (e.Column.Index == ColumnIndex.Index || e.Column.Index == ColumnCentreDistance.Index || e.Column.Index == ColumnCurrentDistance.Index )
                 e.SortDataGridViewColumnNumeric();
-            else if ( e.Column.Index == 0)
+            else if ( e.Column.Index == ColumnStar.Index)
                 e.SortDataGridViewColumnAlphaInt();
         }
         

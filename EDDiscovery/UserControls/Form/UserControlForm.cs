@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             labeltransparentcolour = labeltransparent;
 
             TransparencyColorKey = UserControl.SupportTransparency ? transparentkey : Color.Transparent;
-            WinTitle = label_index.Text = this.Text = title;            // label index always contains the wintitle, but may not be shown
+            WinTitle = label_title.Text = this.Text = title;            // label index always contains the wintitle, but may not be shown
 
             curwindowsborder = defwindowsborder = winborder;
             DBRefName = "PopUpForm" + rf;
@@ -97,14 +97,17 @@ namespace EDDiscovery.UserControls
 
             Invalidate();
 
-            var enumlisttt = new Enum[] { EDTx.UserControlForm_panel_showtitle_ToolTip, EDTx.UserControlForm_panel_minimize_ToolTip, EDTx.UserControlForm_panel_ontop_ToolTip, EDTx.UserControlForm_panel_taskbaricon_ToolTip, EDTx.UserControlForm_panel_transparent_ToolTip, EDTx.UserControlForm_panel_close_ToolTip };
+            var enumlisttt = new Enum[] {
+                        EDTx.UserControlForm_extButtonDrawnShowTitle_ToolTip, EDTx.UserControlForm_extButtonDrawnMinimize_ToolTip, EDTx.UserControlForm_extButtonDrawnOnTop_ToolTip,
+                        EDTx.UserControlForm_extButtonDrawnTaskBarIcon_ToolTip, EDTx.UserControlForm_extButtonDrawnTransparentMode_ToolTip,
+                        EDTx.UserControlForm_extButtonDrawnClose_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             //System.Diagnostics.Debug.WriteLine("UCF Init-");
         }
 
         public void SetControlText(string text)
         {
-            labelControlText.Location = new Point(label_index.Location.X + label_index.Width + 16, labelControlText.Location.Y);
+            labelControlText.Location = new Point(label_title.Location.X + label_title.Width + 16, labelControlText.Location.Y);
             labelControlText.Text = text;
             this.Text = WinTitle + " " + text;
         }
@@ -115,7 +118,7 @@ namespace EDDiscovery.UserControls
             {
                 TransparentMode = t;
                 UpdateTransparency();
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
+                UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
             }
         }
 
@@ -123,7 +126,7 @@ namespace EDDiscovery.UserControls
         {
             DisplayTitle = t;
             UpdateControls();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
+            UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
             UserControl.onControlTextVisibilityChanged(DisplayTitle);            
         }
 
@@ -163,7 +166,7 @@ namespace EDDiscovery.UserControls
         public int TitleBarMinWidth()
         {
             int retval = 0;
-            foreach(Control c in panelTop.Controls)
+            foreach(Control c in panelControls.Controls)
             {
                 if (c.Visible) retval += c.Width;
             }
@@ -198,10 +201,11 @@ namespace EDDiscovery.UserControls
 
             this.BackColor = togo;
             statusStripBottom.BackColor = togo;
-            panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor =
-                    panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor = extButtonDrawnHelp.BackColor = panelTop.BackColor = togo;
+            extButtonDrawnTaskBarIcon.BackColor = extButtonDrawnTransparentMode.BackColor = extButtonDrawnClose.BackColor =
+                    extButtonDrawnMinimize.BackColor = extButtonDrawnOnTop.BackColor = extButtonDrawnShowTitle.BackColor = extButtonDrawnHelp.BackColor =
+                    panelControls.BackColor = panelTitleControlText.BackColor = togo;
 
-            label_index.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
+            label_title.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
 
             UserControl.SetTransparency(showtransparent, togo);     // tell the UCCB about the change
 
@@ -232,30 +236,30 @@ namespace EDDiscovery.UserControls
             FormBorderStyle = curwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
 
             // the extensive controls in panel top is shown if we are not in transparent mode with no windows border, or if in transparent mode and we are in a panel show
-            panelTop.Visible = (!IsTransparentModeOn && !curwindowsborder) || (IsTransparentModeOn && inpanelshow);
+            panelControls.Visible = (!IsTransparentModeOn && !curwindowsborder) || (IsTransparentModeOn && inpanelshow);
+
+            // the title and control text is visible if DisplayTitle is on, or not transparent
+            panelTitleControlText.Visible = (DisplayTitle || !showtransparent);   
 
             statusStripBottom.Visible = !showtransparent && !curwindowsborder;      // status strip on, when not transparent, and when we don't have border
 
-            panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = extButtonDrawnHelp.Visible = !showtransparent;
+            extButtonDrawnTaskBarIcon.Visible = extButtonDrawnClose.Visible = extButtonDrawnMinimize.Visible = extButtonDrawnOnTop.Visible = extButtonDrawnShowTitle.Visible = extButtonDrawnHelp.Visible = !showtransparent;
 
-            panel_transparent.Visible = IsTransparencySupported && !showtransparent;
-            panel_showtitle.Visible = IsTransparencySupported && !showtransparent;
-            panel_showtitle.Visible = IsTransparencySupported && !showtransparent;
+            extButtonDrawnTransparentMode.Visible = IsTransparencySupported && !showtransparent;
+            extButtonDrawnShowTitle.Visible = IsTransparencySupported && !showtransparent;
 
             if (TransparentMode == TransparencyMode.On)
-                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
             else if (TransparentMode == TransparencyMode.OnClickThru)
-                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.TransparentClickThru;
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.TransparentClickThru;
             else if (TransparentMode == TransparencyMode.OnFullyTransparent)
-                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.FullyTransparent;
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.FullyTransparent;
             else
-                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
 
-            label_index.Visible = labelControlText.Visible = (DisplayTitle || !showtransparent);   //  titles are on, or transparent is off
-
-            panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
-            panel_showtitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
-            panel_ontop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
+            extButtonDrawnTaskBarIcon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
+            extButtonDrawnShowTitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
+            extButtonDrawnOnTop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
         }
 
         const int UCPaddingWidth = 3;
@@ -264,7 +268,7 @@ namespace EDDiscovery.UserControls
         {
             if (UserControl != null)
             {
-                UserControl.Location = new Point(3, panelTop.Visible ? panelTop.Bottom+1 : 2);
+                UserControl.Location = new Point(3, panelControls.Visible || panelTitleControlText.Visible ? panelControls.Bottom+1 : 2);
                 UserControl.Size = new Size(ClientRectangle.Width - UCPaddingWidth*2, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
             }
         }
@@ -322,22 +326,22 @@ namespace EDDiscovery.UserControls
 
 #region Clicks
 
-        private void panel_close_Click(object sender, EventArgs e)
+        private void button_close_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void panel_minimize_Click(object sender, EventArgs e)
+        private void button_minimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void panel_ontop_Click(object sender, EventArgs e)
+        private void button_ontop_Click(object sender, EventArgs e)
         {
             SetTopMost(!TopMost);
         }
 
-        private void panel_transparency_Click(object sender, EventArgs e)       // only works if transparency is supported
+        private void button_transparency_Click(object sender, EventArgs e)       // only works if transparency is supported
         {
             inpanelshow = true; // in case we go transparent, we need to make sure its on.. since it won't be on if the timer is not running
 
@@ -354,12 +358,12 @@ namespace EDDiscovery.UserControls
             SetTransparency(TransparentMode);
         }
 
-        private void panel_taskbaricon_Click(object sender, EventArgs e)
+        private void button_taskbaricon_Click(object sender, EventArgs e)
         {
             SetShowInTaskBar(!this.ShowInTaskbar);
         }
 
-        private void panel_showtitle_Click(object sender, EventArgs e)
+        private void button_showtitle_Click(object sender, EventArgs e)
         {
             SetShowTitleInTransparency(!DisplayTitle);
         }
@@ -442,13 +446,13 @@ namespace EDDiscovery.UserControls
             if (v == 0)
             {
                 if (IsTransparencySupported)
-                    panel_transparency_Click(panel_transparent, EventArgs.Empty);
+                    button_transparency_Click(extButtonDrawnTransparentMode, EventArgs.Empty);
                 else
                     ExtendedControls.MessageBoxTheme.Show(this, "This panel does not support transparency");
             }
             else
             {
-                panel_taskbaricon_Click(panel_taskbaricon, EventArgs.Empty);
+                button_taskbaricon_Click(extButtonDrawnTaskBarIcon, EventArgs.Empty);
             }
         }
 
@@ -459,7 +463,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private void label_index_MouseDown(object sender, MouseEventArgs e)
+        private void label_title_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
         }
@@ -469,12 +473,12 @@ namespace EDDiscovery.UserControls
             OnCaptionMouseDown((Control)sender, e);
         }
 
-        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        private void panel_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
         }
 
-        private void panelTop_MouseUp(object sender, MouseEventArgs e)
+        private void panel_MouseUp(object sender, MouseEventArgs e)
         {
             OnCaptionMouseUp((Control)sender, e);
         }

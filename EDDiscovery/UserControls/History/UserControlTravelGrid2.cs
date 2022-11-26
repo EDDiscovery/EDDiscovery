@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
                                 fsd.FuelUsed,
                                 fsd.FuelLevel,
                                 fsd.BoostUsed,
-                                he.SNC != null ? he.SNC.Note : "",
+                                he.GetNoteText,
                             };
 
                         };
@@ -279,14 +279,14 @@ namespace EDDiscovery.UserControls
                             grd.VerifyLine += delegate (int r)      // second hook to reject line
                             {
                                 HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                                if (he.SNC != null)
+                                if (he.journalEntry.SNC != null)
                                 {
-                                    if (sysnotecache.Contains(he.SNC))
+                                    if (sysnotecache.Contains(he.journalEntry.SNC))
                                         return false;
                                     else
                                     {
                                         if (frm.SelectedIndex == 3)
-                                            sysnotecache.Add(he.SNC);
+                                            sysnotecache.Add(he.journalEntry.SNC);
                                         return true;
                                     }
                                 }

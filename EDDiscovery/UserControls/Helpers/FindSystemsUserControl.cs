@@ -215,7 +215,6 @@ namespace EDDiscovery.UserControls
             if (sys != null)
             {
                 var list = HistoryList.FindSystemsWithinLy(discoveryform.history.EntryOrder(), sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
-
                 ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
             }
             else
@@ -228,21 +227,28 @@ namespace EDDiscovery.UserControls
 
             if (sys != null)
             {
-                BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
-
                 Cursor = Cursors.WaitCursor;
 
-                SystemCache.GetSystemListBySqDistancesFrom(distlist, sys.X, sys.Y, sys.Z, 50000,
-                            numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
+                // work out the excluded system name list
+                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.history.Visited.Values.Select(x=>x.System.Name).ToHashSet() : new HashSet<string>();
 
-                Cursor = Cursors.Default;
+                Task<List<Tuple<ISystem,double>>>.Factory.StartNew(() =>
+                {
+                    BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
 
-                var res = (from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList();
+                    SystemCache.GetSystemListBySqDistancesFrom(distlist, sys.X, sys.Y, sys.Z, 50000,
+                                numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked, excluded);
 
-                if ( extCheckBoxExcludeVisitedSystems.Checked )
-                    res = (from x in res where discoveryform.history.FindLastFSDCarrierJumpBySystemName(x.Item1.Name) == null select x).ToList();
+                    var res = (from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList();
 
-                ReturnSystems(res);
+                    return res;
+
+                }).ContinueWith(task => this.Invoke(new Action(() =>
+                {
+                    var res = task.Result;
+                    ReturnSystems(res);
+                    Cursor = Cursors.Default;
+                })));
             }
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -250,7 +256,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            Excel();
+            Excel?.Invoke();
         }
 
         bool ignoresystemnamechange = false;

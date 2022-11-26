@@ -267,11 +267,17 @@ namespace EDDiscovery.UserControls
             EliteDangerousCalculations.FSDSpec fsdspec = si.GetFSDSpec();
             if (fsdspec != null)
             {
-                EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2);
+                EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2, 1.0);   // based on no boost
                 AddInfoLine("FSD Avg Jump".T(EDTx.UserControlModules_FSDAvgJump), ji.avgsinglejumpnocargo.ToString("N2") + "ly", "Half tank, no cargo".T(EDTx.UserControlModules_HT), fsdspec.ToString());
                 DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
                 AddInfoLine("FSD Max Range".T(EDTx.UserControlModules_FSDMaxRange), ji.maxjumprange.ToString("N2") + "ly", "Full Tank, no cargo".T(EDTx.UserControlModules_FT), fsdspec.ToString());
                 AddInfoLine("FSD Maximum Fuel per jump".T(EDTx.UserControlModules_FSDMaximumFuelperjump), fsdspec.MaxFuelPerJump.ToString() + "t", "", fsdspec.ToString());
+
+                //{
+                //    double eddmaxunlanen = fsdspec.JumpRange(0, modulemass + hullmass, 5, 1);
+                //    double spanshmaxunladen = fsdspec.SpanshJumpRange(modulemass + hullmass + 5);
+                //    AddInfoLine("AAFSD", $"5t fuel EDD = {eddmaxunlanen}\r\nSpansh:{spanshmaxunladen}");
+                //}
             }
 
             if (si.HullValue > 0)
@@ -283,11 +289,11 @@ namespace EDDiscovery.UserControls
             if (si.Rebuy > 0)
                 AddValueLine("Rebuy Cost".T(EDTx.UserControlModules_RebuyCost), si.Rebuy);
 
-            AddMassLine("Mass Hull".T(EDTx.UserControlModules_MassHull), hullmass.ToString("N1") + "t");
-            AddMassLine("Mass Unladen".T(EDTx.UserControlModules_MassUnladen), (hullmass + modulemass).ToString("N1") + "t");
+            AddMassLine("Mass Hull".T(EDTx.UserControlModules_MassHull), hullmass.ToString("N2") + "t");
+            AddMassLine("Mass Unladen".T(EDTx.UserControlModules_MassUnladen), (hullmass + modulemass).ToString("N2") + "t");
             if (si.UnladenMass > 0)
-                AddMassLine("Mass FD Unladen".T(EDTx.UserControlModules_MassFDUnladen), si.UnladenMass.ToString("N1") + "t");
-            AddMassLine("Mass Modules".T(EDTx.UserControlModules_MassModules), modulemass.ToString("N1") + "t");
+                AddMassLine("Mass FD Unladen".T(EDTx.UserControlModules_MassFDUnladen), si.UnladenMass.ToString("N2") + "t");
+            AddMassLine("Mass Modules".T(EDTx.UserControlModules_MassModules), modulemass.ToString("N2") + "t");
 
             AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.Manufacturer);
 

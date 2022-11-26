@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             toupdatetimer.Interval = 500;
             toupdatetimer.Tick += ToUpdateTick;
 
-            string[] MetricNames = {        // synchronise with SystemsDB.SystemsNearestMetric, really should be translated, but there you go.
+            string[] MetricNames = {        // synchronise with SystemCache.SystemsNearestMetric, really should be translated, but there you go.
                 "Nearest to Waypoint".T(EDTx.UserControlRoute_M1),
                 "Minimum Deviation from Path".T(EDTx.UserControlRoute_M2),
                 "Nearest to Waypoint with dev<=100ly".T(EDTx.UserControlRoute_M3),
@@ -67,13 +67,15 @@ namespace EDDiscovery.UserControls
                 "Nearest to Waypoint + Deviation / 2".T(EDTx.UserControlRoute_M6),
                 };
 
-            foreach (SystemsDB.SystemsNearestMetric values in Enum.GetValues(typeof(SystemsDB.SystemsNearestMetric)))
+            foreach (SystemCache.SystemsNearestMetric values in Enum.GetValues(typeof(SystemCache.SystemsNearestMetric)))
                 comboBoxRoutingMetric.Items.Insert((int)values, MetricNames[(int)values]);
 
             changesilence = true;
 
             textBox_From.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
+            textBox_From.AutoCompleteTimeout = 500;
             textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete , true);
+            textBox_To.AutoCompleteTimeout = 500;
 
             textBox_From.Text = GetSetting("_RouteFrom", "");
             textBox_To.Text = GetSetting("_RouteTo", "");
@@ -86,9 +88,9 @@ namespace EDDiscovery.UserControls
             textBox_ToZ.Text = GetSetting("_RouteToZ", "");
 
             int metricvalue = GetSetting("RouteMetric", 0);
-            comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(SystemsDB.SystemsNearestMetric), metricvalue)
+            comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(SystemCache.SystemsNearestMetric), metricvalue)
                 ? metricvalue
-                : (int) SystemsDB.SystemsNearestMetric.IterativeNearestWaypoint;
+                : (int) SystemCache.SystemsNearestMetric.IterativeNearestWaypoint;
 
             UpdateDistance();
             button_Route.Enabled = IsValid();
@@ -302,7 +304,7 @@ namespace EDDiscovery.UserControls
         {
             if (TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z))
             {
-                UpdateFrom(textBox_From, TargetClass.GetNameWithoutPrefix(name));
+                UpdateFrom(textBox_From, name);
             }
         }
 
@@ -423,7 +425,7 @@ namespace EDDiscovery.UserControls
         {
             if (TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z))
             {
-                UpdateTo(textBox_To, TargetClass.GetNameWithoutPrefix(name));
+                UpdateTo(textBox_To, name);
             }
         }
 
@@ -451,7 +453,7 @@ namespace EDDiscovery.UserControls
                 GetCoordsTo(out plotter.Coordsto);
                 plotter.FromSystem = !textBox_FromName.Text.Contains("@") && textBox_From.Text.HasChars() ? textBox_From.Text : "START POINT";
                 plotter.ToSystem = !textBox_ToName.Text.Contains("@") && textBox_To.Text.HasChars() ? textBox_To.Text : "END POINT";
-                plotter.RouteMethod = (SystemsDB.SystemsNearestMetric) comboBoxRoutingMetric.SelectedIndex;
+                plotter.RouteMethod = (SystemCache.SystemsNearestMetric) comboBoxRoutingMetric.SelectedIndex;
                 plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
                 plotter.EDSM = checkBoxEDSM.Checked;
 

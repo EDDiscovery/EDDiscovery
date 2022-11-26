@@ -28,8 +28,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        DateTime? gotodatestart = null;
-        DateTime? gotodateend = null;
+        DateTime? gotodatestartutc = null;
+        DateTime? gotodateendutc = null;
         bool createnew = false;
 
         public override void Init()
@@ -57,20 +57,21 @@ namespace EDDiscovery.UserControls
 
                 if (uccb is CaptainsLogDiary)
                 {
-                    (uccb as CaptainsLogDiary).ClickedonDate = (d,b) =>
+                    (uccb as CaptainsLogDiary).ClickedOnDate = (d,b) =>     // date is in utc
                     {
-                        gotodatestart = gotodateend = d;
+                        gotodatestartutc = d;
+                        gotodateendutc = d.EndOfDay();
                         createnew = b;
                         tabStrip.SelectedIndex = 1;
                     };
                 }
                 else if ( uccb is CaptainsLogEntries )
                 {
-                    if ( gotodatestart.HasValue )
+                    if ( gotodatestartutc.HasValue )
                     {
                         var clentries = uccb as CaptainsLogEntries;
-                        clentries.SelectDate(gotodatestart.Value,gotodateend.Value,createnew);
-                        gotodatestart = gotodateend = null;
+                        clentries.SelectDate(gotodatestartutc.Value,gotodateendutc.Value,createnew);
+                        gotodatestartutc = gotodateendutc = null;
                     }
                 }
             };
@@ -86,8 +87,8 @@ namespace EDDiscovery.UserControls
                 CaptainsLogDiary cld = tabStrip.CurrentControl as CaptainsLogDiary;
                 if ( cld != null )
                 {
-                    gotodatestart = cld.CurrentMonth;
-                    gotodateend = new DateTime(cld.CurrentMonth.Year, cld.CurrentMonth.Month, DateTime.DaysInMonth(cld.CurrentMonth.Year, cld.CurrentMonth.Month));
+                    gotodatestartutc = cld.CurrentMonthFirstDayUTC;
+                    gotodateendutc = cld.CurrentMonthFirstDayUTC.EndOfMonth();      // whole month view
                     createnew = false;
                     tabStrip.SelectedIndex = 1;
                 }

@@ -42,11 +42,12 @@
             this.buttonBackup = new System.Windows.Forms.Button();
             this.buttonDeleteUserDB = new System.Windows.Forms.Button();
             this.buttonRemoveJournals = new System.Windows.Forms.Button();
+            this.buttonRemoveJournalsCommanders = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonDbs
             // 
-            this.buttonDbs.Location = new System.Drawing.Point(55, 293);
+            this.buttonDbs.Location = new System.Drawing.Point(55, 353);
             this.buttonDbs.Name = "buttonDbs";
             this.buttonDbs.Size = new System.Drawing.Size(250, 23);
             this.buttonDbs.TabIndex = 0;
@@ -56,7 +57,7 @@
             // 
             // buttonRun
             // 
-            this.buttonRun.Location = new System.Drawing.Point(55, 399);
+            this.buttonRun.Location = new System.Drawing.Point(55, 462);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(250, 23);
             this.buttonRun.TabIndex = 0;
@@ -87,7 +88,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(55, 437);
+            this.buttonCancel.Location = new System.Drawing.Point(55, 500);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(250, 23);
             this.buttonCancel.TabIndex = 0;
@@ -148,7 +149,7 @@
             // 
             // buttonResetDBLoc
             // 
-            this.buttonResetDBLoc.Location = new System.Drawing.Point(55, 360);
+            this.buttonResetDBLoc.Location = new System.Drawing.Point(55, 410);
             this.buttonResetDBLoc.Name = "buttonResetDBLoc";
             this.buttonResetDBLoc.Size = new System.Drawing.Size(250, 23);
             this.buttonResetDBLoc.TabIndex = 0;
@@ -158,7 +159,7 @@
             // 
             // buttonBackup
             // 
-            this.buttonBackup.Location = new System.Drawing.Point(55, 320);
+            this.buttonBackup.Location = new System.Drawing.Point(55, 380);
             this.buttonBackup.Name = "buttonBackup";
             this.buttonBackup.Size = new System.Drawing.Size(250, 23);
             this.buttonBackup.TabIndex = 0;
@@ -178,7 +179,7 @@
             // 
             // buttonRemoveJournals
             // 
-            this.buttonRemoveJournals.Location = new System.Drawing.Point(55, 259);
+            this.buttonRemoveJournals.Location = new System.Drawing.Point(55, 276);
             this.buttonRemoveJournals.Name = "buttonRemoveJournals";
             this.buttonRemoveJournals.Size = new System.Drawing.Size(250, 23);
             this.buttonRemoveJournals.TabIndex = 0;
@@ -186,13 +187,24 @@
             this.buttonRemoveJournals.UseVisualStyleBackColor = true;
             this.buttonRemoveJournals.Click += new System.EventHandler(this.buttonRemoveJournals_Click);
             // 
+            // buttonRemoveJournalsCommanders
+            // 
+            this.buttonRemoveJournalsCommanders.Location = new System.Drawing.Point(55, 305);
+            this.buttonRemoveJournalsCommanders.Name = "buttonRemoveJournalsCommanders";
+            this.buttonRemoveJournalsCommanders.Size = new System.Drawing.Size(250, 23);
+            this.buttonRemoveJournalsCommanders.TabIndex = 0;
+            this.buttonRemoveJournalsCommanders.Text = "Remove Journal Entries && Commanders";
+            this.buttonRemoveJournalsCommanders.UseVisualStyleBackColor = true;
+            this.buttonRemoveJournalsCommanders.Click += new System.EventHandler(this.buttonRemoveJournalsCommanders_Click);
+            // 
             // SafeModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 476);
+            this.ClientSize = new System.Drawing.Size(389, 545);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonRun);
+            this.Controls.Add(this.buttonRemoveJournalsCommanders);
             this.Controls.Add(this.buttonRemoveJournals);
             this.Controls.Add(this.buttonDeleteUserDB);
             this.Controls.Add(this.buttonDeleteSystemDB);
@@ -228,5 +240,6 @@
         private System.Windows.Forms.Button buttonBackup;
         private System.Windows.Forms.Button buttonDeleteUserDB;
         private System.Windows.Forms.Button buttonRemoveJournals;
+        private System.Windows.Forms.Button buttonRemoveJournalsCommanders;
     }
 }

@@ -23,6 +23,10 @@ SECTION StartUp
 
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
 
+SECTION DataGridView
+
+.WordWrap: "Word Wrap (Override)" @
+
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @
@@ -161,6 +165,8 @@ SECTION PopOutInfo
 .Engineers.Description: "List of Engineers, status, recipes" @
 .Discoveries.Title: "Discoveries" @
 .Discoveries.Description: "Discoveries Observer List" @
+.Carrier.Title: "Carrier" @
+.Carrier.Description: "Data about your fleet carrier" @
 
 SECTION EDDiscoveryForm
 
@@ -175,7 +181,6 @@ SECTION EDDiscoveryForm
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "工具(&T)"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "设置(&S)"
-.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show old &3D maps (depreciated)" => "显示&3D星图"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "弹窗(&P)"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "显示所有弹窗的任务栏图标(&S)"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "重置所有透明弹窗(&T)"
@@ -421,7 +426,6 @@ SECTION NewReleaseForm
 NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Version"
 .labelName: "Name" => "名称"
 .btnClose: "&Close" => "关闭(&C)"
-.buttonMsiInstaller: "&Msi Installer" => "&Msi 安装包"
 .labelURL: "GitHub URL" => "Github 链接"
 .labelDownload: "Download" => "下载"
 .buttonPortablezip: "&Portable Zip" => "免安装版(&P)"
@@ -495,12 +499,12 @@ KeyForm: "Define Key Sequence" => "定义按键"
 
 SECTION UserControlForm
 
-.panel_minimize.ToolTip: "Minimise" => "最小化"
-.panel_ontop.ToolTip: "Toggle window on top of others" => "切换窗口置顶"
-.panel_close.ToolTip: "Close" => "关闭"
-.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "切换是否显示此窗口任务栏图标"
-.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "切换当此窗口透明时是否显示标题"
-.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "切换四种窗口透明度模式\r\n关闭——普通窗口\r\n打开(T)——窗口透明切可用鼠标控制\r\n打开(Tc)——窗口透明按下激活窗口热键启用鼠标控制\r\n打开(Tf)——完全透明并无响应，按下激活窗口热键启用鼠标控制\r\n\r\n参照设置面板来配置激活窗口热键。\r\n鼠标必须在窗口范围内且按下热键大约500毫秒。\r\n\r\n\r\n"
+.extButtonDrawnMinimize.ToolTip: "Minimise" => "最小化"
+.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "切换窗口置顶"
+.extButtonDrawnClose.ToolTip: "Close" => "关闭"
+.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "切换是否显示此窗口任务栏图标"
+.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "切换当此窗口透明时是否显示标题"
+.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "切换四种窗口透明度模式\r\n关闭——普通窗口\r\n打开(T)——窗口透明切可用鼠标控制\r\n打开(Tc)——窗口透明按下激活窗口热键启用鼠标控制\r\n打开(Tf)——完全透明并无响应，按下激活窗口热键启用鼠标控制\r\n\r\n参照设置面板来配置激活窗口热键。\r\n鼠标必须在窗口范围内且按下热键大约500毫秒。\r\n\r\n\r\n"
 
 SECTION ExtPanelRollUp
 

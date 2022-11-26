@@ -54,6 +54,7 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonEditSystem = new ExtendedControls.ExtButton();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonNewRegion = new ExtendedControls.ExtButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -68,7 +69,7 @@
             // 
             this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
-            this.buttonExtImport.Location = new System.Drawing.Point(385, 1);
+            this.buttonExtImport.Location = new System.Drawing.Point(421, 1);
             this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtImport.Name = "buttonExtImport";
             this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
@@ -81,7 +82,7 @@
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(349, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(385, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -93,7 +94,7 @@
             // buttonDelete
             // 
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(313, 1);
+            this.buttonDelete.Location = new System.Drawing.Point(349, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
@@ -117,7 +118,7 @@
             // buttonEdit
             // 
             this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Edit;
-            this.buttonEdit.Location = new System.Drawing.Point(241, 1);
+            this.buttonEdit.Location = new System.Drawing.Point(277, 1);
             this.buttonEdit.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(28, 28);
@@ -228,6 +229,7 @@
             this.dataGridViewBookMarks.AllowUserToAddRows = false;
             this.dataGridViewBookMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewBookMarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewBookMarks.AutoSortByColumnName = false;
             this.dataGridViewBookMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewBookMarks.ColumnReorder = true;
             this.dataGridViewBookMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -241,6 +243,7 @@
             this.dataGridViewBookMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
+            this.dataGridViewBookMarks.PerColumnWordWrapControl = true;
             this.dataGridViewBookMarks.RowHeaderMenuStrip = null;
             this.dataGridViewBookMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewBookMarks.SingleRowSelect = true;
@@ -326,7 +329,7 @@
             // extButtonEditSystem
             // 
             this.extButtonEditSystem.Image = global::EDDiscovery.Icons.Controls.EditSystem;
-            this.extButtonEditSystem.Location = new System.Drawing.Point(277, 1);
+            this.extButtonEditSystem.Location = new System.Drawing.Point(313, 1);
             this.extButtonEditSystem.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extButtonEditSystem.Name = "extButtonEditSystem";
             this.extButtonEditSystem.Size = new System.Drawing.Size(28, 28);
@@ -341,6 +344,7 @@
             this.topPanel.Controls.Add(this.labelSearch);
             this.topPanel.Controls.Add(this.textBoxFilter);
             this.topPanel.Controls.Add(this.buttonNew);
+            this.topPanel.Controls.Add(this.extButtonNewRegion);
             this.topPanel.Controls.Add(this.buttonEdit);
             this.topPanel.Controls.Add(this.extButtonEditSystem);
             this.topPanel.Controls.Add(this.buttonDelete);
@@ -351,6 +355,18 @@
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(676, 30);
             this.topPanel.TabIndex = 39;
+            // 
+            // extButtonNewRegion
+            // 
+            this.extButtonNewRegion.Image = global::EDDiscovery.Icons.Controls.NewRegion;
+            this.extButtonNewRegion.Location = new System.Drawing.Point(241, 1);
+            this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonNewRegion.Name = "extButtonNewRegion";
+            this.extButtonNewRegion.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNewRegion.TabIndex = 2;
+            this.toolTip.SetToolTip(this.extButtonNewRegion, "New Region Bookmark");
+            this.extButtonNewRegion.UseVisualStyleBackColor = true;
+            this.extButtonNewRegion.Click += new System.EventHandler(this.extButtonNewRegion_Click);
             // 
             // UserControlBookmarks
             // 
@@ -399,5 +415,6 @@
         private ExtendedControls.ExtButton buttonExtImport;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
         private ExtendedControls.ExtButton extButtonEditSystem;
+        private ExtendedControls.ExtButton extButtonNewRegion;
     }
 }

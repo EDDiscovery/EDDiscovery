@@ -18,7 +18,6 @@ using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
-using EMK.LightGeometry;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -32,8 +31,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpanel : UserControlCommonBase
     {
-        private string dbFilter = "EventFilter2";
-        private string dbFieldFilter = "FieldFilter";
+        private const string dbFilter = "EventFilter2";
+        private const string dbFieldFilter = "FieldFilter";
+        private const string dbUserGroups = "UserGroups";
 
         private JournalFilterSelector cfs;
         private ConditionLists fieldfilter = new ConditionLists();
@@ -164,6 +164,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
@@ -205,6 +206,7 @@ namespace EDDiscovery.UserControls
             PutSetting("Layout", layoutorder);
             string s = string.Join<int>(",", columnpos);
             PutSetting("PanelTabs", s);
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -276,10 +278,6 @@ namespace EDDiscovery.UserControls
 					}
                     else
                     {
-                        string name;
-                        Point3D tpos;
-                        bool targetpresent = TargetClass.GetTargetPosition(out name, out tpos);
-
                         ISystem currentsystem = hl.CurrentSystem(); // may be null
 
                         HistoryEntry last = hl.GetLast;
@@ -365,10 +363,13 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
+                        // if no target, xt will be Nan
+                        bool targetpresent = TargetClass.GetTargetPosition(out string name, out double xt, out double yt, out double zt);
+
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
-                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".T(EDTx.Unknown);
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".T(EDTx.UserControlSpanel_Target) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, dfont, null).Location.Bottom;
+                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(xt, yt, zt).ToString("0.00") : "Unknown".T(EDTx.Unknown);
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".T(EDTx.UserControlSpanel_Target) + ": " + name + " @ " + dist + " ly", textcolour, backcolour, dfont, null).Location.Bottom;
                         }
 
                         startingtextrowpos = rowpos;
@@ -377,7 +378,7 @@ namespace EDDiscovery.UserControls
                         {
                             if ( hef.IsIncluded(rhe))
                             {
-                                rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour, dfont);
+                                rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, xt,yt,zt, textcolour, backcolour, dfont);
 
                                 if (rowpos > ClientRectangle.Height)                // stop when off of screen
                                     break;
@@ -392,7 +393,8 @@ namespace EDDiscovery.UserControls
             pictureBox.Render();
         }
 
-         int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour, Font dfont )
+        // draw he, at rowpos.  xt/yt/zt is target position (xt=nan if not set)
+        int DrawHistoryEntry(HistoryEntry he, int rowpos, double xt, double yt, double zt, Color textcolour , Color backcolour, Font dfont )
         {
             List<string> coldata = new List<string>();                      // First we accumulate the strings
             List<int> tooltipattach = new List<int>();
@@ -424,12 +426,11 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder == 0 && Config(Configuration.showNotes))
             {
-                coldata.Add((he.SNC != null) ? he.SNC.Note.Replace("\r\n", " ") : "");
+                coldata.Add(he.GetNoteText.Replace("\r\n", " "));
             }
 
-
             if (layoutorder == 2 && Config(Configuration.showDistancePerStar))
-                coldata.Add(showiffsdorconfigall ? DistToStar(he, tpos) : "");
+                coldata.Add(showiffsdorconfigall ? DistToStar(he, xt,yt,zt) : "");
 
             if (Config(Configuration.showXYZ))
             {
@@ -440,11 +441,11 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder > 0 && Config(Configuration.showNotes))
             {
-                coldata.Add((he.SNC != null) ? he.SNC.Note.Replace("\r\n", " ") : "");
+                coldata.Add(he.GetNoteText.Replace("\r\n", " "));
             }
 
             if (layoutorder < 2 && Config(Configuration.showDistancePerStar))
-                coldata.Add(showiffsdorconfigall ? DistToStar(he, tpos) : "");
+                coldata.Add(showiffsdorconfigall ? DistToStar(he, xt,yt,zt) : "");
 
             int colnum = 0;
 
@@ -597,12 +598,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private string DistToStar(HistoryEntry he, Point3D tpos)
+        private string DistToStar(HistoryEntry he, double x, double y, double z)
         {
             string res = "";
-            if (!double.IsNaN(tpos.X))
+            if (!double.IsNaN(x))
             {
-                double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
+                double dist = he.System.Distance(x,y,z);
                 if (dist >= 0)
                     res = dist.ToString("0.00");
             }
@@ -923,7 +924,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(Configuration.showXYZ, "Show XYZ".TxID(EDTx.UserControlSpanel_showXYZToolStripMenuItem));
             displayfilter.AddStandardOption(Configuration.showDistancePerStar, "Show Target Distance per Star".TxID(EDTx.UserControlSpanel_showTargetToolStripMenuItem));
             displayfilter.AddStandardOption(Configuration.showDistancesOnFSDJumpsOnly, "Show Distances/Coords on FSD Jumps Only".TxID(EDTx.UserControlSpanel_showDistancesOnFSDJumpsOnlyToolStripMenuItem));
-            CommonCtrl(displayfilter,extButtonColumns);
+            CommonCtrl(displayfilter,extButtonColumns, true);
         }
 
         private void extButtonHabZones_Click(object sender, EventArgs e)
@@ -939,7 +940,7 @@ namespace EDDiscovery.UserControls
             CommonCtrl(displayfilter,extButtonHabZones);
         }
 
-        private void CommonCtrl(CheckedIconListBoxFormGroup displayfilter, Control button)
+        private void CommonCtrl(CheckedIconListBoxFormGroup displayfilter, Control button, bool affectstablist = false)
         {
             displayfilter.AllOrNoneBack = false;
             displayfilter.ScreenMargin = new Size(0, 0);
@@ -948,9 +949,13 @@ namespace EDDiscovery.UserControls
             displayfilter.SaveSettings = (s, o) =>
             {
                 long v = CheckedIconListBoxFormGroup.SettingsStringToLong(s);
+                long oldconfig = config;
                 config = (config & ~displayfilter.LongConfigurationValue) | v;
                 System.Diagnostics.Debug.WriteLine($"Spanel config back is {v:X}, result {config:X}");
-                ResetTabList();
+
+                if ( oldconfig != config && affectstablist )
+                    ResetTabList();
+
                 ShowDividers(false);
                 Display(current_historylist);
             };

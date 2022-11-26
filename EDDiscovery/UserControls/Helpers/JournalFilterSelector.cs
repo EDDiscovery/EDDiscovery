@@ -31,6 +31,9 @@ namespace EDDiscovery.UserControls
         {
             CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
             HideOnDeactivate = true;
+            MultipleColumnsAllowed = true;
+            MultipleColumnsFitToScreen = true;
+            BorderStyle = BorderStyle.FixedSingle;
         }
 
         public void AddJournalExtraOptions()
@@ -68,8 +71,14 @@ namespace EDDiscovery.UserControls
             string suittype = string.Join(";", suitle.Select(x => x.Item1)) + ";";
             AddGroupOption(suittype, "Suits".T(EDTx.FilterSelector_Suits), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
 
+            var carriere = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCarrierStats" });
+            string carriertype = string.Join(";", carriere.Select(x => x.Item1)) + ";";
+
+            AddGroupOption(carriertype, "Carrier".T(EDTx.FilterSelector_Carrier), JournalEntry.JournalTypeIcons[JournalTypeEnum.CarrierStats]);
+
             AddGroupOption("MiningRefined;AsteroidCracked;ProspectedAsteroid;LaunchDrone","Mining".T(EDTx.FilterSelector_Mining), JournalEntry.JournalTypeIcons[JournalTypeEnum.MiningRefined]);
         }
+
 
         public void AddJournalEntries(string[] methods = null)
         {
@@ -87,6 +96,51 @@ namespace EDDiscovery.UserControls
             }
 
             SortStandardOptions();  // sorted by text
+        }
+
+        public void AddUserGroups(string groupswithids)
+        {
+            AddGroupOptions(groupswithids, 1, global::EDDiscovery.Icons.Controls.RescanJournals);
+
+            //System.Diagnostics.Debug.WriteLine($"Group setting {GetUserGroupDefinition(1)}");
+
+            AddStandardOptionAtTop(null, "Create new group".TxID(EDTx.FilterSelector_NewGroup), global::EDDiscovery.Icons.Controls.AddJournals, button: true);
+
+            ButtonPressed += (index,stag, text, usertag, e) => 
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    if (usertag is int)
+                    {
+                        Hide();
+
+                        if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".TxID(EDTx.FilterSelector_Confirmremoval) + " " + text, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        {
+                            Clear();
+                            RemoveGroupOption(index);
+                        }
+                    }
+                    else
+                    {
+                        // don't like  ExtendedControls.MessageBoxTheme.Show($"Cannot delete".TxID(EDTx.TBD) + " " + text, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    }
+                }
+                else if ( e.Button == MouseButtons.Left)
+                {
+                    if ( stag == null )
+                    {
+                        Hide();
+
+                        string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(null, "", "", "Enter name of new group".TxID(EDTx.FilterSelector_Newgroupname), Properties.Resources.edlogo_3mo_icon);
+                        if (promptValue != null)
+                        {
+                            string cursettings = GetChecked();
+                            Clear();        // will cause a reload
+                            AddGroupOption(cursettings, promptValue, global::EDDiscovery.Icons.Controls.RescanJournals, usertag:1);
+                        }
+                    }
+                }
+            };
         }
 
         // use this to open the filter.

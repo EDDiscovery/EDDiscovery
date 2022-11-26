@@ -228,8 +228,8 @@ namespace EDDiscovery.Actions
                             string note = sp.NextQuotedWord();
                             if (note != null && sp.IsEOL)
                             {
-                                he.SetJournalSystemNoteText(note, true, EDCommander.Current.SyncToEdsm);
-                                (ap.ActionController as ActionController).DiscoveryForm.NoteChanged(this, he, true);
+                                he.journalEntry.UpdateSystemNote(note, he.System.Name, EDCommander.Current.SyncToEdsm);
+                                (ap.ActionController as ActionController).DiscoveryForm.NoteChanged(this, he);
                             }
                             else
                                 ap.ReportError("Missing note text or unquoted text in Event NOTE");

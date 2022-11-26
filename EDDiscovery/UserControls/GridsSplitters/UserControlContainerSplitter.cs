@@ -131,10 +131,6 @@ namespace EDDiscovery.UserControls
 
             Invalidate(true);
             Update();        // need this to FORCE a full refresh in case there are lots of windows
-
-            UserControlTravelGrid tg = GetTravelGrid;                   // if travel grid, link up
-            if (tg != null)
-                tg.OnKeyDownInCell += Tg_OnKeyDownInCell;
         }
 
         public override bool AllowClose()                  // splitter is closing, does the consistuent panels allow close?
@@ -394,27 +390,8 @@ namespace EDDiscovery.UserControls
             {
                 //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Stay on " + ucursor_inuse.GetHashCode());
             }
-
-            UserControlTravelGrid tg = GetTravelGrid;       // this is called whenever deployment changes.. so see if TG is there..
-            if (tg != null)
-            {
-                tg.OnKeyDownInCell -= Tg_OnKeyDownInCell;
-                tg.OnKeyDownInCell += Tg_OnKeyDownInCell;
-            }
-
         }
 
-        private void Tg_OnKeyDownInCell(int asciikeycode, int rowno, int colno, bool note)
-        {
-            if (note)           // links a TG with a system info to allow note taking
-            {
-                UserControlSysInfo s = GetUserControl<UserControlSysInfo>(PanelInformation.PanelIDs.SystemInformation);
-                if (s != null && s.IsNotesShowing)
-                {
-                    s.FocusOnNote(asciikeycode);
-                }
-            }
-        }
 
         #region Clicks
 

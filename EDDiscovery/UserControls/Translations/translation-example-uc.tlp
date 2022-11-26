@@ -17,6 +17,8 @@ SECTION UserControlBookmarks
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
+.extButtonNewRegion.ToolTip: "New Region Bookmark" @
+
 
 SECTION UserControlCombatPanel
 
@@ -163,6 +165,7 @@ SECTION UserControlDiscoveries
 
 SECTION SearchStars
 
+.ColumnIndex: "Index" @
 .ColumnStar: "Star" @
 .ColumnCentreDistance: "Centre Distance" @
 .ColumnCurrentDistance: "Current Distance" @
@@ -255,6 +258,9 @@ SECTION UserControlExpedition
 .SystemName: "System Name" @
 .Distance: "Dist." @
 .Note: "Note" @
+.ColumnDistStart: "Dist Start" @
+.ColumnDistanceRemaining: "Dist Remaining" @
+
 .labelCml: "Cml Distance:" @
 .labelP2P: "P2P Distance:" @
 .labelEndDate: "End Date:" @
@@ -277,7 +283,7 @@ SECTION UserControlExpedition
 .Specify: "Please specify a name for the route." @
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" @
-.EDSMUnk: "System not known to EDSM" @
+.EDSMUnk: "System not known" @
 .NoScanInfo : "No local scan info" @
 
 SECTION UserControlJournalGrid
@@ -975,11 +981,60 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" @
 .tabControlCustomStats.tabPageGeneral.Information: "Information" @
 .tabControlCustomStats.tabPageTravel: "Travel" @
-.tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" @
 .tabControlCustomStats.tabPageScan: "Scan" @
-.tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
 .tabControlCustomStats.tabPageGameStats: "In Game" @
 .tabControlCustomStats.tabPageByShip: "By Ship" @
+.tabControlCustomStats.tabPageRanks: "Ranks" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" @
+.tabControlCustomStats.tabPageLedger: "Ledger" @
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" @
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnNumericCredits: "Credits" @
+.tabControlCustomStats.tabPageCombat: "Combat" @
+
+.Powerplay: "Powerplay" @
+.Squadron: "Squadron" @
+
+.NoTrip: "No Trip" @
+.BountiesThargoid: "Bounties on Thargoids" @
+.BountiesOnFootNPC: "Bounties on On Foot NPC" @
+.BountiesSkimmers: "Bounties on Skimmers" @
+.ShipsUnknown: "Ships Unknown Rank" @
+.ShipsElite: "Ships Elite Rank" @
+.ShipsDeadly: "Ships Deadly Rank" @
+.ShipsDangerous: "Ships Dangerous Rank" @
+.ShipsMaster: "Ships Master Rank" @
+.ShipsExpert: "Ships Expert Rank" @
+.ShipsCompetent: "Ships Competent Rank" @
+.ShipsNovice: "Ships Novice Rank" @
+.ShipsHarmless: "Ships Harmless Rank" @
+.PVPElite: "PVP Elite Rank" @
+.PVPDeadly: "PVP Deadly Rank" @
+.PVPDangerous: "PVP Dangerous Rank" @
+.PVPMaster: "PVP Master Rank" @
+.PVPExpert: "PVP Expert Rank" @
+.PVPCompetent: "PVP Competent Rank" @
+.PVPNovice: "PVP Novice Rank" @
+.PVPHarmless: "PVP Harmless Rank" @
+.Bounties: "Bounties" @
+.Bountyvalue: "Bounty Value" @
+.Bountiesonships: "Bounties on Ships" @
+.Crimes: "Crimes" @
+.CrimeCost: "Crime Cost" @
+.FactionKillBonds: "Faction Kill Bonds" @
+.FKBValue: "FKB Value" @
+.InterdictionPlayerSucceeded: "Interdictions Player Succeeded" @
+.InterdictionPlayerFailed: "Interdictions Player Failed" @
+.InterdictionNPCSucceeded: "Interdictions NPC Succeeded" @
+.InterdictionNPCFailed: "Interdictions NPC Failed" @
+.InterdictedPlayerSucceeded: "Interdicted Player Succeeded" @
+.InterdictedPlayerFailed: "Interdicted Player Failed" @
+.InterdictedNPCSucceeded: "Interdicted NPC Succeeded" @
+.InterdictedNPCFailed: "Interdicted NPC Failed" @
+.PVPKills: "PVP Kills" @
 
 .TotalNoofjumps: "Total No of jumps" @
 .FSDjumps: "FSD jumps" @
@@ -1094,6 +1149,7 @@ SECTION UserControlSysInfo
 .toolStripSkinny: "When transparent, use skinny look" @
 .toolStripReset: "Reset" @
 .toolStripRemoveAll: "Remove All" @
+.displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
 
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" @
 .textBoxTargetDist.ToolTip: "Distance to target" @
@@ -1102,7 +1158,7 @@ SECTION UserControlSysInfo
 .labelStationFaction: "Faction" @
 .extButtonEDSMTarget: "EDSM" @
 .labelSecurity: "Security" @
-.labelJumpRange: "Jump" @
+.labelJumpRange: "Range" @
 .labelTarget: "Target" @
 .labelSysName: "System" @
 .labelGamemode: "Mode" @
@@ -1120,7 +1176,6 @@ SECTION UserControlSysInfo
 .labelFuel: "Fuel" @
 .labelBodyName: "Body" @
 .labelPosition: "Pos" @
-.labelNote: "Note" @
 .labelMissions: "Missions" @
 .labelEconomy: "Economy" @
 .labelGov: "Gov" @
@@ -1128,6 +1183,8 @@ SECTION UserControlSysInfo
 .labelState: "State" @
 .labelSolDist: "Sol" @
 .labelHomeDist: "Home" @
+.labelNextDestination: "Dest" @
+
 .NoMissions: "No Missions" @
 .SysUnk: "System unknown to EDSM" @
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" @
@@ -1171,6 +1228,7 @@ SECTION UserControlTravelGrid
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
 
+.quickMarkToolStripMenuItem: "Marked" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" @
 .gotoEntryNumberToolStripMenuItem: "Jump to Entry" @
 .setNoteToolStripMenuItem: "Set Note" @
@@ -1399,7 +1457,7 @@ SECTION UserControlOrganics
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
 .extButtonAlignment_ToolTip: "Alignment" @
 .at: "At {0}" @
-.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}" @
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 
 
 SECTION ScanDisplayForm
@@ -1427,6 +1485,11 @@ SECTION FilterSelector
 .Mining: "Mining" @
 .MicroResources: "Micro Resources" @
 .Suits: "Suits" @
+.Carrier: "Carrier" @
+.NewGroup: "Create new group" @
+.Newgroupname: "Enter name of new group" @
+.Confirmremoval: "Confirm removal of" @
+
 
 SECTION UserControlCommonBase
 
@@ -1466,6 +1529,100 @@ SECTION UserControlSuitsWeapons
 .Confirm: "Confirm Selling of" @
 .forceSellShipToolStripMenuItem: "Force Suit Sale" @
 
+SECTION UserControlCarrier
 
+.NoCarrier: "No Carrier" @
+.Cargo: "Cargo" @
+.Services: "Services" @
+.Shippacks: "Ship packs" @
+.Modulepacks: "Module Packs" @
+.Freespace: "Free Space" @
+.Jumprange: "Jump Range" @
+.Maxjump: "Max Jump" @
+.Fuel: "Fuel" @
+.DockingAccess: "Docking Access" @
+.Notorious: "Notorious" @
+.Balance: "Balance" @
+.Reserve: "Reserve" @
+.Available: "Available" @
+.PioneerTax: "Pioneer Tax" @
+.ShipyardTax: "Shipyard Tax" @
+.RearmTax: "Rearm Tax" @
+.OutfittingTax: "Outfitting Tax" @
+.RefuelTax: "Refuel Tax" @
+.RepairTax: "Repair Tax" @
+.CoreCost: "Core Cost" @
+.ServicesCost: "Services Cost" @
+.ServiceActive: "This Service is Active" @
+.InstallCost: "Install cost" @
+.CapacityAllocated: "Capacity Allocated" @
+.Upkeepcost: "Upkeep cost" @
+.Suspendedupkeepcost: "Suspended upkeep cost" @
+.CrewName: "Crew Name" @
+.Tier: "Tier" @
+.Cost: "Cost" @
+.CoreService: "Core Service" @
+.OptionalService: "Optional Service" @
+
+
+.extTabControl.tabPageOverall: "Overall" @
+.extTabControl.tabPageOverall.imageControlOverall: "imageControl1" @
+.extTabControl.tabPageItinerary: "Itinerary" @
+.extTabControl.tabPageItinerary.colItinDate: "Date" @
+.extTabControl.tabPageItinerary.colItinSystemAlphaInt: "System" @
+.extTabControl.tabPageItinerary.colItinBodyAlphaInt: "Body" @
+.extTabControl.tabPageItinerary.colItinJumpDistNumeric: "Jump Dist" @
+.extTabControl.tabPageItinerary.colItinDistFromNumeric: "Dist From" @
+.extTabControl.tabPageItinerary.colItinInformation: "Information" @
+.extTabControl.tabPageFinances: "Finances" @
+.extTabControl.tabPageFinances.colLedgerDate: "Date" @
+.extTabControl.tabPageFinances.colLedgerStarsystemAlphaInt: "System" @
+.extTabControl.tabPageFinances.colLedgerBodyAlphaInt: "Body" @
+.extTabControl.tabPageFinances.colLedgerEvent: "Event" @
+.extTabControl.tabPageFinances.colLedgerCreditNumeric: "Credits" @
+.extTabControl.tabPageFinances.colLedgerDebitNumeric: "Debits" @
+.extTabControl.tabPageFinances.colLedgerBalanceNumeric: "Balance cr" @
+.extTabControl.tabPageFinances.colLedgerNotes: "Notes" @
+.extTabControl.tabPageServices: "Services" @
+.extTabControl.tabPageServices.imageControlServices: "imageControl1" @
+.extTabControl.tabPagePacks: "Packs" @
+.extTabControl.tabPagePacks.imageControlPacks: "imageControl1" @
+.extTabControl.tabPageOrders: "Orders" @
+.extTabControl.tabPageOrders.colOrdersDate: "Date" @
+.extTabControl.tabPageOrders.colOrdersCommodity: "Commodity" @
+.extTabControl.tabPageOrders.colOrdersType: "Type" @
+.extTabControl.tabPageOrders.colOrdersGroup: "Group" @
+.extTabControl.tabPageOrders.colOrdersPurchaseNumeric: "Purchase" @
+.extTabControl.tabPageOrders.colOrdersSaleNumeric: "Sale" @
+.extTabControl.tabPageOrders.colOrdersPriceNumeric: "Price" @
+.extTabControl.tabPageOrders.colOrdersBlackmarket: "Blackmarket" @
+.extTabControl.tabPageCAPI3: "CAPI Stats" @
+.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumn1: "Name" @
+.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" @
+.extTabControl.tabPageCAPI1: "CAPI Ships/Modules" @
+.extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" @
+.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" @
+.extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" @
+.extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" @
+.extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" @
+.extTabControl.tabPageCAPI1.colCAPIShipsMassNumeric: "Mass" @
+.extTabControl.tabPageCAPI1.colCAPIShipsLandingPadNumeric: "Landing Pad" @
+.extTabControl.tabPageCAPI1.colCAPIModulesName: "Name" @
+.extTabControl.tabPageCAPI1.colCAPIModulesCat: "Category" @
+.extTabControl.tabPageCAPI1.colCAPIModulesMassNumeric: "Mass" @
+.extTabControl.tabPageCAPI1.colCAPIModulesPowerNumeric: "Power" @
+.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" @
+.extTabControl.tabPageCAPI1.colCAPIModulesStockNumeric: "Stock" @
+.extTabControl.tabPageCAPI1.colCAPIModulesInfo: "Info" @
+.extTabControl.tabPageCAPI2: "CAPI Items" @
+.extTabControl.tabPageCAPI2.colCAPICargoCommodity: "Commodity" @
+.extTabControl.tabPageCAPI2.colCAPICargoType: "Type" @
+.extTabControl.tabPageCAPI2.colCAPICargoGroup: "Group" @
+.extTabControl.tabPageCAPI2.colCAPICargoQuantityNumeric: "Quantity" @
+.extTabControl.tabPageCAPI2.colCAPICargoPriceNumeric: "Price" @
+.extTabControl.tabPageCAPI2.colCAPICargoStolen: "Stolen" @
+.extTabControl.tabPageCAPI2.colCAPILockerName: "Microresource" @
+.extTabControl.tabPageCAPI2.colCAPILockerType: "Type" @
+.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" @
 
 

@@ -104,7 +104,7 @@ namespace EDDiscovery.Forms
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(880, 13);
+            this.buttonOK.Location = new System.Drawing.Point(867, 13);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 24);
             this.buttonOK.TabIndex = 6;
@@ -137,7 +137,7 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.textBoxLicense.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxLicense.ShowLineCount = false;
-            this.textBoxLicense.Size = new System.Drawing.Size(695, 189);
+            this.textBoxLicense.Size = new System.Drawing.Size(682, 189);
             this.textBoxLicense.TabIndex = 1;
             this.textBoxLicense.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxLicense.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -147,7 +147,7 @@ namespace EDDiscovery.Forms
             this.panelLinksBR.Controls.Add(this.flowLayoutPanelLabels);
             this.panelLinksBR.Controls.Add(this.labelNoAffiliation);
             this.panelLinksBR.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelLinksBR.Location = new System.Drawing.Point(0, 391);
+            this.panelLinksBR.Location = new System.Drawing.Point(0, 356);
             this.panelLinksBR.Name = "panelLinksBR";
             this.panelLinksBR.Size = new System.Drawing.Size(300, 276);
             this.panelLinksBR.TabIndex = 5;
@@ -346,7 +346,7 @@ namespace EDDiscovery.Forms
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
-            this.panel_close.Location = new System.Drawing.Point(968, 3);
+            this.panel_close.Location = new System.Drawing.Point(955, 3);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
@@ -365,7 +365,7 @@ namespace EDDiscovery.Forms
             // 
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Right;
             this.panelLogo.Image = global::EDDiscovery.Properties.Resources.Logo;
-            this.panelLogo.Location = new System.Drawing.Point(440, 0);
+            this.panelLogo.Location = new System.Drawing.Point(427, 0);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
             this.panelLogo.Size = new System.Drawing.Size(255, 64);
@@ -392,7 +392,7 @@ namespace EDDiscovery.Forms
             this.paneltop.Dock = System.Windows.Forms.DockStyle.Top;
             this.paneltop.Location = new System.Drawing.Point(0, 0);
             this.paneltop.Name = "paneltop";
-            this.paneltop.Size = new System.Drawing.Size(995, 28);
+            this.paneltop.Size = new System.Drawing.Size(982, 28);
             this.paneltop.TabIndex = 29;
             // 
             // panelbot
@@ -400,9 +400,9 @@ namespace EDDiscovery.Forms
             this.panelbot.Controls.Add(this.panelEDCD);
             this.panelbot.Controls.Add(this.buttonOK);
             this.panelbot.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelbot.Location = new System.Drawing.Point(0, 695);
+            this.panelbot.Location = new System.Drawing.Point(0, 660);
             this.panelbot.Name = "panelbot";
-            this.panelbot.Size = new System.Drawing.Size(995, 49);
+            this.panelbot.Size = new System.Drawing.Size(982, 49);
             this.panelbot.TabIndex = 30;
             // 
             // panelOuter
@@ -414,7 +414,7 @@ namespace EDDiscovery.Forms
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 0);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(997, 746);
+            this.panelOuter.Size = new System.Drawing.Size(984, 711);
             this.panelOuter.TabIndex = 2;
             // 
             // panelContent
@@ -424,7 +424,7 @@ namespace EDDiscovery.Forms
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContent.Location = new System.Drawing.Point(0, 28);
             this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(995, 667);
+            this.panelContent.Size = new System.Drawing.Size(982, 632);
             this.panelContent.TabIndex = 31;
             // 
             // panelLeft
@@ -435,7 +435,7 @@ namespace EDDiscovery.Forms
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
             this.panelLeft.Name = "panelLeft";
-            this.panelLeft.Size = new System.Drawing.Size(695, 667);
+            this.panelLeft.Size = new System.Drawing.Size(682, 632);
             this.panelLeft.TabIndex = 2;
             // 
             // panelWebBrowser
@@ -443,7 +443,7 @@ namespace EDDiscovery.Forms
             this.panelWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebBrowser.Location = new System.Drawing.Point(0, 253);
             this.panelWebBrowser.Name = "panelWebBrowser";
-            this.panelWebBrowser.Size = new System.Drawing.Size(695, 414);
+            this.panelWebBrowser.Size = new System.Drawing.Size(682, 379);
             this.panelWebBrowser.TabIndex = 2;
             // 
             // panelName
@@ -453,7 +453,7 @@ namespace EDDiscovery.Forms
             this.panelName.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelName.Location = new System.Drawing.Point(0, 0);
             this.panelName.Name = "panelName";
-            this.panelName.Size = new System.Drawing.Size(695, 64);
+            this.panelName.Size = new System.Drawing.Size(682, 64);
             this.panelName.TabIndex = 2;
             // 
             // panelRight
@@ -462,9 +462,9 @@ namespace EDDiscovery.Forms
             this.panelRight.Controls.Add(this.panelDevs);
             this.panelRight.Controls.Add(this.labelDevelopers);
             this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelRight.Location = new System.Drawing.Point(695, 0);
+            this.panelRight.Location = new System.Drawing.Point(682, 0);
             this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(300, 667);
+            this.panelRight.Size = new System.Drawing.Size(300, 632);
             this.panelRight.TabIndex = 0;
             // 
             // panelDevs
@@ -473,7 +473,7 @@ namespace EDDiscovery.Forms
             this.panelDevs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDevs.Location = new System.Drawing.Point(0, 24);
             this.panelDevs.Name = "panelDevs";
-            this.panelDevs.Size = new System.Drawing.Size(300, 643);
+            this.panelDevs.Size = new System.Drawing.Size(300, 608);
             this.panelDevs.TabIndex = 8;
             // 
             // panelDevsSurround
@@ -483,7 +483,7 @@ namespace EDDiscovery.Forms
             this.panelDevsSurround.Location = new System.Drawing.Point(0, 0);
             this.panelDevsSurround.Name = "panelDevsSurround";
             this.panelDevsSurround.Padding = new System.Windows.Forms.Padding(5);
-            this.panelDevsSurround.Size = new System.Drawing.Size(300, 643);
+            this.panelDevsSurround.Size = new System.Drawing.Size(300, 608);
             this.panelDevsSurround.TabIndex = 5;
             // 
             // extTextBoxDevs
@@ -508,7 +508,7 @@ namespace EDDiscovery.Forms
             this.extTextBoxDevs.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.extTextBoxDevs.SelectionLength = 0;
             this.extTextBoxDevs.SelectionStart = 0;
-            this.extTextBoxDevs.Size = new System.Drawing.Size(290, 633);
+            this.extTextBoxDevs.Size = new System.Drawing.Size(290, 598);
             this.extTextBoxDevs.TabIndex = 4;
             this.extTextBoxDevs.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.extTextBoxDevs.WordWrap = true;
@@ -518,7 +518,7 @@ namespace EDDiscovery.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(997, 746);
+            this.ClientSize = new System.Drawing.Size(984, 711);
             this.Controls.Add(this.panelOuter);
             this.DoubleBuffered = true;
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;

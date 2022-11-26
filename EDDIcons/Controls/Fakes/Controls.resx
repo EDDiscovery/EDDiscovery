@@ -118,162 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Map3D_Bookmarks_AddRegionBookmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\AddRegionBookmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Bookmarks_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Bookmarks_Noted" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\Noted.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Bookmarks_Region" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\Region.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Bookmarks_ShowBookmarks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\ShowBookmarks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Bookmarks_ShowNotemarks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\ShowNotemarks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Bookmarks_Star" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\Star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Bookmarks_Target" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Bookmarks\Target.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_EliteMovement" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\EliteMovement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Filter_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Filter\Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Filter_ShowAllStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Filter\ShowAllStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_FilterDate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\FilterDate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_GalObjects" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\GalObjects.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Grid_Coords" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Grid\Coords.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Grid_FineGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Grid\FineGrid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Grid_Grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Grid\Grid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Help" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_MapNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\MapNames.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Markers_Selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Markers\Selected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_CenterOnSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\CenterOnSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_GoBackward" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\GoBackward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_GoForward" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\GoForward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_GoForwardOnJump" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\GoForwardOnJump.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_GoToHistorySelection" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\GoToHistorySelection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_GoToHomeSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\GoToHomeSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_GoToTarget" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\GoToTarget.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_LastKnownPosition" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\LastKnownPosition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Navigation_LookAtSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Navigation\LookAtSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_OrangeDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\OrangeDot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Perspective" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Perspective.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_Clear" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\Clear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_Load" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\Load.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_NewRecordStep" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\NewRecordStep.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_Pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\Pause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_PausePlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\PausePlay.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_PauseRecord" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\PauseRecord.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_Play" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\Play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_Record" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\Record.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_RecordStep" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\RecordStep.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_StopPlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\StopPlay.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Recorder_StopRecord" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Recorder\StopRecord.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Stars_DisplayColours" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Stars\DisplayColours.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Stars_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Stars\Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Stars_ShowDiscs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Stars\ShowDiscs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Stars_ShowNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Stars\ShowNames.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Travel_DrawLines" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Travel\DrawLines.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Travel_DrawStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Travel\DrawStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Travel_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Travel\Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Travel_WhiteStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Travel\WhiteStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_YellowDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\YellowDot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Scan_Bodies_Barycentre" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\Bodies\Barycentre.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -750,5 +594,23 @@
   </data>
   <data name="Ledger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Ledger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bookmarks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bookmarks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FleetCarrier" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\FleetCarrier.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ArrowsRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ArrowsRight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AddJournals" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\addjournals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NewRegion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\NewRegion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -77,7 +77,6 @@ namespace EDDiscovery
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.show3DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllPopoutsInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.turnOffAllTransparencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -186,7 +185,7 @@ namespace EDDiscovery
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(960, 207);
+            this.tabControlMain.Size = new System.Drawing.Size(984, 631);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -382,7 +381,7 @@ namespace EDDiscovery
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.SecondHiddenMarkerWidth = 0;
             this.panelToolBar.ShowHiddenMarker = true;
-            this.panelToolBar.Size = new System.Drawing.Size(960, 30);
+            this.panelToolBar.Size = new System.Drawing.Size(984, 30);
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.UnrollHoverDelay = 1000;
             // 
@@ -434,9 +433,9 @@ namespace EDDiscovery
             this.toolStripProgressBarEDD,
             this.toolStripStatusLabelEDD});
             this.statusStripEDD.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStripEDD.Location = new System.Drawing.Point(0, 265);
+            this.statusStripEDD.Location = new System.Drawing.Point(0, 689);
             this.statusStripEDD.Name = "statusStripEDD";
-            this.statusStripEDD.Size = new System.Drawing.Size(960, 22);
+            this.statusStripEDD.Size = new System.Drawing.Size(984, 22);
             this.statusStripEDD.TabIndex = 22;
             // 
             // toolStripProgressBarEDD
@@ -463,7 +462,7 @@ namespace EDDiscovery
             this.tableLayoutPanelTop.RowCount = 1;
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanelTop.Size = new System.Drawing.Size(960, 25);
+            this.tableLayoutPanelTop.Size = new System.Drawing.Size(984, 25);
             this.tableLayoutPanelTop.TabIndex = 23;
             this.tableLayoutPanelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.tableLayoutPanelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -502,7 +501,6 @@ namespace EDDiscovery
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
-            this.show3DMapsToolStripMenuItem,
             this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -513,17 +511,9 @@ namespace EDDiscovery
             // 
             this.settingsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // show3DMapsToolStripMenuItem
-            // 
-            this.show3DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Map3D;
-            this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.show3DMapsToolStripMenuItem.Text = "Show old &3D maps (depreciated)";
-            this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.showold3DMapsToolStripMenuItem_Click);
             // 
             // showAllPopoutsInTaskBarToolStripMenuItem
             // 
@@ -532,7 +522,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Menu;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -555,7 +545,7 @@ namespace EDDiscovery
             // 
             this.exitToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -893,7 +883,7 @@ namespace EDDiscovery
             this.closeminimizeFlowPanel.Controls.Add(this.panel_eddiscovery);
             this.closeminimizeFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.closeminimizeFlowPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.closeminimizeFlowPanel.Location = new System.Drawing.Point(870, 0);
+            this.closeminimizeFlowPanel.Location = new System.Drawing.Point(894, 0);
             this.closeminimizeFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.closeminimizeFlowPanel.Name = "closeminimizeFlowPanel";
             this.closeminimizeFlowPanel.Size = new System.Drawing.Size(90, 25);
@@ -967,14 +957,14 @@ namespace EDDiscovery
             this.extPanelTopResizer.Location = new System.Drawing.Point(0, 0);
             this.extPanelTopResizer.Movement = System.Windows.Forms.DockStyle.Top;
             this.extPanelTopResizer.Name = "extPanelTopResizer";
-            this.extPanelTopResizer.Size = new System.Drawing.Size(960, 3);
+            this.extPanelTopResizer.Size = new System.Drawing.Size(984, 3);
             this.extPanelTopResizer.TabIndex = 22;
             // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 287);
+            this.ClientSize = new System.Drawing.Size(984, 711);
             this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.panelToolBar);
             this.Controls.Add(this.tableLayoutPanelTop);
@@ -1040,7 +1030,6 @@ namespace EDDiscovery
         private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAllPopoutsInTaskBarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAllInTaskBarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem turnOffAllTransparencyToolStripMenuItem;

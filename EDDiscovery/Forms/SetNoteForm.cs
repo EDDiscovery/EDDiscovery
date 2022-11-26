@@ -23,7 +23,7 @@ namespace EDDiscovery.Forms
     public partial class SetNoteForm : ExtendedControls.DraggableForm
     {
         public HistoryEntry HistoryEntry { get; private set; }
-        public string NoteText { get; private set; }
+        public string NoteText { get { return this.textBoxNote.Text; } }
 
         public SetNoteForm(HistoryEntry he, EDDiscoveryForm parent)
         {
@@ -36,8 +36,7 @@ namespace EDDiscovery.Forms
 
             this.Owner = parent;
             this.HistoryEntry = he;
-            this.NoteText = he.SNC?.Note;
-            this.textBoxNote.Text = this.NoteText ?? "";
+            this.textBoxNote.Text = he.GetNoteText;
             this.labelTimestamp.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
             this.labelSystem.Text = he.System.Name;
 
@@ -54,7 +53,7 @@ namespace EDDiscovery.Forms
 
         private void SaveNote()
         {
-            this.NoteText = textBoxNote.Text.Trim();
+            textBoxNote.Text = textBoxNote.Text.Trim();
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

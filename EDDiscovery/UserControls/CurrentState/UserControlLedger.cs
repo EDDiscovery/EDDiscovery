@@ -22,15 +22,18 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlLedger : UserControlCommonBase
     {
         private JournalFilterSelector cfs;
-        private string dbFilter = "EventFilter2";
-        private string dbHistorySave = "EDUIHistory";
+        private const string dbFilter = "EventFilter2";
+        private const string dbHistorySave = "EDUIHistory";
+        private const string dbSCLedger = "SCLedger";
         private const string dbWordWrap = "WordWrap";
+        private const string dbUserGroups = "UserGroups";
         private int transactioncountatdisplay = 0;
 
         #region Init
@@ -53,6 +56,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
@@ -71,6 +75,41 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), incldockstartend: false);
+
+            splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
+
+            {                                                                               // same code as in carrier/stats really
+                extChartLedger.AddChartArea("LedgerCA1");
+                extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
+                extChartLedger.EnableZoomMouseWheelX();
+                extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
+
+                extChartLedger.SetXAxisInterval(DateTimeIntervalType.Days, 0, IntervalAutoMode.VariableCount);
+                extChartLedger.SetXAxisFormat("g");
+
+                extChartLedger.XCursorShown();
+                extChartLedger.XCursorSelection();
+                extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Seconds);
+
+                extChartLedger.YAutoScale();
+                extChartLedger.SetYAxisFormat("N0");
+
+                extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
+
+                extChartLedger.AddContextMenu(new string[] { "Zoom out by 1", "Reset Zoom" },
+                                    new Action<ToolStripMenuItem>[]
+                                        { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
+                                              new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomResetX(); } ),
+                                        },
+                                    new Action<ToolStripMenuItem[]>((list) =>
+                                    {
+                                        list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
+                                    })
+                                    );
+
+                extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
+            }
+
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -87,13 +126,15 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewLedger);
+            PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
             discoveryform.OnHistoryChange -= Redisplay;
             discoveryform.OnNewEntry -= NewEntry;
         }
 
         #endregion
 
-        #region Display
+        #region Display Grid
 
         private void Redisplay(HistoryList hl)
         {
@@ -111,55 +152,76 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
             dataGridViewLedger.Rows.Clear();
+            extChartLedger.ClearSeriesPoints();
 
-            var mc = discoveryform.history.CashLedger;
+            var ledger = discoveryform.history.CashLedger;
             transactioncountatdisplay = 0;
             
-            if (mc != null && mc.Transactions.Count > 0)
+            if (ledger != null && ledger.Transactions.Count > 0)
             {
                 var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
-                List<Ledger.Transaction> filteredlist = filter.Filter(mc.Transactions);
-
-                filteredlist = FilterByJournalEvent(filteredlist, GetSetting(dbFilter, "All"));
+                List<Ledger.Transaction> filteredlist = filter.Filter(ledger.Transactions);
 
                 if (filteredlist.Count > 0)
                 {
+                    var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
+
                     var rowsToAdd = new List<DataGridViewRow>(filteredlist.Count);
+                 
                     for (int i = filteredlist.Count - 1; i >= 0; i--)
                     {
-                        Ledger.Transaction tx = filteredlist[i];
-                        rowsToAdd.Add(CreateRow(tx));
+                        var row = CreateRow(filteredlist[i], eventfilter, textBoxFilter.Text);      // create if not filtered out
+
+                        if (row != null)
+                        {
+                            rowsToAdd.Add(row);
+                            DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(filteredlist[i].EventTimeUTC);
+                            extChartLedger.AddXY(seltime, filteredlist[i].CashTotal, graphtooltip: $"{seltime.ToString()} {filteredlist[i].CashTotal:N0}cr" );
+                        }
                     }
 
                     dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
-
-                    dataGridViewLedger.FilterGridView(textBoxFilter.Text);
                 }
 
-                transactioncountatdisplay = mc.Transactions.Count;
+                transactioncountatdisplay = ledger.Transactions.Count;
             }
 
             dataGridViewLedger.Columns[0].HeaderText = EDDConfig.Instance.GetTimeTitle();
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+
+            var tx1 = ledger.TransactionBefore(DateTime.UtcNow.AddHours(-24));
+            label24h.Text = tx1 != null ? ("24h: " + (ledger.CashTotal - tx1.CashTotal).ToString("N0") + "cr") : "";
+            var tx2 = ledger.TransactionBefore(DateTime.UtcNow.AddDays(-7));
+            label7d.Text = tx2 != null ? ("7d: " + (ledger.CashTotal - tx2.CashTotal).ToString("N0") + "cr") : "";
+
         }
 
-        private DataGridViewRow CreateRow(Ledger.Transaction tx)
+        private DataGridViewRow CreateRow(Ledger.Transaction tx, HashSet<string> eventfilter, string textfilter)
         {
-            object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.utctime) ,
-                                            tx.jtype.ToString().SplitCapsWord(),
-                                            tx.notes,
-                                            (tx.cashadjust>0) ? tx.cashadjust.ToString("N0") : "",
-                                            (tx.cashadjust<0) ? (-tx.cashadjust).ToString("N0") : "",
-                                            tx.cash.ToString("N0"),
-                                            (tx.profitperunit!=0) ? tx.profitperunit.ToString("N0") : "",
-                                            (tx.profit!=0) ? tx.profit.ToString("N0") : ""
+            if (!eventfilter.Contains(tx.EventType.ToString()) && !eventfilter.Contains("All"))        // All or event name must be in list
+                return null;
+
+            string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC).ToString() ,
+                                            tx.EventType.ToString().SplitCapsWord(),
+                                            tx.Notes,
+                                            (tx.CashAdjust>0) ? tx.CashAdjust.ToString("N0") : "",
+                                            (tx.CashAdjust<0) ? (-tx.CashAdjust).ToString("N0") : "",
+                                            tx.CashTotal.ToString("N0"),
+                                            (tx.ProfitPerUnit!=0) ? tx.ProfitPerUnit.ToString("N0") : "",
+                                            (tx.Profit!=0) ? tx.Profit.ToString("N0") : ""
                                         };
 
-            var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
-            row.CreateCells(dataGridViewLedger, rowobj);
-            row.Tag = tx.jid;
-            return row;
+            if (!textfilter.HasChars() || rowobj.ContainsIn(textfilter, StringComparison.InvariantCultureIgnoreCase) >= 0)
+            {
+                var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
+                row.CreateCells(dataGridViewLedger, rowobj);
+                row.Tag = tx.JID;
+                row.Cells[0].Tag = tx.EventTimeUTC;
+                return row;
+            }
+            else
+                return null;
         }
 
         private void NewEntry(HistoryEntry he, HistoryList hl)
@@ -168,50 +230,32 @@ namespace EDDiscovery.UserControls
             {
                 Ledger.Transaction tx = discoveryform.history.CashLedger.Transactions[transactioncountatdisplay];
 
-                string evstring = GetSetting(dbFilter, "All");
+                var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
+                var row = CreateRow(tx, eventfilter, textBoxFilter.Text);
 
-                if ( evstring.Equals("All") || tx.IsJournalEventInEventFilter(evstring.Split(';')))     // if in filter..
+                if ( row!=null)
                 {
-                    var row = CreateRow(tx);
-                    bool visible = false;
-
-                    if (textBoxFilter.Text.HasChars())      // if we are text filtering..
-                    {
-                        foreach (DataGridViewCell cell in row.Cells)
-                        {
-                            if (cell.Value != null)
-                            {
-                                if (cell.Value.ToString().IndexOf(textBoxFilter.Text, 0, StringComparison.CurrentCultureIgnoreCase) >= 0)
-                                {
-                                    visible = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else
-                        visible = true;
-
-                    row.Visible = visible;                      // searching on this panel sets the visibility flag
                     dataGridViewLedger.Rows.Insert(0, row);     // insert at top
+                    var seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
+                    extChartLedger.AddXY(seltime, tx.CashTotal, graphtooltip: $"{seltime.ToString()} {tx.CashTotal:N0}cr");
                 }
 
                 transactioncountatdisplay++;
             }
         }
 
-        public List<Ledger.Transaction> FilterByJournalEvent(List<Ledger.Transaction> txlist, string eventstring)
+
+        private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (eventstring.Equals("All"))
-                return txlist;
-            else
-            {
-                string[] events = eventstring.Split(';');
-                return (from tx in txlist where tx.IsJournalEventInEventFilter(events) select tx).ToList();
-            }
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate(true);
+            else if (e.Column.Index >= 3)
+                e.SortDataGridViewColumnNumeric();
         }
 
         #endregion
+
+        #region Top UI
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -240,7 +284,6 @@ namespace EDDiscovery.UserControls
             dataViewScrollerPanel.UpdateScroll();
         }
 
-
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             PutSetting(dbHistorySave, comboBoxTime.Text);
@@ -249,30 +292,58 @@ namespace EDDiscovery.UserControls
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
-            dataGridViewLedger.FilterGridView(textBoxFilter.Text);
+            Display();
         }
 
-        #region right clicks
+        #endregion
+
+        #region right clicks on grid
 
         private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)
         {
             if (dataGridViewLedger.RightClickRow != -1)
             {
                 long v = (long)dataGridViewLedger.Rows[dataGridViewLedger.RightClickRow].Tag;
-
                 uctg.GotoPosByJID(v);
             }
         }
 
         #endregion
 
-        private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        #region Click on grid
+
+        private void dataGridViewLedger_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate(true);
-            else if (e.Column.Index >= 3)
-                e.SortDataGridViewColumnNumeric();
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)
+            {
+                var row = dataGridViewLedger.Rows[e.RowIndex];
+                var datetime = (DateTime)row.Cells[0].Tag;
+                System.Diagnostics.Debug.WriteLine($"Ledger Selected Graph cursor position {datetime}");
+                extChartLedger.SetXCursorPosition(datetime);
+            }
         }
+
+        #endregion
+
+        #region Chart
+        private void LedgerCursorPositionChanged(ExtendedControls.ExtSafeChart chart, string chartarea, AxisName axis, double pos)
+        {
+            if (!double.IsNaN(pos))     // this means its off graph, ignore
+            {
+                DateTime dtgraph = DateTime.FromOADate(pos);                    // back to date/time
+                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => (DateTime)r.Cells[0].Tag, dtgraph, long.MaxValue);  // we accept any nearest
+                if (row >= 0)
+                {
+                    dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(row);
+                    dataGridViewLedger.Rows[row].Selected = true;
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region Export
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
@@ -312,5 +383,8 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ledger available".T(EDTx.UserControlLedger_NOLG), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
+
+        #endregion
+
     }
 }

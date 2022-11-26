@@ -32,9 +32,10 @@ namespace EDDiscovery.UserControls
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        private string dbFilter = "EventFilter2";
-        private string dbHistorySave = "EDUIHistory";
-        private string dbFieldFilter = "ControlFieldFilter";
+        private const string dbFilter = "EventFilter2";
+        private const string dbHistorySave = "EDUIHistory";
+        private const string dbFieldFilter = "ControlFieldFilter";
+        private const string dbUserGroups = "UserGroups";
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -84,6 +85,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
 
             checkBoxCursorToTop.Checked = true;
@@ -127,6 +129,7 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal);
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();
@@ -417,10 +420,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewJournal_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            DataGridView grid = sender as DataGridView;
-            PaintHelpers.PaintEventColumn(sender as DataGridView, e,
-                discoveryform.history.Count, (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag,
-                Columns.Event, false);
+            HistoryEntry he = (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag;
+            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+            PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno, he, Columns.Event, false);
         }
 
         #region Mouse Clicks
@@ -514,7 +516,7 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        public void GotoPosByJID(long jid)
+        public int GotoPosByJID(long jid)       // -1 if fails
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
@@ -523,6 +525,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewJournal.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
+
+            return rowno;
         }
 
         public void FireChangeSelection()

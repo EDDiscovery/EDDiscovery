@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Wanted"] = he.Wanted.ToStringIntValue();
                 vars[prefix + "MarketId"] = he.MarketID.HasValue ? he.MarketID.ToStringInvariant() : "0";
 
-                vars[prefix + "Note"] = he.SNC?.Note ?? "";
+                vars[prefix + "Note"] = he.GetNoteText;
 
                 he.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 vars[prefix + "EventDescription"] = EventDescription;
@@ -116,14 +116,6 @@ namespace EDDiscovery.Actions
                 vars[prefix + "xpos"] = s.X.ToNANSafeString("0.###");
                 vars[prefix + "ypos"] = s.Y.ToNANSafeString("0.###");
                 vars[prefix + "zpos"] = s.Z.ToNANSafeString("0.###");
-                vars[prefix + "EDDBGovernment"] = s.Government.ToNullUnknownString();
-                vars[prefix + "EDDBAllegiance"] = s.Allegiance.ToNullUnknownString();
-                vars[prefix + "EDDBState"] = s.State.ToNullUnknownString();
-                vars[prefix + "EDDBSecurity"] = s.Security.ToNullUnknownString();
-                vars[prefix + "EDDBPrimaryEconomy"] = s.PrimaryEconomy.ToNullUnknownString();
-                vars[prefix + "EDDBFaction"] = s.Faction.ToNullUnknownString();
-                vars[prefix + "EDDBPopulation"] = s.Population.ToString(ct);
-                vars[prefix + "EDDBNeedsPermit"] = (s.NeedsPermit != 0).ToStringIntValue();
             }
         }
 

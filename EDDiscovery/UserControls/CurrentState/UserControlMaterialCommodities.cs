@@ -26,9 +26,10 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
-        public string dbWrapText = "WrapText";
-        public string dbFilter = "Filter2";
-        public string dbClearZero = "ClearZero";
+        public const string dbWrapText = "WrapText";
+        public const string dbFilter = "Filter2";
+        public const string dbClearZero = "ClearZero";
+        private const string dbUserGroups = "UserGroups";
 
         public enum PanelType { Materials, Commodities, MicroResources};
         public PanelType PanelMode;
@@ -137,6 +138,7 @@ namespace EDDiscovery.UserControls
             checkBoxShowZeros.Checked = !GetSetting(dbClearZero, true); // used to be clear zeros, now its show zeros, invert
             checkBoxShowZeros.CheckedChanged += CheckBoxClear_CheckedChanged;
 
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += FilterChanged;
         }
 
@@ -157,6 +159,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewMC);
+            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
 
             uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
         }

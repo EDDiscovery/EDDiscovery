@@ -27,6 +27,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace EDDiscovery.UserControls
 {
@@ -46,7 +47,6 @@ namespace EDDiscovery.UserControls
         const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         private Timer autoupdateedsm;
-        private bool closing = false;
         private bool updatingsystemrows = false;    // set during row update, to stop user interfering with the async processor without flashing icons if we just disabled them
 
         #region Standard UC Interfaces
@@ -86,7 +86,11 @@ namespace EDDiscovery.UserControls
             autoupdateedsm.Tick += Autoupdateedsm_Tick;
             autoupdateedsm.Start();     // something to display..
 
-            var enumlist = new Enum[] { EDTx.UserControlExpedition_SystemName, EDTx.UserControlExpedition_Distance, EDTx.UserControlExpedition_Note, EDTx.UserControlExpedition_CurDist, EDTx.UserControlExpedition_Visits, EDTx.UserControlExpedition_Scans, EDTx.UserControlExpedition_FSSBodies, EDTx.UserControlExpedition_KnownBodies, EDTx.UserControlExpedition_Stars, EDTx.UserControlExpedition_Info, EDTx.UserControlExpedition_labelRouteName, EDTx.UserControlExpedition_labelDateStart, EDTx.UserControlExpedition_labelEndDate, EDTx.UserControlExpedition_labelCml, EDTx.UserControlExpedition_labelP2P};
+            var enumlist = new Enum[] { EDTx.UserControlExpedition_SystemName, EDTx.UserControlExpedition_Distance, EDTx.UserControlExpedition_Note, EDTx.UserControlExpedition_CurDist, 
+                                        EDTx.UserControlExpedition_Visits, EDTx.UserControlExpedition_Scans, EDTx.UserControlExpedition_FSSBodies, EDTx.UserControlExpedition_KnownBodies, 
+                                        EDTx.UserControlExpedition_Stars, EDTx.UserControlExpedition_Info, EDTx.UserControlExpedition_labelRouteName, EDTx.UserControlExpedition_labelDateStart, 
+                                        EDTx.UserControlExpedition_labelEndDate, EDTx.UserControlExpedition_labelCml, EDTx.UserControlExpedition_labelP2P,
+                                        EDTx.UserControlExpedition_ColumnDistStart, EDTx.UserControlExpedition_ColumnDistanceRemaining};
             var enumlisttt = new Enum[] { EDTx.UserControlExpedition_extButtonLoadRoute_ToolTip, EDTx.UserControlExpedition_extButtonNew_ToolTip, EDTx.UserControlExpedition_extButtonSave_ToolTip, EDTx.UserControlExpedition_extButtonDelete_ToolTip, 
                                           EDTx.UserControlExpedition_extButtonImportFile_ToolTip, EDTx.UserControlExpedition_extButtonImportRoute_ToolTip, EDTx.UserControlExpedition_extButtonImportNavRoute_ToolTip, EDTx.UserControlExpedition_extButtonNavRouteLatest_ToolTip, 
                                           EDTx.UserControlExpedition_extButtonAddSystems_ToolTip, 
@@ -126,7 +130,6 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            closing = true;
             autoupdateedsm.Stop();
 
             DGVSaveColumnLayout(dataGridView);
@@ -141,7 +144,7 @@ namespace EDDiscovery.UserControls
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
         }
 
-        private void Discoveryform_OnNoteChanged(object arg1, HistoryEntry arg2, bool arg3)
+        private void Discoveryform_OnNoteChanged(object arg1, HistoryEntry arg2)
         {
             UpdateSystemRows();
         }
@@ -266,7 +269,11 @@ namespace EDDiscovery.UserControls
             bool showorganics = displayfilters.Contains("organics");
             bool disablegmoshow = displayfilters.Contains("gmoinfooff");
 
-
+            ISystem startsystem = await LookupSystem(0, edsmcheck);
+            ISystem endsystem = await LookupSystem(dataGridView.GetLastRowWithValue(), edsmcheck);
+            if (IsClosed)
+                return;
+                
             for (int rowindex = rowstart; rowindex <= Math.Min(rowendinc, dataGridView.Rows.Count-1); rowindex++)
             {
                 DataGridViewRow row = dataGridView.Rows[rowindex];
@@ -276,10 +283,7 @@ namespace EDDiscovery.UserControls
                 if (!sysname.HasChars())
                     continue;
 
-                string note = "";
-                SystemNoteClass sysnote = SystemNoteClass.GetNoteOnSystem(sysname);
-                if (sysnote != null && !string.IsNullOrWhiteSpace(sysnote.Note))
-                    note = sysnote.Note;
+                string note = SystemNoteClass.GetTextNotesOnSystem(sysname);
 
                 BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sysname);
                 if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
@@ -303,8 +307,7 @@ namespace EDDiscovery.UserControls
                 var lookup = edsmcheck;     // here so you can turn it off for speed
                 var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, lookup);
                 //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
-
-                if (closing)        // because its async, the await returns with void, and then this is called back, and we may be closing.
+                if (IsClosed)        // because its async, the await returns with void, and then this is called back, and we may be closing.
                     return;
 
                 row.Tag = sys;      // store tag
@@ -316,7 +319,6 @@ namespace EDDiscovery.UserControls
                 if ( sys == null )      // no system found
                 {
                     row.Cells[Distance.Index].Tag = null;
-
                     row.Cells[Distance.Index].Value =
                     row.Cells[ColumnX.Index].Value =
                     row.Cells[ColumnY.Index].Value =
@@ -344,7 +346,7 @@ namespace EDDiscovery.UserControls
 
                     StarScan.SystemNode sysnode = await discoveryform.history.StarScan.FindSystemAsync(sys, lookup);
 
-                    if (closing)        // because its async, may be called during closedown. stop this
+                    if (IsClosed)        // because its async, may be called during closedown. stop this
                         return;
 
                     if (sysnode != null)
@@ -386,40 +388,58 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            ISystem firstsys = null;
-            ISystem lastsys = null;
-            double totaldistance = 0;
-
-            for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
             {
-                var row = dataGridView.Rows[rowindex];
-                var sys = row.Tag as ISystem;
-                if ( sys?.HasCoordinate ?? false)
-                {
-                    if (firstsys == null)
-                        firstsys = sys;
-                    lastsys = sys;
+                ISystem firstsys = null;
+                ISystem lastsys = null;
+                double totaldistance = 0;
 
-                    double? ds = row.Cells[Distance.Index].Tag as double?;
-                    if (ds != null)
+                for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
+                {
+                    var row = dataGridView.Rows[rowindex];
+                    var sys = row.Tag as ISystem;
+
+                    if (sys?.HasCoordinate ?? false)
                     {
-                        totaldistance += ds.Value;
+                        if (firstsys == null)
+                            firstsys = sys;
+
+                        lastsys = sys;
+
+                        double? ds = row.Cells[Distance.Index].Tag as double?;
+                        if (ds != null)
+                        {
+                            totaldistance += ds.Value;
+                        }
+
+                        row.Cells[ColumnDistStart.Index].Value = startsystem != null ? sys.Distance(startsystem).ToString("N1") : "";
+                        row.Cells[ColumnDistanceRemaining.Index].Value = endsystem != null ? sys.Distance(endsystem).ToString("N1") : "";
+                    }
+                    else
+                    {
+                        row.Cells[ColumnDistStart.Index].Value = row.Cells[ColumnDistanceRemaining.Index].Value = "";
                     }
                 }
-            }
 
-            if (firstsys != null)      // therefore lastsys must too
-            {
-                txtCmlDistance.Text = totaldistance.ToString("0.#") + " ly";
-                txtP2PDIstance.Text = firstsys.Distance(lastsys).ToString("0.#") + "ly";
+                if (firstsys != null)      // therefore lastsys must too
+                {
+                    txtCmlDistance.Text = totaldistance.ToString("0.#") + " ly";
+                    txtP2PDIstance.Text = firstsys.Distance(lastsys).ToString("0.#") + "ly";
+                }
+                else
+                    txtCmlDistance.Text = txtP2PDIstance.Text = "";
             }
-            else
-                txtCmlDistance.Text = txtP2PDIstance.Text = "";
 
             Cursor = Cursors.Default;
 
             updatingsystemrows = false;
         }
+
+        private Task<ISystem> LookupSystem(int row, bool checkedsm)
+        {
+            string name = (row >= 0 && row < dataGridView.RowCount && dataGridView[0, row].Value != null) ? (string)dataGridView[0, row].Value : "xxxRubbishxxx";
+            return SystemCache.FindSystemAsync(name, null, checkedsm);
+        }
+
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
         {
@@ -486,7 +506,7 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerStartDate.Checked)
             {
-                route.StartDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerStartDate.Value.Date);
+                route.StartDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.Date);
                 if (dateTimePickerStartTime.Checked)
                     route.StartDateUTC += dateTimePickerStartTime.Value.TimeOfDay;
             }
@@ -497,7 +517,7 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerEndDate.Checked)
             {
-                route.EndDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value.Date);
+                route.EndDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.Date);
                 route.EndDateUTC += dateTimePickerEndTime.Checked ? dateTimePickerEndTime.Value.TimeOfDay : new TimeSpan(23, 59, 59);
             }
             else
@@ -606,23 +626,26 @@ namespace EDDiscovery.UserControls
 
             var savedroutes = SavedRouteClass.GetAllSavedRoutes();
 
-            dropdown.FitImagesToItemHeight = true;
-            dropdown.Items = savedroutes.Select(x => x.Name).ToList();
-            dropdown.FlatStyle = FlatStyle.Popup;
-            dropdown.PositionBelow(sender as Control);
-            dropdown.SelectedIndexChanged += (s, ea) =>
+            if (savedroutes.Count > 0)
             {
-                if (PromptAndSaveIfNeeded())
+                dropdown.FitImagesToItemHeight = true;
+                dropdown.Items = savedroutes.Select(x => x.Name).ToList();
+                dropdown.FlatStyle = FlatStyle.Popup;
+                dropdown.PositionBelow(sender as Control);
+                dropdown.SelectedIndexChanged += (s, ea) =>
                 {
-                    string name = savedroutes[dropdown.SelectedIndex].Name;
-                    savedroutes = SavedRouteClass.GetAllSavedRoutes();      // reload, in case reselecting saved route
-                    loadedroute = savedroutes.Find(x => x.Name == name);        // if your picking the same route again for some strange reason
-                    DisplayRoute(loadedroute);
-                }
-            };
+                    if (PromptAndSaveIfNeeded())
+                    {
+                        string name = savedroutes[dropdown.SelectedIndex].Name;
+                        savedroutes = SavedRouteClass.GetAllSavedRoutes();      // reload, in case reselecting saved route
+                        loadedroute = savedroutes.Find(x => x.Name == name);        // if your picking the same route again for some strange reason
+                        DisplayRoute(loadedroute);
+                    }
+                };
 
-            ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
-            dropdown.Show(this.FindForm());
+                ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
+                dropdown.Show(this.FindForm());
+            }
         }
 
         private void extButtonNew_Click(object sender, EventArgs e)
@@ -735,7 +758,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < navroutes.Count; i++)
                 {
                     var jroute = navroutes[i].journalEntry as JournalNavRoute;
-                    navroutefilter.AddStandardOption(i.ToStringInvariant(), navroutes[i].EventTimeUTC.ToLocalTime().ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
+                    navroutefilter.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(navroutes[i].EventTimeUTC).ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
                 }
 
                 navroutefilter.SaveSettings = (s, o) =>
@@ -1241,7 +1264,15 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            TargetHelpers.SetTargetSystem(this, discoveryform, (string)obj);
+
+            ISystem sc = SystemCache.FindSystem((string)obj);       //TBD warning not found?
+            if (sc != null && sc.HasCoordinate)
+            {
+                if (TargetClass.SetTargetOnSystemConditional(sc.Name, sc.X, sc.Y, sc.Z))
+                {
+                    discoveryform.NewTargetSet(this);
+                }
+            }
         }
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1263,7 +1294,7 @@ namespace EDDiscovery.UserControls
             if (sc == null)
                 sc = new SystemClass((string)obj,0,0,0);
 
-            TargetHelpers.ShowBookmarkForm(this, discoveryform, sc, null, false);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, sc, null);
             UpdateSystemRows();
         }
 
@@ -1290,7 +1321,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.Column.Index == 0)
                 e.SortDataGridViewColumnAlphaInt();
-            else if (e.Column.Index == 1 || (e.Column.Index>=3 && e.Column.Index <= 10))
+            else if (e.Column.Index == Distance.Index || (e.Column.Index>=ColumnX.Index && e.Column.Index <= KnownBodies.Index))
                 e.SortDataGridViewColumnNumeric();
 
         }

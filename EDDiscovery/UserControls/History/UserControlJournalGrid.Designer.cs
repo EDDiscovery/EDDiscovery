@@ -286,7 +286,6 @@ namespace EDDiscovery.UserControls
             // buttonField
             // 
             this.buttonField.Image = global::EDDiscovery.Icons.Controls.FieldFilter;
-            this.buttonField.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonField.Location = new System.Drawing.Point(387, 1);
             this.buttonField.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonField.Name = "buttonField";

@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
+            this.ColumnIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCentreDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -101,10 +102,12 @@ namespace EDDiscovery.UserControls
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSortByColumnName = false;
             this.dataGridView.CheckEDSM = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnIndex,
             this.ColumnStar,
             this.ColumnCentreDistance,
             this.ColumnCurrentDistance,
@@ -120,6 +123,13 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Size = new System.Drawing.Size(788, 602);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
+            // 
+            // ColumnIndex
+            // 
+            this.ColumnIndex.FillWeight = 40F;
+            this.ColumnIndex.HeaderText = "Index";
+            this.ColumnIndex.Name = "ColumnIndex";
+            this.ColumnIndex.ReadOnly = true;
             // 
             // ColumnStar
             // 
@@ -182,6 +192,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private EDDiscovery.UserControls.Search.DataGridViewStarResults dataGridView;
         private FindSystemsUserControl findSystemsUserControl;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCentreDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;

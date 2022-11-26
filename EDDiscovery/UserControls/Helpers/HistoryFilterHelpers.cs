@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
             {
                 List<HistoryEntry> ret = he.Where(s => BaseUtils.ConditionLists.CheckConditionWithObjectData(cond.List,
                                                     s.journalEntry,
-                                                    new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.SNC?.Note ?? "") },
+                                                    new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.GetNoteText) },
                                                     out string eliststring, out BaseUtils.ConditionLists.ErrorClass errclass) == true).
                                                     Select(x => x).ToList();
                 return ret;
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
             if (filterbyeventname.TryGetValue(he.journalEntry.EventFilterName, out filterrules) || filterbyeventname.TryGetValue("All", out filterrules))     // if we have rules for this event..
             {
-                filtervars["Note"] = he.SNC?.Note ?? "";  // add in SNC Note
+                filtervars["Note"] = he.GetNoteText;  // add in SNC Note
 
                 var fres = ConditionLists.CheckConditionWithObjectData(filterrules, he.journalEntry, new Variables[] { filtervars }, out string errlist, out ConditionLists.ErrorClass errclass);
 

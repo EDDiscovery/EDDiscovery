@@ -65,10 +65,10 @@ namespace EDDiscovery
 
         #region Callbacks from us
         public event Action<Object> OnNewTarget;
-        public event Action<Object, HistoryEntry, bool> OnNoteChanged;  // UI.Note has been updated attached to this note
+        public event Action<Object, HistoryEntry> OnNoteChanged;        // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action OnAddOnsChanged;                            // add on changed
-        public event Action OnPanelAdded;                            // add on changed
+        public event Action OnPanelAdded;                               // add on changed
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
@@ -79,11 +79,11 @@ namespace EDDiscovery
         #endregion
 
         #region Events due to EDDiscoveryControl 
+        public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }       
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
-        public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
         public event Action<long, long> OnSyncComplete { add { Controller.OnSyncComplete += value; } remove { Controller.OnSyncComplete -= value; } }
 
@@ -107,7 +107,7 @@ namespace EDDiscovery
         public void ChangeToCommander(int id)
         {
             EDCommander.CurrentCmdrID = id;
-            Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+            Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause Display to be called as some point
         }
         #endregion
 
@@ -116,7 +116,6 @@ namespace EDDiscovery
         private EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
-        private EDDiscovery._3DMap.MapManager old3DMap;
         private BaseUtils.GitHubRelease newRelease;
         private Timer periodicchecktimer;
         private bool in_system_sync = false;        // between start/end sync of databases
@@ -187,7 +186,7 @@ namespace EDDiscovery
 
             HttpCom.LogPath = logpath;
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Init config finished");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Init config finished");
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
@@ -211,7 +210,7 @@ namespace EDDiscovery
             string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");
             BaseUtils.Icons.IconSet.Instance.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " ED init");        // STAGE 1
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF init");        // STAGE 1
 
             msg.Invoke("Loading Translations");
 
@@ -255,9 +254,8 @@ namespace EDDiscovery
 
             ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
-            old3DMap = new EDDiscovery._3DMap.MapManager(this);
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
             msg.Invoke("Applying Themes");
 
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
@@ -272,14 +270,16 @@ namespace EDDiscovery
             ThemeList = new ExtendedControls.ThemeList();
             ThemeList.LoadBaseThemes();                                         // default themes and ones on disk loaded
             ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(), "*.eddtheme"); // load any file stored themes
-            ThemeList.SetThemeByName("Windows Default");                        // this is the default theme we use
 
             if (!EDDOptions.Instance.NoTheme)
             {
+                ThemeList.SetThemeByName("Elite Verdana Small");                // this is the default theme we use normally
                 var theme = GetThemeFromDB();
                 if (theme != null)
                     ExtendedControls.Theme.Current = theme;
             }
+            else
+                ThemeList.SetThemeByName("Windows Default");                    // this is the default theme we use for notheme
 
             if (EDDOptions.Instance.FontSize > 0)
                 ExtendedControls.Theme.Current.FontSize = EDDOptions.Instance.FontSize;
@@ -294,7 +294,7 @@ namespace EDDiscovery
 
             // create the action controller and install commands before we executre tabs, since some tabs need these set up
 
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { });
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
@@ -377,7 +377,7 @@ namespace EDDiscovery
             // ---------------------------------------------------------------- DLL Load
 
             msg.Invoke("Loading Extension DLLs");
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " DLL setup");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF DLL setup");
 
             EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(EDDOptions.Instance.DLLAppDirectory());      // any needed assemblies from here
             var dllexe = EDDOptions.Instance.DLLExeDirectory();     // and possibly from here, may not be present
@@ -435,7 +435,7 @@ namespace EDDiscovery
 
             //---------------------------------------------------------------------- Tool tips
 
-            var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_show3DMapsToolStripMenuItem, 
+            var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_exitToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, 
@@ -472,7 +472,7 @@ namespace EDDiscovery
             // ---------------------------------------------------------------- open all the major tabs except the built in ones
 
             msg.Invoke("Loading Tabs");
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");        // STAGE 3 Tabs
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Creating major tabs Now");        // STAGE 3 Tabs
 
             if (EDDOptions.Instance.TabsReset)
             {
@@ -517,26 +517,26 @@ namespace EDDiscovery
 
             helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this, contextMenuStripTabs.PointToScreen(new Point(0, 0)), tabControlMain.LastTabClicked); };
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load");
 
             if (!EDDOptions.Instance.NoTabs)        // load the tabs so when shown is done they are there..
                 tabControlMain.LoadTabs();
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load Complete");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
         }
 
 
         // OnShown is called once
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF shown");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF shown");
 
             if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
             {
@@ -585,7 +585,8 @@ namespace EDDiscovery
                 ScreenShotCaptured?.Invoke(outfile, imagesize);         // tell others screen shot is captured
             };
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Web");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Web");
+
             WebServerControl(EDDConfig.Instance.WebServerEnable, EDDConfig.Instance.WebServerPort);
 
             tabControlMain.SelectedIndexChanged += (snd, ea) =>
@@ -622,7 +623,7 @@ namespace EDDiscovery
                 if (changed)
                 {
                     DLLManager.UnLoad();
-                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Reload DLL");
+                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Reload DLL");
                     dllresults = DLLStart(ref dllsalloweddisallowed);
                 }
             }
@@ -639,7 +640,7 @@ namespace EDDiscovery
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
             // Bindings
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Bindings");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
 
             if (actioncontroller.FrontierBindings.FileLoaded != null)
             {
@@ -653,7 +654,7 @@ namespace EDDiscovery
             else
                 LogLine("Frontier bindings did not load");
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Notifications");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
 
             // Notifications
 
@@ -703,7 +704,7 @@ namespace EDDiscovery
 
             // Now the installer
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Installer");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Installer");
             Installer.CheckForNewInstallerAsync((rel) =>  // in thread
             {
                 newRelease = rel;
@@ -826,7 +827,12 @@ namespace EDDiscovery
 
             DLLManager.Shown();     // tell the DLLs form has shown
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " End shown");
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF End shown");
+
+            // test code - open all types of panel
+            //foreach (PanelInformation.PanelIDs pc in Enum.GetValues(typeof(PanelInformation.PanelIDs))) { if (pc != PanelInformation.PanelIDs.GroupMarker) tabControlMain.EnsureMajorTabIsPresent(pc, false); }
+            // test code - close down all panels except tab 0
+            //foreach (PanelInformation.PanelIDs pc in Enum.GetValues(typeof(PanelInformation.PanelIDs))) { if (pc != PanelInformation.PanelIDs.GroupMarker) { TabPage p = tabControlMain.GetMajorTab(pc); if (p != null && p.TabIndex>0) tabControlMain.RemoveTab(p); } }
         }
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
@@ -989,7 +995,7 @@ namespace EDDiscovery
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             e.Cancel = disallowclose;
-            System.Diagnostics.Debug.WriteLine($"Form closing called {Controller.PendingClose} {disallowclose}");
+            System.Diagnostics.Debug.WriteLine($"EDF form closing called {Controller.PendingClose} {disallowclose}");
 
             if (!Controller.PendingClose)       // if not shutting down..
             {
@@ -1022,9 +1028,6 @@ namespace EDDiscovery
             if (WebServer.Running)
                 WebServer.Stop();
 
-            // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note); });
-
             ScreenshotConverter.SaveSettings();
             ScreenshotConverter.Stop();
 
@@ -1037,6 +1040,7 @@ namespace EDDiscovery
             PopOuts.SaveCurrentPopouts();
 
             notifyIconEDD.Visible = false;
+            notifyIconEDD.Dispose();
 
             actioncontroller.CloseDown();
 
@@ -1056,10 +1060,6 @@ namespace EDDiscovery
             tabControlMain.EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Settings, true);
         }
 
-        private void showold3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenOld3DMap();
-        }
 
         private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1123,7 +1123,7 @@ namespace EDDiscovery
 
         private void Read21Folders(bool force)
         {
-            if (Controller.history.CommanderId >= 0)
+            if (Controller.history.IsRealCommanderId)
             {
                 EDCommander cmdr = EDCommander.Current;
                 if (cmdr != null)
@@ -1334,7 +1334,7 @@ namespace EDDiscovery
             else
             {
                 comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
-                if (history.CommanderId == -1)
+                if (history.CommanderId == -1)  // is hidden log
                 {
                     comboBoxCommander.SelectedIndex = 0;
                 }
