@@ -17,6 +17,7 @@ SECTION UserControlBookmarks
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Importar marcadores a EDD desde un archivo CSV"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exportar marcadores a archivo CSV"
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" => "Editar marcador en el sistema actual"
+.extButtonNewRegion.ToolTip: "New Region Bookmark" @
 
 SECTION UserControlCombatPanel
 
@@ -162,6 +163,7 @@ SECTION UserControlDiscoveries
 
 SECTION SearchStars
 
+.ColumnIndex: "Index" @
 .ColumnStar: "Star" => "Estrella"
 .ColumnCentreDistance: "Centre Distance" => "Distancia al centro"
 .ColumnCurrentDistance: "Current Distance" => "Distancia actual"
@@ -247,6 +249,8 @@ SECTION UserControlExpedition
 .SystemName: "System Name" => "Nombre del sistema"
 .Distance: "Dist." => "Dist."
 .Note: "Note" => "Nota"
+.ColumnDistStart: "Dist Start" @
+.ColumnDistanceRemaining: "Dist Remaining" @
 .labelCml: "Cml Distance:" => "Distancia Cml: "
 .labelP2P: "P2P Distance:" => "Distancia P2P: "
 .labelEndDate: "End Date:" => "Fecha final: "
@@ -267,7 +271,7 @@ SECTION UserControlExpedition
 .Specify: "Please specify a name for the route." => "Por favor, especifique un nombre para la ruta"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "El nombre de la ruta actual entra en conflicto con una expedición conocida.\r\nPor favor, especifique un nuevo nombre para guardar los cambios"
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Advertencia: la ruta ya existe. ¿Le gustaría sobrescribirla?"
-.EDSMUnk: "System not known to EDSM" => "Sistema no conocido por EDSM"
+.EDSMUnk: "System not known" => "Sistema no conocido por EDSM"
 .NoScanInfo: "No local scan info" @
 
 SECTION UserControlJournalGrid
@@ -920,11 +924,58 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "Artículo"
 .tabControlCustomStats.tabPageGeneral.Information: "Information" => "Información"
 .tabControlCustomStats.tabPageTravel: "Travel" => "Viaje"
-.tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" => "Tiempo"
 .tabControlCustomStats.tabPageScan: "Scan" => "Escanear"
-.tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Tiempo"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "En el juego"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "Por Nave"
+.tabControlCustomStats.tabPageRanks: "Ranks" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" @
+.tabControlCustomStats.tabPageLedger: "Ledger" @
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" @
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnNumericCredits: "Credits" @
+.tabControlCustomStats.tabPageCombat: "Combat" @
+.Powerplay: "Powerplay" @
+.Squadron: "Squadron" @
+.NoTrip: "No Trip" @
+.BountiesThargoid: "Bounties on Thargoids" @
+.BountiesOnFootNPC: "Bounties on On Foot NPC" @
+.BountiesSkimmers: "Bounties on Skimmers" @
+.ShipsUnknown: "Ships Unknown Rank" @
+.ShipsElite: "Ships Elite Rank" @
+.ShipsDeadly: "Ships Deadly Rank" @
+.ShipsDangerous: "Ships Dangerous Rank" @
+.ShipsMaster: "Ships Master Rank" @
+.ShipsExpert: "Ships Expert Rank" @
+.ShipsCompetent: "Ships Competent Rank" @
+.ShipsNovice: "Ships Novice Rank" @
+.ShipsHarmless: "Ships Harmless Rank" @
+.PVPElite: "PVP Elite Rank" @
+.PVPDeadly: "PVP Deadly Rank" @
+.PVPDangerous: "PVP Dangerous Rank" @
+.PVPMaster: "PVP Master Rank" @
+.PVPExpert: "PVP Expert Rank" @
+.PVPCompetent: "PVP Competent Rank" @
+.PVPNovice: "PVP Novice Rank" @
+.PVPHarmless: "PVP Harmless Rank" @
+.Bounties: "Bounties" @
+.Bountyvalue: "Bounty Value" @
+.Bountiesonships: "Bounties on Ships" @
+.Crimes: "Crimes" @
+.CrimeCost: "Crime Cost" @
+.FactionKillBonds: "Faction Kill Bonds" @
+.FKBValue: "FKB Value" @
+.InterdictionPlayerSucceeded: "Interdictions Player Succeeded" @
+.InterdictionPlayerFailed: "Interdictions Player Failed" @
+.InterdictionNPCSucceeded: "Interdictions NPC Succeeded" @
+.InterdictionNPCFailed: "Interdictions NPC Failed" @
+.InterdictedPlayerSucceeded: "Interdicted Player Succeeded" @
+.InterdictedPlayerFailed: "Interdicted Player Failed" @
+.InterdictedNPCSucceeded: "Interdicted NPC Succeeded" @
+.InterdictedNPCFailed: "Interdicted NPC Failed" @
+.PVPKills: "PVP Kills" @
 .TotalNoofjumps: "Total No of jumps" => "No total de saltos: "
 .FSDjumps: "FSD jumps" => "FSD Jumps"
 .JumpHistory: "FSD Jump History" => "Historial de saltos"
@@ -1032,13 +1083,14 @@ SECTION UserControlSysInfo
 .toolStripSkinny: "When transparent, use skinny look" => "Cuando sea transparente, usa un look delgado"
 .toolStripReset: "Reset" => "Reiniciar"
 .toolStripRemoveAll: "Remove All" => "Eliminar todo"
+.displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantenga presionada la tecla Ctrl y luego arrastre hacia la izquierda un elemento para reposicionar, hay 8 columnas disponibles"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Distancia al objetivo"
 .textBoxTarget.ToolTip: "Sets the target" => "Establece el objetivo"
 .labelStationFaction: "Faction" => "Facción"
 .extButtonEDSMTarget: "EDSM" => "EDSM"
 .labelSecurity: "Security" @
-.labelJumpRange: "Jump" => "Salto"
+.labelJumpRange: "Range" => "Salto"
 .labelTarget: "Target" => "Objetivo"
 .labelSysName: "System" => "Sistema"
 .labelGamemode: "Mode" => "Modo"
@@ -1056,7 +1108,6 @@ SECTION UserControlSysInfo
 .labelFuel: "Fuel" => "Combustible"
 .labelBodyName: "Body" => "Cuerpo"
 .labelPosition: "Pos" => "Pos"
-.labelNote: "Note" => "Nota"
 .labelMissions: "Missions" => "Misiones"
 .labelEconomy: "Economy" => "Economía"
 .labelGov: "Gov" => "Gobierno"
@@ -1064,6 +1115,7 @@ SECTION UserControlSysInfo
 .labelState: "State" => "Estado"
 .labelSolDist: "Sol" => "Sol"
 .labelHomeDist: "Home" => "Hogar"
+.labelNextDestination: "Dest" @
 .NoMissions: "No Missions" => "Sin misiones"
 .SysUnk: "System unknown to EDSM" => "Sistema desconocido para EDSM"
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "La posición es {0:0.00}, {1:0.00}, {2:0.00}"
@@ -1106,6 +1158,7 @@ SECTION UserControlTravelGrid
 .SETSTSTOP: "Set Start/Stop point for travel calculations" => "Establecer punto de inicio/parada para cálculos de recorrido"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "No se pudo encontrar el sistema - no se ha sincronizado o EDSM no está disponible"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Confirme que desea eliminar esta entrada\r\nPuede volver a aparecer si se vuelven a escanear los registros"
+.quickMarkToolStripMenuItem: "Marked" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Eliminar ordenación de columnas"
 .gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "Ir a la entrada"
 .setNoteToolStripMenuItem: "Set Note" => "Establecer nota"
@@ -1353,6 +1406,9 @@ SECTION FilterSelector
 .MicroResources: "Micro Resources" @
 .Suits: "Suits" @
 .Carrier: "Carrier" @
+.NewGroup: "Create new group" @
+.Newgroupname: "Enter name of new group" @
+.Confirmremoval: "Confirm removal of" @
 
 SECTION UserControlCommonBase
 

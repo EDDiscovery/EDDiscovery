@@ -25,7 +25,6 @@ SECTION StartUp
 
 SECTION DataGridView
 
-
 .WordWrap: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
 
 SECTION SafeModeForm

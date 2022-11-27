@@ -17,6 +17,7 @@ SECTION UserControlBookmarks
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Импорт закладок из csv-файла в EDD"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Экспорт закладок в csv-файл"
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
+.extButtonNewRegion.ToolTip: "New Region Bookmark" @
 
 SECTION UserControlCombatPanel
 
@@ -162,6 +163,7 @@ SECTION UserControlDiscoveries
 
 SECTION SearchStars
 
+.ColumnIndex: "Index" @
 .ColumnStar: "Star" => "Система"
 .ColumnCentreDistance: "Centre Distance" => "Расстояние от центра"
 .ColumnCurrentDistance: "Current Distance" => "Текущее расстояние"
@@ -247,6 +249,8 @@ SECTION UserControlExpedition
 .SystemName: "System Name" => "Название системы"
 .Distance: "Dist." => "Расстояние"
 .Note: "Note" => "Примечание"
+.ColumnDistStart: "Dist Start" @
+.ColumnDistanceRemaining: "Dist Remaining" @
 .labelCml: "Cml Distance:" => "Суммарное: "
 .labelP2P: "P2P Distance:" => "Точка-точка: "
 .labelEndDate: "End Date:" => "Окончание: "
@@ -267,7 +271,7 @@ SECTION UserControlExpedition
 .Specify: "Please specify a name for the route." => "Введите название маршрута"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Текущее название маршрута конфликтует с названием известной экспедиции\r\nВыберите другое имя."
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Внимание: маршрут уже существует. Вы действительно хотите его перезаписать?"
-.EDSMUnk: "System not known to EDSM" => "Система неизвестна в EDSM"
+.EDSMUnk: "System not known" => "Система неизвестна в EDSM"
 .NoScanInfo: "No local scan info" @
 
 SECTION UserControlJournalGrid
@@ -920,11 +924,58 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "Наименование"
 .tabControlCustomStats.tabPageGeneral.Information: "Information" => "Информация"
 .tabControlCustomStats.tabPageTravel: "Travel" => "Полеты"
-.tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" => "Время"
 .tabControlCustomStats.tabPageScan: "Scan" => "Сканы"
-.tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Время"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "По игре"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "По кораблям"
+.tabControlCustomStats.tabPageRanks: "Ranks" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" @
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" @
+.tabControlCustomStats.tabPageLedger: "Ledger" @
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" @
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnNumericCredits: "Credits" @
+.tabControlCustomStats.tabPageCombat: "Combat" @
+.Powerplay: "Powerplay" @
+.Squadron: "Squadron" @
+.NoTrip: "No Trip" @
+.BountiesThargoid: "Bounties on Thargoids" @
+.BountiesOnFootNPC: "Bounties on On Foot NPC" @
+.BountiesSkimmers: "Bounties on Skimmers" @
+.ShipsUnknown: "Ships Unknown Rank" @
+.ShipsElite: "Ships Elite Rank" @
+.ShipsDeadly: "Ships Deadly Rank" @
+.ShipsDangerous: "Ships Dangerous Rank" @
+.ShipsMaster: "Ships Master Rank" @
+.ShipsExpert: "Ships Expert Rank" @
+.ShipsCompetent: "Ships Competent Rank" @
+.ShipsNovice: "Ships Novice Rank" @
+.ShipsHarmless: "Ships Harmless Rank" @
+.PVPElite: "PVP Elite Rank" @
+.PVPDeadly: "PVP Deadly Rank" @
+.PVPDangerous: "PVP Dangerous Rank" @
+.PVPMaster: "PVP Master Rank" @
+.PVPExpert: "PVP Expert Rank" @
+.PVPCompetent: "PVP Competent Rank" @
+.PVPNovice: "PVP Novice Rank" @
+.PVPHarmless: "PVP Harmless Rank" @
+.Bounties: "Bounties" @
+.Bountyvalue: "Bounty Value" @
+.Bountiesonships: "Bounties on Ships" @
+.Crimes: "Crimes" @
+.CrimeCost: "Crime Cost" @
+.FactionKillBonds: "Faction Kill Bonds" @
+.FKBValue: "FKB Value" @
+.InterdictionPlayerSucceeded: "Interdictions Player Succeeded" @
+.InterdictionPlayerFailed: "Interdictions Player Failed" @
+.InterdictionNPCSucceeded: "Interdictions NPC Succeeded" @
+.InterdictionNPCFailed: "Interdictions NPC Failed" @
+.InterdictedPlayerSucceeded: "Interdicted Player Succeeded" @
+.InterdictedPlayerFailed: "Interdicted Player Failed" @
+.InterdictedNPCSucceeded: "Interdicted NPC Succeeded" @
+.InterdictedNPCFailed: "Interdicted NPC Failed" @
+.PVPKills: "PVP Kills" @
 .TotalNoofjumps: "Total No of jumps" => "Общее число прыжков"
 .FSDjumps: "FSD jumps" @
 .JumpHistory: "FSD Jump History" => "Всего прыжков"
@@ -1032,13 +1083,14 @@ SECTION UserControlSysInfo
 .toolStripSkinny: "When transparent, use skinny look" => "Использовать тонкий дизайн при включении прозрачности"
 .toolStripReset: "Reset" => "Сброс"
 .toolStripRemoveAll: "Remove All" => "Удалить все"
+.displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Удерживая клавишу Ctrl, щелкните левой кнопкой мыши и перетащите, чтобы переместить элемент. Доступно 8 столбцов"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Расстояние до цели"
 .textBoxTarget.ToolTip: "Sets the target" => "Выбрать цель"
 .labelStationFaction: "Faction" @
 .extButtonEDSMTarget: "EDSM" @
 .labelSecurity: "Security" @
-.labelJumpRange: "Jump" => "Прыжок"
+.labelJumpRange: "Range" => "Прыжок"
 .labelTarget: "Target" => "Цель"
 .labelSysName: "System" => "Система"
 .labelGamemode: "Mode" => "Режим"
@@ -1056,7 +1108,6 @@ SECTION UserControlSysInfo
 .labelFuel: "Fuel" => "Топливо"
 .labelBodyName: "Body" => "Тело"
 .labelPosition: "Pos" => "Полож."
-.labelNote: "Note" => "Прим."
 .labelMissions: "Missions" => "Миссии"
 .labelEconomy: "Economy" => "Эконом."
 .labelGov: "Gov" => "Правл."
@@ -1064,6 +1115,7 @@ SECTION UserControlSysInfo
 .labelState: "State" => "Сост."
 .labelSolDist: "Sol" @
 .labelHomeDist: "Home" => "Дом"
+.labelNextDestination: "Dest" @
 .NoMissions: "No Missions" => "Нет миссий"
 .SysUnk: "System unknown to EDSM" => "Этой системы нет в EDSM"
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "Положение {0:0.00},{1:0.00},{2:0.00}"
@@ -1106,6 +1158,7 @@ SECTION UserControlTravelGrid
 .SETSTSTOP: "Set Start/Stop point for travel calculations" => "Выбрать начальную/конечную метки для поиска маршрута"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Вы действительно хотите удалить эту запись?\r\nОна может появиться снова после повторного импорта журналов."
+.quickMarkToolStripMenuItem: "Marked" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Сбросить сортировку столбцов"
 .gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "Перейти к другой записи..."
 .setNoteToolStripMenuItem: "Set Note" => "Добавить примечание"
@@ -1353,6 +1406,9 @@ SECTION FilterSelector
 .MicroResources: "Micro Resources" @
 .Suits: "Suits" @
 .Carrier: "Carrier" @
+.NewGroup: "Create new group" @
+.Newgroupname: "Enter name of new group" @
+.Confirmremoval: "Confirm removal of" @
 
 SECTION UserControlCommonBase
 
