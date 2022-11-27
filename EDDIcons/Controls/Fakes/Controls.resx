@@ -490,9 +490,6 @@
   <data name="Map3D" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\map3d.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Popouts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\popouts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -612,5 +609,8 @@
   </data>
   <data name="NewRegion" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\NewRegion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Popout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Popout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

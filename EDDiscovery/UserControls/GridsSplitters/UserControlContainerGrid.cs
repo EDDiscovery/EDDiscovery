@@ -204,6 +204,8 @@ namespace EDDiscovery.UserControls
 
         private UserControlContainerResizable CreateInitPanel(UserControlCommonBase uccb)
         {
+            uccb.AutoScaleMode = AutoScaleMode.Inherit;     // as per major tab control, we set mode to inherit to prevent multi scaling
+
             UserControlContainerResizable uccr = new UserControlContainerResizable();
 
             PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(uccb.panelid);
@@ -222,6 +224,7 @@ namespace EDDiscovery.UserControls
             panelPlayfield.Controls.Add(uccr);
 
             //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " " + numopenedinsidealready);
+
             uccb.Init(discoveryform, dnum);
 
             return uccr;
@@ -359,10 +362,17 @@ namespace EDDiscovery.UserControls
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.PositionBelow(buttonExtPopOut);
+            popoutdropdown.FitImagesToItemHeight = true;
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
                 UserControlContainerResizable uccr = CreateInitPanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]));
-                // uccb init done above, contract states we now theme.
+
+                // uccb init done above, contract states we now scale then theme.
+                
+                var scale = this.FindForm().CurrentAutoScaleFactor();
+                System.Diagnostics.Trace.WriteLine($"Grid apply scaling to {uccr.Name} {scale}");
+                uccr.Scale(scale);       // scale and
+
                 ExtendedControls.Theme.Current.ApplyStd(uccr);
 
                 LoadLayoutPanel(uccr, uccr.control as UserControlCommonBase,

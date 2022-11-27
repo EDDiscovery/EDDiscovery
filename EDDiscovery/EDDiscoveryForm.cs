@@ -1428,6 +1428,7 @@ namespace EDDiscovery
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.PositionBelow(buttonExtPopOut);
+            popoutdropdown.FitImagesToItemHeight = true;
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
                 PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);

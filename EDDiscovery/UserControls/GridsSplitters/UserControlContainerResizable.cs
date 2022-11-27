@@ -39,9 +39,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init( UserControlCommonBase c, string title)
+        public void Init( UserControlCommonBase uccb, string title)
         {
-            control = c;
+            control = uccb;
             lcontroltext = new Label() { Top = margin, Left = margin, Text = title };
             Controls.Add(control);
             Controls.Add(lcontroltext);

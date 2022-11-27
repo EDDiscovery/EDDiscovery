@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
             {
                 int tagid = (int)c.Tag;
                 int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                System.Diagnostics.Trace.WriteLine($"SP: Make {uccb.panelid} tag {tagid} dno {displaynumber}");
+                System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.panelid} tag {tagid} dno {displaynumber}");
 
                 uccb.Init(discoveryform, displaynumber);
             });
@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
                     pi = PanelInformation.GetPanelInfoByPanelID(PanelInformation.PanelIDs.Log);      // make sure we have a valid one - can't return nothing
 
                 UserControlCommonBase uccb = PanelInformation.Create(pi.PopoutID);      // must return as we made sure pi is valid
-                uccb.AutoScaleMode = AutoScaleMode.Inherit;     // very very important and took 2 days to work out!
+                uccb.AutoScaleMode = AutoScaleMode.Inherit;     // very very important and took 2 days to work out! UCCB, as per major tab control, should be in inherit mode
                 uccb.Dock = DockStyle.Fill;
                 uccb.Tag = tagid;
                 uccb.Name = "UC-" + tagid.ToStringInvariant();
@@ -278,11 +278,11 @@ namespace EDDiscovery.UserControls
                     PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID((PanelInformation.PanelIDs)tabstrip.TagList[si]);  // must be valid, as it came from the taglist
                     Control c = PanelInformation.Create(pi.PopoutID);
                     var uccb = (c as UserControlCommonBase);
-                    uccb.AutoScaleMode = AutoScaleMode.Inherit;
+                    uccb.AutoScaleMode = AutoScaleMode.Inherit;     // must be in inherit mode to prevent multi scaling
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
                     tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
 
-                    System.Diagnostics.Trace.WriteLine("SP:Create Tab " + c.Name );
+                    System.Diagnostics.Trace.WriteLine("SplitterCreate Tab " + c.Name );
                     return c;
                 };
 
@@ -290,19 +290,22 @@ namespace EDDiscovery.UserControls
                 {
                     int tabstripid = (int)tab.Tag;       // tag from tab strip
                     int displaynumber = DisplayNumberOfSplitter(tabstripid);                         // tab strip - use tag to remember display id which helps us save context.
-                    UserControlCommonBase uc = ctrl as UserControlCommonBase;
+                    UserControlCommonBase uccb = ctrl as UserControlCommonBase;
 
-                    if (uc != null)
+                    if (uccb != null)
                     {
-                        System.Diagnostics.Trace.WriteLine("SP:Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
-                        uc.Init(discoveryform, displaynumber);      // init..
+                        System.Diagnostics.Trace.WriteLine("Splitter Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
+                        uccb.Init(discoveryform, displaynumber);      // init..
 
-                        uc.Scale(this.FindForm().CurrentAutoScaleFactor());       // keeping to the contract, scale and  
-                        ExtendedControls.Theme.Current.ApplyStd(uc);       // theme the uc. between init and set cursor
+                        var scale = this.FindForm().CurrentAutoScaleFactor();
+                        System.Diagnostics.Trace.WriteLine($"Splitter apply scaling to {uccb.Name} {scale}");
+                        uccb.Scale(scale);       // keeping to the contract, scale and theme the uc. between init and set cursor
 
-                        uc.SetCursor(ucursor_inuse);
-                        uc.LoadLayout();
-                        uc.InitialDisplay();
+                        ExtendedControls.Theme.Current.ApplyStd(uccb);     
+
+                        uccb.SetCursor(ucursor_inuse);
+                        uccb.LoadLayout();
+                        uccb.InitialDisplay();
                     }
 
                     AssignTHC();        // in case we added one

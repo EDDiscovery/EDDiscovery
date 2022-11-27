@@ -254,11 +254,13 @@ namespace EDDiscovery
 
         private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex)
         {
+            System.Diagnostics.Debug.WriteLine($"\nMajorTabControl create tab {ptype} {name} {posindex}");
+
             UserControls.UserControlCommonBase uccb = PanelInformation.Create(ptype);   // must create, since its a ptype.
             if (uccb == null)       // if ptype is crap, it returns null.. catch
                 return null;
 
-            uccb.AutoScaleMode = AutoScaleMode.Inherit;     // inherit will mean Font autoscale won't happen at attach
+            uccb.AutoScaleMode = AutoScaleMode.Inherit;     // inherit will mean Font autoscale won't happen at attach - very important. we keep control of scaling
             uccb.Dock = System.Windows.Forms.DockStyle.Fill;    // uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
             uccb.Location = new System.Drawing.Point(3, 3);
 
@@ -283,7 +285,6 @@ namespace EDDiscovery
                 }
             }
 
-            //System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", ptype, dn, posindex);
 
             int numoftab = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? 0 : (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1);
             if (uccb is UserControls.UserControlContainerSplitter && numoftab > 0)          // so history is a splitter, so first real splitter will be dn=100, adjust for it
@@ -295,6 +296,7 @@ namespace EDDiscovery
             uccb.Name = title;              // for debugging use
 
             TabPage page = new TabPage(title);
+            page.Name = "MajorTabPage " + title;
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
             page.Padding = new System.Windows.Forms.Padding(3); // this is to allow a pad around the sides
 
@@ -313,8 +315,15 @@ namespace EDDiscovery
             //Init control after it is added to the form
             uccb.Init(eddiscovery, dn);    // start the uccb up
 
-            uccb.Scale(this.FindForm().CurrentAutoScaleFactor());       // scale and
-            ExtendedControls.Theme.Current.ApplyStd(page);  // theme it.  Order as per the contract in UCCB
+            // the standard method is to scale then theme. Order as per the contract in UCCB. Uccb should be in AutoScaleInherit mode
+            // done in splitter, grid, popout the same
+            // and the uccb must be in AutoScaleMode.Inherit mode so it does end up double scaling
+
+            var scale = this.FindForm().CurrentAutoScaleFactor();
+            System.Diagnostics.Debug.WriteLine($"MajorTabControl apply scaling to {uccb.Name} {scale}");
+            uccb.Scale(scale);      
+
+            ExtendedControls.Theme.Current.ApplyStd(page); 
 
             page.ResumeLayout();
 

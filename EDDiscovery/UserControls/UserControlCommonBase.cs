@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
 
         public virtual void Creation(PanelInformation.PanelInfo p)      
         {
-            System.Diagnostics.Debug.WriteLine("Create UCCB " + this.Name + " of " + this.GetType().Name + " with " + p.PopoutID);
+            System.Diagnostics.Debug.WriteLine("UCCB Create " + this.Name + " of " + this.GetType().Name + " with " + p.PopoutID);
             panelid = p.PopoutID;
         }
 
@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
 
         public void Init(EDDiscoveryForm ed, int dn)
         {
-            System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
+            System.Diagnostics.Debug.WriteLine("UCCB Init " + this.Name + " of " + this.GetType().Name + " with " + dn);
             discoveryform = ed;
             displaynumber = dn;
             Init();
@@ -65,9 +65,11 @@ namespace EDDiscovery.UserControls
 
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
 
-        // For forms, the transparency key color is set by theme during UserControlForm init. The Init function above for a UC could override if required
-        // themeing and scaling happens at this point.  Init has a chance to make new controls if required to be autothemed/scaled.
-        // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab
+        // For forms, the transparency key color is set by theme during UserControlForm init.
+        // The Init function above for a UC could override if required
+        // themeing and scaling happens at this point.  Item should be in AutoScaleMode.Inherit to prevent double scaling
+        // Init has a chance to make new controls if required to be autothemed/scaled.
+        // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab, Grid:CreateInitPanel
 
         public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
         public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.

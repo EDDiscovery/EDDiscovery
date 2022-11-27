@@ -46,7 +46,6 @@ namespace EDDiscovery.Icons
         public static Image ReportIssue { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ReportIssue"); } }
         public static Image SafeModeHelp { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SafeModeHelp"); } }
         public static Image EditAddons { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EditAddons"); } }
-        public static Image Popouts { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Popouts"); } }
         public static Image Refresh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Refresh"); } }
         public static Image Exit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exit"); } }
         public static Image Map3D { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D"); } }

@@ -294,7 +294,7 @@ namespace EDDiscovery
             // buttonExtPopOut
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Popouts;
+            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Popout;
             this.buttonExtPopOut.Location = new System.Drawing.Point(342, 1);
             this.buttonExtPopOut.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtPopOut.Name = "buttonExtPopOut";

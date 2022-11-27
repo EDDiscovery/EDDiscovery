@@ -286,7 +286,6 @@
     <EmbeddedResource Include="Controls\ZoomIn.png" />
     <EmbeddedResource Include="Controls\ZoomOut.png" />
     <EmbeddedResource Include="Controls\ZoomToFit.png" />
-    <EmbeddedResource Include="Controls\Panels.png" />
     <EmbeddedResource Include="Controls\Tile.png" />
   </ItemGroup>
   <ItemGroup>
@@ -311,7 +310,7 @@
     <EmbeddedResource Include="Controls\Warning.png" />
     <EmbeddedResource Include="Panels\Map2D.png" />
     <EmbeddedResource Include="Controls\EditAddons.png" />
-    <EmbeddedResource Include="Controls\Popouts.png" />
+    <EmbeddedResource Include="Controls\Panels.png" />
     <EmbeddedResource Include="Controls\Refresh.png" />
     <EmbeddedResource Include="Controls\CheckForNewRelease.png" />
     <EmbeddedResource Include="Controls\DiscordChat.png" />

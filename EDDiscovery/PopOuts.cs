@@ -99,25 +99,25 @@ namespace EDDiscovery
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             // uccb creation of selected panel
-            UserControlCommonBase ctrl = PanelInformation.Create(selected);
+            UserControlCommonBase uccb = PanelInformation.Create(selected);
 
             PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByPanelID(selected);
 
-            if (ctrl != null && poi != null )
+            if (uccb != null && poi != null )
             {
                 // we make up the title and refname based on how many previously opened of this type
                 int numopened = usercontrolsforms.CountOf(selected) + 1;
                 string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
 
-                System.Diagnostics.Trace.WriteLine("Popout Make " + windowtitle + " ucf " + ctrl.GetType().Name);
+                System.Diagnostics.Trace.WriteLine("Popout Make " + windowtitle + " ucf " + uccb.GetType().Name);
 
                 //System.Diagnostics.Debug.WriteLine("TCF init");
-                tcf.Init(ctrl, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
+                tcf.Init(uccb, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
                              ExtendedControls.Theme.Current.LabelColor, ExtendedControls.Theme.Current.SPanelColor, ExtendedControls.Theme.Current.TransparentColorKey);
 
                 //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
-                ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
+                uccb.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
 
                 ExtendedControls.Theme.Current.ApplyStd(tcf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
 
@@ -127,7 +127,7 @@ namespace EDDiscovery
                 discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
 
-            return ctrl;
+            return uccb;
         }
 
         public bool AllowClose()

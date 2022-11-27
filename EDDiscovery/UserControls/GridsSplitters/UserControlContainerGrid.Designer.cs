@@ -85,7 +85,7 @@
             // buttonExtPopOut
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Panels;
+            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Popout;
             this.buttonExtPopOut.Location = new System.Drawing.Point(3, 3);
             this.buttonExtPopOut.Name = "buttonExtPopOut";
             this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
