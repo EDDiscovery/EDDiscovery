@@ -70,13 +70,16 @@ namespace EDDiscovery.Forms
             webbrowser.NewWindow += Webbrowser_NewWindow;
             webbrowser.ScriptErrorsSuppressed = true;
             panelWebBrowser.Controls.Add(webbrowser);
-            webbrowser.DocumentText =
+            if (Properties.Resources.URLReleaseVideo.HasChars() && !Properties.Resources.URLReleaseVideo.Contains("DISABLE"))
+            {
+                webbrowser.DocumentText =
                 "<html>" +
                 "<head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"/></head>" +
                 "<body style=\"margin: 0\">" +
                 $"<iframe style=\"display: block; border: none; height: 100vh; width: 100vw\" src=\"{Properties.Resources.URLReleaseVideo}\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>" +
                 "</body>" +
                 "</html>";
+            }
         }
 
         protected override void OnShown(EventArgs e)

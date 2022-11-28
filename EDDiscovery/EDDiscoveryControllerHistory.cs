@@ -301,8 +301,14 @@ namespace EDDiscovery
 
                 FrontierCAPI.Disconnect();         // Disconnect capi from current user, but don't clear their credential file
 
+                if (EDCommander.Current.LegacyCommander)
+                    LogLineHighlight("Console commander access temp withdrawn due to update 14");
+
                 // available, and not hidden commander, and we have logged in before
-                if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && FrontierCAPI.GetUserState(EDCommander.Current.Name) != CAPI.CompanionAPI.UserState.NeverLoggedIn)
+                if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && 
+                                FrontierCAPI.GetUserState(EDCommander.Current.Name) != CAPI.CompanionAPI.UserState.NeverLoggedIn && 
+                                // and for now, no legacy or console commanders
+                                !EDCommander.Current.LegacyCommander && !EDCommander.Current.ConsoleCommander )
                 {
                     Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Login with CAPI");
 

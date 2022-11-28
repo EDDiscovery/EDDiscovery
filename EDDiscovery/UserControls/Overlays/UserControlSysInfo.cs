@@ -61,10 +61,10 @@ namespace EDDiscovery.UserControls
 
         const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << BitSelEDSMButtonsNextLine);
 
-        private int[] ItemSize = new int[]      // size of items in HorzPosititons
+        private int[] ItemSize = new int[]      // size of items in HorzPosititons (1/2/3/4 etc)
         {
             2,2,1,2,        // 0    - small: Visits
-            2,2,2,2,        // 4
+            2,2,2,0,        // 4    - pos, distancefrom systemstate, Note(removed)
             2,2,1,1,        // 8    - small: Fuel,Cargo
             1,1,1,2,        // 12   - small: Mats, Data, Credits
             2,2,1,2,        // 16   - small: jumprange
@@ -77,6 +77,7 @@ namespace EDDiscovery.UserControls
             {BitSelSystem,-1},
             {BitSelPosition,-1},
             {BitSelNextDestination,-1},
+            {BitSelJumpRange,BitSelFuel },
             {BitSelEDSM,-1},
             {BitSelVisits,BitSelCredits},
             {BitSelBody,-1},
@@ -88,13 +89,12 @@ namespace EDDiscovery.UserControls
             {BitSelSystemState,-1},
             {BitSelSecurity,-1},
             {BitSelTarget,-1},
-            {BitSelFuel,BitSelCargo},
+            {BitSelCargo,-1},
             {BitSelMats,BitSelData},
             {BitSelMR, -1 },
             {BitSelGameMode,-1},
             {BitSelTravel,-1},
             {BitSelMissions,-1},
-            {BitSelJumpRange,-1},
         };
 
         public const int HorzPositions = 8;
@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
             textBoxTarget.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete);
             textBoxTarget.AutoCompleteTimeout = 500;
 
-            // same order as Sel bits are defined in, one bit per selection item.
+            // same order as Sel bits are defined in, one bit per selection item. Null if bit is no longer used
             toolstriplist = new ToolStripMenuItem[]
             {   toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
                 toolStripPosition, toolStripDistanceFrom,
@@ -1050,6 +1050,7 @@ namespace EDDiscovery.UserControls
                                     extTextBoxNextDestinationPosition.Bounds = new Rectangle(extTextBoxNextDestinationDistance.Right + hspacing, extTextBoxNextDestinationDistance.Top,
                                                                                              extTextBoxNextDestination.Width - hspacing - extTextBoxNextDestinationDistance.Width, extTextBoxNextDestinationPosition.Height);
                                     extTextBoxNextDestinationDistance.Visible = extTextBoxNextDestinationPosition.Visible = true;
+                                    extTextBoxNextDestinationDistance.Tag = extTextBoxNextDestinationPosition.Tag = si;
                                     itembottom = Math.Max(extTextBoxNextDestinationDistance.Bottom, itembottom);
                                     break;
 
