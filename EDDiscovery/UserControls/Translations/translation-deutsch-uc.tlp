@@ -17,7 +17,7 @@ SECTION UserControlBookmarks
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Importiere Lesezeichen aus CSV-Datei nach EDD"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exportiere Lesezeichen in CSV-Datei"
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" => "Bearbeite Lesezeichen des aktuellen Systems"
-.extButtonNewRegion.ToolTip: "New Region Bookmark" @
+.extButtonNewRegion.ToolTip: "New Region Bookmark" => "Neues Regionslesezeichen"
 
 SECTION UserControlCombatPanel
 
@@ -163,7 +163,7 @@ SECTION UserControlDiscoveries
 
 SECTION SearchStars
 
-.ColumnIndex: "Index" @
+.ColumnIndex: "Index" => "Index"
 .ColumnStar: "Star" => "Stern"
 .ColumnCentreDistance: "Centre Distance" => "Zentrumsentfernung"
 .ColumnCurrentDistance: "Current Distance" => "Derzeitige Entfernung"
@@ -249,8 +249,8 @@ SECTION UserControlExpedition
 .SystemName: "System Name" => "Systemname"
 .Distance: "Dist." => "Entf."
 .Note: "Note" => "Notiz"
-.ColumnDistStart: "Dist Start" @
-.ColumnDistanceRemaining: "Dist Remaining" @
+.ColumnDistStart: "Dist Start" => "Dist Start"
+.ColumnDistanceRemaining: "Dist Remaining" => "Dist Verbleibend"
 .labelCml: "Cml Distance:" => "Gesamte Entfernung:"
 .labelP2P: "P2P Distance:" => "Punkt-zu-Punkt-Entfernung:"
 .labelEndDate: "End Date:" => "Enddatum:"
@@ -271,7 +271,7 @@ SECTION UserControlExpedition
 .Specify: "Please specify a name for the route." => "Bitte spezifiziere einen Namen für die Route"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Der derzeitige Routennamen steht im Konflikt mit einer bekannten Expedition.\r\nBitte spezifiziere einen neuen Namen um zu speichern."
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Warnung: Route exisitiert bereits. Willst du sie überschreiben?"
-.EDSMUnk: "System not known" => "System ist EDSM nicht bekannt"
+.EDSMUnk: "System not known" => "System nicht bekannt"
 .NoScanInfo: "No local scan info" => "Keine lokale Scaninformation"
 
 SECTION UserControlJournalGrid
@@ -927,55 +927,55 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan: "Scan" => "Scan"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "Im Spiel"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "Pro Schiff"
-.tabControlCustomStats.tabPageRanks: "Ranks" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" @
-.tabControlCustomStats.tabPageLedger: "Ledger" @
-.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" @
-.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnNumericCredits: "Credits" @
-.tabControlCustomStats.tabPageCombat: "Combat" @
-.Powerplay: "Powerplay" @
-.Squadron: "Squadron" @
-.NoTrip: "No Trip" @
-.BountiesThargoid: "Bounties on Thargoids" @
-.BountiesOnFootNPC: "Bounties on On Foot NPC" @
-.BountiesSkimmers: "Bounties on Skimmers" @
-.ShipsUnknown: "Ships Unknown Rank" @
-.ShipsElite: "Ships Elite Rank" @
-.ShipsDeadly: "Ships Deadly Rank" @
-.ShipsDangerous: "Ships Dangerous Rank" @
-.ShipsMaster: "Ships Master Rank" @
-.ShipsExpert: "Ships Expert Rank" @
-.ShipsCompetent: "Ships Competent Rank" @
-.ShipsNovice: "Ships Novice Rank" @
-.ShipsHarmless: "Ships Harmless Rank" @
-.PVPElite: "PVP Elite Rank" @
-.PVPDeadly: "PVP Deadly Rank" @
-.PVPDangerous: "PVP Dangerous Rank" @
-.PVPMaster: "PVP Master Rank" @
-.PVPExpert: "PVP Expert Rank" @
-.PVPCompetent: "PVP Competent Rank" @
-.PVPNovice: "PVP Novice Rank" @
-.PVPHarmless: "PVP Harmless Rank" @
-.Bounties: "Bounties" @
-.Bountyvalue: "Bounty Value" @
-.Bountiesonships: "Bounties on Ships" @
-.Crimes: "Crimes" @
-.CrimeCost: "Crime Cost" @
-.FactionKillBonds: "Faction Kill Bonds" @
-.FKBValue: "FKB Value" @
-.InterdictionPlayerSucceeded: "Interdictions Player Succeeded" @
-.InterdictionPlayerFailed: "Interdictions Player Failed" @
-.InterdictionNPCSucceeded: "Interdictions NPC Succeeded" @
-.InterdictionNPCFailed: "Interdictions NPC Failed" @
-.InterdictedPlayerSucceeded: "Interdicted Player Succeeded" @
-.InterdictedPlayerFailed: "Interdicted Player Failed" @
-.InterdictedNPCSucceeded: "Interdicted NPC Succeeded" @
-.InterdictedNPCFailed: "Interdicted NPC Failed" @
-.PVPKills: "PVP Kills" @
+.tabControlCustomStats.tabPageRanks: "Ranks" => "Ränge"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" => "Rang"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" => "Zu Beginn"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" => "Am Schluss"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" => "Fortschritt"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" => "Letzte(s) Promotion/Datum"
+.tabControlCustomStats.tabPageLedger: "Ledger" => "Kassabuch"
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" => "Datum"
+.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnNumericCredits: "Credits" => "Credits"
+.tabControlCustomStats.tabPageCombat: "Combat" => "Kampf"
+.Powerplay: "Powerplay" => "Machtspiel"
+.Squadron: "Squadron" => "Schwadron"
+.NoTrip: "No Trip" => "Kein Trip"
+.BountiesThargoid: "Bounties on Thargoids" => "Kopfgelder auf Thargoiden"
+.BountiesOnFootNPC: "Bounties on On Foot NPC" => "Kopfgelder auf NPCs (zu Fuß)"
+.BountiesSkimmers: "Bounties on Skimmers" => "Kopfgelder auf OF-Drohnen"
+.ShipsUnknown: "Ships Unknown Rank" => "Schiffe unbekannter Rang"
+.ShipsElite: "Ships Elite Rank" => "Schiffe Rang: Elite"
+.ShipsDeadly: "Ships Deadly Rank" => "Schiffe Rang: Tödlich"
+.ShipsDangerous: "Ships Dangerous Rank" => "Schiffe Rang: Gefährlich"
+.ShipsMaster: "Ships Master Rank" => "Schiffe Rang: Meister"
+.ShipsExpert: "Ships Expert Rank" => "Schiffe Rang: Experte"
+.ShipsCompetent: "Ships Competent Rank" => "Schiffe Rang: Kompetent"
+.ShipsNovice: "Ships Novice Rank" => "Schiffe Rang: Novize"
+.ShipsHarmless: "Ships Harmless Rank" => "Schiffe Rang: Harmlos"
+.PVPElite: "PVP Elite Rank" => "PVP Rang: Elite"
+.PVPDeadly: "PVP Deadly Rank" => "PVP Rang: Tödlich"
+.PVPDangerous: "PVP Dangerous Rank" => "PVP Rang: Gefährlich"
+.PVPMaster: "PVP Master Rank" => "PVP Rang: Meister"
+.PVPExpert: "PVP Expert Rank" => "PVP Rang: Experte"
+.PVPCompetent: "PVP Competent Rank" => "PVP Rang: Kompetent"
+.PVPNovice: "PVP Novice Rank" => "PVP Rang: Novize"
+.PVPHarmless: "PVP Harmless Rank" => "PVP Rang: Harmlos"
+.Bounties: "Bounties" => "Kopfgelder"
+.Bountyvalue: "Bounty Value" => "Kopfgelder Wert"
+.Bountiesonships: "Bounties on Ships" => "Kopfgelder auf Schiffe"
+.Crimes: "Crimes" => "Verbrechen"
+.CrimeCost: "Crime Cost" => "Verbrechen Kosten"
+.FactionKillBonds: "Faction Kill Bonds" => "Fraktions-Mord-Belohnung"
+.FKBValue: "FKB Value" => "FMB Wert"
+.InterdictionPlayerSucceeded: "Interdictions Player Succeeded" => "Unterbrechungen Spieler Erfolgreich"
+.InterdictionPlayerFailed: "Interdictions Player Failed" => "Unterbrechungen Spieler Fehlgeschlagen"
+.InterdictionNPCSucceeded: "Interdictions NPC Succeeded" => "Unterbrechungen NPC Erfolgreich"
+.InterdictionNPCFailed: "Interdictions NPC Failed" => "Unterbrechungen NPC Fehlgeschlagen"
+.InterdictedPlayerSucceeded: "Interdicted Player Succeeded" => "Unterbrochener Spieler Erfolgreich"
+.InterdictedPlayerFailed: "Interdicted Player Failed" => "Unterbrochener Spieler Fehlgeschlagen"
+.InterdictedNPCSucceeded: "Interdicted NPC Succeeded" => "Unterbrochener NPC Erfolgreich"
+.InterdictedNPCFailed: "Interdicted NPC Failed" => "Unterbrochener NPC Fehlgeschlagen"
+.PVPKills: "PVP Kills" => "PVP Tötungen"
 .TotalNoofjumps: "Total No of jumps" => "Gesamtzahl der Sprünge"
 .FSDjumps: "FSD jumps" => "FSA-Sprünge"
 .JumpHistory: "FSD Jump History" => "Sprunghistorie"
@@ -1083,7 +1083,7 @@ SECTION UserControlSysInfo
 .toolStripSkinny: "When transparent, use skinny look" => "Wenn transparent, verwende mageres Aussehen"
 .toolStripReset: "Reset" => "Zurücksetzen"
 .toolStripRemoveAll: "Remove All" => "Alle entfernen"
-.displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" => "Zeige nächste gewählte Destination"
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Drücke die strg-Taste und ziehe dann mit der linken Maustaste um einen Eintrag umzupositionieren, 8 Spalten sind verfügbar."
 .textBoxTargetDist.ToolTip: "Distance to target" => "Entfernung zum Ziel"
 .textBoxTarget.ToolTip: "Sets the target" => "Setzt das Ziel"
@@ -1115,7 +1115,7 @@ SECTION UserControlSysInfo
 .labelState: "State" => "Zustand"
 .labelSolDist: "Sol" => "Sol"
 .labelHomeDist: "Home" => "Heimat"
-.labelNextDestination: "Dest" @
+.labelNextDestination: "Dest" => "Dest"
 .NoMissions: "No Missions" => "Keine Missionen"
 .SysUnk: "System unknown to EDSM" => "System ist EDSM unbekannt"
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "Position ist {0:0.00},{1:0.00},{2:0.00}"
@@ -1158,7 +1158,7 @@ SECTION UserControlTravelGrid
 .SETSTSTOP: "Set Start/Stop point for travel calculations" => "Setze Start/Stopp-punkt für Reiseberechnungen"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "System konnte nicht gefunden werden - wurde nicht synchronisiert oder EDSM ist nicht verfügbar"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Bestätige, dass du diesen Eintrag entfernen willst\r\nDieser kann wieder aufscheinen wenn die Logs erneut gescannt werden."
-.quickMarkToolStripMenuItem: "Marked" @
+.quickMarkToolStripMenuItem: "Marked" => "Markiert"
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Entferne Spaltensortierung"
 .gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "Springe zu Eintrag"
 .setNoteToolStripMenuItem: "Set Note" => "Setze Notiz"
@@ -1406,9 +1406,9 @@ SECTION FilterSelector
 .MicroResources: "Micro Resources" => "Mikroressourcen"
 .Suits: "Suits" => "Anzüge"
 .Carrier: "Carrier" => "Carrier"
-.NewGroup: "Create new group" @
-.Newgroupname: "Enter name of new group" @
-.Confirmremoval: "Confirm removal of" @
+.NewGroup: "Create new group" => "Erstelle neue Gruppe"
+.Newgroupname: "Enter name of new group" => "Namen der neuen Gruppe eingeben"
+.Confirmremoval: "Confirm removal of" => "Bestätige Entfernung von"
 
 SECTION UserControlCommonBase
 
