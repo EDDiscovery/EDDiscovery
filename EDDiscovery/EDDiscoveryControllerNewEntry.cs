@@ -46,7 +46,7 @@ namespace EDDiscovery
 
             if (playdelay > 0)  // if delaying to see if a companion event occurs. add it to list. Set timer so we pick it up
             {
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play queue " + je.EventTypeID + " Delay for " + playdelay);
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play queue " + je.EventTypeID + " Delay for " + playdelay);
                 journalqueue.Enqueue(je);
                 journalqueuedelaytimer.Change(playdelay, Timeout.Infinite);
             }
@@ -54,14 +54,14 @@ namespace EDDiscovery
             {
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);  // stop the timer, but if it occurs before this, not the end of the world
                 journalqueue.Enqueue(je);  // add it to the play list.
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID);
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID);
                 PlayJournalList();    // and play
             }
         }
 
         public void DelayPlay(Object s)             // timer thread timeout after play delay.. 
         {
-            System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play timer executed");
+            //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play timer executed");
             journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
             InvokeAsyncOnUiThread(() =>
             {
@@ -72,13 +72,13 @@ namespace EDDiscovery
         public void PlayJournalList()                 // UI Thread play delay list out..
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Play out list of {journalqueue.Count}");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Play out list of {journalqueue.Count}");
 
             while (journalqueue.Count > 0)
             {
                 var current = journalqueue.Dequeue();
 
-                System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} New JEntry {current.EventTimeUTC} {current.EventTypeStr}");
+                System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} Journal {current.EventTypeStr} {current.EventTimeUTC}");
 
                 BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
 
@@ -103,7 +103,7 @@ namespace EDDiscovery
                         OnNewJournalEntryUnfiltered?.Invoke(peek);         // send the peeked, unmodified
                         OnNewHistoryEntryUnfiltered?.Invoke(history.MakeHistoryEntry(peek));
                         journalqueue.Dequeue();                     // remove it
-                        System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ..merged {peek.EventTimeUTC} {peek.EventTypeStr}");
+                        //System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ..merged {peek.EventTimeUTC} {peek.EventTypeStr}");
                     }
                     else
                         break;                                      // not mergable and since we peeked not removed
@@ -113,7 +113,7 @@ namespace EDDiscovery
 
                 foreach (var he in historyentries.EmptyIfNull())
                 {
-                    System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** Process {he.EventTimeUTC} {he.EntryType}");
+                    System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** Process {he.EntryType} {he.EventTimeUTC}");
 
                     he.journalEntry.SetSystemNote();                // since we are displaying it, we can check here to see if a system note needs assigning
 
@@ -158,7 +158,7 @@ namespace EDDiscovery
                     }
 
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
-                    System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** EndProcess {he.EventTimeUTC} {he.EntryType} {t3.Item1} {(t3.Item3 > 99 ? "!!!!!!!!!!!!!" : "")}");
+                    System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** EndProcess {he.EntryType} {he.EventTimeUTC} {t3.Item1} {(t3.Item3 > 99 ? "!!!!!!!!!!!!!" : "")}");
                 }
 
                 if (historyentry.EntryType == JournalTypeEnum.LoadGame) // and issue this on Load game
