@@ -179,9 +179,9 @@ namespace EDDiscovery
                 helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
             }
 
+            // we send the list using the last gameversion/build as we may have early entries without these..
             if (helist.Count > 0)
-                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist);
-
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist, helist.Last().journalEntry.GameVersion, helist.Last().journalEntry.Build );
         }
 
 

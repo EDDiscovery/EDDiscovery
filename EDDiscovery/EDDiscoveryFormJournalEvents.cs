@@ -92,7 +92,7 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.OkayToSend(he))          
             {
-                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });       // send, if bad credentials, EDSM will moan alerting the user
+                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he }, he.journalEntry.GameVersion, he.journalEntry.Build);       // send, if bad credentials, EDSM will moan alerting the user
             }
 
             // as does Inara. Note the MCMR has been updated.  Needed here due to using materials/cargo
