@@ -301,28 +301,32 @@ namespace EDDiscovery
 
                 FrontierCAPI.Disconnect();         // Disconnect capi from current user, but don't clear their credential file
 
-                if (EDCommander.Current.LegacyCommander)
-                    LogLineHighlight("Console commander access temp withdrawn due to update 14");
-
-                // available, and not hidden commander, and we have logged in before
-                if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && 
-                                FrontierCAPI.GetUserState(EDCommander.Current.Name) != CAPI.CompanionAPI.UserState.NeverLoggedIn && 
-                                // and for now, no legacy or console commanders
-                                !EDCommander.Current.LegacyCommander && !EDCommander.Current.ConsoleCommander )
+                // available, and not hidden commander
+                if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0)
                 {
-                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Login with CAPI");
+                    // so a legacy commander, and a live commander, share the same CAPI oauth login (the CAPI server is just different)
+                    // lets go to the capi root name for the saved data file
 
-                    FrontierCAPI.GameIsBeta = EDCommander.Current.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase);
-
-                    System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
+                    if (FrontierCAPI.GetUserState(EDCommander.Current.RootName) != CAPI.CompanionAPI.UserState.NeverLoggedIn)
                     {
-                        FrontierCAPI.LogIn(EDCommander.Current.Name);   // try and get to Active.  May cause a new frontier login
+                        CAPI.CompanionAPI.CAPIServerType stype = EDCommander.Current.NameIsBeta ? CAPI.CompanionAPI.CAPIServerType.Beta : 
+                                    (EDCommander.Current.LegacyCommander || EDCommander.Current.ConsoleCommander) ? CAPI.CompanionAPI.CAPIServerType.Legacy : 
+                                    CAPI.CompanionAPI.CAPIServerType.Live;
+                        
+                        FrontierCAPI.CAPIServer= stype;
 
-                        if (FrontierCAPI.Active)     // if active, indicate
-                            LogLine("CAPI User Logged in");
-                        else
-                            LogLine("CAPI Require Log in");
-                    });
+                        Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Login with CAPI server type {stype} {EDCommander.Current.RootName}");
+
+                        System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
+                        {
+                            FrontierCAPI.LogIn(EDCommander.Current.RootName);   // try and get to Active.  May cause a new frontier login
+
+                            if (FrontierCAPI.Active)     // if active, indicate
+                                LogLine($"CAPI User Logged in to {stype} using {EDCommander.Current.RootName}");
+                            else
+                                LogLine($"CAPI Require Fresh Log in to {stype} using {EDCommander.Current.RootName}");
+                        });
+                    }
                 }
 
                 if (history.IsRealCommanderId)

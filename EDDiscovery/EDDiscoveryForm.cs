@@ -457,14 +457,17 @@ namespace EDDiscovery
             BaseUtils.Translator.Instance.TranslateToolstrip(mainMenu, enumlistcms3, this);
 
             var enumlisttt = new Enum[] { EDTx.EDDiscoveryForm_tabControlMain_ToolTip, EDTx.EDDiscoveryForm_comboBoxCommander_ToolTip, EDTx.EDDiscoveryForm_buttonExtRefresh_ToolTip, EDTx.EDDiscoveryForm_comboBoxCustomProfiles_ToolTip,
-                EDTx.EDDiscoveryForm_buttonExtManageAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtEditAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtPopOut_ToolTip, EDTx.EDDiscoveryForm_buttonReloadActions_ToolTip };
+                EDTx.EDDiscoveryForm_buttonExtManageAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtEditAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtPopOut_ToolTip, EDTx.EDDiscoveryForm_buttonReloadActions_ToolTip , EDTx.EDDiscoveryForm_extButtonCAPI_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             panelToolBar.SetToolTip(toolTip);    // use the defaults
 
             if (EDDOptions.Instance.ActionButton)
+            {
                 buttonReloadActions.Visible = true;
+                extButtonCAPI.Visible = true;
+            }
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
@@ -1458,6 +1461,14 @@ namespace EDDiscovery
             //if (FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
             //  Controller.DoCAPI(history.GetLast.Status.StationName, history.GetLast.System.Name, false, history.Shipyards.AllowCobraMkIV);
         }
+
+        private void extButtonCAPI_Click(object sender, EventArgs e)
+        {
+            var he = history.GetLast;
+            if (he != null && he.IsDocked)
+                Controller.DoCAPI(he.WhereAmI, he.System.Name, history.Shipyards.AllowCobraMkIV);
+        }
+
 
 
         #endregion

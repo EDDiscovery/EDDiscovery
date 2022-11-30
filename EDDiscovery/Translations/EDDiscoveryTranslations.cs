@@ -93,6 +93,7 @@ namespace EDDiscovery
         EDDiscoveryForm_buttonExtEditAddOns_ToolTip, // ToolTip 'Edit Add-Ons'
         EDDiscoveryForm_buttonExtPopOut_ToolTip, // ToolTip 'Click to select a pop out panel to display'
         EDDiscoveryForm_buttonReloadActions_ToolTip, // ToolTip 'DEBUG reload action system'
+        EDDiscoveryForm_extButtonCAPI_ToolTip,
 
         EDDiscoveryForm_TSF,
         EDDiscoveryForm_ConfirmSyncToEDSM, // You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?

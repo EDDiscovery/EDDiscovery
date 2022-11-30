@@ -242,23 +242,23 @@ namespace EDDiscovery.UserControls
 
         private void clearLoginButton_Click(object sender, EventArgs e)
         {
-            discoveryform.FrontierCAPI.LogOut(cf.CommanderName);        // force logout and deletion of .cred
+            discoveryform.FrontierCAPI.LogOut(cf.CommanderRootName);        // force logout and deletion of .cred
             capiclearloginButton.Visible = false;
         }
 
         private void CapiButton_Click(object sender, EventArgs e)
         {
-            if (cf.CommanderName.HasChars())    // good commander name..
+            if (cf.CommanderRootName.HasChars())    // good commander name..
             {
                 // if we have a login, and it has credentials, delete them
-                if (discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) == CompanionAPI.UserState.HasLoggedInWithCredentials) 
+                if (discoveryform.FrontierCAPI.GetUserState(cf.CommanderRootName) == CompanionAPI.UserState.HasLoggedInWithCredentials) 
                 {
-                    discoveryform.FrontierCAPI.LogOut(cf.CommanderName);
+                    discoveryform.FrontierCAPI.LogOut(cf.CommanderRootName);
                     SetCAPILabelState();
                 }
                 else
                 {
-                    discoveryform.FrontierCAPI.LogIn(cf.CommanderName);         // perform login, which does the auth procedure.
+                    discoveryform.FrontierCAPI.LogIn(cf.CommanderRootName);         // perform login, which does the auth procedure.
                     capiloggedin = true;         // remember we did a logon
                     capiButton.Enabled = false;
                     capiStateLabel.Text = "Logging in".T(EDTx.CommanderForm_CAPILoggingin);
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
                 capiButton.Enabled = false;
                 capiStateLabel.Text = capiButton.Text = "Disabled".T(EDTx.CommanderForm_CAPIDisabled);
             }
-            else if (cf.CommanderName.HasChars() && discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) == CompanionAPI.UserState.HasLoggedInWithCredentials)   // if logged in..
+            else if (cf.CommanderRootName.HasChars() && discoveryform.FrontierCAPI.GetUserState(cf.CommanderRootName) == CompanionAPI.UserState.HasLoggedInWithCredentials)   // if logged in..
             {
                 capiclearloginButton.Visible = false;
                 capiButton.Enabled = true;
@@ -285,7 +285,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {                                                   // no cred, or logged out..
-                capiclearloginButton.Visible = discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) != CompanionAPI.UserState.NeverLoggedIn;
+                capiclearloginButton.Visible = discoveryform.FrontierCAPI.GetUserState(cf.CommanderRootName) != CompanionAPI.UserState.NeverLoggedIn;
                 capiButton.Enabled = true;
                 capiButton.Text = "Login".T(EDTx.CommanderForm_CAPILogin);
                 capiStateLabel.Text = "Await Log in".T(EDTx.CommanderForm_CAPIAwaitLogin);

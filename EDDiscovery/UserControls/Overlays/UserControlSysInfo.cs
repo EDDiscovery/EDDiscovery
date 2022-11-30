@@ -301,7 +301,7 @@ namespace EDDiscovery.UserControls
                 var tophe = discoveryform.history.GetLast;      // we feed in the top, which is being updated by EDDiscoveryControllerNewEntry with the latest fuel
                 if (tophe != null)   // paranoia
                 {
-                    System.Diagnostics.Debug.WriteLine($"UI Top he Fuel {last_he.EventTimeUTC} {last_he.ShipInformation.FuelLevel} {last_he.ShipInformation.ReserveFuelCapacity}");
+                    System.Diagnostics.Debug.WriteLine($"UI Top he Fuel {tophe.EventTimeUTC} {tophe.ShipInformation.FuelLevel} {tophe.ShipInformation.ReserveFuelCapacity}");
                     Display(tophe);
                 }
             }

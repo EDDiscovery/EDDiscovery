@@ -154,7 +154,7 @@ namespace EDDiscovery
                     if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
                     {
                         var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
-                        DoCAPI(dockevt.StationName, he.System.Name, he.journalEntry.IsBeta, history.Shipyards.AllowCobraMkIV);
+                        DoCAPI(dockevt.StationName, he.System.Name, history.Shipyards.AllowCobraMkIV);
                     }
 
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
@@ -192,7 +192,7 @@ namespace EDDiscovery
                 System.Diagnostics.Debug.WriteLine( t.Item1 + " Controller UI !!!");
         }
 
-        public void DoCAPI(string station, string system, bool beta , bool? allowcobramkiv)
+        public void DoCAPI(string station, string system, bool? allowcobramkiv)
         {
             // don't hold up the main thread, do it in a task, as its a HTTP operation
 
@@ -203,8 +203,6 @@ namespace EDDiscovery
                 for (int tries = 3; tries >= 1 && (donemarket == false || doneshipyard == false); tries--)
                 {
                     Thread.Sleep(10000);        // for the first go, give the CAPI servers a chance to update, for the next goes, spread out the requests
-
-                    FrontierCAPI.GameIsBeta = beta;
 
                     if (!donemarket)
                     {
@@ -228,13 +226,15 @@ namespace EDDiscovery
                                 InvokeAsyncOnUiThread(() =>
                                 {
                                     Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                    NewJournalEntryFromScanner(entry,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
-                                                                    // EDDN handler will pick up EDDCommodityPrices and send it.
+                                    NewJournalEntryFromScanner(entry, null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
+                                                                                            // EDDN handler will pick up EDDCommodityPrices and send it.
                                 });
 
                                 donemarket = true;
                                 Thread.Sleep(500);      // space the next check out a bit
                             }
+                            else
+                                LogLine($"MK is invalid {mk.IsValid} station {mk.Name}");
                         }
                     }
 

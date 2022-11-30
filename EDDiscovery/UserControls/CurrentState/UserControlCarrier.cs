@@ -831,9 +831,6 @@ namespace EDDiscovery.UserControls
                 PutSetting(dbCAPICommander, discoveryform.history.CommanderId, global: true);
                 PutSetting(dbCAPISave, "", global: true);
 
-                // set beta flag from last history entry
-                discoveryform.FrontierCAPI.GameIsBeta = discoveryform.history.GetLast?.journalEntry.IsBeta ?? false;
-
                 // don't hold up the main thread, do it in a task, as its a HTTP operation
 
                 System.Threading.Tasks.Task.Run(() =>
