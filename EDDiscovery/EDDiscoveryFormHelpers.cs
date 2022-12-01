@@ -181,7 +181,12 @@ namespace EDDiscovery
 
             // we send the list using the last gameversion/build as we may have early entries without these..
             if (helist.Count > 0)
-                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist, helist.Last().journalEntry.GameVersion, helist.Last().journalEntry.Build );
+            {
+                var gb = history.GetLastGameversionBuild();
+
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist, gb.Item1, gb.Item2);
+
+            }
         }
 
 

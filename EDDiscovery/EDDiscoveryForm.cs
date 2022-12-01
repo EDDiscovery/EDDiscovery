@@ -457,7 +457,7 @@ namespace EDDiscovery
             BaseUtils.Translator.Instance.TranslateToolstrip(mainMenu, enumlistcms3, this);
 
             var enumlisttt = new Enum[] { EDTx.EDDiscoveryForm_tabControlMain_ToolTip, EDTx.EDDiscoveryForm_comboBoxCommander_ToolTip, EDTx.EDDiscoveryForm_buttonExtRefresh_ToolTip, EDTx.EDDiscoveryForm_comboBoxCustomProfiles_ToolTip,
-                EDTx.EDDiscoveryForm_buttonExtManageAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtEditAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtPopOut_ToolTip, EDTx.EDDiscoveryForm_buttonReloadActions_ToolTip , EDTx.EDDiscoveryForm_extButtonCAPI_ToolTip };
+                EDTx.EDDiscoveryForm_buttonExtManageAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtEditAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtPopOut_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 

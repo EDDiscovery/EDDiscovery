@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare3 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIconEDD = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -60,6 +60,7 @@ namespace EDDiscovery
             this.buttonExtEditAddOns = new ExtendedControls.ExtButton();
             this.buttonExtPopOut = new ExtendedControls.ExtButton();
             this.buttonReloadActions = new ExtendedControls.ExtButton();
+            this.extButtonCAPI = new ExtendedControls.ExtButton();
             this.contextMenuStripTabs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -123,7 +124,6 @@ namespace EDDiscovery
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.extPanelTopResizer = new ExtendedControls.ExtPanelResizer();
-            this.extButtonCAPI = new ExtendedControls.ExtButton();
             this.notifyIconContextMenuStrip.SuspendLayout();
             this.contextMenuStripTabs.SuspendLayout();
             this.panelToolBar.SuspendLayout();
@@ -197,7 +197,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare3;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -316,10 +316,24 @@ namespace EDDiscovery
             this.buttonReloadActions.TabIndex = 1;
             this.buttonReloadActions.Text = "Actions";
             this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolTip.SetToolTip(this.buttonReloadActions, "DEBUG reload action system");
             this.buttonReloadActions.UseVisualStyleBackColor = true;
             this.buttonReloadActions.Visible = false;
             this.buttonReloadActions.Click += new System.EventHandler(this.buttonReloadActions_Click);
+            // 
+            // extButtonCAPI
+            // 
+            this.extButtonCAPI.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.extButtonCAPI.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extButtonCAPI.Location = new System.Drawing.Point(439, 1);
+            this.extButtonCAPI.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.extButtonCAPI.Name = "extButtonCAPI";
+            this.extButtonCAPI.Size = new System.Drawing.Size(65, 24);
+            this.extButtonCAPI.TabIndex = 1;
+            this.extButtonCAPI.Text = "CAPI";
+            this.extButtonCAPI.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.extButtonCAPI.UseVisualStyleBackColor = true;
+            this.extButtonCAPI.Visible = false;
+            this.extButtonCAPI.Click += new System.EventHandler(this.extButtonCAPI_Click);
             // 
             // contextMenuStripTabs
             // 
@@ -513,7 +527,7 @@ namespace EDDiscovery
             // 
             this.settingsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -524,7 +538,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Menu;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -547,7 +561,7 @@ namespace EDDiscovery
             // 
             this.exitToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -961,22 +975,6 @@ namespace EDDiscovery
             this.extPanelTopResizer.Name = "extPanelTopResizer";
             this.extPanelTopResizer.Size = new System.Drawing.Size(984, 3);
             this.extPanelTopResizer.TabIndex = 22;
-            // 
-            // extButtonCAPI
-            // 
-            this.extButtonCAPI.Image = global::EDDiscovery.Icons.Controls.Refresh;
-            this.extButtonCAPI.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.extButtonCAPI.Location = new System.Drawing.Point(439, 1);
-            this.extButtonCAPI.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.extButtonCAPI.Name = "extButtonCAPI";
-            this.extButtonCAPI.Size = new System.Drawing.Size(65, 24);
-            this.extButtonCAPI.TabIndex = 1;
-            this.extButtonCAPI.Text = "CAPI";
-            this.extButtonCAPI.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolTip.SetToolTip(this.extButtonCAPI, "DEBUG Redo CAPI Query");
-            this.extButtonCAPI.UseVisualStyleBackColor = true;
-            this.extButtonCAPI.Visible = false;
-            this.extButtonCAPI.Click += new System.EventHandler(this.extButtonCAPI_Click);
             // 
             // EDDiscoveryForm
             // 
