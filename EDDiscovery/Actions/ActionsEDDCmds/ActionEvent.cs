@@ -228,6 +228,7 @@ namespace EDDiscovery.Actions
                             string note = sp.NextQuotedWord();
                             if (note != null && sp.IsEOL)
                             {
+                                System.Diagnostics.Trace.Assert(note != null && he.System != null);
                                 he.journalEntry.UpdateSystemNote(note, he.System.Name, EDCommander.Current.SyncToEdsm);
                                 (ap.ActionController as ActionController).DiscoveryForm.NoteChanged(this, he);
                             }

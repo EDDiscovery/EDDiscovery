@@ -600,6 +600,7 @@ namespace EDDiscovery.UserControls
             {
                 var he = dataGridViewTravel.Rows[c.RowIndex].Tag as HistoryEntry;
                 var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;
+                System.Diagnostics.Trace.Assert(str != null && he != null);
                 he.journalEntry.UpdateSystemNote(str, he.System.Name, EDCommander.Current.SyncToEdsm);
                 discoveryform.NoteChanged(this, he);
             }
@@ -682,6 +683,7 @@ namespace EDDiscovery.UserControls
                         {
                             if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                             {
+                                System.Diagnostics.Trace.Assert(noteform.NoteText != null && leftclickhe.System != null);
                                 leftclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, leftclickhe.System.Name, EDCommander.Current.SyncToEdsm);
                                 discoveryform.NoteChanged(this, leftclickhe);
                             }
@@ -1037,6 +1039,7 @@ namespace EDDiscovery.UserControls
             {
                 if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
+                    System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclickhe.System != null);
                     rightclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, rightclickhe.System.Name, EDCommander.Current.SyncToEdsm);
                     discoveryform.NoteChanged(this, rightclickhe);
                 }

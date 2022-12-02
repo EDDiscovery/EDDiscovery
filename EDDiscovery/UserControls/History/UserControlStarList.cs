@@ -709,6 +709,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {
+                        System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclicksystem.System != null);
                         rightclicksystem.journalEntry.UpdateSystemNote(noteform.NoteText, rightclicksystem.System.Name, EDCommander.Current.SyncToEdsm);
                         discoveryform.NoteChanged(this, rightclicksystem);
                     }

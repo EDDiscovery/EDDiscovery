@@ -856,7 +856,7 @@ namespace EDDiscovery.UserControls
 
                                 if (fc.IsValid)
                                 {
-                                    System.IO.File.WriteAllText(@"c:\code\fc.json", fc.Json.ToString(true));
+                                    BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\fc.json", fc.Json.ToString(true));
                                     System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
                                     PutSetting(dbCAPISave, fleetcarrier, global: true);       // store data into global capi slot
                                     break;
