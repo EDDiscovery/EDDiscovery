@@ -345,7 +345,7 @@ namespace EDDiscovery.UserControls
 
             string typename = sm.LocalisedItem;
             if (typename.IsEmpty())
-                typename = ItemData.Instance.GetShipModuleProperties(sm.ItemFD).ModType;
+                typename = ItemData.GetShipModuleProperties(sm.ItemFD).ModType;
 
             string eng = "";
             string engtooltip = null;

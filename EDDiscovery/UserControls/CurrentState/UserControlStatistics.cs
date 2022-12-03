@@ -653,6 +653,7 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
             extChartLedger.ClearSeriesPoints();
+            extChartLedger.BeginInit();
             dataGridViewLedger.Rows.Clear();
 
             foreach( var kvp in currentstat.Credits)
@@ -661,9 +662,10 @@ namespace EDDiscovery.UserControls
                 object[] coldata = new object[] { seltime.ToString(), kvp.Value.ToString("N0") };
                 int row =dataGridViewLedger.Rows.Add(coldata);
                 dataGridViewLedger.Rows[row].Tag = seltime;
-                extChartLedger.AddXY(seltime, kvp.Value, graphtooltip: $"{seltime.ToString()} {kvp.Value:N0}cr");
+                extChartLedger.AddXY(seltime, kvp.Value);   // no tip, since the grid responds to a click on a point 
             }
 
+            extChartLedger.EndInit();
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 

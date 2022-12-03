@@ -1025,12 +1025,12 @@ namespace EDDiscovery.UserControls
                         {
                             var ord = ships[i];
 
-                            string name = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
-                            string manu = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
-                            string speed = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                            string boost = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                            string mass = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                            string classv = ItemData.Instance.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string name = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
+                            string manu = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
+                            string speed = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string boost = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string mass = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string classv = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
 
                             object[] rowobj = {
                                             name,
@@ -1063,7 +1063,7 @@ namespace EDDiscovery.UserControls
                         for (int i = 0; i < modules.Count; i++)
                         {
                             var ord = modules[i];
-                            var modp = ItemData.Instance.GetShipModuleProperties(ord.Name);
+                            var modp = ItemData.GetShipModuleProperties(ord.Name);
 
                             string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
                             string mtype = modp?.ModType ?? ord.Category ?? "";

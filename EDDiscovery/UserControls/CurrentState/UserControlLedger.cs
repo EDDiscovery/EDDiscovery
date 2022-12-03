@@ -156,7 +156,8 @@ namespace EDDiscovery.UserControls
 
             var ledger = discoveryform.history.CashLedger;
             transactioncountatdisplay = 0;
-            
+
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("LD", true)} Ledger");
             if (ledger != null && ledger.Transactions.Count > 0)
             {
                 var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
@@ -167,7 +168,9 @@ namespace EDDiscovery.UserControls
                     var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
 
                     var rowsToAdd = new List<DataGridViewRow>(filteredlist.Count);
-                 
+
+                    extChartLedger.BeginInit();
+
                     for (int i = filteredlist.Count - 1; i >= 0; i--)
                     {
                         var row = CreateRow(filteredlist[i], eventfilter, textBoxFilter.Text);      // create if not filtered out
@@ -176,15 +179,18 @@ namespace EDDiscovery.UserControls
                         {
                             rowsToAdd.Add(row);
                             DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(filteredlist[i].EventTimeUTC);
-                            extChartLedger.AddXY(seltime, filteredlist[i].CashTotal, graphtooltip: $"{seltime.ToString()} {filteredlist[i].CashTotal:N0}cr" );
+                            extChartLedger.AddXY(seltime, filteredlist[i].CashTotal);   // purposely no chart tips - uses too much space, no need with grid reflection
                         }
                     }
 
                     dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
+                    extChartLedger.EndInit();
                 }
 
                 transactioncountatdisplay = ledger.Transactions.Count;
             }
+
+            System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("LD")} Ledger end");
 
             dataGridViewLedger.Columns[0].HeaderText = EDDConfig.Instance.GetTimeTitle();
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
@@ -237,7 +243,7 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewLedger.Rows.Insert(0, row);     // insert at top
                     var seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
-                    extChartLedger.AddXY(seltime, tx.CashTotal, graphtooltip: $"{seltime.ToString()} {tx.CashTotal:N0}cr");
+                    extChartLedger.AddXY(seltime, tx.CashTotal);
                 }
 
                 transactioncountatdisplay++;
