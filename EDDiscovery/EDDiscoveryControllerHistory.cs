@@ -158,6 +158,7 @@ namespace EDDiscovery
         private void DoRefreshHistory(RefreshWorkerArgs args)
         {
             HistoryList hist = null;
+
             try
             {
                 refreshWorkerArgs = args;
@@ -267,15 +268,17 @@ namespace EDDiscovery
 
         private void ForegroundHistoryRefreshCompleteonUI(HistoryList hist)
         {
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);     // in UI Thread
 
             if (!PendingClose)
             {
                 Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC foreground history refresh start");
 
-                if (hist != null)
+                if (hist != null)       // if we had an exception above, we may have an empty history
                 {
-                    history = hist;
+                    commandercountafterhistoryread = EDCommander.NumberOfCommanders;        // current count of commanders at the history change point
+
+                    history = hist;     // replace history
 
                     EdsmLogFetcher.StopCheck();     // ensure edsm has stopped. previosly asked to stop above by an async call
 

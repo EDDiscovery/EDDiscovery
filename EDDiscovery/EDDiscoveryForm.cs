@@ -147,11 +147,15 @@ namespace EDDiscovery
             Controller.OnNewHistoryEntryUnfiltered += Controller_NewHistoryEntryUnfiltered; // called before being added to the HE, unfiltered, unmerged stream
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
+            Controller.OnNewCommanderDuringPlayDetected += Controller_NewCommanderDuringPlay;
         }
 
         // called from EDDApplicationContext .. continues on with the construction of the system
         public void Init(Action<string> msg)  
         {
+            // some debug
+            //EliteDangerousCore.ItemData.ReformatNonCoriolisModules();     // clean up these modules list
+
             if (EDDOptions.Instance.Culture != null)
                 CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
 
@@ -1324,7 +1328,7 @@ namespace EDDiscovery
 
         #region Toolbar
 
-        public void LoadCommandersListBox()
+        public void UpdateCommandersListBox()
         {
             comboBoxCommander.Enabled = false;
             comboBoxCommander.Items.Clear();            // comboBox is nicer with items

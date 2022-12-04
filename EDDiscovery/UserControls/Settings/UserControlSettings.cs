@@ -316,7 +316,7 @@ namespace EDDiscovery.UserControls
                     cf.Update(cmdr);
                     EDCommander.Add(cmdr);
                     UpdateCommandersListBox();
-                    discoveryform.LoadCommandersListBox();
+                    discoveryform.UpdateCommandersListBox();
                     discoveryform.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
@@ -378,7 +378,7 @@ namespace EDDiscovery.UserControls
                 if (result == DialogResult.Yes)
                 {
                     EDCommander.Delete(cmdr);
-                    discoveryform.LoadCommandersListBox();
+                    discoveryform.UpdateCommandersListBox();
                     UpdateCommandersListBox();
                     discoveryform.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
 

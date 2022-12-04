@@ -31,7 +31,7 @@ namespace EDDiscovery
     public partial class EDDiscoveryController
     {
         #region Variables
-        public HistoryList history { get; private set; } = new HistoryList();
+        public HistoryList history { get; private set; } = new HistoryList();       // we always have a history
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
         public string LogText { get { return logtext; } }
 
@@ -60,6 +60,7 @@ namespace EDDiscovery
 
         // In order. Current commander only
 
+        public event Action OnNewCommanderDuringPlayDetected;                         // UI. Called during play when a new commander has been found (not during history load)
         public event Action<JournalEntry> OnNewJournalEntryUnfiltered;      // UI. Called when a new journal entry is read.  Not filtered by history system
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered;      // UI. Called when a new history entry is created and databases into it updated, but before adding.  Not filtered by history system
         public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called after HE has been added to the history list.  Post filtering
@@ -98,6 +99,8 @@ namespace EDDiscovery
 
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
+
+        private int commandercountafterhistoryread;
 
         #endregion
 

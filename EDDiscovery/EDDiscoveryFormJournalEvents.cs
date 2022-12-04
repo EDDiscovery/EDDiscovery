@@ -29,7 +29,7 @@ namespace EDDiscovery
     {
         private void Controller_RefreshCommanders()
         {
-            LoadCommandersListBox();             // in case a new commander has been detected
+            UpdateCommandersListBox();             // in case a new commander has been detected
         }
 
         private void Controller_RefreshStarting()
@@ -79,7 +79,7 @@ namespace EDDiscovery
 
         public void NewEntry(JournalEntry e)       // programatically do a new entry
         {
-            Controller.NewJournalEntryFromScanner(e,null);                 // push it thru as if the monitor watcher saw it
+            Controller.NewJournalEntryFromScanner(e, null);                 // push it thru as if the monitor watcher saw it
         }
 
         // Called by controller before any HL removal reorder. The raw HE stream.  The MCMR etc databases have been updated
@@ -90,11 +90,11 @@ namespace EDDiscovery
 
             // EDSM needs the raw stream, so send it here..
 
-            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.OkayToSend(he))          
+            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.OkayToSend(he))
             {
                 // send, if bad credentials, EDSM will moan alerting the user. Use the gameversion/build from the HE
 
-                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he }, he.journalEntry.GameVersion, he.journalEntry.Build);       
+                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he }, he.journalEntry.GameVersion, he.journalEntry.Build);
             }
 
             // as does Inara. Note the MCMR has been updated.  Needed here due to using materials/cargo
@@ -109,8 +109,10 @@ namespace EDDiscovery
 
         }
 
+        private HistoryEntry queuededdnfsssd = null;        // queued FSS because we can't find the right system
+
         // Called after HE removal/reorder, and after the UI's has had a chance to operate
-        private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         
+        private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)
         {
             BaseUtils.AppTicks.TickCountLapDelta("DFS", true);
 
@@ -139,12 +141,12 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToEddn == true)
             {
-                if (queuedfsssd != null && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)queuedfsssd.journalEntry).Signals[0].SystemAddress == he.System.SystemAddress)     // if queued, and we are now in its system
+                if (queuededdnfsssd != null && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)queuededdnfsssd.journalEntry).Signals[0].SystemAddress == he.System.SystemAddress)     // if queued, and we are now in its system
                 {
                     System.Diagnostics.Debug.WriteLine($"EDDN send of FSSSignalDiscovered is sent - now in system");
-                    ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)queuedfsssd.journalEntry).EDDNSystem = he.System; // override for EDDN purposes
-                    EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> {queuedfsssd });
-                    queuedfsssd = null;
+                    ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)queuededdnfsssd.journalEntry).EDDNSystem = he.System; // override for EDDN purposes
+                    EDDNSync.SendEDDNEvents(LogLine, new List<HistoryEntry> { queuededdnfsssd });
+                    queuededdnfsssd = null;
                 }
 
                 if (EDDNClass.IsEDDNMessage(he.EntryType) && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
@@ -152,7 +154,7 @@ namespace EDDiscovery
                     // if FSS Signal discovered, but the system address is not of the current system we think we are in, then queue it until location/jump comes about
                     if (he.EntryType == JournalTypeEnum.FSSSignalDiscovered && ((EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered)he.journalEntry).Signals[0].SystemAddress != he.System.SystemAddress)
                     {
-                        queuedfsssd = he;
+                        queuededdnfsssd = he;
                         System.Diagnostics.Debug.WriteLine($"EDDN send of FSSSignalDiscovered is queued due to SystemAddress not being Isystem address");
                     }
                     else
@@ -168,8 +170,6 @@ namespace EDDiscovery
             CheckActionProfile(he);
 
         }
-
-        private HistoryEntry queuedfsssd = null;
 
         private void Controller_NewUIEvent(UIEvent uievent)
         {
@@ -216,7 +216,10 @@ namespace EDDiscovery
 
             }
         }
-
-
+        private void Controller_NewCommanderDuringPlay()
+        {
+            LogLineHighlight("Right On New Commander!");
+            UpdateCommandersListBox();            
+        }
     }
 }

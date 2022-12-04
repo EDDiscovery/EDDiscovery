@@ -34,6 +34,13 @@ namespace EDDiscovery
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
+            if ( EDCommander.NumberOfCommanders != commandercountafterhistoryread)      // if this changes, a commander has been added
+            {
+                commandercountafterhistoryread = EDCommander.NumberOfCommanders;        // reset and invoke
+                System.Diagnostics.Trace.WriteLine( $"EDC Commander count changed to {commandercountafterhistoryread}");
+                OnNewCommanderDuringPlayDetected?.Invoke();
+            }
+
             if (je.EventTypeID == JournalTypeEnum.CodexEntry)
             {
                 System.Diagnostics.Debug.Assert(sr != null, "Made codex programatically - wrong");
