@@ -1277,7 +1277,7 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" @
 
-.SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction" 
+.SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 
 //.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
 //.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
@@ -1563,7 +1563,8 @@ SECTION UserControlCarrier
 .Cost: "Cost" @
 .CoreService: "Core Service" @
 .OptionalService: "Optional Service" @
-
+.Decommissioned : "Decommissioned" @
+.DecommissionedOn : "Decommissioning on" @
 
 .extTabControl.tabPageOverall: "Overall" @
 .extTabControl.tabPageOverall.imageControlOverall: "imageControl1" @

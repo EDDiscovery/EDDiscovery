@@ -1724,8 +1724,8 @@ namespace EDDiscovery
         UserControlSpanel_showInPositionToolStripMenuItem_scanBelowMenuItem,
         UserControlSpanel_showInPositionToolStripMenuItem_scanOnTopMenuItem,
 
-        UserControlCarrier_Decommisioned,
-        UserControlCarrier_DecommisionedOn,
+        UserControlCarrier_Decommissioned,
+        UserControlCarrier_DecommissionedOn,
         UserControlCarrier_Cargo,
         UserControlCarrier_Services,
         UserControlCarrier_Shippacks,

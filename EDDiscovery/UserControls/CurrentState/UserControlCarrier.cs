@@ -438,10 +438,12 @@ namespace EDDiscovery.UserControls
                     string name = cs.State.Name + " " + cs.State.Callsign;
 
                     if (cs.IsDecommisioned)
-                        name += " (" + "Decommisioned".TxID(EDTx.UserControlCarrier_Decommisioned) + ")";
+                    {
+                        name += " (" + "Decommissioned".TxID(EDTx.UserControlCarrier_Decommissioned) + ")";
+                    }
                     else if (cs.IsDecommisioning)
                     {
-                        name += " (" + "Decommissioning on".TxID(EDTx.UserControlCarrier_DecommisionedOn) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
+                        name += " (" + "Decommissioning on".TxID(EDTx.UserControlCarrier_DecommissionedOn) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
                     }
 
                     imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);

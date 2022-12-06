@@ -1486,6 +1486,8 @@ SECTION UserControlCarrier
 .Cost: "Cost" => "Kosten"
 .CoreService: "Core Service" => "Kerneinrichtung"
 .OptionalService: "Optional Service" => "Optionale Einrichtung"
+.Decommissioned: "Decommissioned" @
+.DecommissionedOn: "Decommissioning on" @
 .extTabControl.tabPageOverall: "Overall" => "Insgesamt"
 .extTabControl.tabPageOverall.imageControlOverall: "imageControl1" => "Bildkontrolle1"
 .extTabControl.tabPageItinerary: "Itinerary" => "Reiseverlauf"
