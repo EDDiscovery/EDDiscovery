@@ -1531,7 +1531,8 @@ SECTION UserControlSuitsWeapons
 
 SECTION UserControlCarrier
 
-.NoCarrier: "No Carrier" @
+.Decommissioned : "Decommissioned" @
+.DecommissionedOn : "Decommissioning on" @
 .Cargo: "Cargo" @
 .Services: "Services" @
 .Shippacks: "Ship packs" @
@@ -1553,18 +1554,24 @@ SECTION UserControlCarrier
 .RepairTax: "Repair Tax" @
 .CoreCost: "Core Cost" @
 .ServicesCost: "Services Cost" @
-.ServiceActive: "This Service is Active" @
+.NoCarrier: "No Carrier" @
 .InstallCost: "Install cost" @
 .CapacityAllocated: "Capacity Allocated" @
 .Upkeepcost: "Upkeep cost" @
 .Suspendedupkeepcost: "Suspended upkeep cost" @
 .CrewName: "Crew Name" @
+.ServiceActive: "This Service is Active" @
+.ServiceSuspended : "This service is suspended" @
+.ServiceNotInstalled: "This Service is Not Installed" @
+.NoPacks: ""No Module or Ship packs installed" @
 .Tier: "Tier" @
 .Cost: "Cost" @
-.CoreService: "Core Service" @
+.Jumping : "Jumping" @
+.NetworkFailure : "No CAPI data from frontier, due to either or server/network failure" @
+.NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
 .OptionalService: "Optional Service" @
-.Decommissioned : "Decommissioned" @
-.DecommissionedOn : "Decommissioning on" @
+.CoreService: "Core Service" @
+
 
 .extTabControl.tabPageOverall: "Overall" @
 .extTabControl.tabPageOverall.imageControlOverall: "imageControl1" @

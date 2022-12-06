@@ -388,10 +388,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewItinerary.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewItinerary.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-                string[] text = new string[] { cs.LastJumpText(1), cs.LastJumpText(2), cs.LastJumpText(3), cs.LastJumpText(4), cs.LastJumpText(5), cs.LastJumpText(6) };
-                int lines = text.Where(x => x != null).Count();
-                imageControlOverall.DrawText(new Point(hspacing, imageControlOverall.ImageHeight - linemargin - lines * (normfont.Height + linemargin)),
-                                    new Size(30000, 30000), text, normfont, linemargin, color);
             }
 
             if (dataGridViewLedger.RowCount != cs.Ledger.Count)
@@ -485,6 +481,12 @@ namespace EDDiscovery.UserControls
 
                     labelFCoreCost.Text = "Core Cost".TxID(EDTx.UserControlCarrier_CoreCost) + ": " + cs.State.GetCoreCost().ToString("N0") + "cr";
                     labelFServicesCost.Text = "Services Cost".TxID(EDTx.UserControlCarrier_ServicesCost) + ": " + cs.State.GetServicesCost().ToString("N0") + "cr";
+
+                    string[] itinerylines = new string[] { cs.LastJumpText(1), cs.LastJumpText(2), cs.LastJumpText(3), cs.LastJumpText(4), cs.LastJumpText(5), cs.LastJumpText(6) };
+                    int lines = itinerylines.Where(x => x != null).Count();
+                    imageControlOverall.DrawText(new Point(hspacing, imageControlOverall.ImageHeight - linemargin - lines * (normfont.Height + linemargin)),
+                                        new Size(30000, 30000), itinerylines, normfont, linemargin, color);
+
                 }
                 else
                 {
@@ -717,7 +719,7 @@ namespace EDDiscovery.UserControls
                 int hpos = hspacing + (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap(cs.CurrentPositionText, bigfont).Width + hspacing;
 
                 var timetogo = cs.TimeTillJump;
-                string jumptext = cs.NextDestinationText + " " + (timetogo.TotalSeconds > 0 ? timetogo.ToString(@"mm\.ss") : "Jumping".TxID(EDTx.UserControlCarrier_Jumping));
+                string jumptext = cs.NextDestinationText + " " + (timetogo.TotalSeconds > 0 ? timetogo.ToString(@"mm\:ss") : "Jumping".TxID(EDTx.UserControlCarrier_Jumping));
 
                 imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
                 hpos += 48;

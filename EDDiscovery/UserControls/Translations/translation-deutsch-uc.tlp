@@ -1454,7 +1454,8 @@ SECTION UserControlSuitsWeapons
 
 SECTION UserControlCarrier
 
-.NoCarrier: "No Carrier" => "Kein Carrier"
+.Decommissioned: "Decommissioned" @
+.DecommissionedOn: "Decommissioning on" @
 .Cargo: "Cargo" => "Fracht"
 .Services: "Services" => "Einrichtungen"
 .Shippacks: "Ship packs" => "Schiffspakete"
@@ -1476,18 +1477,22 @@ SECTION UserControlCarrier
 .RepairTax: "Repair Tax" => "Reparatursteuer"
 .CoreCost: "Core Cost" => "Kernkosten"
 .ServicesCost: "Services Cost" => "Einrichtungskosten"
-.ServiceActive: "This Service is Active" => "Diese Einrichtung ist aktiv"
+.NoCarrier: "No Carrier" => "Kein Carrier"
 .InstallCost: "Install cost" => "Installationskosten"
 .CapacityAllocated: "Capacity Allocated" => "Zugewiesene Kapazität"
 .Upkeepcost: "Upkeep cost" => "Instandhaltungskosten"
 .Suspendedupkeepcost: "Suspended upkeep cost" => "Eingestellte Instandhaltungskosten"
 .CrewName: "Crew Name" => "Crewname"
+.ServiceActive: "This Service is Active" => "Diese Einrichtung ist aktiv"
+.ServiceSuspended: "This service is suspended" @
+.ServiceNotInstalled: "This Service is Not Installed" @
 .Tier: "Tier" => "Rang"
 .Cost: "Cost" => "Kosten"
-.CoreService: "Core Service" => "Kerneinrichtung"
+.Jumping: "Jumping" @
+.NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" @
+.NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
 .OptionalService: "Optional Service" => "Optionale Einrichtung"
-.Decommissioned: "Decommissioned" @
-.DecommissionedOn: "Decommissioning on" @
+.CoreService: "Core Service" => "Kerneinrichtung"
 .extTabControl.tabPageOverall: "Overall" => "Insgesamt"
 .extTabControl.tabPageOverall.imageControlOverall: "imageControl1" => "Bildkontrolle1"
 .extTabControl.tabPageItinerary: "Itinerary" => "Reiseverlauf"
