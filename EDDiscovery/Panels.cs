@@ -89,6 +89,8 @@ namespace EDDiscovery
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
+        public const int DLLUserPanelsStart = 20000;
+
         // This is the order they are presented to the user if not using alpha sort..   you can shuffle them to your hearts content
         // description = empty means not user selectable.  Single text string expresses a group.
 

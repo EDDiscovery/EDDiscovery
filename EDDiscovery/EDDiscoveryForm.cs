@@ -68,7 +68,7 @@ namespace EDDiscovery
         public event Action<Object, HistoryEntry> OnNoteChanged;        // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action OnAddOnsChanged;                            // add on changed
-        public event Action OnPanelAdded;                               // add on changed
+        public event Action OnPanelAdded;                               // panel was added by a user DLL
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
@@ -82,6 +82,7 @@ namespace EDDiscovery
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }       
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
+        public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered { add { Controller.OnNewHistoryEntryUnfiltered += value; } remove { Controller.OnNewHistoryEntryUnfiltered -= value; } }
         public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
@@ -391,16 +392,31 @@ namespace EDDiscovery
 
             DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
             DLLCallBacks = new EDDDLLInterfaces.EDDDLLIF.EDDCallBacks();
-            DLLCallBacks.ver = 2;
+            DLLCallBacks.ver = 3;
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
             DLLCallBacks.GetShipLoadout = (s) => { return null; };
+            DLLCallBacks.AddPanel = (id,paneltype,wintitle,refname,description,image) => 
+                {
+                    // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
+                    string regpanelstr = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLUserPanelsRegisteredList", "");
+                    string splitstr = "\u2737";
+                    string[] registeredpanels = regpanelstr.Split(splitstr, emptyarrayifempty: true);
+                    int indexof = Array.IndexOf(registeredpanels, id);
+                    int panelid = PanelInformation.DLLUserPanelsStart + (indexof < 0 ? registeredpanels.Length : indexof);       // set panel id
+                    if (indexof == -1)
+                    {
+                        EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLUserPanelsRegisteredList", regpanelstr.AppendPrePad(id, splitstr));
+                    }
+
+                    System.Diagnostics.Trace.WriteLine($"DLL added panel {id} {paneltype.Name} {wintitle} {refname} {description} {panelid}");
+                    PanelInformation.AddPanel(panelid, typeof(UserControls.UserControlExtPanel), paneltype, wintitle, refname, description, image);
+                    UpdatePanelListInContextMenuStrip();
+                    OnPanelAdded?.Invoke();
+                };
+
             dllsalloweddisallowed = EDDConfig.Instance.DLLPermissions;
             dllresults = DLLStart(ref dllsalloweddisallowed);       // we run it, and keep the results for processing in Shown
-
-           // temp example - will be removed later.
-           //AddPanel(20100, typeof(UserControls.UserControlExtPanel), typeof(UserControls.NewPanel1), "New Panel 1", "newpanel1", "New panel 1 auto installed", BaseUtils.Icons.IconSet.Instance.Get("fred"));
-           //AddPanel(20200, typeof(UserControls.UserControlExtPanel), typeof(UserControls.NewPanel2), "New Panel 2", "newpanel2", "New panel 2 auto installed", BaseUtils.Icons.IconSet.Instance.Get("fred"));
 
             // ---------------------------------------------------------------- Web server
 

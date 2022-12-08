@@ -379,21 +379,13 @@ namespace EDDiscovery
             string[] options = new string[] { EDDDLLInterfaces.EDDDLLIF.FLAG_HOSTNAME + "EDDiscovery",
                                               EDDDLLInterfaces.EDDDLLIF.FLAG_JOURNALVERSION + EliteDangerousCore.DLL.EDDDLLCallerHE.JournalVersion.ToString(), 
                                               EDDDLLInterfaces.EDDDLLIF.FLAG_CALLBACKVERSION + DLLCallBacks.ver.ToString(),
-                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLVERSION + EDDDLLInterfaces.EDDDLLIF.CallVersion,
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLVERSION + EDDDLLInterfaces.EDDDLLIF.CallBackVersion,
                                             };
 
             string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
             bool[] autodisallow = new bool[] { false, true };
             return DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls,
                                                              (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
-        }
-
-        // add a panel. Use null for underlyingtype to indicate ext panel. Use tag if required for panel
-        public void AddPanel(int id, Type underlyingtype, Object tag, string wintitle, string refname, string description, Image image)
-        {
-            PanelInformation.AddPanel(id, underlyingtype, tag, wintitle, refname, description, image);
-            UpdatePanelListInContextMenuStrip();
-            OnPanelAdded?.Invoke();
         }
 
         #endregion
