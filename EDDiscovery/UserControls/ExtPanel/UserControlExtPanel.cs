@@ -61,22 +61,11 @@ namespace EDDiscovery.UserControls
             callbacks.IsFloatingWindow = () => IsFloatingWindow;
             callbacks.IsClosed = () => IsClosed;
             callbacks.DGVTransparent = (g, t, c) => DGVTransparent((DataGridView)g, t, c);
-            callbacks.GetHistoryEntry = (i) => 
-            { 
-                return i >= 0 && i < discoveryform.history.Count ? EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, discoveryform.history[i], false) :  new JournalEntry() { indexno = -1 }; 
-            };
-            callbacks.GetTarget = () =>
-            {
-                var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
-                return hastarget ? new Tuple<string, double, double, double>(name, x, y, z) : null;
-            };
-            callbacks.WriteToLog = (s) => discoveryform.LogLine(s);
-            callbacks.WriteToLogHighlight = (s) => discoveryform.LogLineHighlight(s);
-
+  
             var th = ExtendedControls.Theme.Current;
             var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
-            panel.Initialise(callbacks,jo.ToString(),"");     // initialise, pass in callbacks and unused config string
+            panel.Initialise(callbacks, displaynumber, jo.ToString(),"");     // initialise, pass in callbacks and unused config string
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;

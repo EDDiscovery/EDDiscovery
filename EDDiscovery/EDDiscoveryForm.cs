@@ -395,7 +395,21 @@ namespace EDDiscovery
             DLLCallBacks.ver = 3;
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
-            DLLCallBacks.GetShipLoadout = (s) => { return null; };
+            DLLCallBacks.GetShipLoadout = DLLGetShipLoadout;
+            DLLCallBacks.GetTarget = () =>
+            {
+                var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
+                return hastarget ? new Tuple<string, double, double, double>(name, x, y, z) : null;
+            };
+            DLLCallBacks.WriteToLog = (s) => LogLine(s);
+            DLLCallBacks.WriteToLogHighlight = (s) => LogLineHighlight(s);
+            DLLCallBacks.GetScanData = DLLGetScanData;
+            DLLCallBacks.GetSuitsWeaponsLoadouts = DLLGetSuitWeaponsLoadout;
+            DLLCallBacks.GetCarrierData = DLLGetCarrierData;
+            DLLCallBacks.GetVisitedList = DLLGetVisitedList;
+            DLLCallBacks.GetShipyards = DLLGetShipyards;
+            DLLCallBacks.GetOutfitting = DLLGetOutfitting;
+
             DLLCallBacks.AddPanel = (id,paneltype,wintitle,refname,description,image) => 
                 {
                     // registered panels, search the stored list, see if there, then it gets the index, else its added to the list

@@ -825,13 +825,15 @@ namespace EDDiscovery.UserControls
                 {
                     toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".T(EDTx.UserControlTravelGrid_SETSTARTTC);
                 }
+
+
             }
             else
             {
                 toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".T(EDTx.UserControlTravelGrid_SETSTSTOP); ;
             }
 
-            quickMarkToolStripMenuItem.Checked = quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
+            quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
             mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
             toolStripMenuItemStartStop.Enabled = (rightclickhe != null);
