@@ -59,6 +59,10 @@ namespace EDDiscovery
                     for (int i = lastfileh.EntryNumber - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
                     {
                         //System.Diagnostics.Debug.WriteLine($"DLL-> {history[i].EventTimeUTC} {history[i].EventSummary}");
+
+                        // lying here a bit - we don't have the raw available, have to send best we can
+                        DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);
+
                         DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);
                     }
                 }
@@ -105,7 +109,7 @@ namespace EDDiscovery
             }
 
             if (DLLManager.Count > 0)
-                DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he));       // give DLL the unfiltered stream
+                DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he),false);       // give DLL the unfiltered stream
 
         }
 
