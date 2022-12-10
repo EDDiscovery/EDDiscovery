@@ -252,8 +252,8 @@ namespace EDDiscovery.UserControls
         }
 
         void DrawGrid()
-        { 
-            if ( discoveryform.history != null )        //??its never null?
+        {
+            if (discoveryform.history != null)        //??its never null?
             {
                 // change display time to utc
                 DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);
@@ -268,9 +268,9 @@ namespace EDDiscovery.UserControls
 
                 foreach (var syskvp in discoveryform.history.StarScan.ScanDataByName)
                 {
-                    foreach( var starkvp in syskvp.Value.StarNodes)
+                    foreach (var starkvp in syskvp.Value.StarNodes)
                     {
-                        foreach( var body in starkvp.Value.Descendants)
+                        foreach (var body in starkvp.Value.Descendants)
                         {
                             if (body.Organics != null)
                             {
@@ -315,12 +315,14 @@ namespace EDDiscovery.UserControls
                 dataGridView.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
 
                 int rowwithtag;
-                if (curtag != null && (rowwithtag = dataGridView.FindRowWithTag(curtag)) >=0)
+                if (curtag != null && (rowwithtag = dataGridView.FindRowWithTag(curtag)) >= 0)
                 {
-                    dataGridView.CurrentCell = dataGridView.Rows[rowwithtag].Cells[0];
+                    dataGridView.SetCurrentSelOnRow(rowwithtag, 0);
                 }
                 else if (dataGridView.RowCount > 0)
-                    dataGridView.CurrentCell = dataGridView.Rows[0].Cells[0];
+                {
+                    dataGridView.SetCurrentSelOnRow(0, 0);
+                }
 
                 labelValue.Text = totalvalue>0 ? (totalvalue.ToString("N0") + " cr") : "";
             }
