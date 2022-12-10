@@ -227,9 +227,14 @@ namespace EDDiscovery
 
         public static void AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image)
         {
-            PanelInfo p = new PanelInfo((PanelIDs)id, uccbtype, wintitle, refname, description, image, tag);
-            displayablepanels.Add(p);
-            userselectablepanellist.Add(p);
+            PanelIDs pid = (PanelIDs)id;
+
+            if (GetPanelInfoByPanelID(pid) == null)     // don't double add
+            {
+                PanelInfo p = new PanelInfo(pid, uccbtype, wintitle, refname, description, image, tag);
+                displayablepanels.Add(p);
+                userselectablepanellist.Add(p);
+            }
         }
 
         [System.Diagnostics.DebuggerDisplay("{PopoutID} {WindowTitle}")]

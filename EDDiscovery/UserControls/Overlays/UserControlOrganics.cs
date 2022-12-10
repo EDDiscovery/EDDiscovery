@@ -253,7 +253,7 @@ namespace EDDiscovery.UserControls
 
         void DrawGrid()
         { 
-            if ( discoveryform.history != null )
+            if ( discoveryform.history != null )        //??its never null?
             {
                 // change display time to utc
                 DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);

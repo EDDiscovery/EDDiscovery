@@ -37,7 +37,6 @@ namespace EDDiscovery
     public partial class EDDiscoveryForm : Forms.DraggableFormPos
     {
         #region Major systems
-
         public EliteDangerousCore.DLL.EDDDLLManager DLLManager { get; set; }
 
         public CAPI.CompanionAPI FrontierCAPI { get { return Controller.FrontierCAPI; } }
@@ -114,7 +113,6 @@ namespace EDDiscovery
 
         #region Privates
 
-        private EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
         private BaseUtils.GitHubRelease newRelease;
@@ -384,53 +382,7 @@ namespace EDDiscovery
             msg.Invoke("Loading Extension DLLs");
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF DLL setup");
 
-            EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(EDDOptions.Instance.DLLAppDirectory());      // any needed assemblies from here
-            var dllexe = EDDOptions.Instance.DLLExeDirectory();     // and possibly from here, may not be present
-            if ( dllexe != null )
-                EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(dllexe);       
-            AppDomain.CurrentDomain.AssemblyResolve += EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyResolve;
-
-            DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
-            DLLCallBacks = new EDDDLLInterfaces.EDDDLLIF.EDDCallBacks();
-            DLLCallBacks.ver = 3;
-            DLLCallBacks.RequestHistory = DLLRequestHistory;
-            DLLCallBacks.RunAction = DLLRunAction;
-            DLLCallBacks.GetShipLoadout = DLLGetShipLoadout;
-            DLLCallBacks.GetTarget = () =>
-            {
-                var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
-                return hastarget ? new Tuple<string, double, double, double>(name, x, y, z) : null;
-            };
-            DLLCallBacks.WriteToLog = (s) => LogLine(s);
-            DLLCallBacks.WriteToLogHighlight = (s) => LogLineHighlight(s);
-            DLLCallBacks.GetScanData = DLLGetScanData;
-            DLLCallBacks.GetSuitsWeaponsLoadouts = DLLGetSuitWeaponsLoadout;
-            DLLCallBacks.GetCarrierData = DLLGetCarrierData;
-            DLLCallBacks.GetVisitedList = DLLGetVisitedList;
-            DLLCallBacks.GetShipyards = DLLGetShipyards;
-            DLLCallBacks.GetOutfitting = DLLGetOutfitting;
-
-            DLLCallBacks.AddPanel = (id,paneltype,wintitle,refname,description,image) => 
-                {
-                    // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
-                    string regpanelstr = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLUserPanelsRegisteredList", "");
-                    string splitstr = "\u2737";
-                    string[] registeredpanels = regpanelstr.Split(splitstr, emptyarrayifempty: true);
-                    int indexof = Array.IndexOf(registeredpanels, id);
-                    int panelid = PanelInformation.DLLUserPanelsStart + (indexof < 0 ? registeredpanels.Length : indexof);       // set panel id
-                    if (indexof == -1)
-                    {
-                        EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLUserPanelsRegisteredList", regpanelstr.AppendPrePad(id, splitstr));
-                    }
-
-                    System.Diagnostics.Trace.WriteLine($"DLL added panel {id} {paneltype.Name} {wintitle} {refname} {description} {panelid}");
-                    PanelInformation.AddPanel(panelid, typeof(UserControls.UserControlExtPanel), paneltype, wintitle, refname, description, image);
-                    UpdatePanelListInContextMenuStrip();
-                    OnPanelAdded?.Invoke();
-                };
-
-            dllsalloweddisallowed = EDDConfig.Instance.DLLPermissions;
-            dllresults = DLLStart(ref dllsalloweddisallowed);       // we run it, and keep the results for processing in Shown
+            DLLStart();
 
             // ---------------------------------------------------------------- Web server
 
@@ -904,7 +856,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
+#region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
 
         public void AddTab(PanelInformation.PanelIDs id, int tabindex = 0) // negative means from the end.. -1 is one before end
         {
@@ -1023,10 +975,10 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
 
-        #region Closing
+#region Closing
 
         public bool disallowclose = true;
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -1088,9 +1040,9 @@ namespace EDDiscovery
             Application.Exit();
         }
      
-        #endregion
+#endregion
     
-        #region Tools Menu
+#region Tools Menu
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1113,9 +1065,9 @@ namespace EDDiscovery
             Close();
         }
 
-        #endregion
+#endregion
 
-        #region Admin Menu
+#region Admin Menu
 
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1255,9 +1207,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Add Ons Menu
+#region Add Ons Menu
 
         public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1291,9 +1243,9 @@ namespace EDDiscovery
             actioncontroller.TerminateAll();
         }
 
-        #endregion
+#endregion
 
-        #region Help Menu
+#region Help Menu
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1354,9 +1306,9 @@ namespace EDDiscovery
         }
 
 
-        #endregion
+#endregion
 
-        #region Toolbar
+#region Toolbar
 
         public void UpdateCommandersListBox()
         {
@@ -1505,9 +1457,9 @@ namespace EDDiscovery
 
 
 
-        #endregion
+#endregion
 
-        #region Other clicks - Captions etc
+#region Other clicks - Captions etc
 
         private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
@@ -1544,9 +1496,9 @@ namespace EDDiscovery
                 this.WindowState = FormWindowState.Minimized;
         }
 
-        #endregion
+#endregion
 
-        #region Notify Icons
+#region Notify Icons
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -1597,7 +1549,7 @@ namespace EDDiscovery
         }
 
 
-        #endregion
+#endregion
 
     }
 }

@@ -42,10 +42,14 @@ namespace EDDiscovery.UserControls
             DBBaseName = "ExtPanel" + p.PopoutID;
         }
 
+        public const int PanelCallBackVersion = 1;      // explicitly,this is what we do
+
         public override void Init()
         {
+            System.Diagnostics.Debug.Assert(PanelCallBackVersion == EDDDLLInterfaces.EDDDLLIF.PanelCallBackVersion, "***** Updated EDD DLL IF but not updated panel callbacks");
+
             var callbacks = new EDDPanelCallbacks();
-            callbacks.ver = 1;
+            callbacks.ver = PanelCallBackVersion;
             callbacks.SaveString = (s, d) => PutSetting(s, d);
             callbacks.GetString = (s, d) => GetSetting(s, d);
             callbacks.SaveDouble = (s, d) => PutSetting(s, d);
