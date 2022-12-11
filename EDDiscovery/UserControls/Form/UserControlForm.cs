@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,10 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.UserControls;
+
 using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
@@ -64,7 +62,7 @@ namespace EDDiscovery.UserControls
                          Color labelnormal , Color labeltransparent, Color transparentkey )
         {
             //System.Diagnostics.Debug.WriteLine("UCF Init+");
-            RestoreFormPositionRegKey = "PopUpForm" + rf;      // position remember key
+            DBRefName = RestoreFormPositionRegKey = "PopUpForm" + rf;      // Keys for form position and form properties are based on this naming (PopUpFormBookmarks).  Note UCCB using Get/Put Settings are based on another system (see UCCB)
 
             UserControl = c;
             UserControl.Dock = DockStyle.None;
@@ -78,7 +76,6 @@ namespace EDDiscovery.UserControls
             WinTitle = label_title.Text = this.Text = title;            // label index always contains the wintitle, but may not be shown
 
             curwindowsborder = defwindowsborder = winborder;
-            DBRefName = "PopUpForm" + rf;
             this.Name = rf;
             deftopmost = deftopmostp;
 
