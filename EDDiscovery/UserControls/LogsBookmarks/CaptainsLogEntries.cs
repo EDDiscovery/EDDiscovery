@@ -288,12 +288,12 @@ namespace EDDiscovery.UserControls
             updateprogramatically = false;
         }
 
-        private void MakeNew(DateTime entrytimeutc, string system, string body)
+        private void MakeNew(DateTime selectedtime, string system, string body)
         {
             var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
 
             rw.CreateCells(dataGridView,
-                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entrytimeutc),
+                selectedtime,
                 system,
                 body,
                 "",
@@ -301,7 +301,7 @@ namespace EDDiscovery.UserControls
              );
 
             rw.Tag = null;
-            rw.Cells[0].Tag = entrytimeutc;      // new ones store the date in here as UTC see StoreNote
+            rw.Cells[0].Tag = EDDConfig.Instance.ConvertTimeToUTCFromSelected(selectedtime);
 
             dataGridView.Rows.Insert(0, rw);
             dataGridView.SetCurrentSelOnRow(0, 2);
@@ -414,7 +414,7 @@ namespace EDDiscovery.UserControls
 
             if (createnew)
             {
-                MakeNew(datestartutc, "?", "?");
+                MakeNew(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(datestartutc).StartOfDay(), "?", "?");
             }
         }
 
@@ -426,7 +426,7 @@ namespace EDDiscovery.UserControls
         {
             ClearDates();
             HistoryEntry he = discoveryform.history.GetLast;
-            MakeNew(DateTime.UtcNow, he?.System.Name ?? "?", he?.WhereAmI ?? "?");
+            MakeNew(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow), he?.System.Name ?? "?", he?.WhereAmI ?? "?");
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
