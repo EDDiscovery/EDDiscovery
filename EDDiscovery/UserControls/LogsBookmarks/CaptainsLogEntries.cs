@@ -257,19 +257,14 @@ namespace EDDiscovery.UserControls
 
                 string dt = rw.Cells[0].Value is DateTime ? ((DateTime)rw.Cells[0].Value).ToString() : rw.Cells[0].Value as string;
 
-                // select conversion operation
+                System.Globalization.DateTimeStyles dts = System.Globalization.DateTimeStyles.AllowWhiteSpaces;     // convert straight no conversion
 
-                System.Globalization.DateTimeStyles dts = !EDDConfig.Instance.DisplayTimeLocal ?
-                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal :
-                    System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AdjustToUniversal;
-                
-                // if not null, it converts to selected time, and its in range for selected
-                if (dt!= null && DateTime.TryParse(dt, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime datetimeselected) && 
+                if ( dt != null && DateTime.TryParse(dt, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime datetimeselected) && 
                             EDDConfig.Instance.DateTimeInRangeForGame(datetimeselected))
                 {
-                    // its in selected time, go to UTC
-                    rw.Cells[0].Tag = EDDConfig.Instance.ConvertTimeToUTCFromSelected(datetimeselected);      // update UTC Tag
-                    System.Diagnostics.Debug.WriteLine($"Captains Log Edit row {rw.Index} date time utc {rw.Cells[0].Tag}");
+                    var utc = EDDConfig.Instance.ConvertTimeToUTCFromPicker(datetimeselected);        // go to UTC like a picker
+                    rw.Cells[0].Tag = utc;
+                    System.Diagnostics.Debug.WriteLine($"Captains Log Edit row {rw.Index} datetime {datetimeselected} -> date time utc {rw.Cells[0].Tag}");
                     StoreRow(rw);
                 }
                 else
