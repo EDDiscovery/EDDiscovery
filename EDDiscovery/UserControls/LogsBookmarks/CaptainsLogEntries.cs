@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls
             // be paranoid about end/start of day
             DateTime startutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : EDDConfig.GameLaunchTimeUTC();
             DateTime endutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : EDDConfig.GameEndTimeUTC();
-            //System.Diagnostics.Debug.WriteLine($"CL Filter {startutc} {endutc}");
+            System.Diagnostics.Debug.WriteLine($"Captains Log display filter {startutc} {endutc}");
 
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
             {
@@ -149,6 +149,7 @@ namespace EDDiscovery.UserControls
 
                         rw.Tag = entry;
                         rw.Cells[0].Tag = entry.TimeUTC;      // column 0 gets time utc
+                        //System.Diagnostics.Debug.WriteLine($"Captains Log {rw.Index} date time utc {rw.Cells[0].Tag}");
 
                         List<string> taglist = entry.Tags?.SplitNoEmptyStrings(';');        // may be null - we do not use all or none note
                         rw.Cells[4].Tag = taglist;
@@ -252,29 +253,64 @@ namespace EDDiscovery.UserControls
 
             if ( e.ColumnIndex == 0 )
             {
-                string v = rw.Cells[0].Value as string;
+                // cell contains a datetime object (dec 22 bug) or maybe a string to be defensive
+
+                string dt = rw.Cells[0].Value is DateTime ? ((DateTime)rw.Cells[0].Value).ToString() : rw.Cells[0].Value as string;
+
+                // select conversion operation
 
                 System.Globalization.DateTimeStyles dts = !EDDConfig.Instance.DisplayTimeLocal ?
                     System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal :
                     System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AdjustToUniversal;
-
-                if (v!= null && DateTime.TryParse(v, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime res) && EDDConfig.Instance.DateTimeInRangeForGame(res))
+                
+                // if not null, it converts to selected time, and its in range for selected
+                if (dt!= null && DateTime.TryParse(dt, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime datetimeselected) && 
+                            EDDConfig.Instance.DateTimeInRangeForGame(datetimeselected))
                 {
-                    rw.Cells[0].Tag = res;
+                    // its in selected time, go to UTC
+                    rw.Cells[0].Tag = EDDConfig.Instance.ConvertTimeToUTCFromSelected(datetimeselected);      // update UTC Tag
+                    System.Diagnostics.Debug.WriteLine($"Captains Log Edit row {rw.Index} date time utc {rw.Cells[0].Tag}");
                     StoreRow(rw);
                 }
                 else
                 {
                     ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad/Out of Range Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    DateTime prev = (DateTime)rw.Cells[0].Tag;
-                    rw.Cells[0].Value = prev;
+                    DateTime prevutc = (DateTime)rw.Cells[0].Tag;
+                    rw.Cells[0].Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(prevutc);       // note we go back to selected
                 }
             }
-            else if (e.ColumnIndex <= 2 )
+            else 
             {
-                if (rw.Cells[3].Value != null && ((string)rw.Cells[3].Value).Length > 0)
-                    StoreRow(rw);
+                StoreRow(rw);
             }
+        }
+
+        private void ClearDates()
+        {
+            updateprogramatically = true;
+            dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = false;
+            Display();
+            updateprogramatically = false;
+        }
+
+        private void MakeNew(DateTime entrytimeutc, string system, string body)
+        {
+            var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
+
+            rw.CreateCells(dataGridView,
+                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entrytimeutc),
+                system,
+                body,
+                "",
+                ""
+             );
+
+            rw.Tag = null;
+            rw.Cells[0].Tag = entrytimeutc;      // new ones store the date in here as UTC see StoreNote
+
+            dataGridView.Rows.Insert(0, rw);
+            dataGridView.SetCurrentSelOnRow(0, 2);
+            StoreRow(rw);
         }
 
         private void EditNote(DataGridViewRow rw)
@@ -290,8 +326,6 @@ namespace EDDiscovery.UserControls
                 StoreRow(rw);
             }
         }
-
-
 
         private void EditTags(DataGridViewRow rw)
         {
@@ -384,7 +418,9 @@ namespace EDDiscovery.UserControls
             Display();
 
             if (createnew)
-                buttonNew_Click(null, null);
+            {
+                MakeNew(datestartutc, "?", "?");
+            }
         }
 
         #endregion
@@ -393,34 +429,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonNew_Click(object nu1, EventArgs nu2)
         {
+            ClearDates();
             HistoryEntry he = discoveryform.history.GetLast;
-
-            DateTime entrytimeutc = DateTime.UtcNow;
-            string system = he?.System.Name ?? "?";
-            string body = he?.WhereAmI ?? "?";
-
-            if (dateTimePickerEndDate.Checked && dateTimePickerEndDate.Value.ToUniversalTime() < DateTime.UtcNow)      // we are not at the current time..
-            {
-                entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value);
-                entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddMinutes(DateTime.UtcNow.Minute);
-                system = "?";
-                body = "?";
-            }
-
-            var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
-
-            rw.CreateCells(dataGridView,
-                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entrytimeutc),
-                system,
-                body,
-                "",
-                ""
-             );
-
-            rw.Tag = null;
-            rw.Cells[0].Tag = entrytimeutc;      // new ones store the date in here as UTC see StoreNote
-
-            dataGridView.Rows.Insert(0,rw);
+            MakeNew(DateTime.UtcNow, he?.System.Name ?? "?", he?.WhereAmI ?? "?");
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
