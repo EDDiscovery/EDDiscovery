@@ -276,7 +276,8 @@ namespace EDDiscovery
 
             if (!EDDOptions.Instance.NoTheme)
             {
-                ThemeList.SetThemeByName("Elite Verdana Small");                // this is the default theme we use normally
+                string deftheme = Environment.OSVersion.Platform == PlatformID.Win32NT ? "Elite Verdana Small" : "Windows Default";
+                ThemeList.SetThemeByName(deftheme);                // this is the default theme we use normally
                 var theme = GetThemeFromDB();
                 if (theme != null)
                     ExtendedControls.Theme.Current = theme;
