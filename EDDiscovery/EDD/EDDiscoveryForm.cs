@@ -647,9 +647,12 @@ namespace EDDiscovery
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
 
-            // Notifications
+            // Notifications, only check github when directed and we are not debugging it using a folder override
 
-            Notifications.CheckForNewNotifications((notelist) =>
+            Notifications.CheckForNewNotifications(EDDOptions.Instance.CheckGithubFiles && EDDOptions.Instance.NotificationFolderOverride == null, 
+                                                   EDDOptions.Instance.NotificationsAppDirectory(),
+                                                   EDDiscovery.Properties.Resources.URLGithubDataDownload,
+            (notelist) =>
             {
                 this.BeginInvoke(new Action(() =>
                 {

@@ -332,12 +332,12 @@ namespace EDDiscovery
 
         #region Notifications
 
-        List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();
+        List<BaseUtils.Notifications.Notification> popupnotificationlist = new List<BaseUtils.Notifications.Notification>();
         void ShowNotification()        // orgnanise pop ups one at a time..
         {
             if (popupnotificationlist.Count > 0)
             {
-                Notifications.NotificationParas p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
+                BaseUtils.Notifications.NotificationParas p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
 
                 Action<object> act = new Action<object>((o) =>      // on ack, update list of ack entries
                 {
