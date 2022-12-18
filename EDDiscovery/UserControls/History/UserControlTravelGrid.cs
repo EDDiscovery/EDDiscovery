@@ -115,6 +115,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
+            discoveryform.RequestPanelAction += Discoveryform_RequestPanelAction;
 
             this.showSystemVisitedForeColourToolStripMenuItem.Checked = GetSetting(dbVisitedColour, false);
             this.showSystemVisitedForeColourToolStripMenuItem.Click += new System.EventHandler(this.showSystemVisitedForeColourToolStripMenuItem_Click);
@@ -177,8 +178,12 @@ namespace EDDiscovery.UserControls
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewTravel);
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
+
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
+            discoveryform.OnNoteChanged -= OnNoteChanged;
+            discoveryform.RequestPanelAction -= Discoveryform_RequestPanelAction;
+
             searchtimer.Dispose();
         }
 
@@ -637,6 +642,18 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void Discoveryform_RequestPanelAction(string arg1, string arg2, string arg3, string arg4)
+        {
+            if (arg1.EqualsIIC("editnoteprimary") && IsPrimaryHistoryDisplayNumber)      // action on editnoteprimary, and we are a primary history display
+            {
+                HistoryEntry he = dataGridViewTravel.RowCount > 0 ? dataGridViewTravel.Rows[0].Tag as HistoryEntry : null;   // grab top row HE if it exists
+                if (he != null)
+                {
+                    EditNoteInWindow(he);
+                }
+            }
+        }
+
 
         private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
@@ -671,6 +688,7 @@ namespace EDDiscovery.UserControls
             leftclickhe = dataGridViewTravel.LeftClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow].Tag : null;
         }
 
+
         private void dataGridViewTravel_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dataGridViewTravel.LeftClickRowValid)                                                
@@ -679,15 +697,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (!dataGridViewTravel.IsCurrentCellInEditMode)
                     {
-                        using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(leftclickhe, discoveryform))
-                        {
-                            if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
-                            {
-                                System.Diagnostics.Trace.Assert(noteform.NoteText != null && leftclickhe.System != null);
-                                leftclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, leftclickhe.System.Name, EDCommander.Current.SyncToEdsm);
-                                discoveryform.NoteChanged(this, leftclickhe);
-                            }
-                        }
+                        EditNoteInWindow(leftclickhe);
                     }
                 }
                 else
@@ -1037,13 +1047,18 @@ namespace EDDiscovery.UserControls
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclickhe, discoveryform))
+            EditNoteInWindow(rightclickhe);
+        }
+
+        private void EditNoteInWindow(HistoryEntry he)
+        {
+            using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(he))
             {
                 if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclickhe.System != null);
-                    rightclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, rightclickhe.System.Name, EDCommander.Current.SyncToEdsm);
-                    discoveryform.NoteChanged(this, rightclickhe);
+                    System.Diagnostics.Trace.Assert(noteform.NoteText != null && he.System != null);
+                    he.journalEntry.UpdateSystemNote(noteform.NoteText, he.System.Name, EDCommander.Current.SyncToEdsm);
+                    discoveryform.NoteChanged(this, he);
                 }
             }
         }

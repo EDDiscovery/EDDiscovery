@@ -253,13 +253,12 @@ SECTION UserControlExpedition
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
 
-// old stuff
-
 .SystemName: "System Name" @
 .Distance: "Dist." @
 .Note: "Note" @
 .ColumnDistStart: "Dist Start" @
 .ColumnDistanceRemaining: "Dist Remaining" @
+.ColumnHistoryNote: "History Note" @
 
 .labelCml: "Cml Distance:" @
 .labelP2P: "P2P Distance:" @
@@ -269,8 +268,10 @@ SECTION UserControlExpedition
 
 .copyToolStripMenuItem: "Copy" @
 .pasteToolStripMenuItem: "Paste" @
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" @
-.deleteRowsToolStripMenuItem: "Delete Rows" @
+
+.cutToolStripMenuItem: "Cut" @
+.insertRowAboveToolStripMenuItem: "Insert row above" @
+
 .setTargetToolStripMenuItem: "Set Target" @
 .editBookmarkToolStripMenuItem: "Edit bookmark" @
 

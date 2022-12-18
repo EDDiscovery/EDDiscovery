@@ -36,16 +36,19 @@
             this.labelSummary = new System.Windows.Forms.Label();
             this.labelTDetails = new System.Windows.Forms.Label();
             this.labelDetails = new System.Windows.Forms.Label();
-            this.panelBack = new System.Windows.Forms.Panel();
+            this.panelMain = new System.Windows.Forms.Panel();
+            this.textBoxNote = new ExtendedControls.ExtRichTextBox();
             this.buttonCancel = new ExtendedControls.ExtButton();
             this.buttonSave = new ExtendedControls.ExtButton();
-            this.textBoxNote = new ExtendedControls.ExtRichTextBox();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.ExtButtonDrawn();
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
-            this.panelBack.SuspendLayout();
+            this.panelBottom = new System.Windows.Forms.Panel();
+            this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
+            this.panelMain.SuspendLayout();
             this.panelTop.SuspendLayout();
+            this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTTimestamp
@@ -115,58 +118,34 @@
             // 
             this.labelDetails.Location = new System.Drawing.Point(150, 82);
             this.labelDetails.Name = "labelDetails";
-            this.labelDetails.Size = new System.Drawing.Size(366, 91);
+            this.labelDetails.Size = new System.Drawing.Size(195, 100);
             this.labelDetails.TabIndex = 11;
             this.labelDetails.Text = "<code>";
             // 
-            // panelBack
+            // panelMain
             // 
-            this.panelBack.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelBack.Controls.Add(this.labelTTimestamp);
-            this.panelBack.Controls.Add(this.buttonCancel);
-            this.panelBack.Controls.Add(this.buttonSave);
-            this.panelBack.Controls.Add(this.textBoxNote);
-            this.panelBack.Controls.Add(this.labelTSystem);
-            this.panelBack.Controls.Add(this.labelDetails);
-            this.panelBack.Controls.Add(this.labelTSummary);
-            this.panelBack.Controls.Add(this.labelTDetails);
-            this.panelBack.Controls.Add(this.labelTimestamp);
-            this.panelBack.Controls.Add(this.labelSummary);
-            this.panelBack.Controls.Add(this.labelSystem);
-            this.panelBack.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelBack.Location = new System.Drawing.Point(0, 32);
-            this.panelBack.Name = "panelBack";
-            this.panelBack.Size = new System.Drawing.Size(529, 354);
-            this.panelBack.TabIndex = 13;
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(298, 312);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(100, 23);
-            this.buttonCancel.TabIndex = 3;
-            this.buttonCancel.Text = "%Cancel%";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(416, 312);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(100, 23);
-            this.buttonSave.TabIndex = 4;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.panelMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelMain.Controls.Add(this.labelTTimestamp);
+            this.panelMain.Controls.Add(this.labelTimestamp);
+            this.panelMain.Controls.Add(this.labelTSystem);
+            this.panelMain.Controls.Add(this.labelSystem);
+            this.panelMain.Controls.Add(this.labelTSummary);
+            this.panelMain.Controls.Add(this.labelSummary);
+            this.panelMain.Controls.Add(this.labelTDetails);
+            this.panelMain.Controls.Add(this.labelDetails);
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelMain.Location = new System.Drawing.Point(0, 32);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(676, 200);
+            this.panelMain.TabIndex = 13;
             // 
             // textBoxNote
             // 
             this.textBoxNote.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxNote.BorderColorScaling = 0.5F;
+            this.textBoxNote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxNote.HideScrollBar = true;
-            this.textBoxNote.Location = new System.Drawing.Point(6, 184);
+            this.textBoxNote.Location = new System.Drawing.Point(0, 232);
             this.textBoxNote.Name = "textBoxNote";
             this.textBoxNote.ReadOnly = false;
             this.textBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
@@ -184,10 +163,32 @@
             this.textBoxNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.textBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxNote.ShowLineCount = false;
-            this.textBoxNote.Size = new System.Drawing.Size(510, 110);
+            this.textBoxNote.Size = new System.Drawing.Size(676, 218);
             this.textBoxNote.TabIndex = 1;
             this.textBoxNote.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxNote.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.Location = new System.Drawing.Point(441, 6);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(100, 24);
+            this.buttonCancel.TabIndex = 3;
+            this.buttonCancel.Text = "%Cancel%";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSave.Location = new System.Drawing.Point(561, 6);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(100, 24);
+            this.buttonSave.TabIndex = 4;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // panelTop
             // 
@@ -197,7 +198,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(529, 32);
+            this.panelTop.Size = new System.Drawing.Size(676, 32);
             this.panelTop.TabIndex = 33;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             // 
@@ -208,7 +209,7 @@
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
-            this.panel_close.Location = new System.Drawing.Point(506, 0);
+            this.panel_close.Location = new System.Drawing.Point(653, 0);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
@@ -230,7 +231,7 @@
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(476, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(623, 0);
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
@@ -255,22 +256,45 @@
             this.label_index.Text = "<code>";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             // 
+            // panelBottom
+            // 
+            this.panelBottom.Controls.Add(this.buttonSave);
+            this.panelBottom.Controls.Add(this.buttonCancel);
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(0, 450);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(676, 40);
+            this.panelBottom.TabIndex = 12;
+            // 
+            // statusStripCustom
+            // 
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 490);
+            this.statusStripCustom.Name = "statusStripCustom";
+            this.statusStripCustom.Size = new System.Drawing.Size(676, 22);
+            this.statusStripCustom.TabIndex = 33;
+            // 
             // SetNoteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(529, 386);
-            this.Controls.Add(this.panelBack);
+            this.ClientSize = new System.Drawing.Size(676, 512);
+            this.Controls.Add(this.textBoxNote);
+            this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.panelBottom);
+            this.Controls.Add(this.statusStripCustom);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "SetNoteForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Set Note";
-            this.panelBack.ResumeLayout(false);
-            this.panelBack.PerformLayout();
+
+            this.panelMain.ResumeLayout(false);
+            this.panelMain.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            this.panelBottom.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -286,10 +310,12 @@
         private System.Windows.Forms.Label labelTDetails;
         private System.Windows.Forms.Label labelDetails;
         private ExtendedControls.ExtRichTextBox textBoxNote;
-        private System.Windows.Forms.Panel panelBack;
+        private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.ExtButtonDrawn panel_close;
         private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
+        private System.Windows.Forms.Panel panelBottom;
+        private ExtendedControls.ExtStatusStrip statusStripCustom;
     }
 }

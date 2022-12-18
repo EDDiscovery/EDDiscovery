@@ -59,11 +59,27 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName = new ExtendedControls.ExtTextBox();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
+            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
+            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistanceRemaining = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Visits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Scans = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FSSBodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.KnownBodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Stars = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnHistoryNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.insertCopiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insertRowAboveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel2 = new System.Windows.Forms.FlowLayoutPanel();
@@ -87,21 +103,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistanceRemaining = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Visits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Scans = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FSSBodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.KnownBodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Stars = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -328,12 +329,13 @@ namespace EDDiscovery.UserControls
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView.AutoSortByColumnName = false;
+            this.dataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SystemName,
-            this.Distance,
             this.Note,
+            this.Distance,
             this.ColumnX,
             this.ColumnY,
             this.ColumnZ,
@@ -345,6 +347,7 @@ namespace EDDiscovery.UserControls
             this.FSSBodies,
             this.KnownBodies,
             this.Stars,
+            this.ColumnHistoryNote,
             this.Info});
             this.dataGridView.ContextMenuStrip = this.contextMenuCopyPaste;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -360,63 +363,169 @@ namespace EDDiscovery.UserControls
             this.dataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewRouteSystems_SortCompare);
-            this.dataGridView.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragDrop);
-            this.dataGridView.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
-            this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
-            this.dataGridView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
+            this.dataGridView.Sorted += new System.EventHandler(this.dataGridView_Sorted);
+            // 
+            // SystemName
+            // 
+            this.SystemName.FillWeight = 50F;
+            this.SystemName.HeaderText = "System Name";
+            this.SystemName.Name = "SystemName";
+            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Note
+            // 
+            this.Note.HeaderText = "Note";
+            this.Note.Name = "Note";
+            // 
+            // Distance
+            // 
+            this.Distance.FillWeight = 25F;
+            this.Distance.HeaderText = "Dist.";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
+            // 
+            // ColumnX
+            // 
+            this.ColumnX.FillWeight = 25F;
+            this.ColumnX.HeaderText = "X";
+            this.ColumnX.Name = "ColumnX";
+            this.ColumnX.ReadOnly = true;
+            // 
+            // ColumnY
+            // 
+            this.ColumnY.FillWeight = 25F;
+            this.ColumnY.HeaderText = "Y";
+            this.ColumnY.Name = "ColumnY";
+            this.ColumnY.ReadOnly = true;
+            // 
+            // ColumnZ
+            // 
+            this.ColumnZ.FillWeight = 25F;
+            this.ColumnZ.HeaderText = "Z";
+            this.ColumnZ.Name = "ColumnZ";
+            this.ColumnZ.ReadOnly = true;
+            // 
+            // ColumnDistStart
+            // 
+            this.ColumnDistStart.FillWeight = 25F;
+            this.ColumnDistStart.HeaderText = "Dist Start";
+            this.ColumnDistStart.Name = "ColumnDistStart";
+            this.ColumnDistStart.ReadOnly = true;
+            // 
+            // ColumnDistanceRemaining
+            // 
+            this.ColumnDistanceRemaining.FillWeight = 25F;
+            this.ColumnDistanceRemaining.HeaderText = "Dist Remaining";
+            this.ColumnDistanceRemaining.Name = "ColumnDistanceRemaining";
+            this.ColumnDistanceRemaining.ReadOnly = true;
+            // 
+            // CurDist
+            // 
+            this.CurDist.FillWeight = 25F;
+            this.CurDist.HeaderText = "Cur. Dist";
+            this.CurDist.Name = "CurDist";
+            this.CurDist.ReadOnly = true;
+            // 
+            // Visits
+            // 
+            this.Visits.FillWeight = 25F;
+            this.Visits.HeaderText = "Visits";
+            this.Visits.Name = "Visits";
+            this.Visits.ReadOnly = true;
+            // 
+            // Scans
+            // 
+            this.Scans.FillWeight = 25F;
+            this.Scans.HeaderText = "Scans";
+            this.Scans.Name = "Scans";
+            this.Scans.ReadOnly = true;
+            // 
+            // FSSBodies
+            // 
+            this.FSSBodies.FillWeight = 25F;
+            this.FSSBodies.HeaderText = "FSS Bodies";
+            this.FSSBodies.Name = "FSSBodies";
+            this.FSSBodies.ReadOnly = true;
+            // 
+            // KnownBodies
+            // 
+            this.KnownBodies.FillWeight = 25F;
+            this.KnownBodies.HeaderText = "Known Bodies";
+            this.KnownBodies.Name = "KnownBodies";
+            this.KnownBodies.ReadOnly = true;
+            // 
+            // Stars
+            // 
+            this.Stars.FillWeight = 25F;
+            this.Stars.HeaderText = "Stars";
+            this.Stars.Name = "Stars";
+            this.Stars.ReadOnly = true;
+            // 
+            // ColumnHistoryNote
+            // 
+            this.ColumnHistoryNote.HeaderText = "History Note";
+            this.ColumnHistoryNote.Name = "ColumnHistoryNote";
+            this.ColumnHistoryNote.ReadOnly = true;
+            // 
+            // Info
+            // 
+            this.Info.FillWeight = 150F;
+            this.Info.HeaderText = "Info";
+            this.Info.Name = "Info";
+            this.Info.ReadOnly = true;
             // 
             // contextMenuCopyPaste
             // 
             this.contextMenuCopyPaste.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem,
             this.pasteToolStripMenuItem,
-            this.insertCopiedToolStripMenuItem,
-            this.deleteRowsToolStripMenuItem,
+            this.cutToolStripMenuItem,
+            this.insertRowAboveToolStripMenuItem,
             this.setTargetToolStripMenuItem,
             this.editBookmarkToolStripMenuItem});
             this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
-            this.contextMenuCopyPaste.Size = new System.Drawing.Size(176, 136);
+            this.contextMenuCopyPaste.Size = new System.Drawing.Size(162, 136);
             this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
-            // insertCopiedToolStripMenuItem
+            // cutToolStripMenuItem
             // 
-            this.insertCopiedToolStripMenuItem.Name = "insertCopiedToolStripMenuItem";
-            this.insertCopiedToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.insertCopiedToolStripMenuItem.Text = "Insert Copied Rows";
-            this.insertCopiedToolStripMenuItem.Click += new System.EventHandler(this.insertCopiedToolStripMenuItem_Click);
+            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.cutToolStripMenuItem.Text = "Cut";
+            this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
             // 
-            // deleteRowsToolStripMenuItem
+            // insertRowAboveToolStripMenuItem
             // 
-            this.deleteRowsToolStripMenuItem.Name = "deleteRowsToolStripMenuItem";
-            this.deleteRowsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.deleteRowsToolStripMenuItem.Text = "Delete Rows";
-            this.deleteRowsToolStripMenuItem.Click += new System.EventHandler(this.deleteRowsToolStripMenuItem_Click);
+            this.insertRowAboveToolStripMenuItem.Name = "insertRowAboveToolStripMenuItem";
+            this.insertRowAboveToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.insertRowAboveToolStripMenuItem.Text = "Insert row above";
+            this.insertRowAboveToolStripMenuItem.Click += new System.EventHandler(this.insertRowAboveToolStripMenuItem_Click);
             // 
             // setTargetToolStripMenuItem
             // 
             this.setTargetToolStripMenuItem.Name = "setTargetToolStripMenuItem";
-            this.setTargetToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.setTargetToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.setTargetToolStripMenuItem.Text = "Set Target";
             this.setTargetToolStripMenuItem.Click += new System.EventHandler(this.setTargetToolStripMenuItem_Click);
             // 
             // editBookmarkToolStripMenuItem
             // 
             this.editBookmarkToolStripMenuItem.Name = "editBookmarkToolStripMenuItem";
-            this.editBookmarkToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.editBookmarkToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.editBookmarkToolStripMenuItem.Text = "Edit bookmark";
             this.editBookmarkToolStripMenuItem.Click += new System.EventHandler(this.editBookmarkToolStripMenuItem_Click);
             // 
@@ -778,110 +887,6 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
-            // SystemName
-            // 
-            this.SystemName.FillWeight = 50F;
-            this.SystemName.HeaderText = "System Name";
-            this.SystemName.Name = "SystemName";
-            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Distance
-            // 
-            this.Distance.FillWeight = 25F;
-            this.Distance.HeaderText = "Dist.";
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            // 
-            // Note
-            // 
-            this.Note.HeaderText = "Note";
-            this.Note.Name = "Note";
-            this.Note.ReadOnly = true;
-            // 
-            // ColumnX
-            // 
-            this.ColumnX.FillWeight = 25F;
-            this.ColumnX.HeaderText = "X";
-            this.ColumnX.Name = "ColumnX";
-            this.ColumnX.ReadOnly = true;
-            // 
-            // ColumnY
-            // 
-            this.ColumnY.FillWeight = 25F;
-            this.ColumnY.HeaderText = "Y";
-            this.ColumnY.Name = "ColumnY";
-            this.ColumnY.ReadOnly = true;
-            // 
-            // ColumnZ
-            // 
-            this.ColumnZ.FillWeight = 25F;
-            this.ColumnZ.HeaderText = "Z";
-            this.ColumnZ.Name = "ColumnZ";
-            this.ColumnZ.ReadOnly = true;
-            // 
-            // ColumnDistStart
-            // 
-            this.ColumnDistStart.FillWeight = 25F;
-            this.ColumnDistStart.HeaderText = "Dist Start";
-            this.ColumnDistStart.Name = "ColumnDistStart";
-            this.ColumnDistStart.ReadOnly = true;
-            // 
-            // ColumnDistanceRemaining
-            // 
-            this.ColumnDistanceRemaining.FillWeight = 25F;
-            this.ColumnDistanceRemaining.HeaderText = "Dist Remaining";
-            this.ColumnDistanceRemaining.Name = "ColumnDistanceRemaining";
-            this.ColumnDistanceRemaining.ReadOnly = true;
-            // 
-            // CurDist
-            // 
-            this.CurDist.FillWeight = 25F;
-            this.CurDist.HeaderText = "Cur. Dist";
-            this.CurDist.Name = "CurDist";
-            this.CurDist.ReadOnly = true;
-            // 
-            // Visits
-            // 
-            this.Visits.FillWeight = 25F;
-            this.Visits.HeaderText = "Visits";
-            this.Visits.Name = "Visits";
-            this.Visits.ReadOnly = true;
-            // 
-            // Scans
-            // 
-            this.Scans.FillWeight = 25F;
-            this.Scans.HeaderText = "Scans";
-            this.Scans.Name = "Scans";
-            this.Scans.ReadOnly = true;
-            // 
-            // FSSBodies
-            // 
-            this.FSSBodies.FillWeight = 25F;
-            this.FSSBodies.HeaderText = "FSS Bodies";
-            this.FSSBodies.Name = "FSSBodies";
-            this.FSSBodies.ReadOnly = true;
-            // 
-            // KnownBodies
-            // 
-            this.KnownBodies.FillWeight = 25F;
-            this.KnownBodies.HeaderText = "Known Bodies";
-            this.KnownBodies.Name = "KnownBodies";
-            this.KnownBodies.ReadOnly = true;
-            // 
-            // Stars
-            // 
-            this.Stars.FillWeight = 25F;
-            this.Stars.HeaderText = "Stars";
-            this.Stars.Name = "Stars";
-            this.Stars.ReadOnly = true;
-            // 
-            // Info
-            // 
-            this.Info.FillWeight = 150F;
-            this.Info.HeaderText = "Info";
-            this.Info.Name = "Info";
-            this.Info.ReadOnly = true;
-            // 
             // UserControlExpedition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -917,8 +922,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuCopyPaste;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem insertCopiedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
         private ExtendedControls.ExtButton buttonReverseRoute;
         private System.Windows.Forms.Label labelCml;
         private System.Windows.Forms.Label labelP2P;
@@ -948,8 +951,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonNavRouteLatest;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private ExtendedControls.ExtDataGridViewColumnAutoComplete SystemName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnY;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnZ;
@@ -961,6 +964,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn FSSBodies;
         private System.Windows.Forms.DataGridViewTextBoxColumn KnownBodies;
         private System.Windows.Forms.DataGridViewTextBoxColumn Stars;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHistoryNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
+        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insertRowAboveToolStripMenuItem;
     }
 }

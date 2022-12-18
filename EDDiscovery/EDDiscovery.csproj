@@ -307,6 +307,9 @@
     <Compile Include="UserControls\Overlays\UserControlOrganics.Designer.cs">
       <DependentUpon>UserControlOrganics.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExpeditionRoute.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -46,6 +46,11 @@ namespace EDDiscovery
             OnNewCalculatedRoute?.Invoke(list);
         }
 
+        public void PanelAction(string one, string two, string three, string four)
+        {
+            RequestPanelAction?.Invoke(one, two, three, four);
+        }
+
         #endregion
 
         #region webserver

@@ -705,7 +705,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null)
             {
-                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
+                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem))
                 {
                     if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {

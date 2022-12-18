@@ -1099,6 +1099,7 @@ namespace EDDiscovery
         UserControlExpedition_labelEndDate, // Control 'End Date:'
         UserControlExpedition_ColumnDistStart,
         UserControlExpedition_ColumnDistanceRemaining,
+        UserControlExpedition_ColumnHistoryNote,
         UserControlExpedition_labelCml, // Control 'Cml Distance:'
         UserControlExpedition_labelP2P, // Control 'P2P Distance:'
         UserControlExpedition_buttonReverseRoute_ToolTip, // Control 'Reverse'
@@ -1118,8 +1119,8 @@ namespace EDDiscovery
         UserControlExpedition_checkBoxEDSM_ToolTip, // ToolTip 'Show/Hide Body data from EDSM.'
         UserControlExpedition_copyToolStripMenuItem, // ToolStrip control 'Copy'
         UserControlExpedition_pasteToolStripMenuItem, // ToolStrip control 'Paste'
-        UserControlExpedition_insertCopiedToolStripMenuItem, // ToolStrip control 'Insert Copied Rows'
-        UserControlExpedition_deleteRowsToolStripMenuItem, // ToolStrip control 'Delete Rows'
+        UserControlExpedition_cutToolStripMenuItem, // ToolStrip control 'Paste'
+        UserControlExpedition_insertRowAboveToolStripMenuItem,
         UserControlExpedition_setTargetToolStripMenuItem, // ToolStrip control 'Set Target'
         UserControlExpedition_editBookmarkToolStripMenuItem, // ToolStrip control 'Edit bookmark'
         UserControlExpedition_Unsaved, // Expedition - There are unsaved changes to the current route.

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using BaseUtils;
 using QuickJSON;
@@ -90,14 +88,16 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlExpedition_Visits, EDTx.UserControlExpedition_Scans, EDTx.UserControlExpedition_FSSBodies, EDTx.UserControlExpedition_KnownBodies, 
                                         EDTx.UserControlExpedition_Stars, EDTx.UserControlExpedition_Info, EDTx.UserControlExpedition_labelRouteName, EDTx.UserControlExpedition_labelDateStart, 
                                         EDTx.UserControlExpedition_labelEndDate, EDTx.UserControlExpedition_labelCml, EDTx.UserControlExpedition_labelP2P,
-                                        EDTx.UserControlExpedition_ColumnDistStart, EDTx.UserControlExpedition_ColumnDistanceRemaining};
+                                        EDTx.UserControlExpedition_ColumnDistStart, EDTx.UserControlExpedition_ColumnDistanceRemaining, EDTx.UserControlExpedition_ColumnHistoryNote};
             var enumlisttt = new Enum[] { EDTx.UserControlExpedition_extButtonLoadRoute_ToolTip, EDTx.UserControlExpedition_extButtonNew_ToolTip, EDTx.UserControlExpedition_extButtonSave_ToolTip, EDTx.UserControlExpedition_extButtonDelete_ToolTip, 
                                           EDTx.UserControlExpedition_extButtonImportFile_ToolTip, EDTx.UserControlExpedition_extButtonImportRoute_ToolTip, EDTx.UserControlExpedition_extButtonImportNavRoute_ToolTip, EDTx.UserControlExpedition_extButtonNavRouteLatest_ToolTip, 
                                           EDTx.UserControlExpedition_extButtonAddSystems_ToolTip, 
                                           EDTx.UserControlExpedition_buttonExtExport_ToolTip, EDTx.UserControlExpedition_extButtonShow3DMap_ToolTip, 
                                           EDTx.UserControlExpedition_extButtonDisplayFilters_ToolTip, EDTx.UserControlExpedition_checkBoxEDSM_ToolTip,
                                          EDTx.UserControlExpedition_buttonReverseRoute_ToolTip, EDTx.UserControlExpedition_extCheckBoxWordWrap_ToolTip };
-            var enumlistcms = new Enum[] { EDTx.UserControlExpedition_copyToolStripMenuItem, EDTx.UserControlExpedition_pasteToolStripMenuItem, EDTx.UserControlExpedition_insertCopiedToolStripMenuItem, EDTx.UserControlExpedition_deleteRowsToolStripMenuItem, EDTx.UserControlExpedition_setTargetToolStripMenuItem, EDTx.UserControlExpedition_editBookmarkToolStripMenuItem };
+            var enumlistcms = new Enum[] { EDTx.UserControlExpedition_copyToolStripMenuItem, EDTx.UserControlExpedition_cutToolStripMenuItem, EDTx.UserControlExpedition_pasteToolStripMenuItem,
+                                            EDTx.UserControlExpedition_insertRowAboveToolStripMenuItem,
+                                          EDTx.UserControlExpedition_setTargetToolStripMenuItem, EDTx.UserControlExpedition_editBookmarkToolStripMenuItem };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView);
+            DGVLoadColumnLayout(dataGridView,"V2");
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
         {
             autoupdateedsm.Stop();
 
-            DGVSaveColumnLayout(dataGridView);
+            DGVSaveColumnLayout(dataGridView,"V2");
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
 
             discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
         private void OnNewStars(List<string> list, OnNewStarsPushType command)    // and if a user asked for stars to be added
         {
             if (command == OnNewStarsPushType.Expedition)
-                AppendRows(list);
+                AppendOrInsertSystems(-1,list);
         }
 
         #endregion
@@ -176,61 +176,42 @@ namespace EDDiscovery.UserControls
 
         #region Grid Display Route and update when required
 
-        private void DisplayRoute(SavedRouteClass route)
+        // insert or append (insertindex=-1) to the grid, either systementries, Isystems or strings
+        public void AppendOrInsertSystems(int insertIndex, IEnumerable<object> sysnames, bool updatesystemrows = true)
         {
-            dataGridView.Rows.Clear();
-
-            if (route == null)
-                return;
-
-            textBoxRouteName.Text = route.Name;
-            if (route.StartDateUTC == null)
-            {
-                dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
-            }
-            else
-            {
-                dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = true;
-                dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(route.StartDateUTC.Value);
-            }
-
-            if (route.EndDateUTC == null)
-            {
-                dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = false;
-            }
-            else
-            {
-                dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = true;
-                dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(route.EndDateUTC.Value);
-            }
-
-            foreach (string sysname in route.Systems)
-            {
-                dataGridView.Rows.Add(sysname,"","");
-            }
-
-            UpdateSystemRows();
-        }
-
-        public void AppendRows(IEnumerable<string> sysnames)
-        {
+            int i = 0;
             foreach (var system in sysnames)
             {
-                dataGridView.Rows.Add(system);
-            }
-            UpdateSystemRows();
-        }
+                object[] data;
 
-        public void InsertRows(int insertIndex, IEnumerable<string> sysnames)
-        {
-            foreach (var system in sysnames)
-            {
-                dataGridView.Rows.Insert(insertIndex, system);
-                insertIndex++;
+                if (system is string)
+                {
+                    data = new object[] { system, "" };
+                }
+                else if (system is SavedRouteClass.SystemEntry)
+                {
+                    var se = (SavedRouteClass.SystemEntry)system;
+                    data = new object[] { se.SystemName, se.Note};
+                }
+                else
+                {
+                    var se = (ISystem)system;
+                    data = new object[] { se.Name, ""};
+                }
+
+                if (((string)data[0]).HasChars())       // must have a name
+                {
+                    if (insertIndex < 0)
+                        dataGridView.Rows.Add(data);
+                    else
+                        dataGridView.Rows.Insert(insertIndex++, data);
+                }
+
+                i++;
             }
-            UpdateSystemRows();
+
+            if (updatesystemrows)
+                UpdateSystemRows();
         }
 
         private void ClearTable()
@@ -296,7 +277,7 @@ namespace EDDiscovery.UserControls
                         note = note.AppendPrePad(gmo.Description, "; ");
                 }
 
-                row.Cells[Note.Index].Value = note;
+                row.Cells[ColumnHistoryNote.Index].Value = note;
 
                 // find in history, and the DB, and EDSM, the system..
 
@@ -334,9 +315,9 @@ namespace EDDiscovery.UserControls
                 {
                     ISystem prevlinesys = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as ISystem : null;
 
-                    double dist = (prevlinesys?.HasCoordinate ?? false) ? sys.Distance(prevlinesys) : 0;
+                    double? dist = (prevlinesys?.HasCoordinate ?? false) ? sys.Distance(prevlinesys) : default(double?);
                     row.Cells[Distance.Index].Tag = dist;       // record in tag for computation laster
-                    row.Cells[Distance.Index].Value = dist>0 ? dist.ToString("0.#") : "";
+                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("0.#") : "";
 
                     row.Cells[ColumnX.Index].Value = sys.X.ToString("0.#");
                     row.Cells[ColumnY.Index].Value = sys.Y.ToString("0.#");
@@ -440,7 +421,6 @@ namespace EDDiscovery.UserControls
             return SystemCache.FindSystemAsync(name, null, checkedsm);
         }
 
-
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
         {
             if (checkBoxEDSM.Checked == false)
@@ -484,133 +464,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Routes
-
-        // if the data in the grid is set, and different to the loadedroute, or the grid is not empty.  
-        // not dirty if the grid is empty (name and systems empty)
-        public bool IsDirty()       
-        {
-            var gridroute = SaveGridIntoRoute();
-            return (gridroute != null && loadedroute != null) ? !gridroute.Equals(loadedroute) : gridroute != null;
-        }
-
-        // move systems in grid into this route class
-        private SavedRouteClass SaveGridIntoRoute()
-        {
-            SavedRouteClass route = new SavedRouteClass();
-            route.Name = textBoxRouteName.Text.Trim();
-            route.Systems.Clear();
-            route.Systems.AddRange(dataGridView.Rows.OfType<DataGridViewRow>()
-                .Where(r => r.Index < dataGridView.NewRowIndex && r.Cells[0].Value != null)
-                .Select(r => r.Cells[0].Value as string));
-
-            if (dateTimePickerStartDate.Checked)
-            {
-                route.StartDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.Date);
-                if (dateTimePickerStartTime.Checked)
-                    route.StartDateUTC += dateTimePickerStartTime.Value.TimeOfDay;
-            }
-            else
-            {
-                route.StartDateUTC = null;
-            }
-
-            if (dateTimePickerEndDate.Checked)
-            {
-                route.EndDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.Date);
-                route.EndDateUTC += dateTimePickerEndTime.Checked ? dateTimePickerEndTime.Value.TimeOfDay : new TimeSpan(23, 59, 59);
-            }
-            else
-            {
-                route.EndDateUTC = null;
-            }
-
-            return route.Systems.Count>0 || route.Name.HasChars() ? route : null;           // if systems or name, there is a route
-        }
-
-        // Move the current route into the DB
-        private bool StoreCurrentRouteIntoDB(SavedRouteClass newrt)
-        {
-            if (newrt.Name.IsEmpty())
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.".T(EDTx.UserControlExpedition_Specify), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            var savedroutes = SavedRouteClass.GetAllSavedRoutes();
-            var edsmroute = savedroutes.Find(x => x.Name.Equals(newrt.Name, StringComparison.InvariantCultureIgnoreCase) && x.EDSM);
-
-            if (edsmroute != null)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), ("The current route name conflicts with a well-known expedition." + Environment.NewLine
-                    + "Please specify a new name to save your changes.").T(EDTx.UserControlExpedition_Conflict), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                return false;
-            }
-
-            var overwriteroute = savedroutes.Where(r => r.Name.Equals(newrt.Name)).FirstOrDefault();
-
-            if (overwriteroute != null)
-            {
-                if (MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?".T(EDTx.UserControlExpedition_Overwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo) != DialogResult.Yes)
-                    return false;
-
-                overwriteroute.Delete();
-            }
-
-            if (overwriteroute == null)
-                return newrt.Add();
-            else
-            {
-                newrt.Id = overwriteroute.Id;
-                return newrt.Add();
-            }
-        }
-
-        // true if grid is empty, or it has saved
-        private bool SaveGrid()
-        {
-            SavedRouteClass route = SaveGridIntoRoute();
-            if (route != null)
-            {
-                if (StoreCurrentRouteIntoDB(route))
-                {
-                    loadedroute = route;
-                    return true;
-                }
-                else
-                    return false;
-            }
-            else
-                return true;
-        }
-
-        private bool PromptAndSaveIfNeeded()
-        {
-            if (IsDirty())
-            {
-                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("Expedition - There are unsaved changes to the current route." + Environment.NewLine
-                    + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-
-                switch (result)
-                {
-                    case DialogResult.Yes:
-                        return SaveGrid();
-
-                    case DialogResult.No:
-                        return true;
-
-                    case DialogResult.Cancel:
-                    default:
-                        return false;
-                }
-            }
-            else
-                return true;
-        }
-
-
-        #endregion
 
         #region toolbar ui
 
@@ -639,7 +492,32 @@ namespace EDDiscovery.UserControls
                         string name = savedroutes[dropdown.SelectedIndex].Name;
                         savedroutes = SavedRouteClass.GetAllSavedRoutes();      // reload, in case reselecting saved route
                         loadedroute = savedroutes.Find(x => x.Name == name);        // if your picking the same route again for some strange reason
-                        DisplayRoute(loadedroute);
+
+                        textBoxRouteName.Text = loadedroute.Name;
+                        if (loadedroute.StartDateUTC == null)
+                        {
+                            dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                            dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
+                        }
+                        else
+                        {
+                            dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = true;
+                            dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.StartDateUTC.Value);
+                        }
+
+                        if (loadedroute.EndDateUTC == null)
+                        {
+                            dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                            dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = false;
+                        }
+                        else
+                        {
+                            dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = true;
+                            dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.EndDateUTC.Value);
+                        }
+
+                        dataGridView.Rows.Clear();
+                        AppendOrInsertSystems(-1, loadedroute.Systems);
                     }
                 };
 
@@ -703,8 +581,7 @@ namespace EDDiscovery.UserControls
                     {
                         if (list.Item1.HasChars() && textBoxRouteName.Text.IsEmpty())
                             textBoxRouteName.Text = list.Item1;
-                        foreach (var jk in list.Item2)
-                            dataGridView.Rows.Add(jk);
+                        AppendOrInsertSystems(-1, list.Item2);
                     }
                 }
                 else
@@ -712,14 +589,16 @@ namespace EDDiscovery.UserControls
                     CSVFile csv = new CSVFile();
                     if (csv.Read(frm.Path, FileShare.ReadWrite, frm.Comma))
                     {
+                        var systems = new List<SavedRouteClass.SystemEntry>();
+
                         for (int r = frm.SelectedIndex == 0 ? 1 : 0; r < csv.Rows.Count; r++)  // if in mode 0, from line 1, else from line 0
                         {
                             var row = csv[r];                               // column 0 only
-                            if (row[0].HasChars())
-                                dataGridView.Rows.Add(row[0]);
+                            if (row.Cells.Count >= 1)
+                                systems.Add(new SavedRouteClass.SystemEntry(row[0],row.Cells.Count>=2 ? row[1] : ""));
                         }
 
-                        UpdateSystemRows();
+                        AppendOrInsertSystems(-1, systems);
                     }
                 }
             }
@@ -736,12 +615,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            foreach (ISystem s in latestplottedroute)
-            {
-                dataGridView.Rows.Add(s.Name);
-            }
-
-            UpdateSystemRows();
+            AppendOrInsertSystems(-1, latestplottedroute);
         }
 
         private void extButtonImportNavRoute_Click(object sender, EventArgs e)
@@ -768,15 +642,7 @@ namespace EDDiscovery.UserControls
                     {
                         var jroute = navroutes[i.Value].journalEntry as JournalNavRoute;
 
-                        foreach (var sys in jroute.Route)
-                        {
-                            if (sys.StarSystem.HasChars())
-                            {
-                                dataGridView.Rows.Add(sys.StarSystem);
-                            }
-                        }
-
-                        UpdateSystemRows();
+                        AppendOrInsertSystems(-1, jroute.Route.Select(x => x.StarSystem));
                     }
                 };
                 navroutefilter.CloseOnChange = true;
@@ -793,25 +659,15 @@ namespace EDDiscovery.UserControls
             var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
             if (route?.Route != null)
             {
-                foreach (var s in route.Route)
-                {
-                    if (s.StarSystem.HasChars())
-                    {
-                        dataGridView.Rows.Add(s.StarSystem);
-                    }
-                }
-
-                UpdateSystemRows();
+                AppendOrInsertSystems(-1, route.Route.Select(s => s.StarSystem));
             }
         }
-
-
         private void buttonExtExport_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
                 return;
 
-            var rt = SaveGridIntoRoute();
+            var rt = CopyGridIntoRoute();
             if (rt == null)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".T(EDTx.UserControlExpedition_NoRouteExport),
@@ -832,9 +688,9 @@ namespace EDDiscovery.UserControls
                 {
                     List<JournalScan> scans = new List<JournalScan>();
 
-                    foreach ( var system in rt.Systems)
+                    foreach ( var syse in rt.Systems)
                     {
-                        ISystem sys = SystemCache.FindSystem(system, discoveryform.galacticMapping, true);
+                        ISystem sys = SystemCache.FindSystem(syse.SystemName, discoveryform.galacticMapping, true);
                         if (sys != null)
                         {
                             var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
@@ -888,14 +744,19 @@ namespace EDDiscovery.UserControls
                     {
                         DataGridViewRow rw = dataGridView.Rows[r];
                         if (frm.SelectedIndex == 1)
-                            return new Object[] { rw.Cells[0].Value };
+                            return new object[] { rw.Cells[0].Value };
                         else
-                            return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value, rw.Cells[4].Value, rw.Cells[5].Value };
+                        {
+                            object[] list = new object[dataGridView.ColumnCount];
+                            for (int i = 0; i < dataGridView.ColumnCount; i++)
+                                list[i] = rw.Cells[i].Value;
+                            return list;
+                        }
                     };
 
                     grd.GetHeader += delegate (int c)
                     {
-                        return (c < 6 && frm.IncludeHeader && frm.SelectedIndex == 0) ? dataGridView.Columns[c].HeaderText : null;
+                        return frm.IncludeHeader && (frm.SelectedIndex == 1 ? c == 0 : c < dataGridView.ColumnCount) ? dataGridView.Columns[c].HeaderText : null;
                     };
 
                     grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
@@ -935,14 +796,7 @@ namespace EDDiscovery.UserControls
             FindSystemsUserControl usc = new FindSystemsUserControl();
             usc.ReturnSystems = (List<Tuple<ISystem, double>> syslist) =>
             {
-                List<String> systems = new List<String>();
-                foreach (Tuple<ISystem, double> ret in syslist)
-                {
-                    systems.Add(ret.Item1.Name.Trim());
-                }
-
-                AppendRows(systems);
-
+                AppendOrInsertSystems(-1,syslist.Select(x=>x.Item1.Name.Trim()));
                 f.ReturnResult(DialogResult.OK);
             };
 
@@ -1028,95 +882,13 @@ namespace EDDiscovery.UserControls
             if (updatingsystemrows)
                 return;
 
-            var route = SaveGridIntoRoute();
+            var route = CopyGridIntoRoute();
+
             if (route != null)
             {
                 dataGridView.Rows.Clear();
-                InsertRows(0, route.Systems.Reverse<string>().ToArray());
-            }
-        }
-
-        #endregion
-
-        #region Left click on row header mouse UI
-
-        int dragRowIndex;
-        Rectangle dragBox;
-        private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (updatingsystemrows)
-                return;
-
-            if (e.Button.HasFlag(MouseButtons.Left))
-            {
-                var hit = dataGridView.HitTest(e.X, e.Y);
-                if (hit.Type == DataGridViewHitTestType.RowHeader && hit.RowIndex != -1)
-                {
-                    dragRowIndex = hit.RowIndex;
-                    Size dragsize = SystemInformation.DragSize;
-                    dragBox = new Rectangle(e.X - dragsize.Width / 2, e.Y - dragsize.Height / 2, dragsize.Width, dragsize.Height);
-                }
-                else
-                {
-                    dragBox = Rectangle.Empty;
-                }
-            }
-        }
-
-        private void dataGridViewRouteSystems_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button.HasFlag(MouseButtons.Left))
-            {
-                if (dragBox != Rectangle.Empty && !dragBox.Contains(e.Location))
-                {
-                    dataGridView.DoDragDrop(dataGridView.Rows[dragRowIndex], DragDropEffects.Move);
-                }
-            }
-        }
-
-        private void dataGridViewRouteSystems_DragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(DataGridViewRow)))
-            {
-                var data = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
-                if (data.DataGridView == dataGridView)
-                {
-                    e.Effect = DragDropEffects.Move;
-                }
-            }
-            else if (e.Data.GetDataPresent(typeof(string)))
-            {
-                e.Effect = DragDropEffects.Copy;
-            }
-        }
-
-        private void dataGridViewRouteSystems_DragDrop(object sender, DragEventArgs e)
-        {
-            Point p = dataGridView.PointToClient(new Point(e.X, e.Y));
-            var insertIndex = dataGridView.HitTest(p.X, p.Y).RowIndex;
-            if (insertIndex >= dataGridView.Rows.Count)
-            {
-                insertIndex = dataGridView.Rows.Count - 1;
-            }
-
-            if (e.Data.GetDataPresent(typeof(DataGridViewRow)))
-            {
-                if (e.Effect == DragDropEffects.Move)
-                {
-                    var row = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
-                    if (row.DataGridView == dataGridView)
-                    {
-                        dataGridView.Rows.Remove(row);
-                        dataGridView.Rows.Insert(insertIndex, row);
-                        UpdateSystemRows();
-                    }
-                }
-            }
-            else if (e.Data.GetDataPresent(typeof(string)) && e.Effect == DragDropEffects.Copy)
-            {
-                var data = e.Data.GetData(typeof(string)) as string;
-                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
-                InsertRows(insertIndex, rows);
+                route.ReverseSystemList();
+                AppendOrInsertSystems(-1,route.Systems);
             }
         }
 
@@ -1128,17 +900,44 @@ namespace EDDiscovery.UserControls
             if (updatingsystemrows)
                 return;
 
-            if (e.RowIndex >= 0 && (e.ColumnIndex == Note.Index || e.ColumnIndex == Info.Index))
+            if (e.RowIndex >= 0)
             {
-                var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-
-                string text = cell.Value as string;
-
-                if (text.HasChars())
+                if (e.ColumnIndex == ColumnHistoryNote.Index || e.ColumnIndex == Info.Index)
                 {
-                    InfoForm frm = new InfoForm();
-                    frm.Info(dataGridView.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
-                    frm.Show(FindForm());
+                    var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                    string text = cell.Value as string;
+
+                    if (text.HasChars())
+                    {
+                        InfoForm frm = new InfoForm();
+                        frm.Info(dataGridView.Columns[e.ColumnIndex].HeaderText, FindForm().Icon, text);
+                        frm.Show(FindForm());
+                    }
+                }
+                else if ( e.ColumnIndex == Note.Index)
+                {
+                    if (!dataGridView.IsCurrentCellInEditMode)
+                    {
+                        Forms.SetNoteForm noteform = new Forms.SetNoteForm();
+                        DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+                        string x = rw.Cells[ColumnX.Index].Value as string;
+                        string y = rw.Cells[ColumnY.Index].Value as string;
+                        string z = rw.Cells[ColumnZ.Index].Value as string;
+                        string distremain = rw.Cells[ColumnDistanceRemaining.Index].Value as string;
+                        string summary = x.HasChars() ? $"{x}, {y}, {z} @ {distremain} ly" : "";
+
+                        noteform.Init(rw.Cells[Note.Index].Value as string, DateTime.MinValue,
+                                        rw.Cells[SystemName.Index].Value as string,
+                                        summary,
+                                        rw.Cells[ColumnHistoryNote.Index].Value as string
+                                        );
+
+                        if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
+                        {
+                            dataGridView[Note.Index, e.RowIndex].Value = noteform.NoteText;
+                        }
+                    }
                 }
             }
 
@@ -1167,16 +966,12 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
             }
 
-            if (hastext)
-            {
-                pasteToolStripMenuItem.Enabled = true;
-                insertCopiedToolStripMenuItem.Enabled = true;
-            }
-            else
-            {
-                pasteToolStripMenuItem.Enabled = false;
-                insertCopiedToolStripMenuItem.Enabled = false;
-            }
+            copyToolStripMenuItem.Enabled = dataGridView.SelectedCells.Count > 0;
+            pasteToolStripMenuItem.Enabled = hastext;
+            cutToolStripMenuItem.Enabled = dataGridView.SelectedRows.Count > 0;     // only on if we marked rows
+
+            var rows = dataGridView.SelectedRowAndCount(true, true, 0, false);      // same as below in insert, ascending, use cells if not row selection, leave on new row
+            insertRowAboveToolStripMenuItem.Enabled = rows.Item1 != dataGridView.NewRowIndex;
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1193,6 +988,18 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            copyToolStripMenuItem_Click(sender, e);       // copy first
+
+            int[] selectedRows = dataGridView.SelectedRows(false,false);        // decending, must have row selection
+
+            foreach ( var row in selectedRows)   // delete in this specific highest row first order
+                dataGridView.Rows.RemoveAt(row);
+
+            UpdateSystemRows();
+        }
+
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = null;
@@ -1206,51 +1013,23 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
             }
 
-            if (data != null)
+            if (data != null )
             {
-                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
-                int[] selectedRows = dataGridView.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
-                int insertRow = selectedRows.FirstOrDefault();
-                foreach (int index in selectedRows.Reverse())
-                {
-                    if (index != dataGridView.NewRowIndex)
-                    {
-                        dataGridView.Rows.RemoveAt(index);
-                    }
-                }
-                InsertRows(insertRow, rows);
+                bool tabs = data.Contains("\t");            // data copied from grid uses tab as cell dividers, else use comma
+                string[][] textlines = data.Split(Environment.NewLine, tabs ? "\t" : ",", StringComparison.InvariantCulture);   // use nice splitter to split into newlines, then cells
+
+                var rows = dataGridView.SelectedRowAndCount(true, true);   // ascending, use cells, default is 0, and remove new row
+                // make up a systementry with the name, and possibly the note
+                var se = textlines.Where(x => x.Length > 0 && x[0].HasChars()).Select(y => new SavedRouteClass.SystemEntry(y[0], y.Length >= 2 ? y[1] : ""));
+
+                AppendOrInsertSystems(rows.Item1, se);
             }
         }
 
-        private void insertCopiedToolStripMenuItem_Click(object sender, EventArgs e)
+        private void insertRowAboveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string data = null;
-
-            try
-            {
-                data = Clipboard.GetText();
-            }
-            catch
-            {
-                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
-            }
-
-            if (data != null)
-            {
-                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
-                int[] selectedRows = dataGridView.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
-                int insertRow = selectedRows.FirstOrDefault();
-                InsertRows(insertRow, rows);
-            }
-        }
-
-        private void deleteRowsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            int[] selectedRows = dataGridView.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridView.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
-            foreach (int index in selectedRows.Reverse())
-            {
-                dataGridView.Rows.RemoveAt(index);
-            }
+            var rows = dataGridView.SelectedRowAndCount(true, true, 0, false);   // ascending, use cells if not row selection, don't change due to new row
+            dataGridView.Rows.Insert(rows.Item1, rows.Item2);
             UpdateSystemRows();
         }
 
@@ -1265,7 +1044,7 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = SystemCache.FindSystem((string)obj);       //TBD warning not found?
+            ISystem sc = SystemCache.FindSystem((string)obj);       
             if (sc != null && sc.HasCoordinate)
             {
                 if (TargetClass.SetTargetOnSystemConditional(sc.Name, sc.X, sc.Y, sc.Z))
@@ -1323,8 +1102,13 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnAlphaInt();
             else if (e.Column.Index == Distance.Index || (e.Column.Index>=ColumnX.Index && e.Column.Index <= KnownBodies.Index))
                 e.SortDataGridViewColumnNumeric();
-
         }
+
+        private void dataGridView_Sorted(object sender, EventArgs e)
+        {
+            UpdateSystemRows();     // once sorted, recompute columns
+        }
+
         #endregion
 
         #region JSON Output/Input of systems and name

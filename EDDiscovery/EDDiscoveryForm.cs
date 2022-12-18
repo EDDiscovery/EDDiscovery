@@ -75,6 +75,7 @@ namespace EDDiscovery
         public event Action OnThemeChanging;                            // Note you won't get it on startup because theme is applied to form before tabs/panels are setup. Before themeing
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
+        public event Action<string,string,string,string> RequestPanelAction;   // from actions, a request for a panel action
         #endregion
 
         #region Events due to EDDiscoveryControl 
@@ -276,7 +277,8 @@ namespace EDDiscovery
 
             if (!EDDOptions.Instance.NoTheme)
             {
-                ThemeList.SetThemeByName("Elite Verdana Small");                // this is the default theme we use normally
+                string deftheme = Environment.OSVersion.Platform == PlatformID.Win32NT ? "Elite Verdana Small" : "Windows Default";
+                ThemeList.SetThemeByName(deftheme);                // this is the default theme we use normally
                 var theme = GetThemeFromDB();
                 if (theme != null)
                     ExtendedControls.Theme.Current = theme;

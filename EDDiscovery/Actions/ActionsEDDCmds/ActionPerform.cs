@@ -187,6 +187,10 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("disablevoicerecognition"))
                         ac.VoiceReconOff();
+                    else if (cmdname.Equals("panelaction"))
+                    {
+                        ac.DiscoveryForm.PanelAction(nextword, thirdword, fourthword, fifthword);
+                    }
                     else if (cmdname.Equals("beginvoicerecognition"))
                         ac.VoiceLoadEvents();
                     else if (cmdname.Equals("voicerecognitionconfidencelevel"))

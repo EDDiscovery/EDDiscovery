@@ -25,15 +25,16 @@ namespace EDDiscovery.UserControls
         public const int DisplayNumberPopOuts = 1;                  // pop outs are 1-99.. of each specific type.
         public const int DisplayNumberStartExtraTabs = 100;         // extra tabs are assigned here
         public const int DisplayNumberStartExtraTabsMax = 199;
+        public const int DisplayNumberSplitterStart = 1050;
 
         // When a grid or splitter is open, displaynumber for its children based on its own number
         // 1050 is historical.. 1000..1049 was reserved for the previous history window splitters
 
         protected int DisplayNumberOfSplitter(int numopenedinside)  // splitter children are assigned this range..
-        { return 1050 + displaynumber * 100 + numopenedinside; }
+        { return DisplayNumberSplitterStart + displaynumber * 100 + numopenedinside; }
 
         protected int DisplayNumberOfGrid(int numopenedinside)      // grid children are assigned this range..  allow range for splitters.
-        { return 1050 + (DisplayNumberStartExtraTabsMax + 1) * 100 + displaynumber * 100 + numopenedinside; }
+        { return DisplayNumberSplitterStart + (DisplayNumberStartExtraTabsMax + 1) * 100 + displaynumber * 100 + numopenedinside; }
 
         // Common parameters of a UCCB
 
@@ -42,6 +43,8 @@ namespace EDDiscovery.UserControls
         public EDDiscoveryForm discoveryform { get; private set; }    // set on Init    
         public IHistoryCursor uctg { get; protected set; }            // valid at loadlayout
         public bool IsClosed { get; private set; }                    // set after CloseDown called. Use this if your doing await stuff which may mean your class gets called after close
+
+        public bool IsPrimaryHistoryDisplayNumber { get { return displaynumber == DisplayNumberSplitterStart; } }
 
         /////////////////////////////////////////////////////////////// in calling order..
         
