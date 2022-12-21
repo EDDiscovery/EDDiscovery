@@ -57,20 +57,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             Resize += UserControlMiningOverlay_Resize;
         }
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -85,14 +77,18 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             timetimer.Stop();
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             PutSetting(dbRolledUp, extPanelRollUp.PinState);
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            Display(he);
-        }
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                Display(he);
+            }
+            return false;
+         }
 
         private void UserControlMiningOverlay_Resize(object sender, EventArgs e)
         {

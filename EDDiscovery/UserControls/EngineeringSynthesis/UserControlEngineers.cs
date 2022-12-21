@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EliteDangerousCore;
 using System;
@@ -44,6 +44,8 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             isHistoric = GetSetting(dbHistoricMatsSave, false);
+            chkNotHistoric.Checked = !isHistoric;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkNotHistoric_CheckedChanged);
 
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;     // install after setup
@@ -70,55 +72,34 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += UCTGChanged;
-        }
-
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += UCTGChanged;
+            discoveryform.OnHistoryChange += RefreshData;
         }
 
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            discoveryform.OnHistoryChange -= RefreshData;
 
             PutSetting(dbHistoricMatsSave, isHistoric);
-        }
-
-        internal void SetHistoric(bool newVal)
-        {
-            isHistoric = newVal;
-            if (isHistoric)
-            {
-                last_he = uctg.GetCurrentHistoryEntry;
-            }
-            else
-            {
-                last_he = discoveryform.history.GetLast;
-            }
-            UpdateDisplay();
         }
 
         public override void InitialDisplay()
         {
             SetupDisplay();
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            UpdateDisplay();
+            RefreshData(null);
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void RefreshData(HistoryList objunused)
         {
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            UpdateDisplay();
+            if (isHistoric)
+            {
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());
+            }
+            else
+            {
+                last_he = discoveryform.history.GetLast;
+                UpdateDisplay();
+            }
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
@@ -132,14 +113,18 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
-        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (isHistoric || last_he == null)
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                last_he = he;
-                UpdateDisplay();
+                if (isHistoric )
+                {
+                    last_he = he;
+                    UpdateDisplay();
+                }
             }
+            return false;
         }
 
         public void SetupDisplay()
@@ -309,6 +294,12 @@ namespace EDDiscovery.UserControls
 
 
 
-            #endregion
+        #endregion
+
+        private void chkNotHistoric_CheckedChanged(object sender, EventArgs e)
+        {
+            isHistoric = !chkNotHistoric.Checked;
+            RefreshData(null);
         }
+    }
 }

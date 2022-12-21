@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -127,27 +127,19 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += UCTGChanged;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += UCTGChanged;
             DGVLoadColumnLayout(dataGridViewEngineering);
             chkNotHistoric.Checked = !isHistoric;       // upside down now
             chkNotHistoric.Visible = !isEmbedded;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewEngineering);
 
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
@@ -160,17 +152,18 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Display
-        internal void SetHistoric(bool newVal)
-        {
-            isHistoric = newVal;
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            Display();
-        }
-
+ 
         public override void InitialDisplay()
         {
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            Display();
+            if (isHistoric)
+            {
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            }
+            else
+            {
+                last_he = discoveryform.history.GetLast;
+                Display();
+            }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
@@ -190,15 +183,21 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (isHistoric || last_he == null)
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                last_he = he;
-                Display();
+                if (isHistoric || last_he == null)
+                {
+                    last_he = he;
+                    Display();
+                }
             }
+
+            return false;
         }
-        
+
         private void Display()
         {
             //DONT turn on sorting in the future, thats not how it works.  You click and drag to sort manually since it gives you
@@ -464,6 +463,12 @@ namespace EDDiscovery.UserControls
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
             SetHistoric(!chkNotHistoric.Checked);      // upside down when changed appearance
+        }
+
+        internal void SetHistoric(bool newVal)
+        {
+            isHistoric = newVal;
+            InitialDisplay();
         }
 
         private void dataGridViewEngineering_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

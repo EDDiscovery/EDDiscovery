@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2017 EDDiscovery development team
+ * Copyright © 2015 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -25,7 +23,9 @@ namespace EDDiscovery
     {
         EDDiscoveryForm eddiscovery;
 
-        public UserControls.UserControlContainerSplitter PrimaryTab { get
+        public UserControls.UserControlContainerSplitter PrimarySplitterTab
+        {
+            get
             {
                 foreach (TabPage p in TabPages)      // all main tabs, load/display
                 {
@@ -78,13 +78,12 @@ namespace EDDiscovery
                 {
                     if (panelids[i] == -1)      // marker indicating the special history tab
                     {
-                        TabPage p = CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count);
-                        p.Tag = true;       // this marks it as the primary tab..
+                        TabPage p = CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count, true);
                     }
                     else
                     {
                         PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)panelids[i];
-                        CreateTab(p, name, displaynumbers[i], TabPages.Count);      // no need the theme, will be themed as part of overall load
+                        CreateTab(p, name, displaynumbers[i], TabPages.Count,false);      // no need the theme, will be themed as part of overall load
                     }
                 }
                 catch (Exception ex)   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
@@ -101,8 +100,6 @@ namespace EDDiscovery
         {
             //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
 
-            UserControls.UserControlContainerSplitter primary = PrimaryTab;
-
             foreach (TabPage p in TabPages)      // all main tabs, load/display
             {
                 // now a strange thing. tab Selected, cause its shown, gets resized (due to repoisition form). Other tabs dont.
@@ -110,8 +107,6 @@ namespace EDDiscovery
                 // so force size. tried perform layout to no avail
                 p.Size = TabPages[SelectedIndex].Size;
                 UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
-                var tg = primary.GetTravelGrid;
-                uccb.SetCursor(tg);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             }
@@ -142,7 +137,7 @@ namespace EDDiscovery
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.CloseDown();
-                idlist.Add( Object.ReferenceEquals(uccb, PrimaryTab) ? -1 : (int)uccb.panelid);      // primary is marked -1
+                idlist.Add( Object.ReferenceEquals(uccb, PrimarySplitterTab) ? -1 : (int)uccb.panelid);      // primary is marked -1
                 idlist.Add(uccb.displaynumber);
                 tabnames += p.Text + ";";
             }
@@ -156,12 +151,11 @@ namespace EDDiscovery
             if (tabindex < 0)
                 tabindex = Math.Max(0,TabCount + tabindex);
 
-            TabPage page = CreateTab(id, null, -1, tabindex);
+            TabPage page = CreateTab(id, null, -1, tabindex,false);
 
             if (page != null)
             {
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.SetCursor(PrimaryTab.GetTravelGrid);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
                 SelectedIndex = tabindex;   // and select the inserted one
@@ -223,9 +217,8 @@ namespace EDDiscovery
             TabPage page = GetMajorTab(ptype);
             if (page == null)
             {
-                page = CreateTab(ptype, null, -1, TabCount>0 ? TabCount-1 : 0);
+                page = CreateTab(ptype, null, -1, TabCount>0 ? TabCount-1 : 0,false);
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.SetCursor(PrimaryTab.GetTravelGrid);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             }
@@ -239,7 +232,7 @@ namespace EDDiscovery
         // find first tab containing UCCB type t.
         public Tuple<TabPage, UserControls.UserControlCommonBase> Find(PanelInformation.PanelIDs p)
         {
-            foreach ( TabPage tp in TabPages)
+            foreach (TabPage tp in TabPages)
             {
                 var f = ((UserControls.UserControlCommonBase)tp.Controls[0]).Find(p);
                 if (f != null)
@@ -252,7 +245,7 @@ namespace EDDiscovery
 
         // MAY return null!
 
-        private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex)
+        private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex, bool primary)
         {
             System.Diagnostics.Debug.WriteLine($"\nMajorTabControl create tab {ptype} {name} {posindex}");
 
@@ -285,6 +278,10 @@ namespace EDDiscovery
                 }
             }
 
+            if (primary)
+                uccb.RequestPanelOperation = RequestPanelOperationPrimary;
+            else
+                uccb.RequestPanelOperation = RequestPanelOperationOther;
 
             int numoftab = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? 0 : (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1);
             if (uccb is UserControls.UserControlContainerSplitter && numoftab > 0)          // so history is a splitter, so first real splitter will be dn=100, adjust for it
@@ -299,6 +296,9 @@ namespace EDDiscovery
             page.Name = "MajorTabPage " + title;
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
             page.Padding = new System.Windows.Forms.Padding(3); // this is to allow a pad around the sides
+
+            if ( primary )
+                page.Tag = true;       // this marks it as the primary tab..
 
             page.SuspendLayout();
 
@@ -328,6 +328,76 @@ namespace EDDiscovery
             page.ResumeLayout();
 
             return page;
+        }
+
+        // request came from primary panel
+        // splitter has already distributed it around itself
+        // We pass it onto other tabs
+
+        private void RequestPanelOperationPrimary(UserControls.UserControlCommonBase sender, object actionobj)
+        {
+            System.Diagnostics.Debug.WriteLine($"Tab Primary request {actionobj}");
+
+            System.Diagnostics.Debug.Assert(!(actionobj is long));      // should not get jid moves from primary tab
+
+            foreach (TabPage tp in TabPages)
+            {
+                if (tp.Tag == null)       // came in on primary, don't resent to primary, as splitter has already distributed it
+                {
+                    var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
+                    System.Diagnostics.Debug.WriteLine($"..Tab primary distribute {actionobj} to {tp.Text}");
+                    if (uccb.PerformPanelOperation(sender, actionobj))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"..Tab primary panel {tp.Text} claimed it, stop distribution");
+                        break;
+                    }
+                }
+            }
+
+            eddiscovery.PopOuts.PerformPanelOperation(sender, actionobj);       // primary panel requests are vectored to forms - other ones are not
+        }
+
+        // request came from secondary panel 
+        private void RequestPanelOperationOther(UserControls.UserControlCommonBase sender, object actionobj)
+        {
+            System.Diagnostics.Debug.WriteLine($"Tab Other request {actionobj}");
+            PerformOperation(sender, actionobj);
+        }
+
+        // request can from a pop up panel
+        public void PerformPanelOperation(UserControls.UserControlCommonBase sender, object actionobj)
+        {
+            System.Diagnostics.Debug.WriteLine($"Perform Panel operation request {actionobj}");
+            PerformOperation(sender, actionobj);
+        }
+
+        // see if the request is valid, and for what tabs
+
+        public void PerformOperation(UserControls.UserControlCommonBase sender, object actionobj)
+        {
+            if (UserControls.UserControlCommonBase.IsOperationTHPush(actionobj))
+            {
+                System.Diagnostics.Debug.WriteLine($"..blocked as TH push from secondary tab");
+            }
+            else if (UserControls.UserControlCommonBase.IsOperationForTH(actionobj))
+            {
+                System.Diagnostics.Debug.WriteLine($"..Send travel grid request to primary tab");
+                UserControls.UserControlContainerSplitter pt = PrimarySplitterTab;
+                pt.PerformPanelOperation(sender, actionobj);        // send to primary tab only as it owns the travel grid, return is not material
+            }
+            else 
+            { 
+                foreach (TabPage tp in TabPages)        // to all
+                {
+                    var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
+                    System.Diagnostics.Debug.WriteLine($"..Tab other distribute {actionobj} to {tp.Text}");
+                    if (uccb.PerformPanelOperation(sender, actionobj))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"..Tab other panel {tp.Text} claimed it, stop distribution");
+                        break;
+                    }
+                }
+            }
         }
 
 

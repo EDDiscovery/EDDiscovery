@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using QuickJSON;
@@ -44,11 +44,6 @@ namespace EDDiscovery
         public void NewCalculatedRoute(List<ISystem> list)
         {
             OnNewCalculatedRoute?.Invoke(list);
-        }
-
-        public void PanelAction(string one, string two, string three, string four)
-        {
-            RequestPanelAction?.Invoke(one, two, three, four);
         }
 
         #endregion

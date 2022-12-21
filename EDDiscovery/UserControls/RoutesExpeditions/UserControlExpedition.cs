@@ -108,20 +108,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView,"V2");
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
         }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
-            uctg = thc;
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
-        }
-
 
         public override bool AllowClose()
         {
@@ -139,9 +126,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNoteChanged -= Discoveryform_OnNoteChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
         }
 
         private void Discoveryform_OnNoteChanged(object arg1, HistoryEntry arg2)
@@ -165,14 +149,19 @@ namespace EDDiscovery.UserControls
             latestplottedroute = obj;
         }
 
-        private void OnNewStars(List<string> list, OnNewStarsPushType command)    // and if a user asked for stars to be added
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (command == OnNewStarsPushType.Expedition)
-                AppendOrInsertSystems(-1,list);
+            var push = actionobj as UserControlCommonBase.PushStars;
+            if ( push != null && push.PushTo == PushStars.PushType.Expedition)
+            {
+                AppendOrInsertSystems(-1, push.Systems);
+                return true;
+            }
+
+            return false;
         }
 
         #endregion
-
 
         #region Grid Display Route and update when required
 

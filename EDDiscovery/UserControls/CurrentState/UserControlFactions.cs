@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EDDiscovery.Controls;
@@ -194,29 +194,21 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Discoveryform_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Discoveryform_OnTravelSelectionChanged;
-        }
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Discoveryform_OnTravelSelectionChanged;
             DGVLoadColumnLayout(dataGridViewFactions);
         }
 
         public override void InitialDisplay()
         {
-            Discoveryform_OnTravelSelectionChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewFactions);
 
-            uctg.OnTravelSelectionChanged -= Discoveryform_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
@@ -245,14 +237,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            last_he = he;
-            Display();
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                last_he = he;
 
-            // he can be null
-            var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? EDDConfig.GameEndTimeUTC());    // will always return an array
-            NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
+                Display();
+
+                var ml = discoveryform.history.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
+                NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
+            }
+            return false;
         }
 
         #endregion

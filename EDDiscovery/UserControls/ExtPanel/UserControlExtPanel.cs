@@ -87,17 +87,8 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             panel.LoadLayout();
         }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
         public override void InitialDisplay()
         {
             panel.InitialDisplay();
@@ -106,8 +97,6 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             panel.Closing();
-
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
 
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
@@ -135,9 +124,15 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Panel reactions
-        private void Uctg_OnTravelSelectionChanged(EliteDangerousCore.HistoryEntry he, EliteDangerousCore.HistoryList hl, bool selectedEntry)
+
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(hl, he, false));
+            EliteDangerousCore.HistoryEntry he = actionobj as EliteDangerousCore.HistoryEntry;
+            if (he != null)
+            {
+                panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, he, false));
+            }
+            return false;
         }
 
         #endregion

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -63,26 +63,17 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewNearest);
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewNearest);
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
             PutSetting("Min", textMinRadius.Value);
             PutSetting("Max", textMaxRadius.Value);
@@ -92,7 +83,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            KickComputation(uctg.GetCurrentHistoryEntry, true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         protected override void OnLoad(EventArgs e)
@@ -105,9 +96,15 @@ namespace EDDiscovery.UserControls
             KickComputation(obj.GetLast);   // copes with getlast = null
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            KickComputation(he);
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                KickComputation(he);
+            }
+
+            return false;
         }
 
         private void KickComputation(HistoryEntry he, bool force = false)
@@ -223,16 +220,16 @@ namespace EDDiscovery.UserControls
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            AddTo(OnNewStarsPushType.TriSystems);
+            AddTo(UserControlCommonBase.PushStars.PushType.TriSystems);
         }
 
         private void addToExpeditionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddTo(OnNewStarsPushType.Expedition);
+            AddTo(UserControlCommonBase.PushStars.PushType.Expedition);
 
         }
 
-        private void AddTo(OnNewStarsPushType pushtype)
+        private void AddTo(UserControlCommonBase.PushStars.PushType pushtype)
         {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
@@ -243,8 +240,7 @@ namespace EDDiscovery.UserControls
             foreach (DataGridViewRow r in selectedRows)
                 syslist.Add(r.Cells[0].Value.ToString());
 
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).FireNewStarList(syslist, pushtype);
+            RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = pushtype, Systems = syslist });
         }
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)

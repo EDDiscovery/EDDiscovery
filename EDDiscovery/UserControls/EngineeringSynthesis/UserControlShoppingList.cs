@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,10 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.Forms;
+
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
@@ -92,13 +90,6 @@ namespace EDDiscovery.UserControls
 
             var enumlistcms = new Enum[] { EDTx.UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem_onlyCapacityToolStripMenuItem, EDTx.UserControlShoppingList_showAvailableMaterialsInListWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem, EDTx.UserControlShoppingList_useEDSMDataInSystemAvailabilityToolStripMenuItem, EDTx.UserControlShoppingList_useHistoricMaterialCountsToolStripMenuItem, EDTx.UserControlShoppingList_toggleListPositionToolStripMenuItem };
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-        }
-
-        public override void SetCursor(IHistoryCursor cur)
-        {
-            base.SetCursor(cur);
-            userControlEngineering.SetCursor(cur);
-            userControlSynthesis.SetCursor(cur);
         }
 
         public override void Closing()

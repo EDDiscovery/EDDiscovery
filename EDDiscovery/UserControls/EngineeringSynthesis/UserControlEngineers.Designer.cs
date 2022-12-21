@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 namespace EDDiscovery.UserControls
 {
@@ -51,6 +51,7 @@ namespace EDDiscovery.UserControls
             this.panelEngineers = new ExtendedControls.ExtPanelScroll();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
             this.panelTop.SuspendLayout();
             this.panelEngineers.SuspendLayout();
             this.SuspendLayout();
@@ -61,6 +62,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonFilterEngineer);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Controls.Add(this.extCheckBoxMoreInfo);
+            this.panelTop.Controls.Add(this.chkNotHistoric);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
@@ -184,6 +186,29 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // chkNotHistoric
+            // 
+            this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
+            this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
+            this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
+            this.chkNotHistoric.ImageIndeterminate = null;
+            this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
+            this.chkNotHistoric.Location = new System.Drawing.Point(124, 1);
+            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.chkNotHistoric.Name = "chkNotHistoric";
+            this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
+            this.chkNotHistoric.TabIndex = 32;
+            this.chkNotHistoric.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.chkNotHistoric, "When red, use the materials at the cursor to estimate, when green always use the " +
+        "latest materials.");
+            this.chkNotHistoric.UseVisualStyleBackColor = true;
+            // 
             // UserControlEngineers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -208,5 +233,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar extScrollBar1;
         private ExtendedControls.ExtCheckBox extCheckBoxMoreInfo;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ExtCheckBox chkNotHistoric;
     }
 }

@@ -10,15 +10,10 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EDDiscovery.UserControls;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 
 namespace EDDiscovery
 {
@@ -36,6 +31,8 @@ namespace EDDiscovery
         public UserControlForm Find(PanelInformation.PanelIDs p) { return usercontrolsforms.Find(p); }
 
         public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
+
+        public Action<UserControlCommonBase, object> RequestPanelOperation;        // Request other panel does work
 
         private static string PopOutSaveID(PanelInformation.PanelIDs p)
         {
@@ -105,6 +102,11 @@ namespace EDDiscovery
 
             if (uccb != null && poi != null )
             {
+                uccb.RequestPanelOperation += (s, o) =>
+                {
+                    RequestPanelOperation?.Invoke(s, o);
+                };
+
                 // we make up the title and refname based on how many previously opened of this type
                 int numopened = usercontrolsforms.CountOf(selected) + 1;
                 string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
@@ -128,6 +130,11 @@ namespace EDDiscovery
             }
 
             return uccb;
+        }
+
+        public void PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            usercontrolsforms.PerformPanelOperation(sender, actionobj);
         }
 
         public bool AllowClose()

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -54,11 +54,6 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { findSystemsUserControl });
             dataGridView.Init(discoveryform);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg = thc;
         }
 
         public override void LoadLayout()

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EliteDangerousCore;
@@ -37,6 +37,8 @@ namespace EDDiscovery.UserControls
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
         private string dbEDSM = "EDSM";
+
+        public HistoryEntry last_history_he = null;
 
         public UserControlRoute()
         {
@@ -113,14 +115,14 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += HistoryChanged;
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg = thc;
-        }
-
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewRoute);
+        }
+
+        public override void InitialDisplay()
+        {
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
@@ -154,6 +156,7 @@ namespace EDDiscovery.UserControls
             {
                 UpdateTo(null);
                 UpdateFrom(null);
+                last_history_he = hl.GetLast;
             }
         }
 
@@ -166,6 +169,16 @@ namespace EDDiscovery.UserControls
             return s;
         }
 
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                last_history_he = he;       // keep track
+            }
+
+            return false;
+        }
 
         #region Helpers
 
@@ -294,9 +307,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromHistory_Click(object sender, EventArgs e)
         {
-            if (uctg.GetCurrentHistoryEntry != null)
+            if (last_history_he != null)
             {
-                UpdateFrom(textBox_From, uctg.GetCurrentHistoryEntry?.System.Name ?? "Sol");
+                UpdateFrom(textBox_From, last_history_he.System.Name);
             }
         }
 
@@ -415,9 +428,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonToHistory_Click(object sender, EventArgs e)
         {
-            if (uctg.GetCurrentHistoryEntry != null)
+            if (last_history_he != null)
             {
-                UpdateTo(textBox_To, uctg.GetCurrentHistoryEntry?.System.Name ?? "Sol");
+                UpdateTo(textBox_From, last_history_he.System.Name);
             }
         }
 

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EDDiscovery.Controls;
@@ -29,22 +29,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarList : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlStarList : UserControlCommonBase
     {
-        #region Public IF
-
-        public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewStarList.CurrentCell != null ?
-                    (dataGridViewStarList.Rows[dataGridViewStarList.CurrentCell.RowIndex].Tag as HistoryEntry) : null; } }
-
-        #endregion
-
-        #region Events
-
-        // implement IHistoryCursor fields
-        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
-
-        #endregion
-
         #region Init
         private class Columns
         {
@@ -511,32 +497,12 @@ namespace EDDiscovery.UserControls
 
         #region UI
 
-        Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
-        {
-            long jid = (dataGridViewStarList.CurrentCell != null) ? (dataGridViewStarList.Rows[dataGridViewStarList.CurrentCell.RowIndex].Tag as HistoryEntry).Journalid : -1;
-            int cellno = (dataGridViewStarList.CurrentCell != null) ? dataGridViewStarList.CurrentCell.ColumnIndex : 0;
-            return new Tuple<long, int>(jid, cellno);
-        }
-
-        public int GotoPosByJID(long jid)      // uccursor requirement. -1 if fails
-        {
-            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-            if (rowno >= 0)
-            {
-                dataGridViewStarList.SetCurrentAndSelectAllCellsOnRow(rowno);
-                dataGridViewStarList.Rows[rowno].Selected = true;
-                FireChangeSelection();
-            }
-            return rowno;
-        }
-
-        public void FireChangeSelection() // uccursor requirement
+        public void FireChangeSelection() // kept for historic purposes in case we want to make it a cursor again
         {
             if (dataGridViewStarList.CurrentCell != null)
             {
                 int row = dataGridViewStarList.CurrentCell.RowIndex;
                 //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
-                OnTravelSelectionChanged?.Invoke((dataGridViewStarList.Rows[row].Tag as HistoryEntry), discoveryform.history, true);
             }
         }
 

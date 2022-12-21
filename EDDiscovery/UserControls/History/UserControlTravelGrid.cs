@@ -27,21 +27,11 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursorNewStarList
+    public partial class UserControlTravelGrid : UserControlCommonBase
     {
         #region Public IF
 
-        //ucct interface
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Tag as HistoryEntry : null; } }
-
-        #endregion
-
-        #region Events
-
-        // implement IHistoryCursor fields
-        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
-
-        public event OnNewStarsSubPanelsHandler OnNewStarList;
 
         #endregion
 
@@ -115,7 +105,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
-            discoveryform.RequestPanelAction += Discoveryform_RequestPanelAction;
 
             this.showSystemVisitedForeColourToolStripMenuItem.Checked = GetSetting(dbVisitedColour, false);
             this.showSystemVisitedForeColourToolStripMenuItem.Click += new System.EventHandler(this.showSystemVisitedForeColourToolStripMenuItem_Click);
@@ -182,7 +171,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             discoveryform.OnNoteChanged -= OnNoteChanged;
-            discoveryform.RequestPanelAction -= Discoveryform_RequestPanelAction;
 
             searchtimer.Dispose();
         }
@@ -538,41 +526,79 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        public int GotoPosByJID(long jid)       // -1 if fails
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid,jid, true);
+            if ( actionobj is long )
+            {
+                GotoPosByJID((long)actionobj);
+                return true;
+            }
+            else if ( actionobj is UserControlCommonBase.RequestTravelHistoryPos )
+            {
+                var he = CurrentHE();
+                if (he != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
+                    sender.PerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
+                    return true;
+                }
+            }
+            else if (actionobj is UserControlCommonBase.PanelAction)
+            {
+                var act = actionobj as UserControlCommonBase.PanelAction;
+
+                if (act.Action.EqualsIIC("editnoteprimary") && IsPrimaryHistoryDisplayNumber)      // action on editnoteprimary, and we are a primary history display
+                {
+                    HistoryEntry he = dataGridViewTravel.RowCount > 0 ? dataGridViewTravel.Rows[0].Tag as HistoryEntry : null;   // grab top row HE if it exists
+                    if (he != null)
+                    {
+                        EditNoteInWindow(he);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void GotoPosByJID(long jid)       // -1 if fails
+        {
+            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
+            System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
+
             if (rowno >= 0)
             {
                 dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(rowno);
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
-            return rowno;
         }
 
         public void FireChangeSelection()
+        {
+            var he = CurrentHE();
+            if ( he != null )
+            { 
+                System.Diagnostics.Trace.WriteLine($"Travel Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell.RowIndex}:{dataGridViewTravel.CurrentCell.ColumnIndex}");
+                RequestPanelOperation?.Invoke(this, he);
+            }
+        }
+
+        private HistoryEntry CurrentHE()
         {
             if (dataGridViewTravel.CurrentCell != null)
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
                 var he = dataGridViewTravel.Rows[row].Tag as HistoryEntry;
-                //System.Diagnostics.Trace.WriteLine("************ TG Fire Change sel at " + row + " he " + he.EventTimeUTC + " " +  he.EventSummary + " " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
-
-                if ( OnTravelSelectionChanged != null )     // we do this manually, so we can time each reaction if required.
-                {
-                    foreach (var e in OnTravelSelectionChanged.GetInvocationList())
-                    {
-                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
-                        e.DynamicInvoke(he, current_historylist, true);
-                        if ( sw.ElapsedMilliseconds>=50)
-                            System.Diagnostics.Trace.WriteLine("TG FCS Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
-                    }
-                }
+                return he;
             }
             else if (current_historylist != null && current_historylist.Count > 0)
             {
-                OnTravelSelectionChanged?.Invoke(current_historylist.GetLast, current_historylist, false);
+                return current_historylist.GetLast;
             }
+            else
+                return null;
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
@@ -642,20 +668,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_RequestPanelAction(string arg1, string arg2, string arg3, string arg4)
-        {
-            if (arg1.EqualsIIC("editnoteprimary") && IsPrimaryHistoryDisplayNumber)      // action on editnoteprimary, and we are a primary history display
-            {
-                HistoryEntry he = dataGridViewTravel.RowCount > 0 ? dataGridViewTravel.Rows[0].Tag as HistoryEntry : null;   // grab top row HE if it exists
-                if (he != null)
-                {
-                    EditNoteInWindow(he);
-                }
-            }
-        }
-
-
-        private void textBoxSearch_TextChanged(object sender, EventArgs e)
+         private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
             searchtimer.Stop();
             searchtimer.Start();
@@ -856,10 +869,6 @@ namespace EDDiscovery.UserControls
             gotoEntryNumberToolStripMenuItem.Enabled = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
             gotoNextStartStopMarkerToolStripMenuItem.Enabled = (rightclickhe != null);
-
-            var invokelist = OnNewStarList?.GetInvocationList();
-            bothToolStripMenuItem.Enabled = wantedSystemsToolStripMenuItem.Enabled = trilaterationToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlTrilateration)) != null;
-            expeditionToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExpedition)) != null;
         }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1002,19 +1011,14 @@ namespace EDDiscovery.UserControls
             }
 
             if (dist)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.TriSystems);
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriSystems, Systems = systemnamelist });
 
             if (wanted)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.TriWanted);
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriWanted, Systems = systemnamelist });
 
             if (expedition)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.Expedition);
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, Systems = systemnamelist });
 
-        }
-
-        public void FireNewStarList(List<string> system, OnNewStarsPushType pushtype)
-        {
-            OnNewStarList?.Invoke(system, pushtype);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)

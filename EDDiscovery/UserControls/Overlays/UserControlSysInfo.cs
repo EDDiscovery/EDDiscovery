@@ -113,7 +113,6 @@ namespace EDDiscovery.UserControls
 
         private bool travelhistoryisattop = true;
 
-        bool neverdisplayed = true;
         HistoryEntry last_he = null;
 
         private ControlHelpersStaticFunc.ControlDragger drag = new ControlHelpersStaticFunc.ControlDragger();
@@ -255,22 +254,8 @@ namespace EDDiscovery.UserControls
             shiptexttranslation = labelShip.Text;
         }
 
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += TravelSelChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= TravelSelChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += TravelSelChanged;
-            //System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
-        }
-
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= TravelSelChanged;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
@@ -285,7 +270,8 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry);
+            UpdateViewOnSelection();  // then turn the right ones on
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         private void Discoveryform_OnEDSMSyncComplete(int count, string syslist)     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
@@ -337,9 +323,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void TravelSelChanged(HistoryEntry he, HistoryList hl, bool sel)
+        public override bool PerformPanelOperation(UserControlCommonBase senderunused, Object actionobj)
         {
-            travelhistoryisattop = he == hl.GetLast;      // see if tracking at top
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he == null)
+                return false;
+
+            System.Diagnostics.Debug.WriteLine($"Sysinfo {displaynumber} : Cursor {he.Index} {he.EventSummary}");
+            travelhistoryisattop = he == discoveryform.history.GetLast;      // see if tracking at top
 
             bool duetosystem = last_he == null;
             bool duetostatus = false;
@@ -371,16 +362,12 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
             }
+
+            return false;
         }
 
         private async void Display(HistoryEntry he) 
         {
-            if (neverdisplayed)
-            {
-                UpdateViewOnSelection();  // then turn the right ones on
-                neverdisplayed = false;
-            }
-
             last_he = he;
             var hl = discoveryform.history;
 

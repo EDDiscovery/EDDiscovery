@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -118,12 +118,6 @@ namespace EDDiscovery.UserControls
 
             labelCount.Visible = false;
         }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg = thc;
-        }
-
         public override void LoadLayout()
         {
             bool loaded = DGVLoadColumnLayout(dataGridView);

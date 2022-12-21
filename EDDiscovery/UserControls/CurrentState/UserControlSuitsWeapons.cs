@@ -40,17 +40,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSuits, enumlistcms, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
-
             DGVLoadColumnLayout(dataGridViewSuits, "Suits");
             DGVLoadColumnLayout(dataGridViewWeapons, "Weapons");
             splitContainerMissions.SplitterDistance(GetSetting("Splitter", 0.4));
@@ -61,9 +52,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewSuits, "Suits");
             DGVSaveColumnLayout(dataGridViewWeapons, "Weapons");
             PutSetting("Splitter", splitContainerMissions.GetSplitterDistance());
-
-            uctg.OnTravelSelectionChanged -= Display;
-
         }
 
         #endregion
@@ -72,30 +60,35 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history,true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         uint last_weapons = 0;
         uint last_suits = 0;
         uint last_loadout = 0;
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-          //  System.Diagnostics.Debug.WriteLine("Display check");
-            uint newweapon = he?.Weapons ?? 0;
-            if (newweapon != last_weapons)
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                last_weapons = newweapon;
-                DisplayWeapons();
+                uint newweapon = he.Weapons;
+                if (newweapon != last_weapons)
+                {
+                    last_weapons = newweapon;
+                    DisplayWeapons();
+                }
+                uint newsuits = he.Suits;
+                uint newloadout = he.Loadouts;
+                if (newsuits != last_suits || newloadout != last_loadout)
+                {
+                    last_suits = newsuits;
+                    last_loadout = newloadout;
+                    DisplaySuits();
+                }
             }
-            uint newsuits = he?.Suits ?? 0;
-            uint newloadout = he?.Loadouts ?? 0;
-            if (newsuits != last_suits || newloadout != last_loadout )
-            {
-                last_suits = newsuits;
-                last_loadout = newloadout;
-                DisplaySuits();
-            }
+
+            return false;
         }
 
         private void DisplayWeapons()

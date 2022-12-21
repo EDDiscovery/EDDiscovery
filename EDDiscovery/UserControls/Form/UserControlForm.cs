@@ -290,7 +290,6 @@ namespace EDDiscovery.UserControls
             if (UserControl != null)
             {
                 System.Diagnostics.Debug.WriteLine("UCCB Call set curosr, load layout, initial display");
-                UserControl.SetCursor(UserControl.discoveryform.PrimaryCursor);
                 UserControl.LoadLayout();
                 UserControl.InitialDisplay();
             }
@@ -583,10 +582,18 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public void PerformPanelOperation(UserControlCommonBase sender, object action)
+        {
+            foreach (UserControlForm ucf in forms)
+            {
+                ucf.UserControl?.PerformPanelOperation(sender, action);
+            }
+        }
+
         public void CloseAll()
         {
             List<UserControlForm> list = new List<UserControlForm>(forms);       // so, closing it ends up calling back to FormCloseCallBack
-                                                                                    // and it changes tabforms. So we need a copy to safely do this
+                                                                                 // and it changes tabforms. So we need a copy to safely do this
             foreach (UserControlForm ucf in list)
             {
                 ucf.Close();        // don't change tabforms.. the FormCloseCallBack does this

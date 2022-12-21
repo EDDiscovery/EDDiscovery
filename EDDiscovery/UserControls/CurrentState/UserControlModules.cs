@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -77,24 +77,15 @@ namespace EDDiscovery.UserControls
             fuellevelname = "Fuel Level".T(EDTx.UserControlModules_FuelLevel);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewModules.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewModules);
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewModules);
-            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
@@ -139,16 +130,21 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (comboBoxShips.Items.Count == 0)
-                UpdateComboBox(hl);
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                if (comboBoxShips.Items.Count == 0)
+                    UpdateComboBox(discoveryform.history);
 
-            last_he = he;
-            Display();
+                last_he = he;
+                Display();
+            }
+            return false;
         }
 
         private void Display()      // allow redisplay of last data

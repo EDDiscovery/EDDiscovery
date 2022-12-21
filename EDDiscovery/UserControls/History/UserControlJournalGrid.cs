@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -26,7 +26,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlJournalGrid : UserControlCommonBase
     {
         private JournalFilterSelector cfs;
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
@@ -43,11 +43,6 @@ namespace EDDiscovery.UserControls
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
         private string searchterms = "system:body:station:stationfaction";
-
-        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
-
-
-        public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Tag as HistoryEntry : null; } }
 
         #region Init
 
@@ -516,27 +511,27 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        public int GotoPosByJID(long jid)       // -1 if fails
-        {
-            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-            if (rowno >= 0)
-            {
-                dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
-                dataGridViewJournal.Rows[rowno].Selected = true;
-                FireChangeSelection();
-            }
+        //public int GotoPosByJID(long jid)       // keep for now in case we want to make it a history cursor again
+        //{
+        //    int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
+        //    if (rowno >= 0)
+        //    {
+        //        dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
+        //        dataGridViewJournal.Rows[rowno].Selected = true;
+        //        FireChangeSelection();
+        //    }
 
-            return rowno;
-        }
+        //    return rowno;
+        //}
 
-        public void FireChangeSelection()
+        public void FireChangeSelection()       // keep for now
         {
-            System.Diagnostics.Debug.WriteLine("JG Fire Change Sel");
-            if (dataGridViewJournal.CurrentCell != null)
-            {
-                int row = dataGridViewJournal.CurrentCell.RowIndex;
-                OnTravelSelectionChanged?.Invoke(dataGridViewJournal.Rows[row].Tag as HistoryEntry, current_historylist, true);
-            }
+//            System.Diagnostics.Debug.WriteLine("JG Fire Change Sel");
+//            if (dataGridViewJournal.CurrentCell != null)
+//            {
+//                int row = dataGridViewJournal.CurrentCell.RowIndex;
+////                OnTravelSelectionChanged?.Invoke(dataGridViewJournal.Rows[row].Tag as HistoryEntry, current_historylist, true);
+//            }
         }
 
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)

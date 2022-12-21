@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Drawing;
@@ -21,6 +19,7 @@ namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
     {
+
         public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
         public const int DisplayNumberPopOuts = 1;                  // pop outs are 1-99.. of each specific type.
         public const int DisplayNumberStartExtraTabs = 100;         // extra tabs are assigned here
@@ -41,7 +40,6 @@ namespace EDDiscovery.UserControls
         public PanelInformation.PanelIDs panelid { get; private set; }  // set on creation 
         public int displaynumber { get; private set; }                // set on Init
         public EDDiscoveryForm discoveryform { get; private set; }    // set on Init    
-        public IHistoryCursor uctg { get; protected set; }            // valid at loadlayout
         public bool IsClosed { get; private set; }                    // set after CloseDown called. Use this if your doing await stuff which may mean your class gets called after close
 
         public bool IsPrimaryHistoryDisplayNumber { get { return displaynumber == DisplayNumberSplitterStart; } }
@@ -75,14 +73,11 @@ namespace EDDiscovery.UserControls
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab, Grid:CreateInitPanel
 
         public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
-        public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
         public virtual void InitialDisplay() { }    // do the initial display
         public virtual void Closing() { }           // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
 
         // end calling order.
-
-        public virtual void ChangeCursorType(IHistoryCursor thc) { }     // implement if you call the uctg
 
         public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
         public virtual bool DefaultTransparent { get { return false; } }  // override to say default to be transparent
@@ -110,6 +105,42 @@ namespace EDDiscovery.UserControls
             base.Dispose(disposing);
         }
 
+        // Action request system - replaces UCTG. Allows comms between panels
+        // Requests/Performs are:
+        //      HistoryEntry - sent by all TG on cursor moves.
+        //          Splitter/grid distributes it around the siblings - they response false
+        //          Sent up to tab - MainTab distributes it to other tabs, Other throws it away
+        //
+        //      long - request travel grid to go to this jid AND class RequestTravelHistoryPos - request travel grid to call back directly to sender with the current HE
+        //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution
+        //           If not ack, sent up to tab - Other will send it to maintab, maintab will never get it (as it would be cancelled by splitter)
+        //
+        //      class PushStars - someone is pushing a system list to expedition or trilat
+        //            Splitter/grid distributes it around the siblings - if a receipient is there and uses it, they respond true, which stops the distribution
+        //            Sent up to major tab - both types will distribute it to all tabs and the first recepient will cancel it
+        //
+        //      class PanelAction - perform this string action on a tab panel
+        //             Sent into all tabs, first one accepting it will cancel it.
+        //             // TBD
+
+        public static bool IsOperationForTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
+        public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
+        public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he
+        public class PushStars                          // use to push star list to other panels
+        {
+            public enum PushType { TriWanted, TriSystems, Expedition };
+            public PushType PushTo { get; set; }
+            public System.Collections.Generic.List<string> Systems { get; set; }
+        };
+        public class PanelAction
+        { 
+            public string Action { get; set; }
+        }
+
+        public Action<UserControlCommonBase, object> RequestPanelOperation;        // Request other panel does something for you, pretty please.
+        public virtual bool PerformPanelOperation(UserControlCommonBase sender, object actionobj) { return false;  } // panel asked for operation, return true to indicate its swallowed
+
+        // more status
 
         public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
 

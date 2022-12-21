@@ -53,7 +53,10 @@ namespace EDDiscovery.UserControls
                 mapsave = new MapSaverImpl(this);
                 map.LoadState(mapsave, true, 0);
 
-                map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
+                map.AddSystemsToExpedition = (list) =>
+                {
+                    RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, Systems = list });
+                };
 
                 // start clock
                 systemtimer.Interval = 50;

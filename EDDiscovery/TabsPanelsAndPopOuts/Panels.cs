@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  *
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EDDiscovery.UserControls;
@@ -26,6 +26,7 @@ namespace EDDiscovery
     {
         public enum PanelIDs        // id's.. used in tab controls, and in button pop outs button
         {
+            Any = -2,
             GroupMarker = -1,
 
             Log = 0,                  // BEWARE

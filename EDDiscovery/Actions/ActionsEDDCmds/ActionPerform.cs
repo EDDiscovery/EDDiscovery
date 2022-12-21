@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using System;
 using System.Collections.Generic;
@@ -187,9 +187,9 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("disablevoicerecognition"))
                         ac.VoiceReconOff();
-                    else if (cmdname.Equals("panelaction"))
+                    else if (cmdname.Equals("panelaction"))     // send to panel tabs
                     {
-                        ac.DiscoveryForm.PanelAction(nextword, thirdword, fourthword, fifthword);
+                        ac.DiscoveryForm.PerformOperationOnTabs(null, new UserControls.UserControlCommonBase.PanelAction() { Action = nextword });
                     }
                     else if (cmdname.Equals("beginvoicerecognition"))
                         ac.VoiceLoadEvents();

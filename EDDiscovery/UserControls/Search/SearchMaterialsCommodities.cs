@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -75,12 +75,7 @@ namespace EDDiscovery.UserControls
             comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".T(EDTx.SearchMaterialsCommodities_AND), "OR".T(EDTx.SearchMaterialsCommodities_OR) });
             comboBoxCustomCMANDOR.SelectedIndex = GetSetting(dbCMANDOR, 0);
 
-            dataGridView.GotoEntryClicked += (he) => { uctg.GotoPosByJID(he.Journalid); };
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg = thc;
+            dataGridView.GotoEntryClicked += (he) => { RequestPanelOperation(this,he.Journalid); };
         }
 
         public override void LoadLayout()

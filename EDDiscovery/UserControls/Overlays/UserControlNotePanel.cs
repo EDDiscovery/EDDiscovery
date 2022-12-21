@@ -58,7 +58,6 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += OnTravelChange;
         }
 
         public override void InitialDisplay()
@@ -66,18 +65,10 @@ namespace EDDiscovery.UserControls
             OnHistoryChange(discoveryform.history);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= OnTravelChange;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += OnTravelChange;
-        }
-
         public override void Closing()
         {
             discoveryform.OnHistoryChange -= OnHistoryChange;
             discoveryform.OnNoteChanged -= OnNoteChange;
-            uctg.OnTravelSelectionChanged -= OnTravelChange;
             PutSetting("Config", (int)config);
         }
 
@@ -88,9 +79,14 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
-        private void OnTravelChange(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            Display(he);
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                Display(he);
+            }
+            return false;
         }
 
         private void OnNoteChange(Object sender, HistoryEntry he)

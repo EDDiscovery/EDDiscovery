@@ -50,8 +50,6 @@ namespace EDDiscovery.UserControls
             Display(currentHE);
         }
 
-        bool debug_followcursor = false;        // only for debugging, normally locked to last entry
-
         #region Init
 
         public UserControlMissionOverlay()
@@ -96,8 +94,6 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            if (debug_followcursor)
-                uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged; //DEBUG
 
             Resize += UserControlMissionOverlay_Resize;
         }
@@ -112,11 +108,6 @@ namespace EDDiscovery.UserControls
             Display(he);
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
-        {
-            Display(he);
-        }
-
         private void UserControlMissionOverlay_Resize(object sender, EventArgs e)
         {
             Display(currentHE);
@@ -126,8 +117,6 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            if (debug_followcursor)
-                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 
         #endregion

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 // turn on for play testing of all your scans
@@ -84,29 +84,14 @@ namespace EDDiscovery.UserControls
 #endif
         }
 
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
-            DrawSystem(last_he);    // may be null
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState );
-
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= NewEntry;
             closing = true;
         }
@@ -154,12 +139,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
 #if PLAYTHRU
             t.Start();    // debug, for playing all scans thru
 #endif
 
+            HistoryEntry he = actionobj as HistoryEntry;
             if (he != null)
             {
                 if (last_he == null || last_he.System != he.System) // if we changed system, we need to represent
@@ -168,6 +154,7 @@ namespace EDDiscovery.UserControls
                     DrawSystem(last_he);
                 }
             }
+            return false;
         }
 
         void DrawSystem(HistoryEntry he)

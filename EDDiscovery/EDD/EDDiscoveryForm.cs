@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using BaseUtils;
@@ -48,8 +48,8 @@ namespace EDDiscovery
 
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
-        public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
-        public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
+        public UserControls.UserControlTravelGrid PrimaryTravelGrid { get { return tabControlMain.PrimarySplitterTab.GetTravelGrid; } }
+        public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimarySplitterTab; } }
 
         public EliteDangerousCore.ScreenShots.ScreenShotConverter ScreenshotConverter { get; set; }
         public PopOutControl PopOuts { get; set; }
@@ -75,7 +75,6 @@ namespace EDDiscovery
         public event Action OnThemeChanging;                            // Note you won't get it on startup because theme is applied to form before tabs/panels are setup. Before themeing
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
-        public event Action<string,string,string,string> RequestPanelAction;   // from actions, a request for a panel action
         #endregion
 
         #region Events due to EDDiscoveryControl 
@@ -258,6 +257,8 @@ namespace EDDiscovery
 
             ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
+
+            PopOuts.RequestPanelOperation += tabControlMain.PerformPanelOperation;          // HOOK requests from the forms into the main tab..
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
             msg.Invoke("Applying Themes");
@@ -481,7 +482,7 @@ namespace EDDiscovery
             {
                 tabControlMain.MinimumTabWidth = 32;
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
-                if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
+                if (tabControlMain.PrimarySplitterTab == null || tabControlMain.PrimarySplitterTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
                 {
                     MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                     "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
@@ -863,6 +864,11 @@ namespace EDDiscovery
 
 #region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
 
+        public void PerformOperationOnTabs(UserControls.UserControlCommonBase sender, object actionobj)
+        {
+            tabControlMain.PerformOperation(sender, actionobj);
+        }
+
         public void AddTab(PanelInformation.PanelIDs id, int tabindex = 0) // negative means from the end.. -1 is one before end
         {
             tabControlMain.AddTab(id, tabindex);
@@ -964,7 +970,7 @@ namespace EDDiscovery
 
         private bool IsNonRemovableTab(int n)
         {
-            bool uch = Object.ReferenceEquals(tabControlMain.TabPages[n].Controls[0], tabControlMain.PrimaryTab);
+            bool uch = Object.ReferenceEquals(tabControlMain.TabPages[n].Controls[0], tabControlMain.PrimarySplitterTab);
             bool sel = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector;
             return uch || sel;
         }

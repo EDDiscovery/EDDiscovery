@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System;
@@ -116,27 +115,19 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += UCTGChanged;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewSynthesis.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += UCTGChanged;
             DGVLoadColumnLayout(dataGridViewSynthesis);
             chkNotHistoric.Checked = !isHistoric;
             chkNotHistoric.Visible = !isEmbedded;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);     // now trigger
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewSynthesis);
 
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
@@ -149,17 +140,17 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Display
-        internal void SetHistoric(bool newVal)
-        {
-            isHistoric = newVal;
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            Display();
-        }
-
         public override void InitialDisplay()
         {
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            Display();
+            if (isHistoric)
+            {
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            }
+            else
+            {
+                last_he = discoveryform.history.GetLast;
+                Display();
+            }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
@@ -181,13 +172,18 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (isHistoric || last_he == null)
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                last_he = he;
-                Display();
+                if (isHistoric || last_he == null)
+                {
+                    last_he = he;
+                    Display();
+                }
             }
+            return false;
         }
 
         private void Display()
@@ -442,6 +438,11 @@ namespace EDDiscovery.UserControls
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
             SetHistoric(!chkNotHistoric.Checked);       // button sense changed
+        }
+        internal void SetHistoric(bool newVal)
+        {
+            isHistoric = newVal;
+            InitialDisplay();       // same action as initial display
         }
 
     }

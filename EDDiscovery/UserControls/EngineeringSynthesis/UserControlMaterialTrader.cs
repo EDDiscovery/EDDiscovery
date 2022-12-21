@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -111,17 +111,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= TravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += TravelSelectionChanged;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewTrades.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += TravelSelectionChanged;
             DGVLoadColumnLayout(dataGridViewTrades);
         }
 
@@ -129,7 +121,6 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewTrades);
             PutSetting(dbSplitter, splitContainer.GetSplitterDistance());
-            uctg.OnTravelSelectionChanged -= TravelSelectionChanged;
 
             discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
@@ -149,10 +140,16 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            // last_mcl may be null if there is no history
-            last_mcl = checkBoxCursorToTop.Checked ? discoveryform.history.GetLast?.MaterialCommodity : uctg.GetCurrentHistoryEntry?.MaterialCommodity;
-            DisplayTradeSelection();
-            DisplayTradeList();
+            if (checkBoxCursorToTop.Checked)
+            {
+                last_mcl = discoveryform.history.GetLast?.MaterialCommodity;
+                DisplayTradeSelection();
+                DisplayTradeList();
+            }
+            else
+            {
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
@@ -160,17 +157,16 @@ namespace EDDiscovery.UserControls
             InitialDisplay();
         }
 
-        private void TravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (checkBoxCursorToTop.Checked == false)
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null && checkBoxCursorToTop.Checked == false && last_mcl != he.MaterialCommodity)
             {
-                if (he != null && last_mcl != he?.MaterialCommodity)        // if changed MCL
-                {
-                    last_mcl = he.MaterialCommodity;
-                    DisplayTradeSelection();
-                    DisplayTradeList();
-                }
+                last_mcl = he.MaterialCommodity;
+                DisplayTradeSelection();
+                DisplayTradeList();
             }
+            return false;
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)

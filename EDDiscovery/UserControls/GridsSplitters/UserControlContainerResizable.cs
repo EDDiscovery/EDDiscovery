@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -24,7 +22,9 @@ namespace EDDiscovery.UserControls
     {
         public Color BorderColor { get; set; } = Color.Red;
         public Color SelectedBorderColor { get; set; } = Color.Green;
-        public Control control { get; private set; }
+
+        public UserControlCommonBase UCCB { get; private set; }
+
         public Action<UserControlContainerResizable> ResizeStart;
         public Action<UserControlContainerResizable,bool> ResizeEnd;
         public bool Selected { get { return selected; } set { SetSelected(value); } }
@@ -41,9 +41,9 @@ namespace EDDiscovery.UserControls
 
         public void Init( UserControlCommonBase uccb, string title)
         {
-            control = uccb;
+            UCCB = uccb;
             lcontroltext = new Label() { Top = margin, Left = margin, Text = title };
-            Controls.Add(control);
+            Controls.Add(UCCB);
             Controls.Add(lcontroltext);
             PerformLayout();
         }
@@ -64,8 +64,8 @@ namespace EDDiscovery.UserControls
             base.OnLayout(e);
             lcontroltext.Width = ClientRectangle.Width - lcontroltext.Left - margin*2;
             int ycontroltext = (int)Font.GetHeight()+4;    // space for title/control text. Control text replaces title on UCs where its called.
-            control.Location = new Point(margin, margin+ycontroltext);
-            control.Size = new Size(ClientRectangle.Width - margin * 2, ClientRectangle.Height - margin * 2 - ycontroltext);
+            UCCB.Location = new Point(margin, margin+ycontroltext);
+            UCCB.Size = new Size(ClientRectangle.Width - margin * 2, ClientRectangle.Height - margin * 2 - ycontroltext);
         }
 
         protected override void OnPaint(PaintEventArgs e)

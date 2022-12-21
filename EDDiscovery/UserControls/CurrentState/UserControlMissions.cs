@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EliteDangerousCore;
@@ -54,17 +54,8 @@ namespace EDDiscovery.UserControls
             missionListPrevious.SearchTextChanged += () => { Display(); };
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
-
             missionListCurrent.SetMinimumHeight(Font.ScalePixels(26));
             missionListPrevious.SetMinimumHeight(Font.ScalePixels(26));
 
@@ -84,7 +75,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(missionListCurrent.dataGridView, "Current");
             DGVSaveColumnLayout(missionListPrevious.dataGridView, "Previous");
 
-            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
@@ -102,7 +92,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
@@ -123,18 +113,28 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                Display(he);
+            }
+            return false;
+        }
+
         HistoryEntry last_he = null;
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
+        //private void Display(HistoryEntry he, HistoryList hl) =>
+        //    Display(he, hl, true);
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void Display(HistoryEntry he)
         {
             last_he = he;
             Display();
 
             // he can be null
-            var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
+            var ml = discoveryform.history.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
             NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? ObjectExtensionsDates.MaxValueUTC();
         }
 

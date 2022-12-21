@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 namespace EDDiscovery.UserControls
 {
@@ -252,7 +252,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.chkNotHistoric, "When red, use the materials at the cursor to estimate, when green always use the " +
         "latest materials.");
             this.chkNotHistoric.UseVisualStyleBackColor = true;
-            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
             // 
             // extCheckBoxWordWrap
             // 

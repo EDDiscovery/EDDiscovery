@@ -545,7 +545,6 @@
     <Compile Include="UserControls\History\UserControlTravelGrid.Designer.cs">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\IHistoryCursor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

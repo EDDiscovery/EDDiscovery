@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EliteDangerousCore;
@@ -72,28 +72,19 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewScangrid);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewScangrid);
-            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
         }
 
         public override void InitialDisplay()
         {
-            DrawSystem(uctg.GetCurrentHistoryEntry, false);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         private void NewEntry(HistoryEntry he, HistoryList hl)
@@ -101,9 +92,15 @@ namespace EDDiscovery.UserControls
             DrawSystem(he, he.journalEntry is IStarScan ); // not IBodyNameAndID because all that can do is add an empty scan node, and we do not present info if no scan data
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            DrawSystem(he, false);
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                DrawSystem(he, false);
+            }
+
+            return false;
         }
 
         #endregion

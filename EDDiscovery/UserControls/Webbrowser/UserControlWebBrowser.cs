@@ -31,8 +31,8 @@ namespace EDDiscovery.UserControls
 
         private BrowserBase wbb;
 
-        private Timer uctgtimer = new System.Windows.Forms.Timer();
-        private HistoryEntry uctghe;
+        private Timer historychangedtimer = new System.Windows.Forms.Timer();
+        private HistoryEntry historyhe;
         
         private string urlallowed;
 
@@ -72,21 +72,9 @@ namespace EDDiscovery.UserControls
 
             extButtonIE11Warning.Visible = false;
 
-            uctgtimer = new Timer();
-            uctgtimer.Interval = 50;
-            uctgtimer.Tick += Uctgtimer_Tick;
-        }
-
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+            historychangedtimer = new Timer();
+            historychangedtimer.Interval = 100;
+            historychangedtimer.Tick += HistoryChangedTimer_Tick;
         }
 
         public override void InitialDisplay()
@@ -112,8 +100,9 @@ namespace EDDiscovery.UserControls
                 Controls.Add(wbb.webbrowser);
                 Controls.SetChildIndex(wbb.webbrowser, 0);
 
-                last_sys_tracked = uctg.GetCurrentHistoryEntry?.System;
-                PresentSystem(last_sys_tracked);    // may be null
+                last_sys_tracked = null;             
+
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
             };
             wv2.Start();
         }
@@ -122,43 +111,45 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            uctgtimer.Stop();
+            historychangedtimer.Stop();
             isClosing = true;
             PutSetting("PinState", rollUpPanelTop.PinState);
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry) 
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (he != null) // we may not have the webbrowser up, so we just tick until its ready
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                System.Diagnostics.Debug.WriteLine($"Web browser utcg request {he.System.Name}");
-                uctghe = he;
-                uctgtimer.Start();
+                System.Diagnostics.Debug.WriteLine($"Web browser HE change request {he.System.Name}");
+                historyhe = he;
+                historychangedtimer.Start();
             }
+
+            return false;
         }
 
-        private void Uctgtimer_Tick(object sender, EventArgs e)
+        private void HistoryChangedTimer_Tick(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"Web browser UCTG timer on {uctghe.System.Name} {wbb != null}");
+            System.Diagnostics.Debug.WriteLine($"Web browser timer on {historyhe.System.Name} {wbb != null}");
 
             if (wbb != null)        // wait till we have a webbrowser
             {
-                uctgtimer.Stop();
+                historychangedtimer.Stop();
                 bool nosys = last_sys_tracked == null;
 
-                if (nosys || last_sys_tracked.Name != uctghe.System.Name)
+                if (nosys || last_sys_tracked.Name != historyhe.System.Name)
                 {
-                    last_sys_tracked = uctghe.System;       // we want to track system always
+                    last_sys_tracked = historyhe.System;       // we want to track system always
 
                     if (override_system == null && (checkBoxAutoTrack.Checked || nosys))        // if no overridden, and tracking (or no sys), present
                         PresentSystem(last_sys_tracked);
                 }
-                else if (uctghe.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
+                else if (historyhe.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
                 {
                     if (override_system == null && checkBoxAutoTrack.Checked)       // if not overriding, and tracking, present
                     {
-                        JournalStartJump jsj = uctghe.journalEntry as JournalStartJump;
+                        JournalStartJump jsj = historyhe.journalEntry as JournalStartJump;
                         last_sys_tracked = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
                         PresentSystem(last_sys_tracked);
                     }

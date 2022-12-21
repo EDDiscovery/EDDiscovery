@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -101,22 +101,9 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
         public override void InitialDisplay()
         {
-            last_sys = uctg.GetCurrentHistoryEntry?.System;
-            DrawAll(last_sys);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
             SetVisibility();
             doresize = true;                            // now allow resizing actions, before, resizes were due to setups, now due to user interactions
         }
@@ -127,7 +114,6 @@ namespace EDDiscovery.UserControls
 
             PutSetting("PinState", rollUpPanelTop.PinState);
 
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
@@ -248,12 +234,12 @@ namespace EDDiscovery.UserControls
             CalculateAndDrawSystem(last_sys);
         }
 
-
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
+            HistoryEntry he = actionobj as HistoryEntry;
             if (he != null)
             {
-                bool islatest = Object.ReferenceEquals(hl.GetLast, he);        // is this the latest
+                bool islatest = Object.ReferenceEquals(discoveryform.history.GetLast, he);        // is this the latest
 
                 // can't say i love this idea, there must be a better solution, but..
                 // from scan of logs on 18/9/22 these are ones which I saw between startjump and fsdjump. Excluding the ones turned in ui events in edjournalreader.cs
@@ -265,7 +251,7 @@ namespace EDDiscovery.UserControls
                                                             };
 
                 if (islatest && Array.IndexOf(excludedevents,he.EntryType)>=0)        // if latest, and its an excluded event, we ignore, so we don't let it interrupt the start jump sequence..
-                    return;                                                     
+                    return false;                                                     
 
                 // something has changed and just blindly for now recalc the fsd info
                 shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
@@ -285,7 +271,7 @@ namespace EDDiscovery.UserControls
                         CalculateAndDrawSystem(last_sys);       // no route or fuel needed
                     }
 
-                    return;     // ignore otherwise and don't let the stuff below happen since its an IStarScan and it will cause a recomputation
+                    return false;     // ignore otherwise and don't let the stuff below happen since its an IStarScan and it will cause a recomputation
                 }
 
                 if (last_sys == null || last_sys.Name != he.System.Name) // If not got a system, or different name
@@ -296,7 +282,7 @@ namespace EDDiscovery.UserControls
                     last_sys = he.System;       // and set, then
                     DrawTitle();
                     DrawAll(last_sys);
-                    return;
+                    return false;
                 }
                 else
                     last_sys = he.System;       // its the same system, but since we may have synthesised a last_sys in startjump, and we have a real one from the journal, make sure its updated
@@ -342,6 +328,8 @@ namespace EDDiscovery.UserControls
                     drawsystemupdatetimer.Start();
                 }
             }
+
+            return false;
         }
 
 

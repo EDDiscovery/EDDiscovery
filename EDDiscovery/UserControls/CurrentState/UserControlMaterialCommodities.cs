@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  *
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using System;
 using System.ComponentModel;
@@ -142,17 +142,9 @@ namespace EDDiscovery.UserControls
             cfs.SaveSettings += FilterChanged;
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += CallBackDisplayWithCheck;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewMC.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += CallBackDisplayWithCheck;
             DGVLoadColumnLayout(dataGridViewMC);
         }
 
@@ -160,8 +152,6 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMC);
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
-
-            uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
         }
 
         #endregion
@@ -170,14 +160,19 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg?.GetCurrentHistoryEntry?.MaterialCommodity);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        private void CallBackDisplayWithCheck(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            uint? mcl = he?.MaterialCommodity;
-            if ( mcl != last_mcl )
-                Display(mcl);
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
+            {
+                uint mcl = he.MaterialCommodity;
+                if (mcl != last_mcl)
+                    Display(mcl);
+            }
+            return false;
         }
 
         private void Display(uint? mcl)       // update display. mcl can be null

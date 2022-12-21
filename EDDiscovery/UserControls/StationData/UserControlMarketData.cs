@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -62,18 +62,10 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= OnChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += OnChanged;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewMarketData.RowTemplate.MinimumHeight= Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewMarketData);
-            uctg.OnTravelSelectionChanged += OnChanged;
         }
 
         public override void Closing()
@@ -83,14 +75,13 @@ namespace EDDiscovery.UserControls
             PutSetting(dbHasDemand, checkBoxHasDemand.Checked);
             PutSetting(dbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnNewEntry;
-            uctg.OnTravelSelectionChanged -= OnChanged;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         public override void InitialDisplay()
         {
             FillComboBoxes(discoveryform.history);
-            OnChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         #endregion
@@ -119,32 +110,36 @@ namespace EDDiscovery.UserControls
                 FillComboBoxes(hl);
                 notfoundeddmd = false;
             }
-
-            OnChanged(he, hl, true);
         }
 
-        private void OnChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                // Find last commodity entry, if notfoundeedmd is true.  notfoundeddmd is cleared on a new market data entry of commodity prices
-                HistoryEntry new_last_eddmd = notfoundeddmd ? null : hl.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
-                notfoundeddmd = new_last_eddmd == null;
-
-                bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
-                bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he
-
-                last_eddmd = new_last_eddmd;
-                last_he = he;
-
-                //System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged, cargochanged);
-
-                if (eddmd_left == null)    // if showing travel.. if not, no update due to this.  Need to keep the last_he/last_eddmd going for swapping back
+                if (!Object.ReferenceEquals(he, last_he))       // if last was null, or he has changed, we have a possible change..
                 {
-                    if (eddmdchanged || cargochanged)        // if last_eddmd changed.. or cargo
-                        Display();
+                    // Find last commodity entry, if notfoundeedmd is true.  notfoundeddmd is cleared on a new market data entry of commodity prices
+                    HistoryEntry new_last_eddmd = notfoundeddmd ? null : discoveryform.history.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
+                    notfoundeddmd = new_last_eddmd == null;
+
+                    bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
+                    bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he
+
+                    last_eddmd = new_last_eddmd;
+                    last_he = he;
+
+                    //System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged, cargochanged);
+
+                    if (eddmd_left == null)    // if showing travel.. if not, no update due to this.  Need to keep the last_he/last_eddmd going for swapping back
+                    {
+                        if (eddmdchanged || cargochanged)        // if last_eddmd changed.. or cargo
+                            Display();
+                    }
                 }
             }
+
+            return false;
         }
 
         private void Display()

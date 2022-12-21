@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EDDiscovery.Controls;
@@ -75,15 +75,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewEstimatedValues);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
@@ -91,7 +83,6 @@ namespace EDDiscovery.UserControls
             PutSetting("PinState", extPanelRollUp.PinState);
             DGVSaveColumnLayout(dataGridViewEstimatedValues);
 
-            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
 
@@ -105,7 +96,7 @@ namespace EDDiscovery.UserControls
         }
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
@@ -118,13 +109,18 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)            // Called at first start or hooked to change cursor
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (he != null && (last_he == null || he.System != last_he.System))
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                last_he = he;
-                DrawSystem();
+                if (last_he == null || he.System != last_he.System)
+                {
+                    last_he = he;
+                    DrawSystem();
+                }
             }
+            return false;
         }
 
         async void DrawSystem()   // draw last_he

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -94,27 +94,19 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             DGVLoadColumnLayout(dataGridView);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
 
         public override void InitialDisplay()
         {
-            lasthe = uctg.GetCurrentHistoryEntry;
-            DrawAll();
+            DrawGrid();
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState);
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -145,14 +137,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
+            HistoryEntry he = actionobj as HistoryEntry;
             if (he != null)
             {
                 lasthe = he;
                 DrawBodyInfo();
                 ControlVisibility();
             }
+            return false;
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)

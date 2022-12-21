@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EliteDangerousCore;
@@ -59,21 +59,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= TGChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += TGChanged;
-        }
-
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += TGChanged;
-        }
-
         public override void InitialDisplay()
         {
-            TGChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
             UpdateComboBox();
         }
 
@@ -88,8 +76,6 @@ namespace EDDiscovery.UserControls
             discoveryform.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged -= TGChanged;
-
             PutSetting(dbImages, String.Join("\u2188", extimages));
         }
 
@@ -106,15 +92,20 @@ namespace EDDiscovery.UserControls
                 Display(file, size);
         }
 
-        private void TGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (he != null && he.journalEntry is JournalScreenshot )    // if screen shot
+            HistoryEntry he = actionobj as HistoryEntry;
+            if (he != null)
             {
-                if (extComboBoxImage.SelectedIndex == 0)      // if on Auto..
+                if (he.journalEntry is JournalScreenshot)    // if screen shot
                 {
-                    Display(he.journalEntry as JournalScreenshot);
+                    if (extComboBoxImage.SelectedIndex == 0)      // if on Auto..
+                    {
+                        Display(he.journalEntry as JournalScreenshot);
+                    }
                 }
             }
+            return false;
         }
 
         // Display he
