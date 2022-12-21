@@ -67,28 +67,22 @@ namespace EDDiscovery.UserControls
         uint last_suits = 0;
         uint last_loadout = 0;
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
+            uint newweapon = he.Weapons;
+            if (newweapon != last_weapons)
             {
-                uint newweapon = he.Weapons;
-                if (newweapon != last_weapons)
-                {
-                    last_weapons = newweapon;
-                    DisplayWeapons();
-                }
-                uint newsuits = he.Suits;
-                uint newloadout = he.Loadouts;
-                if (newsuits != last_suits || newloadout != last_loadout)
-                {
-                    last_suits = newsuits;
-                    last_loadout = newloadout;
-                    DisplaySuits();
-                }
+                last_weapons = newweapon;
+                DisplayWeapons();
             }
-
-            return false;
+            uint newsuits = he.Suits;
+            uint newloadout = he.Loadouts;
+            if (newsuits != last_suits || newloadout != last_loadout)
+            {
+                last_suits = newsuits;
+                last_loadout = newloadout;
+                DisplaySuits();
+            }
         }
 
         private void DisplayWeapons()

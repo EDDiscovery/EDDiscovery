@@ -92,15 +92,9 @@ namespace EDDiscovery.UserControls
             DrawSystem(he, he.journalEntry is IStarScan ); // not IBodyNameAndID because all that can do is add an empty scan node, and we do not present info if no scan data
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                DrawSystem(he, false);
-            }
-
-            return false;
+            DrawSystem(he, false);
         }
 
         #endregion

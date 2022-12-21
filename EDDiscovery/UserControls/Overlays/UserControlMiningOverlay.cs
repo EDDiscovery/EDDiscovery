@@ -80,15 +80,10 @@ namespace EDDiscovery.UserControls
             PutSetting(dbRolledUp, extPanelRollUp.PinState);
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                Display(he);
-            }
-            return false;
-         }
+            Display(he);
+        }
 
         private void UserControlMiningOverlay_Resize(object sender, EventArgs e)
         {

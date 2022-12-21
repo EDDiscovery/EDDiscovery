@@ -114,19 +114,13 @@ namespace EDDiscovery.UserControls
 
         HistoryEntry last_he = null;
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                if (comboBoxYards.Items.Count == 0)
-                    UpdateComboBox(discoveryform.history);
+            if (comboBoxYards.Items.Count == 0)
+                UpdateComboBox(discoveryform.history);
 
-                last_he = he;
-                Display();
-            }
-
-            return false;
+            last_he = he;
+            Display();
         }
 
         private void Display()

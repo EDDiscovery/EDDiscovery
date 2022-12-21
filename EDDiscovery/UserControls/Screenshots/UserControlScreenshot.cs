@@ -92,20 +92,15 @@ namespace EDDiscovery.UserControls
                 Display(file, size);
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
+            if (he.journalEntry is JournalScreenshot)    // if screen shot
             {
-                if (he.journalEntry is JournalScreenshot)    // if screen shot
+                if (extComboBoxImage.SelectedIndex == 0)      // if on Auto..
                 {
-                    if (extComboBoxImage.SelectedIndex == 0)      // if on Auto..
-                    {
-                        Display(he.journalEntry as JournalScreenshot);
-                    }
+                    Display(he.journalEntry as JournalScreenshot);
                 }
             }
-            return false;
         }
 
         // Display he

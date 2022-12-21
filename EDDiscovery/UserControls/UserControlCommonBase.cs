@@ -138,7 +138,19 @@ namespace EDDiscovery.UserControls
         }
 
         public Action<UserControlCommonBase, object> RequestPanelOperation;        // Request other panel does something for you, pretty please.
-        public virtual bool PerformPanelOperation(UserControlCommonBase sender, object actionobj) { return false;  } // panel asked for operation, return true to indicate its swallowed
+
+        // panel asked for operation, return true to indicate its swallowed. 
+        // the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry
+        // either override PerformPanelOperation for the full monty, or override ReceiveHistoryEntry if your just interested in HE receive
+        public virtual bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            if (actionobj is EliteDangerousCore.HistoryEntry)
+                ReceiveHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
+            return false;
+        } 
+        public virtual void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
+        {
+        } 
 
         // more status
 

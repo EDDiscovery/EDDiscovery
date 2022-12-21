@@ -570,6 +570,7 @@ namespace EDDiscovery.UserControls
             if (rowno >= 0)
             {
                 dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(rowno);
+                dataGridViewTravel.DisplayRow(rowno, true);
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }

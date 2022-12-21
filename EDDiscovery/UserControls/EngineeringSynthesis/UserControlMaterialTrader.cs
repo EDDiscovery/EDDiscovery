@@ -157,16 +157,14 @@ namespace EDDiscovery.UserControls
             InitialDisplay();
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null && checkBoxCursorToTop.Checked == false && last_mcl != he.MaterialCommodity)
+            if (checkBoxCursorToTop.Checked == false && last_mcl != he.MaterialCommodity)
             {
                 last_mcl = he.MaterialCommodity;
                 DisplayTradeSelection();
                 DisplayTradeList();
             }
-            return false;
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)

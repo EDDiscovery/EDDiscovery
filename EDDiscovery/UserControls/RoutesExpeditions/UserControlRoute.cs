@@ -169,15 +169,9 @@ namespace EDDiscovery.UserControls
             return s;
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                last_history_he = he;       // keep track
-            }
-
-            return false;
+            last_history_he = he;       // keep track
         }
 
         #region Helpers

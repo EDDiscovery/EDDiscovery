@@ -125,14 +125,9 @@ namespace EDDiscovery.UserControls
 
         #region Panel reactions
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-            EliteDangerousCore.HistoryEntry he = actionobj as EliteDangerousCore.HistoryEntry;
-            if (he != null)
-            {
-                panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, he, false));
-            }
-            return false;
+            panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, he, false));
         }
 
         #endregion

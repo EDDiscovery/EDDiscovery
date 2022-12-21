@@ -323,12 +323,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase senderunused, Object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he == null)
-                return false;
-
             System.Diagnostics.Debug.WriteLine($"Sysinfo {displaynumber} : Cursor {he.Index} {he.EventSummary}");
             travelhistoryisattop = he == discoveryform.history.GetLast;      // see if tracking at top
 
@@ -362,8 +358,6 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
             }
-
-            return false;
         }
 
         private async void Display(HistoryEntry he) 

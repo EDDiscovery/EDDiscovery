@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -138,23 +138,16 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
 #if PLAYTHRU
             t.Start();    // debug, for playing all scans thru
 #endif
-
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
+            if (last_he == null || last_he.System != he.System) // if we changed system, we need to represent
             {
-                if (last_he == null || last_he.System != he.System) // if we changed system, we need to represent
-                {
-                    last_he = he;
-                    DrawSystem(last_he);
-                }
+                last_he = he;
+                DrawSystem(last_he);
             }
-            return false;
         }
 
         void DrawSystem(HistoryEntry he)

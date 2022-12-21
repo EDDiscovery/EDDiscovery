@@ -137,16 +137,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
-        {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                lasthe = he;
-                DrawBodyInfo();
-                ControlVisibility();
-            }
-            return false;
+        public override void ReceiveHistoryEntry(HistoryEntry he)
+        { 
+            lasthe = he;
+            DrawBodyInfo();
+            ControlVisibility();
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)

@@ -133,18 +133,13 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                if (comboBoxShips.Items.Count == 0)
-                    UpdateComboBox(discoveryform.history);
+            if (comboBoxShips.Items.Count == 0)
+                UpdateComboBox(discoveryform.history);
 
-                last_he = he;
-                Display();
-            }
-            return false;
+            last_he = he;
+            Display();
         }
 
         private void Display()      // allow redisplay of last data

@@ -116,17 +116,11 @@ namespace EDDiscovery.UserControls
             PutSetting("PinState", rollUpPanelTop.PinState);
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                System.Diagnostics.Debug.WriteLine($"Web browser HE change request {he.System.Name}");
-                historyhe = he;
-                historychangedtimer.Start();
-            }
-
-            return false;
+            System.Diagnostics.Debug.WriteLine($"Web browser HE change request {he.System.Name}");
+            historyhe = he;
+            historychangedtimer.Start();
         }
 
         private void HistoryChangedTimer_Tick(object sender, EventArgs e)

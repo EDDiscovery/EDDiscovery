@@ -163,16 +163,11 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                uint mcl = he.MaterialCommodity;
-                if (mcl != last_mcl)
-                    Display(mcl);
-            }
-            return false;
+            uint mcl = he.MaterialCommodity;
+            if (mcl != last_mcl)
+                Display(mcl);
         }
 
         private void Display(uint? mcl)       // update display. mcl can be null

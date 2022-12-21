@@ -233,103 +233,96 @@ namespace EDDiscovery.UserControls
             DrawScanSummary(last_sys);
             CalculateAndDrawSystem(last_sys);
         }
+        public override void ReceiveHistoryEntry(HistoryEntry he)
+        { 
+            bool islatest = Object.ReferenceEquals(discoveryform.history.GetLast, he);        // is this the latest
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
-        {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
+            // can't say i love this idea, there must be a better solution, but..
+            // from scan of logs on 18/9/22 these are ones which I saw between startjump and fsdjump. Excluding the ones turned in ui events in edjournalreader.cs
+
+            var excludedevents = new JournalTypeEnum[] { JournalTypeEnum.Friends, JournalTypeEnum.HeatDamage, JournalTypeEnum.HeatWarning, JournalTypeEnum.ReceiveText,
+                                                        JournalTypeEnum.ShieldState, JournalTypeEnum.Scanned, JournalTypeEnum.ShipTargeted,JournalTypeEnum.UnderAttack,
+                                                        JournalTypeEnum.FuelScoop, JournalTypeEnum.ApproachBody, JournalTypeEnum.LeaveBody, 
+                                                        JournalTypeEnum.ReservoirReplenished, JournalTypeEnum.ShipLocker, 
+                                                        };
+
+            if (islatest && Array.IndexOf(excludedevents, he.EntryType) >= 0)        // if latest, and its an excluded event, we ignore, so we don't let it interrupt the start jump sequence..
+                return;
+
+            // something has changed and just blindly for now recalc the fsd info
+            shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
+            shipinfo = he.ShipInformation;
+
+            if (he.EntryType == JournalTypeEnum.StartJump)                  // start jump on hyperspace preempts everything
             {
-                bool islatest = Object.ReferenceEquals(discoveryform.history.GetLast, he);        // is this the latest
-
-                // can't say i love this idea, there must be a better solution, but..
-                // from scan of logs on 18/9/22 these are ones which I saw between startjump and fsdjump. Excluding the ones turned in ui events in edjournalreader.cs
-
-                var excludedevents = new JournalTypeEnum[] { JournalTypeEnum.Friends, JournalTypeEnum.HeatDamage, JournalTypeEnum.HeatWarning, JournalTypeEnum.ReceiveText,
-                                                            JournalTypeEnum.ShieldState, JournalTypeEnum.Scanned, JournalTypeEnum.ShipTargeted,JournalTypeEnum.UnderAttack,
-                                                            JournalTypeEnum.FuelScoop, JournalTypeEnum.ApproachBody, JournalTypeEnum.LeaveBody, 
-                                                            JournalTypeEnum.ReservoirReplenished, JournalTypeEnum.ShipLocker, 
-                                                            };
-
-                if (islatest && Array.IndexOf(excludedevents,he.EntryType)>=0)        // if latest, and its an excluded event, we ignore, so we don't let it interrupt the start jump sequence..
-                    return false;                                                     
-
-                // something has changed and just blindly for now recalc the fsd info
-                shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
-                shipinfo = he.ShipInformation;
-
-                if (he.EntryType == JournalTypeEnum.StartJump)                  // start jump on hyperspace preempts everything
+                JournalStartJump jsj = he.journalEntry as JournalStartJump;
+                if (jsj.IsHyperspace)                                       // needs to be a hyperspace one, not supercruise
                 {
-                    JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    if (jsj.IsHyperspace)                                       // needs to be a hyperspace one, not supercruise
-                    {
-                        last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
-                        starclass = jsj.FriendlyStarClass;
-                        bodies_found = 0;
-                        all_found = false;
-                        DrawTitle();
-                        DrawScanSummary(last_sys);
-                        CalculateAndDrawSystem(last_sys);       // no route or fuel needed
-                    }
-
-                    return false;     // ignore otherwise and don't let the stuff below happen since its an IStarScan and it will cause a recomputation
-                }
-
-                if (last_sys == null || last_sys.Name != he.System.Name) // If not got a system, or different name
-                {
-                    starclass = null;           // we cancel out the text info fields
+                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
+                    starclass = jsj.FriendlyStarClass;
                     bodies_found = 0;
                     all_found = false;
-                    last_sys = he.System;       // and set, then
                     DrawTitle();
-                    DrawAll(last_sys);
-                    return false;
-                }
-                else
-                    last_sys = he.System;       // its the same system, but since we may have synthesised a last_sys in startjump, and we have a real one from the journal, make sure its updated
-
-                if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // title uses body count and all found, so update it
-                {
-                    JournalFSSAllBodiesFound fs = he.journalEntry as JournalFSSAllBodiesFound;
-                    all_found = true;
-                    bodies_found = fs.Count;
-                    DrawTitle();      
-                }
-                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan) // title and summary are affected    
-                {
-                    var je = he.journalEntry as JournalFSSDiscoveryScan;
-                    bodies_found = je.BodyCount;
-                    DrawTitle();                //  title uses bodies_found
-                    DrawScanSummary(last_sys);  // but scan summary also uses FSS body count, via the value stored inside the scan star structures
-                }
-                else if ( he.EntryType == JournalTypeEnum.FuelScoop || he.EntryType == JournalTypeEnum.ReservoirReplenished )
-                {
-                    DrawFuel();
-                }
-                else if ( he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump ) // these affect fuel use and route
-                {
-                    DrawFuel();
-                    DrawRoute(last_sys);
+                    DrawScanSummary(last_sys);
+                    CalculateAndDrawSystem(last_sys);       // no route or fuel needed
                 }
 
-                // these are in IStarScan, but we don't need to do anything here, as they don't affect the display
-                else if (he.EntryType == JournalTypeEnum.SAAScanComplete || he.EntryType == JournalTypeEnum.Location)
-                {
-                    // System.Diagnostics.Debug.WriteLine($"Surveyor Ignore {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
-                }
-
-                // IStarScan : FSSSignalDiscovery, SAASignalsFound, FSSBodySignals, Scan all involved in Searches
-                // Scan is involved in inbuilt presentations
-                // ScanBaryCentre is also indirectly involved in Searches
-
-                else if (he.journalEntry is IStarScan )
-                {
-                    //  System.Diagnostics.Debug.WriteLine($"Surveyor Update due to {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
-                    drawsystemupdatetimer.Stop();       // kick the scan aggregator timer 
-                    drawsystemupdatetimer.Start();
-                }
+                return;     // ignore otherwise and don't let the stuff below happen since its an IStarScan and it will cause a recomputation
             }
 
-            return false;
+            if (last_sys == null || last_sys.Name != he.System.Name) // If not got a system, or different name
+            {
+                starclass = null;           // we cancel out the text info fields
+                bodies_found = 0;
+                all_found = false;
+                last_sys = he.System;       // and set, then
+                DrawTitle();
+                DrawAll(last_sys);
+                return;
+            }
+            else
+                last_sys = he.System;       // its the same system, but since we may have synthesised a last_sys in startjump, and we have a real one from the journal, make sure its updated
+
+            if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // title uses body count and all found, so update it
+            {
+                JournalFSSAllBodiesFound fs = he.journalEntry as JournalFSSAllBodiesFound;
+                all_found = true;
+                bodies_found = fs.Count;
+                DrawTitle();      
+            }
+            else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan) // title and summary are affected    
+            {
+                var je = he.journalEntry as JournalFSSDiscoveryScan;
+                bodies_found = je.BodyCount;
+                DrawTitle();                //  title uses bodies_found
+                DrawScanSummary(last_sys);  // but scan summary also uses FSS body count, via the value stored inside the scan star structures
+            }
+            else if ( he.EntryType == JournalTypeEnum.FuelScoop || he.EntryType == JournalTypeEnum.ReservoirReplenished )
+            {
+                DrawFuel();
+            }
+            else if ( he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump ) // these affect fuel use and route
+            {
+                DrawFuel();
+                DrawRoute(last_sys);
+            }
+
+            // these are in IStarScan, but we don't need to do anything here, as they don't affect the display
+            else if (he.EntryType == JournalTypeEnum.SAAScanComplete || he.EntryType == JournalTypeEnum.Location)
+            {
+                // System.Diagnostics.Debug.WriteLine($"Surveyor Ignore {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
+            }
+
+            // IStarScan : FSSSignalDiscovery, SAASignalsFound, FSSBodySignals, Scan all involved in Searches
+            // Scan is involved in inbuilt presentations
+            // ScanBaryCentre is also indirectly involved in Searches
+
+            else if (he.journalEntry is IStarScan )
+            {
+                //  System.Diagnostics.Debug.WriteLine($"Surveyor Update due to {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
+                drawsystemupdatetimer.Stop();       // kick the scan aggregator timer 
+                drawsystemupdatetimer.Start();
+            }
         }
 
 

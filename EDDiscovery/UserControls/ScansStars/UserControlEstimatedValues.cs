@@ -109,18 +109,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
+            if (last_he == null || he.System != last_he.System)
             {
-                if (last_he == null || he.System != last_he.System)
-                {
-                    last_he = he;
-                    DrawSystem();
-                }
+                last_he = he;
+                DrawSystem();
             }
-            return false;
         }
 
         async void DrawSystem()   // draw last_he

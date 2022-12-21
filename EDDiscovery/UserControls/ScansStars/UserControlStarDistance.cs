@@ -96,15 +96,9 @@ namespace EDDiscovery.UserControls
             KickComputation(obj.GetLast);   // copes with getlast = null
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            HistoryEntry he = actionobj as HistoryEntry;
-            if (he != null)
-            {
-                KickComputation(he);
-            }
-
-            return false;
+            KickComputation(he);
         }
 
         private void KickComputation(HistoryEntry he, bool force = false)
