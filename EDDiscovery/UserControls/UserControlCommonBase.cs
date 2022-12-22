@@ -110,37 +110,41 @@ namespace EDDiscovery.UserControls
         //      HistoryEntry - sent by all TG on cursor moves.
         //          Splitter/grid distributes it around the siblings - they response false
         //          Sent up to tab - MainTab distributes it to other tabs, Other throws it away
+        //          all panels must return false so no-one grabs it
         //
         //      long - request travel grid to go to this jid AND class RequestTravelHistoryPos - request travel grid to call back directly to sender with the current HE
         //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution
         //           If not ack, sent up to tab - Other will send it to maintab, maintab will never get it (as it would be cancelled by splitter)
+        //           TG should return true
         //
         //      class PushStars - someone is pushing a system list to expedition or trilat
-        //            Splitter/grid distributes it around the siblings - if a receipient is there and uses it, they respond true, which stops the distribution
-        //            Sent up to major tab - both types will distribute it to all tabs and the first recepient will cancel it
+        //           Splitter/grid distributes it around the siblings - if a recipient is there and uses it, they respond true, which stops the distribution
+        //           Sent up to major tab - both types will distribute it to all tabs and the first recepient will cancel it
+        //           Panel should return true
         //
         //      class PanelAction - perform this string action on a tab panel
-        //             Sent into all tabs, first one accepting it will cancel it.
-        //        
+        //           Sent into all tabs, first one accepting it will cancel it.
+        //           Panel should return true if serviced
 
         public static bool IsOperationForTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
         public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
-        public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he
-        public class PushStars                          // use to push star list to other panels
+        public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he. TG will return true 
+        public class PushStars                          // use to push star list to other panels 
         {
             public enum PushType { TriWanted, TriSystems, Expedition };
             public PushType PushTo { get; set; }
             public System.Collections.Generic.List<string> Systems { get; set; }
         };
-        public class PanelAction
+        public class PanelAction                    // perform an action
         {
-            public const string ImportCSV = "ImportCSV";
-            public const string EditNotePrimary = "editnoteprimary";
+            public const string ImportCSV = "ImportCSV";                // data is the filename string
+            public const string EditNotePrimary = "editnoteprimary";    // no data
             public string Action { get; set; }
             public object Data { get; set; }
         }
 
-        public Action<UserControlCommonBase, object> RequestPanelOperation;        // Request other panel does something for you, pretty please.
+        // Request action. Return if positively services by 
+        public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        // Request other panel does something for you, pretty please.
 
         // panel asked for operation, return true to indicate its swallowed. 
         // the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry

@@ -342,7 +342,7 @@ namespace EDDiscovery.UserControls
 
         // called by the panels to do something - pass to siblings, and then work out if we should pass upwards
         // a panel may claim the event, in which case its not sent up
-        private void SplitterRequestAction(UserControlCommonBase sender, object actionobj)
+        private bool SplitterRequestAction(UserControlCommonBase sender, object actionobj)
         {
             System.Diagnostics.Debug.WriteLine($"\r\nSplitter {displaynumber} request action {actionobj}");
 
@@ -361,8 +361,10 @@ namespace EDDiscovery.UserControls
             if ( !done )
             {
                 System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
-                RequestPanelOperation?.Invoke(sender, actionobj);     // No one claimed it, so pass it up the chain
+                return RequestPanelOperation.Invoke(sender, actionobj);     // No one claimed it, so pass it up the chain
             }
+            else
+                return done;
         }
 
         // called from above for us to do something, work out if we should pass it down

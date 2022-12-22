@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
         }
 
         //SYNC with splitter
-        private void GridRequestAction(UserControlCommonBase sender, object actionobj)
+        private bool GridRequestAction(UserControlCommonBase sender, object actionobj)
         {
             System.Diagnostics.Debug.WriteLine($"Grid {displaynumber} request action {actionobj}");
 
@@ -269,11 +269,13 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            if ( !done )
+            if (!done)
             {
                 System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
-                RequestPanelOperation?.Invoke(sender, actionobj);     // and pass up with us as the sender
+                return RequestPanelOperation.Invoke(sender, actionobj);     // and pass up with us as the sender
             }
+            else
+                return done;
         }
 
         //SYNC with splitter

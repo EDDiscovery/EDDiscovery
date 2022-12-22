@@ -582,12 +582,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void PerformPanelOperation(UserControlCommonBase sender, object action)
+        public bool PerformPanelOperation(UserControlCommonBase sender, object action)
         {
             foreach (UserControlForm ucf in forms)
             {
-                ucf.UserControl?.PerformPanelOperation(sender, action);
+                if (ucf.UserControl.PerformPanelOperation(sender, action))
+                    return true;
             }
+
+            return false;
         }
 
         public void CloseAll()
