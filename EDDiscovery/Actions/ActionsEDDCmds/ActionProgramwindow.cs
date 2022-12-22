@@ -59,6 +59,11 @@ namespace EDDiscovery.Actions
                     if (!(ap.ActionController as ActionController).DiscoveryForm.SelectTabPage(tabname, nextcmd.Equals("opentab"), nextcmd.Equals("closetab")))
                         ap.ReportError("Tab page name " + tabname + " not found");
                 }
+                else if (nextcmd.Equals("tabexists") )
+                {
+                    string tabname = sp.NextQuotedWord(lowercase: System.Globalization.CultureInfo.InvariantCulture, replaceescape: true);
+                    ap["Exists"] = (ap.ActionController as ActionController).DiscoveryForm.TabPageExists(tabname).ToStringIntValue();
+                }
                 else if (nextcmd.Equals("topmost"))
                     (ap.ActionController as ActionController).DiscoveryForm.TopMost = true;
                 else if (nextcmd.Equals("normalz"))

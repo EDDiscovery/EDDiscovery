@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
 
             var data = dataGridView.Rows.OfType<DataGridViewRow>()
                 .Where(r => r.Index < dataGridView.NewRowIndex && r.Cells[0].Value != null)
-                .Select(r => new SavedRouteClass.SystemEntry(r.Cells[0].Value as string, r.Cells[2].Value as string));
+                .Select(r => new SavedRouteClass.SystemEntry(r.Cells[0].Value as string, r.Cells[1].Value as string));
 
             route.Systems.AddRange(data);
 

@@ -97,6 +97,7 @@ namespace EDDiscovery
 
         static private List<PanelInfo> paneldefinition = new List<PanelInfo>()
         {
+            //                                                      Windows title, windows ref name (used in registry), description 
             { new PanelInfo( "History") },
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Log of program information" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
@@ -181,9 +182,9 @@ namespace EDDiscovery
 
         private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
             PanelIDs.EDSM, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
-            PanelIDs.Spansh, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
-            PanelIDs.EDDB, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
-            PanelIDs.Inara, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
+            PanelIDs.Spansh, 
+            PanelIDs.EDDB, 
+            PanelIDs.Inara, 
         });
 
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed

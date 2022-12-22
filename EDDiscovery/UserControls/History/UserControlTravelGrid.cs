@@ -547,7 +547,7 @@ namespace EDDiscovery.UserControls
             {
                 var act = actionobj as UserControlCommonBase.PanelAction;
 
-                if (act.Action.EqualsIIC("editnoteprimary") && IsPrimaryHistoryDisplayNumber)      // action on editnoteprimary, and we are a primary history display
+                if (act.Action.EqualsIIC(PanelAction.EditNotePrimary) && IsPrimaryHistoryDisplayNumber)      // action on editnoteprimary, and we are a primary history display
                 {
                     HistoryEntry he = dataGridViewTravel.RowCount > 0 ? dataGridViewTravel.Rows[0].Tag as HistoryEntry : null;   // grab top row HE if it exists
                     if (he != null)

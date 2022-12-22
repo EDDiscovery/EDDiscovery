@@ -84,6 +84,7 @@ namespace EDDiscovery.UserControls
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelBusy = new System.Windows.Forms.Label();
             this.extPanelDataGridViewScroll = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarDGV = new ExtendedControls.ExtScrollBar();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
@@ -103,6 +104,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -364,6 +366,8 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewRouteSystems_SortCompare);
             this.dataGridView.Sorted += new System.EventHandler(this.dataGridView_Sorted);
+            this.dataGridView.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragDrop);
+            this.dataGridView.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragEnter);
             // 
             // SystemName
             // 
@@ -560,6 +564,7 @@ namespace EDDiscovery.UserControls
             this.tableLayoutPanel1.Controls.Add(this.txtP2PDIstance, 4, 1);
             this.tableLayoutPanel1.Controls.Add(this.textBoxRouteName, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.topPanel2, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelBusy, 4, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 30);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -570,6 +575,17 @@ namespace EDDiscovery.UserControls
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1134, 78);
             this.tableLayoutPanel1.TabIndex = 12;
+            // 
+            // labelBusy
+            // 
+            this.labelBusy.BackColor = System.Drawing.Color.Red;
+            this.labelBusy.Location = new System.Drawing.Point(530, 3);
+            this.labelBusy.Name = "labelBusy";
+            this.labelBusy.Size = new System.Drawing.Size(100, 23);
+            this.labelBusy.TabIndex = 15;
+            this.labelBusy.Text = "<code BUSY>";
+            this.labelBusy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelBusy.Visible = false;
             // 
             // extPanelDataGridViewScroll
             // 
@@ -968,5 +984,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
         private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertRowAboveToolStripMenuItem;
+        private System.Windows.Forms.Label labelBusy;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }

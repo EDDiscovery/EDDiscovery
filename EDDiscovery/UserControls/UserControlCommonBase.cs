@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
         //
         //      class PanelAction - perform this string action on a tab panel
         //             Sent into all tabs, first one accepting it will cancel it.
-        //             // TBD
+        //        
 
         public static bool IsOperationForTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
         public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
@@ -133,8 +133,11 @@ namespace EDDiscovery.UserControls
             public System.Collections.Generic.List<string> Systems { get; set; }
         };
         public class PanelAction
-        { 
+        {
+            public const string ImportCSV = "ImportCSV";
+            public const string EditNotePrimary = "editnoteprimary";
             public string Action { get; set; }
+            public object Data { get; set; }
         }
 
         public Action<UserControlCommonBase, object> RequestPanelOperation;        // Request other panel does something for you, pretty please.

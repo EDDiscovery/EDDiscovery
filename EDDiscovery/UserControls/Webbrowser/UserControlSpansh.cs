@@ -13,17 +13,129 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpansh : UserControlWebBrowser
     {
+        private FileSystemWatcher m_Watcher;
+        private Timer waitforaccesstimer;
+        private long waittimertimeout;
+        const int FileTimeout = 10000;
+        private string newfiledetected;
+        private HashSet<string> detectedfiles = new HashSet<string>();
+
         public override void Init()
         {
             Init("Spansh", "https://spansh.co.uk");
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6)
+            {
+                string path = BaseUtils.Win32.UnsafeNativeMethods.KnownFolderPath(BaseUtils.Win32.UnsafeNativeMethods.Win32FolderId_Downloads);
+
+                if ( path != null )
+                {
+                    m_Watcher = new System.IO.FileSystemWatcher();
+                    m_Watcher.Path = path + Path.DirectorySeparatorChar;
+                    m_Watcher.Filter = "*.csv";
+                    m_Watcher.IncludeSubdirectories = false;
+                    m_Watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.Size;
+                    m_Watcher.Changed += new FileSystemEventHandler(OnNewFileChanged);
+                    m_Watcher.Renamed += new RenamedEventHandler(OnNewFileRenamed);
+                    m_Watcher.Created += new FileSystemEventHandler(OnNewFileCreated);
+                    m_Watcher.EnableRaisingEvents = true;
+
+                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCount} Spansh Start Monitor on {path}");
+
+                    waitforaccesstimer = new Timer();
+                    waitforaccesstimer.Interval = 500;
+                    waitforaccesstimer.Tick += Waitforaccesstimer_Tick;
+                }
+            }
+        }
+
+        public override void Closing()
+        {
+            base.Closing();
+
+            m_Watcher.EnableRaisingEvents = false;
+            m_Watcher.Dispose();
+            m_Watcher = null;
+
+            waitforaccesstimer.Stop();
+        }
+
+        private void OnNewFileChanged(object sender, FileSystemEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Spansh new file changed {e.FullPath}");
+            CheckFile(e.FullPath);
+        }
+        private void OnNewFileCreated(object sender, FileSystemEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Spansh new file created {e.FullPath}");
+            CheckFile(e.FullPath);
+        }
+        private void OnNewFileRenamed(object sender, RenamedEventArgs e)        // Some seem to do renames of downloaded temp file
+        {
+            System.Diagnostics.Debug.WriteLine($"Spansh new file renamed {e.FullPath}");
+            CheckFile(e.FullPath);
+        }
+
+        // this is in another thread
+        // this can kick in before any data has had time to be written to it...
+        private void CheckFile(string filename)
+        {
+            string[] prefixes = new string[] { "neutron", "ammonia", "earth", "tourist", "fleet", "exact", "exobiology" };
+
+            if ( prefixes.StartsWith(Path.GetFileName(filename))>=0)
+            {
+                if ( detectedfiles.Contains(filename))
+                {
+                    System.Diagnostics.Debug.WriteLine($"Spansh already detected {filename}");
+                }
+                else if (newfiledetected == null)
+                {
+                    newfiledetected = filename;
+                    detectedfiles.Add(newfiledetected);
+                    System.Diagnostics.Debug.WriteLine($"Spansh detects new csv file {newfiledetected}");
+
+                    BeginInvoke((MethodInvoker)delegate
+                    {
+                        waitforaccesstimer.Start();     // need to do this in a UI thread
+                        waittimertimeout = Environment.TickCount + FileTimeout;
+                    });
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Spansh ignore new file too quick {filename}");
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Spansh ignore file name {filename}");
+            }
+        }
+
+        private void Waitforaccesstimer_Tick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Spansh tick");
+            if ( BaseUtils.FileHelpers.IsFileAvailable(newfiledetected))
+            {
+                System.Diagnostics.Debug.WriteLine($"Spansh detects csv file ready {newfiledetected}");
+                waitforaccesstimer.Stop();
+                discoveryform.SelectTabPage("Expedition", true, false);         // ensure expedition is open
+                RequestPanelOperation(this,new UserControlCommonBase.PanelAction() { Action =PanelAction.ImportCSV, Data = newfiledetected });
+                newfiledetected = null;
+            }
+            else if ( Environment.TickCount > waittimertimeout)
+            {
+                System.Diagnostics.Debug.WriteLine($"Spansh timeout waiting for {newfiledetected}");
+                waitforaccesstimer.Stop();
+                newfiledetected = null;
+            }
         }
     }
-
-
 }

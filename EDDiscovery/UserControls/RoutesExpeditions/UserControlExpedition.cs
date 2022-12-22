@@ -103,6 +103,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuCopyPaste, enumlistcms, this);
             rollUpPanelTop.SetToolTip(toolTip);
+
+            labelBusy.Text = "BUSY";    // in english, suck it up
         }
 
         public override void LoadLayout()
@@ -152,10 +154,28 @@ namespace EDDiscovery.UserControls
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             var push = actionobj as UserControlCommonBase.PushStars;
-            if ( push != null && push.PushTo == PushStars.PushType.Expedition)
+            var action = actionobj as UserControlCommonBase.PanelAction;
+            if (push != null)
             {
-                AppendOrInsertSystems(-1, push.Systems);
-                return true;
+                if (push.PushTo == PushStars.PushType.Expedition)
+                {
+                    AppendOrInsertSystems(-1, push.Systems);
+                    return true;
+                }
+            }
+            else if ( action != null )
+            {
+                if ( action.Action == PanelAction.ImportCSV)
+                {
+                    if (PromptAndSaveIfNeeded())
+                    {
+                        ClearTable();
+                        string file = action.Data as string;
+                        System.Diagnostics.Debug.WriteLine($"Expedition import CSV {file}");
+                        Import(0, file, true);
+                    }
+                    return true;
+                }
             }
 
             return false;
@@ -211,6 +231,7 @@ namespace EDDiscovery.UserControls
             textBoxRouteName.Text = "";
             txtCmlDistance.Text = "";
             txtP2PDIstance.Text = "";
+            loadedroute = null;
         }
 
         // this is an async function - which needs very special handling
@@ -220,6 +241,8 @@ namespace EDDiscovery.UserControls
         {
             Cursor = Cursors.WaitCursor;
             updatingsystemrows = true;
+            labelBusy.Visible = true;
+            labelBusy.Update();
 
             ISystem currentSystem = discoveryform.history.CurrentSystem(); // may be null
 
@@ -401,6 +424,7 @@ namespace EDDiscovery.UserControls
 
             Cursor = Cursors.Default;
 
+            labelBusy.Visible = false;
             updatingsystemrows = false;
         }
 
@@ -460,7 +484,10 @@ namespace EDDiscovery.UserControls
         private void extButtonLoadRoute_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             ExtendedControls.ExtButton but = sender as ExtendedControls.ExtButton;
 
@@ -518,19 +545,32 @@ namespace EDDiscovery.UserControls
         private void extButtonNew_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
+            ClearRoute();
+        }
+
+        private bool ClearRoute()
+        {
             if (PromptAndSaveIfNeeded())
             {
                 ClearTable();
-                loadedroute = null;
+                return true;
             }
+            else
+                return false;
         }
 
         private void extButtonSave_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             SaveGrid();
         }
@@ -538,14 +578,16 @@ namespace EDDiscovery.UserControls
         private void extButtonDelete_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             if ( loadedroute != null && loadedroute.EDSM == false && !IsDirty() )        // if loaded and unchanged, and not EDSM route
             {
                 if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?".T(EDTx.UserControlExpedition_Delete), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     loadedroute.Delete();
-                    loadedroute = null;
                     ClearTable();
                 }
             }
@@ -554,7 +596,10 @@ namespace EDDiscovery.UserControls
         private void extButtonImport_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             var frm = new Forms.ExportForm();
             frm.Init(true, new string[] { "CSV", "CSV No Header Line", "Text File", "JSON" },
@@ -563,32 +608,67 @@ namespace EDDiscovery.UserControls
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                if (frm.SelectedIndex == 3)     // JSON
+                Import(frm.SelectedIndex, frm.Path, frm.Comma);
+            }
+        }
+
+        // duplicate systems on same lines removed and notes are merges
+        // any columns past 2 are merged into notes
+        // form = 0 CSV with ignored header line. Cells 0 = system, optional 1 = note, 2.. are merged into note
+        // form = 1 CSV without header line
+        // form = 2 text file, same as 1 really
+        // form = 3 json import
+        // form = 4 spansh riches system (may be repeated), body, type, terraformable, distance to arrival, scan value, mapping value, jumps to
+        private void Import(int form, string path, bool comma)
+        {
+            if (form == 3)     // JSON
+            {
+                var list = ReadJSON(path);
+                if (list != null)
                 {
-                    var list = ReadJSON(frm.Path);
-                    if ( list != null )
-                    {
-                        if (list.Item1.HasChars() && textBoxRouteName.Text.IsEmpty())
-                            textBoxRouteName.Text = list.Item1;
-                        AppendOrInsertSystems(-1, list.Item2);
-                    }
+                    if (list.Item1.HasChars() && textBoxRouteName.Text.IsEmpty())
+                        textBoxRouteName.Text = list.Item1;
+                    AppendOrInsertSystems(-1, list.Item2);
                 }
-                else
+            }
+            else
+            {
+                CSVFile csv = new CSVFile();
+                if (csv.Read(path, FileShare.ReadWrite, comma))
                 {
-                    CSVFile csv = new CSVFile();
-                    if (csv.Read(frm.Path, FileShare.ReadWrite, frm.Comma))
+                    var systems = new List<SavedRouteClass.SystemEntry>();
+                    string lastsystem = null;
+
+                    CSVFile.Row rowheader = csv.Rows.Count > 1 && form == 0 ? csv[0] : null;
+
+                    for (int r = form == 0 ? 1 : 0; r < csv.Rows.Count; r++)  // if in mode 0, from line 1, else from line 0
                     {
-                        var systems = new List<SavedRouteClass.SystemEntry>();
-
-                        for (int r = frm.SelectedIndex == 0 ? 1 : 0; r < csv.Rows.Count; r++)  // if in mode 0, from line 1, else from line 0
+                        var row = csv[r];                               // column 0 only
+                        if (row.Cells.Count >= 1)
                         {
-                            var row = csv[r];                               // column 0 only
-                            if (row.Cells.Count >= 1)
-                                systems.Add(new SavedRouteClass.SystemEntry(row[0],row.Cells.Count>=2 ? row[1] : ""));
-                        }
+                            string note = "";
+                            for (int i = 1; i < row.Cells.Count; i++)
+                            {
+                                string header = rowheader != null && rowheader.Cells.Count > i ? rowheader[i] + ":" : "";
+                                note = note.AppendPrePad(header+row[i], Environment.NewLine);
+                            }
 
-                        AppendOrInsertSystems(-1, systems);
+                            string systemname = row[0];
+                            if ( systemname == lastsystem)
+                            {
+                                systems.Last().Note = systems.Last().Note.AppendPrePad(note,Environment.NewLine);
+                            }
+                            else
+                                systems.Add(new SavedRouteClass.SystemEntry(systemname,note));
+
+                            lastsystem = systemname;
+                        }
+                            
                     }
+
+                    if (!textBoxRouteName.Text.HasChars())
+                        textBoxRouteName.Text = Path.GetFileNameWithoutExtension(path);
+                    AppendOrInsertSystems(-1, systems);
                 }
             }
         }
@@ -596,7 +676,10 @@ namespace EDDiscovery.UserControls
         private void extButtonImportRoute_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             if (latestplottedroute == null || latestplottedroute.Count == 0)
             {
@@ -610,7 +693,10 @@ namespace EDDiscovery.UserControls
         private void extButtonImportNavRoute_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             var navroutes = discoveryform.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(20).ToList();
 
@@ -643,7 +729,10 @@ namespace EDDiscovery.UserControls
         private void extButtonNavLatest_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
             if (route?.Route != null)
@@ -654,7 +743,10 @@ namespace EDDiscovery.UserControls
         private void buttonExtExport_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             var rt = CopyGridIntoRoute();
             if (rt == null)
@@ -757,7 +849,10 @@ namespace EDDiscovery.UserControls
         private void extButtonShow3DMap_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             var route = dataGridView.Rows.OfType<DataGridViewRow>()
                  .Where(r => r.Index < dataGridView.NewRowIndex && r.Tag != null)
@@ -778,7 +873,10 @@ namespace EDDiscovery.UserControls
         private void extButtonAddSystems_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
@@ -815,7 +913,10 @@ namespace EDDiscovery.UserControls
         private void extButtonDisplayFilters_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AllOrNoneBack = false;
@@ -850,7 +951,12 @@ namespace EDDiscovery.UserControls
         {
             PutSetting(dbEDSM, checkBoxEDSM.Checked);       // update the store
 
-            if (!updatingsystemrows)    // if we are not in the update system rows, redraw it
+            if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
+                return;
+            }
+            else
                 UpdateSystemRows();
         }
 
@@ -869,7 +975,10 @@ namespace EDDiscovery.UserControls
         private void buttonReverseRoute_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             var route = CopyGridIntoRoute();
 
@@ -887,7 +996,10 @@ namespace EDDiscovery.UserControls
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (updatingsystemrows)
+            {
+                Console.Beep(512, 500);
                 return;
+            }
 
             if (e.RowIndex >= 0)
             {
@@ -940,6 +1052,7 @@ namespace EDDiscovery.UserControls
         {
             if (updatingsystemrows)
             {
+                Console.Beep(512, 500);
                 e.Cancel = true;
                 return;
             }
@@ -1068,6 +1181,43 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Drag drop
+
+        private void dataGridView_DragDrop(object sender, DragEventArgs e)
+        {
+            // still check if the associated data from the file(s) can be used for this purpose
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Fetch the file(s) names with full path here to be processed
+                string[] fileList = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (updatingsystemrows == false)
+                {
+                    if (PromptAndSaveIfNeeded())
+                    {
+                        ClearTable();
+                        System.Diagnostics.Debug.WriteLine($"Expedition import CSV {fileList[0]}");
+                        Import(0, fileList[0], true);
+                    }
+                }
+                else
+                    Console.Beep(512, 500);
+            }
+        }
+
+        private void dataGridView_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] fileList = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (Path.GetExtension(fileList[0]).EqualsIIC(".csv"))
+                    e.Effect = DragDropEffects.Move;
+            }
+        }
+
+        #endregion
+
         #region Validation
 
         private void dataGridViewRouteSystems_CellValidated(object sender, DataGridViewCellEventArgs e)
@@ -1147,6 +1297,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
     }
 }
