@@ -187,9 +187,9 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnThemeChanged += ClearDisplayFontJournalCAPI;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnThemeChanged += ClearDisplayFontJournalCAPI;
         }
 
         public override void LoadLayout()
@@ -236,9 +236,9 @@ namespace EDDiscovery.UserControls
             PutSetting(dbTabSave, extTabControl.SelectedIndex);
 
 
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnThemeChanged -= ClearDisplayFontJournalCAPI;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnThemeChanged -= ClearDisplayFontJournalCAPI;
             bigfont.Dispose();
             normfont.Dispose();
         }
@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
 
         private void Period_Tick(object sender, EventArgs e)
         {
-            var cs = discoveryform.history.Carrier;
+            var cs = DiscoveryForm.history.Carrier;
 
             if (cs.CheckCarrierJump(DateTime.UtcNow)) // if autojump happened
                 DisplayJournal();      // redisplay all - including destinationsystem
@@ -284,10 +284,10 @@ namespace EDDiscovery.UserControls
             // capi enable/disable  - get stats
             DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global:true);
             int capicmdrid = GetSetting(dbCAPICommander, -1, global:true);
-            bool capisamecmdr = discoveryform.history.CommanderId == capicmdrid;
+            bool capisamecmdr = DiscoveryForm.history.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
-            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = discoveryform.history.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
+            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = DiscoveryForm.history.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
 
             // if its the same commander, and our display is in the past, another panel fetched it, redisplay
             if (capisamecmdr && capitime > capidisplayedtime)
@@ -332,7 +332,7 @@ namespace EDDiscovery.UserControls
 
         private async void DisplayJournal()
         {
-            var cs = discoveryform.history.Carrier;
+            var cs = DiscoveryForm.history.Carrier;
 
             cs.CheckCarrierJump(DateTime.UtcNow);       // see if auto jump happened
 
@@ -350,7 +350,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewItinerary.Rows.Clear();
                 ISystem lastsys = null;
 
-                ISystem cursys = discoveryform.history.GetLast?.System;     // last system, if present
+                ISystem cursys = DiscoveryForm.history.GetLast?.System;     // last system, if present
 
                 for (int i = cs.JumpHistory.Count - 1; i >= 0; i--)
                 {
@@ -696,7 +696,7 @@ namespace EDDiscovery.UserControls
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
 
-            if (discoveryform.history.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
+            if (DiscoveryForm.history.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
                 imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), "Cost".TxID(EDTx.UserControlCarrier_Cost) + ": " + value.ToString("N0"), normfont, color);
             }
@@ -709,7 +709,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayDestinationSystem()
         {
-            var cs = discoveryform.history.Carrier;
+            var cs = DiscoveryForm.history.Carrier;
 
             if (cs.State.HaveCarrier && cs.IsJumping)
             {
@@ -825,14 +825,14 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDoCAPI1_Click(object sender, EventArgs e)
         {
-            if (discoveryform.FrontierCAPI.Active)
+            if (DiscoveryForm.FrontierCAPI.Active)
             {
                 extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;
 
                 // record when and who did capi, and clear data.  
 
                 PutSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);                 
-                PutSetting(dbCAPICommander, discoveryform.history.CommanderId, global: true);
+                PutSetting(dbCAPICommander, DiscoveryForm.history.CommanderId, global: true);
                 PutSetting(dbCAPISave, "", global: true);
 
                 // don't hold up the main thread, do it in a task, as its a HTTP operation
@@ -845,7 +845,7 @@ namespace EDDiscovery.UserControls
                     int tries = 3;
                     while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
-                        string fleetcarrier = discoveryform.FrontierCAPI.FleetCarrier(nocontentreturnemptystring:true);
+                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(nocontentreturnemptystring:true);
 
                         if (fleetcarrier != null)
                         {
@@ -908,7 +908,7 @@ namespace EDDiscovery.UserControls
             int capicmd = GetSetting(dbCAPICommander, -1, global: true);
 
             // if its a valid capi for commander, turn it into a FC entity
-            var fc = (capi.Length > 0 && capicmd == discoveryform.history.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
+            var fc = (capi.Length > 0 && capicmd == DiscoveryForm.history.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
 
             DisplayCAPI(fc);
         }

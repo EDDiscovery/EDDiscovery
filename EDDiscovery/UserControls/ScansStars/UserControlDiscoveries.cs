@@ -68,8 +68,8 @@ namespace EDDiscovery.UserControls
                                 EDTx.UserControlDiscoveries_extCheckBoxWordWrap_ToolTip, EDTx.UserControlDiscoveries_buttonExtExcel_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += NewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translator
 
@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
 
             PopulateCtrlList();
 
-            dataGridView.Init(discoveryform);
+            dataGridView.Init(DiscoveryForm);
             dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
             dataGridView.Columns[5].Tag = "TextPopOut";       // these two double click are text popouts
 
@@ -111,8 +111,8 @@ namespace EDDiscovery.UserControls
 
             DGVSaveColumnLayout(dataGridView);
             PutSetting("PinState", rollUpPanelTop.PinState);
-            discoveryform.OnNewEntry -= NewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
 
                 while (DrawCount > 0)       // loop around while >0.   The execute search aboves if DrawCount>0 until we get to DrawCount=1 at which point we display result
                 {
-                    var entries = discoveryform.history.EntryOrder();
+                    var entries = DiscoveryForm.history.EntryOrder();
                     bool updateit = false;
 
                     if (DrawOnlySys != null)    // if filter by system
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
 
         private async Task<Dictionary<string, HistoryListQueries.Results>> ExecuteSearch(List<HistoryEntry> helist)
         {
-            discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
+            DiscoveryForm.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
             var defaultvars = new BaseUtils.Variables();
             // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
 
             foreach (var searchname in searchesactive)
             {
-                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, discoveryform.history.StarScan, false); // execute the searches
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.history.StarScan, false); // execute the searches
                 //System.Threading.Thread.Sleep(1000);
                 if (IsClosed)       // may be closing during async process
                     return null;

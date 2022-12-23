@@ -92,8 +92,8 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             Resize += UserControlMissionOverlay_Resize;
         }
@@ -115,8 +115,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         #endregion
@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(discoveryform.history.GetLast);
+            Display(DiscoveryForm.history.GetLast);
         }
 
         private void Display(HistoryEntry he)
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
 
                 DateTime hetime = currentHE.EventTimeUTC;
 
-                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(currentHE.MissionList);
+                List<MissionState> ml = DiscoveryForm.history.MissionListAccumulator.GetMissionList(currentHE.MissionList);
                 List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
 
                 int vpos = 4;

@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
             int size = GetSetting("Size", 64);
             SetSizeImage(size);
 
-            discoveryform.OnNewEntry += NewEntry;
+            DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlisttt = new Enum[] { EDTx.UserControlScan_extCheckBoxStar_ToolTip, EDTx.UserControlScan_extButtonFilter_ToolTip, EDTx.UserControlScan_extButtonDisplayFilters_ToolTip, EDTx.UserControlScan_buttonSize_ToolTip, EDTx.UserControlScan_checkBoxEDSM_ToolTip, EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState );
-            discoveryform.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnNewEntry -= NewEntry;
             closing = true;
         }
 
@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
             if (override_system)        // no change, last_he continues to track cursor for restore..
                 return;
 
-            showing_matcomds = he != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity) : null;
+            showing_matcomds = he != null ? DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity) : null;
             showing_system = he?.System;
             DrawSystem();
         }
@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked) : null;
+            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.history.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked) : null;
 #endif
             string control_text = "No System";
 
@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                     control_text += " " + "No Scan".T(EDTx.NoScan);
             }
 
-            var curmats = discoveryform.history.MaterialCommoditiesMicroResources.GetLast();
+            var curmats = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetLast();
 
             panelStars.DrawSystem(data, showing_matcomds, curmats, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);
 
@@ -459,7 +459,7 @@ namespace EDDiscovery.UserControls
         {
             if (showing_system == null)
                 return;
-            var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
+            var sysnode = DiscoveryForm.history.StarScan.FindSystemSynchronous(showing_system, false);
 
             if ( sysnode != null )
             {

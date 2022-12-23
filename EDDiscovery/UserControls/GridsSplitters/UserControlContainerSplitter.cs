@@ -26,13 +26,13 @@ namespace EDDiscovery.UserControls
         public T GetUserControl<T>(PanelInformation.PanelIDs p) where T : class
         {
             T v = default(T);
-            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).panelid == p, (c) => { v = c as T; }); // see if we can find
+            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).PanelID == p, (c) => { v = c as T; }); // see if we can find
             return v;
         }
         public UserControlCommonBase GetUserControl(PanelInformation.PanelIDs p)
         {
             UserControlCommonBase v = null;
-            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).panelid == p, (c) => { v = c as UserControlCommonBase; }); // see if we can find
+            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).PanelID == p, (c) => { v = c as UserControlCommonBase; }); // see if we can find
             return v;
         }
 
@@ -107,12 +107,12 @@ namespace EDDiscovery.UserControls
             {
                 int tagid = (int)c.Tag;
                 int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.panelid} tag {tagid} dno {displaynumber}");
+                System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.PanelID} tag {tagid} dno {displaynumber}");
 
-                uccb.Init(discoveryform, displaynumber);
+                uccb.Init(DiscoveryForm, displaynumber);
             });
 
-            discoveryform.OnPanelAdded += PanelAdded;
+            DiscoveryForm.OnPanelAdded += PanelAdded;
 
             // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
@@ -163,12 +163,12 @@ namespace EDDiscovery.UserControls
                     {
                         // pick out the uccb, if currentcontrol is null it will be null. Then using that pick out the panelid from it, which is the definitive one used to create it
                         UserControlCommonBase uccb = ((c as ExtendedControls.TabStrip).CurrentControl) as UserControlCommonBase;
-                        return tagid.ToStringInvariant() + "," + (uccb != null ? (int)uccb.panelid : NoTabPanelSelected).ToStringInvariant();
+                        return tagid.ToStringInvariant() + "," + (uccb != null ? (int)uccb.PanelID : NoTabPanelSelected).ToStringInvariant();
                     }
                     else
                     {
                         UserControlCommonBase uccb = c as UserControlCommonBase;
-                        return tagid.ToStringInvariant() + "," + (FixedPanelOffsetLow + ((int)uccb.panelid)).ToStringInvariant();
+                        return tagid.ToStringInvariant() + "," + (FixedPanelOffsetLow + ((int)uccb.PanelID)).ToStringInvariant();
                     }
                 });
 
@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
                 }
             });
 
-            discoveryform.OnPanelAdded -= PanelAdded;
+            DiscoveryForm.OnPanelAdded -= PanelAdded;
         }
 
         public void PanelAdded()
@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
                     if (uccb != null)
                     {
                         System.Diagnostics.Trace.WriteLine("Splitter Make Tab " + tabstripid + " with dno " + displaynumber );
-                        uccb.Init(discoveryform, displaynumber);      // init..
+                        uccb.Init(DiscoveryForm, displaynumber);      // init..
 
                         var scale = this.FindForm().CurrentAutoScaleFactor();
                         System.Diagnostics.Trace.WriteLine($"Splitter apply scaling to {uccb.Name} {scale}");
@@ -312,7 +312,7 @@ namespace EDDiscovery.UserControls
                     }
                 };
 
-                tabstrip.OnPopOut += (tab, i) => { discoveryform.PopOuts.PopOut((PanelInformation.PanelIDs)tabstrip.TagList[i]); };
+                tabstrip.OnPopOut += (tab, i) => { DiscoveryForm.PopOuts.PopOut((PanelInformation.PanelIDs)tabstrip.TagList[i]); };
 
                 PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha); // sort order v.important.. we need the right index, dep
 
@@ -344,7 +344,7 @@ namespace EDDiscovery.UserControls
         // a panel may claim the event, in which case its not sent up
         private bool SplitterRequestAction(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"\r\nSplitter {displaynumber} request action {actionobj}");
+            System.Diagnostics.Debug.WriteLine($"\r\nSplitter {DisplayNumber} request action {actionobj}");
 
             bool done = false;
 
@@ -354,7 +354,7 @@ namespace EDDiscovery.UserControls
                 {
                     done = uccb.PerformPanelOperation(sender, actionobj);
                     if (done)
-                        System.Diagnostics.Debug.WriteLine($".. uccb {uccb.panelid} claimed this operation {actionobj}");
+                        System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj}");
                 }
             });
 
@@ -371,7 +371,7 @@ namespace EDDiscovery.UserControls
         // we don't pass up some travel grid stuff if we have a travel grid ourselves
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Splitter {displaynumber} perform action {actionobj}");
+            System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} perform action {actionobj}");
 
             if (IsOperationTHPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid)!=null)
             {
@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
                 {
                     done = uccb.PerformPanelOperation(sender, actionobj);
                     if (done)
-                        System.Diagnostics.Debug.WriteLine($".. uccb {uccb.panelid} claimed this operation {actionobj}");
+                        System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj}");
                 }
             });
 

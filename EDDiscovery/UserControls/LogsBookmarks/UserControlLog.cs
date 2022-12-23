@@ -36,8 +36,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnNewLogEntry += AppendText;
-            AppendText(discoveryform.LogText, ExtendedControls.Theme.Current.TextBlockColor);
+            DiscoveryForm.OnNewLogEntry += AppendText;
+            AppendText(DiscoveryForm.LogText, ExtendedControls.Theme.Current.TextBlockColor);
             richTextBox_History.ScrollToCaret();
 
             var enumlistcms = new Enum[] { EDTx.UserControlLog_toolStripMenuItemCopy, EDTx.UserControlLog_clearLogToolStripMenuItem };
@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnNewLogEntry -= AppendText;
+            DiscoveryForm.OnNewLogEntry -= AppendText;
         }
 
         public void AppendText(string s, Color c)

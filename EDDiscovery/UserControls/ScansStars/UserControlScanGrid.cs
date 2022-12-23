@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ScanGridPanel";
 
-            discoveryform.OnNewEntry += NewEntry;
+            DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlScanGrid_colName, EDTx.UserControlScanGrid_colClass, EDTx.UserControlScanGrid_colDistance, EDTx.UserControlScanGrid_colBriefing };
             var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip, EDTx.UserControlScanGrid_checkBoxEDSM_ToolTip };
@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewScangrid);
-            discoveryform.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnNewEntry -= NewEntry;
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
         }
 
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await discoveryform.history.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
+                scannode = await DiscoveryForm.history.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -154,8 +154,8 @@ namespace EDDiscovery.UserControls
             var gasgiants = 0;
             var moons = 0;
 
-            List<MaterialCommodityMicroResource> historicmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
-            List<MaterialCommodityMicroResource> curmcl = discoveryform.history.MaterialCommoditiesMicroResources.GetLast();
+            List<MaterialCommodityMicroResource> historicmcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+            List<MaterialCommodityMicroResource> curmcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetLast();
 
             HashSet<string> jumponiums = new HashSet<string>();
 

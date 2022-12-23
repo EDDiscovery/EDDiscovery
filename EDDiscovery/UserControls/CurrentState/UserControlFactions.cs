@@ -179,8 +179,8 @@ namespace EDDiscovery.UserControls
             startDateTimePicker.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);        // now install the change handlers
             endDateTimePicker.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
 
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             dataGridViewFactions.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewFactions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -209,8 +209,8 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewFactions);
 
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             PutSetting("StartDate", startDateTimePicker.Value);                 // picker value is stored..
             PutSetting("StartDateChecked", startDateTimePicker.Checked);
@@ -243,7 +243,7 @@ namespace EDDiscovery.UserControls
 
             Display();
 
-            var ml = discoveryform.history.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
+            var ml = DiscoveryForm.history.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
             NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
         }
 
@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
 
             // first do the mission lists and accumulate into factionslist
 
-            List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
+            List<MissionState> ml = DiscoveryForm.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
             if (ml != null)
             {
                 foreach (MissionState ms in ml)
@@ -349,7 +349,7 @@ namespace EDDiscovery.UserControls
             {
                 Stats stats = new Stats();      // reprocess this list completely
 
-                foreach (var he in HistoryList.FilterByDateRange(discoveryform.history.EntryOrder(), startdateutc, enddateutc))
+                foreach (var he in HistoryList.FilterByDateRange(DiscoveryForm.history.EntryOrder(), startdateutc, enddateutc))
                 {
                     stats.Process(he.journalEntry, he.StationFaction);
                 }
@@ -358,7 +358,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                factioninfo = discoveryform.history.GetStatsAtGeneration(last_he?.Statistics ?? 0);
+                factioninfo = DiscoveryForm.history.GetStatsAtGeneration(last_he?.Statistics ?? 0);
             }
 
             // if we have some stats on factions accumulated via the history, add to the faction list
@@ -486,7 +486,7 @@ namespace EDDiscovery.UserControls
                 MissionListUserControl mluc = new MissionListUserControl();
 
                 mluc.Clear();
-                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
+                List<MissionState> ml = DiscoveryForm.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
 
                 DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EDDConfig.GameLaunchTimeUTC();
                 DateTime enddateutc = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EDDConfig.GameEndTimeUTC();
@@ -534,7 +534,7 @@ namespace EDDiscovery.UserControls
             {
                 DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EDDConfig.GameLaunchTimeUTC();
                 DateTime enddateutc = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EDDConfig.GameEndTimeUTC();
-                return HistoryList.FilterBefore(discoveryform.history.EntryOrder(), last_he, 
+                return HistoryList.FilterBefore(DiscoveryForm.history.EntryOrder(), last_he, 
                                     (x) => ((DateTime.Compare(x.EventTimeUTC, startdateutc) >= 0 &&
                                              DateTime.Compare(x.EventTimeUTC, enddateutc) <= 0) &&
                                              where(x)));
@@ -718,7 +718,7 @@ namespace EDDiscovery.UserControls
                     string systemName = null;
                     if (last_he != null)
                     {
-                        foreach (var he in HistoryList.FilterBefore(discoveryform.history.EntryOrder(), last_he, 
+                        foreach (var he in HistoryList.FilterBefore(DiscoveryForm.history.EntryOrder(), last_he, 
                                     (x) => x.System.SystemAddress == si.SystemAddress))
                         {
                             systemName = he.System.Name;

@@ -57,9 +57,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             DBBaseName = "Compass";
-            discoveryform.OnNewEntry += OnNewEntry;
-            discoveryform.OnNewUIEvent += OnNewUIEvent;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += OnNewEntry;
+            DiscoveryForm.OnNewUIEvent += OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             numberBoxTargetLatitude.ValueNoChange = GetSetting(dbLatSave, 0.0);     // note need to explicity state its double
             numberBoxTargetLongitude.ValueNoChange = GetSetting(dbLongSave, 0.0);
             autoHideTargetCoords = GetSetting(dbHideSave, false);
@@ -81,9 +81,9 @@ namespace EDDiscovery.UserControls
             PutSetting(dbLatSave, numberBoxTargetLatitude.Value);
             PutSetting(dbLongSave, numberBoxTargetLongitude.Value);
             PutSetting(dbHideSave, autoHideTargetCoords);
-            discoveryform.OnNewEntry -= OnNewEntry;
-            discoveryform.OnNewUIEvent -= OnNewUIEvent;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= OnNewEntry;
+            DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
@@ -138,15 +138,15 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj) // need to handle this in case commander changed..
         {
-            last_he = discoveryform.history.GetLast;
+            last_he = DiscoveryForm.history.GetLast;
             currentBookmark = null;
             PopulateBookmarkCombo();
-            OnNewEntry(last_he, discoveryform.history);
+            OnNewEntry(last_he, DiscoveryForm.history);
         }
 
         public override void InitialDisplay()       // on start up, this will have an empty history
         {
-            last_he = discoveryform.history.GetLast;
+            last_he = DiscoveryForm.history.GetLast;
             PopulateBookmarkCombo();
             DisplayCompass();
         }
@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
             {
                 if ( bodyRadius == null || lastradiusbody != he.WhereAmI)       // try and get radius, this is cleared on target selection
                 { 
-                    StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(he.System, false);       // find scan if we have one
+                    StarScan.SystemNode last_sn = await DiscoveryForm.history.StarScan.FindSystemAsync(he.System, false);       // find scan if we have one
                     JournalScan sd = last_sn?.Find(he.WhereAmI)?.ScanData;  // find body scan data if present, null if not
                     bodyRadius = sd?.nRadius;
                     if (bodyRadius.HasValue)
@@ -463,7 +463,7 @@ namespace EDDiscovery.UserControls
             if (last_he == null)
                 return;
 
-            BookmarkForm frm = new BookmarkForm(discoveryform.history);
+            BookmarkForm frm = new BookmarkForm(DiscoveryForm.history);
             DateTime timeutc = DateTime.UtcNow;
             if (currentBookmark == null)
             {

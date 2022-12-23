@@ -43,8 +43,8 @@ namespace EDDiscovery.UserControls
                                             GetSetting("EndDate", DateTime.UtcNow),
                                             GetSetting("EndDateChecked", false));
             
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             var enumlist = new Enum[] { EDTx.MissionListUserControl_PcolName, EDTx.MissionListUserControl_pColStart, EDTx.MissionListUserControl_pColEnd, EDTx.MissionListUserControl_pColOrigin, EDTx.MissionListUserControl_pColFromFaction, EDTx.MissionListUserControl_pColDestSys, EDTx.MissionListUserControl_pColTargetFaction, EDTx.MissionListUserControl_pColResult, EDTx.MissionListUserControl_pColInfo, EDTx.MissionListUserControl_labelTo, EDTx.MissionListUserControl_labelSearch };
             
@@ -75,8 +75,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(missionListCurrent.dataGridView, "Current");
             DGVSaveColumnLayout(missionListPrevious.dataGridView, "Previous");
 
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             PutSetting("StartDate", missionListPrevious.customDateTimePickerStart.Value);
             PutSetting("StartDateChecked", missionListPrevious.customDateTimePickerStart.Checked);
@@ -130,13 +130,13 @@ namespace EDDiscovery.UserControls
             Display();
 
             // he can be null
-            var ml = discoveryform.history.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
+            var ml = DiscoveryForm.history.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
             NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? ObjectExtensionsDates.MaxValueUTC();
         }
 
         private void Display()
         {
-            List<MissionState> ml = last_he != null ? discoveryform.history.MissionListAccumulator.GetMissionList(last_he.MissionList) : null;
+            List<MissionState> ml = last_he != null ? DiscoveryForm.history.MissionListAccumulator.GetMissionList(last_he.MissionList) : null;
 
             missionListCurrent.Clear();
             missionListPrevious.Clear();

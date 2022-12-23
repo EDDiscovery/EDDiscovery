@@ -63,8 +63,8 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            discoveryform.OnHistoryChange += Redisplay;
-            discoveryform.OnNewEntry += NewEntry;
+            DiscoveryForm.OnHistoryChange += Redisplay;
+            DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlLedger_TimeCol, EDTx.UserControlLedger_Type, EDTx.UserControlLedger_Notes, EDTx.UserControlLedger_Credits, EDTx.UserControlLedger_Debits, EDTx.UserControlLedger_Balance, EDTx.UserControlLedger_NormProfit, EDTx.UserControlLedger_TotalProfit, EDTx.UserControlLedger_labelTime, EDTx.UserControlLedger_labelSearch };
             var enumlistcms = new Enum[] { EDTx.UserControlLedger_toolStripMenuItemGotoItem };
@@ -123,8 +123,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewLedger);
             PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
-            discoveryform.OnHistoryChange -= Redisplay;
-            discoveryform.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnHistoryChange -= Redisplay;
+            DiscoveryForm.OnNewEntry -= NewEntry;
         }
 
         #endregion
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.Rows.Clear();
             extChartLedger.ClearSeriesPoints();
 
-            var ledger = discoveryform.history.CashLedger;
+            var ledger = DiscoveryForm.history.CashLedger;
             transactioncountatdisplay = 0;
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("LD", true)} Ledger");
@@ -227,9 +227,9 @@ namespace EDDiscovery.UserControls
 
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
-            while(transactioncountatdisplay < discoveryform.history.CashLedger.Transactions.Count)   // if new transaction
+            while(transactioncountatdisplay < DiscoveryForm.history.CashLedger.Transactions.Count)   // if new transaction
             {
-                Ledger.Transaction tx = discoveryform.history.CashLedger.Transactions[transactioncountatdisplay];
+                Ledger.Transaction tx = DiscoveryForm.history.CashLedger.Transactions[transactioncountatdisplay];
 
                 var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
                 var row = CreateRow(tx, eventfilter, textBoxFilter.Text);
@@ -348,7 +348,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            var current_mc = discoveryform.history.CashLedger;
+            var current_mc = DiscoveryForm.history.CashLedger;
 
             if ( current_mc != null )
             { 

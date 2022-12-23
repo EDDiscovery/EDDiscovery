@@ -131,6 +131,8 @@ namespace EDDiscovery.UserControls
         {
             if (IsDirty())
             {
+                MakeVisible();      // we may not be on this screen if called (shutdown, import) make visible
+
                 var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("Expedition - There are unsaved changes to the current route." + Environment.NewLine
                     + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 

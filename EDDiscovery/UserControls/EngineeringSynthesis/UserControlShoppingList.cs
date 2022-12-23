@@ -66,12 +66,12 @@ namespace EDDiscovery.UserControls
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
             userControlEngineering.DBBaseName = "SLEngineering";            // makes it unique to the SL
-            userControlEngineering.Init(discoveryform, displaynumber);
+            userControlEngineering.Init(DiscoveryForm, DisplayNumber);
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
             userControlSynthesis.DBBaseName = "SLSynthesis";            // makes it unique to the SL
-            userControlSynthesis.Init(discoveryform, displaynumber);
+            userControlSynthesis.Init(DiscoveryForm, DisplayNumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
 
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
-                List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);
+                List<MaterialCommodityMicroResource> mcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
 
                 if (showListAvailability || showPlanetMats)
                 {
-                    last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
+                    last_sn = await DiscoveryForm.history.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
 
                     if (last_he.IsLanded && last_sn != null )       // if found node, and landed
                     {

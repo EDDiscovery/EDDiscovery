@@ -76,7 +76,7 @@ namespace EDDiscovery.UserControls
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
         }
 
@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
 
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
         #endregion
 
@@ -425,7 +425,7 @@ namespace EDDiscovery.UserControls
         private void buttonNew_Click(object nu1, EventArgs nu2)
         {
             ClearDates();
-            HistoryEntry he = discoveryform.history.GetLast;
+            HistoryEntry he = DiscoveryForm.history.GetLast;
             MakeNew(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow), he?.System.Name ?? "?", he?.WhereAmI ?? "?");
         }
 
@@ -540,8 +540,8 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
-            discoveryform.Open3DMap(s);
+            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.galacticMapping, true);
+            DiscoveryForm.Open3DMap(s);
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -557,10 +557,10 @@ namespace EDDiscovery.UserControls
 
         private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
+            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.galacticMapping, true);
 
             if ( sys != null )
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.history);
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
 

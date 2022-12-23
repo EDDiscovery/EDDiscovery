@@ -129,7 +129,7 @@ namespace EDDiscovery.UserControls
                 bool serviced = RequestPanelOperation(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = newfiledetected });
                 if ( !serviced) // no-one serviced it, so create an expedition tab, and then reissue
                 {
-                    discoveryform.SelectTabPage("Expedition", true, false);         // ensure expedition is open
+                    DiscoveryForm.SelectTabPage("Expedition", true, false);         // ensure expedition is open
                     RequestPanelOperation(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = newfiledetected });
                 }
                 newfiledetected = null;

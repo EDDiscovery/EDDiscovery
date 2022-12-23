@@ -95,8 +95,8 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer() { Interval = 10 };
             todotimer.Tick += Todotimer_Tick;
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
+            DiscoveryForm.OnHistoryChange += HistoryChanged;
+            DiscoveryForm.OnNewEntry += AddNewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime, EDTx.UserControlJournalGrid_Event, EDTx.UserControlJournalGrid_ColumnType, EDTx.UserControlJournalGrid_ColumnText, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
             var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
@@ -125,8 +125,8 @@ namespace EDDiscovery.UserControls
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal);
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
-            discoveryform.OnHistoryChange -= HistoryChanged;
-            discoveryform.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();
         }
 
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(discoveryform.history);
+            HistoryChanged(DiscoveryForm.history);
         }
 
 
@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
 
             var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
 
@@ -282,7 +282,7 @@ namespace EDDiscovery.UserControls
         private void AddEntry(HistoryEntry he)
         { 
             var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             var row = CreateHistoryRow(he, sst, hef);     // we might be filtered out by search
             if (row != null)
@@ -325,7 +325,7 @@ namespace EDDiscovery.UserControls
                 if (search.Terms[0] != null)
                 {
                     string timestr = time.ToString();
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
                     matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                     he.EventSummary.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -402,7 +402,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
             if ( res != null )
             {
                 fieldfilter = res;
@@ -416,7 +416,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewJournal_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             HistoryEntry he = (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag;
-            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
             PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno, he, Columns.Event, false);
         }
 
@@ -460,7 +460,7 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMap(rightclicksystem?.System);
+            DiscoveryForm.Open3DMap(rightclicksystem?.System);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -474,15 +474,15 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null)
             {
-                discoveryform.history.SetStartStop(rightclicksystem);
-                discoveryform.RefreshHistoryAsync();
+                DiscoveryForm.history.SetStartStop(rightclicksystem);
+                DiscoveryForm.RefreshHistoryAsync();
             }
         }
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rightclicksystem != null)
-                discoveryform.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
+                DiscoveryForm.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
@@ -536,11 +536,11 @@ namespace EDDiscovery.UserControls
 
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.EntryNumber : (discoveryform.history.Count - rightclicksystem.EntryNumber + 1)) : 0;
+            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.EntryNumber : (DiscoveryForm.history.Count - rightclicksystem.EntryNumber + 1)) : 0;
             int selrow = dataGridViewJournal.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)

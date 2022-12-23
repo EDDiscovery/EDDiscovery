@@ -61,10 +61,10 @@ namespace EDDiscovery.UserControls
 
             dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
 
-            discoveryform.OnNewCalculatedRoute += discoveryForm_OnNewCalculatedRoute;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNoteChanged += Discoveryform_OnNoteChanged;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewCalculatedRoute += discoveryForm_OnNewCalculatedRoute;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNoteChanged += Discoveryform_OnNoteChanged;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -124,10 +124,10 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridView,"V2");
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
 
-            discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNoteChanged -= Discoveryform_OnNoteChanged;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNoteChanged -= Discoveryform_OnNoteChanged;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
         }
 
         private void Discoveryform_OnNoteChanged(object arg1, HistoryEntry arg2)
@@ -169,6 +169,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (PromptAndSaveIfNeeded())
                     {
+                        MakeVisible();      // we may not be on this screen if called (shutdown, import) make visible
                         ClearTable();
                         string file = action.Data as string;
                         System.Diagnostics.Debug.WriteLine($"Expedition import CSV {file}");
@@ -244,7 +245,7 @@ namespace EDDiscovery.UserControls
             labelBusy.Visible = true;
             labelBusy.Update();
 
-            ISystem currentSystem = discoveryform.history.CurrentSystem(); // may be null
+            ISystem currentSystem = DiscoveryForm.history.CurrentSystem(); // may be null
 
             bool showplanets = displayfilters.Contains("planets");
             bool showstars = displayfilters.Contains("stars");
@@ -284,7 +285,7 @@ namespace EDDiscovery.UserControls
 
                 if (!disablegmoshow)
                 {
-                    var gmo = discoveryform.galacticMapping.Find(sysname);
+                    var gmo = DiscoveryForm.galacticMapping.Find(sysname);
                     if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
                         note = note.AppendPrePad(gmo.Description, "; ");
                 }
@@ -298,7 +299,7 @@ namespace EDDiscovery.UserControls
 
                 //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
                 var lookup = edsmcheck;     // here so you can turn it off for speed
-                var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, lookup);
+                var sys = await SystemCache.FindSystemAsync(sysname, DiscoveryForm.galacticMapping, lookup);
                 //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
                 if (IsClosed)        // because its async, the await returns with void, and then this is called back, and we may be closing.
                     return;
@@ -307,7 +308,7 @@ namespace EDDiscovery.UserControls
 
                 row.Cells[0].Style.ForeColor = (sys?.HasCoordinate ?? false) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
-                row.Cells[Visits.Index].Value = discoveryform.history.Visits(sysname).ToString("0");
+                row.Cells[Visits.Index].Value = DiscoveryForm.history.Visits(sysname).ToString("0");
 
                 if ( sys == null )      // no system found
                 {
@@ -337,7 +338,7 @@ namespace EDDiscovery.UserControls
 
                     row.Cells[CurDist.Index].Value = (currentSystem?.HasCoordinate ?? false) ? sys.Distance(currentSystem).ToString("0.#") : "";
 
-                    StarScan.SystemNode sysnode = await discoveryform.history.StarScan.FindSystemAsync(sys, lookup);
+                    StarScan.SystemNode sysnode = await DiscoveryForm.history.StarScan.FindSystemAsync(sys, lookup);
 
                     if (IsClosed)        // because its async, may be called during closedown. stop this
                         return;
@@ -650,7 +651,11 @@ namespace EDDiscovery.UserControls
                             for (int i = 1; i < row.Cells.Count; i++)
                             {
                                 string header = rowheader != null && rowheader.Cells.Count > i ? rowheader[i] + ":" : "";
-                                note = note.AppendPrePad(header+row[i], Environment.NewLine);
+                                string data = row[i];
+                                if (data.InvariantParseDoubleNull() != null && data.Contains(".")) // if its a number, and its a dotted number
+                                    data = data.InvariantParseDouble(0).ToString("0.##");
+
+                                note = note.AppendPrePad(header+data, Environment.NewLine);
                             }
 
                             string systemname = row[0];
@@ -698,7 +703,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            var navroutes = discoveryform.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(20).ToList();
+            var navroutes = DiscoveryForm.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(20).ToList();
 
             if (navroutes.Count > 0)
             {
@@ -734,7 +739,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+            var route = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
             if (route?.Route != null)
             {
                 AppendOrInsertSystems(-1, route.Route.Select(s => s.StarSystem));
@@ -771,7 +776,7 @@ namespace EDDiscovery.UserControls
 
                     foreach ( var syse in rt.Systems)
                     {
-                        ISystem sys = SystemCache.FindSystem(syse.SystemName, discoveryform.galacticMapping, true);
+                        ISystem sys = SystemCache.FindSystem(syse.SystemName, DiscoveryForm.galacticMapping, true);
                         if (sys != null)
                         {
                             var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
@@ -861,7 +866,7 @@ namespace EDDiscovery.UserControls
 
             if (route.Count >= 2)
             {
-                discoveryform.Open3DMap(route[0], route);
+                DiscoveryForm.Open3DMap(route[0], route);
             }
             else
             {
@@ -903,7 +908,7 @@ namespace EDDiscovery.UserControls
             f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExpedition_AddSys),
                                 callback: () =>
                                 {
-                                    usc.Init(db, false, discoveryform);
+                                    usc.Init(db, false, DiscoveryForm);
                                 },
                                 closeicon: true);
             usc.Save();
@@ -1151,7 +1156,7 @@ namespace EDDiscovery.UserControls
             {
                 if (TargetClass.SetTargetOnSystemConditional(sc.Name, sc.X, sc.Y, sc.Z))
                 {
-                    discoveryform.NewTargetSet(this);
+                    DiscoveryForm.NewTargetSet(this);
                 }
             }
         }
@@ -1170,12 +1175,12 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = SystemCache.FindSystem((string)obj,discoveryform.galacticMapping, true);     // use EDSM directly if required
+            ISystem sc = SystemCache.FindSystem((string)obj,DiscoveryForm.galacticMapping, true);     // use EDSM directly if required
 
             if (sc == null)
                 sc = new SystemClass((string)obj,0,0,0);
 
-            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, sc, null);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sc, null);
             UpdateSystemRows();
         }
 

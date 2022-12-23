@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
         public override void LoadLayout()
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             PutSetting(dbDateSave, CurrentMonthFirstDayUTC);
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         private void CaptainsLogDiary_Resize(object sender, EventArgs e)

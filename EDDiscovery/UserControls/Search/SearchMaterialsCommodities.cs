@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             var enumlisttt = new Enum[] { EDTx.SearchMaterialsCommodities_buttonExtExcel_ToolTip, EDTx.SearchMaterialsCommodities_buttonExtFind_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCMANDOR_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM1_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            dataGridView.Init(discoveryform);
+            dataGridView.Init(DiscoveryForm);
 
             itemlist = MaterialCommodityMicroResourceType.GetAll();
             Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
@@ -112,9 +112,9 @@ namespace EDDiscovery.UserControls
         void Search(MaterialCommodityMicroResourceType cm, Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist, 
                                         string prefix = "")
         {
-            ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+            ISystem cursystem = DiscoveryForm.history.CurrentSystem();        // could be null
 
-            foreach ( var he in discoveryform.history.EntryOrder())      // oldest first..
+            foreach ( var he in DiscoveryForm.history.EntryOrder())      // oldest first..
             {
                 Tuple<HistoryEntry, string> found = null;
                 bool checkstation = false;
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+                ISystem cursystem = DiscoveryForm.history.CurrentSystem();        // could be null
 
                 foreach (var ret in systems)
                 {

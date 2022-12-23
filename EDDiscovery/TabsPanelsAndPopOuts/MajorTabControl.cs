@@ -137,8 +137,8 @@ namespace EDDiscovery
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.CloseDown();
-                idlist.Add( Object.ReferenceEquals(uccb, PrimarySplitterTab) ? -1 : (int)uccb.panelid);      // primary is marked -1
-                idlist.Add(uccb.displaynumber);
+                idlist.Add( Object.ReferenceEquals(uccb, PrimarySplitterTab) ? -1 : (int)uccb.PanelID);      // primary is marked -1
+                idlist.Add(uccb.DisplayNumber);
                 tabnames += p.Text + ";";
             }
 
@@ -208,7 +208,7 @@ namespace EDDiscovery
 
         public TabPage GetMajorTab(PanelInformation.PanelIDs ptype)
         {
-            return (from TabPage x in TabPages where ((UserControls.UserControlCommonBase)x.Controls[0]).panelid == ptype select x).FirstOrDefault();
+            return (from TabPage x in TabPages where ((UserControls.UserControlCommonBase)x.Controls[0]).PanelID == ptype select x).FirstOrDefault();
         }
 
         // placed it at the end of the tab line, but before the +
@@ -261,7 +261,7 @@ namespace EDDiscovery
             {
                 // go thru the tabs trying to find another page with the same panelid as ptype
 
-                List<int> idlist = (from TabPage p in TabPages where ((UserControls.UserControlCommonBase)p.Controls[0]).panelid == ptype select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
+                List<int> idlist = (from TabPage p in TabPages where ((UserControls.UserControlCommonBase)p.Controls[0]).PanelID == ptype select (p.Controls[0] as UserControls.UserControlCommonBase).DisplayNumber).ToList();
 
                 if (!idlist.Contains(UserControls.UserControlCommonBase.DisplayNumberPrimaryTab))
                     dn = UserControls.UserControlCommonBase.DisplayNumberPrimaryTab;

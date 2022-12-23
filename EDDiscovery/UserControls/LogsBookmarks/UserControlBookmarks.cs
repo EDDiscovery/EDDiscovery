@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
                 if (bk.isRegion)
                     userControlSurfaceBookmarks.Disable();
                 else
-                    userControlSurfaceBookmarks.Init(bk.StarName,discoveryform.history, bk.PlanetaryMarks);
+                    userControlSurfaceBookmarks.Init(bk.StarName,DiscoveryForm.history, bk.PlanetaryMarks);
             }
             else
             {
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
         private void buttonNew_Click(object sender, EventArgs e)
         {
             updating = true;
-            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, null, null);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, null, null);
             updating = false;
             Display();
         }
@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
         private void extButtonNewRegion_Click(object sender, EventArgs e)
         {
             updating = true;
-            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, null, null, true);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, null, null, true);
             updating = false;
             Display();
         }
@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
         private void extButtonEditSystem_Click(object sender, EventArgs e)
         {
             updating = true;
-            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, discoveryform.history.GetLast?.System, null);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, DiscoveryForm.history.GetLast?.System, null);
             updating = false;
             Display();
         }
@@ -203,10 +203,10 @@ namespace EDDiscovery.UserControls
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
                 SaveBackAnyChanges();
-                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, discoveryform.galacticMapping, true) : null;
+                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.galacticMapping, true) : null;
 
                 updating = true;
-                BookmarkHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, sys, bk);
+                BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sys, bk);
                 updating = false;
                 Display();
             }
@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
-                UserControlCompass comp = (UserControlCompass)discoveryform.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
+                UserControlCompass comp = (UserControlCompass)DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
                 comp.SetSurfaceBookmark(bk, planet, locname);
             }
         }
@@ -338,7 +338,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
+            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)

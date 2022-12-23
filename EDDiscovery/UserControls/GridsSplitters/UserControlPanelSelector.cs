@@ -33,9 +33,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             Draw();
-            discoveryform.OnAddOnsChanged += Redraw;
-            discoveryform.OnThemeChanging += Redraw;     // because we pick the image for the composite button based on theme
-            discoveryform.OnPanelAdded += Redraw;
+            DiscoveryForm.OnAddOnsChanged += Redraw;
+            DiscoveryForm.OnThemeChanging += Redraw;     // because we pick the image for the composite button based on theme
+            DiscoveryForm.OnPanelAdded += Redraw;
         }
 
         public override void LoadLayout()
@@ -51,9 +51,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnAddOnsChanged -= Redraw;
-            discoveryform.OnThemeChanging -= Redraw;
-            discoveryform.OnPanelAdded -= Redraw;
+            DiscoveryForm.OnAddOnsChanged -= Redraw;
+            DiscoveryForm.OnThemeChanging -= Redraw;
+            DiscoveryForm.OnPanelAdded -= Redraw;
         }
         public void Draw()
         {
@@ -162,16 +162,16 @@ namespace EDDiscovery.UserControls
             Object cbtag = ((Control)o).Tag;
 
             if ( cbtag is null )        // tag being null means
-                discoveryform.manageAddOnsToolStripMenuItem_Click(null, null);
+                DiscoveryForm.manageAddOnsToolStripMenuItem_Click(null, null);
             else
             {
                 PanelInformation.PanelIDs pid = (PanelInformation.PanelIDs)cbtag;
                 System.Diagnostics.Debug.WriteLine("Selected " + pid + " " + i);
 
                 if (i == 0)
-                    discoveryform.PopOuts.PopOut(pid);
+                    DiscoveryForm.PopOuts.PopOut(pid);
                 else
-                    discoveryform.AddTab(pid, -1);   // add as last tab
+                    DiscoveryForm.AddTab(pid, -1);   // add as last tab
             }
 
         }

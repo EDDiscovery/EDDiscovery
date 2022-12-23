@@ -43,8 +43,8 @@ namespace EDDiscovery.UserControls
             dataGridViewShips.MakeDoubleBuffered();
             dataGridViewShips.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange; ;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlShipYards_labelYardSel, EDTx.UserControlShipYards_labelYard };
             var enumlisttt = new Enum[] { EDTx.UserControlShipYards_comboBoxYards_ToolTip };
@@ -62,8 +62,8 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewShips);
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
 
@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxYards.Items.Count == 0)
-                UpdateComboBox(discoveryform.history);
+                UpdateComboBox(DiscoveryForm.history);
             last_he = he;
             Display();
          }
@@ -136,13 +136,13 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxYards.SelectedIndex == 0 || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
-                HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Shipyard, last_he);
+                HistoryEntry lastshipyard = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Shipyard, last_he);
                 if (lastshipyard != null)
                     yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalShipyard).Yard;
             }
             else
             {
-                yard = discoveryform.history.Shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
+                yard = DiscoveryForm.history.Shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard?.Ships != null)
@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist = discoveryform.history.Shipyards.GetShipLocations(comboBoxYards.Text,nolocrepeats:true);
+                List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist = DiscoveryForm.history.Shipyards.GetShipLocations(comboBoxYards.Text,nolocrepeats:true);
                 if ( shiplist.Count > 0 )
                     DisplayShips(shiplist, comboBoxYards.Text);
             }
@@ -163,11 +163,11 @@ namespace EDDiscovery.UserControls
 
         private void DisplayShips(List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist,string ship)
         {
-            ISystem cursys = discoveryform.history.CurrentSystem();
+            ISystem cursys = DiscoveryForm.history.CurrentSystem();
 
             foreach (Tuple<ShipYard, ShipYard.ShipyardItem> i in shiplist)
             {
-                double distance = discoveryform.history.DistanceCurrentTo(i.Item1.StarSystem);
+                double distance = DiscoveryForm.history.DistanceCurrentTo(i.Item1.StarSystem);
                 string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(i.Item1.Datetime).ToString();
                 object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N0") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewShips.Rows.Add(rowobj);
             }
 
-            double distance = discoveryform.history.DistanceCurrentTo(yard.StarSystem);
+            double distance = DiscoveryForm.history.DistanceCurrentTo(yard.StarSystem);
 
             labelYard.Text = yard.Ident() + (distance>-1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;

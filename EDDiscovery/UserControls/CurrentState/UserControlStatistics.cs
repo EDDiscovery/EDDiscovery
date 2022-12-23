@@ -95,8 +95,8 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            discoveryform.OnNewEntry += AddNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += AddNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
 
             // datetime picker kind is not used
@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewByShip.RowTemplate.MinimumHeight =
                         dataGridViewGeneral.RowTemplate.MinimumHeight = Font.ScalePixels(24);
 
-            if ( discoveryform.history.Count>0 )        // if we loaded a history, this is a new panel, so work
+            if ( DiscoveryForm.history.Count>0 )        // if we loaded a history, this is a new panel, so work
                 KickComputer();
 
             timerupdate.Start();
@@ -286,8 +286,8 @@ namespace EDDiscovery.UserControls
             PutSetting(dbSCScan, splitContainerScan.GetSplitterDistance());
             PutSetting(dbSCShip, splitContainerShips.GetSplitterDistance());
 
-            discoveryform.OnNewEntry -= AddNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)     // tab change, UI will see tab has changed

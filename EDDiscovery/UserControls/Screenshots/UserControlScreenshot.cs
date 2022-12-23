@@ -46,9 +46,9 @@ namespace EDDiscovery.UserControls
         {
             extButtonRemoveImage.Enabled = extButtonCopy.Enabled = false;
 
-            discoveryform.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             autotext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
 
             string[] dbsaved = GetSetting(dbImages, "").Split('\u2188');
@@ -73,9 +73,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             PutSetting(dbImages, String.Join("\u2188", extimages));
         }
 
@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
         // Display he
         private void Display(JournalScreenshot js)
         {
-            var pathsize = js.GetScreenshotPath(discoveryform.ScreenshotConverter.InputFolder);
+            var pathsize = js.GetScreenshotPath(DiscoveryForm.ScreenshotConverter.InputFolder);
 
             if (pathsize != null)
             {
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox()
         {
-            var sslist = HistoryList.LatestFirst(discoveryform.history.EntryOrder(), new System.Collections.Generic.HashSet<JournalTypeEnum>() { JournalTypeEnum.Screenshot });
+            var sslist = HistoryList.LatestFirst(DiscoveryForm.history.EntryOrder(), new System.Collections.Generic.HashSet<JournalTypeEnum>() { JournalTypeEnum.Screenshot });
 
             string cur = extComboBoxImage.Text;
 
@@ -206,7 +206,7 @@ namespace EDDiscovery.UserControls
             foreach (var x in sslist)
             {
                 var j = x.journalEntry as JournalScreenshot;
-                var pathsize = j.GetScreenshotPath(discoveryform.ScreenshotConverter.InputFolder);
+                var pathsize = j.GetScreenshotPath(DiscoveryForm.ScreenshotConverter.InputFolder);
                 if (pathsize != null)
                 {
                  //   System.Diagnostics.Debug.WriteLine($"Accept {pathsize.Item1} {x.WhereAmI} {File.Exists(pathsize.Item1)}");

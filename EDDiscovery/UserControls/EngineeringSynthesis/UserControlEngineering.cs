@@ -117,8 +117,8 @@ namespace EDDiscovery.UserControls
 
             isHistoric = GetSetting(dbHistoricMatsSave, false);
             
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             var enumlist = new Enum[] { EDTx.UserControlEngineering_UpgradeCol, EDTx.UserControlEngineering_ModuleCol, EDTx.UserControlEngineering_LevelCol, EDTx.UserControlEngineering_MaxCol, EDTx.UserControlEngineering_WantedCol, EDTx.UserControlEngineering_AvailableCol, EDTx.UserControlEngineering_NotesCol, EDTx.UserControlEngineering_RecipeCol, EDTx.UserControlEngineering_EngineersCol };
             BaseUtils.Translator.Instance.TranslateControls(this,enumlist);
@@ -140,8 +140,8 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewEngineering);
 
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             PutSetting(dbOSave, RowToRecipe.ToString(","));
             PutSetting(dbWSave, WantedPerRecipe.ToString(","));
@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                last_he = discoveryform.history.GetLast;
+                last_he = DiscoveryForm.history.GetLast;
                 Display();
             }
         }
@@ -201,8 +201,8 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                var mcllist = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);      // mcl at this point
-                var lastengprog = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he);
+                var mcllist = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);      // mcl at this point
+                var lastengprog = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he);
 
                 int fdrow = dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 

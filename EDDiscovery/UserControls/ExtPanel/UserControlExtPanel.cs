@@ -69,15 +69,15 @@ namespace EDDiscovery.UserControls
             var th = ExtendedControls.Theme.Current;
             var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
-            panel.Initialise(callbacks, displaynumber, jo.ToString(),"");     // initialise, pass in callbacks and unused config string
+            panel.Initialise(callbacks, DisplayNumber, jo.ToString(),"");     // initialise, pass in callbacks and unused config string
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnNewHistoryEntryUnfiltered += Discoveryform_OnNewHistoryEntryUnfiltered;
-            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
-            discoveryform.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
-            discoveryform.OnNewTarget += Discoveryform_OnNewTarget;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewHistoryEntryUnfiltered += Discoveryform_OnNewHistoryEntryUnfiltered;
+            DiscoveryForm.OnThemeChanged += Discoveryform_OnThemeChanged;
+            DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
         }
 
         public override void SetTransparency(bool ison, Color curcol)
@@ -98,13 +98,13 @@ namespace EDDiscovery.UserControls
         {
             panel.Closing();
 
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnNewHistoryEntryUnfiltered -= Discoveryform_OnNewHistoryEntryUnfiltered;
-            discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
-            discoveryform.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
-            discoveryform.OnNewTarget -= Discoveryform_OnNewTarget;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewHistoryEntryUnfiltered -= Discoveryform_OnNewHistoryEntryUnfiltered;
+            DiscoveryForm.OnThemeChanged -= Discoveryform_OnThemeChanged;
+            DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnNewTarget -= Discoveryform_OnNewTarget;
         }
 
         public override bool SupportTransparency { get { return panel.SupportTransparency; } }  // override to say support transparency
@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-            panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, he, false));
+            panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.history, he, false));
         }
 
         #endregion
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewHistoryEntryUnfiltered(EliteDangerousCore.HistoryEntry he)
         {
-            panel.NewUnfilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, he, false));
+            panel.NewUnfilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.history, he, false));
         }
 
         private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he, EliteDangerousCore.HistoryList hl)

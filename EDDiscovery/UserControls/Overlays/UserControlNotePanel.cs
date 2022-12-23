@@ -49,8 +49,8 @@ namespace EDDiscovery.UserControls
 
             displayfont = ExtendedControls.Theme.Current.GetFont;
 
-            discoveryform.OnHistoryChange += OnHistoryChange;
-            discoveryform.OnNoteChanged += OnNoteChange;
+            DiscoveryForm.OnHistoryChange += OnHistoryChange;
+            DiscoveryForm.OnNoteChanged += OnNoteChange;
 
             var enumlistcms = new Enum[] { EDTx.UserControlNotePanel_miGMPNotes, EDTx.UserControlNotePanel_miSystemNotes };
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
@@ -62,13 +62,13 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            OnHistoryChange(discoveryform.history);
+            OnHistoryChange(DiscoveryForm.history);
         }
 
         public override void Closing()
         {
-            discoveryform.OnHistoryChange -= OnHistoryChange;
-            discoveryform.OnNoteChanged -= OnNoteChange;
+            DiscoveryForm.OnHistoryChange -= OnHistoryChange;
+            DiscoveryForm.OnNoteChanged -= OnNoteChange;
             PutSetting("Config", (int)config);
         }
 
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                HistoryEntry hefsd = discoveryform.history.GetLastHistoryEntry(x => x.IsFSDCarrierJump, he);
+                HistoryEntry hefsd = DiscoveryForm.history.GetLastHistoryEntry(x => x.IsFSDCarrierJump, he);
 
                 if (hefsd != null)
                 {
@@ -113,9 +113,9 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showSystemNotes))
                     {
-                        for (int pos = hefsd.Index; pos < discoveryform.history.Count && (pos==hefsd.Index || !discoveryform.history[pos].IsFSDCarrierJump); pos++)
+                        for (int pos = hefsd.Index; pos < DiscoveryForm.history.Count && (pos==hefsd.Index || !DiscoveryForm.history[pos].IsFSDCarrierJump); pos++)
                         {
-                            HistoryEntry cur = discoveryform.history[pos];
+                            HistoryEntry cur = DiscoveryForm.history[pos];
                             string notetext = cur.GetNoteText;
                             if ( notetext.HasChars())
                                 botline += notetext.WordWrap(60) + Environment.NewLine;
@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showGMPNotes))
                     {
-                        var gmo = discoveryform.galacticMapping.Find(hefsd.System.Name);
+                        var gmo = DiscoveryForm.galacticMapping.Find(hefsd.System.Name);
                         if (gmo != null)
                             botline = ("GMP: " + gmo.Description).WordWrap(60) + Environment.NewLine;
                     }

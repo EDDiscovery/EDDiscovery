@@ -69,9 +69,9 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange; ;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
 
             fuelresname = "Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity);
             fuellevelname = "Fuel Level".T(EDTx.UserControlModules_FuelLevel);
@@ -86,9 +86,9 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewModules);
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
         }
 
         #endregion
@@ -109,9 +109,9 @@ namespace EDDiscovery.UserControls
         {
             // fuel UI update the SI information globally, and we have a ship, and we have a last entry, and we have ship information
 
-            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && discoveryform.history.GetLast?.ShipInformation != null ) // protect against ship information or he being null
+            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && DiscoveryForm.history.GetLast?.ShipInformation != null ) // protect against ship information or he being null
             {
-                if (last_si.ShipNameIdentType == discoveryform.history.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
+                if (last_si.ShipNameIdentType == DiscoveryForm.history.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
                 {
                     // update grid if found. Doing it this way stops flicker.
 
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxShips.Items.Count == 0)
-                UpdateComboBox(discoveryform.history);
+                UpdateComboBox(DiscoveryForm.history);
 
             last_he = he;
             Display();
@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
             {
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
-                ShipInformationList shm = discoveryform.history.ShipInformationList;
+                ShipInformationList shm = DiscoveryForm.history.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 foreach( var si in ownedships )
@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ShipInformation si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
+                ShipInformation si = DiscoveryForm.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
                     DisplayShip(si);
             }
@@ -484,7 +484,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
+                si = DiscoveryForm.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
@@ -526,7 +526,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
+                si = DiscoveryForm.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
@@ -597,7 +597,7 @@ namespace EDDiscovery.UserControls
                         var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow, last_si.ShipFD, last_si.ID, 0, EDCommander.CurrentCmdrID);
                         var jo = je.Json();
                         je.Add(jo);
-                        discoveryform.NewEntry(je);
+                        DiscoveryForm.NewEntry(je);
                     }
 
                     f.ReturnResult(DialogResult.Cancel);
@@ -677,7 +677,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     };
 
-                    var x = discoveryform.history.ShipInformationList.Ships.GetEnumerator();
+                    var x = DiscoveryForm.history.ShipInformationList.Ships.GetEnumerator();
                     x.MoveNext();
 
                     grd.GetPostHeader += delegate (int r)

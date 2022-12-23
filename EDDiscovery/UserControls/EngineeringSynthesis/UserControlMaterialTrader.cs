@@ -106,9 +106,9 @@ namespace EDDiscovery.UserControls
 
             splitContainer.SplitterDistance(GetSetting(dbSplitter, 0.75));
 
-            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnThemeChanged += Discoveryform_OnThemeChanged;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
         public override void LoadLayout()
@@ -122,9 +122,9 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTrades);
             PutSetting(dbSplitter, splitContainer.GetSplitterDistance());
 
-            discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnThemeChanged -= Discoveryform_OnThemeChanged;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
 
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
         {
             if (checkBoxCursorToTop.Checked)
             {
-                last_mcl = discoveryform.history.GetLast?.MaterialCommodity;
+                last_mcl = DiscoveryForm.history.GetLast?.MaterialCommodity;
                 DisplayTradeSelection();
                 DisplayTradeList();
             }
@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            var curmcl = last_mcl != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
+            var curmcl = last_mcl != null ? DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
 
             Font titlefont = ExtendedControls.Theme.Current.GetFont;
             Font badgefont = ExtendedControls.Theme.Current.GetScaledFont(16f / 12f, max:21);
@@ -380,7 +380,7 @@ namespace EDDiscovery.UserControls
             if (tradelist.Count > 0)        
             {
                 // last_mcl can be null
-                List<MaterialCommodityMicroResource> mcl = last_mcl == null ? null : discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
+                List<MaterialCommodityMicroResource> mcl = last_mcl == null ? null : DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
 
                 var totals = mcl == null ? null : MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present, null if we don't have an mcl
 
@@ -445,7 +445,7 @@ namespace EDDiscovery.UserControls
 
                 if (selected != null)
                 {
-                    List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
+                    List<MaterialCommodityMicroResource> mcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
                     int currenttotal = mcl.Find(x=>x.Details==current.element)?.Count ?? 0;   // current mat total. If not there, its zero
                     foreach (var trade in tradelist)
                     {

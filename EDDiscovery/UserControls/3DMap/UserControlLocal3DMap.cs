@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             // load setup restore settings of map
             map = new Map();
 
-            if (map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this,
+            if (map.Start(glwfc, DiscoveryForm.galacticMapping, DiscoveryForm.eliteRegions, this,
                   Map.Parts.None
                 | Map.Parts.Galaxy
                 | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute
@@ -77,23 +77,23 @@ namespace EDDiscovery.UserControls
                 systemtimer.Tick += new EventHandler(SystemTick);
                 systemtimer.Start();
 
-                discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-                discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-                discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;
+                DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+                DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+                DiscoveryForm.OnSyncComplete += Discoveryform_OnSyncComplete;
             }
         }
 
         public override void Closing()
         {
-            System.Diagnostics.Debug.WriteLine($"local 3dmap {displaynumber} stop");
+            System.Diagnostics.Debug.WriteLine($"local 3dmap {DisplayNumber} stop");
 
             if (map != null)    // just in case loadlayout has not been called..
             {
                 systemtimer.Stop();
 
-                discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-                discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-                discoveryform.OnSyncComplete -= Discoveryform_OnSyncComplete;
+                DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+                DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+                DiscoveryForm.OnSyncComplete -= Discoveryform_OnSyncComplete;
 
                 glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
                 map.SaveState(mapsave);

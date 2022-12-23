@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
                 {
                     object[] rowobj;
 
-                    MaterialCommodityMicroResource m = discoveryform.history.MaterialCommoditiesMicroResources.Get(mcl.Value, mcd.FDName);      // at generation mcl, find fdname.
+                    MaterialCommodityMicroResource m = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(mcl.Value, mcd.FDName);      // at generation mcl, find fdname.
 
                     if (showzeros || (m != null && m.NonZero))       // if display zero, or we have some..
                     {
@@ -250,7 +250,7 @@ namespace EDDiscovery.UserControls
             if (firstline >= 0 && firstline < dataGridViewMC.RowCount)
                 dataGridViewMC.SafeFirstDisplayedScrollingRowIndex( firstline);
 
-            var mcllist = discoveryform.history.MaterialCommoditiesMicroResources.Get(mcl.Value);
+            var mcllist = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(mcl.Value);
             var counts = MaterialCommoditiesMicroResourceList.Count(mcllist);
 
             if (PanelMode == PanelType.Materials)

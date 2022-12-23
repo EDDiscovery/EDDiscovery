@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.history.EntryOrder());
 
             pickerStart = new ExtendedControls.ExtDateTimePicker();
             pickerStop = new ExtendedControls.ExtDateTimePicker();
@@ -96,15 +96,15 @@ namespace EDDiscovery.UserControls
             
             imageViewer.BackColor = Color.FromArgb(5, 5, 5);
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             if (he.IsFSDCarrierJump)
             {
-                systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+                systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.history.EntryOrder());
                 if (imageViewer.Image != null)      // make sure we have a image up, if so, just augment the travel history
                     DrawTravelHistory();
                 else
@@ -114,14 +114,14 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.history.EntryOrder());
             Display();
         }
 
         public override void Closing()
         {
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             imageViewer.Image?.Dispose();
             imageViewer.Image = null;
             foreach (var i in images)

@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
 
             scanSortControl.SortDirectionClicked += (chk) => { if (scanSortControl.Condition.HasChars()) SortGridBySortCriteria(); };
 
-            dataGridView.Init(discoveryform);
+            dataGridView.Init(DiscoveryForm);
             dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
             dataGridView.Columns[5].Tag = "TextPopOut";  // these two double click are text popouts
 
@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                discoveryform.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
+                DiscoveryForm.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
                 // what variables are in use, so we don't enumerate the lot.
                 var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
@@ -247,19 +247,19 @@ namespace EDDiscovery.UserControls
                 Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
 
                 var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars);
-                var helist = HistoryList.FilterByEventEntryOrder(discoveryform.history.EntryOrder(), computedsearch);
-                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {discoveryform.history.EntryOrder().Count}");
+                var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.history.EntryOrder(), computedsearch);
+                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {DiscoveryForm.history.EntryOrder().Count}");
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, discoveryform.history.StarScan, extCheckBoxDebug.Checked);
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, DiscoveryForm.history.StarScan, extCheckBoxDebug.Checked);
 
                 if (IsClosed)       // may be closing during async process
                     return;
 
                 System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count} results {results.Count}");
 
-                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+                ISystem cursystem = DiscoveryForm.history.CurrentSystem();        // could be null
 
                 if (scanSortControl.Condition.HasChars())       // before we present, and we have a sort condition, update the sort vars
                 {
@@ -339,7 +339,7 @@ namespace EDDiscovery.UserControls
                         {
                             this.Cursor = Cursors.WaitCursor;
                             ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-                            ifrm.Info("Log", discoveryform.Icon, lastresultlog);
+                            ifrm.Info("Log", DiscoveryForm.Icon, lastresultlog);
                             ifrm.Show(this);
                             this.Cursor = Cursors.Default;
                         }

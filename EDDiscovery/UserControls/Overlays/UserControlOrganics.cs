@@ -63,9 +63,9 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
-            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
             var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip,
                                         EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip ,
@@ -107,9 +107,9 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState);
-            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             DGVSaveColumnLayout(dataGridView);
         }
 
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
 
             if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
             {
-                StarScan.SystemNode data = discoveryform.history.StarScan.FindSystemSynchronous(lasthe.System, false);
+                StarScan.SystemNode data = DiscoveryForm.history.StarScan.FindSystemSynchronous(lasthe.System, false);
 
                 if (data != null && data.NodesByID.TryGetValue(lasthe.Status.BodyID.Value, out StarScan.ScanNode node))
                 {
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
 
         void DrawGrid()
         {
-            if (discoveryform.history != null)        //??its never null?
+            if (DiscoveryForm.history != null)        //??its never null?
             {
                 // change display time to utc
                 DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);
@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.Rows.Clear();
                 long totalvalue = 0;
 
-                foreach (var syskvp in discoveryform.history.StarScan.ScanDataByName)
+                foreach (var syskvp in DiscoveryForm.history.StarScan.ScanDataByName)
                 {
                     foreach (var starkvp in syskvp.Value.StarNodes)
                     {

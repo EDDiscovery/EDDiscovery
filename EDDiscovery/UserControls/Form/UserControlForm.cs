@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
 
         public bool IsTransparencySupported { get { return !TransparencyColorKey.IsFullyTransparent(); } }
 
-        public PanelInformation.PanelIDs PanelID { get { return UserControl?.panelid ?? PanelInformation.PanelIDs.GroupMarker; } }  // May not be open, if so, return an impossible
+        public PanelInformation.PanelIDs PanelID { get { return UserControl?.PanelID ?? PanelInformation.PanelIDs.GroupMarker; } }  // May not be open, if so, return an impossible
 
         public UserControlForm()
         {
@@ -526,7 +526,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (UserControlForm u in forms)     
             {
-                if (u.UserControl != null && u.UserControl.panelid == p)
+                if (u.UserControl != null && u.UserControl.PanelID == p)
                     return u;
             }
 

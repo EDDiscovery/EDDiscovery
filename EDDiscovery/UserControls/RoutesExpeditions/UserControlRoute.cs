@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            discoveryform.OnHistoryChange += HistoryChanged;
+            DiscoveryForm.OnHistoryChange += HistoryChanged;
         }
 
         public override void LoadLayout()
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
                 routingthread.Join();
             }
 
-            discoveryform.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
 
             PutSetting("_RouteFrom", textBox_From.Text);
             PutSetting("_RouteTo", textBox_To.Text);
@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);     // if we have a name, find it
+               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.galacticMapping, true);     // if we have a name, find it
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
@@ -245,7 +245,7 @@ namespace EDDiscovery.UserControls
                 if (GetCoordsFrom(out Point3D curpos))          // else if we have co-ords, find nearest
                 {
                     ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = discoveryform.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    GalacticMapObject nearestgmo = DiscoveryForm.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -347,7 +347,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
+                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.galacticMapping, true);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
@@ -365,7 +365,7 @@ namespace EDDiscovery.UserControls
                 if (GetCoordsTo(out Point3D curpos))
                 {
                     ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = discoveryform.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    GalacticMapObject nearestgmo = DiscoveryForm.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -504,7 +504,7 @@ namespace EDDiscovery.UserControls
 
             this.BeginInvoke(new Action(() => 
                 {
-                    discoveryform.NewCalculatedRoute(routeSystems);
+                    DiscoveryForm.NewCalculatedRoute(routeSystems);
                     cmd3DMap.Enabled = true;
                     button_Route.Text = "Find Route".TxID(EDTx.UserControlRoute_button_Route);
                     button_Route.Enabled = true;
@@ -552,7 +552,7 @@ namespace EDDiscovery.UserControls
                 if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
                     dist = 30;
 
-                discoveryform.Open3DMap(routeSystems.First(), routeSystems);
+                DiscoveryForm.Open3DMap(routeSystems.First(), routeSystems);
 
             }
             else
@@ -579,7 +579,7 @@ namespace EDDiscovery.UserControls
             if (row >= 0)
             {
                 ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.history);
             }
         }
 
@@ -626,7 +626,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewRoute.RightClickRowValid)
             {
                 ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);    // protected against sys = null
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.history);    // protected against sys = null
             }
         }
 

@@ -26,12 +26,12 @@ namespace EDDiscovery.UserControls
 
         private T GetUserControl<T>(PanelInformation.PanelIDs p) where T : class
         {
-            var uccrfound = uccrlist.Find(x => x.UCCB.panelid == p);
+            var uccrfound = uccrlist.Find(x => x.UCCB.PanelID == p);
             return uccrfound != null ? uccrfound.UCCB as T : null;
         }
         public UserControlCommonBase GetUserControl(PanelInformation.PanelIDs p)
         {
-            var uccrfound = uccrlist.Find(x => x.UCCB.panelid == p);
+            var uccrfound = uccrlist.Find(x => x.UCCB.PanelID == p);
             return uccrfound != null ? uccrfound.UCCB: null;
         }
 
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             {
                 UserControlCommonBase uc = r.UCCB;
 
-                s = s.AppendPrePad(((int)uc.panelid).ToStringInvariant(), ",");
+                s = s.AppendPrePad(((int)uc.PanelID).ToStringInvariant(), ",");
                 p = p.AppendPrePad(r.Location.X + "," + r.Location.Y + "," + r.Size.Width + "," + r.Size.Height, ",");
                 
                 //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name + " at " + r.Location + " sz " + r.Size);
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
 
             UserControlContainerResizable uccr = new UserControlContainerResizable();
 
-            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(uccb.panelid);
+            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(uccb.PanelID);
             uccr.Init(uccb, pi.WindowTitle);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " " + numopenedinsidealready);
 
-            uccb.Init(discoveryform, dnum);
+            uccb.Init(DiscoveryForm, dnum);
 
             return uccr;
         }
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
         //SYNC with splitter
         private bool GridRequestAction(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Grid {displaynumber} request action {actionobj}");
+            System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} request action {actionobj}");
 
             bool done = false;
             foreach (var uccr in uccrlist)
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
                 done = uccr.UCCB.PerformPanelOperation(sender, actionobj);
                 if ( done )
                 {
-                    System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.panelid} claimed this operation {actionobj}");
+                    System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
                     break;
                 }
             }
@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
         //SYNC with splitter
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Grid {displaynumber} perform action {actionobj}");
+            System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} perform action {actionobj}");
 
             if (IsOperationTHPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid) != null)
             {
@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
             {
                 if ( uccr.UCCB.PerformPanelOperation(sender, actionobj) )
                 {
-                    System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.panelid} claimed this operation {actionobj}");
+                    System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
                     return true;
                 }
             }

@@ -47,13 +47,13 @@ namespace EDDiscovery.UserControls
 
             DBSettingsSaver db = new DBSettingsSaver(this, "SearchFindSys");
 
-            findSystemsUserControl.Init(db, true, discoveryform);
+            findSystemsUserControl.Init(db, true, DiscoveryForm);
             findSystemsUserControl.Excel += () => { dataGridView.Excel(dataGridView.ColumnCount); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
             var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { findSystemsUserControl });
-            dataGridView.Init(discoveryform);
+            dataGridView.Init(DiscoveryForm);
         }
 
         public override void LoadLayout()
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Ascending;
 
-                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+                ISystem cursystem = DiscoveryForm.history.CurrentSystem();        // could be null
                 bool centresort = false;
 
                 int index = 1;

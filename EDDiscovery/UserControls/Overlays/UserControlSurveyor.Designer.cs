@@ -65,6 +65,7 @@ namespace EDDiscovery.UserControls
             this.extPictureBoxRoute = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxFuel = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScanSummary = new ExtendedControls.ExtPictureBox();
+            this.extPictureBoxTarget = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxSystemDetails)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
@@ -73,6 +74,7 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxRoute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxFuel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxScanSummary)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxTarget)).BeginInit();
             this.SuspendLayout();
             // 
             // extButtonPlanets
@@ -181,10 +183,10 @@ namespace EDDiscovery.UserControls
             this.extPictureBoxScroll.Controls.Add(this.extScrollBar);
             this.extPictureBoxScroll.Controls.Add(this.extPictureBoxSystemDetails);
             this.extPictureBoxScroll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extPictureBoxScroll.Location = new System.Drawing.Point(0, 126);
+            this.extPictureBoxScroll.Location = new System.Drawing.Point(0, 150);
             this.extPictureBoxScroll.Name = "extPictureBoxScroll";
             this.extPictureBoxScroll.ScrollBarEnabled = true;
-            this.extPictureBoxScroll.Size = new System.Drawing.Size(721, 277);
+            this.extPictureBoxScroll.Size = new System.Drawing.Size(721, 253);
             this.extPictureBoxScroll.TabIndex = 1;
             this.extPictureBoxScroll.VerticalScrollBarDockRight = true;
             // 
@@ -198,14 +200,14 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.BorderColor = System.Drawing.Color.White;
             this.extScrollBar.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar.HideScrollBar = true;
-            this.extScrollBar.LargeChange = 277;
+            this.extScrollBar.LargeChange = 253;
             this.extScrollBar.Location = new System.Drawing.Point(705, 0);
             this.extScrollBar.Maximum = 199;
             this.extScrollBar.Minimum = 0;
             this.extScrollBar.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBar.Name = "extScrollBar";
-            this.extScrollBar.Size = new System.Drawing.Size(16, 277);
+            this.extScrollBar.Size = new System.Drawing.Size(16, 253);
             this.extScrollBar.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar.SmallChange = 16;
             this.extScrollBar.TabIndex = 1;
@@ -377,7 +379,7 @@ namespace EDDiscovery.UserControls
             // extPictureBoxFuel
             // 
             this.extPictureBoxFuel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.extPictureBoxFuel.Location = new System.Drawing.Point(0, 78);
+            this.extPictureBoxFuel.Location = new System.Drawing.Point(0, 102);
             this.extPictureBoxFuel.Name = "extPictureBoxFuel";
             this.extPictureBoxFuel.Size = new System.Drawing.Size(721, 24);
             this.extPictureBoxFuel.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -386,11 +388,20 @@ namespace EDDiscovery.UserControls
             // extPictureBoxScanSummary
             // 
             this.extPictureBoxScanSummary.Dock = System.Windows.Forms.DockStyle.Top;
-            this.extPictureBoxScanSummary.Location = new System.Drawing.Point(0, 102);
+            this.extPictureBoxScanSummary.Location = new System.Drawing.Point(0, 126);
             this.extPictureBoxScanSummary.Name = "extPictureBoxScanSummary";
             this.extPictureBoxScanSummary.Size = new System.Drawing.Size(721, 24);
             this.extPictureBoxScanSummary.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.extPictureBoxScanSummary.TabIndex = 18;
+            // 
+            // extPictureBoxTarget
+            // 
+            this.extPictureBoxTarget.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPictureBoxTarget.Location = new System.Drawing.Point(0, 78);
+            this.extPictureBoxTarget.Name = "extPictureBoxTarget";
+            this.extPictureBoxTarget.Size = new System.Drawing.Size(721, 24);
+            this.extPictureBoxTarget.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.extPictureBoxTarget.TabIndex = 19;
             // 
             // UserControlSurveyor
             // 
@@ -399,6 +410,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.extPictureBoxScroll);
             this.Controls.Add(this.extPictureBoxScanSummary);
             this.Controls.Add(this.extPictureBoxFuel);
+            this.Controls.Add(this.extPictureBoxTarget);
             this.Controls.Add(this.extPictureBoxRoute);
             this.Controls.Add(this.extPictureBoxTitle);
             this.Controls.Add(this.rollUpPanelTop);
@@ -415,6 +427,7 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxRoute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxFuel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxScanSummary)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxTarget)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -442,5 +455,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPictureBox extPictureBoxRoute;
         private ExtendedControls.ExtPictureBox extPictureBoxFuel;
         private ExtendedControls.ExtPictureBox extPictureBoxScanSummary;
+        private ExtendedControls.ExtPictureBox extPictureBoxTarget;
     }
 }

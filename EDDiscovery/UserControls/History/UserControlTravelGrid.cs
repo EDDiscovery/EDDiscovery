@@ -102,9 +102,9 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer { Interval = 20 };
             todotimer.Tick += Todotimer_Tick;
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
-            discoveryform.OnNoteChanged += OnNoteChanged;
+            DiscoveryForm.OnHistoryChange += HistoryChanged;
+            DiscoveryForm.OnNewEntry += AddNewEntry;
+            DiscoveryForm.OnNoteChanged += OnNoteChanged;
 
             this.showSystemVisitedForeColourToolStripMenuItem.Checked = GetSetting(dbVisitedColour, false);
             this.showSystemVisitedForeColourToolStripMenuItem.Click += new System.EventHandler(this.showSystemVisitedForeColourToolStripMenuItem_Click);
@@ -168,9 +168,9 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel);
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
 
-            discoveryform.OnHistoryChange -= HistoryChanged;
-            discoveryform.OnNewEntry -= AddNewEntry;
-            discoveryform.OnNoteChanged -= OnNoteChanged;
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnNoteChanged -= OnNoteChanged;
 
             searchtimer.Dispose();
         }
@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(discoveryform.history);
+            HistoryChanged(DiscoveryForm.history);
         }
 
         public void HistoryChanged(HistoryList hl)           // on History change
@@ -259,7 +259,7 @@ namespace EDDiscovery.UserControls
 
             int lrowno = 0;
 
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             if (chunks.Count != 0)
             {
@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
         { 
             var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             var row = CreateHistoryRow(he, sst, hef, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
 
@@ -461,7 +461,7 @@ namespace EDDiscovery.UserControls
 
                 if (search.Terms[0] != null)
                 {
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
                     matched = entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 colTime.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -634,7 +634,7 @@ namespace EDDiscovery.UserControls
                 var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;
                 System.Diagnostics.Trace.Assert(str != null && he != null);
                 he.journalEntry.UpdateSystemNote(str, he.System.Name, EDCommander.Current.SyncToEdsm);
-                discoveryform.NoteChanged(this, he);
+                DiscoveryForm.NoteChanged(this, he);
             }
         }
 
@@ -686,7 +686,7 @@ namespace EDDiscovery.UserControls
         {
             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag;
             bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
-            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1));
+            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1));
             PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, Icon.Index, true);
         }
 
@@ -879,7 +879,7 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMap(rightclickhe?.System);
+            DiscoveryForm.Open3DMap(rightclickhe?.System);
         }
 
         private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1031,8 +1031,8 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
         {
-            discoveryform.history.SetStartStop(rightclickhe);
-            discoveryform.RefreshHistoryAsync();
+            DiscoveryForm.history.SetStartStop(rightclickhe);
+            DiscoveryForm.RefreshHistoryAsync();
         }
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1041,13 +1041,13 @@ namespace EDDiscovery.UserControls
             if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclickhe.Journalid);
-                discoveryform.RefreshHistoryAsync();
+                DiscoveryForm.RefreshHistoryAsync();
             }
         }
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
+            DiscoveryForm.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
         }
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1063,7 +1063,7 @@ namespace EDDiscovery.UserControls
                 {
                     System.Diagnostics.Trace.Assert(noteform.NoteText != null && he.System != null);
                     he.journalEntry.UpdateSystemNote(noteform.NoteText, he.System.Name, EDCommander.Current.SyncToEdsm);
-                    discoveryform.NoteChanged(this, he);
+                    DiscoveryForm.NoteChanged(this, he);
                 }
             }
         }
@@ -1077,7 +1077,7 @@ namespace EDDiscovery.UserControls
             Actions.ActionVars.HistoryEventVars(eventvars, rightclickhe, "Event");     // if HE is null, ignored
             Actions.ActionVars.ShipBasicInformation(eventvars, rightclickhe?.ShipInformation, "Event");     // if He null, or si null, ignore
             Actions.ActionVars.SystemVars(eventvars, rightclickhe?.System, "Event");
-            discoveryform.LogLine(eventvars.ToString(separ: Environment.NewLine));
+            DiscoveryForm.LogLine(eventvars.ToString(separ: Environment.NewLine));
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1086,22 +1086,22 @@ namespace EDDiscovery.UserControls
             if (json != null)
             {
                 SetClipboardText(json);
-                discoveryform.LogLine(json);
+                DiscoveryForm.LogLine(json);
             }
         }
 
         private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BookmarkHelpers.ShowBookmarkForm(discoveryform, discoveryform, rightclickhe.System, null);
+            BookmarkHelpers.ShowBookmarkForm(DiscoveryForm, DiscoveryForm, rightclickhe.System, null);
         }
 
         private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (discoveryform.history.Count - rightclickhe.EntryNumber + 1)) : 0;
+            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.history.Count - rightclickhe.EntryNumber + 1)) : 0;
             int selrow = dataGridViewTravel.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)
@@ -1140,7 +1140,7 @@ namespace EDDiscovery.UserControls
                 quickMarkJIDs.Remove(rightclickhe.journalEntry.Id);
 
             var str = quickMarkJIDs.Select(x => x.ToStringInvariant()).ToArray().Join(';');
-            PutSetting(dbBookmarks + ":" + discoveryform.history.CommanderId.ToStringInvariant(), str);
+            PutSetting(dbBookmarks + ":" + DiscoveryForm.history.CommanderId.ToStringInvariant(), str);
             UpdateQuickMarkComboBox();
         }
 
@@ -1189,7 +1189,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
             if (res != null)
             {
                 fieldfilter = res;
@@ -1217,7 +1217,7 @@ namespace EDDiscovery.UserControls
         private void showSystemVisitedForeColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting(dbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
-            HistoryChanged(discoveryform.history);
+            HistoryChanged(DiscoveryForm.history);
         }
 
         #endregion
@@ -1228,7 +1228,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                var mcmr = discoveryform.history.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
+                var mcmr = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
                 List<QuickJSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, mcmr);
 
                 foreach (var j in list)
@@ -1245,33 +1245,33 @@ namespace EDDiscovery.UserControls
                 }
 
                 string json = rightclickhe.journalEntry.GetJsonString();
-                discoveryform.LogLine(json);
+                DiscoveryForm.LogLine(json);
 
                 EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass(EDCommander.Current);
                 string str = inara.ToJSONString(list);
-                discoveryform.LogLine(str);
+                DiscoveryForm.LogLine(str);
                 //System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
 
                 if (list.Count > 0)
                 {
                     string strres = inara.Send(list);
-                    discoveryform.LogLine(strres);
+                    DiscoveryForm.LogLine(strres);
                 }
                 else
-                    discoveryform.LogLine("No Events");
+                    DiscoveryForm.LogLine("No Events");
             }
         }
 
         private void runEntryThroughProfileSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.CheckActionProfile(rightclickhe);
+            DiscoveryForm.CheckActionProfile(rightclickhe);
         }
 
         private void runSelectionThroughIGAUDebugToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rightclickhe != null)
             {
-                EliteDangerousCore.IGAU.IGAUSync.NewEvent(discoveryform.LogLine, rightclickhe);
+                EliteDangerousCore.IGAU.IGAUSync.NewEvent(DiscoveryForm.LogLine, rightclickhe);
             }
         }
 
@@ -1301,7 +1301,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                discoveryform.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, rightclickhe), true);
+                DiscoveryForm.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.history, rightclickhe), true);
             }
 
         }
@@ -1309,7 +1309,7 @@ namespace EDDiscovery.UserControls
         private void travelGridInDebugModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting(dbDebugMode, travelGridInDebugModeToolStripMenuItem.Checked);
-            HistoryChanged(discoveryform.history);
+            HistoryChanged(DiscoveryForm.history);
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1318,7 +1318,7 @@ namespace EDDiscovery.UserControls
             string lasttype = "";
             int lasttypecount = 0;
 
-            discoveryform.ActionController.AsyncMode = false;     // to force it to do all the action code before returning..
+            DiscoveryForm.ActionController.AsyncMode = false;     // to force it to do all the action code before returning..
 
             if (dataGridViewTravel.SelectedRows.Count > 0)
             {
@@ -1335,13 +1335,13 @@ namespace EDDiscovery.UserControls
                         lasttype = he.journalEntry.EventTypeStr;
                         lasttypecount = (same) ? ++lasttypecount : 0;
 
-                        discoveryform.ActionController.SetPeristentGlobal("GlobalSaySaid", "");
+                        DiscoveryForm.ActionController.SetPeristentGlobal("GlobalSaySaid", "");
                         BaseUtils.FunctionHandlers.SetRandom(new Random(rw.Index + 1));
-                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+                        DiscoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
 
                         string json = he.journalEntry.GetJsonString();
 
-                        string s = discoveryform.ActionController.Globals["GlobalSaySaid"];
+                        string s = DiscoveryForm.ActionController.Globals["GlobalSaySaid"];
 
                         if (s.Length > 0 && !s.Equals(laststring))
                         {

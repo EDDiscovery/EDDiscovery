@@ -244,10 +244,10 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            discoveryform.OnNewTarget += RefreshTargetDisplay;
-            discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
-            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
+            DiscoveryForm.OnNewTarget += RefreshTargetDisplay;
+            DiscoveryForm.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
+            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnThemeChanged += Discoveryform_OnThemeChanged;
 
             panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
 
@@ -256,9 +256,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnNewTarget -= RefreshTargetDisplay;
-            discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
-            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewTarget -= RefreshTargetDisplay;
+            DiscoveryForm.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
+            DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
 
             PutSetting(dbOSave, BaseUtils.LineStore.ToString(Lines));
             PutSetting(dbSelection, Selection);
@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
         {
             if (obj is EliteDangerousCore.UIEvents.UIFuel && travelhistoryisattop) // fuel UI update the SI information globally.  if tracking at the top..
             {
-                var tophe = discoveryform.history.GetLast;      // we feed in the top, which is being updated by EDDiscoveryControllerNewEntry with the latest fuel
+                var tophe = DiscoveryForm.history.GetLast;      // we feed in the top, which is being updated by EDDiscoveryControllerNewEntry with the latest fuel
                 if (tophe != null)   // paranoia
                 {
                     System.Diagnostics.Debug.WriteLine($"UI Top he Fuel {tophe.EventTimeUTC} {tophe.ShipInformation.FuelLevel} {tophe.ShipInformation.ReserveFuelCapacity}");
@@ -297,7 +297,7 @@ namespace EDDiscovery.UserControls
                 var j = ((EliteDangerousCore.UIEvents.UIFSDTarget)obj).FSDTarget;
                 if (lasttarget == null || j.StarSystem != lasttarget.StarSystem)       // a little bit of debouncing, see if the target info has changed
                 {
-                    if ( (discoveryform.history.GetLast?.FSDJumpSequence??false)  == true) 
+                    if ( (DiscoveryForm.history.GetLast?.FSDJumpSequence??false)  == true) 
                     {
                         System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got, but in fsd sequence, pend it");
                         pendingtarget = j;
@@ -325,8 +325,8 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            System.Diagnostics.Debug.WriteLine($"Sysinfo {displaynumber} : Cursor {he.Index} {he.EventSummary}");
-            travelhistoryisattop = he == discoveryform.history.GetLast;      // see if tracking at top
+            System.Diagnostics.Debug.WriteLine($"Sysinfo {DisplayNumber} : Cursor {he.Index} {he.EventSummary}");
+            travelhistoryisattop = he == DiscoveryForm.history.GetLast;      // see if tracking at top
 
             bool duetosystem = last_he == null;
             bool duetostatus = false;
@@ -363,7 +363,7 @@ namespace EDDiscovery.UserControls
         private async void Display(HistoryEntry he) 
         {
             last_he = he;
-            var hl = discoveryform.history;
+            var hl = DiscoveryForm.history;
 
             if (last_he != null)
             {
@@ -491,7 +491,7 @@ namespace EDDiscovery.UserControls
                     {
                         var suit = hl.SuitList.Suit(cursuit,he.Suits);                // get suit
                         textBoxShip.Text = suit?.FriendlyName ?? "???";
-                        var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(he.Loadouts);         // get current loadout ID, or 0 if none
+                        var curloadout = DiscoveryForm.history.SuitLoadoutList.CurrentID(he.Loadouts);         // get current loadout ID, or 0 if none
 
                         if ( curloadout != 0 )
                         {
@@ -562,7 +562,7 @@ namespace EDDiscovery.UserControls
                             bodyname = lastdestination.Name;    // else body
                           //  System.Diagnostics.Debug.WriteLine($"Destination select body {lastdestination.BodyID}");
 
-                            var ss = await discoveryform.history.StarScan.FindSystemAsync(discoveryform.history.GetLast.System, false);
+                            var ss = await DiscoveryForm.history.StarScan.FindSystemAsync(DiscoveryForm.history.GetLast.System, false);
                             if (IsClosed)       //ASYNC! warning! may have closed.
                                 return;
 
@@ -592,7 +592,7 @@ namespace EDDiscovery.UserControls
 
                         if (sys != null && sys.HasCoordinate)       // Bingo!
                         {
-                            double dist = sys.Distance(discoveryform.history.GetLast.System);       // we must have a last to be here
+                            double dist = sys.Distance(DiscoveryForm.history.GetLast.System);       // we must have a last to be here
                             distance = $"{dist:N2}ly";
 
                             if (ji != null) // and therefore fsd is non null
@@ -754,16 +754,16 @@ namespace EDDiscovery.UserControls
                     if ( sc != null)
                     {
                         TargetClass.SetTargetOnSystem(sc.Name, sc.X, sc.Y, sc.Z);
-                        discoveryform.NewTargetSet(this);
+                        DiscoveryForm.NewTargetSet(this);
                     }
                     else
                     {
-                        GalacticMapObject gmo = discoveryform.galacticMapping.Find(textBoxTarget.Text, true);       // find gmo, any part
+                        GalacticMapObject gmo = DiscoveryForm.galacticMapping.Find(textBoxTarget.Text, true);       // find gmo, any part
                         if (gmo != null)
                         {
                             TargetClass.SetTargetOnGMO(gmo.Name,gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
                             textBoxTarget.Text = gmo.Name;
-                            discoveryform.NewTargetSet(this);
+                            DiscoveryForm.NewTargetSet(this);
                         }
                         else
                             Console.Beep(256, 200); // beep boop!
@@ -772,7 +772,7 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     TargetClass.ClearTarget();          // empty means clear
-                    discoveryform.NewTargetSet(this);
+                    DiscoveryForm.NewTargetSet(this);
                 }
             }
         }
@@ -790,7 +790,7 @@ namespace EDDiscovery.UserControls
                 textBoxTarget.Select(0, 0);
                 textBoxTargetDist.Text = "No Pos".T(EDTx.NoPos);
 
-                HistoryEntry cs = discoveryform.history.GetLastWithPosition();
+                HistoryEntry cs = DiscoveryForm.history.GetLastWithPosition();
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 

@@ -105,8 +105,8 @@ namespace EDDiscovery.UserControls
 
             isHistoric = GetSetting(dbHistoricMatsSave, false);
 
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             var enumlist = new Enum[] { EDTx.UserControlSynthesis_UpgradeCol, EDTx.UserControlSynthesis_Level, EDTx.UserControlSynthesis_MaxCol, EDTx.UserControlSynthesis_WantedCol, EDTx.UserControlSynthesis_Available, EDTx.UserControlSynthesis_Notes, EDTx.UserControlSynthesis_Recipe };
             var enumlisttt = new Enum[] { EDTx.UserControlSynthesis_buttonRecipeFilter_ToolTip, EDTx.UserControlSynthesis_buttonFilterLevel_ToolTip, EDTx.UserControlSynthesis_buttonMaterialFilter_ToolTip, EDTx.UserControlSynthesis_buttonClear_ToolTip, EDTx.UserControlSynthesis_chkNotHistoric_ToolTip, EDTx.UserControlSynthesis_extCheckBoxWordWrap_ToolTip };
@@ -128,8 +128,8 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewSynthesis);
 
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             PutSetting(dbOSave, RowToRecipe.ToString(","));
             PutSetting(dbWSave, WantedPerRecipe.ToString(","));
@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                last_he = discoveryform.history.GetLast;
+                last_he = DiscoveryForm.history.GetLast;
                 Display();
             }
         }
@@ -189,8 +189,8 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                var totalmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
-                var mclmats = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
+                var totalmcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+                var mclmats = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
 
                 int fdrow = dataGridViewSynthesis.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 
