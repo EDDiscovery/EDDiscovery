@@ -580,8 +580,8 @@ namespace EDDiscovery.UserControls
         {
             var he = CurrentHE();
             if ( he != null )
-            { 
-                System.Diagnostics.Trace.WriteLine($"Travel Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell.RowIndex}:{dataGridViewTravel.CurrentCell.ColumnIndex}");
+            {
+                System.Diagnostics.Trace.WriteLine($"Travel Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell?.RowIndex}:{dataGridViewTravel.CurrentCell?.ColumnIndex}");
                 RequestPanelOperation?.Invoke(this, he);
             }
         }
