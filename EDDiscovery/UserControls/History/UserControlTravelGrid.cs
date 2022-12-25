@@ -94,8 +94,6 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            System.Diagnostics.Trace.WriteLine($"TGR={EDDOptions.Instance.EnableTGRightDebugClicks}");
-
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
 
@@ -404,14 +402,14 @@ namespace EDDiscovery.UserControls
                 {
                     for (int r = dataGridViewTravel.Rows.Count - 1; r >= filter.MaximumNumberOfItems; r--)
                     {
-                        System.Diagnostics.Debug.WriteLine("TG Removed as too much " + r);
+                        //System.Diagnostics.Debug.WriteLine("TG Removed as too much " + r);
                         dataGridViewTravel.Rows.RemoveAt(r);
                     }
                 }
 
                 if (checkBoxCursorToTop.Checked)   // Move focus to first row
                 {
-                    System.Diagnostics.Trace.WriteLine("TG Auto selected top row on new entry");
+                    //System.Diagnostics.Trace.WriteLine("TG Auto selected top row on new entry");
                     dataGridViewTravel.ClearSelection();
                     dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
                     FireChangeSelection();
@@ -538,7 +536,7 @@ namespace EDDiscovery.UserControls
                 var he = CurrentHE();
                 if (he != null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
+                    //System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
                     sender.PerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
                     return true;
                 }
@@ -565,7 +563,7 @@ namespace EDDiscovery.UserControls
         public void GotoPosByJID(long jid)       // -1 if fails
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-            System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
+            //System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
 
             if (rowno >= 0)
             {
@@ -581,7 +579,7 @@ namespace EDDiscovery.UserControls
             var he = CurrentHE();
             if ( he != null )
             {
-                System.Diagnostics.Trace.WriteLine($"Travel Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell?.RowIndex}:{dataGridViewTravel.CurrentCell?.ColumnIndex}");
+                //System.Diagnostics.Trace.WriteLine($"Travel Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell?.RowIndex}:{dataGridViewTravel.CurrentCell?.ColumnIndex}");
                 RequestPanelOperation?.Invoke(this, he);
             }
         }
@@ -663,7 +661,7 @@ namespace EDDiscovery.UserControls
 
             if ( rowsbyjournalid.TryGetValue(he.Journalid,out DataGridViewRow row))
             {
-                System.Diagnostics.Debug.WriteLine($"TravelGrid update note due to external {row.Index} {he.GetNoteText} {he.EventSummary}");
+                //System.Diagnostics.Debug.WriteLine($"TravelGrid update note due to external {row.Index} {he.GetNoteText} {he.EventSummary}");
                 string s = he.GetNoteText;  
                 row.Cells[ColumnNote.Index].Value = s;
             }
@@ -1345,7 +1343,7 @@ namespace EDDiscovery.UserControls
 
                         if (s.Length > 0 && !s.Equals(laststring))
                         {
-                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json?.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
+                            //System.Diagnostics.Debug.WriteLine("Call ts(j='" + json?.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
                             laststring = s;
                         }
                     }
