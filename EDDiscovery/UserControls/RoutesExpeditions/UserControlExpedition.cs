@@ -25,7 +25,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 
 namespace EDDiscovery.UserControls
 {
@@ -186,44 +185,7 @@ namespace EDDiscovery.UserControls
 
         #region Grid Display Route and update when required
 
-        // insert or append (insertindex=-1) to the grid, either systementries, Isystems or strings
-        public void AppendOrInsertSystems(int insertIndex, IEnumerable<object> sysnames, bool updatesystemrows = true)
-        {
-            int i = 0;
-            foreach (var system in sysnames)
-            {
-                object[] data;
-
-                if (system is string)
-                {
-                    data = new object[] { system, "" };
-                }
-                else if (system is SavedRouteClass.SystemEntry)
-                {
-                    var se = (SavedRouteClass.SystemEntry)system;
-                    data = new object[] { se.SystemName, se.Note};
-                }
-                else
-                {
-                    var se = (ISystem)system;
-                    data = new object[] { se.Name, ""};
-                }
-
-                if (((string)data[0]).HasChars())       // must have a name
-                {
-                    if (insertIndex < 0)
-                        dataGridView.Rows.Add(data);
-                    else
-                        dataGridView.Rows.Insert(insertIndex++, data);
-                }
-
-                i++;
-            }
-
-            if (updatesystemrows)
-                UpdateSystemRows();
-        }
-
+  
         private void ClearTable()
         {
             dataGridView.Rows.Clear();
@@ -238,6 +200,7 @@ namespace EDDiscovery.UserControls
         // this is an async function - which needs very special handling
         // scan rows indicated and fill in other columns
         // normal to do this with edsmcheck off, the auto edsm routing calls it with on
+
         private async void UpdateSystemRows(int rowstart = 0, int rowendinc = int.MaxValue, bool edsmcheck = false)
         {
             Cursor = Cursors.WaitCursor;
@@ -245,7 +208,7 @@ namespace EDDiscovery.UserControls
             labelBusy.Visible = true;
             labelBusy.Update();
 
-            ISystem currentSystem = DiscoveryForm.history.CurrentSystem(); // may be null
+            ISystem historySystem = DiscoveryForm.history.CurrentSystem(); // may be null
 
             bool showplanets = displayfilters.Contains("planets");
             bool showstars = displayfilters.Contains("stars");
@@ -263,176 +226,169 @@ namespace EDDiscovery.UserControls
             bool showorganics = displayfilters.Contains("organics");
             bool disablegmoshow = displayfilters.Contains("gmoinfooff");
 
-            ISystem startsystem = await LookupSystem(0, edsmcheck);
-            ISystem endsystem = await LookupSystem(dataGridView.GetLastRowWithValue(), edsmcheck);
-            if (IsClosed)
-                return;
-                
-            for (int rowindex = rowstart; rowindex <= Math.Min(rowendinc, dataGridView.Rows.Count-1); rowindex++)
+            for (int rowindex = rowstart; rowindex <= Math.Min(rowendinc, dataGridView.Rows.Count - 1); rowindex++)
             {
-                DataGridViewRow row = dataGridView.Rows[rowindex];
+                SystemClass sys = GetSystemClass(rowindex);
 
-                string sysname = row.Cells[0].Value as string;       // value may be null, so protect (2999)
-
-                if (!sysname.HasChars())
+                if (sys == null)
                     continue;
 
-                string note = SystemNoteClass.GetTextNotesOnSystem(sysname);
+                DataGridViewRow row = dataGridView.Rows[rowindex];
 
-                BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sysname);
+                string note = SystemNoteClass.GetTextNotesOnSystem(sys.Name);
+
+                BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sys.Name);
                 if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
                     note = note.AppendPrePad(bkmark.Note, "; ");
 
                 if (!disablegmoshow)
                 {
-                    var gmo = DiscoveryForm.galacticMapping.Find(sysname);
+                    var gmo = DiscoveryForm.galacticMapping.Find(sys.Name);
                     if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
                         note = note.AppendPrePad(gmo.Description, "; ");
                 }
 
                 row.Cells[ColumnHistoryNote.Index].Value = note;
 
-                // find in history, and the DB, and EDSM, the system..
+                row.Cells[Visits.Index].Value = DiscoveryForm.history.Visits(sys.Name).ToString("0");
 
-                if ( edsmcheck )    // mark if edsm checked, so we don't do it again
-                    row.Cells[0].Tag = edsmcheck;       // if been looked up via EDSM, do first before async lookup as it will return immediately due to await
+                // if not, try a lookup
+                if (!sys.HasCoordinate)
+                {
+                    //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
+                    var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.galacticMapping, edsmcheck);
+                    //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
+                    if (IsClosed)        // because its async, the await returns with void, and then this is called back, and we may be closing.
+                        return;
 
-                //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
-                var lookup = edsmcheck;     // here so you can turn it off for speed
-                var sys = await SystemCache.FindSystemAsync(sysname, DiscoveryForm.galacticMapping, lookup);
-                //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
-                if (IsClosed)        // because its async, the await returns with void, and then this is called back, and we may be closing.
+                    if (syslookup != null)
+                    {
+                        //System.Diagnostics.Debug.WriteLine($"Lookup for {sys.Name} Found co-ords");
+                        row.Cells[ColumnX.Index].Value = syslookup.X.ToString("0.##");
+                        row.Cells[ColumnY.Index].Value = syslookup.Y.ToString("0.##");
+                        row.Cells[ColumnZ.Index].Value = syslookup.Z.ToString("0.##");
+                        sys = new SystemClass(syslookup);
+                    }
+                }
+
+                row.Tag = sys;      // always non null, but may have no co-ord
+
+                row.Cells[0].Style.ForeColor = sys.HasCoordinate ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
+
+                SystemClass prevrowsystem = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as SystemClass : null;
+                double? dist = sys.HasCoordinate && prevrowsystem != null && prevrowsystem.HasCoordinate ? prevrowsystem.Distance(sys) : default(double?);
+                row.Cells[Distance.Index].Tag = dist;       // save distance for accumulator
+                row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("0.#") : "";
+
+                double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
+                row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("0.#") : "";
+
+                StarScan.SystemNode sysnode = await DiscoveryForm.history.StarScan.FindSystemAsync(sys, edsmcheck); 
+
+                if (IsClosed)        // because its async, may be called during closedown. stop this
                     return;
 
-                row.Tag = sys;      // store tag
-
-                row.Cells[0].Style.ForeColor = (sys?.HasCoordinate ?? false) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
-
-                row.Cells[Visits.Index].Value = DiscoveryForm.history.Visits(sysname).ToString("0");
-
-                if ( sys == null )      // no system found
+                if (sysnode != null)
                 {
-                    row.Cells[Distance.Index].Tag = null;
-                    row.Cells[Distance.Index].Value =
-                    row.Cells[ColumnX.Index].Value =
-                    row.Cells[ColumnY.Index].Value =
-                    row.Cells[ColumnZ.Index].Value =
-                    row.Cells[CurDist.Index].Value =
+                    row.Cells[Scans.Index].Value = sysnode.StarPlanetsScannednonEDSM().ToString("0");
+                    row.Cells[FSSBodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
+                    row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsScanned().ToString("0");
+                    row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
+
+                    string info = "";
+                    foreach (var sn in sysnode.Bodies)
+                    {
+                        if (sn?.ScanData != null)  // must have scan data..
+                        {
+                            if (
+                               (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||     // major selectors for line display
+                               (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
+                               (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
+                               (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                               )
+                            {
+                                string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
+                                                            showvol, showv, showsi, showg,
+                                                            showatmos && sn.ScanData.IsLandable, showrings,
+                                                            lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
+
+                                info = info.AppendPrePad(bs, Environment.NewLine);
+                            }
+                        }
+
+                    }
+
+                    row.Cells[Info.Index].Value = info.Trim();
+                }
+                else
+                {
                     row.Cells[Scans.Index].Value =
                     row.Cells[FSSBodies.Index].Value =
                     row.Cells[KnownBodies.Index].Value =
                     row.Cells[Stars.Index].Value = "";
-                    row.Cells[Info.Index].Value = "System not known".T(EDTx.UserControlExpedition_EDSMUnk);
-                }
-                else 
-                {
-                    ISystem prevlinesys = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as ISystem : null;
-
-                    double? dist = (prevlinesys?.HasCoordinate ?? false) ? sys.Distance(prevlinesys) : default(double?);
-                    row.Cells[Distance.Index].Tag = dist;       // record in tag for computation laster
-                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("0.#") : "";
-
-                    row.Cells[ColumnX.Index].Value = sys.X.ToString("0.#");
-                    row.Cells[ColumnY.Index].Value = sys.Y.ToString("0.#");
-                    row.Cells[ColumnZ.Index].Value = sys.Z.ToString("0.#");
-
-                    row.Cells[CurDist.Index].Value = (currentSystem?.HasCoordinate ?? false) ? sys.Distance(currentSystem).ToString("0.#") : "";
-
-                    StarScan.SystemNode sysnode = await DiscoveryForm.history.StarScan.FindSystemAsync(sys, lookup);
-
-                    if (IsClosed)        // because its async, may be called during closedown. stop this
-                        return;
-
-                    if (sysnode != null)
-                    {
-                        row.Cells[Scans.Index].Value = sysnode.StarPlanetsScannednonEDSM().ToString("0");
-                        row.Cells[FSSBodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
-                        row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsScanned().ToString("0");
-                        row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
-
-                        string info = "";
-                        foreach (var sn in sysnode.Bodies)
-                        {
-                            if (sn?.ScanData != null)  // must have scan data..
-                            {
-                                if (
-                                   (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||     // major selectors for line display
-                                   (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
-                                   (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
-                                   (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
-                                   )
-                                {
-                                    string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
-                                                                showvol, showv, showsi, showg,
-                                                                showatmos && sn.ScanData.IsLandable, showrings,
-                                                                lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
-
-                                    info = info.AppendPrePad(bs, Environment.NewLine);
-                                }
-                            }
-
-                        }
-
-                        row.Cells[Info.Index].Value = info.Trim();
-                    }
-                    else
-                    {
-                        row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "No Body information found on EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
-                    }
+                    row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "No Body information found on EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
                 }
             }
 
             {
-                ISystem firstsys = null;
-                ISystem lastsys = null;
+                SystemClass firstsys = dataGridView.Rows[0].Tag as SystemClass;     // may be null, may not have distance
+                if (firstsys != null && !firstsys.HasCoordinate)        // no co-ord means firstsys is useless
+                    firstsys = null;
+
+                SystemClass lastsys = null;
+                for (int i = dataGridView.RowCount - 1; i >= 0; i--)
+                {
+                    if (dataGridView.Rows[i].Tag != null)
+                    {
+                        lastsys = dataGridView.Rows[i].Tag as SystemClass;      // find last filled one
+                        if (!lastsys.HasCoordinate)                             // no coord, useless
+                            lastsys = null;
+                        break;
+                    }
+                }
+
                 double totaldistance = 0;
 
                 for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
                 {
                     var row = dataGridView.Rows[rowindex];
-                    var sys = row.Tag as ISystem;
+                    var sys = row.Tag as SystemClass;
 
-                    if (sys?.HasCoordinate ?? false)
-                    {
-                        if (firstsys == null)
-                            firstsys = sys;
+                    if (row.Cells[Distance.Index].Tag != null)
+                        totaldistance += (double)row.Cells[Distance.Index].Tag;
 
-                        lastsys = sys;
-
-                        double? ds = row.Cells[Distance.Index].Tag as double?;
-                        if (ds != null)
-                        {
-                            totaldistance += ds.Value;
-                        }
-
-                        row.Cells[ColumnDistStart.Index].Value = startsystem != null ? sys.Distance(startsystem).ToString("N1") : "";
-                        row.Cells[ColumnDistanceRemaining.Index].Value = endsystem != null ? sys.Distance(endsystem).ToString("N1") : "";
-                    }
-                    else
-                    {
-                        row.Cells[ColumnDistStart.Index].Value = row.Cells[ColumnDistanceRemaining.Index].Value = "";
-                    }
+                    bool syshascoord = sys?.HasCoordinate ?? false;
+                    row.Cells[ColumnDistStart.Index].Value = firstsys != null && syshascoord ? sys.Distance(firstsys).ToString("N1") : "";
+                    row.Cells[ColumnDistanceRemaining.Index].Value = lastsys != null && syshascoord ? sys.Distance(lastsys).ToString("N1") : "";
                 }
 
-                if (firstsys != null)      // therefore lastsys must too
-                {
-                    txtCmlDistance.Text = totaldistance.ToString("0.#") + " ly";
-                    txtP2PDIstance.Text = firstsys.Distance(lastsys).ToString("0.#") + "ly";
-                }
-                else
-                    txtCmlDistance.Text = txtP2PDIstance.Text = "";
+                txtCmlDistance.Text = totaldistance.ToString("0.#") + " ly";
+                txtP2PDIstance.Text = firstsys != null && lastsys != null ? firstsys.Distance(lastsys).ToString("0.#") + "ly" : "?";
             }
 
             Cursor = Cursors.Default;
-
             labelBusy.Visible = false;
             updatingsystemrows = false;
         }
 
-        private Task<ISystem> LookupSystem(int row, bool checkedsm)
+        private SystemClass GetSystemClass(int rown)
         {
-            string name = (row >= 0 && row < dataGridView.RowCount && dataGridView[0, row].Value != null) ? (string)dataGridView[0, row].Value : "xxxRubbishxxx";
-            return SystemCache.FindSystemAsync(name, null, checkedsm);
+            if (rown >= 0 && rown < dataGridView.Rows.Count)
+            {
+                DataGridViewRow row = dataGridView.Rows[rown];
+                string name = (string)row.Cells[SystemName.Index].Value;
+                if (name.HasChars())
+                {
+                    double xpos = ((string)row.Cells[ColumnX.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
+                    double ypos = ((string)row.Cells[ColumnY.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
+                    double zpos = ((string)row.Cells[ColumnZ.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
+
+                    bool knownpos = xpos != SavedRouteClass.SystemEntry.NotKnown && ypos != SavedRouteClass.SystemEntry.NotKnown && zpos != SavedRouteClass.SystemEntry.NotKnown;
+
+                    return knownpos ? new SystemClass(name, xpos, ypos, zpos) : new SystemClass(name);
+                }
+            }
+            return null;
         }
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
@@ -440,15 +396,14 @@ namespace EDDiscovery.UserControls
             if (checkBoxEDSM.Checked == false)
                 return;
 
-            for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
+            for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows
             {
                 var row = dataGridView.Rows[rowindex];
                 var name = row.Cells[0].Value as string;
 
-                if (row.Cells[0].Tag== null && name.HasChars() )  // if cells[0] indicating EDSM lookup is null, and name, do edsm check
+                if ( name.HasChars() && row.Cells[0].Tag == null  )             // if not edsm processed..
                 {
-                    var sys = row.Tag as ISystem;
-
+                    row.Cells[0].Tag = true;
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - EDSM lookup on {rowindex} {dataGridView[0, rowindex].Value}");
                     UpdateSystemRows(rowindex, rowindex, true);
                     break;
@@ -722,7 +677,7 @@ namespace EDDiscovery.UserControls
                     {
                         var jroute = navroutes[i.Value].journalEntry as JournalNavRoute;
 
-                        AppendOrInsertSystems(-1, jroute.Route.Select(x => x.StarSystem));
+                        AppendOrInsertSystems(-1, jroute.Route.Select(r => new SavedRouteClass.SystemEntry(r.StarSystem, "", r.StarPos.X, r.StarPos.Y, r.StarPos.Z)));
                     }
                 };
                 navroutefilter.CloseOnChange = true;
@@ -742,7 +697,7 @@ namespace EDDiscovery.UserControls
             var route = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
             if (route?.Route != null)
             {
-                AppendOrInsertSystems(-1, route.Route.Select(s => s.StarSystem));
+                AppendOrInsertSystems(-1, route.Route.Select(r => new SavedRouteClass.SystemEntry(r.StarSystem, "", r.StarPos.X, r.StarPos.Y, r.StarPos.Z)));
             }
         }
         private void buttonExtExport_Click(object sender, EventArgs e)
@@ -776,7 +731,7 @@ namespace EDDiscovery.UserControls
 
                     foreach ( var syse in rt.Systems)
                     {
-                        ISystem sys = SystemCache.FindSystem(syse.SystemName, DiscoveryForm.galacticMapping, true);
+                        ISystem sys = SystemCache.FindSystem(syse.Name, DiscoveryForm.galacticMapping, true);
                         if (sys != null)
                         {
                             var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
@@ -850,7 +805,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
         private void extButtonShow3DMap_Click(object sender, EventArgs e)
         {
             if (updatingsystemrows)
@@ -888,7 +842,7 @@ namespace EDDiscovery.UserControls
             FindSystemsUserControl usc = new FindSystemsUserControl();
             usc.ReturnSystems = (List<Tuple<ISystem, double>> syslist) =>
             {
-                AppendOrInsertSystems(-1,syslist.Select(x=>x.Item1.Name.Trim()));
+                AppendOrInsertSystems(-1, syslist.Select(r=> new SavedRouteClass.SystemEntry(r.Item1.Name.Trim(),"",r.Item1.X,r.Item1.Y,r.Item1.Z)));
                 f.ReturnResult(DialogResult.OK);
             };
 
@@ -1127,7 +1081,11 @@ namespace EDDiscovery.UserControls
 
                 var rows = dataGridView.SelectedRowAndCount(true, true);   // ascending, use cells, default is 0, and remove new row
                 // make up a systementry with the name, and possibly the note
-                var se = textlines.Where(x => x.Length > 0 && x[0].HasChars()).Select(y => new SavedRouteClass.SystemEntry(y[0], y.Length >= 2 ? y[1] : ""));
+                var se = textlines.Where(x => x.Length > 0 && x[0].HasChars()).Select(r => new SavedRouteClass.SystemEntry(r[0], r.Length >= 2 ? r[1] : "",
+                                        r.Length >= 3 ? r[2].InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown) : SavedRouteClass.SystemEntry.NotKnown,
+                                        r.Length >= 4 ? r[3].InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown) : SavedRouteClass.SystemEntry.NotKnown,
+                                        r.Length >= 5 ? r[4].InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown) : SavedRouteClass.SystemEntry.NotKnown
+                                        ));
 
                 AppendOrInsertSystems(rows.Item1, se);
             }
@@ -1227,16 +1185,11 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewRouteSystems_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 0)
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridView.RowCount)
             {
-                var row = dataGridView.Rows[e.RowIndex];
-                var cellvalue = row.Cells[0].Value as string;
-                if ( cellvalue.HasChars() && (row.Tag == null || !((ISystem)row.Tag).Name.Equals(cellvalue, StringComparison.InvariantCultureIgnoreCase)))
-                {
-                    System.Diagnostics.Debug.WriteLine("Expedition- Invalidate tag as text has changed");
-                    row.Cells[0].Tag = row.Tag = null;        // clear system lookup
-                    UpdateSystemRows(e.RowIndex, e.RowIndex);
-                }
+                dataGridView.Rows[e.RowIndex].Cells[0].Tag = null;          // reset edsm
+                System.Diagnostics.Debug.WriteLine($"Update row index and next one only");
+                UpdateSystemRows(e.RowIndex, e.RowIndex+1);
             }
         }
 

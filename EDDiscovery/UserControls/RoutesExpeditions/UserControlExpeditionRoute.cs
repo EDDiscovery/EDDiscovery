@@ -11,9 +11,11 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using ExtendedControls;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
@@ -23,6 +25,45 @@ namespace EDDiscovery.UserControls
     public partial class UserControlExpedition
     {
         #region Routes
+
+        // insert or append (insertindex=-1) to the grid, either systementry, Isystems or strings
+        public void AppendOrInsertSystems(int insertIndex, IEnumerable<object> sysnames, bool updatesystemrows = true)
+        {
+            int i = 0;
+            foreach (var system in sysnames)
+            {
+                object[] data;
+
+                if (system is string)
+                {
+                    data = new object[] { system, "" };
+                }
+                else if (system is SavedRouteClass.SystemEntry)
+                {
+                    var se = (SavedRouteClass.SystemEntry)system;
+                    bool known = se.HasCoordinate;
+                    data = new object[] { se.Name, se.Note, known ? se.X.ToString("0.##") : "", known ? se.Y.ToString("0.##") : "", known ? se.Z.ToString("0.##") : "" };
+                }
+                else
+                {
+                    var se = (ISystem)system;
+                    data = new object[] { se.Name, "" };
+                }
+
+                if (((string)data[0]).HasChars())       // must have a name
+                {
+                    if (insertIndex < 0)
+                        dataGridView.Rows.Add(data);
+                    else
+                        dataGridView.Rows.Insert(insertIndex++, data);
+                }
+
+                i++;
+            }
+
+            if (updatesystemrows)
+                UpdateSystemRows();
+        }
 
         // if the data in the grid is set, and different to the loadedroute, or the grid is not empty.  
         // not dirty if the grid is empty (name and systems empty)
@@ -41,8 +82,14 @@ namespace EDDiscovery.UserControls
             route.Systems.Clear();
 
             var data = dataGridView.Rows.OfType<DataGridViewRow>()
-                .Where(r => r.Index < dataGridView.NewRowIndex && r.Cells[0].Value != null)
-                .Select(r => new SavedRouteClass.SystemEntry(r.Cells[0].Value as string, r.Cells[1].Value as string));
+                .Where(r => r.Index < dataGridView.NewRowIndex && (r.Cells[0].Value as string).HasChars())
+                .Select(r => new SavedRouteClass.SystemEntry(
+                                    (r.Cells[SystemName.Index].Value as string) ?? "", // sometimes they can end up null
+                                    (r.Cells[Note.Index].Value as string) ?? "",
+                                    ((string)r.Cells[ColumnX.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown),
+                                    ((string)r.Cells[ColumnY.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown),
+                                    ((string)r.Cells[ColumnZ.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown)
+                                    ));
 
             route.Systems.AddRange(data);
 

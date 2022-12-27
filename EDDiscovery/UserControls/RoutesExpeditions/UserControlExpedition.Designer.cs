@@ -61,10 +61,10 @@ namespace EDDiscovery.UserControls
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistanceRemaining = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -337,10 +337,10 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SystemName,
             this.Note,
-            this.Distance,
             this.ColumnX,
             this.ColumnY,
             this.ColumnZ,
+            this.Distance,
             this.ColumnDistStart,
             this.ColumnDistanceRemaining,
             this.CurDist,
@@ -381,33 +381,30 @@ namespace EDDiscovery.UserControls
             this.Note.HeaderText = "Note";
             this.Note.Name = "Note";
             // 
-            // Distance
-            // 
-            this.Distance.FillWeight = 25F;
-            this.Distance.HeaderText = "Dist.";
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            // 
             // ColumnX
             // 
             this.ColumnX.FillWeight = 25F;
             this.ColumnX.HeaderText = "X";
             this.ColumnX.Name = "ColumnX";
-            this.ColumnX.ReadOnly = true;
             // 
             // ColumnY
             // 
             this.ColumnY.FillWeight = 25F;
             this.ColumnY.HeaderText = "Y";
             this.ColumnY.Name = "ColumnY";
-            this.ColumnY.ReadOnly = true;
             // 
             // ColumnZ
             // 
             this.ColumnZ.FillWeight = 25F;
             this.ColumnZ.HeaderText = "Z";
             this.ColumnZ.Name = "ColumnZ";
-            this.ColumnZ.ReadOnly = true;
+            // 
+            // Distance
+            // 
+            this.Distance.FillWeight = 25F;
+            this.Distance.HeaderText = "Dist.";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
             // 
             // ColumnDistStart
             // 
@@ -966,12 +963,16 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private ExtendedControls.ExtButton extButtonNavRouteLatest;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insertRowAboveToolStripMenuItem;
+        private System.Windows.Forms.Label labelBusy;
+        private System.IO.Ports.SerialPort serialPort1;
         private ExtendedControls.ExtDataGridViewColumnAutoComplete SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnY;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnZ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistanceRemaining;
         private System.Windows.Forms.DataGridViewTextBoxColumn CurDist;
@@ -982,9 +983,5 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Stars;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHistoryNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
-        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem insertRowAboveToolStripMenuItem;
-        private System.Windows.Forms.Label labelBusy;
-        private System.IO.Ports.SerialPort serialPort1;
     }
 }

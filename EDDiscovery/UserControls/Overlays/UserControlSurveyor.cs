@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,7 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
  * 
  */
 using EliteDangerousCore;
@@ -41,7 +40,6 @@ namespace EDDiscovery.UserControls
         private string translatednavroutename = "";
         private SavedRouteClass currentRoute = null;
         private string lastsystemroute;
-//        private string lastroutetext = "";      // we have to hold this, because StartJump synthesises a system without co-ords, which would make route draw fail
 
         private ShipInformation shipinfo;   // and last ship info
         private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
@@ -1116,7 +1114,6 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} In DB its now '{GetSetting("route","???")}'");
 
             currentRoute = null;        // clear route and held text
-            //lastroutetext = "";
 
             if (name.HasChars())
             {
@@ -1125,21 +1122,25 @@ namespace EDDiscovery.UserControls
                     var route = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                     if (route?.Route != null)
                     {
-                        var systems = route.Route.Where(x => x.StarSystem.HasChars()).Select(y => y.StarSystem).ToArray();
+                        // pick out x/y/z to fill in route so it does not need any system lookup
+                        var systems = route.Route.Where(x => x.StarSystem.HasChars()).
+                                Select(rt => new SavedRouteClass.SystemEntry(rt.StarSystem,"",rt.StarPos.X,rt.StarPos.Y,rt.StarPos.Z)).ToList();
+
                         currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note
                         //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded Nav route with {systems.Length}");
                     }
                     else
                     {
-                        currentRoute = new SavedRouteClass(translatednavroutename, new string[] { });     // no known systems yet, but make a navroute so we have it selected
+                        currentRoute = new SavedRouteClass();
+                        currentRoute.Name = translatednavroutename;     // no known systems yet, but make a navroute so we have it selected
                         //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} No route available, loaded empty Nav route");
-
                     }
                 }
                 else
                 {
                     var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
+                    currentRoute.FillInCoordinates();                           // fill in any co-ords into DB - it may be in the DB without known co-ords
                     //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded route with {currentRoute?.Systems.Count}");
                 }
             }
