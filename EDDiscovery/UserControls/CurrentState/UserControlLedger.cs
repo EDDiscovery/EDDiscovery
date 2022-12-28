@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.Rows.Clear();
             extChartLedger.ClearSeriesPoints();
 
-            var ledger = DiscoveryForm.history.CashLedger;
+            var ledger = DiscoveryForm.History.CashLedger;
             transactioncountatdisplay = 0;
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("LD", true)} Ledger");
@@ -227,9 +227,9 @@ namespace EDDiscovery.UserControls
 
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
-            while(transactioncountatdisplay < DiscoveryForm.history.CashLedger.Transactions.Count)   // if new transaction
+            while(transactioncountatdisplay < DiscoveryForm.History.CashLedger.Transactions.Count)   // if new transaction
             {
-                Ledger.Transaction tx = DiscoveryForm.history.CashLedger.Transactions[transactioncountatdisplay];
+                Ledger.Transaction tx = DiscoveryForm.History.CashLedger.Transactions[transactioncountatdisplay];
 
                 var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
                 var row = CreateRow(tx, eventfilter, textBoxFilter.Text);
@@ -348,7 +348,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            var current_mc = DiscoveryForm.history.CashLedger;
+            var current_mc = DiscoveryForm.History.CashLedger;
 
             if ( current_mc != null )
             { 

@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                last_he = DiscoveryForm.history.GetLast;
+                last_he = DiscoveryForm.History.GetLast;
                 Display();
             }
         }
@@ -201,8 +201,8 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                var mcllist = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);      // mcl at this point
-                var lastengprog = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he);
+                var mcllist = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);      // mcl at this point
+                var lastengprog = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he);
 
                 int fdrow = dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 

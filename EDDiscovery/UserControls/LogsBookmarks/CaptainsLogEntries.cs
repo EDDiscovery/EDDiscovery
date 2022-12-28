@@ -425,7 +425,7 @@ namespace EDDiscovery.UserControls
         private void buttonNew_Click(object nu1, EventArgs nu2)
         {
             ClearDates();
-            HistoryEntry he = DiscoveryForm.history.GetLast;
+            HistoryEntry he = DiscoveryForm.History.GetLast;
             MakeNew(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow), he?.System.Name ?? "?", he?.WhereAmI ?? "?");
         }
 
@@ -540,7 +540,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.galacticMapping, true);
+            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, true);
             DiscoveryForm.Open3DMap(s);
         }
 
@@ -557,10 +557,10 @@ namespace EDDiscovery.UserControls
 
         private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.galacticMapping, true);
+            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, true);
 
             if ( sys != null )
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.history);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
 

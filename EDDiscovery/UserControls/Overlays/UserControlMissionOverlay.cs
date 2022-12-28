@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(DiscoveryForm.history.GetLast);
+            Display(DiscoveryForm.History.GetLast);
         }
 
         private void Display(HistoryEntry he)
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
 
                 DateTime hetime = currentHE.EventTimeUTC;
 
-                List<MissionState> ml = DiscoveryForm.history.MissionListAccumulator.GetMissionList(currentHE.MissionList);
+                List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionList(currentHE.MissionList);
                 List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
 
                 int vpos = 4;

@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
 
                 while (DrawCount > 0)       // loop around while >0.   The execute search aboves if DrawCount>0 until we get to DrawCount=1 at which point we display result
                 {
-                    var entries = DiscoveryForm.history.EntryOrder();
+                    var entries = DiscoveryForm.History.EntryOrder();
                     bool updateit = false;
 
                     if (DrawOnlySys != null)    // if filter by system
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
 
         private async Task<Dictionary<string, HistoryListQueries.Results>> ExecuteSearch(List<HistoryEntry> helist)
         {
-            DiscoveryForm.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
+            DiscoveryForm.History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
             var defaultvars = new BaseUtils.Variables();
             // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
 
             foreach (var searchname in searchesactive)
             {
-                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.history.StarScan, false); // execute the searches
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); // execute the searches
                 //System.Threading.Thread.Sleep(1000);
                 if (IsClosed)       // may be closing during async process
                     return null;

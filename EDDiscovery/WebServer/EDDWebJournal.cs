@@ -60,7 +60,7 @@ namespace EDDiscovery.WebServer
             {
                 JToken response;
 
-                var hl = discoveryform.history;
+                var hl = discoveryform.History;
                 if (hl.Count == 0)
                 {
                     response = new JObject();

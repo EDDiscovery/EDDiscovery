@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await DiscoveryForm.history.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
+                scannode = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -154,8 +154,8 @@ namespace EDDiscovery.UserControls
             var gasgiants = 0;
             var moons = 0;
 
-            List<MaterialCommodityMicroResource> historicmcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
-            List<MaterialCommodityMicroResource> curmcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetLast();
+            List<MaterialCommodityMicroResource> historicmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+            List<MaterialCommodityMicroResource> curmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast();
 
             HashSet<string> jumponiums = new HashSet<string>();
 

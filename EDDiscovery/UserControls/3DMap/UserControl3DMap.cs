@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             glwfc.EnsureCurrentContext();
 
             map = new Map();
-            if (map.Start(glwfc, DiscoveryForm.galacticMapping, DiscoveryForm.eliteRegions, this, Map.Parts.Map3D))
+            if (map.Start(glwfc, DiscoveryForm.GalacticMapping, DiscoveryForm.EliteRegions, this, Map.Parts.Map3D))
             {
                 mapsave = new MapSaverImpl(this);
                 map.LoadState(mapsave, true, 0);

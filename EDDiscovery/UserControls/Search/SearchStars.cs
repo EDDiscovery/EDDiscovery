@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Ascending;
 
-                ISystem cursystem = DiscoveryForm.history.CurrentSystem();        // could be null
+                ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
                 bool centresort = false;
 
                 int index = 1;

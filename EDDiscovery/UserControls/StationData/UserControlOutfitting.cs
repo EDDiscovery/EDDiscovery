@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxYards.Items.Count == 0)
-                UpdateComboBox(DiscoveryForm.history);
+                UpdateComboBox(DiscoveryForm.History);
 
             last_he = he;
             Display();
@@ -137,13 +137,13 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxYards.SelectedIndex == 0 || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
-                HistoryEntry lastshipyard = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
+                HistoryEntry lastshipyard = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
                 if (lastshipyard != null)
                     yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalOutfitting).YardInfo;      // this may pick up an empty yard..
             }
             else
             {
-                yard = DiscoveryForm.history.Outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
+                yard = DiscoveryForm.History.Outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard?.Items != null ) // yard may be null, and its entries may be null
@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = DiscoveryForm.history.Outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
+                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = DiscoveryForm.History.Outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
                 if ( itemlist.Count > 0 )
                     DisplayItems(itemlist, comboBoxYards.Text);
             }
@@ -165,11 +165,11 @@ namespace EDDiscovery.UserControls
 
         private void DisplayItems(List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist, string moduletype)
         {
-            ISystem cursys = DiscoveryForm.history.CurrentSystem();
+            ISystem cursys = DiscoveryForm.History.CurrentSystem();
 
             foreach (var yard in itemlist)
             {
-                double distance = DiscoveryForm.history.DistanceCurrentTo(yard.Item1.StarSystem);
+                double distance = DiscoveryForm.History.DistanceCurrentTo(yard.Item1.StarSystem);
                 string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(yard.Item1.Datetimeutc).ToString();
                 string yardname = yard.Item1.Location;
 
@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewOutfitting.Rows.Add(rowobj);
             }
 
-            double distance = DiscoveryForm.history.DistanceCurrentTo(yard.StarSystem);
+            double distance = DiscoveryForm.History.DistanceCurrentTo(yard.StarSystem);
 
             labelYard.Text = yard.Ident() + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;

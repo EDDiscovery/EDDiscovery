@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                last_he = DiscoveryForm.history.GetLast;
+                last_he = DiscoveryForm.History.GetLast;
                 Display();
             }
         }
@@ -189,8 +189,8 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                var totalmcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
-                var mclmats = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
+                var totalmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+                var mclmats = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
 
                 int fdrow = dataGridViewSynthesis.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 

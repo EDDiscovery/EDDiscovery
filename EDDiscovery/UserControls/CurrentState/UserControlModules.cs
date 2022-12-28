@@ -109,9 +109,9 @@ namespace EDDiscovery.UserControls
         {
             // fuel UI update the SI information globally, and we have a ship, and we have a last entry, and we have ship information
 
-            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && DiscoveryForm.history.GetLast?.ShipInformation != null ) // protect against ship information or he being null
+            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && DiscoveryForm.History.GetLast?.ShipInformation != null ) // protect against ship information or he being null
             {
-                if (last_si.ShipNameIdentType == DiscoveryForm.history.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
+                if (last_si.ShipNameIdentType == DiscoveryForm.History.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
                 {
                     // update grid if found. Doing it this way stops flicker.
 
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxShips.Items.Count == 0)
-                UpdateComboBox(DiscoveryForm.history);
+                UpdateComboBox(DiscoveryForm.History);
 
             last_he = he;
             Display();
@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
             {
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
-                ShipInformationList shm = DiscoveryForm.history.ShipInformationList;
+                ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 foreach( var si in ownedships )
@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ShipInformation si = DiscoveryForm.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
+                ShipInformation si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
                     DisplayShip(si);
             }
@@ -484,7 +484,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = DiscoveryForm.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
+                si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
@@ -526,7 +526,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = DiscoveryForm.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
+                si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
@@ -677,7 +677,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     };
 
-                    var x = DiscoveryForm.history.ShipInformationList.Ships.GetEnumerator();
+                    var x = DiscoveryForm.History.ShipInformationList.Ships.GetEnumerator();
                     x.MoveNext();
 
                     grd.GetPostHeader += delegate (int r)

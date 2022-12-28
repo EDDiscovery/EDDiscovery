@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.history.EntryOrder());
+            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.History.EntryOrder());
 
             pickerStart = new ExtendedControls.ExtDateTimePicker();
             pickerStop = new ExtendedControls.ExtDateTimePicker();
@@ -104,7 +104,7 @@ namespace EDDiscovery.UserControls
         {
             if (he.IsFSDCarrierJump)
             {
-                systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.history.EntryOrder());
+                systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.History.EntryOrder());
                 if (imageViewer.Image != null)      // make sure we have a image up, if so, just augment the travel history
                     DrawTravelHistory();
                 else
@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.history.EntryOrder());
+            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.History.EntryOrder());
             Display();
         }
 

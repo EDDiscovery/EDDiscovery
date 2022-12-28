@@ -37,7 +37,7 @@ namespace EDDiscovery
             else
             {
                 comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
-                if (history.CommanderId == -1)  // is hidden log
+                if (History.CommanderId == -1)  // is hidden log
                 {
                     comboBoxCommander.SelectedIndex = 0;
                 }
@@ -164,9 +164,9 @@ namespace EDDiscovery
 
         private void extButtonCAPI_Click(object sender, EventArgs e)
         {
-            var he = history.GetLast;
+            var he = History.GetLast;
             if (he != null && he.IsDocked)
-                Controller.DoCAPI(he.WhereAmI, he.System.Name, history.Shipyards.AllowCobraMkIV);
+                Controller.DoCAPI(he.WhereAmI, he.System.Name, History.Shipyards.AllowCobraMkIV);
         }
     }
 }

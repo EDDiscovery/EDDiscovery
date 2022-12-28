@@ -68,7 +68,7 @@ namespace EDDiscovery.WebServer
                 JObject response = new JObject();
                 response["responsetype"] = type;
 
-                var hl = discoveryform.history;
+                var hl = discoveryform.History;
                 if (hl.Count == 0)
                 {
                     response["entry"] = -1;
@@ -85,7 +85,7 @@ namespace EDDiscovery.WebServer
                     int count = 0;
                     for( int l = entry; l >= 0 && count < length; l--)
                     {
-                        var he = discoveryform.history.EntryOrder()[l];
+                        var he = discoveryform.History.EntryOrder()[l];
                         if ( he.EntryType == JournalTypeEnum.ReceiveText )
                         {
                             var rt = he.journalEntry as JournalReceiveText;

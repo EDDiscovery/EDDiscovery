@@ -70,8 +70,8 @@ namespace EDDiscovery.Actions
                         if ( jid.HasValue )
                         {
                             var ac = (ap.ActionController as ActionController);
-                            HistoryList hl = ac.DiscoveryForm.history;
-                            HistoryEntry h = ac.DiscoveryForm.history.GetByJID(jid.Value);
+                            HistoryList hl = ac.DiscoveryForm.History;
+                            HistoryEntry h = ac.DiscoveryForm.History.GetByJID(jid.Value);
 
                             if ( h != null)
                             {

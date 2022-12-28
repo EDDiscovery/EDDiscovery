@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             // load setup restore settings of map
             map = new Map();
 
-            if (map.Start(glwfc, DiscoveryForm.galacticMapping, DiscoveryForm.eliteRegions, this,
+            if (map.Start(glwfc, DiscoveryForm.GalacticMapping, DiscoveryForm.EliteRegions, this,
                   Map.Parts.None
                 | Map.Parts.Galaxy
                 | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute

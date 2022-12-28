@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.galacticMapping, true);     // if we have a name, find it
+               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, true);     // if we have a name, find it
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
@@ -245,7 +245,7 @@ namespace EDDiscovery.UserControls
                 if (GetCoordsFrom(out Point3D curpos))          // else if we have co-ords, find nearest
                 {
                     ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = DiscoveryForm.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -347,7 +347,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.galacticMapping, true);
+                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.GalacticMapping, true);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
@@ -365,7 +365,7 @@ namespace EDDiscovery.UserControls
                 if (GetCoordsTo(out Point3D curpos))
                 {
                     ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = DiscoveryForm.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -579,7 +579,7 @@ namespace EDDiscovery.UserControls
             if (row >= 0)
             {
                 ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.history);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);
             }
         }
 
@@ -626,7 +626,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewRoute.RightClickRowValid)
             {
                 ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.history);    // protected against sys = null
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);    // protected against sys = null
             }
         }
 

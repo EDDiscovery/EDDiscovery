@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            OnHistoryChange(DiscoveryForm.history);
+            OnHistoryChange(DiscoveryForm.History);
         }
 
         public override void Closing()
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                HistoryEntry hefsd = DiscoveryForm.history.GetLastHistoryEntry(x => x.IsFSDCarrierJump, he);
+                HistoryEntry hefsd = DiscoveryForm.History.GetLastHistoryEntry(x => x.IsFSDCarrierJump, he);
 
                 if (hefsd != null)
                 {
@@ -113,9 +113,9 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showSystemNotes))
                     {
-                        for (int pos = hefsd.Index; pos < DiscoveryForm.history.Count && (pos==hefsd.Index || !DiscoveryForm.history[pos].IsFSDCarrierJump); pos++)
+                        for (int pos = hefsd.Index; pos < DiscoveryForm.History.Count && (pos==hefsd.Index || !DiscoveryForm.History[pos].IsFSDCarrierJump); pos++)
                         {
-                            HistoryEntry cur = DiscoveryForm.history[pos];
+                            HistoryEntry cur = DiscoveryForm.History[pos];
                             string notetext = cur.GetNoteText;
                             if ( notetext.HasChars())
                                 botline += notetext.WordWrap(60) + Environment.NewLine;
@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showGMPNotes))
                     {
-                        var gmo = DiscoveryForm.galacticMapping.Find(hefsd.System.Name);
+                        var gmo = DiscoveryForm.GalacticMapping.Find(hefsd.System.Name);
                         if (gmo != null)
                             botline = ("GMP: " + gmo.Description).WordWrap(60) + Environment.NewLine;
                     }

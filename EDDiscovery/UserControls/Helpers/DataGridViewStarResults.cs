@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls.Search
 
         void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, CheckEDSM, discoveryform.history);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, CheckEDSM, discoveryform.History);
         }
 
         public void Excel(int columnsout)

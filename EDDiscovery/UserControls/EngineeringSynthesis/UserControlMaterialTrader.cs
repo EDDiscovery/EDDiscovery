@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
         {
             if (checkBoxCursorToTop.Checked)
             {
-                last_mcl = DiscoveryForm.history.GetLast?.MaterialCommodity;
+                last_mcl = DiscoveryForm.History.GetLast?.MaterialCommodity;
                 DisplayTradeSelection();
                 DisplayTradeList();
             }
@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            var curmcl = last_mcl != null ? DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
+            var curmcl = last_mcl != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
 
             Font titlefont = ExtendedControls.Theme.Current.GetFont;
             Font badgefont = ExtendedControls.Theme.Current.GetScaledFont(16f / 12f, max:21);
@@ -380,7 +380,7 @@ namespace EDDiscovery.UserControls
             if (tradelist.Count > 0)        
             {
                 // last_mcl can be null
-                List<MaterialCommodityMicroResource> mcl = last_mcl == null ? null : DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
+                List<MaterialCommodityMicroResource> mcl = last_mcl == null ? null : DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
 
                 var totals = mcl == null ? null : MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present, null if we don't have an mcl
 
@@ -445,7 +445,7 @@ namespace EDDiscovery.UserControls
 
                 if (selected != null)
                 {
-                    List<MaterialCommodityMicroResource> mcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
+                    List<MaterialCommodityMicroResource> mcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
                     int currenttotal = mcl.Find(x=>x.Details==current.element)?.Count ?? 0;   // current mat total. If not there, its zero
                     foreach (var trade in tradelist)
                     {

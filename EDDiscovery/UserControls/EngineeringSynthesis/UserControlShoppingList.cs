@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
 
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
-                List<MaterialCommodityMicroResource> mcl = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);
+                List<MaterialCommodityMicroResource> mcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
 
                 if (showListAvailability || showPlanetMats)
                 {
-                    last_sn = await DiscoveryForm.history.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
+                    last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
 
                     if (last_he.IsLanded && last_sn != null )       // if found node, and landed
                     {

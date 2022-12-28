@@ -138,15 +138,15 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj) // need to handle this in case commander changed..
         {
-            last_he = DiscoveryForm.history.GetLast;
+            last_he = DiscoveryForm.History.GetLast;
             currentBookmark = null;
             PopulateBookmarkCombo();
-            OnNewEntry(last_he, DiscoveryForm.history);
+            OnNewEntry(last_he, DiscoveryForm.History);
         }
 
         public override void InitialDisplay()       // on start up, this will have an empty history
         {
-            last_he = DiscoveryForm.history.GetLast;
+            last_he = DiscoveryForm.History.GetLast;
             PopulateBookmarkCombo();
             DisplayCompass();
         }
@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
             {
                 if ( bodyRadius == null || lastradiusbody != he.WhereAmI)       // try and get radius, this is cleared on target selection
                 { 
-                    StarScan.SystemNode last_sn = await DiscoveryForm.history.StarScan.FindSystemAsync(he.System, false);       // find scan if we have one
+                    StarScan.SystemNode last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, false);       // find scan if we have one
                     JournalScan sd = last_sn?.Find(he.WhereAmI)?.ScanData;  // find body scan data if present, null if not
                     bodyRadius = sd?.nRadius;
                     if (bodyRadius.HasValue)
@@ -463,7 +463,7 @@ namespace EDDiscovery.UserControls
             if (last_he == null)
                 return;
 
-            BookmarkForm frm = new BookmarkForm(DiscoveryForm.history);
+            BookmarkForm frm = new BookmarkForm(DiscoveryForm.History);
             DateTime timeutc = DateTime.UtcNow;
             if (currentBookmark == null)
             {

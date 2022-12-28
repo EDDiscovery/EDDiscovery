@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                last_he = DiscoveryForm.history.GetLast;
+                last_he = DiscoveryForm.History.GetLast;
                 UpdateDisplay();
             }
         }
@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine($"Update {BaseUtils.AppTicks.TickCountLap("s2", true)}");
 
-            var lastengprog = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he); // may be null
+            var lastengprog = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he); // may be null
             var system = last_he?.System;       // may be null
 
             for (int i = 0; i < engineerpanels.Count; i++)
@@ -224,16 +224,16 @@ namespace EDDiscovery.UserControls
                     status = state.ToString();
                 }
 
-                var mcllist = last_he != null ? DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
+                var mcllist = last_he != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
 
                 List<HistoryEntry> crafts = null;
 
                 if ( last_he != null)
                 {
                     if (ep.Name.Contains("Guardian") || ep.Name.Equals("Human"))
-                        crafts = DiscoveryForm.history.Engineering.Get(last_he.Engineering, EngineeringList.TechBrokerID);
+                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, EngineeringList.TechBrokerID);
                     else
-                        crafts = DiscoveryForm.history.Engineering.Get(last_he.Engineering, ep.Name);
+                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, ep.Name);
                 }
                 
                 ep.UpdateStatus(status, system, mcllist,crafts);

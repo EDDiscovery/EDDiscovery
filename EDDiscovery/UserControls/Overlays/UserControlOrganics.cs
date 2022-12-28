@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
 
             if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
             {
-                StarScan.SystemNode data = DiscoveryForm.history.StarScan.FindSystemSynchronous(lasthe.System, false);
+                StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System, false);
 
                 if (data != null && data.NodesByID.TryGetValue(lasthe.Status.BodyID.Value, out StarScan.ScanNode node))
                 {
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
 
         void DrawGrid()
         {
-            if (DiscoveryForm.history != null)        //??its never null?
+            if (DiscoveryForm.History != null)        //??its never null?
             {
                 // change display time to utc
                 DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);
@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.Rows.Clear();
                 long totalvalue = 0;
 
-                foreach (var syskvp in DiscoveryForm.history.StarScan.ScanDataByName)
+                foreach (var syskvp in DiscoveryForm.History.StarScan.ScanDataByName)
                 {
                     foreach (var starkvp in syskvp.Value.StarNodes)
                     {

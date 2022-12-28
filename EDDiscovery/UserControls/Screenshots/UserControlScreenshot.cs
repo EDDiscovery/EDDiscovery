@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox()
         {
-            var sslist = HistoryList.LatestFirst(DiscoveryForm.history.EntryOrder(), new System.Collections.Generic.HashSet<JournalTypeEnum>() { JournalTypeEnum.Screenshot });
+            var sslist = HistoryList.LatestFirst(DiscoveryForm.History.EntryOrder(), new System.Collections.Generic.HashSet<JournalTypeEnum>() { JournalTypeEnum.Screenshot });
 
             string cur = extComboBoxImage.Text;
 

@@ -45,29 +45,29 @@ namespace EDDiscovery
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
-            if (EDCommander.Current.SyncToInara && history.GetLast != null)
+            if (EDCommander.Current.SyncToInara && History.GetLast != null)
             {
-                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history.GetLast, EDCommander.Current);
+                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, History.GetLast, EDCommander.Current);
             }
 
             if (DLLManager.Count > 0)
             {
-                HistoryEntry lastfileh = history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Fileheader);
+                HistoryEntry lastfileh = History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Fileheader);
 
                 if (lastfileh != null)
                 {
-                    for (int i = lastfileh.EntryNumber - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
+                    for (int i = lastfileh.EntryNumber - 1; i < History.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
                     {
                         //System.Diagnostics.Debug.WriteLine($"DLL-> {history[i].EventTimeUTC} {history[i].EventSummary}");
 
                         // lying here a bit - we don't have the raw available, have to send best we can
-                        DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);
+                        DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(History, History[i]), true);
 
-                        DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);
+                        DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(History, History[i]), true);
                     }
                 }
 
-                DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history.GetLast));
+                DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(History, History.GetLast));
             }
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
@@ -104,12 +104,12 @@ namespace EDDiscovery
             // as does Inara. Note the MCMR has been updated.  Needed here due to using materials/cargo
             if (EDCommander.Current.SyncToInara)
             {
-                var mcmr = history.MaterialCommoditiesMicroResources.GetDict(he.MaterialCommodity);
+                var mcmr = History.MaterialCommoditiesMicroResources.GetDict(he.MaterialCommodity);
                 EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he, mcmr);
             }
 
             if (DLLManager.Count > 0)
-                DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he),false);       // give DLL the unfiltered stream
+                DLLManager.NewUnfilteredJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(History, he),false);       // give DLL the unfiltered stream
 
         }
 
@@ -128,7 +128,7 @@ namespace EDDiscovery
 
             if (he.IsFSDCarrierJump)
             {
-                int count = history.GetVisitsCount(he.System.Name);
+                int count = History.GetVisitsCount(he.System.Name);
                 LogLine(string.Format("Arrived at system {0} Visit No. {1}".T(EDTx.EDDiscoveryForm_Arrived), he.System.Name, count));
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
             }
@@ -167,7 +167,7 @@ namespace EDDiscovery
             }
 
             if (DLLManager.Count > 0)
-                DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
+                DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(History, he), false);
 
             ScreenshotConverter.NewJournalEntry(he.journalEntry);       // tell the screenshotter.
 

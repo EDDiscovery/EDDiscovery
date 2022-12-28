@@ -351,8 +351,8 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 travelpath = new TravelPath();
                 travelpath.Start("TP", 200000, travelsunsize, tapesize, findresults, true, items, rObjects);
-                travelpath.CreatePath(parent.DiscoveryForm.history);
-                travelpath.SetSystem(parent.DiscoveryForm.history.LastSystem);
+                travelpath.CreatePath(parent.DiscoveryForm.History);
+                travelpath.SetSystem(parent.DiscoveryForm.History.LastSystem);
             }
 
             if ((parts & Parts.NavRoute) != 0)
@@ -466,7 +466,7 @@ namespace EDDiscovery.UserControls.Map3D
                         {
                             if (e.Button == GLMouseEventArgs.MouseButtons.Left)
                             {
-                                var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.history.GetLast);
+                                var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
                                 var bkm = rightclickmenu.Tag as EliteDangerousCore.DB.BookmarkClass;
 
                                 System.Diagnostics.Debug.WriteLine($"Info {nl.Item1} {nl.Item2}");
@@ -514,7 +514,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                             if (bkm == null)
                             {
-                                var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.history.GetLast);
+                                var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
                                 bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl.Item1);
                             }
 
@@ -528,7 +528,7 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         Click = (s1) =>
                         {
-                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.history.GetLast);
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
                             gl3dcontroller.SlewToPositionZoom(nl.Item2, 300, -1);
                         }
                     },
@@ -536,7 +536,7 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         Click = (s1) =>
                         {
-                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.history.GetLast);
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
                             System.Diagnostics.Debug.WriteLine($"Goto {nl.Item1} {nl.Item2}");
                             gl3dcontroller.SlewToPosition(nl.Item2, -1);
                         }
@@ -554,7 +554,7 @@ namespace EDDiscovery.UserControls.Map3D
                         Click = (s1) =>
                         {
                             ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
-                            ScanDisplayForm.ShowScanOrMarketForm(parent.FindForm(), s, true, parent.DiscoveryForm.history, 0.8f, System.Drawing.Color.Purple);
+                            ScanDisplayForm.ShowScanOrMarketForm(parent.FindForm(), s, true, parent.DiscoveryForm.History, 0.8f, System.Drawing.Color.Purple);
                         }
                     },
                     new GLMenuItem("RCMViewEDSM", "View on EDSM")
@@ -573,7 +573,7 @@ namespace EDDiscovery.UserControls.Map3D
                         Click = (s1) =>
                         {
                             rightclickmenu.Visible = false;     // see above for this reason
-                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.history.GetLast);
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
 
                             var res = BookmarkHelpers.ShowBookmarkForm(parent.DiscoveryForm, parent.DiscoveryForm,
                                                     new SystemClass(nl.Item1, nl.Item2.X, nl.Item2.Y, nl.Item2.Z), null);
@@ -591,7 +591,7 @@ namespace EDDiscovery.UserControls.Map3D
                             var bkm = rightclickmenu.Tag as EliteDangerousCore.DB.BookmarkClass;
                             if (bkm == null)
                             {
-                                var nl2 = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.history.GetLast);
+                                var nl2 = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
                                 bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl2.Item1);
                             }
 
@@ -619,7 +619,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                     if (issystem)
                     {
-                        var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.history.GetLast);
+                        var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
                         System.Diagnostics.Debug.WriteLine("Right click on system " + nl.Item1);
                         var bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl.Item1);
 
@@ -737,8 +737,8 @@ namespace EDDiscovery.UserControls.Map3D
         {
             if (travelpath != null )
             {
-                travelpath.CreatePath(parent.DiscoveryForm.history);
-                travelpath.SetSystem(parent.DiscoveryForm.history.LastSystem);
+                travelpath.CreatePath(parent.DiscoveryForm.History);
+                travelpath.SetSystem(parent.DiscoveryForm.History.LastSystem);
             }
 
             CheckRefreshLocalArea();  // also see if local stars need updating
@@ -748,7 +748,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             if (navroute != null )
             {
-                var route = parent.DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+                var route = parent.DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                 if (route?.Route != null) // If a navroute with a valid route..
                 {
                     var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, x.StarPos.X, x.StarPos.Y, x.StarPos.Z)).Cast<ISystem>().ToList();
@@ -790,7 +790,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void CheckRefreshLocalArea()
         {
-            HistoryEntry he = parent.DiscoveryForm.history.GetLast;       // may be null
+            HistoryEntry he = parent.DiscoveryForm.History.GetLast;       // may be null
             // basic check we are operating in this mode
             if (galaxystars != null && he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0 )
             {
@@ -949,7 +949,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void GoToCurrentSystem(float lydist = 50f)
         {
-            HistoryEntry he = parent.DiscoveryForm.history.GetLast;       // may be null
+            HistoryEntry he = parent.DiscoveryForm.History.GetLast;       // may be null
             if (he != null)
             {
                 GoToSystem(he.System, lydist);

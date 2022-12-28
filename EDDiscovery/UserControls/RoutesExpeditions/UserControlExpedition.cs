@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
             labelBusy.Visible = true;
             labelBusy.Update();
 
-            ISystem historySystem = DiscoveryForm.history.CurrentSystem(); // may be null
+            ISystem historySystem = DiscoveryForm.History.CurrentSystem(); // may be null
 
             bool showplanets = displayfilters.Contains("planets");
             bool showstars = displayfilters.Contains("stars");
@@ -243,20 +243,20 @@ namespace EDDiscovery.UserControls
 
                 if (!disablegmoshow)
                 {
-                    var gmo = DiscoveryForm.galacticMapping.Find(sys.Name);
+                    var gmo = DiscoveryForm.GalacticMapping.Find(sys.Name);
                     if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
                         note = note.AppendPrePad(gmo.Description, "; ");
                 }
 
                 row.Cells[ColumnHistoryNote.Index].Value = note;
 
-                row.Cells[Visits.Index].Value = DiscoveryForm.history.Visits(sys.Name).ToString("0");
+                row.Cells[Visits.Index].Value = DiscoveryForm.History.Visits(sys.Name).ToString("0");
 
                 // if not, try a lookup
                 if (!sys.HasCoordinate)
                 {
                     //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
-                    var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.galacticMapping, edsmcheck);
+                    var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.GalacticMapping, edsmcheck);
                     //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
                     if (IsClosed)        // because its async, the await returns with void, and then this is called back, and we may be closing.
                         return;
@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
                 row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("0.#") : "";
 
-                StarScan.SystemNode sysnode = await DiscoveryForm.history.StarScan.FindSystemAsync(sys, edsmcheck); 
+                StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmcheck); 
 
                 if (IsClosed)        // because its async, may be called during closedown. stop this
                     return;
@@ -658,7 +658,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            var navroutes = DiscoveryForm.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(20).ToList();
+            var navroutes = DiscoveryForm.History.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(20).ToList();
 
             if (navroutes.Count > 0)
             {
@@ -694,7 +694,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            var route = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+            var route = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
             if (route?.Route != null)
             {
                 AppendOrInsertSystems(-1, route.Route.Select(r => new SavedRouteClass.SystemEntry(r.StarSystem, "", r.StarPos.X, r.StarPos.Y, r.StarPos.Z)));
@@ -731,7 +731,7 @@ namespace EDDiscovery.UserControls
 
                     foreach ( var syse in rt.Systems)
                     {
-                        ISystem sys = SystemCache.FindSystem(syse.Name, DiscoveryForm.galacticMapping, true);
+                        ISystem sys = SystemCache.FindSystem(syse.Name, DiscoveryForm.GalacticMapping, true);
                         if (sys != null)
                         {
                             var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
@@ -1133,7 +1133,7 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = SystemCache.FindSystem((string)obj,DiscoveryForm.galacticMapping, true);     // use EDSM directly if required
+            ISystem sc = SystemCache.FindSystem((string)obj,DiscoveryForm.GalacticMapping, true);     // use EDSM directly if required
 
             if (sc == null)
                 sc = new SystemClass((string)obj,0,0,0);

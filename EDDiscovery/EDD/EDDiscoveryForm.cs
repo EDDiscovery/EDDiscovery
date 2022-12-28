@@ -52,10 +52,10 @@ namespace EDDiscovery
         public EliteDangerousCore.ScreenShots.ScreenShotConverter ScreenshotConverter { get; set; }
         public PopOutControl PopOuts { get; set; }
 
-        public GalacticMapping galacticMapping { get; private set; }
-        public GalacticMapping eliteRegions { get; private set; }
+        public GalacticMapping GalacticMapping { get; private set; }
+        public GalacticMapping EliteRegions { get; private set; }
 
-        public HistoryList history { get { return Controller.history; } }
+        public HistoryList History { get { return Controller.History; } }
 
         public string LogText { get { return Controller.LogText; } }
         #endregion
@@ -401,19 +401,19 @@ namespace EDDiscovery
             }
 
             {
-                galacticMapping = new GalacticMapping();
+                GalacticMapping = new GalacticMapping();
                 if (File.Exists(gmofile))
-                    galacticMapping.ParseEDSMFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
-                galacticMapping.LoadMarxObjects();
+                    GalacticMapping.ParseEDSMFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+                GalacticMapping.LoadMarxObjects();
             }
 
             {
-                eliteRegions = new GalacticMapping();
+                EliteRegions = new GalacticMapping();
                 var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
-                eliteRegions.ParseEDSMJson(text);                            // at this point, gal map data has been uploaded - get it into memory
+                EliteRegions.ParseEDSMJson(text);                            // at this point, gal map data has been uploaded - get it into memory
             }
 
-            SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
+            SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMONames());
 
             Bodies.Prepopulate();           
 
@@ -553,9 +553,9 @@ namespace EDDiscovery
                              (b) => LogLine(b),
                              () =>
                              {
-                                 if (history.GetLast != null)        // lasthe should have name and whereami, and an indication of commander
+                                 if (History.GetLast != null)        // lasthe should have name and whereami, and an indication of commander
                                  {
-                                     return new Tuple<string, string, string>(history.GetLast.System.Name, history.GetLast.WhereAmI, history.GetLast.Commander?.Name ?? "Unknown");
+                                     return new Tuple<string, string, string>(History.GetLast.System.Name, History.GetLast.WhereAmI, History.GetLast.Commander?.Name ?? "Unknown");
                                  }
                                  else
                                  {
@@ -994,7 +994,7 @@ namespace EDDiscovery
 
         private void Read21Folders(bool force)
         {
-            if (Controller.history.IsRealCommanderId)
+            if (Controller.History.IsRealCommanderId)
             {
                 EDCommander cmdr = EDCommander.Current;
                 if (cmdr != null)
@@ -1055,7 +1055,7 @@ namespace EDDiscovery
 
             if (DateTime.UtcNow.Subtract(lasttime).TotalHours >= 1)  // every hours, allowed to do this..
             {
-                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine, history, EDCommander.Current);
+                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine, History, EDCommander.Current);
                 UserDatabase.Instance.PutSettingDate("InaraLastHistoricUpload", DateTime.UtcNow);
             }
             else
@@ -1084,7 +1084,7 @@ namespace EDDiscovery
                     "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?".T(EDTx.EDDiscoveryForm_FillPos), 
                     "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                history.FillInPositionsFSDJumps(LogLine);
+                History.FillInPositionsFSDJumps(LogLine);
                 RefreshDisplays();
             }
         }

@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            FillComboBoxes(DiscoveryForm.history);
+            FillComboBoxes(DiscoveryForm.History);
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
             if (!Object.ReferenceEquals(he, last_he))       // if last was null, or he has changed, we have a possible change..
             {
                 // Find last commodity entry, if notfoundeedmd is true.  notfoundeddmd is cleared on a new market data entry of commodity prices
-                HistoryEntry new_last_eddmd = notfoundeddmd ? null : DiscoveryForm.history.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
+                HistoryEntry new_last_eddmd = notfoundeddmd ? null : DiscoveryForm.History.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
                 notfoundeddmd = new_last_eddmd == null;
 
                 bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
                     list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities);
                 }
-                List<MaterialCommodityMicroResource> mclist = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetCommoditiesSorted(cargo.MaterialCommodity);      // stuff we have..  commodities only
+                List<MaterialCommodityMicroResource> mclist = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetCommoditiesSorted(cargo.MaterialCommodity);      // stuff we have..  commodities only
                 List<MaterialCommodityMicroResource> notfound = new List<MaterialCommodityMicroResource>();
                 foreach (MaterialCommodityMicroResource m in mclist)
                 {

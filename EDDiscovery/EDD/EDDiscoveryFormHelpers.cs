@@ -102,7 +102,7 @@ namespace EDDiscovery
 
         public void EDSMSend()
         {
-            var helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
+            var helist = EDSMJournalSync.GetListToSend(History.EntryOrder());               // find out what to send..
 
             if (helist.Count >= 500)
             {
@@ -176,13 +176,13 @@ namespace EDDiscovery
                 var jes = helist.Where(x => x.EventTimeUTC < dateutc).Select(x => x.journalEntry).ToList();
                 JournalEntry.SetEdsmSyncList(jes);
 
-                helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
+                helist = EDSMJournalSync.GetListToSend(History.EntryOrder());               // find out what to send..
             }
 
             // we send the list using the last gameversion/build as we may have early entries without these..
             if (helist.Count > 0)
             {
-                var gb = history.GetLastGameversionBuild();
+                var gb = History.GetLastGameversionBuild();
 
                 EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist, gb.Item1, gb.Item2);
 

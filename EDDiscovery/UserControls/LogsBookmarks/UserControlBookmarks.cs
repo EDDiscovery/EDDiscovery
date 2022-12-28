@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
                 if (bk.isRegion)
                     userControlSurfaceBookmarks.Disable();
                 else
-                    userControlSurfaceBookmarks.Init(bk.StarName,DiscoveryForm.history, bk.PlanetaryMarks);
+                    userControlSurfaceBookmarks.Init(bk.StarName,DiscoveryForm.History, bk.PlanetaryMarks);
             }
             else
             {
@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
         private void extButtonEditSystem_Click(object sender, EventArgs e)
         {
             updating = true;
-            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, DiscoveryForm.history.GetLast?.System, null);
+            BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, DiscoveryForm.History.GetLast?.System, null);
             updating = false;
             Display();
         }
@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
                 SaveBackAnyChanges();
-                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.galacticMapping, true) : null;
+                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.GalacticMapping, true) : null;
 
                 updating = true;
                 BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sys, bk);

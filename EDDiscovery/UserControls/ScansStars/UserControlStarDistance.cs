@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             double lookup_max = Math.Min(textMaxRadius.Value, lookup_limit);
 
             // Get nearby systems from our travel history. This will filter out duplicates from the systems DB.
-            DiscoveryForm.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z,
+            DiscoveryForm.History.CalculateSqDistances(list, sys.X, sys.Y, sys.Z,
                                 maxitems, textMinRadius.Value, lookup_max, !checkBoxCube.Checked, 5000);       // only go back a sensible number of FSD entries
 
             FillGrid(sys.Name, list);
@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
 
                     if (tvp.Value.Name != name && (checkBoxCube.Checked || (dist >= textMinRadius.Value && dist <= textMaxRadius.Value)))
                     {
-                        int visits = DiscoveryForm.history.GetVisitsCount(tvp.Value.Name);
+                        int visits = DiscoveryForm.History.GetVisitsCount(tvp.Value.Name);
                         object[] rowobj = { tvp.Value.Name, $"{dist:0.00}", $"{visits:n0}" };
 
                         var rw = dataGridViewNearest.RowTemplate.Clone() as DataGridViewRow;
@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
                 if (rightclicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, DiscoveryForm.history);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, DiscoveryForm.History);
             }
         }
 
@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
             {
                 var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
                 if (clicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, DiscoveryForm.history);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, DiscoveryForm.History);
             }
 
         }
@@ -332,7 +332,7 @@ namespace EDDiscovery.UserControls
                         {
                             if ( r == 0 )
                             {
-                                return new object[] { last_he.System.Name, "0", DiscoveryForm.history.GetVisitsCount(last_he.System.Name).ToString("#"),
+                                return new object[] { last_he.System.Name, "0", DiscoveryForm.History.GetVisitsCount(last_he.System.Name).ToString("#"),
                                             last_he.System.X.ToString("F2"), last_he.System.Y.ToString("F2"), last_he.System.Z.ToString("F2") };
                             }
                             else

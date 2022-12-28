@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             last_sys = hl.GetLast?.System;      // may be null
-            shipfsdinfo = hl.GetLast?.GetJumpInfo(DiscoveryForm.history.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
+            shipfsdinfo = hl.GetLast?.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
             shipinfo = hl.GetLast?.ShipInformation;
 
             LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
         }
         public override void ReceiveHistoryEntry(HistoryEntry he)
         { 
-            bool islatest = Object.ReferenceEquals(DiscoveryForm.history.GetLast, he);        // is this the latest
+            bool islatest = Object.ReferenceEquals(DiscoveryForm.History.GetLast, he);        // is this the latest
 
             // can't say i love this idea, there must be a better solution, but..
             // from scan of logs on 18/9/22 these are ones which I saw between startjump and fsdjump. Excluding the ones turned in ui events in edjournalreader.cs
@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls
                 return;
 
             // something has changed and just blindly for now recalc the fsd info
-            shipfsdinfo = he.GetJumpInfo(DiscoveryForm.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
+            shipfsdinfo = he.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
             shipinfo = he.ShipInformation;
 
             if (he.EntryType == JournalTypeEnum.StartJump)                  // start jump on hyperspace preempts everything
@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
             string text = "";
             if (sys != null)
             {
-                StarScan.SystemNode systemnode = await DiscoveryForm.history.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -574,12 +574,12 @@ namespace EDDiscovery.UserControls
 
                 if (searchesactive.Length > 0)       // if any searches
                 {
-                    DiscoveryForm.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
+                    DiscoveryForm.History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
 
                     // all entries related to sys.  Can't really limit the pick up as tried before using the afterlastevent option in this call
                     // due to being able to browse back in history. We may not be at the end of the list the system we are displaying. For now, just do a blind whole history search
 
-                    var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.history.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes, sys);
+                    var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes, sys);
 
                     if (helist.Count > 0)        // no point executing if nothing in helist
                     {
@@ -590,7 +590,7 @@ namespace EDDiscovery.UserControls
                         foreach (var searchname in searchesactive)
                         {
                             // await is horrible, anything can happen, even closing
-                            await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.history.StarScan, false); // execute the searches
+                            await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); // execute the searches
 
                             if (IsClosed)       // if we was ordered to close, abore
                                 return;
@@ -605,7 +605,7 @@ namespace EDDiscovery.UserControls
 
                 // find if we have system nodes
 
-                StarScan.SystemNode systemnode = await DiscoveryForm.history.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -1122,7 +1122,7 @@ namespace EDDiscovery.UserControls
             {
                 if (name.Equals(NavRouteNameLabel))
                 {
-                    var route = DiscoveryForm.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+                    var route = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                     if (route?.Route != null)
                     {
                         // pick out x/y/z to fill in route so it does not need any system lookup

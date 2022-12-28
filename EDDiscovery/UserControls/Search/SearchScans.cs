@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                DiscoveryForm.history.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
+                DiscoveryForm.History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
                 // what variables are in use, so we don't enumerate the lot.
                 var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
@@ -247,19 +247,19 @@ namespace EDDiscovery.UserControls
                 Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
 
                 var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars);
-                var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.history.EntryOrder(), computedsearch);
-                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {DiscoveryForm.history.EntryOrder().Count}");
+                var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), computedsearch);
+                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {DiscoveryForm.History.EntryOrder().Count}");
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, DiscoveryForm.history.StarScan, extCheckBoxDebug.Checked);
+                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, DiscoveryForm.History.StarScan, extCheckBoxDebug.Checked);
 
                 if (IsClosed)       // may be closing during async process
                     return;
 
                 System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count} results {results.Count}");
 
-                ISystem cursystem = DiscoveryForm.history.CurrentSystem();        // could be null
+                ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
 
                 if (scanSortControl.Condition.HasChars())       // before we present, and we have a sort condition, update the sort vars
                 {

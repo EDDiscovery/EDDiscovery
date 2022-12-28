@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            if (DiscoveryForm.history.Count > 0)      // on program start, this can be called with an empty history
+            if (DiscoveryForm.History.Count > 0)      // on program start, this can be called with an empty history
             {
                 FillCampaignCombo();                  // if so, ignore it.  otherwise the history could be full and we need to process
                 SelectInitial();
@@ -270,28 +270,28 @@ namespace EDDiscovery.UserControls
                 List<HistoryEntry> hel;
 
                 if (current.Type == FilterEntry.EntryType.Lastdock)
-                    hel = HistoryList.ToLastDock(DiscoveryForm.history.EntryOrder());
+                    hel = HistoryList.ToLastDock(DiscoveryForm.History.EntryOrder());
                 else if (current.Type == FilterEntry.EntryType.All)
-                    hel = DiscoveryForm.history.LatestFirst();
+                    hel = DiscoveryForm.History.LatestFirst();
                 else if (current.Type == FilterEntry.EntryType.Oneday)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.history.EntryOrder(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Sevendays)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.history.EntryOrder(), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Today)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.history.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Mission)
                 {
                     hel = new List<HistoryEntry>();     // default empty
                     if (current.MissionKey != null)
                     {
                         // look up the mission in the current data
-                        MissionState ms = DiscoveryForm.history.MissionListAccumulator.GetMission(current.MissionKey);
+                        MissionState ms = DiscoveryForm.History.MissionListAccumulator.GetMission(current.MissionKey);
                         if ( ms != null )
-                            hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.history.EntryOrder(), current.StartTimeUTC, ms.MissionEndTime);
+                            hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), current.StartTimeUTC, ms.MissionEndTime);
                     }
                 }
                 else
-                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.history.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
 
                 var rows = new List<DataGridViewRow>(hel.Count);
                 foreach (HistoryEntry he in hel)
@@ -385,7 +385,7 @@ namespace EDDiscovery.UserControls
         {
             rewardcol = "";
 
-            MissionState ml = current.MissionKey != null ? DiscoveryForm.history.MissionListAccumulator.GetMission(current.MissionKey) : null;
+            MissionState ml = current.MissionKey != null ? DiscoveryForm.History.MissionListAccumulator.GetMission(current.MissionKey) : null;
 
             if ( ml != null &&
                  ((he.EntryType == JournalTypeEnum.MissionAccepted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionAccepted).MissionId == ml.Mission.MissionId)
@@ -473,7 +473,7 @@ namespace EDDiscovery.UserControls
             labelFaction.Text = faction ? (current.TargetFaction) : "";
             labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToString()) : "";
 
-            labelCredits.Text = (DiscoveryForm.history.GetLast != null) ? (DiscoveryForm.history.GetLast.Credits.ToString("N0") + "cr") : "";
+            labelCredits.Text = (DiscoveryForm.History.GetLast != null) ? (DiscoveryForm.History.GetLast.Credits.ToString("N0") + "cr") : "";
             labelBalance.Text = (balance != 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";
             labelFactionReward.Text = (faction && faction_reward != balance) ? ("+" + faction_reward.ToString("N0") + "cr") : "";
             labelTotalReward.Text = (total_reward != balance) ? ("+" + total_reward.ToString("N0") + "cr") : "";
@@ -519,7 +519,7 @@ namespace EDDiscovery.UserControls
 
             displayedfilterentries.AddRange(savedfilterentries);
 
-            var missions = DiscoveryForm.history.MissionListAccumulator.GetAllMissions();
+            var missions = DiscoveryForm.History.MissionListAccumulator.GetAllMissions();
             var combatmissions = MissionListAccumulator.GetAllCombatMissionsLatestFirst(missions);
 
             if (combatmissions != null )

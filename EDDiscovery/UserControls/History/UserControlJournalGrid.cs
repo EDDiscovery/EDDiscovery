@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(DiscoveryForm.history);
+            HistoryChanged(DiscoveryForm.History);
         }
 
 
@@ -325,7 +325,7 @@ namespace EDDiscovery.UserControls
                 if (search.Terms[0] != null)
                 {
                     string timestr = time.ToString();
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
                     matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                     he.EventSummary.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -416,7 +416,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewJournal_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             HistoryEntry he = (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag;
-            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
+            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
             PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno, he, Columns.Event, false);
         }
 
@@ -474,7 +474,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null)
             {
-                DiscoveryForm.history.SetStartStop(rightclicksystem);
+                DiscoveryForm.History.SetStartStop(rightclicksystem);
                 DiscoveryForm.RefreshHistoryAsync();
             }
         }
@@ -536,11 +536,11 @@ namespace EDDiscovery.UserControls
 
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.EntryNumber : (DiscoveryForm.history.Count - rightclicksystem.EntryNumber + 1)) : 0;
+            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.EntryNumber : (DiscoveryForm.History.Count - rightclicksystem.EntryNumber + 1)) : 0;
             int selrow = dataGridViewJournal.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)

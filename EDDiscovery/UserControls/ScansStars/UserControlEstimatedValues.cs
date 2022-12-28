@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = await DiscoveryForm.history.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
+            StarScan.SystemNode last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
 
             if (last_sn != null)
             {

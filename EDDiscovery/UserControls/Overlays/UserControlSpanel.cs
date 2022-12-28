@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(DiscoveryForm.history);
+            Display(DiscoveryForm.History);
         }
 
         private async void Display(HistoryList hl)            
@@ -838,7 +838,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayString(0,historicmatlist: DiscoveryForm.history.MaterialCommoditiesMicroResources.GetLast());
+                scantext = scan.DisplayString(0,historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
                 SetSurfaceScanBehaviour();  // set up timers etc.
             }

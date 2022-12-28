@@ -116,12 +116,12 @@ namespace EDDiscovery.UserControls
                 JournalTypeEnum[] miningevents = new JournalTypeEnum[] { JournalTypeEnum.AsteroidCracked, JournalTypeEnum.ProspectedAsteroid, JournalTypeEnum.LaunchDrone,
                                 JournalTypeEnum.MiningRefined, JournalTypeEnum.MaterialCollected, JournalTypeEnum.MaterialDiscovered, JournalTypeEnum.MaterialDiscarded};
 
-                var newlist = HistoryList.FilterBetween(DiscoveryForm.history.EntryOrder(), he, x => boundevents.Contains(x.EntryType), y => miningevents.Contains(y.EntryType), out HistoryEntry newhebelow, out HistoryEntry newheabove);
+                var newlist = HistoryList.FilterBetween(DiscoveryForm.History.EntryOrder(), he, x => boundevents.Contains(x.EntryType), y => miningevents.Contains(y.EntryType), out HistoryEntry newhebelow, out HistoryEntry newheabove);
 
                 if (newlist != null)        // only if no history would we get null, unlikely since he has been tested, but still..
                 {
-                    int limpetsleft = DiscoveryForm.history.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
-                    int cargo = DiscoveryForm.history.MaterialCommoditiesMicroResources.CargoCount(newheabove.MaterialCommodity);
+                    int limpetsleft = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
+                    int cargo = DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(newheabove.MaterialCommodity);
                     int cargocap = newheabove.ShipInformation?.CargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
                     int cargoleft = cargocap - cargo; 
 
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
                         hebelow = newhebelow;
                         limpetsleftdisplay = limpetsleft;
                         cargoleftdisplay = cargoleft;
-                        incurrentplay = heabove == DiscoveryForm.history.GetLast && !boundevents.Contains(heabove.EntryType);
+                        incurrentplay = heabove == DiscoveryForm.History.GetLast && !boundevents.Contains(heabove.EntryType);
                         System.Diagnostics.Debug.WriteLine("Redisplay {0} current {1}", heabove.EntryNumber, incurrentplay);
                         Display();
 

@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
 
             if (last_weapons >= 0)
             {
-                var weaponlist = DiscoveryForm.history.WeaponList.Weapons.Get(last_weapons,x => x.Sold == false); // get unsold weapons
+                var weaponlist = DiscoveryForm.History.WeaponList.Weapons.Get(last_weapons,x => x.Sold == false); // get unsold weapons
 
                 foreach (var w in weaponlist)
                 {
@@ -162,11 +162,11 @@ namespace EDDiscovery.UserControls
 
             if (last_suits >= 0)
             {
-                var suitlist = DiscoveryForm.history.SuitList.Suits(last_suits);
+                var suitlist = DiscoveryForm.History.SuitList.Suits(last_suits);
                 //foreach (var su in suitlist) System.Diagnostics.Debug.WriteLine($"Suit gen {last_suits}: {su.Value.ID} {su.Value.FDName}");
 
-                var cursuit = DiscoveryForm.history.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
-                var curloadout = DiscoveryForm.history.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
+                var cursuit = DiscoveryForm.History.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
+                var curloadout = DiscoveryForm.History.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
 
                 foreach (var s in suitlist)
                 {
@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
                     string sprice = s.Value.Price.ToString("N0");
                     string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
 
-                    var loadouts = DiscoveryForm.history.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.Value.ID);
+                    var loadouts = DiscoveryForm.History.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.Value.ID);
 
                     if (loadouts == null || loadouts.Count == 0)
                     {

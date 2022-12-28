@@ -57,7 +57,7 @@ namespace EDDiscovery
                 if (curargs == null ||                                                                      // and we have mateirlally changed comething important
                     curargs.ForceNetLogReload != forcenetlogreload ||
                     curargs.ForceJournalReload != forcejournalreload ||
-                    curargs.CurrentCommander != (currentcmdr ?? history.CommanderId) ||
+                    curargs.CurrentCommander != (currentcmdr ?? History.CommanderId) ||
                     curargs.NetLogPath != netlogpath ||
                     curargs.RemoveDuplicateFSDEntries != removedupfsdentries)
                 {
@@ -72,7 +72,7 @@ namespace EDDiscovery
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
                     ForceJournalReload = forcejournalreload,
-                    CurrentCommander = currentcmdr ?? history.CommanderId,
+                    CurrentCommander = currentcmdr ?? History.CommanderId,
                     RemoveDuplicateFSDEntries = removedupfsdentries
                 });
 
@@ -278,7 +278,7 @@ namespace EDDiscovery
                 {
                     commandercountafterhistoryread = EDCommander.NumberOfCommanders;        // current count of commanders at the history change point
 
-                    history = hist;     // replace history
+                    History = hist;     // replace history
 
                     EdsmLogFetcher.StopCheck();     // ensure edsm has stopped. previosly asked to stop above by an async call
 
@@ -288,7 +288,7 @@ namespace EDDiscovery
 
                     Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Invoke");
 
-                    OnHistoryChange?.Invoke(history);
+                    OnHistoryChange?.Invoke(History);
 
                     Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Completed");
                 }
@@ -332,7 +332,7 @@ namespace EDDiscovery
                     }
                 }
 
-                if (history.IsRealCommanderId)
+                if (History.IsRealCommanderId)
                     EdsmLogFetcher.Start(EDCommander.Current);
 
                 refreshHistoryRequestedFlag = 0;

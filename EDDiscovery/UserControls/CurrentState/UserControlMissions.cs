@@ -130,13 +130,13 @@ namespace EDDiscovery.UserControls
             Display();
 
             // he can be null
-            var ml = DiscoveryForm.history.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
+            var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
             NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? ObjectExtensionsDates.MaxValueUTC();
         }
 
         private void Display()
         {
-            List<MissionState> ml = last_he != null ? DiscoveryForm.history.MissionListAccumulator.GetMissionList(last_he.MissionList) : null;
+            List<MissionState> ml = last_he != null ? DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he.MissionList) : null;
 
             missionListCurrent.Clear();
             missionListPrevious.Clear();

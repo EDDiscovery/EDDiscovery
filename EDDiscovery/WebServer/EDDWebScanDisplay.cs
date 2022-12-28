@@ -55,7 +55,7 @@ namespace EDDiscovery.WebServer
             response["responsetype"] = "scandisplayobjects";
             JArray objectlist = new JArray();
 
-            var hl = discoveryform.history;
+            var hl = discoveryform.History;
             if (hl.Count > 0)
             {
                 if (entry < 0 || entry >= hl.Count)

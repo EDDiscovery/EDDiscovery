@@ -31,7 +31,7 @@ namespace EDDiscovery
     public partial class EDDiscoveryController
     {
         #region Variables
-        public HistoryList history { get; private set; } = new HistoryList();       // we always have a history
+        public HistoryList History { get; private set; } = new HistoryList();       // we always have a history
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
         public string LogText { get { return logtext; } }
 
@@ -113,7 +113,7 @@ namespace EDDiscovery
 
         public void RefreshDisplays()
         {
-            OnHistoryChange?.Invoke(history);
+            OnHistoryChange?.Invoke(History);
         }
 
         #endregion

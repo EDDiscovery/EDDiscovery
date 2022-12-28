@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(DiscoveryForm.history);
+            HistoryChanged(DiscoveryForm.History);
         }
 
         public void HistoryChanged(HistoryList hl)           // on History change
@@ -459,7 +459,7 @@ namespace EDDiscovery.UserControls
 
                 if (search.Terms[0] != null)
                 {
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
                     matched = entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 colTime.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -684,7 +684,7 @@ namespace EDDiscovery.UserControls
         {
             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag;
             bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
-            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1));
+            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1));
             PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, Icon.Index, true);
         }
 
@@ -1029,7 +1029,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.history.SetStartStop(rightclickhe);
+            DiscoveryForm.History.SetStartStop(rightclickhe);
             DiscoveryForm.RefreshHistoryAsync();
         }
 
@@ -1095,11 +1095,11 @@ namespace EDDiscovery.UserControls
 
         private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.history.Count - rightclickhe.EntryNumber + 1)) : 0;
+            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.History.Count - rightclickhe.EntryNumber + 1)) : 0;
             int selrow = dataGridViewTravel.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.history.Count - he.EntryNumber + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)
@@ -1138,7 +1138,7 @@ namespace EDDiscovery.UserControls
                 quickMarkJIDs.Remove(rightclickhe.journalEntry.Id);
 
             var str = quickMarkJIDs.Select(x => x.ToStringInvariant()).ToArray().Join(';');
-            PutSetting(dbBookmarks + ":" + DiscoveryForm.history.CommanderId.ToStringInvariant(), str);
+            PutSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), str);
             UpdateQuickMarkComboBox();
         }
 
@@ -1215,7 +1215,7 @@ namespace EDDiscovery.UserControls
         private void showSystemVisitedForeColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting(dbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
-            HistoryChanged(DiscoveryForm.history);
+            HistoryChanged(DiscoveryForm.History);
         }
 
         #endregion
@@ -1226,7 +1226,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                var mcmr = DiscoveryForm.history.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
+                var mcmr = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
                 List<QuickJSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, mcmr);
 
                 foreach (var j in list)
@@ -1299,7 +1299,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                DiscoveryForm.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.history, rightclickhe), true);
+                DiscoveryForm.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, rightclickhe), true);
             }
 
         }
@@ -1307,7 +1307,7 @@ namespace EDDiscovery.UserControls
         private void travelGridInDebugModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting(dbDebugMode, travelGridInDebugModeToolStripMenuItem.Checked);
-            HistoryChanged(DiscoveryForm.history);
+            HistoryChanged(DiscoveryForm.History);
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)

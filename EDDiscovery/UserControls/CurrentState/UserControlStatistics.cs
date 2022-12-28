@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewByShip.RowTemplate.MinimumHeight =
                         dataGridViewGeneral.RowTemplate.MinimumHeight = Font.ScalePixels(24);
 
-            if ( DiscoveryForm.history.Count>0 )        // if we loaded a history, this is a new panel, so work
+            if ( DiscoveryForm.History.Count>0 )        // if we loaded a history, this is a new panel, so work
                 KickComputer();
 
             timerupdate.Start();
