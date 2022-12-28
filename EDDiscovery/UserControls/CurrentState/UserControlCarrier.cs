@@ -243,12 +243,12 @@ namespace EDDiscovery.UserControls
             normfont.Dispose();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)     
+        private void Discoveryform_OnHistoryChange()     
         {
             ClearDisplayFontJournalCAPI();   // do the lot, including the capi, etc.
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)     
+        private void Discoveryform_OnNewEntry(HistoryEntry he)     
         {
             if ( he.journalEntry is ICarrierStats)
             {

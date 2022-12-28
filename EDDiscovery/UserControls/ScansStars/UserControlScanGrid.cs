@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        private void NewEntry(HistoryEntry he, HistoryList hl)
+        private void NewEntry(HistoryEntry he)
         {
             DrawSystem(he, he.journalEntry is IStarScan ); // not IBodyNameAndID because all that can do is add an empty scan node, and we do not present info if no scan data
         }

@@ -166,12 +166,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             InitialDisplay();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (!isHistoric)    // only if current (not on history cursor)
             {

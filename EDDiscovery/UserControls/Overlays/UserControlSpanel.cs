@@ -172,7 +172,7 @@ namespace EDDiscovery.UserControls
 
             dividers = new ExtButton[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
-            DiscoveryForm.OnHistoryChange += Display;
+            DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
             DiscoveryForm.OnNewEntry += NewEntry;
             DiscoveryForm.OnNewTarget += NewTarget;
             DiscoveryForm.OnNewUIEvent += OnNewUIEvent;
@@ -191,7 +191,7 @@ namespace EDDiscovery.UserControls
             dividercheck.Stop();
             scanhide.Stop();
 
-            DiscoveryForm.OnHistoryChange -= Display;
+            DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
             DiscoveryForm.OnNewEntry -= NewEntry;
             DiscoveryForm.OnNewTarget -= NewTarget;
             DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
@@ -228,6 +228,11 @@ namespace EDDiscovery.UserControls
         #region Display
 
         public override void InitialDisplay()
+        {
+            Display(DiscoveryForm.History);
+        }
+
+        private void DiscoveryForm_OnHistoryChange()
         {
             Display(DiscoveryForm.History);
         }
@@ -617,13 +622,13 @@ namespace EDDiscovery.UserControls
             Display(current_historylist);
         }
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
+        public void NewEntry(HistoryEntry he)               // called when a new entry is made..
         {
             HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             if (hef.IsIncluded(he))
             {
-                Display(hl);
+                Display(DiscoveryForm.History);
             }
 
             if (he.journalEntry.EventTypeID == JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed

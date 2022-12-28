@@ -136,12 +136,12 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj) // need to handle this in case commander changed..
+        private void Discoveryform_OnHistoryChange() // need to handle this in case commander changed..
         {
             last_he = DiscoveryForm.History.GetLast;
             currentBookmark = null;
             PopulateBookmarkCombo();
-            OnNewEntry(last_he, DiscoveryForm.History);
+            OnNewEntry(last_he);
         }
 
         public override void InitialDisplay()       // on start up, this will have an empty history
@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-        private async void OnNewEntry(HistoryEntry he, HistoryList hl)
+        private async void OnNewEntry(HistoryEntry he)
         {
             last_he = he;
             if (last_he != null)

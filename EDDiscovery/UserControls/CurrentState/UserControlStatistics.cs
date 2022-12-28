@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
             timerupdate.Start();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
             VerifyDates();      // date range may have changed
             KickComputer();
@@ -366,7 +366,7 @@ namespace EDDiscovery.UserControls
             pendingstats = rs;              // the UI tick will see we have new pending stats and apply them..
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)
+        private void AddNewEntry(HistoryEntry he)
         {
             if (JournalStatisticsComputer.IsJournalEntryForStats(he.journalEntry))     // only if its got something to do with stats
             {

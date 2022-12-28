@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (he.IsFSDCarrierJump)
             {
@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.History.EntryOrder());
             Display();

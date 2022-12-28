@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private void Discoveryform_OnHistoryChange(EliteDangerousCore.HistoryList obj)      // called if history re-read, so need to recalc combo and display
+        private void Discoveryform_OnHistoryChange()      // called if history re-read, so need to recalc combo and display
         {
             bool firsttime = comboBoxCustomCampaign.Items.Count == 0;
 
@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
             SetLabels();
         }
 
-        private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he, EliteDangerousCore.HistoryList hel)
+        private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he)
         {
             if ( current != null )
             {
@@ -320,7 +320,7 @@ namespace EDDiscovery.UserControls
                     tryadd = he.EventTimeUTC <= current.EndTimeUTC;
                 else if (current.Type == FilterEntry.EntryType.Mission) // mission is limited, lookup mission and check end time
                 {
-                    MissionState ms = hel.MissionListAccumulator.GetMission(current.MissionKey ?? "-");
+                    MissionState ms = DiscoveryForm.History.MissionListAccumulator.GetMission(current.MissionKey ?? "-");
                     tryadd = ms != null ? (he.EventTimeUTC <= ms.MissionEndTime) : false;
                 }
 

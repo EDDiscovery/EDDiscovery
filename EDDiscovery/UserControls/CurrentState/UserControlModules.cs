@@ -95,14 +95,15 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            Discoveryform_OnHistoryChange(hl);
+            // TBD seems aggressive
+            UpdateComboBox();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            UpdateComboBox(hl);
+            UpdateComboBox();
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
@@ -136,7 +137,7 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxShips.Items.Count == 0)
-                UpdateComboBox(DiscoveryForm.History);
+                UpdateComboBox();
 
             last_he = he;
             Display();
@@ -411,9 +412,9 @@ namespace EDDiscovery.UserControls
         #endregion
 
 
-        private void UpdateComboBox(HistoryList hl)
+        private void UpdateComboBox()
         {
-            ShipInformationList shm = hl.ShipInformationList;
+            ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
             string cursel = comboBoxShips.Text;
 
             comboBoxShips.Items.Clear();

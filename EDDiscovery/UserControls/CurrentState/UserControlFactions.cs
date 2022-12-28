@@ -218,13 +218,13 @@ namespace EDDiscovery.UserControls
             PutSetting("EndDateChecked", endDateTimePicker.Checked);
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)     // may have changed date system, this causes this
+        private void Discoveryform_OnHistoryChange()     // may have changed date system, this causes this
         {
             VerifyDates();
             Display();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiryUTC)
             {
@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
                 Display();
 
                 // he can be null
-                var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? EDDConfig.GameEndTimeUTC());    // will always return an array
+                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? EDDConfig.GameEndTimeUTC());    // will always return an array
                 NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
             }
         }

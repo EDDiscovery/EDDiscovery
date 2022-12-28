@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             Display();
         }

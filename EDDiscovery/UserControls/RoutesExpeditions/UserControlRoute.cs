@@ -150,13 +150,13 @@ namespace EDDiscovery.UserControls
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
-        public void HistoryChanged(HistoryList hl)           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
+        public void HistoryChanged()           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
         {
-            if (hl != null && hl.Count > 0)
+            if (DiscoveryForm.History.Count > 0)
             {
                 UpdateTo(null);
                 UpdateFrom(null);
-                last_history_he = hl.GetLast;
+                last_history_he = DiscoveryForm.History.GetLast;
             }
         }
 

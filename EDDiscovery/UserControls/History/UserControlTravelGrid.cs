@@ -177,27 +177,24 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(DiscoveryForm.History);
+            Display(DiscoveryForm.History,false);
         }
 
-        public void HistoryChanged(HistoryList hl)           // on History change
+        public void HistoryChanged()           // on History change
         {
-            HistoryChanged(hl, false);
+            Display(DiscoveryForm.History, false);
 
             // quick marks are commander dependent
-            var str = GetSetting(dbBookmarks + ":" + hl.CommanderId, "").Split(';');
+            var str = GetSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId, "").Split(';');
             quickMarkJIDs = str.Select(x => x.InvariantParseLong(-1)).ToList().ToHashSet();
         }
 
-        public void HistoryChanged(HistoryList hl, bool disablesorting)
+        public void Display(HistoryList hl, bool disablesorting)
         {
             todo.Clear();           // clear queue of things to do
             queuedadds.Clear();     // and any adds.
             todotimer.Stop();       // ensure timer is off
 
-            if (hl == null)     // just for safety
-                return;
-                                        
             current_historylist = hl;
             this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
 
@@ -372,7 +369,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
+        private void AddNewEntry(HistoryEntry he)           // on new entry from discovery system
         {
             if (todotimer.Enabled)      // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
@@ -603,7 +600,7 @@ namespace EDDiscovery.UserControls
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             PutSetting(dbHistorySave, comboBoxTime.Text);
-            HistoryChanged(current_historylist);       
+            Display(current_historylist,false);       
         }
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -677,7 +674,7 @@ namespace EDDiscovery.UserControls
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
             searchtimer.Stop();
-            HistoryChanged(current_historylist);
+            Display(current_historylist, false);
         }
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -791,7 +788,7 @@ namespace EDDiscovery.UserControls
         {
             if (extCheckBoxOutlines.Checked == true && outliningOnOffToolStripMenuItem.Checked)     // if going checked.. means it was unchecked
             {
-                HistoryChanged(current_historylist, true);      // Reapply, disabled by sorting etc
+                Display(current_historylist, true);      // Reapply, disabled by sorting etc
             }
             else
             {
@@ -806,7 +803,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
             if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
-                HistoryChanged(current_historylist, true);
+                Display(current_historylist, true);
         }
 
         private void rolluplimitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -817,7 +814,7 @@ namespace EDDiscovery.UserControls
             rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
             PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
             if (outliningOnOffToolStripMenuItem.Checked )
-                HistoryChanged(current_historylist, true);
+                Display(current_historylist, true);
         }
 
         #endregion
@@ -872,7 +869,7 @@ namespace EDDiscovery.UserControls
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            HistoryChanged(current_historylist, true);
+            Display(current_historylist, true);
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
@@ -900,7 +897,7 @@ namespace EDDiscovery.UserControls
                     sp.journalEntry.UpdateMapColour(mapColorDialog.Color.ToArgb());
                 }
 
-                HistoryChanged(current_historylist);
+                Display(current_historylist,false);
             }
         }
 
@@ -1180,7 +1177,7 @@ namespace EDDiscovery.UserControls
             if (filters != newset)
             {
                 PutSetting(dbFilter, newset);
-                HistoryChanged(current_historylist, true);
+                Display(current_historylist, true);
             }
         }
 
@@ -1192,7 +1189,7 @@ namespace EDDiscovery.UserControls
             {
                 fieldfilter = res;
                 PutSetting(dbFieldFilter, fieldfilter.GetJSON());
-                HistoryChanged(current_historylist);
+                Display(current_historylist, false);
             }
         }
 
@@ -1215,7 +1212,7 @@ namespace EDDiscovery.UserControls
         private void showSystemVisitedForeColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting(dbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
-            HistoryChanged(DiscoveryForm.History);
+            Display(current_historylist, false);
         }
 
         #endregion
@@ -1307,7 +1304,7 @@ namespace EDDiscovery.UserControls
         private void travelGridInDebugModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting(dbDebugMode, travelGridInDebugModeToolStripMenuItem.Checked);
-            HistoryChanged(DiscoveryForm.History);
+            Display(current_historylist, false);
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)

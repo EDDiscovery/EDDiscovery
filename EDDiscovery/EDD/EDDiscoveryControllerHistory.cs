@@ -288,7 +288,7 @@ namespace EDDiscovery
 
                     Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Invoke");
 
-                    OnHistoryChange?.Invoke(History);
+                    OnHistoryChange?.Invoke();
 
                     Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Completed");
                 }

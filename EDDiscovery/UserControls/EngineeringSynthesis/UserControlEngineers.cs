@@ -86,10 +86,10 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             SetupDisplay();
-            RefreshData(null);
+            RefreshData();
         }
 
-        private void RefreshData(HistoryList objunused)
+        private void RefreshData()
         {
             if (isHistoric)
             {
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (!isHistoric)        // only track new items if not historic
             {
@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
         private void chkNotHistoric_CheckedChanged(object sender, EventArgs e)
         {
             isHistoric = !chkNotHistoric.Checked;
-            RefreshData(null);
+            RefreshData();
         }
     }
 }

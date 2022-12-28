@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
 
 #region Display
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        public void NewEntry(HistoryEntry he)               // called when a new entry is made.. check to see if its a scan update
         {
             if (he != null)
             {

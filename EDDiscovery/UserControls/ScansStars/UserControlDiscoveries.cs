@@ -115,13 +115,13 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             updatetimer.Stop();
             Draw();
         }
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        public void NewEntry(HistoryEntry he)               // called when a new entry is made.. check to see if its a scan update
         {
             // Star scan type, or material entry type, or a bodyname/id entry, or not set, or not same system
             if (HistoryListQueries.AllSearchableJournalTypes.Contains(he.EntryType))

@@ -98,12 +98,12 @@ namespace EDDiscovery.UserControls
             Resize += UserControlMissionOverlay_Resize;
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            Display(hl.GetLast);
+            Display(DiscoveryForm.History.GetLast);
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             Display(he);
         }

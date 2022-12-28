@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             UpdateComboBox();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             UpdateComboBox();
         }
@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbImages, String.Join("\u2188", extimages));
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if ( he.journalEntry is JournalScreenshot )
             {

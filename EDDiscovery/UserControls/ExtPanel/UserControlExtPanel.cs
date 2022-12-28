@@ -134,10 +134,10 @@ namespace EDDiscovery.UserControls
 
         #region Events
 
-        private void Discoveryform_OnHistoryChange(EliteDangerousCore.HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            var cmdr = EliteDangerousCore.EDCommander.GetCommander(hl.CommanderId);
-            panel.HistoryChange(hl.Count, cmdr.Name, cmdr.NameIsBeta, cmdr.LegacyCommander);
+            var cmdr = EliteDangerousCore.EDCommander.GetCommander(DiscoveryForm.History.CommanderId);
+            panel.HistoryChange(DiscoveryForm.History.Count, cmdr.Name, cmdr.NameIsBeta, cmdr.LegacyCommander);
         }
 
         private void Discoveryform_OnNewHistoryEntryUnfiltered(EliteDangerousCore.HistoryEntry he)
@@ -145,9 +145,9 @@ namespace EDDiscovery.UserControls
             panel.NewUnfilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, he, false));
         }
 
-        private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he, EliteDangerousCore.HistoryList hl)
+        private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he)
         {
-            panel.NewFilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(hl, he, false));
+            panel.NewFilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, he, false));
         }
 
         private void Discoveryform_OnNewUIEvent(EliteDangerousCore.UIEvent uievent)

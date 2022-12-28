@@ -116,7 +116,7 @@ namespace EDDiscovery
         private HistoryEntry queuededdnfsssd = null;        // queued FSS because we can't find the right system
 
         // Called after HE removal/reorder, and after the UI's has had a chance to operate
-        private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)
+        private void Controller_NewEntrySecond(HistoryEntry he)
         {
             BaseUtils.AppTicks.TickCountLapDelta("DFS", true);
 

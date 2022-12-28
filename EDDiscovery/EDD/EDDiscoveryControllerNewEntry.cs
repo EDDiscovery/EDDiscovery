@@ -154,7 +154,7 @@ namespace EDDiscovery
                     if (t2.Item2 >= 80)
                         System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} OnNewEntry slow {t2.Item1}");
 
-                    OnNewEntrySecond?.Invoke(he, History);      // secondary hook..
+                    OnNewEntrySecond?.Invoke(he);      // secondary hook..
 
                     // finally, CAPI, if docked, and CAPI is go for pc commander, do capi procedure
 

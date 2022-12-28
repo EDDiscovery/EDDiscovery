@@ -91,9 +91,9 @@ namespace EDDiscovery.UserControls
             base.OnLoad(e);
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
-            KickComputation(obj.GetLast);   // copes with getlast = null
+            KickComputation(DiscoveryForm.History.GetLast);   // copes with getlast = null
         }
 
         public override void ReceiveHistoryEntry(HistoryEntry he)

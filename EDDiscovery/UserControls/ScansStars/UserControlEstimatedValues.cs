@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        public void NewEntry(HistoryEntry he)               // called when a new entry is made.. check to see if its a scan update
         {
             // if he valid, and last is null, or not he, or we have a new scan
             if (he != null && (last_he == null || he != last_he || he.journalEntry is IStarScan)) 

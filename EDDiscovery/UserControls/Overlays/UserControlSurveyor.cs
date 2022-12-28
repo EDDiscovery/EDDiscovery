@@ -118,8 +118,9 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
+            var hl = DiscoveryForm.History;
             last_sys = hl.GetLast?.System;      // may be null
             shipfsdinfo = hl.GetLast?.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
             shipinfo = hl.GetLast?.ShipInformation;
@@ -135,14 +136,14 @@ namespace EDDiscovery.UserControls
         }
         //int sysno = 0; double percent = -10; Timer t = new Timer();// play thru harness
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             // received a new navroute, and we have navroute selected, reload
             if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
             {
                 //System.Diagnostics.Debug.WriteLine("Surveyor {displaynumber} new entry, load nav route");
                 LoadRoute(NavRouteNameLabel);
-                last_sys = hl.GetLast?.System;      // may be null, make sure its set.
+                last_sys = DiscoveryForm.History.GetLast?.System;      // may be null, make sure its set.
                 CalculateThenDrawSystem(last_sys);
             }
         }

@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
 
         #region Display Grid
 
-        private void Redisplay(HistoryList hl)
+        private void Redisplay()
         {
             Display();
         }
@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
                 return null;
         }
 
-        private void NewEntry(HistoryEntry he, HistoryList hl)
+        private void NewEntry(HistoryEntry he)
         {
             while(transactioncountatdisplay < DiscoveryForm.History.CashLedger.Transactions.Count)   // if new transaction
             {

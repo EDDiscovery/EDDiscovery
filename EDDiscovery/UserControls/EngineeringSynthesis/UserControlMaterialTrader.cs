@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             InitialDisplay();
         }
@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if ( checkBoxCursorToTop.Checked )
             { 

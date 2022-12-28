@@ -136,13 +136,13 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(DiscoveryForm.History);
+            Display(DiscoveryForm.History, false);
         }
 
 
-        private void HistoryChanged(HistoryList hl)
+        private void HistoryChanged()
         {
-            Display(hl, false);
+            Display(DiscoveryForm.History, false);
         }
 
         private void Display(HistoryList hl, bool disablesorting )
@@ -151,13 +151,10 @@ namespace EDDiscovery.UserControls
             queuedadds.Clear();
             todotimer.Stop();
 
-            if (hl == null)     // just for safety
-                return;
-
             this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
             buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
 
-            current_historylist = hl;
+            current_historylist = hl;       // we cache this in case it changes during sorting
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -267,7 +264,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)               // on new entry from discovery system
+        private void AddNewEntry(HistoryEntry he)               // on new entry from discovery system
         {
             if (todotimer.Enabled)       // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
@@ -378,7 +375,7 @@ namespace EDDiscovery.UserControls
             if (filters != newset)
             {
                 PutSetting(dbFilter, newset);
-                HistoryChanged(current_historylist);
+                Display(current_historylist, false);
             }
         }
 
@@ -397,7 +394,7 @@ namespace EDDiscovery.UserControls
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             PutSetting(dbHistorySave, comboBoxTime.Text);
-            HistoryChanged(current_historylist);
+            Display(current_historylist, false);
         }
 
         private void buttonField_Click(object sender, EventArgs e)
@@ -407,7 +404,7 @@ namespace EDDiscovery.UserControls
             {
                 fieldfilter = res;
                 PutSetting(dbFieldFilter, fieldfilter.GetJSON());
-                HistoryChanged(current_historylist);
+                Display(current_historylist, false);
             }
         }
 

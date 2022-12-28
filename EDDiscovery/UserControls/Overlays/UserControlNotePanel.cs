@@ -60,11 +60,6 @@ namespace EDDiscovery.UserControls
         {
         }
 
-        public override void InitialDisplay()
-        {
-            OnHistoryChange(DiscoveryForm.History);
-        }
-
         public override void Closing()
         {
             DiscoveryForm.OnHistoryChange -= OnHistoryChange;
@@ -89,9 +84,14 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
-        private void OnHistoryChange( HistoryList hl)            // when user clicks around..  HE may be null here
+        public override void InitialDisplay()
         {
-            Display(hl.GetLast);
+            Display(DiscoveryForm.History.GetLast);
+        }
+
+        private void OnHistoryChange()            // when user clicks around..  HE may be null here
+        {
+            Display(DiscoveryForm.History.GetLast);
         }
 
         void Display(HistoryEntry he)

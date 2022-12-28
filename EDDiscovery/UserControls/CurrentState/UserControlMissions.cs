@@ -95,12 +95,12 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             missionListPrevious.VerifyDates();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiryUTC)
             {
@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls
                 Display();
 
                 // he can be null
-                var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
+                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? ObjectExtensionsDates.MaxValueUTC());    // will always return an array
                 NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? ObjectExtensionsDates.MaxValueUTC();
             }
         }
@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
 
         HistoryEntry last_he = null;
 
-        //private void Display(HistoryEntry he, HistoryList hl) =>
+        //private void Display(HistoryEntry he) =>
         //    Display(he, hl, true);
 
         private void Display(HistoryEntry he)

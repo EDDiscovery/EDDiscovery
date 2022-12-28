@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
             map.Systick();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             glwfc.EnsureCurrentContext();           // ensure the context
 
@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             glwfc.EnsureCurrentContext();           // ensure the context
 

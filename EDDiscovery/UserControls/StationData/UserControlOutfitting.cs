@@ -71,19 +71,20 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            Discoveryform_OnHistoryChange(hl);
+            // seems excessive agressive tbd
+            UpdateComboBox();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            UpdateComboBox(hl);
+            UpdateComboBox();
         }
 
-        private void UpdateComboBox(HistoryList hl)
+        private void UpdateComboBox()
         {
-            OutfittingList ofl = hl.Outfitting;
+            OutfittingList ofl = DiscoveryForm.History.Outfitting;
             string cursel = comboBoxYards.Text;
 
             string the = "Travel History Entry".T(EDTx.UserControlOutfitting_TravelHistoryEntry);
@@ -117,7 +118,7 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxYards.Items.Count == 0)
-                UpdateComboBox(DiscoveryForm.History);
+                UpdateComboBox();
 
             last_he = he;
             Display();

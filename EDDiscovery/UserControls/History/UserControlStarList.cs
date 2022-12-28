@@ -129,10 +129,10 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(DiscoveryForm.History);
+            Display(false);
         }
 
-        public void HistoryChanged(HistoryList hl)           // on History change
+        public void HistoryChanged()           // on History change
         {
             Display(false);
         }
@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
+        private void AddNewEntry(HistoryEntry he)           // on new entry from discovery system
         {
             if (todotimer.Enabled)      // if loading, add to queue..
             {

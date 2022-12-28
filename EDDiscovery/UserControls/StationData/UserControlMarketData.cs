@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            FillComboBoxes(DiscoveryForm.History);
+            FillComboBoxes();
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
@@ -97,17 +97,17 @@ namespace EDDiscovery.UserControls
 
         List<HistoryEntry> comboboxentries = new List<HistoryEntry>(); // filled by combobox
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            FillComboBoxes(hl);     // display time or list may have changed
+            FillComboBoxes();     // display time or list may have changed
             notfoundeddmd = false;
         }
 
-        private void OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void OnNewEntry(HistoryEntry he)
         {
             if (he.journalEntry is JournalCommodityPricesBase)            // new CMPB, update combo boxes
             {
-                FillComboBoxes(hl);
+                FillComboBoxes();
                 notfoundeddmd = false;
             }
         }
@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Stop watch" + swp.ElapsedMilliseconds);
         }
 
-        private void FillComboBoxes(HistoryList hl)
+        private void FillComboBoxes()
         {
             string selfrom = comboBoxCustomFrom.Text;
             string selto = comboBoxCustomTo.Text;
@@ -305,7 +305,7 @@ namespace EDDiscovery.UserControls
 
             comboboxentries.Clear();
 
-            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(hl.EntryOrder());
+            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(DiscoveryForm.History.EntryOrder());
             JournalCommodityPricesBase last = null;
 
             foreach (HistoryEntry h in hlcpb)

@@ -120,19 +120,19 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
             ControlVisibility();
         }
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
             VerifyDates();      // date range may have changed
             DrawGrid();             // don't do the Body info, its tied to the UCTG
             ControlVisibility();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             // received a new navroute, and we have navroute selected, reload
             if (he.EntryType == JournalTypeEnum.ScanOrganic)
             {
-                lasthe = hl.GetLast;      // may be null
+                lasthe = DiscoveryForm.History.GetLast;      // may be null
                 DrawAll();
             }
         }
