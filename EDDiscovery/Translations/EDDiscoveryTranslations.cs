@@ -995,6 +995,7 @@ namespace EDDiscovery
         UserControlRouteTracker_showWaypointCoordinatesToolStripMenuItem,
         UserControlRouteTracker_showDeviationFromRouteToolStripMenuItem,
         UserControlRouteTracker_showBookmarkNotesToolStripMenuItem,
+        UserControlRouteTracker_showSystemRouteNoteToolStripMenuItem,
         UserControlRouteTracker_autoCopyWPToolStripMenuItem,
         UserControlRouteTracker_autoSetTargetToolStripMenuItem,
         UserControlRouteTracker_showtargetinfo,

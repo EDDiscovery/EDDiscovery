@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);        // null if not set
 
             LoadRoute(GetSetting("route", ""));
-            routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
+            routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints;shownotetext");
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
 
@@ -475,6 +475,9 @@ namespace EDDiscovery.UserControls
                             if (bookmark != null)
                                 lastroutetext += Environment.NewLine + String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
                         }
+
+                        if ( IsSet(RouteControl.shownotetext) && closest.waypointnote.HasChars())
+                            lastroutetext = lastroutetext.AppendPrePad(closest.waypointnote,Environment.NewLine);
 
                         string name = closest.nextsystem.Name;
 
@@ -1162,6 +1165,7 @@ namespace EDDiscovery.UserControls
             settarget,
             showtarget,
             showfuel,
+            shownotetext,
         };
 
         private bool IsSet(RouteControl c)
@@ -1177,6 +1181,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(RouteControl.showwaypoints.ToString(), "Show Waypoint Coordinates".TxID(EDTx.UserControlRouteTracker_showWaypointCoordinatesToolStripMenuItem));
             displayfilter.AddStandardOption(RouteControl.showdeviation.ToString(), "Show Deviation from route".TxID(EDTx.UserControlRouteTracker_showDeviationFromRouteToolStripMenuItem));
             displayfilter.AddStandardOption(RouteControl.showbookmarks.ToString(), "Show Bookmark Notes".TxID(EDTx.UserControlRouteTracker_showBookmarkNotesToolStripMenuItem));
+            displayfilter.AddStandardOption(RouteControl.shownotetext.ToString(), "Show Route Note on waypoint".TxID(EDTx.UserControlRouteTracker_showSystemRouteNoteToolStripMenuItem));
             displayfilter.AddStandardOption(RouteControl.autocopy.ToString(), "Auto copy waypoint".TxID(EDTx.UserControlRouteTracker_autoCopyWPToolStripMenuItem));
             displayfilter.AddStandardOption(RouteControl.settarget.ToString(), "Auto set target".TxID(EDTx.UserControlRouteTracker_autoSetTargetToolStripMenuItem));
             displayfilter.AddStandardOption(RouteControl.showtarget.ToString(), "Show Target Information".TxID(EDTx.UserControlRouteTracker_showtargetinfo));

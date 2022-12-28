@@ -649,6 +649,7 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" @
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" @
 .autoSetTargetToolStripMenuItem: "Auto set target" @
+.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
 
 .showtargetinfo: "Show Target Information" @
 .showfuelinfo: "Show Fuel Information" @
