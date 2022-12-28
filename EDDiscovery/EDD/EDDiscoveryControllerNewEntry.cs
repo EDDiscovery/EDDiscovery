@@ -144,7 +144,7 @@ namespace EDDiscovery
                         foreach (var e in OnNewEntry.GetInvocationList())       // do the invokation manually, so we can time each method
                         {
                             Stopwatch sw = new Stopwatch(); sw.Start();
-                            e.DynamicInvoke(he, History);
+                            e.DynamicInvoke(he);
                             if (sw.ElapsedMilliseconds >= 80)
                                 System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} OnNewEntry Add Method {e.Method.DeclaringType} took {sw.ElapsedMilliseconds}");
                         }
