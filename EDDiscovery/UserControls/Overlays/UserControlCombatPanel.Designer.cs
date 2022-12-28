@@ -205,8 +205,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomGridOn.ImageIndeterminate = null;
             this.checkBoxCustomGridOn.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomGridOn.ImageUnchecked = null;
-            this.checkBoxCustomGridOn.Location = new System.Drawing.Point(324, 1);
-            this.checkBoxCustomGridOn.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxCustomGridOn.Location = new System.Drawing.Point(324, 6);
+            this.checkBoxCustomGridOn.Margin = new System.Windows.Forms.Padding(0, 6, 8, 1);
             this.checkBoxCustomGridOn.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomGridOn.Name = "checkBoxCustomGridOn";
             this.checkBoxCustomGridOn.Size = new System.Drawing.Size(45, 17);
@@ -225,8 +225,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCampaign.DisplayMember = "";
             this.comboBoxCustomCampaign.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomCampaign.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 1);
-            this.comboBoxCustomCampaign.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 2);
+            this.comboBoxCustomCampaign.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
             this.comboBoxCustomCampaign.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCampaign.Name = "comboBoxCustomCampaign";
             this.comboBoxCustomCampaign.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -243,8 +243,8 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtEditCampaign
             // 
-            this.buttonExtEditCampaign.Location = new System.Drawing.Point(230, 1);
-            this.buttonExtEditCampaign.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtEditCampaign.Location = new System.Drawing.Point(230, 2);
+            this.buttonExtEditCampaign.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
             this.buttonExtEditCampaign.Name = "buttonExtEditCampaign";
             this.buttonExtEditCampaign.Size = new System.Drawing.Size(50, 24);
             this.buttonExtEditCampaign.TabIndex = 2;

@@ -236,6 +236,7 @@ namespace EDDiscovery.UserControls
 
             if ( current != null )
             {
+            
                 //System.Diagnostics.Debug.WriteLine("Filter {0} {1}", current.StartTime.ToStringZulu(), current.EndTime.ToStringZulu());
                 List<HistoryEntry> hel;
 
@@ -263,13 +264,19 @@ namespace EDDiscovery.UserControls
                 else
                     hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
 
+                HashSet<string> eventfilter = GetSetting(dbFilter, "All").SplitNoEmptyStartFinish(';').ToHashSet();
+                bool allevents = eventfilter.Contains("All");
+
                 var rows = new List<DataGridViewRow>(hel.Count);
                 foreach (HistoryEntry he in hel)
                 {
-                    //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
-                    var row = createRow(he);
-                    if ( row != null)
-                        rows.Add(row);
+                    if (allevents || eventfilter.Contains(he.journalEntry.EventFilterName))
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
+                        var row = createRow(he);
+                        if (row != null)
+                            rows.Add(row);
+                    }
                 }
                 dataGridViewCombat.Rows.AddRange(rows.ToArray());
             }
