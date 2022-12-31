@@ -73,8 +73,10 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            // TBD seems aggressive
-            UpdateComboBox();
+            if (he.EntryType == JournalTypeEnum.Shipyard)    // only this affects the list..
+            {
+                UpdateComboBox();
+            }
         }
 
         private void Discoveryform_OnHistoryChange()

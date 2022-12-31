@@ -97,8 +97,10 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            // TBD seems aggressive
-            UpdateComboBox();
+            if (he.journalEntry is IShipInformation)        // anything that ShipInformationList processes could cause a change in history.StoredModules or history.Shipinformation
+            {
+                UpdateComboBox();
+            }
         }
 
         private void Discoveryform_OnHistoryChange()
@@ -106,11 +108,11 @@ namespace EDDiscovery.UserControls
             UpdateComboBox();
         }
 
-        private void Discoveryform_OnNewUIEvent(UIEvent obj)
+        private void Discoveryform_OnNewUIEvent(UIEvent uievent)
         {
             // fuel UI update the SI information globally, and we have a ship, and we have a last entry, and we have ship information
 
-            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && DiscoveryForm.History.GetLast?.ShipInformation != null ) // protect against ship information or he being null
+            if (uievent is EliteDangerousCore.UIEvents.UIFuel && last_si != null && DiscoveryForm.History.GetLast?.ShipInformation != null ) // protect against ship information or he being null
             {
                 if (last_si.ShipNameIdentType == DiscoveryForm.History.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
                 {

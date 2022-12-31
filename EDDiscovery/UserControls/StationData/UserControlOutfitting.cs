@@ -73,8 +73,10 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            // seems excessive agressive tbd
-            UpdateComboBox();
+            if (he.EntryType == JournalTypeEnum.Outfitting)    // only this affects the list..
+            {
+                UpdateComboBox();
+            }
         }
 
         private void Discoveryform_OnHistoryChange()
