@@ -421,19 +421,20 @@ namespace EDDiscovery.UserControls
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
-            mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+            toolStripMenuItemStartStop.Enabled = rightclickhe != null;
+            mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
+            viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
             jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
         }
 
-        HistoryEntry rightclicksystem = null;
-        HistoryEntry leftclicksystem = null;
+        HistoryEntry rightclickhe = null;
+        HistoryEntry leftclickhe = null;
 
         private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
         {
-            rightclicksystem = dataGridViewJournal.RightClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.RightClickRow].Tag : null;
-            leftclicksystem = dataGridViewJournal.LeftClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.LeftClickRow].Tag : null;
+            rightclickhe = dataGridViewJournal.RightClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.RightClickRow].Tag : null;
+            leftclickhe = dataGridViewJournal.LeftClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.LeftClickRow].Tag : null;
         }
 
         private void dataGridViewJournal_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -441,9 +442,9 @@ namespace EDDiscovery.UserControls
             if (dataGridViewJournal.LeftClickRowValid)                                                   // Click expands it..
             {
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                leftclicksystem.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
-                info.Info( (EDDConfig.Instance.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC)) + ": " + leftclicksystem.EventSummary,
+                info.Info( (EDDConfig.Instance.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC)) + ": " + leftclickhe.EventSummary,
                     FindForm().Icon, infodetailed);
                 info.Size = new Size(1200, 800);
                 info.Show(FindForm());
@@ -457,36 +458,33 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.Open3DMap(rightclicksystem?.System);
+            DiscoveryForm.Open3DMap(rightclickhe?.System);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name))
+            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
         }
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
-            {
-                DiscoveryForm.History.SetStartStop(rightclicksystem);
-                DiscoveryForm.RefreshHistoryAsync();
-            }
+            rightclickhe.SetStartStop();
+            DiscoveryForm.RefreshHistoryAsync();        // because we need to recalc all the travel history and redraw
         }
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
-                DiscoveryForm.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
+            if (rightclickhe != null)
+                DiscoveryForm.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
+            if (rightclickhe != null && rightclickhe.journalEntry != null)
             {
-                string json = rightclicksystem.journalEntry.GetJsonString();
+                string json = rightclickhe.journalEntry.GetJsonString();
                 if (json != null)
                 {
                     SetClipboardText(json);
@@ -533,7 +531,7 @@ namespace EDDiscovery.UserControls
 
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.EntryNumber : (DiscoveryForm.History.Count - rightclicksystem.EntryNumber + 1)) : 0;
+            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.History.Count - rightclickhe.EntryNumber + 1)) : 0;
             int selrow = dataGridViewJournal.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;

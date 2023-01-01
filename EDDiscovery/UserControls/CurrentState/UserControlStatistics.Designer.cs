@@ -67,6 +67,11 @@ namespace EDDiscovery.UserControls
             this.tabPageRanks = new System.Windows.Forms.TabPage();
             this.extPanelDataGridViewScrollRanks = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewRanks = new BaseUtils.DataGridViewBaseEnhancements();
+            this.dataGridViewTextBoxColumnRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnAtStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxAtEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextColumnRankProgressNumeric = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnLastPromotionDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extScrollBarRanks = new ExtendedControls.ExtScrollBar();
             this.tabPageLedger = new System.Windows.Forms.TabPage();
             this.splitContainerLedger = new System.Windows.Forms.SplitContainer();
@@ -107,13 +112,9 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
             this.labelStatus = new System.Windows.Forms.Label();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
+            this.extButtonStartStop = new ExtendedControls.ExtButton();
             this.dateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
             this.labelStart = new System.Windows.Forms.Label();
-            this.dataGridViewTextBoxColumnRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnAtStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxAtEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextColumnRankProgressNumeric = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnLastPromotionDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGeneral)).BeginInit();
             this.tabControlCustomStats.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
@@ -363,6 +364,37 @@ namespace EDDiscovery.UserControls
             this.dataGridViewRanks.Size = new System.Drawing.Size(1043, 505);
             this.dataGridViewRanks.TabIndex = 2;
             this.dataGridViewRanks.TopLeftHeaderMenuStrip = null;
+            // 
+            // dataGridViewTextBoxColumnRank
+            // 
+            this.dataGridViewTextBoxColumnRank.HeaderText = "Rank";
+            this.dataGridViewTextBoxColumnRank.Name = "dataGridViewTextBoxColumnRank";
+            this.dataGridViewTextBoxColumnRank.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumnAtStart
+            // 
+            this.dataGridViewTextBoxColumnAtStart.HeaderText = "At Start";
+            this.dataGridViewTextBoxColumnAtStart.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumnAtStart.Name = "dataGridViewTextBoxColumnAtStart";
+            this.dataGridViewTextBoxColumnAtStart.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxAtEnd
+            // 
+            this.dataGridViewTextBoxAtEnd.HeaderText = "At End";
+            this.dataGridViewTextBoxAtEnd.Name = "dataGridViewTextBoxAtEnd";
+            this.dataGridViewTextBoxAtEnd.ReadOnly = true;
+            // 
+            // dataGridViewTextColumnRankProgressNumeric
+            // 
+            this.dataGridViewTextColumnRankProgressNumeric.HeaderText = "Progress";
+            this.dataGridViewTextColumnRankProgressNumeric.Name = "dataGridViewTextColumnRankProgressNumeric";
+            this.dataGridViewTextColumnRankProgressNumeric.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumnLastPromotionDate
+            // 
+            this.dataGridViewTextBoxColumnLastPromotionDate.HeaderText = "Last Promotion/Date";
+            this.dataGridViewTextBoxColumnLastPromotionDate.Name = "dataGridViewTextBoxColumnLastPromotionDate";
+            this.dataGridViewTextBoxColumnLastPromotionDate.ReadOnly = true;
             // 
             // extScrollBarRanks
             // 
@@ -974,7 +1006,7 @@ namespace EDDiscovery.UserControls
             // labelEndDate
             // 
             this.labelEndDate.AutoSize = true;
-            this.labelEndDate.Location = new System.Drawing.Point(321, 7);
+            this.labelEndDate.Location = new System.Drawing.Point(376, 7);
             this.labelEndDate.Name = "labelEndDate";
             this.labelEndDate.Size = new System.Drawing.Size(20, 13);
             this.labelEndDate.TabIndex = 0;
@@ -985,14 +1017,14 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.dateTimePickerStartDate.Checked = false;
-            this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
-            this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
+            this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerStartDate.Location = new System.Drawing.Point(56, 3);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
             this.dateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerStartDate.ShowCheckBox = true;
             this.dateTimePickerStartDate.ShowUpDown = false;
-            this.dateTimePickerStartDate.Size = new System.Drawing.Size(250, 24);
+            this.dateTimePickerStartDate.Size = new System.Drawing.Size(300, 24);
             this.dateTimePickerStartDate.TabIndex = 1;
             this.dateTimePickerStartDate.TextBackColor = System.Drawing.Color.DarkBlue;
             this.dateTimePickerStartDate.Value = new System.DateTime(2021, 2, 5, 7, 56, 15, 927);
@@ -1000,7 +1032,7 @@ namespace EDDiscovery.UserControls
             // labelStatus
             // 
             this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(618, 7);
+            this.labelStatus.Location = new System.Drawing.Point(766, 7);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(43, 13);
             this.labelStatus.TabIndex = 0;
@@ -1011,6 +1043,7 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.AutoHeight = false;
             this.extPanelRollUp.AutoHeightWidthDisable = false;
             this.extPanelRollUp.AutoWidth = false;
+            this.extPanelRollUp.Controls.Add(this.extButtonStartStop);
             this.extPanelRollUp.Controls.Add(this.labelStatus);
             this.extPanelRollUp.Controls.Add(this.dateTimePickerEndDate);
             this.extPanelRollUp.Controls.Add(this.dateTimePickerStartDate);
@@ -1030,19 +1063,32 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.TabIndex = 7;
             this.extPanelRollUp.UnrollHoverDelay = 1000;
             // 
+            // extButtonStartStop
+            // 
+            this.extButtonStartStop.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonStartStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonStartStop.Image = global::EDDiscovery.Icons.Controls.ImportSphere;
+            this.extButtonStartStop.Location = new System.Drawing.Point(722, 1);
+            this.extButtonStartStop.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonStartStop.Name = "extButtonStartStop";
+            this.extButtonStartStop.Size = new System.Drawing.Size(28, 28);
+            this.extButtonStartStop.TabIndex = 30;
+            this.extButtonStartStop.UseVisualStyleBackColor = false;
+            this.extButtonStartStop.Click += new System.EventHandler(this.extButtonStartStop_Click);
+            // 
             // dateTimePickerEndDate
             // 
             this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.dateTimePickerEndDate.Checked = false;
-            this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
-            this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerEndDate.Location = new System.Drawing.Point(354, 3);
+            this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
+            this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(409, 3);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
             this.dateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerEndDate.ShowCheckBox = true;
             this.dateTimePickerEndDate.ShowUpDown = false;
-            this.dateTimePickerEndDate.Size = new System.Drawing.Size(250, 24);
+            this.dateTimePickerEndDate.Size = new System.Drawing.Size(300, 24);
             this.dateTimePickerEndDate.TabIndex = 1;
             this.dateTimePickerEndDate.TextBackColor = System.Drawing.Color.DarkBlue;
             this.dateTimePickerEndDate.Value = new System.DateTime(2021, 2, 5, 7, 56, 15, 927);
@@ -1055,37 +1101,6 @@ namespace EDDiscovery.UserControls
             this.labelStart.Size = new System.Drawing.Size(29, 13);
             this.labelStart.TabIndex = 0;
             this.labelStart.Text = "Start";
-            // 
-            // dataGridViewTextBoxColumnRank
-            // 
-            this.dataGridViewTextBoxColumnRank.HeaderText = "Rank";
-            this.dataGridViewTextBoxColumnRank.Name = "dataGridViewTextBoxColumnRank";
-            this.dataGridViewTextBoxColumnRank.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumnAtStart
-            // 
-            this.dataGridViewTextBoxColumnAtStart.HeaderText = "At Start";
-            this.dataGridViewTextBoxColumnAtStart.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumnAtStart.Name = "dataGridViewTextBoxColumnAtStart";
-            this.dataGridViewTextBoxColumnAtStart.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxAtEnd
-            // 
-            this.dataGridViewTextBoxAtEnd.HeaderText = "At End";
-            this.dataGridViewTextBoxAtEnd.Name = "dataGridViewTextBoxAtEnd";
-            this.dataGridViewTextBoxAtEnd.ReadOnly = true;
-            // 
-            // dataGridViewTextColumnRankProgressNumeric
-            // 
-            this.dataGridViewTextColumnRankProgressNumeric.HeaderText = "Progress";
-            this.dataGridViewTextColumnRankProgressNumeric.Name = "dataGridViewTextColumnRankProgressNumeric";
-            this.dataGridViewTextColumnRankProgressNumeric.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumnLastPromotionDate
-            // 
-            this.dataGridViewTextBoxColumnLastPromotionDate.HeaderText = "Last Promotion/Date";
-            this.dataGridViewTextBoxColumnLastPromotionDate.Name = "dataGridViewTextBoxColumnLastPromotionDate";
-            this.dataGridViewTextBoxColumnLastPromotionDate.ReadOnly = true;
             // 
             // UserControlStats
             // 
@@ -1208,5 +1223,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxAtEnd;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextColumnRankProgressNumeric;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnLastPromotionDate;
+        private ExtendedControls.ExtButton extButtonStartStop;
     }
 }

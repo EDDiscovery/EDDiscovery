@@ -844,14 +844,9 @@ namespace EDDiscovery.UserControls
                 {
                     toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".T(EDTx.UserControlTravelGrid_SETSTARTTC);
                 }
-
-
-            }
-            else
-            {
-                toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".T(EDTx.UserControlTravelGrid_SETSTSTOP); ;
             }
 
+            toolStripMenuItemStartStop.Enabled = rightclickhe != null;
             quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
             mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
@@ -1026,8 +1021,8 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.History.SetStartStop(rightclickhe);
-            DiscoveryForm.RefreshHistoryAsync();
+            rightclickhe.SetStartStop();
+            DiscoveryForm.RefreshHistoryAsync();        // because we need to recalc all the travel history and redraw
         }
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)

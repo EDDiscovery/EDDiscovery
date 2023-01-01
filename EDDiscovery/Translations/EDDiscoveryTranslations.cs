@@ -760,7 +760,6 @@ namespace EDDiscovery
         UserControlTravelGrid_CSTOP, // Clear Stop marker
         UserControlTravelGrid_SETSTOPTC, // Set Stop marker for travel calculations
         UserControlTravelGrid_SETSTARTTC, // Set Start marker for travel calculations
-        UserControlTravelGrid_SETSTSTOP, // Set Start/Stop point for travel calculations
         UserControlTravelGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
         UserControlTravelGrid_Remove, // Confirm you wish to remove this entry
 

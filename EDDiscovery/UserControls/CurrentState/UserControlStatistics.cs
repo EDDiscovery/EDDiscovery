@@ -100,8 +100,8 @@ namespace EDDiscovery.UserControls
 
 
             // datetime picker kind is not used
-            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC())).StartOfDay();
-            dateTimePickerEndDate.Value = GetSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow)).EndOfDay();
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC()));
+            dateTimePickerEndDate.Value = GetSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow));
             startchecked = dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
             endchecked = dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
             VerifyDates();
@@ -290,11 +290,16 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
+        #endregion
+
+        #region UI
+
         private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)     // tab change, UI will see tab has changed
         {
             PutSetting(dbSelectedTabSave, tabControlCustomStats.SelectedIndex);
             redisplay = true;
         }
+
 
         bool updateprogramatically = false;
         private void VerifyDates()
@@ -333,6 +338,49 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void extButtonStartStop_Click(object sender, EventArgs e)
+        {
+
+            var startstops = JournalEntry.GetStartStopDates(EDCommander.CurrentCmdrID);
+
+            if (startstops.Count > 0)
+            {
+                ExtendedControls.CheckedIconListBoxFormGroup startstopsel = new ExtendedControls.CheckedIconListBoxFormGroup();
+
+                for (int i = 0; i < startstops.Count; i++)
+                {
+                    startstopsel.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[i].Item2).ToStringYearFirst()
+                                + " - " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[i].Item4).ToStringYearFirst());
+                }
+
+                startstopsel.SaveSettings = (s, o) =>
+                {
+                    int index = s.Replace(";", "").InvariantParseInt(0);
+
+                    updateprogramatically = true;
+
+                    dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[index].Item2);
+                    dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[index].Item4);
+
+                    dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = true;
+
+                    PutSetting(dbStartDate, dateTimePickerStartDate.Value);
+                    PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
+                    PutSetting(dbEndDate, dateTimePickerEndDate.Value);
+                    PutSetting(dbEndDateOn, dateTimePickerEndDate.Checked);
+
+                    updateprogramatically = false;
+                    KickComputer();
+                };
+
+                startstopsel.CloseOnChange = true;
+                startstopsel.CloseBoundaryRegion = new Size(32, extButtonStartStop.Height);
+                startstopsel.Show("", extButtonStartStop, this.FindForm());
+            }
+        }
+
+
+
         #endregion
 
         #region Stats Computation
@@ -349,8 +397,8 @@ namespace EDDiscovery.UserControls
                     ;
 
                 statscomputer.Start(EDCommander.CurrentCmdrID,
-                                                dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?),
-                                                dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?),
+                                                dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) : default(DateTime?),
+                                                dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) : default(DateTime?),
                                                 (rs) => 
                                                 {
                                                     BeginInvoke((MethodInvoker)(() => { EndComputation(rs); })); 
@@ -388,7 +436,7 @@ namespace EDDiscovery.UserControls
             bool newstats = pendingstats != null;                        // this means kick computation happened..
             bool enqueued = entriesqueued.Count > 0;                    // queued entries
 
-          //  System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Tick {newstats} {enqueued} {redisplay}");
+            //  System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Tick {newstats} {enqueued} {redisplay}");
 
             if ( newstats || enqueued || redisplay)                      // redisplay is due to tab change or time mode change
             {
@@ -418,9 +466,9 @@ namespace EDDiscovery.UserControls
                         laststatsgeneraldisplayed = laststatsbyshipdisplayed = laststatsledgerdisplayed = laststatsrankdisplayed= false;
                     }
 
-                    DateTime starttimeutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) :
+                    DateTime starttimeutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) :
                                                                             EDDConfig.GameLaunchTimeUTC();
-                    DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) :
+                    DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) :
                                                                             EDDConfig.Instance.SelectedEndOfTodayUTC();
 
 

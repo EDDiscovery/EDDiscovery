@@ -121,6 +121,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.AllowUserToAddRows = false;
             this.dataGridViewJournal.AllowUserToDeleteRows = false;
             this.dataGridViewJournal.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewJournal.AutoSortByColumnName = false;
             this.dataGridViewJournal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewJournal.ColumnReorder = true;
             this.dataGridViewJournal.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -188,7 +189,7 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 158);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 180);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem

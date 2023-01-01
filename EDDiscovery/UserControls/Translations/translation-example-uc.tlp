@@ -1226,7 +1226,6 @@ SECTION UserControlTravelGrid
 .CSTOP: "Clear Stop marker" @
 .SETSTOPTC: "Set Stop marker for travel calculations" @
 .SETSTARTTC: "Set Start marker for travel calculations" @
-.SETSTSTOP: "Set Start/Stop point for travel calculations" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
 
