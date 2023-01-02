@@ -355,9 +355,12 @@ namespace EDDiscovery.UserControls
 
             for (int i = 0; i < times.Count; i++)
             {
-                startstopsel.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item1).ToStringYearFirst()
-                            + " - " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item2).ToStringYearFirst() + 
-                            " \u0394 " + (times[i].Item2 - times[i].Item1).ToString(@"d\:hh\:mm\:ss"));
+                string s = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item1).ToStringYearFirst() + " - ";
+                if ( times[i].Item2 != EDDConfig.GameEndTimeUTC())
+                {
+                    s += EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item2).ToStringYearFirst() + " \u0394 " + (times[i].Item2 - times[i].Item1).ToString(@"d\:hh\:mm\:ss");
+                }
+                startstopsel.AddStandardOption(i.ToStringInvariant(), s);
             }
 
             startstopsel.SaveSettings = (s, o) =>
@@ -369,9 +372,15 @@ namespace EDDiscovery.UserControls
                     updateprogramatically = true;
 
                     dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[index].Item1);
-                    dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[index].Item2);
+                    dateTimePickerStartDate.Checked = true;
 
-                    dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = true;
+                    if (times[index].Item2 != EDDConfig.GameEndTimeUTC())
+                    {
+                        dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[index].Item2);
+                        dateTimePickerEndDate.Checked = true;
+                    }
+                    else
+                        dateTimePickerEndDate.Checked = false;
 
                     PutSetting(dbStartDate, dateTimePickerStartDate.Value);
                     PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
@@ -396,8 +405,11 @@ namespace EDDiscovery.UserControls
             if ( docked.Count > 0)
             {
                 var times = new List<Tuple<DateTime, DateTime>>();
+                //                times.Add(new Tuple<DateTime, DateTime>(docked[docked.Count - 1].EventTimeUTC, new DateTime(2099,12,31, 0,0,0,DateTimeKind.Utc)));
+                times.Add(new Tuple<DateTime, DateTime>(docked[docked.Count - 1].EventTimeUTC, EDDConfig.GameEndTimeUTC()));
+
                 for (int i = docked.Count - 1; i >= docked.Count-1000 && i >= 1; i -= 1)        // limit to 1000 last entries
-                    times.Add(new Tuple<DateTime, DateTime>(docked[i-1].EventTimeUTC, docked[i].EventTimeUTC));
+                    times.Add(new Tuple<DateTime, DateTime>(docked[i - 1].EventTimeUTC, docked[i].EventTimeUTC));
 
                 DateTimeRangeDialog(extButtonDocked, times);
             }
