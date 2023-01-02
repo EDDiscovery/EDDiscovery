@@ -109,6 +109,7 @@ namespace EDDiscovery.UserControls
 
         public override bool SupportTransparency { get { return panel.SupportTransparency; } }  // override to say support transparency
         public override bool DefaultTransparent { get { return panel.DefaultTransparent; } }  // override to say default to be transparent
+        public override void TransparencyModeChanged( bool on) { panel.TransparencyModeChanged(on); }  // override to say default to be transparent
         public override bool AllowClose() { return panel.AllowClose(); }
 
         public override string HelpKeyOrAddress()
