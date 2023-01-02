@@ -323,6 +323,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Docked {
+            get {
+                object obj = ResourceManager.GetObject("Docked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Eccentric {
             get {
                 object obj = ResourceManager.GetObject("Eccentric", resourceCulture);
@@ -526,6 +536,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap firstdiscover {
             get {
                 object obj = ResourceManager.GetObject("firstdiscover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap FlagsRedGreen {
+            get {
+                object obj = ResourceManager.GetObject("FlagsRedGreen", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -340,27 +340,36 @@ namespace EDDiscovery.UserControls
 
         private void extButtonStartStop_Click(object sender, EventArgs e)
         {
-
             var startstops = JournalEntry.GetStartStopDates(EDCommander.CurrentCmdrID);
 
             if (startstops.Count > 0)
             {
-                ExtendedControls.CheckedIconListBoxFormGroup startstopsel = new ExtendedControls.CheckedIconListBoxFormGroup();
+                var reformedlist = startstops.Select(x => new Tuple<DateTime, DateTime>(x.Item2, x.Item4)).ToList();
+                DateTimeRangeDialog(extButtonStartStop, reformedlist);
+            }
+        }
 
-                for (int i = 0; i < startstops.Count; i++)
+        private void DateTimeRangeDialog(Control button, List<Tuple<DateTime,DateTime>> times)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup startstopsel = new ExtendedControls.CheckedIconListBoxFormGroup();
+
+            for (int i = 0; i < times.Count; i++)
+            {
+                startstopsel.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item1).ToStringYearFirst()
+                            + " - " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item2).ToStringYearFirst() + 
+                            " \u0394 " + (times[i].Item2 - times[i].Item1).ToString(@"d\:hh\:mm\:ss"));
+            }
+
+            startstopsel.SaveSettings = (s, o) =>
+            {
+                int index = s.Replace(";", "").InvariantParseInt(-1);
+
+                if (index >= 0)
                 {
-                    startstopsel.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[i].Item2).ToStringYearFirst()
-                                + " - " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[i].Item4).ToStringYearFirst());
-                }
-
-                startstopsel.SaveSettings = (s, o) =>
-                {
-                    int index = s.Replace(";", "").InvariantParseInt(0);
-
                     updateprogramatically = true;
 
-                    dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[index].Item2);
-                    dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(startstops[index].Item4);
+                    dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[index].Item1);
+                    dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[index].Item2);
 
                     dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = true;
 
@@ -371,15 +380,28 @@ namespace EDDiscovery.UserControls
 
                     updateprogramatically = false;
                     KickComputer();
-                };
+                }
+            };
 
-                startstopsel.CloseOnChange = true;
-                startstopsel.CloseBoundaryRegion = new Size(32, extButtonStartStop.Height);
-                startstopsel.Show("", extButtonStartStop, this.FindForm());
-            }
+            startstopsel.CloseOnChange = true;
+            startstopsel.CloseBoundaryRegion = new Size(32, extButtonStartStop.Height);
+            startstopsel.Show("", button, this.FindForm());
+
         }
 
+        private void extButtonDocked_Click(object sender, EventArgs e)
+        {
+            var docked = JournalEntry.GetByEventType(JournalTypeEnum.Docked, EDCommander.CurrentCmdrID, DateTime.MinValue, DateTime.MaxValue);
 
+            if ( docked.Count > 0)
+            {
+                var times = new List<Tuple<DateTime, DateTime>>();
+                for (int i = docked.Count - 1; i >= docked.Count-1000 && i >= 1; i -= 1)        // limit to 1000 last entries
+                    times.Add(new Tuple<DateTime, DateTime>(docked[i-1].EventTimeUTC, docked[i].EventTimeUTC));
+
+                DateTimeRangeDialog(extButtonDocked, times);
+            }
+        }
 
         #endregion
 

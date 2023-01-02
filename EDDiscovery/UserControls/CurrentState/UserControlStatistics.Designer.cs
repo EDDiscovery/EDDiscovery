@@ -112,9 +112,10 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
             this.labelStatus = new System.Windows.Forms.Label();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
-            this.extButtonStartStop = new ExtendedControls.ExtButton();
             this.dateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
             this.labelStart = new System.Windows.Forms.Label();
+            this.extButtonDocked = new ExtendedControls.ExtButton();
+            this.extButtonStartStop = new ExtendedControls.ExtButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGeneral)).BeginInit();
             this.tabControlCustomStats.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
@@ -1032,7 +1033,7 @@ namespace EDDiscovery.UserControls
             // labelStatus
             // 
             this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(766, 7);
+            this.labelStatus.Location = new System.Drawing.Point(790, 7);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(43, 13);
             this.labelStatus.TabIndex = 0;
@@ -1043,6 +1044,7 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.AutoHeight = false;
             this.extPanelRollUp.AutoHeightWidthDisable = false;
             this.extPanelRollUp.AutoWidth = false;
+            this.extPanelRollUp.Controls.Add(this.extButtonDocked);
             this.extPanelRollUp.Controls.Add(this.extButtonStartStop);
             this.extPanelRollUp.Controls.Add(this.labelStatus);
             this.extPanelRollUp.Controls.Add(this.dateTimePickerEndDate);
@@ -1062,19 +1064,6 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.Size = new System.Drawing.Size(1073, 32);
             this.extPanelRollUp.TabIndex = 7;
             this.extPanelRollUp.UnrollHoverDelay = 1000;
-            // 
-            // extButtonStartStop
-            // 
-            this.extButtonStartStop.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonStartStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonStartStop.Image = global::EDDiscovery.Icons.Controls.ImportSphere;
-            this.extButtonStartStop.Location = new System.Drawing.Point(722, 1);
-            this.extButtonStartStop.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonStartStop.Name = "extButtonStartStop";
-            this.extButtonStartStop.Size = new System.Drawing.Size(28, 28);
-            this.extButtonStartStop.TabIndex = 30;
-            this.extButtonStartStop.UseVisualStyleBackColor = false;
-            this.extButtonStartStop.Click += new System.EventHandler(this.extButtonStartStop_Click);
             // 
             // dateTimePickerEndDate
             // 
@@ -1101,6 +1090,32 @@ namespace EDDiscovery.UserControls
             this.labelStart.Size = new System.Drawing.Size(29, 13);
             this.labelStart.TabIndex = 0;
             this.labelStart.Text = "Start";
+            // 
+            // extButtonDocked
+            // 
+            this.extButtonDocked.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonDocked.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonDocked.Image = global::EDDiscovery.Icons.Controls.Docked;
+            this.extButtonDocked.Location = new System.Drawing.Point(753, 1);
+            this.extButtonDocked.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonDocked.Name = "extButtonDocked";
+            this.extButtonDocked.Size = new System.Drawing.Size(28, 28);
+            this.extButtonDocked.TabIndex = 30;
+            this.extButtonDocked.UseVisualStyleBackColor = false;
+            this.extButtonDocked.Click += new System.EventHandler(this.extButtonDocked_Click);
+            // 
+            // extButtonStartStop
+            // 
+            this.extButtonStartStop.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonStartStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonStartStop.Image = global::EDDiscovery.Icons.Controls.FlagsRedGreen;
+            this.extButtonStartStop.Location = new System.Drawing.Point(722, 1);
+            this.extButtonStartStop.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonStartStop.Name = "extButtonStartStop";
+            this.extButtonStartStop.Size = new System.Drawing.Size(28, 28);
+            this.extButtonStartStop.TabIndex = 30;
+            this.extButtonStartStop.UseVisualStyleBackColor = false;
+            this.extButtonStartStop.Click += new System.EventHandler(this.extButtonStartStop_Click);
             // 
             // UserControlStats
             // 
@@ -1224,5 +1239,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextColumnRankProgressNumeric;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnLastPromotionDate;
         private ExtendedControls.ExtButton extButtonStartStop;
+        private ExtendedControls.ExtButton extButtonDocked;
     }
 }
