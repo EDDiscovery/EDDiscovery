@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
 
         private Font displayfont;
-
+        
         private ISystem last_sys = null;
         private string starclass = "";
         private Timer drawsystemupdatetimer;
@@ -188,6 +188,8 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }       // turn it on
         public override void SetTransparency(bool on, Color curcol)
         {
+            //System.Diagnostics.Debug.WriteLine($"Surveyor set transparency {on} {curcol}");
+
             extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
 
             this.BackColor = curcol;
@@ -195,6 +197,11 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.BackColor =  curcol;
             rollUpPanelTop.Visible = !on;
             SetVisibility(!on);     // set our visible mode for text, but override to on if we are not transparent
+        }
+
+        public override void TransparencyModeChanged(bool on)
+        {
+            DrawAll(last_sys);
         }
 
         // normally we use uistate/uimode to determine if the output is visible. We can override this, for use when transparent mode is on but its not transparent

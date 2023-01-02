@@ -214,6 +214,10 @@ namespace EDDiscovery.UserControls
         {
             pictureBox.BackColor = this.BackColor = curcol;
             rollUpPanelTop.Visible = !on;
+        }
+
+        public override void TransparencyModeChanged(bool on)
+        {
             Display(current_historylist);
         }
 

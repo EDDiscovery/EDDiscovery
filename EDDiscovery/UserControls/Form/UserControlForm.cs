@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             checkmousepositiontimer.Tick += CheckMouse;
 
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
-            extButtonDrawnHelp.Text = "";
+                extButtonDrawnHelp.Text = "";
         }
 
         #region Public Interface
@@ -116,6 +116,13 @@ namespace EDDiscovery.UserControls
                 TransparentMode = t;
                 UpdateTransparency();
                 UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
+
+                bool tmode = TransparentMode != TransparencyMode.Off;
+                if (lasttransparentmodereported != tmode)
+                {
+                    lasttransparentmodereported = tmode;
+                    UserControl?.TransparencyModeChanged(tmode);
+                }
             }
         }
 
@@ -488,6 +495,7 @@ namespace EDDiscovery.UserControls
 
         private Timer checkmousepositiontimer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost;
+        private bool? lasttransparentmodereported = null;
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
     }

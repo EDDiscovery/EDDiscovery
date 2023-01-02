@@ -120,6 +120,11 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
             ControlVisibility();
         }
+        public override void TransparencyModeChanged(bool on)
+        {
+            DrawAll();
+        }
+
         private void Discoveryform_OnHistoryChange()
         {
             VerifyDates();      // date range may have changed

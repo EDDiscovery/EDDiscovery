@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
         // Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab, Grid:CreateInitPanel
 
-        public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
+        public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before LoadLayout/InitialDisplay in a pop out form
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
         public virtual void InitialDisplay() { }    // do the initial display
         public virtual void Closing() { }           // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
@@ -102,6 +102,7 @@ namespace EDDiscovery.UserControls
 
         public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
         public virtual bool DefaultTransparent { get { return false; } }  // override to say default to be transparent
+        public virtual void TransparencyModeChanged(bool on) { }         // override to know when it changes (from on-off, not its different on conditions, thats private to user control form)
         public virtual void onControlTextVisibilityChanged(bool newvalue)       // override to know
         {
         }

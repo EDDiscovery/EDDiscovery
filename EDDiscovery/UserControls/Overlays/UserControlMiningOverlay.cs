@@ -71,6 +71,9 @@ namespace EDDiscovery.UserControls
         {
             extPanelRollUp.Visible = !on;
             pictureBox.BackColor = this.BackColor = curcol;
+        }
+        public override void TransparencyModeChanged(bool on)
+        {
             Display();
         }
 

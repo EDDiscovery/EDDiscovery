@@ -74,6 +74,11 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
+        public override void TransparencyModeChanged(bool on)
+        {
+            Display(lastHE);
+        }
+
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             Display(he);
