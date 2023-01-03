@@ -336,7 +336,7 @@ namespace EDDiscovery
 
         private bool RequestPanelOperationPrimary(UserControls.UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Tab Primary request {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Tab Primary request {actionobj}");
 
             System.Diagnostics.Debug.Assert(!(actionobj is long));      // should not get jid moves from primary tab
 
@@ -345,10 +345,10 @@ namespace EDDiscovery
                 if (tp.Tag == null)       // came in on primary, don't resent to primary, as splitter has already distributed it
                 {
                     var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
-                    System.Diagnostics.Debug.WriteLine($"..Tab primary distribute {actionobj} to {tp.Text}");
+                    //System.Diagnostics.Debug.WriteLine($"..Tab primary distribute {actionobj} to {tp.Text}");
                     if (uccb.PerformPanelOperation(sender, actionobj))
                     {
-                        System.Diagnostics.Debug.WriteLine($"..Tab primary panel {tp.Text} claimed it, stop distribution");
+                        //System.Diagnostics.Debug.WriteLine($"..Tab primary panel {tp.Text} claimed it, stop distribution");
                         return true;
                     }
                 }
@@ -360,14 +360,14 @@ namespace EDDiscovery
         // request came from secondary panel 
         private bool RequestPanelOperationOther(UserControls.UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Tab Other request {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Tab Other request {actionobj}");
             return PerformOperation(sender, actionobj);
         }
 
         // request can from a pop up panel
         public bool PerformPanelOperation(UserControls.UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Perform Panel operation request {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Perform Panel operation request {actionobj}");
             return PerformOperation(sender, actionobj);
         }
 
@@ -377,11 +377,11 @@ namespace EDDiscovery
         {
             if (UserControls.UserControlCommonBase.IsOperationTHPush(actionobj))
             {
-                System.Diagnostics.Debug.WriteLine($"..blocked as TH push from secondary tab");
+               // System.Diagnostics.Debug.WriteLine($"..blocked as TH push from secondary tab");
             }
             else if (UserControls.UserControlCommonBase.IsOperationForTH(actionobj))
             {
-                System.Diagnostics.Debug.WriteLine($"..Send travel grid request to primary tab");
+                //System.Diagnostics.Debug.WriteLine($"..Send travel grid request to primary tab");
                 UserControls.UserControlContainerSplitter pt = PrimarySplitterTab;
                 return pt.PerformPanelOperation(sender, actionobj);        // send to primary tab only as it owns the travel grid, return is not material
             }
@@ -390,10 +390,10 @@ namespace EDDiscovery
                 foreach (TabPage tp in TabPages)        // to all
                 {
                     var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
-                    System.Diagnostics.Debug.WriteLine($"..Tab other distribute {actionobj} to {tp.Text}");
+                    //System.Diagnostics.Debug.WriteLine($"..Tab other distribute {actionobj} to {tp.Text}");
                     if (uccb.PerformPanelOperation(sender, actionobj))
                     {
-                        System.Diagnostics.Debug.WriteLine($"..Tab other panel {tp.Text} claimed it, stop distribution");
+                        //System.Diagnostics.Debug.WriteLine($"..Tab other panel {tp.Text} claimed it, stop distribution");
                         return true;
                     }
                 }
