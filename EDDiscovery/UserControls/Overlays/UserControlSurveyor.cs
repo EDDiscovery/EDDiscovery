@@ -193,7 +193,6 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
 
             this.BackColor = curcol;
-            // TBD why not other picture boxes?extPictureBoxSystemDetails.BackColor
             extPictureBoxScroll.BackColor =  curcol;
             rollUpPanelTop.Visible = !on;
             SetVisibility(!on);     // set our visible mode for text, but override to on if we are not transparent
@@ -218,7 +217,7 @@ namespace EDDiscovery.UserControls
                 showit = showit && (uimode == EliteDangerousCore.UIEvents.UIMode.ModeType.None || uimode == EliteDangerousCore.UIEvents.UIMode.ModeType.MainShipSupercruise);
             }
 
-            System.Diagnostics.Debug.WriteLine($"Surveyor uimode {uimode} uistate {uistate} Visibility {showit} route {currentRoute!=null}");
+            //System.Diagnostics.Debug.WriteLine($"Surveyor Visibility uimode {uimode} uistate {uistate} Visibility {showit} route {currentRoute!=null}");
             extPictureBoxScanSummary.Visible = extPictureBoxScroll.Visible = showit;
             extPictureBoxTitle.Visible = IsSet(CtrlList.showsysinfo) && showit;
             extPictureBoxRoute.Visible = currentRoute != null && showit;
@@ -338,7 +337,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawAll(ISystem sys, bool presentsystemonly = false)
         {
-            System.Diagnostics.Debug.WriteLine($"\nSurveyor draw All {presentsystemonly}");
+        //    System.Diagnostics.Debug.WriteLine($"\nSurveyor draw All {presentsystemonly}");
 
             DrawTitle();            // these calculate and draw quick
             DrawRoute(sys);
@@ -354,7 +353,8 @@ namespace EDDiscovery.UserControls
         // title
         private void DrawTitle()
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor draw title");
+           // System.Diagnostics.Debug.WriteLine($"Surveyor draw title with {IsTransparentModeOn}");
+
             string text = last_sys?.Name ?? "";
             if (starclass.HasChars() && IsSet(CtrlList.showstarclass))
                 text += " | " + starclass;
@@ -371,7 +371,8 @@ namespace EDDiscovery.UserControls
 
         private async void DrawScanSummary(ISystem sys)
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor scan summary ${sys?.Name}");
+           // System.Diagnostics.Debug.WriteLine($"Surveyor scan summary ${sys?.Name}");
+
             string text = "";
             if (sys != null)
             {
@@ -403,7 +404,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawRoute(ISystem sys)
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor draw route {sys?.Name}");
+            //System.Diagnostics.Debug.WriteLine($"Surveyor draw route {sys?.Name}");
 
             string lastroutetext = "No System Info";
 
@@ -513,7 +514,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawTarget()
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor draw target");
+            //System.Diagnostics.Debug.WriteLine($"Surveyor draw target");
 
             string lasttargettext = "No Target";
 
@@ -537,7 +538,8 @@ namespace EDDiscovery.UserControls
 
         private void DrawFuel()
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor draw fuel");
+            //System.Diagnostics.Debug.WriteLine($"Surveyor draw fuel");
+
             string fueltext = "";
 
             if ( shipinfo != null)
@@ -568,7 +570,7 @@ namespace EDDiscovery.UserControls
 
         async private void CalculateThenDrawSystem(ISystem sys)
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor calc system {sys?.Name}");
+            System.Diagnostics.Debug.WriteLine($"Surveyor {DisplayNumber} calc system {sys?.Name}");
 
             drawsystemtext.Clear();
             drawsystemsignallist = "";
@@ -604,7 +606,7 @@ namespace EDDiscovery.UserControls
                                 return;
                         }
 
-                        System.Diagnostics.Debug.WriteLine($"  Surveyor reports {searchresults.Count} results");
+                        //System.Diagnostics.Debug.WriteLine($"  Surveyor reports {searchresults.Count} results");
                     }
                 }
 
@@ -760,7 +762,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawSystem()
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor present system results");
+            //System.Diagnostics.Debug.WriteLine($"Surveyor present system results");
 
             var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
 

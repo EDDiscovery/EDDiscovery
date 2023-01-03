@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
 
         public virtual void Creation(PanelInformation.PanelInfo p)      
         {
-            System.Diagnostics.Debug.WriteLine("UCCB Create " + this.Name + " of " + this.GetType().Name + " with " + p.PopoutID);
+            System.Diagnostics.Debug.WriteLine($"UCCB Create {this.Name}");
             PanelID = p.PopoutID;
         }
 
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
 
         public void Init(EDDiscoveryForm ed, int dn)
         {
-            System.Diagnostics.Debug.WriteLine("UCCB Init " + this.Name + " of " + this.GetType().Name + " with " + dn);
+            System.Diagnostics.Debug.WriteLine($"UCCB Init {this.Name} with DN {dn}");
             DiscoveryForm = ed;
             DisplayNumber = dn;
             Init();

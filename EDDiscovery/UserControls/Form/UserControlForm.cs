@@ -12,12 +12,10 @@
  * governing permissions and limitations under the License.
  */
 
-using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -115,13 +113,13 @@ namespace EDDiscovery.UserControls
             {
                 TransparentMode = t;
                 UpdateTransparency();
-                UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
 
                 bool tmode = TransparentMode != TransparencyMode.Off;
                 if (lasttransparentmodereported != tmode)
                 {
                     lasttransparentmodereported = tmode;
-                    UserControl?.TransparencyModeChanged(tmode);
+                    UserControl.TransparencyModeChanged(tmode);
                 }
             }
         }
@@ -130,7 +128,7 @@ namespace EDDiscovery.UserControls
         {
             DisplayTitle = t;
             UpdateControls();
-            UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
             UserControl.onControlTextVisibilityChanged(DisplayTitle);            
         }
 
@@ -219,7 +217,8 @@ namespace EDDiscovery.UserControls
             {
                 // if in transparent click thru, we set transparent style.. else clear it.
                 BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
-                                    WS_EX.TRANSPARENT, showtransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
+                                    BaseUtils.Win32Constants.WS_EX.TRANSPARENT, 
+                                    showtransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? BaseUtils.Win32Constants.WS_EX.TRANSPARENT : 0);
             }
 
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
@@ -279,30 +278,27 @@ namespace EDDiscovery.UserControls
 
         private void UserControlForm_Shown(object sender, EventArgs e)          // as launched, it may not be in front (as its launched from a control).. bring to front
         {
-            //System.Diagnostics.Debug.WriteLine("UCF Shown+");
+            System.Diagnostics.Debug.WriteLine($"UCF {Name} Shown");
+
             this.BringToFront();
 
             if (IsTransparencySupported)
                 TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
             bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "TopMost", deftopmost);
+
             //kludge 
             SetTopMost(wantedTopMost);
             SetTopMost(!wantedTopMost);
             SetTopMost(wantedTopMost); // this also establishes transparency
 
-            var top = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Top", -999);
-            //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
-
             if (UserControl != null)
             {
-                System.Diagnostics.Debug.WriteLine("UCCB Call set curosr, load layout, initial display");
                 UserControl.LoadLayout();
                 UserControl.InitialDisplay();
             }
 
             IsLoaded = true;
-            //System.Diagnostics.Debug.WriteLine("UCF Shown-");
         }
 
         public bool AllowClose()

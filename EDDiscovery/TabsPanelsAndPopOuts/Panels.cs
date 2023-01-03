@@ -26,7 +26,6 @@ namespace EDDiscovery
     {
         public enum PanelIDs        // id's.. used in tab controls, and in button pop outs button
         {
-            Any = -2,
             GroupMarker = -1,
 
             Log = 0,                  // BEWARE
