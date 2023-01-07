@@ -287,7 +287,7 @@ namespace EDDiscovery.UserControls
                 var tophe = DiscoveryForm.History.GetLast;      // we feed in the top, which is being updated by EDDiscoveryControllerNewEntry with the latest fuel
                 if (tophe != null)   // paranoia
                 {
-                    System.Diagnostics.Debug.WriteLine($"UI Top he Fuel {tophe.EventTimeUTC} {tophe.ShipInformation.FuelLevel} {tophe.ShipInformation.ReserveFuelCapacity}");
+                    //System.Diagnostics.Debug.WriteLine($"UI Top he Fuel {tophe.EventTimeUTC} {tophe.ShipInformation.FuelLevel} {tophe.ShipInformation.ReserveFuelCapacity}");
                     Display(tophe);
                 }
             }
@@ -299,13 +299,13 @@ namespace EDDiscovery.UserControls
                 {
                     if ( (DiscoveryForm.History.GetLast?.FSDJumpSequence??false)  == true) 
                     {
-                        System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got, but in fsd sequence, pend it");
+                        //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got, but in fsd sequence, pend it");
                         pendingtarget = j;
                     }
                     else
                     {
                         lasttarget = j;
-                        System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got");
+                        //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got");
                         Display(last_he);
                     }
                 }
@@ -315,7 +315,7 @@ namespace EDDiscovery.UserControls
                 var j = (EliteDangerousCore.UIEvents.UIDestination)obj;
                 if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        // if name or bodyid has changed
                 {
-                    System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
+                    //System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
 
                     lastdestination = j;
                     Display(last_he);
@@ -323,9 +323,25 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void ReceiveHistoryEntry(HistoryEntry he)
+        // override and intercept events
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Sysinfo {DisplayNumber} : Cursor {he.Index} {he.EventSummary}");
+            if (actionobj is EliteDangerousCore.HistoryEntry)       // he from travel grid
+            {
+                NewHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
+            }
+            else if (actionobj is UserControlCommonBase.TravelHistoryRecalculated)  // travel change
+            {
+                Display(last_he);
+            }
+
+            return false;
+        }
+
+
+        public void NewHistoryEntry(HistoryEntry he)
+        {
+            //System.Diagnostics.Debug.WriteLine($"Sysinfo {DisplayNumber} : Cursor {he.Index} {he.EventSummary}");
             travelhistoryisattop = he == DiscoveryForm.History.GetLast;      // see if tracking at top
 
             bool duetosystem = last_he == null;
@@ -337,7 +353,7 @@ namespace EDDiscovery.UserControls
 
             if (he.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
             {
-                System.Diagnostics.Debug.WriteLine($"Sysinfo - FSDJump and pending target set, so end of jump sequence");
+                //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSDJump and pending target set, so end of jump sequence");
                 lasttarget = pendingtarget;
                 pendingtarget = null;
                 duetoother = true;          // force update
@@ -355,7 +371,7 @@ namespace EDDiscovery.UserControls
 
             if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions)
             {
-                System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
+                //System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
             }
         }
@@ -447,7 +463,7 @@ namespace EDDiscovery.UserControls
                 {
                     textBoxTravelDist.Text = he.TravelledDistance.ToString("0.0") + "ly";
                     textBoxTravelTime.Text = he.TravelledSeconds.ToString();
-                    textBoxTravelJumps.Text = he.TravelledJumpsAndMisses;
+                    textBoxTravelJumps.Text = he.TravelledJumps.ToString();
                 }
                 else
                 {

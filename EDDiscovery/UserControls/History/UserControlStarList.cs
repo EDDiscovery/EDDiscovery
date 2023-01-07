@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -17,14 +17,12 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
-using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -246,7 +244,8 @@ namespace EDDiscovery.UserControls
 
             this.dataGridViewStarList.Cursor = Cursors.WaitCursor;
 
-            var pos = CurrentGridPosByIndex();
+            var selpos = dataGridViewStarList.GetSelectedRowOrCellPosition();
+            Tuple<long, int> pos = selpos != null ? new Tuple<long, int>(((HistoryEntry)(dataGridViewStarList.Rows[selpos.Item1].Tag)).Journalid, selpos.Item2) : new Tuple<long, int>(-1, 0);
 
             SortOrder sortorder = dataGridViewStarList.SortOrder;
             int sortcol = dataGridViewStarList.SortedColumn?.Index ?? -1;
@@ -302,13 +301,13 @@ namespace EDDiscovery.UserControls
                     dataGridViewStarList.Rows.AddRange(rowstoadd.ToArray());
                 });
 
-                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, false))
+                if (dataGridViewStarList.SelectAndMove(rowsbyjournalid, ref pos, false))
                     FireChangeSelection();
             }
 
             todo.Enqueue(() =>
             {
-                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, true))
+                if (dataGridViewStarList.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -499,18 +498,6 @@ namespace EDDiscovery.UserControls
 
         public void FireChangeSelection() // kept for historic purposes in case we want to make it a cursor again
         {
-            if (dataGridViewStarList.CurrentCell != null)
-            {
-                int row = dataGridViewStarList.CurrentCell.RowIndex;
-                //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
-            }
-        }
-
-        Tuple<long, int> CurrentGridPosByIndex()          // Returns Index, column index.  Index = -1 if cell is not defined
-        {
-            long index = (dataGridViewStarList.CurrentCell != null) ? (dataGridViewStarList.Rows[dataGridViewStarList.CurrentCell.RowIndex].Tag as HistoryEntry).Journalid : -1;
-            int cellno = (dataGridViewStarList.CurrentCell != null) ? dataGridViewStarList.CurrentCell.ColumnIndex : 0;
-            return new Tuple<long, int>(index, cellno);
         }
 
         public void CheckEDSM()
@@ -812,8 +799,8 @@ namespace EDDiscovery.UserControls
                             EventDetailedInfo,
                             he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.Travelledjumps.ToString() : "",
-                            he.isTravelling ? he.TravelledMissingjump.ToString() : "",
+                            he.isTravelling ? he.TravelledJumps.ToString() : "",
+                            he.isTravelling ? he.TravelledMissingJumps.ToString() : "",
                             };
                     };
 

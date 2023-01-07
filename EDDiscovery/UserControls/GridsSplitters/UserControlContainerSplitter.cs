@@ -344,23 +344,26 @@ namespace EDDiscovery.UserControls
         // a panel may claim the event, in which case its not sent up
         private bool SplitterRequestAction(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"\r\nSplitter {DisplayNumber} request action {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} request action {actionobj}");
 
             bool done = false;
 
             RunActionOnSplitterTree((sp, c, uccb) =>    // reflect to us first
             {
-                if (uccb != null && !done)
+                if (uccb != null && uccb != sender && !done )   // make sure we have one, and don't send to sender, and we are not done (claimed)
                 {
+                   // System.Diagnostics.Debug.WriteLine($"Splitter .. uccb {uccb.PanelID} perform operation {actionobj}");
                     done = uccb.PerformPanelOperation(sender, actionobj);
                     if (done)
-                        System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                    {
+                       // System.Diagnostics.Debug.WriteLine($"Splitter .. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                    }
                 }
             });
 
             if ( !done )
             {
-                System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
+                //System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
                 return RequestPanelOperation.Invoke(sender, actionobj);     // No one claimed it, so pass it up the chain
             }
             else
@@ -369,13 +372,14 @@ namespace EDDiscovery.UserControls
 
         // called from above for us to do something, work out if we should pass it down
         // we don't pass up some travel grid stuff if we have a travel grid ourselves
+        // sender can't be us since we are being called from above.
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} perform action {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} perform action {actionobj}");
 
             if (IsOperationTHPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid)!=null)
             {
-                System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH for {actionobj}");
+                //System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH for {actionobj}");
                 return false;
             }
 
@@ -387,7 +391,9 @@ namespace EDDiscovery.UserControls
                 {
                     done = uccb.PerformPanelOperation(sender, actionobj);
                     if (done)
-                        System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                    {
+                        //System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                    }
                 }
             });
 

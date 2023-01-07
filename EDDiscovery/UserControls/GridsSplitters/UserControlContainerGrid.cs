@@ -256,22 +256,25 @@ namespace EDDiscovery.UserControls
         //SYNC with splitter
         private bool GridRequestAction(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} request action {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} request action {actionobj}");
 
             bool done = false;
             foreach (var uccr in uccrlist)
             {
-                done = uccr.UCCB.PerformPanelOperation(sender, actionobj);
-                if ( done )
+                if (uccr.UCCB != sender)        // don't send to sender
                 {
-                    System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
-                    break;
+                    done = uccr.UCCB.PerformPanelOperation(sender, actionobj);
+                    if (done)
+                    {
+                        //System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
+                        break;
+                    }
                 }
             }
 
             if (!done)
             {
-                System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
+                //System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
                 return RequestPanelOperation.Invoke(sender, actionobj);     // and pass up with us as the sender
             }
             else
@@ -281,11 +284,11 @@ namespace EDDiscovery.UserControls
         //SYNC with splitter
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} perform action {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} perform action {actionobj}");
 
             if (IsOperationTHPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid) != null)
             {
-                System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH for {actionobj}");
+                //System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH for {actionobj}");
                 return false;
             }
 
@@ -293,7 +296,7 @@ namespace EDDiscovery.UserControls
             {
                 if ( uccr.UCCB.PerformPanelOperation(sender, actionobj) )
                 {
-                    System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
+                    //System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
                     return true;
                 }
             }

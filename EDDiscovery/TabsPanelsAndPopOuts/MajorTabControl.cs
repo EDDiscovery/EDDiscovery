@@ -278,11 +278,6 @@ namespace EDDiscovery
                 }
             }
 
-            if (primary)
-                uccb.RequestPanelOperation = RequestPanelOperationPrimary;
-            else
-                uccb.RequestPanelOperation = RequestPanelOperationOther;
-
             int numoftab = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? 0 : (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1);
             if (uccb is UserControls.UserControlContainerSplitter && numoftab > 0)          // so history is a splitter, so first real splitter will be dn=100, adjust for it
                 numoftab--;
@@ -305,6 +300,11 @@ namespace EDDiscovery
             page.Controls.Add(uccb);
 
             TabPages.Insert(posindex, page);        // with inherit above, no font autoscale
+
+            if (primary)                            // hook up the request system
+                uccb.RequestPanelOperation = RequestPanelOperationPrimary;
+            else
+                uccb.RequestPanelOperation = (sender, op) => { return RequestPanelOperationOther(page,sender, op); };
 
             if (Environment.OSVersion.Platform != PlatformID.Win32NT && SelectedIndex >= posindex)
             {
@@ -342,15 +342,21 @@ namespace EDDiscovery
 
             foreach (TabPage tp in TabPages)
             {
-                if (tp.Tag == null)       // came in on primary, don't resent to primary, as splitter has already distributed it
+                if (tp.Tag == null)       // tag is null if not primary. It came in on primary, don't resent to primary, as splitter has already distributed it
                 {
                     var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
-                    //System.Diagnostics.Debug.WriteLine($"..Tab primary distribute {actionobj} to {tp.Text}");
+
+                    //System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
+
                     if (uccb.PerformPanelOperation(sender, actionobj))
                     {
                         //System.Diagnostics.Debug.WriteLine($"..Tab primary panel {tp.Text} claimed it, stop distribution");
                         return true;
                     }
+                }
+                else
+                {
+                    //System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary from {sender.PanelID} don't send back to primary: {actionobj}");
                 }
             }
 
@@ -358,43 +364,62 @@ namespace EDDiscovery
         }
 
         // request came from secondary panel 
-        private bool RequestPanelOperationOther(UserControls.UserControlCommonBase sender, object actionobj)
+        private bool RequestPanelOperationOther(TabPage page, UserControls.UserControlCommonBase sender, object actionobj)
         {
-            //System.Diagnostics.Debug.WriteLine($"Tab Other request {actionobj}");
-            return PerformOperation(sender, actionobj);
+            return PerformOperationOther(page, sender, actionobj);
         }
 
         // request can from a pop up panel
         public bool PerformPanelOperation(UserControls.UserControlCommonBase sender, object actionobj)
         {
             //System.Diagnostics.Debug.WriteLine($"Perform Panel operation request {actionobj}");
-            return PerformOperation(sender, actionobj);
+            return PerformOperationOther(null, sender, actionobj);
         }
 
+        // For tabs other than primary, or for senders other than a tab page (action lang, popouts, page will be null)
         // see if the request is valid, and for what tabs
+        // don't distribute certain types
+        // and send certain types only to primary tab
 
-        public bool PerformOperation(UserControls.UserControlCommonBase sender, object actionobj)
+        public bool PerformOperationOther(TabPage page, UserControls.UserControlCommonBase sender, object actionobj)
         {
-            if (UserControls.UserControlCommonBase.IsOperationTHPush(actionobj))
+            // if we are pushing an operation down, but its a TH push up from a secondary tab, we stop it.
+            // only the primary tab pushes these around
+
+            if (UserControls.UserControlCommonBase.IsOperationTHPush(actionobj))            
             {
                // System.Diagnostics.Debug.WriteLine($"..blocked as TH push from secondary tab");
             }
-            else if (UserControls.UserControlCommonBase.IsOperationForTH(actionobj))
+
+            // if we are pushing a operation for the primary TH only..
+
+            else if (UserControls.UserControlCommonBase.IsOperationForPrimaryTH(actionobj))
             {
                 //System.Diagnostics.Debug.WriteLine($"..Send travel grid request to primary tab");
                 UserControls.UserControlContainerSplitter pt = PrimarySplitterTab;
                 return pt.PerformPanelOperation(sender, actionobj);        // send to primary tab only as it owns the travel grid, return is not material
             }
+
+            // else push to all
             else 
             { 
-                foreach (TabPage tp in TabPages)        // to all
+                foreach (TabPage tp in TabPages)       
                 {
-                    var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
-                    //System.Diagnostics.Debug.WriteLine($"..Tab other distribute {actionobj} to {tp.Text}");
-                    if (uccb.PerformPanelOperation(sender, actionobj))
+                    if (tp != page)     // don't resent to page which originated it - its already been distributed on that page
                     {
-                        //System.Diagnostics.Debug.WriteLine($"..Tab other panel {tp.Text} claimed it, stop distribution");
-                        return true;
+                        var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
+
+                        //System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
+
+                        if (uccb.PerformPanelOperation(sender, actionobj))
+                        {
+                            //System.Diagnostics.Debug.WriteLine($"..Tab other panel {tp.Text} claimed it, stop distribution");
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        //System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} don't send to sender: {actionobj}");
                     }
                 }
             }

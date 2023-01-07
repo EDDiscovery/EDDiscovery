@@ -143,7 +143,8 @@ namespace EDDiscovery.UserControls
         //          Sent up to tab - MainTab distributes it to other tabs, Other throws it away
         //          all panels must return false so no-one grabs it
         //
-        //      long - request travel grid to go to this jid AND class RequestTravelHistoryPos - request travel grid to call back directly to sender with the current HE
+        //      long - request travel grid to go to this jid 
+        //      class RequestTravelHistoryPos - request travel grid to call back directly to sender with the current HE (may be null)
         //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution
         //           If not ack, sent up to tab - Other will send it to maintab, maintab will never get it (as it would be cancelled by splitter)
         //           TG should return true
@@ -156,8 +157,11 @@ namespace EDDiscovery.UserControls
         //      class PanelAction - perform this string action on a tab panel
         //           Sent into all tabs, first one accepting it will cancel it.
         //           Panel should return true if serviced
+        //
+        //      class TravelHistoryRecalculated - someone set a start stop flag
+        //           Sent to everone. No one should cancel it with true
 
-        public static bool IsOperationForTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
+        public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
         public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
         public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he. TG will return true 
         public class PushStars                          // use to push star list to other panels 
@@ -173,6 +177,8 @@ namespace EDDiscovery.UserControls
             public string Action { get; set; }
             public object Data { get; set; }
         }
+
+        public class TravelHistoryRecalculated { }
 
         // Request action. Return if positively services by 
         public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        // Request other panel does something for you, pretty please.

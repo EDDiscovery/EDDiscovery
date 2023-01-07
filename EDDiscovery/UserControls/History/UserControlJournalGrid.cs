@@ -156,7 +156,8 @@ namespace EDDiscovery.UserControls
 
             current_historylist = hl;       // we cache this in case it changes during sorting
 
-            Tuple<long, int> pos = CurrentGridPosByJID();
+            var selpos = dataGridViewJournal.GetSelectedRowOrCellPosition();
+            Tuple<long, int> pos = selpos != null ? new Tuple<long, int>(((HistoryEntry)(dataGridViewJournal.Rows[selpos.Item1].Tag)).Journalid, selpos.Item2) : new Tuple<long, int>(-1, 0);
 
             SortOrder sortorder = dataGridViewJournal.SortOrder;
             int sortcol = dataGridViewJournal.SortedColumn?.Index ?? -1;
@@ -217,7 +218,7 @@ namespace EDDiscovery.UserControls
 
                     // System.Diagnostics.Debug.WriteLine("J Chunk Load in " + sw.ElapsedMilliseconds);
 
-                    if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, false))
+                    if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, false))
                         FireChangeSelection();
 
                 });
@@ -229,7 +230,7 @@ namespace EDDiscovery.UserControls
 
                 UpdateToolTipsForFilter();
 
-                if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, true))
+                if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -471,7 +472,9 @@ namespace EDDiscovery.UserControls
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
         {
             rightclickhe.SetStartStop();
-            DiscoveryForm.RefreshHistoryAsync();        // because we need to recalc all the travel history and redraw
+            DiscoveryForm.History.RecalculateTravel();
+            RequestPanelOperation(this, new TravelHistoryRecalculated());        // tell others
+            Display(current_historylist, true);     // need to redisplay
         }
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -499,34 +502,18 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            long jid = (dataGridViewJournal.CurrentCell != null) ? ((HistoryEntry)(dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Tag)).Journalid : -1;
-            int cellno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.ColumnIndex : 0;
-            return new Tuple<long, int>(jid, cellno);
+            if (actionobj is UserControlCommonBase.TravelHistoryRecalculated)
+            {
+                Display(current_historylist, false);
+            }
+
+            return false;
         }
-
-        //public int GotoPosByJID(long jid)       // keep for now in case we want to make it a history cursor again
-        //{
-        //    int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-        //    if (rowno >= 0)
-        //    {
-        //        dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
-        //        dataGridViewJournal.Rows[rowno].Selected = true;
-        //        FireChangeSelection();
-        //    }
-
-        //    return rowno;
-        //}
 
         public void FireChangeSelection()       // keep for now
         {
-//            System.Diagnostics.Debug.WriteLine("JG Fire Change Sel");
-//            if (dataGridViewJournal.CurrentCell != null)
-//            {
-//                int row = dataGridViewJournal.CurrentCell.RowIndex;
-////                OnTravelSelectionChanged?.Invoke(dataGridViewJournal.Rows[row].Tag as HistoryEntry, current_historylist, true);
-//            }
         }
 
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)

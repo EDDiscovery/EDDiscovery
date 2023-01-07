@@ -23,7 +23,7 @@ namespace EDDiscovery
     {
         public void PerformOperationOnTabs(UserControls.UserControlCommonBase sender, object actionobj)
         {
-            tabControlMain.PerformOperation(sender, actionobj);
+            tabControlMain.PerformOperationOther(null, sender, actionobj);
         }
 
         public void AddTab(PanelInformation.PanelIDs id, int tabindex = 0) // negative means from the end.. -1 is one before end
