@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022I EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
@@ -98,9 +97,15 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += HistoryChanged;
             DiscoveryForm.OnNewEntry += AddNewEntry;
 
-            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime, EDTx.UserControlJournalGrid_Event, EDTx.UserControlJournalGrid_ColumnType, EDTx.UserControlJournalGrid_ColumnText, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime, EDTx.UserControlJournalGrid_ColumnEvent, EDTx.UserControlJournalGrid_ColumnDescription, 
+                EDTx.UserControlJournalGrid_ColumnInformation, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
+
+            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, 
+                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, 
+                EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
+
+            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, 
+                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
@@ -471,10 +476,27 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
         {
-            rightclickhe.SetStartStop();
-            DiscoveryForm.History.RecalculateTravel();
+            this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
+
+            rightclickhe.SetStartStop();                                        // change flag
+            DiscoveryForm.History.RecalculateTravel(rightclickhe.Index);        // recalculate from this index on - previous entries must by definition be unaffected
+
+            foreach (DataGridViewRow row in dataGridViewJournal.Rows)            // dgv could be in any sort order, we have to do the lot
+            {
+                HistoryEntry he = row.Tag as HistoryEntry;
+                if (he.IsFSD)
+                {
+                    he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
+                    row.Cells[ColumnInformation.Index].Value = eventdescription;
+                }
+            }
+
+            dataGridViewJournal.Refresh();       // to make the start/stop marker appear, refresh
+
             RequestPanelOperation(this, new TravelHistoryRecalculated());        // tell others
-            Display(current_historylist, true);     // need to redisplay
+
+            this.dataGridViewJournal.Cursor = Cursors.Default;
+
         }
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)

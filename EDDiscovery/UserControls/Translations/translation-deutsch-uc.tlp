@@ -278,9 +278,9 @@ SECTION UserControlJournalGrid
 
 .comboBoxTime.ToolTip: "Select the entries selected by age" => "Wähle die nach Alter gewählten Einträge"
 .ColumnTime: "Time" => "Zeit"
-.Event: "Event" => "Ereignis"
-.ColumnType: "Description" => "Beschreibung"
-.ColumnText: "Information" => "Information"
+.ColumnEvent: "Event" => "Ereignis"
+.ColumnDescription: "Description" => "Beschreibung"
+.ColumnInformation: "Information" => "Information"
 .labelTime: "Time" => "Zeit"
 .labelSearch: "Search" => "Suche"
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Spezifiziere einen Suchterm um Zelleninhalte zu filtern. Verfügbar sind system:<Platzhalter>, body:<Platzhalter>, station:<Platzhalter> und stationfaction:<Platzhalter> um Ereignisse die diesen Parametern zugewiesen sind zu filtern"
@@ -1141,9 +1141,9 @@ SECTION UserControlContainerSplitter
 SECTION UserControlTravelGrid
 
 .ColumnTime: "Time" => "Zeit"
-.Icon: "Event" => "Ereignis"
-.ColumnSystem: "Description" => "Beschreibung"
-.ColumnDistance: "Information" => "Information"
+.ColumnEvent: "Event" => "Ereignis"
+.ColumnDescription: "Description" => "Beschreibung"
+.ColumnInformation: "Information" => "Information"
 .ColumnNote: "Note" => "Notiz"
 .labelTime: "Time" => "Zeit"
 .labelSearch: "Search" => "Suche"

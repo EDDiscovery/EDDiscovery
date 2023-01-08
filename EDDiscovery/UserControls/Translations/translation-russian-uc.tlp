@@ -278,9 +278,9 @@ SECTION UserControlJournalGrid
 
 .comboBoxTime.ToolTip: "Select the entries selected by age" => "Выбор записей по времени"
 .ColumnTime: "Time" => "Время"
-.Event: "Event" => "Событие"
-.ColumnType: "Description" => "Описание"
-.ColumnText: "Information" => "Информация"
+.ColumnEvent: "Event" => "Событие"
+.ColumnDescription: "Description" => "Описание"
+.ColumnInformation: "Information" => "Информация"
 .labelTime: "Time" => "Время"
 .labelSearch: "Search" => "Поиск"
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Введите текст для поиска в любых полях"
@@ -1141,9 +1141,9 @@ SECTION UserControlContainerSplitter
 SECTION UserControlTravelGrid
 
 .ColumnTime: "Time" => "Время"
-.Icon: "Event" => "Событие"
-.ColumnSystem: "Description" => "Описание"
-.ColumnDistance: "Information" => "Информация"
+.ColumnEvent: "Event" => "Событие"
+.ColumnDescription: "Description" => "Описание"
+.ColumnInformation: "Information" => "Информация"
 .ColumnNote: "Note" => "Примечание"
 .labelTime: "Time" => "Время"
 .labelSearch: "Search" => "Поиск"

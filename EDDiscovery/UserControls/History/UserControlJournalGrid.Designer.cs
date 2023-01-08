@@ -49,9 +49,9 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridViewJournal = new BaseUtils.DataGridViewColumnControl();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnText = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnEvent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jumpToEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -126,9 +126,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.ColumnReorder = true;
             this.dataGridViewJournal.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
-            this.Event,
-            this.ColumnType,
-            this.ColumnText});
+            this.ColumnEvent,
+            this.ColumnDescription,
+            this.ColumnInformation});
             this.dataGridViewJournal.ContextMenuStrip = this.historyContextMenu;
             this.dataGridViewJournal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewJournal.Location = new System.Drawing.Point(0, 0);
@@ -155,28 +155,28 @@ namespace EDDiscovery.UserControls
             // 
             // Event
             // 
-            this.Event.FillWeight = 50F;
-            this.Event.HeaderText = "Event";
-            this.Event.MinimumWidth = 50;
-            this.Event.Name = "Event";
-            this.Event.ReadOnly = true;
-            this.Event.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ColumnEvent.FillWeight = 50F;
+            this.ColumnEvent.HeaderText = "Event";
+            this.ColumnEvent.MinimumWidth = 50;
+            this.ColumnEvent.Name = "ColumnEvent";
+            this.ColumnEvent.ReadOnly = true;
+            this.ColumnEvent.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ColumnType
             // 
-            this.ColumnType.FillWeight = 125F;
-            this.ColumnType.HeaderText = "Description";
-            this.ColumnType.MinimumWidth = 50;
-            this.ColumnType.Name = "ColumnType";
-            this.ColumnType.ReadOnly = true;
+            this.ColumnDescription.FillWeight = 125F;
+            this.ColumnDescription.HeaderText = "Description";
+            this.ColumnDescription.MinimumWidth = 50;
+            this.ColumnDescription.Name = "ColumnDescription";
+            this.ColumnDescription.ReadOnly = true;
             // 
             // ColumnText
             // 
-            this.ColumnText.FillWeight = 300F;
-            this.ColumnText.HeaderText = "Information";
-            this.ColumnText.MinimumWidth = 50;
-            this.ColumnText.Name = "ColumnText";
-            this.ColumnText.ReadOnly = true;
+            this.ColumnInformation.FillWeight = 300F;
+            this.ColumnInformation.HeaderText = "Information";
+            this.ColumnInformation.MinimumWidth = 50;
+            this.ColumnInformation.Name = "ColumnInformation";
+            this.ColumnInformation.ReadOnly = true;
             // 
             // historyContextMenu
             // 
@@ -443,9 +443,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnText;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEvent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
         private System.Windows.Forms.ToolStripMenuItem removeSortingOfColumnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem jumpToEntryToolStripMenuItem;
         private ExtendedControls.ExtCheckBox checkBoxCursorToTop;

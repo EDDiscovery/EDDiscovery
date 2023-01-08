@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -131,7 +131,9 @@ namespace EDDiscovery.UserControls
             travelGridInDebugModeToolStripMenuItem.Checked = EDDOptions.Instance.EnableTGRightDebugClicks ? GetSetting(dbDebugMode, false) : false;
             travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
 
-            var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_Icon, EDTx.UserControlTravelGrid_ColumnSystem, EDTx.UserControlTravelGrid_ColumnDistance, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime, EDTx.UserControlTravelGrid_labelSearch };
+            var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_ColumnEvent, EDTx.UserControlTravelGrid_ColumnDescription, 
+                                        EDTx.UserControlTravelGrid_ColumnInformation, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime, 
+                                        EDTx.UserControlTravelGrid_labelSearch };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             var enumlistcms = new Enum[] { EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem, EDTx.UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, EDTx.UserControlTravelGrid_setNoteToolStripMenuItem, EDTx.UserControlTravelGrid_createEditBookmarkToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripMenuItemStartStop, EDTx.UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, EDTx.UserControlTravelGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlTravelGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlTravelGrid_starMapColourToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_wantedSystemsToolStripMenuItem, 
@@ -679,7 +681,7 @@ namespace EDDiscovery.UserControls
             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag;
             bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
             int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1));
-            PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, Icon.Index, true);
+            PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, ColumnEvent.Index, true);
         }
 
 
@@ -710,14 +712,13 @@ namespace EDDiscovery.UserControls
                     leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
                     DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
-                    bool expanded = row.Cells[ColumnDistance.Index].Tag != null;
+                    bool expanded = row.Cells[ColumnInformation.Index].Tag != null;
 
-                    if (expanded) // put it back to original text
+                    if (expanded) // put it back to original text, remove tag, and set wrap mode notset
                     {
-                        row.Cells[ColumnDistance.Index].Value = EventDescription;
-                        for (int i = 0; i < row.Cells.Count; i++)
-                            row.Cells[i].Style.WrapMode = DataGridViewTriState.NotSet;
-                        row.Cells[ColumnDistance.Index].Tag = null;
+                        row.Cells[ColumnInformation.Index].Value = EventDescription;
+                        row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;
+                        row.Cells[ColumnInformation.Index].Tag = null;
                     }
                     else
                     {
@@ -730,7 +731,7 @@ namespace EDDiscovery.UserControls
                             {
                                 if (row.Cells[i].Value is string)
                                 {
-                                    string s = i == ColumnDistance.Index ? infodetailed : (string)row.Cells[i].Value;
+                                    string s = i == ColumnInformation.Index ? infodetailed : (string)row.Cells[i].Value;
                                     int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
                                     maxh = Math.Max(maxh, h);
                                 }
@@ -746,16 +747,11 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                row.Cells[ColumnDistance.Index].Value = infodetailed;
-
-                                if (!extCheckBoxWordWrap.Checked)
-                                {
-                                    for (int i = 0; i < row.Cells.Count; i++)
-                                        row.Cells[i].Style.WrapMode = DataGridViewTriState.True;
-                                }
+                                row.Cells[ColumnInformation.Index].Value = infodetailed;        // display in cell with wrap mode turned on irrespective of setting
+                                row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.True;
                             }
 
-                            row.Cells[ColumnDistance.Index].Tag = true;      // mark expanded
+                            row.Cells[ColumnInformation.Index].Tag = true;      // mark expanded
                         }
                     }
 
@@ -1085,13 +1081,31 @@ namespace EDDiscovery.UserControls
                 FireChangeSelection();
             }
         }
-        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
+
+        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with Journal Grid call
         {
-            System.Diagnostics.Debug.WriteLine($"Travel {rightclickhe.TravelledJumps} {rightclickhe.TravelledDistance}");
-            rightclickhe.SetStartStop();
-            DiscoveryForm.History.RecalculateTravel();
+            this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
+
+            rightclickhe.SetStartStop();                                        // change flag
+            DiscoveryForm.History.RecalculateTravel(rightclickhe.Index);        // recalculate from this index on - previous entries must by definition be unaffected
+            
+            foreach( DataGridViewRow row in dataGridViewTravel.Rows)            // dgv could be in any sort order, we have to do the lot
+            {
+                HistoryEntry he = row.Tag as HistoryEntry;
+                if ( he.IsFSD)
+                {
+                    he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
+                    row.Cells[ColumnInformation.Index].Value = eventdescription;
+                    row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;        // in case it was in expanded state (see cell double click)
+                    row.Cells[ColumnInformation.Index].Tag = null;
+                }
+            }
+
+            dataGridViewTravel.Refresh();       // to make the start/stop marker appear, refresh
+
             RequestPanelOperation(this, new TravelHistoryRecalculated());        // tell others
-            Display(current_historylist, true);     // need to redisplay
+
+            this.dataGridViewTravel.Cursor = Cursors.Default;
         }
 
         private void gotoNextStartStopMarkerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1099,18 +1113,25 @@ namespace EDDiscovery.UserControls
             for( int rown = dataGridViewTravel.RightClickRow + 1; rown < dataGridViewTravel.Rows.Count; rown++ )
             {
                 DataGridViewRow r = dataGridViewTravel.Rows[rown];
-                if (r.Visible)
+                HistoryEntry h = r.Tag as HistoryEntry;
+                if (h.StartMarker || h.StopMarker)
                 {
-                    HistoryEntry h = r.Tag as HistoryEntry;
-                    if (h.StartMarker || h.StopMarker)
+                    if (r.Visible)
                     {
                         dataGridViewTravel.DisplayRow(r.Index, true);
                         dataGridViewTravel.ClearSelection();
                         dataGridViewTravel.Rows[r.Index].Selected = true;
-                        break;
+                        return;
                     }
+                    else
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Next start/stop marker is hidden".T(EDTx.UserControlTravelGrid_StartStopHidden));
+                    }
+                    break;
                 }
             }
+
+            ExtendedControls.MessageBoxTheme.Show(FindForm(), "No start/stop marker found below".T(EDTx.UserControlTravelGrid_StartStopNotFound));
         }
 
         // quickmarks.

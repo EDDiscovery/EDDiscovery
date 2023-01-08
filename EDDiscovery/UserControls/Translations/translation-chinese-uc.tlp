@@ -278,9 +278,9 @@ SECTION UserControlJournalGrid
 
 .comboBoxTime.ToolTip: "Select the entries selected by age" => "安照时间顺序筛选条目"
 .ColumnTime: "Time" => "时间"
-.Event: "Event" => "事件"
-.ColumnType: "Description" => "描述"
-.ColumnText: "Information" => "信息"
+.ColumnEvent: "Event" => "事件"
+.ColumnDescription: "Description" => "描述"
+.ColumnInformation: "Information" => "信息"
 .labelTime: "Time" => "时间"
 .labelSearch: "Search" => "搜索"
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
@@ -1141,9 +1141,9 @@ SECTION UserControlContainerSplitter
 SECTION UserControlTravelGrid
 
 .ColumnTime: "Time" => "时间"
-.Icon: "Event" => "事件"
-.ColumnSystem: "Description" => "描述"
-.ColumnDistance: "Information" => "信息"
+.ColumnEvent: "Event" => "事件"
+.ColumnDescription: "Description" => "描述"
+.ColumnInformation: "Information" => "信息"
 .ColumnNote: "Note" => "笔记"
 .labelTime: "Time" => "时间"
 .labelSearch: "Search" => "搜索"

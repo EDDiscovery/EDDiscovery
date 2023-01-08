@@ -673,9 +673,9 @@ namespace EDDiscovery
         UserControlContainerGrid_buttonExtPopOut_ToolTip, // ToolTip 'Click to select a pop out panel to display'
 
         UserControlJournalGrid_ColumnTime, // Column Header 'Time'
-        UserControlJournalGrid_Event, // Column Header 'Event'
-        UserControlJournalGrid_ColumnType, // Column Header 'Description'
-        UserControlJournalGrid_ColumnText, // Column Header 'Information'
+        UserControlJournalGrid_ColumnEvent, // Column Header 'Event'
+        UserControlJournalGrid_ColumnDescription, // Column Header 'Description'
+        UserControlJournalGrid_ColumnInformation, // Column Header 'Information'
         UserControlJournalGrid_labelTime, // Control 'Time'
         UserControlJournalGrid_labelSearch, // Control 'Search'
         UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, // ToolStrip control 'Remove sorting of columns'
@@ -746,9 +746,9 @@ namespace EDDiscovery
         UserControlTravelGrid_extCheckBoxOutlines_ToolTip, // ToolTip 'Control Outlining'
 
         UserControlTravelGrid_ColumnTime, // Column Header 'Time'
-        UserControlTravelGrid_Icon, // Column Header 'Event'
-        UserControlTravelGrid_ColumnSystem, // Column Header 'Description'
-        UserControlTravelGrid_ColumnDistance, // Column Header 'Information'
+        UserControlTravelGrid_ColumnEvent, // Column Header 'Event'
+        UserControlTravelGrid_ColumnDescription, // Column Header 'Description'
+        UserControlTravelGrid_ColumnInformation, // Column Header 'Information'
         UserControlTravelGrid_ColumnNote, // Column Header 'Note'
         UserControlTravelGrid_labelTime, // Control 'Time'
         UserControlTravelGrid_labelSearch, // Control 'Search'
@@ -764,6 +764,8 @@ namespace EDDiscovery
         UserControlTravelGrid_Remove, // Confirm you wish to remove this entry
 
         UserControlTravelGrid_SearchTerms,      // you must define this one fully if you include it
+        UserControlTravelGrid_StartStopHidden,      // you must define this one fully if you include it
+        UserControlTravelGrid_StartStopNotFound,      // you must define this one fully if you include it
 
         UserControlStarList_ColumnTime, // Column Header 'Last Visit'
         UserControlStarList_ColumnSystem, // Column Header 'System'

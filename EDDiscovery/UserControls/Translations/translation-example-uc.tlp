@@ -292,9 +292,9 @@ SECTION UserControlJournalGrid
 .comboBoxTime.ToolTip: "Select the entries selected by age" @
 
 .ColumnTime: "Time" @
-.Event: "Event" @
-.ColumnType: "Description" @
-.ColumnText: "Information" @
+.ColumnEvent: "Event" @
+.ColumnDescription: "Description" @
+.ColumnInformation: "Information" @
 
 .labelTime: "Time" @
 .labelSearch: "Search" @
@@ -316,6 +316,7 @@ SECTION UserControlJournalGrid
 .TTSelAge: "Select the entries by age, " @
 .JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
+
 
 SECTION UserControlLedger
 
@@ -1212,9 +1213,9 @@ SECTION UserControlContainerSplitter
 SECTION UserControlTravelGrid
 
 .ColumnTime: "Time" @
-.Icon: "Event" @
-.ColumnSystem: "Description" @
-.ColumnDistance: "Information" @
+.ColumnEvent: "Event" @
+.ColumnDescription: "Description" @
+.ColumnInformation: "Information" @
 .ColumnNote: "Note" @
 .labelTime: "Time" @
 .labelSearch: "Search" @
@@ -1280,8 +1281,8 @@ SECTION UserControlTravelGrid
 
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 
-//.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
-//.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
+.StartStopHidden: "Next start/stop marker is hidden" @
+.StartStopNotFound: "No start/stop marker found below" @
 
 SECTION UserControlCaptainsLog
 
