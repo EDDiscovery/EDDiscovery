@@ -1087,12 +1087,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
 
             rightclickhe.SetStartStop();                                        // change flag
-            DiscoveryForm.History.RecalculateTravel(rightclickhe.Index);        // recalculate from this index on - previous entries must by definition be unaffected
+            DiscoveryForm.History.RecalculateTravel();                          // recalculate all
             
             foreach( DataGridViewRow row in dataGridViewTravel.Rows)            // dgv could be in any sort order, we have to do the lot
             {
                 HistoryEntry he = row.Tag as HistoryEntry;
-                if ( he.IsFSD)
+                if (he.IsFSD || he.StopMarker || he == rightclickhe)
                 {
                     he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
                     row.Cells[ColumnInformation.Index].Value = eventdescription;

@@ -474,17 +474,17 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
         }
 
-        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
+        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with travel grid call
         {
             this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
 
             rightclickhe.SetStartStop();                                        // change flag
-            DiscoveryForm.History.RecalculateTravel(rightclickhe.Index);        // recalculate from this index on - previous entries must by definition be unaffected
+            DiscoveryForm.History.RecalculateTravel();                          // recalculate all
 
             foreach (DataGridViewRow row in dataGridViewJournal.Rows)            // dgv could be in any sort order, we have to do the lot
             {
                 HistoryEntry he = row.Tag as HistoryEntry;
-                if (he.IsFSD)
+                if (he.IsFSD || he.StopMarker || he == rightclickhe)
                 {
                     he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
                     row.Cells[ColumnInformation.Index].Value = eventdescription;

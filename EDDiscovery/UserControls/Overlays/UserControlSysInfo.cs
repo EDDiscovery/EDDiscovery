@@ -606,7 +606,7 @@ namespace EDDiscovery.UserControls
                         if (IsClosed)       //ASYNC! warning! may have closed.
                             return;
 
-                        if (sys != null && sys.HasCoordinate)       // Bingo!
+                        if (sys != null && sys.HasCoordinate && DiscoveryForm.History.GetLast != null)       // check we have data - defense against #3373, if the async call was long the history could have changed
                         {
                             double dist = sys.Distance(DiscoveryForm.History.GetLast.System);       // we must have a last to be here
                             distance = $"{dist:N2}ly";
