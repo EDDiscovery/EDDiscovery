@@ -47,12 +47,16 @@ namespace EDDiscovery.UserControls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlMaterialCommodities));
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewMC = new BaseUtils.DataGridViewColumnControl();
-            this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ShortName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Category = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColShortName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColBackPack = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColWanted = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColNeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRecipes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openRecipeInWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
@@ -79,76 +83,112 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(704, 534);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1011, 819);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
             // dataGridViewMC
             // 
+            this.dataGridViewMC.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewMC.AllowUserToAddRows = false;
             this.dataGridViewMC.AllowUserToDeleteRows = false;
             this.dataGridViewMC.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewMC.AutoSortByColumnName = false;
             this.dataGridViewMC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMC.ColumnReorder = true;
             this.dataGridViewMC.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.NameCol,
-            this.ShortName,
-            this.Category,
-            this.Type,
-            this.Number,
-            this.Price});
+            this.ColName,
+            this.ColShortName,
+            this.ColCategory,
+            this.ColType,
+            this.ColNumber,
+            this.ColBackPack,
+            this.ColPrice,
+            this.ColWanted,
+            this.ColNeed,
+            this.ColRecipes});
             this.dataGridViewMC.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewMC.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMC.Name = "dataGridViewMC";
+            this.dataGridViewMC.PerColumnWordWrapControl = true;
             this.dataGridViewMC.RowHeaderMenuStrip = null;
             this.dataGridViewMC.RowHeadersVisible = false;
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMC.SingleRowSelect = true;
-            this.dataGridViewMC.Size = new System.Drawing.Size(688, 534);
+            this.dataGridViewMC.Size = new System.Drawing.Size(995, 819);
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellDoubleClick);
+            this.dataGridViewMC.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellEndEdit);
             this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
             // 
-            // NameCol
+            // ColName
             // 
-            this.NameCol.HeaderText = "Name";
-            this.NameCol.MinimumWidth = 50;
-            this.NameCol.Name = "NameCol";
-            this.NameCol.ReadOnly = true;
+            this.ColName.HeaderText = "Name";
+            this.ColName.MinimumWidth = 50;
+            this.ColName.Name = "ColName";
+            this.ColName.ReadOnly = true;
             // 
-            // ShortName
+            // ColShortName
             // 
-            this.ShortName.HeaderText = "Abv";
-            this.ShortName.MinimumWidth = 25;
-            this.ShortName.Name = "ShortName";
-            this.ShortName.ReadOnly = true;
+            this.ColShortName.HeaderText = "Abv";
+            this.ColShortName.MinimumWidth = 25;
+            this.ColShortName.Name = "ColShortName";
+            this.ColShortName.ReadOnly = true;
             // 
-            // Category
+            // ColCategory
             // 
-            this.Category.HeaderText = "Category";
-            this.Category.MinimumWidth = 50;
-            this.Category.Name = "Category";
-            this.Category.ReadOnly = true;
+            this.ColCategory.HeaderText = "Category";
+            this.ColCategory.MinimumWidth = 50;
+            this.ColCategory.Name = "ColCategory";
+            this.ColCategory.ReadOnly = true;
             // 
-            // Type
+            // ColType
             // 
-            this.Type.HeaderText = "Type";
-            this.Type.MinimumWidth = 50;
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
+            this.ColType.HeaderText = "Type";
+            this.ColType.MinimumWidth = 50;
+            this.ColType.Name = "ColType";
+            this.ColType.ReadOnly = true;
             // 
-            // Number
+            // ColNumber
             // 
-            this.Number.HeaderText = "Number";
-            this.Number.MinimumWidth = 50;
-            this.Number.Name = "Number";
-            this.Number.ReadOnly = true;
+            this.ColNumber.FillWeight = 50F;
+            this.ColNumber.HeaderText = "Number";
+            this.ColNumber.MinimumWidth = 50;
+            this.ColNumber.Name = "ColNumber";
+            this.ColNumber.ReadOnly = true;
             // 
-            // Price
+            // ColBackPack
             // 
-            this.Price.HeaderText = "Avg. Price";
-            this.Price.MinimumWidth = 50;
-            this.Price.Name = "Price";
-            this.Price.ReadOnly = true;
+            this.ColBackPack.HeaderText = "Backpack";
+            this.ColBackPack.Name = "ColBackPack";
+            this.ColBackPack.ReadOnly = true;
+            // 
+            // ColPrice
+            // 
+            this.ColPrice.HeaderText = "Avg. Price";
+            this.ColPrice.MinimumWidth = 50;
+            this.ColPrice.Name = "ColPrice";
+            this.ColPrice.ReadOnly = true;
+            // 
+            // ColWanted
+            // 
+            this.ColWanted.FillWeight = 50F;
+            this.ColWanted.HeaderText = "Want";
+            this.ColWanted.Name = "ColWanted";
+            // 
+            // ColNeed
+            // 
+            this.ColNeed.FillWeight = 50F;
+            this.ColNeed.HeaderText = "Need";
+            this.ColNeed.Name = "ColNeed";
+            this.ColNeed.ReadOnly = true;
+            // 
+            // ColRecipes
+            // 
+            this.ColRecipes.FillWeight = 200F;
+            this.ColRecipes.HeaderText = "Recipes";
+            this.ColRecipes.Name = "ColRecipes";
+            this.ColRecipes.ReadOnly = true;
             // 
             // contextMenuStrip
             // 
@@ -175,13 +215,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(688, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(995, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 534);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 819);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -218,8 +258,8 @@ namespace EDDiscovery.UserControls
             this.textBoxItems2.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxItems2.EndButtonImage")));
             this.textBoxItems2.EndButtonVisible = false;
             this.textBoxItems2.InErrorCondition = false;
-            this.textBoxItems2.Location = new System.Drawing.Point(221, 1);
-            this.textBoxItems2.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxItems2.Location = new System.Drawing.Point(221, 3);
+            this.textBoxItems2.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.textBoxItems2.Multiline = false;
             this.textBoxItems2.Name = "textBoxItems2";
             this.textBoxItems2.ReadOnly = false;
@@ -246,8 +286,8 @@ namespace EDDiscovery.UserControls
             this.textBoxItems1.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxItems1.EndButtonImage")));
             this.textBoxItems1.EndButtonVisible = false;
             this.textBoxItems1.InErrorCondition = false;
-            this.textBoxItems1.Location = new System.Drawing.Point(87, 1);
-            this.textBoxItems1.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxItems1.Location = new System.Drawing.Point(87, 3);
+            this.textBoxItems1.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.textBoxItems1.Multiline = false;
             this.textBoxItems1.Name = "textBoxItems1";
             this.textBoxItems1.ReadOnly = false;
@@ -263,8 +303,8 @@ namespace EDDiscovery.UserControls
             // labelItems2
             // 
             this.labelItems2.AutoSize = true;
-            this.labelItems2.Location = new System.Drawing.Point(170, 1);
-            this.labelItems2.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelItems2.Location = new System.Drawing.Point(170, 6);
+            this.labelItems2.Margin = new System.Windows.Forms.Padding(0, 6, 8, 1);
             this.labelItems2.Name = "labelItems2";
             this.labelItems2.Size = new System.Drawing.Size(43, 13);
             this.labelItems2.TabIndex = 3;
@@ -273,8 +313,8 @@ namespace EDDiscovery.UserControls
             // labelItems1
             // 
             this.labelItems1.AutoSize = true;
-            this.labelItems1.Location = new System.Drawing.Point(36, 1);
-            this.labelItems1.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelItems1.Location = new System.Drawing.Point(36, 6);
+            this.labelItems1.Margin = new System.Windows.Forms.Padding(0, 6, 8, 1);
             this.labelItems1.Name = "labelItems1";
             this.labelItems1.Size = new System.Drawing.Size(43, 13);
             this.labelItems1.TabIndex = 3;
@@ -352,7 +392,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(704, 30);
+            this.panelTop.Size = new System.Drawing.Size(1011, 30);
             this.panelTop.TabIndex = 6;
             // 
             // UserControlMaterialCommodities
@@ -362,7 +402,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlMaterialCommodities";
-            this.Size = new System.Drawing.Size(704, 564);
+            this.Size = new System.Drawing.Size(1011, 849);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
@@ -378,12 +418,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private BaseUtils.DataGridViewColumnControl dataGridViewMC;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ShortName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Category;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Number;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtCheckBox checkBoxShowZeros;
         private ExtendedControls.ExtTextBox textBoxItems2;
@@ -395,5 +429,15 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem openRecipeInWindowToolStripMenuItem;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColShortName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColCategory;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColBackPack;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColWanted;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColNeed;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColRecipes;
     }
 }

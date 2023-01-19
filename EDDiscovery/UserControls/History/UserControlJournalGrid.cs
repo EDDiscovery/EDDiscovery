@@ -74,6 +74,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.RowTemplate.MinimumHeight = 26;      // enough for the icon
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            dataGridViewJournal.AllowRowHeaderVisibleSelection = true;
 
             cfs = new JournalFilterSelector();
             cfs.AddAllNone();
@@ -120,7 +121,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             dataGridViewJournal.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));
-            DGVLoadColumnLayout(dataGridViewJournal);
+            DGVLoadColumnLayout(dataGridViewJournal, rowheaderselection: dataGridViewJournal.AllowRowHeaderVisibleSelection);
         }
 
         public override void Closing()

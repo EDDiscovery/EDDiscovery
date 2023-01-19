@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.MinimumHeight = 26;      // enough for the icon
+            dataGridViewTravel.AllowRowHeaderVisibleSelection = true;
 
             string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
@@ -157,7 +158,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewTravel);
+            DGVLoadColumnLayout(dataGridViewTravel,rowheaderselection:dataGridViewTravel.AllowRowHeaderVisibleSelection);
         }
 
         public override void Closing()
@@ -165,7 +166,9 @@ namespace EDDiscovery.UserControls
             todo.Clear();
             todotimer.Stop();
             searchtimer.Stop();
+
             DGVSaveColumnLayout(dataGridViewTravel);
+
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
 
             DiscoveryForm.OnHistoryChange -= HistoryChanged;

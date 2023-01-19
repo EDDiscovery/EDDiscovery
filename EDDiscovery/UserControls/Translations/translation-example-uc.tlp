@@ -371,23 +371,29 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.BackPack: "BackPack" @
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
 .Rare: "Rare" @
-.Recipes: "Recipes" @
-.NameCol: "Name" @
-.ShortName: "Abv" @
-.Category: "Category" @
-.Type: "Type" @
-.Number: "Number" @
-.Price: "Avg. Price" @
+.ColName: "Name" @
+.ColShortName: "Abv" @
+.ColCategory: "Category" @
+.ColType: "Type" @
+.ColNumber: "Number" @
+.ColBackPack: "Backpack" @
+.ColPrice: "Avg. Price" @
+.ColRecipes: "Recipes" @
+.ColWanted: "Want" @
+.ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" @
 .textBoxItems1.ToolTip: "Count of Items" @
 .buttonFilter.ToolTip: "Filter out items" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.AllMats: "All Materials" @
+.AllCommods: "All Commodities" @
+.AllMicroresources: "All Microresources" @
+
 
 SECTION UserControlMissionOverlay
 

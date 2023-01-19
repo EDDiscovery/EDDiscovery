@@ -353,18 +353,18 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.BackPack: "BackPack" @
+.ColBackPack: "BackPack" @
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
 .Rare: "Rare" @
-.Recipes: "Recipes" @
-.NameCol: "Name" => "Nome"
-.ShortName: "Abv" @
-.Category: "Category" => "Categoria"
-.Type: "Type" => "Tipo"
-.Number: "Number" => "Numero"
-.Price: "Avg. Price" => "Prezzo medio"
+.ColRecipes: "Recipes" @
+.ColName: "Name" => "Nome"
+.ColShortName: "Abv" @
+.ColCategory: "Category" => "Categoria"
+.ColType: "Type" => "Tipo"
+.ColNumber: "Number" => "Numero"
+.ColPrice: "Avg. Price" => "Prezzo medio"
 .textBoxItems2.ToolTip: "Count of Items" => "Conteggio"
 .textBoxItems1.ToolTip: "Count of Items" => "Conteggio"
 .buttonFilter.ToolTip: "Filter out items" @

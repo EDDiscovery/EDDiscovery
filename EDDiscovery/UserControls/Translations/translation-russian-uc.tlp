@@ -353,18 +353,18 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.BackPack: "BackPack" @
+.ColBackPack: "BackPack" @
 .Data: "Data" => "Данные"
 .Mats: "Mats" => "Мат-лы"
 .Total: "Total" => "Всего"
 .Rare: "Rare" => "Редкие товары"
-.Recipes: "Recipes" @
-.NameCol: "Name" => "Название"
-.ShortName: "Abv" => "Сокращение"
-.Category: "Category" => "Категория"
-.Type: "Type" => "Тип"
-.Number: "Number" => "Количество"
-.Price: "Avg. Price" => "Средняя цена"
+.ColRecipes: "Recipes" @
+.ColName: "Name" => "Название"
+.ColShortName: "Abv" => "Сокращение"
+.ColCategory: "Category" => "Категория"
+.ColType: "Type" => "Тип"
+.ColNumber: "Number" => "Количество"
+.ColPrice: "Avg. Price" => "Средняя цена"
 .textBoxItems2.ToolTip: "Count of Items" => "Количество предметов"
 .textBoxItems1.ToolTip: "Count of Items" => "Количество предметов"
 .buttonFilter.ToolTip: "Filter out items" => "Фильтровать"

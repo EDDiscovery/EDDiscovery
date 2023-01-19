@@ -38,13 +38,15 @@ namespace EDDiscovery.UserControls
 
         public void SaveDGV(string root)
         {
-            dataGridViewEngineering.SaveColumnSettings(root, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+            dataGridViewEngineering.SaveColumnSettings(root, 
+                            (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
                             (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }
         public void LoadDGV(string root)
         {
             inchange = true;
-            dataGridViewEngineering.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+            dataGridViewEngineering.LoadColumnSettings(root, false, 
+                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                             (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
             inchange = false;
         }
@@ -77,7 +79,8 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, "UserControlEngineering");    // share IDs with Engineering panel./
 
-            dataGridViewEngineering.LoadColumnSettings(colsetting, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+            dataGridViewEngineering.LoadColumnSettings(colsetting, false,
+                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                             (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
 
             labelEngineerName.Text = name;

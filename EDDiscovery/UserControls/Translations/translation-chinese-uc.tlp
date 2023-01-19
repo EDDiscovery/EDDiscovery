@@ -353,18 +353,18 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.BackPack: "BackPack" @
+.ColBackPack: "BackPack" @
 .Data: "Data" => "数据"
 .Mats: "Mats" => "材料"
 .Total: "Total" => "总量"
 .Rare: "Rare" @
-.Recipes: "Recipes" @
-.NameCol: "Name" => "名称"
-.ShortName: "Abv" => "简称"
-.Category: "Category" => "分类"
-.Type: "Type" => "种类"
-.Number: "Number" => "数量"
-.Price: "Avg. Price" => "平均价格"
+.ColRecipes: "Recipes" @
+.ColName: "Name" => "名称"
+.ColShortName: "Abv" => "简称"
+.ColCategory: "Category" => "分类"
+.ColType: "Type" => "种类"
+.ColNumber: "Number" => "数量"
+.ColPrice: "Avg. Price" => "平均价格"
 .textBoxItems2.ToolTip: "Count of Items" => "商品数量"
 .textBoxItems1.ToolTip: "Count of Items" => "商品数量"
 .buttonFilter.ToolTip: "Filter out items" @

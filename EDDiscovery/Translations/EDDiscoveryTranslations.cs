@@ -412,12 +412,16 @@ namespace EDDiscovery
         UserControlSettings_NoMap, // No map downloaded
         UserControlSettings_GalFini, // Finished, Please close the window.
 
-        UserControlMaterialCommodities_NameCol, // Column Header 'Name'
-        UserControlMaterialCommodities_ShortName, // Column Header 'Abv'
-        UserControlMaterialCommodities_Category, // Column Header 'Category'
-        UserControlMaterialCommodities_Type, // Column Header 'Type'
-        UserControlMaterialCommodities_Number, // Column Header 'Number'
-        UserControlMaterialCommodities_Price, // Column Header 'Avg. Price'
+        UserControlMaterialCommodities_ColName, // Column Header 'Name'
+        UserControlMaterialCommodities_ColShortName, // Column Header 'Abv'
+        UserControlMaterialCommodities_ColCategory, // Column Header 'Category'
+        UserControlMaterialCommodities_ColType, // Column Header 'Type'
+        UserControlMaterialCommodities_ColNumber, // Column Header 'Number'
+        UserControlMaterialCommodities_ColBackPack,
+        UserControlMaterialCommodities_ColPrice, // Column Header 'Avg. Price'
+        UserControlMaterialCommodities_ColRecipes, // Recipes !! NOTE
+        UserControlMaterialCommodities_ColWanted,
+        UserControlMaterialCommodities_ColNeed,
         UserControlMaterialCommodities_buttonFilter_ToolTip, // ToolTip 'Filter out items'
         UserControlMaterialCommodities_textBoxItems1_ToolTip, // ToolTip 'Count of Items'
         UserControlMaterialCommodities_textBoxItems2_ToolTip, // ToolTip 'Count of Items'
@@ -428,10 +432,10 @@ namespace EDDiscovery
         UserControlMaterialCommodities_Mats, // Data !! NOTE
         UserControlMaterialCommodities_Total, // Data !! NOTE
         UserControlMaterialCommodities_Rare, // Rare !! NOTE
-        UserControlMaterialCommodities_Recipes, // Recipes !! NOTE
-        UserControlMaterialCommodities_ShipLocker, // Discrete
-        UserControlMaterialCommodities_BackPack, // Discrete
-
+        UserControlMaterialCommodities_ShipLocker,
+        UserControlMaterialCommodities_AllMats,
+        UserControlMaterialCommodities_AllCommods,
+        UserControlMaterialCommodities_AllMicroresources,
 
         MissionListUserControl_PcolName, // Column Header 'Name'
         MissionListUserControl_pColStart, // Column Header 'Start Date'

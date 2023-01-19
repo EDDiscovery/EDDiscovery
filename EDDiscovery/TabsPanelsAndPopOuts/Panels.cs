@@ -86,6 +86,7 @@ namespace EDDiscovery
             Engineers = 56,
             Discoveries = 57,
             Carrier=58,
+            Resources=59,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -107,6 +108,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.MicroResources, typeof(UserControlMicroResources), "Micro Resources", "MicroResources", "Micro resource count") },
+            { new PanelInfo( PanelIDs.Resources, typeof(UserControlAllResources), "Resources", "AllResources", "All Materials, Commodity, MicroResources") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
             { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
