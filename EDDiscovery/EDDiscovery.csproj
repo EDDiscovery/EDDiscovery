@@ -164,8 +164,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.QuickJSON.1.0.1\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.QuickJSON.1.1.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -200,6 +200,12 @@
     </Compile>
     <Compile Include="EDD\EDDiscoveryFormTabs.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImportExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImportExportForm.Designer.cs">
+      <DependentUpon>ImportExportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TabsPanelsAndPopOuts\EDDHelp.cs" />
     <Compile Include="EDD\EDDiscoveryFormDLL.cs">
@@ -393,12 +399,6 @@
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
     <Compile Include="OptionsAndConfig\EDDOptions.cs" />
-    <Compile Include="Forms\ExportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ExportForm.Designer.cs">
-      <DependentUpon>ExportForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\GalaxySectorSelect.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -806,8 +806,8 @@
     <EmbeddedResource Include="Forms\DraggableFormPos.resx">
       <DependentUpon>DraggableFormPos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ExportForm.resx">
-      <DependentUpon>ExportForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ImportExportForm.resx">
+      <DependentUpon>ImportExportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
       <DependentUpon>GalaxySectorSelect.cs</DependentUpon>

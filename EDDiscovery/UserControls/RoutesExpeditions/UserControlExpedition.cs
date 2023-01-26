@@ -172,7 +172,8 @@ namespace EDDiscovery.UserControls
                         ClearTable();
                         string file = action.Data as string;
                         System.Diagnostics.Debug.WriteLine($"Expedition import CSV {file}");
-                        Import(0, file, true);
+                        string str = FileHelpers.TryReadAllTextFromFile(file);
+                        Import(0, Path.GetFileNameWithoutExtension(file), str, ",", true);
                     }
                     return true;
                 }
@@ -557,80 +558,94 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            var frm = new Forms.ExportForm();
-            frm.Init(true, new string[] { "CSV", "CSV No Header Line", "Text File", "JSON" },
-                new string[] { "CSV|*.csv", "CSV|*.csv", "Text |*.txt|All|*.*", "JSON|*.json|All|*.*" },
-                new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTOI, Forms.ExportForm.ShowFlags.DTOI, Forms.ExportForm.ShowFlags.DTCVSOI, Forms.ExportForm.ShowFlags.DTCVSOI });
+            var frm = new Forms.ImportExportForm();
+            frm.Import( new string[] { "CSV", "Text File", "JSON" },
+                new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowImportOptions, Forms.ImportExportForm.ShowFlags.ShowImportOptions, Forms.ImportExportForm.ShowFlags.ShowPaste },
+                new string[] { "CSV|*.csv", "CSV|*.csv", "Text |*.txt|All|*.*", "JSON|*.json|All|*.*" }
+                );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                Import(frm.SelectedIndex, frm.Path, frm.Comma);
+                var src = frm.ReadSource();
+
+                if (src == null || !Import(frm.SelectedIndex, Path.GetFileNameWithoutExtension(frm.Path), src, frm.Delimiter, frm.ExcludeHeader))
+                {
+                    MessageBoxTheme.Show(FindForm(), "Failed to read " + frm.Path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
 
+        // form = 0 CSV with ignored header line. Cells 0 = system, optional 1 = note, 2.. are merged into note
+        // form = 1 text file
         // duplicate systems on same lines removed and notes are merges
         // any columns past 2 are merged into notes
-        // form = 0 CSV with ignored header line. Cells 0 = system, optional 1 = note, 2.. are merged into note
-        // form = 1 CSV without header line
-        // form = 2 text file, same as 1 really
-        // form = 3 json import
-        // form = 4 spansh riches system (may be repeated), body, type, terraformable, distance to arrival, scan value, mapping value, jumps to
-        private void Import(int form, string path, bool comma)
+        // form = 2 json import
+        // text can be null to complain about a bad load
+
+        private bool Import(int importtype, string name, string text, string delimiter, bool excludeheaderrow)
         {
-            if (form == 3)     // JSON
+            if (text != null)
             {
-                var list = ReadJSON(path);
-                if (list != null)
+                if (importtype == 2)
                 {
-                    if (list.Item1.HasChars() && textBoxRouteName.Text.IsEmpty())
-                        textBoxRouteName.Text = list.Item1;
-                    AppendOrInsertSystems(-1, list.Item2);
-                }
-            }
-            else
-            {
-                CSVFile csv = new CSVFile();
-                if (csv.Read(path, FileShare.ReadWrite, comma))
-                {
-                    var systems = new List<SavedRouteClass.SystemEntry>();
-                    string lastsystem = null;
-
-                    CSVFile.Row rowheader = csv.Rows.Count > 1 && form == 0 ? csv[0] : null;
-
-                    for (int r = form == 0 ? 1 : 0; r < csv.Rows.Count; r++)  // if in mode 0, from line 1, else from line 0
+                    var list = ReadJSON(text);
+                    if (list != null)
                     {
-                        var row = csv[r];                               // column 0 only
-                        if (row.Cells.Count >= 1)
-                        {
-                            string note = "";
-                            for (int i = 1; i < row.Cells.Count; i++)
-                            {
-                                string header = rowheader != null && rowheader.Cells.Count > i ? rowheader[i] + ":" : "";
-                                string data = row[i];
-                                if (data.InvariantParseDoubleNull() != null && data.Contains(".")) // if its a number, and its a dotted number
-                                    data = data.InvariantParseDouble(0).ToString("0.##");
-
-                                note = note.AppendPrePad(header+data, Environment.NewLine);
-                            }
-
-                            string systemname = row[0];
-                            if ( systemname == lastsystem)
-                            {
-                                systems.Last().Note = systems.Last().Note.AppendPrePad(note,Environment.NewLine);
-                            }
-                            else
-                                systems.Add(new SavedRouteClass.SystemEntry(systemname,note));
-
-                            lastsystem = systemname;
-                        }
-                            
+                        if (list.Item1.HasChars() && textBoxRouteName.Text.IsEmpty())
+                            textBoxRouteName.Text = list.Item1;
+                        AppendOrInsertSystems(-1, list.Item2);
+                        textBoxRouteName.Text = name;
+                        return true;
                     }
+                }
+                else 
+                {
+                    CSVFile csv = new CSVFile(delimiter);
+                    if (csv.ReadString(text))
+                    {
+                        var systems = new List<SavedRouteClass.SystemEntry>();
+                        string lastsystem = null;
 
-                    if (!textBoxRouteName.Text.HasChars())
-                        textBoxRouteName.Text = Path.GetFileNameWithoutExtension(path);
-                    AppendOrInsertSystems(-1, systems);
+                        CSVFile.Row rowheader = csv.Rows.Count > 1 && excludeheaderrow ? csv[0] : null;
+
+                        for (int r = excludeheaderrow ? 1 : 0; r < csv.Rows.Count; r++)
+                        {
+                            var row = csv[r];                               // column 0 only
+                            if (row.Cells.Count >= 1)
+                            {
+                                string note = "";
+                                for (int i = 1; i < row.Cells.Count; i++)
+                                {
+                                    string header = rowheader != null && rowheader.Cells.Count > i ? rowheader[i] + ":" : "";
+                                    string data = row[i];
+                                    if (data.InvariantParseDoubleNull() != null && data.Contains(".")) // if its a number, and its a dotted number
+                                        data = data.InvariantParseDouble(0).ToString("0.##");
+
+                                    note = note.AppendPrePad(header + data, Environment.NewLine);
+                                }
+
+                                string systemname = row[0];
+                                if (systemname == lastsystem)
+                                {
+                                    systems.Last().Note = systems.Last().Note.AppendPrePad(note, Environment.NewLine);
+                                }
+                                else
+                                    systems.Add(new SavedRouteClass.SystemEntry(systemname, note));
+
+                                lastsystem = systemname;
+                            }
+
+                        }
+
+                        textBoxRouteName.Text = name;
+                        AppendOrInsertSystems(-1, systems);
+                        return true;
+                    }
                 }
             }
+
+            ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + name, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            return false;
         }
 
         private void extButtonImportRoute_Click(object sender, EventArgs e)
@@ -716,10 +731,10 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            var frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Grid", "System Name Only", "JSON", "EDSM System Information" },
+            var frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Grid", "System Name Only", "JSON", "EDSM System Information" },
+                            new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude, Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude, Forms.ImportExportForm.ShowFlags.None, Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude },
                             new string[] { "CSV export|*.csv", "Text File|*.txt|CSV export|*.csv", "JSON|*.json", "CSV export|*.csv" },
-                            new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DTCVSOI, Forms.ExportForm.ShowFlags.DisableDateTime },
                             new string[] { "ExpeditionGrid", "SystemList", "Systems", "EDSMData" }
                             );
 
@@ -741,7 +756,7 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    if ( CSVHelpers.OutputScanCSV(scans,frm.Path,frm.Comma,true,true,true,false,true))
+                    if ( CSVHelpers.OutputScanCSV(scans,frm.Path,frm.Delimiter,true,true,true,false,true))
                     {
                         try
                         {
@@ -769,8 +784,8 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
                     grd.GetLineStatus += delegate (int r)
                     {
                         if (r < dataGridView.Rows.Count)
@@ -1160,7 +1175,8 @@ namespace EDDiscovery.UserControls
                     {
                         ClearTable();
                         System.Diagnostics.Debug.WriteLine($"Expedition import CSV {fileList[0]}");
-                        Import(0, fileList[0], true);
+                        string str = FileHelpers.TryReadAllTextFromFile(fileList[0]);
+                        Import(0, Path.GetFileNameWithoutExtension(fileList[0]), str, ",", true);
                     }
                 }
                 else
@@ -1210,24 +1226,20 @@ namespace EDDiscovery.UserControls
 
         #region JSON Output/Input of systems and name
 
-        public static Tuple<string, List<string>> ReadJSON(string path)
+        public static Tuple<string, List<string>> ReadJSON(string text)
         {
-            string text = BaseUtils.FileHelpers.TryReadAllTextFromFile(path);
-            if (text != null)
+            JObject jo = JObject.Parse(text, JToken.ParseOptions.AllowTrailingCommas | JToken.ParseOptions.CheckEOL);
+
+            if (jo != null)
             {
-                JObject jo = JObject.Parse(text, JToken.ParseOptions.AllowTrailingCommas | JToken.ParseOptions.CheckEOL);
+                var syslist = jo["Systems"].Array();
 
-                if (jo != null)
+                if (syslist != null)
                 {
-                    var syslist = jo["Systems"].Array();
-
-                    if (syslist != null)
-                    {
-                        List<string> sys = new List<string>();
-                        foreach (var jk in syslist)
-                            sys.Add(jk.Str());
-                        return new Tuple<string, List<string>>(jo["Name"].Str(), sys);
-                    }
+                    List<string> sys = new List<string>();
+                    foreach (var jk in syslist)
+                        sys.Add(jk.Str());
+                    return new Tuple<string, List<string>>(jo["Name"].Str(), sys);
                 }
             }
 

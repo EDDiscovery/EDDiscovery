@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2022 - 2022 EDDiscovery development team
+ * Copyright © 2022 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
+
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
@@ -158,12 +157,8 @@ namespace EDDiscovery.UserControls
 
                     ep.Init(name, ei, GetSetting(dbWSave + "_" + name, ""), colsetting);
                     ep.UpdateWordWrap(extCheckBoxWordWrap.Checked);
-
-                    ep.Redisplay += () =>
-                    {
-                        PutSetting(dbWSave + "_" + name, ep.WantedPerRecipe.ToString(","));
-                        UpdateDisplay();
-                    };
+                    ep.SaveSettings += () => { PutSetting(dbWSave + "_" + name, ep.WantedPerRecipe.ToString(",")); };
+                    ep.AskForRedisplay += () => { UpdateDisplay(); };
 
                     ep.ColumnSetupChanged += (panel) =>
                     {
@@ -288,14 +283,46 @@ namespace EDDiscovery.UserControls
             panelEngineers.ResumeLayout();
         }
 
-
-
-        #endregion
-
         private void chkNotHistoric_CheckedChanged(object sender, EventArgs e)
         {
             isHistoric = !chkNotHistoric.Checked;
             RefreshData();
         }
+
+        private void extButtonPushResources_Click(object sender, EventArgs e)
+        {
+            Dictionary<MaterialCommodityMicroResourceType, int> resourcelist = new Dictionary<MaterialCommodityMicroResourceType, int>();
+            foreach (var p in engineerpanels)
+            {
+                foreach( var kvp in p.NeededResources )
+                {
+                    if (resourcelist.TryGetValue(kvp.Key, out int value))
+                    {
+                        resourcelist[kvp.Key] = value + kvp.Value;
+                    }
+                    else
+                        resourcelist[kvp.Key] = kvp.Value;
+                }
+            }
+
+            if (!RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist }))
+            {
+                ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
+            }
+
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            foreach (var x in engineerpanels)
+            {
+                x.Clear();
+            }
+
+            UpdateDisplay();
+        }
+
+        #endregion
+
     }
 }

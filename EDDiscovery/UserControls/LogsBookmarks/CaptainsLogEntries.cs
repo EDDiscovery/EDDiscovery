@@ -568,13 +568,13 @@ namespace EDDiscovery.UserControls
 
         private void extButtonExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Export Current View", "All" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DisableDateTime });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Export Current View", "All" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude, Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
-                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                grd.SetCSVDelimiter(frm.Comma);
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
 
                 grd.GetLineHeader += delegate (int c)
                 {

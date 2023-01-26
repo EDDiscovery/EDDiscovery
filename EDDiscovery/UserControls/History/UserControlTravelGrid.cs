@@ -551,7 +551,7 @@ namespace EDDiscovery.UserControls
                     return true;
                 }
             }
-            else if ( actionobj is UserControlCommonBase.TravelHistoryRecalculated)      
+            else if ( actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)      
             {
                 Display(current_historylist, false);
             }
@@ -1106,7 +1106,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.Refresh();       // to make the start/stop marker appear, refresh
 
-            RequestPanelOperation(this, new TravelHistoryRecalculated());        // tell others
+            RequestPanelOperation(this, new TravelHistoryStartStopChanged());        // tell others
 
             this.dataGridViewTravel.Cursor = Cursors.Default;
         }

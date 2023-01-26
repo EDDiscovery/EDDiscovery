@@ -53,8 +53,8 @@
             this.userControlSurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonEditSystem = new ExtendedControls.ExtButton();
-            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonNewRegion = new ExtendedControls.ExtButton();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -198,6 +198,7 @@
             // 
             // vScrollBarCustom1
             // 
+            this.vScrollBarCustom1.AlwaysHideScrollBar = false;
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
@@ -226,6 +227,7 @@
             // 
             // dataGridViewBookMarks
             // 
+            this.dataGridViewBookMarks.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewBookMarks.AllowUserToAddRows = false;
             this.dataGridViewBookMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewBookMarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
@@ -338,6 +340,18 @@
             this.extButtonEditSystem.UseVisualStyleBackColor = true;
             this.extButtonEditSystem.Click += new System.EventHandler(this.extButtonEditSystem_Click);
             // 
+            // extButtonNewRegion
+            // 
+            this.extButtonNewRegion.Image = global::EDDiscovery.Icons.Controls.NewRegion;
+            this.extButtonNewRegion.Location = new System.Drawing.Point(241, 1);
+            this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonNewRegion.Name = "extButtonNewRegion";
+            this.extButtonNewRegion.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNewRegion.TabIndex = 2;
+            this.toolTip.SetToolTip(this.extButtonNewRegion, "New Region Bookmark");
+            this.extButtonNewRegion.UseVisualStyleBackColor = true;
+            this.extButtonNewRegion.Click += new System.EventHandler(this.extButtonNewRegion_Click);
+            // 
             // topPanel
             // 
             this.topPanel.AutoSize = true;
@@ -355,18 +369,6 @@
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(676, 30);
             this.topPanel.TabIndex = 39;
-            // 
-            // extButtonNewRegion
-            // 
-            this.extButtonNewRegion.Image = global::EDDiscovery.Icons.Controls.NewRegion;
-            this.extButtonNewRegion.Location = new System.Drawing.Point(241, 1);
-            this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonNewRegion.Name = "extButtonNewRegion";
-            this.extButtonNewRegion.Size = new System.Drawing.Size(28, 28);
-            this.extButtonNewRegion.TabIndex = 2;
-            this.toolTip.SetToolTip(this.extButtonNewRegion, "New Region Bookmark");
-            this.extButtonNewRegion.UseVisualStyleBackColor = true;
-            this.extButtonNewRegion.Click += new System.EventHandler(this.extButtonNewRegion_Click);
             // 
             // UserControlBookmarks
             // 

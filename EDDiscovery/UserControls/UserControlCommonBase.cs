@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
             PanelID = p.PopoutID;
         }
 
-        // called after set up on init
+        // Called by form/major tab etc to create a panel
 
         public void Init(EDDiscoveryForm ed, int dn)
         {
@@ -81,18 +81,28 @@ namespace EDDiscovery.UserControls
             Init();
         }
 
-        public virtual void Init() { }              // start up, called by above Init.  no cursor available
-
-        // For forms, the transparency key color is set by theme during UserControlForm init.
-        // The Init function above for a UC could override if required
-        // themeing and scaling happens at this point.  Item should be in AutoScaleMode.Inherit to prevent double scaling
+        // UCCB overrides this to initialise itself.
         // Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab, Grid:CreateInitPanel
 
-        public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before LoadLayout/InitialDisplay in a pop out form
-        public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
+        public virtual void Init() { }              // start up, called by above Init.  no cursor available
+
+        // after init, themeing and scaling happens at this point.  Item should be in AutoScaleMode.Inherit to prevent double scaling
+
+        // For popout forms, on init, it calls SetTransparency, then TransparencyModeChanged
+        // The transparency key color is set by theme during UserControlForm init - you can override if required in Init()
+        // everytime the transparency changes (due to user hovering etc) SetTransparency is called
+        public virtual void SetTransparency(bool ison, Color curcol) { }
+
+        // TransparentModeChange is called on startup, and only then if the user changes the transparent major mode on/off
+        public virtual void TransparencyModeChanged(bool on) { }         
+
+        // then LoadLayout, InitialDisplay is called
+        public virtual void LoadLayout() { }        // then a chance to load a layout. 
         public virtual void InitialDisplay() { }    // do the initial display
-        public virtual void Closing() { }           // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
+
+        // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
+        public virtual void Closing() { }
 
         // end calling order.
 
@@ -100,19 +110,21 @@ namespace EDDiscovery.UserControls
 
         #region Virtual overrides
 
-        public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
-        public virtual bool DefaultTransparent { get { return false; } }  // override to say default to be transparent
-        public virtual void TransparencyModeChanged(bool on) { }         // override to know when it changes (from on-off, not its different on conditions, thats private to user control form)
-        public virtual void onControlTextVisibilityChanged(bool newvalue)       // override to know
+        // override to say support transparency
+        public virtual bool SupportTransparency { get { return false; } }
+        // override to say default to be transparent
+        public virtual bool DefaultTransparent { get { return false; } }
+        // override to know
+        public virtual void onControlTextVisibilityChanged(bool newvalue)       
         {
         }
+        // override to prevent closure
         public virtual bool AllowClose() { return true; }
 
         #endregion
 
         #region Closedown
         // Call to close down panel.
-
         public void CloseDown()     
         {
             IsClosed = true;
@@ -140,26 +152,32 @@ namespace EDDiscovery.UserControls
         // Requests/Performs are:
         //      HistoryEntry - sent by all TG on cursor moves.
         //          Splitter/grid distributes it around the siblings - they response false
-        //          Sent up to tab - MainTab distributes it to other tabs, Other throws it away
-        //          all panels must return false so no-one grabs it
+        //          Sent up to tab - MainTab distributes it to other tabs and forms, Other throws it away
+        //          All panels must return false so no-one grabs it
         //
         //      long - request travel grid to go to this jid 
-        //      class RequestTravelHistoryPos - request travel grid to call back directly to sender with the current HE (may be null)
-        //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution
-        //           If not ack, sent up to tab - Other will send it to maintab, maintab will never get it (as it would be cancelled by splitter)
-        //           TG should return true
+        //      class RequestTravelHistoryPos - request primary travel grid to call back directly to sender with the current HE (may be null)
+        //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution (like the main tab will)
+        //           If not ack, sent up to tab - Other will send it to maintab only
+        //           Panel should return true
         //
         //      class PushStars - someone is pushing a system list to expedition or trilat
         //           Splitter/grid distributes it around the siblings - if a recipient is there and uses it, they respond true, which stops the distribution
         //           Sent up to major tab - both types will distribute it to all tabs and the first recepient will cancel it
+        //           Distributed to all forms
         //           Panel should return true
         //
         //      class PanelAction - perform this string action on a tab panel
-        //           Sent into all tabs, first one accepting it will cancel it.
+        //           Sent into all tabs, and to all forms, first one accepting it will cancel it.
         //           Panel should return true if serviced
         //
-        //      class TravelHistoryRecalculated - someone set a start stop flag
-        //           Sent to everone. No one should cancel it with true
+        //      class TravelHistoryStartStopChanged - someone set a start stop flag
+        //           Sent to everone.
+        //           Panel should return false
+        //
+        //      class PushResourceWantedList - synthesis/engineering pushes a list of wants to the resources panel
+        //           Send to everyone
+        //           Panel which grabs it should return true
 
         public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
         public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
@@ -177,13 +195,19 @@ namespace EDDiscovery.UserControls
             public string Action { get; set; }
             public object Data { get; set; }
         }
+        public class PushResourceWantedList         // use to push resource list to resource panel
+        {
+            public System.Collections.Generic.Dictionary<EliteDangerousCore.MaterialCommodityMicroResourceType, int> Resources { get; set; }      // push type and amount
+        }
 
-        public class TravelHistoryRecalculated { }
+        public class TravelHistoryStartStopChanged { }
 
-        // Request action. Return if positively services by 
-        public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        // Request other panel does something for you, pretty please.
+        // Request action. Return if postively services by a single panel, or false if panels either don't use it or pass it on
+        // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
 
-        // panel asked for operation, return true to indicate its swallowed. 
+        public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        
+
+        // panel is asked for operation, return true to indicate its swallowed, or false to say pass it onto next guy. 
         // the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry
         // either override PerformPanelOperation for the full monty, or override ReceiveHistoryEntry if your just interested in HE receive
         public virtual bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
@@ -260,6 +284,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        // force transparency update/set transparent function
         public void UpdateTransparency()
         {
             if (this.Parent is UserControlForm)
@@ -272,7 +297,8 @@ namespace EDDiscovery.UserControls
             return PanelID == p ? this : null;
         }
 
-        public void MakeVisible()       // if in tab, or floating, force it visible
+        // force this tab or panel to be visible
+        public void MakeVisible()       
         {
             Control c = Parent;
             TabPage p = null;
@@ -302,7 +328,8 @@ namespace EDDiscovery.UserControls
 
         #region Resize
 
-        public bool ResizingNow = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+        // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+        public bool ResizingNow = false;                                            
 
         public void RequestTemporaryMinimumSize(Size w)         // w is UC area
         { 

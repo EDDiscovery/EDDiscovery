@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System;
@@ -25,11 +24,19 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEngineering : UserControlCommonBase
     {
-        RecipeFilterSelector efs;
-        RecipeFilterSelector mfs;
-        RecipeFilterSelector ufs;
-        RecipeFilterSelector lfs;
-        RecipeFilterSelector matfs;
+        public bool isEmbedded { get; set; } = false;
+        public bool isHistoric { get; set; } = false;
+
+        public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
+
+        public Dictionary<MaterialCommodityMicroResourceType, int> NeededResources;        // computed during display
+
+
+        private RecipeFilterSelector efs;
+        private RecipeFilterSelector mfs;
+        private RecipeFilterSelector ufs;
+        private RecipeFilterSelector lfs;
+        private RecipeFilterSelector matfs;
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "NA"};
 
@@ -43,14 +50,10 @@ namespace EDDiscovery.UserControls
         private string dbHistoricMatsSave = "GridHistoricMaterials";
         private string dbWordWrap = "WordWrap";
 
-        int[] RowToRecipe;        // order
-        int[] WantedPerRecipe;       // wanted, in order terms
+        private int[] RowToRecipe;        // order
+        private int[] WantedPerRecipe;       // wanted, in order terms
 
-        internal bool isEmbedded = false;
-        internal bool isHistoric = false;
-        public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
-
-        HistoryEntry last_he = null;
+        private HistoryEntry last_he = null;
 
         #region Init
 
@@ -220,14 +223,13 @@ namespace EDDiscovery.UserControls
                 string[] upgArray = upgrades.Split(';');
                 string materials = GetSetting(dbMaterialFilterSave, "All");
                 var matList = materials.Split(';');        // list of materials to show
-                
+
+                NeededResources = new Dictionary<MaterialCommodityMicroResourceType, int>();
+
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    
-                    // maximum we can make, not taking any, so not changing totals
 
-                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcllist, totals, Recipes.EngineeringRecipes[rno]).Item1.ToString();
                     bool visible = true;
                     
                     if (!(engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All"))
@@ -268,9 +270,10 @@ namespace EDDiscovery.UserControls
                     {
                         Recipes.Recipe r = Recipes.EngineeringRecipes[i];
 
-                        var res = MaterialCommoditiesRecipe.HowManyLeft(mcllist, totals, Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]);
-                      //  System.Diagnostics.Debug.WriteLine($"{i} Recipe {rno} executed {WantedPerRecipe[rno]}; {res.Item2}, {res.Item3} ");
+                        var res = MaterialCommoditiesRecipe.HowManyLeft(Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno], mcllist, totals, NeededResources);
+                        //  System.Diagnostics.Debug.WriteLine($"{i} Recipe {rno} executed {WantedPerRecipe[rno]}; {res.Item2}, {res.Item3} ");
 
+                        dataGridViewEngineering[MaxCol.Index, i].Value = res.Item1.ToString();
                         dataGridViewEngineering[WantedCol.Index, i].Value = WantedPerRecipe[rno].ToString();
                         dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToString();
                         dataGridViewEngineering[PercentageCol.Index, i].Value = res.Item5.ToString("N0");
@@ -280,6 +283,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
                         dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = (res.Item5 >= 100.0) ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                     }
+
                     if (WantedPerRecipe[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {
                         wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]));
@@ -295,16 +299,12 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcllist);
-
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
-
-                    foreach (var c in shoppinglist)      // and add new..
+                    foreach (var kvp in NeededResources)        // and add new..
                     {
-                        var cur = mcllist.Find((x) => x.Details == c.Item1.Details);    // may be null
-
+                        var cur = mcllist.Find((x) => x.Details == kvp.Key);    // may be null
                         DataGridViewRow r = dataGridViewEngineering.RowTemplate.Clone() as DataGridViewRow;
-                        r.CreateCells(dataGridViewEngineering, c.Item1.Details.Name, "", "", "", c.Item2.ToString(), (cur?.Count ?? 0).ToString(), "", c.Item1.Details.Shortname, "");
+                        r.CreateCells(dataGridViewEngineering, kvp.Key.Name, "", "", "", kvp.Value.ToString(), (cur?.Count ?? 0).ToString(), "", kvp.Key.Shortname, "");
                         r.ReadOnly = true;
                         dataGridViewEngineering.Rows.Add(r);
                     }
@@ -314,9 +314,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex(fdrow);
             }
 
-            if (OnDisplayComplete != null)
-                OnDisplayComplete(wantedList);
-
+            OnDisplayComplete?.Invoke(wantedList);
         }
 
         #endregion
@@ -408,8 +406,6 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                     RowToRecipe[i] = (int)dataGridViewEngineering.Rows[i].Tag;          // reset the order array
 
-                //for (int i = 0; i < 10; i++)   System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + Order[i]);
-
                 Display();
             }
         }
@@ -453,6 +449,16 @@ namespace EDDiscovery.UserControls
             }
             Display();
         }
+        private void extButtonPushResources_Click(object sender, EventArgs e)
+        {
+            if (NeededResources != null)
+            {                                           // prefer popouts first, then anyone
+                if (!RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = NeededResources }))
+                {
+                    ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
+                }
+            }
+        }
 
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
@@ -479,5 +485,6 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+
     }
 }

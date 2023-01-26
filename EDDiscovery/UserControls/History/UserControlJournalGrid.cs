@@ -494,7 +494,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewJournal.Refresh();       // to make the start/stop marker appear, refresh
 
-            RequestPanelOperation(this, new TravelHistoryRecalculated());        // tell others
+            RequestPanelOperation(this, new TravelHistoryStartStopChanged());        // tell others
 
             this.dataGridViewJournal.Cursor = Cursors.Default;
 
@@ -527,7 +527,7 @@ namespace EDDiscovery.UserControls
 
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (actionobj is UserControlCommonBase.TravelHistoryRecalculated)
+            if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)
             {
                 Display(current_historylist, false);
             }
@@ -569,10 +569,11 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Export Current View", "Export as Journals" },
-                new string[] { "CSV export| *.csv", "Journal Export|*.log" },
-                new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.None, Forms.ExportForm.ShowFlags.DisableCVS });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Export Current View", "Export as Journals" },
+                new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowDateTimeCSVOpenInclude, Forms.ImportExportForm.ShowFlags.ShowDateTimeOpenInclude },
+                new string[] { "CSV export| *.csv", "Journal Export|*.log" }
+                );
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -617,8 +618,8 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
                     grd.GetLineStatus += delegate (int r)
                     {
                         if (r < dataGridViewJournal.Rows.Count)

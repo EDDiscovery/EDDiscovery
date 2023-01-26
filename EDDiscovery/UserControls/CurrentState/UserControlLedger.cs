@@ -352,14 +352,13 @@ namespace EDDiscovery.UserControls
 
             if ( current_mc != null )
             { 
-                Forms.ExportForm frm = new Forms.ExportForm();
+                Forms.ImportExportForm frm = new Forms.ImportExportForm();
 
-                frm.Init(false, new string[] { "Export Current View" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
+                frm.Export( new string[] { "Export Current View" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
 
                 if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                     grd.GetHeader += delegate (int c)
                     {

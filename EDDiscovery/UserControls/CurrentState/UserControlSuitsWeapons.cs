@@ -44,14 +44,14 @@ namespace EDDiscovery.UserControls
         {
             DGVLoadColumnLayout(dataGridViewSuits, "Suits");
             DGVLoadColumnLayout(dataGridViewWeapons, "Weapons");
-            splitContainerMissions.SplitterDistance(GetSetting("Splitter", 0.4));
+            splitContainerSuitsWeapons.SplitterDistance(GetSetting("Splitter", 0.4));
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewSuits, "Suits");
             DGVSaveColumnLayout(dataGridViewWeapons, "Weapons");
-            PutSetting("Splitter", splitContainerMissions.GetSplitterDistance());
+            PutSetting("Splitter", splitContainerSuitsWeapons.GetSplitterDistance());
         }
 
         #endregion

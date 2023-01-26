@@ -330,7 +330,7 @@ namespace EDDiscovery.UserControls
             {
                 NewHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
             }
-            else if (actionobj is UserControlCommonBase.TravelHistoryRecalculated)  // travel change
+            else if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)  // travel change
             {
                 Display(last_he);
             }

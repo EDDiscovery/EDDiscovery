@@ -372,9 +372,9 @@ SECTION AddOnManagerForm
 .Failed: "Add-on failed to update. Check files for read only status" => "Add-On-Update fehlgeschlagen. Prüfe Dateien auf 'nur Lesen'-Status"
 .DeleteWarn: "Do you really want to delete {0}" => "Willst du {0} wirklich löschen?"
 
-SECTION ExportForm
+SECTION ImportExportForm
 
-ExportForm: "Export data" => "Daten exportieren"
+ImportExportForm: "Export data" => "Daten exportieren"
 .buttonExport: "Export" => "Exportieren"
 .ImportTitle: "Import data" => "Daten importieren"
 .ImportButton: "Import" => "Import"

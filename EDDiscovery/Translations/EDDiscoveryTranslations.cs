@@ -33,8 +33,17 @@ namespace EDDiscovery
         Information, // Information
         NoPos, // No Pos
 
+        // copy from Extended control
+        MessageBoxTheme_OK,
+        MessageBoxTheme_Cancel,
+        MessageBoxTheme_Warning,
         MessageBoxTheme_No,
         MessageBoxTheme_Yes,
+        MessageBoxTheme_Abort,
+        MessageBoxTheme_Retry,
+        MessageBoxTheme_Ignore,
+        MessageBoxTheme_Add,
+        MessageBoxTheme_Set,
 
         TBD, // TBD - to be done
 
@@ -224,18 +233,20 @@ namespace EDDiscovery
         UserControlCompass_labelTargetLat, // Control 'Target'
         UserControlCompass_checkBoxHideTransparent, // Control 'Hide In Transparent'
 
-
-        ExportForm, // Control 'Export'
-        ExportForm_buttonExport, // Control 'Export'
-        ExportForm_ImportTitle,
-        ExportForm_ImportButton,
-        ExportForm_labelCVSSep, // Control 'CSV Separator'
-        ExportForm_radioButtonComma, // Control 'Comma'
-        ExportForm_radioButtonSemiColon, // Control 'Semicolon'
-        ExportForm_checkBoxIncludeHeader, // Control 'Include Header'
-        ExportForm_checkBoxCustomAutoOpen, // Control 'Open'
-        ExportForm_labelUTCEnd, // Control 'UTC'
-        ExportForm_labelUTCStart, // Control 'UTC'
+        ImportExportForm, // Control 'Export'
+        ImportExportForm_buttonExport, // Control 'Export'
+        ImportExportForm_ImportTitle,
+        ImportExportForm_ImportButton,
+        ImportExportForm_labelCVSSep, // Control 'CSV Separator'
+        ImportExportForm_radioButtonComma, // Control 'Comma'
+        ImportExportForm_radioButtonSemiColon, // Control 'Semicolon'
+        ImportExportForm_checkBoxIncludeHeader, // Control 'Include Header'
+        ImportExportForm_checkBoxCustomAutoOpen, // Control 'Open'
+        ImportExportForm_labelUTCEnd, // Control 'UTC'
+        ImportExportForm_labelUTCStart, // Control 'UTC'
+        ImportExportForm_labelPaste,
+        ImportExportForm_extRadioButtonTab,
+        ImportExportForm_extCheckBoxExcludeHeader,
 
         Form2DMap_LastWeek, // Last Week
         Form2DMap_LastMonth, // Last Month
@@ -436,6 +447,12 @@ namespace EDDiscovery
         UserControlMaterialCommodities_AllMats,
         UserControlMaterialCommodities_AllCommods,
         UserControlMaterialCommodities_AllMicroresources,
+
+        UserControlMaterialCommodities_openRecipeInWindowToolStripMenuItem,
+        UserControlMaterialCommodities_displayItemInShoppingListToolStripMenuItem,
+        UserControlMaterialCommodities_clearAllDisplayItemsInShoppingListToolStripMenuItem,
+        UserControlMaterialCommodities_displayAllInShoppingListToolStripMenuItem,
+        UserControlMaterialCommodities_toolStripMenuItemSLClearAll,
 
         MissionListUserControl_PcolName, // Column Header 'Name'
         MissionListUserControl_pColStart, // Column Header 'Start Date'
@@ -1832,7 +1849,9 @@ namespace EDDiscovery
         UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerType,
         UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric,
 
-        ActionPackVariablesForm_gv
+        ActionPackVariablesForm_gv,
+
+        NoPanelAccepted,
     }
 
     internal static class EDTranslatorExtensions

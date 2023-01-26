@@ -46,15 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewSynthesis = new BaseUtils.DataGridViewColumnControl();
-            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.buttonRecipeFilter = new ExtendedControls.ExtButton();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonFilterLevel = new ExtendedControls.ExtButton();
-            this.buttonMaterialFilter = new ExtendedControls.ExtButton();
-            this.buttonClear = new ExtendedControls.ExtButton();
-            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
-            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
-            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,6 +54,16 @@ namespace EDDiscovery.UserControls
             this.Percentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
+            this.buttonRecipeFilter = new ExtendedControls.ExtButton();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonFilterLevel = new ExtendedControls.ExtButton();
+            this.buttonMaterialFilter = new ExtendedControls.ExtButton();
+            this.buttonClear = new ExtendedControls.ExtButton();
+            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
+            this.extButtonPushResources = new ExtendedControls.ExtButton();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -83,9 +84,11 @@ namespace EDDiscovery.UserControls
             // dataGridViewSynthesis
             // 
             this.dataGridViewSynthesis.AllowDrop = true;
+            this.dataGridViewSynthesis.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewSynthesis.AllowUserToAddRows = false;
             this.dataGridViewSynthesis.AllowUserToDeleteRows = false;
             this.dataGridViewSynthesis.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewSynthesis.AutoSortByColumnName = false;
             this.dataGridViewSynthesis.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSynthesis.ColumnReorder = true;
             this.dataGridViewSynthesis.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -114,8 +117,76 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSynthesis.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewSynthesis_MouseDown);
             this.dataGridViewSynthesis.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewSynthesis_MouseMove);
             // 
+            // UpgradeCol
+            // 
+            this.UpgradeCol.HeaderText = "Upgrade/Mat";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
+            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Level
+            // 
+            this.Level.FillWeight = 50F;
+            this.Level.HeaderText = "Level";
+            this.Level.MinimumWidth = 50;
+            this.Level.Name = "Level";
+            this.Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // MaxCol
+            // 
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Max";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
+            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Wanted";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Available
+            // 
+            this.Available.FillWeight = 25F;
+            this.Available.HeaderText = "Avail.";
+            this.Available.MinimumWidth = 50;
+            this.Available.Name = "Available";
+            this.Available.ReadOnly = true;
+            this.Available.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Percentage
+            // 
+            this.Percentage.FillWeight = 25F;
+            this.Percentage.HeaderText = "%";
+            this.Percentage.Name = "Percentage";
+            this.Percentage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Notes
+            // 
+            this.Notes.FillWeight = 150F;
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 50;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            this.Notes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Recipe
+            // 
+            this.Recipe.FillWeight = 50F;
+            this.Recipe.HeaderText = "Recipe";
+            this.Recipe.MinimumWidth = 15;
+            this.Recipe.Name = "Recipe";
+            this.Recipe.ReadOnly = true;
+            this.Recipe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // vScrollBarCustomMC
             // 
+            this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
@@ -211,7 +282,7 @@ namespace EDDiscovery.UserControls
             this.chkNotHistoric.ImageIndeterminate = null;
             this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.chkNotHistoric.Location = new System.Drawing.Point(164, 1);
+            this.chkNotHistoric.Location = new System.Drawing.Point(204, 1);
             this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
             this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.chkNotHistoric.Name = "chkNotHistoric";
@@ -242,7 +313,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(204, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(244, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
@@ -252,6 +323,20 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
+            // extButtonPushResources
+            // 
+            this.extButtonPushResources.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonPushResources.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonPushResources.Image = global::EDDiscovery.Icons.Controls.Resources;
+            this.extButtonPushResources.Location = new System.Drawing.Point(168, 1);
+            this.extButtonPushResources.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonPushResources.Name = "extButtonPushResources";
+            this.extButtonPushResources.Size = new System.Drawing.Size(28, 28);
+            this.extButtonPushResources.TabIndex = 33;
+            this.toolTip.SetToolTip(this.extButtonPushResources, "Push items wanted to Resources panel");
+            this.extButtonPushResources.UseVisualStyleBackColor = true;
+            this.extButtonPushResources.Click += new System.EventHandler(this.extButtonPushResources_Click);
+            // 
             // panelTop
             // 
             this.panelTop.AutoSize = true;
@@ -259,6 +344,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonFilterLevel);
             this.panelTop.Controls.Add(this.buttonMaterialFilter);
             this.panelTop.Controls.Add(this.buttonClear);
+            this.panelTop.Controls.Add(this.extButtonPushResources);
             this.panelTop.Controls.Add(this.chkNotHistoric);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
@@ -267,73 +353,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 2;
-            // 
-            // UpgradeCol
-            // 
-            this.UpgradeCol.HeaderText = "Upgrade/Mat";
-            this.UpgradeCol.MinimumWidth = 50;
-            this.UpgradeCol.Name = "UpgradeCol";
-            this.UpgradeCol.ReadOnly = true;
-            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Level
-            // 
-            this.Level.FillWeight = 50F;
-            this.Level.HeaderText = "Level";
-            this.Level.MinimumWidth = 50;
-            this.Level.Name = "Level";
-            this.Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // MaxCol
-            // 
-            this.MaxCol.FillWeight = 25F;
-            this.MaxCol.HeaderText = "Max";
-            this.MaxCol.MinimumWidth = 50;
-            this.MaxCol.Name = "MaxCol";
-            this.MaxCol.ReadOnly = true;
-            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // WantedCol
-            // 
-            this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Wanted";
-            this.WantedCol.MinimumWidth = 50;
-            this.WantedCol.Name = "WantedCol";
-            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Available
-            // 
-            this.Available.FillWeight = 25F;
-            this.Available.HeaderText = "Avail.";
-            this.Available.MinimumWidth = 50;
-            this.Available.Name = "Available";
-            this.Available.ReadOnly = true;
-            this.Available.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Percentage
-            // 
-            this.Percentage.FillWeight = 25F;
-            this.Percentage.HeaderText = "%";
-            this.Percentage.Name = "Percentage";
-            this.Percentage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Notes
-            // 
-            this.Notes.FillWeight = 150F;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 50;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            this.Notes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Recipe
-            // 
-            this.Recipe.FillWeight = 50F;
-            this.Recipe.HeaderText = "Recipe";
-            this.Recipe.MinimumWidth = 15;
-            this.Recipe.Name = "Recipe";
-            this.Recipe.ReadOnly = true;
-            this.Recipe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // UserControlSynthesis
             // 
@@ -372,5 +391,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Percentage;
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
+        private ExtendedControls.ExtButton extButtonPushResources;
     }
 }

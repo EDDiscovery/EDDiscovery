@@ -198,5 +198,7 @@ namespace EDDiscovery.Icons
         public static Image NewRegion { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.NewRegion"); } }
         public static Image FlagsRedGreen { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.FlagsRedGreen"); } }
         public static Image Docked { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Docked"); } }
+        public static Image Paste { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Paste"); } }
+        public static Image Resources { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Resources"); } }
     }
 }

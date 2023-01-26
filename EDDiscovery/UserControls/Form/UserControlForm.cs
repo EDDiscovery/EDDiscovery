@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -100,12 +100,15 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("UCF Init-");
         }
 
+        // call to update the control text in the title area
         public void SetControlText(string text)
         {
             labelControlText.Location = new Point(label_title.Location.X + label_title.Width + 16, labelControlText.Location.Y);
             labelControlText.Text = text;
             this.Text = WinTitle + " " + text;
         }
+
+        // call to change the transparency mode
 
         public void SetTransparency(TransparencyMode t)
         {
@@ -115,11 +118,10 @@ namespace EDDiscovery.UserControls
                 UpdateTransparency();
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
 
-                bool tmode = TransparentMode != TransparencyMode.Off;
-                if (lasttransparentmodereported != tmode)
+                if (lasttransparentmodereported != IsTransparentModeOn)     // if we changed major mode, inform the panel so it can redraw 
                 {
-                    lasttransparentmodereported = tmode;
-                    UserControl.TransparencyModeChanged(tmode);
+                    lasttransparentmodereported = IsTransparentModeOn;
+                    UserControl.TransparencyModeChanged(IsTransparentModeOn);
                 }
             }
         }
@@ -209,7 +211,7 @@ namespace EDDiscovery.UserControls
 
             label_title.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
 
-            UserControl.SetTransparency(showtransparent, togo);     // tell the UCCB about the change
+            UserControl.SetTransparency(showtransparent, togo);     // tell the UCCB about the current state
 
             PerformLayout();        // need to position the UCCB
 
@@ -292,8 +294,11 @@ namespace EDDiscovery.UserControls
             SetTopMost(!wantedTopMost);
             SetTopMost(wantedTopMost); // this also establishes transparency
 
+            lasttransparentmodereported = IsTransparentModeOn;      // record what we started with
+
             if (UserControl != null)
             {
+                UserControl.TransparencyModeChanged(IsTransparentModeOn);       // new, call to tell the panel the transparency mode is set
                 UserControl.LoadLayout();
                 UserControl.InitialDisplay();
             }
@@ -491,7 +496,7 @@ namespace EDDiscovery.UserControls
 
         private Timer checkmousepositiontimer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost;
-        private bool? lasttransparentmodereported = null;
+        private bool lasttransparentmodereported;
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
     }

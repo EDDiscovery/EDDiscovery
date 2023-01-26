@@ -362,8 +362,10 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Export Current View" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Export Current View" }, 
+                            new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude },
+                            suggestedfilenamesp:new string[] { "Bookmarks" });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -371,8 +373,7 @@ namespace EDDiscovery.UserControls
                 {
                     string path = frm.Path;               //string path = "C:\\code\\f.csv"; // debug
 
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                     List<string> colh = new List<string>();
                     colh.AddRange(new string[] { "Type", "Time", "System/Region", "Note","X","Y", "Z", "Planet", "Name", "Comment", "Lat","Long"});
@@ -454,21 +455,20 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtImport_Click(object sender, EventArgs e)
         {
-            var frm = new Forms.ExportForm();
+            var frm = new Forms.ImportExportForm();
 
-            frm.Init(true, new string[] { "CSV"},
-                 new string[] { "CSV|*.csv" },
-                 new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTOI });
+            frm.Import(new string[] { "CSV"},
+                new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowImportOptions },
+                 new string[] { "CSV|*.csv" }
+                 );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                string path = frm.Path;
+                var csv = frm.CSVRead();
 
-                BaseUtils.CSVFile csv = new BaseUtils.CSVFile();
-
-                if (csv.Read(path, System.IO.FileShare.ReadWrite, frm.Comma))
+                if (csv != null)
                 {
-                    List<BaseUtils.CSVFile.Row> rows = csv.RowsExcludingHeaderRow;
+                    var rows = frm.ExcludeHeader ? csv.RowsExcludingHeaderRow : csv.Rows;
 
                     BookmarkClass currentbk = null;
 
@@ -542,10 +542,10 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    PutSetting("ImportExcelFolder", System.IO.Path.GetDirectoryName(path));
+                    PutSetting("ImportExcelFolder", System.IO.Path.GetDirectoryName(frm.Path));
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + frm.Path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 

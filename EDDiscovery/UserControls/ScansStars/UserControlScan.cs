@@ -473,13 +473,13 @@ namespace EDDiscovery.UserControls
 
                     StarScan.ScanNode.DumpTree(nodes, "Top", 0);
 
-                    Forms.ExportForm frm = new Forms.ExportForm();
-                    frm.Init(false, new string[] {
+                    Forms.ImportExportForm frm = new Forms.ImportExportForm();
+                    frm.Export( new string[] {
                                         "JSON Orbital Parameters",
                                         },
-                        outputext: new string[] { "JSON|*.json|All|*.*" },
-                        showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTCVSOI },
-                        suggestedfilenames: new string[] { last_he?.System.Name ?? "" }
+                        new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.None },
+                        new string[] { "JSON|*.json|All|*.*" },
+                        new string[] { last_he?.System.Name ?? "" }
                     );
 
                     if (frm.ShowDialog(FindForm()) == DialogResult.OK)

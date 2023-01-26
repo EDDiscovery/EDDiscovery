@@ -252,7 +252,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" @
 .PL: "Profile {0} Loaded" @
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." @
-.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" @
+.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" @
 .notifyIconMenu_Open: "&Open EDDiscovery" @
 .notifyIconMenu_Hide: "&Hide Tray Icon" @
 .notifyIconMenu_Exit: "E&xit" @
@@ -374,9 +374,9 @@ SECTION AddOnManagerForm
 .DeleteWarn: "Do you really want to delete {0}" @
 
 
-SECTION ExportForm
+SECTION ImportExportForm
 
-ExportForm: "Export data" @
+ImportExportForm: "Export data" @
 .buttonExport: "Export" @
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
@@ -388,6 +388,12 @@ ExportForm: "Export data" @
 .checkBoxCustomAutoOpen: "Open" @
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
+
+.labelPaste: "Click Paste or drag text or files to input box" @
+.extRadioButtonTab: "Tab" @
+.extCheckBoxExcludeHeader: "Exclude Header Row" @
+
+
 
 SECTION Form2DMap
 
@@ -467,6 +473,8 @@ SECTION MessageBoxTheme
 .OK: "OK" @
 .No: "No" @
 .Yes: "Yes" @
+.Add: "Add" @
+.Set: "Set" @
 
 SECTION DataGridViewDialogs
 

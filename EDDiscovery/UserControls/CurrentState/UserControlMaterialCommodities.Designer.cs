@@ -59,6 +59,9 @@ namespace EDDiscovery.UserControls
             this.ColRecipes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openRecipeInWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayItemInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearAllDisplayItemsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayAllInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.buttonFilter = new ExtendedControls.ExtButton();
             this.textBoxItems2 = new ExtendedControls.ExtTextBox();
@@ -68,11 +71,27 @@ namespace EDDiscovery.UserControls
             this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
+            this.extButtonFont = new ExtendedControls.ExtButton();
+            this.buttonClear = new ExtendedControls.ExtButton();
+            this.buttonExtImport = new ExtendedControls.ExtButton();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extPictureBoxShoppingList = new ExtendedControls.ExtPictureBox();
+            this.contextMenuStripSL = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemSLClearAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.extPictureBoxScrollShoppingList = new ExtendedControls.ExtPictureBoxScroll();
+            this.extScrollBarShoppingList = new ExtendedControls.ExtScrollBar();
+            this.splitContainerPanel = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             this.panelTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxShoppingList)).BeginInit();
+            this.contextMenuStripSL.SuspendLayout();
+            this.extPictureBoxScrollShoppingList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerPanel)).BeginInit();
+            this.splitContainerPanel.Panel1.SuspendLayout();
+            this.splitContainerPanel.Panel2.SuspendLayout();
+            this.splitContainerPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
@@ -81,9 +100,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1011, 819);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1011, 715);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -115,7 +134,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.RowHeadersVisible = false;
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMC.SingleRowSelect = true;
-            this.dataGridViewMC.Size = new System.Drawing.Size(995, 819);
+            this.dataGridViewMC.Size = new System.Drawing.Size(995, 715);
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellDoubleClick);
             this.dataGridViewMC.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellEndEdit);
@@ -193,19 +212,47 @@ namespace EDDiscovery.UserControls
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openRecipeInWindowToolStripMenuItem});
+            this.openRecipeInWindowToolStripMenuItem,
+            this.displayItemInShoppingListToolStripMenuItem,
+            this.clearAllDisplayItemsInShoppingListToolStripMenuItem,
+            this.displayAllInShoppingListToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(202, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(293, 92);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // openRecipeInWindowToolStripMenuItem
             // 
             this.openRecipeInWindowToolStripMenuItem.Name = "openRecipeInWindowToolStripMenuItem";
-            this.openRecipeInWindowToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openRecipeInWindowToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.openRecipeInWindowToolStripMenuItem.Text = "Open Recipe in Window";
             this.openRecipeInWindowToolStripMenuItem.Click += new System.EventHandler(this.openRecipeInWindowToolStripMenuItem_Click);
             // 
+            // displayItemInShoppingListToolStripMenuItem
+            // 
+            this.displayItemInShoppingListToolStripMenuItem.Checked = true;
+            this.displayItemInShoppingListToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.displayItemInShoppingListToolStripMenuItem.Name = "displayItemInShoppingListToolStripMenuItem";
+            this.displayItemInShoppingListToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.displayItemInShoppingListToolStripMenuItem.Text = "Display Item in shopping list";
+            this.displayItemInShoppingListToolStripMenuItem.Click += new System.EventHandler(this.displayItemInShoppingListToolStripMenuItem_Click);
+            // 
+            // clearAllDisplayItemsInShoppingListToolStripMenuItem
+            // 
+            this.clearAllDisplayItemsInShoppingListToolStripMenuItem.Name = "clearAllDisplayItemsInShoppingListToolStripMenuItem";
+            this.clearAllDisplayItemsInShoppingListToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.clearAllDisplayItemsInShoppingListToolStripMenuItem.Text = "Clear all display items in shopping list";
+            this.clearAllDisplayItemsInShoppingListToolStripMenuItem.Click += new System.EventHandler(this.clearAllDisplayItemsInShoppingListToolStripMenuItem_Click);
+            // 
+            // displayAllInShoppingListToolStripMenuItem
+            // 
+            this.displayAllInShoppingListToolStripMenuItem.Name = "displayAllInShoppingListToolStripMenuItem";
+            this.displayAllInShoppingListToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.displayAllInShoppingListToolStripMenuItem.Text = "Display all non zero items in shopping list";
+            this.displayAllInShoppingListToolStripMenuItem.Click += new System.EventHandler(this.displayAllInShoppingListToolStripMenuItem_Click);
+            // 
             // vScrollBarCustomMC
             // 
+            this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
@@ -221,7 +268,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 819);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 715);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -332,7 +379,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxShowZeros.ImageIndeterminate = null;
             this.checkBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.redzero;
-            this.checkBoxShowZeros.Location = new System.Drawing.Point(304, 1);
+            this.checkBoxShowZeros.Location = new System.Drawing.Point(340, 1);
             this.checkBoxShowZeros.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxShowZeros.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxShowZeros.Name = "checkBoxShowZeros";
@@ -369,7 +416,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(340, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(376, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
@@ -379,6 +426,47 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
+            // extButtonFont
+            // 
+            this.extButtonFont.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonFont.Image = global::EDDiscovery.Icons.Controls.Font;
+            this.extButtonFont.Location = new System.Drawing.Point(412, 1);
+            this.extButtonFont.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonFont.Name = "extButtonFont";
+            this.extButtonFont.Size = new System.Drawing.Size(28, 28);
+            this.extButtonFont.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonFont, "Font for shopping list");
+            this.extButtonFont.UseVisualStyleBackColor = false;
+            this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
+            // 
+            // buttonClear
+            // 
+            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClear.Image = global::EDDiscovery.Icons.Controls.Cross;
+            this.buttonClear.Location = new System.Drawing.Point(304, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(28, 28);
+            this.buttonClear.TabIndex = 35;
+            this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
+            // buttonExtImport
+            // 
+            this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
+            this.buttonExtImport.Location = new System.Drawing.Point(448, 1);
+            this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtImport.Name = "buttonExtImport";
+            this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtImport.TabIndex = 39;
+            this.toolTip.SetToolTip(this.buttonExtImport, "Import materials list into panel");
+            this.buttonExtImport.UseVisualStyleBackColor = true;
+            this.buttonExtImport.Click += new System.EventHandler(this.buttonExtImport_Click);
+            // 
             // panelTop
             // 
             this.panelTop.AutoSize = true;
@@ -387,19 +475,106 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.textBoxItems1);
             this.panelTop.Controls.Add(this.labelItems2);
             this.panelTop.Controls.Add(this.textBoxItems2);
+            this.panelTop.Controls.Add(this.buttonClear);
             this.panelTop.Controls.Add(this.checkBoxShowZeros);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
+            this.panelTop.Controls.Add(this.extButtonFont);
+            this.panelTop.Controls.Add(this.buttonExtImport);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(1011, 30);
             this.panelTop.TabIndex = 6;
             // 
+            // extPictureBoxShoppingList
+            // 
+            this.extPictureBoxShoppingList.ContextMenuStrip = this.contextMenuStripSL;
+            this.extPictureBoxShoppingList.Location = new System.Drawing.Point(0, 0);
+            this.extPictureBoxShoppingList.Name = "extPictureBoxShoppingList";
+            this.extPictureBoxShoppingList.Size = new System.Drawing.Size(995, 4);
+            this.extPictureBoxShoppingList.TabIndex = 2;
+            // 
+            // contextMenuStripSL
+            // 
+            this.contextMenuStripSL.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemSLClearAll});
+            this.contextMenuStripSL.Name = "contextMenuStrip";
+            this.contextMenuStripSL.Size = new System.Drawing.Size(273, 26);
+            // 
+            // toolStripMenuItemSLClearAll
+            // 
+            this.toolStripMenuItemSLClearAll.Name = "toolStripMenuItemSLClearAll";
+            this.toolStripMenuItemSLClearAll.Size = new System.Drawing.Size(272, 22);
+            this.toolStripMenuItemSLClearAll.Text = "Clear all display items in shopping list";
+            this.toolStripMenuItemSLClearAll.Click += new System.EventHandler(this.clearAllDisplayItemsInShoppingListToolStripMenuItem_Click);
+            // 
+            // extPictureBoxScrollShoppingList
+            // 
+            this.extPictureBoxScrollShoppingList.Controls.Add(this.extScrollBarShoppingList);
+            this.extPictureBoxScrollShoppingList.Controls.Add(this.extPictureBoxShoppingList);
+            this.extPictureBoxScrollShoppingList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPictureBoxScrollShoppingList.Location = new System.Drawing.Point(0, 0);
+            this.extPictureBoxScrollShoppingList.Name = "extPictureBoxScrollShoppingList";
+            this.extPictureBoxScrollShoppingList.ScrollBarEnabled = true;
+            this.extPictureBoxScrollShoppingList.Size = new System.Drawing.Size(1011, 100);
+            this.extPictureBoxScrollShoppingList.TabIndex = 2;
+            this.extPictureBoxScrollShoppingList.VerticalScrollBarDockRight = true;
+            // 
+            // extScrollBarShoppingList
+            // 
+            this.extScrollBarShoppingList.AlwaysHideScrollBar = false;
+            this.extScrollBarShoppingList.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBarShoppingList.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarShoppingList.ArrowColorScaling = 0.5F;
+            this.extScrollBarShoppingList.ArrowDownDrawAngle = 270F;
+            this.extScrollBarShoppingList.ArrowUpDrawAngle = 90F;
+            this.extScrollBarShoppingList.BorderColor = System.Drawing.Color.White;
+            this.extScrollBarShoppingList.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBarShoppingList.HideScrollBar = true;
+            this.extScrollBarShoppingList.LargeChange = 100;
+            this.extScrollBarShoppingList.Location = new System.Drawing.Point(995, 0);
+            this.extScrollBarShoppingList.Maximum = 3;
+            this.extScrollBarShoppingList.Minimum = 0;
+            this.extScrollBarShoppingList.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarShoppingList.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarShoppingList.Name = "extScrollBarShoppingList";
+            this.extScrollBarShoppingList.Size = new System.Drawing.Size(16, 100);
+            this.extScrollBarShoppingList.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarShoppingList.SmallChange = 1;
+            this.extScrollBarShoppingList.TabIndex = 2;
+            this.extScrollBarShoppingList.Text = "extScrollBar1";
+            this.extScrollBarShoppingList.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBarShoppingList.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarShoppingList.ThumbColorScaling = 0.5F;
+            this.extScrollBarShoppingList.ThumbDrawAngle = 0F;
+            this.extScrollBarShoppingList.Value = 0;
+            this.extScrollBarShoppingList.ValueLimited = 0;
+            // 
+            // splitContainerPanel
+            // 
+            this.splitContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerPanel.Location = new System.Drawing.Point(0, 30);
+            this.splitContainerPanel.Name = "splitContainerPanel";
+            this.splitContainerPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainerPanel.Panel1
+            // 
+            this.splitContainerPanel.Panel1.Controls.Add(this.extPictureBoxScrollShoppingList);
+            this.splitContainerPanel.Panel1MinSize = 5;
+            // 
+            // splitContainerPanel.Panel2
+            // 
+            this.splitContainerPanel.Panel2.Controls.Add(this.dataViewScrollerPanel);
+            this.splitContainerPanel.Panel2MinSize = 5;
+            this.splitContainerPanel.Size = new System.Drawing.Size(1011, 819);
+            this.splitContainerPanel.SplitterDistance = 100;
+            this.splitContainerPanel.TabIndex = 2;
+            // 
             // UserControlMaterialCommodities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel);
+            this.Controls.Add(this.splitContainerPanel);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlMaterialCommodities";
             this.Size = new System.Drawing.Size(1011, 849);
@@ -408,6 +583,13 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxShoppingList)).EndInit();
+            this.contextMenuStripSL.ResumeLayout(false);
+            this.extPictureBoxScrollShoppingList.ResumeLayout(false);
+            this.splitContainerPanel.Panel1.ResumeLayout(false);
+            this.splitContainerPanel.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerPanel)).EndInit();
+            this.splitContainerPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -439,5 +621,17 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColWanted;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColNeed;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColRecipes;
+        private ExtendedControls.ExtPictureBox extPictureBoxShoppingList;
+        private ExtendedControls.ExtButton extButtonFont;
+        private ExtendedControls.ExtButton buttonClear;
+        private System.Windows.Forms.ToolStripMenuItem displayItemInShoppingListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearAllDisplayItemsInShoppingListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem displayAllInShoppingListToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripSL;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSLClearAll;
+        private ExtendedControls.ExtPictureBoxScroll extPictureBoxScrollShoppingList;
+        private ExtendedControls.ExtScrollBar extScrollBarShoppingList;
+        private System.Windows.Forms.SplitContainer splitContainerPanel;
+        private ExtendedControls.ExtButton buttonExtImport;
     }
 }

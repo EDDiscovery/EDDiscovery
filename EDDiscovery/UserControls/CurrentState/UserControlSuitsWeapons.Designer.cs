@@ -49,23 +49,6 @@ namespace EDDiscovery.UserControls
             this.panelPrev = new System.Windows.Forms.Panel();
             this.extPanelDataGridViewScrollWeapons = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewWeapons = new BaseUtils.DataGridViewColumnControl();
-            this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
-            this.panelCurrent = new System.Windows.Forms.Panel();
-            this.extPanelDataGridViewScrollSuits = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewSuits = new BaseUtils.DataGridViewColumnControl();
-            this.CSTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CSName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CSMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CSPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CSLoadout = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CSPrimary1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CSPrimary2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CSSecondary = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripSuits = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.forceSellShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.extScrollBar2 = new ExtendedControls.ExtScrollBar();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.CWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,6 +65,23 @@ namespace EDDiscovery.UserControls
             this.CWHopper = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWRange = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWHSD = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
+            this.panelCurrent = new System.Windows.Forms.Panel();
+            this.extPanelDataGridViewScrollSuits = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.dataGridViewSuits = new BaseUtils.DataGridViewColumnControl();
+            this.CSTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSLoadout = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSPrimary1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSPrimary2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSSecondary = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripSuits = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.forceSellShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extScrollBar2 = new ExtendedControls.ExtScrollBar();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.splitContainerSuitsWeapons = new System.Windows.Forms.SplitContainer();
             this.panelPrev.SuspendLayout();
             this.extPanelDataGridViewScrollWeapons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWeapons)).BeginInit();
@@ -89,10 +89,10 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollSuits.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuits)).BeginInit();
             this.contextMenuStripSuits.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMissions)).BeginInit();
-            this.splitContainerMissions.Panel1.SuspendLayout();
-            this.splitContainerMissions.Panel2.SuspendLayout();
-            this.splitContainerMissions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerSuitsWeapons)).BeginInit();
+            this.splitContainerSuitsWeapons.Panel1.SuspendLayout();
+            this.splitContainerSuitsWeapons.Panel2.SuspendLayout();
+            this.splitContainerSuitsWeapons.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelPrev
@@ -118,10 +118,12 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewWeapons
             // 
+            this.dataGridViewWeapons.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewWeapons.AllowUserToAddRows = false;
             this.dataGridViewWeapons.AllowUserToDeleteRows = false;
             this.dataGridViewWeapons.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewWeapons.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+            this.dataGridViewWeapons.AutoSortByColumnName = false;
             this.dataGridViewWeapons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewWeapons.ColumnReorder = true;
             this.dataGridViewWeapons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -151,6 +153,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewWeapons.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewWeapons.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewWeapons.Name = "dataGridViewWeapons";
+            this.dataGridViewWeapons.PerColumnWordWrapControl = true;
             this.dataGridViewWeapons.ReadOnly = true;
             this.dataGridViewWeapons.RowHeaderMenuStrip = null;
             this.dataGridViewWeapons.RowHeadersVisible = false;
@@ -159,206 +162,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewWeapons.Size = new System.Drawing.Size(784, 302);
             this.dataGridViewWeapons.TabIndex = 1;
             this.dataGridViewWeapons.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewWeapons_SortCompare);
-            // 
-            // extScrollBar1
-            // 
-            this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar1.ArrowColorScaling = 0.5F;
-            this.extScrollBar1.ArrowDownDrawAngle = 270F;
-            this.extScrollBar1.ArrowUpDrawAngle = 90F;
-            this.extScrollBar1.BorderColor = System.Drawing.Color.White;
-            this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extScrollBar1.HideScrollBar = false;
-            this.extScrollBar1.LargeChange = 0;
-            this.extScrollBar1.Location = new System.Drawing.Point(784, 0);
-            this.extScrollBar1.Maximum = -1;
-            this.extScrollBar1.Minimum = 0;
-            this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.extScrollBar1.Name = "extScrollBar1";
-            this.extScrollBar1.Size = new System.Drawing.Size(16, 302);
-            this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
-            this.extScrollBar1.SmallChange = 1;
-            this.extScrollBar1.TabIndex = 0;
-            this.extScrollBar1.Text = "extScrollBar1";
-            this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar1.ThumbColorScaling = 0.5F;
-            this.extScrollBar1.ThumbDrawAngle = 0F;
-            this.extScrollBar1.Value = -1;
-            this.extScrollBar1.ValueLimited = -1;
-            // 
-            // panelCurrent
-            // 
-            this.panelCurrent.Controls.Add(this.extPanelDataGridViewScrollSuits);
-            this.panelCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCurrent.Location = new System.Drawing.Point(0, 0);
-            this.panelCurrent.Name = "panelCurrent";
-            this.panelCurrent.Size = new System.Drawing.Size(800, 266);
-            this.panelCurrent.TabIndex = 3;
-            // 
-            // extPanelDataGridViewScrollSuits
-            // 
-            this.extPanelDataGridViewScrollSuits.Controls.Add(this.dataGridViewSuits);
-            this.extPanelDataGridViewScrollSuits.Controls.Add(this.extScrollBar2);
-            this.extPanelDataGridViewScrollSuits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extPanelDataGridViewScrollSuits.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollSuits.Location = new System.Drawing.Point(0, 0);
-            this.extPanelDataGridViewScrollSuits.Name = "extPanelDataGridViewScrollSuits";
-            this.extPanelDataGridViewScrollSuits.Size = new System.Drawing.Size(800, 266);
-            this.extPanelDataGridViewScrollSuits.TabIndex = 1;
-            this.extPanelDataGridViewScrollSuits.VerticalScrollBarDockRight = true;
-            // 
-            // dataGridViewSuits
-            // 
-            this.dataGridViewSuits.AllowUserToAddRows = false;
-            this.dataGridViewSuits.AllowUserToDeleteRows = false;
-            this.dataGridViewSuits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewSuits.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            this.dataGridViewSuits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewSuits.ColumnReorder = true;
-            this.dataGridViewSuits.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.CSTime,
-            this.CSName,
-            this.CSMods,
-            this.CSPrice,
-            this.CSLoadout,
-            this.CSPrimary1,
-            this.CSPrimary2,
-            this.CSSecondary});
-            this.dataGridViewSuits.ContextMenuStrip = this.contextMenuStripSuits;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewSuits.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewSuits.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewSuits.Name = "dataGridViewSuits";
-            this.dataGridViewSuits.ReadOnly = true;
-            this.dataGridViewSuits.RowHeaderMenuStrip = null;
-            this.dataGridViewSuits.RowHeadersVisible = false;
-            this.dataGridViewSuits.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewSuits.SingleRowSelect = true;
-            this.dataGridViewSuits.Size = new System.Drawing.Size(784, 266);
-            this.dataGridViewSuits.TabIndex = 1;
-            this.dataGridViewSuits.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewSuits_SortCompare);
-            // 
-            // CSTime
-            // 
-            this.CSTime.HeaderText = "Time";
-            this.CSTime.Name = "CSTime";
-            this.CSTime.ReadOnly = true;
-            // 
-            // CSName
-            // 
-            this.CSName.HeaderText = "Name";
-            this.CSName.Name = "CSName";
-            this.CSName.ReadOnly = true;
-            // 
-            // CSMods
-            // 
-            this.CSMods.HeaderText = "Mods";
-            this.CSMods.Name = "CSMods";
-            this.CSMods.ReadOnly = true;
-            // 
-            // CSPrice
-            // 
-            this.CSPrice.HeaderText = "Price";
-            this.CSPrice.Name = "CSPrice";
-            this.CSPrice.ReadOnly = true;
-            // 
-            // CSLoadout
-            // 
-            this.CSLoadout.HeaderText = "Loadout";
-            this.CSLoadout.Name = "CSLoadout";
-            this.CSLoadout.ReadOnly = true;
-            // 
-            // CSPrimary1
-            // 
-            this.CSPrimary1.HeaderText = "Primary 1";
-            this.CSPrimary1.Name = "CSPrimary1";
-            this.CSPrimary1.ReadOnly = true;
-            // 
-            // CSPrimary2
-            // 
-            this.CSPrimary2.HeaderText = "Primary 2";
-            this.CSPrimary2.Name = "CSPrimary2";
-            this.CSPrimary2.ReadOnly = true;
-            // 
-            // CSSecondary
-            // 
-            this.CSSecondary.HeaderText = "Secondary";
-            this.CSSecondary.Name = "CSSecondary";
-            this.CSSecondary.ReadOnly = true;
-            // 
-            // contextMenuStripSuits
-            // 
-            this.contextMenuStripSuits.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.forceSellShipToolStripMenuItem});
-            this.contextMenuStripSuits.Name = "contextMenuStripSuits";
-            this.contextMenuStripSuits.Size = new System.Drawing.Size(151, 26);
-            // 
-            // forceSellShipToolStripMenuItem
-            // 
-            this.forceSellShipToolStripMenuItem.Name = "forceSellShipToolStripMenuItem";
-            this.forceSellShipToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
-            this.forceSellShipToolStripMenuItem.Text = "Force Suit Sale";
-            this.forceSellShipToolStripMenuItem.Click += new System.EventHandler(this.forceSellSuitToolStripMenuItem_Click);
-            // 
-            // extScrollBar2
-            // 
-            this.extScrollBar2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.extScrollBar2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar2.ArrowColorScaling = 0.5F;
-            this.extScrollBar2.ArrowDownDrawAngle = 270F;
-            this.extScrollBar2.ArrowUpDrawAngle = 90F;
-            this.extScrollBar2.BorderColor = System.Drawing.Color.White;
-            this.extScrollBar2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extScrollBar2.HideScrollBar = false;
-            this.extScrollBar2.LargeChange = 0;
-            this.extScrollBar2.Location = new System.Drawing.Point(784, 0);
-            this.extScrollBar2.Maximum = -1;
-            this.extScrollBar2.Minimum = 0;
-            this.extScrollBar2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.extScrollBar2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.extScrollBar2.Name = "extScrollBar2";
-            this.extScrollBar2.Size = new System.Drawing.Size(16, 266);
-            this.extScrollBar2.SliderColor = System.Drawing.Color.DarkGray;
-            this.extScrollBar2.SmallChange = 1;
-            this.extScrollBar2.TabIndex = 0;
-            this.extScrollBar2.Text = "extScrollBar2";
-            this.extScrollBar2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.extScrollBar2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar2.ThumbColorScaling = 0.5F;
-            this.extScrollBar2.ThumbDrawAngle = 0F;
-            this.extScrollBar2.Value = -1;
-            this.extScrollBar2.ValueLimited = -1;
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
-            // 
-            // splitContainerMissions
-            // 
-            this.splitContainerMissions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerMissions.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerMissions.Name = "splitContainerMissions";
-            this.splitContainerMissions.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainerMissions.Panel1
-            // 
-            this.splitContainerMissions.Panel1.Controls.Add(this.panelCurrent);
-            // 
-            // splitContainerMissions.Panel2
-            // 
-            this.splitContainerMissions.Panel2.Controls.Add(this.panelPrev);
-            this.splitContainerMissions.Size = new System.Drawing.Size(800, 572);
-            this.splitContainerMissions.SplitterDistance = 266;
-            this.splitContainerMissions.TabIndex = 3;
             // 
             // CWTime
             // 
@@ -469,11 +272,214 @@ namespace EDDiscovery.UserControls
             this.CWHSD.Name = "CWHSD";
             this.CWHSD.ReadOnly = true;
             // 
+            // extScrollBar1
+            // 
+            this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBar1.ArrowColorScaling = 0.5F;
+            this.extScrollBar1.ArrowDownDrawAngle = 270F;
+            this.extScrollBar1.ArrowUpDrawAngle = 90F;
+            this.extScrollBar1.BorderColor = System.Drawing.Color.White;
+            this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBar1.HideScrollBar = false;
+            this.extScrollBar1.LargeChange = 0;
+            this.extScrollBar1.Location = new System.Drawing.Point(784, 0);
+            this.extScrollBar1.Maximum = -1;
+            this.extScrollBar1.Minimum = 0;
+            this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBar1.Name = "extScrollBar1";
+            this.extScrollBar1.Size = new System.Drawing.Size(16, 302);
+            this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBar1.SmallChange = 1;
+            this.extScrollBar1.TabIndex = 0;
+            this.extScrollBar1.Text = "extScrollBar1";
+            this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBar1.ThumbColorScaling = 0.5F;
+            this.extScrollBar1.ThumbDrawAngle = 0F;
+            this.extScrollBar1.Value = -1;
+            this.extScrollBar1.ValueLimited = -1;
+            // 
+            // panelCurrent
+            // 
+            this.panelCurrent.Controls.Add(this.extPanelDataGridViewScrollSuits);
+            this.panelCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCurrent.Location = new System.Drawing.Point(0, 0);
+            this.panelCurrent.Name = "panelCurrent";
+            this.panelCurrent.Size = new System.Drawing.Size(800, 266);
+            this.panelCurrent.TabIndex = 3;
+            // 
+            // extPanelDataGridViewScrollSuits
+            // 
+            this.extPanelDataGridViewScrollSuits.Controls.Add(this.dataGridViewSuits);
+            this.extPanelDataGridViewScrollSuits.Controls.Add(this.extScrollBar2);
+            this.extPanelDataGridViewScrollSuits.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelDataGridViewScrollSuits.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.extPanelDataGridViewScrollSuits.Location = new System.Drawing.Point(0, 0);
+            this.extPanelDataGridViewScrollSuits.Name = "extPanelDataGridViewScrollSuits";
+            this.extPanelDataGridViewScrollSuits.Size = new System.Drawing.Size(800, 266);
+            this.extPanelDataGridViewScrollSuits.TabIndex = 1;
+            this.extPanelDataGridViewScrollSuits.VerticalScrollBarDockRight = true;
+            // 
+            // dataGridViewSuits
+            // 
+            this.dataGridViewSuits.AllowRowHeaderVisibleSelection = false;
+            this.dataGridViewSuits.AllowUserToAddRows = false;
+            this.dataGridViewSuits.AllowUserToDeleteRows = false;
+            this.dataGridViewSuits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewSuits.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+            this.dataGridViewSuits.AutoSortByColumnName = false;
+            this.dataGridViewSuits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSuits.ColumnReorder = true;
+            this.dataGridViewSuits.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.CSTime,
+            this.CSName,
+            this.CSMods,
+            this.CSPrice,
+            this.CSLoadout,
+            this.CSPrimary1,
+            this.CSPrimary2,
+            this.CSSecondary});
+            this.dataGridViewSuits.ContextMenuStrip = this.contextMenuStripSuits;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewSuits.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridViewSuits.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewSuits.Name = "dataGridViewSuits";
+            this.dataGridViewSuits.PerColumnWordWrapControl = true;
+            this.dataGridViewSuits.ReadOnly = true;
+            this.dataGridViewSuits.RowHeaderMenuStrip = null;
+            this.dataGridViewSuits.RowHeadersVisible = false;
+            this.dataGridViewSuits.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewSuits.SingleRowSelect = true;
+            this.dataGridViewSuits.Size = new System.Drawing.Size(784, 266);
+            this.dataGridViewSuits.TabIndex = 1;
+            this.dataGridViewSuits.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewSuits_SortCompare);
+            // 
+            // CSTime
+            // 
+            this.CSTime.HeaderText = "Time";
+            this.CSTime.Name = "CSTime";
+            this.CSTime.ReadOnly = true;
+            // 
+            // CSName
+            // 
+            this.CSName.HeaderText = "Name";
+            this.CSName.Name = "CSName";
+            this.CSName.ReadOnly = true;
+            // 
+            // CSMods
+            // 
+            this.CSMods.HeaderText = "Mods";
+            this.CSMods.Name = "CSMods";
+            this.CSMods.ReadOnly = true;
+            // 
+            // CSPrice
+            // 
+            this.CSPrice.HeaderText = "Price";
+            this.CSPrice.Name = "CSPrice";
+            this.CSPrice.ReadOnly = true;
+            // 
+            // CSLoadout
+            // 
+            this.CSLoadout.HeaderText = "Loadout";
+            this.CSLoadout.Name = "CSLoadout";
+            this.CSLoadout.ReadOnly = true;
+            // 
+            // CSPrimary1
+            // 
+            this.CSPrimary1.HeaderText = "Primary 1";
+            this.CSPrimary1.Name = "CSPrimary1";
+            this.CSPrimary1.ReadOnly = true;
+            // 
+            // CSPrimary2
+            // 
+            this.CSPrimary2.HeaderText = "Primary 2";
+            this.CSPrimary2.Name = "CSPrimary2";
+            this.CSPrimary2.ReadOnly = true;
+            // 
+            // CSSecondary
+            // 
+            this.CSSecondary.HeaderText = "Secondary";
+            this.CSSecondary.Name = "CSSecondary";
+            this.CSSecondary.ReadOnly = true;
+            // 
+            // contextMenuStripSuits
+            // 
+            this.contextMenuStripSuits.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.forceSellShipToolStripMenuItem});
+            this.contextMenuStripSuits.Name = "contextMenuStripSuits";
+            this.contextMenuStripSuits.Size = new System.Drawing.Size(151, 26);
+            // 
+            // forceSellShipToolStripMenuItem
+            // 
+            this.forceSellShipToolStripMenuItem.Name = "forceSellShipToolStripMenuItem";
+            this.forceSellShipToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.forceSellShipToolStripMenuItem.Text = "Force Suit Sale";
+            this.forceSellShipToolStripMenuItem.Click += new System.EventHandler(this.forceSellSuitToolStripMenuItem_Click);
+            // 
+            // extScrollBar2
+            // 
+            this.extScrollBar2.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBar2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBar2.ArrowColorScaling = 0.5F;
+            this.extScrollBar2.ArrowDownDrawAngle = 270F;
+            this.extScrollBar2.ArrowUpDrawAngle = 90F;
+            this.extScrollBar2.BorderColor = System.Drawing.Color.White;
+            this.extScrollBar2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBar2.HideScrollBar = false;
+            this.extScrollBar2.LargeChange = 0;
+            this.extScrollBar2.Location = new System.Drawing.Point(784, 0);
+            this.extScrollBar2.Maximum = -1;
+            this.extScrollBar2.Minimum = 0;
+            this.extScrollBar2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBar2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBar2.Name = "extScrollBar2";
+            this.extScrollBar2.Size = new System.Drawing.Size(16, 266);
+            this.extScrollBar2.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBar2.SmallChange = 1;
+            this.extScrollBar2.TabIndex = 0;
+            this.extScrollBar2.Text = "extScrollBar2";
+            this.extScrollBar2.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBar2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBar2.ThumbColorScaling = 0.5F;
+            this.extScrollBar2.ThumbDrawAngle = 0F;
+            this.extScrollBar2.Value = -1;
+            this.extScrollBar2.ValueLimited = -1;
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
+            // splitContainerSuitsWeapons
+            // 
+            this.splitContainerSuitsWeapons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerSuitsWeapons.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerSuitsWeapons.Name = "splitContainerSuitsWeapons";
+            this.splitContainerSuitsWeapons.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainerSuitsWeapons.Panel1
+            // 
+            this.splitContainerSuitsWeapons.Panel1.Controls.Add(this.panelCurrent);
+            // 
+            // splitContainerSuitsWeapons.Panel2
+            // 
+            this.splitContainerSuitsWeapons.Panel2.Controls.Add(this.panelPrev);
+            this.splitContainerSuitsWeapons.Size = new System.Drawing.Size(800, 572);
+            this.splitContainerSuitsWeapons.SplitterDistance = 266;
+            this.splitContainerSuitsWeapons.TabIndex = 3;
+            // 
             // UserControlSuitsWeapons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainerMissions);
+            this.Controls.Add(this.splitContainerSuitsWeapons);
             this.Name = "UserControlSuitsWeapons";
             this.Size = new System.Drawing.Size(800, 572);
             this.panelPrev.ResumeLayout(false);
@@ -483,10 +489,10 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollSuits.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSuits)).EndInit();
             this.contextMenuStripSuits.ResumeLayout(false);
-            this.splitContainerMissions.Panel1.ResumeLayout(false);
-            this.splitContainerMissions.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMissions)).EndInit();
-            this.splitContainerMissions.ResumeLayout(false);
+            this.splitContainerSuitsWeapons.Panel1.ResumeLayout(false);
+            this.splitContainerSuitsWeapons.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerSuitsWeapons)).EndInit();
+            this.splitContainerSuitsWeapons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -495,7 +501,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelPrev;
         private System.Windows.Forms.Panel panelCurrent;
-        private System.Windows.Forms.SplitContainer splitContainerMissions;
+        private System.Windows.Forms.SplitContainer splitContainerSuitsWeapons;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollWeapons;
         private BaseUtils.DataGridViewColumnControl dataGridViewWeapons;
         private ExtendedControls.ExtScrollBar extScrollBar1;

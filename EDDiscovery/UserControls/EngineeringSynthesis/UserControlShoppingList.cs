@@ -66,11 +66,15 @@ namespace EDDiscovery.UserControls
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
             userControlEngineering.DBBaseName = "SLEngineering";            // makes it unique to the SL
+            userControlEngineering.RequestPanelOperation += RequestPanelOperation;
+
             userControlEngineering.Init(DiscoveryForm, DisplayNumber);
+
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
             userControlSynthesis.DBBaseName = "SLSynthesis";            // makes it unique to the SL
+            userControlSynthesis.RequestPanelOperation += RequestPanelOperation;
             userControlSynthesis.Init(DiscoveryForm, DisplayNumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
@@ -259,9 +263,9 @@ namespace EDDiscovery.UserControls
                 {
                     var totals2 = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
-                    var basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"));
-                    var standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"));
-                    var premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"));
+                    var basic = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"),0, mcl, totals2);
+                    var standard = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"),0, mcl, totals2);
+                    var premium = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"),0, mcl, totals2);
                     wantedList.Append(Environment.NewLine +
                         string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".T(EDTx.UserControlShoppingList_FSD), basic.Item1, standard.Item1, premium.Item1));
                 }

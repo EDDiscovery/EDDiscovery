@@ -938,20 +938,20 @@ namespace EDDiscovery.UserControls
                 labelCAPICarrierBalance.Text = fc.Balance.ToString("N0") + "cr";
 
                 {
+                    DataGridViewColumn sortcol = dataGridViewCAPICargo.SortedColumn != null ? dataGridViewCAPICargo.SortedColumn : dataGridViewCAPICargo.Columns[0];
+                    SortOrder sortorder = dataGridViewCAPICargo.SortOrder != SortOrder.None ? dataGridViewCAPICargo.SortOrder : SortOrder.Ascending;
+                    dataGridViewCAPICargo.Rows.Clear();
+
                     List<CAPI.FleetCarrier.Cargo> cargounmerged = fc.GetCargo();
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Polymers", Value = 100, Quantity = 100 });     // for debugging the merge
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Polymers", Value = 100, Quantity = 200 });
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Polymers", Value = 100, Quantity = 300 });
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Pesticides", Value = 656, Quantity = 300 });
-                    var cargo = CAPI.FleetCarrier.MergeCargo(cargounmerged);
 
-                    DataGridViewColumn sortcol = dataGridViewCAPICargo.SortedColumn != null ? dataGridViewCAPICargo.SortedColumn : dataGridViewCAPICargo.Columns[0];
-                    SortOrder sortorder = dataGridViewCAPICargo.SortOrder != SortOrder.None ? dataGridViewCAPICargo.SortOrder : SortOrder.Ascending;
-
-                    dataGridViewCAPICargo.Rows.Clear();
-
-                    if (cargo != null)
+                    if (cargounmerged != null)
                     {
+                        var cargo = CAPI.FleetCarrier.MergeCargo(cargounmerged);        // merge similar entries
+
                         for (int i = 0; i < cargo.Count; i++)
                         {
                             var ord = cargo[i];

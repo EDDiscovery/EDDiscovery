@@ -313,10 +313,10 @@ namespace EDDiscovery.UserControls
             if (last_he == null)
                 return;
 
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "View", "JSON" },
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "View", "JSON" },
+                            new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude, Forms.ImportExportForm.ShowFlags.None },
                             new string[] { "CSV|*.csv", "JSON|*.json" },
-                            new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DTCVSOI },
                             new string[] { "neareststars", "neareststars" }
                 );
 
@@ -324,8 +324,8 @@ namespace EDDiscovery.UserControls
             {
                 if (frm.SelectedIndex == 0)
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
                     grd.GetLine += delegate (int r)
                     {
                         if (r < dataGridViewNearest.RowCount+1)

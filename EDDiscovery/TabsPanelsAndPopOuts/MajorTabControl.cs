@@ -360,7 +360,7 @@ namespace EDDiscovery
                 }
             }
 
-            return eddiscovery.PopOuts.PerformPanelOperation(sender, actionobj);       // primary panel requests are vectored to forms - other ones are not
+            return eddiscovery.PopOuts.PerformPanelOperation(sender, actionobj);       // finally vector to pop out panels
         }
 
         // request came from secondary panel 
@@ -369,8 +369,8 @@ namespace EDDiscovery
             return PerformOperationOther(page, sender, actionobj);
         }
 
-        // request can from a pop up panel
-        public bool PerformPanelOperation(UserControls.UserControlCommonBase sender, object actionobj)
+        // request came from a pop up panel
+        public bool PerformPanelOperationPopOut(UserControls.UserControlCommonBase sender, object actionobj)
         {
             //System.Diagnostics.Debug.WriteLine($"Perform Panel operation request {actionobj}");
             return PerformOperationOther(null, sender, actionobj);
@@ -383,7 +383,7 @@ namespace EDDiscovery
 
         public bool PerformOperationOther(TabPage page, UserControls.UserControlCommonBase sender, object actionobj)
         {
-            // if we are pushing an operation down, but its a TH push up from a secondary tab, we stop it.
+            // if we are pushing an operation down, but its a TH push up from a secondary tab or a pop up panel, we stop it.
             // only the primary tab pushes these around
 
             if (UserControls.UserControlCommonBase.IsOperationTHPush(actionobj))            
@@ -424,7 +424,7 @@ namespace EDDiscovery
                 }
             }
 
-            return false;
+            return eddiscovery.PopOuts.PerformPanelOperation(sender, actionobj);       // and send to all pop out forms
         }
 
 
