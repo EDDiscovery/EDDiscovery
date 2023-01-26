@@ -520,17 +520,22 @@ namespace EDDiscovery.UserControls
 
             if (TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z))
             {
-                double dist = last_sys.Distance(x, y, z);
-
-                string jumpstr = "";
-                if (shipfsdinfo != null)
+                if (last_sys != null)     // double checky
                 {
-                    int jumps = (int)Math.Ceiling(dist / shipfsdinfo.avgsinglejump);
-                    if (jumps > 0)
-                        jumpstr = jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
-                }
+                    double dist = last_sys.Distance(x, y, z);
 
-                lasttargettext = $"T-> {name} {dist:N1}ly {jumpstr}";
+                    string jumpstr = "";
+                    if (shipfsdinfo != null)
+                    {
+                        int jumps = (int)Math.Ceiling(dist / shipfsdinfo.avgsinglejump);
+                        if (jumps > 0)
+                            jumpstr = jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+                    }
+
+                    lasttargettext = $"T-> {name} {dist:N1}ly {jumpstr}";
+                }
+                else
+                    lasttargettext = "No known system";
             }
 
             DrawTextIntoBox(extPictureBoxTarget, lasttargettext);
