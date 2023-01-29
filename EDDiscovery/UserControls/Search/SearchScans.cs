@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
                 "Compare(left.nMassKG,right.nMassKG)",
                 "Compare(left.nEccentricity,right.nEccentricity)",
                 "Compare(left.nOrbitalPeriod,right.nOrbitalPeriod)",
-                "Compare(left.DistanceFromArrivallm,right.DistanceFromArrivallm)",
+                "Compare(left.DistanceFromArrivalm,right.DistanceFromArrivalm)",
                 "Compare(left.nRadius,right.nRadius)" ,
                 "Compare(left.nRotationPeriod,right.nRotationPeriod)",
                 "Compare(left.nSemiMajorAxis,right.nSemiMajorAxis)",
