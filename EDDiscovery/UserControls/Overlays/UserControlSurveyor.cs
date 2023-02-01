@@ -733,7 +733,7 @@ namespace EDDiscovery.UserControls
 
                     // mirrors scandisplaynodes
 
-                    var notexpired = signallist.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
+                    var notexpired = signallist.Where(x => (!x.SignalName.Contains("-class") && (!x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow)) || (x.SignalName.Contains("-class") && x.RecordedUTC > DateTime.Now.AddDays(-14))).ToList();
                     notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
 
                     var expired = signallist.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
