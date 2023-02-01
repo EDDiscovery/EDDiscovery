@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
                 {
                     last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
 
-                    if (last_he.IsLanded && last_sn != null )       // if found node, and landed
+                    if (last_he.Status.IsLandedInShipOrSRV && last_sn != null )       // if found node, and landed
                     {
                         sd = last_sn.Find(last_he.WhereAmI)?.ScanData;  // find scan data for this body
                     }
@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
                         {
                             capExceededMats.Add(c.Item1.Details.Name);
                         }
-                        if (!last_he.IsLanded && last_sn != null)
+                        if (!last_he.Status.IsLandedInShipOrSRV && last_sn != null)
                         {
                             var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) &&
                                                                  b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Item1.Details.FDName));

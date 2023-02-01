@@ -297,7 +297,7 @@ namespace EDDiscovery.UserControls
                 var j = ((EliteDangerousCore.UIEvents.UIFSDTarget)obj).FSDTarget;
                 if (lasttarget == null || j.StarSystem != lasttarget.StarSystem)       // a little bit of debouncing, see if the target info has changed
                 {
-                    if ( (DiscoveryForm.History.GetLast?.FSDJumpSequence??false)  == true) 
+                    if ( (DiscoveryForm.History.GetLast?.Status.FSDJumpSequence??false)  == true) 
                     {
                         //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got, but in fsd sequence, pend it");
                         pendingtarget = j;
@@ -351,7 +351,7 @@ namespace EDDiscovery.UserControls
             bool duetoother = false;
             bool duetomissions = false;
 
-            if (he.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
+            if (he.Status.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
             {
                 //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSDJump and pending target set, so end of jump sequence");
                 lasttarget = pendingtarget;
@@ -388,11 +388,14 @@ namespace EDDiscovery.UserControls
                 HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
 
                 textBoxSystem.Text = he.System.Name;
+#if DEBUG
+                textBoxSystem.Text += $" {he.System.SystemAddress}";
+#endif
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
                 textBoxBody.Text = he.WhereAmI + " (" + he.Status.BodyType + ")";
 
-                bool hasmarketid = he?.MarketID.HasValue ?? false;
+                bool hasmarketid = he?.Status.MarketID.HasValue ?? false;
                 bool hasbodyormarketid = hasmarketid || he.FullBodyID.HasValue;
 
                 extButtonEDDBStation.Enabled = extButtonInaraStation.Enabled = hasmarketid;
@@ -434,7 +437,7 @@ namespace EDDiscovery.UserControls
                 textBoxState.Text = factionstate;
                 extTextBoxSecurity.Text = security;
 
-                extTextBoxStationFaction.Text = he.StationFaction ?? "";
+                extTextBoxStationFaction.Text = he.Status.StationFaction ?? "";
 
                 List<MissionState> mcurrent = (from MissionState ms in hl.MissionListAccumulator.GetMissionList(he.MissionList) where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
@@ -701,16 +704,16 @@ namespace EDDiscovery.UserControls
 
         private void extButtonEDDBStation_Click(object sender, EventArgs e)
         {
-            if (last_he != null && last_he.MarketID != null)
-                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBStationMarketId + last_he.MarketID.ToStringInvariant());
+            if (last_he != null && last_he.Status.MarketID != null)
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBStationMarketId + last_he.Status.MarketID.ToStringInvariant());
         }
 
         private void extButtonSpanshStation_Click(object sender, EventArgs e)
         {
             if (last_he != null)
             {
-                if (last_he.MarketID != null)
-                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.MarketID.ToStringInvariant());
+                if (last_he.Status.MarketID != null)
+                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.Status.MarketID.ToStringInvariant());
                 else if (last_he.FullBodyID.HasValue)
                     BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
             }

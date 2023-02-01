@@ -446,7 +446,7 @@ namespace EDDiscovery.UserControls
                                + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}\r\n"
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship}\r\n"
-                               + $"jcb{he.Status.CurrentBoost} fsds{he.FSDJumpSequence}\r\n"
+                               + $"jcb{he.Status.CurrentBoost} fsds{he.Status.FSDJumpSequence} jm{he.Status.FSDJumpNextSystemName} {he.Status.FSDJumpNextSystemAddress}\r\n"
                                + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledSeconds} jmps {he.TravelledJumps}"
                                ;
 

@@ -105,7 +105,7 @@ namespace EDDiscovery.WebServer
             sysstate["Economy"] = economy;
             sysstate["Faction"] = faction;
             sysstate["Security"] = security;
-            sysstate["MarketID"] = he.MarketID;
+            sysstate["MarketID"] = he.Status.MarketID;
             response["EDDB"] = sysstate;
 
             var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);

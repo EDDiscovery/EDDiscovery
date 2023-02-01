@@ -165,7 +165,7 @@ namespace EDDiscovery
         private void extButtonCAPI_Click(object sender, EventArgs e)
         {
             var he = History.GetLast;
-            if (he != null && he.IsDocked)
+            if (he != null && he.Status.IsDocked)
                 Controller.DoCAPI(he.WhereAmI, he.System.Name, History.Shipyards.AllowCobraMkIV);
         }
     }

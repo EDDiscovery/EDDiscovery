@@ -351,7 +351,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (var he in HistoryList.FilterByDateRange(DiscoveryForm.History.EntryOrder(), startdateutc, enddateutc))
                 {
-                    stats.Process(he.journalEntry, he.StationFaction);
+                    stats.Process(he.journalEntry, he.Status.StationFaction);
                 }
 
                 factioninfo = stats.GetLastEntries(); // pick the last generation in there.
@@ -568,7 +568,7 @@ namespace EDDiscovery.UserControls
 
                 long profit = 0;
 
-                foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name))
+                foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.Status.StationFaction == fs.Name))
                 {
                     var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
                     foreach (var i in items)
@@ -731,9 +731,9 @@ namespace EDDiscovery.UserControls
                 // find all the history entries with faction, taking into account start/end date, and last_he position
 
                 var list = FilterHistory((x) =>
-                        (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name) ||  // he's with changes in stats due to MatCommod trading
+                        (x.journalEntry is IStatsJournalEntryMatCommod && x.Status.StationFaction == fs.Name) ||  // he's with changes in stats due to MatCommod trading
                         (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name) ) ||  // he's with Bountry/bond
-                        ((x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData || x.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData) && x.StationFaction == fs.Name)// he's for exploration
+                        ((x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData || x.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData) && x.Status.StationFaction == fs.Name)// he's for exploration
                         );
 
                 foreach (var he in list)
