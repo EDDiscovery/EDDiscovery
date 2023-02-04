@@ -559,19 +559,12 @@
     <Compile Include="UserControls\Helpers\HistoryFilterHelpers.cs" />
     <Compile Include="EDD\EDDApplicationContext.cs" />
     <Compile Include="EDD\EDDiscoveryControllerMain.cs" />
-    <Compile Include="Forms\AddOnManagerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AddOnManagerForm.Designer.cs">
-      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\SetNoteForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SetNoteForm.Designer.cs">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
     <Compile Include="TabsPanelsAndPopOuts\Panels.cs" />
     <Compile Include="Forms\BookmarkForm.cs">
@@ -800,9 +793,6 @@
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.Designer.cs">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
-      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DraggableFormPos.resx">
       <DependentUpon>DraggableFormPos.cs</DependentUpon>
     </EmbeddedResource>

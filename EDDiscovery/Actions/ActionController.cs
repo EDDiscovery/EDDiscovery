@@ -377,9 +377,12 @@ namespace EDDiscovery.Actions
         {
             bool changed = false;
 
-            using (AddOnManagerForm dmf = new AddOnManagerForm())
+            using (ActionLanguage.Manager.AddOnManagerForm dmf = new ActionLanguage.Manager.AddOnManagerForm())
             {
-                dmf.Init(manage, this.Icon);
+                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
+                System.Diagnostics.Debug.Assert(edversion != null);
+
+                dmf.Init(manage, this.Icon, edversion, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , EDDOptions.Instance.CheckGithubFiles );
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;

@@ -1,6 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿/*
+ * Copyright © 2017-2023 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 
 // procedure for translation normalisation
 // 1. cd \code\eddiscovery.
@@ -165,31 +175,6 @@ namespace EDDiscovery
         UserControlForm_extButtonDrawnTaskBarIcon_ToolTip, // ToolTip 'Toggle show taskbar icon for this window'
         UserControlForm_extButtonDrawnTransparentMode_ToolTip, // ToolTip 'Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n'
         UserControlForm_extButtonDrawnClose_ToolTip, // ToolTip 'Close'
-
-        AddOnManagerForm_buttonExtGlobals,   // Control 'Globals'
-
-        AddOnManagerForm_AddOnTitle, // Add-On Manager
-        AddOnManagerForm_EditTitle, // Edit Add-Ons
-        AddOnManagerForm_Locallymodified, // Locally modified
-        AddOnManagerForm_UptoDate, // Up to Date
-        AddOnManagerForm_LocalOnly, // Local Only
-        AddOnManagerForm_Newversion, // New version
-        AddOnManagerForm_Newer, // Newer EDD required
-        AddOnManagerForm_Old, // Too old for EDD
-        AddOnManagerForm_Modwarn, // Modified locally, do you wish to overwrite the changes
-        AddOnManagerForm_Failed, // Add-on failed to update. Check files for read only status
-        AddOnManagerForm_DeleteWarn, // Do you really want to delete {0}
-        AddOnManagerForm_Type, // Type
-        AddOnManagerForm_Name, // Name
-        AddOnManagerForm_Version, // Version
-        AddOnManagerForm_Description, // Description
-        AddOnManagerForm_Status, // Status
-        AddOnManagerForm_Action, // Action
-        AddOnManagerForm_Delete, // Delete
-        AddOnManagerForm_Enabled, // Enabled
-        AddOnManagerForm_Install, // Install
-        AddOnManagerForm_Update, // Update
-        AddOnManagerForm_Edit, // Edit
 
         BookmarkForm_buttonEDSM, // Control 'EDSM'
         BookmarkForm_labelName, // Control 'Name'
