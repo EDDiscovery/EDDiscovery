@@ -345,7 +345,12 @@ namespace EDDiscovery.UserControls
             DrawFuel();
             DrawScanSummary(sys);
             if (presentsystemonly)  // used during resize
-                DrawSystem();
+            {
+                lock (extPictureBoxScroll)      // because of the async call, we lock the local structures drawsystem* over the draw, so a calculate can't reset them during the draw
+                {
+                    DrawSystemUnlocked();
+                }
+            }
             else
                 CalculateThenDrawSystem(sys);
         }
@@ -568,18 +573,24 @@ namespace EDDiscovery.UserControls
 
             DrawTextIntoBox(extPictureBoxFuel, fueltext);
         }
-        
-        SortedList<string, string> drawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
-        private long drawsystemvalue;
-        private string drawsystemsignallist;
+
+
+        // we keep the results of the last CalculatethenDrawSystem so we can just DrawSystem later
+        // we also set it to null in case DrawSystem gets called first before a calculate
+
+        private SortedList<string, string> drawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
+        private string drawsystemsignallist = "";
+        private long drawsystemvalue = 0;
+
+        // recalc the system drawSystem* values, then lock, set the locals above, then lock draw
 
         async private void CalculateThenDrawSystem(ISystem sys)
         {
             System.Diagnostics.Debug.WriteLine($"Surveyor {DisplayNumber} calc system {sys?.Name}");
 
-            drawsystemtext.Clear();
-            drawsystemsignallist = "";
-            drawsystemvalue = 0;     // accumulate value if required of shown bodies
+            SortedList<string, string> ldrawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
+            string ldrawsystemsignallist = "";
+            long ldrawsystemvalue = 0;
 
             if (sys != null)      // if we have a system
             {
@@ -706,9 +717,9 @@ namespace EDDiscovery.UserControls
                                 silstring += " : " + info;
                             }
 
-                            drawsystemtext[sd.BodyName] = silstring;
+                            ldrawsystemtext[sd.BodyName] = silstring;
 
-                            drawsystemvalue += sd.EstimatedValue;
+                            ldrawsystemvalue += sd.EstimatedValue;
                         }
 
                     }   // end for..
@@ -720,7 +731,7 @@ namespace EDDiscovery.UserControls
                 {
                     string info = string.Join(", ", kvp.Value.FiltersPassed);
                     string bodyname = kvp.Key;
-                    drawsystemtext[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
+                    ldrawsystemtext[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
                 }
 
                 // any FSS items, if we have system node
@@ -754,22 +765,31 @@ namespace EDDiscovery.UserControls
                             fsssignalsdisplayed.Equals("*"))
                         {
                             if (pos++ == expiredpos)
-                                drawsystemsignallist = drawsystemsignallist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
+                                ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
 
-                            drawsystemsignallist = drawsystemsignallist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
+                            ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
                         }
                     }
                 }
             }       // end sys
 
-            DrawSystem();
+            lock (extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock, set vars, draw, unlock
+            {
+                drawsystemtext = ldrawsystemtext;                   // we keep these in variables so we can just draw again. Nasty
+                drawsystemsignallist = ldrawsystemsignallist;
+                drawsystemvalue = ldrawsystemvalue;
+                DrawSystemUnlocked();
+            }
         }
 
-        private void DrawSystem()
+        // Draw system data, stored in drawsystem* values, to screen, taking into account width
+        // this is not locked. MUST be extenally locked
+
+        private void DrawSystemUnlocked()
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor present system results");
 
-            var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
+            extPictureBoxSystemDetails.ClearImageList();
 
             int vpos = 0;
 
@@ -791,7 +811,7 @@ namespace EDDiscovery.UserControls
                         backcolour,
                         1.0F,
                         frmt: frmt);
-                picelements.Add(i);
+                extPictureBoxSystemDetails.Add(i);
                 vpos += i.Location.Height;
             }
 
@@ -807,10 +827,9 @@ namespace EDDiscovery.UserControls
                     backcolour,
                     1.0F,
                     frmt: frmt);
-                picelements.Add(i);
+                extPictureBoxSystemDetails.Add(i);
                 vpos += i.Location.Height;
             }
-
 
             if (drawsystemsignallist.HasChars())
             {
@@ -825,18 +844,13 @@ namespace EDDiscovery.UserControls
                                                 1.0F,
                                                 frmt: frmt);
                 vpos += i.Location.Height;
-                picelements.Add(i);
+                extPictureBoxSystemDetails.Add(i);
             }
 
             frmt.Dispose();
 
-            lock (extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
-            {
-                extPictureBoxSystemDetails.ClearImageList();
-                extPictureBoxSystemDetails.AddRange(picelements);
-                extPictureBoxScroll.Render();
-                Refresh();
-            }
+            extPictureBoxScroll.Render();
+            Refresh();
         }
 
 
