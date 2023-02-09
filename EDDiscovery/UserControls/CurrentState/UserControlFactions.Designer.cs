@@ -83,7 +83,7 @@
             this.datePanel.Size = new System.Drawing.Size(853, 27);
             this.datePanel.TabIndex = 0;
             // 
-            // startDateTime
+            // startDateTimePicker
             // 
             this.startDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
             this.startDateTimePicker.BorderColorScaling = 0.5F;
@@ -92,7 +92,7 @@
             this.startDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.startDateTimePicker.Location = new System.Drawing.Point(0, 1);
             this.startDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.startDateTimePicker.Name = "startDateTime";
+            this.startDateTimePicker.Name = "startDateTimePicker";
             this.startDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
             this.startDateTimePicker.ShowCheckBox = true;
             this.startDateTimePicker.ShowUpDown = false;
@@ -112,7 +112,7 @@
             this.labelTo.TabIndex = 4;
             this.labelTo.Text = "to";
             // 
-            // endDateTime
+            // endDateTimePicker
             // 
             this.endDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
             this.endDateTimePicker.BorderColorScaling = 0.5F;
@@ -121,7 +121,7 @@
             this.endDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.endDateTimePicker.Location = new System.Drawing.Point(251, 1);
             this.endDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.endDateTimePicker.Name = "endDateTime";
+            this.endDateTimePicker.Name = "endDateTimePicker";
             this.endDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
             this.endDateTimePicker.ShowCheckBox = true;
             this.endDateTimePicker.ShowUpDown = false;
@@ -199,6 +199,7 @@
             // 
             // scrollBarFactions
             // 
+            this.scrollBarFactions.AlwaysHideScrollBar = false;
             this.scrollBarFactions.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.scrollBarFactions.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.scrollBarFactions.ArrowColorScaling = 0.5F;
@@ -229,9 +230,11 @@
             // 
             // dataGridViewFactions
             // 
+            this.dataGridViewFactions.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewFactions.AllowUserToAddRows = false;
             this.dataGridViewFactions.AllowUserToDeleteRows = false;
             this.dataGridViewFactions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFactions.AutoSortByColumnName = false;
             this.dataGridViewFactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFactions.ColumnReorder = true;
             this.dataGridViewFactions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -261,6 +264,7 @@
             this.dataGridViewFactions.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewFactions.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridViewFactions.Name = "dataGridViewFactions";
+            this.dataGridViewFactions.PerColumnWordWrapControl = true;
             this.dataGridViewFactions.RowHeaderMenuStrip = null;
             this.dataGridViewFactions.RowHeadersVisible = false;
             this.dataGridViewFactions.RowHeadersWidth = 62;

@@ -183,10 +183,10 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        public override void ReceiveHistoryEntry(HistoryEntry he)
-        {
-            Discoveryform_OnNewEntry(he);       // enable for pushing thru a historical event as new
-        }
+        //public override void ReceiveHistoryEntry(HistoryEntry he)
+        //{
+          //  Discoveryform_OnNewEntry(he);       // enable for pushing thru a historical event as new - only for debugging
+        //}
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {

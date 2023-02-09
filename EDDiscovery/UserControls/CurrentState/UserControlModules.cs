@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,13 +10,13 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using ExtendedControls;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -30,6 +30,7 @@ namespace EDDiscovery.UserControls
         private string storedmoduletext;
         private string travelhistorytext;
         private string allmodulestext;
+
         private HistoryEntry last_he = null;
         private ShipInformation last_si = null;
 
@@ -38,6 +39,8 @@ namespace EDDiscovery.UserControls
 
         private string dbDisplayFilters = "DisplayFilters";
         private string[] displayfilters;
+
+        private List<object> allmodulesref = new List<object>();
 
         #region Init
 
@@ -111,10 +114,13 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)
         {
             // fuel UI update the SI information globally, and we have a ship, and we have a last entry, and we have ship information
+            // protect against ship information or he being null
 
-            if (uievent is EliteDangerousCore.UIEvents.UIFuel && last_si != null && DiscoveryForm.History.GetLast?.ShipInformation != null ) // protect against ship information or he being null
+            if (uievent is EliteDangerousCore.UIEvents.UIFuel && last_si != null && DiscoveryForm.History.GetLast?.ShipInformation != null ) 
             {
-                if (last_si.ShipNameIdentType == DiscoveryForm.History.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
+                // if we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
+
+                if (last_si.ShipNameIdentType == DiscoveryForm.History.GetLast.ShipInformation.ShipNameIdentType ) 
                 {
                     // update grid if found. Doing it this way stops flicker.
 
@@ -136,13 +142,48 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
+        // new entry received from travel grid
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxShips.Items.Count == 0)
                 UpdateComboBox();
 
-            last_he = he;
-            Display();
+            bool update = false;
+
+            if (comboBoxShips.Text == storedmoduletext)         // stored at he
+            {
+                update = !Object.ReferenceEquals(he.StoredModules, last_he?.StoredModules);
+            }
+            else if (comboBoxShips.Text == allmodulestext)      // this displays the stored modules, as well as all other ship modules, at top of history
+            {
+                ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
+                var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+
+                List<object> curref = new List<object>();       // repeat the objects used in the display
+                foreach (var si in ownedships)  
+                    curref.Add(si);
+                foreach (ModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
+                    curref.Add(sm);
+
+                update = !allmodulesref.ReferenceEquals(curref);        // if not identical, something has changed, execute update
+            }
+            else if (comboBoxShips.Text == travelhistorytext)           // travel history, it should the the current si vs the last displayed si
+            {
+                update = !Object.ReferenceEquals(he.ShipInformation, last_si);      
+            }
+            else
+            {
+                ShipInformation si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);      // grab SI of specific ship (may be null)
+                update = !Object.ReferenceEquals(si, last_si);      // this vs ship
+            }
+
+            if (update)      // if stored modules is different..
+            {
+               // System.Diagnostics.Debug.WriteLine($"Modules recalc {he.EventTimeUTC} vs {last_he?.EventTimeUTC} {comboBoxShips.Text}");
+                last_he = he;
+                Display();
+            }
+
         }
 
         private void Display()      // allow redisplay of last data
@@ -156,6 +197,7 @@ namespace EDDiscovery.UserControls
             dataViewScrollerPanel.SuspendLayout();
 
             last_si = null;     // no ship info
+            allmodulesref.Clear();      // no ref to all modules info
 
             dataGridViewModules.Columns[2].HeaderText = "Slot".T(EDTx.UserControlModules_SlotCol);
             dataGridViewModules.Columns[3].HeaderText = "Info".T(EDTx.UserControlModules_ItemInfo);
@@ -165,7 +207,7 @@ namespace EDDiscovery.UserControls
             {
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
-                if (last_he != null && last_he.StoredModules != null)
+                if (last_he?.StoredModules != null)
                 {
                     ModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
@@ -193,33 +235,28 @@ namespace EDDiscovery.UserControls
                 ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
-                foreach( var si in ownedships )
+                foreach (var si in ownedships)
                 {
                     foreach (string key in si.Modules.Keys)
                     {
-                        EliteDangerousCore.ShipModule sm = si.Modules[key];
+                        ShipModule sm = si.Modules[key];
                         AddModuleLine(sm,si);
-
                     }
+                    allmodulesref.Add(si);      // we add ref in effect to the list of modules we extracted info from - this is used to see if they changed during the update abovevi
                 }
 
-                if (last_he != null && last_he.StoredModules != null)
+                foreach (ModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
                 {
-                    ModulesInStore mi = last_he.StoredModules;
-                    labelVehicle.Text = "";
-
-                    foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
-                    {
-                        string info = sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit));
-                        info = info.AppendPrePad(sm.TransferTimeString, ":");
-                        object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name, "Stored".TxID(EDTx.UserControlModules_Stored),
+                    string info = sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit));
+                    info = info.AppendPrePad(sm.TransferTimeString, ":");
+                    object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name, "Stored".TxID(EDTx.UserControlModules_Stored),
                                  info ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
                                 sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
                                 "" };
-                        dataGridViewModules.Rows.Add(rowobj);
-                    }
+                    dataGridViewModules.Rows.Add(rowobj);
+                    allmodulesref.Add(sm);
                 }
             }
             else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
@@ -246,7 +283,6 @@ namespace EDDiscovery.UserControls
 
         private void DisplayShip(ShipInformation si)
         {
-            //System.Diagnostics.Debug.WriteLine("HE " + last_he.Indexno);
             last_si = si;
 
             foreach (string key in si.Modules.Keys)

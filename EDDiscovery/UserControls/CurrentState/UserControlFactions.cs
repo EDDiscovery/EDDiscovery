@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2020 EDDiscovery development team
+ * Copyright © 2020-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
 
 using EDDiscovery.Controls;
@@ -179,7 +177,6 @@ namespace EDDiscovery.UserControls
             startDateTimePicker.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);        // now install the change handlers
             endDateTimePicker.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
 
-            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             dataGridViewFactions.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -192,6 +189,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            labelValue.Text = "";
         }
 
 
@@ -209,7 +208,6 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewFactions);
 
-            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             PutSetting("StartDate", startDateTimePicker.Value);                 // picker value is stored..
@@ -224,27 +222,17 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he)
+        // follow travel history cursor, he is never null
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiryUTC)
+            if (he.MissionList != last_he?.MissionList || he.EventTimeUTC > NextExpiryUTC)      // note this works if last_he is null....
             {
                 last_he = he;
                 Display();
-
-                // he can be null
-                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? EDDConfig.GameEndTimeUTC());    // will always return an array
+                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
                 NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
+                //System.Diagnostics.Debug.WriteLine($"Faction List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he?.MissionList}, next expiry time {NextExpiryUTC}");
             }
-        }
-
-        public override void ReceiveHistoryEntry(HistoryEntry he)
-        {
-            last_he = he;
-
-            Display();
-
-            var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
-            NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
         }
 
         #endregion

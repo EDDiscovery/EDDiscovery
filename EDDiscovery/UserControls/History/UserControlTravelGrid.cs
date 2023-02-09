@@ -443,7 +443,7 @@ namespace EDDiscovery.UserControls
                 colTime += Environment.NewLine + $"{he.TravelState} @ {he.System.Name}\r\n"
                                + $"b{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n"
                                + $"s{he.Status.StationName},{he.Status.StationType}\r\n"
-                               + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}\r\n"
+                               + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship}\r\n"
                                + $"jcb{he.Status.CurrentBoost} fsds{he.Status.FSDJumpSequence} jm'{he.Status.FSDJumpNextSystemName??"NoJump"}' ad{he.Status.FSDJumpNextSystemAddress??-1}\r\n"

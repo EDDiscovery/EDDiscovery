@@ -382,7 +382,7 @@ namespace EDDiscovery.Actions
                 var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
                 System.Diagnostics.Debug.Assert(edversion != null);
 
-                dmf.Init(manage, this.Icon, edversion, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , EDDOptions.Instance.CheckGithubFiles );
+                dmf.Init("EDDiscovery", manage, this.Icon, edversion, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , EDDOptions.Instance.CheckGithubFiles );
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;

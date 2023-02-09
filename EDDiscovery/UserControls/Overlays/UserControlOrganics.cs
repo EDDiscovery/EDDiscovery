@@ -144,6 +144,7 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(HistoryEntry he)
         { 
+            // TBD actions on every HE when on planet..
             lasthe = he;
             DrawBodyInfo();
             ControlVisibility();
