@@ -23,7 +23,7 @@ namespace EDDiscovery.UserControls
     {
         private FileSystemWatcher m_Watcher;
         private Timer waitforaccesstimer;
-        private long waittimertimeout;
+        private BaseUtils.MSTicks waittimertimeout;
         const int FileTimeout = 10000;
         private string newfiledetected;
         private HashSet<string> detectedfiles = new HashSet<string>();
@@ -104,8 +104,8 @@ namespace EDDiscovery.UserControls
 
                     BeginInvoke((MethodInvoker)delegate
                     {
+                        waittimertimeout.TimeoutAt(FileTimeout);
                         waitforaccesstimer.Start();     // need to do this in a UI thread
-                        waittimertimeout = Environment.TickCount + FileTimeout;
                     });
                 }
                 else
@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
                 }
                 newfiledetected = null;
             }
-            else if ( Environment.TickCount > waittimertimeout)
+            else if ( waittimertimeout.TimedOut )
             {
                 System.Diagnostics.Debug.WriteLine($"Spansh timeout waiting for {newfiledetected}");
                 waitforaccesstimer.Stop();

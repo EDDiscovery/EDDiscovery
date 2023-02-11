@@ -185,7 +185,9 @@ namespace EDDiscovery
             PanelIDs.EDSM, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             PanelIDs.Spansh, 
             PanelIDs.EDDB, 
-            PanelIDs.Inara, 
+            PanelIDs.Inara,
+            PanelIDs.Map3D,
+            PanelIDs.LocalMap3D,
         });
 
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed

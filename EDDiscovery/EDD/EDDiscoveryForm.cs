@@ -153,6 +153,16 @@ namespace EDDiscovery
             // some debug
             //EliteDangerousCore.ItemData.ReformatNonCoriolisModules();     // clean up these modules list
 
+            //BaseUtils.MSTicks T = new MSTicks(100);
+            //while(T.NotTimedOut)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"Not timed out {Environment.TickCount}");
+            //    System.Threading.Thread.Sleep(50);
+            //}
+
+          //  System.Diagnostics.Debug.WriteLine($"timed out {T.TimedOut}");
+
+
             if (EDDOptions.Instance.Culture != null)
                 CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
 
