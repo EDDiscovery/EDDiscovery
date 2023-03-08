@@ -23,7 +23,7 @@ namespace EDDiscovery.UserControls
     {
         private FileSystemWatcher m_Watcher;
         private Timer waitforaccesstimer;
-        private BaseUtils.MSTicks waittimertimeout;
+        private BaseUtils.MSTicks waittimertimeout = new BaseUtils.MSTicks();
         const int FileTimeout = 10000;
         private string newfiledetected;
         private HashSet<string> detectedfiles = new HashSet<string>();

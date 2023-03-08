@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls.Map3D
             ISystem lastone = CurrentPos != -1 && CurrentPos < currentfilteredlistsys.Count ? currentfilteredlistsys[CurrentPos] : null;  // see if lastpos is there, and store it
 
             // create current filter list..
-            currentfilteredlisthe = hl.FilterByTravelTime(TravelPathStartDateEnable ? TravelPathStartDateUTC : default(DateTime?), TravelPathEndDateEnable ? TravelPathEndDateUTC : default(DateTime?), true);
+            currentfilteredlisthe = hl.FilterByTravelTimeAndMulticrew(TravelPathStartDateEnable ? TravelPathStartDateUTC : default(DateTime?), TravelPathEndDateEnable ? TravelPathEndDateUTC : default(DateTime?), true);
 
             if (currentfilteredlisthe.Count > MaxStars)
                 currentfilteredlisthe = currentfilteredlisthe.Skip(currentfilteredlisthe.Count - MaxStars).ToList();
