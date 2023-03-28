@@ -282,7 +282,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.ColumnIndex == 0 && e.RowIndex >= 0 && e.RowIndex < dataGridViewNearest.Rows.Count)
             {
-                Clipboard.SetText(dataGridViewNearest.Rows[e.RowIndex].Cells[0].Value as string);
+                SetClipboardText(dataGridViewNearest.Rows[e.RowIndex].Cells[0].Value as string);
             }
         }
 

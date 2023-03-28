@@ -613,11 +613,7 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewRoute.GetCellCount(DataGridViewElementStates.Selected) > 0)
             {
-                try
-                {
-                    Clipboard.SetDataObject(dataGridViewRoute.GetClipboardContent());
-                }
-                catch { }
+                SetClipboard(dataGridViewRoute.GetClipboardContent());
             }
         }
 

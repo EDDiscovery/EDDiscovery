@@ -1031,19 +1031,8 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            bool hastext = false;
-
-            try
-            {
-                hastext = Clipboard.ContainsText();
-            }
-            catch
-            {
-                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
-            }
-
             copyToolStripMenuItem.Enabled = dataGridView.SelectedCells.Count > 0;
-            pasteToolStripMenuItem.Enabled = hastext;
+            pasteToolStripMenuItem.Enabled = ClipboardHasText();
             cutToolStripMenuItem.Enabled = dataGridView.SelectedRows.Count > 0;     // only on if we marked rows
 
             var rows = dataGridView.SelectedRowAndCount(true, true, 0, false);      // same as below in insert, ascending, use cells if not row selection, leave on new row
@@ -1052,16 +1041,7 @@ namespace EDDiscovery.UserControls
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DataObject obj = dataGridView.GetClipboardContent();
-
-            try
-            {
-                Clipboard.SetDataObject(obj);
-            }
-            catch
-            {
-                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
-            }
+            SetClipboard(dataGridView.GetClipboardContent());
         }
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1078,16 +1058,7 @@ namespace EDDiscovery.UserControls
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string data = null;
-
-            try
-            {
-                data = Clipboard.GetText();
-            }
-            catch
-            {
-                System.Diagnostics.Trace.WriteLine("Unable to access clipboard");
-            }
+            string data = GetClipboardText();
 
             if (data != null )
             {

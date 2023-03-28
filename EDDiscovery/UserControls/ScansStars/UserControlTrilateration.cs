@@ -642,21 +642,24 @@ namespace EDDiscovery.UserControls
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string txt = Clipboard.GetText(TextDataFormat.UnicodeText);
-            string[] lines = txt.Split('\n').Select(s => s.Trim('\r')).ToArray();
-            foreach (string line in lines)
+            string txt = GetClipboardText();
+            if (txt!=null)
             {
-                string[] fields = line.Split('\t');
-                string sysname = fields[0].Trim();
-                string dist = fields.Length >= 2 ? fields[1].Trim() : null;
-
-                if (sysname != "")
+                string[] lines = txt.Split('\n').Select(s => s.Trim('\r')).ToArray();
+                foreach (string line in lines)
                 {
-                    var row = dataGridViewDistances.Rows.Add(sysname, dist);
-                    dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(0, row));
-                    if (dist != "")
+                    string[] fields = line.Split('\t');
+                    string sysname = fields[0].Trim();
+                    string dist = fields.Length >= 2 ? fields[1].Trim() : null;
+
+                    if (sysname != "")
                     {
-                        dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(1, row));
+                        var row = dataGridViewDistances.Rows.Add(sysname, dist);
+                        dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(0, row));
+                        if (dist != "")
+                        {
+                            dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(1, row));
+                        }
                     }
                 }
             }

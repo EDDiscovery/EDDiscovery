@@ -283,6 +283,42 @@ namespace EDDiscovery.UserControls
                 DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
             }
         }
+        public void SetClipboard(DataObject obj)
+        {
+            try
+            {
+                Clipboard.SetDataObject(obj);
+            }
+            catch
+            {
+                DiscoveryForm.LogLineHighlight("Copying object to clipboard failed");
+            }
+        }
+
+        public bool ClipboardHasText()
+        {
+            try
+            {
+                return Clipboard.ContainsText();
+            }
+            catch
+            {
+                DiscoveryForm.LogLineHighlight("Unable to access clipboard");
+                return false;
+            }
+        }
+
+        public string GetClipboardText()
+        {
+            try
+            {
+                return Clipboard.GetText();
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         // force transparency update/set transparent function
         public void UpdateTransparency()
