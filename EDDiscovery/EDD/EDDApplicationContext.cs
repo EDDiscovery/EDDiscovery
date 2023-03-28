@@ -220,6 +220,16 @@ namespace EDDiscovery
                     return;
                 }
 
+                if ( !SystemsDatabase.Instance.VerifyTablesExist() )
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: System DB is corrupt due to missing tables at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
+                                                         "Database is unusable. Use safe mode to remove it and start again. User settings will be retained",
+                                                         "System DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    SystemsDatabase.Instance.Stop();
+                    SwitchContext(new SafeModeForm(false));
+                    return;
+                }
+
                 EDDOptions.Instance.NoWindowReposition |= launchArg.PositionReset;
                 EDDOptions.Instance.NoTheme |= launchArg.ThemeReset;
                 EDDOptions.Instance.TabsReset |= launchArg.TabsReset;
