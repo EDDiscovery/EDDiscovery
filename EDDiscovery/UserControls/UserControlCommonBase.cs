@@ -190,7 +190,7 @@ namespace EDDiscovery.UserControls
         };
         public class PanelAction                    // perform an action
         {
-            public const string ImportCSV = "ImportCSV";                // data is the filename string
+            public const string ImportCSV = "ImportCSV";                // data is the filename string, to expedition panel
             public const string EditNotePrimary = "editnoteprimary";    // no data
             public string Action { get; set; }
             public object Data { get; set; }
@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             public System.Collections.Generic.Dictionary<EliteDangerousCore.MaterialCommodityMicroResourceType, int> Resources { get; set; }      // push type and amount
         }
 
-        public class TravelHistoryStartStopChanged { }
+        public class TravelHistoryStartStopChanged { }  // push start/stop has been changed
 
         // Request action. Return if postively services by a single panel, or false if panels either don't use it or pass it on
         // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs

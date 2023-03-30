@@ -65,7 +65,23 @@ namespace EDDiscovery.UserControls
             callbacks.IsFloatingWindow = () => IsFloatingWindow;
             callbacks.IsClosed = () => IsClosed;
             callbacks.DGVTransparent = (g, t, c) => DGVTransparent((DataGridView)g, t, c);
-  
+            callbacks.RequestTravelGridPosition = () => 
+            { 
+                return RequestPanelOperation?.Invoke(this, new RequestTravelHistoryPos()) ?? false; 
+            };
+            callbacks.PushStars = (name,list) => 
+            {
+                PushStars.PushType pt = name.EqualsIIC("triwanted") ? PushStars.PushType.TriWanted :
+                                        name.EqualsIIC("trisystems") ? PushStars.PushType.TriSystems :
+                                        PushStars.PushType.Expedition;
+
+                return RequestPanelOperation?.Invoke(this, new PushStars { PushTo = pt, Systems = list }) ?? false; 
+            };
+            callbacks.PushCSVToExpedition = (file) =>
+            {
+                return RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = file }) ?? false;
+            };
+
             var th = ExtendedControls.Theme.Current;
             var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 

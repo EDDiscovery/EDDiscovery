@@ -637,6 +637,8 @@ namespace EDDiscovery
             if (dllresults.Item4.HasChars())   // failed
                 LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), dllresults.Item4));
 
+
+
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
             // Bindings

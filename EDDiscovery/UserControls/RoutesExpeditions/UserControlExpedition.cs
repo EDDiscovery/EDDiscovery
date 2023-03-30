@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
                         string file = action.Data as string;
                         System.Diagnostics.Debug.WriteLine($"Expedition import CSV {file}");
                         string str = FileHelpers.TryReadAllTextFromFile(file);
-                        Import(0, Path.GetFileNameWithoutExtension(file), str, ",", true);
+                        Import(0, Path.GetFileNameWithoutExtension(file), str, ",", true); // will cope with str = null
                     }
                     return true;
                 }
@@ -1147,7 +1147,7 @@ namespace EDDiscovery.UserControls
                         ClearTable();
                         System.Diagnostics.Debug.WriteLine($"Expedition import CSV {fileList[0]}");
                         string str = FileHelpers.TryReadAllTextFromFile(fileList[0]);
-                        Import(0, Path.GetFileNameWithoutExtension(fileList[0]), str, ",", true);
+                        Import(0, Path.GetFileNameWithoutExtension(fileList[0]), str, ",", true);   // will cope with str = null
                     }
                 }
                 else
