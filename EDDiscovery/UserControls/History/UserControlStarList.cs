@@ -433,6 +433,7 @@ namespace EDDiscovery.UserControls
                 bool showsi = displayfilters.Contains("shortinfo");
                 bool showg = displayfilters.Contains("gravity");
                 bool showatmos = displayfilters.Contains("atmos");
+                bool showTemp = displayfilters.Contains("temp");
                 bool showrings = displayfilters.Contains("rings");
                 bool showorganics = displayfilters.Contains("organics");
 
@@ -451,7 +452,7 @@ namespace EDDiscovery.UserControls
                         {
                             string info = sn.SurveyorInfoLine(system, showsignals, showorganics, 
                                                                 showvol, showv, showsi, showg,
-                                                                showatmos && sn.ScanData.IsLandable, showrings,
+                                                                showatmos && sn.ScanData.IsLandable, showTemp, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
                             infostr = infostr.AppendPrePad(info, Environment.NewLine);
                         }
@@ -719,6 +720,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("shortinfo", "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
             displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
             displayfilter.AddStandardOption("atmos", "Show atmospheres".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("temp", "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
             displayfilter.AddStandardOption("rings", "Has Rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
             displayfilter.AddStandardOption("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
             displayfilter.AddStandardOption("codex", "Show codex entries".T(EDTx.UserControlStarList_showcodex), global::EDDiscovery.Icons.Controls.Entries);
