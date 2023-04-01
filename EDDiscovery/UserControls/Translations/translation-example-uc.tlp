@@ -451,6 +451,7 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
 .showAtmosToolStripMenuItem: "Show atmospheres" @
+.showTempToolStripMenuItem: "Show surface temperature" @
 .showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @

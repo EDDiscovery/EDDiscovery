@@ -986,6 +986,7 @@ namespace EDDiscovery
         UserControlSurveyor_showMoreInformationToolStripMenuItem,
         UserControlSurveyor_showGravityToolStripMenuItem,
         UserControlSurveyor_showAtmosToolStripMenuItem,
+        UserControlSurveyor_showTempToolStripMenuItem,
         UserControlSurveyor_showVolcanismToolStripMenuItem,
         UserControlSurveyor_showSignalsToolStripMenuItem,
         UserControlSurveyor_autoHideToolStripMenuItem,
