@@ -218,7 +218,8 @@ namespace EDDiscovery.UserControls
             }
 
             //System.Diagnostics.Debug.WriteLine($"Surveyor Visibility uimode {uimode} uistate {uistate} Visibility {showit} route {currentRoute!=null}");
-            extPictureBoxScanSummary.Visible = extPictureBoxScroll.Visible = showit;
+            extPictureBoxScroll.Visible = showit;
+            extPictureBoxScanSummary.Visible = IsSet(CtrlList.showscansum) && showit;
             extPictureBoxTitle.Visible = IsSet(CtrlList.showsysinfo) && showit;
             extPictureBoxRoute.Visible = currentRoute != null && showit;
             extPictureBoxTarget.Visible = showit && IsSet(RouteControl.showtarget) && TargetClass.IsTargetSet();
@@ -895,7 +896,7 @@ namespace EDDiscovery.UserControls
             // 18
             allstars, beltclusters,
             // 20
-            showValues, moreinfo, showGravity, atmos, temp, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo, showstarclass, showdividers,
+            showValues, moreinfo, showGravity, atmos, temp, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo, showscansum, showstarclass, showdividers,
             // 31
             alignleft, aligncenter, alignright
         };
@@ -996,6 +997,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID(EDTx.UserControlSurveyor_dontHideInFSSModeToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID(EDTx.UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show system info always".TxID(EDTx.UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.showscansum.ToString(), "Show scan summary always".TxID(EDTx.UserControlSurveyor_showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showstarclass.ToString(), "Show star class in system info".TxID(EDTx.UserControlSurveyor_showstarclassToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.showdividers.ToString(), "Show dividers".TxID(EDTx.UserControlSurveyor_showDividersToolStripMenuItem));
 
