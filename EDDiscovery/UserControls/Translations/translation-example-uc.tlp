@@ -457,6 +457,7 @@ SECTION UserControlSurveyor
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
+.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" @
 .showstarclassToolStripMenuItem: "Show star class in system info" @
 .showDividersToolStripMenuItem: "Show dividers" @
 

@@ -421,6 +421,7 @@ SECTION UserControlSurveyor
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" => "Im FSS-Modus nicht verbergen"
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Verbirg bereits kartographierte Körper"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" => "Systeminformation immer anzeigen"
+.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" => "Scanzusammenfassung immer anzeigen"
 .showstarclassToolStripMenuItem: "Show star class in system info" => "Zeige Sternenklasse in Systeminformation"
 .showDividersToolStripMenuItem: "Show dividers" => "Zeige Unterteiler"
 .extButtonPlanets.ToolTip: "Planet Filter" => "Planetenfilter"
