@@ -204,8 +204,9 @@ namespace EDDiscovery.UserControls
                                     sn.ScanData.DisplayString(0, historicmcl, curmcl);
                     }
                 }
-                // must have scan data and a name to be good, and either not edsm body or edsm check
-                else if (sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))     
+
+                // must have scan data and either not edsm body or edsm check
+                else if (sn.ScanData != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
                 { 
                     var overlays = new StarColumnOverlays();
 
@@ -363,12 +364,27 @@ namespace EDDiscovery.UserControls
                             overlays.mapped = true;
                         }
 
-                        if ( sn.Organics != null )
+                        if (sn.SurfaceFeatures != null)
+                        {
+                            string ol = StarScan.SurfaceFeatureList(sn.SurfaceFeatures);
+                            bdDetails.Append(Environment.NewLine).Append(ol);
+                        }
+                        if (sn.Organics != null)
                         {
                             string ol = JournalScanOrganic.OrganicList(sn.Organics);
                             bdDetails.Append(Environment.NewLine).Append(ol);
                         }
-                            
+                        if (sn.Signals != null)
+                        {
+                            string ol = JournalSAASignalsFound.SignalList(sn.Signals);
+                            bdDetails.Append(Environment.NewLine).Append(ol);
+                        }
+                        if (sn.Genuses != null)
+                        {
+                            string ol = JournalSAASignalsFound.GenusList(sn.Genuses);
+                            bdDetails.Append(Environment.NewLine).Append(ol);
+                        }
+
                         // materials                        
                         if (sn.ScanData.HasMaterials )
                         {
@@ -445,6 +461,34 @@ namespace EDDiscovery.UserControls
                                 sn.ScanData.DisplayString(0, historicmcl, curmcl);
 
                     sn.ScanData.Jumponium(jumponiums);      // add to jumponiums hash any seen
+                }
+                else if ( !sn.EDSMCreatedNode )             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
+                {   
+                    if (sn.SurfaceFeatures != null)
+                    {
+                        string ol = StarScan.SurfaceFeatureList(sn.SurfaceFeatures);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+                    if (sn.Organics != null)
+                    {
+                        string ol = JournalScanOrganic.OrganicList(sn.Organics);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+                    if (sn.Signals != null)
+                    {
+                        string ol = JournalSAASignalsFound.SignalList(sn.Signals);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+                    if (sn.Genuses != null)
+                    {
+                        string ol = JournalSAASignalsFound.GenusList(sn.Genuses);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+
+                    dataGridViewScangrid.Rows.Add(new object[] { null, sn.FullName, "?", "?" , bdDetails });
+                    
+                    var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+                    cur.Tag = JournalScan.GetPlanetImageNotScanned();
                 }
             }
 
