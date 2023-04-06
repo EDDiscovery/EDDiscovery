@@ -162,27 +162,31 @@ namespace EDDiscovery.UserControls
 
             if (last_suits >= 0)
             {
-                var suitlist = DiscoveryForm.History.SuitList.Suits(last_suits);
-                //foreach (var su in suitlist) System.Diagnostics.Debug.WriteLine($"Suit gen {last_suits}: {su.Value.ID} {su.Value.FDName}");
+                // convert key/value to a value list
+                var suitlist = DiscoveryForm.History.SuitList.Suits(last_suits).Select(x=>x.Value).ToList();
+                // sort by friendly name so its added to the grid in that order
+                suitlist.Sort(delegate (Suit left, Suit right) { return left.FriendlyName.CompareTo(right.FriendlyName); });
 
                 var cursuit = DiscoveryForm.History.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
                 var curloadout = DiscoveryForm.History.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
 
                 foreach (var s in suitlist)
                 {
-                    string stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s.Value.EventTime).ToString();
-                    string sname = s.Value.FriendlyName;// + ":"+ (s.Value.ID % 1000000).ToStringInvariant();
-                    string sprice = s.Value.Price.ToString("N0");
-                    string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
+                    string stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s.EventTime).ToString();
+                    string sname = s.FriendlyName;// + ":"+ (s.ID % 1000000).ToStringInvariant();
+                    string sprice = s.Price.ToString("N0");
+                    string smods = s.SuitMods != null ? string.Join(", ", s.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
 
-                    var loadouts = DiscoveryForm.History.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.Value.ID);
+                    var loadouts = DiscoveryForm.History.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.ID);
 
                     if (loadouts == null || loadouts.Count == 0)
                     {
-                        object[] rowobj = new object[] { stime, sname + (cursuit == s.Value.ID ? "*" : ""), smods, sprice };
+                        object[] rowobj = new object[] { stime, sname + (cursuit == s.ID ? "*" : ""), smods, sprice };
                         dataGridViewSuits.Rows.Add(rowobj);
+
                         DataGridViewRow r = dataGridViewSuits.Rows[dataGridViewSuits.RowCount - 1];
-                        r.Tag = s.Value;
+                        r.Tag = s;     
+                        r.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
                     }
                     else
                     {
@@ -195,7 +199,7 @@ namespace EDDiscovery.UserControls
                             var rw = dataGridViewSuits.RowTemplate.Clone() as DataGridViewRow;
                             rw.CreateCells(dataGridViewSuits,
                                                 stime,      //0
-                                                (cursuit == s.Value.ID && curloadout == l.Value.ID ? "*** " : "") + sname,
+                                                (cursuit == s.ID && curloadout == l.Value.ID ? "*** " : "") + sname,
                                                 smods,
                                                 sprice,
                                                 l.Value.Name + "(" + ((l.Value.ID % 10000).ToString()) + ")",
@@ -204,16 +208,16 @@ namespace EDDiscovery.UserControls
                                                 l.Value.GetModuleDescription("secondaryweapon")
                                                 );
 
-                            rw.Cells[1].ToolTipText = "ID:" + s.Value.ID.ToStringInvariant();
-                            rw.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
+
+                            System.Diagnostics.Debug.WriteLine($"Suit ${sname} row {rw.Cells[1].Tag}");
                             if (i > 0)
                                 rw.Cells[1].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+                            rw.Tag = s;
+                            rw.Cells[1].ToolTipText = "ID:" + s.ID.ToStringInvariant();
+                            rw.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
+
                             dataGridViewSuits.Rows.Add(rw);
-
-                            DataGridViewRow r = dataGridViewSuits.Rows[dataGridViewSuits.RowCount - 1];
-                            r.Tag = s.Value;
-
                             i++;
                         }
                     }
