@@ -214,9 +214,7 @@ namespace EDDiscovery
         CSV_Helpers_OpenFailed, // Failed to open<spc>
         CSV_Helpers_WriteFailed, // Failed to write to<spc>
 
-        UserControlCompass_labelBookmark, // Control 'System Bookmarks'
         UserControlCompass_labelTargetLat, // Control 'Target'
-        UserControlCompass_checkBoxHideTransparent, // Control 'Hide In Transparent'
 
         ImportExportForm, // Control 'Export'
         ImportExportForm_buttonExport, // Control 'Export'

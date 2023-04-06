@@ -138,8 +138,9 @@ namespace EDDiscovery
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
-            journalmonitor.OnNewJournalEntry += NewJournalEntryFromScanner;
+            journalmonitor.OnNewFilteredJournalEntry += NewJournalEntryFromScanner;
             journalmonitor.OnNewUIEvent += NewUIEventFromScanner;
+            journalmonitor.OnNewRawJournalEntry += NewRawJournalEntryFromScanner;
 
             FrontierCAPI = new CAPI.CompanionAPI(EDDOptions.Instance.CAPIDirectory(), CAPI.CapiClientIdentity.id, EDDApplicationContext.UserAgent, "eddiscovery");
             DDEServer = new BaseUtils.DDE.DDEServer();          // will be started in shown

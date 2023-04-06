@@ -78,8 +78,6 @@ SECTION UserControlContainerGrid
 
 SECTION UserControlCompass
 
-.labelBookmark: "System Bookmarks" @
-.checkBoxHideTransparent: "Hide In Transparent" @
 .labelTargetLat: "Target" @
 
 SECTION UserControlWebBrowser

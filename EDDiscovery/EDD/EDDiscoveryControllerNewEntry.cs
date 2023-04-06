@@ -28,11 +28,21 @@ namespace EDDiscovery
         private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
         private System.Threading.Timer journalqueuedelaytimer;
 
-        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
-        // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
-        public void NewJournalEntryFromScanner(JournalEntry je, StatusReader sr)        
+        // on UI thread. hooked into journal monitor and receives all new entries with no DB filtering
+        public void NewRawJournalEntryFromScanner(JournalEntry je, StatusReader sr)
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            //System.Diagnostics.Debug.WriteLine($"Raw JE {je.GetJson().ToString()}");
+        }
+
+        // on UI thread. hooked into journal monitor and receives new entries post DB filtering..
+        // Also call if you programatically add an entry
+        // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
+        public void NewJournalEntryFromScanner(JournalEntry je, StatusReader sr)
+        {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            //System.Diagnostics.Debug.WriteLine($"Filterd JE {je.GetJson().ToString()}");
 
             if ( EDCommander.NumberOfCommanders != commandercountafterhistoryread)      // if this changes, a commander has been added
             {

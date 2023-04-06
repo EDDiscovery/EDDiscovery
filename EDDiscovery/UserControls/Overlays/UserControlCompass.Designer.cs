@@ -45,51 +45,26 @@ namespace EDDiscovery.UserControls
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlCompass));
             this.labelTargetLat = new ExtendedControls.ExtLabel();
-            this.checkBoxHideTransparent = new ExtendedControls.ExtCheckBox();
             this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
             this.numberBoxTargetLongitude = new ExtendedControls.NumberBoxDouble();
             this.comboBoxBookmarks = new ExtendedControls.ExtComboBox();
-            this.labelBookmark = new ExtendedControls.ExtLabel();
             this.buttonNewBookmark = new ExtendedControls.ExtButton();
             this.compassControl = new ExtendedControls.CompassControl();
             this.flowLayoutPanelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanelBookmarks = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonFont = new ExtendedControls.ExtButton();
             this.flowLayoutPanelTop.SuspendLayout();
-            this.flowLayoutPanelBookmarks.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTargetLat
             // 
             this.labelTargetLat.AutoSize = true;
-            this.labelTargetLat.Location = new System.Drawing.Point(3, 13);
-            this.labelTargetLat.Margin = new System.Windows.Forms.Padding(3, 13, 3, 0);
+            this.labelTargetLat.Location = new System.Drawing.Point(3, 6);
+            this.labelTargetLat.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.labelTargetLat.Name = "labelTargetLat";
             this.labelTargetLat.Size = new System.Drawing.Size(38, 13);
             this.labelTargetLat.TabIndex = 4;
             this.labelTargetLat.Text = "Target";
             this.labelTargetLat.TextBackColor = System.Drawing.Color.Transparent;
-            // 
-            // checkBoxHideTransparent
-            // 
-            this.checkBoxHideTransparent.AutoSize = true;
-            this.checkBoxHideTransparent.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxHideTransparent.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxHideTransparent.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxHideTransparent.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxHideTransparent.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxHideTransparent.ImageIndeterminate = null;
-            this.checkBoxHideTransparent.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxHideTransparent.ImageUnchecked = null;
-            this.checkBoxHideTransparent.Location = new System.Drawing.Point(205, 10);
-            this.checkBoxHideTransparent.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
-            this.checkBoxHideTransparent.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxHideTransparent.Name = "checkBoxHideTransparent";
-            this.checkBoxHideTransparent.Size = new System.Drawing.Size(120, 17);
-            this.checkBoxHideTransparent.TabIndex = 8;
-            this.checkBoxHideTransparent.Text = "Hide In Transparent";
-            this.checkBoxHideTransparent.TickBoxReductionRatio = 0.75F;
-            this.checkBoxHideTransparent.UseVisualStyleBackColor = true;
-            this.checkBoxHideTransparent.CheckedChanged += new System.EventHandler(this.checkBoxHideTransparent_CheckedChanged);
             // 
             // numberBoxTargetLatitude
             // 
@@ -107,8 +82,8 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLatitude.EndButtonVisible = false;
             this.numberBoxTargetLatitude.Format = "N4";
             this.numberBoxTargetLatitude.InErrorCondition = false;
-            this.numberBoxTargetLatitude.Location = new System.Drawing.Point(47, 10);
-            this.numberBoxTargetLatitude.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
+            this.numberBoxTargetLatitude.Location = new System.Drawing.Point(47, 6);
+            this.numberBoxTargetLatitude.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.numberBoxTargetLatitude.Maximum = 90D;
             this.numberBoxTargetLatitude.Minimum = -90D;
             this.numberBoxTargetLatitude.Multiline = false;
@@ -140,8 +115,8 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLongitude.EndButtonVisible = false;
             this.numberBoxTargetLongitude.Format = "N4";
             this.numberBoxTargetLongitude.InErrorCondition = false;
-            this.numberBoxTargetLongitude.Location = new System.Drawing.Point(107, 10);
-            this.numberBoxTargetLongitude.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
+            this.numberBoxTargetLongitude.Location = new System.Drawing.Point(107, 6);
+            this.numberBoxTargetLongitude.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.numberBoxTargetLongitude.Maximum = 180D;
             this.numberBoxTargetLongitude.Minimum = -180D;
             this.numberBoxTargetLongitude.Multiline = false;
@@ -166,7 +141,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxBookmarks.DisplayMember = "";
             this.comboBoxBookmarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxBookmarks.Location = new System.Drawing.Point(106, 3);
+            this.comboBoxBookmarks.Location = new System.Drawing.Point(167, 6);
+            this.comboBoxBookmarks.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.comboBoxBookmarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxBookmarks.Name = "comboBoxBookmarks";
             this.comboBoxBookmarks.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -180,23 +156,13 @@ namespace EDDiscovery.UserControls
             this.comboBoxBookmarks.ValueMember = "";
             this.comboBoxBookmarks.SelectedIndexChanged += new System.EventHandler(this.comboBoxBookmarks_SelectedIndexChanged);
             // 
-            // labelBookmark
-            // 
-            this.labelBookmark.AutoSize = true;
-            this.labelBookmark.Location = new System.Drawing.Point(3, 3);
-            this.labelBookmark.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.labelBookmark.Name = "labelBookmark";
-            this.labelBookmark.Size = new System.Drawing.Size(97, 13);
-            this.labelBookmark.TabIndex = 12;
-            this.labelBookmark.Text = "System Bookmarks";
-            this.labelBookmark.TextBackColor = System.Drawing.Color.Transparent;
-            // 
             // buttonNewBookmark
             // 
             this.buttonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
-            this.buttonNewBookmark.Location = new System.Drawing.Point(167, 3);
+            this.buttonNewBookmark.Location = new System.Drawing.Point(420, 4);
+            this.buttonNewBookmark.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
             this.buttonNewBookmark.Name = "buttonNewBookmark";
-            this.buttonNewBookmark.Size = new System.Drawing.Size(32, 32);
+            this.buttonNewBookmark.Size = new System.Drawing.Size(28, 28);
             this.buttonNewBookmark.TabIndex = 13;
             this.buttonNewBookmark.UseVisualStyleBackColor = true;
             this.buttonNewBookmark.Click += new System.EventHandler(this.buttonNewBookmark_Click);
@@ -210,24 +176,22 @@ namespace EDDiscovery.UserControls
             this.compassControl.BugColor = System.Drawing.Color.White;
             this.compassControl.BugSizePixels = 10;
             this.compassControl.CentreTickColor = System.Drawing.Color.Green;
-            this.compassControl.CentreTickHeightPercentage = 60;
-            this.compassControl.CompassHeightPercentage = 60;
             this.compassControl.DisableMessage = "";
             this.compassControl.Distance = double.NaN;
             this.compassControl.DistanceFormat = "{0:0.##}";
-            this.compassControl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.compassControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.compassControl.GlideSlope = double.NaN;
-            this.compassControl.Location = new System.Drawing.Point(0, 65);
+            this.compassControl.Location = new System.Drawing.Point(0, 35);
             this.compassControl.Name = "compassControl";
             this.compassControl.ShowNegativeDegrees = false;
-            this.compassControl.Size = new System.Drawing.Size(670, 80);
+            this.compassControl.Size = new System.Drawing.Size(915, 285);
             this.compassControl.SlewRateDegreesSec = 10;
             this.compassControl.SlewToBearing = 0D;
             this.compassControl.StencilColor = System.Drawing.Color.Red;
             this.compassControl.StencilMajorTicksAt = 20;
             this.compassControl.StencilMinorTicksAt = 5;
             this.compassControl.TabIndex = 14;
-            this.compassControl.TickHeightPercentage = 60;
+            this.compassControl.TextBandRatioToFont = 1.5D;
             this.compassControl.WidthDegrees = 180;
             // 
             // flowLayoutPanelTop
@@ -237,41 +201,39 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.Controls.Add(this.labelTargetLat);
             this.flowLayoutPanelTop.Controls.Add(this.numberBoxTargetLatitude);
             this.flowLayoutPanelTop.Controls.Add(this.numberBoxTargetLongitude);
+            this.flowLayoutPanelTop.Controls.Add(this.comboBoxBookmarks);
             this.flowLayoutPanelTop.Controls.Add(this.buttonNewBookmark);
-            this.flowLayoutPanelTop.Controls.Add(this.checkBoxHideTransparent);
+            this.flowLayoutPanelTop.Controls.Add(this.extButtonFont);
             this.flowLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelTop.Name = "flowLayoutPanelTop";
-            this.flowLayoutPanelTop.Size = new System.Drawing.Size(670, 38);
+            this.flowLayoutPanelTop.Size = new System.Drawing.Size(915, 35);
             this.flowLayoutPanelTop.TabIndex = 15;
             this.flowLayoutPanelTop.WrapContents = false;
             // 
-            // flowLayoutPanelBookmarks
+            // extButtonFont
             // 
-            this.flowLayoutPanelBookmarks.AutoSize = true;
-            this.flowLayoutPanelBookmarks.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanelBookmarks.Controls.Add(this.labelBookmark);
-            this.flowLayoutPanelBookmarks.Controls.Add(this.comboBoxBookmarks);
-            this.flowLayoutPanelBookmarks.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanelBookmarks.Location = new System.Drawing.Point(0, 38);
-            this.flowLayoutPanelBookmarks.Name = "flowLayoutPanelBookmarks";
-            this.flowLayoutPanelBookmarks.Size = new System.Drawing.Size(670, 27);
-            this.flowLayoutPanelBookmarks.TabIndex = 16;
-            this.flowLayoutPanelBookmarks.WrapContents = false;
+            this.extButtonFont.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonFont.Image = global::EDDiscovery.Icons.Controls.Font;
+            this.extButtonFont.Location = new System.Drawing.Point(459, 1);
+            this.extButtonFont.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonFont.Name = "extButtonFont";
+            this.extButtonFont.Size = new System.Drawing.Size(28, 28);
+            this.extButtonFont.TabIndex = 30;
+            this.extButtonFont.UseVisualStyleBackColor = false;
+            this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
             // 
             // UserControlCompass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.compassControl);
-            this.Controls.Add(this.flowLayoutPanelBookmarks);
             this.Controls.Add(this.flowLayoutPanelTop);
             this.Name = "UserControlCompass";
-            this.Size = new System.Drawing.Size(670, 448);
+            this.Size = new System.Drawing.Size(915, 320);
             this.flowLayoutPanelTop.ResumeLayout(false);
             this.flowLayoutPanelTop.PerformLayout();
-            this.flowLayoutPanelBookmarks.ResumeLayout(false);
-            this.flowLayoutPanelBookmarks.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,14 +241,12 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private ExtendedControls.ExtLabel labelTargetLat;
-        private ExtendedControls.ExtCheckBox checkBoxHideTransparent;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLatitude;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLongitude;
         private ExtendedControls.ExtComboBox comboBoxBookmarks;
-        private ExtendedControls.ExtLabel labelBookmark;
         private ExtendedControls.ExtButton buttonNewBookmark;
         private ExtendedControls.CompassControl compassControl;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelTop;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelBookmarks;
+        private ExtendedControls.ExtButton extButtonFont;
     }
 }

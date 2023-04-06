@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,7 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+
  */
 using EDDiscovery.Forms;
 using EliteDangerousCore;
@@ -29,24 +28,24 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCompass : UserControlCommonBase
     {
-        string dbLatSave = "LatTarget";
-        string dbLongSave = "LongTarget";
-        string dbHideSave = "AutoHide";
+        private string dbLatSave = "LatTarget";
+        private string dbLongSave = "LongTarget";
+        private string dbFont = "Font";
 
-        double? latitude = null;
-        double? longitude = null;
-        double? heading = null;
-        double? altitude = null;
-        double? bodyRadius = null;
-        string lastradiusbody = null;
-        bool autoHideTargetCoords = false;
-        HistoryEntry last_he;
-        BookmarkClass currentBookmark;
-        bool externallyForcedBookmark = false;
-        PlanetMarks.Location externalLocation;
-        string externalLocationName;
-        EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        private double? latitude = null;
+        private double? longitude = null;
+        private double? heading = null;
+        private double? altitude = null;
+        private double? bodyRadius = null;
+        private string lastradiusbody = null;
 
+        private HistoryEntry last_he;
+        private BookmarkClass currentBookmark;
+        private bool externallyForcedBookmark = false;
+        private PlanetMarks.Location externalLocation;
+        private string externalLocationName;
+        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        private Font displayfont;
         #region Init
 
         public UserControlCompass()
@@ -62,25 +61,28 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             numberBoxTargetLatitude.ValueNoChange = GetSetting(dbLatSave, 0.0);     // note need to explicity state its double
             numberBoxTargetLongitude.ValueNoChange = GetSetting(dbLongSave, 0.0);
-            autoHideTargetCoords = GetSetting(dbHideSave, false);
-            checkBoxHideTransparent.Checked = autoHideTargetCoords;
             comboBoxBookmarks.Text = "";
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
             compassControl.SlewRateDegreesSec = 40;
             compassControl.AutoSetStencilTicks = true;
+            compassControl.TextBandRatioToFont = 1;
             buttonNewBookmark.Enabled = false;
-
-            checkBoxHideTransparent.Visible = IsFloatingWindow;
-
-            var enumlist = new Enum[] { EDTx.UserControlCompass_labelBookmark, EDTx.UserControlCompass_labelTargetLat, EDTx.UserControlCompass_checkBoxHideTransparent };
+            var enumlist = new Enum[] { EDTx.UserControlCompass_labelTargetLat };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+        }
+
+        public override void LoadLayout()
+        {
+            base.LoadLayout();
+            displayfont = FontHelpers.GetFont(GetSetting(dbFont, ""), null);        // null if not set, keep selection in displayfont
+            if (displayfont != null)
+                compassControl.Font = displayfont;
         }
 
         public override void Closing()
         {
             PutSetting(dbLatSave, numberBoxTargetLatitude.Value);
             PutSetting(dbLongSave, numberBoxTargetLongitude.Value);
-            PutSetting(dbHideSave, autoHideTargetCoords);
             DiscoveryForm.OnNewEntry -= OnNewEntry;
             DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -94,10 +96,7 @@ namespace EDDiscovery.UserControls
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
             numberBoxTargetLatitude.ControlBackground = numberBoxTargetLongitude.ControlBackground = curbackcol;
             labelTargetLat.TextBackColor = curbackcol;
-            labelBookmark.TextBackColor = curbackcol;
             flowLayoutPanelTop.BackColor = curbackcol;
-            flowLayoutPanelBookmarks.BackColor = curbackcol;
-            checkBoxHideTransparent.BackColor = curbackcol;
             comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = on;
             comboBoxBookmarks.BackColor = curbackcol;
             buttonNewBookmark.BackColor = curbackcol;
@@ -109,14 +108,13 @@ namespace EDDiscovery.UserControls
             compassControl.CentreTickColor = fore.Multiply(1.2F);
             compassControl.BugColor = fore.Multiply(0.8F);
             compassControl.BackColor = on ? Color.Transparent : BackColor;
-            compassControl.Font = ExtendedControls.Theme.Current.GetScaledFont(0.8f);
+            compassControl.Font = ExtendedControls.Theme.Current.GetScaledFont(1f);
 
-            if (autoHideTargetCoords)
-            {
-                flowLayoutPanelBookmarks.Visible = flowLayoutPanelTop.Visible = !on;
-            }
+            flowLayoutPanelTop.Visible = !on;
 
             SetCompassVisibility(on);
+
+            compassControl.Font = displayfont ?? this.Font;     // due to themeing, set control font again
         }
 
         private void SetCompassVisibility(bool transparent)
@@ -293,6 +291,7 @@ namespace EDDiscovery.UserControls
                     compassControl.Set(heading.HasValue ? heading.Value : double.NaN,
                                     targetBearing.HasValue ? targetBearing.Value : double.NaN,
                                     targetDistance.HasValue ? targetDistance.Value : double.NaN, true);
+                   // compassControl.Set(120, 180, 20.2, true);
                 }
                 catch { }       // unlikely but Status.JSON could send duff values, trap out the exception on bad values
             }
@@ -381,13 +380,7 @@ namespace EDDiscovery.UserControls
                 if (heading.HasValue)
                 {
                     // orbital flight or landed, just do this body
-                    labelBookmark.Text = "Planet Bookmarks";
                     planetMarks = planetMarks?.Where(p => p.Name == last_he.WhereAmI)?.ToList();
-                }
-                else
-                {
-                    // add whole system
-                    labelBookmark.Text = "System Bookmarks";
                 }
 
                 if (planetMarks != null)
@@ -420,12 +413,6 @@ namespace EDDiscovery.UserControls
 
 
         #endregion
-
-        private void checkBoxHideTransparent_CheckedChanged(object sender, EventArgs e)
-        {
-            autoHideTargetCoords = ((ExtCheckBox)sender).Checked;
-           // SetTransparency(IsTransparent, BackColor);
-        }
 
         private void comboBoxBookmarks_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -537,6 +524,16 @@ namespace EDDiscovery.UserControls
         private void numberBoxTargetLongitude_ValueChanged(object sender, EventArgs e)
         {
             DisplayCompass();
+        }
+
+        private void extButtonFont_Click(object sender, EventArgs e)
+        {
+            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
+            string setting = FontHelpers.GetFontSettingString(f);
+            //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
+            PutSetting(dbFont, setting);
+            displayfont = f;
+            compassControl.Font = displayfont ?? this.Font;     // set control font
         }
     }
 }
