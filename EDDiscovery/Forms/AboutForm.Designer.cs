@@ -58,8 +58,6 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHub = new System.Windows.Forms.LinkLabel();
             this.linkLabelFDForum = new System.Windows.Forms.LinkLabel();
             this.linkLabelEliteDangerous = new System.Windows.Forms.LinkLabel();
-            this.linkLabelEDSM = new System.Windows.Forms.LinkLabel();
-            this.linkLabelEDDB = new System.Windows.Forms.LinkLabel();
             this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.labelDevelopers = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -162,8 +160,6 @@ namespace EDDiscovery.Forms
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelGitHub);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelFDForum);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelEliteDangerous);
-            this.flowLayoutPanelLabels.Controls.Add(this.linkLabelEDSM);
-            this.flowLayoutPanelLabels.Controls.Add(this.linkLabelEDDB);
             this.flowLayoutPanelLabels.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelLabels.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelLabels.Location = new System.Drawing.Point(0, 0);
@@ -285,36 +281,6 @@ namespace EDDiscovery.Forms
             this.linkLabelEliteDangerous.Text = "Elite Dangerous";
             this.linkLabelEliteDangerous.Click += new System.EventHandler(this.link_Click);
             // 
-            // linkLabelEDSM
-            // 
-            this.linkLabelEDSM.AutoSize = true;
-            this.linkLabelEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelEDSM.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.linkLabelEDSM.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelEDSM.Location = new System.Drawing.Point(3, 165);
-            this.linkLabelEDSM.Margin = new System.Windows.Forms.Padding(3);
-            this.linkLabelEDSM.Name = "linkLabelEDSM";
-            this.linkLabelEDSM.Size = new System.Drawing.Size(47, 16);
-            this.linkLabelEDSM.TabIndex = 4;
-            this.linkLabelEDSM.TabStop = true;
-            this.linkLabelEDSM.Text = "EDSM";
-            this.linkLabelEDSM.Click += new System.EventHandler(this.link_Click);
-            // 
-            // linkLabelEDDB
-            // 
-            this.linkLabelEDDB.AutoSize = true;
-            this.linkLabelEDDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelEDDB.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.linkLabelEDDB.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelEDDB.Location = new System.Drawing.Point(3, 187);
-            this.linkLabelEDDB.Margin = new System.Windows.Forms.Padding(3);
-            this.linkLabelEDDB.Name = "linkLabelEDDB";
-            this.linkLabelEDDB.Size = new System.Drawing.Size(46, 16);
-            this.linkLabelEDDB.TabIndex = 3;
-            this.linkLabelEDDB.TabStop = true;
-            this.linkLabelEDDB.Text = "EDDB";
-            this.linkLabelEDDB.Click += new System.EventHandler(this.link_Click);
-            // 
             // labelNoAffiliation
             // 
             this.labelNoAffiliation.AutoSize = true;
@@ -324,7 +290,7 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation.Name = "labelNoAffiliation";
             this.labelNoAffiliation.Size = new System.Drawing.Size(210, 64);
             this.labelNoAffiliation.TabIndex = 16;
-            this.labelNoAffiliation.Text = "(C) 2015-2022 EDDiscovery Team\r\n\r\nEDDiscovery is not affiliated with \r\nFrontier D" +
+            this.labelNoAffiliation.Text = "(C) 2015-2023 EDDiscovery Team\r\n\r\nEDDiscovery is not affiliated with \r\nFrontier D" +
     "evelopments plc.\r\n";
             this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -556,8 +522,6 @@ namespace EDDiscovery.Forms
         internal System.Windows.Forms.Label labelLinks;
         private System.Windows.Forms.LinkLabel linkLabelEliteDangerous;
         private System.Windows.Forms.LinkLabel linkLabelDeveloperChat;
-        private System.Windows.Forms.LinkLabel linkLabelEDDB;
-        private System.Windows.Forms.LinkLabel linkLabelEDSM;
         private System.Windows.Forms.LinkLabel linkLabelFDForum;
         private System.Windows.Forms.LinkLabel linkLabelGitHub;
         private System.Windows.Forms.LinkLabel linkLabelHelp;

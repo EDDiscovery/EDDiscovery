@@ -32,8 +32,6 @@ namespace EDDiscovery.Forms
             labelVersion.Text = EDDApplicationContext.UserAgent;
 
             SetTipAndTag(linkLabelDeveloperChat, Resources.URLProjectDiscord);
-            SetTipAndTag(linkLabelEDDB, Resources.URLeddb);
-            SetTipAndTag(linkLabelEDSM, Resources.URLedsm);
             SetTipAndTag(linkLabelEliteDangerous, Resources.URLEDHomepage);
             SetTipAndTag(linkLabelFDForum, Resources.URLProjectEDForumPost);
             SetTipAndTag(linkLabelGitHub, Resources.URLProjectGithub);

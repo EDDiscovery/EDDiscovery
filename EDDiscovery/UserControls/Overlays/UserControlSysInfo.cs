@@ -1033,14 +1033,32 @@ namespace EDDiscovery.UserControls
                                     if (!selEDSMonNextLine && (Selection & (1 << BitSelEDSM)) != 0)
                                     {
                                         extButtonEDSMSystem.Location = new Point(panelFD.Right + hspacing, datapos.Y);
-                                        extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
                                         extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
                                         itembottom = Math.Max(extButtonEDSMSystem.Bottom, itembottom);
+
+                                        extButtonEDDBSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonEDDBSystem.Visible = false;
                                     }
 
+                                    break;
+                                case BitSelEDSM:
+                                    if (selEDSMonNextLine)
+                                    {
+                                        labelOpen.Location = labpos;
+                                        extButtonEDSMSystem.Location = new Point(datapos.X, datapos.Y);
+                                        extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        labelOpen.Visible = true;
+                                        itembottom = extButtonEDSMSystem.Bottom;
+
+                                        extButtonEDDBSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonEDDBSystem.Visible = false;
+                                    }
                                     break;
 
                                 case BitSelNextDestination:
@@ -1055,30 +1073,17 @@ namespace EDDiscovery.UserControls
                                     break;
 
 
-                                case BitSelEDSM:
-                                    if (selEDSMonNextLine)
-                                    {
-                                        labelOpen.Location = labpos;
-                                        extButtonEDSMSystem.Location = new Point(datapos.X, datapos.Y);
-                                        extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
-                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
-                                        labelOpen.Visible = true;
-                                        itembottom = extButtonEDSMSystem.Bottom;
-                                    }
-                                    break;
-
                                 case BitSelStationButtons:
                                     labelOpenStation.Location = labpos;
-                                    extButtonEDDBStation.Location = new Point(datapos.X, datapos.Y);
-                                    extButtonInaraStation.Location = new Point(extButtonEDDBStation.Right + hspacing, extButtonEDDBStation.Top);
-                                    extButtonSpanshStation.Location = new Point(extButtonInaraStation.Right + hspacing, extButtonEDDBStation.Top);
+                                    extButtonInaraStation.Location = new Point(datapos.X, datapos.Y); 
+                                    extButtonSpanshStation.Location = new Point(extButtonInaraStation.Right + hspacing, extButtonInaraStation.Top);
                                     labelOpenStation.Tag = extButtonEDDBStation.Tag = extButtonInaraStation.Tag = extButtonSpanshStation.Tag = si;
-                                    extButtonEDDBStation.Visible = extButtonInaraStation.Visible = extButtonSpanshStation.Visible = true;
+                                    extButtonInaraStation.Visible = extButtonSpanshStation.Visible = true;
                                     labelOpenStation.Visible = true;
                                     itembottom = extButtonEDDBStation.Bottom;
+
+                                    extButtonEDDBStation.Visible = false;
+                                    extButtonEDDBStation.Location = new Point(extButtonSpanshStation.Right + hspacing, extButtonInaraStation.Top);
                                     break;
 
                                 case BitSelShipyardButtons:

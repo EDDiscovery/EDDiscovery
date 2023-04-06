@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 642);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 620);
             // 
             // toolStripSystem
             // 
@@ -618,6 +618,7 @@ namespace EDDiscovery.UserControls
             // 
             // extScrollBar1
             // 
+            this.extScrollBar1.AlwaysHideScrollBar = false;
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBar1.ArrowColorScaling = 0.5F;
@@ -1067,7 +1068,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonSpanshStation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonSpanshStation.Image = global::EDDiscovery.Icons.Controls.spansh;
-            this.extButtonSpanshStation.Location = new System.Drawing.Point(327, 99);
+            this.extButtonSpanshStation.Location = new System.Drawing.Point(274, 98);
             this.extButtonSpanshStation.Name = "extButtonSpanshStation";
             this.extButtonSpanshStation.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshStation.Size = new System.Drawing.Size(44, 20);
@@ -1082,7 +1083,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonSpanshSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonSpanshSystem.Image = global::EDDiscovery.Icons.Controls.spansh;
-            this.extButtonSpanshSystem.Location = new System.Drawing.Point(365, 38);
+            this.extButtonSpanshSystem.Location = new System.Drawing.Point(318, 38);
             this.extButtonSpanshSystem.Name = "extButtonSpanshSystem";
             this.extButtonSpanshSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshSystem.Size = new System.Drawing.Size(44, 20);
@@ -1125,7 +1126,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonInaraSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonInaraSystem.Image = global::EDDiscovery.Icons.Controls.Inara;
-            this.extButtonInaraSystem.Location = new System.Drawing.Point(320, 38);
+            this.extButtonInaraSystem.Location = new System.Drawing.Point(274, 38);
             this.extButtonInaraSystem.Name = "extButtonInaraSystem";
             this.extButtonInaraSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonInaraSystem.Size = new System.Drawing.Size(44, 20);
@@ -1181,7 +1182,7 @@ namespace EDDiscovery.UserControls
             this.extButtonEDDBStation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonEDDBStation.Cursor = System.Windows.Forms.Cursors.Hand;
             this.extButtonEDDBStation.Image = global::EDDiscovery.Icons.Controls.EDDB;
-            this.extButtonEDDBStation.Location = new System.Drawing.Point(278, 99);
+            this.extButtonEDDBStation.Location = new System.Drawing.Point(380, 98);
             this.extButtonEDDBStation.Name = "extButtonEDDBStation";
             this.extButtonEDDBStation.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonEDDBStation.Size = new System.Drawing.Size(44, 20);
@@ -1196,7 +1197,7 @@ namespace EDDiscovery.UserControls
             this.extButtonEDDBSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonEDDBSystem.Cursor = System.Windows.Forms.Cursors.Hand;
             this.extButtonEDDBSystem.Image = global::EDDiscovery.Icons.Controls.EDDB;
-            this.extButtonEDDBSystem.Location = new System.Drawing.Point(274, 38);
+            this.extButtonEDDBSystem.Location = new System.Drawing.Point(372, 38);
             this.extButtonEDDBSystem.Name = "extButtonEDDBSystem";
             this.extButtonEDDBSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonEDDBSystem.Size = new System.Drawing.Size(44, 20);
