@@ -187,7 +187,7 @@ namespace EDDiscovery
 
         // New UI event. SR will be null if programatically made
 
-        void NewUIEventFromScanner(UIEvent u, StatusReader sr)                  // UI thread new event
+        void NewUIEventFromScanner(UIEvent u, StatusReader _)                  // UI thread new event
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
@@ -200,6 +200,11 @@ namespace EDDiscovery
                 History.ShipInformationList.UIFuel(uifuel);             // update the SI global value
                 if (History.ShipInformationList.CurrentShip != null )   // just to be paranoid
                     History.GetLast?.UpdateShipInformation(History.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
+            }
+
+            if ( u is EliteDangerousCore.UIEvents.UIOverallStatus)
+            {
+                UIOverallStatus = u as EliteDangerousCore.UIEvents.UIOverallStatus;
             }
 
             OnNewUIEvent?.Invoke(u);

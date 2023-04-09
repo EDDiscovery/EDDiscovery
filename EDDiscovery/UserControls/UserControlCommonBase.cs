@@ -202,7 +202,14 @@ namespace EDDiscovery.UserControls
 
         public class TravelHistoryStartStopChanged { }  // push start/stop has been changed
 
-        // Request action. Return if postively services by a single panel, or false if panels either don't use it or pass it on
+        public class SetCompassTarget
+        {
+            public string Name { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+        }
+
+        // Request action. Return if positively services by a single panel, or false if panels either don't use it or pass it on
         // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
 
         public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        

@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -34,7 +32,7 @@ namespace EDDiscovery.Forms
         public PlanetMarks PlanetMarks { get { return planetmarks; } }      // current set..
 
         public Action<PlanetMarks> Changed;     // if a change to data is made
-        public Action<string, string> CompassSeleted; // when compass is clicked
+        public Action<string, string, double, double> CompassSelected; // when compass is clicked
 
         private PlanetMarks planetmarks;
 
@@ -157,9 +155,9 @@ namespace EDDiscovery.Forms
         {
             if (dataGridViewMarks.RightClickRow >= 0)
             {
-                deleteToolStripMenuItem.Enabled = dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow].IsNewRow == false;
-                var check = (DataGridViewCheckBoxCell)dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow].Cells[5];
-                sendToCompassToolStripMenuItem.Enabled = check.Value != null && (bool)(check.Value) == true && !dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow].Cells[1].IsNullOrEmpty();
+                var rw = dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow];
+                deleteToolStripMenuItem.Enabled = rw.IsNewRow == false;
+                sendToCompassToolStripMenuItem.Enabled = CompassSelected != null && ValidRow(rw, out double _1, out double _2) == RowValidity.ValidWithLatLong;
             }
         }
 
@@ -220,11 +218,12 @@ namespace EDDiscovery.Forms
 
         private void sendToCompassToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DataGridViewRow c = dataGridViewMarks.CurrentRow;
-
-            if (c != null && c.Tag != null)
+            if (dataGridViewMarks.RightClickRow >= 0)
             {
-                CompassSeleted?.Invoke(c.Cells[0].Value.ToString(), ((Location)c.Tag).Name);
+                DataGridViewRow rw = dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow];
+                ValidRow(rw, out double lat, out double lon);
+                System.Diagnostics.Debug.WriteLine($"Send to compass {rw.Cells[0].Value} {rw.Cells[1].Value}: {lat} {lon}");
+                CompassSelected(rw.Cells[0].Value as string, rw.Cells[1].Value as string, lat, lon);
             }
         }
 
@@ -241,10 +240,12 @@ namespace EDDiscovery.Forms
         private void dataGridViewMarks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewRow rw = dataGridViewMarks.Rows[e.RowIndex];
-            bool valid = ValidRow(rw);
-            ((DataGridViewCheckBoxCell)rw.Cells[5]).Value = valid;
 
-            if (valid)
+            var valid = ValidRow(rw, out double lat, out double lon);
+
+            ((DataGridViewCheckBoxCell)rw.Cells[5]).Value = valid != RowValidity.Invalid;
+
+            if (valid != RowValidity.Invalid)
             {
                 Edited = true;
                 System.Diagnostics.Debug.WriteLine("Commit " + rw.Cells[0].Value.ToString());
@@ -253,11 +254,8 @@ namespace EDDiscovery.Forms
 
                 newLoc.Name = rw.Cells[1].IsNullOrEmpty() ? "" : rw.Cells[1].Value.ToString();      // planet bookmarks not required to set name
                 newLoc.Comment = rw.Cells[2].IsNullOrEmpty() ? "" : rw.Cells[2].Value.ToString(); // not required to set descr.
-                if (rw.Cells[3].IsNullOrEmpty() || !double.TryParse(rw.Cells[3].Value.ToString(), out newLoc.Latitude))        // planet bookmarks not required to set pos
-                    newLoc.Latitude = 0;
-                if (rw.Cells[4].IsNullOrEmpty() || !double.TryParse(rw.Cells[4].Value.ToString(), out newLoc.Longitude))
-                    newLoc.Longitude = 0;
-
+                newLoc.Latitude = lat;
+                newLoc.Longitude = lon;
                 planetmarks.AddOrUpdateLocation(rw.Cells[0].Value.ToString(), newLoc);
                 rw.Tag = newLoc;
                 rw.Cells[0].ReadOnly = true;    // can't change the planet.  Can change the name as we are directly editing the loc in memory
@@ -277,7 +275,6 @@ namespace EDDiscovery.Forms
                 {
                     if (s == "-")
                     {
-
                     }
                     else
                     {
@@ -294,31 +291,34 @@ namespace EDDiscovery.Forms
             }
         }
 
-        private bool ValidRow(DataGridViewRow dr)
+        // check validity, and return lat lon
+        enum RowValidity { Invalid, ValidNoLatLong, ValidWithLatLong }
+        private RowValidity ValidRow(DataGridViewRow dr, out double lat, out double lon)
         {
+            lat = lon = 0;
+
             if (dr.Cells[0].IsNullOrEmpty() || dr.Cells[1].IsNullOrEmpty())      // must have a planet and a description
-                return false;
+                return RowValidity.Invalid;
 
             if (!dr.Cells[1].IsNullOrEmpty() && dr.Cells[3].IsNullOrEmpty() && dr.Cells[4].IsNullOrEmpty())     // if both empty, its a planet wide bookmark
-                return true;
+                return RowValidity.ValidNoLatLong;
 
             if (dr.Cells[3].IsNullOrEmpty() || dr.Cells[4].IsNullOrEmpty())     // if either empty, invalid
-                return false;
+                return RowValidity.Invalid;
 
-            if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat)) // else both must decode
-                return false;
+            if (!Double.TryParse(dr.Cells[3].Value.ToString(), out lat)) // else both must decode in current culture
+                return RowValidity.Invalid;
 
-            if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon))
-                return false;
+            if (!Double.TryParse(dr.Cells[4].Value.ToString(), out lon))
+                return RowValidity.Invalid;
 
-            return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;      // and be valid
+            return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180 ? RowValidity.ValidWithLatLong : RowValidity.Invalid;    
         }
 
         // if the bookmark contains a planet no longer there, we get this, so ignore the error
         private void dataGridViewMarks_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             e.ThrowException = false;
-
         }
 
         #endregion

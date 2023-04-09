@@ -62,11 +62,10 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             Display();
-            userControlSurfaceBookmarks.Changed += ChangeLocations;
-            userControlSurfaceBookmarks.CompassSeleted += CompassSelected;
+            userControlSurfaceBookmarks.Changed += (p) => SaveBackAnyChanges();
+            userControlSurfaceBookmarks.CompassSelected += (p,d,lat,lon) => RequestPanelOperation(this, new UserControlCommonBase.SetCompassTarget() { Name = p + ": " + d, Latitude = lat, Longitude = lon });
         }
 
-        
         private void Display()
         {
             this.dataGridViewBookMarks.SelectionChanged -= new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
@@ -287,23 +286,7 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.Default;
         }
 
-
-        private void ChangeLocations(PlanetMarks p)     // planetary bits edited.. call back from planetaryform
-        {
-            SaveBackAnyChanges();
-        }
-
-        private void CompassSelected(string planet, string locname)
-        {
-            if (currentedit != null)      // if we have a current cell.. 
-            {
-                BookmarkClass bk = (BookmarkClass)currentedit.Tag;
-
-                UserControlCompass comp = (UserControlCompass)DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
-                comp.SetSurfaceBookmark(bk, planet, locname);
-            }
-        }
-
+   
         #endregion
 
         #region Reaction to bookmarks doing stuff from outside sources

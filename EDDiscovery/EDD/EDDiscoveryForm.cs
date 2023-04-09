@@ -58,6 +58,8 @@ namespace EDDiscovery
         public HistoryList History { get { return Controller.History; } }
 
         public string LogText { get { return Controller.LogText; } }
+
+        public EliteDangerousCore.UIEvents.UIOverallStatus UIOverallStatus { get { return Controller.UIOverallStatus; } }
         #endregion
 
         #region Callbacks from us

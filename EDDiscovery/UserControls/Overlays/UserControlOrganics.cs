@@ -391,9 +391,6 @@ namespace EDDiscovery.UserControls
             CommonCtrl(displayfilter, extButtonAlignment);
         }
 
-
-        #endregion
-
         private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
         {
             displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
@@ -476,6 +473,7 @@ namespace EDDiscovery.UserControls
             updatedprogramatically = false;
         }
 
+        #endregion
 
 
     }

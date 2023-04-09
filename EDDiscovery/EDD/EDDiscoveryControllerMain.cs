@@ -39,6 +39,7 @@ namespace EDDiscovery
 
         public CAPI.CompanionAPI FrontierCAPI;
         public BaseUtils.DDE.DDEServer DDEServer;
+        public EliteDangerousCore.UIEvents.UIOverallStatus UIOverallStatus { get; private set; } = new EliteDangerousCore.UIEvents.UIOverallStatus();
 
         #endregion
 
