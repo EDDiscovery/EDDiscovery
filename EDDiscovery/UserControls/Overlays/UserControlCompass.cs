@@ -185,6 +185,12 @@ namespace EDDiscovery.UserControls
                 current_body = null;        // don't know it now
                 PopulateBookmarkCombo();
             }
+
+            if ( he is IBodyFeature )       // an IBodyfeature would affect the body feature list, used to populate the combo box, so update combo
+            {
+                PopulateBookmarkCombo();
+            }
+
         }
 
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
