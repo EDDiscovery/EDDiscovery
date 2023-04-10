@@ -56,8 +56,21 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Compass";
 
-            numberBoxTargetLatitude.ValueNoChange = GetSetting(dbLatSave, 0.0);     // note need to explicity state its double
-            numberBoxTargetLongitude.ValueNoChange = GetSetting(dbLongSave, 0.0);
+            double lat = GetSetting(dbLatSave, double.NaN);     // note need to explicity state its double
+            double lon = GetSetting(dbLongSave, double.NaN);
+            if (double.IsNaN(lat) || double.IsNaN(lon))
+            {
+                numberBoxTargetLatitude.SetBlank();
+                numberBoxTargetLongitude.SetBlank();
+            }
+            else
+            {
+                numberBoxTargetLatitude.ValueNoChange = lat;
+                numberBoxTargetLongitude.ValueNoChange = lon;
+            }
+            this.numberBoxTargetLatitude.ValueChanged += new System.EventHandler(this.numberBoxTargetLatitude_ValueChanged);
+            this.numberBoxTargetLongitude.ValueChanged += new System.EventHandler(this.numberBoxTargetLongitude_ValueChanged);
+
             comboBoxBookmarks.Text = "";
             compassControl.SlewRateDegreesSec = 40;
             compassControl.AutoSetStencilTicks = true;
@@ -76,6 +89,8 @@ namespace EDDiscovery.UserControls
             // new! april23 pick up last major mode ad uistate.  Need to do this now, before load/initial display, as set transparent uses it
             elitemode = new EliteDangerousCore.UIEvents.UIMode(DiscoveryForm.UIOverallStatus.Mode, DiscoveryForm.UIOverallStatus.MajorMode);
             guistate = DiscoveryForm.UIOverallStatus.Focus;
+
+
         }
 
         public override void LoadLayout()
@@ -93,8 +108,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            PutSetting(dbLatSave, numberBoxTargetLatitude.Value);
-            PutSetting(dbLongSave, numberBoxTargetLongitude.Value);
+            bool validsetting = numberBoxTargetLatitude.IsValid && numberBoxTargetLongitude.IsValid;
+            PutSetting(dbLatSave, validsetting ? numberBoxTargetLatitude.Value : double.NaN);
+            PutSetting(dbLongSave, validsetting ? numberBoxTargetLongitude.Value : double.NaN);
             DiscoveryForm.OnNewEntry -= OnNewEntry;
             DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -156,17 +172,26 @@ namespace EDDiscovery.UserControls
             {
                 position = pos;
 
-                if (position.ValidBodyName && position.BodyName != current_body )       // changed body name (this is the full name)
-                {
-                    current_body = position.BodyName;
-                    System.Diagnostics.Debug.WriteLine($"Compass changed body name {current_body}");
-                    PopulateBookmarkCombo();
-                }
-
                 System.Diagnostics.Debug.WriteLine($"Compass lat {pos.Location.Latitude}, {pos.Location.Longitude} A {pos.Location.Altitude} H {pos.Heading} R {pos.PlanetRadius} BN {pos.BodyName}");
 
                 UpdateCompass();
                 SetCompassVisibility();
+            }
+
+            EliteDangerousCore.UIEvents.UIBodyName bn = uievent as EliteDangerousCore.UIEvents.UIBodyName;
+
+            if ( bn != null )
+            {
+                current_body = bn.BodyName;
+                System.Diagnostics.Debug.WriteLine($"Compass changed body name {current_body}");
+
+                PopulateBookmarkCombo();
+
+                // option to clear to blank target lat on body name disappearing
+                if ( current_body.IsEmpty() && IsSet(CtrlList.clearlatlong))
+                {
+                    extButtonBlank_Click(null, null);
+                }
             }
 
             var gui = uievent as EliteDangerousCore.UIEvents.UIGUIFocus;
@@ -228,8 +253,8 @@ namespace EDDiscovery.UserControls
                             // if in mainship, or srv, or we are on foot planet, we can show
                 else if (elitemode.InFlight ||
                          elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.SRV ||
-                         elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootPlanet ||
-                         elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootInstallationInside
+                         (!IsSet(CtrlList.hidewhenonfoot) && ( elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootPlanet ||
+                                                                elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootInstallationInside ))
                     )
                 {
                 }
@@ -250,15 +275,15 @@ namespace EDDiscovery.UserControls
         // done even if invisible so it will be right when reshown
         private void UpdateCompass()
         {
-            double targetlat = numberBoxTargetLatitude.Value;
-            double targetlong = numberBoxTargetLongitude.Value;
-            
             double bearing = double.NaN;
             double displaydistance = double.NaN;
             double glideslope = double.NaN;
 
-            if (position.Location.ValidPosition)
+            if (position.Location.ValidPosition && numberBoxTargetLatitude.IsValid && numberBoxTargetLongitude.IsValid)
             {
+                double targetlat = numberBoxTargetLatitude.Value;
+                double targetlong = numberBoxTargetLongitude.Value;
+
                 bearing = ObjectExtensionsNumbersBool.CalculateBearing(position.Location.Latitude, position.Location.Longitude, targetlat, targetlong);
 
                 if (position.ValidRadius)
@@ -403,7 +428,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxBookmarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ( !preventbookmarkcomboreentry)
+            if ( !preventbookmarkcomboreentry && comboBoxBookmarks.SelectedIndex>=0)
             {
                 var pos = comboboxpositions[comboBoxBookmarks.SelectedIndex];
                 numberBoxTargetLatitude.Value = pos.Latitude;       // changing these cause the number box change to fire, updating the compass
@@ -473,6 +498,14 @@ namespace EDDiscovery.UserControls
             UpdateCompass();
         }
 
+        private void extButtonBlank_Click(object sender, EventArgs e)
+        {
+            numberBoxTargetLongitude.SetBlank();      
+            numberBoxTargetLatitude.SetBlank();
+            comboBoxBookmarks.SelectedIndex = -1;
+            UpdateCompass();
+        }
+
         private void extButtonFont_Click(object sender, EventArgs e)
         {
             Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
@@ -487,6 +520,8 @@ namespace EDDiscovery.UserControls
         {
             autohide,
             hidewithnolatlong,
+            hidewhenonfoot,
+            clearlatlong,
         };
 
         private bool[] ctrlset; // holds current state of each control above
@@ -507,6 +542,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AddAllNone();
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no Lat/Long".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
+            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear Lat/Long when leaving a body".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 
@@ -528,67 +565,7 @@ namespace EDDiscovery.UserControls
             displayfilter.Show(typeof(CtrlList), ctrlset, under, this.FindForm());
         }
 
-
-        //    last_he = he;
-        //    if (last_he != null)
-        //    {
-        //        if ( bodyRadius == null || lastradiusbody != he.WhereAmI)       // try and get radius, this is cleared on target selection
-        //        { 
-        //            StarScan.SystemNode last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, false);       // find scan if we have one
-        //            JournalScan sd = last_sn?.Find(he.WhereAmI)?.ScanData;  // find body scan data if present, null if not
-        //            bodyRadius = sd?.nRadius;
-        //            if (bodyRadius.HasValue)
-        //            {
-        //                lastradiusbody = he.WhereAmI;
-        //                System.Diagnostics.Debug.WriteLine("Compass Radius Set " + lastradiusbody + " " + bodyRadius.Value);
-        //            }
-        //        }
-
-        //        switch (he.journalEntry.EventTypeID)
-        //        {
-        //            case JournalTypeEnum.Screenshot:
-        //                JournalScreenshot js = he.journalEntry as JournalScreenshot;
-        //                latitude = js.nLatitude;
-        //                longitude = js.nLongitude;
-        //                altitude = js.nAltitude;
-        //                break;
-        //            case JournalTypeEnum.Touchdown:
-        //                JournalTouchdown jt = he.journalEntry as JournalTouchdown;
-        //                if (jt.PlayerControlled.HasValue && jt.PlayerControlled.Value)
-        //                {
-        //                    latitude = jt.Latitude;
-        //                    longitude = jt.Longitude;
-        //                    altitude = 0;
-        //                }
-        //                break;
-        //            case JournalTypeEnum.Location:
-        //                JournalLocation jl = he.journalEntry as JournalLocation;
-        //                latitude = jl.Latitude;
-        //                longitude = jl.Longitude;
-        //                altitude = null;
-        //                break;
-        //            case JournalTypeEnum.Liftoff:
-        //                JournalLiftoff jlo = he.journalEntry as JournalLiftoff;
-        //                if (jlo.PlayerControlled.HasValue && jlo.PlayerControlled.Value)
-        //                {
-        //                    latitude = jlo.Latitude;
-        //                    longitude = jlo.Longitude;
-        //                    altitude = 0;
-        //                }
-        //                break;
-        //            case JournalTypeEnum.LeaveBody:
-        //                latitude = null;
-        //                longitude = null;
-        //                altitude = null;
-        //                break;
-        //            case JournalTypeEnum.FSDJump:       // to allow us to do PopulateBookmark..
-        //            case JournalTypeEnum.CarrierJump:     
-        //                break;
-        //            default:
-        //                return;
-        //        }
-
-
         #endregion
+
     }
 }

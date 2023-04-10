@@ -53,6 +53,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.extButtonFont = new ExtendedControls.ExtButton();
+            this.extButtonBlank = new ExtendedControls.ExtButton();
             this.flowLayoutPanelTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,7 +99,6 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.numberBoxTargetLatitude.Value = 0D;
             this.numberBoxTargetLatitude.WordWrap = true;
-            this.numberBoxTargetLatitude.ValueChanged += new System.EventHandler(this.numberBoxTargetLatitude_ValueChanged);
             // 
             // numberBoxTargetLongitude
             // 
@@ -131,7 +131,6 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.numberBoxTargetLongitude.Value = 0D;
             this.numberBoxTargetLongitude.WordWrap = true;
-            this.numberBoxTargetLongitude.ValueChanged += new System.EventHandler(this.numberBoxTargetLongitude_ValueChanged);
             // 
             // comboBoxBookmarks
             // 
@@ -160,7 +159,7 @@ namespace EDDiscovery.UserControls
             // buttonNewBookmark
             // 
             this.buttonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
-            this.buttonNewBookmark.Location = new System.Drawing.Point(420, 4);
+            this.buttonNewBookmark.Location = new System.Drawing.Point(454, 4);
             this.buttonNewBookmark.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
             this.buttonNewBookmark.Name = "buttonNewBookmark";
             this.buttonNewBookmark.Size = new System.Drawing.Size(28, 28);
@@ -203,6 +202,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.Controls.Add(this.numberBoxTargetLatitude);
             this.flowLayoutPanelTop.Controls.Add(this.numberBoxTargetLongitude);
             this.flowLayoutPanelTop.Controls.Add(this.comboBoxBookmarks);
+            this.flowLayoutPanelTop.Controls.Add(this.extButtonBlank);
             this.flowLayoutPanelTop.Controls.Add(this.buttonNewBookmark);
             this.flowLayoutPanelTop.Controls.Add(this.extButtonShowControl);
             this.flowLayoutPanelTop.Controls.Add(this.extButtonFont);
@@ -218,7 +218,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonShowControl.Location = new System.Drawing.Point(454, 4);
+            this.extButtonShowControl.Location = new System.Drawing.Point(488, 4);
             this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
@@ -231,13 +231,24 @@ namespace EDDiscovery.UserControls
             this.extButtonFont.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonFont.Image = global::EDDiscovery.Icons.Controls.Font;
-            this.extButtonFont.Location = new System.Drawing.Point(488, 4);
+            this.extButtonFont.Location = new System.Drawing.Point(522, 4);
             this.extButtonFont.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
             this.extButtonFont.Name = "extButtonFont";
             this.extButtonFont.Size = new System.Drawing.Size(28, 28);
             this.extButtonFont.TabIndex = 30;
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
+            // 
+            // extButtonBlank
+            // 
+            this.extButtonBlank.Image = global::EDDiscovery.Icons.Controls.Cross;
+            this.extButtonBlank.Location = new System.Drawing.Point(420, 4);
+            this.extButtonBlank.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.extButtonBlank.Name = "extButtonBlank";
+            this.extButtonBlank.Size = new System.Drawing.Size(28, 28);
+            this.extButtonBlank.TabIndex = 13;
+            this.extButtonBlank.UseVisualStyleBackColor = true;
+            this.extButtonBlank.Click += new System.EventHandler(this.extButtonBlank_Click);
             // 
             // UserControlCompass
             // 
@@ -264,5 +275,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelTop;
         private ExtendedControls.ExtButton extButtonFont;
         private ExtendedControls.ExtButton extButtonShowControl;
+        private ExtendedControls.ExtButton extButtonBlank;
     }
 }
