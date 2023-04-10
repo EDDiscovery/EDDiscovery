@@ -35,12 +35,12 @@ namespace EDDiscovery.UserControls
 
         EliteDangerousCore.UIEvents.UIMode elitemode;
         private bool intransparent = false;
-        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate;
+        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus guistate;
 
         private Font displayfont;
 
-        private ISystem current_sys;   // current system we are in, may be null
-        private string current_body;    // current body
+        private ISystem current_sys;   // current system we are in, may be null, picked up from last_he
+        private string current_body;    // current body, picked up from last_he, and checked via UI Position for changes
 
         private string sentbookmarktext;    // Another panel has sent a bookmark, and its position, add it to the combobox and allow selection
         private EliteDangerousCore.UIEvents.UIPosition.Position sentposition;
@@ -73,9 +73,9 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
-            // new! april23 pick up last major mode..
+            // new! april23 pick up last major mode ad uistate.  Need to do this now, before load/initial display, as set transparent uses it
             elitemode = new EliteDangerousCore.UIEvents.UIMode(DiscoveryForm.UIOverallStatus.Mode, DiscoveryForm.UIOverallStatus.MajorMode);
-            uistate = DiscoveryForm.UIOverallStatus.Focus;
+            guistate = DiscoveryForm.UIOverallStatus.Focus;
         }
 
         public override void LoadLayout()
@@ -86,6 +86,11 @@ namespace EDDiscovery.UserControls
                 compassControl.Font = displayfont;
         }
 
+        public override void InitialDisplay()       
+        {
+            Discoveryform_OnHistoryChange();
+        }
+
         public override void Closing()
         {
             PutSetting(dbLatSave, numberBoxTargetLatitude.Value);
@@ -94,6 +99,16 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
+        }
+
+        private void Discoveryform_OnHistoryChange() 
+        {
+            var lasthe = DiscoveryForm.History.GetLast;
+            current_sys = lasthe?.System;       // pick up last system and body 
+            current_body = lasthe?.Status.BodyName;
+            PopulateBookmarkCombo();
+            UpdateCompass();
+            SetCompassVisibility();
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -144,6 +159,7 @@ namespace EDDiscovery.UserControls
                 if (position.ValidBodyName && position.BodyName != current_body )       // changed body name (this is the full name)
                 {
                     current_body = position.BodyName;
+                    System.Diagnostics.Debug.WriteLine($"Compass changed body name {current_body}");
                     PopulateBookmarkCombo();
                 }
 
@@ -157,40 +173,25 @@ namespace EDDiscovery.UserControls
 
             if ( gui != null )
             {
-                uistate = gui.GUIFocus;
+                guistate = gui.GUIFocus;
+                System.Diagnostics.Debug.WriteLine($"Compass changed GUI state {guistate}");
                 SetCompassVisibility();
             }
-        }
-
-        private void Discoveryform_OnHistoryChange() // need to handle this in case commander changed..
-        {
-            var lasthe = DiscoveryForm.History.GetLast;
-            current_sys = lasthe?.System;
-            System.Diagnostics.Debug.WriteLine($"Compass start with {current_sys?.Name}");
-            PopulateBookmarkCombo();
-            UpdateCompass();
-            SetCompassVisibility();
-        }
-
-        public override void InitialDisplay()       // on start up, this will have an empty history
-        {
-            Discoveryform_OnHistoryChange();
         }
 
         private void OnNewEntry(HistoryEntry he)
         {
             if (current_sys == null || current_sys.Name != he.System.Name)       // changed system
             {
-                current_sys = he.System;
-                current_body = null;        // don't know it now
+                current_sys = he.System;        // always there
+                current_body = he.Status.BodyName;        // may be blank or null
                 PopulateBookmarkCombo();
             }
 
-            if ( he is IBodyFeature )       // an IBodyfeature would affect the body feature list, used to populate the combo box, so update combo
+            if ( he.journalEntry is IBodyFeature )       // an IBodyfeature would affect the body feature list, used to populate the combo box, so update combo
             {
                 PopulateBookmarkCombo();
             }
-
         }
 
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
@@ -220,7 +221,7 @@ namespace EDDiscovery.UserControls
 
             if (intransparent && IsSet(CtrlList.autohide))       // autohide turns off when transparent And..
             {
-                if (uistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus)    // not on main screen
+                if (guistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus)    // not on main screen
                 {
                     visible = false;
                 }
@@ -251,103 +252,61 @@ namespace EDDiscovery.UserControls
         {
             double targetlat = numberBoxTargetLatitude.Value;
             double targetlong = numberBoxTargetLongitude.Value;
-
-            double? targetDistance = CalculateDistance(targetlat, targetlong);
-
-            if (targetDistance.HasValue)
-            {
-                if (targetDistance.Value < 1000)
-                    compassControl.DistanceFormat = "{0:0.#}m";
-                else if (targetDistance.Value < 1000000)
-                {
-                    targetDistance = targetDistance.Value / 1000;
-                    compassControl.DistanceFormat = "{0:0.#}km";
-                }
-                else
-                {
-                    targetDistance = targetDistance.Value / 1000000;
-                    compassControl.DistanceFormat = "{0:0.#}Mm";
-                }
-            }
-
-            double? targetSlope = CalculateGlideslope(targetDistance);
-            compassControl.GlideSlope = targetSlope.HasValue ? targetSlope.Value : double.NaN;
-
-            double? targetBearing = CalculateBearing(targetlat, targetlong);
-
-            try
-            {
-                compassControl.Set(position.ValidHeading ? position.Heading : double.NaN,
-                                targetBearing.HasValue ? targetBearing.Value : double.NaN,
-                                targetDistance.HasValue ? targetDistance.Value : double.NaN, true);
-                // compassControl.Set(120, 180, 20.2, true);
-            }
-            catch (Exception ex)   // unlikely but Status.JSON could send duff values, trap out the exception on bad values
-            {
-                System.Diagnostics.Debug.WriteLine($"Compass exception {ex}");
-            }       
-        }
-
-        private double? CalculateBearing(double targetLat, double targetLong)
-        {
-            if (!position.Location.ValidPosition)
-                return null;
-
-            // turn degrees to radians
-            double long1 = position.Location.Longitude * PI / 180;
-            double lat1 = position.Location.Latitude * PI / 180;
-            double long2 = targetLong * PI / 180;
-            double lat2 = targetLat * PI / 180;
-
-            double y = Sin(long2 - long1) * Cos(lat2);
-            double x = Cos(lat1) * Sin(lat2) -
-                        Sin(lat1) * Cos(lat2) * Cos(long2 - long1);
             
-            // back to degrees again
-            double bearing = Atan2(y, x) / PI * 180;
+            double bearing = double.NaN;
+            double displaydistance = double.NaN;
+            double glideslope = double.NaN;
 
-            //bearing in game HUD is 0-360, not -180 to 180
-            return bearing > 0 ? bearing : 360 + bearing;
-        }
+            if (position.Location.ValidPosition)
+            {
+                bearing = ObjectExtensionsNumbersBool.CalculateBearing(position.Location.Latitude, position.Location.Longitude, targetlat, targetlong);
 
-        private double? CalculateDistance(double targetLat, double targetLong)
-        {
-            if (!position.Location.ValidPosition || !position.ValidRadius)       // must have lat/long and radius
-                return null;
+                if (position.ValidRadius)
+                {
+                    // we use distance including altitude as the prefered display distance
 
-            double lat1 = position.Location.Latitude * PI / 180;
-            double lat2 = targetLat * PI / 180;
-            double deltaLong = (targetLong - position.Location.Longitude) * PI / 180;
-            double deltaLat = (targetLat - position.Location.Latitude) * PI / 180;
+                    double distanceinclaltitude = position.Location.ValidAltitude ? 
+                                ObjectExtensionsNumbersBool.CalculateDistance(position.Location.Latitude, position.Location.Longitude, position.Location.Altitude, targetlat, targetlong, 0, position.PlanetRadius) : 
+                                ObjectExtensionsNumbersBool.CalculateDistance(position.Location.Latitude, position.Location.Longitude, targetlat, targetlong, position.PlanetRadius);
 
-            double a = Sin(deltaLat / 2) * Sin(deltaLat / 2) + Cos(lat1) * Cos(lat2) * Sin(deltaLong / 2) * Sin(deltaLong / 2);
-            double c = 2 * Atan2(Sqrt(a), Sqrt(1 - a));
+                    if ( distanceinclaltitude >= 100)       // if worth displaying
+                    {
+                        displaydistance = distanceinclaltitude;
 
-            return position.PlanetRadius * c;
-        }
+                        if (distanceinclaltitude < 1000)
+                        {
+                            compassControl.DistanceFormat = "{0:0.#}m";
+                        }
+                        else if (distanceinclaltitude < 1000000)
+                        {
+                            displaydistance /= 1000;
+                            compassControl.DistanceFormat = "{0:0.#}km";
+                        }
+                        else
+                        {
+                            displaydistance /= 1000000;
+                            compassControl.DistanceFormat = "{0:0.#}Mm";
+                        }
+                    }
 
-        private double? CalculateGlideslope(double? distance)
-        {
-            if (!distance.HasValue || !position.Location.ValidAltitude || !position.ValidRadius)
-                return null;
+                    // if worth doing a glideslope
 
-            if (position.Location.Altitude < 10000 || distance.Value < 10000) // Don't return a slope if less than 10km out or below 10km
-                return null;
+                    if ( distanceinclaltitude >= 3000 && position.Location.ValidAltitude && position.Location.Altitude >= 3000)    
+                    {
+                        // for glideslope, we don't want altitude in play for distance, just ground distance
+                        double distanceground = ObjectExtensionsNumbersBool.CalculateDistance(position.Location.Latitude, position.Location.Longitude, targetlat, targetlong, position.PlanetRadius);
 
-            double theta = distance.Value / position.PlanetRadius;
-            double rad = 1 + position.Location.Altitude / position.PlanetRadius;
-            double dist2 = 1 + rad * rad - 2 * rad * Cos(theta);
+                        var res = ObjectExtensionsNumbersBool.CalculateGlideslope(distanceground, position.Location.Altitude, position.PlanetRadius);
 
-            // a = radius, b = distance, c = altitude + radius
-            // c^2 = a^2 + b^2 - 2.a.b.cos(C) -> cos(C) = (a^2 + b^2 - c^2) / (2.a.b)
-            double sintgtslope = (1 + dist2 - rad * rad) / (2 * Sqrt(dist2));
+                        if (res.Item2 < 0) // Don't return a slope if it would be > 0 deg at the target (ie. we are facing backwards)
+                        {
+                            glideslope = res.Item1;
+                        }
+                    }
+                }
+            }
 
-            if (sintgtslope >= 0)  // Don't return a slope if it would be > 0 deg at the target (ie. we are facing backwards)
-                return null;
-
-            // a = altitude + radius, b = distance, c = radius
-            double slope = -Asin((rad * rad + dist2 - 1) / (2 * rad * Sqrt(dist2))) * 180 / PI;
-            return slope;
+            compassControl.Set(position.ValidHeading ? position.Heading : double.NaN, bearing, displaydistance, glideslope, true);
         }
 
         #endregion
@@ -365,6 +324,8 @@ namespace EDDiscovery.UserControls
             comboBoxBookmarks.Items.Clear();
             comboboxpositions.Clear();
 
+            System.Diagnostics.Debug.WriteLine($"Compass populate bookmark sys {current_sys?.Name} body {current_body}");
+
             if (current_sys != null)
             {
                 var sysbookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(current_sys.Name);
@@ -372,10 +333,10 @@ namespace EDDiscovery.UserControls
                 {
                     List<PlanetMarks.Planet> planetMarks = sysbookmark.PlanetaryMarks?.Planets;
 
-                    if (position.ValidBodyName)
+                    if (current_body != null)
                     {
-                        string planetname = position.BodyName.ReplaceIfStartsWith(current_sys.Name, "");
-                        System.Diagnostics.Debug.WriteLine($"Compass Combobox check for planet {planetname}");
+                        string planetname = current_body.ReplaceIfStartsWith(current_sys.Name, "");
+                        System.Diagnostics.Debug.WriteLine($"..Compass Combobox check for planet {planetname}");
                         planetMarks = planetMarks?.Where(p => p.Name.EqualsIIC(planetname))?.ToList();
                     }
 
@@ -388,8 +349,8 @@ namespace EDDiscovery.UserControls
                             {
                                 foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"Compass Combobox Add {pl.Name}: {loc.Name}");
-                                    comboBoxBookmarks.Items.Add($"{pl.Name}: {loc.Name}");
+                                    System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {pl.Name}: {loc.Name}");
+                                    comboBoxBookmarks.Items.Add($"{pl.Name}: {loc.Name} @ {loc.Latitude:0.####}, {loc.Longitude:0.####}");
                                     comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = loc.Latitude, Longitude = loc.Longitude });
                                 }
                             }
@@ -399,17 +360,18 @@ namespace EDDiscovery.UserControls
 
                 var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(current_sys, false);     // not edsm, so no delay
 
-                if ( sysnode != null)
+                if ( sysnode != null && current_body != null)
                 {
-                    var scannode = sysnode.Find(position.BodyName);
+                    var scannode = sysnode.Find(current_body);
                     if ( scannode != null)
                     {
-                        //System.Diagnostics.Debug.WriteLine($"Compass Found scannode for {position.BodyName}");
+                        System.Diagnostics.Debug.WriteLine($"..Compass Found scannode for {current_body}");
+
                         foreach(var sf in scannode.SurfaceFeatures.EmptyIfNull())
                         {
                             if (sf.HasLatLong)  // only want positions
                             {
-                                System.Diagnostics.Debug.WriteLine($"Compass Combobox Add {sf.Name_Localised}");
+                                System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
                                 comboBoxBookmarks.Items.Add($"{sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
                                 comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
                             }
