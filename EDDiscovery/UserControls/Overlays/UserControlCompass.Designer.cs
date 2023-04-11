@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlCompass));
             this.labelTargetLat = new ExtendedControls.ExtLabel();
             this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
@@ -51,9 +52,10 @@ namespace EDDiscovery.UserControls
             this.buttonNewBookmark = new ExtendedControls.ExtButton();
             this.compassControl = new ExtendedControls.CompassControl();
             this.flowLayoutPanelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonBlank = new ExtendedControls.ExtButton();
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.extButtonFont = new ExtendedControls.ExtButton();
-            this.extButtonBlank = new ExtendedControls.ExtButton();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.flowLayoutPanelTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,6 +99,7 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLatitude.Size = new System.Drawing.Size(54, 20);
             this.numberBoxTargetLatitude.TabIndex = 9;
             this.numberBoxTargetLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.numberBoxTargetLatitude, "Latitude of target position, blank for none");
             this.numberBoxTargetLatitude.Value = 0D;
             this.numberBoxTargetLatitude.WordWrap = true;
             // 
@@ -129,6 +132,7 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLongitude.Size = new System.Drawing.Size(54, 20);
             this.numberBoxTargetLongitude.TabIndex = 10;
             this.numberBoxTargetLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.numberBoxTargetLongitude, "Longitude of target position, blank for none");
             this.numberBoxTargetLongitude.Value = 0D;
             this.numberBoxTargetLongitude.WordWrap = true;
             // 
@@ -153,6 +157,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxBookmarks.Size = new System.Drawing.Size(247, 21);
             this.comboBoxBookmarks.TabIndex = 11;
             this.comboBoxBookmarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxBookmarks, "Select known body feature or select bookmark");
             this.comboBoxBookmarks.ValueMember = "";
             this.comboBoxBookmarks.SelectedIndexChanged += new System.EventHandler(this.comboBoxBookmarks_SelectedIndexChanged);
             // 
@@ -164,12 +169,13 @@ namespace EDDiscovery.UserControls
             this.buttonNewBookmark.Name = "buttonNewBookmark";
             this.buttonNewBookmark.Size = new System.Drawing.Size(28, 28);
             this.buttonNewBookmark.TabIndex = 13;
+            this.toolTip.SetToolTip(this.buttonNewBookmark, "Edit or create bookmark on system");
             this.buttonNewBookmark.UseVisualStyleBackColor = true;
             this.buttonNewBookmark.Click += new System.EventHandler(this.buttonNewBookmark_Click);
             // 
             // compassControl
             // 
-            this.compassControl.AutoSetStencilTicks = false;
+            this.compassControl.AutoSetStencilTicks = true;
             this.compassControl.BackColor = System.Drawing.Color.LightBlue;
             this.compassControl.Bearing = 0D;
             this.compassControl.Bug = double.NaN;
@@ -185,13 +191,13 @@ namespace EDDiscovery.UserControls
             this.compassControl.Name = "compassControl";
             this.compassControl.ShowNegativeDegrees = false;
             this.compassControl.Size = new System.Drawing.Size(915, 285);
-            this.compassControl.SlewRateDegreesSec = 10;
+            this.compassControl.SlewRateDegreesSec = 40;
             this.compassControl.SlewToBearing = 0D;
             this.compassControl.StencilColor = System.Drawing.Color.Red;
             this.compassControl.StencilMajorTicksAt = 20;
             this.compassControl.StencilMinorTicksAt = 5;
             this.compassControl.TabIndex = 14;
-            this.compassControl.TextBandRatioToFont = 1.5D;
+            this.compassControl.TextBandRatioToFont = 1D;
             this.compassControl.WidthDegrees = 180;
             // 
             // flowLayoutPanelTop
@@ -213,6 +219,18 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.TabIndex = 15;
             this.flowLayoutPanelTop.WrapContents = false;
             // 
+            // extButtonBlank
+            // 
+            this.extButtonBlank.Image = global::EDDiscovery.Icons.Controls.Cross;
+            this.extButtonBlank.Location = new System.Drawing.Point(420, 4);
+            this.extButtonBlank.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.extButtonBlank.Name = "extButtonBlank";
+            this.extButtonBlank.Size = new System.Drawing.Size(28, 28);
+            this.extButtonBlank.TabIndex = 13;
+            this.toolTip.SetToolTip(this.extButtonBlank, "Clear target latitude and longitude and selection");
+            this.extButtonBlank.UseVisualStyleBackColor = true;
+            this.extButtonBlank.Click += new System.EventHandler(this.extButtonBlank_Click);
+            // 
             // extButtonShowControl
             // 
             this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
@@ -223,6 +241,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
             this.extButtonShowControl.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonShowControl, "Configure compass overlay");
             this.extButtonShowControl.UseVisualStyleBackColor = false;
             this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
             // 
@@ -236,19 +255,13 @@ namespace EDDiscovery.UserControls
             this.extButtonFont.Name = "extButtonFont";
             this.extButtonFont.Size = new System.Drawing.Size(28, 28);
             this.extButtonFont.TabIndex = 30;
+            this.toolTip.SetToolTip(this.extButtonFont, "Configure font of compass");
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
             // 
-            // extButtonBlank
+            // toolTip
             // 
-            this.extButtonBlank.Image = global::EDDiscovery.Icons.Controls.Cross;
-            this.extButtonBlank.Location = new System.Drawing.Point(420, 4);
-            this.extButtonBlank.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
-            this.extButtonBlank.Name = "extButtonBlank";
-            this.extButtonBlank.Size = new System.Drawing.Size(28, 28);
-            this.extButtonBlank.TabIndex = 13;
-            this.extButtonBlank.UseVisualStyleBackColor = true;
-            this.extButtonBlank.Click += new System.EventHandler(this.extButtonBlank_Click);
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlCompass
             // 
@@ -276,5 +289,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonFont;
         private ExtendedControls.ExtButton extButtonShowControl;
         private ExtendedControls.ExtButton extButtonBlank;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

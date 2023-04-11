@@ -79,6 +79,13 @@ SECTION UserControlContainerGrid
 SECTION UserControlCompass
 
 .labelTargetLat: "Target" @
+.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
+.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
+.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
+.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
+.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
+.extButtonShowControl.ToolTip: "Configure compass overlay" @
+.extButtonFont.ToolTip: "Configure font of compass" @
 
 SECTION UserControlWebBrowser
 
@@ -1579,7 +1586,7 @@ SECTION UserControlCarrier
 .ServiceActive: "This Service is Active" @
 .ServiceSuspended : "This service is suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
-.NoPacks: ""No Module or Ship packs installed" @
+.NoPacks: "No Module or Ship packs installed" @
 .Tier: "Tier" @
 .Cost: "Cost" @
 .Jumping : "Jumping" @

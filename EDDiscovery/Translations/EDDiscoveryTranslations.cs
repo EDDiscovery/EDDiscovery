@@ -216,6 +216,14 @@ namespace EDDiscovery
 
         UserControlCompass_labelTargetLat, // Control 'Target'
 
+        UserControlCompass_numberBoxTargetLatitude_ToolTip,
+        UserControlCompass_numberBoxTargetLongitude_ToolTip,
+        UserControlCompass_comboBoxBookmarks_ToolTip,
+        UserControlCompass_extButtonBlank_ToolTip,
+        UserControlCompass_buttonNewBookmark_ToolTip,
+        UserControlCompass_extButtonShowControl_ToolTip,
+        UserControlCompass_extButtonFont_ToolTip,
+
         ImportExportForm, // Control 'Export'
         ImportExportForm_buttonExport, // Control 'Export'
         ImportExportForm_ImportTitle,

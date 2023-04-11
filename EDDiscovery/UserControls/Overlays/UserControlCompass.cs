@@ -10,8 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
-
  */
+
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Math;
 
 namespace EDDiscovery.UserControls
 {
@@ -56,7 +55,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Compass";
 
-            double lat = GetSetting(dbLatSave, double.NaN);     // note need to explicity state its double
+            double lat = GetSetting(dbLatSave, double.NaN);     // pick up target, it will be Nan if not set
             double lon = GetSetting(dbLongSave, double.NaN);
             if (double.IsNaN(lat) || double.IsNaN(lon))
             {
@@ -72,12 +71,15 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLongitude.ValueChanged += new System.EventHandler(this.numberBoxTargetLongitude_ValueChanged);
 
             comboBoxBookmarks.Text = "";
-            compassControl.SlewRateDegreesSec = 40;
-            compassControl.AutoSetStencilTicks = true;
-            compassControl.TextBandRatioToFont = 1;
+
             buttonNewBookmark.Enabled = false;
+
             var enumlist = new Enum[] { EDTx.UserControlCompass_labelTargetLat };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            var enumlisttt = new Enum[] {EDTx.UserControlCompass_numberBoxTargetLatitude_ToolTip, EDTx.UserControlCompass_numberBoxTargetLongitude_ToolTip,
+                                        EDTx.UserControlCompass_comboBoxBookmarks_ToolTip, EDTx.UserControlCompass_extButtonBlank_ToolTip, EDTx.UserControlCompass_buttonNewBookmark_ToolTip,
+                                        EDTx.UserControlCompass_extButtonShowControl_ToolTip, EDTx.UserControlCompass_extButtonFont_ToolTip};
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             PopulateCtrlList();
 
@@ -89,8 +91,6 @@ namespace EDDiscovery.UserControls
             // new! april23 pick up last major mode ad uistate.  Need to do this now, before load/initial display, as set transparent uses it
             elitemode = new EliteDangerousCore.UIEvents.UIMode(DiscoveryForm.UIOverallStatus.Mode, DiscoveryForm.UIOverallStatus.MajorMode);
             guistate = DiscoveryForm.UIOverallStatus.Focus;
-
-
         }
 
         public override void LoadLayout()
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             var lasthe = DiscoveryForm.History.GetLast;
             current_sys = lasthe?.System;       // pick up last system and body 
             current_body = lasthe?.Status.BodyName;
-            PopulateBookmarkCombo();
+            PopulateBookmarkComboSetBookmarkEnable();
             UpdateCompass();
             SetCompassVisibility();
         }
@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
                 current_body = bn.BodyName;
                 System.Diagnostics.Debug.WriteLine($"Compass changed body name {current_body}");
 
-                PopulateBookmarkCombo();
+                PopulateBookmarkComboSetBookmarkEnable();
 
                 // option to clear to blank target lat on body name disappearing
                 if ( current_body.IsEmpty() && IsSet(CtrlList.clearlatlong))
@@ -210,12 +210,12 @@ namespace EDDiscovery.UserControls
             {
                 current_sys = he.System;        // always there
                 current_body = he.Status.BodyName;        // may be blank or null
-                PopulateBookmarkCombo();
+                PopulateBookmarkComboSetBookmarkEnable();
             }
 
             if ( he.journalEntry is IBodyFeature )       // an IBodyfeature would affect the body feature list, used to populate the combo box, so update combo
             {
-                PopulateBookmarkCombo();
+                PopulateBookmarkComboSetBookmarkEnable();
             }
         }
 
@@ -227,7 +227,7 @@ namespace EDDiscovery.UserControls
                 {
                     sentbookmarktext = sct.Name;
                     sentposition = new EliteDangerousCore.UIEvents.UIPosition.Position() { Altitude = 0, AltitudeFromAverageRadius = false, Latitude = sct.Latitude, Longitude = sct.Longitude };
-                    PopulateBookmarkCombo();
+                    PopulateBookmarkComboSetBookmarkEnable();
                 }
                 comboBoxBookmarks.SelectedItem = sct.Name;      // must be in list, so select and set the compass
                 return true;
@@ -341,13 +341,16 @@ namespace EDDiscovery.UserControls
         bool preventbookmarkcomboreentry = false;
         List<EliteDangerousCore.UIEvents.UIPosition.Position> comboboxpositions = new List<EliteDangerousCore.UIEvents.UIPosition.Position>(); // holds position for entries
 
-        private void PopulateBookmarkCombo()
+        private void PopulateBookmarkComboSetBookmarkEnable()
         {
             preventbookmarkcomboreentry = true;
-            //string curselection = externallyForcedBookmark ? externalLocationName : comboBoxBookmarks.Text; 
+
             string curselection = comboBoxBookmarks.Text; 
+
             comboBoxBookmarks.Items.Clear();
             comboboxpositions.Clear();
+
+            buttonNewBookmark.Enabled = current_sys != null;
 
             System.Diagnostics.Debug.WriteLine($"Compass populate bookmark sys {current_sys?.Name} body {current_body}");
 
@@ -417,12 +420,8 @@ namespace EDDiscovery.UserControls
                 }
 
                 comboBoxBookmarks.Invalidate();     // items list has changed, invalidate
-                buttonNewBookmark.Enabled = true;
             }
-            else
-            {
-                buttonNewBookmark.Enabled = false;
-            }
+
             preventbookmarkcomboreentry = false;
         }
 
@@ -479,13 +478,13 @@ namespace EDDiscovery.UserControls
                     GlobalBookMarkList.Instance.Delete(sysbookmark);
                 }
 
-                PopulateBookmarkCombo();
+                PopulateBookmarkComboSetBookmarkEnable();
             }
         }
 
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
         {
-            PopulateBookmarkCombo();
+            PopulateBookmarkComboSetBookmarkEnable();
         }
 
         private void numberBoxTargetLatitude_ValueChanged(object sender, EventArgs e)
@@ -543,7 +542,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no Lat/Long".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
             displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
-            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear Lat/Long when leaving a body".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
+            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 
