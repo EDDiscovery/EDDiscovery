@@ -427,6 +427,10 @@ namespace EDDiscovery
         UserControlMaterialCommodities_buttonFilter_ToolTip, // ToolTip 'Filter out items'
         UserControlMaterialCommodities_textBoxItems1_ToolTip, // ToolTip 'Count of Items'
         UserControlMaterialCommodities_textBoxItems2_ToolTip, // ToolTip 'Count of Items'
+        UserControlMaterialCommodities_buttonClear_ToolTip,
+        UserControlMaterialCommodities_extButtonFont_ToolTip,
+        UserControlMaterialCommodities_buttonExtImport_ToolTip,
+
         UserControlMaterialCommodities_checkBoxShowZeros_ToolTip, // ToolTip 'Green will show materials with zero counts, red means remove them'
         UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
 

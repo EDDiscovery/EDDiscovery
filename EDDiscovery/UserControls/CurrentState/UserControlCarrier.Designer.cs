@@ -39,7 +39,7 @@
             this.tabPageItinerary = new System.Windows.Forms.TabPage();
             this.dataViewScrollerPanelItinerary = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarItinerary = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewItinerary = new BaseUtils.DataGridViewColumnControl();
+            this.dataGridViewItinerary = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.colItinDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItinSystemAlphaInt = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItinBodyAlphaInt = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -288,6 +288,7 @@
             // 
             // extScrollBarItinerary
             // 
+            this.extScrollBarItinerary.AlwaysHideScrollBar = false;
             this.extScrollBarItinerary.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarItinerary.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarItinerary.ArrowColorScaling = 0.5F;
@@ -318,10 +319,12 @@
             // 
             // dataGridViewItinerary
             // 
+            this.dataGridViewItinerary.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewItinerary.AllowUserToAddRows = false;
             this.dataGridViewItinerary.AllowUserToDeleteRows = false;
             this.dataGridViewItinerary.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewItinerary.AutoSortByColumnName = true;
+            this.dataGridViewItinerary.CheckEDSM = false;
             this.dataGridViewItinerary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewItinerary.ColumnReorder = true;
             this.dataGridViewItinerary.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -463,6 +466,7 @@
             // 
             // extScrollBarLedger
             // 
+            this.extScrollBarLedger.AlwaysHideScrollBar = false;
             this.extScrollBarLedger.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarLedger.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarLedger.ArrowColorScaling = 0.5F;
@@ -493,6 +497,7 @@
             // 
             // dataGridViewLedger
             // 
+            this.dataGridViewLedger.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewLedger.AllowUserToAddRows = false;
             this.dataGridViewLedger.AllowUserToDeleteRows = false;
             this.dataGridViewLedger.AllowUserToResizeRows = false;
@@ -761,6 +766,7 @@
             // 
             // extScrollBarServices
             // 
+            this.extScrollBarServices.AlwaysHideScrollBar = false;
             this.extScrollBarServices.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarServices.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarServices.ArrowColorScaling = 0.5F;
@@ -829,6 +835,7 @@
             // 
             // extScrollBarPacks
             // 
+            this.extScrollBarPacks.AlwaysHideScrollBar = false;
             this.extScrollBarPacks.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarPacks.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarPacks.ArrowColorScaling = 0.5F;
@@ -882,6 +889,7 @@
             // 
             // extScrollBarOrders
             // 
+            this.extScrollBarOrders.AlwaysHideScrollBar = false;
             this.extScrollBarOrders.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarOrders.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarOrders.ArrowColorScaling = 0.5F;
@@ -912,6 +920,7 @@
             // 
             // dataGridViewOrders
             // 
+            this.dataGridViewOrders.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewOrders.AllowUserToAddRows = false;
             this.dataGridViewOrders.AllowUserToDeleteRows = false;
             this.dataGridViewOrders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -1027,6 +1036,7 @@
             // 
             // extScrollBarCAPIStats
             // 
+            this.extScrollBarCAPIStats.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIStats.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIStats.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarCAPIStats.ArrowColorScaling = 0.5F;
@@ -1057,6 +1067,7 @@
             // 
             // dataGridViewCAPIStats
             // 
+            this.dataGridViewCAPIStats.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewCAPIStats.AllowUserToAddRows = false;
             this.dataGridViewCAPIStats.AllowUserToDeleteRows = false;
             this.dataGridViewCAPIStats.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -1179,6 +1190,7 @@
             // 
             // extScrollBarCAPIShips
             // 
+            this.extScrollBarCAPIShips.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIShips.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIShips.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarCAPIShips.ArrowColorScaling = 0.5F;
@@ -1209,6 +1221,7 @@
             // 
             // dataGridViewCAPIShips
             // 
+            this.dataGridViewCAPIShips.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewCAPIShips.AllowUserToAddRows = false;
             this.dataGridViewCAPIShips.AllowUserToDeleteRows = false;
             this.dataGridViewCAPIShips.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -1305,6 +1318,7 @@
             // 
             // extScrollBarCAPIModules
             // 
+            this.extScrollBarCAPIModules.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIModules.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIModules.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarCAPIModules.ArrowColorScaling = 0.5F;
@@ -1335,6 +1349,7 @@
             // 
             // dataGridViewCAPIModules
             // 
+            this.dataGridViewCAPIModules.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewCAPIModules.AllowUserToAddRows = false;
             this.dataGridViewCAPIModules.AllowUserToDeleteRows = false;
             this.dataGridViewCAPIModules.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -1491,6 +1506,7 @@
             // 
             // extScrollBarCAPICargo
             // 
+            this.extScrollBarCAPICargo.AlwaysHideScrollBar = false;
             this.extScrollBarCAPICargo.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPICargo.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarCAPICargo.ArrowColorScaling = 0.5F;
@@ -1521,6 +1537,7 @@
             // 
             // dataGridViewCAPICargo
             // 
+            this.dataGridViewCAPICargo.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewCAPICargo.AllowUserToAddRows = false;
             this.dataGridViewCAPICargo.AllowUserToDeleteRows = false;
             this.dataGridViewCAPICargo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -1606,6 +1623,7 @@
             // 
             // extScrollBarCAPILocker
             // 
+            this.extScrollBarCAPILocker.AlwaysHideScrollBar = false;
             this.extScrollBarCAPILocker.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPILocker.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarCAPILocker.ArrowColorScaling = 0.5F;
@@ -1636,6 +1654,7 @@
             // 
             // dataGridViewCAPILocker
             // 
+            this.dataGridViewCAPILocker.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewCAPILocker.AllowUserToAddRows = false;
             this.dataGridViewCAPILocker.AllowUserToDeleteRows = false;
             this.dataGridViewCAPILocker.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -1781,7 +1800,7 @@
         private System.Windows.Forms.TabPage tabPageOrders;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelItinerary;
         private ExtendedControls.ExtScrollBar extScrollBarItinerary;
-        private BaseUtils.DataGridViewColumnControl dataGridViewItinerary;
+        private Search.DataGridViewStarResults dataGridViewItinerary;
         private System.Windows.Forms.Label labelFTaxShipyard;
         private System.Windows.Forms.Label labelFTaxRepair;
         private System.Windows.Forms.Label labelFTaxRefuel;

@@ -182,7 +182,6 @@ namespace EDDiscovery.UserControls
                     gr.FillRectangle(br5, new Rectangle(1096, 625, 5, 4));
                 }
             }
-
         }
 
         public override void Init()
@@ -190,6 +189,9 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnThemeChanged += ClearDisplayFontJournalCAPI;
+
+            dataGridViewItinerary.Init(DiscoveryForm);      // set up 
+            dataGridViewItinerary.CheckEDSM = true;
         }
 
         public override void LoadLayout()
@@ -379,10 +381,11 @@ namespace EDDiscovery.UserControls
                                         it.StarSystem.HasCoordinate ? it.StarSystem.Z.ToString("N2") : "",
                                         dist>0 ? dist.ToString("N1") : "",
                                         distfrom>0 ? distfrom.ToString("N1") : "",
-                                        "?",
+                                        "",
                     };
 
-                    dataGridViewItinerary.Rows.Add(rowobj);
+                    int rwn = dataGridViewItinerary.Rows.Add(rowobj);
+                    dataGridViewItinerary.Rows[rwn].Tag = it.StarSystem;
                 }
 
                 dataGridViewItinerary.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);

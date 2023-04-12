@@ -76,7 +76,7 @@ namespace EDDiscovery
             MiningOverlay=46,         
             Factions=47,              
             Spansh=48,                
-            EDDB=49,                  
+            // EDDB=49,                   removed for 16.1
             Inara=50,                 
             MicroResources=51,        
             SuitsWeapons=52,
@@ -184,7 +184,6 @@ namespace EDDiscovery
         private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
             PanelIDs.EDSM, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             PanelIDs.Spansh, 
-            PanelIDs.EDDB, 
             PanelIDs.Inara,
             PanelIDs.Map3D,
             PanelIDs.LocalMap3D,

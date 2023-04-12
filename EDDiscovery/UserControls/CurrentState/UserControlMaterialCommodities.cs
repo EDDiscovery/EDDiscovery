@@ -78,8 +78,13 @@ namespace EDDiscovery.UserControls
                                         };
 
             var enumlisttt = new Enum[] { EDTx.UserControlMaterialCommodities_buttonFilter_ToolTip, EDTx.UserControlMaterialCommodities_textBoxItems1_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_textBoxItems2_ToolTip, EDTx.UserControlMaterialCommodities_checkBoxShowZeros_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip };
+                                        EDTx.UserControlMaterialCommodities_textBoxItems2_ToolTip,
+                                        EDTx.UserControlMaterialCommodities_buttonClear_ToolTip,
+                                        EDTx.UserControlMaterialCommodities_checkBoxShowZeros_ToolTip,
+                                        EDTx.UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip,
+                                        EDTx.UserControlMaterialCommodities_extButtonFont_ToolTip,
+                                        EDTx.UserControlMaterialCommodities_buttonExtImport_ToolTip,
+                                        };
 
             var enumlistcms = new Enum[] {EDTx.UserControlMaterialCommodities_openRecipeInWindowToolStripMenuItem, EDTx.UserControlMaterialCommodities_displayItemInShoppingListToolStripMenuItem,
                                         EDTx.UserControlMaterialCommodities_clearAllDisplayItemsInShoppingListToolStripMenuItem,
