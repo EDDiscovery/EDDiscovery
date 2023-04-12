@@ -167,6 +167,8 @@ SECTION PopOutInfo
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @
 .Carrier.Description: "Data about your fleet carrier" @
+.Resources.Title: "Resources" @
+.Resources.Description: "All Materials, Commodity, MicroResources" @
 
 SECTION EDDiscoveryForm
 
@@ -252,7 +254,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" => "Edycja Profili"
 .PL: "Profile {0} Loaded" => "Wczytano Profil {0}"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Panel w Nowym Oknie.."
-.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualizuje bazy danych EDSM i EDDB\r\nNaciśnij OK aby zamknąć teraz, Anuluj aby zaczekać na ukończenie aktualizacji"
+.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualizuje bazy danych EDSM i EDDB\r\nNaciśnij OK aby zamknąć teraz, Anuluj aby zaczekać na ukończenie aktualizacji"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Otwórz EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "Ukryj Ikonę Zasobnika"
 .notifyIconMenu_Exit: "E&xit" => "W&yjście"
@@ -385,6 +387,9 @@ ImportExportForm: "Export data" => "Eksport"
 .checkBoxCustomAutoOpen: "Open" => "Otwórz w Excel"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
+.labelPaste: "Click Paste or drag text or files to input box" @
+.extRadioButtonTab: "Tab" @
+.extCheckBoxExcludeHeader: "Exclude Header Row" @
 
 SECTION Form2DMap
 
@@ -409,7 +414,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Wybór Sektora Galaktyki"
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Dodałeś nowe sektory!\r\nTo wymaga ponownego pobrania wszystkich danych EDSM\r\nCzy na pewno chcesz to zrobić?"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Synchronizacja danych gwiazd jest wyłączona w ustawieniach.\r\nWłącz, żeby umożliwić aktualizację danych"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Usunąłeś sektory!\r\nTo wymaga wyczyszczenia wpisów z bazy danych, co może zająć dużo czasu\r\nCzy na pewno chcesz to zrobić?"
-.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery pobiera dane gwiazd z EDSM/EDDB, które dostarczają dodatkowych informacji. Zaznacz, ile danych chcesz przechowywać. Im więcej obszaru galaktyki zaznaczysz, tym więcej potrzeba pamięci do przechowywania danych."
+.GALSELEX: "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery pobiera dane gwiazd z EDSM/EDDB, które dostarczają dodatkowych informacji. Zaznacz, ile danych chcesz przechowywać. Im więcej obszaru galaktyki zaznaczysz, tym więcej potrzeba pamięci do przechowywania danych."
 .Select: "Select: " => "Zaznacz: "
 .GALSELEN: "Select the data set" => "Wprowadź numer, do którego albo w pobliże którego chcesz przejść"
 .PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
@@ -464,6 +469,8 @@ SECTION MessageBoxTheme
 .OK: "OK" @
 .No: "No" => "Nie"
 .Yes: "Yes" => "Tak"
+.Add: "Add" @
+.Set: "Set" @
 
 SECTION DataGridViewDialogs
 

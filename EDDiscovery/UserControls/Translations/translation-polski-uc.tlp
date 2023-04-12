@@ -77,9 +77,17 @@ SECTION UserControlContainerGrid
 
 SECTION UserControlCompass
 
-.labelBookmark: "System Bookmarks" => "Zakładki w Układzie"
-.checkBoxHideTransparent: "Hide In Transparent" => "Ukryj gdy przezroczyste"
 .labelTargetLat: "Target" => "Cel"
+.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
+.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
+.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
+.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
+.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
+.extButtonShowControl.ToolTip: "Configure compass overlay" @
+.extButtonFont.ToolTip: "Configure font of compass" @
+.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhenonfoot: "Hide when on foot" @
+.cleartargetonleavingbody: "Clear target when leaving a body" @
 
 SECTION UserControlWebBrowser
 
@@ -251,6 +259,7 @@ SECTION UserControlExpedition
 .Note: "Note" => "Notatka"
 .ColumnDistStart: "Dist Start" @
 .ColumnDistanceRemaining: "Dist Remaining" @
+.ColumnHistoryNote: "History Note" @
 .labelCml: "Cml Distance:" => "Łącz. Dystans: "
 .labelP2P: "P2P Distance:" => "Dyst. P2P: "
 .labelEndDate: "End Date:" => "Data Końca: "
@@ -258,8 +267,8 @@ SECTION UserControlExpedition
 .labelRouteName: "Route Name:" => "Nazwa Trasy: "
 .copyToolStripMenuItem: "Copy" => "Kopiuj"
 .pasteToolStripMenuItem: "Paste" => "Wklej"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Wstaw Skopiowane Wiersze"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Usuń Wiersze"
+.cutToolStripMenuItem: "Cut" @
+.insertRowAboveToolStripMenuItem: "Insert row above" @
 .setTargetToolStripMenuItem: "Set Target" => "Ustaw Cel"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "Edytuj Zakładki"
 .NoRoute: "No route set up. Please add at least two systems." => "Brak ustawionej trasy. Proszę dodać co najmniej dwa układy."
@@ -353,23 +362,36 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.ColBackPack: "BackPack" @
 .Data: "Data" => "Dane"
 .Mats: "Mats" => "Materiały"
 .Total: "Total" => "Razem"
 .Rare: "Rare" => "Rzadkie"
-.ColRecipes: "Recipes" @
 .ColName: "Name" => "Nazwa"
 .ColShortName: "Abv" => "Skr."
 .ColCategory: "Category" => "Kategoria"
 .ColType: "Type" => "Typ"
 .ColNumber: "Number" => "Ilość"
+.ColBackPack: "Backpack" @
 .ColPrice: "Avg. Price" => "Śr. Cena"
+.ColRecipes: "Recipes" @
+.ColWanted: "Want" @
+.ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" => "Ilość Przedmiotów"
 .textBoxItems1.ToolTip: "Count of Items" => "Ilość Przedmiotów"
 .buttonFilter.ToolTip: "Filter out items" => "Filtruj przedmioty"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.AllMats: "All Materials" @
+.AllCommods: "All Commodities" @
+.AllMicroresources: "All Microresources" @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.extButtonFont.ToolTip: "Font for shopping list" @
+.buttonExtImport.ToolTip: "Import materials list into panel" @
+.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
+.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
+.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
+.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
+.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
 
 SECTION UserControlMissionOverlay
 
@@ -415,11 +437,13 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
 .showAtmosToolStripMenuItem: "Show atmospheres" @
+.showTempToolStripMenuItem: "Show surface temperature" @
 .showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Ukryj zmapowane ciała"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
+.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" @
 .showstarclassToolStripMenuItem: "Show star class in system info" @
 .showDividersToolStripMenuItem: "Show dividers" @
 .extButtonPlanets.ToolTip: "Planet Filter" @
@@ -621,6 +645,7 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Pokaż Odstępstwo od trasy"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Automatycznie kopiuj punkt nawigacyjny"
 .autoSetTargetToolStripMenuItem: "Auto set target" => "Automatycznie ustaw cel"
+.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
 .showtargetinfo: "Show Target Information" @
 .showfuelinfo: "Show Fuel Information" @
 .J1: "jump" => "skok"
@@ -1155,7 +1180,6 @@ SECTION UserControlTravelGrid
 .CSTOP: "Clear Stop marker" => "Wyczyść znacznik Stop"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "Ustaw znacznik Stop do obliczeń podróży"
 .SETSTARTTC: "Set Start marker for travel calculations" => "Ustaw znacznik Start do obliczeń podróży"
-.SETSTSTOP: "Set Start/Stop point for travel calculations" => "Ustaw punkt Start/Stop do obliczeń podróży"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Potwierdź, że chcesz usunąć ten wpis\r\nMoże pojawić się ponownie, jeśli dzienniki zostaną przeskanowane od nowa"
 .quickMarkToolStripMenuItem: "Marked" @
@@ -1203,6 +1227,8 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Kontrola Zwijania"
 .SearchTerms: "system:body:station:stationfaction" @
+.StartStopHidden: "Next start/stop marker is hidden" @
+.StartStopNotFound: "No start/stop marker found below" @
 
 SECTION UserControlCaptainsLog
 
@@ -1486,6 +1512,7 @@ SECTION UserControlCarrier
 .ServiceActive: "This Service is Active" @
 .ServiceSuspended: "This service is suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
+.NoPacks: "No Module or Ship packs installed" @
 .Tier: "Tier" @
 .Cost: "Cost" @
 .Jumping: "Jumping" @

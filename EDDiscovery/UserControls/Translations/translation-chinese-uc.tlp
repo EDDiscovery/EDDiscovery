@@ -77,9 +77,17 @@ SECTION UserControlContainerGrid
 
 SECTION UserControlCompass
 
-.labelBookmark: "System Bookmarks" => "星系书签"
-.checkBoxHideTransparent: "Hide In Transparent" => "透明模式下除标尺以外全部隐藏"
 .labelTargetLat: "Target" => "目标"
+.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
+.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
+.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
+.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
+.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
+.extButtonShowControl.ToolTip: "Configure compass overlay" @
+.extButtonFont.ToolTip: "Configure font of compass" @
+.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhenonfoot: "Hide when on foot" @
+.cleartargetonleavingbody: "Clear target when leaving a body" @
 
 SECTION UserControlWebBrowser
 
@@ -251,6 +259,7 @@ SECTION UserControlExpedition
 .Note: "Note" => "笔记"
 .ColumnDistStart: "Dist Start" @
 .ColumnDistanceRemaining: "Dist Remaining" @
+.ColumnHistoryNote: "History Note" @
 .labelCml: "Cml Distance:" => "总距离："
 .labelP2P: "P2P Distance:" => "直线距离："
 .labelEndDate: "End Date:" => "结束日期："
@@ -258,8 +267,8 @@ SECTION UserControlExpedition
 .labelRouteName: "Route Name:" => "航线名称："
 .copyToolStripMenuItem: "Copy" => "复制"
 .pasteToolStripMenuItem: "Paste" => "粘贴"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "插入复制的行"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "删除行"
+.cutToolStripMenuItem: "Cut" @
+.insertRowAboveToolStripMenuItem: "Insert row above" @
 .setTargetToolStripMenuItem: "Set Target" => "设置目标"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "编辑书签"
 .NoRoute: "No route set up. Please add at least two systems." => "没有建立航线，请至少添加两个星系。"
@@ -353,23 +362,36 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.ColBackPack: "BackPack" @
 .Data: "Data" => "数据"
 .Mats: "Mats" => "材料"
 .Total: "Total" => "总量"
 .Rare: "Rare" @
-.ColRecipes: "Recipes" @
 .ColName: "Name" => "名称"
 .ColShortName: "Abv" => "简称"
 .ColCategory: "Category" => "分类"
 .ColType: "Type" => "种类"
 .ColNumber: "Number" => "数量"
+.ColBackPack: "Backpack" @
 .ColPrice: "Avg. Price" => "平均价格"
+.ColRecipes: "Recipes" @
+.ColWanted: "Want" @
+.ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" => "商品数量"
 .textBoxItems1.ToolTip: "Count of Items" => "商品数量"
 .buttonFilter.ToolTip: "Filter out items" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.AllMats: "All Materials" @
+.AllCommods: "All Commodities" @
+.AllMicroresources: "All Microresources" @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.extButtonFont.ToolTip: "Font for shopping list" @
+.buttonExtImport.ToolTip: "Import materials list into panel" @
+.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
+.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
+.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
+.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
+.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
 
 SECTION UserControlMissionOverlay
 
@@ -415,11 +437,13 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
 .showAtmosToolStripMenuItem: "Show atmospheres" @
+.showTempToolStripMenuItem: "Show surface temperature" @
 .showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
+.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" @
 .showstarclassToolStripMenuItem: "Show star class in system info" @
 .showDividersToolStripMenuItem: "Show dividers" @
 .extButtonPlanets.ToolTip: "Planet Filter" @
@@ -621,6 +645,7 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "显示距航线的偏差"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "自动复制航点"
 .autoSetTargetToolStripMenuItem: "Auto set target" => "自动设置目标"
+.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
 .showtargetinfo: "Show Target Information" @
 .showfuelinfo: "Show Fuel Information" @
 .J1: "jump" => "次跳跃"
@@ -1155,7 +1180,6 @@ SECTION UserControlTravelGrid
 .CSTOP: "Clear Stop marker" => "清除终点标记"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "设为航行计算的终点"
 .SETSTARTTC: "Set Start marker for travel calculations" => "设为航行计算的起点"
-.SETSTSTOP: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "你确认要删除此项条目吗？\r\n它有可能会在重新扫描游戏日志文件的时候再次出现"
 .quickMarkToolStripMenuItem: "Marked" @
@@ -1203,6 +1227,8 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "纲要模式控制"
 .SearchTerms: "system:body:station:stationfaction" @
+.StartStopHidden: "Next start/stop marker is hidden" @
+.StartStopNotFound: "No start/stop marker found below" @
 
 SECTION UserControlCaptainsLog
 
@@ -1486,6 +1512,7 @@ SECTION UserControlCarrier
 .ServiceActive: "This Service is Active" @
 .ServiceSuspended: "This service is suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
+.NoPacks: "No Module or Ship packs installed" @
 .Tier: "Tier" @
 .Cost: "Cost" @
 .Jumping: "Jumping" @

@@ -167,6 +167,8 @@ SECTION PopOutInfo
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @
 .Carrier.Description: "Data about your fleet carrier" @
+.Resources.Title: "Resources" @
+.Resources.Description: "All Materials, Commodity, MicroResources" @
 
 SECTION EDDiscoveryForm
 
@@ -252,7 +254,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" => "编辑配置文件"
 .PL: "Profile {0} Loaded" => "配置文件{0}已加载"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "打开新的弹窗面板"
-.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery正在更新EDSM和EDDB的数据库\r\n现在退出请选择确认，等待更新完成请选择取消"
+.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery正在更新EDSM和EDDB的数据库\r\n现在退出请选择确认，等待更新完成请选择取消"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "打开EDDiscovery(O)"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "隐藏托盘图标(&H)"
 .notifyIconMenu_Exit: "E&xit" => "退出(&X)"
@@ -385,6 +387,9 @@ ImportExportForm: "Export data" => "导出"
 .checkBoxCustomAutoOpen: "Open" => "导出后打开"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
+.labelPaste: "Click Paste or drag text or files to input box" @
+.extRadioButtonTab: "Tab" @
+.extCheckBoxExcludeHeader: "Exclude Header Row" @
 
 SECTION Form2DMap
 
@@ -409,7 +414,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "你添加了新的星域！\r\n这将会需要完全重新下载EDSM数据\r\n确认要继续吗？"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "星系数据同步已被禁用。\r\n若要让星系数据更新，请从设置里重新启用星系数据下载"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "你移除了一些星域！\r\n这将会花上一段时间来从数据库里清除数据\r\n确认要继续吗？"
-.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
+.GALSELEX: "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
 .Select: "Select: " => "选择："
 .GALSELEN: "Select the data set" => "选择数据集"
 .PresstoAccept: "Press to Accept" => "点击以接受"
@@ -464,6 +469,8 @@ SECTION MessageBoxTheme
 .OK: "OK" => "确认"
 .No: "No" => "否"
 .Yes: "Yes" => "是"
+.Add: "Add" @
+.Set: "Set" @
 
 SECTION DataGridViewDialogs
 

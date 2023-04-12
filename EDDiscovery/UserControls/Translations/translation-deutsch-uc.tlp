@@ -77,9 +77,17 @@ SECTION UserControlContainerGrid
 
 SECTION UserControlCompass
 
-.labelBookmark: "System Bookmarks" => "Systemlesezeichen"
-.checkBoxHideTransparent: "Hide In Transparent" => "Verstecke bei Transparenz"
 .labelTargetLat: "Target" => "Ziel"
+.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
+.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
+.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
+.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
+.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
+.extButtonShowControl.ToolTip: "Configure compass overlay" @
+.extButtonFont.ToolTip: "Configure font of compass" @
+.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhenonfoot: "Hide when on foot" @
+.cleartargetonleavingbody: "Clear target when leaving a body" @
 
 SECTION UserControlWebBrowser
 
@@ -251,6 +259,7 @@ SECTION UserControlExpedition
 .Note: "Note" => "Notiz"
 .ColumnDistStart: "Dist Start" => "Dist Start"
 .ColumnDistanceRemaining: "Dist Remaining" => "Dist Verbleibend"
+.ColumnHistoryNote: "History Note" @
 .labelCml: "Cml Distance:" => "Gesamte Entfernung:"
 .labelP2P: "P2P Distance:" => "Punkt-zu-Punkt-Entfernung:"
 .labelEndDate: "End Date:" => "Enddatum:"
@@ -258,8 +267,8 @@ SECTION UserControlExpedition
 .labelRouteName: "Route Name:" => "Routenname:"
 .copyToolStripMenuItem: "Copy" => "Kopieren"
 .pasteToolStripMenuItem: "Paste" => "Einfügen"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Füge kopierte Zeilen ein"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Lösche Zeilen"
+.cutToolStripMenuItem: "Cut" @
+.insertRowAboveToolStripMenuItem: "Insert row above" @
 .setTargetToolStripMenuItem: "Set Target" => "Ziel setzen"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "Lesezeichen bearbeiten"
 .NoRoute: "No route set up. Please add at least two systems." => "Keine Route angelegt. Bitte füge mindestens zwei Systeme hinzu."
@@ -353,23 +362,36 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" => "Schiffsspind"
-.ColBackPack: "BackPack" => "Rucksack"
 .Data: "Data" => "Daten"
 .Mats: "Mats" => "Mat."
 .Total: "Total" => "Gesamt"
 .Rare: "Rare" => "Selten"
-.ColRecipes: "Recipes" => "Rezepte"
 .ColName: "Name" => "Name"
 .ColShortName: "Abv" => "Abk"
 .ColCategory: "Category" => "Kategorie"
 .ColType: "Type" => "Art"
 .ColNumber: "Number" => "Anzahl"
+.ColBackPack: "Backpack" => "Rucksack"
 .ColPrice: "Avg. Price" => "Durchschn. Preis"
+.ColRecipes: "Recipes" => "Rezepte"
+.ColWanted: "Want" @
+.ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" => "Anzahl"
 .textBoxItems1.ToolTip: "Count of Items" => "Anzahl"
 .buttonFilter.ToolTip: "Filter out items" => "Einträge ausfiltern"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Grün zeigt Einträge auf Null, Rot filtert diese"
+.AllMats: "All Materials" @
+.AllCommods: "All Commodities" @
+.AllMicroresources: "All Microresources" @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.extButtonFont.ToolTip: "Font for shopping list" @
+.buttonExtImport.ToolTip: "Import materials list into panel" @
+.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
+.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
+.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
+.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
+.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
 
 SECTION UserControlMissionOverlay
 
@@ -623,6 +645,7 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Zeige Abweichung von der Route"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Wegpunkt automatisch kopieren"
 .autoSetTargetToolStripMenuItem: "Auto set target" => "Ziel automatisch setzen"
+.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
 .showtargetinfo: "Show Target Information" => "Zeige Zielinformation"
 .showfuelinfo: "Show Fuel Information" => "Zeige Treibstoffinformation"
 .J1: "jump" => "Sprung"
@@ -1157,7 +1180,6 @@ SECTION UserControlTravelGrid
 .CSTOP: "Clear Stop marker" => "Leere Stoppmarker"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "Setze Stoppmarker für Reiseberechnungen"
 .SETSTARTTC: "Set Start marker for travel calculations" => "Setze Startmarker für Reiseberechnungen"
-.SETSTSTOP: "Set Start/Stop point for travel calculations" => "Setze Start/Stopp-punkt für Reiseberechnungen"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "System konnte nicht gefunden werden - wurde nicht synchronisiert oder EDSM ist nicht verfügbar"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Bestätige, dass du diesen Eintrag entfernen willst\r\nDieser kann wieder aufscheinen wenn die Logs erneut gescannt werden."
 .quickMarkToolStripMenuItem: "Marked" => "Markiert"
@@ -1205,6 +1227,8 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Umrisskontrolle"
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
+.StartStopHidden: "Next start/stop marker is hidden" @
+.StartStopNotFound: "No start/stop marker found below" @
 
 SECTION UserControlCaptainsLog
 
@@ -1488,6 +1512,7 @@ SECTION UserControlCarrier
 .ServiceActive: "This Service is Active" => "Diese Einrichtung ist aktiv"
 .ServiceSuspended: "This service is suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
+.NoPacks: "No Module or Ship packs installed" @
 .Tier: "Tier" => "Rang"
 .Cost: "Cost" => "Kosten"
 .Jumping: "Jumping" @
