@@ -223,6 +223,10 @@ namespace EDDiscovery
         UserControlCompass_buttonNewBookmark_ToolTip,
         UserControlCompass_extButtonShowControl_ToolTip,
         UserControlCompass_extButtonFont_ToolTip,
+        UserControlCompass_cleartargetonleavingbody,
+        UserControlCompass_hidewhenonfoot,
+        UserControlCompass_hidewhennolatlong,
+
 
         ImportExportForm, // Control 'Export'
         ImportExportForm_buttonExport, // Control 'Export'

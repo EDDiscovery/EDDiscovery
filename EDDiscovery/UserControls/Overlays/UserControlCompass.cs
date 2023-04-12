@@ -540,9 +540,9 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no Lat/Long".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
-            displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
-            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); //tbd
+            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); //tbd
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 
