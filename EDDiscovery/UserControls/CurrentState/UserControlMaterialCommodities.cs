@@ -634,9 +634,10 @@ namespace EDDiscovery.UserControls
             {
                 var csv = frm.CSVRead();
 
-                if ( csv!=null )
+                if ( csv!=null && csv.Rows.Count>0)
                 {
                     var rows = frm.ExcludeHeader ? csv.RowsExcludingHeaderRow : csv.Rows;
+                    int amountcol = frm.ExcludeHeader ? csv.CellNumberOfHeaderItem(new string[] { "Qty", "Amount", "Quantity", "Count" }) : -1;
 
                     wantedamounts.Clear();
                     
@@ -645,8 +646,12 @@ namespace EDDiscovery.UserControls
                         MaterialCommodityMicroResourceType mcrt = null;
                         int count = int.MinValue;
 
-                        foreach (var c in r.Cells)
+                        if (amountcol >= 0 && amountcol < r.Cells.Count && int.TryParse(r.Cells[amountcol], System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int cv1))
+                            count = cv1;
+
+                        for (int i = 0; i < r.Cells.Count; i++)
                         {
+                            var c = r.Cells[i];
                             //System.Diagnostics.Debug.Write($"{c},");
                         
                             var mcd = MaterialCommodityMicroResourceType.GetByEnglishName(c);
@@ -655,6 +660,8 @@ namespace EDDiscovery.UserControls
                             else if (count == int.MinValue && int.TryParse(c, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int cv))
                                 count = cv;
                         }
+
+
                         if (mcrt != null && count > 0)
                             wantedamounts[mcrt.FDName] = count;
 
