@@ -251,8 +251,8 @@ namespace EDDiscovery.UserControls
                     visible = false;
                 }
                             // if in mainship, or srv, or we are on foot planet, we can show
-                else if (elitemode.InFlight ||
-                         elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.SRV ||
+                else if ((!IsSet(CtrlList.hidewheninship) && elitemode.InFlight) ||
+                         (!IsSet(CtrlList.hidewheninSRV) && elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.SRV ) ||
                          (!IsSet(CtrlList.hidewhenonfoot) && ( elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootPlanet ||
                                                                 elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootInstallationInside ))
                     )
@@ -364,8 +364,9 @@ namespace EDDiscovery.UserControls
                     if (current_body != null)
                     {
                         string planetname = current_body.ReplaceIfStartsWith(current_sys.Name, "");
-                        System.Diagnostics.Debug.WriteLine($"..Compass Combobox check for planet {planetname}");
-                        planetMarks = planetMarks?.Where(p => p.Name.EqualsIIC(planetname))?.ToList();
+                        System.Diagnostics.Debug.WriteLine($"..Compass Combobox check for planet '{planetname}'");
+                        if ( planetname.HasChars() )
+                            planetMarks = planetMarks?.Where(p => p.Name.EqualsIIC(planetname))?.ToList();
                     }
 
                     if (planetMarks != null)
@@ -388,14 +389,15 @@ namespace EDDiscovery.UserControls
 
                 var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(current_sys, false);     // not edsm, so no delay
 
-                if ( sysnode != null && current_body != null)
+                if ( sysnode != null)
                 {
-                    var scannode = sysnode.Find(current_body);
+                    var scannode = current_body.HasChars() ? sysnode.Find(current_body) : null;
+
                     if ( scannode != null)
                     {
                         System.Diagnostics.Debug.WriteLine($"..Compass Found scannode for {current_body}");
 
-                        foreach(var sf in scannode.SurfaceFeatures.EmptyIfNull())
+                        foreach (var sf in scannode.SurfaceFeatures.EmptyIfNull())
                         {
                             if (sf.HasLatLong)  // only want positions
                             {
@@ -404,7 +406,24 @@ namespace EDDiscovery.UserControls
                                 comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
                             }
                         }
+                    }
+                    else
+                    {
+                        foreach( var bodies in sysnode.Bodies)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.FullName}");
 
+                            foreach (var sf in bodies.SurfaceFeatures.EmptyIfNull())
+                            {
+                                if (sf.HasLatLong)  // only want positions
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
+                                    comboBoxBookmarks.Items.Add($"{bodies.CustomNameOrOwnname}: {sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
+                                    comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
+                                }
+                            }
+
+                        }
                     }
                 }
 
@@ -520,6 +539,8 @@ namespace EDDiscovery.UserControls
             autohide,
             hidewithnolatlong,
             hidewhenonfoot,
+            hidewheninSRV,
+            hidewheninship,
             clearlatlong,
         };
 
@@ -542,6 +563,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
             displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); //tbd
             displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship)); //tbd
             displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); //tbd
             CommonCtrl(displayfilter, extButtonShowControl);
         }

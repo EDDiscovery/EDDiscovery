@@ -225,6 +225,8 @@ namespace EDDiscovery
         UserControlCompass_extButtonFont_ToolTip,
         UserControlCompass_cleartargetonleavingbody,
         UserControlCompass_hidewhenonfoot,
+        UserControlCompass_hidewheninSRV,
+        UserControlCompass_hidewheninship,
         UserControlCompass_hidewhennolatlong,
 
 
