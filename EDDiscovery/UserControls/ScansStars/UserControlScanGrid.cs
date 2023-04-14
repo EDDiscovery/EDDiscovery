@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EliteDangerousCore;
@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ScanGridPanel";
 
-            discoveryform.OnNewEntry += NewEntry;
+            DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlScanGrid_colName, EDTx.UserControlScanGrid_colClass, EDTx.UserControlScanGrid_colDistance, EDTx.UserControlScanGrid_colBriefing };
             var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip, EDTx.UserControlScanGrid_checkBoxEDSM_ToolTip };
@@ -72,36 +72,27 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewScangrid);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewScangrid);
-            uctg.OnTravelSelectionChanged -= Display;
-            discoveryform.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnNewEntry -= NewEntry;
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
         }
 
         public override void InitialDisplay()
         {
-            DrawSystem(uctg.GetCurrentHistoryEntry, false);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        private void NewEntry(HistoryEntry he, HistoryList hl)
+        private void NewEntry(HistoryEntry he)
         {
             DrawSystem(he, he.journalEntry is IStarScan ); // not IBodyNameAndID because all that can do is add an empty scan node, and we do not present info if no scan data
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             DrawSystem(he, false);
         }
@@ -127,7 +118,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await discoveryform.history.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
+                scannode = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -163,8 +154,8 @@ namespace EDDiscovery.UserControls
             var gasgiants = 0;
             var moons = 0;
 
-            List<MaterialCommodityMicroResource> historicmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
-            List<MaterialCommodityMicroResource> curmcl = discoveryform.history.MaterialCommoditiesMicroResources.GetLast();
+            List<MaterialCommodityMicroResource> historicmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+            List<MaterialCommodityMicroResource> curmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast();
 
             HashSet<string> jumponiums = new HashSet<string>();
 
@@ -213,8 +204,9 @@ namespace EDDiscovery.UserControls
                                     sn.ScanData.DisplayString(0, historicmcl, curmcl);
                     }
                 }
-                // must have scan data and a name to be good, and either not edsm body or edsm check
-                else if (sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))     
+
+                // must have scan data and either not edsm body or edsm check
+                else if (sn.ScanData != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
                 { 
                     var overlays = new StarColumnOverlays();
 
@@ -372,12 +364,27 @@ namespace EDDiscovery.UserControls
                             overlays.mapped = true;
                         }
 
-                        if ( sn.Organics != null )
+                        if (sn.SurfaceFeatures != null)
+                        {
+                            string ol = StarScan.SurfaceFeatureList(sn.SurfaceFeatures);
+                            bdDetails.Append(Environment.NewLine).Append(ol);
+                        }
+                        if (sn.Organics != null)
                         {
                             string ol = JournalScanOrganic.OrganicList(sn.Organics);
                             bdDetails.Append(Environment.NewLine).Append(ol);
                         }
-                            
+                        if (sn.Signals != null)
+                        {
+                            string ol = JournalSAASignalsFound.SignalList(sn.Signals);
+                            bdDetails.Append(Environment.NewLine).Append(ol);
+                        }
+                        if (sn.Genuses != null)
+                        {
+                            string ol = JournalSAASignalsFound.GenusList(sn.Genuses);
+                            bdDetails.Append(Environment.NewLine).Append(ol);
+                        }
+
                         // materials                        
                         if (sn.ScanData.HasMaterials )
                         {
@@ -454,6 +461,34 @@ namespace EDDiscovery.UserControls
                                 sn.ScanData.DisplayString(0, historicmcl, curmcl);
 
                     sn.ScanData.Jumponium(jumponiums);      // add to jumponiums hash any seen
+                }
+                else if ( !sn.EDSMCreatedNode )             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
+                {   
+                    if (sn.SurfaceFeatures != null)
+                    {
+                        string ol = StarScan.SurfaceFeatureList(sn.SurfaceFeatures);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+                    if (sn.Organics != null)
+                    {
+                        string ol = JournalScanOrganic.OrganicList(sn.Organics);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+                    if (sn.Signals != null)
+                    {
+                        string ol = JournalSAASignalsFound.SignalList(sn.Signals);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+                    if (sn.Genuses != null)
+                    {
+                        string ol = JournalSAASignalsFound.GenusList(sn.Genuses);
+                        bdDetails.Append(Environment.NewLine).Append(ol);
+                    }
+
+                    dataGridViewScangrid.Rows.Add(new object[] { null, sn.FullName, "?", "?" , bdDetails });
+                    
+                    var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+                    cur.Tag = JournalScan.GetPlanetImageNotScanned();
                 }
             }
 

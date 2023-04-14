@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Data;
@@ -25,10 +23,16 @@ namespace EDDiscovery.UserControls
     {
         public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(PanelInformation.PanelIDs.TravelGrid); } }
 
-        public T GetUserControl<T>(PanelInformation.PanelIDs p) where T:class
+        public T GetUserControl<T>(PanelInformation.PanelIDs p) where T : class
         {
             T v = default(T);
-            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).panelid == p, (c) => { v = c as T; }); // see if we can find a TG
+            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).PanelID == p, (c) => { v = c as T; }); // see if we can find
+            return v;
+        }
+        public UserControlCommonBase GetUserControl(PanelInformation.PanelIDs p)
+        {
+            UserControlCommonBase v = null;
+            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c is UserControlCommonBase && ((UserControlCommonBase)c).PanelID == p, (c) => { v = c as UserControlCommonBase; }); // see if we can find
             return v;
         }
 
@@ -103,20 +107,18 @@ namespace EDDiscovery.UserControls
             {
                 int tagid = (int)c.Tag;
                 int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.panelid} tag {tagid} dno {displaynumber}");
+                System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.PanelID} tag {tagid} dno {displaynumber}");
 
-                uccb.Init(discoveryform, displaynumber);
+                uccb.Init(DiscoveryForm, displaynumber);
             });
 
-            discoveryform.OnPanelAdded += PanelAdded;
+            DiscoveryForm.OnPanelAdded += PanelAdded;
 
             // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
 
         public override void LoadLayout()           // cursor now set up, initial setup complete..
         {
-            ucursor_history = uctg;                 // record base one
-            ucursor_inuse = FindTHC() ?? ucursor_history; // if we have a THC, use it, else use the history one
             string splitctrl = GetSetting(dbWindows, "");
 
             //System.Diagnostics.Debug.WriteLine("Layout loading " + displaynumber + " " + splitctrl);
@@ -124,7 +126,6 @@ namespace EDDiscovery.UserControls
 
             RunActionOnSplitterTree((p, c, uccb) =>     // now, at load layout, do the rest of the UCCB contract.
             {
-                uccb.SetCursor(ucursor_inuse);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             });
@@ -162,12 +163,12 @@ namespace EDDiscovery.UserControls
                     {
                         // pick out the uccb, if currentcontrol is null it will be null. Then using that pick out the panelid from it, which is the definitive one used to create it
                         UserControlCommonBase uccb = ((c as ExtendedControls.TabStrip).CurrentControl) as UserControlCommonBase;
-                        return tagid.ToStringInvariant() + "," + (uccb != null ? (int)uccb.panelid : NoTabPanelSelected).ToStringInvariant();
+                        return tagid.ToStringInvariant() + "," + (uccb != null ? (int)uccb.PanelID : NoTabPanelSelected).ToStringInvariant();
                     }
                     else
                     {
                         UserControlCommonBase uccb = c as UserControlCommonBase;
-                        return tagid.ToStringInvariant() + "," + (FixedPanelOffsetLow + ((int)uccb.panelid)).ToStringInvariant();
+                        return tagid.ToStringInvariant() + "," + (FixedPanelOffsetLow + ((int)uccb.PanelID)).ToStringInvariant();
                     }
                 });
 
@@ -184,7 +185,7 @@ namespace EDDiscovery.UserControls
                 }
             });
 
-            discoveryform.OnPanelAdded -= PanelAdded;
+            DiscoveryForm.OnPanelAdded -= PanelAdded;
         }
 
         public void PanelAdded()
@@ -240,6 +241,7 @@ namespace EDDiscovery.UserControls
                 uccb.Dock = DockStyle.Fill;
                 uccb.Tag = tagid;
                 uccb.Name = "UC-" + tagid.ToStringInvariant();
+                uccb.RequestPanelOperation += SplitterRequestAction;
 
                 return uccb;
             }
@@ -270,7 +272,6 @@ namespace EDDiscovery.UserControls
                 {
                     UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                     uccb.CloseDown();
-                    AssignTHC();        // in case we removed anything
                 };
 
                 tabstrip.OnCreateTab += (tab, si) =>        // called when the tab strip wants a new control for a tab. 
@@ -283,6 +284,9 @@ namespace EDDiscovery.UserControls
                     tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
 
                     System.Diagnostics.Trace.WriteLine("SplitterCreate Tab " + c.Name );
+
+                    uccb.RequestPanelOperation += SplitterRequestAction;
+
                     return c;
                 };
 
@@ -294,8 +298,8 @@ namespace EDDiscovery.UserControls
 
                     if (uccb != null)
                     {
-                        System.Diagnostics.Trace.WriteLine("Splitter Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
-                        uccb.Init(discoveryform, displaynumber);      // init..
+                        System.Diagnostics.Trace.WriteLine("Splitter Make Tab " + tabstripid + " with dno " + displaynumber );
+                        uccb.Init(DiscoveryForm, displaynumber);      // init..
 
                         var scale = this.FindForm().CurrentAutoScaleFactor();
                         System.Diagnostics.Trace.WriteLine($"Splitter apply scaling to {uccb.Name} {scale}");
@@ -303,15 +307,12 @@ namespace EDDiscovery.UserControls
 
                         ExtendedControls.Theme.Current.ApplyStd(uccb);     
 
-                        uccb.SetCursor(ucursor_inuse);
                         uccb.LoadLayout();
                         uccb.InitialDisplay();
                     }
-
-                    AssignTHC();        // in case we added one
                 };
 
-                tabstrip.OnPopOut += (tab, i) => { discoveryform.PopOuts.PopOut((PanelInformation.PanelIDs)tabstrip.TagList[i]); };
+                tabstrip.OnPopOut += (tab, i) => { DiscoveryForm.PopOuts.PopOut((PanelInformation.PanelIDs)tabstrip.TagList[i]); };
 
                 PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha); // sort order v.important.. we need the right index, dep
 
@@ -338,61 +339,65 @@ namespace EDDiscovery.UserControls
             toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels".T(EDTx.UserControlContainerSplitter_RC));
             return sc;
         }
-        
-        public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one
-        {
-            bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
-            //System.Diagnostics.Debug.WriteLine("Splitter CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
-            ucursor_history = thc;         // underlying one has changed. 
 
-            if (changedinuse)   // inform the boys
+        // called by the panels to do something - pass to siblings, and then work out if we should pass upwards
+        // a panel may claim the event, in which case its not sent up
+        private bool SplitterRequestAction(UserControlCommonBase sender, object actionobj)
+        {
+            //System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} request action {actionobj}");
+
+            bool done = false;
+
+            RunActionOnSplitterTree((sp, c, uccb) =>    // reflect to us first
             {
-                ucursor_inuse = ucursor_history;
-
-                RunActionOnSplitterTree((p, c, uccb) =>
+                if (uccb != null && uccb != sender && !done )   // make sure we have one, and don't send to sender, and we are not done (claimed)
                 {
-                    uccb.ChangeCursorType(ucursor_inuse);
-                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
-                });
-            }
-        }
+                   // System.Diagnostics.Debug.WriteLine($"Splitter .. uccb {uccb.PanelID} perform operation {actionobj}");
+                    done = uccb.PerformPanelOperation(sender, actionobj);
+                    if (done)
+                    {
+                       // System.Diagnostics.Debug.WriteLine($"Splitter .. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                    }
+                }
+            });
 
-        private IHistoryCursor FindTHC()
-        {
-            IHistoryCursor ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.TravelGrid);
-
-            if (ihc == null)
-                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.Journal);
-
-            if (ihc == null)
-                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.StarList);
-
-            return ihc;
-        }
-
-        private void AssignTHC()
-        {
-            IHistoryCursor uctgfound = FindTHC();
-
-            if ((uctgfound != null && !Object.ReferenceEquals(uctgfound, ucursor_inuse)) ||    // if got one but its not the one currently in use
-                 (uctgfound == null && !Object.ReferenceEquals(ucursor_history, ucursor_inuse))    // or not found, but we are not on the history one
-                )
+            if ( !done )
             {
-                ucursor_inuse = (uctgfound != null) ? uctgfound : ucursor_history;    // select
-                //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Change to " + ucursor_inuse.GetHashCode());
-
-                RunActionOnSplitterTree((p, c, uccb) =>
-                {
-                    uccb.ChangeCursorType(ucursor_inuse);
-                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
-                });
-
-                ucursor_inuse.FireChangeSelection();       // let the uctg tell the children a change event, so they can refresh
+                //System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
+                return RequestPanelOperation.Invoke(sender, actionobj);     // No one claimed it, so pass it up the chain
             }
             else
+                return done;
+        }
+
+        // called from above for us to do something, work out if we should pass it down
+        // we don't pass up some travel grid stuff if we have a travel grid ourselves
+        // sender can't be us since we are being called from above.
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            //System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} perform action {actionobj}");
+
+            if (IsOperationTHPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid)!=null)
             {
-                //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Stay on " + ucursor_inuse.GetHashCode());
+                //System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH for {actionobj}");
+                return false;
             }
+
+            bool done = false;
+
+            RunActionOnSplitterTree((sp, c, uccb) =>    // send Hes and JID moves to all
+            {
+                if (uccb != null && !done)
+                {
+                    done = uccb.PerformPanelOperation(sender, actionobj);
+                    if (done)
+                    {
+                        //System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                    }
+                }
+            });
+
+            return done;
         }
 
 
@@ -456,7 +461,6 @@ namespace EDDiscovery.UserControls
             if (uccb?.AllowClose() ?? true)      // check if can close, if null, we can
             {
                 currentsplitter.Merge(panel);
-                AssignTHC();        // because we may have removed the cursor
             }
         }
 
@@ -573,9 +577,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion 
-
-        private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
-        private IHistoryCursor ucursor_inuse;  // one in use
 
     }
 }

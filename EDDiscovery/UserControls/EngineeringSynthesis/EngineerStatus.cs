@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2022 - 2022 EDDiscovery development team
+ * Copyright © 2022 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EDDiscovery.Controls;
@@ -24,6 +22,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
+    [System.Diagnostics.DebuggerDisplay("{EngineerInfo.Name} {RecipesCount}")]
+
     public partial class EngineerStatusPanel : UserControl
     {
         public ItemData.EngineeringInfo EngineerInfo { get; private set; }      // may be null if entry not associated with an engineer
@@ -32,22 +32,36 @@ namespace EDDiscovery.UserControls
         public int RecipesCount { get { return dataGridViewEngineering.RowCount; } }
         public int[] WantedPerRecipe { get; private set; }
 
-        public Action Redisplay { get; set; }
+        public Action SaveSettings { get; set; }
+        public Action AskForRedisplay { get; set; }
+
+        public Dictionary<MaterialCommodityMicroResourceType, int> NeededResources { get; set; }        // computed during UpdateStatus, may be null
 
         public Action<EngineerStatusPanel> ColumnSetupChanged { get; set; }
 
         public void SaveDGV(string root)
         {
-            dataGridViewEngineering.SaveColumnSettings(root, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+            dataGridViewEngineering.SaveColumnSettings(root,
+                            (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
                             (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }
         public void LoadDGV(string root)
         {
             inchange = true;
-            dataGridViewEngineering.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+            dataGridViewEngineering.LoadColumnSettings(root, false,
+                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                             (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
             inchange = false;
         }
+
+        public void Clear()
+        {
+            for (int i = 0; i < WantedPerRecipe.Length; i++)
+                WantedPerRecipe[i] = 0;
+
+            SaveSettings?.Invoke();
+        }
+
 
         public int GetVSize(bool fullinfo)
         {
@@ -77,7 +91,8 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, "UserControlEngineering");    // share IDs with Engineering panel./
 
-            dataGridViewEngineering.LoadColumnSettings(colsetting, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+            dataGridViewEngineering.LoadColumnSettings(colsetting, false,
+                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                             (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
 
             labelEngineerName.Text = name;
@@ -100,6 +115,8 @@ namespace EDDiscovery.UserControls
 
             dataViewScrollerPanel.Suspend();
 
+            int wno = 0;
+
             for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
             {
                 if (Recipes.EngineeringRecipes[i].engineers.Contains(name))
@@ -108,6 +125,7 @@ namespace EDDiscovery.UserControls
 
                     var row = dataGridViewEngineering.Rows[dataGridViewEngineering.Rows.Add()];
                     row.Tag = r;
+                    row.Cells[0].Tag = wno++;           // index into WantedPerRecipe
                     row.Cells[UpgradeCol.Index].Value = r.Name; 
                     row.Cells[ModuleCol.Index].Value = r.modulesstring;
                     row.Cells[LevelCol.Index].Value = r.level;
@@ -118,11 +136,6 @@ namespace EDDiscovery.UserControls
             }
 
             WantedPerRecipe = wantedsettings.RestoreArrayFromString(0, RecipesCount);
-
-            for(int i = 0; i < RecipesCount; i++)
-            {
-                dataGridViewEngineering.Rows[i].Cells[WantedCol.Index].Value = WantedPerRecipe[i].ToString();
-            }
 
             dataViewScrollerPanel.Resume();
 
@@ -194,6 +207,8 @@ namespace EDDiscovery.UserControls
                 var wwmode = dataGridViewEngineering.DefaultCellStyle.WrapMode;
                 dataGridViewEngineering.DefaultCellStyle.WrapMode = DataGridViewTriState.False;     // seems to make it a tad faster
 
+                NeededResources = new Dictionary<MaterialCommodityMicroResourceType, int>();
+
                 foreach (DataGridViewRow row in dataGridViewEngineering.Rows)
                 {
                     row.Visible = true;     // if we hide stuff, we just make it invisible, we do not remove it
@@ -228,8 +243,9 @@ namespace EDDiscovery.UserControls
 
                     row.Cells[CraftedCol.Index].ToolTipText = tooltip;
 
-                    var res = MaterialCommoditiesRecipe.HowManyLeft(mcllist, totals, r, WantedPerRecipe[row.Index], reducetotals: false);    // recipes not chained not in order
+                    var res = MaterialCommoditiesRecipe.HowManyLeft(r, WantedPerRecipe[row.Index], mcllist, totals, NeededResources, reducetotals: false);    // recipes not chained not in order
 
+                    row.Cells[WantedCol.Index].Value = WantedPerRecipe[ (int)row.Cells[0].Tag].ToString();
                     row.Cells[MaxCol.Index].Value = res.Item1.ToString();
                     row.Cells[CraftedCol.Index].Value = CraftedCol.HeaderText == "-" ? "" : craftcount.ToString();
                     row.Cells[PercentageCol.Index].Value = res.Item5.ToString("N0");
@@ -275,7 +291,8 @@ namespace EDDiscovery.UserControls
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     WantedPerRecipe[e.RowIndex] = iv;
-                    Redisplay?.Invoke();
+                    SaveSettings?.Invoke();
+                    AskForRedisplay?.Invoke();
                 }
                 else
                     dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = WantedPerRecipe[e.RowIndex].ToString();

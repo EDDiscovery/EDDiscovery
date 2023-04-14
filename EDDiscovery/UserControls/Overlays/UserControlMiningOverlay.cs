@@ -57,20 +57,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             Resize += UserControlMiningOverlay_Resize;
         }
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -79,17 +71,19 @@ namespace EDDiscovery.UserControls
         {
             extPanelRollUp.Visible = !on;
             pictureBox.BackColor = this.BackColor = curcol;
+        }
+        public override void TransparencyModeChanged(bool on)
+        {
             Display();
         }
 
         public override void Closing()
         {
             timetimer.Stop();
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             PutSetting(dbRolledUp, extPanelRollUp.PinState);
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             Display(he);
         }
@@ -125,12 +119,12 @@ namespace EDDiscovery.UserControls
                 JournalTypeEnum[] miningevents = new JournalTypeEnum[] { JournalTypeEnum.AsteroidCracked, JournalTypeEnum.ProspectedAsteroid, JournalTypeEnum.LaunchDrone,
                                 JournalTypeEnum.MiningRefined, JournalTypeEnum.MaterialCollected, JournalTypeEnum.MaterialDiscovered, JournalTypeEnum.MaterialDiscarded};
 
-                var newlist = HistoryList.FilterBetween(discoveryform.history.EntryOrder(), he, x => boundevents.Contains(x.EntryType), y => miningevents.Contains(y.EntryType), out HistoryEntry newhebelow, out HistoryEntry newheabove);
+                var newlist = HistoryList.FilterBetween(DiscoveryForm.History.EntryOrder(), he, x => boundevents.Contains(x.EntryType), y => miningevents.Contains(y.EntryType), out HistoryEntry newhebelow, out HistoryEntry newheabove);
 
                 if (newlist != null)        // only if no history would we get null, unlikely since he has been tested, but still..
                 {
-                    int limpetsleft = discoveryform.history.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
-                    int cargo = discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(newheabove.MaterialCommodity);
+                    int limpetsleft = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
+                    int cargo = DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(newheabove.MaterialCommodity);
                     int cargocap = newheabove.ShipInformation?.CargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
                     int cargoleft = cargocap - cargo; 
 
@@ -142,7 +136,7 @@ namespace EDDiscovery.UserControls
                         hebelow = newhebelow;
                         limpetsleftdisplay = limpetsleft;
                         cargoleftdisplay = cargoleft;
-                        incurrentplay = heabove == discoveryform.history.GetLast && !boundevents.Contains(heabove.EntryType);
+                        incurrentplay = heabove == DiscoveryForm.History.GetLast && !boundevents.Contains(heabove.EntryType);
                         System.Diagnostics.Debug.WriteLine("Redisplay {0} current {1}", heabove.EntryNumber, incurrentplay);
                         Display();
 
@@ -629,13 +623,13 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "All" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "All" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                grd.SetCSVDelimiter(frm.Comma);
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
 
                 var found = ReadHistory(out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
 

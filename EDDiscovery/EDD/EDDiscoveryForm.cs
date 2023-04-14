@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2021 EDDiscovery development team
+ * Copyright © 2015 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using BaseUtils;
@@ -23,7 +22,6 @@ using EliteDangerousCore.EDSM;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -48,18 +46,20 @@ namespace EDDiscovery
 
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
-        public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
-        public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
+        public UserControls.UserControlTravelGrid PrimaryTravelGrid { get { return tabControlMain.PrimarySplitterTab.GetTravelGrid; } }
+        public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimarySplitterTab; } }
 
         public EliteDangerousCore.ScreenShots.ScreenShotConverter ScreenshotConverter { get; set; }
         public PopOutControl PopOuts { get; set; }
 
-        public GalacticMapping galacticMapping { get; private set; }
-        public GalacticMapping eliteRegions { get; private set; }
+        public GalacticMapping GalacticMapping { get; private set; }
+        public GalacticMapping EliteRegions { get; private set; }
 
-        public HistoryList history { get { return Controller.history; } }
+        public HistoryList History { get { return Controller.History; } }
 
         public string LogText { get { return Controller.LogText; } }
+
+        public EliteDangerousCore.UIEvents.UIOverallStatus UIOverallStatus { get { return Controller.UIOverallStatus; } }
         #endregion
 
         #region Callbacks from us
@@ -79,8 +79,8 @@ namespace EDDiscovery
 
         #region Events due to EDDiscoveryControl 
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }       
-        public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
-        public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
+        public event Action OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
+        public event Action<HistoryEntry> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered { add { Controller.OnNewHistoryEntryUnfiltered += value; } remove { Controller.OnNewHistoryEntryUnfiltered -= value; } }
         public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
@@ -154,6 +154,16 @@ namespace EDDiscovery
         {
             // some debug
             //EliteDangerousCore.ItemData.ReformatNonCoriolisModules();     // clean up these modules list
+
+            //BaseUtils.MSTicks T = new MSTicks(100);
+            //while(T.NotTimedOut)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"Not timed out {Environment.TickCount}");
+            //    System.Threading.Thread.Sleep(50);
+            //}
+
+          //  System.Diagnostics.Debug.WriteLine($"timed out {T.TimedOut}");
+
 
             if (EDDOptions.Instance.Culture != null)
                 CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
@@ -257,6 +267,8 @@ namespace EDDiscovery
 
             ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
+
+            PopOuts.RequestPanelOperation += tabControlMain.PerformPanelOperationPopOut;          // HOOK requests from the forms into the main tab..
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
             msg.Invoke("Applying Themes");
@@ -401,19 +413,19 @@ namespace EDDiscovery
             }
 
             {
-                galacticMapping = new GalacticMapping();
+                GalacticMapping = new GalacticMapping();
                 if (File.Exists(gmofile))
-                    galacticMapping.ParseEDSMFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
-                galacticMapping.LoadMarxObjects();
+                    GalacticMapping.ParseEDSMFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+                GalacticMapping.LoadMarxObjects();
             }
 
             {
-                eliteRegions = new GalacticMapping();
+                EliteRegions = new GalacticMapping();
                 var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
-                eliteRegions.ParseEDSMJson(text);                            // at this point, gal map data has been uploaded - get it into memory
+                EliteRegions.ParseEDSMJson(text);                            // at this point, gal map data has been uploaded - get it into memory
             }
 
-            SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
+            SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMONames());
 
             Bodies.Prepopulate();           
 
@@ -480,7 +492,7 @@ namespace EDDiscovery
             {
                 tabControlMain.MinimumTabWidth = 32;
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
-                if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
+                if (tabControlMain.PrimarySplitterTab == null || tabControlMain.PrimarySplitterTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
                 {
                     MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                     "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
@@ -553,9 +565,9 @@ namespace EDDiscovery
                              (b) => LogLine(b),
                              () =>
                              {
-                                 if (history.GetLast != null)        // lasthe should have name and whereami, and an indication of commander
+                                 if (History.GetLast != null)        // lasthe should have name and whereami, and an indication of commander
                                  {
-                                     return new Tuple<string, string, string>(history.GetLast.System.Name, history.GetLast.WhereAmI, history.GetLast.Commander?.Name ?? "Unknown");
+                                     return new Tuple<string, string, string>(History.GetLast.System.Name, History.GetLast.WhereAmI, History.GetLast.Commander?.Name ?? "Unknown");
                                  }
                                  else
                                  {
@@ -627,6 +639,8 @@ namespace EDDiscovery
             if (dllresults.Item4.HasChars())   // failed
                 LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), dllresults.Item4));
 
+
+
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
             // Bindings
@@ -646,9 +660,12 @@ namespace EDDiscovery
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
 
-            // Notifications
+            // Notifications, only check github when directed and we are not debugging it using a folder override
 
-            Notifications.CheckForNewNotifications((notelist) =>
+            Notifications.CheckForNewNotifications(EDDOptions.Instance.CheckGithubFiles && EDDOptions.Instance.NotificationFolderOverride == null, 
+                                                   EDDOptions.Instance.NotificationsAppDirectory(),
+                                                   EDDiscovery.Properties.Resources.URLGithubDataDownload,
+            (notelist) =>
             {
                 this.BeginInvoke(new Action(() =>
                 {
@@ -857,129 +874,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
-
-        public void AddTab(PanelInformation.PanelIDs id, int tabindex = 0) // negative means from the end.. -1 is one before end
-        {
-            tabControlMain.AddTab(id, tabindex);
-        }
-
-        public bool SelectTabPage(string name, bool openit, bool closeit)
-        {
-            PanelInformation.PanelIDs? id = PanelInformation.GetPanelIDByWindowsRefName(name);
-
-            if (id == null)     // if a name, perform a name select
-            {
-                TabPage p = tabControlMain.FindTabPageByName(name);
-                if (p != null)
-                {
-                    if (closeit)
-                        tabControlMain.RemoveTab(p);
-                    else
-                        tabControlMain.SelectTab(p);
-                    return true;
-                }
-            }
-            else
-            {
-                TabPage p = tabControlMain.GetMajorTab(id.Value);
-                if (p == null)
-                {
-                    if (openit)
-                    {
-                        tabControlMain.EnsureMajorTabIsPresent(id.Value, true);
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (closeit)
-                        tabControlMain.RemoveTab(p);
-                    else
-                        tabControlMain.SelectTab(p);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private void panelTabControlBack_MouseDown(object sender, MouseEventArgs e)     // click on the empty space of the tabs.. backed up by the panel
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                tabControlMain.ClearLastTab();      // this sets LastTab to -1, which thankfully means insert at last but one position to the AddTab function
-                contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
-            }
-        }
-
-        private void tabControlMain_MouseClick(object sender, MouseEventArgs e)     // click on one of the tab buttons
-        {
-            if (tabControlMain.LastTabClicked >= 0)
-            {
-                if (e.Button == MouseButtons.Right)
-                {
-                    Point p = tabControlMain.PointToScreen(e.Location);
-                    p.Offset(0, -8);
-                    contextMenuStripTabs.Show(p);
-                }
-                else if (e.Button == MouseButtons.Middle && !IsNonRemovableTab(tabControlMain.LastTabClicked))
-                {
-                    tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
-                }
-            }
-        }
-
-        private void ContextMenuStripTabs_Opening(object sender, CancelEventArgs e)
-        {
-            int n = tabControlMain.LastTabClicked;
-            bool validtab = n >= 0 && n < tabControlMain.TabPages.Count;   // sanity check
-
-            removeTabToolStripMenuItem.Enabled = validtab && !IsNonRemovableTab(n);
-            renameTabToolStripMenuItem.Enabled = validtab && !(tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector);
-        }
-
-        private void UpdatePanelListInContextMenuStrip()
-        {
-            addTabToolStripMenuItem.DropDownItems.Clear();
-
-            foreach (PanelInformation.PanelIDs pid in PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName))
-            {
-                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid,
-                    (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
-
-                if (tsmi != null)
-                    addTabToolStripMenuItem.DropDownItems.Add(tsmi);
-
-                ToolStripMenuItem tsmi2 = PanelInformation.MakeToolStripMenuItem(pid,
-                    (s, e) => PopOuts.PopOut((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag)));
-
-                if (tsmi2 != null)
-                    popOutPanelToolStripMenuItem.DropDownItems.Add(tsmi2);
-            }
-        }
-
-        private bool IsNonRemovableTab(int n)
-        {
-            bool uch = Object.ReferenceEquals(tabControlMain.TabPages[n].Controls[0], tabControlMain.PrimaryTab);
-            bool sel = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector;
-            return uch || sel;
-        }
-
-        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)     // use the form to detect the click on the empty tab area.. it passes thru
-        {
-            if (e.Button == MouseButtons.Right && e.Y >= tabControlMain.Top)
-            {
-                tabControlMain.ClearLastTab();      // this sets LastTab to -1, which thankfully means insert at last but one position to the AddTab function
-                Point p = this.PointToScreen(e.Location);
-                p.Offset(0, -8);
-                contextMenuStripTabs.Show(p);
-            }
-        }
-
-#endregion
-
-
-#region Closing
+        #region Closing
 
         public bool disallowclose = true;
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -1043,7 +938,7 @@ namespace EDDiscovery
      
 #endregion
     
-#region Tools Menu
+        #region Tools Menu
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1068,7 +963,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Admin Menu
+        #region Admin Menu
 
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1113,7 +1008,7 @@ namespace EDDiscovery
 
         private void Read21Folders(bool force)
         {
-            if (Controller.history.IsRealCommanderId)
+            if (Controller.History.IsRealCommanderId)
             {
                 EDCommander cmdr = EDCommander.Current;
                 if (cmdr != null)
@@ -1174,7 +1069,7 @@ namespace EDDiscovery
 
             if (DateTime.UtcNow.Subtract(lasttime).TotalHours >= 1)  // every hours, allowed to do this..
             {
-                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine, history, EDCommander.Current);
+                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine, History, EDCommander.Current);
                 UserDatabase.Instance.PutSettingDate("InaraLastHistoricUpload", DateTime.UtcNow);
             }
             else
@@ -1203,14 +1098,14 @@ namespace EDDiscovery
                     "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?".T(EDTx.EDDiscoveryForm_FillPos), 
                     "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                history.FillInPositionsFSDJumps(LogLine);
+                History.FillInPositionsFSDJumps(LogLine);
                 RefreshDisplays();
             }
         }
 
 #endregion
 
-#region Add Ons Menu
+        #region Add Ons Menu
 
         public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1246,7 +1141,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Help Menu
+        #region Help Menu
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1309,158 +1204,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Toolbar
-
-        public void UpdateCommandersListBox()
-        {
-            comboBoxCommander.Enabled = false;
-            comboBoxCommander.Items.Clear();            // comboBox is nicer with items
-
-            if (EDDOptions.Instance.DisableCommanderSelect)
-            {
-                comboBoxCommander.Items.Add("Jameson");
-                comboBoxCommander.SelectedIndex = 0;
-            }
-            else
-            {
-                comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
-                if (history.CommanderId == -1)  // is hidden log
-                {
-                    comboBoxCommander.SelectedIndex = 0;
-                }
-                else
-                {
-                    comboBoxCommander.SelectedItem = EDCommander.Current.Name;
-                }
-
-                comboBoxCommander.Enabled = true;
-            }
-        }
-
-        private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
-            {
-                var itm = (from EDCommander c in EDCommander.GetListInclHidden() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
-                ChangeToCommander(itm[0].Id);
-            }
-        }
-
-        public void RefreshButton(bool state)
-        {
-            buttonExtRefresh.Enabled = state;
-        }
-
-        private void buttonExtRefresh_Click(object sender, EventArgs e)
-        {
-            LogLine("Refresh History.".T(EDTx.EDDiscoveryForm_RH));
-            RefreshHistoryAsync();
-        }
-
-        private void sendUnsyncedEDSMJournalsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EDSMClass edsm = new EDSMClass();
-
-            if (!edsm.ValidCredentials)
-            {
-                ExtendedControls.MessageBoxTheme.Show(this, "No EDSM API key set".T(EDTx.EDDiscoveryForm_NoEDSMAPI));
-                return;
-            }
-
-            if (!EDCommander.Current.SyncToEdsm)
-            {
-                string dlgtext = "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?".T(EDTx.EDDiscoveryForm_ConfirmSyncToEDSM);
-                string dlgcapt = "Confirm EDSM sync".T(EDTx.EDDiscoveryForm_ConfirmSyncToEDSMCaption);
-
-                if (ExtendedControls.MessageBoxTheme.Show(this, dlgtext, dlgcapt, MessageBoxButtons.YesNo) == DialogResult.No)
-                {
-                    return;
-                }
-            }
-
-            EDSMSend();
-        }
-
-        private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCustomProfiles.SelectedIndex >= 0 && comboBoxCustomProfiles.Enabled)
-            {
-                if (comboBoxCustomProfiles.SelectedIndex == comboBoxCustomProfiles.Items.Count-1)    // last one if edit profiles
-                {
-                    Forms.ProfileEditor pe = new ProfileEditor();
-                    pe.Init(EDDProfiles.Instance, this.Icon);
-                    if (pe.ShowDialog() == DialogResult.OK)
-                    {
-                        bool removedcurprofile = EDDProfiles.Instance.UpdateProfiles(pe.Result, pe.PowerOnIndex);       // see if the current one has changed...
-
-                        if (removedcurprofile)
-                            ChangeToProfileId(EDDProfiles.DefaultId, false );
-                    }
-
-                    UpdateProfileComboBox();
-                }
-                else
-                {
-                    ChangeToProfileId(EDDProfiles.Instance.IdOfIndex(comboBoxCustomProfiles.SelectedIndex), true);
-                }
-            }
-        }
-
-        ExtendedControls.ExtListBoxForm popoutdropdown;
-
-        private void buttonExtPopOut_Click(object sender, EventArgs e)
-        {
-            popoutdropdown = new ExtendedControls.ExtListBoxForm("", true);
-            popoutdropdown.StartPosition = FormStartPosition.Manual;
-            popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
-            popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
-            popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
-            popoutdropdown.FlatStyle = FlatStyle.Popup;
-            popoutdropdown.PositionBelow(buttonExtPopOut);
-            popoutdropdown.FitImagesToItemHeight = true;
-            popoutdropdown.SelectedIndexChanged += (s, ea) =>
-            {
-                PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
-            };
-
-            ExtendedControls.Theme.Current.ApplyStd(popoutdropdown,true);
-            popoutdropdown.SelectionBackColor = ExtendedControls.Theme.Current.ButtonBackColor;
-            popoutdropdown.Show(this);
-        }
-
-        private void extButtonDrawnHelp_Click(object sender, EventArgs e)
-        {
-            tabControlMain.HelpOn(this,extButtonDrawnHelp.PointToScreen(new Point(0, extButtonDrawnHelp.Bottom)), tabControlMain.SelectedIndex);
-        }
-
-        private void buttonReloadActions_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ReLoad();
-            actioncontroller.CheckWarn();
-            actioncontroller.onStartup();
-            Controller.ResetUIStatus();
-
-            // keep for debug:
-
-            //var tx = BaseUtils.Translator.Instance.NotUsed();  foreach (var s in tx) System.Diagnostics.Debug.WriteLine(s); // turn on usetracker at top to use
-
-            //if (FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
-            //  Controller.DoCAPI(history.GetLast.Status.StationName, history.GetLast.System.Name, false, history.Shipyards.AllowCobraMkIV);
-        }
-
-        private void extButtonCAPI_Click(object sender, EventArgs e)
-        {
-            var he = history.GetLast;
-            if (he != null && he.IsDocked)
-                Controller.DoCAPI(he.WhereAmI, he.System.Name, history.Shipyards.AllowCobraMkIV);
-        }
-
-
-
-#endregion
-
-#region Other clicks - Captions etc
+        #region Other clicks - Captions etc
 
         private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
@@ -1499,7 +1243,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Notify Icons
+        #region Notify Icons
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {

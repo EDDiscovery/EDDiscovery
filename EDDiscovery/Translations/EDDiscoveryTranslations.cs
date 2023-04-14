@@ -1,6 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿/*
+ * Copyright © 2017-2023 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 
 // procedure for translation normalisation
 // 1. cd \code\eddiscovery.
@@ -33,8 +43,17 @@ namespace EDDiscovery
         Information, // Information
         NoPos, // No Pos
 
+        // copy from Extended control
+        MessageBoxTheme_OK,
+        MessageBoxTheme_Cancel,
+        MessageBoxTheme_Warning,
         MessageBoxTheme_No,
         MessageBoxTheme_Yes,
+        MessageBoxTheme_Abort,
+        MessageBoxTheme_Retry,
+        MessageBoxTheme_Ignore,
+        MessageBoxTheme_Add,
+        MessageBoxTheme_Set,
 
         TBD, // TBD - to be done
 
@@ -157,31 +176,6 @@ namespace EDDiscovery
         UserControlForm_extButtonDrawnTransparentMode_ToolTip, // ToolTip 'Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n'
         UserControlForm_extButtonDrawnClose_ToolTip, // ToolTip 'Close'
 
-        AddOnManagerForm_buttonExtGlobals,   // Control 'Globals'
-
-        AddOnManagerForm_AddOnTitle, // Add-On Manager
-        AddOnManagerForm_EditTitle, // Edit Add-Ons
-        AddOnManagerForm_Locallymodified, // Locally modified
-        AddOnManagerForm_UptoDate, // Up to Date
-        AddOnManagerForm_LocalOnly, // Local Only
-        AddOnManagerForm_Newversion, // New version
-        AddOnManagerForm_Newer, // Newer EDD required
-        AddOnManagerForm_Old, // Too old for EDD
-        AddOnManagerForm_Modwarn, // Modified locally, do you wish to overwrite the changes
-        AddOnManagerForm_Failed, // Add-on failed to update. Check files for read only status
-        AddOnManagerForm_DeleteWarn, // Do you really want to delete {0}
-        AddOnManagerForm_Type, // Type
-        AddOnManagerForm_Name, // Name
-        AddOnManagerForm_Version, // Version
-        AddOnManagerForm_Description, // Description
-        AddOnManagerForm_Status, // Status
-        AddOnManagerForm_Action, // Action
-        AddOnManagerForm_Delete, // Delete
-        AddOnManagerForm_Enabled, // Enabled
-        AddOnManagerForm_Install, // Install
-        AddOnManagerForm_Update, // Update
-        AddOnManagerForm_Edit, // Edit
-
         BookmarkForm_buttonEDSM, // Control 'EDSM'
         BookmarkForm_labelName, // Control 'Name'
         BookmarkForm_checkBoxTarget, // Control 'Make Target'
@@ -220,22 +214,36 @@ namespace EDDiscovery
         CSV_Helpers_OpenFailed, // Failed to open<spc>
         CSV_Helpers_WriteFailed, // Failed to write to<spc>
 
-        UserControlCompass_labelBookmark, // Control 'System Bookmarks'
         UserControlCompass_labelTargetLat, // Control 'Target'
-        UserControlCompass_checkBoxHideTransparent, // Control 'Hide In Transparent'
+
+        UserControlCompass_numberBoxTargetLatitude_ToolTip,
+        UserControlCompass_numberBoxTargetLongitude_ToolTip,
+        UserControlCompass_comboBoxBookmarks_ToolTip,
+        UserControlCompass_extButtonBlank_ToolTip,
+        UserControlCompass_buttonNewBookmark_ToolTip,
+        UserControlCompass_extButtonShowControl_ToolTip,
+        UserControlCompass_extButtonFont_ToolTip,
+        UserControlCompass_cleartargetonleavingbody,
+        UserControlCompass_hidewhenonfoot,
+        UserControlCompass_hidewheninSRV,
+        UserControlCompass_hidewheninship,
+        UserControlCompass_hidewhennolatlong,
 
 
-        ExportForm, // Control 'Export'
-        ExportForm_buttonExport, // Control 'Export'
-        ExportForm_ImportTitle,
-        ExportForm_ImportButton,
-        ExportForm_labelCVSSep, // Control 'CSV Separator'
-        ExportForm_radioButtonComma, // Control 'Comma'
-        ExportForm_radioButtonSemiColon, // Control 'Semicolon'
-        ExportForm_checkBoxIncludeHeader, // Control 'Include Header'
-        ExportForm_checkBoxCustomAutoOpen, // Control 'Open'
-        ExportForm_labelUTCEnd, // Control 'UTC'
-        ExportForm_labelUTCStart, // Control 'UTC'
+        ImportExportForm, // Control 'Export'
+        ImportExportForm_buttonExport, // Control 'Export'
+        ImportExportForm_ImportTitle,
+        ImportExportForm_ImportButton,
+        ImportExportForm_labelCVSSep, // Control 'CSV Separator'
+        ImportExportForm_radioButtonComma, // Control 'Comma'
+        ImportExportForm_radioButtonSemiColon, // Control 'Semicolon'
+        ImportExportForm_checkBoxIncludeHeader, // Control 'Include Header'
+        ImportExportForm_checkBoxCustomAutoOpen, // Control 'Open'
+        ImportExportForm_labelUTCEnd, // Control 'UTC'
+        ImportExportForm_labelUTCStart, // Control 'UTC'
+        ImportExportForm_labelPaste,
+        ImportExportForm_extRadioButtonTab,
+        ImportExportForm_extCheckBoxExcludeHeader,
 
         Form2DMap_LastWeek, // Last Week
         Form2DMap_LastMonth, // Last Month
@@ -412,15 +420,23 @@ namespace EDDiscovery
         UserControlSettings_NoMap, // No map downloaded
         UserControlSettings_GalFini, // Finished, Please close the window.
 
-        UserControlMaterialCommodities_NameCol, // Column Header 'Name'
-        UserControlMaterialCommodities_ShortName, // Column Header 'Abv'
-        UserControlMaterialCommodities_Category, // Column Header 'Category'
-        UserControlMaterialCommodities_Type, // Column Header 'Type'
-        UserControlMaterialCommodities_Number, // Column Header 'Number'
-        UserControlMaterialCommodities_Price, // Column Header 'Avg. Price'
+        UserControlMaterialCommodities_ColName, // Column Header 'Name'
+        UserControlMaterialCommodities_ColShortName, // Column Header 'Abv'
+        UserControlMaterialCommodities_ColCategory, // Column Header 'Category'
+        UserControlMaterialCommodities_ColType, // Column Header 'Type'
+        UserControlMaterialCommodities_ColNumber, // Column Header 'Number'
+        UserControlMaterialCommodities_ColBackPack,
+        UserControlMaterialCommodities_ColPrice, // Column Header 'Avg. Price'
+        UserControlMaterialCommodities_ColRecipes, // Recipes !! NOTE
+        UserControlMaterialCommodities_ColWanted,
+        UserControlMaterialCommodities_ColNeed,
         UserControlMaterialCommodities_buttonFilter_ToolTip, // ToolTip 'Filter out items'
         UserControlMaterialCommodities_textBoxItems1_ToolTip, // ToolTip 'Count of Items'
         UserControlMaterialCommodities_textBoxItems2_ToolTip, // ToolTip 'Count of Items'
+        UserControlMaterialCommodities_buttonClear_ToolTip,
+        UserControlMaterialCommodities_extButtonFont_ToolTip,
+        UserControlMaterialCommodities_buttonExtImport_ToolTip,
+
         UserControlMaterialCommodities_checkBoxShowZeros_ToolTip, // ToolTip 'Green will show materials with zero counts, red means remove them'
         UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
 
@@ -428,10 +444,16 @@ namespace EDDiscovery
         UserControlMaterialCommodities_Mats, // Data !! NOTE
         UserControlMaterialCommodities_Total, // Data !! NOTE
         UserControlMaterialCommodities_Rare, // Rare !! NOTE
-        UserControlMaterialCommodities_Recipes, // Recipes !! NOTE
-        UserControlMaterialCommodities_ShipLocker, // Discrete
-        UserControlMaterialCommodities_BackPack, // Discrete
+        UserControlMaterialCommodities_ShipLocker,
+        UserControlMaterialCommodities_AllMats,
+        UserControlMaterialCommodities_AllCommods,
+        UserControlMaterialCommodities_AllMicroresources,
 
+        UserControlMaterialCommodities_openRecipeInWindowToolStripMenuItem,
+        UserControlMaterialCommodities_displayItemInShoppingListToolStripMenuItem,
+        UserControlMaterialCommodities_clearAllDisplayItemsInShoppingListToolStripMenuItem,
+        UserControlMaterialCommodities_displayAllInShoppingListToolStripMenuItem,
+        UserControlMaterialCommodities_toolStripMenuItemSLClearAll,
 
         MissionListUserControl_PcolName, // Column Header 'Name'
         MissionListUserControl_pColStart, // Column Header 'Start Date'
@@ -673,9 +695,9 @@ namespace EDDiscovery
         UserControlContainerGrid_buttonExtPopOut_ToolTip, // ToolTip 'Click to select a pop out panel to display'
 
         UserControlJournalGrid_ColumnTime, // Column Header 'Time'
-        UserControlJournalGrid_Event, // Column Header 'Event'
-        UserControlJournalGrid_ColumnType, // Column Header 'Description'
-        UserControlJournalGrid_ColumnText, // Column Header 'Information'
+        UserControlJournalGrid_ColumnEvent, // Column Header 'Event'
+        UserControlJournalGrid_ColumnDescription, // Column Header 'Description'
+        UserControlJournalGrid_ColumnInformation, // Column Header 'Information'
         UserControlJournalGrid_labelTime, // Control 'Time'
         UserControlJournalGrid_labelSearch, // Control 'Search'
         UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, // ToolStrip control 'Remove sorting of columns'
@@ -746,9 +768,9 @@ namespace EDDiscovery
         UserControlTravelGrid_extCheckBoxOutlines_ToolTip, // ToolTip 'Control Outlining'
 
         UserControlTravelGrid_ColumnTime, // Column Header 'Time'
-        UserControlTravelGrid_Icon, // Column Header 'Event'
-        UserControlTravelGrid_ColumnSystem, // Column Header 'Description'
-        UserControlTravelGrid_ColumnDistance, // Column Header 'Information'
+        UserControlTravelGrid_ColumnEvent, // Column Header 'Event'
+        UserControlTravelGrid_ColumnDescription, // Column Header 'Description'
+        UserControlTravelGrid_ColumnInformation, // Column Header 'Information'
         UserControlTravelGrid_ColumnNote, // Column Header 'Note'
         UserControlTravelGrid_labelTime, // Control 'Time'
         UserControlTravelGrid_labelSearch, // Control 'Search'
@@ -760,11 +782,12 @@ namespace EDDiscovery
         UserControlTravelGrid_CSTOP, // Clear Stop marker
         UserControlTravelGrid_SETSTOPTC, // Set Stop marker for travel calculations
         UserControlTravelGrid_SETSTARTTC, // Set Start marker for travel calculations
-        UserControlTravelGrid_SETSTSTOP, // Set Start/Stop point for travel calculations
         UserControlTravelGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
         UserControlTravelGrid_Remove, // Confirm you wish to remove this entry
 
         UserControlTravelGrid_SearchTerms,      // you must define this one fully if you include it
+        UserControlTravelGrid_StartStopHidden,      // you must define this one fully if you include it
+        UserControlTravelGrid_StartStopNotFound,      // you must define this one fully if you include it
 
         UserControlStarList_ColumnTime, // Column Header 'Last Visit'
         UserControlStarList_ColumnSystem, // Column Header 'System'
@@ -979,12 +1002,14 @@ namespace EDDiscovery
         UserControlSurveyor_showMoreInformationToolStripMenuItem,
         UserControlSurveyor_showGravityToolStripMenuItem,
         UserControlSurveyor_showAtmosToolStripMenuItem,
+        UserControlSurveyor_showTempToolStripMenuItem,
         UserControlSurveyor_showVolcanismToolStripMenuItem,
         UserControlSurveyor_showSignalsToolStripMenuItem,
         UserControlSurveyor_autoHideToolStripMenuItem,
         UserControlSurveyor_dontHideInFSSModeToolStripMenuItem,
         UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem,
         UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem,
+        UserControlSurveyor_showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem,
         UserControlSurveyor_showDividersToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem,
         UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem,
@@ -995,6 +1020,7 @@ namespace EDDiscovery
         UserControlRouteTracker_showWaypointCoordinatesToolStripMenuItem,
         UserControlRouteTracker_showDeviationFromRouteToolStripMenuItem,
         UserControlRouteTracker_showBookmarkNotesToolStripMenuItem,
+        UserControlRouteTracker_showSystemRouteNoteToolStripMenuItem,
         UserControlRouteTracker_autoCopyWPToolStripMenuItem,
         UserControlRouteTracker_autoSetTargetToolStripMenuItem,
         UserControlRouteTracker_showtargetinfo,
@@ -1099,6 +1125,7 @@ namespace EDDiscovery
         UserControlExpedition_labelEndDate, // Control 'End Date:'
         UserControlExpedition_ColumnDistStart,
         UserControlExpedition_ColumnDistanceRemaining,
+        UserControlExpedition_ColumnHistoryNote,
         UserControlExpedition_labelCml, // Control 'Cml Distance:'
         UserControlExpedition_labelP2P, // Control 'P2P Distance:'
         UserControlExpedition_buttonReverseRoute_ToolTip, // Control 'Reverse'
@@ -1118,8 +1145,8 @@ namespace EDDiscovery
         UserControlExpedition_checkBoxEDSM_ToolTip, // ToolTip 'Show/Hide Body data from EDSM.'
         UserControlExpedition_copyToolStripMenuItem, // ToolStrip control 'Copy'
         UserControlExpedition_pasteToolStripMenuItem, // ToolStrip control 'Paste'
-        UserControlExpedition_insertCopiedToolStripMenuItem, // ToolStrip control 'Insert Copied Rows'
-        UserControlExpedition_deleteRowsToolStripMenuItem, // ToolStrip control 'Delete Rows'
+        UserControlExpedition_cutToolStripMenuItem, // ToolStrip control 'Paste'
+        UserControlExpedition_insertRowAboveToolStripMenuItem,
         UserControlExpedition_setTargetToolStripMenuItem, // ToolStrip control 'Set Target'
         UserControlExpedition_editBookmarkToolStripMenuItem, // ToolStrip control 'Edit bookmark'
         UserControlExpedition_Unsaved, // Expedition - There are unsaved changes to the current route.
@@ -1825,7 +1852,9 @@ namespace EDDiscovery
         UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerType,
         UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric,
 
-        ActionPackVariablesForm_gv
+        ActionPackVariablesForm_gv,
+
+        NoPanelAccepted,
     }
 
     internal static class EDTranslatorExtensions

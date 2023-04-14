@@ -59,10 +59,9 @@ namespace EDDiscovery.UserControls
             ExtendedControls.MessageBoxTheme.Show(parent, "Failed to write to ".T(EDTx.CSV_Helpers_WriteFailed) + file, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
-        public static bool OutputScanCSV(List<JournalScan> scans, string path, bool Comma, bool IncludeHeader, bool ShowStars, bool ShowPlanets, bool showMapped, bool ShowBeltClusters)
+        public static bool OutputScanCSV(List<JournalScan> scans, string path, string delimiter, bool IncludeHeader, bool ShowStars, bool ShowPlanets, bool showMapped, bool ShowBeltClusters)
         {
-            BaseUtils.CSVWrite csv = new BaseUtils.CSVWrite();
-            csv.SetCSVDelimiter(Comma);
+            BaseUtils.CSVWrite csv = new BaseUtils.CSVWrite(delimiter);
 
             try
             {

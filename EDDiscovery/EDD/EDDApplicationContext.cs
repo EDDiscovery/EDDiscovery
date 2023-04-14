@@ -51,13 +51,14 @@ namespace EDDiscovery
         #endregion
 
         #region Implementation
+
+        // create application context with form chosen by StartupForm
         public EDDApplicationContext() : base(StartupForm())
         {
             if ( MainForm is SafeModeForm)
             {
                 // give safemode the means to run EDD
-
-                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { RunEDD(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
+                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { RunEDD(new LaunchArgs(p, theme , tabs, lang)); });
             }
             else
             {
@@ -126,7 +127,7 @@ namespace EDDiscovery
 
         // Run EDD!
         // Show SplashForm, if it's not already, then start a 250ms timer to ensure that we don't block the main loop during spool-up and ignition.
-        private void RunEDD(EDDFormLaunchArgs args = null)
+        private void RunEDD(LaunchArgs args = null)
         {
             if (MainForm == null || !(MainForm is SplashForm || MainForm.GetType().IsSubclassOf(typeof(SplashForm))))
             {
@@ -163,7 +164,7 @@ namespace EDDiscovery
             var tim = (Timer)sender;
             tim?.Stop();
 
-            var launchArg = ((EDDFormLaunchArgs)tim?.Tag)?.Clone() ?? new EDDFormLaunchArgs();
+            var launchArg = ((LaunchArgs)tim?.Tag)?.Clone() ?? new LaunchArgs();
             tim?.Dispose();
 
             EDDiscoveryForm EDDMainForm = null;
@@ -219,6 +220,16 @@ namespace EDDiscovery
                     return;
                 }
 
+                if ( !SystemsDatabase.Instance.VerifyTablesExist() )
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: System DB is corrupt due to missing tables at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
+                                                         "Database is unusable. Use safe mode to remove it and start again. User settings will be retained",
+                                                         "System DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    SystemsDatabase.Instance.Stop();
+                    SwitchContext(new SafeModeForm(false));
+                    return;
+                }
+
                 EDDOptions.Instance.NoWindowReposition |= launchArg.PositionReset;
                 EDDOptions.Instance.NoTheme |= launchArg.ThemeReset;
                 EDDOptions.Instance.TabsReset |= launchArg.TabsReset;
@@ -259,17 +270,17 @@ namespace EDDiscovery
 
 
         // Pass startup opts from GoForAutoSequenceStart to MainEngineStart without permanent heap impact.
-        private class EDDFormLaunchArgs : EventArgs
-        {   // Should probably be public and passed directly on to EDDiscoveryForm ctor() or Init() or something.
+        private class LaunchArgs : EventArgs
+        {   
 
             public bool PositionReset { get; private set; }
             public bool ThemeReset { get; private set; }
             public bool TabsReset { get; private set; }
             public bool ResetLang { get; private set; }
 
-            public EDDFormLaunchArgs() : this(false, false, false, false) { }
+            public LaunchArgs() : this(false, false, false, false) { }
 
-            public EDDFormLaunchArgs(bool positionReset, bool themeReset, bool tabsreset , bool resetlang)
+            public LaunchArgs(bool positionReset, bool themeReset, bool tabsreset , bool resetlang)
             {
                 PositionReset = positionReset;
                 ThemeReset = themeReset;
@@ -277,9 +288,9 @@ namespace EDDiscovery
                 ResetLang = resetlang;
             }
 
-            public EDDFormLaunchArgs Clone()
+            public LaunchArgs Clone()
             {
-                return new EDDFormLaunchArgs(PositionReset, ThemeReset, TabsReset, ResetLang);
+                return new LaunchArgs(PositionReset, ThemeReset, TabsReset, ResetLang);
             }
         }
 

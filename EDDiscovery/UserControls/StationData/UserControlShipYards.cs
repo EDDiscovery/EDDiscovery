@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -43,8 +43,8 @@ namespace EDDiscovery.UserControls
             dataGridViewShips.MakeDoubleBuffered();
             dataGridViewShips.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange; ;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlShipYards_labelYardSel, EDTx.UserControlShipYards_labelYard };
             var enumlisttt = new Enum[] { EDTx.UserControlShipYards_comboBoxYards_ToolTip };
@@ -53,26 +53,17 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewShips.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewShips);
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewShips);
-            uctg.OnTravelSelectionChanged -= Display;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
 
@@ -80,19 +71,22 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            Discoveryform_OnHistoryChange(hl);
+            if (he.EntryType == JournalTypeEnum.Shipyard)    // only this affects the list..
+            {
+                UpdateComboBox();
+            }
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            UpdateComboBox(hl);
+            UpdateComboBox();
         }
 
-        private void UpdateComboBox(HistoryList hl)
+        private void UpdateComboBox()
         {
-            ShipYardList shm = hl.Shipyards;
+            ShipYardList shm = DiscoveryForm.History.Shipyards;
             string cursel = comboBoxYards.Text;
 
             string the = "Travel History Entry".T(EDTx.UserControlShipYards_TravelHistoryEntry);
@@ -118,22 +112,18 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         HistoryEntry last_he = null;
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
-
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if ( comboBoxYards.Items.Count == 0 )
-                UpdateComboBox(hl);
-
+            if (comboBoxYards.Items.Count == 0)
+                UpdateComboBox();
             last_he = he;
             Display();
-        }
+         }
 
         private void Display()
         {
@@ -149,13 +139,13 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxYards.SelectedIndex == 0 || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
-                HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Shipyard, last_he);
+                HistoryEntry lastshipyard = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Shipyard, last_he);
                 if (lastshipyard != null)
                     yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalShipyard).Yard;
             }
             else
             {
-                yard = discoveryform.history.Shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
+                yard = DiscoveryForm.History.Shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard?.Ships != null)
@@ -164,7 +154,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist = discoveryform.history.Shipyards.GetShipLocations(comboBoxYards.Text,nolocrepeats:true);
+                List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist = DiscoveryForm.History.Shipyards.GetShipLocations(comboBoxYards.Text,nolocrepeats:true);
                 if ( shiplist.Count > 0 )
                     DisplayShips(shiplist, comboBoxYards.Text);
             }
@@ -176,11 +166,11 @@ namespace EDDiscovery.UserControls
 
         private void DisplayShips(List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist,string ship)
         {
-            ISystem cursys = discoveryform.history.CurrentSystem();
+            ISystem cursys = DiscoveryForm.History.CurrentSystem();
 
             foreach (Tuple<ShipYard, ShipYard.ShipyardItem> i in shiplist)
             {
-                double distance = discoveryform.history.DistanceCurrentTo(i.Item1.StarSystem);
+                double distance = DiscoveryForm.History.DistanceCurrentTo(i.Item1.StarSystem);
                 string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(i.Item1.Datetime).ToString();
                 object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N0") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
@@ -217,7 +207,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewShips.Rows.Add(rowobj);
             }
 
-            double distance = discoveryform.history.DistanceCurrentTo(yard.StarSystem);
+            double distance = DiscoveryForm.History.DistanceCurrentTo(yard.StarSystem);
 
             labelYard.Text = yard.Ident() + (distance>-1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;

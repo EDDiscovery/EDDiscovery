@@ -31,7 +31,7 @@ namespace EDDiscovery
     public partial class EDDiscoveryController
     {
         #region Variables
-        public HistoryList history { get; private set; } = new HistoryList();       // we always have a history
+        public HistoryList History { get; private set; } = new HistoryList();       // we always have a history
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
         public string LogText { get { return logtext; } }
 
@@ -39,6 +39,7 @@ namespace EDDiscovery
 
         public CAPI.CompanionAPI FrontierCAPI;
         public BaseUtils.DDE.DDEServer DDEServer;
+        public EliteDangerousCore.UIEvents.UIOverallStatus UIOverallStatus { get; private set; } = new EliteDangerousCore.UIEvents.UIOverallStatus();
 
         #endregion
 
@@ -49,7 +50,7 @@ namespace EDDiscovery
         public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
         public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made And when a loadgame is seen.
                                                                             // Commanders may have been added. 
-        public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
+        public event Action OnHistoryChange;                                // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
         public event Action<int, string> OnReportRefreshProgress;           // UI. Refresh progress reporter
 
@@ -63,8 +64,8 @@ namespace EDDiscovery
         public event Action OnNewCommanderDuringPlayDetected;                         // UI. Called during play when a new commander has been found (not during history load)
         public event Action<JournalEntry> OnNewJournalEntryUnfiltered;      // UI. Called when a new journal entry is read.  Not filtered by history system
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered;      // UI. Called when a new history entry is created and databases into it updated, but before adding.  Not filtered by history system
-        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called after HE has been added to the history list.  Post filtering
-        public event Action<HistoryEntry, HistoryList> OnNewEntrySecond;    // UI. Called after OnNewEntry for more processing. Post filtering
+        public event Action<HistoryEntry> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called after HE has been added to the history list.  Post filtering
+        public event Action<HistoryEntry> OnNewEntrySecond;    // UI. Called after OnNewEntry for more processing. Post filtering
 
         // If a UC is a Cursor Control type, then OnNewEntry should also fire the cursor control OnChangedSelection, OnTravelSelectionChanged after onNewEntry has been received by the cursor UC
 
@@ -113,7 +114,7 @@ namespace EDDiscovery
 
         public void RefreshDisplays()
         {
-            OnHistoryChange?.Invoke(history);
+            OnHistoryChange?.Invoke();
         }
 
         #endregion
@@ -138,8 +139,9 @@ namespace EDDiscovery
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
-            journalmonitor.OnNewJournalEntry += NewJournalEntryFromScanner;
+            journalmonitor.OnNewFilteredJournalEntry += NewJournalEntryFromScanner;
             journalmonitor.OnNewUIEvent += NewUIEventFromScanner;
+            journalmonitor.OnNewRawJournalEntry += NewRawJournalEntryFromScanner;
 
             FrontierCAPI = new CAPI.CompanionAPI(EDDOptions.Instance.CAPIDirectory(), CAPI.CapiClientIdentity.id, EDDApplicationContext.UserAgent, "eddiscovery");
             DDEServer = new BaseUtils.DDE.DDEServer();          // will be started in shown

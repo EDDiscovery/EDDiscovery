@@ -90,8 +90,8 @@ namespace EDDiscovery
 
         private bool DLLRequestHistory(long index, bool isjid, out EDDDLLInterfaces.EDDDLLIF.JournalEntry f)
         {
-            HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByEntryNo((int)index);
-            f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he);
+            HistoryEntry he = isjid ? History.GetByJID(index) : History.GetByEntryNo((int)index);
+            f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(History, he);
             return he != null;
         }
         private string DLLGetShipLoadout(string name)
@@ -100,7 +100,7 @@ namespace EDDiscovery
             {
                 JObject ships = new JObject();
                 int index = 0;
-                foreach( var sh in history.ShipInformationList.Ships)
+                foreach( var sh in History.ShipInformationList.Ships)
                 {
                     ships[index++.ToStringInvariant()] = JToken.FromObject(sh.Value, true, new Type[] { }, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                 }
@@ -110,7 +110,7 @@ namespace EDDiscovery
             }
             else
             {
-                var sh = !name.IsEmpty() ? history.ShipInformationList.GetShipByFullInfoMatch(name) : history.ShipInformationList.CurrentShip;
+                var sh = !name.IsEmpty() ? History.ShipInformationList.GetShipByFullInfoMatch(name) : History.ShipInformationList.CurrentShip;
                 var ret = sh != null ? JToken.FromObject(sh, true, new Type[] { }, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public).ToString(true) : null;
                 //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllshiploadout.json", ret);
                 return ret;
@@ -131,13 +131,13 @@ namespace EDDiscovery
 
             if (dll != null)
             {
-                var syslookup = systemname.IsEmpty() ? history.CurrentSystem()?.Name : systemname;      // get a name
+                var syslookup = systemname.IsEmpty() ? History.CurrentSystem()?.Name : systemname;      // get a name
 
                 JToken json = new JObject();     // default return
 
                 if (syslookup.HasChars())
                 {
-                    var sc = history.StarScan;
+                    var sc = History.StarScan;
                     var snode = await sc.FindSystemAsync(new SystemClass(syslookup), edsmlookup);       // async lookup
                     if (snode != null)
                         json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
@@ -152,9 +152,9 @@ namespace EDDiscovery
 
         private string DLLGetSuitWeaponsLoadout()
         {
-            var wlist = JToken.FromObject(history.WeaponList.Weapons.Get(history.GetLast?.Weapons ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-            var slist = JToken.FromObject(history.SuitList.Suits(history.GetLast?.Suits ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-            var sloadoutlist = JToken.FromObject(history.SuitLoadoutList.Loadouts(history.GetLast?.Loadouts ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var wlist = JToken.FromObject(History.WeaponList.Weapons.Get(History.GetLast?.Weapons ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var slist = JToken.FromObject(History.SuitList.Suits(History.GetLast?.Suits ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var sloadoutlist = JToken.FromObject(History.SuitLoadoutList.Loadouts(History.GetLast?.Loadouts ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
             JObject ret = new JObject();
             ret["Weapons"] = wlist;
@@ -166,7 +166,7 @@ namespace EDDiscovery
 
         private string DLLGetCarrierData()
         {
-            var carrier = JToken.FromObject(history.Carrier, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var carrier = JToken.FromObject(History.Carrier, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllcarrier.json", carrier.ToString(true));
             return carrier.ToString();
         }
@@ -181,7 +181,7 @@ namespace EDDiscovery
 
         private string DLLGetVisitedList(int howmany)
         {
-            var list = history.Visited.Values;
+            var list = History.Visited.Values;
             int toskip = howmany > list.Count || howmany < 0 ? list.Count : list.Count-howmany;
             var vlist = list.Skip(toskip).Select(x => new VisitedSystem(x.System.Name,x.System.SystemAddress??-1,x.System.X,x.System.Y,x.System.Z)).ToList();
             var visited = JToken.FromObject(vlist, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
@@ -191,13 +191,13 @@ namespace EDDiscovery
         }
         private string DLLGetShipyards()
         {
-            var shipyards = JToken.FromObject(history.Shipyards, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var shipyards = JToken.FromObject(History.Shipyards, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllshipyards.json", shipyards.ToString(true));
             return shipyards.ToString();
         }
         private string DLLGetOutfitting()
         {
-            var outfitting = JToken.FromObject(history.Outfitting, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var outfitting = JToken.FromObject(History.Outfitting, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dlloutfitting.json", outfitting.ToString(true));
             return outfitting.ToString();
         }

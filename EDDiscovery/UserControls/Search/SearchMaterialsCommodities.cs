@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             var enumlisttt = new Enum[] { EDTx.SearchMaterialsCommodities_buttonExtExcel_ToolTip, EDTx.SearchMaterialsCommodities_buttonExtFind_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCMANDOR_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM1_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            dataGridView.Init(discoveryform);
+            dataGridView.Init(DiscoveryForm);
 
             itemlist = MaterialCommodityMicroResourceType.GetAll();
             Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
@@ -75,12 +75,7 @@ namespace EDDiscovery.UserControls
             comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".T(EDTx.SearchMaterialsCommodities_AND), "OR".T(EDTx.SearchMaterialsCommodities_OR) });
             comboBoxCustomCMANDOR.SelectedIndex = GetSetting(dbCMANDOR, 0);
 
-            dataGridView.GotoEntryClicked += (he) => { uctg.GotoPosByJID(he.Journalid); };
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg = thc;
+            dataGridView.GotoEntryClicked += (he) => { RequestPanelOperation(this,he.Journalid); };
         }
 
         public override void LoadLayout()
@@ -117,9 +112,9 @@ namespace EDDiscovery.UserControls
         void Search(MaterialCommodityMicroResourceType cm, Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist, 
                                         string prefix = "")
         {
-            ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+            ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
 
-            foreach ( var he in discoveryform.history.EntryOrder())      // oldest first..
+            foreach ( var he in DiscoveryForm.History.EntryOrder())      // oldest first..
             {
                 Tuple<HistoryEntry, string> found = null;
                 bool checkstation = false;
@@ -221,7 +216,7 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
+                ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
 
                 foreach (var ret in systems)
                 {

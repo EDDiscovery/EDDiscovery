@@ -63,9 +63,9 @@ namespace EDDiscovery
             }
         }
 
-        const int ForcedFullDownloadDays = 28;      // beyond this time, we force a full download
+        const int ForcedFullDownloadDays = 56;      // beyond this time, we force a full download
+        const int UpdateFetchHours = 12;             // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
         const int ForcedAliasDownloadDays = 7;      // beyond this time, we force an alias hidden system download
-        const int UpdateFetchHours = 6;             // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
 
         public void CheckForSync()      // called in background init
         {
@@ -73,7 +73,7 @@ namespace EDDiscovery
             {
                 DateTime edsmdatetime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
-                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForcedFullDownloadDays)   
+                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForcedFullDownloadDays*10)   
                 {
                     System.Diagnostics.Debug.WriteLine("EDSM Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
                     syncstate.perform_edsm_fullsync = true;       // do a full sync.

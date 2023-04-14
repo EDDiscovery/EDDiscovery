@@ -61,7 +61,7 @@ namespace EDDiscovery.WebServer
                 JObject response = new JObject();
                 response["responsetype"] = type;
 
-                var hl = discoveryform.history;
+                var hl = discoveryform.History;
                 if (hl.Count == 0)
                 {
                     response["entry"] = -1;
@@ -75,7 +75,7 @@ namespace EDDiscovery.WebServer
 
                     HistoryEntry he = hl[entry];
 
-                    List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(he.MissionList);
+                    List<MissionState> ml = discoveryform.History.MissionListAccumulator.GetMissionList(he.MissionList);
 
                     DateTime hetime = he.EventTimeUTC;
 

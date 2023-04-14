@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
                                             Math.Abs(s.Item1.X - centre.X) <= numberBoxMaxRadius.Value &&
                                             Math.Abs(s.Item1.Y - centre.Y) <= numberBoxMaxRadius.Value &&
                                             Math.Abs(s.Item1.Z - centre.Z) <= numberBoxMaxRadius.Value &&
-                                            (!excvisited || discoveryform.history.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null)
+                                            (!excvisited || discoveryform.History.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null)
                                           select s).ToList();
 
                             //System.Diagnostics.Debug.WriteLine("To " + listsphere.Count());
@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
                     else if ( excvisited )  // if exc visited, need to filter them out
                     {
                         listsphere = (from s in listsphere
-                                      where discoveryform.history.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null
+                                      where discoveryform.History.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null
                                       select s).ToList();
                     }
                 }
@@ -210,11 +210,11 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtVisitedClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
-                var list = HistoryList.FindSystemsWithinLy(discoveryform.history.EntryOrder(), sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
+                var list = HistoryList.FindSystemsWithinLy(discoveryform.History.EntryOrder(), sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
                 ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
             }
             else
@@ -223,14 +223,14 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtDBClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
                 Cursor = Cursors.WaitCursor;
 
                 // work out the excluded system name list
-                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.history.Visited.Values.Select(x=>x.System.Name).ToHashSet() : new HashSet<string>();
+                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Values.Select(x=>x.System.Name).ToHashSet() : new HashSet<string>();
 
                 Task<List<Tuple<ISystem,double>>>.Factory.StartNew(() =>
                 {
@@ -272,7 +272,7 @@ namespace EDDiscovery.UserControls
 
         private void SetXYZ()
         {
-            ISystem sys = SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping, false);      // not doing edsm as done via INIT
+            ISystem sys = SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, false);      // not doing edsm as done via INIT
 
             if (sys != null && sys.HasCoordinate)
             {

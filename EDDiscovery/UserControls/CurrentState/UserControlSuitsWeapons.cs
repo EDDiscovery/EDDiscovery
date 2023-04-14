@@ -40,30 +40,18 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSuits, enumlistcms, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
-
             DGVLoadColumnLayout(dataGridViewSuits, "Suits");
             DGVLoadColumnLayout(dataGridViewWeapons, "Weapons");
-            splitContainerMissions.SplitterDistance(GetSetting("Splitter", 0.4));
+            splitContainerSuitsWeapons.SplitterDistance(GetSetting("Splitter", 0.4));
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewSuits, "Suits");
             DGVSaveColumnLayout(dataGridViewWeapons, "Weapons");
-            PutSetting("Splitter", splitContainerMissions.GetSplitterDistance());
-
-            uctg.OnTravelSelectionChanged -= Display;
-
+            PutSetting("Splitter", splitContainerSuitsWeapons.GetSplitterDistance());
         }
 
         #endregion
@@ -72,25 +60,24 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history,true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         uint last_weapons = 0;
         uint last_suits = 0;
         uint last_loadout = 0;
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-          //  System.Diagnostics.Debug.WriteLine("Display check");
-            uint newweapon = he?.Weapons ?? 0;
+            uint newweapon = he.Weapons;
             if (newweapon != last_weapons)
             {
                 last_weapons = newweapon;
                 DisplayWeapons();
             }
-            uint newsuits = he?.Suits ?? 0;
-            uint newloadout = he?.Loadouts ?? 0;
-            if (newsuits != last_suits || newloadout != last_loadout )
+            uint newsuits = he.Suits;
+            uint newloadout = he.Loadouts;
+            if (newsuits != last_suits || newloadout != last_loadout)
             {
                 last_suits = newsuits;
                 last_loadout = newloadout;
@@ -111,7 +98,7 @@ namespace EDDiscovery.UserControls
 
             if (last_weapons >= 0)
             {
-                var weaponlist = discoveryform.history.WeaponList.Weapons.Get(last_weapons,x => x.Sold == false); // get unsold weapons
+                var weaponlist = DiscoveryForm.History.WeaponList.Weapons.Get(last_weapons,x => x.Sold == false); // get unsold weapons
 
                 foreach (var w in weaponlist)
                 {
@@ -175,27 +162,31 @@ namespace EDDiscovery.UserControls
 
             if (last_suits >= 0)
             {
-                var suitlist = discoveryform.history.SuitList.Suits(last_suits);
-                //foreach (var su in suitlist) System.Diagnostics.Debug.WriteLine($"Suit gen {last_suits}: {su.Value.ID} {su.Value.FDName}");
+                // convert key/value to a value list
+                var suitlist = DiscoveryForm.History.SuitList.Suits(last_suits).Select(x=>x.Value).ToList();
+                // sort by friendly name so its added to the grid in that order
+                suitlist.Sort(delegate (Suit left, Suit right) { return left.FriendlyName.CompareTo(right.FriendlyName); });
 
-                var cursuit = discoveryform.history.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
-                var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
+                var cursuit = DiscoveryForm.History.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
+                var curloadout = DiscoveryForm.History.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
 
                 foreach (var s in suitlist)
                 {
-                    string stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s.Value.EventTime).ToString();
-                    string sname = s.Value.FriendlyName;// + ":"+ (s.Value.ID % 1000000).ToStringInvariant();
-                    string sprice = s.Value.Price.ToString("N0");
-                    string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
+                    string stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s.EventTime).ToString();
+                    string sname = s.FriendlyName;// + ":"+ (s.ID % 1000000).ToStringInvariant();
+                    string sprice = s.Price.ToString("N0");
+                    string smods = s.SuitMods != null ? string.Join(", ", s.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
 
-                    var loadouts = discoveryform.history.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.Value.ID);
+                    var loadouts = DiscoveryForm.History.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.ID);
 
                     if (loadouts == null || loadouts.Count == 0)
                     {
-                        object[] rowobj = new object[] { stime, sname + (cursuit == s.Value.ID ? "*" : ""), smods, sprice };
+                        object[] rowobj = new object[] { stime, sname + (cursuit == s.ID ? "*" : ""), smods, sprice };
                         dataGridViewSuits.Rows.Add(rowobj);
+
                         DataGridViewRow r = dataGridViewSuits.Rows[dataGridViewSuits.RowCount - 1];
-                        r.Tag = s.Value;
+                        r.Tag = s;     
+                        r.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
                     }
                     else
                     {
@@ -208,7 +199,7 @@ namespace EDDiscovery.UserControls
                             var rw = dataGridViewSuits.RowTemplate.Clone() as DataGridViewRow;
                             rw.CreateCells(dataGridViewSuits,
                                                 stime,      //0
-                                                (cursuit == s.Value.ID && curloadout == l.Value.ID ? "*** " : "") + sname,
+                                                (cursuit == s.ID && curloadout == l.Value.ID ? "*** " : "") + sname,
                                                 smods,
                                                 sprice,
                                                 l.Value.Name + "(" + ((l.Value.ID % 10000).ToString()) + ")",
@@ -217,16 +208,16 @@ namespace EDDiscovery.UserControls
                                                 l.Value.GetModuleDescription("secondaryweapon")
                                                 );
 
-                            rw.Cells[1].ToolTipText = "ID:" + s.Value.ID.ToStringInvariant();
-                            rw.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
+
+                            System.Diagnostics.Debug.WriteLine($"Suit ${sname} row {rw.Cells[1].Tag}");
                             if (i > 0)
                                 rw.Cells[1].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+                            rw.Tag = s;
+                            rw.Cells[1].ToolTipText = "ID:" + s.ID.ToStringInvariant();
+                            rw.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
+
                             dataGridViewSuits.Rows.Add(rw);
-
-                            DataGridViewRow r = dataGridViewSuits.Rows[dataGridViewSuits.RowCount - 1];
-                            r.Tag = s.Value;
-
                             i++;
                         }
                     }
@@ -272,7 +263,7 @@ namespace EDDiscovery.UserControls
                     var je = new EliteDangerousCore.JournalEvents.JournalSellSuit(DateTime.UtcNow, s.ID, s.FDName, s.Name_Localised, 0, EDCommander.CurrentCmdrID);
                     var jo = je.Json();
                     je.Add(jo);
-                    discoveryform.NewEntry(je);
+                    DiscoveryForm.NewEntry(je);
                 }
             }
 

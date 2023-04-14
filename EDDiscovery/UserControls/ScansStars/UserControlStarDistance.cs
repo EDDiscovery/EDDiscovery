@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -63,26 +63,17 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewNearest);
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewNearest);
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             computer.ShutDown();
             PutSetting("Min", textMinRadius.Value);
             PutSetting("Max", textMaxRadius.Value);
@@ -92,7 +83,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            KickComputation(uctg.GetCurrentHistoryEntry, true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         protected override void OnLoad(EventArgs e)
@@ -100,12 +91,12 @@ namespace EDDiscovery.UserControls
             base.OnLoad(e);
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
-            KickComputation(obj.GetLast);   // copes with getlast = null
+            KickComputation(DiscoveryForm.History.GetLast);   // copes with getlast = null
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             KickComputation(he);
         }
@@ -145,7 +136,7 @@ namespace EDDiscovery.UserControls
             double lookup_max = Math.Min(textMaxRadius.Value, lookup_limit);
 
             // Get nearby systems from our travel history. This will filter out duplicates from the systems DB.
-            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z,
+            DiscoveryForm.History.CalculateSqDistances(list, sys.X, sys.Y, sys.Z,
                                 maxitems, textMinRadius.Value, lookup_max, !checkBoxCube.Checked, 5000);       // only go back a sensible number of FSD entries
 
             FillGrid(sys.Name, list);
@@ -176,7 +167,7 @@ namespace EDDiscovery.UserControls
 
                     if (tvp.Value.Name != name && (checkBoxCube.Checked || (dist >= textMinRadius.Value && dist <= textMaxRadius.Value)))
                     {
-                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name);
+                        int visits = DiscoveryForm.History.GetVisitsCount(tvp.Value.Name);
                         object[] rowobj = { tvp.Value.Name, $"{dist:0.00}", $"{visits:n0}" };
 
                         var rw = dataGridViewNearest.RowTemplate.Clone() as DataGridViewRow;
@@ -223,16 +214,16 @@ namespace EDDiscovery.UserControls
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            AddTo(OnNewStarsPushType.TriSystems);
+            AddTo(UserControlCommonBase.PushStars.PushType.TriSystems);
         }
 
         private void addToExpeditionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddTo(OnNewStarsPushType.Expedition);
+            AddTo(UserControlCommonBase.PushStars.PushType.Expedition);
 
         }
 
-        private void AddTo(OnNewStarsPushType pushtype)
+        private void AddTo(UserControlCommonBase.PushStars.PushType pushtype)
         {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
@@ -243,8 +234,7 @@ namespace EDDiscovery.UserControls
             foreach (DataGridViewRow r in selectedRows)
                 syslist.Add(r.Cells[0].Value.ToString());
 
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).FireNewStarList(syslist, pushtype);
+            RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = pushtype, Systems = syslist });
         }
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -292,7 +282,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.ColumnIndex == 0 && e.RowIndex >= 0 && e.RowIndex < dataGridViewNearest.Rows.Count)
             {
-                Clipboard.SetText(dataGridViewNearest.Rows[e.RowIndex].Cells[0].Value as string);
+                SetClipboardText(dataGridViewNearest.Rows[e.RowIndex].Cells[0].Value as string);
             }
         }
 
@@ -303,7 +293,7 @@ namespace EDDiscovery.UserControls
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
                 if (rightclicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, discoveryform.history);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, DiscoveryForm.History);
             }
         }
 
@@ -313,7 +303,7 @@ namespace EDDiscovery.UserControls
             {
                 var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
                 if (clicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, discoveryform.history);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, DiscoveryForm.History);
             }
 
         }
@@ -323,10 +313,10 @@ namespace EDDiscovery.UserControls
             if (last_he == null)
                 return;
 
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "View", "JSON" },
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "View", "JSON" },
+                            new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude, Forms.ImportExportForm.ShowFlags.None },
                             new string[] { "CSV|*.csv", "JSON|*.json" },
-                            new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DTCVSOI },
                             new string[] { "neareststars", "neareststars" }
                 );
 
@@ -334,15 +324,15 @@ namespace EDDiscovery.UserControls
             {
                 if (frm.SelectedIndex == 0)
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
                     grd.GetLine += delegate (int r)
                     {
                         if (r < dataGridViewNearest.RowCount+1)
                         {
                             if ( r == 0 )
                             {
-                                return new object[] { last_he.System.Name, "0", discoveryform.history.GetVisitsCount(last_he.System.Name).ToString("#"),
+                                return new object[] { last_he.System.Name, "0", DiscoveryForm.History.GetVisitsCount(last_he.System.Name).ToString("#"),
                                             last_he.System.X.ToString("F2"), last_he.System.Y.ToString("F2"), last_he.System.Z.ToString("F2") };
                             }
                             else

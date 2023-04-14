@@ -65,19 +65,35 @@ namespace EDDiscovery.UserControls
             callbacks.IsFloatingWindow = () => IsFloatingWindow;
             callbacks.IsClosed = () => IsClosed;
             callbacks.DGVTransparent = (g, t, c) => DGVTransparent((DataGridView)g, t, c);
-  
+            callbacks.RequestTravelGridPosition = () => 
+            { 
+                return RequestPanelOperation?.Invoke(this, new RequestTravelHistoryPos()) ?? false; 
+            };
+            callbacks.PushStars = (name,list) => 
+            {
+                PushStars.PushType pt = name.EqualsIIC("triwanted") ? PushStars.PushType.TriWanted :
+                                        name.EqualsIIC("trisystems") ? PushStars.PushType.TriSystems :
+                                        PushStars.PushType.Expedition;
+
+                return RequestPanelOperation?.Invoke(this, new PushStars { PushTo = pt, Systems = list }) ?? false; 
+            };
+            callbacks.PushCSVToExpedition = (file) =>
+            {
+                return RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = file }) ?? false;
+            };
+
             var th = ExtendedControls.Theme.Current;
             var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
-            panel.Initialise(callbacks, displaynumber, jo.ToString(),"");     // initialise, pass in callbacks and unused config string
+            panel.Initialise(callbacks, DisplayNumber, jo.ToString(),"");     // initialise, pass in callbacks and unused config string
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnNewHistoryEntryUnfiltered += Discoveryform_OnNewHistoryEntryUnfiltered;
-            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
-            discoveryform.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
-            discoveryform.OnNewTarget += Discoveryform_OnNewTarget;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewHistoryEntryUnfiltered += Discoveryform_OnNewHistoryEntryUnfiltered;
+            DiscoveryForm.OnThemeChanged += Discoveryform_OnThemeChanged;
+            DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
         }
 
         public override void SetTransparency(bool ison, Color curcol)
@@ -87,17 +103,8 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             panel.LoadLayout();
         }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
         public override void InitialDisplay()
         {
             panel.InitialDisplay();
@@ -107,19 +114,18 @@ namespace EDDiscovery.UserControls
         {
             panel.Closing();
 
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnNewHistoryEntryUnfiltered -= Discoveryform_OnNewHistoryEntryUnfiltered;
-            discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
-            discoveryform.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
-            discoveryform.OnNewTarget -= Discoveryform_OnNewTarget;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewHistoryEntryUnfiltered -= Discoveryform_OnNewHistoryEntryUnfiltered;
+            DiscoveryForm.OnThemeChanged -= Discoveryform_OnThemeChanged;
+            DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnNewTarget -= Discoveryform_OnNewTarget;
         }
 
         public override bool SupportTransparency { get { return panel.SupportTransparency; } }  // override to say support transparency
         public override bool DefaultTransparent { get { return panel.DefaultTransparent; } }  // override to say default to be transparent
+        public override void TransparencyModeChanged( bool on) { panel.TransparencyModeChanged(on); }  // override to say default to be transparent
         public override bool AllowClose() { return panel.AllowClose(); }
 
         public override string HelpKeyOrAddress()
@@ -135,29 +141,30 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Panel reactions
-        private void Uctg_OnTravelSelectionChanged(EliteDangerousCore.HistoryEntry he, EliteDangerousCore.HistoryList hl, bool selectedEntry)
+
+        public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-            panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(hl, he, false));
+            panel.CursorChanged(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, he, false));
         }
 
         #endregion
 
         #region Events
 
-        private void Discoveryform_OnHistoryChange(EliteDangerousCore.HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            var cmdr = EliteDangerousCore.EDCommander.GetCommander(hl.CommanderId);
-            panel.HistoryChange(hl.Count, cmdr.Name, cmdr.NameIsBeta, cmdr.LegacyCommander);
+            var cmdr = EliteDangerousCore.EDCommander.GetCommander(DiscoveryForm.History.CommanderId);
+            panel.HistoryChange(DiscoveryForm.History.Count, cmdr.Name, cmdr.NameIsBeta, cmdr.LegacyCommander);
         }
 
         private void Discoveryform_OnNewHistoryEntryUnfiltered(EliteDangerousCore.HistoryEntry he)
         {
-            panel.NewUnfilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, he, false));
+            panel.NewUnfilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, he, false));
         }
 
-        private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he, EliteDangerousCore.HistoryList hl)
+        private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he)
         {
-            panel.NewFilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(hl, he, false));
+            panel.NewFilteredJournal(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, he, false));
         }
 
         private void Discoveryform_OnNewUIEvent(EliteDangerousCore.UIEvent uievent)

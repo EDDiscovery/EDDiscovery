@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -11,40 +11,24 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
-using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarList : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlStarList : UserControlCommonBase
     {
-        #region Public IF
-
-        public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewStarList.CurrentCell != null ?
-                    (dataGridViewStarList.Rows[dataGridViewStarList.CurrentCell.RowIndex].Tag as HistoryEntry) : null; } }
-
-        #endregion
-
-        #region Events
-
-        // implement IHistoryCursor fields
-        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
-
-        #endregion
-
         #region Init
         private class Columns
         {
@@ -101,8 +85,8 @@ namespace EDDiscovery.UserControls
 
             displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics;codex").Split(';');
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
+            DiscoveryForm.OnHistoryChange += HistoryChanged;
+            DiscoveryForm.OnNewEntry += AddNewEntry;
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
@@ -137,16 +121,16 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewStarList);
-            discoveryform.OnHistoryChange -= HistoryChanged;
-            discoveryform.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
         }
 
         public override void InitialDisplay()
         {
-            HistoryChanged(discoveryform.history);
+            Display(false);
         }
 
-        public void HistoryChanged(HistoryList hl)           // on History change
+        public void HistoryChanged()           // on History change
         {
             Display(false);
         }
@@ -164,7 +148,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
+        private void AddNewEntry(HistoryEntry he)           // on new entry from discovery system
         {
             if (todotimer.Enabled)      // if loading, add to queue..
             {
@@ -203,13 +187,13 @@ namespace EDDiscovery.UserControls
                     if (rowpresent != null)                                     // if its in the list, move to top and set visit count
                     {
                         dataGridViewStarList.Rows.Remove(rowpresent);
-                        rowpresent.Cells[2].Value = discoveryform.history.Visits(he.System.Name);  // update count
+                        rowpresent.Cells[2].Value = DiscoveryForm.History.Visits(he.System.Name);  // update count
                         dataGridViewStarList.Rows.Insert(0, rowpresent);        // move to top..
                         added = true;
                     }
                     else
                     {                                                           // not in the list, add it
-                        var visitlist = discoveryform.history.Visited.Values.ToList();
+                        var visitlist = DiscoveryForm.History.Visited.Values.ToList();
                         visitlist.Sort(delegate (HistoryEntry left, HistoryEntry right) { return right.EventTimeUTC.CompareTo(left.EventTimeUTC); });
                         var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
                         visitlist = filter.FilterLatestFirst(visitlist);      // and filter
@@ -238,7 +222,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (rowpresent != null)       // only need to do something if its displayed
                     {
-                        var node = discoveryform.history.StarScan?.FindSystemSynchronous(rowhe.System, false); // may be null
+                        var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(rowhe.System, false); // may be null
                         string info = Infoline(rowhe.System, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
                         rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
@@ -260,7 +244,8 @@ namespace EDDiscovery.UserControls
 
             this.dataGridViewStarList.Cursor = Cursors.WaitCursor;
 
-            var pos = CurrentGridPosByIndex();
+            var selpos = dataGridViewStarList.GetSelectedRowOrCellPosition();
+            Tuple<long, int> pos = selpos != null ? new Tuple<long, int>(((HistoryEntry)(dataGridViewStarList.Rows[selpos.Item1].Tag)).Journalid, selpos.Item2) : new Tuple<long, int>(-1, 0);
 
             SortOrder sortorder = dataGridViewStarList.SortOrder;
             int sortcol = dataGridViewStarList.SortedColumn?.Index ?? -1;
@@ -275,7 +260,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewStarList.Columns[0].HeaderText = EDDConfig.Instance.GetTimeTitle();
 
-            var visitlist = discoveryform.history.Visited.Values.ToList();
+            var visitlist = DiscoveryForm.History.Visited.Values.ToList();
 
             // sort is latest first
             visitlist.Sort(delegate (HistoryEntry left, HistoryEntry right) { return right.EventTimeUTC.CompareTo(left.EventTimeUTC); });
@@ -316,13 +301,13 @@ namespace EDDiscovery.UserControls
                     dataGridViewStarList.Rows.AddRange(rowstoadd.ToArray());
                 });
 
-                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, false))
+                if (dataGridViewStarList.SelectAndMove(rowsbyjournalid, ref pos, false))
                     FireChangeSelection();
             }
 
             todo.Enqueue(() =>
             {
-                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, true))
+                if (dataGridViewStarList.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -351,9 +336,9 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
-            var node = discoveryform.history.StarScan?.FindSystemSynchronous(he.System, false); // may be null
+            var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(he.System, false); // may be null
 
-            string visits = discoveryform.history.Visits(he.System.Name).ToString();
+            string visits = DiscoveryForm.History.Visits(he.System.Name).ToString();
             string info = Infoline(he.System, node);  // lookup node, using star name, no EDSM lookup.
 
             if (search.Enabled)
@@ -448,6 +433,7 @@ namespace EDDiscovery.UserControls
                 bool showsi = displayfilters.Contains("shortinfo");
                 bool showg = displayfilters.Contains("gravity");
                 bool showatmos = displayfilters.Contains("atmos");
+                bool showTemp = displayfilters.Contains("temp");
                 bool showrings = displayfilters.Contains("rings");
                 bool showorganics = displayfilters.Contains("organics");
 
@@ -466,7 +452,7 @@ namespace EDDiscovery.UserControls
                         {
                             string info = sn.SurveyorInfoLine(system, showsignals, showorganics, 
                                                                 showvol, showv, showsi, showg,
-                                                                showatmos && sn.ScanData.IsLandable, showrings,
+                                                                showatmos && sn.ScanData.IsLandable, showTemp, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
                             infostr = infostr.AppendPrePad(info, Environment.NewLine);
                         }
@@ -511,40 +497,8 @@ namespace EDDiscovery.UserControls
 
         #region UI
 
-        Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
+        public void FireChangeSelection() // kept for historic purposes in case we want to make it a cursor again
         {
-            long jid = (dataGridViewStarList.CurrentCell != null) ? (dataGridViewStarList.Rows[dataGridViewStarList.CurrentCell.RowIndex].Tag as HistoryEntry).Journalid : -1;
-            int cellno = (dataGridViewStarList.CurrentCell != null) ? dataGridViewStarList.CurrentCell.ColumnIndex : 0;
-            return new Tuple<long, int>(jid, cellno);
-        }
-
-        public int GotoPosByJID(long jid)      // uccursor requirement. -1 if fails
-        {
-            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-            if (rowno >= 0)
-            {
-                dataGridViewStarList.SetCurrentAndSelectAllCellsOnRow(rowno);
-                dataGridViewStarList.Rows[rowno].Selected = true;
-                FireChangeSelection();
-            }
-            return rowno;
-        }
-
-        public void FireChangeSelection() // uccursor requirement
-        {
-            if (dataGridViewStarList.CurrentCell != null)
-            {
-                int row = dataGridViewStarList.CurrentCell.RowIndex;
-                //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
-                OnTravelSelectionChanged?.Invoke((dataGridViewStarList.Rows[row].Tag as HistoryEntry), discoveryform.history, true);
-            }
-        }
-
-        Tuple<long, int> CurrentGridPosByIndex()          // Returns Index, column index.  Index = -1 if cell is not defined
-        {
-            long index = (dataGridViewStarList.CurrentCell != null) ? (dataGridViewStarList.Rows[dataGridViewStarList.CurrentCell.RowIndex].Tag as HistoryEntry).Journalid : -1;
-            int cellno = (dataGridViewStarList.CurrentCell != null) ? dataGridViewStarList.CurrentCell.ColumnIndex : 0;
-            return new Tuple<long, int>(index, cellno);
         }
 
         public void CheckEDSM()
@@ -556,7 +510,7 @@ namespace EDDiscovery.UserControls
         public async void CheckEDSM(DataGridViewRow row)
         {
             HistoryEntry he = row.Tag as HistoryEntry;
-            var node = await discoveryform.history.StarScan?.FindSystemAsync(he.System, true);  // try an EDSM lookup, cache data, then redisplay.
+            var node = await DiscoveryForm.History.StarScan?.FindSystemAsync(he.System, true);  // try an EDSM lookup, cache data, then redisplay.
             row.Cells[Columns.OtherInformation].Value = Infoline(he.System,node);
             row.Cells[Columns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
@@ -690,7 +644,7 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMap(rightclicksystem?.System);
+            DiscoveryForm.Open3DMap(rightclicksystem?.System);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -705,13 +659,13 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null)
             {
-                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
+                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem))
                 {
                     if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {
                         System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclicksystem.System != null);
                         rightclicksystem.journalEntry.UpdateSystemNote(noteform.NoteText, rightclicksystem.System.Name, EDCommander.Current.SyncToEdsm);
-                        discoveryform.NoteChanged(this, rightclicksystem);
+                        DiscoveryForm.NoteChanged(this, rightclicksystem);
                     }
                 }
             }
@@ -733,7 +687,7 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     var he = dataGridViewStarList.Rows[e.RowIndex].Tag as HistoryEntry;
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, checkBoxEDSM.Checked, discoveryform.history);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, checkBoxEDSM.Checked, DiscoveryForm.History);
                 }
             }
         }
@@ -742,7 +696,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null)
             {
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, checkBoxEDSM.Checked, discoveryform.history);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, checkBoxEDSM.Checked, DiscoveryForm.History);
             }
         }
         #endregion
@@ -766,6 +720,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("shortinfo", "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
             displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
             displayfilter.AddStandardOption("atmos", "Show atmospheres".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("temp", "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
             displayfilter.AddStandardOption("rings", "Has Rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
             displayfilter.AddStandardOption("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
             displayfilter.AddStandardOption("codex", "Show codex entries".T(EDTx.UserControlStarList_showcodex), global::EDDiscovery.Icons.Controls.Entries);
@@ -800,8 +755,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Export Current View" });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Export Current View" });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -810,8 +765,8 @@ namespace EDDiscovery.UserControls
                     // 0        1       2           3            4               5           6           7             8              9              10              11              12          
                     string[] colh = { "Time", "System", "Visits", "Other Info", "Scan Value", "Unused", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps" };
 
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
                     grd.GetLineStatus += delegate (int r)
                     {
                         if (r < dataGridViewStarList.Rows.Count)
@@ -846,8 +801,8 @@ namespace EDDiscovery.UserControls
                             EventDetailedInfo,
                             he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.Travelledjumps.ToString() : "",
-                            he.isTravelling ? he.TravelledMissingjump.ToString() : "",
+                            he.isTravelling ? he.TravelledJumps.ToString() : "",
+                            he.isTravelling ? he.TravelledMissingJumps.ToString() : "",
                             };
                     };
 

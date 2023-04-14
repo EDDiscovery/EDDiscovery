@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
             // try and find the associated bookmark..
             BookmarkClass bkmark = (curbookmark != null) ? curbookmark : (cursystem != null ? GlobalBookMarkList.Instance.FindBookmarkOnSystem(cursystem.Name) : null);
 
-            BookmarkForm frm = new BookmarkForm(discoveryForm.history, true);       // we handle target changes so show checkbox
+            BookmarkForm frm = new BookmarkForm(discoveryForm.History, true);       // we handle target changes so show checkbox
 
             bool regionmarker = false;                  // if region marker..
             DateTime timeutc;

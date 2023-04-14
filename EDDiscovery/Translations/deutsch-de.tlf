@@ -167,6 +167,8 @@ SECTION PopOutInfo
 .Discoveries.Description: "Discoveries Observer List" => "Discoveries Observer-Liste"
 .Carrier.Title: "Carrier" => "Carrier"
 .Carrier.Description: "Data about your fleet carrier" => "Daten über deinen Fleet Carrier"
+.Resources.Title: "Resources" @
+.Resources.Description: "All Materials, Commodity, MicroResources" @
 
 SECTION EDDiscoveryForm
 
@@ -252,7 +254,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" => "Profile bearbeiten"
 .PL: "Profile {0} Loaded" => "Profil {0} geladen"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Paneel als externes Fenster"
-.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualisiert die EDSM-Datenbank.\r\nKlicke OK um jetzt zu schließen, Abbrechen um zu warten bis die Aktualisierung abgeschlossen ist."
+.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualisiert die EDSM-Datenbank.\r\nKlicke OK um jetzt zu schließen, Abbrechen um zu warten bis die Aktualisierung abgeschlossen ist."
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Öffne EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Verstecke Tray-Icon"
 .notifyIconMenu_Exit: "E&xit" => "B&eenden"
@@ -372,9 +374,9 @@ SECTION AddOnManagerForm
 .Failed: "Add-on failed to update. Check files for read only status" => "Add-On-Update fehlgeschlagen. Prüfe Dateien auf 'nur Lesen'-Status"
 .DeleteWarn: "Do you really want to delete {0}" => "Willst du {0} wirklich löschen?"
 
-SECTION ExportForm
+SECTION ImportExportForm
 
-ExportForm: "Export data" => "Daten exportieren"
+ImportExportForm: "Export data" => "Daten exportieren"
 .buttonExport: "Export" => "Exportieren"
 .ImportTitle: "Import data" => "Daten importieren"
 .ImportButton: "Import" => "Import"
@@ -385,6 +387,9 @@ ExportForm: "Export data" => "Daten exportieren"
 .checkBoxCustomAutoOpen: "Open" => "Öffnen"
 .labelUTCEnd: "UTC" => "UTC"
 .labelUTCStart: "UTC" => "UTC"
+.labelPaste: "Click Paste or drag text or files to input box" @
+.extRadioButtonTab: "Tab" @
+.extCheckBoxExcludeHeader: "Exclude Header Row" @
 
 SECTION Form2DMap
 
@@ -409,7 +414,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Galaxiesektor wählen"
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Du hast neue Sektoren hinzugefügt!\r\nDies erfrordert einen kompletten Neudownload der EDSM-Daten\r\nBestätige ob du dies tun willst."
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Synchronisation der Sterndaten in den Eisntellungen deaktiviert.\r\nAktivieren um Update der Sterndaten zu erlauben."
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Du hast Sektoren entfernt!\r\nDies erfordert, dass die Datenbank bereinigt wird, was Zeit kostet.\r\nBestätige ob du dies tun willst."
-.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery kann Sterndaten von EDSM/EDDB herunterladen um dir zusätzliche Daten zur Verfügung zu stellen. Wähle wieviele Daten du herunterladen möchtest. Je mehr  Teile der Galaxie du wählst umso mehr Speicherplatz wird benötigt."
+.GALSELEX: "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery kann Sterndaten von EDSM/EDDB herunterladen um dir zusätzliche Daten zur Verfügung zu stellen. Wähle wieviele Daten du herunterladen möchtest. Je mehr  Teile der Galaxie du wählst umso mehr Speicherplatz wird benötigt. Beachte, dass der Appdataordner von EDD sich auf einer SSD befinden sollte, sollte er sich auf einer Festplatte befinden wird dies sehr langsam sein. Wähle 'Keine' wenn du eine Festplatte nutzt."
 .Select: "Select: " => "Auswählen: "
 .GALSELEN: "Select the data set" => "Wähle das Datenset"
 .PresstoAccept: "Press to Accept" => "Drücke um anzunehmen"
@@ -464,6 +469,8 @@ SECTION MessageBoxTheme
 .OK: "OK" => "OK"
 .No: "No" => "Nein"
 .Yes: "Yes" => "Ja"
+.Add: "Add" @
+.Set: "Set" @
 
 SECTION DataGridViewDialogs
 

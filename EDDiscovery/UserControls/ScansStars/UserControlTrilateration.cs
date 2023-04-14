@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2017 EDDiscovery development team
+ * Copyright © 2015 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
@@ -75,43 +74,32 @@ namespace EDDiscovery.UserControls
             toolStripTextBoxSystem.Text = "Press Start New".T(EDTx.UserControlTrilateration_ToolStripText);
         }
 
-        public override void LoadLayout()
-        {
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += Discoveryform_OnNewStarsForTrilat;
-        }
-
         public override void Closing()
         {
             PutSetting("Sectors", toolStripButtonSector.Checked);
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
         }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
-            uctg = thc;
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += Discoveryform_OnNewStarsForTrilat;
-        }
-
 
         #endregion
 
         #region Interaction with outside
 
-        private void Discoveryform_OnNewStarsForTrilat(List<string> list, OnNewStarsPushType selection)      // when someone wants to send us sys, they do it via this IF
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            foreach (string s in list)
+            var push = actionobj as UserControlCommonBase.PushStars;
+            if (push != null && (push.PushTo == PushStars.PushType.TriWanted || push.PushTo == PushStars.PushType.TriSystems))
             {
-                if (selection == OnNewStarsPushType.TriWanted)
-                    AddWantedSystem(s);
-                else if (selection == OnNewStarsPushType.TriSystems)
-                    AddSystemToDataGridViewDistances(s, false);
+                foreach (string s in push.Systems)
+                {
+                    if (push.PushTo == PushStars.PushType.TriWanted)
+                        AddWantedSystem(s);
+                    else if (push.PushTo == PushStars.PushType.TriSystems)
+                        AddSystemToDataGridViewDistances(s, false);
+                }
+
+                return true;
             }
+
+            return false;
         }
 
         #endregion
@@ -132,14 +120,14 @@ namespace EDDiscovery.UserControls
 
         private void buttonStartNew_Click(object sender, EventArgs e)
         {
-            HistoryEntry he = discoveryform.history.GetLastFSDOnly();
+            HistoryEntry he = DiscoveryForm.History.GetLastFSDOnly();
             if (he != null)
                 Set(he.System);
         }
 
         private void toolStripButtonSector_Click(object sender, EventArgs e)
         {
-            HistoryEntry he = discoveryform.history.GetLastFSDOnly();
+            HistoryEntry he = DiscoveryForm.History.GetLastFSDOnly();
             if (he != null)
                 Set(he.System);
         }
@@ -191,7 +179,7 @@ namespace EDDiscovery.UserControls
                         return;
                     }
 
-                    var system = SystemCache.FindSystem(value, discoveryform.galacticMapping, false);
+                    var system = SystemCache.FindSystem(value, DiscoveryForm.GalacticMapping, false);
                     var enteredSystems = GetEnteredSystems();
                     if (cell.Value != null)
                     {
@@ -399,7 +387,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMap(targetsystem);
+            DiscoveryForm.Open3DMap(targetsystem);
         }
 
         private bool Query(string msg)
@@ -411,7 +399,7 @@ namespace EDDiscovery.UserControls
         {
             try
             {
-                HistoryEntry he = discoveryform.history.GetLastFSDOnly();
+                HistoryEntry he = DiscoveryForm.History.GetLastFSDOnly();
 
                 if (he != null && !he.System.Name.Equals(targetsystem.Name, StringComparison.OrdinalIgnoreCase))
                 {
@@ -480,7 +468,7 @@ namespace EDDiscovery.UserControls
         {
             if (wanted == null) PopulateLocalWantedSystems();
             int i = 0;
-            var unknown = discoveryform.history.FilterByFSDOnly().ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
+            var unknown = DiscoveryForm.History.FilterByFSDOnly().ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
                             .Where(fsd => !fsd.HasCoordinate);
             if(descending) unknown = unknown.OrderByDescending(fsd => fsd.EventTimeUTC);
             else unknown = unknown.OrderBy(fsd => fsd.EventTimeUTC);
@@ -589,7 +577,7 @@ namespace EDDiscovery.UserControls
                 sysName = r.Cells[1].Value.ToString();
                 if (r.Cells[0].Value.ToString() == "Local")
                 {
-                    var sys = SystemCache.FindSystem(sysName, discoveryform.galacticMapping, false);
+                    var sys = SystemCache.FindSystem(sysName, DiscoveryForm.GalacticMapping, false);
                     if (sys == null)
                         edsmCheckNames.Add(sysName);
                     else
@@ -654,21 +642,24 @@ namespace EDDiscovery.UserControls
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string txt = Clipboard.GetText(TextDataFormat.UnicodeText);
-            string[] lines = txt.Split('\n').Select(s => s.Trim('\r')).ToArray();
-            foreach (string line in lines)
+            string txt = GetClipboardText();
+            if (txt!=null)
             {
-                string[] fields = line.Split('\t');
-                string sysname = fields[0].Trim();
-                string dist = fields.Length >= 2 ? fields[1].Trim() : null;
-
-                if (sysname != "")
+                string[] lines = txt.Split('\n').Select(s => s.Trim('\r')).ToArray();
+                foreach (string line in lines)
                 {
-                    var row = dataGridViewDistances.Rows.Add(sysname, dist);
-                    dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(0, row));
-                    if (dist != "")
+                    string[] fields = line.Split('\t');
+                    string sysname = fields[0].Trim();
+                    string dist = fields.Length >= 2 ? fields[1].Trim() : null;
+
+                    if (sysname != "")
                     {
-                        dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(1, row));
+                        var row = dataGridViewDistances.Rows.Add(sysname, dist);
+                        dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(0, row));
+                        if (dist != "")
+                        {
+                            dataGridViewDistances_CellEndEdit(this, new DataGridViewCellEventArgs(1, row));
+                        }
                     }
                 }
             }
@@ -752,7 +743,7 @@ namespace EDDiscovery.UserControls
                     if (respOk && trilatOk)
                     {
                         LogTextSuccess("EDSM submission succeeded, trilateration successful.".T(EDTx.UserControlTrilateration_Horray) + Environment.NewLine);
-                        discoveryform.RefreshHistoryAsync();
+                        DiscoveryForm.RefreshHistoryAsync();
                         checkForUnknownSystemsNowKnown();
                     }
                     else if (respOk)
@@ -790,7 +781,7 @@ namespace EDDiscovery.UserControls
             }
 
             SetTargetSystemUI();
-            toolStripLabelNoCoords.Text = discoveryform.history.FilterByFSDOnly().Where(j => !(j.journalEntry as JournalFSDJump).HasCoordinate).Count().ToString();
+            toolStripLabelNoCoords.Text = DiscoveryForm.History.FilterByFSDOnly().Where(j => !(j.journalEntry as JournalFSDJump).HasCoordinate).Count().ToString();
 
             UnfreezeTrilaterationUI();
             dataGridViewDistances.Focus();
@@ -862,7 +853,7 @@ namespace EDDiscovery.UserControls
          * it creates a new System entity, otherwise logs it and returns null. */
         private ISystem getSystemForTrilateration(string systemName, bool fromEDSM)
         {
-            var system = SystemCache.FindSystem(systemName, discoveryform.galacticMapping, false);
+            var system = SystemCache.FindSystem(systemName, DiscoveryForm.GalacticMapping, false);
 
             if (system == null)
             {
@@ -910,7 +901,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (WantedSystemClass sys in wanted)
                 {
-                    ISystem star = SystemCache.FindSystem(sys.system, discoveryform.galacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(sys.system, DiscoveryForm.GalacticMapping, false);
                     if (star == null)
                         star = new SystemClass(sys.system);
 
@@ -935,7 +926,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (var system in pushed)
                 {
-                    ISystem star = SystemCache.FindSystem(system, discoveryform.galacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(system, DiscoveryForm.GalacticMapping, false);
                     if (star == null)
                         star = new SystemClass(system);
 
@@ -985,7 +976,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (string systemName in sector)
                 {
-                    ISystem star = SystemCache.FindSystem(systemName, discoveryform.galacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(systemName, DiscoveryForm.GalacticMapping, false);
                     if (star == null)
                         star = new SystemClass(systemName);
 
@@ -1043,7 +1034,7 @@ namespace EDDiscovery.UserControls
                 if (oldSystem != null && !oldSystem.HasCoordinate)
                 {
                     var value = systemCell.Value as string;
-                    var newSystem = SystemCache.FindSystem(value, discoveryform.galacticMapping, false);
+                    var newSystem = SystemCache.FindSystem(value, DiscoveryForm.GalacticMapping, false);
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
@@ -1113,7 +1104,7 @@ namespace EDDiscovery.UserControls
 
                 wanted.Add(toAdd);
 
-                ISystem star = SystemCache.FindSystem(sysName, discoveryform.galacticMapping, false); 
+                ISystem star = SystemCache.FindSystem(sysName, DiscoveryForm.GalacticMapping, false); 
                 if (star == null)
                     star = new SystemClass(sysName);
 

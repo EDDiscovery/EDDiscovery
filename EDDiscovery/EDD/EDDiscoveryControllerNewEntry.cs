@@ -28,11 +28,21 @@ namespace EDDiscovery
         private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
         private System.Threading.Timer journalqueuedelaytimer;
 
-        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
-        // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
-        public void NewJournalEntryFromScanner(JournalEntry je, StatusReader sr)        
+        // on UI thread. hooked into journal monitor and receives all new entries with no DB filtering
+        public void NewRawJournalEntryFromScanner(JournalEntry je, StatusReader sr)
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            //System.Diagnostics.Debug.WriteLine($"Raw JE {je.GetJson().ToString()}");
+        }
+
+        // on UI thread. hooked into journal monitor and receives new entries post DB filtering..
+        // Also call if you programatically add an entry
+        // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
+        public void NewJournalEntryFromScanner(JournalEntry je, StatusReader sr)
+        {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            //System.Diagnostics.Debug.WriteLine($"Filterd JE {je.GetJson().ToString()}");
 
             if ( EDCommander.NumberOfCommanders != commandercountafterhistoryread)      // if this changes, a commander has been added
             {
@@ -89,26 +99,26 @@ namespace EDDiscovery
 
                 BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
 
-                if (current.CommanderId != history.CommanderId)         // remove non relevant jes
+                if (current.CommanderId != History.CommanderId)         // remove non relevant jes
                     continue;
 
                 OnNewJournalEntryUnfiltered?.Invoke(current);         // Called before any removal or merging, so this is the raw journal list
 
-                HistoryEntry historyentry = history.MakeHistoryEntry(current);
+                HistoryEntry historyentry = History.MakeHistoryEntry(current);
                 OnNewHistoryEntryUnfiltered?.Invoke(historyentry);
 
                 while (journalqueue.Count > 0)                      // go thru the list and find merge candidates
                 {
                     var peek = journalqueue.Peek();
 
-                    if (peek.CommanderId != history.CommanderId)     // remove non relevant jes
+                    if (peek.CommanderId != History.CommanderId)     // remove non relevant jes
                     {
                         journalqueue.Dequeue();                     // remove it
                     }
                     else if (HistoryList.MergeJournalEntries(current, peek))  // if the peeked is merged into current
                     {
                         OnNewJournalEntryUnfiltered?.Invoke(peek);         // send the peeked, unmodified
-                        OnNewHistoryEntryUnfiltered?.Invoke(history.MakeHistoryEntry(peek));
+                        OnNewHistoryEntryUnfiltered?.Invoke(History.MakeHistoryEntry(peek));
                         journalqueue.Dequeue();                     // remove it
                         //System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ..merged {peek.EventTimeUTC} {peek.EventTypeStr}");
                     }
@@ -116,7 +126,7 @@ namespace EDDiscovery
                         break;                                      // not mergable and since we peeked not removed
                 }
 
-                var historyentries = history.AddHistoryEntryToListWithReorder(historyentry, h => LogLineHighlight(h));   // add a new one on top of the HL, reorder, remove, return a list of ones to process
+                var historyentries = History.AddHistoryEntryToListWithReorder(historyentry, h => LogLineHighlight(h));   // add a new one on top of the HL, reorder, remove, return a list of ones to process
 
                 foreach (var he in historyentries.EmptyIfNull())
                 {
@@ -144,7 +154,7 @@ namespace EDDiscovery
                         foreach (var e in OnNewEntry.GetInvocationList())       // do the invokation manually, so we can time each method
                         {
                             Stopwatch sw = new Stopwatch(); sw.Start();
-                            e.DynamicInvoke(he, history);
+                            e.DynamicInvoke(he);
                             if (sw.ElapsedMilliseconds >= 80)
                                 System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} OnNewEntry Add Method {e.Method.DeclaringType} took {sw.ElapsedMilliseconds}");
                         }
@@ -154,14 +164,14 @@ namespace EDDiscovery
                     if (t2.Item2 >= 80)
                         System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} OnNewEntry slow {t2.Item1}");
 
-                    OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                    OnNewEntrySecond?.Invoke(he);      // secondary hook..
 
                     // finally, CAPI, if docked, and CAPI is go for pc commander, do capi procedure
 
                     if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
                     {
                         var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
-                        DoCAPI(dockevt.StationName, he.System.Name, history.Shipyards.AllowCobraMkIV);
+                        DoCAPI(dockevt.StationName, he.System.Name, History.Shipyards.AllowCobraMkIV);
                     }
 
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
@@ -177,7 +187,7 @@ namespace EDDiscovery
 
         // New UI event. SR will be null if programatically made
 
-        void NewUIEventFromScanner(UIEvent u, StatusReader sr)                  // UI thread new event
+        void NewUIEventFromScanner(UIEvent u, StatusReader _)                  // UI thread new event
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
@@ -185,11 +195,16 @@ namespace EDDiscovery
             BaseUtils.AppTicks.TickCountLapDelta("CTUI", true);
 
             var uifuel = u as EliteDangerousCore.UIEvents.UIFuel;       // UI Fuel has information on fuel level - update it.
-            if (uifuel != null && history != null)
+            if (uifuel != null && History != null)
             {
-                history.ShipInformationList.UIFuel(uifuel);             // update the SI global value
-                if (history.ShipInformationList.CurrentShip != null )   // just to be paranoid
-                    history.GetLast?.UpdateShipInformation(history.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
+                History.ShipInformationList.UIFuel(uifuel);             // update the SI global value
+                if (History.ShipInformationList.CurrentShip != null )   // just to be paranoid
+                    History.GetLast?.UpdateShipInformation(History.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
+            }
+
+            if ( u is EliteDangerousCore.UIEvents.UIOverallStatus)
+            {
+                UIOverallStatus = u as EliteDangerousCore.UIEvents.UIOverallStatus;
             }
 
             OnNewUIEvent?.Invoke(u);

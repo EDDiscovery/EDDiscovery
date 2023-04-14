@@ -182,14 +182,16 @@ namespace EDDiscovery.UserControls
                     gr.FillRectangle(br5, new Rectangle(1096, 625, 5, 4));
                 }
             }
-
         }
 
         public override void Init()
         {
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnThemeChanged += ClearDisplayFontJournalCAPI;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnThemeChanged += ClearDisplayFontJournalCAPI;
+
+            dataGridViewItinerary.Init(DiscoveryForm);      // set up 
+            dataGridViewItinerary.CheckEDSM = true;
         }
 
         public override void LoadLayout()
@@ -236,19 +238,19 @@ namespace EDDiscovery.UserControls
             PutSetting(dbTabSave, extTabControl.SelectedIndex);
 
 
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnThemeChanged -= ClearDisplayFontJournalCAPI;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnThemeChanged -= ClearDisplayFontJournalCAPI;
             bigfont.Dispose();
             normfont.Dispose();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)     
+        private void Discoveryform_OnHistoryChange()     
         {
             ClearDisplayFontJournalCAPI();   // do the lot, including the capi, etc.
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)     
+        private void Discoveryform_OnNewEntry(HistoryEntry he)     
         {
             if ( he.journalEntry is ICarrierStats)
             {
@@ -268,7 +270,7 @@ namespace EDDiscovery.UserControls
 
         private void Period_Tick(object sender, EventArgs e)
         {
-            var cs = discoveryform.history.Carrier;
+            var cs = DiscoveryForm.History.Carrier;
 
             if (cs.CheckCarrierJump(DateTime.UtcNow)) // if autojump happened
                 DisplayJournal();      // redisplay all - including destinationsystem
@@ -284,10 +286,10 @@ namespace EDDiscovery.UserControls
             // capi enable/disable  - get stats
             DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global:true);
             int capicmdrid = GetSetting(dbCAPICommander, -1, global:true);
-            bool capisamecmdr = discoveryform.history.CommanderId == capicmdrid;
+            bool capisamecmdr = DiscoveryForm.History.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
-            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = discoveryform.history.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
+            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = DiscoveryForm.History.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
 
             // if its the same commander, and our display is in the past, another panel fetched it, redisplay
             if (capisamecmdr && capitime > capidisplayedtime)
@@ -332,7 +334,7 @@ namespace EDDiscovery.UserControls
 
         private async void DisplayJournal()
         {
-            var cs = discoveryform.history.Carrier;
+            var cs = DiscoveryForm.History.Carrier;
 
             cs.CheckCarrierJump(DateTime.UtcNow);       // see if auto jump happened
 
@@ -350,7 +352,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewItinerary.Rows.Clear();
                 ISystem lastsys = null;
 
-                ISystem cursys = discoveryform.history.GetLast?.System;     // last system, if present
+                ISystem cursys = DiscoveryForm.History.GetLast?.System;     // last system, if present
 
                 for (int i = cs.JumpHistory.Count - 1; i >= 0; i--)
                 {
@@ -379,10 +381,11 @@ namespace EDDiscovery.UserControls
                                         it.StarSystem.HasCoordinate ? it.StarSystem.Z.ToString("N2") : "",
                                         dist>0 ? dist.ToString("N1") : "",
                                         distfrom>0 ? distfrom.ToString("N1") : "",
-                                        "?",
+                                        "",
                     };
 
-                    dataGridViewItinerary.Rows.Add(rowobj);
+                    int rwn = dataGridViewItinerary.Rows.Add(rowobj);
+                    dataGridViewItinerary.Rows[rwn].Tag = it.StarSystem;
                 }
 
                 dataGridViewItinerary.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
@@ -696,7 +699,7 @@ namespace EDDiscovery.UserControls
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
 
-            if (discoveryform.history.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
+            if (DiscoveryForm.History.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
                 imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), "Cost".TxID(EDTx.UserControlCarrier_Cost) + ": " + value.ToString("N0"), normfont, color);
             }
@@ -709,7 +712,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayDestinationSystem()
         {
-            var cs = discoveryform.history.Carrier;
+            var cs = DiscoveryForm.History.Carrier;
 
             if (cs.State.HaveCarrier && cs.IsJumping)
             {
@@ -825,14 +828,14 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDoCAPI1_Click(object sender, EventArgs e)
         {
-            if (discoveryform.FrontierCAPI.Active)
+            if (DiscoveryForm.FrontierCAPI.Active)
             {
                 extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;
 
                 // record when and who did capi, and clear data.  
 
                 PutSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);                 
-                PutSetting(dbCAPICommander, discoveryform.history.CommanderId, global: true);
+                PutSetting(dbCAPICommander, DiscoveryForm.History.CommanderId, global: true);
                 PutSetting(dbCAPISave, "", global: true);
 
                 // don't hold up the main thread, do it in a task, as its a HTTP operation
@@ -845,7 +848,7 @@ namespace EDDiscovery.UserControls
                     int tries = 3;
                     while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
-                        string fleetcarrier = discoveryform.FrontierCAPI.FleetCarrier(nocontentreturnemptystring:true);
+                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(nocontentreturnemptystring:true);
 
                         if (fleetcarrier != null)
                         {
@@ -908,7 +911,7 @@ namespace EDDiscovery.UserControls
             int capicmd = GetSetting(dbCAPICommander, -1, global: true);
 
             // if its a valid capi for commander, turn it into a FC entity
-            var fc = (capi.Length > 0 && capicmd == discoveryform.history.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
+            var fc = (capi.Length > 0 && capicmd == DiscoveryForm.History.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
 
             DisplayCAPI(fc);
         }
@@ -938,20 +941,20 @@ namespace EDDiscovery.UserControls
                 labelCAPICarrierBalance.Text = fc.Balance.ToString("N0") + "cr";
 
                 {
+                    DataGridViewColumn sortcol = dataGridViewCAPICargo.SortedColumn != null ? dataGridViewCAPICargo.SortedColumn : dataGridViewCAPICargo.Columns[0];
+                    SortOrder sortorder = dataGridViewCAPICargo.SortOrder != SortOrder.None ? dataGridViewCAPICargo.SortOrder : SortOrder.Ascending;
+                    dataGridViewCAPICargo.Rows.Clear();
+
                     List<CAPI.FleetCarrier.Cargo> cargounmerged = fc.GetCargo();
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Polymers", Value = 100, Quantity = 100 });     // for debugging the merge
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Polymers", Value = 100, Quantity = 200 });
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Polymers", Value = 100, Quantity = 300 });
                     //cargounmerged.Add(new CAPI.FleetCarrier.Cargo() { Commodity = "Pesticides", Value = 656, Quantity = 300 });
-                    var cargo = CAPI.FleetCarrier.MergeCargo(cargounmerged);
 
-                    DataGridViewColumn sortcol = dataGridViewCAPICargo.SortedColumn != null ? dataGridViewCAPICargo.SortedColumn : dataGridViewCAPICargo.Columns[0];
-                    SortOrder sortorder = dataGridViewCAPICargo.SortOrder != SortOrder.None ? dataGridViewCAPICargo.SortOrder : SortOrder.Ascending;
-
-                    dataGridViewCAPICargo.Rows.Clear();
-
-                    if (cargo != null)
+                    if (cargounmerged != null)
                     {
+                        var cargo = CAPI.FleetCarrier.MergeCargo(cargounmerged);        // merge similar entries
+
                         for (int i = 0; i < cargo.Count; i++)
                         {
                             var ord = cargo[i];

@@ -78,9 +78,18 @@ SECTION UserControlContainerGrid
 
 SECTION UserControlCompass
 
-.labelBookmark: "System Bookmarks" @
-.checkBoxHideTransparent: "Hide In Transparent" @
 .labelTargetLat: "Target" @
+.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
+.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
+.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
+.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
+.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
+.extButtonShowControl.ToolTip: "Configure compass overlay" @
+.extButtonFont.ToolTip: "Configure font of compass" @
+.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhenonfoot: "Hide when on foot" @
+.cleartargetonleavingbody: "Clear target when leaving a body" @
+
 
 SECTION UserControlWebBrowser
 
@@ -253,13 +262,12 @@ SECTION UserControlExpedition
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
 
-// old stuff
-
 .SystemName: "System Name" @
 .Distance: "Dist." @
 .Note: "Note" @
 .ColumnDistStart: "Dist Start" @
 .ColumnDistanceRemaining: "Dist Remaining" @
+.ColumnHistoryNote: "History Note" @
 
 .labelCml: "Cml Distance:" @
 .labelP2P: "P2P Distance:" @
@@ -269,8 +277,10 @@ SECTION UserControlExpedition
 
 .copyToolStripMenuItem: "Copy" @
 .pasteToolStripMenuItem: "Paste" @
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" @
-.deleteRowsToolStripMenuItem: "Delete Rows" @
+
+.cutToolStripMenuItem: "Cut" @
+.insertRowAboveToolStripMenuItem: "Insert row above" @
+
 .setTargetToolStripMenuItem: "Set Target" @
 .editBookmarkToolStripMenuItem: "Edit bookmark" @
 
@@ -291,9 +301,9 @@ SECTION UserControlJournalGrid
 .comboBoxTime.ToolTip: "Select the entries selected by age" @
 
 .ColumnTime: "Time" @
-.Event: "Event" @
-.ColumnType: "Description" @
-.ColumnText: "Information" @
+.ColumnEvent: "Event" @
+.ColumnDescription: "Description" @
+.ColumnInformation: "Information" @
 
 .labelTime: "Time" @
 .labelSearch: "Search" @
@@ -315,6 +325,7 @@ SECTION UserControlJournalGrid
 .TTSelAge: "Select the entries by age, " @
 .JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
+
 
 SECTION UserControlLedger
 
@@ -369,23 +380,37 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.BackPack: "BackPack" @
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
 .Rare: "Rare" @
-.Recipes: "Recipes" @
-.NameCol: "Name" @
-.ShortName: "Abv" @
-.Category: "Category" @
-.Type: "Type" @
-.Number: "Number" @
-.Price: "Avg. Price" @
+.ColName: "Name" @
+.ColShortName: "Abv" @
+.ColCategory: "Category" @
+.ColType: "Type" @
+.ColNumber: "Number" @
+.ColBackPack: "Backpack" @
+.ColPrice: "Avg. Price" @
+.ColRecipes: "Recipes" @
+.ColWanted: "Want" @
+.ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" @
 .textBoxItems1.ToolTip: "Count of Items" @
 .buttonFilter.ToolTip: "Filter out items" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.AllMats: "All Materials" @
+.AllCommods: "All Commodities" @
+.AllMicroresources: "All Microresources" @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.extButtonFont.ToolTip: "Font for shopping list" @
+.buttonExtImport.ToolTip: "Import materials list into panel" @
+.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
+.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
+.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
+.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
+.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
+
 
 SECTION UserControlMissionOverlay
 
@@ -435,11 +460,13 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
 .showAtmosToolStripMenuItem: "Show atmospheres" @
+.showTempToolStripMenuItem: "Show surface temperature" @
 .showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
+.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" @
 .showstarclassToolStripMenuItem: "Show star class in system info" @
 .showDividersToolStripMenuItem: "Show dividers" @
 
@@ -648,6 +675,7 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" @
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" @
 .autoSetTargetToolStripMenuItem: "Auto set target" @
+.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
 
 .showtargetinfo: "Show Target Information" @
 .showfuelinfo: "Show Fuel Information" @
@@ -1210,9 +1238,9 @@ SECTION UserControlContainerSplitter
 SECTION UserControlTravelGrid
 
 .ColumnTime: "Time" @
-.Icon: "Event" @
-.ColumnSystem: "Description" @
-.ColumnDistance: "Information" @
+.ColumnEvent: "Event" @
+.ColumnDescription: "Description" @
+.ColumnInformation: "Information" @
 .ColumnNote: "Note" @
 .labelTime: "Time" @
 .labelSearch: "Search" @
@@ -1224,7 +1252,6 @@ SECTION UserControlTravelGrid
 .CSTOP: "Clear Stop marker" @
 .SETSTOPTC: "Set Stop marker for travel calculations" @
 .SETSTARTTC: "Set Start marker for travel calculations" @
-.SETSTSTOP: "Set Start/Stop point for travel calculations" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
 
@@ -1279,8 +1306,8 @@ SECTION UserControlTravelGrid
 
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 
-//.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
-//.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
+.StartStopHidden: "Next start/stop marker is hidden" @
+.StartStopNotFound: "No start/stop marker found below" @
 
 SECTION UserControlCaptainsLog
 
@@ -1563,7 +1590,7 @@ SECTION UserControlCarrier
 .ServiceActive: "This Service is Active" @
 .ServiceSuspended : "This service is suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
-.NoPacks: ""No Module or Ship packs installed" @
+.NoPacks: "No Module or Ship packs installed" @
 .Tier: "Tier" @
 .Cost: "Cost" @
 .Jumping : "Jumping" @

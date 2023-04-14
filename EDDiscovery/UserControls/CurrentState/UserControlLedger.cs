@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -63,8 +63,8 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            discoveryform.OnHistoryChange += Redisplay;
-            discoveryform.OnNewEntry += NewEntry;
+            DiscoveryForm.OnHistoryChange += Redisplay;
+            DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlLedger_TimeCol, EDTx.UserControlLedger_Type, EDTx.UserControlLedger_Notes, EDTx.UserControlLedger_Credits, EDTx.UserControlLedger_Debits, EDTx.UserControlLedger_Balance, EDTx.UserControlLedger_NormProfit, EDTx.UserControlLedger_TotalProfit, EDTx.UserControlLedger_labelTime, EDTx.UserControlLedger_labelSearch };
             var enumlistcms = new Enum[] { EDTx.UserControlLedger_toolStripMenuItemGotoItem };
@@ -112,11 +112,6 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg = thc;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewLedger.RowTemplate.MinimumHeight = Font.ScalePixels(26);
@@ -128,15 +123,15 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewLedger);
             PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
-            discoveryform.OnHistoryChange -= Redisplay;
-            discoveryform.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnHistoryChange -= Redisplay;
+            DiscoveryForm.OnNewEntry -= NewEntry;
         }
 
         #endregion
 
         #region Display Grid
 
-        private void Redisplay(HistoryList hl)
+        private void Redisplay()
         {
             Display();
         }
@@ -154,7 +149,7 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.Rows.Clear();
             extChartLedger.ClearSeriesPoints();
 
-            var ledger = discoveryform.history.CashLedger;
+            var ledger = DiscoveryForm.History.CashLedger;
             transactioncountatdisplay = 0;
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("LD", true)} Ledger");
@@ -230,11 +225,11 @@ namespace EDDiscovery.UserControls
                 return null;
         }
 
-        private void NewEntry(HistoryEntry he, HistoryList hl)
+        private void NewEntry(HistoryEntry he)
         {
-            while(transactioncountatdisplay < discoveryform.history.CashLedger.Transactions.Count)   // if new transaction
+            while(transactioncountatdisplay < DiscoveryForm.History.CashLedger.Transactions.Count)   // if new transaction
             {
-                Ledger.Transaction tx = discoveryform.history.CashLedger.Transactions[transactioncountatdisplay];
+                Ledger.Transaction tx = DiscoveryForm.History.CashLedger.Transactions[transactioncountatdisplay];
 
                 var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
                 var row = CreateRow(tx, eventfilter, textBoxFilter.Text);
@@ -310,7 +305,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewLedger.RightClickRow != -1)
             {
                 long v = (long)dataGridViewLedger.Rows[dataGridViewLedger.RightClickRow].Tag;
-                uctg.GotoPosByJID(v);
+                RequestPanelOperation(this, v);
             }
         }
 
@@ -353,18 +348,17 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            var current_mc = discoveryform.history.CashLedger;
+            var current_mc = DiscoveryForm.History.CashLedger;
 
             if ( current_mc != null )
             { 
-                Forms.ExportForm frm = new Forms.ExportForm();
+                Forms.ImportExportForm frm = new Forms.ImportExportForm();
 
-                frm.Init(false, new string[] { "Export Current View" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
+                frm.Export( new string[] { "Export Current View" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
 
                 if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                     grd.GetHeader += delegate (int c)
                     {

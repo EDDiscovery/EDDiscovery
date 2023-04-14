@@ -122,7 +122,7 @@ namespace EDDiscovery.Actions
                         string note = sp.NextQuotedWord();
                         string taglist = sp.NextQuotedWord();
 
-                        HistoryEntry he = discoveryform.history.GetLast;
+                        HistoryEntry he = discoveryform.History.GetLast;
 
                         if ( he != null )
                         {       // taglist can be null.. note must be set.

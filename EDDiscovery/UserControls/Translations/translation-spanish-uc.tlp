@@ -77,9 +77,17 @@ SECTION UserControlContainerGrid
 
 SECTION UserControlCompass
 
-.labelBookmark: "System Bookmarks" => "Marcadores del sistema"
-.checkBoxHideTransparent: "Hide In Transparent" => "Ocultar en transparente"
 .labelTargetLat: "Target" => "Objetivo"
+.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
+.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
+.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
+.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
+.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
+.extButtonShowControl.ToolTip: "Configure compass overlay" @
+.extButtonFont.ToolTip: "Configure font of compass" @
+.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhenonfoot: "Hide when on foot" @
+.cleartargetonleavingbody: "Clear target when leaving a body" @
 
 SECTION UserControlWebBrowser
 
@@ -251,6 +259,7 @@ SECTION UserControlExpedition
 .Note: "Note" => "Nota"
 .ColumnDistStart: "Dist Start" @
 .ColumnDistanceRemaining: "Dist Remaining" @
+.ColumnHistoryNote: "History Note" @
 .labelCml: "Cml Distance:" => "Distancia Cml: "
 .labelP2P: "P2P Distance:" => "Distancia P2P: "
 .labelEndDate: "End Date:" => "Fecha final: "
@@ -258,8 +267,8 @@ SECTION UserControlExpedition
 .labelRouteName: "Route Name:" => "Nombre de ruta: "
 .copyToolStripMenuItem: "Copy" => "Copiar"
 .pasteToolStripMenuItem: "Paste" => "Pegar"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Insertar filas copiadas"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Eliminar filas"
+.cutToolStripMenuItem: "Cut" @
+.insertRowAboveToolStripMenuItem: "Insert row above" @
 .setTargetToolStripMenuItem: "Set Target" => "Poner un objectivo"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "Editar marcador"
 .NoRoute: "No route set up. Please add at least two systems." => "No se estableció ninguna ruta. Agregue al menos dos sistemas"
@@ -278,9 +287,9 @@ SECTION UserControlJournalGrid
 
 .comboBoxTime.ToolTip: "Select the entries selected by age" => "Seleccione las entradas seleccionadas por edad"
 .ColumnTime: "Time" => "Tiempo"
-.Event: "Event" => "Evento"
-.ColumnType: "Description" => "Descripción"
-.ColumnText: "Information" => "Información"
+.ColumnEvent: "Event" => "Evento"
+.ColumnDescription: "Description" => "Descripción"
+.ColumnInformation: "Information" => "Información"
 .labelTime: "Time" => "Tiempo"
 .labelSearch: "Search" => "Búsqueda"
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Introduzca texto para buscar un elemento en cualquier campo"
@@ -353,23 +362,36 @@ SECTION UserControlMarketData
 SECTION UserControlMaterialCommodities
 
 .ShipLocker: "Ship Locker" @
-.BackPack: "BackPack" @
 .Data: "Data" => "Datos"
 .Mats: "Mats" => "Materiales"
 .Total: "Total" => "Total"
 .Rare: "Rare" => "Raro"
-.Recipes: "Recipes" => "Recetas"
-.NameCol: "Name" => "Nombre"
-.ShortName: "Abv" => "Abv"
-.Category: "Category" => "Categoría"
-.Type: "Type" => "Tipo"
-.Number: "Number" => "Número"
-.Price: "Avg. Price" => "Precio medio"
+.ColName: "Name" => "Nombre"
+.ColShortName: "Abv" => "Abv"
+.ColCategory: "Category" => "Categoría"
+.ColType: "Type" => "Tipo"
+.ColNumber: "Number" => "Número"
+.ColBackPack: "Backpack" @
+.ColPrice: "Avg. Price" => "Precio medio"
+.ColRecipes: "Recipes" @
+.ColWanted: "Want" @
+.ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
 .textBoxItems1.ToolTip: "Count of Items" => "Recuento de elementos"
 .buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
+.AllMats: "All Materials" @
+.AllCommods: "All Commodities" @
+.AllMicroresources: "All Microresources" @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.extButtonFont.ToolTip: "Font for shopping list" @
+.buttonExtImport.ToolTip: "Import materials list into panel" @
+.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
+.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
+.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
+.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
+.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
 
 SECTION UserControlMissionOverlay
 
@@ -415,11 +437,13 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show more information" => "Mostrar más información"
 .showGravityToolStripMenuItem: "Show gravity of landables" @
 .showAtmosToolStripMenuItem: "Show atmospheres" @
+.showTempToolStripMenuItem: "Show surface temperature" @
 .showVolcanismToolStripMenuItem: "Show volcanism" @
 .autoHideToolStripMenuItem: "Auto Hide" => "Auto-escondite"
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" => "No te escondas en el modo FSS"
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Ocultar cuerpos ya asignados"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" => "Mostrar información del sistema siempre"
+.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" @
 .showstarclassToolStripMenuItem: "Show star class in system info" @
 .showDividersToolStripMenuItem: "Show dividers" @
 .extButtonPlanets.ToolTip: "Planet Filter" @
@@ -621,6 +645,7 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Mostrar desviación de la ruta"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Copia automática de Marcador"
 .autoSetTargetToolStripMenuItem: "Auto set target" => "Establecer objetivo automáticamente"
+.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
 .showtargetinfo: "Show Target Information" @
 .showfuelinfo: "Show Fuel Information" @
 .J1: "jump" => "salto"
@@ -1141,9 +1166,9 @@ SECTION UserControlContainerSplitter
 SECTION UserControlTravelGrid
 
 .ColumnTime: "Time" => "Tiempo"
-.Icon: "Event" => "Evento"
-.ColumnSystem: "Description" => "Descripción"
-.ColumnDistance: "Information" => "Información"
+.ColumnEvent: "Event" => "Evento"
+.ColumnDescription: "Description" => "Descripción"
+.ColumnInformation: "Information" => "Información"
 .ColumnNote: "Note" => "Nota"
 .labelTime: "Time" => "Tiempo"
 .labelSearch: "Search" => "Búsqueda"
@@ -1155,7 +1180,6 @@ SECTION UserControlTravelGrid
 .CSTOP: "Clear Stop marker" => "Borrar marcador de parada"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "Establecer marcador de parada para cálculos de viaje"
 .SETSTARTTC: "Set Start marker for travel calculations" => "Establecer marcador de inicio para cálculos de viaje"
-.SETSTSTOP: "Set Start/Stop point for travel calculations" => "Establecer punto de inicio/parada para cálculos de recorrido"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "No se pudo encontrar el sistema - no se ha sincronizado o EDSM no está disponible"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Confirme que desea eliminar esta entrada\r\nPuede volver a aparecer si se vuelven a escanear los registros"
 .quickMarkToolStripMenuItem: "Marked" @
@@ -1203,6 +1227,8 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Esquema de control"
 .SearchTerms: "system:body:station:stationfaction" @
+.StartStopHidden: "Next start/stop marker is hidden" @
+.StartStopNotFound: "No start/stop marker found below" @
 
 SECTION UserControlCaptainsLog
 
@@ -1486,6 +1512,7 @@ SECTION UserControlCarrier
 .ServiceActive: "This Service is Active" @
 .ServiceSuspended: "This service is suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
+.NoPacks: "No Module or Ship packs installed" @
 .Tier: "Tier" @
 .Cost: "Cost" @
 .Jumping: "Jumping" @

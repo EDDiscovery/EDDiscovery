@@ -30,36 +30,40 @@ namespace EDDiscovery.UserControls
         private string dbSelection = "Sel";
         private string dbOSave = "Order";
 
-        const int BitSelSystem = 0;
-        const int BitSelEDSM = 1;
-        const int BitSelVisits = 2;
-        const int BitSelBody = 3;
-        const int BitSelPosition = 4;
-        const int BitSelDistanceFrom = 5;
-        const int BitSelSystemState = 6;
-        const int BitSelTarget = 8;
-        const int BitSelShipInfo = 9;
-        const int BitSelFuel = 10;
-        const int BitSelCargo = 11;
-        const int BitSelMats = 12;
-        const int BitSelData = 13;
-        const int BitSelCredits = 14;
-        const int BitSelGameMode = 15;
-        const int BitSelTravel = 16;
-        const int BitSelMissions = 17;
-        const int BitSelJumpRange = 18;
-        const int BitSelStationButtons = 19;
-        const int BitSelShipyardButtons = 20;
-        const int BitSelStationFaction = 21;
-        const int BitSelMR = 22;
-        const int BitSelSecurity = 23;
-        const int BitSelNextDestination = 24;
-        const int BitSelTotal = 25;
+        [Flags]
+        enum ControlBits
+        {
+            BitSelSystem = 0,       // main items
+            BitSelEDSM = 1,
+            BitSelVisits = 2,
+            BitSelBody = 3,
+            BitSelPosition = 4,
+            BitSelDistanceFrom = 5,
+            BitSelSystemState = 6,
+            BitSelTarget = 8,
+            BitSelShipInfo = 9,
+            BitSelFuel = 10,
+            BitSelCargo = 11,
+            BitSelMats = 12,
+            BitSelData = 13,
+            BitSelCredits = 14,
+            BitSelGameMode = 15,
+            BitSelTravel = 16,
+            BitSelMissions = 17,
+            BitSelJumpRange = 18,
+            BitSelStationButtons = 19,
+            BitSelShipyardButtons = 20,
+            BitSelStationFaction = 21,
+            BitSelMR = 22,
+            BitSelSecurity = 23,
+            BitSelNextDestination = 24,
+            BitSelEDSMButtonsNextLine = 28,       // other options
+            BitSelSkinny = 29,
+            BitSelNotValid = -1,
+        };
 
-        const int BitSelEDSMButtonsNextLine = 28;       // other options
-        const int BitSelSkinny = 29;
-
-        const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << BitSelEDSMButtonsNextLine);
+        const int BitSelTotal = 25; // total number of main items
+        const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << (int)ControlBits.BitSelEDSMButtonsNextLine);
 
         private int[] ItemSize = new int[]      // size of items in HorzPosititons (1/2/3/4 etc)
         {
@@ -72,29 +76,29 @@ namespace EDDiscovery.UserControls
             2,0,0,0,        // 24   - large: Next target
         };
 
-        private int[,] resetorder = new int[,]          // default reset order
+        private ControlBits[,] resetorder = new ControlBits[,]          // default reset order
         {
-            {BitSelSystem,-1},
-            {BitSelPosition,-1},
-            {BitSelNextDestination,-1},
-            {BitSelJumpRange,BitSelFuel },
-            {BitSelEDSM,-1},
-            {BitSelVisits,BitSelCredits},
-            {BitSelBody,-1},
-            {BitSelStationFaction,-1},
-            {BitSelStationButtons,-1},
-            {BitSelShipInfo,-1},
-            {BitSelShipyardButtons,-1},
-            {BitSelDistanceFrom,-1},
-            {BitSelSystemState,-1},
-            {BitSelSecurity,-1},
-            {BitSelTarget,-1},
-            {BitSelCargo,-1},
-            {BitSelMats,BitSelData},
-            {BitSelMR, -1 },
-            {BitSelGameMode,-1},
-            {BitSelTravel,-1},
-            {BitSelMissions,-1},
+            {ControlBits.BitSelSystem,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelPosition,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelNextDestination,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelJumpRange,ControlBits.BitSelFuel },
+            {ControlBits.BitSelEDSM,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelVisits,ControlBits.BitSelCredits},
+            {ControlBits.BitSelBody,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelStationFaction,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelStationButtons,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelShipInfo,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelShipyardButtons,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelDistanceFrom,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelSystemState,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelSecurity,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelTarget,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelCargo,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelMats,ControlBits.BitSelData},
+            {ControlBits.BitSelMR, ControlBits.BitSelNotValid },
+            {ControlBits.BitSelGameMode,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelTravel,ControlBits.BitSelNotValid},
+            {ControlBits.BitSelMissions,ControlBits.BitSelNotValid},
         };
 
         public const int HorzPositions = 8;
@@ -113,7 +117,6 @@ namespace EDDiscovery.UserControls
 
         private bool travelhistoryisattop = true;
 
-        bool neverdisplayed = true;
         HistoryEntry last_he = null;
 
         private ControlHelpersStaticFunc.ControlDragger drag = new ControlHelpersStaticFunc.ControlDragger();
@@ -131,25 +134,25 @@ namespace EDDiscovery.UserControls
 
             // seem to need to do it here, first, before anything else gets into it
 
-            var enumlist = new Enum[] { EDTx.UserControlSysInfo_labelStationFaction, EDTx.UserControlSysInfo_extButtonEDSMTarget, EDTx.UserControlSysInfo_labelSecurity, 
-                                        EDTx.UserControlSysInfo_labelJumpRange, EDTx.UserControlSysInfo_labelTarget, EDTx.UserControlSysInfo_labelSysName, 
-                                        EDTx.UserControlSysInfo_labelGamemode, EDTx.UserControlSysInfo_labelTravel, EDTx.UserControlSysInfo_labelOpenShip, 
-                                        EDTx.UserControlSysInfo_labelOpenStation, EDTx.UserControlSysInfo_labelOpen, EDTx.UserControlSysInfo_labelCargo, 
-                                        EDTx.UserControlSysInfo_labelCredits, EDTx.UserControlSysInfo_labelShip, EDTx.UserControlSysInfo_labelMaterials, 
-                                        EDTx.UserControlSysInfo_labelVisits, EDTx.UserControlSysInfo_labelMR, EDTx.UserControlSysInfo_labelData, 
-                                        EDTx.UserControlSysInfo_labelFuel, EDTx.UserControlSysInfo_labelBodyName, EDTx.UserControlSysInfo_labelPosition, 
-                                        EDTx.UserControlSysInfo_labelMissions, EDTx.UserControlSysInfo_labelEconomy, 
-                                        EDTx.UserControlSysInfo_labelGov, EDTx.UserControlSysInfo_labelAllegiance, EDTx.UserControlSysInfo_labelState, EDTx.UserControlSysInfo_labelSolDist, 
+            var enumlist = new Enum[] { EDTx.UserControlSysInfo_labelStationFaction, EDTx.UserControlSysInfo_extButtonEDSMTarget, EDTx.UserControlSysInfo_labelSecurity,
+                                        EDTx.UserControlSysInfo_labelJumpRange, EDTx.UserControlSysInfo_labelTarget, EDTx.UserControlSysInfo_labelSysName,
+                                        EDTx.UserControlSysInfo_labelGamemode, EDTx.UserControlSysInfo_labelTravel, EDTx.UserControlSysInfo_labelOpenShip,
+                                        EDTx.UserControlSysInfo_labelOpenStation, EDTx.UserControlSysInfo_labelOpen, EDTx.UserControlSysInfo_labelCargo,
+                                        EDTx.UserControlSysInfo_labelCredits, EDTx.UserControlSysInfo_labelShip, EDTx.UserControlSysInfo_labelMaterials,
+                                        EDTx.UserControlSysInfo_labelVisits, EDTx.UserControlSysInfo_labelMR, EDTx.UserControlSysInfo_labelData,
+                                        EDTx.UserControlSysInfo_labelFuel, EDTx.UserControlSysInfo_labelBodyName, EDTx.UserControlSysInfo_labelPosition,
+                                        EDTx.UserControlSysInfo_labelMissions, EDTx.UserControlSysInfo_labelEconomy,
+                                        EDTx.UserControlSysInfo_labelGov, EDTx.UserControlSysInfo_labelAllegiance, EDTx.UserControlSysInfo_labelState, EDTx.UserControlSysInfo_labelSolDist,
                                         EDTx.UserControlSysInfo_labelHomeDist, EDTx.UserControlSysInfo_labelNextDestination };
-            var enumlistcms = new Enum[] { EDTx.UserControlSysInfo_toolStripSystem, EDTx.UserControlSysInfo_toolStripEDSM, EDTx.UserControlSysInfo_toolStripEDSMDownLine, 
-                                        EDTx.UserControlSysInfo_toolStripVisits, EDTx.UserControlSysInfo_toolStripBody, EDTx.UserControlSysInfo_displayStationButtonsToolStripMenuItem, 
-                                        EDTx.UserControlSysInfo_displayStationFactionToolStripMenuItem, EDTx.UserControlSysInfo_toolStripPosition, EDTx.UserControlSysInfo_toolStripDistanceFrom, 
-                                        EDTx.UserControlSysInfo_toolStripSystemState, EDTx.UserControlSysInfo_displaySecurityToolStripMenuItem,  
-                                        EDTx.UserControlSysInfo_toolStripTarget, EDTx.UserControlSysInfo_toolStripShip, EDTx.UserControlSysInfo_displayShipButtonsToolStripMenuItem, 
-                                        EDTx.UserControlSysInfo_toolStripFuel, EDTx.UserControlSysInfo_toolStripCargo, EDTx.UserControlSysInfo_toolStripDataCount, 
-                                        EDTx.UserControlSysInfo_toolStripMaterialCounts, EDTx.UserControlSysInfo_displayMicroresourcesCountToolStripMenuItem, 
-                                        EDTx.UserControlSysInfo_toolStripCredits, EDTx.UserControlSysInfo_toolStripGameMode, EDTx.UserControlSysInfo_toolStripTravel, 
-                                        EDTx.UserControlSysInfo_toolStripMissionList, EDTx.UserControlSysInfo_toolStripJumpRange, EDTx.UserControlSysInfo_toolStripSkinny, 
+            var enumlistcms = new Enum[] { EDTx.UserControlSysInfo_toolStripSystem, EDTx.UserControlSysInfo_toolStripEDSM, EDTx.UserControlSysInfo_toolStripEDSMDownLine,
+                                        EDTx.UserControlSysInfo_toolStripVisits, EDTx.UserControlSysInfo_toolStripBody, EDTx.UserControlSysInfo_displayStationButtonsToolStripMenuItem,
+                                        EDTx.UserControlSysInfo_displayStationFactionToolStripMenuItem, EDTx.UserControlSysInfo_toolStripPosition, EDTx.UserControlSysInfo_toolStripDistanceFrom,
+                                        EDTx.UserControlSysInfo_toolStripSystemState, EDTx.UserControlSysInfo_displaySecurityToolStripMenuItem,
+                                        EDTx.UserControlSysInfo_toolStripTarget, EDTx.UserControlSysInfo_toolStripShip, EDTx.UserControlSysInfo_displayShipButtonsToolStripMenuItem,
+                                        EDTx.UserControlSysInfo_toolStripFuel, EDTx.UserControlSysInfo_toolStripCargo, EDTx.UserControlSysInfo_toolStripDataCount,
+                                        EDTx.UserControlSysInfo_toolStripMaterialCounts, EDTx.UserControlSysInfo_displayMicroresourcesCountToolStripMenuItem,
+                                        EDTx.UserControlSysInfo_toolStripCredits, EDTx.UserControlSysInfo_toolStripGameMode, EDTx.UserControlSysInfo_toolStripTravel,
+                                        EDTx.UserControlSysInfo_toolStripMissionList, EDTx.UserControlSysInfo_toolStripJumpRange, EDTx.UserControlSysInfo_toolStripSkinny,
                                         EDTx.UserControlSysInfo_toolStripReset, EDTx.UserControlSysInfo_toolStripRemoveAll , EDTx.UserControlSysInfo_displayNextDestinationToolStripMenuItem};
             var enumlisttt = new Enum[] { EDTx.UserControlSysInfo_ToolTip, EDTx.UserControlSysInfo_textBoxTargetDist_ToolTip, EDTx.UserControlSysInfo_textBoxTarget_ToolTip };
 
@@ -186,94 +189,83 @@ namespace EDDiscovery.UserControls
             else
                 Lines = BaseUtils.LineStore.Restore(rs, HorzPositions);
 
-            for (int bit = 0; bit < BitSelTotal; bit++)     // new bits added will not be in older lists, need to add on in!
+            //foreach (var l in Lines) { for (int i = 0; i < l.Items.Length; i++) {if ( l.Items[i]>0) System.Diagnostics.Debug.Write(((ControlBits)(l.Items[i]-1)).ToString() + " "); } System.Diagnostics.Debug.WriteLine(""); }
+
+            for (int bitn = 0; bitn < BitSelTotal; bitn++)     // new bits added will not be in older lists, need to add on in!
             {
-                if (BaseUtils.LineStore.FindValue(Lines, bit + 1) == null)   // if can't find
+                if (BaseUtils.LineStore.FindValue(Lines, bitn + 1) == null)   // if can't find
                 {
                     int insertat = Lines.Count;
+                    ControlBits cb = (ControlBits)bitn;
 
-                    if (bit == BitSelStationButtons)
+                    if (cb == ControlBits.BitSelStationButtons)
                     {
-                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelBody + 1);     // stored +1
+                        var p = BaseUtils.LineStore.FindValue(Lines, (int)ControlBits.BitSelBody + 1);     // stored +1
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bit);
+                        Selection |= (1 << bitn);
                     }
-                    else if (bit == BitSelShipyardButtons)
+                    else if (cb == ControlBits.BitSelShipyardButtons)
                     {
-                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelShipInfo + 1);
+                        var p = BaseUtils.LineStore.FindValue(Lines, (int)ControlBits.BitSelShipInfo + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bit);
+                        Selection |= (1 << bitn);
                     }
-                    else if (bit == BitSelStationFaction)
+                    else if (cb == ControlBits.BitSelStationFaction)
                     {
-                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelBody + 1);
+                        var p = BaseUtils.LineStore.FindValue(Lines, (int)ControlBits.BitSelBody + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bit);
+                        Selection |= (1 << bitn);
                     }
-                    else if (bit == BitSelMR)
+                    else if (cb == ControlBits.BitSelMR)
                     {
-                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelData + 1);
+                        var p = BaseUtils.LineStore.FindValue(Lines, (int)ControlBits.BitSelData + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bit);
+                        Selection |= (1 << bitn);
                     }
-                    else if (bit == BitSelSecurity)
+                    else if (cb == ControlBits.BitSelSecurity)
                     {
-                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelSystemState + 1);
+                        var p = BaseUtils.LineStore.FindValue(Lines, (int)ControlBits.BitSelSystemState + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bit);
+                        Selection |= (1 << bitn);
                     }
-                    else if (bit == BitSelNextDestination)
+                    else if (cb == ControlBits.BitSelNextDestination)
                     {
-                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelPosition + 1);
+                        var p = BaseUtils.LineStore.FindValue(Lines, (int)ControlBits.BitSelPosition + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bit);
+                        Selection |= (1 << bitn);
                     }
 
-                    Lines.Insert(insertat, new BaseUtils.LineStore() { Items = new int[HorzPositions] { bit + 1, 0, 0, 0, 0, 0, 0, 0 } });
+                    Lines.Insert(insertat, new BaseUtils.LineStore() { Items = new int[HorzPositions] { bitn + 1, 0, 0, 0, 0, 0, 0, 0 } });
                 }
             }
 
-            discoveryform.OnNewTarget += RefreshTargetDisplay;
-            discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
-            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
+            DiscoveryForm.OnNewTarget += RefreshTargetDisplay;
+            DiscoveryForm.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
+            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnThemeChanged += Discoveryform_OnThemeChanged;
 
             panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
 
             shiptexttranslation = labelShip.Text;
         }
 
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += TravelSelChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= TravelSelChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += TravelSelChanged;
-            //System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
-        }
-
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= TravelSelChanged;
-            discoveryform.OnNewTarget -= RefreshTargetDisplay;
-            discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
-            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewTarget -= RefreshTargetDisplay;
+            DiscoveryForm.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
+            DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
 
             PutSetting(dbOSave, BaseUtils.LineStore.ToString(Lines));
             PutSetting(dbSelection, Selection);
@@ -285,7 +277,8 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry);
+            UpdateViewOnSelection();  // then turn the right ones on
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         private void Discoveryform_OnEDSMSyncComplete(int count, string syslist)     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
@@ -298,10 +291,10 @@ namespace EDDiscovery.UserControls
         {
             if (obj is EliteDangerousCore.UIEvents.UIFuel && travelhistoryisattop) // fuel UI update the SI information globally.  if tracking at the top..
             {
-                var tophe = discoveryform.history.GetLast;      // we feed in the top, which is being updated by EDDiscoveryControllerNewEntry with the latest fuel
+                var tophe = DiscoveryForm.History.GetLast;      // we feed in the top, which is being updated by EDDiscoveryControllerNewEntry with the latest fuel
                 if (tophe != null)   // paranoia
                 {
-                    System.Diagnostics.Debug.WriteLine($"UI Top he Fuel {tophe.EventTimeUTC} {tophe.ShipInformation.FuelLevel} {tophe.ShipInformation.ReserveFuelCapacity}");
+                    //System.Diagnostics.Debug.WriteLine($"UI Top he Fuel {tophe.EventTimeUTC} {tophe.ShipInformation.FuelLevel} {tophe.ShipInformation.ReserveFuelCapacity}");
                     Display(tophe);
                 }
             }
@@ -311,15 +304,15 @@ namespace EDDiscovery.UserControls
                 var j = ((EliteDangerousCore.UIEvents.UIFSDTarget)obj).FSDTarget;
                 if (lasttarget == null || j.StarSystem != lasttarget.StarSystem)       // a little bit of debouncing, see if the target info has changed
                 {
-                    if ( (discoveryform.history.GetLast?.FSDJumpSequence??false)  == true) 
+                    if ( (DiscoveryForm.History.GetLast?.Status.FSDJumpSequence??false)  == true) 
                     {
-                        System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got, but in fsd sequence, pend it");
+                        //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got, but in fsd sequence, pend it");
                         pendingtarget = j;
                     }
                     else
                     {
                         lasttarget = j;
-                        System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got");
+                        //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSD target got");
                         Display(last_he);
                     }
                 }
@@ -329,7 +322,7 @@ namespace EDDiscovery.UserControls
                 var j = (EliteDangerousCore.UIEvents.UIDestination)obj;
                 if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        // if name or bodyid has changed
                 {
-                    System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
+                    //System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
 
                     lastdestination = j;
                     Display(last_he);
@@ -337,9 +330,26 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void TravelSelChanged(HistoryEntry he, HistoryList hl, bool sel)
+        // override and intercept events
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            travelhistoryisattop = he == hl.GetLast;      // see if tracking at top
+            if (actionobj is EliteDangerousCore.HistoryEntry)       // he from travel grid
+            {
+                NewHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
+            }
+            else if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)  // travel change
+            {
+                Display(last_he);
+            }
+
+            return false;
+        }
+
+
+        public void NewHistoryEntry(HistoryEntry he)
+        {
+            //System.Diagnostics.Debug.WriteLine($"Sysinfo {DisplayNumber} : Cursor {he.Index} {he.EventSummary}");
+            travelhistoryisattop = he == DiscoveryForm.History.GetLast;      // see if tracking at top
 
             bool duetosystem = last_he == null;
             bool duetostatus = false;
@@ -348,9 +358,9 @@ namespace EDDiscovery.UserControls
             bool duetoother = false;
             bool duetomissions = false;
 
-            if (he.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
+            if (he.Status.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
             {
-                System.Diagnostics.Debug.WriteLine($"Sysinfo - FSDJump and pending target set, so end of jump sequence");
+                //System.Diagnostics.Debug.WriteLine($"Sysinfo - FSDJump and pending target set, so end of jump sequence");
                 lasttarget = pendingtarget;
                 pendingtarget = null;
                 duetoother = true;          // force update
@@ -368,21 +378,15 @@ namespace EDDiscovery.UserControls
 
             if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions)
             {
-                System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
+                //System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
             }
         }
 
         private async void Display(HistoryEntry he) 
         {
-            if (neverdisplayed)
-            {
-                UpdateViewOnSelection();  // then turn the right ones on
-                neverdisplayed = false;
-            }
-
             last_he = he;
-            var hl = discoveryform.history;
+            var hl = DiscoveryForm.History;
 
             if (last_he != null)
             {
@@ -391,11 +395,14 @@ namespace EDDiscovery.UserControls
                 HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
 
                 textBoxSystem.Text = he.System.Name;
+#if DEBUG
+                textBoxSystem.Text += $" {he.System.SystemAddress}";
+#endif
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
                 textBoxBody.Text = he.WhereAmI + " (" + he.Status.BodyType + ")";
 
-                bool hasmarketid = he?.MarketID.HasValue ?? false;
+                bool hasmarketid = he?.Status.MarketID.HasValue ?? false;
                 bool hasbodyormarketid = hasmarketid || he.FullBodyID.HasValue;
 
                 extButtonEDDBStation.Enabled = extButtonInaraStation.Enabled = hasmarketid;
@@ -437,7 +444,7 @@ namespace EDDiscovery.UserControls
                 textBoxState.Text = factionstate;
                 extTextBoxSecurity.Text = security;
 
-                extTextBoxStationFaction.Text = he.StationFaction ?? "";
+                extTextBoxStationFaction.Text = he.Status.StationFaction ?? "";
 
                 List<MissionState> mcurrent = (from MissionState ms in hl.MissionListAccumulator.GetMissionList(he.MissionList) where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
@@ -466,7 +473,7 @@ namespace EDDiscovery.UserControls
                 {
                     textBoxTravelDist.Text = he.TravelledDistance.ToString("0.0") + "ly";
                     textBoxTravelTime.Text = he.TravelledSeconds.ToString();
-                    textBoxTravelJumps.Text = he.TravelledJumpsAndMisses;
+                    textBoxTravelJumps.Text = he.TravelledJumps.ToString();
                 }
                 else
                 {
@@ -510,7 +517,7 @@ namespace EDDiscovery.UserControls
                     {
                         var suit = hl.SuitList.Suit(cursuit,he.Suits);                // get suit
                         textBoxShip.Text = suit?.FriendlyName ?? "???";
-                        var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(he.Loadouts);         // get current loadout ID, or 0 if none
+                        var curloadout = DiscoveryForm.History.SuitLoadoutList.CurrentID(he.Loadouts);         // get current loadout ID, or 0 if none
 
                         if ( curloadout != 0 )
                         {
@@ -581,7 +588,7 @@ namespace EDDiscovery.UserControls
                             bodyname = lastdestination.Name;    // else body
                           //  System.Diagnostics.Debug.WriteLine($"Destination select body {lastdestination.BodyID}");
 
-                            var ss = await discoveryform.history.StarScan.FindSystemAsync(discoveryform.history.GetLast.System, false);
+                            var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(DiscoveryForm.History.GetLast.System, false);
                             if (IsClosed)       //ASYNC! warning! may have closed.
                                 return;
 
@@ -609,9 +616,9 @@ namespace EDDiscovery.UserControls
                         if (IsClosed)       //ASYNC! warning! may have closed.
                             return;
 
-                        if (sys != null && sys.HasCoordinate)       // Bingo!
+                        if (sys != null && sys.HasCoordinate && DiscoveryForm.History.GetLast != null)       // check we have data - defense against #3373, if the async call was long the history could have changed
                         {
-                            double dist = sys.Distance(discoveryform.history.GetLast.System);       // we must have a last to be here
+                            double dist = sys.Distance(DiscoveryForm.History.GetLast.System);       // we must have a last to be here
                             distance = $"{dist:N2}ly";
 
                             if (ji != null) // and therefore fsd is non null
@@ -704,16 +711,16 @@ namespace EDDiscovery.UserControls
 
         private void extButtonEDDBStation_Click(object sender, EventArgs e)
         {
-            if (last_he != null && last_he.MarketID != null)
-                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBStationMarketId + last_he.MarketID.ToStringInvariant());
+            if (last_he != null && last_he.Status.MarketID != null)
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBStationMarketId + last_he.Status.MarketID.ToStringInvariant());
         }
 
         private void extButtonSpanshStation_Click(object sender, EventArgs e)
         {
             if (last_he != null)
             {
-                if (last_he.MarketID != null)
-                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.MarketID.ToStringInvariant());
+                if (last_he.Status.MarketID != null)
+                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.Status.MarketID.ToStringInvariant());
                 else if (last_he.FullBodyID.HasValue)
                     BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
             }
@@ -773,16 +780,16 @@ namespace EDDiscovery.UserControls
                     if ( sc != null)
                     {
                         TargetClass.SetTargetOnSystem(sc.Name, sc.X, sc.Y, sc.Z);
-                        discoveryform.NewTargetSet(this);
+                        DiscoveryForm.NewTargetSet(this);
                     }
                     else
                     {
-                        GalacticMapObject gmo = discoveryform.galacticMapping.Find(textBoxTarget.Text, true);       // find gmo, any part
+                        GalacticMapObject gmo = DiscoveryForm.GalacticMapping.Find(textBoxTarget.Text, true);       // find gmo, any part
                         if (gmo != null)
                         {
                             TargetClass.SetTargetOnGMO(gmo.Name,gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
                             textBoxTarget.Text = gmo.Name;
-                            discoveryform.NewTargetSet(this);
+                            DiscoveryForm.NewTargetSet(this);
                         }
                         else
                             Console.Beep(256, 200); // beep boop!
@@ -791,7 +798,7 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     TargetClass.ClearTarget();          // empty means clear
-                    discoveryform.NewTargetSet(this);
+                    DiscoveryForm.NewTargetSet(this);
                 }
             }
         }
@@ -809,7 +816,7 @@ namespace EDDiscovery.UserControls
                 textBoxTarget.Select(0, 0);
                 textBoxTargetDist.Text = "No Pos".T(EDTx.NoPos);
 
-                HistoryEntry cs = discoveryform.history.GetLastWithPosition();
+                HistoryEntry cs = DiscoveryForm.History.GetLastWithPosition();
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
@@ -841,109 +848,109 @@ namespace EDDiscovery.UserControls
 
         private void toolStripSystem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelSystem);
+            ToggleSelection(sender, ControlBits.BitSelSystem);
         }
         private void toolStripBody_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelBody);
+            ToggleSelection(sender, ControlBits.BitSelBody);
         }
         private void toolStripTarget_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelTarget);
+            ToggleSelection(sender, ControlBits.BitSelTarget);
         }
         private void toolStripEDSMButtons_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelEDSMButtonsNextLine);
+            ToggleSelection(sender, ControlBits.BitSelEDSMButtonsNextLine);
         }
         private void toolStripEDSM_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelEDSM);
+            ToggleSelection(sender, ControlBits.BitSelEDSM);
         }
         private void toolStripVisits_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelVisits);
+            ToggleSelection(sender, ControlBits.BitSelVisits);
         }
         private void toolStripPosition_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelPosition);
+            ToggleSelection(sender, ControlBits.BitSelPosition);
         }
         private void enableDistanceFromToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelDistanceFrom);
+            ToggleSelection(sender, ControlBits.BitSelDistanceFrom);
         }
         private void toolStripSystemState_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelSystemState);
+            ToggleSelection(sender, ControlBits.BitSelSystemState);
         }
         private void toolStripGameMode_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelGameMode);
+            ToggleSelection(sender, ControlBits.BitSelGameMode);
         }
         private void toolStripTravel_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelTravel);
+            ToggleSelection(sender, ControlBits.BitSelTravel);
         }
         private void toolStripCargo_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelCargo);
+            ToggleSelection(sender, ControlBits.BitSelCargo);
         }
         private void toolStripMaterialCount_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelMats);
+            ToggleSelection(sender, ControlBits.BitSelMats);
         }
         private void toolStripDataCount_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelData);
+            ToggleSelection(sender, ControlBits.BitSelData);
         }
         private void toolStripCredits_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelCredits);
+            ToggleSelection(sender, ControlBits.BitSelCredits);
         }
         private void toolStripShip_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelShipInfo);
+            ToggleSelection(sender, ControlBits.BitSelShipInfo);
         }
         private void toolStripFuel_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelFuel);
+            ToggleSelection(sender, ControlBits.BitSelFuel);
         }
 
         private void displayJumpRangeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelJumpRange);
+            ToggleSelection(sender, ControlBits.BitSelJumpRange);
         }
 
         private void toolStripMissionsList_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelMissions);
+            ToggleSelection(sender, ControlBits.BitSelMissions);
         }
         private void displayStationButtonsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelStationButtons);
+            ToggleSelection(sender, ControlBits.BitSelStationButtons);
         }
 
         private void displayShipButtonsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelShipyardButtons);
+            ToggleSelection(sender, ControlBits.BitSelShipyardButtons);
         }
 
         private void displayStationFactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelStationFaction);
+            ToggleSelection(sender, ControlBits.BitSelStationFaction);
         }
 
         private void displayMicroresourcesCountToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelMR);
+            ToggleSelection(sender, ControlBits.BitSelMR);
         }
         private void displaySecurityToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelSecurity);
+            ToggleSelection(sender, ControlBits.BitSelSecurity);
         }
 
         private void displayNextDestinationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelNextDestination);
+            ToggleSelection(sender, ControlBits.BitSelNextDestination);
         }
 
         private void toolStripRemoveAll_Click(object sender, EventArgs e)
@@ -954,16 +961,16 @@ namespace EDDiscovery.UserControls
 
         private void whenTransparentUseSkinnyLookToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(sender, BitSelSkinny);
+            ToggleSelection(sender, ControlBits.BitSelSkinny);
             UpdateTransparency();
         }
 
-        void ToggleSelection(Object sender, int bit)
+        void ToggleSelection(Object sender, ControlBits bit)
         {
             ToolStripMenuItem mi = sender as ToolStripMenuItem;
             if (mi.Enabled)
             {
-                Selection ^= (1 << bit);
+                Selection ^= (1 << (int)bit);
                 UpdateViewOnSelection();
             }
         }
@@ -980,9 +987,9 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Selection is " + sel);
 
-            bool selEDSMonNextLine = (Selection & (1 << BitSelEDSMButtonsNextLine)) != 0;
+            bool selEDSMonNextLine = (Selection & (1 << (int)ControlBits.BitSelEDSMButtonsNextLine)) != 0;
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
-            toolStripSkinny.Checked = (Selection & (1 << BitSelSkinny)) != 0;
+            toolStripSkinny.Checked = (Selection & (1 << (int)ControlBits.BitSelSkinny)) != 0;
 
             int data1offset = textBoxCredits.Left - labelCredits.Left;      // offset between first item to initial label - basing it on actual pos allow the auto font scale to work
             int lab2offset = textBoxCredits.Right + 4 - labelCredits.Left;  // offset between second label and initial label
@@ -1014,6 +1021,8 @@ namespace EDDiscovery.UserControls
 
                         if (ison)
                         {
+                            var cb = (ControlBits)bitno;
+
                             Lines[r].YStart = ypos;
                             int si = r * HorzPositions + c;
 
@@ -1022,28 +1031,49 @@ namespace EDDiscovery.UserControls
                             Point labpos2 = new Point(labpos.X + lab2offset, labpos.Y);
                             Point datapos2 = new Point(labpos.X + data2offset, labpos.Y);
 
-                            switch (bitno)
+                            System.Diagnostics.Debug.WriteLine($"Position {cb.ToString()} at {labpos} {datapos} {labpos2} {datapos2}");
+
+                            switch (cb)
                             {
-                                case BitSelSystem:
+                                case ControlBits.BitSelSystem:
                                     itembottom = this.SetPos(labpos, labelSysName, datapos, textBoxSystem, si);
                                     panelFD.Location = new Point(textBoxSystem.Right, textBoxSystem.Top);
                                     panelFD.Tag = si;
                                     panelFD.Visible = true;
 
-                                    if (!selEDSMonNextLine && (Selection & (1 << BitSelEDSM)) != 0)
+                                    if (!selEDSMonNextLine && (Selection & (1 << (int)ControlBits.BitSelEDSM)) != 0)
                                     {
                                         extButtonEDSMSystem.Location = new Point(panelFD.Right + hspacing, datapos.Y);
-                                        extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
                                         extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
                                         itembottom = Math.Max(extButtonEDSMSystem.Bottom, itembottom);
+
+                                        extButtonEDDBSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonEDDBSystem.Visible = false;
                                     }
 
                                     break;
+                                case ControlBits.BitSelEDSM:
+                                    if (selEDSMonNextLine)
+                                    {
+                                        labelOpen.Location = labpos;
+                                        extButtonEDSMSystem.Location = new Point(datapos.X, datapos.Y);
+                                        extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        labelOpen.Visible = true;
+                                        itembottom = extButtonEDSMSystem.Bottom;
 
-                                case BitSelNextDestination:
+                                        // removed april 23 - kept code in case something else comes along
+                                        extButtonEDDBSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonEDDBSystem.Visible = false;
+                                    }
+                                    break;
+
+                                case ControlBits.BitSelNextDestination:
                                     itembottom = this.SetPos(labpos, labelNextDestination, datapos, extTextBoxNextDestination, si);
                                     itembottom++;
                                     extTextBoxNextDestinationDistance.Location = new Point(extTextBoxNextDestination.Left, itembottom);
@@ -1055,33 +1085,21 @@ namespace EDDiscovery.UserControls
                                     break;
 
 
-                                case BitSelEDSM:
-                                    if (selEDSMonNextLine)
-                                    {
-                                        labelOpen.Location = labpos;
-                                        extButtonEDSMSystem.Location = new Point(datapos.X, datapos.Y);
-                                        extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
-                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
-                                        labelOpen.Visible = true;
-                                        itembottom = extButtonEDSMSystem.Bottom;
-                                    }
-                                    break;
-
-                                case BitSelStationButtons:
+                                case ControlBits.BitSelStationButtons:
                                     labelOpenStation.Location = labpos;
-                                    extButtonEDDBStation.Location = new Point(datapos.X, datapos.Y);
-                                    extButtonInaraStation.Location = new Point(extButtonEDDBStation.Right + hspacing, extButtonEDDBStation.Top);
-                                    extButtonSpanshStation.Location = new Point(extButtonInaraStation.Right + hspacing, extButtonEDDBStation.Top);
+                                    extButtonInaraStation.Location = new Point(datapos.X, datapos.Y); 
+                                    extButtonSpanshStation.Location = new Point(extButtonInaraStation.Right + hspacing, extButtonInaraStation.Top);
                                     labelOpenStation.Tag = extButtonEDDBStation.Tag = extButtonInaraStation.Tag = extButtonSpanshStation.Tag = si;
-                                    extButtonEDDBStation.Visible = extButtonInaraStation.Visible = extButtonSpanshStation.Visible = true;
+                                    extButtonInaraStation.Visible = extButtonSpanshStation.Visible = true;
                                     labelOpenStation.Visible = true;
-                                    itembottom = extButtonEDDBStation.Bottom;
+                                    itembottom = extButtonInaraStation.Bottom;
+
+                                    // removed april 23 - kept code in case something else comes along
+                                    extButtonEDDBStation.Visible = false;
+                                    extButtonEDDBStation.Location = new Point(extButtonSpanshStation.Right + hspacing, extButtonInaraStation.Top);
                                     break;
 
-                                case BitSelShipyardButtons:
+                                case ControlBits.BitSelShipyardButtons:
                                     labelOpenShip.Location = labpos;
                                     extButtonCoriolis.Location = new Point(datapos.X, datapos.Y);
                                     extButtonEDSY.Location = new Point(extButtonCoriolis.Right + hspacing, extButtonCoriolis.Top);
@@ -1092,24 +1110,24 @@ namespace EDDiscovery.UserControls
                                     break;
 
 
-                                case BitSelVisits:
+                                case ControlBits.BitSelVisits:
                                     itembottom = this.SetPos(labpos, labelVisits, datapos, textBoxVisits, si);
                                     break;
 
-                                case BitSelBody:
+                                case ControlBits.BitSelBody:
                                     itembottom = this.SetPos(labpos, labelBodyName, datapos, textBoxBody, si);
                                     break;
 
-                                case BitSelPosition:
+                                case ControlBits.BitSelPosition:
                                     itembottom = this.SetPos(labpos, labelPosition, datapos, textBoxPosition, si);
                                     break;
 
-                                case BitSelDistanceFrom:
+                                case ControlBits.BitSelDistanceFrom:
                                     itembottom = this.SetPos(labpos, labelHomeDist, datapos, textBoxHomeDist, si);
                                     OffsetPos(labpos2, labelSolDist, datapos2, textBoxSolDist, si);
                                     break;
 
-                                case BitSelSystemState:
+                                case ControlBits.BitSelSystemState:
                                     itembottom = this.SetPos(labpos, labelState, datapos, textBoxState, si);
                                     OffsetPos(labpos2, labelAllegiance, datapos2, textBoxAllegiance, si);
                                     labpos.Y = datapos.Y = labpos2.Y = datapos2.Y = itembottom + 1;
@@ -1117,7 +1135,7 @@ namespace EDDiscovery.UserControls
                                     OffsetPos(labpos2, labelEconomy, datapos2, textBoxEconomy, si);
                                     break;
 
-                                case BitSelTarget:
+                                case ControlBits.BitSelTarget:
                                     itembottom = this.SetPos(labpos, labelTarget, datapos, textBoxTarget, si);
                                     textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, datapos.Y);
                                     extButtonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
@@ -1125,11 +1143,11 @@ namespace EDDiscovery.UserControls
                                     textBoxTargetDist.Visible = extButtonEDSMTarget.Visible = true;
                                     break;
 
-                                case BitSelGameMode:
+                                case ControlBits.BitSelGameMode:
                                     itembottom = this.SetPos(labpos, labelGamemode, datapos, textBoxGameMode, si);
                                     break;
 
-                                case BitSelTravel:
+                                case ControlBits.BitSelTravel:
                                     itembottom = this.SetPos(labpos, labelTravel, datapos, textBoxTravelDist, si);
                                     textBoxTravelTime.Location = new Point(textBoxTravelDist.Right + hspacing, datapos.Y);
                                     textBoxTravelJumps.Location = new Point(textBoxTravelTime.Right + hspacing, datapos.Y);
@@ -1138,46 +1156,46 @@ namespace EDDiscovery.UserControls
                                     // don't set visible for the last two, may not be if not travelling. Display will deal with it
                                     break;
 
-                                case BitSelCargo:
+                                case ControlBits.BitSelCargo:
                                     itembottom = this.SetPos(labpos, labelCargo, datapos, textBoxCargo, si);
                                     break;
 
-                                case BitSelMats:
+                                case ControlBits.BitSelMats:
                                     itembottom = this.SetPos(labpos, labelMaterials, datapos, textBoxMaterials, si);
                                     break;
 
-                                case BitSelData:
+                                case ControlBits.BitSelData:
                                     itembottom = this.SetPos(labpos, labelData, datapos, textBoxData, si);
                                     break;
 
-                                case BitSelShipInfo:
+                                case ControlBits.BitSelShipInfo:
                                     itembottom = this.SetPos(labpos, labelShip, datapos, textBoxShip, si);
                                     break;
 
-                                case BitSelFuel:
+                                case ControlBits.BitSelFuel:
                                     itembottom = this.SetPos(labpos, labelFuel, datapos, textBoxFuel, si);
                                     break;
 
-                                case BitSelCredits:
+                                case ControlBits.BitSelCredits:
                                     itembottom = this.SetPos(labpos, labelCredits, datapos, textBoxCredits, si);
                                     break;
 
-                                case BitSelMissions:
+                                case ControlBits.BitSelMissions:
                                     itembottom = this.SetPos(labpos, labelMissions, datapos, richTextBoxScrollMissions, si);
                                     break;
 
-                                case BitSelJumpRange:
+                                case ControlBits.BitSelJumpRange:
                                     itembottom = this.SetPos(labpos, labelJumpRange, datapos, textBoxJumpRange, si);
                                     break;
 
-                                case BitSelStationFaction:
+                                case ControlBits.BitSelStationFaction:
                                     itembottom = this.SetPos(labpos, labelStationFaction, datapos, extTextBoxStationFaction, si);
                                     break;
 
-                                case BitSelMR:
+                                case ControlBits.BitSelMR:
                                     itembottom = this.SetPos(labpos, labelMR, datapos, extTextBoxMR, si);
                                     break;
-                                case BitSelSecurity:
+                                case ControlBits.BitSelSecurity:
                                     itembottom = this.SetPos(labpos, labelSecurity, datapos, extTextBoxSecurity, si);
                                     break;
 
@@ -1210,7 +1228,7 @@ namespace EDDiscovery.UserControls
             Selection = BitSelDefault;
             Lines = new List<BaseUtils.LineStore>();
             for(int i = 0 ; i < resetorder.Length/2; i++ )
-                Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] { resetorder[i,0]+1, resetorder[i,1]+1, 0, 0, 0, 0, 0, 0 } });
+                Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] { (int)resetorder[i,0]+1, (int)resetorder[i,1]+1, 0, 0, 0, 0, 0, 0 } });
             //BaseUtils.LineStore.DumpOrder(Lines, "Reset");
         }
 
@@ -1384,7 +1402,7 @@ namespace EDDiscovery.UserControls
             BackColor = curcol;
             extPanelScroll.BackColor = curcol;
 
-            bool skinny = (Selection & (1 << BitSelSkinny)) != 0;
+            bool skinny = (Selection & (1 << (int)ControlBits.BitSelSkinny)) != 0;
 
             foreach (Control c in extPanelScroll.Controls)
             {

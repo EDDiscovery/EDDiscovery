@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -27,21 +27,11 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursorNewStarList
+    public partial class UserControlTravelGrid : UserControlCommonBase
     {
         #region Public IF
 
-        //ucct interface
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Tag as HistoryEntry : null; } }
-
-        #endregion
-
-        #region Events
-
-        // implement IHistoryCursor fields
-        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
-
-        public event OnNewStarsSubPanelsHandler OnNewStarList;
 
         #endregion
 
@@ -99,12 +89,11 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.MinimumHeight = 26;      // enough for the icon
+            dataGridViewTravel.AllowRowHeaderVisibleSelection = true;
 
             string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
-
-            System.Diagnostics.Trace.WriteLine($"TGR={EDDOptions.Instance.EnableTGRightDebugClicks}");
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
@@ -112,9 +101,9 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer { Interval = 20 };
             todotimer.Tick += Todotimer_Tick;
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
-            discoveryform.OnNoteChanged += OnNoteChanged;
+            DiscoveryForm.OnHistoryChange += HistoryChanged;
+            DiscoveryForm.OnNewEntry += AddNewEntry;
+            DiscoveryForm.OnNoteChanged += OnNoteChanged;
 
             this.showSystemVisitedForeColourToolStripMenuItem.Checked = GetSetting(dbVisitedColour, false);
             this.showSystemVisitedForeColourToolStripMenuItem.Click += new System.EventHandler(this.showSystemVisitedForeColourToolStripMenuItem_Click);
@@ -143,7 +132,9 @@ namespace EDDiscovery.UserControls
             travelGridInDebugModeToolStripMenuItem.Checked = EDDOptions.Instance.EnableTGRightDebugClicks ? GetSetting(dbDebugMode, false) : false;
             travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
 
-            var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_Icon, EDTx.UserControlTravelGrid_ColumnSystem, EDTx.UserControlTravelGrid_ColumnDistance, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime, EDTx.UserControlTravelGrid_labelSearch };
+            var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_ColumnEvent, EDTx.UserControlTravelGrid_ColumnDescription, 
+                                        EDTx.UserControlTravelGrid_ColumnInformation, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime, 
+                                        EDTx.UserControlTravelGrid_labelSearch };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             var enumlistcms = new Enum[] { EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem, EDTx.UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, EDTx.UserControlTravelGrid_setNoteToolStripMenuItem, EDTx.UserControlTravelGrid_createEditBookmarkToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripMenuItemStartStop, EDTx.UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, EDTx.UserControlTravelGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlTravelGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlTravelGrid_starMapColourToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_wantedSystemsToolStripMenuItem, 
@@ -167,7 +158,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewTravel);
+            DGVLoadColumnLayout(dataGridViewTravel,rowheaderselection:dataGridViewTravel.AllowRowHeaderVisibleSelection);
         }
 
         public override void Closing()
@@ -175,10 +166,15 @@ namespace EDDiscovery.UserControls
             todo.Clear();
             todotimer.Stop();
             searchtimer.Stop();
+
             DGVSaveColumnLayout(dataGridViewTravel);
+
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
-            discoveryform.OnHistoryChange -= HistoryChanged;
-            discoveryform.OnNewEntry -= AddNewEntry;
+
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnNoteChanged -= OnNoteChanged;
+
             searchtimer.Dispose();
         }
 
@@ -186,33 +182,32 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(discoveryform.history);
+            Display(DiscoveryForm.History,false);
         }
 
-        public void HistoryChanged(HistoryList hl)           // on History change
+        public void HistoryChanged()           // on History change
         {
-            HistoryChanged(hl, false);
+            Display(DiscoveryForm.History, false);
 
             // quick marks are commander dependent
-            var str = GetSetting(dbBookmarks + ":" + hl.CommanderId, "").Split(';');
+            var str = GetSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId, "").Split(';');
             quickMarkJIDs = str.Select(x => x.InvariantParseLong(-1)).ToList().ToHashSet();
         }
 
-        public void HistoryChanged(HistoryList hl, bool disablesorting)
+ 
+        public void Display(HistoryList hl, bool disablesorting)
         {
             todo.Clear();           // clear queue of things to do
             queuedadds.Clear();     // and any adds.
             todotimer.Stop();       // ensure timer is off
 
-            if (hl == null)     // just for safety
-                return;
-                                        
             current_historylist = hl;
             this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
 
             extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
 
-            Tuple<long, int> pos = CurrentGridPosByJID();
+            var selpos = dataGridViewTravel.GetSelectedRowOrCellPosition();
+            Tuple<long, int> pos = selpos != null ? new Tuple<long, int>(((HistoryEntry)(dataGridViewTravel.Rows[selpos.Item1].Tag)).Journalid, selpos.Item2) : new Tuple<long, int>(-1, 0);
 
             SortOrder sortorder = dataGridViewTravel.SortOrder;
             int sortcol = dataGridViewTravel.SortedColumn?.Index ?? -1;
@@ -266,7 +261,7 @@ namespace EDDiscovery.UserControls
 
             int lrowno = 0;
 
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             if (chunks.Count != 0)
             {
@@ -291,7 +286,7 @@ namespace EDDiscovery.UserControls
 
                 dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
 
-                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false))
+                if (dataGridViewTravel.SelectAndMove(rowsbyjournalid, ref pos, false))
                     FireChangeSelection();
             }
 
@@ -318,7 +313,7 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
 
-                    if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false))
+                    if (dataGridViewTravel.SelectAndMove(rowsbyjournalid, ref pos, false))
                         FireChangeSelection();
 
                     //System.Diagnostics.Debug.WriteLine("T Chunk Load in " + sw.ElapsedMilliseconds);
@@ -338,7 +333,7 @@ namespace EDDiscovery.UserControls
 
                 UpdateToolTipsForFilter();
 
-                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, true))
+                if (dataGridViewTravel.SelectAndMove(rowsbyjournalid, ref pos, true))
                 {
                     FireChangeSelection();
                 }
@@ -381,7 +376,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
+        private void AddNewEntry(HistoryEntry he)           // on new entry from discovery system
         {
             if (todotimer.Enabled)      // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
@@ -397,7 +392,7 @@ namespace EDDiscovery.UserControls
         { 
             var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             var row = CreateHistoryRow(he, sst, hef, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
 
@@ -411,14 +406,14 @@ namespace EDDiscovery.UserControls
                 {
                     for (int r = dataGridViewTravel.Rows.Count - 1; r >= filter.MaximumNumberOfItems; r--)
                     {
-                        System.Diagnostics.Debug.WriteLine("TG Removed as too much " + r);
+                        //System.Diagnostics.Debug.WriteLine("TG Removed as too much " + r);
                         dataGridViewTravel.Rows.RemoveAt(r);
                     }
                 }
 
                 if (checkBoxCursorToTop.Checked)   // Move focus to first row
                 {
-                    System.Diagnostics.Trace.WriteLine("TG Auto selected top row on new entry");
+                    //System.Diagnostics.Trace.WriteLine("TG Auto selected top row on new entry");
                     dataGridViewTravel.ClearSelection();
                     dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
                     FireChangeSelection();
@@ -444,14 +439,15 @@ namespace EDDiscovery.UserControls
 
             if (debugmode)
             {
-                colTime += Environment.NewLine + $"{he.TravelState} @ {he.System.Name}\r\n"
+                colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss:fff");
+                colTime += Environment.NewLine + $"{he.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n"
                                + $"b{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n"
                                + $"s{he.Status.StationName},{he.Status.StationType}\r\n"
-                               + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}\r\n"
+                               + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship}\r\n"
-                               + $"jcb{he.Status.CurrentBoost} fsds{he.FSDJumpSequence}\r\n"
-                               + $"jid{he.journalEntry.Id} tlu{he.journalEntry.TLUId}"
+                               + $"jcb{he.Status.CurrentBoost} fsds{he.Status.FSDJumpSequence} jm'{he.Status.FSDJumpNextSystemName??"NoJump"}' ad{he.Status.FSDJumpNextSystemAddress??-1}\r\n"
+                               + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledSeconds} jmps {he.TravelledJumps}"
                                ;
 
                 colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
@@ -468,7 +464,7 @@ namespace EDDiscovery.UserControls
 
                 if (search.Terms[0] != null)
                 {
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
                     matched = entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 colTime.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -526,54 +522,87 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            long jid = (dataGridViewTravel.CurrentCell != null) ? ((HistoryEntry)(dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Tag)).Journalid : -1;
-            int cellno = (dataGridViewTravel.CurrentCell != null) ? dataGridViewTravel.CurrentCell.ColumnIndex : 0;
-            return new Tuple<long, int>(jid, cellno);
+            if ( actionobj is long )
+            {
+                GotoPosByJID((long)actionobj);
+                return true;
+            }
+            else if ( actionobj is UserControlCommonBase.RequestTravelHistoryPos )
+            {
+                var he = CurrentHE();
+                //System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
+                sender.PerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
+                return true;
+            }
+            else if (actionobj is UserControlCommonBase.PanelAction)
+            {
+                var act = actionobj as UserControlCommonBase.PanelAction;
+
+                if (act.Action.EqualsIIC(PanelAction.EditNotePrimary) && IsPrimaryHistoryDisplayNumber)      // action on editnoteprimary, and we are a primary history display
+                {
+                    HistoryEntry he = dataGridViewTravel.RowCount > 0 ? dataGridViewTravel.Rows[0].Tag as HistoryEntry : null;   // grab top row HE if it exists
+                    if (he != null)
+                    {
+                        EditNoteInWindow(he);
+                    }
+
+                    return true;
+                }
+            }
+            else if ( actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)      
+            {
+                Display(current_historylist, false);
+            }
+
+            return false;
         }
 
-        public int GotoPosByJID(long jid)       // -1 if fails
+        public void GotoPosByJID(long jid)       // -1 if fails
         {
-            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid,jid, true);
+            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
+            //System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
+
             if (rowno >= 0)
             {
                 dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(rowno);
+                dataGridViewTravel.DisplayRow(rowno, true);
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
-            return rowno;
         }
 
         public void FireChangeSelection()
+        {
+            var he = CurrentHE();
+            if ( he != null )
+            {
+                //System.Diagnostics.Trace.WriteLine($"Travel Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell?.RowIndex}:{dataGridViewTravel.CurrentCell?.ColumnIndex}");
+                RequestPanelOperation?.Invoke(this, he);
+            }
+        }
+
+        private HistoryEntry CurrentHE()
         {
             if (dataGridViewTravel.CurrentCell != null)
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
                 var he = dataGridViewTravel.Rows[row].Tag as HistoryEntry;
-                //System.Diagnostics.Trace.WriteLine("************ TG Fire Change sel at " + row + " he " + he.EventTimeUTC + " " +  he.EventSummary + " " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
-
-                if ( OnTravelSelectionChanged != null )     // we do this manually, so we can time each reaction if required.
-                {
-                    foreach (var e in OnTravelSelectionChanged.GetInvocationList())
-                    {
-                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
-                        e.DynamicInvoke(he, current_historylist, true);
-                        if ( sw.ElapsedMilliseconds>=50)
-                            System.Diagnostics.Trace.WriteLine("TG FCS Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
-                    }
-                }
+                return he;
             }
             else if (current_historylist != null && current_historylist.Count > 0)
             {
-                OnTravelSelectionChanged?.Invoke(current_historylist.GetLast, current_historylist, false);
+                return current_historylist.GetLast;
             }
+            else
+                return null;
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             PutSetting(dbHistorySave, comboBoxTime.Text);
-            HistoryChanged(current_historylist);       
+            Display(current_historylist,false);       
         }
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -602,7 +631,7 @@ namespace EDDiscovery.UserControls
                 var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;
                 System.Diagnostics.Trace.Assert(str != null && he != null);
                 he.journalEntry.UpdateSystemNote(str, he.System.Name, EDCommander.Current.SyncToEdsm);
-                discoveryform.NoteChanged(this, he);
+                DiscoveryForm.NoteChanged(this, he);
             }
         }
 
@@ -631,14 +660,13 @@ namespace EDDiscovery.UserControls
 
             if ( rowsbyjournalid.TryGetValue(he.Journalid,out DataGridViewRow row))
             {
-                System.Diagnostics.Debug.WriteLine($"TravelGrid update note due to external {row.Index} {he.GetNoteText} {he.EventSummary}");
+                //System.Diagnostics.Debug.WriteLine($"TravelGrid update note due to external {row.Index} {he.GetNoteText} {he.EventSummary}");
                 string s = he.GetNoteText;  
                 row.Cells[ColumnNote.Index].Value = s;
             }
         }
 
-
-        private void textBoxSearch_TextChanged(object sender, EventArgs e)
+         private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
             searchtimer.Stop();
             searchtimer.Start();
@@ -648,15 +676,15 @@ namespace EDDiscovery.UserControls
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
             searchtimer.Stop();
-            HistoryChanged(current_historylist);
+            Display(current_historylist, false);
         }
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag;
             bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
-            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1));
-            PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, Icon.Index, true);
+            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1));
+            PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, ColumnEvent.Index, true);
         }
 
 
@@ -679,15 +707,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (!dataGridViewTravel.IsCurrentCellInEditMode)
                     {
-                        using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(leftclickhe, discoveryform))
-                        {
-                            if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
-                            {
-                                System.Diagnostics.Trace.Assert(noteform.NoteText != null && leftclickhe.System != null);
-                                leftclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, leftclickhe.System.Name, EDCommander.Current.SyncToEdsm);
-                                discoveryform.NoteChanged(this, leftclickhe);
-                            }
-                        }
+                        EditNoteInWindow(leftclickhe);
                     }
                 }
                 else
@@ -695,24 +715,17 @@ namespace EDDiscovery.UserControls
                     leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
                     DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
-                    bool expanded = row.Cells[ColumnDistance.Index].Tag != null;
+                    bool expanded = row.Cells[ColumnInformation.Index].Tag != null;
 
-                    if (expanded) // put it back to original text
+                    if (expanded) // put it back to original text, remove tag, and set wrap mode notset
                     {
-                        row.Cells[ColumnDistance.Index].Value = EventDescription;
-                        for (int i = 0; i < row.Cells.Count; i++)
-                            row.Cells[i].Style.WrapMode = DataGridViewTriState.NotSet;
-                        row.Cells[ColumnDistance.Index].Tag = null;
+                        row.Cells[ColumnInformation.Index].Value = EventDescription;
+                        row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;
+                        row.Cells[ColumnInformation.Index].Tag = null;
                     }
                     else
                     {
                         string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);        // make up detailed line
-                        if (leftclickhe.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
-                        {
-                            string travelinfo = leftclickhe.TravelInfo();
-                            if (travelinfo != null)
-                                infodetailed = travelinfo + Environment.NewLine + infodetailed;
-                        }
 
                         using (Graphics g = Parent.CreateGraphics())
                         {
@@ -721,7 +734,7 @@ namespace EDDiscovery.UserControls
                             {
                                 if (row.Cells[i].Value is string)
                                 {
-                                    string s = i == ColumnDistance.Index ? infodetailed : (string)row.Cells[i].Value;
+                                    string s = i == ColumnInformation.Index ? infodetailed : (string)row.Cells[i].Value;
                                     int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
                                     maxh = Math.Max(maxh, h);
                                 }
@@ -737,16 +750,11 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                row.Cells[ColumnDistance.Index].Value = infodetailed;
-
-                                if (!extCheckBoxWordWrap.Checked)
-                                {
-                                    for (int i = 0; i < row.Cells.Count; i++)
-                                        row.Cells[i].Style.WrapMode = DataGridViewTriState.True;
-                                }
+                                row.Cells[ColumnInformation.Index].Value = infodetailed;        // display in cell with wrap mode turned on irrespective of setting
+                                row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.True;
                             }
 
-                            row.Cells[ColumnDistance.Index].Tag = true;      // mark expanded
+                            row.Cells[ColumnInformation.Index].Tag = true;      // mark expanded
                         }
                     }
 
@@ -769,7 +777,7 @@ namespace EDDiscovery.UserControls
         {
             if (extCheckBoxOutlines.Checked == true && outliningOnOffToolStripMenuItem.Checked)     // if going checked.. means it was unchecked
             {
-                HistoryChanged(current_historylist, true);      // Reapply, disabled by sorting etc
+                Display(current_historylist, true);      // Reapply, disabled by sorting etc
             }
             else
             {
@@ -784,7 +792,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
             if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
-                HistoryChanged(current_historylist, true);
+                Display(current_historylist, true);
         }
 
         private void rolluplimitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -795,7 +803,7 @@ namespace EDDiscovery.UserControls
             rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
             PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
             if (outliningOnOffToolStripMenuItem.Checked )
-                HistoryChanged(current_historylist, true);
+                Display(current_historylist, true);
         }
 
         #endregion
@@ -825,14 +833,9 @@ namespace EDDiscovery.UserControls
                 {
                     toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".T(EDTx.UserControlTravelGrid_SETSTARTTC);
                 }
-
-
-            }
-            else
-            {
-                toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".T(EDTx.UserControlTravelGrid_SETSTSTOP); ;
             }
 
+            toolStripMenuItemStartStop.Enabled = rightclickhe != null;
             quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
             mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
@@ -846,20 +849,16 @@ namespace EDDiscovery.UserControls
             gotoEntryNumberToolStripMenuItem.Enabled = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
             gotoNextStartStopMarkerToolStripMenuItem.Enabled = (rightclickhe != null);
-
-            var invokelist = OnNewStarList?.GetInvocationList();
-            bothToolStripMenuItem.Enabled = wantedSystemsToolStripMenuItem.Enabled = trilaterationToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlTrilateration)) != null;
-            expeditionToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExpedition)) != null;
         }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            HistoryChanged(current_historylist, true);
+            Display(current_historylist, true);
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMap(rightclickhe?.System);
+            DiscoveryForm.Open3DMap(rightclickhe?.System);
         }
 
         private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
@@ -882,7 +881,7 @@ namespace EDDiscovery.UserControls
                     sp.journalEntry.UpdateMapColour(mapColorDialog.Color.ToArgb());
                 }
 
-                HistoryChanged(current_historylist);
+                Display(current_historylist,false);
             }
         }
 
@@ -992,19 +991,14 @@ namespace EDDiscovery.UserControls
             }
 
             if (dist)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.TriSystems);
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriSystems, Systems = systemnamelist });
 
             if (wanted)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.TriWanted);
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriWanted, Systems = systemnamelist });
 
             if (expedition)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.Expedition);
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, Systems = systemnamelist });
 
-        }
-
-        public void FireNewStarList(List<string> system, OnNewStarsPushType pushtype)
-        {
-            OnNewStarList?.Invoke(system, pushtype);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1014,36 +1008,35 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTravelGrid_NotSynced));
         }
 
-        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
-        {
-            discoveryform.history.SetStartStop(rightclickhe);
-            discoveryform.RefreshHistoryAsync();
-        }
-
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").T(EDTx.UserControlTravelGrid_Remove);
             if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclickhe.Journalid);
-                discoveryform.RefreshHistoryAsync();
+                DiscoveryForm.RefreshHistoryAsync();
             }
         }
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
+            DiscoveryForm.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
         }
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclickhe, discoveryform))
+            EditNoteInWindow(rightclickhe);
+        }
+
+        private void EditNoteInWindow(HistoryEntry he)
+        {
+            using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(he))
             {
                 if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclickhe.System != null);
-                    rightclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, rightclickhe.System.Name, EDCommander.Current.SyncToEdsm);
-                    discoveryform.NoteChanged(this, rightclickhe);
+                    System.Diagnostics.Trace.Assert(noteform.NoteText != null && he.System != null);
+                    he.journalEntry.UpdateSystemNote(noteform.NoteText, he.System.Name, EDCommander.Current.SyncToEdsm);
+                    DiscoveryForm.NoteChanged(this, he);
                 }
             }
         }
@@ -1057,7 +1050,7 @@ namespace EDDiscovery.UserControls
             Actions.ActionVars.HistoryEventVars(eventvars, rightclickhe, "Event");     // if HE is null, ignored
             Actions.ActionVars.ShipBasicInformation(eventvars, rightclickhe?.ShipInformation, "Event");     // if He null, or si null, ignore
             Actions.ActionVars.SystemVars(eventvars, rightclickhe?.System, "Event");
-            discoveryform.LogLine(eventvars.ToString(separ: Environment.NewLine));
+            DiscoveryForm.LogLine(eventvars.ToString(separ: Environment.NewLine));
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1066,22 +1059,22 @@ namespace EDDiscovery.UserControls
             if (json != null)
             {
                 SetClipboardText(json);
-                discoveryform.LogLine(json);
+                DiscoveryForm.LogLine(json);
             }
         }
 
         private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BookmarkHelpers.ShowBookmarkForm(discoveryform, discoveryform, rightclickhe.System, null);
+            BookmarkHelpers.ShowBookmarkForm(DiscoveryForm, DiscoveryForm, rightclickhe.System, null);
         }
 
         private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (discoveryform.history.Count - rightclickhe.EntryNumber + 1)) : 0;
+            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.History.Count - rightclickhe.EntryNumber + 1)) : 0;
             int selrow = dataGridViewTravel.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)
@@ -1092,23 +1085,56 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with Journal Grid call
+        {
+            this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
+
+            rightclickhe.SetStartStop();                                        // change flag
+            DiscoveryForm.History.RecalculateTravel();                          // recalculate all
+            
+            foreach( DataGridViewRow row in dataGridViewTravel.Rows)            // dgv could be in any sort order, we have to do the lot
+            {
+                HistoryEntry he = row.Tag as HistoryEntry;
+                if (he.IsFSD || he.StopMarker || he == rightclickhe)
+                {
+                    he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
+                    row.Cells[ColumnInformation.Index].Value = eventdescription;
+                    row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;        // in case it was in expanded state (see cell double click)
+                    row.Cells[ColumnInformation.Index].Tag = null;
+                }
+            }
+
+            dataGridViewTravel.Refresh();       // to make the start/stop marker appear, refresh
+
+            RequestPanelOperation(this, new TravelHistoryStartStopChanged());        // tell others
+
+            this.dataGridViewTravel.Cursor = Cursors.Default;
+        }
+
         private void gotoNextStartStopMarkerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             for( int rown = dataGridViewTravel.RightClickRow + 1; rown < dataGridViewTravel.Rows.Count; rown++ )
             {
                 DataGridViewRow r = dataGridViewTravel.Rows[rown];
-                if (r.Visible)
+                HistoryEntry h = r.Tag as HistoryEntry;
+                if (h.StartMarker || h.StopMarker)
                 {
-                    HistoryEntry h = r.Tag as HistoryEntry;
-                    if (h.StartMarker || h.StopMarker)
+                    if (r.Visible)
                     {
                         dataGridViewTravel.DisplayRow(r.Index, true);
                         dataGridViewTravel.ClearSelection();
                         dataGridViewTravel.Rows[r.Index].Selected = true;
-                        break;
+                        return;
                     }
+                    else
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Next start/stop marker is hidden".T(EDTx.UserControlTravelGrid_StartStopHidden));
+                    }
+                    break;
                 }
             }
+
+            ExtendedControls.MessageBoxTheme.Show(FindForm(), "No start/stop marker found below".T(EDTx.UserControlTravelGrid_StartStopNotFound));
         }
 
         // quickmarks.
@@ -1120,7 +1146,7 @@ namespace EDDiscovery.UserControls
                 quickMarkJIDs.Remove(rightclickhe.journalEntry.Id);
 
             var str = quickMarkJIDs.Select(x => x.ToStringInvariant()).ToArray().Join(';');
-            PutSetting(dbBookmarks + ":" + discoveryform.history.CommanderId.ToStringInvariant(), str);
+            PutSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), str);
             UpdateQuickMarkComboBox();
         }
 
@@ -1162,19 +1188,19 @@ namespace EDDiscovery.UserControls
             if (filters != newset)
             {
                 PutSetting(dbFilter, newset);
-                HistoryChanged(current_historylist, true);
+                Display(current_historylist, true);
             }
         }
 
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
             if (res != null)
             {
                 fieldfilter = res;
                 PutSetting(dbFieldFilter, fieldfilter.GetJSON());
-                HistoryChanged(current_historylist);
+                Display(current_historylist, false);
             }
         }
 
@@ -1197,7 +1223,7 @@ namespace EDDiscovery.UserControls
         private void showSystemVisitedForeColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting(dbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
-            HistoryChanged(discoveryform.history);
+            Display(current_historylist, false);
         }
 
         #endregion
@@ -1208,7 +1234,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                var mcmr = discoveryform.history.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
+                var mcmr = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
                 List<QuickJSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, mcmr);
 
                 foreach (var j in list)
@@ -1225,33 +1251,33 @@ namespace EDDiscovery.UserControls
                 }
 
                 string json = rightclickhe.journalEntry.GetJsonString();
-                discoveryform.LogLine(json);
+                DiscoveryForm.LogLine(json);
 
                 EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass(EDCommander.Current);
                 string str = inara.ToJSONString(list);
-                discoveryform.LogLine(str);
+                DiscoveryForm.LogLine(str);
                 //System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
 
                 if (list.Count > 0)
                 {
                     string strres = inara.Send(list);
-                    discoveryform.LogLine(strres);
+                    DiscoveryForm.LogLine(strres);
                 }
                 else
-                    discoveryform.LogLine("No Events");
+                    DiscoveryForm.LogLine("No Events");
             }
         }
 
         private void runEntryThroughProfileSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.CheckActionProfile(rightclickhe);
+            DiscoveryForm.CheckActionProfile(rightclickhe);
         }
 
         private void runSelectionThroughIGAUDebugToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rightclickhe != null)
             {
-                EliteDangerousCore.IGAU.IGAUSync.NewEvent(discoveryform.LogLine, rightclickhe);
+                EliteDangerousCore.IGAU.IGAUSync.NewEvent(DiscoveryForm.LogLine, rightclickhe);
             }
         }
 
@@ -1281,7 +1307,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                discoveryform.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(discoveryform.history, rightclickhe), true);
+                DiscoveryForm.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, rightclickhe), true);
             }
 
         }
@@ -1289,7 +1315,7 @@ namespace EDDiscovery.UserControls
         private void travelGridInDebugModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting(dbDebugMode, travelGridInDebugModeToolStripMenuItem.Checked);
-            HistoryChanged(discoveryform.history);
+            Display(current_historylist, false);
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1298,7 +1324,7 @@ namespace EDDiscovery.UserControls
             string lasttype = "";
             int lasttypecount = 0;
 
-            discoveryform.ActionController.AsyncMode = false;     // to force it to do all the action code before returning..
+            DiscoveryForm.ActionController.AsyncMode = false;     // to force it to do all the action code before returning..
 
             if (dataGridViewTravel.SelectedRows.Count > 0)
             {
@@ -1315,17 +1341,17 @@ namespace EDDiscovery.UserControls
                         lasttype = he.journalEntry.EventTypeStr;
                         lasttypecount = (same) ? ++lasttypecount : 0;
 
-                        discoveryform.ActionController.SetPeristentGlobal("GlobalSaySaid", "");
+                        DiscoveryForm.ActionController.SetPeristentGlobal("GlobalSaySaid", "");
                         BaseUtils.FunctionHandlers.SetRandom(new Random(rw.Index + 1));
-                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+                        DiscoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
 
                         string json = he.journalEntry.GetJsonString();
 
-                        string s = discoveryform.ActionController.Globals["GlobalSaySaid"];
+                        string s = DiscoveryForm.ActionController.Globals["GlobalSaySaid"];
 
                         if (s.Length > 0 && !s.Equals(laststring))
                         {
-                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json?.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
+                            //System.Diagnostics.Debug.WriteLine("Call ts(j='" + json?.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
                             laststring = s;
                         }
                     }

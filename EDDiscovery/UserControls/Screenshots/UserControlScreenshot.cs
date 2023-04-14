@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EliteDangerousCore;
@@ -46,9 +46,9 @@ namespace EDDiscovery.UserControls
         {
             extButtonRemoveImage.Enabled = extButtonCopy.Enabled = false;
 
-            discoveryform.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             autotext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
 
             string[] dbsaved = GetSetting(dbImages, "").Split('\u2188');
@@ -59,25 +59,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= TGChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += TGChanged;
-        }
-
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += TGChanged;
-        }
-
         public override void InitialDisplay()
         {
-            TGChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
             UpdateComboBox();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             UpdateComboBox();
         }
@@ -85,15 +73,13 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged -= TGChanged;
-
+            DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             PutSetting(dbImages, String.Join("\u2188", extimages));
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if ( he.journalEntry is JournalScreenshot )
             {
@@ -106,9 +92,9 @@ namespace EDDiscovery.UserControls
                 Display(file, size);
         }
 
-        private void TGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (he != null && he.journalEntry is JournalScreenshot )    // if screen shot
+            if (he.journalEntry is JournalScreenshot)    // if screen shot
             {
                 if (extComboBoxImage.SelectedIndex == 0)      // if on Auto..
                 {
@@ -120,7 +106,7 @@ namespace EDDiscovery.UserControls
         // Display he
         private void Display(JournalScreenshot js)
         {
-            var pathsize = js.GetScreenshotPath(discoveryform.ScreenshotConverter.InputFolder);
+            var pathsize = js.GetScreenshotPath(DiscoveryForm.ScreenshotConverter.InputFolder);
 
             if (pathsize != null)
             {
@@ -208,7 +194,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox()
         {
-            var sslist = HistoryList.LatestFirst(discoveryform.history.EntryOrder(), new System.Collections.Generic.HashSet<JournalTypeEnum>() { JournalTypeEnum.Screenshot });
+            var sslist = HistoryList.LatestFirst(DiscoveryForm.History.EntryOrder(), new System.Collections.Generic.HashSet<JournalTypeEnum>() { JournalTypeEnum.Screenshot });
 
             string cur = extComboBoxImage.Text;
 
@@ -220,7 +206,7 @@ namespace EDDiscovery.UserControls
             foreach (var x in sslist)
             {
                 var j = x.journalEntry as JournalScreenshot;
-                var pathsize = j.GetScreenshotPath(discoveryform.ScreenshotConverter.InputFolder);
+                var pathsize = j.GetScreenshotPath(DiscoveryForm.ScreenshotConverter.InputFolder);
                 if (pathsize != null)
                 {
                  //   System.Diagnostics.Debug.WriteLine($"Accept {pathsize.Item1} {x.WhereAmI} {File.Exists(pathsize.Item1)}");

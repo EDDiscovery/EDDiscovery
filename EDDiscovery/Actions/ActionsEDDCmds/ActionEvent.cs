@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using System;
 using System.Collections.Generic;
@@ -70,7 +70,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = (ap.ActionController as ActionController).DiscoveryForm.PrimaryCursor.GetCurrentHistoryEntry;
+                        HistoryEntry he = (ap.ActionController as ActionController).DiscoveryForm.PrimaryTravelGrid.GetCurrentHistoryEntry;
 
                         if ( he == null )
                         {

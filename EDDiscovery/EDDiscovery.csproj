@@ -164,8 +164,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.QuickJSON.1.0.1\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.QuickJSON.1.1.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -195,20 +195,32 @@
     <Compile Include="Actions\ActionControllerKeys.cs" />
     <Compile Include="Actions\ActionControllerVoice.cs" />
     <Compile Include="CapiClientID.cs" />
-    <Compile Include="EDDHelp.cs" />
-    <Compile Include="EDDiscoveryFormDLL.cs">
+    <Compile Include="EDD\EDDiscoveryFormToolbar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EDDiscoveryFormProfiles.cs">
+    <Compile Include="EDD\EDDiscoveryFormTabs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EDDiscoveryFormHelpers.cs">
+    <Compile Include="Forms\ImportExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EDDiscoveryFormJournalEvents.cs">
+    <Compile Include="Forms\ImportExportForm.Designer.cs">
+      <DependentUpon>ImportExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TabsPanelsAndPopOuts\EDDHelp.cs" />
+    <Compile Include="EDD\EDDiscoveryFormDLL.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PopOuts.cs" />
+    <Compile Include="EDD\EDDiscoveryFormProfiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDD\EDDiscoveryFormHelpers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDD\EDDiscoveryFormJournalEvents.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TabsPanelsAndPopOuts\PopOuts.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
     <Compile Include="UserControls\3DMap\Bookmarks.cs" />
     <Compile Include="UserControls\3DMap\GalaxyStars.cs" />
@@ -307,6 +319,9 @@
     <Compile Include="UserControls\Overlays\UserControlOrganics.Designer.cs">
       <DependentUpon>UserControlOrganics.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExpeditionRoute.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -318,6 +333,18 @@
     </Compile>
     <Compile Include="UserControls\Search\ScanSortControl.Designer.cs">
       <DependentUpon>ScanSortControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Webbrowser\UserControlInara.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Webbrowser\UserControlEDDB.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Webbrowser\UserControlEDSM.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Webbrowser\UserControlSpansh.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Webbrowser\BrowserBase.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserWebView2.cs" />
@@ -339,9 +366,9 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionDLLCall.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />
     <Compile Include="Actions\AudioHelper.cs" />
-    <Compile Include="EDDiscoveryControllerNewEntry.cs" />
-    <Compile Include="EDDiscoveryControllerHistory.cs" />
-    <Compile Include="EDDiscoveryControllerSync.cs" />
+    <Compile Include="EDD\EDDiscoveryControllerNewEntry.cs" />
+    <Compile Include="EDD\EDDiscoveryControllerHistory.cs" />
+    <Compile Include="EDD\EDDiscoveryControllerSync.cs" />
     <Compile Include="Forms\DraggableFormPos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -371,13 +398,7 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
-    <Compile Include="EDDOptions.cs" />
-    <Compile Include="Forms\ExportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ExportForm.Designer.cs">
-      <DependentUpon>ExportForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="OptionsAndConfig\EDDOptions.cs" />
     <Compile Include="Forms\GalaxySectorSelect.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -396,12 +417,11 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MajorTabControl.cs">
+    <Compile Include="TabsPanelsAndPopOuts\MajorTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EDDProfiles.cs" />
+    <Compile Include="Profiles\EDDProfiles.cs" />
     <Compile Include="Installer.cs" />
-    <Compile Include="Notifications.cs" />
     <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="UserControls\Helpers\Outliner.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayForm.cs" />
@@ -531,30 +551,22 @@
     <Compile Include="UserControls\History\UserControlTravelGrid.Designer.cs">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\IHistoryCursor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\HistoryFilterHelpers.cs" />
-    <Compile Include="EDDApplicationContext.cs" />
-    <Compile Include="EDDiscoveryControllerMain.cs" />
-    <Compile Include="Forms\AddOnManagerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AddOnManagerForm.Designer.cs">
-      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="EDD\EDDApplicationContext.cs" />
+    <Compile Include="EDD\EDDiscoveryControllerMain.cs" />
     <Compile Include="Forms\SetNoteForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SetNoteForm.Designer.cs">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
-    <Compile Include="Panels.cs" />
+    <Compile Include="TabsPanelsAndPopOuts\Panels.cs" />
     <Compile Include="Forms\BookmarkForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -585,7 +597,7 @@
     <Compile Include="UserControls\Form\UserControlForm.Designer.cs">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EDDConfig.cs" />
+    <Compile Include="OptionsAndConfig\EDDConfig.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -598,10 +610,10 @@
     <Compile Include="Forms\MoveToCommander.Designer.cs">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </Compile>
-    <Compile Include="EDDiscoveryForm.cs">
+    <Compile Include="EDD\EDDiscoveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EDDiscoveryForm.Designer.cs">
+    <Compile Include="EDD\EDDiscoveryForm.Designer.cs">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -781,14 +793,11 @@
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.Designer.cs">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
-      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DraggableFormPos.resx">
       <DependentUpon>DraggableFormPos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ExportForm.resx">
-      <DependentUpon>ExportForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ImportExportForm.resx">
+      <DependentUpon>ImportExportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
       <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
@@ -1005,7 +1014,7 @@
     <EmbeddedResource Include="UserControls\ScansStars\UserControl2DMap.resx">
       <DependentUpon>UserControl2DMap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EDDiscoveryForm.resx">
+    <EmbeddedResource Include="EDD\EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
@@ -1049,6 +1058,7 @@
     <None Include="UserControls\Translations\translation-italiano-uc.tlp" />
     <None Include="UserControls\Translations\translation-polski-uc.tlp" />
     <None Include="UserControls\Translations\translation-portugues-uc.tlp" />
+    <None Include="UserControls\Translations\translation-russian-uc.tlp" />
     <None Include="UserControls\Translations\translation-spanish-uc.tlp" />
   </ItemGroup>
   <ItemGroup>

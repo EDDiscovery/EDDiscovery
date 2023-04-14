@@ -167,6 +167,8 @@ SECTION PopOutInfo
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @
 .Carrier.Description: "Data about your fleet carrier" @
+.Resources.Title: "Resources" @
+.Resources.Description: "All Materials, Commodity, MicroResources" @
 
 SECTION EDDiscoveryForm
 
@@ -252,7 +254,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" => "Modificar Perfíis"
 .PL: "Profile {0} Loaded" => "Perfil {0} Caregado"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Painel de Pop Out"
-.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery is updating the EDSM and EDDB databases\r\nPremi OK para fechar agora, Cancela para esperar o fim da atualização"
+.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery is updating the EDSM and EDDB databases\r\nPremi OK para fechar agora, Cancela para esperar o fim da atualização"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "Abre EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "Esconde icona da barra d serviço"
 .notifyIconMenu_Exit: "E&xit" => "&Sai"
@@ -372,9 +374,9 @@ SECTION AddOnManagerForm
 .Failed: "Add-on failed to update. Check files for read only status" => "Attualização dos Add-On falhada. Verifica se os arquivos são escrivíveis"
 .DeleteWarn: "Do you really want to delete {0}" => "Está certo de querer eliminar {0}"
 
-SECTION ExportForm
+SECTION ImportExportForm
 
-ExportForm: "Export data" => "Exportar"
+ImportExportForm: "Export data" => "Exportar"
 .buttonExport: "Export" => "Exportar"
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
@@ -385,6 +387,9 @@ ExportForm: "Export data" => "Exportar"
 .checkBoxCustomAutoOpen: "Open" => "Abrir no excel"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
+.labelPaste: "Click Paste or drag text or files to input box" @
+.extRadioButtonTab: "Tab" @
+.extCheckBoxExcludeHeader: "Exclude Header Row" @
 
 SECTION Form2DMap
 
@@ -409,7 +414,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seletor de Setores Galácticos"
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Você inclui novos setores!\r\nIsto requer baixar novamente por completo todos os dados EDSM\r\nConfirma?"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronização de todos os dados desabilitados nos ajustes.\r\nRehabilitar para atualizar dados galácticos"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Você removeu setores!\r\nIsto requer a limpeza de todos os registros, coisa que necessita de tempo. Confirma?"
-.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "ED Discovery baixa dados estelares da EDSM/EDDB, dados usados para te oferecer dados adicionais. Seleciona quantos desses dados você quer baixar e armazenar. Quantos mais dados estelares você baixar, mas espaço no disco e mais memória RAM serão usados."
+.GALSELEX: "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery baixa dados estelares da EDSM/EDDB, dados usados para te oferecer dados adicionais. Seleciona quantos desses dados você quer baixar e armazenar. Quantos mais dados estelares você baixar, mas espaço no disco e mais memória RAM serão usados."
 .Select: "Select: " => "Seleciona"
 .GALSELEN: "Select the data set" => "Escolhe o set de dados estelares"
 .PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
@@ -464,6 +469,8 @@ SECTION MessageBoxTheme
 .OK: "OK" @
 .No: "No" => "Não"
 .Yes: "Yes" => "Sim"
+.Add: "Add" @
+.Set: "Set" @
 
 SECTION DataGridViewDialogs
 

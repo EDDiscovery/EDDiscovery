@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EliteDangerousCore;
@@ -37,6 +37,8 @@ namespace EDDiscovery.UserControls
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
         private string dbEDSM = "EDSM";
+
+        public HistoryEntry last_history_he = null;
 
         public UserControlRoute()
         {
@@ -110,17 +112,17 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg = thc;
+            DiscoveryForm.OnHistoryChange += HistoryChanged;
         }
 
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewRoute);
+        }
+
+        public override void InitialDisplay()
+        {
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
@@ -134,7 +136,7 @@ namespace EDDiscovery.UserControls
                 routingthread.Join();
             }
 
-            discoveryform.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
 
             PutSetting("_RouteFrom", textBox_From.Text);
             PutSetting("_RouteTo", textBox_To.Text);
@@ -148,12 +150,13 @@ namespace EDDiscovery.UserControls
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
-        public void HistoryChanged(HistoryList hl)           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
+        public void HistoryChanged()           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
         {
-            if (hl != null && hl.Count > 0)
+            if (DiscoveryForm.History.Count > 0)
             {
                 UpdateTo(null);
                 UpdateFrom(null);
+                last_history_he = DiscoveryForm.History.GetLast;
             }
         }
 
@@ -166,6 +169,10 @@ namespace EDDiscovery.UserControls
             return s;
         }
 
+        public override void ReceiveHistoryEntry(HistoryEntry he)
+        {
+            last_history_he = he;       // keep track
+        }
 
         #region Helpers
 
@@ -221,7 +228,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);     // if we have a name, find it
+               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, true);     // if we have a name, find it
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
@@ -238,7 +245,7 @@ namespace EDDiscovery.UserControls
                 if (GetCoordsFrom(out Point3D curpos))          // else if we have co-ords, find nearest
                 {
                     ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = discoveryform.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -294,9 +301,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromHistory_Click(object sender, EventArgs e)
         {
-            if (uctg.GetCurrentHistoryEntry != null)
+            if (last_history_he != null)
             {
-                UpdateFrom(textBox_From, uctg.GetCurrentHistoryEntry?.System.Name ?? "Sol");
+                UpdateFrom(textBox_From, last_history_he.System.Name);
             }
         }
 
@@ -340,7 +347,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
+                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.GalacticMapping, true);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
@@ -358,7 +365,7 @@ namespace EDDiscovery.UserControls
                 if (GetCoordsTo(out Point3D curpos))
                 {
                     ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = discoveryform.galacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -415,9 +422,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonToHistory_Click(object sender, EventArgs e)
         {
-            if (uctg.GetCurrentHistoryEntry != null)
+            if (last_history_he != null)
             {
-                UpdateTo(textBox_To, uctg.GetCurrentHistoryEntry?.System.Name ?? "Sol");
+                UpdateTo(textBox_From, last_history_he.System.Name);
             }
         }
 
@@ -497,7 +504,7 @@ namespace EDDiscovery.UserControls
 
             this.BeginInvoke(new Action(() => 
                 {
-                    discoveryform.NewCalculatedRoute(routeSystems);
+                    DiscoveryForm.NewCalculatedRoute(routeSystems);
                     cmd3DMap.Enabled = true;
                     button_Route.Text = "Find Route".TxID(EDTx.UserControlRoute_button_Route);
                     button_Route.Enabled = true;
@@ -545,7 +552,7 @@ namespace EDDiscovery.UserControls
                 if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
                     dist = 30;
 
-                discoveryform.Open3DMap(routeSystems.First(), routeSystems);
+                DiscoveryForm.Open3DMap(routeSystems.First(), routeSystems);
 
             }
             else
@@ -572,7 +579,7 @@ namespace EDDiscovery.UserControls
             if (row >= 0)
             {
                 ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);
             }
         }
 
@@ -606,11 +613,7 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewRoute.GetCellCount(DataGridViewElementStates.Selected) > 0)
             {
-                try
-                {
-                    Clipboard.SetDataObject(dataGridViewRoute.GetClipboardContent());
-                }
-                catch { }
+                SetClipboard(dataGridViewRoute.GetClipboardContent());
             }
         }
 
@@ -619,7 +622,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewRoute.RightClickRowValid)
             {
                 ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);    // protected against sys = null
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);    // protected against sys = null
             }
         }
 
@@ -639,13 +642,12 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "All" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "All" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                grd.SetCSVDelimiter(frm.Comma);
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                 grd.GetLineStatus += delegate (int r)
                 {

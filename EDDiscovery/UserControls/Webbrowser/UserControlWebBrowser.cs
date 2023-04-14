@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,10 +10,7 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-
 
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -34,8 +31,11 @@ namespace EDDiscovery.UserControls
 
         private BrowserBase wbb;
 
-        private Timer uctgtimer = new System.Windows.Forms.Timer();
-        private HistoryEntry uctghe;
+        private Timer historychangedtimer = new System.Windows.Forms.Timer();
+        private HistoryEntry historyhe;
+        
+        private string urlallowed;
+
 
         #region Init
         public UserControlWebBrowser()
@@ -46,8 +46,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.BrowserInfo.FixIECompatibility(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe");
 
         }
-
-        string urlallowed;
 
         public void Init(string source, string urlallowed)
         {
@@ -74,21 +72,9 @@ namespace EDDiscovery.UserControls
 
             extButtonIE11Warning.Visible = false;
 
-            uctgtimer = new Timer();
-            uctgtimer.Interval = 50;
-            uctgtimer.Tick += Uctgtimer_Tick;
-        }
-
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+            historychangedtimer = new Timer();
+            historychangedtimer.Interval = 100;
+            historychangedtimer.Tick += HistoryChangedTimer_Tick;
         }
 
         public override void InitialDisplay()
@@ -114,8 +100,9 @@ namespace EDDiscovery.UserControls
                 Controls.Add(wbb.webbrowser);
                 Controls.SetChildIndex(wbb.webbrowser, 0);
 
-                last_sys_tracked = uctg.GetCurrentHistoryEntry?.System;
-                PresentSystem(last_sys_tracked);    // may be null
+                last_sys_tracked = null;             
+
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
             };
             wv2.Start();
         }
@@ -124,43 +111,39 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            uctgtimer.Stop();
+            historychangedtimer.Stop();
             isClosing = true;
             PutSetting("PinState", rollUpPanelTop.PinState);
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry) 
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (he != null) // we may not have the webbrowser up, so we just tick until its ready
-            {
-                System.Diagnostics.Debug.WriteLine($"Web browser utcg request {he.System.Name}");
-                uctghe = he;
-                uctgtimer.Start();
-            }
+            System.Diagnostics.Debug.WriteLine($"Web browser HE change request {he.System.Name}");
+            historyhe = he;
+            historychangedtimer.Start();
         }
 
-        private void Uctgtimer_Tick(object sender, EventArgs e)
+        private void HistoryChangedTimer_Tick(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"Web browser UCTG timer on {uctghe.System.Name} {wbb != null}");
+            System.Diagnostics.Debug.WriteLine($"Web browser timer on {historyhe.System.Name} {wbb != null}");
 
             if (wbb != null)        // wait till we have a webbrowser
             {
-                uctgtimer.Stop();
+                historychangedtimer.Stop();
                 bool nosys = last_sys_tracked == null;
 
-                if (nosys || last_sys_tracked.Name != uctghe.System.Name)
+                if (nosys || last_sys_tracked.Name != historyhe.System.Name)
                 {
-                    last_sys_tracked = uctghe.System;       // we want to track system always
+                    last_sys_tracked = historyhe.System;       // we want to track system always
 
                     if (override_system == null && (checkBoxAutoTrack.Checked || nosys))        // if no overridden, and tracking (or no sys), present
                         PresentSystem(last_sys_tracked);
                 }
-                else if (uctghe.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
+                else if (historyhe.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
                 {
                     if (override_system == null && checkBoxAutoTrack.Checked)       // if not overriding, and tracking, present
                     {
-                        JournalStartJump jsj = uctghe.journalEntry as JournalStartJump;
+                        JournalStartJump jsj = historyhe.journalEntry as JournalStartJump;
                         last_sys_tracked = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
                         PresentSystem(last_sys_tracked);
                     }
@@ -347,36 +330,5 @@ namespace EDDiscovery.UserControls
         }
     }
 
-    public partial class UserControlEDSM : UserControlWebBrowser
-    {
-        public override void Init()
-        {
-            Init("EDSM", "https://www.edsm.net");
-        }
-    }
-
-    public partial class UserControlSpansh : UserControlWebBrowser
-    {
-        public override void Init()
-        {
-            Init("Spansh", "https://spansh.co.uk");
-        }
-    }
-
-    public partial class UserControlEDDB : UserControlWebBrowser
-    {
-        public override void Init()
-        {
-            Init("EDDB", "https://eddb.io");
-        }
-    }
-
-    public partial class UserControlInara : UserControlWebBrowser
-    {
-        public override void Init()
-        {
-            Init("Inara", "https://inara.cz");
-        }
-    }
 }
 

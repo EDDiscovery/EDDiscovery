@@ -95,13 +95,13 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            discoveryform.OnNewEntry += AddNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += AddNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
 
             // datetime picker kind is not used
-            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC())).StartOfDay();
-            dateTimePickerEndDate.Value = GetSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow)).EndOfDay();
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC()));
+            dateTimePickerEndDate.Value = GetSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow));
             startchecked = dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
             endchecked = dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
             VerifyDates();
@@ -249,13 +249,13 @@ namespace EDDiscovery.UserControls
                         dataGridViewByShip.RowTemplate.MinimumHeight =
                         dataGridViewGeneral.RowTemplate.MinimumHeight = Font.ScalePixels(24);
 
-            if ( discoveryform.history.Count>0 )        // if we loaded a history, this is a new panel, so work
+            if ( DiscoveryForm.History.Count>0 )        // if we loaded a history, this is a new panel, so work
                 KickComputer();
 
             timerupdate.Start();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
             VerifyDates();      // date range may have changed
             KickComputer();
@@ -286,15 +286,20 @@ namespace EDDiscovery.UserControls
             PutSetting(dbSCScan, splitContainerScan.GetSplitterDistance());
             PutSetting(dbSCShip, splitContainerShips.GetSplitterDistance());
 
-            discoveryform.OnNewEntry -= AddNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
+
+        #endregion
+
+        #region UI
 
         private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)     // tab change, UI will see tab has changed
         {
             PutSetting(dbSelectedTabSave, tabControlCustomStats.SelectedIndex);
             redisplay = true;
         }
+
 
         bool updateprogramatically = false;
         private void VerifyDates()
@@ -333,6 +338,86 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void extButtonStartStop_Click(object sender, EventArgs e)
+        {
+            var startstops = JournalEntry.GetStartStopDates(EDCommander.CurrentCmdrID);
+
+            if (startstops.Count > 0)
+            {
+                var reformedlist = startstops.Select(x => new Tuple<DateTime, DateTime>(x.Item2, x.Item4)).ToList();
+                reformedlist.Reverse();
+                DateTimeRangeDialog(extButtonStartStop, reformedlist);
+            }
+        }
+        private void extButtonDocked_Click(object sender, EventArgs e)
+        {
+            var docked = JournalEntry.GetByEventType(JournalTypeEnum.Docked, EDCommander.CurrentCmdrID, DateTime.MinValue, DateTime.MaxValue);
+
+            if (docked.Count > 0)
+            {
+                var times = new List<Tuple<DateTime, DateTime>>();
+                //                times.Add(new Tuple<DateTime, DateTime>(docked[docked.Count - 1].EventTimeUTC, new DateTime(2099,12,31, 0,0,0,DateTimeKind.Utc)));
+                times.Add(new Tuple<DateTime, DateTime>(docked[docked.Count - 1].EventTimeUTC, DateTime.MaxValue.ToUniversalKind()));
+
+                for (int i = docked.Count - 1; i >= docked.Count - 1000 && i >= 1; i -= 1)        // limit to 1000 last entries
+                    times.Add(new Tuple<DateTime, DateTime>(docked[i - 1].EventTimeUTC, docked[i].EventTimeUTC));
+
+                DateTimeRangeDialog(extButtonDocked, times);
+            }
+        }
+
+        private void DateTimeRangeDialog(Control button, List<Tuple<DateTime,DateTime>> times)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup startstopsel = new ExtendedControls.CheckedIconListBoxFormGroup();
+
+            for (int i = 0; i < times.Count; i++)
+            {
+                string s = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item1).ToStringYearFirst() + " - ";
+                if ( times[i].Item2 != DateTime.MaxValue)
+                {
+                    s += EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item2).ToStringYearFirst() + " \u0394 " + (times[i].Item2 - times[i].Item1).ToString(@"d\:hh\:mm\:ss");
+                }
+                startstopsel.AddStandardOption(i.ToStringInvariant(), s);
+            }
+
+            startstopsel.SaveSettings = (s, o) =>
+            {
+                int index = s.Replace(";", "").InvariantParseInt(-1);
+
+                if (index >= 0)
+                {
+                    updateprogramatically = true;
+
+                    dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[index].Item1);
+                    startchecked = dateTimePickerStartDate.Checked = true;
+
+                    if (times[index].Item2 != DateTime.MaxValue)
+                    {
+                        dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[index].Item2);
+                        dateTimePickerEndDate.Checked = true;
+                    }
+                    else
+                        dateTimePickerEndDate.Checked = false;
+
+                    endchecked = dateTimePickerEndDate.Checked;
+
+                    PutSetting(dbStartDate, dateTimePickerStartDate.Value);
+                    PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
+                    PutSetting(dbEndDate, dateTimePickerEndDate.Value);
+                    PutSetting(dbEndDateOn, dateTimePickerEndDate.Checked);
+
+                    updateprogramatically = false;
+                    KickComputer();
+                }
+            };
+
+            startstopsel.CloseOnChange = true;
+            startstopsel.CloseBoundaryRegion = new Size(32, extButtonStartStop.Height);
+            startstopsel.Show("", button, this.FindForm());
+
+        }
+
+
         #endregion
 
         #region Stats Computation
@@ -349,8 +434,8 @@ namespace EDDiscovery.UserControls
                     ;
 
                 statscomputer.Start(EDCommander.CurrentCmdrID,
-                                                dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?),
-                                                dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?),
+                                                dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) : default(DateTime?),
+                                                dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) : default(DateTime?),
                                                 (rs) => 
                                                 {
                                                     BeginInvoke((MethodInvoker)(() => { EndComputation(rs); })); 
@@ -366,7 +451,7 @@ namespace EDDiscovery.UserControls
             pendingstats = rs;              // the UI tick will see we have new pending stats and apply them..
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)
+        private void AddNewEntry(HistoryEntry he)
         {
             if (JournalStatisticsComputer.IsJournalEntryForStats(he.journalEntry))     // only if its got something to do with stats
             {
@@ -388,7 +473,7 @@ namespace EDDiscovery.UserControls
             bool newstats = pendingstats != null;                        // this means kick computation happened..
             bool enqueued = entriesqueued.Count > 0;                    // queued entries
 
-          //  System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Tick {newstats} {enqueued} {redisplay}");
+            //  System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Tick {newstats} {enqueued} {redisplay}");
 
             if ( newstats || enqueued || redisplay)                      // redisplay is due to tab change or time mode change
             {
@@ -418,9 +503,9 @@ namespace EDDiscovery.UserControls
                         laststatsgeneraldisplayed = laststatsbyshipdisplayed = laststatsledgerdisplayed = laststatsrankdisplayed= false;
                     }
 
-                    DateTime starttimeutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) :
+                    DateTime starttimeutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) :
                                                                             EDDConfig.GameLaunchTimeUTC();
-                    DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) :
+                    DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) :
                                                                             EDDConfig.Instance.SelectedEndOfTodayUTC();
 
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System;
@@ -26,6 +25,12 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSynthesis : UserControlCommonBase
     {
+        public bool isEmbedded { get; set; } = false;
+        public bool isHistoric { get; set; } = false;
+
+        public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
+        public Dictionary<MaterialCommodityMicroResourceType, int> NeededResources;        // computed during display
+
         private string dbWSave = "Wanted";
         private string dbOSave = "Order";
         private string dbRecipeFilterSave = "RecipeFilter";
@@ -34,20 +39,16 @@ namespace EDDiscovery.UserControls
         private string dbHistoricMatsSave = "HistoricMaterials";
         private string dbWordWrap = "WordWrap";
 
-        int[] RowToRecipe;        // order
-        int[] WantedPerRecipe;       // wanted, in order terms
-        internal bool isEmbedded = false;
-        internal bool isHistoric = false;
+        private int[] RowToRecipe;        // order
+        private int[] WantedPerRecipe;       // wanted, in order terms
 
-        RecipeFilterSelector rfs;
-        RecipeFilterSelector lfs;
-        RecipeFilterSelector mfs;
-
-        public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
+        private RecipeFilterSelector rfs;
+        private RecipeFilterSelector lfs;
+        private RecipeFilterSelector mfs;
 
         public HistoryEntry CurrentHistoryEntry { get {return last_he;} }     //one in use, may be null
 
-        HistoryEntry last_he = null;
+        private HistoryEntry last_he = null;
 
         #region Init
 
@@ -106,8 +107,8 @@ namespace EDDiscovery.UserControls
 
             isHistoric = GetSetting(dbHistoricMatsSave, false);
 
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             var enumlist = new Enum[] { EDTx.UserControlSynthesis_UpgradeCol, EDTx.UserControlSynthesis_Level, EDTx.UserControlSynthesis_MaxCol, EDTx.UserControlSynthesis_WantedCol, EDTx.UserControlSynthesis_Available, EDTx.UserControlSynthesis_Notes, EDTx.UserControlSynthesis_Recipe };
             var enumlisttt = new Enum[] { EDTx.UserControlSynthesis_buttonRecipeFilter_ToolTip, EDTx.UserControlSynthesis_buttonFilterLevel_ToolTip, EDTx.UserControlSynthesis_buttonMaterialFilter_ToolTip, EDTx.UserControlSynthesis_buttonClear_ToolTip, EDTx.UserControlSynthesis_chkNotHistoric_ToolTip, EDTx.UserControlSynthesis_extCheckBoxWordWrap_ToolTip };
@@ -116,29 +117,21 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += UCTGChanged;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewSynthesis.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += UCTGChanged;
             DGVLoadColumnLayout(dataGridViewSynthesis);
             chkNotHistoric.Checked = !isHistoric;
             chkNotHistoric.Visible = !isEmbedded;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);     // now trigger
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewSynthesis);
 
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             PutSetting(dbOSave, RowToRecipe.ToString(","));
             PutSetting(dbWSave, WantedPerRecipe.ToString(","));
@@ -149,25 +142,25 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Display
-        internal void SetHistoric(bool newVal)
-        {
-            isHistoric = newVal;
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            Display();
-        }
-
         public override void InitialDisplay()
         {
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            Display();
+            if (isHistoric)
+            {
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            }
+            else
+            {
+                last_he = DiscoveryForm.History.GetLast;
+                Display();
+            }
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             InitialDisplay();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (!isHistoric) // only if current (not on history cursor)
             {
@@ -181,7 +174,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (isHistoric || last_he == null)
             {
@@ -198,8 +191,8 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                var totalmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
-                var mclmats = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
+                var totalmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+                var mclmats = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
 
                 int fdrow = dataGridViewSynthesis.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 
@@ -214,10 +207,14 @@ namespace EDDiscovery.UserControls
                 string materials = GetSetting(dbMaterialFilterSave, "All");
                 var matList = materials.Split(';');        // list of materials to show
 
+                NeededResources = new Dictionary<MaterialCommodityMicroResourceType, int>();
+
+                // filter by selections the rows and make the ones not required invisible
+
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.SynthesisRecipes[rno]).Item1.ToString();
+
                     bool visible = true;
                 
                     if (recep != "All" || levels != "All" || materials != "All")
@@ -250,11 +247,11 @@ namespace EDDiscovery.UserControls
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
                         Recipes.Recipe r = Recipes.SynthesisRecipes[rno];
-                        var res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, r , WantedPerRecipe[rno]);
-                        //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
+                        var res = MaterialCommoditiesRecipe.HowManyLeft(r , WantedPerRecipe[rno], mclmats, totals, NeededResources);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
                         {
+                            row.Cells[2].Value = res.Item1.ToString();
                             row.Cells[3].Value = WantedPerRecipe[rno].ToString(); //wanted
                             row.Cells[4].Value = res.Item2.ToString();  // available
                             row.Cells[5].Value = res.Item5.ToString("N0"); // %
@@ -265,23 +262,22 @@ namespace EDDiscovery.UserControls
                             row.DefaultCellStyle.BackColor = res.Item5 >= 100.0 ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                         }
                     }
+
                     if (WantedPerRecipe[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
                     {
                         wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.SynthesisRecipes[rno], WantedPerRecipe[rno]));
                     }
                 }
 
-                dataGridViewSynthesis.RowCount = Recipes.SynthesisRecipes.Count;         // truncate previous shopping list..
-
                 if (!isEmbedded)
                 {
-                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mclmats);
+                    dataGridViewSynthesis.RowCount = Recipes.SynthesisRecipes.Count;         // truncate previous shopping list..
 
-                    foreach (var c in shoppinglist)        // and add new..
+                    foreach (var kvp in NeededResources)        // and add new..
                     {
-                        var cur = totalmcl.Find((x) => x.Details == c.Item1.Details);    // may be null
+                        var cur = totalmcl.Find((x) => x.Details == kvp.Key);    // may be null
 
-                        Object[] values = { c.Item1.Details.Name, c.Item1.Details.TranslatedCategory, (cur?.Count ?? 0).ToString(), c.Item2.ToString(), "", "", c.Item1.Details.Shortname };
+                        Object[] values = { kvp.Key.Name, kvp.Key.TranslatedCategory, (cur?.Count ?? 0).ToString(), kvp.Value.ToString(), "", "", kvp.Key.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
                     }
@@ -292,9 +288,7 @@ namespace EDDiscovery.UserControls
 
             }
 
-            if (OnDisplayComplete != null)
-                OnDisplayComplete(wantedList);
-
+            OnDisplayComplete?.Invoke(wantedList);
         }
 
         #endregion
@@ -402,8 +396,8 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                     RowToRecipe[i] = (int)dataGridViewSynthesis.Rows[i].Tag;          // reset the order array
 
-                for (int i = 0; i < dataGridViewSynthesis.RowCount; i++)
-                    System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + RowToRecipe[i] + " : "+ dataGridViewSynthesis.Rows[i].Tag);
+          //      for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
+           //         System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + RowToRecipe[i] + " : "+ dataGridViewSynthesis.Rows[i].Tag);
 
                 //for (int i = 0; i < 10; i++)   
 
@@ -439,9 +433,25 @@ namespace EDDiscovery.UserControls
             mfs.Open(GetSetting(dbMaterialFilterSave, "All"), b, this.FindForm());
         }
 
+        private void extButtonPushResources_Click(object sender, EventArgs e)
+        {
+            if (NeededResources != null)
+            {                                           // prefer popouts first, then anyone
+                if ( !RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = NeededResources }))
+                {
+                    ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
+                }
+            }
+        }
+
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
             SetHistoric(!chkNotHistoric.Checked);       // button sense changed
+        }
+        internal void SetHistoric(bool newVal)
+        {
+            isHistoric = newVal;
+            InitialDisplay();       // same action as initial display
         }
 
     }

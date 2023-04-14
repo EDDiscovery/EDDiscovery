@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -52,8 +52,8 @@ namespace EDDiscovery.UserControls
 
             checkBoxAutoSwap.Checked = GetSetting(dbAutoSwap, false);
 
-            discoveryform.OnNewEntry += OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol, EDTx.UserControlMarketData_labelLocation, EDTx.UserControlMarketData_labelVs, EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxHasDemand, EDTx.UserControlMarketData_checkBoxAutoSwap };
             var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
@@ -62,18 +62,10 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= OnChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += OnChanged;
-        }
-
         public override void LoadLayout()
         {
             dataGridViewMarketData.RowTemplate.MinimumHeight= Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewMarketData);
-            uctg.OnTravelSelectionChanged += OnChanged;
         }
 
         public override void Closing()
@@ -82,15 +74,14 @@ namespace EDDiscovery.UserControls
             PutSetting(dbBuyOnly, checkBoxBuyOnly.Checked);
             PutSetting(dbHasDemand, checkBoxHasDemand.Checked);
             PutSetting(dbAutoSwap, checkBoxAutoSwap.Checked);
-            discoveryform.OnNewEntry -= OnNewEntry;
-            uctg.OnTravelSelectionChanged -= OnChanged;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         public override void InitialDisplay()
         {
-            FillComboBoxes(discoveryform.history);
-            OnChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            FillComboBoxes();
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         #endregion
@@ -106,29 +97,27 @@ namespace EDDiscovery.UserControls
 
         List<HistoryEntry> comboboxentries = new List<HistoryEntry>(); // filled by combobox
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            FillComboBoxes(hl);     // display time or list may have changed
+            FillComboBoxes();     // display time or list may have changed
             notfoundeddmd = false;
         }
 
-        private void OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void OnNewEntry(HistoryEntry he)
         {
             if (he.journalEntry is JournalCommodityPricesBase)            // new CMPB, update combo boxes
             {
-                FillComboBoxes(hl);
+                FillComboBoxes();
                 notfoundeddmd = false;
             }
-
-            OnChanged(he, hl, true);
         }
 
-        private void OnChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
+            if (!Object.ReferenceEquals(he, last_he))       // if last was null, or he has changed, we have a possible change..
             {
                 // Find last commodity entry, if notfoundeedmd is true.  notfoundeddmd is cleared on a new market data entry of commodity prices
-                HistoryEntry new_last_eddmd = notfoundeddmd ? null : hl.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
+                HistoryEntry new_last_eddmd = notfoundeddmd ? null : DiscoveryForm.History.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
                 notfoundeddmd = new_last_eddmd == null;
 
                 bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
@@ -194,7 +183,7 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
                     list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities);
                 }
-                List<MaterialCommodityMicroResource> mclist = discoveryform.history.MaterialCommoditiesMicroResources.GetCommoditiesSorted(cargo.MaterialCommodity);      // stuff we have..  commodities only
+                List<MaterialCommodityMicroResource> mclist = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetCommoditiesSorted(cargo.MaterialCommodity);      // stuff we have..  commodities only
                 List<MaterialCommodityMicroResource> notfound = new List<MaterialCommodityMicroResource>();
                 foreach (MaterialCommodityMicroResource m in mclist)
                 {
@@ -303,7 +292,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Stop watch" + swp.ElapsedMilliseconds);
         }
 
-        private void FillComboBoxes(HistoryList hl)
+        private void FillComboBoxes()
         {
             string selfrom = comboBoxCustomFrom.Text;
             string selto = comboBoxCustomTo.Text;
@@ -316,7 +305,7 @@ namespace EDDiscovery.UserControls
 
             comboboxentries.Clear();
 
-            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(hl.EntryOrder());
+            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(DiscoveryForm.History.EntryOrder());
             JournalCommodityPricesBase last = null;
 
             foreach (HistoryEntry h in hlcpb)

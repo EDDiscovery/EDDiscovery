@@ -49,8 +49,8 @@ namespace EDDiscovery.UserControls
 
             displayfont = ExtendedControls.Theme.Current.GetFont;
 
-            discoveryform.OnHistoryChange += OnHistoryChange;
-            discoveryform.OnNoteChanged += OnNoteChange;
+            DiscoveryForm.OnHistoryChange += OnHistoryChange;
+            DiscoveryForm.OnNoteChanged += OnNoteChange;
 
             var enumlistcms = new Enum[] { EDTx.UserControlNotePanel_miGMPNotes, EDTx.UserControlNotePanel_miSystemNotes };
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
@@ -58,26 +58,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += OnTravelChange;
-        }
-
-        public override void InitialDisplay()
-        {
-            OnHistoryChange(discoveryform.history);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= OnTravelChange;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += OnTravelChange;
         }
 
         public override void Closing()
         {
-            discoveryform.OnHistoryChange -= OnHistoryChange;
-            discoveryform.OnNoteChanged -= OnNoteChange;
-            uctg.OnTravelSelectionChanged -= OnTravelChange;
+            DiscoveryForm.OnHistoryChange -= OnHistoryChange;
+            DiscoveryForm.OnNoteChanged -= OnNoteChange;
             PutSetting("Config", (int)config);
         }
 
@@ -88,7 +74,12 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
-        private void OnTravelChange(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void TransparencyModeChanged(bool on)
+        {
+            Display(lastHE);
+        }
+
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             Display(he);
         }
@@ -98,9 +89,14 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
-        private void OnHistoryChange( HistoryList hl)            // when user clicks around..  HE may be null here
+        public override void InitialDisplay()
         {
-            Display(hl.GetLast);
+            Display(DiscoveryForm.History.GetLast);
+        }
+
+        private void OnHistoryChange()            // when user clicks around..  HE may be null here
+        {
+            Display(DiscoveryForm.History.GetLast);
         }
 
         void Display(HistoryEntry he)
@@ -111,7 +107,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                HistoryEntry hefsd = discoveryform.history.GetLastHistoryEntry(x => x.IsFSDCarrierJump, he);
+                HistoryEntry hefsd = DiscoveryForm.History.GetLastHistoryEntry(x => x.IsFSDCarrierJump, he);
 
                 if (hefsd != null)
                 {
@@ -122,9 +118,9 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showSystemNotes))
                     {
-                        for (int pos = hefsd.Index; pos < discoveryform.history.Count && (pos==hefsd.Index || !discoveryform.history[pos].IsFSDCarrierJump); pos++)
+                        for (int pos = hefsd.Index; pos < DiscoveryForm.History.Count && (pos==hefsd.Index || !DiscoveryForm.History[pos].IsFSDCarrierJump); pos++)
                         {
-                            HistoryEntry cur = discoveryform.history[pos];
+                            HistoryEntry cur = DiscoveryForm.History[pos];
                             string notetext = cur.GetNoteText;
                             if ( notetext.HasChars())
                                 botline += notetext.WordWrap(60) + Environment.NewLine;
@@ -133,7 +129,7 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showGMPNotes))
                     {
-                        var gmo = discoveryform.galacticMapping.Find(hefsd.System.Name);
+                        var gmo = DiscoveryForm.GalacticMapping.Find(hefsd.System.Name);
                         if (gmo != null)
                             botline = ("GMP: " + gmo.Description).WordWrap(60) + Environment.NewLine;
                     }

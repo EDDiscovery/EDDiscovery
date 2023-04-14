@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022I EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
@@ -26,7 +25,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlJournalGrid : UserControlCommonBase
     {
         private JournalFilterSelector cfs;
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
@@ -43,11 +42,6 @@ namespace EDDiscovery.UserControls
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
         private string searchterms = "system:body:station:stationfaction";
-
-        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
-
-
-        public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Tag as HistoryEntry : null; } }
 
         #region Init
 
@@ -80,6 +74,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.RowTemplate.MinimumHeight = 26;      // enough for the icon
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            dataGridViewJournal.AllowRowHeaderVisibleSelection = true;
 
             cfs = new JournalFilterSelector();
             cfs.AddAllNone();
@@ -100,12 +95,18 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer() { Interval = 10 };
             todotimer.Tick += Todotimer_Tick;
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
+            DiscoveryForm.OnHistoryChange += HistoryChanged;
+            DiscoveryForm.OnNewEntry += AddNewEntry;
 
-            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime, EDTx.UserControlJournalGrid_Event, EDTx.UserControlJournalGrid_ColumnType, EDTx.UserControlJournalGrid_ColumnText, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime, EDTx.UserControlJournalGrid_ColumnEvent, EDTx.UserControlJournalGrid_ColumnDescription, 
+                EDTx.UserControlJournalGrid_ColumnInformation, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
+
+            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, 
+                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, 
+                EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
+
+            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, 
+                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
@@ -120,7 +121,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             dataGridViewJournal.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));
-            DGVLoadColumnLayout(dataGridViewJournal);
+            DGVLoadColumnLayout(dataGridViewJournal, rowheaderselection: dataGridViewJournal.AllowRowHeaderVisibleSelection);
         }
 
         public override void Closing()
@@ -130,8 +131,8 @@ namespace EDDiscovery.UserControls
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal);
             PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
-            discoveryform.OnHistoryChange -= HistoryChanged;
-            discoveryform.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();
         }
 
@@ -141,13 +142,13 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            HistoryChanged(discoveryform.history);
+            Display(DiscoveryForm.History, false);
         }
 
 
-        private void HistoryChanged(HistoryList hl)
+        private void HistoryChanged()
         {
-            Display(hl, false);
+            Display(DiscoveryForm.History, false);
         }
 
         private void Display(HistoryList hl, bool disablesorting )
@@ -156,15 +157,13 @@ namespace EDDiscovery.UserControls
             queuedadds.Clear();
             todotimer.Stop();
 
-            if (hl == null)     // just for safety
-                return;
-
             this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
             buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
 
-            current_historylist = hl;
+            current_historylist = hl;       // we cache this in case it changes during sorting
 
-            Tuple<long, int> pos = CurrentGridPosByJID();
+            var selpos = dataGridViewJournal.GetSelectedRowOrCellPosition();
+            Tuple<long, int> pos = selpos != null ? new Tuple<long, int>(((HistoryEntry)(dataGridViewJournal.Rows[selpos.Item1].Tag)).Journalid, selpos.Item2) : new Tuple<long, int>(-1, 0);
 
             SortOrder sortorder = dataGridViewJournal.SortOrder;
             int sortcol = dataGridViewJournal.SortedColumn?.Index ?? -1;
@@ -197,7 +196,7 @@ namespace EDDiscovery.UserControls
 
             var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
 
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
 
@@ -225,7 +224,7 @@ namespace EDDiscovery.UserControls
 
                     // System.Diagnostics.Debug.WriteLine("J Chunk Load in " + sw.ElapsedMilliseconds);
 
-                    if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, false))
+                    if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, false))
                         FireChangeSelection();
 
                 });
@@ -237,7 +236,7 @@ namespace EDDiscovery.UserControls
 
                 UpdateToolTipsForFilter();
 
-                if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, true))
+                if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -272,7 +271,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)               // on new entry from discovery system
+        private void AddNewEntry(HistoryEntry he)               // on new entry from discovery system
         {
             if (todotimer.Enabled)       // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
@@ -287,7 +286,7 @@ namespace EDDiscovery.UserControls
         private void AddEntry(HistoryEntry he)
         { 
             var sst = new BaseUtils.StringSearchTerms(textBoxSearch.Text, searchterms);
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             var row = CreateHistoryRow(he, sst, hef);     // we might be filtered out by search
             if (row != null)
@@ -330,7 +329,7 @@ namespace EDDiscovery.UserControls
                 if (search.Terms[0] != null)
                 {
                     string timestr = time.ToString();
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
                     matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                     he.EventSummary.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -383,7 +382,7 @@ namespace EDDiscovery.UserControls
             if (filters != newset)
             {
                 PutSetting(dbFilter, newset);
-                HistoryChanged(current_historylist);
+                Display(current_historylist, false);
             }
         }
 
@@ -402,17 +401,17 @@ namespace EDDiscovery.UserControls
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             PutSetting(dbHistorySave, comboBoxTime.Text);
-            HistoryChanged(current_historylist);
+            Display(current_historylist, false);
         }
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
             if ( res != null )
             {
                 fieldfilter = res;
                 PutSetting(dbFieldFilter, fieldfilter.GetJSON());
-                HistoryChanged(current_historylist);
+                Display(current_historylist, false);
             }
         }
 
@@ -421,7 +420,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewJournal_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             HistoryEntry he = (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag;
-            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
             PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno, he, Columns.Event, false);
         }
 
@@ -429,19 +428,20 @@ namespace EDDiscovery.UserControls
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
-            mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+            toolStripMenuItemStartStop.Enabled = rightclickhe != null;
+            mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
+            viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
             jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
         }
 
-        HistoryEntry rightclicksystem = null;
-        HistoryEntry leftclicksystem = null;
+        HistoryEntry rightclickhe = null;
+        HistoryEntry leftclickhe = null;
 
         private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
         {
-            rightclicksystem = dataGridViewJournal.RightClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.RightClickRow].Tag : null;
-            leftclicksystem = dataGridViewJournal.LeftClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.LeftClickRow].Tag : null;
+            rightclickhe = dataGridViewJournal.RightClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.RightClickRow].Tag : null;
+            leftclickhe = dataGridViewJournal.LeftClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.LeftClickRow].Tag : null;
         }
 
         private void dataGridViewJournal_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -449,9 +449,9 @@ namespace EDDiscovery.UserControls
             if (dataGridViewJournal.LeftClickRowValid)                                                   // Click expands it..
             {
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                leftclicksystem.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
-                info.Info( (EDDConfig.Instance.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC)) + ": " + leftclicksystem.EventSummary,
+                info.Info( (EDDConfig.Instance.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC)) + ": " + leftclickhe.EventSummary,
                     FindForm().Icon, infodetailed);
                 info.Size = new Size(1200, 800);
                 info.Show(FindForm());
@@ -465,36 +465,52 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMap(rightclicksystem?.System);
+            DiscoveryForm.Open3DMap(rightclickhe?.System);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name))
+            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
         }
 
-        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
+        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with travel grid call
         {
-            if (rightclicksystem != null)
+            this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
+
+            rightclickhe.SetStartStop();                                        // change flag
+            DiscoveryForm.History.RecalculateTravel();                          // recalculate all
+
+            foreach (DataGridViewRow row in dataGridViewJournal.Rows)            // dgv could be in any sort order, we have to do the lot
             {
-                discoveryform.history.SetStartStop(rightclicksystem);
-                discoveryform.RefreshHistoryAsync();
+                HistoryEntry he = row.Tag as HistoryEntry;
+                if (he.IsFSD || he.StopMarker || he == rightclickhe)
+                {
+                    he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
+                    row.Cells[ColumnInformation.Index].Value = eventdescription;
+                }
             }
+
+            dataGridViewJournal.Refresh();       // to make the start/stop marker appear, refresh
+
+            RequestPanelOperation(this, new TravelHistoryStartStopChanged());        // tell others
+
+            this.dataGridViewJournal.Cursor = Cursors.Default;
+
         }
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
-                discoveryform.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
+            if (rightclickhe != null)
+                DiscoveryForm.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
+            if (rightclickhe != null && rightclickhe.journalEntry != null)
             {
-                string json = rightclicksystem.journalEntry.GetJsonString();
+                string json = rightclickhe.journalEntry.GetJsonString();
                 if (json != null)
                 {
                     SetClipboardText(json);
@@ -509,43 +525,27 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            long jid = (dataGridViewJournal.CurrentCell != null) ? ((HistoryEntry)(dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Tag)).Journalid : -1;
-            int cellno = (dataGridViewJournal.CurrentCell != null) ? dataGridViewJournal.CurrentCell.ColumnIndex : 0;
-            return new Tuple<long, int>(jid, cellno);
-        }
-
-        public int GotoPosByJID(long jid)       // -1 if fails
-        {
-            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-            if (rowno >= 0)
+            if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)
             {
-                dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
-                dataGridViewJournal.Rows[rowno].Selected = true;
-                FireChangeSelection();
+                Display(current_historylist, false);
             }
 
-            return rowno;
+            return false;
         }
 
-        public void FireChangeSelection()
+        public void FireChangeSelection()       // keep for now
         {
-            System.Diagnostics.Debug.WriteLine("JG Fire Change Sel");
-            if (dataGridViewJournal.CurrentCell != null)
-            {
-                int row = dataGridViewJournal.CurrentCell.RowIndex;
-                OnTravelSelectionChanged?.Invoke(dataGridViewJournal.Rows[row].Tag as HistoryEntry, current_historylist, true);
-            }
         }
 
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.EntryNumber : (discoveryform.history.Count - rightclicksystem.EntryNumber + 1)) : 0;
+            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.History.Count - rightclickhe.EntryNumber + 1)) : 0;
             int selrow = dataGridViewJournal.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)
@@ -569,10 +569,11 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Export Current View", "Export as Journals" },
-                new string[] { "CSV export| *.csv", "Journal Export|*.log" },
-                new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.None, Forms.ExportForm.ShowFlags.DisableCVS });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Export Current View", "Export as Journals" },
+                new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowDateTimeCSVOpenInclude, Forms.ImportExportForm.ShowFlags.ShowDateTimeOpenInclude },
+                new string[] { "CSV export| *.csv", "Journal Export|*.log" }
+                );
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -617,8 +618,8 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
                     grd.GetLineStatus += delegate (int r)
                     {
                         if (r < dataGridViewJournal.Rows.Count)

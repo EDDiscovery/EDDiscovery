@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -36,106 +34,29 @@ namespace EDDiscovery.UserControls
         private List<FilterEntry> savedfilterentries;
         private List<FilterEntry> displayedfilterentries;
 
+        public const string dbFilter = "Filter";
+        public const string dbCampaign = "Campaign";
+        public const string dbGridshow = "Gridshow";
+        public const string dbSelected = "Selected";
+
+        private JournalFilterSelector cfs;
+
         private FilterEntry current;        // current selected
 
         private Font transparentfont;
 
-        class FilterEntry
-        {
-            public enum EntryType { Invalid, NewEntry, Time, Mission, Lastdock, Today, Sevendays, Oneday, All }
-
-            public EntryType Type { get; private set; }
-            public string Name { get; private set; }
-
-            public string MissionKey { get; private set; }  // null if not set.  Mission only
-            public string TargetFaction { get; private set; }  // null if not set
-
-            public DateTime StartTimeUTC { get { return starttime; } }
-            public DateTime EndTimeUTC { get { return endtime; } }     // for missions, its the expiry time, not the MissionEndTime
-
-            public string NameDate
-            {
-                get
-                {
-                    string date = "";
-                    if (Type == FilterEntry.EntryType.Time || Type == FilterEntry.EntryType.Mission)
-                    {
-                        date = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttime).ToString("d") ;
-                        string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(endtime).ToString("d");
-                        if (date.Equals(dte))
-                            date = "(" + date + ")";
-                        else
-                            date = "(" + date + "-" + dte + ")";
-                    }
-
-                    return Name + date;
-                }
-            }
-
-            public string UniqueID      // used to identify it for retrieval.
-            {
-                get
-                {
-                    return Name + (MissionKey ?? "");
-                }
-            }
-
-            private DateTime starttime;      // UTC
-            private DateTime endtime;        // UTC only for non missions
-
-            public FilterEntry(string n, EntryType t)
-            {
-                Name = n;
-                TargetFaction = "";
-                Type = t;
-                starttime = endtime = DateTime.UtcNow;
-            }
-
-            public FilterEntry(MissionState m)
-            {
-                Type = EntryType.Mission;
-                Name = m.Mission.Name + ":" + m.Mission.Faction;
-                if (m.Mission.Target.Length > 0)
-                    Name += ":" + m.Mission.Target;
-                starttime = m.Mission.EventTimeUTC;
-                endtime = m.Mission.Expiry;                 // NOTE expiry time of mission, not used however to gate below, we use Mission
-                MissionKey = MissionListAccumulator.Key(m.Mission);
-                TargetFaction = m.Mission.TargetFaction;
-            }
-
-            public FilterEntry(List<string> filtarray, int i)
-            {
-                Type = EntryType.Invalid;
-
-                EntryType t;
-
-                if (Enum.TryParse<FilterEntry.EntryType>(filtarray[i], out t))
-                {
-                    Name = filtarray[i + 1];
-                    TargetFaction = filtarray[i + 2];
-
-                    // keep the UTC marker in the time/date
-                    if (DateTime.TryParse(filtarray[i + 3], System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.RoundtripKind, out starttime) &&
-                        DateTime.TryParse(filtarray[i + 4], System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.RoundtripKind, out endtime))
-                    {
-                        Type = t;
-                    }
-                }
-            }
-
-            public void Reset(string n, string f, DateTime s, DateTime e)
-            {
-                Name = n; TargetFaction = f; starttime = s; endtime = e;
-            }
-        }
-
         #region Init
+
+        public UserControlCombatPanel()
+        {
+            InitializeComponent();
+        }
 
         public override void Init()
         {
             DBBaseName = "CombatPanel";
 
-            string filter = GetSetting("Campaign", "");
+            string filter = GetSetting(dbCampaign, "");
             List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);
 
             dataGridViewCombat.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
@@ -152,11 +73,28 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            buttonExtEditCampaign.Enabled = false;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            cfs = new JournalFilterSelector();
+            cfs.AddAllNone();
+            foreach (var x in jtelist)
+                cfs.AddStandardOption(JournalEntry.GetNameImageOfEvent(x));
+            foreach (var x in extradetaillist)
+                cfs.AddStandardOption(JournalEntry.GetNameImageOfEvent(x));
+            
+            cfs.SortStandardOptions();
+            cfs.SaveSettings += (newset,e) => {
+                string filters = GetSetting(dbFilter, "All");
+                if (filters != newset)
+                {
+                    PutSetting(dbFilter, newset);
+                    Display();
+                }
+            };
 
-            checkBoxCustomGridOn.Checked = GetSetting("Gridshow", false);
+            buttonExtEditCampaign.Enabled = false;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+
+            checkBoxCustomGridOn.Checked = GetSetting(dbGridshow, false);
             checkBoxCustomGridOn.Visible = IsFloatingWindow;
 
             transparentfont = ExtendedControls.Theme.Current.GetFont;
@@ -174,20 +112,14 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewCombat);
-            //DEBUG target with           uctg.OnTravelSelectionChanged += (he,hl,s) => SetTarget(he);
-        }
-
-        public UserControlCombatPanel()
-        {
-            InitializeComponent();
         }
 
         public override void InitialDisplay()
         {
-            if (discoveryform.history.Count > 0)      // on program start, this can be called with an empty history
+            if (DiscoveryForm.History.Count > 0)      // on program start, this can be called with an empty history
             {
                 FillCampaignCombo();                  // if so, ignore it.  otherwise the history could be full and we need to process
-                SelectInitial();
+                SetCampaignCombo();
             }
 
             Display();
@@ -197,8 +129,8 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewCombat);
 
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             transparentfont?.Dispose();
 
             string s = "";
@@ -208,10 +140,10 @@ namespace EDDiscovery.UserControls
                                     f.StartTimeUTC.ToStringZulu() + "," + f.EndTimeUTC.ToStringZulu() + ",";
             }
 
-            PutSetting("Campaign", s);
+            PutSetting(dbCampaign, s);
 
-            PutSetting("Gridshow", checkBoxCustomGridOn.Checked);
-            PutSetting("Selected", current?.UniqueID ?? "");
+            PutSetting(dbGridshow, checkBoxCustomGridOn.Checked);
+            PutSetting(dbSelected, current?.UniqueID ?? "");
         }
 
         public override void SetTransparency(bool on, Color curbackcol)
@@ -233,86 +165,32 @@ namespace EDDiscovery.UserControls
         }
         public override bool SupportTransparency { get { return true; } }
 
-        private void dataGridViewCombat_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 3)        
-                e.SortDataGridViewColumnNumeric();
-        }
-
-
         #endregion
 
-        private void Discoveryform_OnHistoryChange(EliteDangerousCore.HistoryList obj)      // called if history re-read, so need to recalc combo and display
+        #region Event Handlers
+
+        private void Discoveryform_OnHistoryChange()      // called if history re-read, so need to recalc combo and display
         {
             bool firsttime = comboBoxCustomCampaign.Items.Count == 0;
 
             FillCampaignCombo();
 
             if (firsttime)
-                SelectInitial();        // pick saved entry..
+                SetCampaignCombo();        // pick saved entry..
             else
                 CheckCurrent();         // someone changed history, see if we still have that entry..
 
             Display();
         }
 
-        public void Display()
+        //public override void ReceiveHistoryEntry(HistoryEntry he)
+        //{
+          //  Discoveryform_OnNewEntry(he);       // enable for pushing thru a historical event as new - only for debugging
+        //}
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            DataGridViewColumn sortcol = dataGridViewCombat.SortedColumn != null ? dataGridViewCombat.SortedColumn : dataGridViewCombat.Columns[0];
-            SortOrder sortorder = dataGridViewCombat.SortOrder != SortOrder.None ? dataGridViewCombat.SortOrder : SortOrder.Descending;
-
-            dataGridViewCombat.Rows.Clear();
-            npc_total_kills = npc_faction_kills = total_reward = faction_reward = balance = total_crimes = pvp_kills = died = 0;
-
-            if ( current != null )
-            {
-                //System.Diagnostics.Debug.WriteLine("Filter {0} {1}", current.StartTime.ToStringZulu(), current.EndTime.ToStringZulu());
-                List<HistoryEntry> hel;
-
-                if (current.Type == FilterEntry.EntryType.Lastdock)
-                    hel = HistoryList.ToLastDock(discoveryform.history.EntryOrder());
-                else if (current.Type == FilterEntry.EntryType.All)
-                    hel = discoveryform.history.LatestFirst();
-                else if (current.Type == FilterEntry.EntryType.Oneday)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
-                else if (current.Type == FilterEntry.EntryType.Sevendays)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
-                else if (current.Type == FilterEntry.EntryType.Today)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
-                else if (current.Type == FilterEntry.EntryType.Mission)
-                {
-                    hel = new List<HistoryEntry>();     // default empty
-                    if (current.MissionKey != null)
-                    {
-                        // look up the mission in the current data
-                        MissionState ms = discoveryform.history.MissionListAccumulator.GetMission(current.MissionKey);
-                        if ( ms != null )
-                            hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, ms.MissionEndTime);
-                    }
-                }
-                else
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
-
-                var rows = new List<DataGridViewRow>(hel.Count);
-                foreach (HistoryEntry he in hel)
-                {
-                    //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
-                    var row = createRow(he);
-                    if ( row != null)
-                        rows.Add(row);
-                }
-                dataGridViewCombat.Rows.AddRange(rows.ToArray());
-            }
-
-            dataGridViewCombat.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            dataGridViewCombat.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-
-            SetLabels();
-        }
-
-        private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he, EliteDangerousCore.HistoryList hel)
-        {
-            if ( current != null )
+            if (current != null)
             {
                 bool tryadd = true; // normally go for it..
 
@@ -320,7 +198,7 @@ namespace EDDiscovery.UserControls
                     tryadd = he.EventTimeUTC <= current.EndTimeUTC;
                 else if (current.Type == FilterEntry.EntryType.Mission) // mission is limited, lookup mission and check end time
                 {
-                    MissionState ms = hel.MissionListAccumulator.GetMission(current.MissionKey ?? "-");
+                    MissionState ms = DiscoveryForm.History.MissionListAccumulator.GetMission(current.MissionKey ?? "-");
                     tryadd = ms != null ? (he.EventTimeUTC <= ms.MissionEndTime) : false;
                 }
 
@@ -332,7 +210,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (he.EntryType == JournalTypeEnum.Undocked && current.Type == FilterEntry.EntryType.Lastdock )        // on undock, and we are in last docked mode, refresh
+                if (he.EntryType == JournalTypeEnum.Undocked && current.Type == FilterEntry.EntryType.Lastdock)        // on undock, and we are in last docked mode, refresh
                 {
                     Display();
                 }
@@ -341,8 +219,72 @@ namespace EDDiscovery.UserControls
             if (he.EntryType == JournalTypeEnum.MissionAccepted)        // mission accepted means another entry..
                 FillCampaignCombo();                                    // could only add entries, so no need to check it its disappeared
 
-
             SetTarget(he);
+        }
+
+        #endregion
+
+        #region Display
+
+        public void Display()
+        {
+            DataGridViewColumn sortcol = dataGridViewCombat.SortedColumn != null ? dataGridViewCombat.SortedColumn : dataGridViewCombat.Columns[0];
+            SortOrder sortorder = dataGridViewCombat.SortOrder != SortOrder.None ? dataGridViewCombat.SortOrder : SortOrder.Descending;
+
+            dataGridViewCombat.Rows.Clear();
+            npc_total_kills = npc_faction_kills = total_reward = faction_reward = balance = total_crimes = pvp_kills = died = 0;
+
+            if ( current != null )
+            {
+            
+                //System.Diagnostics.Debug.WriteLine("Filter {0} {1}", current.StartTime.ToStringZulu(), current.EndTime.ToStringZulu());
+                List<HistoryEntry> hel;
+
+                if (current.Type == FilterEntry.EntryType.Lastdock)
+                    hel = HistoryList.ToLastDock(DiscoveryForm.History.EntryOrder());
+                else if (current.Type == FilterEntry.EntryType.All)
+                    hel = DiscoveryForm.History.LatestFirst();
+                else if (current.Type == FilterEntry.EntryType.Oneday)
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
+                else if (current.Type == FilterEntry.EntryType.Sevendays)
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+                else if (current.Type == FilterEntry.EntryType.Today)
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
+                else if (current.Type == FilterEntry.EntryType.Mission)
+                {
+                    hel = new List<HistoryEntry>();     // default empty
+                    if (current.MissionKey != null)
+                    {
+                        // look up the mission in the current data
+                        MissionState ms = DiscoveryForm.History.MissionListAccumulator.GetMission(current.MissionKey);
+                        if ( ms != null )
+                            hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), current.StartTimeUTC, ms.MissionEndTime);
+                    }
+                }
+                else
+                    hel = HistoryList.FilterByDateRangeLatestFirst(DiscoveryForm.History.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
+
+                HashSet<string> eventfilter = GetSetting(dbFilter, "All").SplitNoEmptyStartFinish(';').ToHashSet();
+                bool allevents = eventfilter.Contains("All");
+
+                var rows = new List<DataGridViewRow>(hel.Count);
+                foreach (HistoryEntry he in hel)
+                {
+                    if (allevents || eventfilter.Contains(he.journalEntry.EventFilterName))
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
+                        var row = createRow(he);
+                        if (row != null)
+                            rows.Add(row);
+                    }
+                }
+                dataGridViewCombat.Rows.AddRange(rows.ToArray());
+            }
+
+            dataGridViewCombat.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewCombat.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+
+            SetLabels();
         }
 
         DataGridViewRow createRow(HistoryEntry he)
@@ -374,18 +316,24 @@ namespace EDDiscovery.UserControls
 
         static JournalTypeEnum[] jtelist = new JournalTypeEnum[]            // ones to display without any extra detail
         {
-            JournalTypeEnum.Died,
-            JournalTypeEnum.FighterDestroyed,JournalTypeEnum.FighterRebuilt,JournalTypeEnum.PVPKill,
+            JournalTypeEnum.FighterDestroyed,JournalTypeEnum.FighterRebuilt,
             JournalTypeEnum.Interdicted,JournalTypeEnum.EscapeInterdiction,
             JournalTypeEnum.HeatDamage,JournalTypeEnum.HullDamage,
             JournalTypeEnum.SRVDestroyed
         };
 
+        static JournalTypeEnum[] extradetaillist = new JournalTypeEnum[]   // ones picked out by case statements
+        {
+            JournalTypeEnum.MissionAccepted,            JournalTypeEnum.MissionCompleted,            JournalTypeEnum.MissionRedirected,
+            JournalTypeEnum.Bounty,            JournalTypeEnum.CommitCrime,            JournalTypeEnum.FactionKillBond,            JournalTypeEnum.CapShipBond,
+            JournalTypeEnum.Resurrect,            JournalTypeEnum.Died,            JournalTypeEnum.PVPKill,        }
+        ;
+
         bool CreateEntry(HistoryEntry he, out string rewardcol)
         {
             rewardcol = "";
 
-            MissionState ml = current.MissionKey != null ? discoveryform.history.MissionListAccumulator.GetMission(current.MissionKey) : null;
+            MissionState ml = current.MissionKey != null ? DiscoveryForm.History.MissionListAccumulator.GetMission(current.MissionKey) : null;
 
             if ( ml != null &&
                  ((he.EntryType == JournalTypeEnum.MissionAccepted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionAccepted).MissionId == ml.Mission.MissionId)
@@ -473,7 +421,7 @@ namespace EDDiscovery.UserControls
             labelFaction.Text = faction ? (current.TargetFaction) : "";
             labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToString()) : "";
 
-            labelCredits.Text = (discoveryform.history.GetLast != null) ? (discoveryform.history.GetLast.Credits.ToString("N0") + "cr") : "";
+            labelCredits.Text = (DiscoveryForm.History.GetLast != null) ? (DiscoveryForm.History.GetLast.Credits.ToString("N0") + "cr") : "";
             labelBalance.Text = (balance != 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";
             labelFactionReward.Text = (faction && faction_reward != balance) ? ("+" + faction_reward.ToString("N0") + "cr") : "";
             labelTotalReward.Text = (total_reward != balance) ? ("+" + total_reward.ToString("N0") + "cr") : "";
@@ -504,6 +452,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
+
         #region UI
 
         public void FillCampaignCombo()
@@ -519,7 +469,7 @@ namespace EDDiscovery.UserControls
 
             displayedfilterentries.AddRange(savedfilterentries);
 
-            var missions = discoveryform.history.MissionListAccumulator.GetAllMissions();
+            var missions = DiscoveryForm.History.MissionListAccumulator.GetAllMissions();
             var combatmissions = MissionListAccumulator.GetAllCombatMissionsLatestFirst(missions);
 
             if (combatmissions != null )
@@ -543,6 +493,24 @@ namespace EDDiscovery.UserControls
 
             disablecombobox = false;
         }
+
+        private void SetCampaignCombo()
+        {
+            string sel = GetSetting(dbSelected, "INITIAL DEFAULT !!!");
+
+            int i = displayedfilterentries.FindIndex(x => x.UniqueID.Equals(sel));      // note we select on name, which is translated above, so changing languages will reset it
+
+            if (i < 0)        // no selection
+                i = 1;          // select last doc - see FillComboBox above for reason its one
+
+            current = displayedfilterentries[i];
+            disablecombobox = true;
+            comboBoxCustomCampaign.SelectedIndex = i;
+            disablecombobox = false;
+
+            buttonExtEditCampaign.Enabled = current != null && current.Type == FilterEntry.EntryType.Time;
+        }
+
 
         bool disablecombobox = false;
         private void comboBoxCustomCampaign_SelectedIndexChanged(object sender, EventArgs e)
@@ -572,24 +540,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void SelectInitial()
-        {
-            string sel = GetSetting("Selected", "Since Last Dock");
-
-            if (!sel.IsEmpty())
-            {
-                int i = displayedfilterentries.FindIndex(x => x.UniqueID.Equals(sel));
-                if (i >= 0)
-                {
-                    current = displayedfilterentries[i];
-                    disablecombobox = true;
-                    comboBoxCustomCampaign.SelectedIndex = i;
-                    disablecombobox = false;
-
-                    buttonExtEditCampaign.Enabled = current != null && current.Type == FilterEntry.EntryType.Time;
-                }
-            }
-        }
 
         private void CheckCurrent()
         {
@@ -689,6 +639,11 @@ namespace EDDiscovery.UserControls
 
             return res;
         }
+        private void buttonFilter_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            cfs.Open(GetSetting(dbFilter, "All"), b, this.FindForm());
+        }
 
         #endregion
 
@@ -720,6 +675,112 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+
+        #endregion
+
+        #region Sort
+
+        private void dataGridViewCombat_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 3)
+                e.SortDataGridViewColumnNumeric();
+        }
+
+        #endregion
+
+
+        #region FilterEntry
+
+        [System.Diagnostics.DebuggerDisplay("{Name} {Type} {MissionKey} {TargetFaction} {StartTimeUTC} {EndTimeUTC}")]
+        class FilterEntry
+        {
+            public enum EntryType { Invalid, NewEntry, Time, Mission, Lastdock, Today, Sevendays, Oneday, All }
+
+            public EntryType Type { get; private set; }
+            public string Name { get; private set; }
+
+            public string MissionKey { get; private set; }  // null if not set.  Mission only
+            public string TargetFaction { get; private set; }  // null if not set
+
+            public DateTime StartTimeUTC { get { return starttime; } }
+            public DateTime EndTimeUTC { get { return endtime; } }     // for missions, its the expiry time, not the MissionEndTime
+
+            public string NameDate
+            {
+                get
+                {
+                    string date = "";
+                    if (Type == FilterEntry.EntryType.Time || Type == FilterEntry.EntryType.Mission)
+                    {
+                        date = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttime).ToString("d");
+                        string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(endtime).ToString("d");
+                        if (date.Equals(dte))
+                            date = "(" + date + ")";
+                        else
+                            date = "(" + date + "-" + dte + ")";
+                    }
+
+                    return Name + date;
+                }
+            }
+
+            public string UniqueID      // used to identify it for retrieval.
+            {
+                get
+                {
+                    return Name + (MissionKey ?? "");
+                }
+            }
+
+            private DateTime starttime;      // UTC
+            private DateTime endtime;        // UTC only for non missions
+
+            public FilterEntry(string n, EntryType t)
+            {
+                Name = n;
+                TargetFaction = "";
+                Type = t;
+                starttime = endtime = DateTime.UtcNow;
+            }
+
+            public FilterEntry(MissionState m)
+            {
+                Type = EntryType.Mission;
+                Name = m.Mission.Name + ":" + m.Mission.Faction;
+                if (m.Mission.Target.Length > 0)
+                    Name += ":" + m.Mission.Target;
+                starttime = m.Mission.EventTimeUTC;
+                endtime = m.Mission.Expiry;                 // NOTE expiry time of mission, not used however to gate below, we use Mission
+                MissionKey = MissionListAccumulator.Key(m.Mission);
+                TargetFaction = m.Mission.TargetFaction;
+            }
+
+            public FilterEntry(List<string> filtarray, int i)
+            {
+                Type = EntryType.Invalid;
+
+                EntryType t;
+
+                if (Enum.TryParse<FilterEntry.EntryType>(filtarray[i], out t))
+                {
+                    Name = filtarray[i + 1];
+                    TargetFaction = filtarray[i + 2];
+
+                    // keep the UTC marker in the time/date
+                    if (DateTime.TryParse(filtarray[i + 3], System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.RoundtripKind, out starttime) &&
+                        DateTime.TryParse(filtarray[i + 4], System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.RoundtripKind, out endtime))
+                    {
+                        Type = t;
+                    }
+                }
+            }
+
+            public void Reset(string n, string f, DateTime s, DateTime e)
+            {
+                Name = n; TargetFaction = f; starttime = s; endtime = e;
+            }
+        }
+
 
         #endregion
     }

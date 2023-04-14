@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EDDiscovery.Controls;
@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "EstimatedValue";
 
-            discoveryform.OnNewEntry += NewEntry;
+            DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlEstimatedValues_BodyName, EDTx.UserControlEstimatedValues_BodyType, EDTx.UserControlEstimatedValues_EDSM, EDTx.UserControlEstimatedValues_Mapped, EDTx.UserControlEstimatedValues_WasMapped, EDTx.UserControlEstimatedValues_WasDiscovered, EDTx.UserControlEstimatedValues_EstBase, EDTx.UserControlEstimatedValues_MappedValue, EDTx.UserControlEstimatedValues_FirstMappedEff, EDTx.UserControlEstimatedValues_FirstDiscMapped, EDTx.UserControlEstimatedValues_EstValue };
             var enumlisttt = new Enum[] { EDTx.UserControlEstimatedValues_checkBoxEDSM_ToolTip, EDTx.UserControlEstimatedValues_checkBoxShowZeros_ToolTip, EDTx.UserControlEstimatedValues_extCheckBoxShowImpossible_ToolTip };
@@ -75,15 +75,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewEstimatedValues);
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
@@ -91,8 +83,7 @@ namespace EDDiscovery.UserControls
             PutSetting("PinState", extPanelRollUp.PinState);
             DGVSaveColumnLayout(dataGridViewEstimatedValues);
 
-            uctg.OnTravelSelectionChanged -= Display;
-            discoveryform.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnNewEntry -= NewEntry;
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -105,10 +96,10 @@ namespace EDDiscovery.UserControls
         }
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        public void NewEntry(HistoryEntry he)               // called when a new entry is made.. check to see if its a scan update
         {
             // if he valid, and last is null, or not he, or we have a new scan
             if (he != null && (last_he == null || he != last_he || he.journalEntry is IStarScan)) 
@@ -118,9 +109,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)            // Called at first start or hooked to change cursor
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (he != null && (last_he == null || he.System != last_he.System))
+            if (last_he == null || he.System != last_he.System)
             {
                 last_he = he;
                 DrawSystem();
@@ -140,7 +131,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
+            StarScan.SystemNode last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
 
             if (last_sn != null)
             {

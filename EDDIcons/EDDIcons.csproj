@@ -476,6 +476,8 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Resources.png" />
+    <EmbeddedResource Include="Panels\Resources.png" />
     <EmbeddedResource Include="Journal\ClearImpound.png" />
     <EmbeddedResource Include="Controls\AddJournals.png" />
     <EmbeddedResource Include="Journal\FCMaterials.png" />
@@ -1076,6 +1078,8 @@
     <EmbeddedResource Include="Controls\ModulePack.png" />
     <EmbeddedResource Include="Panels\Carrier.png" />
     <EmbeddedResource Include="Controls\NewRegion.png" />
+    <EmbeddedResource Include="Controls\FlagsRedGreen.png" />
+    <EmbeddedResource Include="Controls\Paste.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

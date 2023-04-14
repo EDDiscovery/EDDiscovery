@@ -50,8 +50,6 @@ namespace EDDiscovery.UserControls
             Display(currentHE);
         }
 
-        bool debug_followcursor = false;        // only for debugging, normally locked to last entry
-
         #region Init
 
         public UserControlMissionOverlay()
@@ -94,25 +92,18 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            if (debug_followcursor)
-                uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged; //DEBUG
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             Resize += UserControlMissionOverlay_Resize;
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange()
         {
-            Display(hl.GetLast);
+            Display(DiscoveryForm.History.GetLast);
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
-        {
-            Display(he);
-        }
-
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             Display(he);
         }
@@ -124,10 +115,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            if (debug_followcursor)
-                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         #endregion
@@ -136,7 +125,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(discoveryform.history.GetLast);
+            Display(DiscoveryForm.History.GetLast);
         }
 
         private void Display(HistoryEntry he)
@@ -152,7 +141,7 @@ namespace EDDiscovery.UserControls
 
                 DateTime hetime = currentHE.EventTimeUTC;
 
-                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(currentHE.MissionList);
+                List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionList(currentHE.MissionList);
                 List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
 
                 int vpos = 4;

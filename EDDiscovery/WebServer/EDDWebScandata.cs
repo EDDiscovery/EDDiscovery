@@ -61,7 +61,7 @@ namespace EDDiscovery.WebServer
                 JObject response = new JObject();
                 response["responsetype"] = type;
 
-                var hl = discoveryform.history;
+                var hl = discoveryform.History;
                 if (hl.Count == 0)
                 {
                     response["entry"] = -1;
@@ -75,7 +75,7 @@ namespace EDDiscovery.WebServer
 
                     HistoryEntry he = hl[entry];
 
-                    var scannode = discoveryform.history.StarScan.FindSystemSynchronous(he.System, edsm);        // get data without EDSM - don't want a web lookup
+                    var scannode = discoveryform.History.StarScan.FindSystemSynchronous(he.System, edsm);        // get data without EDSM - don't want a web lookup
                     var bodylist = scannode?.Bodies.ToList();       // may be null
 
                     response["Count"] = bodylist?.Count ?? 0;

@@ -22,33 +22,45 @@ namespace EDDiscovery.Forms
 {
     public partial class SetNoteForm : ExtendedControls.DraggableForm
     {
-        public HistoryEntry HistoryEntry { get; private set; }
         public string NoteText { get { return this.textBoxNote.Text; } }
 
-        public SetNoteForm(HistoryEntry he, EDDiscoveryForm parent)
+        public SetNoteForm(HistoryEntry he)
         {
+            he.FillInformation(out string eventDescription, out string eventDetailedInfo);
+            Init(he.GetNoteText, he.EventTimeUTC, he.System.Name, eventDescription, eventDetailedInfo);
+        }
+        public SetNoteForm()
+        {
+        }
+
+        public void Init(string notetext, DateTime utc, string systemname, string summary , string details)
+        { 
             InitializeComponent();
 
-            var enumlist = new Enum[] { EDTx.SetNoteForm, EDTx.SetNoteForm_labelTTimestamp, EDTx.SetNoteForm_buttonSave, EDTx.SetNoteForm_labelTSystem, EDTx.SetNoteForm_labelTSummary, EDTx.SetNoteForm_labelTDetails };
+            var enumlist = new Enum[] { EDTx.SetNoteForm, EDTx.SetNoteForm_labelTTimestamp, EDTx.SetNoteForm_buttonSave, 
+                                    EDTx.SetNoteForm_labelTSystem, EDTx.SetNoteForm_labelTSummary, EDTx.SetNoteForm_labelTDetails };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             label_index.Text = this.Text;
 
-            this.Owner = parent;
-            this.HistoryEntry = he;
-            this.textBoxNote.Text = he.GetNoteText;
-            this.labelTimestamp.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
-            this.labelSystem.Text = he.System.Name;
+            this.textBoxNote.Text = notetext;
+            if ( utc == DateTime.MinValue)
+            {
+                labelTimestamp.Visible = labelTTimestamp.Visible = false;
+                int offset = labelTSystem.Top - labelTTimestamp.Top;
+                panelMain.Controls.ShiftControls(labelTTimestamp, new System.Drawing.Point(0,-offset));
+                labelDetails.Height += offset;
+            }
+            else
+                this.labelTimestamp.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(utc).ToString();
 
-            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
-
-            this.labelSummary.Text = he.EventSummary;
-            this.labelDetails.Text = EventDescription;
+            this.labelSystem.Text = systemname;
+            this.labelSummary.Text = summary;
+            this.labelDetails.Text = details;
 
             var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
-
         }
 
         private void SaveNote()
@@ -92,6 +104,12 @@ namespace EDDiscovery.Forms
         private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
+            base.OnLayout(levent);
+            labelDetails.Width = panelMain.Width - 10 - labelDetails.Left;
         }
     }
 }

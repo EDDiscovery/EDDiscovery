@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2020 EDDiscovery development team
+ * Copyright © 2020-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EDDiscovery.Controls;
@@ -179,8 +177,7 @@ namespace EDDiscovery.UserControls
             startDateTimePicker.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);        // now install the change handlers
             endDateTimePicker.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
 
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             dataGridViewFactions.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewFactions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -192,33 +189,26 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            labelValue.Text = "";
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Discoveryform_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Discoveryform_OnTravelSelectionChanged;
-        }
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Discoveryform_OnTravelSelectionChanged;
             DGVLoadColumnLayout(dataGridViewFactions);
         }
 
         public override void InitialDisplay()
         {
-            Discoveryform_OnTravelSelectionChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewFactions);
 
-            uctg.OnTravelSelectionChanged -= Discoveryform_OnTravelSelectionChanged;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             PutSetting("StartDate", startDateTimePicker.Value);                 // picker value is stored..
             PutSetting("StartDateChecked", startDateTimePicker.Checked);
@@ -226,33 +216,23 @@ namespace EDDiscovery.UserControls
             PutSetting("EndDateChecked", endDateTimePicker.Checked);
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)     // may have changed date system, this causes this
+        private void Discoveryform_OnHistoryChange()     // may have changed date system, this causes this
         {
             VerifyDates();
             Display();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        // follow travel history cursor, he is never null
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiryUTC)
+            if (he.MissionList != last_he?.MissionList || he.EventTimeUTC > NextExpiryUTC)      // note this works if last_he is null....
             {
                 last_he = he;
                 Display();
-
-                // he can be null
-                var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? EDDConfig.GameEndTimeUTC());    // will always return an array
+                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
                 NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
+                //System.Diagnostics.Debug.WriteLine($"Faction List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he?.MissionList}, next expiry time {NextExpiryUTC}");
             }
-        }
-
-        private void Discoveryform_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
-        {
-            last_he = he;
-            Display();
-
-            // he can be null
-            var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? EDDConfig.GameEndTimeUTC());    // will always return an array
-            NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EDDConfig.GameEndTimeUTC();
         }
 
         #endregion
@@ -275,7 +255,7 @@ namespace EDDiscovery.UserControls
 
             // first do the mission lists and accumulate into factionslist
 
-            List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
+            List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
             if (ml != null)
             {
                 foreach (MissionState ms in ml)
@@ -357,16 +337,16 @@ namespace EDDiscovery.UserControls
             {
                 Stats stats = new Stats();      // reprocess this list completely
 
-                foreach (var he in HistoryList.FilterByDateRange(discoveryform.history.EntryOrder(), startdateutc, enddateutc))
+                foreach (var he in HistoryList.FilterByDateRange(DiscoveryForm.History.EntryOrder(), startdateutc, enddateutc))
                 {
-                    stats.Process(he.journalEntry, he.StationFaction);
+                    stats.Process(he.journalEntry, he.Status.StationFaction);
                 }
 
                 factioninfo = stats.GetLastEntries(); // pick the last generation in there.
             }
             else
             {
-                factioninfo = discoveryform.history.GetStatsAtGeneration(last_he?.Statistics ?? 0);
+                factioninfo = DiscoveryForm.History.GetStatsAtGeneration(last_he?.Statistics ?? 0);
             }
 
             // if we have some stats on factions accumulated via the history, add to the faction list
@@ -494,7 +474,7 @@ namespace EDDiscovery.UserControls
                 MissionListUserControl mluc = new MissionListUserControl();
 
                 mluc.Clear();
-                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
+                List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
 
                 DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EDDConfig.GameLaunchTimeUTC();
                 DateTime enddateutc = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EDDConfig.GameEndTimeUTC();
@@ -542,7 +522,7 @@ namespace EDDiscovery.UserControls
             {
                 DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EDDConfig.GameLaunchTimeUTC();
                 DateTime enddateutc = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EDDConfig.GameEndTimeUTC();
-                return HistoryList.FilterBefore(discoveryform.history.EntryOrder(), last_he, 
+                return HistoryList.FilterBefore(DiscoveryForm.History.EntryOrder(), last_he, 
                                     (x) => ((DateTime.Compare(x.EventTimeUTC, startdateutc) >= 0 &&
                                              DateTime.Compare(x.EventTimeUTC, enddateutc) <= 0) &&
                                              where(x)));
@@ -576,7 +556,7 @@ namespace EDDiscovery.UserControls
 
                 long profit = 0;
 
-                foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name))
+                foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.Status.StationFaction == fs.Name))
                 {
                     var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
                     foreach (var i in items)
@@ -726,7 +706,7 @@ namespace EDDiscovery.UserControls
                     string systemName = null;
                     if (last_he != null)
                     {
-                        foreach (var he in HistoryList.FilterBefore(discoveryform.history.EntryOrder(), last_he, 
+                        foreach (var he in HistoryList.FilterBefore(DiscoveryForm.History.EntryOrder(), last_he, 
                                     (x) => x.System.SystemAddress == si.SystemAddress))
                         {
                             systemName = he.System.Name;
@@ -739,9 +719,9 @@ namespace EDDiscovery.UserControls
                 // find all the history entries with faction, taking into account start/end date, and last_he position
 
                 var list = FilterHistory((x) =>
-                        (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name) ||  // he's with changes in stats due to MatCommod trading
+                        (x.journalEntry is IStatsJournalEntryMatCommod && x.Status.StationFaction == fs.Name) ||  // he's with changes in stats due to MatCommod trading
                         (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name) ) ||  // he's with Bountry/bond
-                        ((x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData || x.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData) && x.StationFaction == fs.Name)// he's for exploration
+                        ((x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData || x.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData) && x.Status.StationFaction == fs.Name)// he's for exploration
                         );
 
                 foreach (var he in list)

@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 namespace EDDiscovery.UserControls
 {
@@ -46,11 +46,14 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonFilterEngineer = new ExtendedControls.ExtButton();
+            this.buttonClear = new ExtendedControls.ExtButton();
+            this.extButtonPushResources = new ExtendedControls.ExtButton();
+            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxMoreInfo = new ExtendedControls.ExtCheckBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelEngineers = new ExtendedControls.ExtPanelScroll();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelEngineers.SuspendLayout();
             this.SuspendLayout();
@@ -59,6 +62,9 @@ namespace EDDiscovery.UserControls
             // 
             this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.buttonFilterEngineer);
+            this.panelTop.Controls.Add(this.buttonClear);
+            this.panelTop.Controls.Add(this.extButtonPushResources);
+            this.panelTop.Controls.Add(this.chkNotHistoric);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Controls.Add(this.extCheckBoxMoreInfo);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
@@ -78,6 +84,56 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.buttonFilterEngineer, "Select which engineers are shown");
             this.buttonFilterEngineer.UseVisualStyleBackColor = true;
             this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
+            // 
+            // buttonClear
+            // 
+            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClear.Image = global::EDDiscovery.Icons.Controls.Cross;
+            this.buttonClear.Location = new System.Drawing.Point(44, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(28, 28);
+            this.buttonClear.TabIndex = 34;
+            this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
+            // extButtonPushResources
+            // 
+            this.extButtonPushResources.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonPushResources.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonPushResources.Image = global::EDDiscovery.Icons.Controls.Resources;
+            this.extButtonPushResources.Location = new System.Drawing.Point(88, 1);
+            this.extButtonPushResources.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonPushResources.Name = "extButtonPushResources";
+            this.extButtonPushResources.Size = new System.Drawing.Size(28, 28);
+            this.extButtonPushResources.TabIndex = 33;
+            this.extButtonPushResources.UseVisualStyleBackColor = true;
+            this.extButtonPushResources.Click += new System.EventHandler(this.extButtonPushResources_Click);
+            // 
+            // chkNotHistoric
+            // 
+            this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
+            this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
+            this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
+            this.chkNotHistoric.ImageIndeterminate = null;
+            this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
+            this.chkNotHistoric.Location = new System.Drawing.Point(124, 1);
+            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.chkNotHistoric.Name = "chkNotHistoric";
+            this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
+            this.chkNotHistoric.TabIndex = 32;
+            this.chkNotHistoric.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.chkNotHistoric, "When red, use the materials at the cursor to estimate, when green always use the " +
+        "latest materials.");
+            this.chkNotHistoric.UseVisualStyleBackColor = true;
             // 
             // extCheckBoxWordWrap
             // 
@@ -99,7 +155,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(48, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(168, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
@@ -129,7 +185,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxMoreInfo.ImageIndeterminate = null;
             this.extCheckBoxMoreInfo.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxMoreInfo.ImageUnchecked = global::EDDiscovery.Icons.Controls.RoundExpand;
-            this.extCheckBoxMoreInfo.Location = new System.Drawing.Point(88, 1);
+            this.extCheckBoxMoreInfo.Location = new System.Drawing.Point(208, 1);
             this.extCheckBoxMoreInfo.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extCheckBoxMoreInfo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxMoreInfo.Name = "extCheckBoxMoreInfo";
@@ -138,6 +194,10 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxMoreInfo.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.extCheckBoxMoreInfo, "Increase size of engineers grid and show more engineer details");
             this.extCheckBoxMoreInfo.UseVisualStyleBackColor = false;
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // panelEngineers
             // 
@@ -153,6 +213,7 @@ namespace EDDiscovery.UserControls
             // 
             // extScrollBar1
             // 
+            this.extScrollBar1.AlwaysHideScrollBar = false;
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBar1.ArrowColorScaling = 0.5F;
@@ -180,10 +241,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.Value = -478;
             this.extScrollBar1.ValueLimited = -478;
             // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
-            // 
             // UserControlEngineers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -208,5 +265,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar extScrollBar1;
         private ExtendedControls.ExtCheckBox extCheckBoxMoreInfo;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ExtCheckBox chkNotHistoric;
+        private ExtendedControls.ExtButton extButtonPushResources;
+        private ExtendedControls.ExtButton buttonClear;
     }
 }

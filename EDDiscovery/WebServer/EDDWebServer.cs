@@ -192,7 +192,7 @@ namespace EDDiscovery.WebServer
             return true;
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             httpws.SendWebSockets(journalsender.Refresh(-1, 50), false); // refresh history
             httpws.SendWebSockets(statussender.Refresh(-1), false); // and status
@@ -210,7 +210,7 @@ namespace EDDiscovery.WebServer
             }
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             httpws.SendWebSockets(journalsender.Push(), false); // refresh history
             httpws.SendWebSockets(statussender.Push(), false); // refresh status

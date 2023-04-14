@@ -68,7 +68,7 @@ namespace EDDiscovery.Actions
                         string wildcard = sp.NextQuotedWord() ?? "*";
 
                         int count = 1;
-                        foreach( var g in discoveryform.galacticMapping.GalacticMapObjects)
+                        foreach( var g in discoveryform.GalacticMapping.GalacticMapObjects)
                         {
                             if (g.Name.WildCardMatch(wildcard, true))
                             {
@@ -78,7 +78,7 @@ namespace EDDiscovery.Actions
                         }
 
                         ap[prefix + "MatchCount"] = (count - 1).ToStringInvariant();
-                        ap[prefix + "TotalCount"] = discoveryform.galacticMapping.GalacticMapObjects.Count.ToStringInvariant();
+                        ap[prefix + "TotalCount"] = discoveryform.GalacticMapping.GalacticMapObjects.Count.ToStringInvariant();
 
                     }
                     else
@@ -89,7 +89,7 @@ namespace EDDiscovery.Actions
                         {
                             if (cmdname.Equals("EXISTS", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, false);
+                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.GalacticMapping.Find(name, false);
                                 ap[prefix + "Exists"] = (gmo != null).ToStringIntValue();
                                 if ( gmo != null )
                                     DumpGMO(ap, prefix, gmo);

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2022 - 2022 EDDiscovery development team
+ * Copyright © 2022 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
@@ -44,6 +43,8 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             isHistoric = GetSetting(dbHistoricMatsSave, false);
+            chkNotHistoric.Checked = !isHistoric;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkNotHistoric_CheckedChanged);
 
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;     // install after setup
@@ -69,59 +70,38 @@ namespace EDDiscovery.UserControls
             var enumlisttt = new Enum[] { EDTx.UserControlEngineers_buttonFilterEngineer_ToolTip, EDTx.UserControlEngineers_extCheckBoxWordWrap_ToolTip, EDTx.UserControlEngineers_extCheckBoxMoreInfo_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += UCTGChanged;
-        }
-
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += UCTGChanged;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange += RefreshData;
         }
 
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= UCTGChanged;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= RefreshData;
 
             PutSetting(dbHistoricMatsSave, isHistoric);
-        }
-
-        internal void SetHistoric(bool newVal)
-        {
-            isHistoric = newVal;
-            if (isHistoric)
-            {
-                last_he = uctg.GetCurrentHistoryEntry;
-            }
-            else
-            {
-                last_he = discoveryform.history.GetLast;
-            }
-            UpdateDisplay();
         }
 
         public override void InitialDisplay()
         {
             SetupDisplay();
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            UpdateDisplay();
+            RefreshData();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void RefreshData()
         {
-            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
-            UpdateDisplay();
+            if (isHistoric)
+            {
+                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());
+            }
+            else
+            {
+                last_he = DiscoveryForm.History.GetLast;
+                UpdateDisplay();
+            }
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (!isHistoric)        // only track new items if not historic
             {
@@ -133,9 +113,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (isHistoric || last_he == null)
+            if (isHistoric )
             {
                 last_he = he;
                 UpdateDisplay();
@@ -177,12 +157,8 @@ namespace EDDiscovery.UserControls
 
                     ep.Init(name, ei, GetSetting(dbWSave + "_" + name, ""), colsetting);
                     ep.UpdateWordWrap(extCheckBoxWordWrap.Checked);
-
-                    ep.Redisplay += () =>
-                    {
-                        PutSetting(dbWSave + "_" + name, ep.WantedPerRecipe.ToString(","));
-                        UpdateDisplay();
-                    };
+                    ep.SaveSettings += () => { PutSetting(dbWSave + "_" + name, ep.WantedPerRecipe.ToString(",")); };
+                    ep.AskForRedisplay += () => { UpdateDisplay(); };
 
                     ep.ColumnSetupChanged += (panel) =>
                     {
@@ -224,7 +200,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine($"Update {BaseUtils.AppTicks.TickCountLap("s2", true)}");
 
-            var lastengprog = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he); // may be null
+            var lastengprog = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he); // may be null
             var system = last_he?.System;       // may be null
 
             for (int i = 0; i < engineerpanels.Count; i++)
@@ -243,16 +219,16 @@ namespace EDDiscovery.UserControls
                     status = state.ToString();
                 }
 
-                var mcllist = last_he != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
+                var mcllist = last_he != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
 
                 List<HistoryEntry> crafts = null;
 
                 if ( last_he != null)
                 {
                     if (ep.Name.Contains("Guardian") || ep.Name.Equals("Human"))
-                        crafts = discoveryform.history.Engineering.Get(last_he.Engineering, EngineeringList.TechBrokerID);
+                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, EngineeringList.TechBrokerID);
                     else
-                        crafts = discoveryform.history.Engineering.Get(last_he.Engineering, ep.Name);
+                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, ep.Name);
                 }
                 
                 ep.UpdateStatus(status, system, mcllist,crafts);
@@ -307,8 +283,46 @@ namespace EDDiscovery.UserControls
             panelEngineers.ResumeLayout();
         }
 
-
-
-            #endregion
+        private void chkNotHistoric_CheckedChanged(object sender, EventArgs e)
+        {
+            isHistoric = !chkNotHistoric.Checked;
+            RefreshData();
         }
+
+        private void extButtonPushResources_Click(object sender, EventArgs e)
+        {
+            Dictionary<MaterialCommodityMicroResourceType, int> resourcelist = new Dictionary<MaterialCommodityMicroResourceType, int>();
+            foreach (var p in engineerpanels)
+            {
+                foreach( var kvp in p.NeededResources )
+                {
+                    if (resourcelist.TryGetValue(kvp.Key, out int value))
+                    {
+                        resourcelist[kvp.Key] = value + kvp.Value;
+                    }
+                    else
+                        resourcelist[kvp.Key] = kvp.Value;
+                }
+            }
+
+            if (!RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist }))
+            {
+                ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
+            }
+
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            foreach (var x in engineerpanels)
+            {
+                x.Clear();
+            }
+
+            UpdateDisplay();
+        }
+
+        #endregion
+
+    }
 }

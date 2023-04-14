@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -12,12 +12,10 @@
  * governing permissions and limitations under the License.
  */
 
-using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -39,7 +37,7 @@ namespace EDDiscovery.UserControls
 
         public bool IsTransparencySupported { get { return !TransparencyColorKey.IsFullyTransparent(); } }
 
-        public PanelInformation.PanelIDs PanelID { get { return UserControl?.panelid ?? PanelInformation.PanelIDs.GroupMarker; } }  // May not be open, if so, return an impossible
+        public PanelInformation.PanelIDs PanelID { get { return UserControl?.PanelID ?? PanelInformation.PanelIDs.GroupMarker; } }  // May not be open, if so, return an impossible
 
         public UserControlForm()
         {
@@ -53,7 +51,7 @@ namespace EDDiscovery.UserControls
             checkmousepositiontimer.Tick += CheckMouse;
 
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
-            extButtonDrawnHelp.Text = "";
+                extButtonDrawnHelp.Text = "";
         }
 
         #region Public Interface
@@ -102,6 +100,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("UCF Init-");
         }
 
+        // call to update the control text in the title area
         public void SetControlText(string text)
         {
             labelControlText.Location = new Point(label_title.Location.X + label_title.Width + 16, labelControlText.Location.Y);
@@ -109,13 +108,21 @@ namespace EDDiscovery.UserControls
             this.Text = WinTitle + " " + text;
         }
 
+        // call to change the transparency mode
+
         public void SetTransparency(TransparencyMode t)
         {
             if (IsTransparencySupported)
             {
                 TransparentMode = t;
                 UpdateTransparency();
-                UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
+
+                if (lasttransparentmodereported != IsTransparentModeOn)     // if we changed major mode, inform the panel so it can redraw 
+                {
+                    lasttransparentmodereported = IsTransparentModeOn;
+                    UserControl.TransparencyModeChanged(IsTransparentModeOn);
+                }
             }
         }
 
@@ -123,7 +130,7 @@ namespace EDDiscovery.UserControls
         {
             DisplayTitle = t;
             UpdateControls();
-            UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
             UserControl.onControlTextVisibilityChanged(DisplayTitle);            
         }
 
@@ -204,7 +211,7 @@ namespace EDDiscovery.UserControls
 
             label_title.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
 
-            UserControl.SetTransparency(showtransparent, togo);     // tell the UCCB about the change
+            UserControl.SetTransparency(showtransparent, togo);     // tell the UCCB about the current state
 
             PerformLayout();        // need to position the UCCB
 
@@ -212,7 +219,8 @@ namespace EDDiscovery.UserControls
             {
                 // if in transparent click thru, we set transparent style.. else clear it.
                 BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
-                                    WS_EX.TRANSPARENT, showtransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
+                                    BaseUtils.Win32Constants.WS_EX.TRANSPARENT, 
+                                    showtransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? BaseUtils.Win32Constants.WS_EX.TRANSPARENT : 0);
             }
 
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
@@ -272,31 +280,30 @@ namespace EDDiscovery.UserControls
 
         private void UserControlForm_Shown(object sender, EventArgs e)          // as launched, it may not be in front (as its launched from a control).. bring to front
         {
-            //System.Diagnostics.Debug.WriteLine("UCF Shown+");
+            System.Diagnostics.Debug.WriteLine($"UCF {Name} Shown");
+
             this.BringToFront();
 
             if (IsTransparencySupported)
                 TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
             bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "TopMost", deftopmost);
+
             //kludge 
             SetTopMost(wantedTopMost);
             SetTopMost(!wantedTopMost);
             SetTopMost(wantedTopMost); // this also establishes transparency
 
-            var top = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Top", -999);
-            //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
+            lasttransparentmodereported = IsTransparentModeOn;      // record what we started with
 
             if (UserControl != null)
             {
-                System.Diagnostics.Debug.WriteLine("UCCB Call set curosr, load layout, initial display");
-                UserControl.SetCursor(UserControl.discoveryform.PrimaryCursor);
+                UserControl.TransparencyModeChanged(IsTransparentModeOn);       // new, call to tell the panel the transparency mode is set
                 UserControl.LoadLayout();
                 UserControl.InitialDisplay();
             }
 
             IsLoaded = true;
-            //System.Diagnostics.Debug.WriteLine("UCF Shown-");
         }
 
         public bool AllowClose()
@@ -489,6 +496,7 @@ namespace EDDiscovery.UserControls
 
         private Timer checkmousepositiontimer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost;
+        private bool lasttransparentmodereported;
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
     }
@@ -527,7 +535,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (UserControlForm u in forms)     
             {
-                if (u.UserControl != null && u.UserControl.panelid == p)
+                if (u.UserControl != null && u.UserControl.PanelID == p)
                     return u;
             }
 
@@ -583,10 +591,21 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public bool PerformPanelOperation(UserControlCommonBase sender, object action)
+        {
+            foreach (UserControlForm ucf in forms)
+            {
+                if (ucf.UserControl.PerformPanelOperation(sender, action))
+                    return true;
+            }
+
+            return false;
+        }
+
         public void CloseAll()
         {
             List<UserControlForm> list = new List<UserControlForm>(forms);       // so, closing it ends up calling back to FormCloseCallBack
-                                                                                    // and it changes tabforms. So we need a copy to safely do this
+                                                                                 // and it changes tabforms. So we need a copy to safely do this
             foreach (UserControlForm ucf in list)
             {
                 ucf.Close();        // don't change tabforms.. the FormCloseCallBack does this

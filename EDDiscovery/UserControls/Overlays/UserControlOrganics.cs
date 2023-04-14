@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -63,9 +63,9 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
-            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
             var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip,
                                         EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip ,
@@ -94,30 +94,22 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             DGVLoadColumnLayout(dataGridView);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
 
         public override void InitialDisplay()
         {
-            lasthe = uctg.GetCurrentHistoryEntry;
-            DrawAll();
+            DrawGrid();
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState);
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+            DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             DGVSaveColumnLayout(dataGridView);
         }
 
@@ -128,31 +120,34 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
             ControlVisibility();
         }
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        public override void TransparencyModeChanged(bool on)
+        {
+            DrawAll();
+        }
+
+        private void Discoveryform_OnHistoryChange()
         {
             VerifyDates();      // date range may have changed
             DrawGrid();             // don't do the Body info, its tied to the UCTG
             ControlVisibility();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             // received a new navroute, and we have navroute selected, reload
             if (he.EntryType == JournalTypeEnum.ScanOrganic)
             {
-                lasthe = hl.GetLast;      // may be null
+                lasthe = DiscoveryForm.History.GetLast;      // may be null
                 DrawAll();
             }
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
-        {
-            if (he != null)
-            {
-                lasthe = he;
-                DrawBodyInfo();
-                ControlVisibility();
-            }
+        public override void ReceiveHistoryEntry(HistoryEntry he)
+        { 
+            // TBD actions on every HE when on planet..
+            lasthe = he;
+            DrawBodyInfo();
+            ControlVisibility();
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)
@@ -205,7 +200,7 @@ namespace EDDiscovery.UserControls
 
             if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
             {
-                StarScan.SystemNode data = discoveryform.history.StarScan.FindSystemSynchronous(lasthe.System, false);
+                StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System, false);
 
                 if (data != null && data.NodesByID.TryGetValue(lasthe.Status.BodyID.Value, out StarScan.ScanNode node))
                 {
@@ -253,7 +248,7 @@ namespace EDDiscovery.UserControls
 
         void DrawGrid()
         {
-            if (discoveryform.history != null)        //??its never null?
+            if (DiscoveryForm.History != null)        //??its never null?
             {
                 // change display time to utc
                 DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);
@@ -266,7 +261,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.Rows.Clear();
                 long totalvalue = 0;
 
-                foreach (var syskvp in discoveryform.history.StarScan.ScanDataByName)
+                foreach (var syskvp in DiscoveryForm.History.StarScan.ScanDataByName)
                 {
                     foreach (var starkvp in syskvp.Value.StarNodes)
                     {
@@ -396,9 +391,6 @@ namespace EDDiscovery.UserControls
             CommonCtrl(displayfilter, extButtonAlignment);
         }
 
-
-        #endregion
-
         private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
         {
             displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
@@ -481,6 +473,7 @@ namespace EDDiscovery.UserControls
             updatedprogramatically = false;
         }
 
+        #endregion
 
 
     }

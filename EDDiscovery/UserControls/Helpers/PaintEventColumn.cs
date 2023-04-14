@@ -33,13 +33,16 @@ namespace EDDiscovery.UserControls
             if (he == null)                                 // otherwise, ignore it and return.
                 return;
 
-            var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-
-            using (var centerFormat = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+            if (grid.RowHeadersVisible)
             {
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-                    e.Graphics.DrawString(rown.ToString(), grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+                var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
+
+                using (var centerFormat = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                {
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+                        e.Graphics.DrawString(rown.ToString(), grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+                }
             }
 
             if (iconcolumn >= 0 && grid.Columns[iconcolumn].Visible)

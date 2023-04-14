@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,7 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
+
  */
 
 using EliteDangerousCore;
@@ -28,10 +27,10 @@ namespace EDDiscovery.UserControls
     {
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "View", "FSD Jumps only", "With Notes only", "With Notes, no repeat",        //0-3
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "View", "FSD Jumps only", "With Notes only", "With Notes, no repeat",        //0-3
                                             "Scans All Bodies", "Scans Planets", "Scans Stars", "Scans Rings" },       //4-7
-                suggestedfilenames: new string[] { "TravelGrid", "FSDJumps", "TravelGrid", "TravelGrid", "Scans", "ScanPlanet", "ScanStars", "ScanRings" }
+                            suggestedfilenamesp:new string[] { "TravelGrid", "FSDJumps", "TravelGrid", "TravelGrid", "Scans", "ScanPlanet", "ScanStars", "ScanRings" }
                 );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
@@ -41,8 +40,7 @@ namespace EDDiscovery.UserControls
                     var saaentries = JournalEntry.GetByEventType(JournalTypeEnum.SAASignalsFound, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC).ConvertAll(x => (JournalSAASignalsFound)x);
                     var scanentries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC).ConvertAll(x => (JournalScan)x);
 
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                     string[] headers1 = { "", "", "", "", "","",
                             "Icy Ring" , "","","","","","","","","",
@@ -181,7 +179,7 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    if (!CSVHelpers.OutputScanCSV(scans, frm.Path, frm.Comma, frm.IncludeHeader, ShowStars, ShowPlanets, ShowPlanets, ShowBeltClusters))
+                    if (!CSVHelpers.OutputScanCSV(scans, frm.Path, frm.Delimiter, frm.IncludeHeader, ShowStars, ShowPlanets, ShowPlanets, ShowBeltClusters))
                         throw new Exception();      // throw to get to scan excel error
 
                     if (frm.AutoOpen)
@@ -191,8 +189,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                     List<SystemNoteClass> sysnotecache = new List<SystemNoteClass>();
                     string[] colh = null;
@@ -264,8 +261,8 @@ namespace EDDiscovery.UserControls
                                 dataGridViewTravel.Rows[r].Cells[4].Value,
                                 he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                                 he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                                he.isTravelling ? he.Travelledjumps.ToString() : "",
-                                he.isTravelling ? he.TravelledMissingjump.ToString() : "",
+                                he.isTravelling ? he.TravelledJumps.ToString() : "",
+                                he.isTravelling ? he.TravelledMissingJumps.ToString() : "",
                                 he.System.X,
                                 he.System.Y,
                                 he.System.Z,

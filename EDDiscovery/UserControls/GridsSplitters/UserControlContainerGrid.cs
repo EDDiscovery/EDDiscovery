@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Collections.Generic;
@@ -24,6 +22,20 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlContainerGrid : UserControlCommonBase        // circular, huh! neat!
     {
+        public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(PanelInformation.PanelIDs.TravelGrid); } }
+
+        private T GetUserControl<T>(PanelInformation.PanelIDs p) where T : class
+        {
+            var uccrfound = uccrlist.Find(x => x.UCCB.PanelID == p);
+            return uccrfound != null ? uccrfound.UCCB as T : null;
+        }
+        public UserControlCommonBase GetUserControl(PanelInformation.PanelIDs p)
+        {
+            var uccrfound = uccrlist.Find(x => x.UCCB.PanelID == p);
+            return uccrfound != null ? uccrfound.UCCB: null;
+        }
+
+
         public UserControlContainerGrid()
         {
             InitializeComponent();
@@ -73,16 +85,13 @@ namespace EDDiscovery.UserControls
             foreach (UserControlContainerResizable r in uccrlist)
             {
                 r.BorderColor = on ? Color.Transparent : ExtendedControls.Theme.Current.GridBorderLines;
-                UserControlCommonBase uc = (UserControlCommonBase)r.control;
+                UserControlCommonBase uc = r.UCCB;
                 uc.SetTransparency(on, curcol);
             }
         }
 
         public override void LoadLayout()   // init and themeing done, now we can complete the UCCB process, set positioning etc.
         {
-            ucursor_history = uctg;                 // record base one
-            ucursor_inuse = FindTHC() ?? ucursor_history; // if we have a THC, use it, else use the history one
-
             var windows = GetSavedSettings();
 
             if (windows != null)
@@ -91,7 +100,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (UserControlContainerResizable u in uccrlist)
                 {
-                    UserControlCommonBase uc = (UserControlCommonBase)u.control;
+                    UserControlCommonBase uc = u.UCCB;
                     LoadLayoutPanel(u, uc, windows[i].Item2, windows[i].Item3);
                     i++;
                 }
@@ -116,7 +125,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (UserControlContainerResizable r in uccrlist)
             {
-                UserControlCommonBase uc = (UserControlCommonBase)r.control;
+                UserControlCommonBase uc = r.UCCB;
                 uc.InitialDisplay();
             }
         }
@@ -125,7 +134,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (UserControlContainerResizable r in uccrlist)   // save in uccr list
             {
-                UserControlCommonBase uc = (UserControlCommonBase)r.control;
+                UserControlCommonBase uc = r.UCCB;
                 if (uc.AllowClose() == false)
                     return false;
             }
@@ -138,9 +147,9 @@ namespace EDDiscovery.UserControls
             string s = "", p = "";
             foreach (UserControlContainerResizable r in uccrlist)   // save in uccr list
             {
-                UserControlCommonBase uc = (UserControlCommonBase)r.control;
+                UserControlCommonBase uc = r.UCCB;
 
-                s = s.AppendPrePad(((int)uc.panelid).ToStringInvariant(), ",");
+                s = s.AppendPrePad(((int)uc.PanelID).ToStringInvariant(), ",");
                 p = p.AppendPrePad(r.Location.X + "," + r.Location.Y + "," + r.Size.Width + "," + r.Size.Height, ",");
                 
                 //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name + " at " + r.Location + " sz " + r.Size);
@@ -168,29 +177,13 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one
-        {
-            bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
-            //System.Diagnostics.Debug.WriteLine("Grid CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
-            ucursor_history = thc;         // underlying one has changed. 
-
-            if (changedinuse)   // inform the boys
-            {
-                ucursor_inuse = ucursor_history;
-                //System.Diagnostics.Debug.WriteLine(".. changed in use, inform children");
-
-                foreach (UserControlContainerResizable u in uccrlist)
-                    ((UserControlCommonBase)u.control).ChangeCursorType(ucursor_inuse);
-            }
-        }
-
         public override UserControlCommonBase Find(PanelInformation.PanelIDs p)              // find UCCB of this type in
         {
             foreach( var x in uccrlist)
             {
-                if ( x.control != null )
+                if ( x.UCCB != null )
                 {
-                    var f = ((UserControlCommonBase)x.control).Find(p);     // need to use find on it, since it may be embedded the same
+                    var f = x.UCCB.Find(p);     // need to use find on it, since it may be embedded the same
                     if (f != null)
                         return f;
                 }
@@ -205,17 +198,18 @@ namespace EDDiscovery.UserControls
         private UserControlContainerResizable CreateInitPanel(UserControlCommonBase uccb)
         {
             uccb.AutoScaleMode = AutoScaleMode.Inherit;     // as per major tab control, we set mode to inherit to prevent multi scaling
+            uccb.RequestPanelOperation += GridRequestAction;
 
             UserControlContainerResizable uccr = new UserControlContainerResizable();
 
-            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(uccb.panelid);
+            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(uccb.PanelID);
             uccr.Init(uccb, pi.WindowTitle);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
             uccr.BorderColor = ExtendedControls.Theme.Current.GridBorderLines;
             uccr.SelectedBorderColor = ExtendedControls.Theme.Current.TextBlockHighlightColor;
 
-            int numopenedinsidealready = uccrlist.Count(x => x.control.GetType().Equals(uccb.GetType()));    // how many others are there BEFORE add
+            int numopenedinsidealready = uccrlist.Count(x => x.UCCB.GetType().Equals(uccb.GetType()));    // how many others are there BEFORE add
 
             uccrlist.Add(uccr);
 
@@ -225,7 +219,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " " + numopenedinsidealready);
 
-            uccb.Init(discoveryform, dnum);
+            uccb.Init(DiscoveryForm, dnum);
 
             return uccr;
         }
@@ -233,7 +227,6 @@ namespace EDDiscovery.UserControls
         private void LoadLayoutPanel(UserControlContainerResizable uccr, UserControlCommonBase uccb, Point pos, Size size)
         {
             //System.Diagnostics.Trace.WriteLine("GD:Cursor/Load/Init " + uccb.GetType().Name + " to " + pos + " " + size);
-            uccb.SetCursor(ucursor_inuse);
             uccb.LoadLayout();
             uccb.InitialDisplay();
 
@@ -243,7 +236,7 @@ namespace EDDiscovery.UserControls
 
         public bool ClosePanel(UserControlContainerResizable uccr)
         {
-            UserControlCommonBase uc = (UserControlCommonBase)uccr.control;
+            UserControlCommonBase uc = uccr.UCCB;
 
             if (uc.AllowClose())
             {
@@ -254,11 +247,61 @@ namespace EDDiscovery.UserControls
                 uc.Dispose();
                 uccr.Dispose();
                 UpdateButtons();
-                AssignTHC();
                 return true;
             }
             else
                 return false;
+        }
+
+        //SYNC with splitter
+        private bool GridRequestAction(UserControlCommonBase sender, object actionobj)
+        {
+            //System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} request action {actionobj}");
+
+            bool done = false;
+            foreach (var uccr in uccrlist)
+            {
+                if (uccr.UCCB != sender)        // don't send to sender
+                {
+                    done = uccr.UCCB.PerformPanelOperation(sender, actionobj);
+                    if (done)
+                    {
+                        //System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
+                        break;
+                    }
+                }
+            }
+
+            if (!done)
+            {
+                //System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
+                return RequestPanelOperation.Invoke(sender, actionobj);     // and pass up with us as the sender
+            }
+            else
+                return done;
+        }
+
+        //SYNC with splitter
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            //System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} perform action {actionobj}");
+
+            if (IsOperationTHPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid) != null)
+            {
+                //System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH for {actionobj}");
+                return false;
+            }
+
+            foreach (var uccr in uccrlist)
+            {
+                if ( uccr.UCCB.PerformPanelOperation(sender, actionobj) )
+                {
+                    //System.Diagnostics.Debug.WriteLine($".. uccb {uccr.UCCB.PanelID} claimed this operation {actionobj}");
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
@@ -290,43 +333,6 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateButtons();
-        }
-
-        private T GetUserControl<T>(PanelInformation.PanelIDs p) where T : class
-        {
-            var uccrfound = uccrlist.Find(x => ((UserControlCommonBase)x.control).panelid == p);
-            return uccrfound != null ? uccrfound.control as T: null;
-        }
-
-        private IHistoryCursor FindTHC()
-        {
-            IHistoryCursor ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.TravelGrid);
-
-            if (ihc == null)
-                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.Journal);
-
-            if (ihc == null)
-                ihc = GetUserControl<IHistoryCursor>(PanelInformation.PanelIDs.StarList);
-
-            return ihc;
-        }
-
-        private void AssignTHC()
-        {
-            IHistoryCursor uctgfound = FindTHC();
-
-            if ( (uctgfound != null && !Object.ReferenceEquals(uctgfound,ucursor_inuse) ) ||    // if got one but its not the one currently in use
-                 (uctgfound == null && !Object.ReferenceEquals(ucursor_history,ucursor_inuse))    // or not found, but we are not on the history one
-                )
-            { 
-                ucursor_inuse = (uctgfound != null) ? uctgfound : ucursor_history;    // select
-                //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Use THC " + uctg_inuse.GetHashCode());
-
-                foreach (UserControlContainerResizable u in uccrlist)
-                    ((UserControlCommonBase)u.control).ChangeCursorType(ucursor_inuse);
-
-                ucursor_inuse.FireChangeSelection();       // let the uctg tell the children a change event, so they can refresh
-            }
         }
 
         #endregion
@@ -365,7 +371,8 @@ namespace EDDiscovery.UserControls
             popoutdropdown.FitImagesToItemHeight = true;
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
-                UserControlContainerResizable uccr = CreateInitPanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]));
+                UserControlCommonBase uccb = PanelInformation.Create(pids[popoutdropdown.SelectedIndex]);
+                UserControlContainerResizable uccr = CreateInitPanel(uccb);
 
                 // uccb init done above, contract states we now scale then theme.
                 
@@ -375,7 +382,7 @@ namespace EDDiscovery.UserControls
 
                 ExtendedControls.Theme.Current.ApplyStd(uccr);
 
-                LoadLayoutPanel(uccr, uccr.control as UserControlCommonBase,
+                LoadLayoutPanel(uccr, uccr.UCCB,
                                             new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
                                             new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
 
@@ -384,7 +391,6 @@ namespace EDDiscovery.UserControls
                 uccr.Selected = true;
                 uccr.BringToFront();
                 UpdateButtons();
-                AssignTHC();
             };
 
             ExtendedControls.Theme.Current.ApplyStd(popoutdropdown,true);
@@ -474,9 +480,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-        private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
-        private IHistoryCursor ucursor_inuse;  // one in use
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
 

@@ -172,10 +172,10 @@ namespace EDDiscovery.UserControls
 
             dividers = new ExtButton[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
-            discoveryform.OnNewUIEvent += OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += NewEntry;
+            DiscoveryForm.OnNewTarget += NewTarget;
+            DiscoveryForm.OnNewUIEvent += OnNewUIEvent;
 
             var enumlisttt = new Enum[] { EDTx.UserControlSpanel_extButtonShowControl_ToolTip, EDTx.UserControlSpanel_extButtonColumns_ToolTip, EDTx.UserControlSpanel_extButtonColumnOrder_ToolTip, EDTx.UserControlSpanel_extButtonHabZones_ToolTip, EDTx.UserControlSpanel_buttonFilter_ToolTip, EDTx.UserControlSpanel_buttonField_ToolTip, EDTx.UserControlSpanel_extButtonScanShow_ToolTip, EDTx.UserControlSpanel_extButtoScanPos_ToolTip, EDTx.UserControlSpanel_extButtonFont_ToolTip, EDTx.UserControlSpanel_extCheckBoxWordWrap_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -191,10 +191,10 @@ namespace EDDiscovery.UserControls
             dividercheck.Stop();
             scanhide.Stop();
 
-            discoveryform.OnHistoryChange -= Display;
-            discoveryform.OnNewEntry -= NewEntry;
-            discoveryform.OnNewTarget -= NewTarget;
-            discoveryform.OnNewUIEvent -= OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnNewTarget -= NewTarget;
+            DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
             scanhide.Tick -= HideScanData;
             dividercheck.Tick -= DividerCheck;
             scanhide.Dispose();
@@ -214,6 +214,10 @@ namespace EDDiscovery.UserControls
         {
             pictureBox.BackColor = this.BackColor = curcol;
             rollUpPanelTop.Visible = !on;
+        }
+
+        public override void TransparencyModeChanged(bool on)
+        {
             Display(current_historylist);
         }
 
@@ -229,7 +233,12 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(discoveryform.history);
+            Display(DiscoveryForm.History);
+        }
+
+        private void DiscoveryForm_OnHistoryChange()
+        {
+            Display(DiscoveryForm.History);
         }
 
         private async void Display(HistoryList hl)            
@@ -242,7 +251,7 @@ namespace EDDiscovery.UserControls
             {
                 List<HistoryEntry> result = current_historylist.LatestFirst();      // Standard filtering
 
-                HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+                HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -617,13 +626,13 @@ namespace EDDiscovery.UserControls
             Display(current_historylist);
         }
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
+        public void NewEntry(HistoryEntry he)               // called when a new entry is made..
         {
-            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, discoveryform.Globals);
+            HistoryEventFilter hef = new HistoryEventFilter(GetSetting(dbFilter, "All"), fieldfilter, DiscoveryForm.Globals);
 
             if (hef.IsIncluded(he))
             {
-                Display(hl);
+                Display(DiscoveryForm.History);
             }
 
             if (he.journalEntry.EventTypeID == JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
@@ -838,7 +847,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayString(0,historicmatlist: discoveryform.history.MaterialCommoditiesMicroResources.GetLast());
+                scantext = scan.DisplayString(0,historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
                 SetSurfaceScanBehaviour();  // set up timers etc.
             }
@@ -1002,7 +1011,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Summary Panel: Filter out fields".T(EDTx.UserControlSpanel_SPF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "Summary Panel: Filter out fields".T(EDTx.UserControlSpanel_SPF));
             if (res != null)
             {
                 fieldfilter = res;

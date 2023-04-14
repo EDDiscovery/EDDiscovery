@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using QuickJSON;
@@ -102,7 +102,7 @@ namespace EDDiscovery
 
         public void EDSMSend()
         {
-            var helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
+            var helist = EDSMJournalSync.GetListToSend(History.EntryOrder());               // find out what to send..
 
             if (helist.Count >= 500)
             {
@@ -176,13 +176,13 @@ namespace EDDiscovery
                 var jes = helist.Where(x => x.EventTimeUTC < dateutc).Select(x => x.journalEntry).ToList();
                 JournalEntry.SetEdsmSyncList(jes);
 
-                helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
+                helist = EDSMJournalSync.GetListToSend(History.EntryOrder());               // find out what to send..
             }
 
             // we send the list using the last gameversion/build as we may have early entries without these..
             if (helist.Count > 0)
             {
-                var gb = history.GetLastGameversionBuild();
+                var gb = History.GetLastGameversionBuild();
 
                 EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist, gb.Item1, gb.Item2);
 
@@ -327,12 +327,12 @@ namespace EDDiscovery
 
         #region Notifications
 
-        List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();
+        List<BaseUtils.Notifications.Notification> popupnotificationlist = new List<BaseUtils.Notifications.Notification>();
         void ShowNotification()        // orgnanise pop ups one at a time..
         {
             if (popupnotificationlist.Count > 0)
             {
-                Notifications.NotificationParas p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
+                BaseUtils.Notifications.NotificationParas p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
 
                 Action<object> act = new Action<object>((o) =>      // on ack, update list of ack entries
                 {

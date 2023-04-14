@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,10 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.Forms;
+
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
@@ -68,12 +66,16 @@ namespace EDDiscovery.UserControls
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
             userControlEngineering.DBBaseName = "SLEngineering";            // makes it unique to the SL
-            userControlEngineering.Init(discoveryform, displaynumber);
+            userControlEngineering.RequestPanelOperation += RequestPanelOperation;
+
+            userControlEngineering.Init(DiscoveryForm, DisplayNumber);
+
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
             userControlSynthesis.DBBaseName = "SLSynthesis";            // makes it unique to the SL
-            userControlSynthesis.Init(discoveryform, displaynumber);
+            userControlSynthesis.RequestPanelOperation += RequestPanelOperation;
+            userControlSynthesis.Init(DiscoveryForm, DisplayNumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
@@ -92,13 +94,6 @@ namespace EDDiscovery.UserControls
 
             var enumlistcms = new Enum[] { EDTx.UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem_onlyCapacityToolStripMenuItem, EDTx.UserControlShoppingList_showAvailableMaterialsInListWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem, EDTx.UserControlShoppingList_useEDSMDataInSystemAvailabilityToolStripMenuItem, EDTx.UserControlShoppingList_useHistoricMaterialCountsToolStripMenuItem, EDTx.UserControlShoppingList_toggleListPositionToolStripMenuItem };
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-        }
-
-        public override void SetCursor(IHistoryCursor cur)
-        {
-            base.SetCursor(cur);
-            userControlEngineering.SetCursor(cur);
-            userControlSynthesis.SetCursor(cur);
         }
 
         public override void Closing()
@@ -168,7 +163,7 @@ namespace EDDiscovery.UserControls
 
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
-                List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);
+                List<MaterialCommodityMicroResource> mcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
@@ -183,9 +178,9 @@ namespace EDDiscovery.UserControls
 
                 if (showListAvailability || showPlanetMats)
                 {
-                    last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
+                    last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
 
-                    if (last_he.IsLanded && last_sn != null )       // if found node, and landed
+                    if (last_he.Status.IsLandedInShipOrSRV && last_sn != null )       // if found node, and landed
                     {
                         sd = last_sn.Find(last_he.WhereAmI)?.ScanData;  // find scan data for this body
                     }
@@ -224,7 +219,7 @@ namespace EDDiscovery.UserControls
                         {
                             capExceededMats.Add(c.Item1.Details.Name);
                         }
-                        if (!last_he.IsLanded && last_sn != null)
+                        if (!last_he.Status.IsLandedInShipOrSRV && last_sn != null)
                         {
                             var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) &&
                                                                  b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Item1.Details.FDName));
@@ -268,9 +263,9 @@ namespace EDDiscovery.UserControls
                 {
                     var totals2 = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
-                    var basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"));
-                    var standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"));
-                    var premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"));
+                    var basic = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"),0, mcl, totals2);
+                    var standard = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"),0, mcl, totals2);
+                    var premium = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"),0, mcl, totals2);
                     wantedList.Append(Environment.NewLine +
                         string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".T(EDTx.UserControlShoppingList_FSD), basic.Item1, standard.Item1, premium.Item1));
                 }

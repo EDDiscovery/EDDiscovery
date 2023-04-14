@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 // turn on for play testing of all your scans
@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
             int size = GetSetting("Size", 64);
             SetSizeImage(size);
 
-            discoveryform.OnNewEntry += NewEntry;
+            DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlisttt = new Enum[] { EDTx.UserControlScan_extCheckBoxStar_ToolTip, EDTx.UserControlScan_extButtonFilter_ToolTip, EDTx.UserControlScan_extButtonDisplayFilters_ToolTip, EDTx.UserControlScan_buttonSize_ToolTip, EDTx.UserControlScan_checkBoxEDSM_ToolTip, EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -84,30 +84,15 @@ namespace EDDiscovery.UserControls
 #endif
         }
 
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-        }
-
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
-            DrawSystem(last_he);    // may be null
+            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState );
-
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            discoveryform.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnNewEntry -= NewEntry;
             closing = true;
         }
 
@@ -141,7 +126,7 @@ namespace EDDiscovery.UserControls
 
 #region Display
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        public void NewEntry(HistoryEntry he)               // called when a new entry is made.. check to see if its a scan update
         {
             if (he != null)
             {
@@ -153,20 +138,15 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void ReceiveHistoryEntry(HistoryEntry he)
         {
 #if PLAYTHRU
             t.Start();    // debug, for playing all scans thru
 #endif
-
-            if (he != null)
+            if (last_he == null || last_he.System != he.System) // if we changed system, we need to represent
             {
-                if (last_he == null || last_he.System != he.System) // if we changed system, we need to represent
-                {
-                    last_he = he;
-                    DrawSystem(last_he);
-                }
+                last_he = he;
+                DrawSystem(last_he);
             }
         }
 
@@ -175,7 +155,7 @@ namespace EDDiscovery.UserControls
             if (override_system)        // no change, last_he continues to track cursor for restore..
                 return;
 
-            showing_matcomds = he != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity) : null;
+            showing_matcomds = he != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity) : null;
             showing_system = he?.System;
             DrawSystem();
         }
@@ -194,7 +174,7 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked) : null;
+            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked) : null;
 #endif
             string control_text = "No System";
 
@@ -224,7 +204,7 @@ namespace EDDiscovery.UserControls
                     control_text += " " + "No Scan".T(EDTx.NoScan);
             }
 
-            var curmats = discoveryform.history.MaterialCommoditiesMicroResources.GetLast();
+            var curmats = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast();
 
             panelStars.DrawSystem(data, showing_matcomds, curmats, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);
 
@@ -479,7 +459,7 @@ namespace EDDiscovery.UserControls
         {
             if (showing_system == null)
                 return;
-            var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
+            var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(showing_system, false);
 
             if ( sysnode != null )
             {
@@ -493,13 +473,13 @@ namespace EDDiscovery.UserControls
 
                     StarScan.ScanNode.DumpTree(nodes, "Top", 0);
 
-                    Forms.ExportForm frm = new Forms.ExportForm();
-                    frm.Init(false, new string[] {
+                    Forms.ImportExportForm frm = new Forms.ImportExportForm();
+                    frm.Export( new string[] {
                                         "JSON Orbital Parameters",
                                         },
-                        outputext: new string[] { "JSON|*.json|All|*.*" },
-                        showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTCVSOI },
-                        suggestedfilenames: new string[] { last_he?.System.Name ?? "" }
+                        new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.None },
+                        new string[] { "JSON|*.json|All|*.*" },
+                        new string[] { last_he?.System.Name ?? "" }
                     );
 
                     if (frm.ShowDialog(FindForm()) == DialogResult.OK)

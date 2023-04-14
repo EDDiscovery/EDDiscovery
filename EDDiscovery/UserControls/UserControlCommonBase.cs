@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
 using System.Drawing;
@@ -21,74 +19,113 @@ namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
     {
+        #region Status
+
         public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
         public const int DisplayNumberPopOuts = 1;                  // pop outs are 1-99.. of each specific type.
         public const int DisplayNumberStartExtraTabs = 100;         // extra tabs are assigned here
         public const int DisplayNumberStartExtraTabsMax = 199;
+        public const int DisplayNumberSplitterStart = 1050;
 
         // When a grid or splitter is open, displaynumber for its children based on its own number
         // 1050 is historical.. 1000..1049 was reserved for the previous history window splitters
 
         protected int DisplayNumberOfSplitter(int numopenedinside)  // splitter children are assigned this range..
-        { return 1050 + displaynumber * 100 + numopenedinside; }
+        { return DisplayNumberSplitterStart + DisplayNumber * 100 + numopenedinside; }
 
         protected int DisplayNumberOfGrid(int numopenedinside)      // grid children are assigned this range..  allow range for splitters.
-        { return 1050 + (DisplayNumberStartExtraTabsMax + 1) * 100 + displaynumber * 100 + numopenedinside; }
+        { return DisplayNumberSplitterStart + (DisplayNumberStartExtraTabsMax + 1) * 100 + DisplayNumber * 100 + numopenedinside; }
 
         // Common parameters of a UCCB
 
-        public PanelInformation.PanelIDs panelid { get; private set; }  // set on creation 
-        public int displaynumber { get; private set; }                // set on Init
-        public EDDiscoveryForm discoveryform { get; private set; }    // set on Init    
-        public IHistoryCursor uctg { get; protected set; }            // valid at loadlayout
+        public PanelInformation.PanelIDs PanelID { get; private set; }  // set on creation 
+        public int DisplayNumber { get; private set; }                // set on Init
+        public bool IsPrimaryHistoryDisplayNumber { get { return DisplayNumber == DisplayNumberSplitterStart; } }
+        public EDDiscoveryForm DiscoveryForm { get; private set; }    // set on Init    
         public bool IsClosed { get; private set; }                    // set after CloseDown called. Use this if your doing await stuff which may mean your class gets called after close
 
-        /////////////////////////////////////////////////////////////// in calling order..
-        
+        public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
+        public bool IsControlTextVisible()
+        {
+            return (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).IsControlTextVisible() : true;
+        }
+        public bool HasControlTextArea()
+        {
+            return (this.Parent is ExtendedControls.TabStrip) || (this.Parent is UserControlForm) || (this.Parent is UserControlContainerResizable);
+        }
+
+        // this means the transparent mode is on, not that its currently transparent. SetTransparency tells you that.
+        public bool IsTransparentModeOn => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).IsTransparentModeOn : false;
+
+        public virtual string HelpKeyOrAddress() { return PanelID.ToString(); }     // default help key is panel id as a string - override to specialise
+
+        #endregion
+
+        #region Lifetime Contract
+
         // called when class is created. Override to get panel info if required
 
         public virtual void Creation(PanelInformation.PanelInfo p)      
         {
-            System.Diagnostics.Debug.WriteLine("UCCB Create " + this.Name + " of " + this.GetType().Name + " with " + p.PopoutID);
-            panelid = p.PopoutID;
+            System.Diagnostics.Debug.WriteLine($"UCCB Create {this.Name}");
+            PanelID = p.PopoutID;
         }
 
-        // called after set up on init
+        // Called by form/major tab etc to create a panel
 
         public void Init(EDDiscoveryForm ed, int dn)
         {
-            System.Diagnostics.Debug.WriteLine("UCCB Init " + this.Name + " of " + this.GetType().Name + " with " + dn);
-            discoveryform = ed;
-            displaynumber = dn;
+            System.Diagnostics.Debug.WriteLine($"UCCB Init {this.Name} with DN {dn}");
+            DiscoveryForm = ed;
+            DisplayNumber = dn;
             Init();
         }
 
-        public virtual void Init() { }              // start up, called by above Init.  no cursor available
-
-        // For forms, the transparency key color is set by theme during UserControlForm init.
-        // The Init function above for a UC could override if required
-        // themeing and scaling happens at this point.  Item should be in AutoScaleMode.Inherit to prevent double scaling
+        // UCCB overrides this to initialise itself.
         // Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab, Grid:CreateInitPanel
 
-        public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
-        public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
-        public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
+        public virtual void Init() { }              // start up, called by above Init.  no cursor available
+
+        // after init, themeing and scaling happens at this point.  Item should be in AutoScaleMode.Inherit to prevent double scaling
+
+        // For popout forms, on init, it calls SetTransparency, then TransparencyModeChanged
+        // The transparency key color is set by theme during UserControlForm init - you can override if required in Init()
+        // everytime the transparency changes (due to user hovering etc) SetTransparency is called
+        public virtual void SetTransparency(bool ison, Color curcol) { }
+
+        // TransparentModeChange is called on startup, and only then if the user changes the transparent major mode on/off
+        public virtual void TransparencyModeChanged(bool on) { }         
+
+        // then LoadLayout, InitialDisplay is called
+        public virtual void LoadLayout() { }        // then a chance to load a layout. 
         public virtual void InitialDisplay() { }    // do the initial display
-        public virtual void Closing() { }           // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
+
+        // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
+        public virtual void Closing() { }
 
         // end calling order.
 
-        public virtual void ChangeCursorType(IHistoryCursor thc) { }     // implement if you call the uctg
+        #endregion
 
-        public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
-        public virtual bool DefaultTransparent { get { return false; } }  // override to say default to be transparent
+        #region Virtual overrides
 
-        public virtual bool AllowClose() { return true; }   
+        // override to say support transparency
+        public virtual bool SupportTransparency { get { return false; } }
+        // override to say default to be transparent
+        public virtual bool DefaultTransparent { get { return false; } }
+        // override to know
+        public virtual void onControlTextVisibilityChanged(bool newvalue)       
+        {
+        }
+        // override to prevent closure
+        public virtual bool AllowClose() { return true; }
 
-        // Close
+        #endregion
 
-        public void CloseDown()     // Call to close down.
+        #region Closedown
+        // Call to close down panel.
+        public void CloseDown()     
         {
             IsClosed = true;
             Closing();
@@ -107,10 +144,92 @@ namespace EDDiscovery.UserControls
             base.Dispose(disposing);
         }
 
+        #endregion
 
-        public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
+        #region Panel communication
 
-        public virtual string HelpKeyOrAddress() { return panelid.ToString(); }     // default help key is panel id as a string
+        // Action request system - replaces UCTG. Allows comms between panels
+        // Requests/Performs are:
+        //      HistoryEntry - sent by all TG on cursor moves.
+        //          Splitter/grid distributes it around the siblings - they response false
+        //          Sent up to tab - MainTab distributes it to other tabs and forms, Other throws it away
+        //          All panels must return false so no-one grabs it
+        //
+        //      long - request travel grid to go to this jid 
+        //      class RequestTravelHistoryPos - request primary travel grid to call back directly to sender with the current HE (may be null)
+        //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution (like the main tab will)
+        //           If not ack, sent up to tab - Other will send it to maintab only
+        //           Panel should return true
+        //
+        //      class PushStars - someone is pushing a system list to expedition or trilat
+        //           Splitter/grid distributes it around the siblings - if a recipient is there and uses it, they respond true, which stops the distribution
+        //           Sent up to major tab - both types will distribute it to all tabs and the first recepient will cancel it
+        //           Distributed to all forms
+        //           Panel should return true
+        //
+        //      class PanelAction - perform this string action on a tab panel
+        //           Sent into all tabs, and to all forms, first one accepting it will cancel it.
+        //           Panel should return true if serviced
+        //
+        //      class TravelHistoryStartStopChanged - someone set a start stop flag
+        //           Sent to everone.
+        //           Panel should return false
+        //
+        //      class PushResourceWantedList - synthesis/engineering pushes a list of wants to the resources panel
+        //           Send to everyone
+        //           Panel which grabs it should return true
+
+        public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
+        public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
+        public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he. TG will return true 
+        public class PushStars                          // use to push star list to other panels 
+        {
+            public enum PushType { TriWanted, TriSystems, Expedition };
+            public PushType PushTo { get; set; }
+            public System.Collections.Generic.List<string> Systems { get; set; }
+        };
+        public class PanelAction                    // perform an action
+        {
+            public const string ImportCSV = "ImportCSV";                // data is the filename string, to expedition panel
+            public const string EditNotePrimary = "editnoteprimary";    // no data
+            public string Action { get; set; }
+            public object Data { get; set; }
+        }
+        public class PushResourceWantedList         // use to push resource list to resource panel
+        {
+            public System.Collections.Generic.Dictionary<EliteDangerousCore.MaterialCommodityMicroResourceType, int> Resources { get; set; }      // push type and amount
+        }
+
+        public class TravelHistoryStartStopChanged { }  // push start/stop has been changed
+
+        public class SetCompassTarget
+        {
+            public string Name { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+        }
+
+        // Request action. Return if positively services by a single panel, or false if panels either don't use it or pass it on
+        // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
+
+        public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        
+
+        // panel is asked for operation, return true to indicate its swallowed, or false to say pass it onto next guy. 
+        // the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry
+        // either override PerformPanelOperation for the full monty, or override ReceiveHistoryEntry if your just interested in HE receive
+        public virtual bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            if (actionobj is EliteDangerousCore.HistoryEntry)
+                ReceiveHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
+            return false;
+        } 
+        public virtual void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
+        {
+        }
+
+        #endregion
+
+        #region Helpers
 
         // set the control text for the panel. 
         // for tabstrips, for forms, for resizable containers
@@ -133,24 +252,7 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
-        public bool IsControlTextVisible()
-        {
-            if (this.Parent is UserControlForm)
-                return ((UserControlForm)(this.Parent)).IsControlTextVisible();
-            else
-                return true;    // else presume true
-        }
-
-        public bool HasControlTextArea()
-        {
-            return (this.Parent is ExtendedControls.TabStrip) || (this.Parent is UserControlForm) || (this.Parent is UserControlContainerResizable);
-        }
-
-        public virtual void onControlTextVisibilityChanged(bool newvalue)       // override to know
-        {
-        }
-
+        
         public void SetClipboardText(string s)
         {
             try
@@ -160,7 +262,7 @@ namespace EDDiscovery.UserControls
             }
             catch
             {
-                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
             }
         }
         public void SetClipboardImage(Image s)
@@ -171,7 +273,7 @@ namespace EDDiscovery.UserControls
             }
             catch
             {
-                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
             }
         }
         public void SetClipboardImage(string file)
@@ -185,21 +287,47 @@ namespace EDDiscovery.UserControls
             }
             catch
             {
-                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
             }
         }
-
-        public bool IsTransparentModeOn           // this means the transparent mode is on, not that its currently transparent.
+        public void SetClipboard(DataObject obj)
         {
-            get
+            try
             {
-                if (this.Parent is UserControlForm)
-                    return ((UserControlForm)(this.Parent)).IsTransparentModeOn;
-                else
-                    return false;
+                Clipboard.SetDataObject(obj);
+            }
+            catch
+            {
+                DiscoveryForm.LogLineHighlight("Copying object to clipboard failed");
             }
         }
 
+        public bool ClipboardHasText()
+        {
+            try
+            {
+                return Clipboard.ContainsText();
+            }
+            catch
+            {
+                DiscoveryForm.LogLineHighlight("Unable to access clipboard");
+                return false;
+            }
+        }
+
+        public string GetClipboardText()
+        {
+            try
+            {
+                return Clipboard.GetText();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // force transparency update/set transparent function
         public void UpdateTransparency()
         {
             if (this.Parent is UserControlForm)
@@ -209,12 +337,42 @@ namespace EDDiscovery.UserControls
         public virtual UserControlCommonBase Find( PanelInformation.PanelIDs p)      // find a UCCB of type T - this simple case just compares, overriden in splitter/grid
         {
             //System.Diagnostics.Debug.WriteLine($"UCCB Find of {t.Name} on {this.GetType().Name}");
-            return panelid == p ? this : null;
+            return PanelID == p ? this : null;
         }
+
+        // force this tab or panel to be visible
+        public void MakeVisible()       
+        {
+            Control c = Parent;
+            TabPage p = null;
+            while( c != null)
+            {
+                if (c is TabPage)           // tab page does not have an index, so we need to record its presence and then let tabcontrol use it
+                {
+                    p = (TabPage)c;
+                }
+                else if (c is TabControl)
+                {
+                    ((TabControl)c).SelectedTab = p;
+                    Refresh();
+                    break;
+                }
+                else if ( c is Form)        // if we reached form, its a floating window.. 
+                {
+                    ((Form)c).BringToFront();
+                    break;
+                }
+
+                c = c.Parent;
+            }
+        }
+
+        #endregion
 
         #region Resize
 
-        public bool ResizingNow = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+        // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+        public bool ResizingNow = false;                                            
 
         public void RequestTemporaryMinimumSize(Size w)         // w is UC area
         { 
@@ -279,7 +437,7 @@ namespace EDDiscovery.UserControls
         public T GetSetting<T>(string itemname, T defaultvalue, bool global = false)
         {
             System.Diagnostics.Debug.Assert(DBBaseName != null);
-            string name = global ? itemname : DBName(displaynumber, DBBaseName, itemname);
+            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
             var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue);
 
           //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
@@ -288,7 +446,7 @@ namespace EDDiscovery.UserControls
 
         public bool PutSetting<T>(string itemname, T value, bool global = false)
         {
-            string name = global ? itemname : DBName(displaynumber, DBBaseName, itemname);
+            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
            // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
             return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
         }
@@ -331,22 +489,24 @@ namespace EDDiscovery.UserControls
 
         public string DGVSaveName(string auxname = "")
         {
-            return DBName(displaynumber, DBBaseName + auxname, "DGVCol");
+            return DBName(DisplayNumber, DBBaseName + auxname, "DGVCol");
         }
 
-        public bool DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
+        public bool DGVLoadColumnLayout(DataGridView dgv, string auxname = "", bool rowheaderselection = false)
         {
-            string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
+            string root = DBName(DisplayNumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine($"DGV Layout Load {root} {auxname}");
-            return dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+            return dgv.LoadColumnSettings(root, rowheaderselection, 
+                                        (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                                         (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
         }
 
         public void DGVSaveColumnLayout(DataGridView dgv, string auxname = "")
         {
-            string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
+            string root = DBName(DisplayNumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine($"DGV Layout Save {root} {auxname}");
-            dgv.SaveColumnSettings(root, (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+            dgv.SaveColumnSettings(root, 
+                                        (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
                                         (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }
 

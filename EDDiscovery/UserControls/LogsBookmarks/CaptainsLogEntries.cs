@@ -76,7 +76,7 @@ namespace EDDiscovery.UserControls
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
         }
 
@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
 
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
         #endregion
 
@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        private void Discoveryform_OnHistoryChange()
         {
             VerifyDates();      // if date time mode changes, history change is fired by settings. check date validation
             Display();
@@ -425,7 +425,7 @@ namespace EDDiscovery.UserControls
         private void buttonNew_Click(object nu1, EventArgs nu2)
         {
             ClearDates();
-            HistoryEntry he = discoveryform.history.GetLast;
+            HistoryEntry he = DiscoveryForm.History.GetLast;
             MakeNew(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow), he?.System.Name ?? "?", he?.WhereAmI ?? "?");
         }
 
@@ -540,8 +540,8 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
-            discoveryform.Open3DMap(s);
+            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, true);
+            DiscoveryForm.Open3DMap(s);
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -557,10 +557,10 @@ namespace EDDiscovery.UserControls
 
         private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
+            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, true);
 
             if ( sys != null )
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -568,13 +568,13 @@ namespace EDDiscovery.UserControls
 
         private void extButtonExcel_Click(object sender, EventArgs e)
         {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Export Current View", "All" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DisableDateTime });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Export Current View", "All" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude, Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
-                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                grd.SetCSVDelimiter(frm.Comma);
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
+
 
                 grd.GetLineHeader += delegate (int c)
                 {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,42 +10,39 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Math;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlCompass : UserControlCommonBase
     {
-        string dbLatSave = "LatTarget";
-        string dbLongSave = "LongTarget";
-        string dbHideSave = "AutoHide";
+        private string dbLatSave = "LatTarget";
+        private string dbLongSave = "LongTarget";
+        private string dbFont = "Font";
 
-        double? latitude = null;
-        double? longitude = null;
-        double? heading = null;
-        double? altitude = null;
-        double? bodyRadius = null;
-        string lastradiusbody = null;
-        bool autoHideTargetCoords = false;
-        HistoryEntry last_he;
-        BookmarkClass currentBookmark;
-        bool externallyForcedBookmark = false;
-        PlanetMarks.Location externalLocation;
-        string externalLocationName;
-        EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        EliteDangerousCore.UIEvents.UIPosition position = new EliteDangerousCore.UIEvents.UIPosition();
+
+        EliteDangerousCore.UIEvents.UIMode elitemode;
+        private bool intransparent = false;
+        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus guistate;
+
+        private Font displayfont;
+
+        private ISystem current_sys;   // current system we are in, may be null, picked up from last_he
+        private string current_body;    // current body, picked up from last_he, and checked via UI Position for changes
+
+        private string sentbookmarktext;    // Another panel has sent a bookmark, and its position, add it to the combobox and allow selection
+        private EliteDangerousCore.UIEvents.UIPosition.Position sentposition;
 
         #region Init
 
@@ -57,51 +54,92 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             DBBaseName = "Compass";
-            discoveryform.OnNewEntry += OnNewEntry;
-            discoveryform.OnNewUIEvent += OnNewUIEvent;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            numberBoxTargetLatitude.ValueNoChange = GetSetting(dbLatSave, 0.0);     // note need to explicity state its double
-            numberBoxTargetLongitude.ValueNoChange = GetSetting(dbLongSave, 0.0);
-            autoHideTargetCoords = GetSetting(dbHideSave, false);
-            checkBoxHideTransparent.Checked = autoHideTargetCoords;
+
+            double lat = GetSetting(dbLatSave, double.NaN);     // pick up target, it will be Nan if not set
+            double lon = GetSetting(dbLongSave, double.NaN);
+            if (double.IsNaN(lat) || double.IsNaN(lon))
+            {
+                numberBoxTargetLatitude.SetBlank();
+                numberBoxTargetLongitude.SetBlank();
+            }
+            else
+            {
+                numberBoxTargetLatitude.ValueNoChange = lat;
+                numberBoxTargetLongitude.ValueNoChange = lon;
+            }
+            this.numberBoxTargetLatitude.ValueChanged += new System.EventHandler(this.numberBoxTargetLatitude_ValueChanged);
+            this.numberBoxTargetLongitude.ValueChanged += new System.EventHandler(this.numberBoxTargetLongitude_ValueChanged);
+
             comboBoxBookmarks.Text = "";
-            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
-            compassControl.SlewRateDegreesSec = 40;
-            compassControl.AutoSetStencilTicks = true;
+
             buttonNewBookmark.Enabled = false;
 
-            checkBoxHideTransparent.Visible = IsFloatingWindow;
-
-            var enumlist = new Enum[] { EDTx.UserControlCompass_labelBookmark, EDTx.UserControlCompass_labelTargetLat, EDTx.UserControlCompass_checkBoxHideTransparent };
+            var enumlist = new Enum[] { EDTx.UserControlCompass_labelTargetLat };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            var enumlisttt = new Enum[] {EDTx.UserControlCompass_numberBoxTargetLatitude_ToolTip, EDTx.UserControlCompass_numberBoxTargetLongitude_ToolTip,
+                                        EDTx.UserControlCompass_comboBoxBookmarks_ToolTip, EDTx.UserControlCompass_extButtonBlank_ToolTip, EDTx.UserControlCompass_buttonNewBookmark_ToolTip,
+                                        EDTx.UserControlCompass_extButtonShowControl_ToolTip, EDTx.UserControlCompass_extButtonFont_ToolTip};
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            PopulateCtrlList();
+
+            DiscoveryForm.OnNewEntry += OnNewEntry;
+            DiscoveryForm.OnNewUIEvent += OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
+
+            // new! april23 pick up last major mode ad uistate.  Need to do this now, before load/initial display, as set transparent uses it
+            elitemode = new EliteDangerousCore.UIEvents.UIMode(DiscoveryForm.UIOverallStatus.Mode, DiscoveryForm.UIOverallStatus.MajorMode);
+            guistate = DiscoveryForm.UIOverallStatus.Focus;
+        }
+
+        public override void LoadLayout()
+        {
+            base.LoadLayout();
+            displayfont = FontHelpers.GetFont(GetSetting(dbFont, ""), null);        // null if not set, keep selection in displayfont
+            if (displayfont != null)
+                compassControl.Font = displayfont;
+        }
+
+        public override void InitialDisplay()       
+        {
+            Discoveryform_OnHistoryChange();
         }
 
         public override void Closing()
         {
-            PutSetting(dbLatSave, numberBoxTargetLatitude.Value);
-            PutSetting(dbLongSave, numberBoxTargetLongitude.Value);
-            PutSetting(dbHideSave, autoHideTargetCoords);
-            discoveryform.OnNewEntry -= OnNewEntry;
-            discoveryform.OnNewUIEvent -= OnNewUIEvent;
-            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            bool validsetting = numberBoxTargetLatitude.IsValid && numberBoxTargetLongitude.IsValid;
+            PutSetting(dbLatSave, validsetting ? numberBoxTargetLatitude.Value : double.NaN);
+            PutSetting(dbLongSave, validsetting ? numberBoxTargetLongitude.Value : double.NaN);
+            DiscoveryForm.OnNewEntry -= OnNewEntry;
+            DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
+            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
+        }
+
+        private void Discoveryform_OnHistoryChange() 
+        {
+            var lasthe = DiscoveryForm.History.GetLast;
+            current_sys = lasthe?.System;       // pick up last system and body 
+            current_body = lasthe?.Status.BodyName;
+            PopulateBookmarkComboSetBookmarkEnable();
+            UpdateCompass();
+            SetCompassVisibility();
         }
 
         public override bool SupportTransparency { get { return true; } }
         public override bool DefaultTransparent { get { return true; } }
         public override void SetTransparency(bool on, Color curbackcol)
         {
+            BackColor = curbackcol;
+
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
             numberBoxTargetLatitude.ControlBackground = numberBoxTargetLongitude.ControlBackground = curbackcol;
             labelTargetLat.TextBackColor = curbackcol;
-            labelBookmark.TextBackColor = curbackcol;
             flowLayoutPanelTop.BackColor = curbackcol;
-            flowLayoutPanelBookmarks.BackColor = curbackcol;
-            checkBoxHideTransparent.BackColor = curbackcol;
             comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = on;
             comboBoxBookmarks.BackColor = curbackcol;
             buttonNewBookmark.BackColor = curbackcol;
-            BackColor = curbackcol;
 
             Color fore = on ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
             compassControl.ForeColor = fore;
@@ -109,133 +147,50 @@ namespace EDDiscovery.UserControls
             compassControl.CentreTickColor = fore.Multiply(1.2F);
             compassControl.BugColor = fore.Multiply(0.8F);
             compassControl.BackColor = on ? Color.Transparent : BackColor;
-            compassControl.Font = ExtendedControls.Theme.Current.GetScaledFont(0.8f);
+            compassControl.Font = ExtendedControls.Theme.Current.GetScaledFont(1f);
+            flowLayoutPanelTop.Visible = !on;
+            compassControl.Font = displayfont ?? this.Font;     // due to themeing, set control font again
 
-            if (autoHideTargetCoords)
+            intransparent = on;
+            SetCompassVisibility();
+        }
+
+        // UI event in, accumulate state information
+        private void OnNewUIEvent(UIEvent uievent)       
+        {
+            EliteDangerousCore.UIEvents.UIMode mode = uievent as EliteDangerousCore.UIEvents.UIMode;
+            if ( mode != null )
             {
-                flowLayoutPanelBookmarks.Visible = flowLayoutPanelTop.Visible = !on;
+                elitemode = mode;
+                System.Diagnostics.Debug.WriteLine($"Compass Elitemode {elitemode.MajorMode} {elitemode.Mode}");
+                SetCompassVisibility();
             }
 
-            SetCompassVisibility(on);
-        }
+            EliteDangerousCore.UIEvents.UIPosition pos = uievent as EliteDangerousCore.UIEvents.UIPosition;
 
-        private void SetCompassVisibility(bool transparent)
-        {
-            if (uistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus && transparent)
+            if (pos != null)
             {
-                compassControl.Visible = false;
-                return;
+                position = pos;
+
+                System.Diagnostics.Debug.WriteLine($"Compass lat {pos.Location.Latitude}, {pos.Location.Longitude} A {pos.Location.Altitude} H {pos.Heading} R {pos.PlanetRadius} BN {pos.BodyName}");
+
+                UpdateCompass();
+                SetCompassVisibility();
             }
-            else if (!compassControl.Visible)
+
+            EliteDangerousCore.UIEvents.UIBodyName bn = uievent as EliteDangerousCore.UIEvents.UIBodyName;
+
+            if ( bn != null )
             {
-                compassControl.Visible = true;
-            }
-        }
+                current_body = bn.BodyName;
+                System.Diagnostics.Debug.WriteLine($"Compass changed body name {current_body}");
 
-        #endregion
+                PopulateBookmarkComboSetBookmarkEnable();
 
-        #region Display
-
-        private void Discoveryform_OnHistoryChange(HistoryList obj) // need to handle this in case commander changed..
-        {
-            last_he = discoveryform.history.GetLast;
-            currentBookmark = null;
-            PopulateBookmarkCombo();
-            OnNewEntry(last_he, discoveryform.history);
-        }
-
-        public override void InitialDisplay()       // on start up, this will have an empty history
-        {
-            last_he = discoveryform.history.GetLast;
-            PopulateBookmarkCombo();
-            DisplayCompass();
-        }
-
-
-        private async void OnNewEntry(HistoryEntry he, HistoryList hl)
-        {
-            last_he = he;
-            if (last_he != null)
-            {
-                if ( bodyRadius == null || lastradiusbody != he.WhereAmI)       // try and get radius, this is cleared on target selection
-                { 
-                    StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(he.System, false);       // find scan if we have one
-                    JournalScan sd = last_sn?.Find(he.WhereAmI)?.ScanData;  // find body scan data if present, null if not
-                    bodyRadius = sd?.nRadius;
-                    if (bodyRadius.HasValue)
-                    {
-                        lastradiusbody = he.WhereAmI;
-                        System.Diagnostics.Debug.WriteLine("Compass Radius Set " + lastradiusbody + " " + bodyRadius.Value);
-                    }
-                }
-
-                switch (he.journalEntry.EventTypeID)
+                // option to clear to blank target lat on body name disappearing
+                if ( current_body.IsEmpty() && IsSet(CtrlList.clearlatlong))
                 {
-                    case JournalTypeEnum.Screenshot:
-                        JournalScreenshot js = he.journalEntry as JournalScreenshot;
-                        latitude = js.nLatitude;
-                        longitude = js.nLongitude;
-                        altitude = js.nAltitude;
-                        break;
-                    case JournalTypeEnum.Touchdown:
-                        JournalTouchdown jt = he.journalEntry as JournalTouchdown;
-                        if (jt.PlayerControlled.HasValue && jt.PlayerControlled.Value)
-                        {
-                            latitude = jt.Latitude;
-                            longitude = jt.Longitude;
-                            altitude = 0;
-                        }
-                        break;
-                    case JournalTypeEnum.Location:
-                        JournalLocation jl = he.journalEntry as JournalLocation;
-                        latitude = jl.Latitude;
-                        longitude = jl.Longitude;
-                        altitude = null;
-                        break;
-                    case JournalTypeEnum.Liftoff:
-                        JournalLiftoff jlo = he.journalEntry as JournalLiftoff;
-                        if (jlo.PlayerControlled.HasValue && jlo.PlayerControlled.Value)
-                        {
-                            latitude = jlo.Latitude;
-                            longitude = jlo.Longitude;
-                            altitude = 0;
-                        }
-                        break;
-                    case JournalTypeEnum.LeaveBody:
-                        latitude = null;
-                        longitude = null;
-                        altitude = null;
-                        break;
-                    case JournalTypeEnum.FSDJump:       // to allow us to do PopulateBookmark..
-                    case JournalTypeEnum.CarrierJump:     
-                        break;
-                    default:
-                        return;
-                }
-
-                PopulateBookmarkCombo();
-                DisplayCompass();
-            }
-        }
-
-        private void OnNewUIEvent(UIEvent uievent)       // UI event in, see if we want to hide.  UI events come before any onNew
-        {
-            EliteDangerousCore.UIEvents.UIPosition up = uievent as EliteDangerousCore.UIEvents.UIPosition;
-
-            if (up != null)
-            {
-                if (up.Location.ValidPosition)
-                {
-                    latitude = up.Location.Latitude;
-                    longitude = up.Location.Longitude;
-                    altitude = up.Location.Altitude;
-                    heading = up.Heading;
-                    DisplayCompass();
-                }
-                else
-                {
-                    latitude = longitude = heading = altitude = null;
-                    DisplayCompass();
+                    extButtonBlank_Click(null, null);
                 }
             }
 
@@ -243,300 +198,396 @@ namespace EDDiscovery.UserControls
 
             if ( gui != null )
             {
-                uistate = gui.GUIFocus;
-                DisplayCompass();
+                guistate = gui.GUIFocus;
+                System.Diagnostics.Debug.WriteLine($"Compass changed GUI state {guistate}");
+                SetCompassVisibility();
             }
         }
 
-
-        private void DisplayCompass()
+        private void OnNewEntry(HistoryEntry he)
         {
-            SetCompassVisibility(IsTransparentModeOn);
-
-            if (compassControl.Visible)
+            if (current_sys == null || current_sys.Name != he.System.Name)       // changed system
             {
-                double? targetlat = numberBoxTargetLatitude.Value;
-                double? targetlong = numberBoxTargetLongitude.Value;
+                current_sys = he.System;        // always there
+                current_body = he.Status.BodyName;        // may be blank or null
+                PopulateBookmarkComboSetBookmarkEnable();
+            }
 
-                double? targetDistance = CalculateDistance(targetlat, targetlong);
-                double? targetSlope = CalculateGlideslope(targetDistance);
+            if ( he.journalEntry is IBodyFeature )       // an IBodyfeature would affect the body feature list, used to populate the combo box, so update combo
+            {
+                PopulateBookmarkComboSetBookmarkEnable();
+            }
+        }
 
-                if (targetDistance.HasValue)
+        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            if (actionobj is SetCompassTarget sct)
+            {
+                if (!comboBoxBookmarks.Items.Contains(sct.Name))        // only add to combo if not in list..
                 {
-                    if (targetDistance.Value < 1000)
-                        compassControl.DistanceFormat = "{0:0.#}m";
-                    else if (targetDistance.Value < 1000000)
-                    {
-                        targetDistance = targetDistance.Value / 1000;
-                        compassControl.DistanceFormat = "{0:0.#}km";
-                    }
-                    else
-                    {
-                        targetDistance = targetDistance.Value / 1000000;
-                        compassControl.DistanceFormat = "{0:0.#}Mm";
-                    }
+                    sentbookmarktext = sct.Name;
+                    sentposition = new EliteDangerousCore.UIEvents.UIPosition.Position() { Altitude = 0, AltitudeFromAverageRadius = false, Latitude = sct.Latitude, Longitude = sct.Longitude };
+                    PopulateBookmarkComboSetBookmarkEnable();
                 }
+                comboBoxBookmarks.SelectedItem = sct.Name;      // must be in list, so select and set the compass
+                return true;
+            }
+            return false;
+        }
 
-                if (targetSlope.HasValue)
+        #endregion
+
+        #region Display
+
+        // we determine visibility from the stored flags.
+        private void SetCompassVisibility()
+        {
+            bool visible = true;
+
+            if (intransparent && IsSet(CtrlList.autohide))       // autohide turns off when transparent And..
+            {
+                if (guistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus)    // not on main screen
                 {
-                    compassControl.GlideSlope = targetSlope.Value;
+                    visible = false;
+                }
+                            // if in mainship, or srv, or we are on foot planet, we can show
+                else if ((!IsSet(CtrlList.hidewheninship) && elitemode.InFlight) ||
+                         (!IsSet(CtrlList.hidewheninSRV) && elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.SRV ) ||
+                         (!IsSet(CtrlList.hidewhenonfoot) && ( elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootPlanet ||
+                                                                elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootInstallationInside ))
+                    )
+                {
                 }
                 else
-                {
-                    compassControl.GlideSlope = double.NaN;
-                }
-
-                double? targetBearing = CalculateBearing(targetlat, targetlong);
-
-                try
-                {
-                    compassControl.Set(heading.HasValue ? heading.Value : double.NaN,
-                                    targetBearing.HasValue ? targetBearing.Value : double.NaN,
-                                    targetDistance.HasValue ? targetDistance.Value : double.NaN, true);
-                }
-                catch { }       // unlikely but Status.JSON could send duff values, trap out the exception on bad values
+                    visible = false;    // else off
             }
-        }
 
-        private double? CalculateBearing(double? targetLat, double? targetLong)
-        {
-            if (!(latitude.HasValue && longitude.HasValue && targetLat.HasValue && targetLong.HasValue))
-                return null;
-            // turn degrees to radians
-            double long1 = longitude.Value * PI / 180;
-            double lat1 = latitude.Value * PI / 180;
-            double long2 = targetLong.Value * PI / 180;
-            double lat2 = targetLat.Value * PI / 180;
-
-            double y = Sin(long2 - long1) * Cos(lat2);
-            double x = Cos(lat1) * Sin(lat2) -
-                        Sin(lat1) * Cos(lat2) * Cos(long2 - long1);
-            
-            // back to degrees again
-            double bearing = Atan2(y, x) / PI * 180;
-
-            //bearing in game HUD is 0-360, not -180 to 180
-            return bearing > 0 ? bearing : 360 + bearing;
-        }
-
-        private double? CalculateDistance(double? targetLat, double? targetLong)
-        {
-            if (!(latitude.HasValue && longitude.HasValue && targetLat.HasValue && targetLong.HasValue && bodyRadius.HasValue))
-                return null;
-
-            double lat1 = latitude.Value * PI / 180;
-            double lat2 = targetLat.Value * PI / 180;
-            double deltaLong = (targetLong.Value - longitude.Value) * PI / 180;
-            double deltaLat = (targetLat.Value - latitude.Value) * PI / 180;
-
-            double a = Sin(deltaLat / 2) * Sin(deltaLat / 2) + Cos(lat1) * Cos(lat2) * Sin(deltaLong / 2) * Sin(deltaLong / 2);
-            double c = 2 * Atan2(Sqrt(a), Sqrt(1 - a));
-
-            return bodyRadius.Value * c;
-        }
-
-        private double? CalculateGlideslope(double? distance)
-        {
-            if (!(distance.HasValue && altitude.HasValue && bodyRadius.HasValue))
-                return null;
-
-            if (altitude.Value < 10000 || distance.Value < 10000) // Don't return a slope if less than 10km out or below 10km
-                return null;
-
-            double theta = distance.Value / bodyRadius.Value;
-            double rad = 1 + altitude.Value / bodyRadius.Value;
-            double dist2 = 1 + rad * rad - 2 * rad * Cos(theta);
-
-            // a = radius, b = distance, c = altitude + radius
-            // c^2 = a^2 + b^2 - 2.a.b.cos(C) -> cos(C) = (a^2 + b^2 - c^2) / (2.a.b)
-            double sintgtslope = (1 + dist2 - rad * rad) / (2 * Sqrt(dist2));
-
-            if (sintgtslope >= 0)  // Don't return a slope if it would be > 0 deg at the target (ie. we are facing backwards)
-                return null;
-
-            // a = altitude + radius, b = distance, c = radius
-            double slope = -Asin((rad * rad + dist2 - 1) / (2 * rad * Sqrt(dist2))) * 180 / PI;
-            return slope;
-        }
-
-        private void PopulateBookmarkCombo()
-        {
-            if (last_he == null)
+            if (intransparent && IsSet(CtrlList.hidewithnolatlong) && !position.Location.ValidPosition)     // if hide if no lat/long..
             {
-                buttonNewBookmark.Enabled = false;
-                return;
+                visible = false;
             }
-            buttonNewBookmark.Enabled = true;
-            if (currentBookmark != null && currentBookmark.StarName == last_he.System.Name)
-            {
-                return;
-            }
-            string selection = externallyForcedBookmark ? externalLocationName : comboBoxBookmarks.Text;
-            comboBoxBookmarks.Items.Clear();
-            currentBookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(last_he.System.Name);
-            if (currentBookmark != null)
-            {
-                List<PlanetMarks.Planet> planetMarks = currentBookmark.PlanetaryMarks?.Planets;
 
-                if (heading.HasValue)
-                {
-                    // orbital flight or landed, just do this body
-                    labelBookmark.Text = "Planet Bookmarks";
-                    planetMarks = planetMarks?.Where(p => p.Name == last_he.WhereAmI)?.ToList();
-                }
-                else
-                {
-                    // add whole system
-                    labelBookmark.Text = "System Bookmarks";
-                }
+            if ( compassControl.Visible != visible)     // not sure this makes a difference, but..
+                compassControl.Visible = visible;
+        }
 
-                if (planetMarks != null)
+        // update the compass, given the info we have
+        // done even if invisible so it will be right when reshown
+        private void UpdateCompass()
+        {
+            double bearing = double.NaN;
+            double displaydistance = double.NaN;
+            double glideslope = double.NaN;
+
+            if (position.Location.ValidPosition && numberBoxTargetLatitude.IsValid && numberBoxTargetLongitude.IsValid)
+            {
+                double targetlat = numberBoxTargetLatitude.Value;
+                double targetlong = numberBoxTargetLongitude.Value;
+
+                bearing = ObjectExtensionsNumbersBool.CalculateBearing(position.Location.Latitude, position.Location.Longitude, targetlat, targetlong);
+
+                if (position.ValidRadius)
                 {
-                    foreach (PlanetMarks.Planet pl in planetMarks)
+                    // we use distance including altitude as the prefered display distance
+
+                    double distanceinclaltitude = position.Location.ValidAltitude ? 
+                                ObjectExtensionsNumbersBool.CalculateDistance(position.Location.Latitude, position.Location.Longitude, position.Location.Altitude, targetlat, targetlong, 0, position.PlanetRadius) : 
+                                ObjectExtensionsNumbersBool.CalculateDistance(position.Location.Latitude, position.Location.Longitude, targetlat, targetlong, position.PlanetRadius);
+
+                    if ( distanceinclaltitude >= 100)       // if worth displaying
                     {
-                        if (pl.Locations != null && pl.Locations.Any())
+                        displaydistance = distanceinclaltitude;
+
+                        if (distanceinclaltitude < 1000)
                         {
-                            foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
-                            {
-                                comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
-                            }
+                            compassControl.DistanceFormat = "{0:0.#}m";
+                        }
+                        else if (distanceinclaltitude < 1000000)
+                        {
+                            displaydistance /= 1000;
+                            compassControl.DistanceFormat = "{0:0.#}km";
+                        }
+                        else
+                        {
+                            displaydistance /= 1000000;
+                            compassControl.DistanceFormat = "{0:0.#}Mm";
+                        }
+                    }
+
+                    // if worth doing a glideslope
+
+                    if ( distanceinclaltitude >= 3000 && position.Location.ValidAltitude && position.Location.Altitude >= 3000)    
+                    {
+                        // for glideslope, we don't want altitude in play for distance, just ground distance
+                        double distanceground = ObjectExtensionsNumbersBool.CalculateDistance(position.Location.Latitude, position.Location.Longitude, targetlat, targetlong, position.PlanetRadius);
+
+                        var res = ObjectExtensionsNumbersBool.CalculateGlideslope(distanceground, position.Location.Altitude, position.PlanetRadius);
+
+                        if (res.Item2 < 0) // Don't return a slope if it would be > 0 deg at the target (ie. we are facing backwards)
+                        {
+                            glideslope = res.Item1;
                         }
                     }
                 }
             }
-            if (externallyForcedBookmark && !comboBoxBookmarks.Items.Contains(externalLocationName))
-            {
-                comboBoxBookmarks.Items.Add(externalLocationName);
-            }
-            if (!String.IsNullOrEmpty(selection) && comboBoxBookmarks.Items.Contains(selection))
-            {
-                comboBoxBookmarks.Text = selection;
-            }
-            else
-            {
-                comboBoxBookmarks.Text = "";
-            }
-        }
 
+            compassControl.Set(position.ValidHeading ? position.Heading : double.NaN, bearing, displaydistance, glideslope, true);
+        }
 
         #endregion
 
-        private void checkBoxHideTransparent_CheckedChanged(object sender, EventArgs e)
+        #region UI
+
+        bool preventbookmarkcomboreentry = false;
+        List<EliteDangerousCore.UIEvents.UIPosition.Position> comboboxpositions = new List<EliteDangerousCore.UIEvents.UIPosition.Position>(); // holds position for entries
+
+        private void PopulateBookmarkComboSetBookmarkEnable()
         {
-            autoHideTargetCoords = ((ExtCheckBox)sender).Checked;
-           // SetTransparency(IsTransparent, BackColor);
+            preventbookmarkcomboreentry = true;
+
+            string curselection = comboBoxBookmarks.Text; 
+
+            comboBoxBookmarks.Items.Clear();
+            comboboxpositions.Clear();
+
+            buttonNewBookmark.Enabled = current_sys != null;
+
+            System.Diagnostics.Debug.WriteLine($"Compass populate bookmark sys {current_sys?.Name} body {current_body}");
+
+            if (current_sys != null)
+            {
+                var sysbookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(current_sys.Name);
+                if (sysbookmark != null)
+                {
+                    List<PlanetMarks.Planet> planetMarks = sysbookmark.PlanetaryMarks?.Planets;
+
+                    if (current_body != null)
+                    {
+                        string planetname = current_body.ReplaceIfStartsWith(current_sys.Name, "");
+                        System.Diagnostics.Debug.WriteLine($"..Compass Combobox check for planet '{planetname}'");
+                        if ( planetname.HasChars() )
+                            planetMarks = planetMarks?.Where(p => p.Name.EqualsIIC(planetname))?.ToList();
+                    }
+
+                    if (planetMarks != null)
+                    {
+                        foreach (PlanetMarks.Planet pl in planetMarks)
+                        {
+
+                            if (pl.Locations != null && pl.Locations.Any())
+                            {
+                                foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {pl.Name}: {loc.Name}");
+                                    comboBoxBookmarks.Items.Add($"{pl.Name}: {loc.Name} @ {loc.Latitude:0.####}, {loc.Longitude:0.####}");
+                                    comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = loc.Latitude, Longitude = loc.Longitude });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(current_sys, false);     // not edsm, so no delay
+
+                if ( sysnode != null)
+                {
+                    var scannode = current_body.HasChars() ? sysnode.Find(current_body) : null;
+
+                    if ( scannode != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"..Compass Found scannode for {current_body}");
+
+                        foreach (var sf in scannode.SurfaceFeatures.EmptyIfNull())
+                        {
+                            if (sf.HasLatLong)  // only want positions
+                            {
+                                System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
+                                comboBoxBookmarks.Items.Add($"{sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
+                                comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach( var bodies in sysnode.Bodies)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.FullName}");
+
+                            foreach (var sf in bodies.SurfaceFeatures.EmptyIfNull())
+                            {
+                                if (sf.HasLatLong)  // only want positions
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
+                                    comboBoxBookmarks.Items.Add($"{bodies.CustomNameOrOwnname}: {sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
+                                    comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                if ( sentbookmarktext.HasChars())       // add an externally given bookmark to our list
+                {
+                    comboBoxBookmarks.Items.Add(sentbookmarktext);
+                    comboboxpositions.Add(sentposition);
+                }
+
+                if (curselection.HasChars() && comboBoxBookmarks.Items.Contains(curselection))
+                {
+                    comboBoxBookmarks.Text = curselection;
+                }
+
+                comboBoxBookmarks.Invalidate();     // items list has changed, invalidate
+            }
+
+            preventbookmarkcomboreentry = false;
         }
 
         private void comboBoxBookmarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (currentBookmark == null || currentBookmark.PlanetaryMarks == null || currentBookmark.PlanetaryMarks.Planets == null) return;
-            foreach (PlanetMarks.Planet pl in currentBookmark.PlanetaryMarks.Planets)
+            if ( !preventbookmarkcomboreentry && comboBoxBookmarks.SelectedIndex>=0)
             {
-                if (pl.Locations != null && pl.Locations.Any())
-                {
-                    foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
-                    {
-                        if ($"{loc.Name} ({pl.Name})" == comboBoxBookmarks.Text)
-                        {
-                            numberBoxTargetLatitude.Value = loc.Latitude;
-                            numberBoxTargetLongitude.Value = loc.Longitude;
-                            bodyRadius = null;
-
-                            if (externallyForcedBookmark && comboBoxBookmarks.Text != externalLocationName)
-                            {
-                                comboBoxBookmarks.Items.Remove(externalLocationName);
-                                externallyForcedBookmark = false;
-                                externalLocationName = "";
-                                externalLocation = null;
-                            }
-
-                            DisplayCompass();
-                            return;
-                        }
-                    }
-                }
+                var pos = comboboxpositions[comboBoxBookmarks.SelectedIndex];
+                numberBoxTargetLatitude.Value = pos.Latitude;       // changing these cause the number box change to fire, updating the compass
+                numberBoxTargetLongitude.Value = pos.Longitude;
             }
         }
 
         private void buttonNewBookmark_Click(object sender, EventArgs e)
         {
-            if (last_he == null)
-                return;
-
-            BookmarkForm frm = new BookmarkForm(discoveryform.history);
-            DateTime timeutc = DateTime.UtcNow;
-            if (currentBookmark == null)
+            if (current_sys != null)
             {
-                if (latitude.HasValue)
+                BookmarkForm frm = new BookmarkForm(DiscoveryForm.History);
+                DateTime datetimeutc = DateTime.UtcNow;
+
+                var sysbookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(current_sys.Name);
+                if (sysbookmark != null)    // if we have one, edit it
                 {
-                    frm.NewSystemBookmark(last_he.System,timeutc, last_he.WhereAmI, latitude.Value, longitude.Value);
+                    if (position.Location.ValidPosition)    // and we have a valid position, autocreate a new planet mark
+                    {
+                        frm.Bookmark(sysbookmark, position.BodyName, position.Location.Latitude, position.Location.Longitude);
+                    }
+                    else
+                    {
+                        frm.Bookmark(sysbookmark);
+                    }
                 }
                 else
                 {
-                    frm.NewSystemBookmark(last_he.System, timeutc);
+                    if (position.Location.ValidPosition)        // don't have a system bookmark, so create a new one here. If we have position, autocreate a new planet mark
+                    {
+                        frm.NewSystemBookmark(current_sys, datetimeutc, position.BodyName, position.Location.Latitude, position.Location.Longitude);
+                    }
+                    else
+                    {
+                        frm.NewSystemBookmark(current_sys, datetimeutc);
+                    }
                 }
-            }
-            else
-            {
-                if (latitude.HasValue)
-                {
-                    frm.Bookmark(currentBookmark, last_he.WhereAmI, latitude.Value, longitude.Value);
-                }
-                else
-                {
-                    frm.Bookmark(currentBookmark);
-                }
-            }
+                
+                frm.StartPosition = FormStartPosition.CenterScreen;
+                DialogResult dr = frm.ShowDialog(this);
 
-            frm.StartPosition = FormStartPosition.CenterScreen;
-            DialogResult dr = frm.ShowDialog();
-            if (dr == DialogResult.OK)
-            {
-                currentBookmark = GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentBookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), timeutc, frm.Notes, frm.SurfaceLocations);
-            }
-            if (dr == DialogResult.Abort)
-            {
-                GlobalBookMarkList.Instance.Delete(currentBookmark);
-                currentBookmark = null;
-            }
+                if (dr == DialogResult.OK)
+                {
+                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(sysbookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), datetimeutc, frm.Notes, frm.SurfaceLocations);
+                }
+                if (dr == DialogResult.Abort)
+                {
+                    GlobalBookMarkList.Instance.Delete(sysbookmark);
+                }
 
-            PopulateBookmarkCombo();
-            DisplayCompass();
+                PopulateBookmarkComboSetBookmarkEnable();
+            }
         }
 
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
         {
-            if (currentBookmark != null && currentBookmark.id == bk.id)
-                currentBookmark = null;
-
-            PopulateBookmarkCombo();
-            DisplayCompass();
-        }
-
-
-        public void SetSurfaceBookmark(BookmarkClass bk, string planetName, string locName)
-        {
-            externallyForcedBookmark = true;
-            externalLocation = bk.PlanetaryMarks.Planets.Where(pl => pl.Name == planetName).FirstOrDefault()?.Locations.Where(l => l.Name == locName).FirstOrDefault();
-            if (externalLocation != null)
-            {
-                externalLocationName = $"{locName} ({planetName})";
-                numberBoxTargetLatitude.Value = externalLocation.Latitude;
-                numberBoxTargetLongitude.Value = externalLocation.Longitude;
-            }
-
-            PopulateBookmarkCombo();
-            DisplayCompass();
+            PopulateBookmarkComboSetBookmarkEnable();
         }
 
         private void numberBoxTargetLatitude_ValueChanged(object sender, EventArgs e)
         {
-            DisplayCompass();
+            UpdateCompass();
         }
 
         private void numberBoxTargetLongitude_ValueChanged(object sender, EventArgs e)
         {
-            DisplayCompass();
+            UpdateCompass();
         }
+
+        private void extButtonBlank_Click(object sender, EventArgs e)
+        {
+            numberBoxTargetLongitude.SetBlank();      
+            numberBoxTargetLatitude.SetBlank();
+            comboBoxBookmarks.SelectedIndex = -1;
+            UpdateCompass();
+        }
+
+        private void extButtonFont_Click(object sender, EventArgs e)
+        {
+            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
+            string setting = FontHelpers.GetFontSettingString(f);
+            //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
+            PutSetting(dbFont, setting);
+            displayfont = f;
+            compassControl.Font = displayfont ?? this.Font;     // set control font
+        }
+
+        protected enum CtrlList
+        {
+            autohide,
+            hidewithnolatlong,
+            hidewhenonfoot,
+            hidewheninSRV,
+            hidewheninship,
+            clearlatlong,
+        };
+
+        private bool[] ctrlset; // holds current state of each control above
+
+        private void PopulateCtrlList()
+        {
+            ctrlset = GetSettingAsCtrlSet<CtrlList>((e)=> { return e == CtrlList.autohide || e == CtrlList.hidewithnolatlong; });
+        }
+
+        private bool IsSet(CtrlList v)
+        {
+            return ctrlset[(int)v];
+        }
+
+        private void extButtonShowControl_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
+            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship)); //tbd
+            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); //tbd
+            CommonCtrl(displayfilter, extButtonShowControl);
+        }
+
+        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
+        {
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.ImageSize = new Size(24, 24);
+            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
+
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
+                PopulateCtrlList();
+                SetCompassVisibility();
+            };
+
+            displayfilter.Show(typeof(CtrlList), ctrlset, under, this.FindForm());
+        }
+
+        #endregion
+
     }
 }

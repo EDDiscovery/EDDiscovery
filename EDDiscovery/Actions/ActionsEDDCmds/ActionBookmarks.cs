@@ -185,7 +185,7 @@ namespace EDDiscovery.Actions
                             else if ( addstar )
                             {
                                 var df = (ap.ActionController as ActionController).DiscoveryForm;
-                                ISystem sys = SystemCache.FindSystem(name,df.galacticMapping, true);
+                                ISystem sys = SystemCache.FindSystem(name,df.GalacticMapping, true);
 
                                 if (sys != null)
                                 {

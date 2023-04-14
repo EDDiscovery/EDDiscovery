@@ -182,11 +182,11 @@ namespace EDDiscovery
             this.tabControlMain.AllowDragReorder = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 58);
+            this.tabControlMain.Location = new System.Drawing.Point(0, 62);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(984, 631);
+            this.tabControlMain.Size = new System.Drawing.Size(984, 627);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -212,8 +212,8 @@ namespace EDDiscovery
             this.comboBoxCommander.DisplayMember = "";
             this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCommander.Location = new System.Drawing.Point(1, 1);
-            this.comboBoxCommander.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.comboBoxCommander.Location = new System.Drawing.Point(1, 3);
+            this.comboBoxCommander.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
             this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommander.Name = "comboBoxCommander";
             this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -236,7 +236,7 @@ namespace EDDiscovery
             this.buttonExtRefresh.Location = new System.Drawing.Point(154, 1);
             this.buttonExtRefresh.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtRefresh.Name = "buttonExtRefresh";
-            this.buttonExtRefresh.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtRefresh.Size = new System.Drawing.Size(28, 28);
             this.buttonExtRefresh.TabIndex = 2;
             this.toolTip.SetToolTip(this.buttonExtRefresh, "Refresh the history");
             this.buttonExtRefresh.UseVisualStyleBackColor = false;
@@ -251,8 +251,8 @@ namespace EDDiscovery
             this.comboBoxCustomProfiles.DisplayMember = "";
             this.comboBoxCustomProfiles.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomProfiles.Location = new System.Drawing.Point(182, 1);
-            this.comboBoxCustomProfiles.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.comboBoxCustomProfiles.Location = new System.Drawing.Point(186, 3);
+            this.comboBoxCustomProfiles.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
             this.comboBoxCustomProfiles.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomProfiles.Name = "comboBoxCustomProfiles";
             this.comboBoxCustomProfiles.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -270,10 +270,10 @@ namespace EDDiscovery
             // 
             this.buttonExtManageAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtManageAddOns.Image = global::EDDiscovery.Icons.Controls.ManageAddOns;
-            this.buttonExtManageAddOns.Location = new System.Drawing.Point(286, 1);
+            this.buttonExtManageAddOns.Location = new System.Drawing.Point(290, 1);
             this.buttonExtManageAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtManageAddOns.Name = "buttonExtManageAddOns";
-            this.buttonExtManageAddOns.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtManageAddOns.Size = new System.Drawing.Size(28, 28);
             this.buttonExtManageAddOns.TabIndex = 2;
             this.toolTip.SetToolTip(this.buttonExtManageAddOns, "Manage Add-Ons");
             this.buttonExtManageAddOns.UseVisualStyleBackColor = false;
@@ -283,10 +283,10 @@ namespace EDDiscovery
             // 
             this.buttonExtEditAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtEditAddOns.Image = global::EDDiscovery.Icons.Controls.EditAddons;
-            this.buttonExtEditAddOns.Location = new System.Drawing.Point(314, 1);
+            this.buttonExtEditAddOns.Location = new System.Drawing.Point(322, 1);
             this.buttonExtEditAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtEditAddOns.Name = "buttonExtEditAddOns";
-            this.buttonExtEditAddOns.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtEditAddOns.Size = new System.Drawing.Size(28, 28);
             this.buttonExtEditAddOns.TabIndex = 2;
             this.toolTip.SetToolTip(this.buttonExtEditAddOns, "Edit Add-Ons");
             this.buttonExtEditAddOns.UseVisualStyleBackColor = false;
@@ -296,10 +296,10 @@ namespace EDDiscovery
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Popout;
-            this.buttonExtPopOut.Location = new System.Drawing.Point(342, 1);
+            this.buttonExtPopOut.Location = new System.Drawing.Point(354, 1);
             this.buttonExtPopOut.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtPopOut.Name = "buttonExtPopOut";
-            this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtPopOut.Size = new System.Drawing.Size(28, 28);
             this.buttonExtPopOut.TabIndex = 2;
             this.toolTip.SetToolTip(this.buttonExtPopOut, "Click to select a pop out panel to display");
             this.buttonExtPopOut.UseVisualStyleBackColor = false;
@@ -309,10 +309,10 @@ namespace EDDiscovery
             // 
             this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReloadActions.Location = new System.Drawing.Point(370, 1);
+            this.buttonReloadActions.Location = new System.Drawing.Point(386, 1);
             this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonReloadActions.Name = "buttonReloadActions";
-            this.buttonReloadActions.Size = new System.Drawing.Size(65, 24);
+            this.buttonReloadActions.Size = new System.Drawing.Size(65, 28);
             this.buttonReloadActions.TabIndex = 1;
             this.buttonReloadActions.Text = "Actions";
             this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -324,10 +324,10 @@ namespace EDDiscovery
             // 
             this.extButtonCAPI.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonCAPI.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.extButtonCAPI.Location = new System.Drawing.Point(439, 1);
+            this.extButtonCAPI.Location = new System.Drawing.Point(455, 1);
             this.extButtonCAPI.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.extButtonCAPI.Name = "extButtonCAPI";
-            this.extButtonCAPI.Size = new System.Drawing.Size(65, 24);
+            this.extButtonCAPI.Size = new System.Drawing.Size(65, 28);
             this.extButtonCAPI.TabIndex = 1;
             this.extButtonCAPI.Text = "CAPI";
             this.extButtonCAPI.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -396,7 +396,7 @@ namespace EDDiscovery
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.SecondHiddenMarkerWidth = 0;
             this.panelToolBar.ShowHiddenMarker = true;
-            this.panelToolBar.Size = new System.Drawing.Size(984, 30);
+            this.panelToolBar.Size = new System.Drawing.Size(984, 34);
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.UnrollHoverDelay = 1000;
             // 
@@ -415,7 +415,7 @@ namespace EDDiscovery
             this.flowToolBar.Location = new System.Drawing.Point(0, 0);
             this.flowToolBar.Margin = new System.Windows.Forms.Padding(0);
             this.flowToolBar.Name = "flowToolBar";
-            this.flowToolBar.Size = new System.Drawing.Size(623, 30);
+            this.flowToolBar.Size = new System.Drawing.Size(623, 34);
             this.flowToolBar.TabIndex = 5;
             this.flowToolBar.WrapContents = false;
             // 
@@ -426,15 +426,16 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelp.Location = new System.Drawing.Point(510, 3);
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(524, 1);
+            this.extButtonDrawnHelp.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
-            this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(0);
             this.extButtonDrawnHelp.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Selectable = true;
-            this.extButtonDrawnHelp.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelp.Size = new System.Drawing.Size(28, 28);
             this.extButtonDrawnHelp.TabIndex = 25;
             this.extButtonDrawnHelp.Text = "?";
             this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

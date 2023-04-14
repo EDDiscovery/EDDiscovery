@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls.Search
 
         void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, CheckEDSM, discoveryform.history);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, CheckEDSM, discoveryform.History);
         }
 
         public void Excel(int columnsout)
@@ -181,15 +181,14 @@ namespace EDDiscovery.UserControls.Search
                 return;
             }
 
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Export Current View" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
+            Forms.ImportExportForm frm = new Forms.ImportExportForm();
+            frm.Export( new string[] { "Export Current View" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 if (frm.SelectedIndex == 0)
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                     grd.GetLineStatus += delegate (int r)
                     {

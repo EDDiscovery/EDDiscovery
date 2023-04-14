@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EDDiscovery.Forms;
@@ -35,9 +33,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             Draw();
-            discoveryform.OnAddOnsChanged += Redraw;
-            discoveryform.OnThemeChanging += Redraw;     // because we pick the image for the composite button based on theme
-            discoveryform.OnPanelAdded += Redraw;
+            DiscoveryForm.OnAddOnsChanged += Redraw;
+            DiscoveryForm.OnThemeChanging += Redraw;     // because we pick the image for the composite button based on theme
+            DiscoveryForm.OnPanelAdded += Redraw;
         }
 
         public override void LoadLayout()
@@ -53,9 +51,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnAddOnsChanged -= Redraw;
-            discoveryform.OnThemeChanging -= Redraw;
-            discoveryform.OnPanelAdded -= Redraw;
+            DiscoveryForm.OnAddOnsChanged -= Redraw;
+            DiscoveryForm.OnThemeChanging -= Redraw;
+            DiscoveryForm.OnPanelAdded -= Redraw;
         }
         public void Draw()
         {
@@ -68,8 +66,8 @@ namespace EDDiscovery.UserControls
             Bitmap selback = (Bitmap)(brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2);
 
             {
-                Versions.VersioningManager mgr = new Versions.VersioningManager();
-                AddOnManagerForm.ReadLocalFiles(mgr, true);
+                ActionLanguage.Manager.VersioningManager mgr = new ActionLanguage.Manager.VersioningManager();
+                ActionLanguage.Manager.AddOnManagerForm.ReadLocalFiles(mgr, EDDOptions.Instance.AppDataDirectory, true);
 
                 int i = mgr.DownloadItems.Count;
 
@@ -164,16 +162,16 @@ namespace EDDiscovery.UserControls
             Object cbtag = ((Control)o).Tag;
 
             if ( cbtag is null )        // tag being null means
-                discoveryform.manageAddOnsToolStripMenuItem_Click(null, null);
+                DiscoveryForm.manageAddOnsToolStripMenuItem_Click(null, null);
             else
             {
                 PanelInformation.PanelIDs pid = (PanelInformation.PanelIDs)cbtag;
                 System.Diagnostics.Debug.WriteLine("Selected " + pid + " " + i);
 
                 if (i == 0)
-                    discoveryform.PopOuts.PopOut(pid);
+                    DiscoveryForm.PopOuts.PopOut(pid);
                 else
-                    discoveryform.AddTab(pid, -1);   // add as last tab
+                    DiscoveryForm.AddTab(pid, -1);   // add as last tab
             }
 
         }

@@ -59,7 +59,7 @@ namespace EDDiscovery.WebServer
             {
                 JToken response = null;
 
-                var hl = discoveryform.history;
+                var hl = discoveryform.History;
                 if (hl.Count == 0)
                 {
                     response = new JObject();
@@ -105,7 +105,7 @@ namespace EDDiscovery.WebServer
             sysstate["Economy"] = economy;
             sysstate["Faction"] = faction;
             sysstate["Security"] = security;
-            sysstate["MarketID"] = he.MarketID;
+            sysstate["MarketID"] = he.Status.MarketID;
             response["EDDB"] = sysstate;
 
             var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
@@ -155,8 +155,8 @@ namespace EDDiscovery.WebServer
             if (he.isTravelling)
             {
                 travel["Dist"] = he.TravelledDistance.ToStringInvariant("0.0");
-                travel["Jumps"] = he.Travelledjumps.ToStringInvariant();
-                travel["UnknownJumps"] = he.TravelledMissingjump.ToStringInvariant();
+                travel["Jumps"] = he.TravelledJumps.ToStringInvariant();
+                travel["UnknownJumps"] = he.TravelledMissingJumps.ToStringInvariant();
                 travel["Time"] = he.TravelledSeconds.ToString();
             }
             else

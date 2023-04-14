@@ -32,7 +32,7 @@ namespace EDDiscovery.Actions
         private EDDiscoveryForm discoveryform;
         private EDDiscoveryController discoverycontroller;
 
-        public HistoryList HistoryList { get { return discoverycontroller.history; } }
+        public HistoryList HistoryList { get { return discoverycontroller.History; } }
         public EDDiscoveryForm DiscoveryForm { get { return discoveryform; } }
 
         public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, c); }     // get or return null
@@ -377,9 +377,12 @@ namespace EDDiscovery.Actions
         {
             bool changed = false;
 
-            using (AddOnManagerForm dmf = new AddOnManagerForm())
+            using (ActionLanguage.Manager.AddOnManagerForm dmf = new ActionLanguage.Manager.AddOnManagerForm())
             {
-                dmf.Init(manage, this.Icon);
+                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
+                System.Diagnostics.Debug.Assert(edversion != null);
+
+                dmf.Init("EDDiscovery", manage, this.Icon, edversion, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , EDDOptions.Instance.CheckGithubFiles );
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;
@@ -507,7 +510,7 @@ namespace EDDiscovery.Actions
         public void ActionRunOnRefresh()
         {
             string prevcommander = Globals.Exists("Commander") ? Globals["Commander"] : "None";
-            string commander = discoverycontroller.history.IsRealCommanderId ? EDCommander.Current.Name : "Hidden";
+            string commander = discoverycontroller.History.IsRealCommanderId ? EDCommander.Current.Name : "Hidden";
 
             string refreshcount = prevcommander.Equals(commander) ? Globals.AddToVar("RefreshCount", 1, 1) : "1";
             SetInternalGlobal("RefreshCount", refreshcount);
@@ -515,7 +518,7 @@ namespace EDDiscovery.Actions
 
             if (actionfiles.IsActionVarDefined("RunAtRefresh"))      // any events have this flag? .. don't usually do this, so worth checking first
             {
-                foreach (HistoryEntry he in discoverycontroller.history.EntryOrder())
+                foreach (HistoryEntry he in discoverycontroller.History.EntryOrder())
                     ActionRunOnEntry(he, ActionEventEDList.RefreshJournal(he), "RunAtRefresh");
             }
 

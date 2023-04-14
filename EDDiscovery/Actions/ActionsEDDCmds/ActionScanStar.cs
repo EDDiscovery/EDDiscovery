@@ -250,7 +250,7 @@ namespace EDDiscovery.Actions
                 if (cmdname != null)
                 {
                     EDDiscoveryForm f = ((ActionController)ap.ActionController).DiscoveryForm;
-                    ISystem sc = SystemCache.FindSystem(cmdname, f.galacticMapping, edsm);        // find thru history, will include history entries
+                    ISystem sc = SystemCache.FindSystem(cmdname, f.GalacticMapping, edsm);        // find thru history, will include history entries
 
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 

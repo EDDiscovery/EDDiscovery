@@ -10,15 +10,10 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EDDiscovery.UserControls;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 
 namespace EDDiscovery
 {
@@ -36,6 +31,8 @@ namespace EDDiscovery
         public UserControlForm Find(PanelInformation.PanelIDs p) { return usercontrolsforms.Find(p); }
 
         public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
+
+        public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        // Request other panel does work
 
         private static string PopOutSaveID(PanelInformation.PanelIDs p)
         {
@@ -79,7 +76,7 @@ namespace EDDiscovery
 
                 if (numtoopen > 0) 
                 {
-                    System.Diagnostics.Debug.WriteLine($"Load Popout {p} {numtoopen}");
+                    System.Diagnostics.Debug.WriteLine($"Popout load {p} number {numtoopen}");
 
                     int numopened = usercontrolsforms.CountOf(p);                                                       // see how many we already have..
                     if (numopened < numtoopen)
@@ -95,39 +92,46 @@ namespace EDDiscovery
         {
             // tcf holds the panel
 
-            UserControlForm tcf = usercontrolsforms.NewForm();
-            tcf.Icon = Properties.Resources.edlogo_3mo_icon;
+            UserControlForm ucf = usercontrolsforms.NewForm();
+            ucf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             // uccb creation of selected panel
             UserControlCommonBase uccb = PanelInformation.Create(selected);
 
-            PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByPanelID(selected);
-
-            if (uccb != null && poi != null )
+            if (uccb != null )
             {
+                uccb.RequestPanelOperation += (s, o) =>
+                {
+                    return RequestPanelOperation.Invoke(s, o);
+                };
+
+                PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByPanelID(selected);
+
                 // we make up the title and refname based on how many previously opened of this type
                 int numopened = usercontrolsforms.CountOf(selected) + 1;
                 string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
 
-                System.Diagnostics.Trace.WriteLine("Popout Make " + windowtitle + " ucf " + uccb.GetType().Name);
+                System.Diagnostics.Trace.WriteLine($"Popout Init UCF `{windowtitle}` rn {refname}");
 
-                //System.Diagnostics.Debug.WriteLine("TCF init");
-                tcf.Init(uccb, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
+                ucf.Init(uccb, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
                              ExtendedControls.Theme.Current.LabelColor, ExtendedControls.Theme.Current.SPanelColor, ExtendedControls.Theme.Current.TransparentColorKey);
 
-                //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
                 uccb.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
 
-                ExtendedControls.Theme.Current.ApplyStd(tcf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
+                ExtendedControls.Theme.Current.ApplyStd(ucf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
 
-                //System.Diagnostics.Debug.WriteLine("Show");
-                tcf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
+                ucf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
 
                 discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
 
             return uccb;
+        }
+
+        public bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            return usercontrolsforms.PerformPanelOperation(sender, actionobj);
         }
 
         public bool AllowClose()

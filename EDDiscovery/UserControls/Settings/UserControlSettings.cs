@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
                 comboBoxCustomLanguage.SelectedIndex = comboBoxCustomLanguage.Items.Count - 1;
             comboBoxCustomLanguage.SelectedIndexChanged += ComboBoxCustomLanguage_SelectedIndexChanged;
 
-            discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
+            DiscoveryForm.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
 
             checkBoxOrderRowsInverted.Checked = EDDConfig.Instance.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDConfig.Instance.MinimizeToNotifyIcon;
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
-            checkBoxCustomEnableScreenshots.Checked = discoveryform.ScreenshotConverter.AutoConvert;
+            checkBoxCustomEnableScreenshots.Checked = DiscoveryForm.ScreenshotConverter.AutoConvert;
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
 
             checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.EDSMDownload;
@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
+            DiscoveryForm.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
 
             var frm = FindForm();
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
 
         private void clearLoginButton_Click(object sender, EventArgs e)
         {
-            discoveryform.FrontierCAPI.LogOut(cf.CommanderRootName);        // force logout and deletion of .cred
+            DiscoveryForm.FrontierCAPI.LogOut(cf.CommanderRootName);        // force logout and deletion of .cred
             capiclearloginButton.Visible = false;
         }
 
@@ -251,14 +251,14 @@ namespace EDDiscovery.UserControls
             if (cf.CommanderRootName.HasChars())    // good commander name..
             {
                 // if we have a login, and it has credentials, delete them
-                if (discoveryform.FrontierCAPI.GetUserState(cf.CommanderRootName) == CompanionAPI.UserState.HasLoggedInWithCredentials) 
+                if (DiscoveryForm.FrontierCAPI.GetUserState(cf.CommanderRootName) == CompanionAPI.UserState.HasLoggedInWithCredentials) 
                 {
-                    discoveryform.FrontierCAPI.LogOut(cf.CommanderRootName);
+                    DiscoveryForm.FrontierCAPI.LogOut(cf.CommanderRootName);
                     SetCAPILabelState();
                 }
                 else
                 {
-                    discoveryform.FrontierCAPI.LogIn(cf.CommanderRootName);         // perform login, which does the auth procedure.
+                    DiscoveryForm.FrontierCAPI.LogIn(cf.CommanderRootName);         // perform login, which does the auth procedure.
                     capiloggedin = true;         // remember we did a logon
                     capiButton.Enabled = false;
                     capiStateLabel.Text = "Logging in".T(EDTx.CommanderForm_CAPILoggingin);
@@ -270,13 +270,13 @@ namespace EDDiscovery.UserControls
 
         void SetCAPILabelState()                                        
         {
-            if (!discoveryform.FrontierCAPI.ClientIDAvailable)      // disable id no capiID
+            if (!DiscoveryForm.FrontierCAPI.ClientIDAvailable)      // disable id no capiID
             {
                 capiclearloginButton.Visible = false;
                 capiButton.Enabled = false;
                 capiStateLabel.Text = capiButton.Text = "Disabled".T(EDTx.CommanderForm_CAPIDisabled);
             }
-            else if (cf.CommanderRootName.HasChars() && discoveryform.FrontierCAPI.GetUserState(cf.CommanderRootName) == CompanionAPI.UserState.HasLoggedInWithCredentials)   // if logged in..
+            else if (cf.CommanderRootName.HasChars() && DiscoveryForm.FrontierCAPI.GetUserState(cf.CommanderRootName) == CompanionAPI.UserState.HasLoggedInWithCredentials)   // if logged in..
             {
                 capiclearloginButton.Visible = false;
                 capiButton.Enabled = true;
@@ -285,7 +285,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {                                                   // no cred, or logged out..
-                capiclearloginButton.Visible = discoveryform.FrontierCAPI.GetUserState(cf.CommanderRootName) != CompanionAPI.UserState.NeverLoggedIn;
+                capiclearloginButton.Visible = DiscoveryForm.FrontierCAPI.GetUserState(cf.CommanderRootName) != CompanionAPI.UserState.NeverLoggedIn;
                 capiButton.Enabled = true;
                 capiButton.Text = "Login".T(EDTx.CommanderForm_CAPILogin);
                 capiStateLabel.Text = "Await Log in".T(EDTx.CommanderForm_CAPIAwaitLogin);
@@ -305,7 +305,7 @@ namespace EDDiscovery.UserControls
         {
             cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls());
             cf.Init(true);
-            discoveryform.FrontierCAPI.StatusChange += CAPICallBack;
+            DiscoveryForm.FrontierCAPI.StatusChange += CAPICallBack;
             SetCAPILabelState();
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
@@ -316,15 +316,15 @@ namespace EDDiscovery.UserControls
                     cf.Update(cmdr);
                     EDCommander.Add(cmdr);
                     UpdateCommandersListBox();
-                    discoveryform.UpdateCommandersListBox();
-                    discoveryform.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+                    DiscoveryForm.UpdateCommandersListBox();
+                    DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
 
-            discoveryform.FrontierCAPI.StatusChange -= CAPICallBack;
+            DiscoveryForm.FrontierCAPI.StatusChange -= CAPICallBack;
         }
 
         private void dataGridViewCommanders_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -350,7 +350,7 @@ namespace EDDiscovery.UserControls
             cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls());
             cf.Init(cmdr,false);
             SetCAPILabelState();
-            discoveryform.FrontierCAPI.StatusChange += CAPICallBack;
+            DiscoveryForm.FrontierCAPI.StatusChange += CAPICallBack;
             capiloggedin = false;
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
@@ -360,10 +360,10 @@ namespace EDDiscovery.UserControls
                 dataGridViewCommanders.Refresh();
 
                 if ( forceupdate || capiloggedin )              // either a critial journal item changed, or a capi was logged
-                    discoveryform.RefreshHistoryAsync();        // do a resync
+                    DiscoveryForm.RefreshHistoryAsync();        // do a resync
             }
 
-            discoveryform.FrontierCAPI.StatusChange -= CAPICallBack;
+            DiscoveryForm.FrontierCAPI.StatusChange -= CAPICallBack;
         }
 
         private void btnDeleteCommander_Click(object sender, EventArgs e)
@@ -378,9 +378,9 @@ namespace EDDiscovery.UserControls
                 if (result == DialogResult.Yes)
                 {
                     EDCommander.Delete(cmdr);
-                    discoveryform.UpdateCommandersListBox();
+                    DiscoveryForm.UpdateCommandersListBox();
                     UpdateCommandersListBox();
-                    discoveryform.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+                    DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
 
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
@@ -400,7 +400,7 @@ namespace EDDiscovery.UserControls
         private void ExtComboBoxGameTime_SelectedIndexChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.DisplayTimeIndex = extComboBoxGameTime.SelectedIndex;
-            discoveryform.RefreshDisplays();
+            DiscoveryForm.RefreshDisplays();
         }
 
         private void ComboBoxCustomHistoryLoadTime_SelectedIndexChanged(object sender, EventArgs e)
@@ -408,7 +408,7 @@ namespace EDDiscovery.UserControls
             if (comboBoxCustomHistoryLoadTime.SelectedIndex >= 0)       // paranoia
             {
                 EDDConfig.Instance.FullHistoryLoadDayLimit = (comboBoxCustomHistoryLoadTime.Tag as int[])[comboBoxCustomHistoryLoadTime.SelectedIndex];
-                discoveryform.RefreshHistoryAsync();
+                DiscoveryForm.RefreshHistoryAsync();
             }
         }
 
@@ -418,7 +418,7 @@ namespace EDDiscovery.UserControls
             {
                 string[] tn = comboBoxCustomEssentialEntries.Tag as string[];
                 EDDConfig.Instance.EssentialEventTypes = tn[comboBoxCustomEssentialEntries.SelectedIndex];
-                discoveryform.RefreshHistoryAsync();
+                DiscoveryForm.RefreshHistoryAsync();
             }
         }
 
@@ -431,8 +431,8 @@ namespace EDDiscovery.UserControls
         private void ResetThemeList()
         {
             themeprogchange = true;
-            comboBoxTheme.Items = discoveryform.ThemeList.GetThemeNames();
-            int i = discoveryform.ThemeList.FindThemeIndex(ExtendedControls.Theme.Current.Name);
+            comboBoxTheme.Items = DiscoveryForm.ThemeList.GetThemeNames();
+            int i = DiscoveryForm.ThemeList.FindThemeIndex(ExtendedControls.Theme.Current.Name);
             if (i == -1)        // if not found
             {
                 ExtendedControls.Theme.Current.SetCustom();     // not in list, must be custom, force name
@@ -451,7 +451,7 @@ namespace EDDiscovery.UserControls
                 string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
 
                 string fontwanted = null;                                               // don't check custom, only a stored theme..
-                if (!themename.Equals("Custom") && !discoveryform.ThemeList.IsFontAvailableInTheme(themename, out fontwanted))
+                if (!themename.Equals("Custom") && !DiscoveryForm.ThemeList.IsFontAvailableInTheme(themename, out fontwanted))
                 {
                     string warning = string.Format(
                           ("The font used by this theme is not available on your system." + Environment.NewLine +
@@ -472,9 +472,9 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                discoveryform.ThemeList.SetThemeByName(themename);             // given the name, go to it, if possible. if not, its not there, it should be
+                DiscoveryForm.ThemeList.SetThemeByName(themename);             // given the name, go to it, if possible. if not, its not there, it should be
                 ResetThemeList();
-                discoveryform.ApplyTheme(true);
+                DiscoveryForm.ApplyTheme(true);
             }
         }
 
@@ -490,7 +490,7 @@ namespace EDDiscovery.UserControls
             {
                 if ( ExtendedControls.Theme.Current.SaveFile(dlg.FileName))
                 {
-                    discoveryform.ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(),"*.eddtheme");          // make sure up to data - we added a theme, reload them all
+                    DiscoveryForm.ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(),"*.eddtheme");          // make sure up to data - we added a theme, reload them all
                     ExtendedControls.Theme.Current.Name = Path.GetFileNameWithoutExtension(dlg.FileName);   // we set the name here, if its not in the theme list on reset, it will go to custom
                     ResetThemeList();
                 }
@@ -503,7 +503,7 @@ namespace EDDiscovery.UserControls
 
             var curtheme = ExtendedControls.Theme.Current;
 
-            themeeditor.ApplyChanges = (theme) => { ExtendedControls.Theme.Current = theme; discoveryform.ApplyTheme(true); };
+            themeeditor.ApplyChanges = (theme) => { ExtendedControls.Theme.Current = theme; DiscoveryForm.ApplyTheme(true); };
 
             buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = false;
 
@@ -522,7 +522,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 ResetThemeList();
-                discoveryform.ApplyTheme(true);
+                DiscoveryForm.ApplyTheme(true);
             };
 
             themeeditor.Show(FindForm());
@@ -540,12 +540,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtScreenshot_Click(object sender, EventArgs e)
         {
-            discoveryform.ScreenshotConverter.Configure(this.discoveryform);
+            DiscoveryForm.ScreenshotConverter.Configure(this.DiscoveryForm);
         }
 
         private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)
         {
-            discoveryform.ScreenshotConverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked;
+            DiscoveryForm.ScreenshotConverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked;
         }
 
         #endregion
@@ -591,7 +591,7 @@ namespace EDDiscovery.UserControls
             bool chk = checkBoxUseNotifyIcon.Checked;
             EDDConfig.Instance.UseNotifyIcon = chk;
             checkBoxMinimizeToNotifyIcon.Enabled = chk;
-            discoveryform.useNotifyIconChanged(chk);
+            DiscoveryForm.useNotifyIconChanged(chk);
         }
 
         private void checkBoxKeepOnTop_CheckedChanged(object sender, EventArgs e)
@@ -648,7 +648,7 @@ namespace EDDiscovery.UserControls
 
                 if (gss.Action == GalaxySectorSelect.ActionToDo.Add)
                 {
-                    discoveryform.ForceEDSMFullRefresh();
+                    DiscoveryForm.ForceEDSMFullRefresh();
                 }
                 else if (gss.Action == GalaxySectorSelect.ActionToDo.Remove)
                 {
@@ -663,9 +663,9 @@ namespace EDDiscovery.UserControls
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
                                 "the process has finished" + Environment.NewLine + Environment.NewLine).T(EDTx.UserControlSettings_GalRemove), gss.Removed.Count));
                     info.EnableClose = false;
-                    info.Show(discoveryform);
+                    info.Show(DiscoveryForm);
 
-                    taskremovesectors = Task.Factory.StartNew(() => RemoveSectors(gss.AllRemoveSectors, (s) => discoveryform.Invoke(new Action(() => { info.AddText(s); }))));
+                    taskremovesectors = Task.Factory.StartNew(() => RemoveSectors(gss.AllRemoveSectors, (s) => DiscoveryForm.Invoke(new Action(() => { info.AddText(s); }))));
 
                     removetimer = new Timer() { Interval = 200 };
                     removetimer.Tick += Removetimer_Tick;
@@ -724,7 +724,7 @@ namespace EDDiscovery.UserControls
 
         private void PeriodicCheck(object sender, EventArgs e)      // webserver needs periodically checking to see if running.
         {
-            bool running = discoveryform.WebServer.Running;
+            bool running = DiscoveryForm.WebServer.Running;
             if (extCheckBoxWebServerEnable.Checked != running)
             {
                 extCheckBoxWebServerEnable.CheckedChanged -= ExtCheckBoxWebServerEnable_CheckedChanged;
@@ -786,7 +786,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            if ( !discoveryform.WebServerControl(runit, (int)numberBoxLongPortNo.Value) )
+            if ( !DiscoveryForm.WebServerControl(runit, (int)numberBoxLongPortNo.Value) )
             {
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Did not start - click OK to configure windows".T(EDTx.UserControlSettings_WSF), "Web Server");
             }
@@ -814,7 +814,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDLLConfigure_Click(object sender, EventArgs e)
         {
-            discoveryform.DLLManager.DLLConfigure(this.FindForm(), this.FindForm().Icon,
+            DiscoveryForm.DLLManager.DLLConfigure(this.FindForm(), this.FindForm().Icon,
                 (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
         }
 

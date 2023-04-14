@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
  using System;
@@ -49,9 +49,8 @@ namespace EDDiscovery.UserControls
             tabStrip.OnPostCreateTab += (tab, ctrl, si) =>
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-                uccb.Init(discoveryform, displaynumber);
+                uccb.Init(DiscoveryForm, DisplayNumber);
                 ExtendedControls.Theme.Current.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
-                uccb.SetCursor(uctg);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             };
@@ -61,15 +60,6 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.CloseDown();
             };
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            UserControlCommonBase uccb = tabStrip.CurrentControl as UserControlCommonBase;
-            if (uccb != null)           // if we get a change cursor, must tell our tab child
-            {
-                uccb.ChangeCursorType(uctg);
-            }
         }
 
         public override void InitialDisplay()

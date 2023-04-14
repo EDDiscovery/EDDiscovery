@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  *
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ * 
  */
 
 using EDDiscovery.UserControls;
@@ -76,7 +76,7 @@ namespace EDDiscovery
             MiningOverlay=46,         
             Factions=47,              
             Spansh=48,                
-            EDDB=49,                  
+            // EDDB=49,                   removed for 16.1
             Inara=50,                 
             MicroResources=51,        
             SuitsWeapons=52,
@@ -86,6 +86,7 @@ namespace EDDiscovery
             Engineers = 56,
             Discoveries = 57,
             Carrier=58,
+            Resources=59,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -96,6 +97,7 @@ namespace EDDiscovery
 
         static private List<PanelInfo> paneldefinition = new List<PanelInfo>()
         {
+            //                                                      Windows title, windows ref name (used in registry), description 
             { new PanelInfo( "History") },
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Log of program information" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
@@ -106,6 +108,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.MicroResources, typeof(UserControlMicroResources), "Micro Resources", "MicroResources", "Micro resource count") },
+            { new PanelInfo( PanelIDs.Resources, typeof(UserControlAllResources), "Resources", "AllResources", "All Materials, Commodity, MicroResources") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
             { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
@@ -130,7 +133,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system") },
             { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "EDSM - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Spansh, typeof(UserControlSpansh), "Spansh", "Spansh", "Spansh - Automatic web view of system") },
-            { new PanelInfo( PanelIDs.EDDB, typeof(UserControlEDDB), "EDDB", "EDDB", "EDDB - Automatic web view of system") },
+            //{ new PanelInfo( PanelIDs.EDDB, typeof(UserControlEDDB), "EDDB", "EDDB", "EDDB - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Inara, typeof(UserControlInara), "Inara", "Inara", "Inara - Automatic web view of system") },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid") },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
@@ -180,9 +183,10 @@ namespace EDDiscovery
 
         private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
             PanelIDs.EDSM, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
-            PanelIDs.Spansh, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
-            PanelIDs.EDDB, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
-            PanelIDs.Inara, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
+            PanelIDs.Spansh, 
+            PanelIDs.Inara,
+            PanelIDs.Map3D,
+            PanelIDs.LocalMap3D,
         });
 
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed
