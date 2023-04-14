@@ -58,7 +58,6 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHub = new System.Windows.Forms.LinkLabel();
             this.linkLabelFDForum = new System.Windows.Forms.LinkLabel();
             this.linkLabelEliteDangerous = new System.Windows.Forms.LinkLabel();
-            this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.labelDevelopers = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel_close = new ExtendedControls.ExtButtonDrawn();
@@ -75,6 +74,7 @@ namespace EDDiscovery.Forms
             this.panelDevs = new System.Windows.Forms.Panel();
             this.panelDevsSurround = new System.Windows.Forms.Panel();
             this.extTextBoxDevs = new ExtendedControls.ExtTextBox();
+            this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.panelLinksBR.SuspendLayout();
             this.flowLayoutPanelLabels.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
@@ -92,10 +92,13 @@ namespace EDDiscovery.Forms
             // 
             // labelVersion
             // 
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Dock = System.Windows.Forms.DockStyle.Left;
             this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.Location = new System.Drawing.Point(3, 13);
+            this.labelVersion.Location = new System.Drawing.Point(0, 0);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(342, 32);
+            this.labelVersion.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.labelVersion.Size = new System.Drawing.Size(75, 32);
             this.labelVersion.TabIndex = 0;
             this.labelVersion.Text = "<code>";
             // 
@@ -142,16 +145,17 @@ namespace EDDiscovery.Forms
             // 
             // panelLinksBR
             // 
+            this.panelLinksBR.AutoSize = true;
             this.panelLinksBR.Controls.Add(this.flowLayoutPanelLabels);
-            this.panelLinksBR.Controls.Add(this.labelNoAffiliation);
             this.panelLinksBR.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelLinksBR.Location = new System.Drawing.Point(0, 356);
+            this.panelLinksBR.Location = new System.Drawing.Point(0, 450);
             this.panelLinksBR.Name = "panelLinksBR";
-            this.panelLinksBR.Size = new System.Drawing.Size(300, 276);
+            this.panelLinksBR.Size = new System.Drawing.Size(300, 182);
             this.panelLinksBR.TabIndex = 5;
             // 
             // flowLayoutPanelLabels
             // 
+            this.flowLayoutPanelLabels.AutoSize = true;
             this.flowLayoutPanelLabels.Controls.Add(this.labelLinks);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelYouTube);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelDeveloperChat);
@@ -164,14 +168,15 @@ namespace EDDiscovery.Forms
             this.flowLayoutPanelLabels.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanelLabels.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelLabels.Name = "flowLayoutPanelLabels";
-            this.flowLayoutPanelLabels.Size = new System.Drawing.Size(300, 212);
+            this.flowLayoutPanelLabels.Padding = new System.Windows.Forms.Padding(1, 10, 1, 10);
+            this.flowLayoutPanelLabels.Size = new System.Drawing.Size(300, 182);
             this.flowLayoutPanelLabels.TabIndex = 17;
             // 
             // labelLinks
             // 
             this.labelLinks.AutoSize = true;
             this.labelLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLinks.Location = new System.Drawing.Point(0, 0);
+            this.labelLinks.Location = new System.Drawing.Point(1, 10);
             this.labelLinks.Margin = new System.Windows.Forms.Padding(0);
             this.labelLinks.Name = "labelLinks";
             this.labelLinks.Size = new System.Drawing.Size(46, 20);
@@ -184,7 +189,7 @@ namespace EDDiscovery.Forms
             this.linkLabelYouTube.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelYouTube.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelYouTube.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelYouTube.Location = new System.Drawing.Point(3, 23);
+            this.linkLabelYouTube.Location = new System.Drawing.Point(4, 33);
             this.linkLabelYouTube.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelYouTube.Name = "linkLabelYouTube";
             this.linkLabelYouTube.Size = new System.Drawing.Size(64, 16);
@@ -199,7 +204,7 @@ namespace EDDiscovery.Forms
             this.linkLabelDeveloperChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelDeveloperChat.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelDeveloperChat.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelDeveloperChat.Location = new System.Drawing.Point(3, 42);
+            this.linkLabelDeveloperChat.Location = new System.Drawing.Point(4, 52);
             this.linkLabelDeveloperChat.Name = "linkLabelDeveloperChat";
             this.linkLabelDeveloperChat.Size = new System.Drawing.Size(102, 16);
             this.linkLabelDeveloperChat.TabIndex = 2;
@@ -213,7 +218,7 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHubIssue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelGitHubIssue.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelGitHubIssue.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelGitHubIssue.Location = new System.Drawing.Point(3, 61);
+            this.linkLabelGitHubIssue.Location = new System.Drawing.Point(4, 71);
             this.linkLabelGitHubIssue.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelGitHubIssue.Name = "linkLabelGitHubIssue";
             this.linkLabelGitHubIssue.Size = new System.Drawing.Size(114, 16);
@@ -228,7 +233,7 @@ namespace EDDiscovery.Forms
             this.linkLabelHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelHelp.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelHelp.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelHelp.Location = new System.Drawing.Point(3, 80);
+            this.linkLabelHelp.Location = new System.Drawing.Point(4, 90);
             this.linkLabelHelp.Name = "linkLabelHelp";
             this.linkLabelHelp.Size = new System.Drawing.Size(37, 16);
             this.linkLabelHelp.TabIndex = 7;
@@ -242,7 +247,7 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHub.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelGitHub.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelGitHub.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelGitHub.Location = new System.Drawing.Point(3, 99);
+            this.linkLabelGitHub.Location = new System.Drawing.Point(4, 109);
             this.linkLabelGitHub.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelGitHub.Name = "linkLabelGitHub";
             this.linkLabelGitHub.Size = new System.Drawing.Size(49, 16);
@@ -257,7 +262,7 @@ namespace EDDiscovery.Forms
             this.linkLabelFDForum.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelFDForum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelFDForum.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelFDForum.Location = new System.Drawing.Point(3, 121);
+            this.linkLabelFDForum.Location = new System.Drawing.Point(4, 131);
             this.linkLabelFDForum.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelFDForum.Name = "linkLabelFDForum";
             this.linkLabelFDForum.Size = new System.Drawing.Size(94, 16);
@@ -272,7 +277,7 @@ namespace EDDiscovery.Forms
             this.linkLabelEliteDangerous.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelEliteDangerous.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelEliteDangerous.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelEliteDangerous.Location = new System.Drawing.Point(3, 143);
+            this.linkLabelEliteDangerous.Location = new System.Drawing.Point(4, 153);
             this.linkLabelEliteDangerous.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelEliteDangerous.Name = "linkLabelEliteDangerous";
             this.linkLabelEliteDangerous.Size = new System.Drawing.Size(104, 16);
@@ -280,19 +285,6 @@ namespace EDDiscovery.Forms
             this.linkLabelEliteDangerous.TabStop = true;
             this.linkLabelEliteDangerous.Text = "Elite Dangerous";
             this.linkLabelEliteDangerous.Click += new System.EventHandler(this.link_Click);
-            // 
-            // labelNoAffiliation
-            // 
-            this.labelNoAffiliation.AutoSize = true;
-            this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelNoAffiliation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNoAffiliation.Location = new System.Drawing.Point(0, 212);
-            this.labelNoAffiliation.Name = "labelNoAffiliation";
-            this.labelNoAffiliation.Size = new System.Drawing.Size(210, 64);
-            this.labelNoAffiliation.TabIndex = 16;
-            this.labelNoAffiliation.Text = "(C) 2015-2023 EDDiscovery Team\r\n\r\nEDDiscovery is not affiliated with \r\nFrontier D" +
-    "evelopments plc.\r\n";
-            this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelDevelopers
             // 
@@ -331,10 +323,10 @@ namespace EDDiscovery.Forms
             // 
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Right;
             this.panelLogo.Image = global::EDDiscovery.Properties.Resources.Logo;
-            this.panelLogo.Location = new System.Drawing.Point(427, 0);
+            this.panelLogo.Location = new System.Drawing.Point(524, 0);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
-            this.panelLogo.Size = new System.Drawing.Size(255, 64);
+            this.panelLogo.Size = new System.Drawing.Size(158, 64);
             this.panelLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.panelLogo.TabIndex = 15;
             this.panelLogo.TabStop = false;
@@ -414,6 +406,7 @@ namespace EDDiscovery.Forms
             // 
             // panelName
             // 
+            this.panelName.Controls.Add(this.labelNoAffiliation);
             this.panelName.Controls.Add(this.panelLogo);
             this.panelName.Controls.Add(this.labelVersion);
             this.panelName.Dock = System.Windows.Forms.DockStyle.Top;
@@ -435,6 +428,7 @@ namespace EDDiscovery.Forms
             // 
             // panelDevs
             // 
+            this.panelDevs.AutoSize = true;
             this.panelDevs.Controls.Add(this.panelDevsSurround);
             this.panelDevs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDevs.Location = new System.Drawing.Point(0, 24);
@@ -444,6 +438,7 @@ namespace EDDiscovery.Forms
             // 
             // panelDevsSurround
             // 
+            this.panelDevsSurround.AutoSize = true;
             this.panelDevsSurround.Controls.Add(this.extTextBoxDevs);
             this.panelDevsSurround.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDevsSurround.Location = new System.Drawing.Point(0, 0);
@@ -479,6 +474,20 @@ namespace EDDiscovery.Forms
             this.extTextBoxDevs.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.extTextBoxDevs.WordWrap = true;
             // 
+            // labelNoAffiliation
+            // 
+            this.labelNoAffiliation.AutoSize = true;
+            this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelNoAffiliation.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelNoAffiliation.Location = new System.Drawing.Point(326, 0);
+            this.labelNoAffiliation.Margin = new System.Windows.Forms.Padding(0);
+            this.labelNoAffiliation.Name = "labelNoAffiliation";
+            this.labelNoAffiliation.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.labelNoAffiliation.Size = new System.Drawing.Size(198, 44);
+            this.labelNoAffiliation.TabIndex = 18;
+            this.labelNoAffiliation.Text = "(C) 2015-2023 \r\nRobby && EDDiscovery Team";
+            this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -506,9 +515,11 @@ namespace EDDiscovery.Forms
             this.panelContent.ResumeLayout(false);
             this.panelLeft.ResumeLayout(false);
             this.panelName.ResumeLayout(false);
+            this.panelName.PerformLayout();
             this.panelRight.ResumeLayout(false);
             this.panelRight.PerformLayout();
             this.panelDevs.ResumeLayout(false);
+            this.panelDevs.PerformLayout();
             this.panelDevsSurround.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -529,7 +540,6 @@ namespace EDDiscovery.Forms
         internal System.Windows.Forms.Label labelDevelopers;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.ExtButtonDrawn panel_close;
-        private System.Windows.Forms.Label labelNoAffiliation;
         private System.Windows.Forms.PictureBox panelLogo;
         private System.Windows.Forms.Panel paneltop;
         private System.Windows.Forms.Panel panelbot;
@@ -545,5 +555,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelLabels;
         private System.Windows.Forms.Panel panelDevsSurround;
         private System.Windows.Forms.Panel panelWebBrowser;
+        private System.Windows.Forms.Label labelNoAffiliation;
     }
 }
