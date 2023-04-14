@@ -78,16 +78,16 @@ SECTION UserControlContainerGrid
 SECTION UserControlCompass
 
 .labelTargetLat: "Target" => "Ziel"
-.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
-.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
-.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
-.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
-.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
-.extButtonShowControl.ToolTip: "Configure compass overlay" @
-.extButtonFont.ToolTip: "Configure font of compass" @
-.hidewhennolatlong: "Hide when no Lat/Long" @
-.hidewhenonfoot: "Hide when on foot" @
-.cleartargetonleavingbody: "Clear target when leaving a body" @
+.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" => "Breitengrad der Zielposition, leer für Nichts"
+.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" => "Langengrad der Zielposition, leer für Nichts"
+.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" => "Wähle bekanntes Körpermerkmal oder Lesezeichen"
+.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" => "Lösche Zielbreiten- und Längengrad sowie Auswahl"
+.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" => "Bearbeite oder erstelle Systemlesezeichen"
+.extButtonShowControl.ToolTip: "Configure compass overlay" => "Konfiguriere Kompassoverlay"
+.extButtonFont.ToolTip: "Configure font of compass" => "Konfiguriere Kompassschrift"
+.hidewhennolatlong: "Hide when no Lat/Long" => "Verbergen ohne aktive Breite/Länge"
+.hidewhenonfoot: "Hide when on foot" => "Verbergen wenn zu Fuß"
+.cleartargetonleavingbody: "Clear target when leaving a body" => "Lösche Ziel beim Verlassen des Körpers"
 
 SECTION UserControlWebBrowser
 
@@ -259,7 +259,7 @@ SECTION UserControlExpedition
 .Note: "Note" => "Notiz"
 .ColumnDistStart: "Dist Start" => "Dist Start"
 .ColumnDistanceRemaining: "Dist Remaining" => "Dist Verbleibend"
-.ColumnHistoryNote: "History Note" @
+.ColumnHistoryNote: "History Note" => "Historiennotiz"
 .labelCml: "Cml Distance:" => "Gesamte Entfernung:"
 .labelP2P: "P2P Distance:" => "Punkt-zu-Punkt-Entfernung:"
 .labelEndDate: "End Date:" => "Enddatum:"
@@ -267,8 +267,8 @@ SECTION UserControlExpedition
 .labelRouteName: "Route Name:" => "Routenname:"
 .copyToolStripMenuItem: "Copy" => "Kopieren"
 .pasteToolStripMenuItem: "Paste" => "Einfügen"
-.cutToolStripMenuItem: "Cut" @
-.insertRowAboveToolStripMenuItem: "Insert row above" @
+.cutToolStripMenuItem: "Cut" => "Ausschneiden"
+.insertRowAboveToolStripMenuItem: "Insert row above" => "Zeile darüber einfügen"
 .setTargetToolStripMenuItem: "Set Target" => "Ziel setzen"
 .editBookmarkToolStripMenuItem: "Edit bookmark" => "Lesezeichen bearbeiten"
 .NoRoute: "No route set up. Please add at least two systems." => "Keine Route angelegt. Bitte füge mindestens zwei Systeme hinzu."
@@ -374,24 +374,24 @@ SECTION UserControlMaterialCommodities
 .ColBackPack: "Backpack" => "Rucksack"
 .ColPrice: "Avg. Price" => "Durchschn. Preis"
 .ColRecipes: "Recipes" => "Rezepte"
-.ColWanted: "Want" @
-.ColNeed: "Need" @
+.ColWanted: "Want" => "Gewollt"
+.ColNeed: "Need" => "Benötigt"
 .textBoxItems2.ToolTip: "Count of Items" => "Anzahl"
 .textBoxItems1.ToolTip: "Count of Items" => "Anzahl"
 .buttonFilter.ToolTip: "Filter out items" => "Einträge ausfiltern"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Grün zeigt Einträge auf Null, Rot filtert diese"
-.AllMats: "All Materials" @
-.AllCommods: "All Commodities" @
-.AllMicroresources: "All Microresources" @
-.buttonClear.ToolTip: "Set all wanted values to zero" @
-.extButtonFont.ToolTip: "Font for shopping list" @
-.buttonExtImport.ToolTip: "Import materials list into panel" @
-.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
-.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
-.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
-.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
-.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
+.AllMats: "All Materials" => "Alle Materialien"
+.AllCommods: "All Commodities" => "Alle Handelswaren"
+.AllMicroresources: "All Microresources" => "Alle Mikroressourcen"
+.buttonClear.ToolTip: "Set all wanted values to zero" => "Setze alle 'Gewollt'-Werte auf Null"
+.extButtonFont.ToolTip: "Font for shopping list" => "Schrift für Einkaufsliste"
+.buttonExtImport.ToolTip: "Import materials list into panel" => "Importiere Materialienliste in Panel"
+.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" => "Öffne Rezept in Fenster"
+.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" => "Zeige Element in Enkaufsliste"
+.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" => "Lösche alle angezeigten Elemente in Einkaufsliste"
+.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" => "Zeige alle 'Nicht Null'-Elemente in Einkaufsliste"
+.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" => "Lösche alle angezeigten Elemente in Einkaufsliste"
 
 SECTION UserControlMissionOverlay
 
@@ -645,7 +645,7 @@ SECTION UserControlRouteTracker
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Zeige Abweichung von der Route"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Wegpunkt automatisch kopieren"
 .autoSetTargetToolStripMenuItem: "Auto set target" => "Ziel automatisch setzen"
-.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
+.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" => "Zeige Routennotiz am Wegpunkt"
 .showtargetinfo: "Show Target Information" => "Zeige Zielinformation"
 .showfuelinfo: "Show Fuel Information" => "Zeige Treibstoffinformation"
 .J1: "jump" => "Sprung"
@@ -1227,8 +1227,8 @@ SECTION UserControlTravelGrid
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Umrisskontrolle"
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
-.StartStopHidden: "Next start/stop marker is hidden" @
-.StartStopNotFound: "No start/stop marker found below" @
+.StartStopHidden: "Next start/stop marker is hidden" => "Nächste Start/Stopp-Markierung ist versteckt"
+.StartStopNotFound: "No start/stop marker found below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
 
 SECTION UserControlCaptainsLog
 
@@ -1480,8 +1480,8 @@ SECTION UserControlSuitsWeapons
 
 SECTION UserControlCarrier
 
-.Decommissioned: "Decommissioned" @
-.DecommissionedOn: "Decommissioning on" @
+.Decommissioned: "Decommissioned" => "Dekommissioniert"
+.DecommissionedOn: "Decommissioning on" => "Dekommissionierung am"
 .Cargo: "Cargo" => "Fracht"
 .Services: "Services" => "Einrichtungen"
 .Shippacks: "Ship packs" => "Schiffspakete"
@@ -1510,14 +1510,14 @@ SECTION UserControlCarrier
 .Suspendedupkeepcost: "Suspended upkeep cost" => "Eingestellte Instandhaltungskosten"
 .CrewName: "Crew Name" => "Crewname"
 .ServiceActive: "This Service is Active" => "Diese Einrichtung ist aktiv"
-.ServiceSuspended: "This service is suspended" @
-.ServiceNotInstalled: "This Service is Not Installed" @
-.NoPacks: "No Module or Ship packs installed" @
+.ServiceSuspended: "This service is suspended" => "Dieser Service ist beurlaubt"
+.ServiceNotInstalled: "This Service is Not Installed" => "Dieser Service ist nicht installiert"
+.NoPacks: "No Module or Ship packs installed" => "Kein Modul- oder Schiffspaket installiert"
 .Tier: "Tier" => "Rang"
 .Cost: "Cost" => "Kosten"
-.Jumping: "Jumping" @
+.Jumping: "Jumping" => "Springend"
 .NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" @
-.NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
+.NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Du bist nicht im CAPI angemeldet.\r\nGehe zum Einstellungspanel, öffne deine Kommandanteneinstellungen und logge dich ein."
 .OptionalService: "Optional Service" => "Optionale Einrichtung"
 .CoreService: "Core Service" => "Kerneinrichtung"
 .extTabControl.tabPageOverall: "Overall" => "Insgesamt"
