@@ -167,8 +167,8 @@ SECTION PopOutInfo
 .Discoveries.Description: "Discoveries Observer List" => "Discoveries Observer-Liste"
 .Carrier.Title: "Carrier" => "Carrier"
 .Carrier.Description: "Data about your fleet carrier" => "Daten über deinen Fleet Carrier"
-.Resources.Title: "Resources" @
-.Resources.Description: "All Materials, Commodity, MicroResources" @
+.Resources.Title: "Resources" => "Ressourcen"
+.Resources.Description: "All Materials, Commodity, MicroResources" => "Alle Materialien, Handelswaren, Mikroressourcen"
 
 SECTION EDDiscoveryForm
 
@@ -387,9 +387,9 @@ ImportExportForm: "Export data" => "Daten exportieren"
 .checkBoxCustomAutoOpen: "Open" => "Öffnen"
 .labelUTCEnd: "UTC" => "UTC"
 .labelUTCStart: "UTC" => "UTC"
-.labelPaste: "Click Paste or drag text or files to input box" @
-.extRadioButtonTab: "Tab" @
-.extCheckBoxExcludeHeader: "Exclude Header Row" @
+.labelPaste: "Click Paste or drag text or files to input box" => "Kopiere Text in, oder ziehe Dateien auf Eingabefeld"
+.extRadioButtonTab: "Tab" => "Tabulator"
+.extCheckBoxExcludeHeader: "Exclude Header Row" => "Ignoriere Headerzeile"
 
 SECTION Form2DMap
 
@@ -469,8 +469,8 @@ SECTION MessageBoxTheme
 .OK: "OK" => "OK"
 .No: "No" => "Nein"
 .Yes: "Yes" => "Ja"
-.Add: "Add" @
-.Set: "Set" @
+.Add: "Add" => "Hinzufügen"
+.Set: "Set" => "Festlegen"
 
 SECTION DataGridViewDialogs
 
