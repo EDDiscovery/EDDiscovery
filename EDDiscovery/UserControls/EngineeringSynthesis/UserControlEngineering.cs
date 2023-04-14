@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
 
             WantedPerRecipe = GetSetting(dbWSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
 
-            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
+            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.Engineers).Distinct().ToList();
             engineers.Sort();
             efs = new RecipeFilterSelector(engineers);
             efs.SaveSettings += (newvalue, e) => { PutSetting(dbEngFilterSave, newvalue); Display(); };
@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
             lfs = new RecipeFilterSelector(levels);
             lfs.SaveSettings += (newvalue, e) => { PutSetting(dbLevelFilterSave, newvalue); Display(); };
 
-            List<string> modules = Recipes.EngineeringRecipes.SelectMany(r => r.modules).Distinct().ToList();
+            List<string> modules = Recipes.EngineeringRecipes.SelectMany(r => r.Modules).Distinct().ToList();
             modules.Sort();
             mfs = new RecipeFilterSelector(modules);
             mfs.SaveSettings += (newvalue, e) => { PutSetting(dbModFilterSave, newvalue); Display(); };
@@ -110,10 +110,10 @@ namespace EDDiscovery.UserControls
                 int rown = dataGridViewEngineering.Rows.Add();
                 DataGridViewRow row = dataGridViewEngineering.Rows[rown];
                 row.Cells[UpgradeCol.Index].Value = r.Name; // debug rno + ":" + r.name;
-                row.Cells[ModuleCol.Index].Value = r.modulesstring;
-                row.Cells[LevelCol.Index].Value = r.level;
-                row.Cells[EngineersCol.Index].Tag = r.engineers;        // keep list in tag
-                row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.engineers);
+                row.Cells[ModuleCol.Index].Value = r.ModuleList;
+                row.Cells[LevelCol.Index].Value = r.Level;
+                row.Cells[EngineersCol.Index].Tag = r.Engineers;        // keep list in tag
+                row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.Engineers);
                 row.Tag = recipeno;
                 row.Visible = false;
             }
@@ -236,19 +236,19 @@ namespace EDDiscovery.UserControls
                     {
                         if (engineers != "All")
                         {
-                            var included = engList.Intersect<string>(Recipes.EngineeringRecipes[rno].engineers.ToList<string>());
+                            var included = engList.Intersect<string>(Recipes.EngineeringRecipes[rno].Engineers.ToList<string>());
                             visible &= included.Count() > 0;
                         }
 
                         if (modules != "All")
                         { 
-                            var included = modList.Intersect<string>(Recipes.EngineeringRecipes[rno].modules.ToList<string>());
+                            var included = modList.Intersect<string>(Recipes.EngineeringRecipes[rno].Modules.ToList<string>());
                             visible &= included.Count() > 0;
                         }
 
                         if (levels != "All")
                         { 
-                            visible &= lvlArray.Contains(Recipes.EngineeringRecipes[rno].level);
+                            visible &= lvlArray.Contains(Recipes.EngineeringRecipes[rno].Level);
                         }
 
                         if (upgrades != "All")
@@ -476,13 +476,19 @@ namespace EDDiscovery.UserControls
             if (e.RowIndex >= 0 )
             {
                 DataGridViewRow row = dataGridViewEngineering.Rows[e.RowIndex];
-                int rno = (int)row.Tag;
-                Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[rno];
 
                 if ( e.ColumnIndex == RecipeCol.Index)
                 {
+                    int rno = (int)row.Tag;
+                    Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[rno];
                     dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = r.IngredientsStringLong;
                 }
+
+                int rcell = e.ColumnIndex;
+                if (row.Cells[rcell].Style.WrapMode == DataGridViewTriState.True)       // toggle wrap mode
+                    row.Cells[rcell].Style.WrapMode = DataGridViewTriState.NotSet;
+                else
+                    row.Cells[rcell].Style.WrapMode = DataGridViewTriState.True;
             }
         }
 

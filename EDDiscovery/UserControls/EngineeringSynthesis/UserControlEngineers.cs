@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxMoreInfo.Checked = GetSetting(dbMoreInfo, false);
             extCheckBoxMoreInfo.Click += extCheckBoxMoreInfo_Click;
 
-            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
+            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.Engineers).Distinct().ToList();
             engineers.Sort();
             efs = new RecipeFilterSelector(engineers);
             efs.AddGroupOption(string.Join(";",ItemData.ShipEngineers()), "Ship Engineers");
@@ -137,7 +137,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine($"Cleaned {BaseUtils.AppTicks.TickCountLap("s1")}");
 
-            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
+            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.Engineers).Distinct().ToList();
             engineers.Sort();
             engineerpanels = new List<EngineerStatusPanel>();
 

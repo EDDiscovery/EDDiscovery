@@ -119,7 +119,7 @@ namespace EDDiscovery.UserControls
 
             for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
             {
-                if (Recipes.EngineeringRecipes[i].engineers.Contains(name))
+                if (Recipes.EngineeringRecipes[i].Engineers.Contains(name))
                 {
                     Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[i];
 
@@ -127,10 +127,10 @@ namespace EDDiscovery.UserControls
                     row.Tag = r;
                     row.Cells[0].Tag = wno++;           // index into WantedPerRecipe
                     row.Cells[UpgradeCol.Index].Value = r.Name; 
-                    row.Cells[ModuleCol.Index].Value = r.modulesstring;
-                    row.Cells[LevelCol.Index].Value = r.level;
-                    row.Cells[EngineersCol.Index].Tag = r.engineers;        // keep list in tag
-                    row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.engineers);
+                    row.Cells[ModuleCol.Index].Value = r.ModuleList;
+                    row.Cells[LevelCol.Index].Value = r.Level;
+                    row.Cells[EngineersCol.Index].Tag = r.Engineers;        // keep list in tag
+                    row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.Engineers);
                     row.Cells[RecipeCol.Index].ToolTipText = r.IngredientsStringLong;
                 }
             }
@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
                         var cb = c.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerCraftBase;
                         if (cb != null)     // if an craft base type, check name and level
                         {
-                            if (cb.Engineering.BlueprintName.Equals(r.fdname, StringComparison.InvariantCultureIgnoreCase) && cb.Engineering.Level == r.LevelInt)
+                            if (cb.Engineering.BlueprintName.Equals(r.FDName, StringComparison.InvariantCultureIgnoreCase) && cb.Engineering.Level == r.LevelInt)
                             {
                                 tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (c.ShipInformation?.Name ?? "?") + " " + (cb.Engineering.ExperimentalEffect_Localised ?? ""), Environment.NewLine);
                                 craftcount++;
@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
                         {
                             var tb = c.journalEntry as EliteDangerousCore.JournalEvents.JournalTechnologyBroker;
                             //string unl = string.Join(",", tb.ItemsUnlocked.Select(x=>x.Name));  System.Diagnostics.Debug.WriteLine($"{unl} {r.fdname}");
-                            if (tb.ItemsUnlocked != null && Array.FindIndex(tb.ItemsUnlocked, x => x.Name.Equals(r.fdname, StringComparison.InvariantCultureIgnoreCase)) >= 0)
+                            if (tb.ItemsUnlocked != null && Array.FindIndex(tb.ItemsUnlocked, x => x.Name.Equals(r.FDName, StringComparison.InvariantCultureIgnoreCase)) >= 0)
                             {
                                 tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (tb.BrokerType ?? "") + " " + string.Join(",", tb.ItemsUnlocked.Select(x => x.Name_Localised)));
                                 craftcount++;

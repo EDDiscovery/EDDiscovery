@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             rfs = new RecipeFilterSelector(rcpes);
             rfs.SaveSettings += (newvalue, e) => { PutSetting(dbRecipeFilterSave, newvalue); Display(); };
 
-            var lvls = Recipes.SynthesisRecipes.Select(r => r.level).Distinct().ToList();
+            var lvls = Recipes.SynthesisRecipes.Select(r => r.Level).Distinct().ToList();
             lvls.Reverse();     // because the table starts with premium-std-basic, thats the order it gets picked up in. reverse it
             lfs = new RecipeFilterSelector(lvls);
             lfs.SaveSettings += (newvalue, e) => { PutSetting(dbLevelFilterSave, newvalue); Display(); };
@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
                 using (DataGridViewRow row = dataGridViewSynthesis.Rows[rown])
                 {
                     row.Cells[0].Value = r.Name; // debug rno + ":" + r.name;
-                    row.Cells[1].Value = r.level;
+                    row.Cells[1].Value = r.Level;
                     row.Tag = recipeno;
                     row.Visible = false;
                 }
@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
 
                         if (levels != "All")
                         {
-                            visible &= lvlArray.Contains(Recipes.SynthesisRecipes[rno].level);
+                            visible &= lvlArray.Contains(Recipes.SynthesisRecipes[rno].Level);
                         }
 
                         if (materials != "All")
@@ -333,16 +333,20 @@ namespace EDDiscovery.UserControls
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dataGridViewSynthesis.Rows[e.RowIndex];
-                int rno = (int)row.Tag;
-                Recipes.SynthesisRecipe r = Recipes.SynthesisRecipes[rno];
 
                 if (e.ColumnIndex == Recipe.Index)
                 {
+                    int rno = (int)row.Tag;
+                    Recipes.SynthesisRecipe r = Recipes.SynthesisRecipes[rno];
                     dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = r.IngredientsStringLong;
                 }
+
+                int rcell = e.ColumnIndex;
+                if (row.Cells[rcell].Style.WrapMode == DataGridViewTriState.True)
+                    row.Cells[rcell].Style.WrapMode = DataGridViewTriState.NotSet;
+                else
+                    row.Cells[rcell].Style.WrapMode = DataGridViewTriState.True;
             }
-
-
         }
 
         private Rectangle moveMoveDragBox;

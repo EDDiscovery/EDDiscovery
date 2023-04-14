@@ -559,24 +559,21 @@ namespace EDDiscovery.UserControls
             {
                 DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
 
-                if (row.Height > dataGridViewMC.RowTemplate.Height)
-                {
-                    row.Height = dataGridViewMC.RowTemplate.Height;
-                }
+                if (row.Cells[rcell].Style.WrapMode == DataGridViewTriState.True)
+                    row.Cells[rcell].Style.WrapMode = DataGridViewTriState.NotSet;
                 else
                 {
-
                     using (Graphics g = Parent.CreateGraphics())
                     {
-                        using (StringFormat f = new StringFormat())
-                        {
-                            string ms = (string)row.Cells[rcell].Value + ".";
-                            var sz = g.MeasureString(ms, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000), f);
-                            sz.Height *= 63.0f / 56.0f; // it underestimates of course, scale it a bit
-                            row.Height = (int)sz.Height;
-                            //System.Diagnostics.Debug.WriteLine("Measured h" + sz);
-                        }
+                        string ms = (string)row.Cells[rcell].Value + ".";
+                        var sz = g.MeasureString(ms, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000));
 
+                        if (sz.Height > dataGridViewMC.Height * 3 / 4)  // if text is unreasonable in size, open in window
+                        {
+                            OpenRecipeInWindow(row.Index);
+                        }
+                        else
+                            row.Cells[rcell].Style.WrapMode = DataGridViewTriState.True;    //else word wrap
                     }
                 }
 
@@ -692,17 +689,20 @@ namespace EDDiscovery.UserControls
         private void openRecipeInWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridViewMC.RightClickRowValid)
+                OpenRecipeInWindow(dataGridViewMC.RightClickRow);
+        }
+
+        void OpenRecipeInWindow(int row)
+        {
+            string mats = (string)dataGridViewMC.Rows[row].Cells[RTag].Tag;
+            if (mats != null)   // sheer paranoia.
             {
-                string mats = (string)dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[RTag].Tag;
-                if (mats != null)   // sheer paranoia.
-                {
-                    mats = mats.Replace(": ", Environment.NewLine + "      ");
-                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info(dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[0].Value as string, FindForm().Icon, mats);
-                    info.Size = new Size(800, 600);
-                    info.StartPosition = FormStartPosition.CenterParent;
-                    info.ShowDialog(FindForm());
-                }
+                mats = mats.Replace(": ", Environment.NewLine + "      ");
+                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                info.Info(dataGridViewMC.Rows[row].Cells[0].Value as string, FindForm().Icon, mats);
+                info.Size = new Size(800, 600);
+                info.StartPosition = FormStartPosition.CenterParent;
+                info.ShowDialog(FindForm());
             }
         }
 
