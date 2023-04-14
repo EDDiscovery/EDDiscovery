@@ -61,10 +61,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Program Concept by:
-        ///Cmdr Finwen  (Robert Wahlström)
-        ///
-        ///Development, Release, Videos by:
+        ///   Looks up a localized string similar to Development, Release, Videos by:
         ///Cmdr Robby
         ///
         ///Developers for this release series:
@@ -79,8 +76,11 @@ namespace EDDiscovery.Properties {
         ///Languages Translations:
         ///Eahlstan, Fito-wolf, Dr.Smile, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
+        ///Program Concept by:
+        ///Cmdr Finwen  (Robert Wahlström)
+        ///
         ///Previous Contributors:
-        ///Bravada Cadelanne, JDM12 [rest of string was truncated]&quot;;.
+        ///Merovech, Bravada Cadela [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Credits {
             get {
@@ -374,7 +374,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DISABLE https://www.youtube.com/embed/3aApsza_y8w.
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/y1XTqBGDdgo.
         /// </summary>
         public static string URLReleaseVideo {
             get {

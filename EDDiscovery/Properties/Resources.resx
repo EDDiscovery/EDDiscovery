@@ -215,7 +215,7 @@
     <value>https://www.youtube.com</value>
   </data>
   <data name="URLReleaseVideo" xml:space="preserve">
-    <value>DISABLE https://www.youtube.com/embed/3aApsza_y8w</value>
+    <value>https://www.youtube.com/embed/y1XTqBGDdgo</value>
   </data>
   <data name="EDD_Licence_Mono" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EDD Licence Mono.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
