@@ -68,7 +68,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Settings", ["wiki"] = "/Using-the-Settings-Panel", ["video"] = "/watch?v=v5g03mYdYAw" },
 
                 new JObject() { ["panel"] = "ScanGrid", ["wiki"] = "/Using-the-Scan-Grid", ["video"] = "" },
-                new JObject() { ["panel"] = "Compass", ["wiki"] = "/Using-the-Compass-Panel", ["video"] = "https://youtu.be/7Kt8XYOetj4" },
+                new JObject() { ["panel"] = "Compass", ["wiki"] = "/Using-the-Compass-Panel", ["video"] = "https://youtu.be/s-AVEYq5vCo" },
                 new JObject() { ["panel"] = "PanelSelector", ["wiki"] = "/Using-Panels", ["video"] = "" },
                 new JObject() { ["panel"] = "BookmarkManager", ["wiki"] = "/Using-the-Bookmarks-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "CombatPanel", ["wiki"] = "/Using-the-combat-panel", ["video"] = "" },
@@ -84,7 +84,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Map2D", ["wiki"] = "/Using-the-2D-Map", ["video"] = "" },
                 new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Spansh", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
+                new JObject() { ["panel"] = "Spansh", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "https://youtu.be/qeLnq-pU14I" },
 
                 new JObject() { ["panel"] = "Inara", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
                 new JObject() { ["panel"] = "MicroResources", ["wiki"] = "/Using-the-Micro-Resources-Panel", ["video"] = "https://youtu.be/U1id5TxS8bs" },
