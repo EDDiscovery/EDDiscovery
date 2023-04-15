@@ -78,8 +78,24 @@ namespace EDDiscovery
                 if (edsm.ValidCredentials)
                     EDSMSend();
             }
+
+            if (EDDOptions.Instance.AutoLoadNextCommander)      // this loads, after 2 seconds, the next commander, for debugging
+            {
+                nextcmdload?.Stop();
+                nextcmdload?.Dispose();
+                nextcmdload = new System.Windows.Forms.Timer();
+                nextcmdload.Interval = 2000;
+                nextcmdload.Tick += (s, e) =>
+                {
+                    if (comboBoxCommander.SelectedIndex < comboBoxCommander.Items.Count - 1)
+                        comboBoxCommander.SelectedIndex = comboBoxCommander.SelectedIndex + 1;
+                    nextcmdload.Stop();
+                };
+                nextcmdload.Start();
+            }
         }
 
+        System.Windows.Forms.Timer nextcmdload;     // for debugging above
 
         public void NewEntry(JournalEntry e)       // programatically do a new entry
         {

@@ -87,6 +87,7 @@ namespace EDDiscovery
         public string DefaultJournalMatchFilename { get; set; } = "Journal*.log";      
         public DateTime MinJournalDateUTC { get; set; }        // default is MinDate
         public bool EnableTGRightDebugClicks { get; set; }
+        public bool AutoLoadNextCommander { get; set; }
         public int HistoryLoadDayLimit { get; set; }    // default zero not set
 
         public string Culture { get; set; }             // default null use system culture, use de-DE etc
@@ -346,6 +347,7 @@ namespace EDDiscovery
                     case "disablecommanderselect": DisableCommanderSelect = true; break;
                     case "disableversiondisplay": DisableVersionDisplay = true; break;
                     case "enabletgrightclicks": EnableTGRightDebugClicks = true; break;
+                    case "autoloadnextcommander": AutoLoadNextCommander = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;

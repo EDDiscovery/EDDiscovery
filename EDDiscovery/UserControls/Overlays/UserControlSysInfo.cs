@@ -1031,7 +1031,7 @@ namespace EDDiscovery.UserControls
                             Point labpos2 = new Point(labpos.X + lab2offset, labpos.Y);
                             Point datapos2 = new Point(labpos.X + data2offset, labpos.Y);
 
-                            System.Diagnostics.Debug.WriteLine($"Position {cb.ToString()} at {labpos} {datapos} {labpos2} {datapos2}");
+                            //System.Diagnostics.Debug.WriteLine($"Position {cb.ToString()} at {labpos} {datapos} {labpos2} {datapos2}");
 
                             switch (cb)
                             {
