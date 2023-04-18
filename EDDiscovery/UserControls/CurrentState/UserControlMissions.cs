@@ -113,8 +113,8 @@ namespace EDDiscovery.UserControls
         {
             List<MissionState> ml = last_he != null ? DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he.MissionList) : null;
 
-            missionListCurrent.Clear();
-            missionListPrevious.Clear();
+            missionListCurrent.Start();
+            missionListPrevious.Start();
 
             if (ml != null)
             {
@@ -127,19 +127,20 @@ namespace EDDiscovery.UserControls
                     missionListCurrent.Add(ms, false, null);
                 }
 
-                missionListCurrent.Finish();
+                missionListCurrent.CompletedFill();
 
                 List<MissionState> mprev = MissionListAccumulator.GetAllExpiredMissions(ml,hetime);
-
-                var previousRows = new List<DataGridViewRow>(mprev.Count);
 
                 foreach (MissionState ms in mprev)
                 {
                     missionListPrevious.Add(ms, true, missionListPrevious.SearchText);
                 }
 
-                missionListPrevious.Finish();
+                missionListPrevious.CompletedFill();
             }
+
+            missionListCurrent.Finish();
+            missionListPrevious.Finish();
         }
 
         #endregion

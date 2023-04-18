@@ -348,6 +348,7 @@ namespace EDDiscovery
                     case "disableversiondisplay": DisableVersionDisplay = true; break;
                     case "enabletgrightclicks": EnableTGRightDebugClicks = true; break;
                     case "autoloadnextcommander": AutoLoadNextCommander = true; break;
+                    case "null": break;     // null option - used by installer when it writes a app options file if it does not want to do anything
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
