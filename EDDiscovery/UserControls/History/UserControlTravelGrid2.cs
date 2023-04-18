@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
                                 he.System.Y,
                                 he.System.Z,
                                 he.Journalid,
-                                he.System.EDSMID,
+                                0,
                             };
                         };
 

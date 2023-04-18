@@ -386,14 +386,13 @@ namespace EDDiscovery
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
-            Controller.AsyncPerformSync();
+            Controller.AsyncPerformSync(false);
         }
 
         public void ForceEDSMFullRefresh()
         {
             SystemsDatabase.Instance.ForceEDSMFullUpdate();
-            SystemsDatabase.Instance.ForceEDSMAliasFullUpdate();
-            Controller.AsyncPerformSync(true, true);
+            Controller.AsyncPerformSync(true);
         }
 
         #endregion

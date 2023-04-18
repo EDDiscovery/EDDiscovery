@@ -547,7 +547,7 @@ namespace EDDiscovery
                 EDDConfig.Instance.EDSMDownload = ressel.Item2 != "None";
                 EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
                 if (EDDConfig.Instance.EDSMDownload)
-                    Controller.AsyncPerformSync(edsmfullsync: true, edsm_alias_sync: true);      // order another go.
+                    Controller.AsyncPerformSync(true);      // order another go.
             }
 
             actioncontroller.ReLoad();          // load the action system up here, with the UI running
@@ -985,7 +985,7 @@ namespace EDDiscovery
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));
             else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").T(EDTx.EDDiscoveryForm_EDSMQ), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {
-                if (!Controller.AsyncPerformSync(edsmfullsync: true))      // we want it to have run, to completion, to allow another go..
+                if (!Controller.AsyncPerformSync(true))      // we want it to have run, to completion, to allow another go..
                     ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".T(EDTx.EDDiscoveryForm_SDSyncErr));
             }
         }

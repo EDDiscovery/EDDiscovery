@@ -30,7 +30,6 @@ namespace EDDiscovery
         private class SystemsSyncState
         {
             public bool perform_edsm_fullsync = false;
-            public bool perform_edsm_alias_sync = false;
 
             public long edsm_fullsync_count = 0;
             public long edsm_updatesync_count = 0;
@@ -46,13 +45,12 @@ namespace EDDiscovery
 
         private int resyncEDSMRequestedFlag = 0;            // flag gets set during EDSM refresh, cleared at end, interlocked exchange during request..
 
-        public bool AsyncPerformSync(bool edsm_alias_sync = false, bool edsmfullsync = false)      // UI thread.
+        public bool AsyncPerformSync(bool edsmfullsync)      // UI thread.
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (Interlocked.CompareExchange(ref resyncEDSMRequestedFlag, 1, 0) == 0)
             {
-                syncstate.perform_edsm_alias_sync |= edsm_alias_sync;
                 syncstate.perform_edsm_fullsync |= edsmfullsync;
                 resyncRequestedEvent.Set();
                 return true;
@@ -79,12 +77,7 @@ namespace EDDiscovery
                     syncstate.perform_edsm_fullsync = true;       // do a full sync.
                 }
 
-                DateTime aliasdatetime = SystemsDatabase.Instance.GetLastAliasDownloadTime();
-
-                if (DateTime.UtcNow.Subtract(aliasdatetime).TotalDays >= ForcedAliasDownloadDays)     
-                    syncstate.perform_edsm_alias_sync = true;
-
-                if (syncstate.perform_edsm_alias_sync || syncstate.perform_edsm_fullsync)
+                if (syncstate.perform_edsm_fullsync)
                 {
                     string databases = "EDSM";
 
@@ -117,7 +110,7 @@ namespace EDDiscovery
 
                     syncstate.ClearCounters();
 
-                    if (syncstate.perform_edsm_fullsync || syncstate.perform_edsm_alias_sync)
+                    if (syncstate.perform_edsm_fullsync )
                     {
                         if (syncstate.perform_edsm_fullsync && !PendingClose)
                         {
@@ -165,27 +158,6 @@ namespace EDDiscovery
                             }
                         }
 
-                        if (!PendingClose && syncstate.perform_edsm_alias_sync)
-                        {
-                            try
-                            {
-                                EDSMClass edsm = new EDSMClass();
-                                string edsmhiddensystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmhiddensystems.json");
-                                string jsonhidden = edsm.GetHiddenSystems(edsmhiddensystems);
-
-                                if (jsonhidden != null)
-                                {
-                                    SystemsDB.ParseAliasString(jsonhidden);
-                                    syncstate.perform_edsm_alias_sync = false;
-
-                                    SystemsDatabase.Instance.SetLastEDSMAliasDownloadTime();
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                LogLineHighlight("GetEDSMAlias exception: " + ex.Message);
-                            }
-                        }
                     }
 
                     if (!PendingClose)          // perform an update sync to get any new EDSM data

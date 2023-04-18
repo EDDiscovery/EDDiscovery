@@ -92,7 +92,7 @@ namespace EDDiscovery.WebServer
             systemdata["PosX"] = he.System.X.ToStringInvariant("0.00");
             systemdata["PosY"] = he.System.Y.ToStringInvariant("0.00");
             systemdata["PosZ"] = he.System.Z.ToStringInvariant("0.00");
-            systemdata["EDSMID"] = he.System.EDSMID.ToStringInvariant();
+            systemdata["EDSMID"] = "0";
             systemdata["VisitCount"] = hl.GetVisitsCount(he.System.Name);
             response["SystemData"] = systemdata;
 
