@@ -562,7 +562,7 @@ namespace EDDiscovery.UserControls
             var frm = new Forms.ImportExportForm();
             frm.Import( new string[] { "CSV", "Text File", "JSON" },
                 new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowImportOptions, Forms.ImportExportForm.ShowFlags.ShowImportOptions, Forms.ImportExportForm.ShowFlags.ShowPaste },
-                new string[] { "CSV|*.csv", "CSV|*.csv", "Text |*.txt|All|*.*", "JSON|*.json|All|*.*" }
+                new string[] { "CSV|*.csv", "Text |*.txt|All|*.*", "JSON|*.json|All|*.*" }
                 );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
