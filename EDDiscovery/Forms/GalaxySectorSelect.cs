@@ -166,7 +166,7 @@ namespace EDDiscovery.Forms
                     ("You have added new sectors!" + Environment.NewLine + "This will require a complete re-download of the EDSM data" + Environment.NewLine + "Confirm you wish to do this?").T(EDTx.GalaxySectorSelect_RD), 
                     "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    if (!EDDConfig.Instance.EDSMDownload)
+                    if (!EDDConfig.Instance.SystemDBDownload)
                         ExtendedControls.MessageBoxTheme.Show(this, ("Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated").T(EDTx.GalaxySectorSelect_NoSync), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     Action = ActionToDo.Add;

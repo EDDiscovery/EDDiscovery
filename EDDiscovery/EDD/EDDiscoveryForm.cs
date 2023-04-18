@@ -540,13 +540,13 @@ namespace EDDiscovery
         {
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF shown");
 
-            if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
+            if (EDDConfig.Instance.SystemDBGridIDs == "Not Set")        // initial state
             {
-                EDDConfig.Instance.EDSMDownload = false;        // this stops the download working in the controller thread
+                EDDConfig.Instance.SystemDBDownload = false;        // this stops the download working in the controller thread
                 var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
-                EDDConfig.Instance.EDSMDownload = ressel.Item2 != "None";
-                EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
-                if (EDDConfig.Instance.EDSMDownload)
+                EDDConfig.Instance.SystemDBDownload = ressel.Item2 != "None";
+                EDDConfig.Instance.SystemDBGridIDs = ressel.Item2;
+                if (EDDConfig.Instance.SystemDBDownload)
                     Controller.AsyncPerformSync(true);      // order another go.
             }
 
@@ -981,7 +981,7 @@ namespace EDDiscovery
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!EDDConfig.Instance.EDSMDownload)
+            if (!EDDConfig.Instance.SystemDBDownload)
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));
             else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").T(EDTx.EDDiscoveryForm_EDSMQ), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {

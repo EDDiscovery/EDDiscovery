@@ -391,7 +391,7 @@ namespace EDDiscovery
 
         public void ForceEDSMFullRefresh()
         {
-            SystemsDatabase.Instance.ForceEDSMFullUpdate();
+            SystemsDatabase.Instance.ForceFullUpdate();
             Controller.AsyncPerformSync(true);
         }
 

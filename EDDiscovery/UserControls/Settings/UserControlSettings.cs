@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
             checkBoxCustomEnableScreenshots.Checked = DiscoveryForm.ScreenshotConverter.AutoConvert;
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
 
-            checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.EDSMDownload;
+            checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.SystemDBDownload;
             this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
             comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".T(EDTx.UserControlSettings_DLA), ">7 days old".T(EDTx.UserControlSettings_7daysold),
@@ -616,14 +616,14 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
         {
-            EDDConfig.Instance.EDSMDownload = checkBoxCustomEDSMDownload.Checked;
+            EDDConfig.Instance.SystemDBDownload = checkBoxCustomEDSMDownload.Checked;
 
 
-            if ( EDDConfig.Instance.EDSMDownload == true)   // if turned on
+            if ( EDDConfig.Instance.SystemDBDownload == true)   // if turned on
             {
                 int gridsel = 0;
                 bool[] grids = new bool[GridId.MaxGridID];
-                foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                foreach (int i in GridId.FromString(EDDConfig.Instance.SystemDBGridIDs))
                     gridsel++;
 
                 if (gridsel == 0)                               // but we have zero grids selected, force the user to select again
@@ -638,13 +638,13 @@ namespace EDDiscovery.UserControls
         {
             GalaxySectorSelect gss = new GalaxySectorSelect();
 
-            if (!gss.Init(EDDConfig.Instance.EDSMGridIDs))
+            if (!gss.Init(EDDConfig.Instance.SystemDBGridIDs))
             {
                 ExtendedControls.MessageBoxTheme.Show(this, "Warning".T(EDTx.Warning), "No map available!".T(EDTx.UserControlSettings_NoMap));
             }
             else if (gss.ShowDialog() == DialogResult.OK)
             {
-                EDDConfig.Instance.EDSMGridIDs = gss.Selection;
+                EDDConfig.Instance.SystemDBGridIDs = gss.Selection;
 
                 if (gss.Action == GalaxySectorSelect.ActionToDo.Add)
                 {

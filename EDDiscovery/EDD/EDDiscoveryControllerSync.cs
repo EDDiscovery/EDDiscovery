@@ -29,29 +29,29 @@ namespace EDDiscovery
     {
         private class SystemsSyncState
         {
-            public bool perform_edsm_fullsync = false;
+            public bool perform_fullsync = false;
 
-            public long edsm_fullsync_count = 0;
-            public long edsm_updatesync_count = 0;
+            public long fullsync_count = 0;
+            public long updatesync_count = 0;
 
             public void ClearCounters()
             {
-                edsm_fullsync_count = 0;
-                edsm_updatesync_count = 0;
+                fullsync_count = 0;
+                updatesync_count = 0;
             }
         }
 
         private SystemsSyncState syncstate = new SystemsSyncState();
 
-        private int resyncEDSMRequestedFlag = 0;            // flag gets set during EDSM refresh, cleared at end, interlocked exchange during request..
+        private int resyncSysDBRequestedFlag = 0;            // flag gets set during SysDB refresh, cleared at end, interlocked exchange during request..
 
-        public bool AsyncPerformSync(bool edsmfullsync)      // UI thread.
+        public bool AsyncPerformSync(bool fullsync)      // UI thread.
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            if (Interlocked.CompareExchange(ref resyncEDSMRequestedFlag, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref resyncSysDBRequestedFlag, 1, 0) == 0)
             {
-                syncstate.perform_edsm_fullsync |= edsmfullsync;
+                syncstate.perform_fullsync |= fullsync;
                 resyncRequestedEvent.Set();
                 return true;
             }
@@ -61,23 +61,22 @@ namespace EDDiscovery
             }
         }
 
-        const int ForcedFullDownloadDays = 56;      // beyond this time, we force a full download
-        const int UpdateFetchHours = 12;             // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
-        const int ForcedAliasDownloadDays = 7;      // beyond this time, we force an alias hidden system download
+        const int ForceEDSMFullDownloadDays = 56;      // beyond this time, we force a full download
+        const int EDSMUpdateFetchHours = 12;             // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
 
         public void CheckForSync()      // called in background init
         {
-            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)        // if enabled
+            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.SystemDBDownload)        // if enabled
             {
-                DateTime edsmdatetime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
+                DateTime edsmdatetime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
 
-                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForcedFullDownloadDays*10)   
+                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForceEDSMFullDownloadDays*10)   
                 {
                     System.Diagnostics.Debug.WriteLine("EDSM Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
-                    syncstate.perform_edsm_fullsync = true;       // do a full sync.
+                    syncstate.perform_fullsync = true;       // do a full sync.
                 }
 
-                if (syncstate.perform_edsm_fullsync)
+                if (syncstate.perform_fullsync)
                 {
                     string databases = "EDSM";
 
@@ -96,23 +95,23 @@ namespace EDDiscovery
         {
             InvokeAsyncOnUiThread.Invoke(() => OnSyncStarting?.Invoke());       // tell listeners sync is starting
 
-            resyncEDSMRequestedFlag = 1;     // sync is happening, stop any async requests..
+            resyncSysDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            if (EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
+            if (EDDConfig.Instance.SystemDBDownload)      // if no system off, and EDSM download on
             {
                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download from EDSM");
 
                 try
                 {
                     bool[] grids = new bool[GridId.MaxGridID];
-                    foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                    foreach (int i in GridId.FromString(EDDConfig.Instance.SystemDBGridIDs))
                         grids[i] = true;
 
                     syncstate.ClearCounters();
 
-                    if (syncstate.perform_edsm_fullsync )
+                    if (syncstate.perform_fullsync )
                     {
-                        if (syncstate.perform_edsm_fullsync && !PendingClose)
+                        if (syncstate.perform_fullsync && !PendingClose)
                         {
                             // Download new systems
                             try
@@ -130,15 +129,15 @@ namespace EDDiscovery
                                 //File.Copy(@"\code\edsm\edsmsystems.1e6.json", edsmsystems);
                                 //bool success = true;
 
-                                syncstate.perform_edsm_fullsync = false;
+                                syncstate.perform_fullsync = false;
 
                                 if (success)
                                 {
                                     ReportSyncProgress("Download complete, creating database");
 
-                                    syncstate.edsm_fullsync_count = SystemsDatabase.Instance.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
+                                    syncstate.fullsync_count = SystemsDatabase.Instance.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
 
-                                    if (syncstate.edsm_fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
+                                    if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
                                         return;
 
                                     BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
@@ -162,7 +161,7 @@ namespace EDDiscovery
 
                     if (!PendingClose)          // perform an update sync to get any new EDSM data
                     {
-                        syncstate.edsm_updatesync_count = UpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                        syncstate.updatesync_count = UpdateSync(grids, () => PendingClose, ReportSyncProgress);
                     }
                 }
                 catch (OperationCanceledException)
@@ -184,8 +183,8 @@ namespace EDDiscovery
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
-                LogLine(string.Format("EDSM systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
+            if (syncstate.fullsync_count > 0 || syncstate.updatesync_count > 0)
+                LogLine(string.Format("EDSM systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
 
             // since we don't assign EDSM IDs to journal entries any more, this is pointless.. removing 
 
@@ -195,20 +194,20 @@ namespace EDDiscovery
             //    RefreshHistoryAsync();
             //}
 
-            OnSyncComplete?.Invoke(syncstate.edsm_fullsync_count, syncstate.edsm_updatesync_count);
+            OnSyncComplete?.Invoke(syncstate.fullsync_count, syncstate.updatesync_count);
 
             ReportSyncProgress("");
 
-            resyncEDSMRequestedFlag = 0;        // releases flag and allow another async to happen
+            resyncSysDBRequestedFlag = 0;        // releases flag and allow another async to happen
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
         public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
-            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
+            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
 
-            DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForcedFullDownloadDays);        // limit download to this amount of days
+            DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForceEDSMFullDownloadDays);        // limit download to this amount of days
             if (lastrecordtime < maximumupdatetimewindow)
                 lastrecordtime = maximumupdatetimewindow;               // this stops crazy situations where somehow we have a very old date but the full sync did not take care of it
 
@@ -216,7 +215,7 @@ namespace EDDiscovery
 
             double fetchmult = 1;
 
-            DateTime minimumfetchspan = DateTime.UtcNow.AddHours(-UpdateFetchHours / 2);        // we don't bother fetching if last record time is beyond this point
+            DateTime minimumfetchspan = DateTime.UtcNow.AddHours(-EDSMUpdateFetchHours / 2);        // we don't bother fetching if last record time is beyond this point
 
             while (lastrecordtime < minimumfetchspan)                                   // stop at X mins before now, so we don't get in a condition
             {                                                                           // where we do a set, the time moves to just before now, 
@@ -229,7 +228,7 @@ namespace EDDiscovery
 
                 EDSMClass edsm = new EDSMClass();
 
-                double hourstofetch = UpdateFetchHours;        //EDSM new server feb 2021, more capable, 
+                double hourstofetch = EDSMUpdateFetchHours;        //EDSM new server feb 2021, more capable, 
 
                 DateTime enddate = lastrecordtime + TimeSpan.FromHours(hourstofetch * fetchmult);
                 if (enddate > DateTime.UtcNow)
@@ -329,7 +328,7 @@ namespace EDDiscovery
 
                 updates += updated;
 
-                SystemsDatabase.Instance.SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
+                SystemsDatabase.Instance.SetLastRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
 
                 int delay = 10;     // Anthor's normal delay 
                 int ratelimitlimit;

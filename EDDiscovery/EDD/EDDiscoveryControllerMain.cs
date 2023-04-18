@@ -302,7 +302,7 @@ namespace EDDiscovery
 
                     if (wh == 1)
                     {
-                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
+                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.SystemDBDownload)      // if no system off, and EDSM download on
                             DoPerformSync();
                     }
                 }

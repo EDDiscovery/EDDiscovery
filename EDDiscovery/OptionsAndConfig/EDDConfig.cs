@@ -54,8 +54,8 @@ namespace EDDiscovery
         private System.Windows.Forms.Keys clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string defaultwavedevice = "Default";
         private string defaultvoicedevice = "Default";
-        private bool edsmdownload = true;
-        private string edsmgridids = "All";
+        private bool systemdbdownload = true;
+        private string systemdbgridids = "All";
         private int fullhistoryloaddaylimit = 0;     //0 means not in use
         private string language = "Auto";
         private bool drawduringresize = true;
@@ -294,29 +294,29 @@ namespace EDDiscovery
             }
         }
 
-        public bool EDSMDownload
+        public bool SystemDBDownload        // do we download system DB data?
         {
             get
             {
-                return edsmdownload;
+                return systemdbdownload;
             }
             set
             {
-                edsmdownload = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("EDSMEDDBDownloadData", value);
+                systemdbdownload = value;
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("EDSMEDDBDownloadData", value);  // use old name
             }
         }
 
-        public string EDSMGridIDs
+        public string SystemDBGridIDs       // what IDs do we store?
         {
             get
             {
-                return edsmgridids;
+                return systemdbgridids;
             }
             set
             {
-                edsmgridids = value;
-                SystemsDatabase.Instance.SetEDSMGridIDs(value);
+                systemdbgridids = value;
+                SystemsDatabase.Instance.SetGridIDs(value);
             }
         }
 
@@ -529,8 +529,8 @@ namespace EDDiscovery
                 defaultvoicedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("VoiceAudioDevice", "Default");
                 defaultwavedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("WaveAudioDevice", "Default");
                 clickthrukey = (System.Windows.Forms.Keys)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey);
-                edsmdownload = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("EDSMEDDBDownloadData", true);    // this goes with the USER on purpose, so its kept over a system db delete
-                edsmgridids = SystemsDatabase.Instance.GetEDSMGridIDs(); // from system database, not user, to keep setting with system data
+                systemdbdownload = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("EDSMEDDBDownloadData", true);    // this goes with the USER on purpose, so its kept over a system db delete
+                systemdbgridids = SystemsDatabase.Instance.GetGridIDs(); // from system database, not user, to keep setting with system data
                 fullhistoryloaddaylimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("FullHistoryLoadDayLimit", 0);
                 language = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DefaultLanguage", "Auto");
                 drawduringresize = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("DrawDuringResizeWindow", true);
