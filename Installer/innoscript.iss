@@ -249,7 +249,8 @@ begin
         Log('** Appdata is ' + DataDirPage.Values[0] + ' need to write options file to ' + WizardDirValue);
         SaveStringToFile(WizardDirValue+'\optionsappdata.txt', '-appfolder ' + DataDirPage.Values[0] + #13#10, false);
     end else  begin
-      Log('** Appdata is ' + DataDirPage.Values[0] + ' no need to write option file ');
+      Log('** Appdata is ' + DataDirPage.Values[0] + ' write null option file to overwrite previous one if present');
+        SaveStringToFile(WizardDirValue+'\optionsappdata.txt', '-null' + #13#10, false);
     end;
 
   end;

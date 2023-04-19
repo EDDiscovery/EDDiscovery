@@ -380,7 +380,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {pl.Name}: {loc.Name}");
                                     comboBoxBookmarks.Items.Add($"{pl.Name}: {loc.Name} @ {loc.Latitude:0.####}, {loc.Longitude:0.####}");
-                                    comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = loc.Latitude, Longitude = loc.Longitude });
+                                    comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = loc.Latitude, Longitude = loc.Longitude });                                    
                                 }
                             }
                         }
@@ -466,7 +466,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (position.Location.ValidPosition)    // and we have a valid position, autocreate a new planet mark
                     {
-                        frm.Bookmark(sysbookmark, position.BodyName, position.Location.Latitude, position.Location.Longitude);
+                        frm.Bookmark(sysbookmark, position.BodyName.ReplaceIfStartsWith(current_sys.Name, ""), position.Location.Latitude, position.Location.Longitude);
                     }
                     else
                     {
@@ -477,7 +477,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (position.Location.ValidPosition)        // don't have a system bookmark, so create a new one here. If we have position, autocreate a new planet mark
                     {
-                        frm.NewSystemBookmark(current_sys, datetimeutc, position.BodyName, position.Location.Latitude, position.Location.Longitude);
+                        frm.NewSystemBookmark(current_sys, datetimeutc, position.BodyName.ReplaceIfStartsWith(current_sys.Name, ""), position.Location.Latitude, position.Location.Longitude);
                     }
                     else
                     {

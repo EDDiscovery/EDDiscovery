@@ -473,7 +473,8 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 MissionListUserControl mluc = new MissionListUserControl();
 
-                mluc.Clear();
+                mluc.Start();
+
                 List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
 
                 DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EDDConfig.GameLaunchTimeUTC();
@@ -495,8 +496,10 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    mluc.Finish();
+                    mluc.CompletedFill();
                 }
+
+                mluc.Finish();
 
                 DGVLoadColumnLayout(mluc.dataGridView, "ShowMission");
 

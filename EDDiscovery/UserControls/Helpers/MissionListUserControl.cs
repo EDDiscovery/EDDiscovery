@@ -70,13 +70,14 @@ namespace EDDiscovery.UserControls.Helpers
         long totalreward;
         int completed, abandonded, failed;
 
-        public void Clear()
+        public void Start()
         {
             sortcolcur = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[1];
             sortordercur = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
             dataGridView.Rows.Clear();
             totalreward = 0;
             completed = abandonded = failed = 0;
+            extPanelDataGridViewScroll.Suspend();
         }
 
         public void Add(MissionState ms, bool previousmissions, string search)
@@ -129,10 +130,11 @@ namespace EDDiscovery.UserControls.Helpers
                 row.CreateCells(dataGridView, rowobj);
                 row.Tag = ms;
                 dataGridView.Rows.Add(row);
+                System.Diagnostics.Debug.Write($"Add mission JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) {ms.State}");
             }
         }
 
-        public void Finish()
+        public void CompletedFill()
         {
             if (panelButtons.Visible)
             {
@@ -147,6 +149,11 @@ namespace EDDiscovery.UserControls.Helpers
 
             dataGridView.Sort(sortcolcur, (sortordercur == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridView.Columns[sortcolcur.Index].HeaderCell.SortGlyphDirection = sortordercur;
+        }
+
+        public void Finish()
+        {
+            extPanelDataGridViewScroll.Resume();
         }
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
