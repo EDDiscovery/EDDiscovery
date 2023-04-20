@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
 
             checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.SystemDBDownload;
-            this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
+            this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomSystemDBDownload_CheckedChanged);
 
             comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".T(EDTx.UserControlSettings_DLA), ">7 days old".T(EDTx.UserControlSettings_7daysold),
                 ">30 days old".T(EDTx.UserControlSettings_30daysold), ">60 days old".T(EDTx.UserControlSettings_60daysold), ">90 days old".T(EDTx.UserControlSettings_90daysold),
@@ -614,7 +614,7 @@ namespace EDDiscovery.UserControls
 
         #region EDSM
 
-        private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxCustomSystemDBDownload_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.SystemDBDownload = checkBoxCustomEDSMDownload.Checked;
 
@@ -623,32 +623,32 @@ namespace EDDiscovery.UserControls
             {
                 int gridsel = 0;
                 bool[] grids = new bool[GridId.MaxGridID];
-                foreach (int i in GridId.FromString(EDDConfig.Instance.SystemDBGridIDs))
+                foreach (int i in GridId.FromString(SystemsDatabase.Instance.GetGridIDs()))
                     gridsel++;
 
                 if (gridsel == 0)                               // but we have zero grids selected, force the user to select again
-                    buttonExtEDSMConfigureArea_Click(sender, e);
+                    buttonExtSystemDBConfigureArea_Click(sender, e);
             }
         }
 
         ExtendedControls.InfoForm info;
         System.Windows.Forms.Timer removetimer;
 
-        private void buttonExtEDSMConfigureArea_Click(object sender, EventArgs e)
+        private void buttonExtSystemDBConfigureArea_Click(object sender, EventArgs e)
         {
             GalaxySectorSelect gss = new GalaxySectorSelect();
 
-            if (!gss.Init(EDDConfig.Instance.SystemDBGridIDs))
+            if (!gss.Init(SystemsDatabase.Instance.GetGridIDs()))
             {
                 ExtendedControls.MessageBoxTheme.Show(this, "Warning".T(EDTx.Warning), "No map available!".T(EDTx.UserControlSettings_NoMap));
             }
             else if (gss.ShowDialog() == DialogResult.OK)
             {
-                EDDConfig.Instance.SystemDBGridIDs = gss.Selection;
+                SystemsDatabase.Instance.SetGridIDs(gss.Selection);
 
                 if (gss.Action == GalaxySectorSelect.ActionToDo.Add)
                 {
-                    DiscoveryForm.ForceEDSMFullRefresh();
+                    DiscoveryForm.ForceSystemDBFullRefresh();
                 }
                 else if (gss.Action == GalaxySectorSelect.ActionToDo.Remove)
                 {

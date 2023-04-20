@@ -137,6 +137,11 @@ namespace EDDiscovery.UserControls
 
                 if (!string.IsNullOrWhiteSpace(textBoxSystemName.Text))
                 {
+                    // debug statements to check edsm - good place to put them
+                    //var found = edsm.GetSystem(textBoxSystemName.Text);
+                    //var found2 = edsm.GetSystems(new List<string> { "Sol", "Lembava" });
+                    //var logs = edsm.GetLogs(null, new DateTime(2023, 4, 13), out List<EliteDangerousCore.JournalEvents.JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime, out BaseUtils.ResponseData response);
+
                     rlist = edsm.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
                 }
                 else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
@@ -148,8 +153,8 @@ namespace EDDiscovery.UserControls
                     rlist = new List<Tuple<ISystem, double>>();
                 }
 
-                if (rlist != null && rlist.Count > 0 && !SystemsDatabase.Instance.RebuildRunning)   // if db free for use, ensure they are all in the db
-                    SystemsDatabase.Instance.StoreSystems(rlist.Select(x => x.Item1).ToList());     // won't do anything if rebuilding
+                if (rlist != null && rlist.Count > 0) // if something to store.. send it
+                    SystemsDatabase.Instance.StoreSystems(rlist.Select(x => x.Item1));     // won't do anything if rebuilding
 
                 return rlist;
 
@@ -210,7 +215,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtVisitedClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
@@ -223,7 +228,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtDBClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {

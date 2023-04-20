@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
 
                     bool knownpos = xpos != SavedRouteClass.SystemEntry.NotKnown && ypos != SavedRouteClass.SystemEntry.NotKnown && zpos != SavedRouteClass.SystemEntry.NotKnown;
 
-                    return knownpos ? new SystemClass(name, xpos, ypos, zpos) : new SystemClass(name);
+                    return knownpos ? new SystemClass(name, null, xpos, ypos, zpos) : new SystemClass(name);
                 }
             }
             return null;

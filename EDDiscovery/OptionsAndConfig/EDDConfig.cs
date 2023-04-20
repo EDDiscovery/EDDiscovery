@@ -55,7 +55,6 @@ namespace EDDiscovery
         private string defaultwavedevice = "Default";
         private string defaultvoicedevice = "Default";
         private bool systemdbdownload = true;
-        private string systemdbgridids = "All";
         private int fullhistoryloaddaylimit = 0;     //0 means not in use
         private string language = "Auto";
         private bool drawduringresize = true;
@@ -64,6 +63,7 @@ namespace EDDiscovery
         private string coriolisURL = "";
         private string eddshipyardURL = "";
         private string edsmfullsystemsurl = "";
+        private string spanshsystemsurl = "";
         private int webserverport = 6502;
         private bool webserverenable = false;
         private string dllpermissions = "";
@@ -307,18 +307,6 @@ namespace EDDiscovery
             }
         }
 
-        public string SystemDBGridIDs       // what IDs do we store?
-        {
-            get
-            {
-                return systemdbgridids;
-            }
-            set
-            {
-                systemdbgridids = value;
-                SystemsDatabase.Instance.SetGridIDs(value);
-            }
-        }
 
         public int FullHistoryLoadDayLimit          // 0 = full load.
         {
@@ -411,7 +399,7 @@ namespace EDDiscovery
             }
         }
 
-        public string EDSMFullSystemsURL   
+        public string EDSMFullSystemsURL
         {
             get
             {
@@ -424,6 +412,22 @@ namespace EDDiscovery
             {
                 edsmfullsystemsurl = value;
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EDSMFullSystemsURL", value);
+            }
+        }
+
+        public string SpanshSystemsURL
+        {
+            get
+            {
+                if (spanshsystemsurl == "Default")
+                    return Properties.Resources.URLSpanshSystemsRoot;
+                else
+                    return spanshsystemsurl;
+            }
+            set
+            {
+                spanshsystemsurl = value;
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("SpanshSystemsURL", value);
             }
         }
 
@@ -530,7 +534,6 @@ namespace EDDiscovery
                 defaultwavedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("WaveAudioDevice", "Default");
                 clickthrukey = (System.Windows.Forms.Keys)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey);
                 systemdbdownload = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("EDSMEDDBDownloadData", true);    // this goes with the USER on purpose, so its kept over a system db delete
-                systemdbgridids = SystemsDatabase.Instance.GetGridIDs(); // from system database, not user, to keep setting with system data
                 fullhistoryloaddaylimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("FullHistoryLoadDayLimit", 0);
                 language = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DefaultLanguage", "Auto");
                 drawduringresize = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("DrawDuringResizeWindow", true);
@@ -542,6 +545,8 @@ namespace EDDiscovery
                     EDDShipyardURL = "http://edsy.org/";
 
                 edsmfullsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EDSMFullSystemsURL", "Default");
+                spanshsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("SpanshSystemsURL", "Default");
+
                 CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);

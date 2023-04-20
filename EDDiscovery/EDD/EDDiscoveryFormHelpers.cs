@@ -382,14 +382,9 @@ namespace EDDiscovery
 
         #endregion
 
-        #region EDSM Star Sync 
+        #region DB Star Sync 
 
-        private void edsmRefreshTimer_Tick(object sender, EventArgs e)
-        {
-            Controller.AsyncPerformSync(false);
-        }
-
-        public void ForceEDSMFullRefresh()
+        public void ForceSystemDBFullRefresh()
         {
             SystemsDatabase.Instance.ForceFullUpdate();
             Controller.AsyncPerformSync(true);

@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
                     if (override_system == null && checkBoxAutoTrack.Checked)       // if not overriding, and tracking, present
                     {
                         JournalStartJump jsj = historyhe.journalEntry as JournalStartJump;
-                        last_sys_tracked = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
+                        last_sys_tracked = new SystemClass(jsj.StarSystem, jsj.SystemAddress);
                         PresentSystem(last_sys_tracked);
                     }
                 }

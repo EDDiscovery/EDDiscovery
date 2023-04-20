@@ -182,6 +182,9 @@ namespace EDDiscovery
                 UserDatabase.Instance.MaxThreads = 2;     
                 UserDatabase.Instance.MultiThreaded = true;     // starts up the threads
 
+                if (EDDOptions.Instance.DeleteSystemDB)
+                    BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath);
+
                 SystemsDatabase.Instance.Name = "SystemDB";
                 SystemsDatabase.Instance.MinThreads = 1;
                 SystemsDatabase.Instance.MaxThreads = 8;

@@ -576,7 +576,7 @@ namespace EDDiscovery.UserControls.Map3D
                             var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
 
                             var res = BookmarkHelpers.ShowBookmarkForm(parent.DiscoveryForm, parent.DiscoveryForm,
-                                                    new SystemClass(nl.Item1, nl.Item2.X, nl.Item2.Y, nl.Item2.Z), null);
+                                                    new SystemClass(nl.Item1, null, nl.Item2.X, nl.Item2.Y, nl.Item2.Z), null);
 
                             if ( res )      // if changed
                             {
@@ -751,7 +751,7 @@ namespace EDDiscovery.UserControls.Map3D
                 var route = parent.DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                 if (route?.Route != null) // If a navroute with a valid route..
                 {
-                    var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, x.StarPos.X, x.StarPos.Y, x.StarPos.Z)).Cast<ISystem>().ToList();
+                    var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, null, x.StarPos.X, x.StarPos.Y, x.StarPos.Z)).Cast<ISystem>().ToList();
                     navroute.CreatePath(syslist, Color.Purple);
                 }
             }

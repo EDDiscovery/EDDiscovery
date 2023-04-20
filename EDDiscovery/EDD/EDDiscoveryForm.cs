@@ -68,7 +68,7 @@ namespace EDDiscovery
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action OnAddOnsChanged;                            // add on changed
         public event Action OnPanelAdded;                               // panel was added by a user DLL
-        public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
+        public event Action<int,string> OnEDSMSyncComplete;             // EDSM journal sync has completed 
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
                                                                         // theme is changing/ then has been changed by settings, hook if you have some UI which needs refreshing due to it. 
@@ -139,8 +139,8 @@ namespace EDDiscovery
             Controller.OnRefreshStarting += Controller_RefreshStarting;
             Controller.OnReportRefreshProgress += ReportRefreshProgress;
 
-            Controller.OnSyncStarting += () => { edsmRefreshTimer.Enabled = false; in_system_sync = true; };
-            Controller.OnSyncComplete += (c1,c2) => { edsmRefreshTimer.Enabled = true; in_system_sync = false; };
+            Controller.OnSyncStarting += () => {  in_system_sync = true; };
+            Controller.OnSyncComplete += (c1,c2) => { in_system_sync = false; };
             Controller.OnReportSyncProgress += ReportSyncProgress;
 
             Controller.OnNewHistoryEntryUnfiltered += Controller_NewHistoryEntryUnfiltered; // called before being added to the HE, unfiltered, unmerged stream
@@ -540,14 +540,12 @@ namespace EDDiscovery
         {
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF shown");
 
-            if (EDDConfig.Instance.SystemDBGridIDs == "Not Set")        // initial state
+            if (SystemsDatabase.Instance.GetGridIDs() == "Not Set")        // initial state.. this holds up the shown and postinit_shown stopping any background worker action
             {
-                EDDConfig.Instance.SystemDBDownload = false;        // this stops the download working in the controller thread
                 var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
-                EDDConfig.Instance.SystemDBDownload = ressel.Item2 != "None";
-                EDDConfig.Instance.SystemDBGridIDs = ressel.Item2;
-                if (EDDConfig.Instance.SystemDBDownload)
-                    Controller.AsyncPerformSync(true);      // order another go.
+                SystemsDatabase.Instance.SetDBSource(ressel.Item1);
+                SystemsDatabase.Instance.SetGridIDs(ressel.Item3);
+                EDDConfig.Instance.SystemDBDownload = ressel.Item3 != "None";
             }
 
             actioncontroller.ReLoad();          // load the action system up here, with the UI running
@@ -884,7 +882,7 @@ namespace EDDiscovery
 
             if (!Controller.PendingClose)       // if not shutting down..
             {
-                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the system database\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 
                 if (goforit)
                 {
@@ -896,7 +894,6 @@ namespace EDDiscovery
 
                 if (goforit)
                 {
-                    edsmRefreshTimer.Enabled = false;
                     ReportRefreshProgress(-1, "Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
                     actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                     Controller.Shutdown();

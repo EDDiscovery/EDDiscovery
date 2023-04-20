@@ -265,6 +265,7 @@ namespace EDDiscovery
         GalaxySectorSelect_NoSync, // Synchronisation to star data disabled in settings.
         GalaxySectorSelect_GALSELEX, // ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed
         GalaxySectorSelect_GALSELEN, // Enter number to jump to or near to
+        GalaxySectorSelect_GALSELSRD, // Enter number to jump to or near to
         GalaxySectorSelect_Select, // GalaxySectorSelect
         GalaxySectorSelect_PresstoAccept, // Press to Accept
         GalaxySectorSelect_GALSELTitle, // Select EDSM Galaxy Data

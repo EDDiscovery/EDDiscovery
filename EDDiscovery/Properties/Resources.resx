@@ -226,4 +226,7 @@
   <data name="URLWebView2" xml:space="preserve">
     <value>https://developer.microsoft.com/en-us/microsoft-edge/webview2/</value>
   </data>
+  <data name="URLSpanshSystemsRoot" xml:space="preserve">
+    <value>http://downloads.spansh.co.uk/systems{0}.json.gz</value>
+  </data>
 </root>

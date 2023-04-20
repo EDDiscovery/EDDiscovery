@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls.Map3D
                     Vector4 pos = new Vector4(d.pos.X + d.searchsize / 2, d.pos.Y + d.searchsize / 2, d.pos.Z + d.searchsize / 2, 0);       // from centre of box
 
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                        (x, y, z) => { 
+                        (x, y, z, startype) => { 
                             return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); 
                         },
                         (v, s) => { 
@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls.Map3D
                 else
                 {
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                                            (x, y, z) => { 
+                                            (x, y, z, startype) => { 
                                                 if ( NoSunList.Contains( new GalMapObjects.ObjectPosXYZ(x,y,z)))
                                                     return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, -1);
                                                 else

@@ -321,7 +321,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
+            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)

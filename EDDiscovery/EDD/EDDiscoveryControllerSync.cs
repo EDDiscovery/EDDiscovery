@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2019 EDDiscovery development team
+ * Copyright © 2015 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore.EDSM;
@@ -47,6 +45,7 @@ namespace EDDiscovery
 
         public bool AsyncPerformSync(bool fullsync)      // UI thread.
         {
+            System.Diagnostics.Debug.WriteLine($"Ask for sync start {fullsync}");
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (Interlocked.CompareExchange(ref resyncSysDBRequestedFlag, 1, 0) == 0)
@@ -72,17 +71,15 @@ namespace EDDiscovery
 
                 if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForceEDSMFullDownloadDays*10)   
                 {
-                    System.Diagnostics.Debug.WriteLine("EDSM Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
-                    syncstate.perform_fullsync = true;       // do a full sync.
+                    System.Diagnostics.Debug.WriteLine("Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
+                   syncstate.perform_fullsync = true;       // do a full sync.
                 }
 
                 if (syncstate.perform_fullsync)
                 {
-                    string databases = "EDSM";
-
                     LogLine(string.Format("System data download from {0} required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), databases));
+                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), SystemsDatabase.Instance.GetDBSource()));
                 }
             }
             else
@@ -93,41 +90,48 @@ namespace EDDiscovery
 
         private void DoPerformSync()        // in Background worker
         {
+            System.Diagnostics.Debug.WriteLine($"Do perform sync starts {syncstate.perform_fullsync}");
+
             InvokeAsyncOnUiThread.Invoke(() => OnSyncStarting?.Invoke());       // tell listeners sync is starting
 
             resyncSysDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            if (EDDConfig.Instance.SystemDBDownload)      // if no system off, and EDSM download on
+            if (EDDConfig.Instance.SystemDBDownload)      // if system DB is to be loaded
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download from EDSM");
+                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download");
 
                 try
                 {
                     bool[] grids = new bool[GridId.MaxGridID];
-                    foreach (int i in GridId.FromString(EDDConfig.Instance.SystemDBGridIDs))
+                    foreach (int i in GridId.FromString(SystemsDatabase.Instance.GetGridIDs()))
                         grids[i] = true;
 
                     syncstate.ClearCounters();
 
-                    if (syncstate.perform_fullsync )
+                    string sourcetype = SystemsDatabase.Instance.GetDBSource();
+                    bool spansh = sourcetype.Equals("SPANSH");
+
+                    if (syncstate.perform_fullsync)
                     {
                         if (syncstate.perform_fullsync && !PendingClose)
                         {
                             // Download new systems
                             try
                             {
-                                string edsmsystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmsystems.json.gz");
+                                string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "systems.json.gz");
 
-                                ReportSyncProgress("Performing full download of System Data from EDSM");
+                                ReportSyncProgress("Performing full download of System Data");
 
                                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EDDConfig.Instance.EDSMFullSystemsURL);
 
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EDDConfig.Instance.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
+                                string url =  spansh ? string.Format(EDDConfig.Instance.SpanshSystemsURL,"") : EDDConfig.Instance.EDSMFullSystemsURL;
 
-                                //edsmsystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmsystems.json");     // debug
-                                //BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);
-                                //File.Copy(@"\code\edsm\edsmsystems.1e6.json", edsmsystems);
-                                //bool success = true;
+                                bool success = true;
+                                downloadfile = spansh ? @"c:\code\examples\edsm\systems_1week.json" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
+
+                                Trace.WriteLine($"DB Systems download from {url} to {downloadfile}");
+
+                                //bool success = BaseUtils.DownloadFile.HTTPDownloadFile( url, downloadfile, false, out bool newfile);
 
                                 syncstate.perform_fullsync = false;
 
@@ -135,21 +139,20 @@ namespace EDDiscovery
                                 {
                                     ReportSyncProgress("Download complete, creating database");
 
-                                    syncstate.fullsync_count = SystemsDatabase.Instance.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
+                                    syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, () => PendingClose, ReportSyncProgress, @"c:\code\sysmake.log");
+
+                                    //BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
 
                                     if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
                                         return;
-
-                                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
                                 }
                                 else
                                 {
                                     ReportSyncProgress("");
-                                    LogLineHighlight("Failed to download full EDSM systems file. Try re-running EDD later");
-                                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
+                                    LogLineHighlight("Failed to download full systems file. Try re-running EDD later");
+                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
                                     return;     // new! if we failed to download, fail here, wait for another time
                                 }
-
                             }
                             catch (Exception ex)
                             {
@@ -161,7 +164,14 @@ namespace EDDiscovery
 
                     if (!PendingClose)          // perform an update sync to get any new EDSM data
                     {
-                        syncstate.updatesync_count = UpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                        if (spansh)
+                        {
+
+                        }
+                        else
+                        {
+                      //      syncstate.updatesync_count = EDSMUpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                        }
                     }
                 }
                 catch (OperationCanceledException)
@@ -184,15 +194,7 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (syncstate.fullsync_count > 0 || syncstate.updatesync_count > 0)
-                LogLine(string.Format("EDSM systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
-
-            // since we don't assign EDSM IDs to journal entries any more, this is pointless.. removing 
-
-            //if (syncstate.edsm_fullsync_count > 0 )   // if we have done a resync, or a major update sync (arb no)
-            //{
-            //    LogLine("Refresh due to updating EDSM system data".T(EDTx.EDDiscoveryController_Refresh));
-            //    RefreshHistoryAsync();
-            //}
+                LogLine(string.Format("Systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
 
             OnSyncComplete?.Invoke(syncstate.fullsync_count, syncstate.updatesync_count);
 
@@ -203,7 +205,7 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
-        public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
+        public long EDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
             DateTime lastrecordtime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
 
@@ -307,7 +309,7 @@ namespace EDDiscovery
                 {
                     ReportProgress($"EDSM star database update from UTC " + lastrecordtime.ToUniversalTime().ToString() );
 
-                    updated = SystemsDB.ParseEDSMJSONString(json, grididallow, ref lastrecordtime, PendingClose, ReportProgress, "");
+                    updated = SystemsDB.ParseJSONString(json, grididallow, ref lastrecordtime, PendingClose, ReportProgress, "");
 
                     System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
                     System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());
