@@ -61,7 +61,9 @@ namespace EDDiscovery
         }
 
         const int ForceEDSMFullDownloadDays = 56;      // beyond this time, we force a full download
-        const int EDSMUpdateFetchHours = 12;             // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
+        const int ForceSpanshFullDownloadDays = 170;   // beyond this time, we force a full download
+        const int MiniumSpanshUpdateAge = 3;           // beyond this time, we update spansh
+        const int EDSMUpdateFetchHours = 12;           // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
 
         public void CheckForSync()      // called in background init
         {
@@ -69,10 +71,13 @@ namespace EDDiscovery
             {
                 DateTime edsmdatetime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
 
-                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForceEDSMFullDownloadDays*10)   
+                bool spansh = SystemsDatabase.Instance.GetDBSource().Equals("SPANSH");
+                var delta = DateTime.UtcNow.Subtract(edsmdatetime).TotalDays;
+
+                if (delta >= (spansh ? ForceEDSMFullDownloadDays : ForceSpanshFullDownloadDays))
                 {
                     System.Diagnostics.Debug.WriteLine("Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
-                   syncstate.perform_fullsync = true;       // do a full sync.
+                    syncstate.perform_fullsync = true;       // do a full sync.
                 }
 
                 if (syncstate.perform_fullsync)
@@ -124,7 +129,7 @@ namespace EDDiscovery
 
                                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EDDConfig.Instance.EDSMFullSystemsURL);
 
-                                string url =  spansh ? string.Format(EDDConfig.Instance.SpanshSystemsURL,"") : EDDConfig.Instance.EDSMFullSystemsURL;
+                                string url = spansh ? string.Format(EDDConfig.Instance.SpanshSystemsURL, "") : EDDConfig.Instance.EDSMFullSystemsURL;
 
                                 bool success = true;
                                 downloadfile = spansh ? @"c:\code\examples\edsm\systems_1week.json" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
@@ -139,9 +144,9 @@ namespace EDDiscovery
                                 {
                                     ReportSyncProgress("Download complete, creating database");
 
-                                    syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, () => PendingClose, ReportSyncProgress, @"c:\code\sysmake.log");
+                                    syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, () => PendingClose, ReportSyncProgress);
 
-                                    //BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
 
                                     if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
                                         return;
@@ -166,11 +171,37 @@ namespace EDDiscovery
                     {
                         if (spansh)
                         {
+                            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
+                            var delta = DateTime.UtcNow.Subtract(lastrecordtime).TotalDays;
 
+                            if ( delta >= MiniumSpanshUpdateAge)        // if its older than this, we will do an update
+                            {
+                                // work out file to grab..
+
+                                string filename = delta < 7 ? "_1week" : delta < 14 ? "_2weeks" : delta < 28 ? "_1month" : "_6months";
+                                string url = string.Format(EDDConfig.Instance.SpanshSystemsURL, filename);
+                                string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "systemsdelta.json.gz");
+
+                                ReportSyncProgress($"Performing partial download of System Data from {url}");
+
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile);
+
+                                if (success)        // grabbed sucessfully
+                                {
+                                    ReportSyncProgress("Download complete, updating database");
+                                    syncstate.updatesync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, () => PendingClose, ReportSyncProgress);
+                                }
+                                else
+                                {
+                                    LogLine("Download of Spansh systems from the server failed (no data returned), will try next time program is run");
+                                }
+
+                                BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                            }
                         }
                         else
                         {
-                      //      syncstate.updatesync_count = EDSMUpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                            syncstate.updatesync_count = EDSMUpdateSync(grids, () => PendingClose, ReportSyncProgress);
                         }
                     }
                 }
