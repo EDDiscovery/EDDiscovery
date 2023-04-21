@@ -46,7 +46,7 @@ namespace EDDiscovery
         /// </summary>
         public static string UserAgent { get; } = $"{FriendlyName} v{AppVersion}";
 
-        public static bool RestartInSafeMode { get; set; } = false;
+        public static string RestartOptions { get; set; } = null;
 
         #endregion
 

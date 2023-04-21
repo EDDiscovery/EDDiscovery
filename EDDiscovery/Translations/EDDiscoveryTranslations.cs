@@ -377,7 +377,8 @@ namespace EDDiscovery
         UserControlSettings_button_edittheme_ToolTip, // ToolTip 'Edit theme and change colours fonts'
         UserControlSettings_buttonSaveTheme_ToolTip, // ToolTip 'Save theme to disk'
         UserControlSettings_checkBoxOrderRowsInverted_ToolTip, // ToolTip 'Number oldest entry 1, latest entry highest'
-        
+        UserControlSettings_extButtonReloadStarDatabase,
+
         UserControlSettings_comboBoxClickThruKey_ToolTip, // ToolTip 'Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards'
         UserControlSettings_comboBoxCustomEssentialEntries_ToolTip, // ToolTip 'Select which items you consider essential to load older than the time above'
         UserControlSettings_comboBoxCustomHistoryLoadTime_ToolTip, // ToolTip 'Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now'
@@ -416,6 +417,7 @@ namespace EDDiscovery
         UserControlSettings_EJS, // Jumps and Scans
         UserControlSettings_EJ, // Jumps
         UserControlSettings_EN, // Nothing
+        UserControlSettings_RELOAD, 
         UserControlSettings_DelCmdr, // delete commander
         UserControlSettings_Font, // The font used by this theme is not available on your system.
         UserControlSettings_NoMap, // No map downloaded

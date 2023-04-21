@@ -113,6 +113,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpSafeMode = new ExtendedControls.ExtButtonDrawn();
             this.labelSafeMode = new System.Windows.Forms.Label();
+            this.extButtonReloadStarDatabase = new ExtendedControls.ExtButton();
             this.extPanelScroll.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerCommanders.SuspendLayout();
@@ -339,7 +340,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtEDSMConfigureArea
             // 
-            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(9, 49);
+            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(9, 43);
             this.buttonExtEDSMConfigureArea.Name = "buttonExtEDSMConfigureArea";
             this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(243, 23);
             this.buttonExtEDSMConfigureArea.TabIndex = 10;
@@ -1088,11 +1089,12 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomEDSM.BorderColorScaling = 0.5F;
             this.groupBoxCustomEDSM.Controls.Add(this.extButtonDrawnHelpEDSM);
+            this.groupBoxCustomEDSM.Controls.Add(this.extButtonReloadStarDatabase);
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
             this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMDownload);
             this.groupBoxCustomEDSM.Location = new System.Drawing.Point(3, 344);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
-            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(281, 85);
+            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(281, 105);
             this.groupBoxCustomEDSM.TabIndex = 21;
             this.groupBoxCustomEDSM.TabStop = false;
             this.groupBoxCustomEDSM.Text = "System DB Control";
@@ -1308,6 +1310,16 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to ano" +
     "ther drive, reset UI, and other maintenance tasks...\r\n\r\n";
             // 
+            // extButtonReloadStarDatabase
+            // 
+            this.extButtonReloadStarDatabase.Location = new System.Drawing.Point(10, 72);
+            this.extButtonReloadStarDatabase.Name = "extButtonReloadStarDatabase";
+            this.extButtonReloadStarDatabase.Size = new System.Drawing.Size(243, 23);
+            this.extButtonReloadStarDatabase.TabIndex = 10;
+            this.extButtonReloadStarDatabase.Text = "Reload Star Database";
+            this.extButtonReloadStarDatabase.UseVisualStyleBackColor = true;
+            this.extButtonReloadStarDatabase.Click += new System.EventHandler(this.extButtonReloadStarDatabase_Click);
+            // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1411,5 +1423,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpDLL;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpCommanders;
         private ExtendedControls.ExtSplitterResizeParent extSplitterResizeParentGroupBoxCommanders;
+        private ExtendedControls.ExtButton extButtonReloadStarDatabase;
     }
 }

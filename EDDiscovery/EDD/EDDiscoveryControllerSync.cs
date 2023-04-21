@@ -127,16 +127,18 @@ namespace EDDiscovery
 
                                 ReportSyncProgress("Performing full download of System Data");
 
-                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EDDConfig.Instance.EDSMFullSystemsURL);
-
                                 string url = spansh ? string.Format(EDDConfig.Instance.SpanshSystemsURL, "") : EDDConfig.Instance.EDSMFullSystemsURL;
 
+                                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} Full system download using URL {url} to {downloadfile}");
+
+#if DEBUGLOAD
                                 bool success = true;
+                                bool deletefile = false;
                                 downloadfile = spansh ? @"c:\code\examples\edsm\systems_1week.json" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
-
-                                Trace.WriteLine($"DB Systems download from {url} to {downloadfile}");
-
-                                //bool success = BaseUtils.DownloadFile.HTTPDownloadFile( url, downloadfile, false, out bool newfile);
+#else
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile);
+                                bool deletefile = true;
+#endif
 
                                 syncstate.perform_fullsync = false;
 
@@ -146,7 +148,8 @@ namespace EDDiscovery
 
                                     syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, () => PendingClose, ReportSyncProgress);
 
-                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                                    if ( deletefile )
+                                        BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
 
                                     if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
                                         return;
@@ -155,7 +158,7 @@ namespace EDDiscovery
                                 {
                                     ReportSyncProgress("");
                                     LogLineHighlight("Failed to download full systems file. Try re-running EDD later");
-                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                                  //  BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
                                     return;     // new! if we failed to download, fail here, wait for another time
                                 }
                             }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2019 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using CAPI;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
@@ -66,7 +65,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlSettings_checkBoxKeepOnTop, EDTx.UserControlSettings_checkBoxCustomResize, EDTx.UserControlSettings_checkBoxMinimizeToNotifyIcon, 
                                         EDTx.UserControlSettings_checkBoxUseNotifyIcon, EDTx.UserControlSettings_extGroupBoxDLLPerms, EDTx.UserControlSettings_extButtonDLLConfigure, 
                                         EDTx.UserControlSettings_extButtonDLLPerms, EDTx.UserControlSettings_groupBoxCustomLanguage, EDTx.UserControlSettings_groupBoxCustomSafeMode, 
-                                        EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode };
+                                        EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode, EDTx.UserControlSettings_extButtonReloadStarDatabase };
             var enumlisttt = new Enum[] { EDTx.UserControlSettings_btnDeleteCommander_ToolTip, EDTx.UserControlSettings_buttonEditCommander_ToolTip, 
                                         EDTx.UserControlSettings_buttonAddCommander_ToolTip, EDTx.UserControlSettings_comboBoxTheme_ToolTip, EDTx.UserControlSettings_button_edittheme_ToolTip, 
                                         EDTx.UserControlSettings_buttonSaveTheme_ToolTip, EDTx.UserControlSettings_checkBoxOrderRowsInverted_ToolTip, EDTx.UserControlSettings_comboBoxClickThruKey_ToolTip, 
@@ -612,7 +611,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region EDSM
+        #region Star Database
 
         private void checkBoxCustomSystemDBDownload_CheckedChanged(object sender, EventArgs e)
         {
@@ -628,6 +627,29 @@ namespace EDDiscovery.UserControls
 
                 if (gridsel == 0)                               // but we have zero grids selected, force the user to select again
                     buttonExtSystemDBConfigureArea_Click(sender, e);
+            }
+        }
+
+        private void extButtonReloadStarDatabase_Click(object sender, EventArgs e)
+        {
+            if (ExtendedControls.MessageBoxTheme.Show(this, ("This will delete the systems database." + Environment.NewLine+ Environment.NewLine +
+                    "You can then reselect the database data source and the" + Environment.NewLine +
+                    "star set required." + Environment.NewLine + Environment.NewLine +
+                    "This will require a full download of the star database from the server" + Environment.NewLine +
+                    "Only use this if you are happy to download the dataset again").T(EDTx.UserControlSettings_RELOAD), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                bool force = EDDApplicationContext.RestartOptions != null;
+                EDDApplicationContext.RestartOptions = "-deletesystemdb";
+
+                if (!force)
+                {
+                    Application.Exit();
+                }
+                else
+                {
+                    System.Threading.Thread.CurrentThread.Abort();
+                }
+
             }
         }
 
@@ -704,8 +726,8 @@ namespace EDDiscovery.UserControls
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".T(EDTx.UserControlSettings_CSM), "Safe Mode".T(EDTx.UserControlSettings_SM), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                bool force = EDDApplicationContext.RestartInSafeMode;
-                EDDApplicationContext.RestartInSafeMode = true;
+                bool force = EDDApplicationContext.RestartOptions != null;
+                EDDApplicationContext.RestartOptions = "-safemode";
 
                 if (!force)
                 {

@@ -48,9 +48,9 @@ namespace EDDiscovery
                 }
                 catch (ThreadAbortException)
                 {
-                    if (EDDApplicationContext.RestartInSafeMode)
+                    if (EDDApplicationContext.RestartOptions != null)
                     {
-                        System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
+                        System.Diagnostics.Process.Start(Application.ExecutablePath, EDDApplicationContext.RestartOptions);
                     }
                 }
                 finally
@@ -58,9 +58,9 @@ namespace EDDiscovery
                     EliteDangerousCore.DB.UserDatabase.Instance.Stop();     // need everything closed before we can shut down the DBs threads
                     EliteDangerousCore.DB.SystemsDatabase.Instance.Stop();
 
-                    if (EDDApplicationContext.RestartInSafeMode)
+                    if (EDDApplicationContext.RestartOptions != null)
                     {
-                        System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
+                        System.Diagnostics.Process.Start(Application.ExecutablePath, EDDApplicationContext.RestartOptions);
                     }
                 }
             }
