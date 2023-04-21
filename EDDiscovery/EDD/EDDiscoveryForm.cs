@@ -232,21 +232,23 @@ namespace EDDiscovery
 
             string lang = EDDOptions.Instance.SelectLanguage ?? EDDConfig.Instance.Language;
 
-            bool loadorgenglish = false;
+            bool debugtranslation = false;
 
 #if DEBUG
             if (lang == "example-ex")       // if we are loading english, turn on code vs english comparision to see if we can find any out of date english.ex
             {
                 Translator.Instance.CompareTranslatedToCode = true;
-                loadorgenglish = true;
+                debugtranslation = true;
             }
 #endif
+
             bool found = BaseUtils.Translator.Instance.LoadTranslation(lang, 
                     CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, 
-                    loadorgenglish:loadorgenglish,
-                    debugout:false);
+                    loadorgenglish:debugtranslation,
+                    loadfile:debugtranslation,
+                    debugout:debugtranslation);
 
 
             if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))

@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls.Helpers
                 row.CreateCells(dataGridView, rowobj);
                 row.Tag = ms;
                 dataGridView.Rows.Add(row);
-                System.Diagnostics.Debug.Write($"Add mission JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) {ms.State}");
+                //System.Diagnostics.Debug.WriteLine($"Add mission JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) {ms.State}");
             }
         }
 

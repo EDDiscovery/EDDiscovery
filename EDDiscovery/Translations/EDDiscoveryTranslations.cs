@@ -1682,6 +1682,7 @@ namespace EDDiscovery
         UserControlSynthesis_buttonClear_ToolTip, // ToolTip 'Set all wanted values to zero'
         UserControlSynthesis_chkNotHistoric_ToolTip, // ToolTip 'When red, use the materials at the cursor to estimate, when green always use the latest materials.'
         UserControlSynthesis_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
+        UserControlSynthesis_extButtonPushResources_ToolTip,
 
         UserControlEngineering_UpgradeCol, // Column Header 'Upgrade/Mat'
         UserControlEngineering_ModuleCol, // Column Header 'Module'
@@ -1702,6 +1703,7 @@ namespace EDDiscovery
         UserControlEngineering_buttonClear_ToolTip, // ToolTip 'Set all wanted values to zero'
         UserControlEngineering_chkNotHistoric_ToolTip, // ToolTip 'When red, use the materials at the cursor to estimate, when green always use the latest materials.'
         UserControlEngineering_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
+        UserControlEngineering_extButtonPushResources_ToolTip,
 
         UserControlEngineers_buttonFilterEngineer_ToolTip, 
         UserControlEngineers_extCheckBoxWordWrap_ToolTip, 

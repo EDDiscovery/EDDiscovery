@@ -66,6 +66,9 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlSettings_checkBoxUseNotifyIcon, EDTx.UserControlSettings_extGroupBoxDLLPerms, EDTx.UserControlSettings_extButtonDLLConfigure, 
                                         EDTx.UserControlSettings_extButtonDLLPerms, EDTx.UserControlSettings_groupBoxCustomLanguage, EDTx.UserControlSettings_groupBoxCustomSafeMode, 
                                         EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode, EDTx.UserControlSettings_extButtonReloadStarDatabase };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
             var enumlisttt = new Enum[] { EDTx.UserControlSettings_btnDeleteCommander_ToolTip, EDTx.UserControlSettings_buttonEditCommander_ToolTip, 
                                         EDTx.UserControlSettings_buttonAddCommander_ToolTip, EDTx.UserControlSettings_comboBoxTheme_ToolTip, EDTx.UserControlSettings_button_edittheme_ToolTip, 
                                         EDTx.UserControlSettings_buttonSaveTheme_ToolTip, EDTx.UserControlSettings_checkBoxOrderRowsInverted_ToolTip, EDTx.UserControlSettings_comboBoxClickThruKey_ToolTip, 
@@ -75,7 +78,6 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlSettings_checkBoxCustomResize_ToolTip, EDTx.UserControlSettings_checkBoxMinimizeToNotifyIcon_ToolTip, EDTx.UserControlSettings_checkBoxUseNotifyIcon_ToolTip, 
                                         EDTx.UserControlSettings_buttonExtSafeMode_ToolTip };
 
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             ResetThemeList();
@@ -126,7 +128,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
 
             checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.SystemDBDownload;
-            this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomSystemDBDownload_CheckedChanged);
+            this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
             comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".T(EDTx.UserControlSettings_DLA), ">7 days old".T(EDTx.UserControlSettings_7daysold),
                 ">30 days old".T(EDTx.UserControlSettings_30daysold), ">60 days old".T(EDTx.UserControlSettings_60daysold), ">90 days old".T(EDTx.UserControlSettings_90daysold),
@@ -156,6 +158,7 @@ namespace EDDiscovery.UserControls
             tm.Start();
 
             extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
+            checkBoxCustomEDSMDownload.Text += " " + SystemsDatabase.Instance.GetDBSource();
         }
 
         public void ConfigureHelpButton(ExtendedControls.ExtButtonDrawn p, string tag)
@@ -613,7 +616,7 @@ namespace EDDiscovery.UserControls
 
         #region Star Database
 
-        private void checkBoxCustomSystemDBDownload_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.SystemDBDownload = checkBoxCustomEDSMDownload.Checked;
 
