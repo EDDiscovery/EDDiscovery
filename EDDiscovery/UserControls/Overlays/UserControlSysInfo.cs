@@ -117,7 +117,8 @@ namespace EDDiscovery.UserControls
 
         private bool travelhistoryisattop = true;
 
-        HistoryEntry last_he = null;
+        private HistoryEntry last_he = null;
+        private uint lastprocessedidgen = uint.MaxValue;
 
         private ControlHelpersStaticFunc.ControlDragger drag = new ControlHelpersStaticFunc.ControlDragger();
 
@@ -323,7 +324,6 @@ namespace EDDiscovery.UserControls
                 if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        // if name or bodyid has changed
                 {
                     //System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
-
                     lastdestination = j;
                     Display(last_he);
                 }
@@ -357,6 +357,7 @@ namespace EDDiscovery.UserControls
             bool duetoship = false;
             bool duetoother = false;
             bool duetomissions = false;
+            bool duetoidentifiers = DiscoveryForm.History.IdentifierList.Generation != lastprocessedidgen;  // global history kick if Ids changed, not on he, but if its changed, a new he would be coming in
 
             if (he.Status.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
             {
@@ -376,10 +377,11 @@ namespace EDDiscovery.UserControls
                 duetomissions = last_he.MissionList != he.MissionList;
             }
 
-            if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions)
+            if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions || duetoidentifiers)
             {
                 //System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
+                lastprocessedidgen = DiscoveryForm.History.IdentifierList.Generation;   // stop identifiers kicking again
             }
         }
 
@@ -566,10 +568,10 @@ namespace EDDiscovery.UserControls
                 if (travelhistoryisattop && ( lastdestination != null || (lasttarget != null && lasttarget.StarSystem != he.System.Name)))
                 {
                     string starname = "";
-                    string bodyname = "";
+                    string destname = "";
                     string starclass = "";
                     string distance = "";
-                    string pos = "";
+                    string onbody = "";
                     Color textdistcolor = ExtendedControls.Theme.Current.TextBlockColor;
 
                     //bool sysinfoincurrentsystem = he.System.Name == (discoveryform.history.LastOrDefault?.System.Name ?? "xx");
@@ -585,17 +587,21 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {
-                            bodyname = lastdestination.Name;    // else body
-                          //  System.Diagnostics.Debug.WriteLine($"Destination select body {lastdestination.BodyID}");
+                            // else body name destination or $POI $MULTIPLAYER etc
+                            // Its not localised, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
+
+                            destname = JournalFieldNaming.BodyName(DiscoveryForm.History.IdentifierList, lastdestination.Name);   
+
+                            //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
                             var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(DiscoveryForm.History.GetLast.System, false);
                             if (IsClosed)       //ASYNC! warning! may have closed.
                                 return;
 
-                            // with a found system, see if we can get the body name
+                            // with a found system, see if we can get the body name so we know what body its on
                             if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID, out StarScan.ScanNode body))
                             {
-                                pos = body.FullName.ReplaceIfStartsWith(he.System.Name).Trim();
+                                onbody = body.FullName.ReplaceIfStartsWith(he.System.Name).Trim();
 
                                 if (body.ScanData != null)
                                     distance = body.ScanData.DistanceFromArrivalLS.ToString("N0") + "ls";
@@ -630,13 +636,13 @@ namespace EDDiscovery.UserControls
                                     textdistcolor = ExtendedControls.Theme.Current.TextBlockHighlightColor;
                             }
 
-                            pos = $"{sys.X:N1}, {sys.Y:N1}, {sys.Z:N1}";
+                            onbody = $"{sys.X:N1}, {sys.Y:N1}, {sys.Z:N1}";
                         }
                     }
 
-                    extTextBoxNextDestination.Text = $"{starname}{bodyname}{starclass}";
+                    extTextBoxNextDestination.Text = $"{starname}{destname}{starclass}";
                     extTextBoxNextDestinationDistance.Text = distance;
-                    extTextBoxNextDestinationPosition.Text = pos;
+                    extTextBoxNextDestinationPosition.Text = onbody;
                     extTextBoxNextDestinationDistance.ForeColor = textdistcolor;
                 }
                 else
