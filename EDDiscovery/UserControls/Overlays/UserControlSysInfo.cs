@@ -590,7 +590,7 @@ namespace EDDiscovery.UserControls
                             // else body name destination or $POI $MULTIPLAYER etc
                             // Its not localised, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
 
-                            destname = JournalFieldNaming.BodyName(DiscoveryForm.History.IdentifierList, lastdestination.Name);   
+                            destname = JournalFieldNaming.SignalBodyName(DiscoveryForm.History.IdentifierList, lastdestination.Name);   
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
