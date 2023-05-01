@@ -27,7 +27,9 @@ namespace EDDiscovery.UserControls
         #region Routes
 
         // insert or append (insertindex=-1) to the grid, either systementry, Isystems or strings
-        public void AppendOrInsertSystems(int insertIndex, IEnumerable<object> sysnames, bool updatesystemrows = true)
+        // rows will be inserted with cells[0].tag set to null, so it will cause them to autoupdate
+        // totals will be asked to update
+        public void AppendOrInsertSystems(int insertIndex, IEnumerable<object> sysnames)
         {
             int i = 0;
             foreach (var system in sysnames)
@@ -56,13 +58,12 @@ namespace EDDiscovery.UserControls
                         dataGridView.Rows.Add(data);
                     else
                         dataGridView.Rows.Insert(insertIndex++, data);
+
+                    forcetotalsupdate = true;           // update the totals
                 }
 
                 i++;
             }
-
-            if (updatesystemrows)
-                UpdateSystemRows();
         }
 
         // if the data in the grid is set, and different to the loadedroute, or the grid is not empty.  

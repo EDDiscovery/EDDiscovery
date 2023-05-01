@@ -192,7 +192,12 @@ namespace EDDiscovery
                                 if (success)        // grabbed sucessfully
                                 {
                                     ReportSyncProgress("Download complete, updating database");
-                                    syncstate.updatesync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, () => PendingClose, ReportSyncProgress);
+
+                                    syncstate.updatesync_count = SystemsDB.ParseJSONFile(downloadfile, grids, ref lastrecordtime, ()=>PendingClose, ReportSyncProgress, "");
+
+                                    System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count} to {lastrecordtime}");
+
+                                    SystemsDatabase.Instance.SetLastRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
                                 }
                                 else
                                 {
@@ -335,7 +340,7 @@ namespace EDDiscovery
                 // debug File.WriteAllText(@"c:\code\json.txt", json);
 
                 DateTime prevrectime = lastrecordtime;
-                System.Diagnostics.Debug.WriteLine("Last record time {0} JSON size {1}", lastrecordtime.ToUniversalTime(), json.Length);
+                System.Diagnostics.Trace.WriteLine($"EDSM partial download last record time {lastrecordtime}");
 
                 long updated = 0;
 
@@ -345,8 +350,7 @@ namespace EDDiscovery
 
                     updated = SystemsDB.ParseJSONString(json, grididallow, ref lastrecordtime, PendingClose, ReportProgress, "");
 
-                    System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
-                    System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());
+                    System.Diagnostics.Trace.WriteLine($"EDSM parital download updated {updated} to {lastrecordtime}");
 
                     // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
                     if (lastrecordtime <= prevrectime)

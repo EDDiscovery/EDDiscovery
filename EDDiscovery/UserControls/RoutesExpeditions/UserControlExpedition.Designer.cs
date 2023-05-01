@@ -104,7 +104,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -328,6 +327,7 @@ namespace EDDiscovery.UserControls
             // dataGridView
             // 
             this.dataGridView.AllowDrop = true;
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView.AutoSortByColumnName = false;
@@ -362,7 +362,6 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Size = new System.Drawing.Size(1118, 565);
             this.dataGridView.TabIndex = 2;
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
-            this.dataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewRouteSystems_SortCompare);
             this.dataGridView.Sorted += new System.EventHandler(this.dataGridView_Sorted);
@@ -598,6 +597,7 @@ namespace EDDiscovery.UserControls
             // 
             // extScrollBarDGV
             // 
+            this.extScrollBarDGV.AlwaysHideScrollBar = false;
             this.extScrollBarDGV.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarDGV.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarDGV.ArrowColorScaling = 0.5F;
@@ -966,7 +966,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertRowAboveToolStripMenuItem;
         private System.Windows.Forms.Label labelBusy;
-        private System.IO.Ports.SerialPort serialPort1;
         private ExtendedControls.ExtDataGridViewColumnAutoComplete SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;

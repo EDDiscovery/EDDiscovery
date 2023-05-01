@@ -43,8 +43,10 @@ namespace EDDiscovery.UserControls
         const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
         const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
-        private Timer autoupdateedsm;
-        private bool updatingsystemrows = false;    // set during row update, to stop user interfering with the async processor without flashing icons if we just disabled them
+        private Timer autoupdate;
+
+        private bool forcetotalsupdate = false;     // force an update of the totals
+        private int outstandingprocessing = 0;      // processing is outstanding
 
         #region Standard UC Interfaces
 
@@ -79,9 +81,8 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.PinState = GetSetting(dbRolledUp, true);
 
-            autoupdateedsm = new Timer() { Interval = 1000 };
-            autoupdateedsm.Tick += Autoupdateedsm_Tick;
-            autoupdateedsm.Start();     // something to display..
+            autoupdate = new Timer() { Interval = 100 };
+            autoupdate.Tick += Autoupdate_Tick;
 
             var enumlist = new Enum[] { EDTx.UserControlExpedition_SystemName, EDTx.UserControlExpedition_Distance, EDTx.UserControlExpedition_Note, EDTx.UserControlExpedition_CurDist, 
                                         EDTx.UserControlExpedition_Visits, EDTx.UserControlExpedition_Scans, EDTx.UserControlExpedition_FSSBodies, EDTx.UserControlExpedition_KnownBodies, 
@@ -109,6 +110,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView,"V2");
+            autoupdate.Start();     // start check tick
         }
 
         public override bool AllowClose()
@@ -118,7 +120,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            autoupdateedsm.Stop();
+            autoupdate.Stop();
 
             DGVSaveColumnLayout(dataGridView,"V2");
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
@@ -131,18 +133,18 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNoteChanged(object arg1, HistoryEntry arg2)
         {
-            UpdateSystemRows();
+            UpdateAllRows();
         }
 
         private void Discoveryform_OnHistoryChange()
         {
-            UpdateSystemRows();
+            UpdateAllRows();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (he.journalEntry is IStarScan || he.IsFSDCarrierJump || he.journalEntry is IBodyNameAndID)
-                UpdateSystemRows();
+                UpdateAllRows();
         }
 
         private void discoveryForm_OnNewCalculatedRoute(List<ISystem> obj) // called when a new route is calculated
@@ -184,9 +186,156 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region auto update
+
+        private void Autoupdate_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
+        {
+            // if we are not EDSM checking, or nothing is outstanding, we can check to see if we can process
+
+            if (checkBoxEDSM.Checked == false || outstandingprocessing == 0)      // if not doing edsm, or no outstandings
+            {
+                int maxlaunch = 20;     // max launch in non edsm mode, 
+
+                //System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Expedition Checking rows");
+
+                for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows
+                {
+                    var row = dataGridView.Rows[rowindex];
+                    var name = row.Cells[0].Value as string;            // name in grid now
+                    string nametag = row.Cells[0].Tag as string;        // null or system name, set in here, used to detect name change
+                    SystemClass systemtag = row.Tag as SystemClass;     // null or set after processing. May or may not have co-ords
+                    bool? edsmtag = row.Cells[1].Tag != null ? (bool)row.Cells[1].Tag : default(bool); // null or edsm flag is in tag 1 - meaning we processed
+
+                    // if name, so row can be valid
+                    if (name.HasChars())
+                    {
+                        // if name tag is null, or name tag is not name, or edsm tag is set but different to current orders, process again
+                        if ((nametag == null || nametag != name) || (edsmtag.HasValue && edsmtag.Value != checkBoxEDSM.Checked))
+                        {
+                            if (nametag != null && nametag != name)        // if changed name.. we clear the xyz, so it will update
+                            {
+                                row.Cells[ColumnX.Index].Value = "";
+                                row.Cells[ColumnY.Index].Value = "";
+                                row.Cells[ColumnZ.Index].Value = "";
+                            }
+
+                            row.Cells[0].Tag = name;        // set to mark we processed with this name
+                            row.Cells[1].Tag = null;        // cancel the processed/edsm flag, it will be set on completion by process
+                            forcetotalsupdate = true;       // update when finished
+                            labelBusy.Visible = true;       // make busy
+
+                            UpdateRowAsync(rowindex, checkBoxEDSM.Checked);
+
+                            if (checkBoxEDSM.Checked)      // if we are doing EDSM checking, space it out.. only launch one. Won't launch another until all processing done
+                                return;
+
+                            if (--maxlaunch == 0)           // if launch max, stop
+                                return;
+                        }
+                        else if ( edsmtag.HasValue )        // if we have processed this line
+                        {
+                            // lets see if the user has changed the co-ords manually
+
+                            SystemClass gridsys = GetSystemClass(rowindex);     // get the system class from the grid. Will never be null, since here grid name is not null
+
+                            // if we have a gridpos, lets see if either system tag was not set, or its different xyz using the ints to compare
+
+                            if ( gridsys.HasCoordinate && (!systemtag.HasCoordinate || 
+                                        systemtag.Xi != gridsys.Xi || systemtag.Yi != gridsys.Yi || systemtag.Zi != gridsys.Zi ))
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Expedition Grid row {rowindex} position now set or changed");
+                                row.Tag = gridsys;
+                                row.Cells[0].Style.ForeColor = Color.Empty;
+                                forcetotalsupdate = true;
+                            }
+                            else if (systemtag.HasCoordinate && !gridsys.HasCoordinate ) // user fucked up the position ;-)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Expedition Grid row {rowindex} position lost");
+                                row.Tag = gridsys;
+                                forcetotalsupdate = true;
+                                row.Cells[0].Style.ForeColor = ExtendedControls.Theme.Current.UnknownSystemColor;
+                            }
+                        }
+                    }
+                }
+            }
+
+            bool alldone = true;
+
+            // scan all rows and see if any are outstanding via the edsmtag set in UpdateRowAsync
+
+            for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)
+            {
+                var row = dataGridView.Rows[rowindex];
+                var name = row.Cells[0].Value as string;
+                var edsmtag = row.Cells[1].Tag;
+                if ( name.HasChars() && edsmtag == null) // if its got a name, and we have not processed it, stop
+                {
+                    alldone = false;
+                    break;
+                }
+            }
+
+            // check both edsm tag and outstanding for safety, then process if required
+
+            if ( alldone && outstandingprocessing == 0 && forcetotalsupdate)        
+            {
+                System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Update totals");
+
+                SystemClass firstsys = dataGridView.Rows[0].Tag as SystemClass;     // may be null, may not have distance.  Find first system
+                if (firstsys != null && !firstsys.HasCoordinate)        // no co-ord means firstsys is useless
+                    firstsys = null;
+
+                SystemClass lastsys = null;
+                for (int i = dataGridView.RowCount - 1; i >= 0; i--)        // find last system
+                {
+                    if (dataGridView.Rows[i].Tag != null)
+                    {
+                        lastsys = dataGridView.Rows[i].Tag as SystemClass;      // find last filled one
+                        if (!lastsys.HasCoordinate)                             // no coord, useless
+                            lastsys = null;
+                        break;
+                    }
+                }
+
+                double totaldistance = 0;
+
+                for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // for all rows, compute distances
+                {
+                    var row = dataGridView.Rows[rowindex];
+                    SystemClass sys = row.Tag as SystemClass;
+
+                    double? dist = null;
+
+                    if (sys != null)
+                    {
+                        SystemClass prevrowsystem = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as SystemClass : null;
+                        dist = sys.HasCoordinate && prevrowsystem != null && prevrowsystem.HasCoordinate ? prevrowsystem.Distance(sys) : default(double?);
+
+                        if (dist.HasValue)
+                        {
+                            totaldistance += dist.Value;
+                        }
+                    }
+
+                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("0.#") : "";
+                    row.Cells[ColumnDistStart.Index].Value = firstsys != null && sys != null && sys.HasCoordinate ? sys.Distance(firstsys).ToString("N1") : "";
+                    row.Cells[ColumnDistanceRemaining.Index].Value = lastsys != null && sys != null && sys.HasCoordinate ? sys.Distance(lastsys).ToString("N1") : "";
+                }
+
+                txtCmlDistance.Text = totaldistance.ToString("0.#") + " ly";
+                txtP2PDIstance.Text = firstsys != null && lastsys != null ? firstsys.Distance(lastsys).ToString("0.#") + "ly" : "?";
+
+                forcetotalsupdate = false;
+                labelBusy.Visible = false;
+            }
+        }
+
+
+        #endregion
+
         #region Grid Display Route and update when required
 
-  
         private void ClearTable()
         {
             dataGridView.Rows.Clear();
@@ -198,16 +347,18 @@ namespace EDDiscovery.UserControls
             loadedroute = null;
         }
 
-        // this is an async function - which needs very special handling
-        // scan rows indicated and fill in other columns
-        // normal to do this with edsmcheck off, the auto edsm routing calls it with on
-
-        private async void UpdateSystemRows(int rowstart = 0, int rowendinc = int.MaxValue, bool edsmcheck = false)
+        void UpdateAllRows()
         {
-            Cursor = Cursors.WaitCursor;
-            updatingsystemrows = true;
-            labelBusy.Visible = true;
-            labelBusy.Update();
+            foreach (DataGridViewRow row in dataGridView.Rows)      // clear all tags
+                row.Cells[0].Tag = null;
+        }
+
+        // this is an async function - which needs very special handling
+        // update a row with edsm check if required
+
+        private async void UpdateRowAsync(int rowindex, bool edsmcheck)
+        {
+            System.Threading.Interlocked.Increment(ref outstandingprocessing);      // increase processing count to indicate we are going. Doubt we need the interlock
 
             ISystem historySystem = DiscoveryForm.History.CurrentSystem(); // may be null
 
@@ -228,15 +379,15 @@ namespace EDDiscovery.UserControls
             bool showorganics = displayfilters.Contains("organics");
             bool disablegmoshow = displayfilters.Contains("gmoinfooff");
 
-            for (int rowindex = rowstart; rowindex <= Math.Min(rowendinc, dataGridView.Rows.Count - 1); rowindex++)
+            DataGridViewRow row = dataGridView.Rows[rowindex];
+
+            // get the system, with name, and include xyz from grid
+            SystemClass sys = GetSystemClass(rowindex);
+
+            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Update row {rowindex} {sys.Name} coord {sys.HasCoordinate}");
+
+            if (sys != null)
             {
-                SystemClass sys = GetSystemClass(rowindex);
-
-                if (sys == null)
-                    continue;
-
-                DataGridViewRow row = dataGridView.Rows[rowindex];
-
                 string note = SystemNoteClass.GetTextNotesOnSystem(sys.Name);
 
                 BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sys.Name);
@@ -273,19 +424,12 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                row.Tag = sys;      // always non null, but may have no co-ord
-
                 row.Cells[0].Style.ForeColor = sys.HasCoordinate ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
-
-                SystemClass prevrowsystem = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as SystemClass : null;
-                double? dist = sys.HasCoordinate && prevrowsystem != null && prevrowsystem.HasCoordinate ? prevrowsystem.Distance(sys) : default(double?);
-                row.Cells[Distance.Index].Tag = dist;       // save distance for accumulator
-                row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("0.#") : "";
 
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
                 row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("0.#") : "";
 
-                StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmcheck); 
+                StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmcheck);
 
                 if (IsClosed)        // because its async, may be called during closedown. stop this
                     return;
@@ -303,11 +447,11 @@ namespace EDDiscovery.UserControls
                         if (sn?.ScanData != null)  // must have scan data..
                         {
                             if (
-                               (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||     // major selectors for line display
-                               (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
-                               (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
-                               (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
-                               )
+                                (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||     // major selectors for line display
+                                (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
+                                (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
+                                (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                                )
                             {
                                 string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
                                                             showvol, showv, showsi, showg,
@@ -328,90 +472,49 @@ namespace EDDiscovery.UserControls
                     row.Cells[FSSBodies.Index].Value =
                     row.Cells[KnownBodies.Index].Value =
                     row.Cells[Stars.Index].Value = "";
-                    row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "No Body information found on EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                    row.Cells[Info.Index].Value = edsmcheck ? "No Body information found on EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
                 }
             }
 
-            {
-                SystemClass firstsys = dataGridView.Rows[0].Tag as SystemClass;     // may be null, may not have distance
-                if (firstsys != null && !firstsys.HasCoordinate)        // no co-ord means firstsys is useless
-                    firstsys = null;
+            row.Tag = sys;      // keep system tag
+            row.Cells[1].Tag = edsmcheck;       // and record the edsm state. this indicates row has been processed
 
-                SystemClass lastsys = null;
-                for (int i = dataGridView.RowCount - 1; i >= 0; i--)
-                {
-                    if (dataGridView.Rows[i].Tag != null)
-                    {
-                        lastsys = dataGridView.Rows[i].Tag as SystemClass;      // find last filled one
-                        if (!lastsys.HasCoordinate)                             // no coord, useless
-                            lastsys = null;
-                        break;
-                    }
-                }
-
-                double totaldistance = 0;
-
-                for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
-                {
-                    var row = dataGridView.Rows[rowindex];
-                    var sys = row.Tag as SystemClass;
-
-                    if (row.Cells[Distance.Index].Tag != null)
-                        totaldistance += (double)row.Cells[Distance.Index].Tag;
-
-                    bool syshascoord = sys?.HasCoordinate ?? false;
-                    row.Cells[ColumnDistStart.Index].Value = firstsys != null && syshascoord ? sys.Distance(firstsys).ToString("N1") : "";
-                    row.Cells[ColumnDistanceRemaining.Index].Value = lastsys != null && syshascoord ? sys.Distance(lastsys).ToString("N1") : "";
-                }
-
-                txtCmlDistance.Text = totaldistance.ToString("0.#") + " ly";
-                txtP2PDIstance.Text = firstsys != null && lastsys != null ? firstsys.Distance(lastsys).ToString("0.#") + "ly" : "?";
-            }
-
-            Cursor = Cursors.Default;
-            labelBusy.Visible = false;
-            updatingsystemrows = false;
+            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Update row {rowindex} finished");
+            System.Threading.Interlocked.Decrement(ref outstandingprocessing);      // and decrease processing count..
         }
 
+        public static System.Threading.Tasks.Task KillTimeAsync(int time)       // debug feature
+        {
+            return System.Threading.Tasks.Task.Run(() =>
+            {
+                System.Threading.Thread.Sleep(time);
+            });
+        }
+
+
+        // return a system class from grid information, with optional xyz. Null if no name
         private SystemClass GetSystemClass(int rown)
         {
             if (rown >= 0 && rown < dataGridView.Rows.Count)
             {
                 DataGridViewRow row = dataGridView.Rows[rown];
                 string name = (string)row.Cells[SystemName.Index].Value;
+
                 if (name.HasChars())
                 {
                     double xpos = ((string)row.Cells[ColumnX.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
                     double ypos = ((string)row.Cells[ColumnY.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
                     double zpos = ((string)row.Cells[ColumnZ.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
-
                     bool knownpos = xpos != SavedRouteClass.SystemEntry.NotKnown && ypos != SavedRouteClass.SystemEntry.NotKnown && zpos != SavedRouteClass.SystemEntry.NotKnown;
-
-                    return knownpos ? new SystemClass(name, null, xpos, ypos, zpos) : new SystemClass(name);
+                    return knownpos ? new SystemClass(name, null, xpos,ypos,zpos) : new SystemClass(name);
                 }
             }
             return null;
         }
 
-        private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
-        {
-            if (checkBoxEDSM.Checked == false)
-                return;
+        #endregion
 
-            for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows
-            {
-                var row = dataGridView.Rows[rowindex];
-                var name = row.Cells[0].Value as string;
-
-                if ( name.HasChars() && row.Cells[0].Tag == null  )             // if not edsm processed..
-                {
-                    row.Cells[0].Tag = true;
-                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - EDSM lookup on {rowindex} {dataGridView[0, rowindex].Value}");
-                    UpdateSystemRows(rowindex, rowindex, true);
-                    break;
-                }
-            }
-        }
+        #region Grid Paint
 
         // autopaint the row number..
         private void dataGridViewRouteSystems_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -432,16 +535,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
         #endregion
 
-
-        #region toolbar ui
+        #region Toolbar ui
 
         ExtendedControls.ExtListBoxForm dropdown;
         private void extButtonLoadRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -502,29 +603,21 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNew_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
             }
 
-            ClearRoute();
-        }
-
-        private bool ClearRoute()
-        {
             if (PromptAndSaveIfNeeded())
             {
                 ClearTable();
-                return true;
             }
-            else
-                return false;
         }
 
         private void extButtonSave_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -535,7 +628,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDelete_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -553,7 +646,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImport_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -651,7 +744,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -668,7 +761,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportNavRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -704,7 +797,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNavLatest_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -718,7 +811,7 @@ namespace EDDiscovery.UserControls
         }
         private void buttonExtExport_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -823,7 +916,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShow3DMap_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -847,7 +940,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonAddSystems_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -887,7 +980,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDisplayFilters_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -916,7 +1009,7 @@ namespace EDDiscovery.UserControls
             {
                 displayfilters = s.Split(';');
                 PutSetting(dbDisplayFilters, string.Join(";", displayfilters));
-                UpdateSystemRows();
+                UpdateAllRows();
             };
 
             displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
@@ -925,15 +1018,7 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
-            PutSetting(dbEDSM, checkBoxEDSM.Checked);       // update the store
-
-            if (updatingsystemrows)
-            {
-                Console.Beep(512, 500);
-                return;
-            }
-            else
-                UpdateSystemRows();
+            PutSetting(dbEDSM, checkBoxEDSM.Checked);       // update the setting, and the autoupdate will take it up
         }
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
@@ -950,20 +1035,19 @@ namespace EDDiscovery.UserControls
 
         private void buttonReverseRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
             }
 
-            var route = CopyGridIntoRoute();
+            List<DataGridViewRow> rows = new List<DataGridViewRow>();
+            rows.AddRange(dataGridView.Rows.Cast<DataGridViewRow>().Where(x=>x.Cells[0].Value != null && x.Cells[0].Value.ToString().HasChars()));
+            rows.Reverse();
+            dataGridView.Rows.Clear();
+            dataGridView.Rows.AddRange(rows.ToArray());
 
-            if (route != null)
-            {
-                dataGridView.Rows.Clear();
-                route.ReverseSystemList();
-                AppendOrInsertSystems(-1,route.Systems);
-            }
+            forcetotalsupdate = true;
         }
 
         #endregion
@@ -971,7 +1055,7 @@ namespace EDDiscovery.UserControls
         #region Double click
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -1026,7 +1110,7 @@ namespace EDDiscovery.UserControls
 
         private void contextMenuCopyPaste_Opening(object sender, CancelEventArgs e)
         {
-            if (updatingsystemrows)
+            if (outstandingprocessing != 0)     // protect whole of context menu copy pasta
             {
                 Console.Beep(512, 500);
                 e.Cancel = true;
@@ -1055,7 +1139,7 @@ namespace EDDiscovery.UserControls
             foreach ( var row in selectedRows)   // delete in this specific highest row first order
                 dataGridView.Rows.RemoveAt(row);
 
-            UpdateSystemRows();
+            forcetotalsupdate = true;           // update the totals
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1067,7 +1151,7 @@ namespace EDDiscovery.UserControls
                 bool tabs = data.Contains("\t");            // data copied from grid uses tab as cell dividers, else use comma
                 string[][] textlines = data.Split(Environment.NewLine, tabs ? "\t" : ",", StringComparison.InvariantCulture);   // use nice splitter to split into newlines, then cells
 
-                var rows = dataGridView.SelectedRowAndCount(true, true);   // ascending, use cells, default is 0, and remove new row
+                var rows = dataGridView.SelectedRowAndCount(true, true, nonewrow:false);   // ascending, use cells, default is 0, and keep end row
                 // make up a systementry with the name, and possibly the note
                 var se = textlines.Where(x => x.Length > 0 && x[0].HasChars()).Select(r => new SavedRouteClass.SystemEntry(r[0], r.Length >= 2 ? r[1] : "",
                                         r.Length >= 3 ? r[2].InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown) : SavedRouteClass.SystemEntry.NotKnown,
@@ -1083,7 +1167,7 @@ namespace EDDiscovery.UserControls
         {
             var rows = dataGridView.SelectedRowAndCount(true, true, 0, false);   // ascending, use cells if not row selection, don't change due to new row
             dataGridView.Rows.Insert(rows.Item1, rows.Item2);
-            UpdateSystemRows();
+            forcetotalsupdate = true;           // update the totals
         }
 
         private void setTargetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1127,7 +1211,7 @@ namespace EDDiscovery.UserControls
                 sc = new SystemClass((string)obj,0,0,0);
 
             BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sc, null);
-            UpdateSystemRows();
+            UpdateAllRows(); // tbd must be better?
         }
 
         #endregion
@@ -1136,13 +1220,19 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_DragDrop(object sender, DragEventArgs e)
         {
+            if (outstandingprocessing != 0)     // protect against update
+            {
+                Console.Beep(512, 500);
+                return;
+            }
+
             // still check if the associated data from the file(s) can be used for this purpose
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 // Fetch the file(s) names with full path here to be processed
                 string[] fileList = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                if (updatingsystemrows == false)
+                if (outstandingprocessing != 0 == false)
                 {
                     if (PromptAndSaveIfNeeded())
                     {
@@ -1172,16 +1262,6 @@ namespace EDDiscovery.UserControls
 
         #region Validation
 
-        private void dataGridViewRouteSystems_CellValidated(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridView.RowCount)
-            {
-                dataGridView.Rows[e.RowIndex].Cells[0].Tag = null;          // reset edsm
-                System.Diagnostics.Debug.WriteLine($"Update row index and next one only");
-                UpdateSystemRows(e.RowIndex, e.RowIndex+1);
-            }
-        }
-
         private void dataGridViewRouteSystems_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
@@ -1192,7 +1272,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_Sorted(object sender, EventArgs e)
         {
-            UpdateSystemRows();     // once sorted, recompute columns
+            forcetotalsupdate = true;       // recompute the totals
         }
 
         #endregion
