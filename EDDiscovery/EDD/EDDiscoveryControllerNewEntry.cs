@@ -256,7 +256,7 @@ namespace EDDiscovery
                                 Thread.Sleep(500);      // space the next check out a bit
                             }
                             else
-                                LogLine($"MK is invalid {mk.IsValid} station {mk.Name}");
+                                LogLine($"MK is valid {mk.IsValid} station {mk.Name}");
                         }
                     }
 
