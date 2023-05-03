@@ -168,7 +168,7 @@ namespace EDDiscovery
 
                     // finally, CAPI, if docked, and CAPI is go for pc commander, do capi procedure
 
-                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
+                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander && he.Status.TravelState != HistoryEntryStatus.TravelStateType.TaxiDocked)
                     {
                         var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
                         DoCAPI(dockevt.StationName, he.System.Name, History.Shipyards.AllowCobraMkIV);
@@ -256,7 +256,7 @@ namespace EDDiscovery
                                 Thread.Sleep(500);      // space the next check out a bit
                             }
                             else
-                                LogLine($"MK is invalid {mk.IsValid} station {mk.Name}");
+                                LogLine($"MK is valid {mk.IsValid} station {mk.Name}");
                         }
                     }
 
