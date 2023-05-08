@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
                 {
                     var se = (SavedRouteClass.SystemEntry)system;
                     bool known = se.HasCoordinate;
-                    data = new object[] { se.Name, se.Note, known ? se.X.ToString("0.##") : "", known ? se.Y.ToString("0.##") : "", known ? se.Z.ToString("0.##") : "" };
+                    data = new object[] { se.Name, se.Note, known ? se.X.ToString("N3") : "", known ? se.Y.ToString("N3") : "", known ? se.Z.ToString("N3") : "" };
                 }
                 else
                 {
@@ -82,14 +82,16 @@ namespace EDDiscovery.UserControls
 
             route.Systems.Clear();
 
+            // grid xyz is in culture specific mode
+
             var data = dataGridView.Rows.OfType<DataGridViewRow>()
                 .Where(r => r.Index < dataGridView.NewRowIndex && (r.Cells[0].Value as string).HasChars())
                 .Select(r => new SavedRouteClass.SystemEntry(
                                     (r.Cells[SystemName.Index].Value as string) ?? "", // sometimes they can end up null
                                     (r.Cells[Note.Index].Value as string) ?? "",
-                                    ((string)r.Cells[ColumnX.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown),
-                                    ((string)r.Cells[ColumnY.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown),
-                                    ((string)r.Cells[ColumnZ.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown)
+                                    ((string)r.Cells[ColumnX.Index].Value).ParseDouble(SavedRouteClass.SystemEntry.NotKnown, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number),
+                                    ((string)r.Cells[ColumnY.Index].Value).ParseDouble(SavedRouteClass.SystemEntry.NotKnown, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number),
+                                    ((string)r.Cells[ColumnZ.Index].Value).ParseDouble(SavedRouteClass.SystemEntry.NotKnown, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number)
                                     ));
 
             route.Systems.AddRange(data);

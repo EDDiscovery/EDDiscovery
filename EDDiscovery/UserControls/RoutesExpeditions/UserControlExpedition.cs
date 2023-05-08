@@ -320,13 +320,13 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("0.#") : "";
+                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("N1") : "";
                     row.Cells[ColumnDistStart.Index].Value = firstsys != null && sys != null && sys.HasCoordinate ? sys.Distance(firstsys).ToString("N1") : "";
                     row.Cells[ColumnDistanceRemaining.Index].Value = lastsys != null && sys != null && sys.HasCoordinate ? sys.Distance(lastsys).ToString("N1") : "";
                 }
 
-                txtCmlDistance.Text = totaldistance.ToString("0.#") + " ly";
-                txtP2PDIstance.Text = firstsys != null && lastsys != null ? firstsys.Distance(lastsys).ToString("0.#") + "ly" : "?";
+                txtCmlDistance.Text = totaldistance.ToString("N1") + " ly";
+                txtP2PDIstance.Text = firstsys != null && lastsys != null ? firstsys.Distance(lastsys).ToString("N1") + "ly" : "?";
 
                 forcetotalsupdate = false;
                 labelBusy.Visible = false;
@@ -419,9 +419,9 @@ namespace EDDiscovery.UserControls
                     if (syslookup != null)
                     {
                         //System.Diagnostics.Debug.WriteLine($"Lookup for {sys.Name} Found co-ords");
-                        row.Cells[ColumnX.Index].Value = syslookup.X.ToString("0.##");              // write culture specific location.
-                        row.Cells[ColumnY.Index].Value = syslookup.Y.ToString("0.##");
-                        row.Cells[ColumnZ.Index].Value = syslookup.Z.ToString("0.##");
+                        row.Cells[ColumnX.Index].Value = syslookup.X.ToString("N3");              // write culture specific location.
+                        row.Cells[ColumnY.Index].Value = syslookup.Y.ToString("N3");
+                        row.Cells[ColumnZ.Index].Value = syslookup.Z.ToString("N3");
                         sys = new SystemClass(syslookup);
                     }
                 }
@@ -429,7 +429,7 @@ namespace EDDiscovery.UserControls
                 row.Cells[0].Style.ForeColor = sys.HasCoordinate ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
-                row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("0.#") : "";
+                row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("N1") : "";
 
                 StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmcheck);
 
@@ -506,11 +506,14 @@ namespace EDDiscovery.UserControls
 
                 if (name.HasChars())
                 {
-                    // it was written in current culture above in UpdateRow, so need to read it in current culture
-                    double? xpos = ((string)row.Cells[ColumnX.Index].Value).ParseDoubleNull();
-                    double? ypos = ((string)row.Cells[ColumnY.Index].Value).ParseDoubleNull();
-                    double? zpos = ((string)row.Cells[ColumnZ.Index].Value).ParseDoubleNull();
+                    // it was written in current culture above in UpdateRow, so need to read it in current culture with style Number
+
+                    double? xpos = ((string)row.Cells[ColumnX.Index].Value).ParseDoubleNull(System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number);
+                    double? ypos = ((string)row.Cells[ColumnY.Index].Value).ParseDoubleNull(System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number);
+                    double? zpos = ((string)row.Cells[ColumnZ.Index].Value).ParseDoubleNull(System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number);
+
                     bool knownpos = xpos != null && ypos != null && zpos != null;
+
                     return knownpos ? new SystemClass(name, null, xpos.Value,ypos.Value,zpos.Value) : new SystemClass(name);
                 }
             }
