@@ -193,7 +193,9 @@ namespace EDDiscovery
                                 {
                                     ReportSyncProgress("Download complete, updating database");
 
-                                    syncstate.updatesync_count = SystemsDB.ParseJSONFile(downloadfile, grids, ref lastrecordtime, ()=>PendingClose, ReportSyncProgress, "");
+                                    System.Diagnostics.Trace.WriteLine($"Peforming spansh update");
+
+                                    syncstate.updatesync_count = SystemsDB.ParseJSONFile(downloadfile, grids, 25000, ref lastrecordtime, ()=>PendingClose, ReportSyncProgress, "");
 
                                     System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count} to {lastrecordtime}");
 
@@ -348,7 +350,7 @@ namespace EDDiscovery
                 {
                     ReportProgress($"EDSM star database update from UTC " + lastrecordtime.ToUniversalTime().ToString() );
 
-                    updated = SystemsDB.ParseJSONString(json, grididallow, ref lastrecordtime, PendingClose, ReportProgress, "");
+                    updated = SystemsDB.ParseJSONString(json, grididallow, 25000, ref lastrecordtime, PendingClose, ReportProgress, "");
 
                     System.Diagnostics.Trace.WriteLine($"EDSM parital download updated {updated} to {lastrecordtime}");
 

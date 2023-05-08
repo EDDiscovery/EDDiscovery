@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                     var name = row.Cells[0].Value as string;            // name in grid now
                     string nametag = row.Cells[0].Tag as string;        // null or system name, set in here, used to detect name change
                     SystemClass systemtag = row.Tag as SystemClass;     // null or set after processing. May or may not have co-ords
-                    bool? edsmtag = row.Cells[1].Tag != null ? (bool)row.Cells[1].Tag : default(bool); // null or edsm flag is in tag 1 - meaning we processed
+                    bool? edsmtag = row.Cells[1].Tag != null ? (bool)row.Cells[1].Tag : default(bool?); // null or edsm flag is in tag 1 - meaning we processed
 
                     // if name, so row can be valid
                     if (name.HasChars())
@@ -238,6 +238,8 @@ namespace EDDiscovery.UserControls
 
                             SystemClass gridsys = GetSystemClass(rowindex);     // get the system class from the grid. Will never be null, since here grid name is not null
 
+                            //System.Diagnostics.Debug.WriteLine($"Row {rowindex} processed, gridsys [{gridsys}] vs [{systemtag}], tag {row.Cells[1].Tag}");
+
                             // if we have a gridpos, lets see if either system tag was not set, or its different xyz using the ints to compare
 
                             if ( gridsys.HasCoordinate && (!systemtag.HasCoordinate || 
@@ -250,7 +252,7 @@ namespace EDDiscovery.UserControls
                             }
                             else if (systemtag.HasCoordinate && !gridsys.HasCoordinate ) // user fucked up the position ;-)
                             {
-                                System.Diagnostics.Debug.WriteLine($"Expedition Grid row {rowindex} position lost");
+                                System.Diagnostics.Debug.WriteLine($"Expedition Grid row {rowindex} position lost {systemtag} -> {gridsys}");
                                 row.Tag = gridsys;
                                 forcetotalsupdate = true;
                                 row.Cells[0].Style.ForeColor = ExtendedControls.Theme.Current.UnknownSystemColor;
@@ -408,16 +410,16 @@ namespace EDDiscovery.UserControls
                 // if not, try a lookup
                 if (!sys.HasCoordinate)
                 {
-                    //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
+                    System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Looking up async for {sys.Name} EDSM {edsmcheck}");
                     var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.GalacticMapping, edsmcheck);
-                    //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
+                    System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Continuing for {sys.Name} EDSM {edsmcheck} found {syslookup}");
                     if (IsClosed)        // because its async, the await returns with void, and then this is called back, and we may be closing.
                         return;
 
                     if (syslookup != null)
                     {
                         //System.Diagnostics.Debug.WriteLine($"Lookup for {sys.Name} Found co-ords");
-                        row.Cells[ColumnX.Index].Value = syslookup.X.ToString("0.##");
+                        row.Cells[ColumnX.Index].Value = syslookup.X.ToString("0.##");              // write culture specific location.
                         row.Cells[ColumnY.Index].Value = syslookup.Y.ToString("0.##");
                         row.Cells[ColumnZ.Index].Value = syslookup.Z.ToString("0.##");
                         sys = new SystemClass(syslookup);
@@ -476,10 +478,12 @@ namespace EDDiscovery.UserControls
                 }
             }
 
+            System.Diagnostics.Debug.Assert(sys != null);
+
+            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Set Expedition Row {rowindex} tag is {sys} set cells[1] to {edsmcheck}");
             row.Tag = sys;      // keep system tag
             row.Cells[1].Tag = edsmcheck;       // and record the edsm state. this indicates row has been processed
 
-            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Update row {rowindex} finished");
             System.Threading.Interlocked.Decrement(ref outstandingprocessing);      // and decrease processing count..
         }
 
@@ -502,11 +506,12 @@ namespace EDDiscovery.UserControls
 
                 if (name.HasChars())
                 {
-                    double xpos = ((string)row.Cells[ColumnX.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
-                    double ypos = ((string)row.Cells[ColumnY.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
-                    double zpos = ((string)row.Cells[ColumnZ.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown);
-                    bool knownpos = xpos != SavedRouteClass.SystemEntry.NotKnown && ypos != SavedRouteClass.SystemEntry.NotKnown && zpos != SavedRouteClass.SystemEntry.NotKnown;
-                    return knownpos ? new SystemClass(name, null, xpos,ypos,zpos) : new SystemClass(name);
+                    // it was written in current culture above in UpdateRow, so need to read it in current culture
+                    double? xpos = ((string)row.Cells[ColumnX.Index].Value).ParseDoubleNull();
+                    double? ypos = ((string)row.Cells[ColumnY.Index].Value).ParseDoubleNull();
+                    double? zpos = ((string)row.Cells[ColumnZ.Index].Value).ParseDoubleNull();
+                    bool knownpos = xpos != null && ypos != null && zpos != null;
+                    return knownpos ? new SystemClass(name, null, xpos.Value,ypos.Value,zpos.Value) : new SystemClass(name);
                 }
             }
             return null;

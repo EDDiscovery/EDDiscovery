@@ -162,11 +162,12 @@ namespace EDDiscovery
             //    System.Threading.Thread.Sleep(50);
             //}
 
-          //  System.Diagnostics.Debug.WriteLine($"timed out {T.TimedOut}");
-
+            //  System.Diagnostics.Debug.WriteLine($"timed out {T.TimedOut}");
 
             if (EDDOptions.Instance.Culture != null)
                 CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
+
+            System.Diagnostics.Trace.WriteLine($"EDD UI Culture is {CultureInfo.CurrentCulture.Name} {System.Threading.Thread.CurrentThread.CurrentUICulture.Name}");
 
             // previously in controller
 
