@@ -476,6 +476,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\SupercruiseDestinationDrop.png" />
     <EmbeddedResource Include="Controls\Resources.png" />
     <EmbeddedResource Include="Panels\Resources.png" />
     <EmbeddedResource Include="Journal\ClearImpound.png" />
