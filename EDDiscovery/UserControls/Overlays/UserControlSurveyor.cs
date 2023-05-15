@@ -597,7 +597,7 @@ namespace EDDiscovery.UserControls
             {
                 // perform searches, and store them in searchresults, keyed by body name matched
 
-                Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
+                var searchresults = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
 
                 if (searchesactive.Length > 0)       // if any searches
                 {
@@ -642,7 +642,7 @@ namespace EDDiscovery.UserControls
                     {
                         var sd = sn.ScanData;
 
-                        searchresults.TryGetValue(sn.FullName, out HistoryListQueries.Results searchresultfornode);     // will be null if not found
+                        searchresults.TryGetValue(sn.FullName, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
 
                         var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
 
@@ -715,7 +715,7 @@ namespace EDDiscovery.UserControls
                             if (searchresultfornode != null) // if search results are set for this body, add text
                             {
                                 searchresults.Remove(sn.FullName);  // we have processed it, finish
-                                string info = string.Join(", ", searchresultfornode.FiltersPassed);
+                                string info = string.Join(", ", searchresultfornode.Select(x=>x.FilterPassed).Distinct());
                                 silstring += " : " + info;
                             }
 
@@ -731,7 +731,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (var kvp in searchresults.EmptyIfNull())            // by bodyname
                 {
-                    string info = string.Join(", ", kvp.Value.FiltersPassed);
+                    string info = string.Join(", ", kvp.Value.Select(x=>x.FilterPassed).Distinct());
                     string bodyname = kvp.Key;
                     ldrawsystemtext[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
                 }

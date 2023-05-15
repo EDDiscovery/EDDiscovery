@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
                     var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
                     List<HistoryEntry> helist = filter.Filter(entries, HistoryListQueries.AllSearchableJournalTypes, false); // in entry order
 
-                    Dictionary<string, HistoryListQueries.Results> searchresults;
+                    Dictionary<string, List<HistoryListQueries.ResultEntry>> searchresults;
                     if (helist.Count > 0 && searchesactive.Length > 0)      // if anything
                     {
                         searchresults = await ExecuteSearch(helist);
@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private async Task<Dictionary<string, HistoryListQueries.Results>> ExecuteSearch(List<HistoryEntry> helist)
+        private async Task<Dictionary<string, List<HistoryListQueries.ResultEntry>>> ExecuteSearch(List<HistoryEntry> helist)
         {
             DiscoveryForm.History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
             // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
             defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep:true);    
 
-            Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
+            var searchresults = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
 
             System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} DC {DrawCount} runs {searchesactive.Length} searches on {helist.Count} entries");
 
@@ -216,7 +216,9 @@ namespace EDDiscovery.UserControls
 
             foreach (var searchname in searchesactive)
             {
-                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); // execute the searches
+                // execute the search, do not delete duplicate scan results..
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); 
+                
                 //System.Threading.Thread.Sleep(1000);
                 if (IsClosed)       // may be closing during async process
                     return null;
@@ -233,7 +235,7 @@ namespace EDDiscovery.UserControls
             return searchresults;
         }
 
-        private void DrawGrid(Dictionary<string, HistoryListQueries.Results> searchresults, bool updategrid = false)
+        private void DrawGrid(Dictionary<string, List<HistoryListQueries.ResultEntry>> searchresults, bool updategrid = false)
         {
             if (IsClosed)       // may be closing during async process
                 return;
@@ -249,11 +251,11 @@ namespace EDDiscovery.UserControls
 
             foreach (var kvp in searchresults.EmptyIfNull())
             {
-                HistoryEntry he = kvp.Value.EntryList.Last();
+                HistoryEntry he = kvp.Value.Last().HistoryEntry;
                 ISystem sys = he.System;
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip,
+                HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value, out string name, out string info, out string infotooltip,
                                                             ColumnParent.Visible, out string pinfo,
                                                             ColumnParentParent.Visible, out string ppinfo,
                                                             ColumnStar.Visible, out string sinfo,
@@ -262,7 +264,7 @@ namespace EDDiscovery.UserControls
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
                                         sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),   //2
-                                        string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),   //3
+                                        string.Join(", " + Environment.NewLine, kvp.Value.Select(x=>x.FilterPassed).Distinct()),   //3
                                         info,   //4
                                         pinfo,  //5
                                         ppinfo,
