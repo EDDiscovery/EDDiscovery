@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         private Timer autoupdateedsm;
-        private bool updatingsystemrows = false;    // set during row update, to stop user interfering with the async processor without flashing icons if we just disabled them
+        private int updatingsystemrows = 0;    // incr during row update, to stop user interfering with the async processor without flashing icons if we just disabled them
 
         #region Standard UC Interfaces
 
@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
         private async void UpdateSystemRows(int rowstart = 0, int rowendinc = int.MaxValue, bool edsmcheck = false)
         {
             Cursor = Cursors.WaitCursor;
-            updatingsystemrows = true;
+            updatingsystemrows++;
             labelBusy.Visible = true;
             labelBusy.Update();
 
@@ -370,7 +370,7 @@ namespace EDDiscovery.UserControls
 
             Cursor = Cursors.Default;
             labelBusy.Visible = false;
-            updatingsystemrows = false;
+            updatingsystemrows--;
         }
 
         private SystemClass GetSystemClass(int rown)
@@ -441,7 +441,7 @@ namespace EDDiscovery.UserControls
         ExtendedControls.ExtListBoxForm dropdown;
         private void extButtonLoadRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -502,7 +502,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNew_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -524,7 +524,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonSave_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -535,7 +535,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDelete_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -553,7 +553,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImport_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -651,7 +651,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -668,7 +668,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportNavRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -704,7 +704,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNavLatest_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -718,7 +718,7 @@ namespace EDDiscovery.UserControls
         }
         private void buttonExtExport_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -823,7 +823,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShow3DMap_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -847,7 +847,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonAddSystems_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -887,7 +887,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDisplayFilters_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -927,7 +927,7 @@ namespace EDDiscovery.UserControls
         {
             PutSetting(dbEDSM, checkBoxEDSM.Checked);       // update the store
 
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -950,7 +950,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonReverseRoute_Click(object sender, EventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -971,7 +971,7 @@ namespace EDDiscovery.UserControls
         #region Double click
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows>0)
             {
                 Console.Beep(512, 500);
                 return;
@@ -1026,7 +1026,7 @@ namespace EDDiscovery.UserControls
 
         private void contextMenuCopyPaste_Opening(object sender, CancelEventArgs e)
         {
-            if (updatingsystemrows)
+            if (updatingsystemrows > 0)
             {
                 Console.Beep(512, 500);
                 e.Cancel = true;
@@ -1048,6 +1048,12 @@ namespace EDDiscovery.UserControls
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (updatingsystemrows > 0)
+            {
+                Console.Beep(512, 500);
+                return;
+            }
+
             copyToolStripMenuItem_Click(sender, e);       // copy first
 
             int[] selectedRows = dataGridView.SelectedRows(false,false);        // decending, must have row selection
@@ -1060,9 +1066,15 @@ namespace EDDiscovery.UserControls
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (updatingsystemrows > 0)
+            {
+                Console.Beep(512, 500);
+                return;
+            }
+
             string data = GetClipboardText();
 
-            if (data != null )
+            if (data != null)
             {
                 bool tabs = data.Contains("\t");            // data copied from grid uses tab as cell dividers, else use comma
                 string[][] textlines = data.Split(Environment.NewLine, tabs ? "\t" : ",", StringComparison.InvariantCulture);   // use nice splitter to split into newlines, then cells
@@ -1081,6 +1093,12 @@ namespace EDDiscovery.UserControls
 
         private void insertRowAboveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (updatingsystemrows > 0)
+            {
+                Console.Beep(512, 500);
+                return;
+            }
+
             var rows = dataGridView.SelectedRowAndCount(true, true, 0, false);   // ascending, use cells if not row selection, don't change due to new row
             dataGridView.Rows.Insert(rows.Item1, rows.Item2);
             UpdateSystemRows();
@@ -1142,7 +1160,7 @@ namespace EDDiscovery.UserControls
                 // Fetch the file(s) names with full path here to be processed
                 string[] fileList = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                if (updatingsystemrows == false)
+                if (updatingsystemrows == 0)
                 {
                     if (PromptAndSaveIfNeeded())
                     {

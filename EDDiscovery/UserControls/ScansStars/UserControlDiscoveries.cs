@@ -272,6 +272,8 @@ namespace EDDiscovery.UserControls
                                         ssinfo,
                                         };
 
+                // if we have the search box running, see if the new text is in the search
+
                 if (search.Enabled)
                 {
                     bool matched = false;
@@ -299,13 +301,16 @@ namespace EDDiscovery.UserControls
 
                 bool addto = true;
 
+                // if we are trying to update it, not redraw the lot..
+
                 if (updategrid)
                 {
                     int existingrow = dataGridView.FindRowWithValue(1, name);       // is the result there with the name?
+
                     if (existingrow >= 0)
                     {
                         System.Diagnostics.Debug.WriteLine($"Discoveries alter row {existingrow}");
-                        addto = false;
+                        addto = false;      // cancel the add - we have a row
                         dataGridView.Rows[existingrow].Cells[3].Value = rowobj[3];      // update what may have changed in 4,5,6. Rest will stay the same.
                         dataGridView.Rows[existingrow].Cells[4].Value = rowobj[4];
                         dataGridView.Rows[existingrow].Cells[5].Value = rowobj[5];
@@ -313,7 +318,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (addto)
+                if (addto)      // else not in grid, so add to grid
                 {
                     int row = dataGridView.Rows.Add(rowobj);
                     dataGridView.Rows[row].Tag = he.System;
