@@ -189,6 +189,7 @@ namespace EDDiscovery.UserControls
   
         private void ClearTable()
         {
+            System.Diagnostics.Debug.WriteLine($"Clear table {updatingsystemrows}");
             dataGridView.Rows.Clear();
             dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
             dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
@@ -204,10 +205,14 @@ namespace EDDiscovery.UserControls
 
         private async void UpdateSystemRows(int rowstart = 0, int rowendinc = int.MaxValue, bool edsmcheck = false)
         {
-            Cursor = Cursors.WaitCursor;
-            updatingsystemrows++;
-            labelBusy.Visible = true;
-            labelBusy.Update();
+            if (updatingsystemrows++ == 0)
+            {
+                Cursor = Cursors.WaitCursor;
+                labelBusy.Visible = true;
+                labelBusy.Update();
+            }
+
+            System.Diagnostics.Debug.WriteLine($"In update system rows {updatingsystemrows}");
 
             ISystem historySystem = DiscoveryForm.History.CurrentSystem(); // may be null
 
@@ -290,6 +295,12 @@ namespace EDDiscovery.UserControls
                 if (IsClosed)        // because its async, may be called during closedown. stop this
                     return;
 
+                if (rowindex >= dataGridView.RowCount)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Row index changed! abort");
+                    break;
+                }
+
                 if (sysnode != null)
                 {
                     row.Cells[Scans.Index].Value = sysnode.StarPlanetsScannednonEDSM().ToString("0");
@@ -368,9 +379,14 @@ namespace EDDiscovery.UserControls
                 txtP2PDIstance.Text = firstsys != null && lastsys != null ? firstsys.Distance(lastsys).ToString("0.#") + "ly" : "?";
             }
 
-            Cursor = Cursors.Default;
-            labelBusy.Visible = false;
-            updatingsystemrows--;
+            System.Diagnostics.Debug.WriteLine($"Out of update system rows {updatingsystemrows}");
+            if (--updatingsystemrows == 0)
+            {
+                labelBusy.Visible = false;
+                labelBusy.Update();
+                Cursor = Cursors.Default;
+            }
+
         }
 
         private SystemClass GetSystemClass(int rown)
@@ -1195,7 +1211,7 @@ namespace EDDiscovery.UserControls
             if (e.RowIndex >= 0 && e.RowIndex < dataGridView.RowCount)
             {
                 dataGridView.Rows[e.RowIndex].Cells[0].Tag = null;          // reset edsm
-                System.Diagnostics.Debug.WriteLine($"Update row index and next one only");
+                System.Diagnostics.Debug.WriteLine($"Update row index {e.RowIndex} with rows {dataGridView.RowCount} and next one only");
                 UpdateSystemRows(e.RowIndex, e.RowIndex+1);
             }
         }
