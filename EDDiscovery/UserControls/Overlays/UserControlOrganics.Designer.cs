@@ -52,14 +52,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBar = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
-            this.ColDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColStarSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColBodyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColGenus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColSpecies = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColLastScanType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonFont = new ExtendedControls.ExtButton();
@@ -72,6 +64,15 @@ namespace EDDiscovery.UserControls
             this.labelEnd = new System.Windows.Forms.Label();
             this.extDateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
             this.labelValue = new System.Windows.Forms.Label();
+            this.ColDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColStarSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColBodyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColGenus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColSpecies = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColVariant = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColLastScanType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -148,6 +149,7 @@ namespace EDDiscovery.UserControls
             // 
             // extScrollBar
             // 
+            this.extScrollBar.AlwaysHideScrollBar = false;
             this.extScrollBar.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBar.ArrowColorScaling = 0.5F;
@@ -189,6 +191,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBar
             // 
+            this.vScrollBar.AlwaysHideScrollBar = false;
             this.vScrollBar.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBar.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBar.ArrowColorScaling = 0.5F;
@@ -218,6 +221,7 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridView
             // 
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AllowUserToResizeRows = false;
@@ -232,6 +236,7 @@ namespace EDDiscovery.UserControls
             this.ColBodyType,
             this.ColGenus,
             this.ColSpecies,
+            this.ColVariant,
             this.ColLastScanType,
             this.ColValue});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -245,52 +250,6 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Size = new System.Drawing.Size(1092, 406);
             this.dataGridView.TabIndex = 23;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
-            // 
-            // ColDate
-            // 
-            this.ColDate.FillWeight = 50F;
-            this.ColDate.HeaderText = "Date";
-            this.ColDate.Name = "ColDate";
-            // 
-            // ColStarSystem
-            // 
-            this.ColStarSystem.HeaderText = "Star System";
-            this.ColStarSystem.Name = "ColStarSystem";
-            // 
-            // ColBodyName
-            // 
-            this.ColBodyName.FillWeight = 75F;
-            this.ColBodyName.HeaderText = "Body Name";
-            this.ColBodyName.MinimumWidth = 50;
-            this.ColBodyName.Name = "ColBodyName";
-            // 
-            // ColBodyType
-            // 
-            this.ColBodyType.HeaderText = "Body Type";
-            this.ColBodyType.Name = "ColBodyType";
-            // 
-            // ColGenus
-            // 
-            this.ColGenus.FillWeight = 50F;
-            this.ColGenus.HeaderText = "Genus";
-            this.ColGenus.Name = "ColGenus";
-            // 
-            // ColSpecies
-            // 
-            this.ColSpecies.FillWeight = 50F;
-            this.ColSpecies.HeaderText = "Species";
-            this.ColSpecies.Name = "ColSpecies";
-            // 
-            // ColLastScanType
-            // 
-            this.ColLastScanType.FillWeight = 50F;
-            this.ColLastScanType.HeaderText = "Last Scan Type";
-            this.ColLastScanType.Name = "ColLastScanType";
-            // 
-            // ColValue
-            // 
-            this.ColValue.HeaderText = "Value";
-            this.ColValue.Name = "ColValue";
             // 
             // rollUpPanelTop
             // 
@@ -470,6 +429,67 @@ namespace EDDiscovery.UserControls
             this.labelValue.TabIndex = 2;
             this.labelValue.Text = "<code>";
             // 
+            // ColDate
+            // 
+            this.ColDate.FillWeight = 50F;
+            this.ColDate.HeaderText = "Date";
+            this.ColDate.Name = "ColDate";
+            this.ColDate.ReadOnly = true;
+            // 
+            // ColStarSystem
+            // 
+            this.ColStarSystem.HeaderText = "Star System";
+            this.ColStarSystem.Name = "ColStarSystem";
+            this.ColStarSystem.ReadOnly = true;
+            // 
+            // ColBodyName
+            // 
+            this.ColBodyName.FillWeight = 75F;
+            this.ColBodyName.HeaderText = "Body Name";
+            this.ColBodyName.MinimumWidth = 50;
+            this.ColBodyName.Name = "ColBodyName";
+            this.ColBodyName.ReadOnly = true;
+            // 
+            // ColBodyType
+            // 
+            this.ColBodyType.HeaderText = "Body Type";
+            this.ColBodyType.Name = "ColBodyType";
+            this.ColBodyType.ReadOnly = true;
+            // 
+            // ColGenus
+            // 
+            this.ColGenus.FillWeight = 50F;
+            this.ColGenus.HeaderText = "Genus";
+            this.ColGenus.Name = "ColGenus";
+            this.ColGenus.ReadOnly = true;
+            // 
+            // ColSpecies
+            // 
+            this.ColSpecies.FillWeight = 50F;
+            this.ColSpecies.HeaderText = "Species";
+            this.ColSpecies.Name = "ColSpecies";
+            this.ColSpecies.ReadOnly = true;
+            // 
+            // ColVariant
+            // 
+            this.ColVariant.FillWeight = 50F;
+            this.ColVariant.HeaderText = "Variant";
+            this.ColVariant.Name = "ColVariant";
+            this.ColVariant.ReadOnly = true;
+            // 
+            // ColLastScanType
+            // 
+            this.ColLastScanType.FillWeight = 50F;
+            this.ColLastScanType.HeaderText = "Last Scan Type";
+            this.ColLastScanType.Name = "ColLastScanType";
+            this.ColLastScanType.ReadOnly = true;
+            // 
+            // ColValue
+            // 
+            this.ColValue.HeaderText = "Value";
+            this.ColValue.Name = "ColValue";
+            this.ColValue.ReadOnly = true;
+            // 
             // UserControlOrganics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -508,14 +528,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBar;
         private BaseUtils.DataGridViewColumnControl dataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColStarSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColGenus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColSpecies;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColLastScanType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColValue;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelGridControl;
         private System.Windows.Forms.Label labelStart;
         private ExtendedControls.ExtDateTimePicker extDateTimePickerStartDate;
@@ -524,5 +536,14 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelValue;
         private ExtendedControls.ExtCheckBox extCheckBoxShowIncomplete;
         private ExtendedControls.ExtButton extButtonAlignment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColStarSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColGenus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColSpecies;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColVariant;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColLastScanType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColValue;
     }
 }
