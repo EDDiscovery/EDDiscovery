@@ -190,6 +190,7 @@ namespace EDDiscovery.UserControls
         private void ClearTable()
         {
             System.Diagnostics.Debug.WriteLine($"Clear table {updatingsystemrows}");
+            this.dataGridView.CellValidated -= new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             dataGridView.Rows.Clear();
             dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
             dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
@@ -197,6 +198,7 @@ namespace EDDiscovery.UserControls
             txtCmlDistance.Text = "";
             txtP2PDIstance.Text = "";
             loadedroute = null;
+            this.dataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
         }
 
         // this is an async function - which needs very special handling
