@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
                     if (PromptAndSaveIfNeeded())
                     {
                         MakeVisible();      // we may not be on this screen if called (shutdown, import) make visible
-                        ClearTable();
+                        ClearTableAndSelectors();
                         string file = action.Data as string;
                         System.Diagnostics.Debug.WriteLine($"Expedition import CSV {file}");
                         string str = FileHelpers.TryReadAllTextFromFile(file);
@@ -186,19 +186,23 @@ namespace EDDiscovery.UserControls
 
         #region Grid Display Route and update when required
 
-  
         private void ClearTable()
         {
-            System.Diagnostics.Debug.WriteLine($"Clear table {updatingsystemrows}");
             this.dataGridView.CellValidated -= new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             dataGridView.Rows.Clear();
+            this.dataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
+        }
+
+        private void ClearTableAndSelectors()
+        {
+            System.Diagnostics.Debug.WriteLine($"Clear table {updatingsystemrows}");
+            ClearTable();
             dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
             dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
             textBoxRouteName.Text = "";
             txtCmlDistance.Text = "";
             txtP2PDIstance.Text = "";
             loadedroute = null;
-            this.dataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
         }
 
         // this is an async function - which needs very special handling
@@ -508,7 +512,7 @@ namespace EDDiscovery.UserControls
                             dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.EndDateUTC.Value);
                         }
 
-                        dataGridView.Rows.Clear();
+                        ClearTable();
                         AppendOrInsertSystems(-1, loadedroute.Systems);
                     }
                 };
@@ -533,7 +537,7 @@ namespace EDDiscovery.UserControls
         {
             if (PromptAndSaveIfNeeded())
             {
-                ClearTable();
+                ClearTableAndSelectors();
                 return true;
             }
             else
@@ -564,7 +568,7 @@ namespace EDDiscovery.UserControls
                 if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?".T(EDTx.UserControlExpedition_Delete), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     loadedroute.Delete();
-                    ClearTable();
+                    ClearTableAndSelectors();
                 }
             }
         }
@@ -978,7 +982,7 @@ namespace EDDiscovery.UserControls
 
             if (route != null)
             {
-                dataGridView.Rows.Clear();
+                ClearTable();
                 route.ReverseSystemList();
                 AppendOrInsertSystems(-1,route.Systems);
             }
@@ -1182,7 +1186,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (PromptAndSaveIfNeeded())
                     {
-                        ClearTable();
+                        ClearTableAndSelectors();
                         System.Diagnostics.Debug.WriteLine($"Expedition import CSV {fileList[0]}");
                         string str = FileHelpers.TryReadAllTextFromFile(fileList[0]);
                         Import(0, Path.GetFileNameWithoutExtension(fileList[0]), str, ",", true);   // will cope with str = null
