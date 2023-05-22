@@ -241,10 +241,10 @@ namespace EDDiscovery.UserControls
                     defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10,ensuredoublerep:true);
                 else
                     defaultvars = null;
-    
+
                 //System.Diagnostics.Debug.WriteLine(defaultvars.ToString(separ:Environment.NewLine));
 
-                Dictionary<string, HistoryListQueries.Results> results = new Dictionary<string, HistoryListQueries.Results>();
+                var results = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
 
                 var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars);
                 var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), computedsearch);
@@ -271,13 +271,13 @@ namespace EDDiscovery.UserControls
                 {
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                    HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip, 
+                    HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value, out string name, out string info, out string infotooltip, 
                                                             ColumnParent.Visible, out string pinfo,
                                                             ColumnParentParent.Visible, out string ppinfo, 
                                                             ColumnStar.Visible, out string sinfo, 
                                                             ColumnStarStar.Visible, out string ssinfo);
 
-                    HistoryEntry he = kvp.Value.EntryList.Last();
+                    HistoryEntry he = kvp.Value.Last().HistoryEntry;
                     ISystem sys = he.System;
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
@@ -466,11 +466,11 @@ namespace EDDiscovery.UserControls
                 DataGridViewRow leftrow = (DataGridViewRow)lo;
                 DataGridViewRow rightrow = (DataGridViewRow)ro;
 
-                HistoryListQueries.Results left = leftrow.Cells[0].Tag as HistoryListQueries.Results;
-                HistoryListQueries.Results right = rightrow.Cells[0].Tag as HistoryListQueries.Results;
+                List<HistoryListQueries.ResultEntry> left = leftrow.Cells[0].Tag as List<HistoryListQueries.ResultEntry>;
+                List<HistoryListQueries.ResultEntry> right = rightrow.Cells[0].Tag as List<HistoryListQueries.ResultEntry>;
 
-                HistoryEntry lefthe = left?.EntryList.Where(x => x.EntryType == JournalTypeEnum.Scan).FirstOrDefault();
-                HistoryEntry righthe = right?.EntryList.Where(x => x.EntryType == JournalTypeEnum.Scan).FirstOrDefault();
+                HistoryEntry lefthe = left?.Where(x => x.HistoryEntry.EntryType == JournalTypeEnum.Scan).Select(y=>y.HistoryEntry).FirstOrDefault();
+                HistoryEntry righthe = right?.Where(x => x.HistoryEntry.EntryType == JournalTypeEnum.Scan).Select(y=>y.HistoryEntry).FirstOrDefault();
 
                 // if we have left, and right, we can compare
                 if (lefthe != null)

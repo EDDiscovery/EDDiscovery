@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
                     var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
                     List<HistoryEntry> helist = filter.Filter(entries, HistoryListQueries.AllSearchableJournalTypes, false); // in entry order
 
-                    Dictionary<string, HistoryListQueries.Results> searchresults;
+                    Dictionary<string, List<HistoryListQueries.ResultEntry>> searchresults;
                     if (helist.Count > 0 && searchesactive.Length > 0)      // if anything
                     {
                         searchresults = await ExecuteSearch(helist);
@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private async Task<Dictionary<string, HistoryListQueries.Results>> ExecuteSearch(List<HistoryEntry> helist)
+        private async Task<Dictionary<string, List<HistoryListQueries.ResultEntry>>> ExecuteSearch(List<HistoryEntry> helist)
         {
             DiscoveryForm.History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
             // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
             defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep:true);    
 
-            Dictionary<string, HistoryListQueries.Results> searchresults = new Dictionary<string, HistoryListQueries.Results>();
+            var searchresults = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
 
             System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} DC {DrawCount} runs {searchesactive.Length} searches on {helist.Count} entries");
 
@@ -216,7 +216,9 @@ namespace EDDiscovery.UserControls
 
             foreach (var searchname in searchesactive)
             {
-                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); // execute the searches
+                // execute the search, do not delete duplicate scan results..
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); 
+                
                 //System.Threading.Thread.Sleep(1000);
                 if (IsClosed)       // may be closing during async process
                     return null;
@@ -233,7 +235,7 @@ namespace EDDiscovery.UserControls
             return searchresults;
         }
 
-        private void DrawGrid(Dictionary<string, HistoryListQueries.Results> searchresults, bool updategrid = false)
+        private void DrawGrid(Dictionary<string, List<HistoryListQueries.ResultEntry>> searchresults, bool updategrid = false)
         {
             if (IsClosed)       // may be closing during async process
                 return;
@@ -249,11 +251,11 @@ namespace EDDiscovery.UserControls
 
             foreach (var kvp in searchresults.EmptyIfNull())
             {
-                HistoryEntry he = kvp.Value.EntryList.Last();
+                HistoryEntry he = kvp.Value.Last().HistoryEntry;
                 ISystem sys = he.System;
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value.EntryList, out string name, out string info, out string infotooltip,
+                HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value, out string name, out string info, out string infotooltip,
                                                             ColumnParent.Visible, out string pinfo,
                                                             ColumnParentParent.Visible, out string ppinfo,
                                                             ColumnStar.Visible, out string sinfo,
@@ -262,13 +264,15 @@ namespace EDDiscovery.UserControls
                 string[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),            //0
                                         name,       //1
                                         sys.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),   //2
-                                        string.Join(", " + Environment.NewLine, kvp.Value.FiltersPassed),   //3
+                                        string.Join(", " + Environment.NewLine, kvp.Value.Select(x=>x.FilterPassed).Distinct()),   //3
                                         info,   //4
                                         pinfo,  //5
                                         ppinfo,
                                         sinfo,
                                         ssinfo,
                                         };
+
+                // if we have the search box running, see if the new text is in the search
 
                 if (search.Enabled)
                 {
@@ -297,13 +301,16 @@ namespace EDDiscovery.UserControls
 
                 bool addto = true;
 
+                // if we are trying to update it, not redraw the lot..
+
                 if (updategrid)
                 {
                     int existingrow = dataGridView.FindRowWithValue(1, name);       // is the result there with the name?
+
                     if (existingrow >= 0)
                     {
                         System.Diagnostics.Debug.WriteLine($"Discoveries alter row {existingrow}");
-                        addto = false;
+                        addto = false;      // cancel the add - we have a row
                         dataGridView.Rows[existingrow].Cells[3].Value = rowobj[3];      // update what may have changed in 4,5,6. Rest will stay the same.
                         dataGridView.Rows[existingrow].Cells[4].Value = rowobj[4];
                         dataGridView.Rows[existingrow].Cells[5].Value = rowobj[5];
@@ -311,7 +318,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (addto)
+                if (addto)      // else not in grid, so add to grid
                 {
                     int row = dataGridView.Rows.Add(rowobj);
                     dataGridView.Rows[row].Tag = he.System;

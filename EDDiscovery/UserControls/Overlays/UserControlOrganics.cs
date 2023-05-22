@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 EDDiscovery development team
+ * Copyright © 2021-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
@@ -288,10 +287,11 @@ namespace EDDiscovery.UserControls
                                                 syskvp.Key.ToString() + ": " + starkvp.Key.ToString(),
                                                 body.FullName,
                                                 body.ScanData?.PlanetTypeText ?? "",
-                                                os.Item2.Genus_Localised,
-                                                os.Item2.Species_Localised,
+                                                os.Item2.Genus_Localised??"",
+                                                os.Item2.Species_Localised_Short,
+                                                os.Item2.Variant_Localised_Short,
                                                 os.Item2.ScanType,
-                                                os.Item2.EstimatedValue?.ToStringInvariant("N0") ??""
+                                                os.Item2.EstimatedValue?.ToString("N0") ??""
                                         };
 
                                         dataGridView.Rows.Add(data);

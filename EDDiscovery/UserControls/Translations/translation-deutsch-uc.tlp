@@ -204,12 +204,15 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtere die Tabelle nach Modultyp"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Wenn 'rot' verwende die Materialien beim Zeiger zum Schätzen, wenn 'grün' verwende immer die letzten Materialien."
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEngineers
 
 .buttonFilterEngineer.ToolTip: "Select which engineers are shown" => "Wähle welche Ingenieure angezeigt werden"
 .extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" => "Aktivere oder deaktiviere Zeilenumbruch"
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Vergrößere das Ingenieursgitter and zeige mehr Ingenieursdetails"
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
 
 SECTION UserControlEstimatedValues
 
@@ -1077,6 +1080,7 @@ SECTION UserControlSynthesis
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Setze alle Gesucht-Werte auf 0"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Wenn rot, benutze Materialien beim Zeiger um zu schätzen, wenn grün verwende immer die letzten Materialien."
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlSysInfo
 
@@ -1396,6 +1400,8 @@ SECTION UserControlFactions
 .MissionsInProgress: "Missions In Progress: " => "Misionen in Arbeit: "
 .CapShipVictims: "Capital ship Victims: " => "Großkampfschiff Opfer: "
 .CapShipAward: "Capital ship Award: " => "Großkampfschiff Belohnung: "
+.startDateTimePicker.ToolTip: "Include from" @
+.endDateTimePicker.ToolTip: "Include to" @
 
 SECTION UserControlOrganics
 
@@ -1406,6 +1412,7 @@ SECTION UserControlOrganics
 .extButtonAlignment_ToolTip: "Alignment" => "Ausrichtung"
 .at: "At {0}" => "Bei {0}"
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Radius {1}, {2}, {3}, Biosignale: {4}{5}"
+.extButtonAlignment.ToolTip: "Alignment" @
 
 SECTION ScanDisplayForm
 

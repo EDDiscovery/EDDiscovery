@@ -213,6 +213,8 @@ SECTION UserControlEngineers
 .buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
 .extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
 
 SECTION UserControlEstimatedValues
 
@@ -1474,6 +1476,8 @@ SECTION UserControlFactions
 .MissionsInProgress: "Missions In Progress: " @
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
+.startDateTimePicker.ToolTip: "Include from" @
+.endDateTimePicker.ToolTip: "Include to" @
 
 SECTION UserControlOrganics
 .extButtonShowControl.ToolTip: "Display Settings" @
@@ -1483,6 +1487,7 @@ SECTION UserControlOrganics
 .extButtonAlignment_ToolTip: "Alignment" @
 .at: "At {0}" @
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
+.extButtonAlignment.ToolTip: "Alignment" @
 
 
 SECTION ScanDisplayForm

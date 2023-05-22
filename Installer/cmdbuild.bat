@@ -16,8 +16,7 @@ rem using EnableExtensions, use the pattern replacer to double \\
 set exefile=%exefile:\=\\%
 set vno=%1
 
-echo ExeFile is %exefile%, Version `%vno%`
-
+echo ExeFile is %exefile%, Want version `%vno%`
 
 if "%vno%"=="" goto :errorVER
 
@@ -46,6 +45,7 @@ exit /b
 
 :errorEXE
 echo Version %vno% does not correspond to the release exe
+type %TMP%\vno.txt
 exit /b
 
 :errorVER

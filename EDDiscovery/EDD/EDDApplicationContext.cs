@@ -225,7 +225,8 @@ namespace EDDiscovery
 
                 if ( !SystemsDatabase.Instance.VerifyTablesExist() )
                 {
-                    System.Windows.Forms.MessageBox.Show("Error: System DB is corrupt due to missing tables at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
+                    System.Windows.Forms.MessageBox.Show("Error: System DB is corruptted, or you are using an older version of the program with a DB " +
+                                                         "produced by a newer version, at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
                                                          "Database is unusable. Use safe mode to remove it and start again. User settings will be retained",
                                                          "System DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
                     SystemsDatabase.Instance.Stop();
