@@ -40,9 +40,11 @@ namespace EDDiscovery
         }
 
         public string VersionDisplayString { get; private set; }
-        public string AppDataDirectory { get; private set; }
-        public string UserDatabasePath { get; private set; }
-        public string SystemDatabasePath { get; private set; }
+        public string AppDataDirectory { get; private set; }    
+        public string UserDatabasePath { get; private set; }       
+        public string UserDatabaseFilename { get; private set; } = "EDDUser.sqlite";
+        public string SystemDatabasePath { get; private set; } 
+        public string SystemDatabaseFilename { get; private set; } = "EDDSystem.sqlite";
         public string IconsPath { get; private set; }
         public bool NoWindowReposition { get; set; }
         public bool MinimiseOnOpen { get; set; }
@@ -218,6 +220,10 @@ namespace EDDiscovery
             {
                 UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-userdbfilename")
+            {
+                UserDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname == "-cmdr" || optname == "-commander")
             {
                 Commander = toeol ? ca.Rest() : ca.NextEmpty();
@@ -229,6 +235,10 @@ namespace EDDiscovery
             else if (optname == "-systemsdbpath")
             {
                 SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-systemsdbfilename" )
+            {
+                SystemDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname == "-iconspath")
             {
@@ -300,7 +310,7 @@ namespace EDDiscovery
                     case "norepositionwindow": NoWindowReposition = true; break;
                     case "minimize": case "minimise": MinimiseOnOpen = true; break;
                     case "maximise": case "maximize": MaximiseOnOpen = true; break;
-                    case "portable": StoreDataInProgramDirectory = true; break;
+                    case "portable": PortableInstall = true; break;
                     case "nrw": NoWindowReposition = true; break;
                     case "showactionbutton": ActionButton = true; break;
                     case "noload": NoLoad = true; break;
@@ -410,7 +420,7 @@ namespace EDDiscovery
             {   
                 AppDataDirectory = AppFolder;
             }
-            else if (StoreDataInProgramDirectory)       // if store in program folder, its exe/appfolder
+            else if (PortableInstall)                   // if store in program folder, its exe/appfolder
             {
                 AppDataDirectory = Path.Combine(ExeDirectory(), AppFolder);
             }
@@ -489,27 +499,21 @@ namespace EDDiscovery
 
             // finally ensure we have a path for the dbs
 
-            if (UserDatabasePath == null)
-                SetDefaultUserDatabasePath();
-            if (SystemDatabasePath == null)
-                SetDefaultSystemDatabasePath();
+            if (UserDatabasePath == null )
+            {
+                UserDatabasePath = Path.Combine(AppDataDirectory, UserDatabaseFilename);
+            }
+            if (SystemDatabasePath == null )
+            {
+                SystemDatabasePath = Path.Combine(AppDataDirectory, SystemDatabaseFilename);
+            }
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }
 
-        public void SetDefaultSystemDatabasePath()
-        {
-            SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
-        }
-
-        public void SetDefaultUserDatabasePath()
-        {
-            UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
-        }
-
         private static EDDOptions options = null;
         private string AppFolder;      // internal to use.. for -appfolder option
-        private bool StoreDataInProgramDirectory;  // internal to us, to indicate app folder is relative to exe not %localappdata%
+        private bool PortableInstall;  // internal to us, to indicate app folder is relative to exe not %localappdata%
         private string translationfolder; // internal to us
 
 
