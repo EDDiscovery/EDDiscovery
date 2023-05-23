@@ -145,27 +145,27 @@
       <DesignTime>True</DesignTime>
     </None>
     <Reference Include="GLOFC, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.1.0.3\lib\net48\GLOFC.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\RJKJSoft.GLOFC.1.0.3\lib\net48\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=3.3.2.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.3.3.2\lib\net20\OpenTK.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\OpenTK.3.3.2\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.QuickJSON.1.1.0\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.1.2.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -1237,7 +1237,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets'))" />
   </Target>
   <Target Name="Version" BeforeTargets="Build">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
@@ -1251,7 +1251,7 @@
       <GitPath Condition=" '$(GitPath)' == '' ">git</GitPath>
     </PropertyGroup>
     <PropertyGroup>
-      <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\..\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
+      <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\$(SolutionDir)\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
     </PropertyGroup>
     <PropertyGroup>
       <In>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/Properties/AssemblyInfo.cs'))</In>
@@ -1294,5 +1294,5 @@ namespace CAPI
     </PropertyGroup>
     <WriteLinesToFile File="CapiClientID.cs" Overwrite="true" Lines="$(LauncherCmd)" />
   </Target>
-  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" />
+  <Import Project="$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" />
 </Project>
