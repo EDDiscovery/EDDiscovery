@@ -364,15 +364,6 @@ namespace EDDiscovery
             }
         }
 
-        public void ReportSyncProgress(string message)
-        {
-            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, message));
-        }
-        public void ReportRefreshProgress(int percent, string message)
-        {
-            InvokeAsyncOnUiThread(() => OnReportRefreshProgress?.Invoke(percent, message));
-        }
-
         #endregion
 
         #region Aux file downloads

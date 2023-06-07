@@ -240,18 +240,21 @@ namespace EDDiscovery.Forms
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Source", "EDSM",
                         new Point(140, 130), new Size(width - 140 - 100, 24),
                         "Select the data source".T(EDTx.GalaxySectorSelect_GALSELEN), new List<string> { "EDSM", "SPANSH" }));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Area:".T(EDTx.GalaxySectorSelect_Area), new Point(10, 200), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", DefaultGalaxyOptions[2].Item1,
-                        new Point(140, 160), new Size(width - 140 - 100, 24),
+                        new Point(140, 200), new Size(width - 140 - 100, 24),
                         "Select the data set".T(EDTx.GalaxySectorSelect_GALSELEN), list));
 
-            f.AddOK(new Point(width - 40 - 80, 200), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept));
+            f.AddOK(new Point(width - 40 - 80, 260), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
                 if (controlname == "OK")
                     f.ReturnResult(DialogResult.OK);
             };
-            
+
+            f.Shown += (e1,e2) => { ((ExtendedControls.ExtComboBox)f.GetControl("Source")).Activate(); };
+
             DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));
 
             string sel = f.Get("Entry");

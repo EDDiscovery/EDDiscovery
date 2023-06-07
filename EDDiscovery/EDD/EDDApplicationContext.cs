@@ -185,6 +185,7 @@ namespace EDDiscovery
                 if (EDDOptions.Instance.DeleteSystemDB)
                     BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath);
 
+                SystemsDatabase.WALMode = true;
                 SystemsDatabase.Instance.Name = "SystemDB";
                 SystemsDatabase.Instance.MinThreads = 1;
                 SystemsDatabase.Instance.MaxThreads = 8;

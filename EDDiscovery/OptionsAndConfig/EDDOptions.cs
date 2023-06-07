@@ -91,6 +91,7 @@ namespace EDDiscovery
         public int HistoryLoadDayLimit { get; private set; }    // default zero not set
 
         public bool DeleteSystemDB { get; private set; }
+        public bool KeepSystemDataDownloadedFiles { get; private set; }
         public string Culture { get; private set; }             // default null use system culture, use de-DE etc
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
@@ -354,7 +355,8 @@ namespace EDDiscovery
                     case "enabletgrightclicks": EnableTGRightDebugClicks = true; break;
                     case "autoloadnextcommander": AutoLoadNextCommander = true; break;
                     case "null": break;     // null option - used by installer when it writes a app options file if it does not want to do anything
-                    case "deletesystemdb": DeleteSystemDB = true; break;     
+                    case "deletesystemdb": DeleteSystemDB = true; break;
+                    case "keepsystemdownloadedfiles": KeepSystemDataDownloadedFiles = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;

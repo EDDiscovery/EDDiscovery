@@ -267,6 +267,7 @@ namespace EDDiscovery
         GalaxySectorSelect_GALSELEN, // Enter number to jump to or near to
         GalaxySectorSelect_GALSELSRD, // Enter number to jump to or near to
         GalaxySectorSelect_Select, // GalaxySectorSelect
+        GalaxySectorSelect_Area, 
         GalaxySectorSelect_PresstoAccept, // Press to Accept
         GalaxySectorSelect_GALSELTitle, // Select EDSM Galaxy Data
         GalaxySectorSelect_RS, // You have removed sectors!

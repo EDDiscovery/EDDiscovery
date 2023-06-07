@@ -16,7 +16,6 @@ using EliteDangerousCore.EDSM;
 using System;
 using System.Diagnostics;
 using System.Threading;
-using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using System.IO;
 using System.Net;
@@ -123,7 +122,7 @@ namespace EDDiscovery
                             // Download new systems
                             try
                             {
-                                string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "systems.json.gz");
+                                string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, spansh ? "spanshsystems.json.gz" : "edsmsystems.json.gz");
 
                                 ReportSyncProgress("Performing full download of System Data");
 
@@ -131,13 +130,14 @@ namespace EDDiscovery
 
                                 Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} Full system download using URL {url} to {downloadfile}");
 
+                                bool deletefile = !EDDOptions.Instance.KeepSystemDataDownloadedFiles;
+
 #if DEBUGLOAD
                                 bool success = true;
-                                bool deletefile = false;
-                                downloadfile = spansh ? @"c:\code\examples\edsm\systems_1week.json" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
+                                deletefile = false;
+                                downloadfile = spansh ? @"c:\code\examples\edsm\systems_6months.json" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
 #else
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile);
-                                bool deletefile = true;
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, reportProgress:ReportDownloadProgress);
 #endif
 
                                 syncstate.perform_fullsync = false;
@@ -146,7 +146,7 @@ namespace EDDiscovery
                                 {
                                     ReportSyncProgress("Download complete, creating database");
 
-                                    syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, () => PendingClose, ReportSyncProgress);
+                                    syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, 200000, () => PendingClose, ReportSyncProgress, method:3);
 
                                     if ( deletefile )
                                         BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
@@ -158,13 +158,13 @@ namespace EDDiscovery
                                 {
                                     ReportSyncProgress("");
                                     LogLineHighlight("Failed to download full systems file. Try re-running EDD later");
-                                  //  BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
                                     return;     // new! if we failed to download, fail here, wait for another time
                                 }
                             }
                             catch (Exception ex)
                             {
-                                LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
+                                LogLineHighlight("System DB Full Sync exception:" + ex.Message);
                             }
                         }
 
@@ -176,18 +176,22 @@ namespace EDDiscovery
                         {
                             DateTime lastrecordtime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
                             var delta = DateTime.UtcNow.Subtract(lastrecordtime).TotalDays;
+                            string filename = delta < 7 ? "_1week" : delta < 14 ? "_2weeks" : delta < 28 ? "_1month" : "_6months";
+                            string url = string.Format(EDDConfig.Instance.SpanshSystemsURL, filename);
+                            string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "systemsdelta.json.gz");
+                            bool deletefile = !EDDOptions.Instance.KeepSystemDataDownloadedFiles;
 
-                            if ( delta >= MiniumSpanshUpdateAge)        // if its older than this, we will do an update
+#if DEBUGLOAD
                             {
-                                // work out file to grab..
-
-                                string filename = delta < 7 ? "_1week" : delta < 14 ? "_2weeks" : delta < 28 ? "_1month" : "_6months";
-                                string url = string.Format(EDDConfig.Instance.SpanshSystemsURL, filename);
-                                string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "systemsdelta.json.gz");
-
+                                bool success = true;
+                                downloadfile = @"c:\code\examples\edsm\systems_1week.json";
+                                deletefile = false;
+#else
+                            if ( delta >= MiniumSpanshUpdateAge )        // if its older than this, we will do an update
+                            {
                                 ReportSyncProgress($"Performing partial download of System Data from {url}");
-
                                 bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile);
+#endif
 
                                 if (success)        // grabbed sucessfully
                                 {
@@ -195,18 +199,19 @@ namespace EDDiscovery
 
                                     System.Diagnostics.Trace.WriteLine($"Peforming spansh update");
 
-                                    syncstate.updatesync_count = SystemsDB.ParseJSONFile(downloadfile, grids, 25000, ref lastrecordtime, ()=>PendingClose, ReportSyncProgress, "");
+                                    SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 25000, grids, false);        // we do this non overlapped and pause to allow main system to run ok
+                                    syncstate.updatesync_count = loader3.ParseJSONFile(downloadfile, () => PendingClose, ReportSyncProgress);
+                                    loader3.Finish();
 
-                                    System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count} to {lastrecordtime}");
-
-                                    SystemsDatabase.Instance.SetLastRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
+                                    System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count}");
                                 }
                                 else
                                 {
                                     LogLine("Download of Spansh systems from the server failed (no data returned), will try next time program is run");
                                 }
 
-                                BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                                if ( deletefile )
+                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
                             }
                         }
                         else
@@ -235,7 +240,7 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (syncstate.fullsync_count > 0 || syncstate.updatesync_count > 0)
-                LogLine(string.Format("Systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
+                LogLine(string.Format("Systems update complete with {0:N0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
 
             OnSyncComplete?.Invoke(syncstate.fullsync_count, syncstate.updatesync_count);
 
@@ -248,11 +253,11 @@ namespace EDDiscovery
 
         public long EDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
-            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
+            SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grididallow, false);       // smallish block size, non overlap, no sleep due to EDSM fetch providing pause between blocks
 
             DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForceEDSMFullDownloadDays);        // limit download to this amount of days
-            if (lastrecordtime < maximumupdatetimewindow)
-                lastrecordtime = maximumupdatetimewindow;               // this stops crazy situations where somehow we have a very old date but the full sync did not take care of it
+            if (loader3.LastDate < maximumupdatetimewindow)
+                loader3.LastDate = maximumupdatetimewindow;               // this stops crazy situations where somehow we have a very old date but the full sync did not take care of it
 
             long updates = 0;
 
@@ -260,11 +265,11 @@ namespace EDDiscovery
 
             DateTime minimumfetchspan = DateTime.UtcNow.AddHours(-EDSMUpdateFetchHours / 2);        // we don't bother fetching if last record time is beyond this point
 
-            while (lastrecordtime < minimumfetchspan)                                   // stop at X mins before now, so we don't get in a condition
+            while (loader3.LastDate < minimumfetchspan)                              // stop at X mins before now, so we don't get in a condition
             {                                                                           // where we do a set, the time moves to just before now, 
                                                                                         // and we then do another set with minimum amount of hours
                 if (PendingClose())
-                    return updates;
+                    break;
 
                 if ( updates == 0)
                     LogLine("Checking for updated EDSM systems (may take a few moments).");
@@ -273,19 +278,19 @@ namespace EDDiscovery
 
                 double hourstofetch = EDSMUpdateFetchHours;        //EDSM new server feb 2021, more capable, 
 
-                DateTime enddate = lastrecordtime + TimeSpan.FromHours(hourstofetch * fetchmult);
+                DateTime enddate = loader3.LastDate + TimeSpan.FromHours(hourstofetch * fetchmult);
                 if (enddate > DateTime.UtcNow)
                     enddate = DateTime.UtcNow;
 
-                LogLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
-                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()} {hourstofetch}");
+                LogLine($"Downloading systems from UTC {loader3.LastDate} to {enddate}");
+                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {loader3.LastDate} to {enddate} {hourstofetch}");
 
                 string json = null;
                 BaseUtils.ResponseData response;
                 try
                 {
                     Stopwatch sw = new Stopwatch();
-                    response = edsm.RequestSystemsData(lastrecordtime, enddate, timeout: 20000);
+                    response = edsm.RequestSystemsData(loader3.LastDate, enddate, timeout: 20000);
                     fetchmult = Math.Max(0.1, Math.Min(Math.Min(fetchmult * 1.1, 1.0), 5000.0 / sw.ElapsedMilliseconds));
                 }
                 catch (WebException ex)
@@ -301,13 +306,13 @@ namespace EDDiscovery
                         LogLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
                     }
 
-                    return updates;
+                    break;
                 }
                 catch (Exception ex)
                 {
                     ReportProgress($"EDSM request failed");
                     LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
-                    return updates;
+                    break;
                 }
 
                 if (response.Error)
@@ -326,7 +331,7 @@ namespace EDDiscovery
                     else
                     {
                         LogLine($"Download of EDSM systems from the server failed ({response.StatusCode.ToString()}), will try next time program is run");
-                        return updates;
+                        break;
                     }
                 }
 
@@ -336,41 +341,26 @@ namespace EDDiscovery
                 {
                     ReportProgress("EDSM request failed");
                     LogLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
-                    return updates;
+                    break;
                 }
 
                 // debug File.WriteAllText(@"c:\code\json.txt", json);
 
-                DateTime prevrectime = lastrecordtime;
-                System.Diagnostics.Trace.WriteLine($"EDSM partial download last record time {lastrecordtime}");
+                ReportProgress($"EDSM star database update from UTC " + loader3.LastDate.ToString() );
 
-                long updated = 0;
+                var prevrectime = loader3.LastDate;
 
-                try
+                long updated = loader3.ParseJSONString(json, PendingClose, ReportSyncProgress);
+
+                System.Diagnostics.Trace.WriteLine($"EDSM parital download updated {updated} to {loader3.LastDate}");
+
+                // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
+                if (loader3.LastDate <= prevrectime)
                 {
-                    ReportProgress($"EDSM star database update from UTC " + lastrecordtime.ToUniversalTime().ToString() );
-
-                    updated = SystemsDB.ParseJSONString(json, grididallow, 25000, ref lastrecordtime, PendingClose, ReportProgress, "");
-
-                    System.Diagnostics.Trace.WriteLine($"EDSM parital download updated {updated} to {lastrecordtime}");
-
-                    // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
-                    if (lastrecordtime <= prevrectime)
-                    {
-                        lastrecordtime += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
-                    }
-                }
-                catch (Exception e)
-                {
-                    System.Diagnostics.Debug.WriteLine("SysClassEDSM.2 Exception " + e.ToString());
-                    ReportProgress("EDSM request failed");
-                    LogLine("Processing EDSM systems download failed, will try next time program is run");
-                    return updates;
+                    loader3.LastDate += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
                 }
 
                 updates += updated;
-
-                SystemsDatabase.Instance.SetLastRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
 
                 int delay = 10;     // Anthor's normal delay 
                 int ratelimitlimit;
@@ -402,8 +392,21 @@ namespace EDDiscovery
                 }
             }
 
+            loader3.Finish();
             return updates;
         }
+
+
+        public void ReportSyncProgress(string message)
+        {
+            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, message));
+        }
+
+        public void ReportDownloadProgress(long count, double rate)
+        {
+            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, $"Downloaded {count/1024:N0} KB at {rate/1024/1024:N2} MBbits/sec"));
+        }
+
     }
 }
 

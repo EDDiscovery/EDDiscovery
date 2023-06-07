@@ -346,5 +346,10 @@ namespace EDDiscovery
             }
         }
 
+        public void ReportRefreshProgress(int percent, string message)
+        {
+            InvokeAsyncOnUiThread(() => OnReportRefreshProgress?.Invoke(percent, message));
+        }
+
     }
 }
