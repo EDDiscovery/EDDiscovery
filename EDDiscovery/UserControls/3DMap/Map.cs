@@ -430,7 +430,7 @@ namespace EDDiscovery.UserControls.Map3D
             // 3d controller
 
             gl3dcontroller = new Controller3D();
-            gl3dcontroller.PosCamera.ZoomMax = 600;     // gives 5ly
+            gl3dcontroller.PosCamera.ZoomMax = 5000;   
             gl3dcontroller.ZoomDistance = 3000F / lyscale;
             gl3dcontroller.PosCamera.ZoomMin = 0.1f;
             gl3dcontroller.PosCamera.ZoomScaling = 1.1f;

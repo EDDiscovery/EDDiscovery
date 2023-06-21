@@ -199,7 +199,8 @@ namespace EDDiscovery
 
                                     System.Diagnostics.Trace.WriteLine($"Peforming spansh update");
 
-                                    SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 25000, grids, false);        // we do this non overlapped and pause to allow main system to run ok
+                                    // we do this non overlapped with replace, to pause to allow main system to run ok
+                                    SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 25000, grids, false, false );        
                                     syncstate.updatesync_count = loader3.ParseJSONFile(downloadfile, () => PendingClose, ReportSyncProgress);
                                     loader3.Finish();
 
@@ -253,7 +254,8 @@ namespace EDDiscovery
 
         public long EDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
-            SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grididallow, false);       // smallish block size, non overlap, no sleep due to EDSM fetch providing pause between blocks
+            // smallish block size, non overlap, allow overwrite
+            SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grididallow, false, false);       
 
             DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForceEDSMFullDownloadDays);        // limit download to this amount of days
             if (loader3.LastDate < maximumupdatetimewindow)
