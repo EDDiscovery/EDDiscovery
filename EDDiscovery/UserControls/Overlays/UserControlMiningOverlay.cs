@@ -27,6 +27,7 @@ namespace EDDiscovery.UserControls
         private string dbChart = "ChartSel";
         private string dbZeroRefined = "ZeroRefined";
         private string dbRolledUp = "RolledUp";
+        private string dbChartBase = "ChartBase";
 
         #region Init
 
@@ -41,7 +42,7 @@ namespace EDDiscovery.UserControls
 
             UpdateComboBox(null);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_Text };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             extPanelRollUp.SetToolTip(toolTip);
 
@@ -49,6 +50,8 @@ namespace EDDiscovery.UserControls
             extCheckBoxZeroRefined.Checked = GetSetting(dbZeroRefined, false);
             extCheckBoxZeroRefined.CheckedChanged += new System.EventHandler(this.extCheckBoxZeroRefined_CheckedChanged);
             extPanelRollUp.PinState = GetSetting(dbRolledUp, true);
+            extCheckBoxChartBase.Checked = GetSetting(dbChartBase, false);
+            extCheckBoxChartBase.CheckedChanged += new System.EventHandler(this.extCheckBoxChartBase_CheckedChanged);
 
             timetimer = new Timer();
             timetimer.Interval = 1000;
@@ -477,23 +480,43 @@ namespace EDDiscovery.UserControls
                             int mi = 0;
                             foreach (var m in matdata)
                             {
-                                Series series = new Series();
-                                series.Name = m.friendlyname;
-                                series.ChartArea = "ChartArea1";
-                                series.ChartType = SeriesChartType.Line;
-                                series.Color = LineC[mi];
-                                series.Legend = "Legend1";
+                                
+                                    Series series = new Series();
+                                    series.Name = m.friendlyname;
+                                    series.ChartArea = "ChartArea1";
+                                    series.ChartType = SeriesChartType.Line;
+                                    series.Color = LineC[mi];
+                                    series.Legend = "Legend1";
 
-                                int i = 0;
-                                for (i = 0; i < CFDbMax; i++)        // 0 - fixed
-                                {
-                                    int numberabove = m.prospectedamounts.Count(x => x >= i);
-                                    series.Points.Add(new DataPoint(i, (double)numberabove / m.prospectednoasteroids * 100.0));
-                                    series.Points[i].AxisLabel = i.ToString();
+                                    int i = 0;
+                                    if (!extCheckBoxChartBase.Checked)
+                                    {
+                                        for (i = 0; i < CFDbMax; i++)        // 0 - fixed
+                                        {
+                                            int numberabove = m.prospectedamounts.Count(x => x >= i);
+                                            series.Points.Add(new DataPoint(i, ((double)numberabove) / m.prospectednoasteroids * 100.0));
+                                            series.Points[i].AxisLabel = i.ToString();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (i = 0; i < CFDbMax; i++)        // 0 - fixed
+                                        {
+                                            int numberabove = m.prospectedamounts.Count(x => x >= i);
+                                            if (i < (int)m.prospectedamounts.Min())
+                                            {
+                                                series.Points.Add(new DataPoint(i + 1, 100.0)); // +1 makes it go straight up instead of moving to the previous i
+                                            }
+                                        else
+                                            {
+                                                series.Points.Add(new DataPoint(i, ((double)numberabove) / prospected * 100.0));
+                                            }
+                                                series.Points[i].AxisLabel = i.ToString();
+                                    }
                                 }
-
-                                chart.Series.Add(series);
-                                mi++;
+                                    chart.Series.Add(series);
+                                    mi++;
+                                
                             }
 
                             chart.EndInit();
@@ -614,6 +637,12 @@ namespace EDDiscovery.UserControls
         private void extCheckBoxZeroRefined_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting(dbZeroRefined, extCheckBoxZeroRefined.Checked);
+            Display();
+        }
+
+        private void extCheckBoxChartBase_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting(dbChartBase, extCheckBoxChartBase.Checked);
             Display();
         }
 

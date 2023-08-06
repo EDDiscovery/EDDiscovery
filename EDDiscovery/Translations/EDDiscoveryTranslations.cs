@@ -931,6 +931,8 @@ namespace EDDiscovery
         UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, // ToolTip 'Display items with zero refined items'
         UserControlMiningOverlay_buttonExtExcel_ToolTip, // ToolTip 'Export'
         UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, // ToolTip 'Select chart options'
+        UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, // ToolTip 'Default shows distribution of asteroids that actually contain the material'
+        UserControlMiningOverlay_extCheckBoxChartBase_Text, // Text 'Base chart on all asteroids'
         UserControlMiningOverlay_Limcargo, // discrete
         UserControlMiningOverlay_Proscoll, // discrete
         UserControlMiningOverlay_ref, // discrete

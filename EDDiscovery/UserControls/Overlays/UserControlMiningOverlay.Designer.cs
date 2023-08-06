@@ -46,6 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.ExtPictureBox();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
+            this.extCheckBoxChartBase = new System.Windows.Forms.CheckBox();
             this.extCheckBoxZeroRefined = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extComboBoxChartOptions = new ExtendedControls.ExtComboBox();
@@ -67,6 +68,7 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.AutoHeight = false;
             this.extPanelRollUp.AutoHeightWidthDisable = false;
             this.extPanelRollUp.AutoWidth = false;
+            this.extPanelRollUp.Controls.Add(this.extCheckBoxChartBase);
             this.extPanelRollUp.Controls.Add(this.extCheckBoxZeroRefined);
             this.extPanelRollUp.Controls.Add(this.buttonExtExcel);
             this.extPanelRollUp.Controls.Add(this.extComboBoxChartOptions);
@@ -83,6 +85,17 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUp.Size = new System.Drawing.Size(894, 34);
             this.extPanelRollUp.TabIndex = 2;
             this.extPanelRollUp.UnrollHoverDelay = 1000;
+            // 
+            // extCheckBoxChartBase
+            // 
+            this.extCheckBoxChartBase.AutoSize = true;
+            this.extCheckBoxChartBase.Location = new System.Drawing.Point(295, 7);
+            this.extCheckBoxChartBase.Name = "extCheckBoxChartBase";
+            this.extCheckBoxChartBase.Size = new System.Drawing.Size(150, 17);
+            this.extCheckBoxChartBase.TabIndex = 62;
+            this.extCheckBoxChartBase.Text = "Base chart on all asteroids";
+            this.toolTip.SetToolTip(this.extCheckBoxChartBase, "Default shows distribution of asteroids that actually contain the material");
+            this.extCheckBoxChartBase.UseVisualStyleBackColor = true;
             // 
             // extCheckBoxZeroRefined
             // 
@@ -169,5 +182,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtCheckBox extCheckBoxZeroRefined;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.CheckBox extCheckBoxChartBase;
     }
 }
