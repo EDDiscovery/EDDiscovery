@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public static void InitaliseComboBox(ExtendedControls.ExtComboBox cc, string last, bool incldockstartend = true, bool inclnumberlimit = true)
+        public static void InitaliseComboBox(ExtendedControls.ExtComboBox cc, string last, bool incldock, bool inclnumberlimit, bool inclstartend)
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
@@ -210,9 +210,12 @@ namespace EDDiscovery.UserControls
                 el.Add(TravelHistoryFilter.Last(500));
             };
 
-            if (incldockstartend)
+            if (incldock)
             {
                 el.Add(TravelHistoryFilter.LastDock());
+            }
+            if (inclstartend)
+            {
                 el.Add(TravelHistoryFilter.StartEnd());
             }
 

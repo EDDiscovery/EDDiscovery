@@ -670,6 +670,19 @@ namespace EDDiscovery
         UserControlOrganics_extButtonAlignment_ToolTip, // ToolTip 'Word Wrap'
         UserControlOrganics_at, // At {0}
         UserControlOrganics_sysinfo, // 
+        
+        UserControlOrganics_ColDate,
+        UserControlOrganics_ColStarSystem,
+        UserControlOrganics_ColBodyName,
+        UserControlOrganics_ColBodyType,
+        UserControlOrganics_ColGenus,
+        UserControlOrganics_ColSpecies,
+        UserControlOrganics_ColVariant,
+        UserControlOrganics_ColLastScanType,
+        UserControlOrganics_ColValue,
+        UserControlOrganics_labelTime,
+        UserControlOrganics_labelStart,
+        UserControlOrganics_labelEnd,
 
 
 

@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
             var enumlisttt = new Enum[] { EDTx.UserControlTravelGrid_comboBoxTime_ToolTip, EDTx.UserControlTravelGrid_textBoxSearch_ToolTip, EDTx.UserControlTravelGrid_buttonFilter_ToolTip, EDTx.UserControlTravelGrid_buttonField_ToolTip, EDTx.UserControlTravelGrid_buttonExtExcel_ToolTip, EDTx.UserControlTravelGrid_checkBoxCursorToTop_ToolTip, EDTx.UserControlTravelGrid_extCheckBoxWordWrap_ToolTip, EDTx.UserControlTravelGrid_extCheckBoxOutlines_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""));
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""), true, true, true);
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;

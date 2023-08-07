@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""));
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""), true,true,true);
 
             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
                 searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);

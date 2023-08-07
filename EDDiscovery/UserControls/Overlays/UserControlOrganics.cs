@@ -66,6 +66,11 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
+            var enumlist = new Enum[] {EDTx.UserControlOrganics_ColDate, EDTx.UserControlOrganics_ColStarSystem, EDTx.UserControlOrganics_ColBodyName, EDTx.UserControlOrganics_ColBodyType,
+            EDTx.UserControlOrganics_ColGenus, EDTx.UserControlOrganics_ColSpecies, EDTx.UserControlOrganics_ColVariant, EDTx.UserControlOrganics_ColLastScanType,
+            EDTx.UserControlOrganics_ColValue, EDTx.UserControlOrganics_labelTime, EDTx.UserControlOrganics_labelStart, EDTx.UserControlOrganics_labelEnd};
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
             var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip,
                                         EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip ,
                                         EDTx.UserControlOrganics_extButtonAlignment_ToolTip};
@@ -86,6 +91,10 @@ namespace EDDiscovery.UserControls
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             extCheckBoxShowIncomplete.Checked = GetSetting("ShowIncomplete", true);
             extCheckBoxShowIncomplete.Click += ExtCheckBoxShowIncomplete_Click;
+
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, "", true, false, false);
+            comboBoxTime.Text = "";
+            this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
 
             labelValue.Text = "";       // as its set to <code>
         }
@@ -438,13 +447,48 @@ namespace EDDiscovery.UserControls
             DrawGrid();
         }
 
+        private void comboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (updatedprogramatically == false)
+            {
+                var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                updatedprogramatically = true;
+                if (filter.Lastdockflag)
+                {
+                    HistoryEntry he = DiscoveryForm.History.GetLastHistoryEntry(x=>x.journalEntry.EventTypeID == JournalTypeEnum.Docked);
+                    if (he != null)
+                    {
+                        extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
+                        extDateTimePickerStartDate.Checked = true;
+                    }
+                    else
+                        extDateTimePickerStartDate.Checked = false;
+                }
+                else if (filter.MaximumDataAge.HasValue)
+                {
+                    DateTime start = DateTime.UtcNow.Subtract(filter.MaximumDataAge.Value);
+                    extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(start);
+                    extDateTimePickerStartDate.Checked = true;
+                }
+                else
+                    extDateTimePickerStartDate.Checked = false;
+
+                extDateTimePickerEndDate.Checked = false;
+                comboBoxTime.Text = "";
+
+                updatedprogramatically = false;
+                SaveStartStopDate();
+                DrawGrid();
+            }
+
+        }
+
         bool updatedprogramatically = false;
         private void DateTimePicker_ValueChangedStart(object sender, EventArgs e)
         {
             if (!updatedprogramatically)
             {
-                PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
-                PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
+                SaveStartStopDate();
                 DrawGrid();
             }
         }
@@ -453,10 +497,18 @@ namespace EDDiscovery.UserControls
         {
             if (!updatedprogramatically)
             {
-                PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
-                PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
+                SaveStartStopDate();
                 DrawGrid();
             }
+        }
+
+        private void SaveStartStopDate()
+        {
+            PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
+            PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
+            PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
+            PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
+
         }
 
         private void VerifyDates()
@@ -473,8 +525,8 @@ namespace EDDiscovery.UserControls
             updatedprogramatically = false;
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

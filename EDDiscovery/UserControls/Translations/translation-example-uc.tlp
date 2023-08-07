@@ -1488,6 +1488,19 @@ SECTION UserControlOrganics
 .at: "At {0}" @
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 .extButtonAlignment.ToolTip: "Alignment" @
+.ColDate: "Date" @
+.ColStarSystem: "Star System" @
+.ColBodyName: "Body Name" @
+.ColBodyType: "Body Type" @
+.ColGenus: "Genus" @
+.ColSpecies: "Species" @
+.ColVariant: "Variant" @
+.ColLastScanType: "Last Scan Type" @
+.ColValue: "Value" @
+.labelTime: "Time" @
+.labelStart: "Start" @
+.labelEnd: "End" @
+.comboBoxTime.ToolTip: "Select the entries by age" @
 
 
 SECTION ScanDisplayForm

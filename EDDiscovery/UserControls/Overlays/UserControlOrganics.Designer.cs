@@ -52,18 +52,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBar = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
-            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
-            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.extButtonFont = new ExtendedControls.ExtButton();
-            this.extButtonAlignment = new ExtendedControls.ExtButton();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.extCheckBoxShowIncomplete = new ExtendedControls.ExtCheckBox();
-            this.flowLayoutPanelGridControl = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelStart = new System.Windows.Forms.Label();
-            this.extDateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
-            this.labelEnd = new System.Windows.Forms.Label();
-            this.extDateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
-            this.labelValue = new System.Windows.Forms.Label();
             this.ColDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColStarSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -73,6 +61,20 @@ namespace EDDiscovery.UserControls
             this.ColVariant = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColLastScanType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
+            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonFont = new ExtendedControls.ExtButton();
+            this.extButtonAlignment = new ExtendedControls.ExtButton();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extCheckBoxShowIncomplete = new ExtendedControls.ExtCheckBox();
+            this.comboBoxTime = new ExtendedControls.ExtComboBox();
+            this.flowLayoutPanelGridControl = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelTime = new System.Windows.Forms.Label();
+            this.labelStart = new System.Windows.Forms.Label();
+            this.extDateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
+            this.labelEnd = new System.Windows.Forms.Label();
+            this.extDateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
+            this.labelValue = new System.Windows.Forms.Label();
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -251,6 +253,67 @@ namespace EDDiscovery.UserControls
             this.dataGridView.TabIndex = 23;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
+            // ColDate
+            // 
+            this.ColDate.FillWeight = 50F;
+            this.ColDate.HeaderText = "Date";
+            this.ColDate.Name = "ColDate";
+            this.ColDate.ReadOnly = true;
+            // 
+            // ColStarSystem
+            // 
+            this.ColStarSystem.HeaderText = "Star System";
+            this.ColStarSystem.Name = "ColStarSystem";
+            this.ColStarSystem.ReadOnly = true;
+            // 
+            // ColBodyName
+            // 
+            this.ColBodyName.FillWeight = 75F;
+            this.ColBodyName.HeaderText = "Body Name";
+            this.ColBodyName.MinimumWidth = 50;
+            this.ColBodyName.Name = "ColBodyName";
+            this.ColBodyName.ReadOnly = true;
+            // 
+            // ColBodyType
+            // 
+            this.ColBodyType.HeaderText = "Body Type";
+            this.ColBodyType.Name = "ColBodyType";
+            this.ColBodyType.ReadOnly = true;
+            // 
+            // ColGenus
+            // 
+            this.ColGenus.FillWeight = 50F;
+            this.ColGenus.HeaderText = "Genus";
+            this.ColGenus.Name = "ColGenus";
+            this.ColGenus.ReadOnly = true;
+            // 
+            // ColSpecies
+            // 
+            this.ColSpecies.FillWeight = 50F;
+            this.ColSpecies.HeaderText = "Species";
+            this.ColSpecies.Name = "ColSpecies";
+            this.ColSpecies.ReadOnly = true;
+            // 
+            // ColVariant
+            // 
+            this.ColVariant.FillWeight = 50F;
+            this.ColVariant.HeaderText = "Variant";
+            this.ColVariant.Name = "ColVariant";
+            this.ColVariant.ReadOnly = true;
+            // 
+            // ColLastScanType
+            // 
+            this.ColLastScanType.FillWeight = 50F;
+            this.ColLastScanType.HeaderText = "Last Scan Type";
+            this.ColLastScanType.Name = "ColLastScanType";
+            this.ColLastScanType.ReadOnly = true;
+            // 
+            // ColValue
+            // 
+            this.ColValue.HeaderText = "Value";
+            this.ColValue.Name = "ColValue";
+            this.ColValue.ReadOnly = true;
+            // 
             // rollUpPanelTop
             // 
             this.rollUpPanelTop.AutoHeight = true;
@@ -339,7 +402,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxShowIncomplete.ImageIndeterminate = null;
             this.extCheckBoxShowIncomplete.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowIncomplete.ImageUnchecked = null;
-            this.extCheckBoxShowIncomplete.Location = new System.Drawing.Point(587, 1);
+            this.extCheckBoxShowIncomplete.Location = new System.Drawing.Point(680, 1);
             this.extCheckBoxShowIncomplete.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extCheckBoxShowIncomplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowIncomplete.Name = "extCheckBoxShowIncomplete";
@@ -349,10 +412,36 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extCheckBoxShowIncomplete, "Display incomplete scans");
             this.extCheckBoxShowIncomplete.UseVisualStyleBackColor = false;
             // 
+            // comboBoxTime
+            // 
+            this.comboBoxTime.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxTime.ButtonColorScaling = 0.5F;
+            this.comboBoxTime.DataSource = null;
+            this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxTime.DisplayMember = "";
+            this.comboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
+            this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxTime.Name = "comboBoxTime";
+            this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxTime.SelectedIndex = -1;
+            this.comboBoxTime.SelectedItem = null;
+            this.comboBoxTime.SelectedValue = null;
+            this.comboBoxTime.Size = new System.Drawing.Size(47, 21);
+            this.comboBoxTime.TabIndex = 36;
+            this.comboBoxTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxTime, "Select the entries by age");
+            this.comboBoxTime.ValueMember = "";
+            // 
             // flowLayoutPanelGridControl
             // 
             this.flowLayoutPanelGridControl.AutoSize = true;
             this.flowLayoutPanelGridControl.BackColor = System.Drawing.SystemColors.Control;
+            this.flowLayoutPanelGridControl.Controls.Add(this.labelTime);
+            this.flowLayoutPanelGridControl.Controls.Add(this.comboBoxTime);
             this.flowLayoutPanelGridControl.Controls.Add(this.labelStart);
             this.flowLayoutPanelGridControl.Controls.Add(this.extDateTimePickerStartDate);
             this.flowLayoutPanelGridControl.Controls.Add(this.labelEnd);
@@ -365,10 +454,20 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelGridControl.Size = new System.Drawing.Size(1108, 30);
             this.flowLayoutPanelGridControl.TabIndex = 2;
             // 
+            // labelTime
+            // 
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(0, 1);
+            this.labelTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(30, 13);
+            this.labelTime.TabIndex = 35;
+            this.labelTime.Text = "Time";
+            // 
             // labelStart
             // 
             this.labelStart.AutoSize = true;
-            this.labelStart.Location = new System.Drawing.Point(3, 6);
+            this.labelStart.Location = new System.Drawing.Point(96, 6);
             this.labelStart.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelStart.Name = "labelStart";
             this.labelStart.Size = new System.Drawing.Size(29, 13);
@@ -380,9 +479,9 @@ namespace EDDiscovery.UserControls
             this.extDateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
             this.extDateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.extDateTimePickerStartDate.Checked = false;
-            this.extDateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
-            this.extDateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.extDateTimePickerStartDate.Location = new System.Drawing.Point(38, 3);
+            this.extDateTimePickerStartDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
+            this.extDateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.extDateTimePickerStartDate.Location = new System.Drawing.Point(131, 3);
             this.extDateTimePickerStartDate.Name = "extDateTimePickerStartDate";
             this.extDateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.extDateTimePickerStartDate.ShowCheckBox = true;
@@ -395,7 +494,7 @@ namespace EDDiscovery.UserControls
             // labelEnd
             // 
             this.labelEnd.AutoSize = true;
-            this.labelEnd.Location = new System.Drawing.Point(294, 6);
+            this.labelEnd.Location = new System.Drawing.Point(387, 6);
             this.labelEnd.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelEnd.Name = "labelEnd";
             this.labelEnd.Size = new System.Drawing.Size(26, 13);
@@ -407,9 +506,9 @@ namespace EDDiscovery.UserControls
             this.extDateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
             this.extDateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.extDateTimePickerEndDate.Checked = false;
-            this.extDateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
-            this.extDateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.extDateTimePickerEndDate.Location = new System.Drawing.Point(326, 3);
+            this.extDateTimePickerEndDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
+            this.extDateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.extDateTimePickerEndDate.Location = new System.Drawing.Point(419, 3);
             this.extDateTimePickerEndDate.Name = "extDateTimePickerEndDate";
             this.extDateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.extDateTimePickerEndDate.ShowCheckBox = true;
@@ -422,73 +521,12 @@ namespace EDDiscovery.UserControls
             // labelValue
             // 
             this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(631, 6);
+            this.labelValue.Location = new System.Drawing.Point(724, 6);
             this.labelValue.Margin = new System.Windows.Forms.Padding(12, 6, 3, 0);
             this.labelValue.Name = "labelValue";
             this.labelValue.Size = new System.Drawing.Size(43, 13);
             this.labelValue.TabIndex = 2;
             this.labelValue.Text = "<code>";
-            // 
-            // ColDate
-            // 
-            this.ColDate.FillWeight = 50F;
-            this.ColDate.HeaderText = "Date";
-            this.ColDate.Name = "ColDate";
-            this.ColDate.ReadOnly = true;
-            // 
-            // ColStarSystem
-            // 
-            this.ColStarSystem.HeaderText = "Star System";
-            this.ColStarSystem.Name = "ColStarSystem";
-            this.ColStarSystem.ReadOnly = true;
-            // 
-            // ColBodyName
-            // 
-            this.ColBodyName.FillWeight = 75F;
-            this.ColBodyName.HeaderText = "Body Name";
-            this.ColBodyName.MinimumWidth = 50;
-            this.ColBodyName.Name = "ColBodyName";
-            this.ColBodyName.ReadOnly = true;
-            // 
-            // ColBodyType
-            // 
-            this.ColBodyType.HeaderText = "Body Type";
-            this.ColBodyType.Name = "ColBodyType";
-            this.ColBodyType.ReadOnly = true;
-            // 
-            // ColGenus
-            // 
-            this.ColGenus.FillWeight = 50F;
-            this.ColGenus.HeaderText = "Genus";
-            this.ColGenus.Name = "ColGenus";
-            this.ColGenus.ReadOnly = true;
-            // 
-            // ColSpecies
-            // 
-            this.ColSpecies.FillWeight = 50F;
-            this.ColSpecies.HeaderText = "Species";
-            this.ColSpecies.Name = "ColSpecies";
-            this.ColSpecies.ReadOnly = true;
-            // 
-            // ColVariant
-            // 
-            this.ColVariant.FillWeight = 50F;
-            this.ColVariant.HeaderText = "Variant";
-            this.ColVariant.Name = "ColVariant";
-            this.ColVariant.ReadOnly = true;
-            // 
-            // ColLastScanType
-            // 
-            this.ColLastScanType.FillWeight = 50F;
-            this.ColLastScanType.HeaderText = "Last Scan Type";
-            this.ColLastScanType.Name = "ColLastScanType";
-            this.ColLastScanType.ReadOnly = true;
-            // 
-            // ColValue
-            // 
-            this.ColValue.HeaderText = "Value";
-            this.ColValue.Name = "ColValue";
-            this.ColValue.ReadOnly = true;
             // 
             // UserControlOrganics
             // 
@@ -545,5 +583,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColVariant;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColLastScanType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColValue;
+        private System.Windows.Forms.Label labelTime;
+        internal ExtendedControls.ExtComboBox comboBoxTime;
     }
 }
