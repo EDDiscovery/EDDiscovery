@@ -200,7 +200,7 @@ namespace EDDiscovery
                                     System.Diagnostics.Trace.WriteLine($"Peforming spansh update");
 
                                     // we do this non overlapped with replace, to pause to allow main system to run ok
-                                    SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 25000, grids, false, false );        
+                                    SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grids, true, false );        
                                     syncstate.updatesync_count = loader3.ParseJSONFile(downloadfile, () => PendingClose, ReportSyncProgress);
                                     loader3.Finish();
 
