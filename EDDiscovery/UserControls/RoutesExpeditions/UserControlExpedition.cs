@@ -852,7 +852,7 @@ namespace EDDiscovery.UserControls
                         if (sys != null)
                         {
                             var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
-                            List<JournalScan> sysscans = jl.Item1;
+                            List<JournalScan> sysscans = jl?.Item1;
                             if (sysscans != null)
                                 scans.AddRange(sysscans);
                         }
