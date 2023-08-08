@@ -643,7 +643,7 @@ namespace EDDiscovery.UserControls
                         MaterialCommodityMicroResourceType mcrt = null;
                         int count = int.MinValue;
 
-                        if (amountcol >= 0 && amountcol < r.Cells.Count && int.TryParse(r.Cells[amountcol], System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int cv1))
+                        if (amountcol >= 0 && amountcol < r.Cells.Count && int.TryParse(r.Cells[amountcol], System.Globalization.NumberStyles.None, csv.FormatCulture, out int cv1))
                             count = cv1;
 
                         for (int i = 0; i < r.Cells.Count; i++)
@@ -654,7 +654,7 @@ namespace EDDiscovery.UserControls
                             var mcd = MaterialCommodityMicroResourceType.GetByEnglishName(c);
                             if (mcd != null)
                                 mcrt = mcd;
-                            else if (count == int.MinValue && int.TryParse(c, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int cv))
+                            else if (count == int.MinValue && int.TryParse(c, System.Globalization.NumberStyles.None, csv.FormatCulture, out int cv))
                                 count = cv;
                         }
 

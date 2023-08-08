@@ -799,10 +799,10 @@ namespace EDDiscovery.UserControls
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
                             EventDescription,
                             EventDetailedInfo,
-                            he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
-                            he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.TravelledJumps.ToString() : "",
-                            he.isTravelling ? he.TravelledMissingJumps.ToString() : "",
+                            he.isTravelling ? he.TravelledDistance.ToString("N1",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledSeconds.ToString("N0",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledJumps.ToString("N0",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledMissingJumps.ToString("N0",grd.FormatCulture) : "",
                             };
                     };
 

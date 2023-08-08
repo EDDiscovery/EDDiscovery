@@ -332,8 +332,8 @@ namespace EDDiscovery.UserControls
                         {
                             if ( r == 0 )
                             {
-                                return new object[] { last_he.System.Name, "0", DiscoveryForm.History.GetVisitsCount(last_he.System.Name).ToString("#"),
-                                            last_he.System.X.ToString("F2"), last_he.System.Y.ToString("F2"), last_he.System.Z.ToString("F2") };
+                                return new object[] { last_he.System.Name, "0", DiscoveryForm.History.GetVisitsCount(last_he.System.Name),
+                                            last_he.System.X.ToString("F2",grd.FormatCulture), last_he.System.Y.ToString("F2",grd.FormatCulture), last_he.System.Z.ToString("F2",grd.FormatCulture) };
                             }
                             else
                             {
@@ -345,9 +345,9 @@ namespace EDDiscovery.UserControls
                                     rw.Cells[0].Value,
                                     rw.Cells[1].Value,
                                     rw.Cells[2].Value,
-                                    clicksystem.X.ToString("F2") ?? "",
-                                    clicksystem.Y.ToString("F2") ?? "",
-                                    clicksystem.Z.ToString("F2") ?? "",
+                                    clicksystem.X.ToString("F2",grd.FormatCulture) ?? "",
+                                    clicksystem.Y.ToString("F2",grd.FormatCulture) ?? "",
+                                    clicksystem.Z.ToString("F2",grd.FormatCulture) ?? "",
                                 };
                             }
                         }

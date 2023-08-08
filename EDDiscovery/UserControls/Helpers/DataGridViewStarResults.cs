@@ -221,9 +221,9 @@ namespace EDDiscovery.UserControls.Search
                         
                         if (sys != null)        // in case we don't have a valid tag
                         {
-                            data.Add(sys.X.ToString("0.#"));
-                            data.Add(sys.Y.ToString("0.#"));
-                            data.Add(sys.Z.ToString("0.#"));
+                            data.Add(sys.X);
+                            data.Add(sys.Y);
+                            data.Add(sys.Z);
                         }
 
                         return data.ToArray();

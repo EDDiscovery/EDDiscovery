@@ -690,24 +690,24 @@ namespace EDDiscovery.UserControls
                     {
                         if (r == 0)
                         {
-                            return new object[] { "","","", prospected.ToString("N0"),"","","","","",
-                                              content[0].ToString("N0"),
-                                              content[1].ToString("N0"),
-                                              content[2].ToString("N0") };
+                            return new object[] { "","","", prospected.ToString("N0",grd.FormatCulture),"","","","","",
+                                              content[0].ToString("N0",grd.FormatCulture),
+                                              content[1].ToString("N0",grd.FormatCulture),
+                                              content[2].ToString("N0",grd.FormatCulture) };
                         }
                         else if (r <= found.Count)
                         {
                             MaterialsFound f = found[r - 1];
                             return new object[] { f.friendlyname, f.amountrefined, f.amountcollected-f.amountdiscarded,
-                                              f.prospectednoasteroids>0 ? f.prospectednoasteroids.ToString("N0") : "" ,
-                                              f.prospectednoasteroids>0 ? (100.0 * (double)f.prospectednoasteroids / prospected).ToString("N1") : "" ,
-                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Average().ToString("N1") : "",
-                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Min().ToString("N1") : "",
-                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Max().ToString("N1") : "",
-                                              f.motherloadasteroids>0 ? f.motherloadasteroids.ToString("N0") : "" ,
-                                              f.prospectednoasteroids>0 ? f.content[0].ToString("N0") :"",
-                                              f.prospectednoasteroids>0 ? f.content[1].ToString("N0") : "",
-                                              f.prospectednoasteroids>0 ? f.content[2].ToString("N0") : "",
+                                              f.prospectednoasteroids>0 ? f.prospectednoasteroids.ToString("N0",grd.FormatCulture) : "" ,
+                                              f.prospectednoasteroids>0 ? (100.0 * (double)f.prospectednoasteroids / prospected).ToString("N1",grd.FormatCulture) : "" ,
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Average().ToString("N1",grd.FormatCulture) : "",
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Min().ToString("N1",grd.FormatCulture) : "",
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Max().ToString("N1",grd.FormatCulture) : "",
+                                              f.motherloadasteroids>0 ? f.motherloadasteroids.ToString("N0",grd.FormatCulture) : "" ,
+                                              f.prospectednoasteroids>0 ? f.content[0].ToString("N0",grd.FormatCulture) :"",
+                                              f.prospectednoasteroids>0 ? f.content[1].ToString("N0",grd.FormatCulture) : "",
+                                              f.prospectednoasteroids>0 ? f.content[2].ToString("N0",grd.FormatCulture) : "",
                                               f.discovered ? "*" : ""  };
                         }
                         else
