@@ -488,7 +488,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewScangrid.Rows.Add(new object[] { null, sn.FullName, "?", "?" , bdDetails });
                     
                     var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
-                    cur.Tag = JournalScan.GetPlanetImageNotScanned();
+                    cur.Tag = BodyToImages.GetPlanetImageNotScanned();
                 }
             }
 
