@@ -687,10 +687,11 @@ namespace EDDiscovery.UserControls
                                 (sd.IsStar && IsSet(CtrlList.allstars)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
                                 (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
-
-                            // qualify choice by mapped
-                            surveyordisplay &= !sd.Mapped || IsSet(CtrlList.hideMapped) == false;
+                            
                         }
+
+                        //qualify choice by mapped
+                        surveyordisplay &= !sd.Mapped || IsSet(CtrlList.hideMapped) == false;
 
                         if (surveyordisplay)
                         {
@@ -728,13 +729,14 @@ namespace EDDiscovery.UserControls
                 }       // end of system node look thru
 
                 // we may have searches without scan nodes, so present
-
+                
+                /* This needs to be altered to not trigger on bodies with a scan node, currently it prints the body name and the search name no matter the settings or presence of a scan node
                 foreach (var kvp in searchresults.EmptyIfNull())            // by bodyname
                 {
                     string info = string.Join(", ", kvp.Value.Select(x=>x.FilterPassed).Distinct());
                     string bodyname = kvp.Key;
                     ldrawsystemtext[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
-                }
+                }*/
 
                 // any FSS items, if we have system node
 
