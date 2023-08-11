@@ -1518,12 +1518,12 @@ namespace EDDiscovery.UserControls
                 strarr[1] = kvp.Value.Ident ?? "-";
 
                 piefsdjumps[row] = fsd.Count();
-                strarr[2] = piefsdjumps[row].ToString();
+                strarr[2] = piefsdjumps[row].ToString("N0");
                 piejumpdist[row] = fsd.Sum(x => x.jumpdist);
                 strarr[3] = piejumpdist[row].ToString("N0");
                 piescans[row] = scans.Count();
                 strarr[4] = piescans[row].ToString("N0");
-                strarr[5] = kvp.Value.Died.ToString();
+                strarr[5] = kvp.Value.Died.ToString("N0");
                 StatToDGV(dataGridViewByShip, kvp.Key, strarr, true);
                 row++;
             }
