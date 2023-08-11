@@ -688,10 +688,12 @@ namespace EDDiscovery.UserControls
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
                                 (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
 
-                            // qualify choice by mapped
-                            surveyordisplay &= !sd.Mapped || IsSet(CtrlList.hideMapped) == false;
                         }
 
+                        // qualify choice by mapped - now applies to both discovery searches and surveyor displays
+                        surveyordisplay &= !sd.Mapped || IsSet(CtrlList.hideMapped) == false;
+
+                        // if we do display..
                         if (surveyordisplay)
                         {
                             var silstring = sd.SurveyorInfoLine(sys,
@@ -714,7 +716,6 @@ namespace EDDiscovery.UserControls
 
                             if (searchresultfornode != null) // if search results are set for this body, add text
                             {
-                                searchresults.Remove(sn.FullName);  // we have processed it, finish
                                 string info = string.Join(", ", searchresultfornode.Select(x=>x.FilterPassed).Distinct());
                                 silstring += " : " + info;
                             }
@@ -724,10 +725,14 @@ namespace EDDiscovery.UserControls
                             ldrawsystemvalue += sd.EstimatedValue;
                         }
 
+                        // if we had a search result, remove it from the list as we have considered it above.  Even if we decided not to print it!
+                        if ( searchresultfornode != null )
+                            searchresults.Remove(sn.FullName);  
+
                     }   // end for..
                 }       // end of system node look thru
 
-                // we may have searches without scan nodes, so present
+                // Any searches left print - they may have been triggered outside of a scan node
 
                 foreach (var kvp in searchresults.EmptyIfNull())            // by bodyname
                 {
