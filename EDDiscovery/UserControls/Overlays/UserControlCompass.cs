@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
                 else if ((!IsSet(CtrlList.hidewheninship) && elitemode.InFlight) ||
                          (!IsSet(CtrlList.hidewheninSRV) && elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.SRV ) ||
                          (!IsSet(CtrlList.hidewhenonfoot) && ( elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootPlanet ||
-                                                                elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootInstallationInside ))
+                                                                elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootInstallationInside )) 
                     )
                 {
                 }
@@ -262,7 +262,8 @@ namespace EDDiscovery.UserControls
                     visible = false;    // else off
             }
 
-            if (intransparent && IsSet(CtrlList.hidewithnolatlong) && !position.Location.ValidPosition)     // if hide if no lat/long..
+            if (intransparent && ((IsSet(CtrlList.hidewithnolatlong) && !position.Location.ValidPosition) || // hide if no lat/long..
+                                  (IsSet(CtrlList.hidewithnotarget) && !(numberBoxTargetLatitude.IsValid && numberBoxTargetLongitude.IsValid)))) // or hide if no target
             {
                 visible = false;
             }
@@ -538,6 +539,7 @@ namespace EDDiscovery.UserControls
         {
             autohide,
             hidewithnolatlong,
+            hidewithnotarget,
             hidewhenonfoot,
             hidewheninSRV,
             hidewheninship,
@@ -561,7 +563,8 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when no player Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewithnotarget.ToString(), "Hide when no Lat/Long target set".TxID(EDTx.UserControlCompass_hidewhennotarget)); //tbd
             displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); //tbd
             displayfilter.AddStandardOption(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); //tbd
             displayfilter.AddStandardOption(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship)); //tbd
