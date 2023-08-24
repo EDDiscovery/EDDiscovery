@@ -109,7 +109,7 @@ namespace EDDiscovery
 
                 // we make up the title and refname based on how many previously opened of this type
                 int numopened = usercontrolsforms.CountOf(selected) + 1;
-                string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
+                string windowtitle = poi.WindowTitle + ((numopened > 1) ? $" {numopened}" : "");
                 string refname = poi.WindowRefName + numopened.ToString();
 
                 System.Diagnostics.Trace.WriteLine($"Popout Init UCF `{windowtitle}` rn {refname}");
