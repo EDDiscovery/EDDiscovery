@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2019-2021 Robbyxp1 @ github.com
+ * Copyright 2019-2023 Robbyxp1 @ github.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -23,6 +23,7 @@ using GLOFC.GL4.Shaders.Geo;
 using GLOFC.GL4.Shaders.Stars;
 using GLOFC.GL4.Shaders.Vertex;
 using GLOFC.GL4.ShapeFactory;
+using GLOFC.GL4.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -44,7 +45,7 @@ namespace EDDiscovery.UserControls.Map3D
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1f, 0);
         // 0 = off, bit 0= stars, bit1 = labels
-        public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode==3; } }
+        public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode == 3; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
         public bool DBActive { get { return subthreadsrunning > 0; ; } }
         public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
@@ -53,19 +54,34 @@ namespace EDDiscovery.UserControls.Map3D
         public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
         public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
-        public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
+        public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, Tuple<GLTexture2DArray, long[]> starimagearrayp, float sunsize, GLStorageBlock findbufferresults)
         {
-            sunvertex = new GLPLVertexShaderModelCoordWorldAutoscale(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) },
-                 autoscale: 30, autoscalemin: 1, autoscalemax: 2, useeyedistance:false);
-            sunshader = items.NewShaderPipeline(null, sunvertex, new GLPLStarSurfaceFragmentShader());
+            // globe shape
+            var shape = GLSphereObjectFactory.CreateTexturedSphereFromTriangles(2, sunsize);
 
-            shapebuf = items.NewBuffer(false);
-            var shape = GLSphereObjectFactory.CreateSphereFromTriangles(2, sunsize);
-            shapebuf.AllocateFill(shape);
+            // globe vertex
+            starshapebuf = items.NewBuffer(false);
+            starshapebuf.AllocateFill(shape.Item1);
 
-            GLRenderState starrc = GLRenderState.Tri();     // render is triangles, with no depth test so we always appear
+            // globe text coords
+
+            startexcoordbuf = items.NewBuffer(false);
+            startexcoordbuf.AllocateFill(shape.Item2);
+
+            // a texture 2d array with various star images
+            starimagearray = starimagearrayp;
+
+            // the sun shader
+
+            sunvertexshader = new GLPLVertexShaderModelWorldTextureAutoScale(autoscale: 50, autoscalemin: 1f, autoscalemax: 50f, useeyedistance: false);
+            var sunfragmenttexture = new GLPLFragmentShaderTexture2DWSelectorSunspot();
+            sunshader = new GLShaderPipeline(sunvertexshader, sunfragmenttexture);
+            items.Add(sunshader);
+
+            var starrc = GLRenderState.Tri();     // render is triangles
             starrc.DepthTest = true;
-            starrc.DepthClamp = true;
+            //starrc.DepthClamp = true;
+            GLRenderDataTexture starrdt = new GLRenderDataTexture(starimagearray.Item1);  // RDI is used to attach the texture
 
             var textrc = GLRenderState.Tri();
             textrc.DepthTest = true;
@@ -75,13 +91,16 @@ namespace EDDiscovery.UserControls.Map3D
             textshader = items.NewShaderPipeline(null, new GLPLVertexShaderMatrixTriStripTexture(), new GLPLFragmentShaderTexture2DIndexMulti(0, 0, true, texunitspergroup));
 
             slset = new GLSetOfObjectsWithLabels("SLSet", rObjects, texunitspergroup, 100, 10,
-                                                            sunshader, shapebuf, shape.Length, starrc, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles,
-                                                            textshader, BitMapSize, textrc, SizedInternalFormat.Rgba8);
+                                                            sunshader, starshapebuf, startexcoordbuf, shape.Item1.Length, starrc, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, starrdt,
+                                                            textshader, new Size(160, 16), textrc, SizedInternalFormat.Rgba8);
 
             items.Add(slset);
 
-            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 16);
-            findshader = items.NewShaderPipeline(null, sunvertex, null, null, geofind, null, null, null);
+            // for debug
+           // GLStorageBlock debugbuf = items.NewStorageBlock(5); debugbuf.AllocateBytes(3200000); var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 32768, debugbuffer: debugbuf);
+            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 32768);
+
+            findshader = items.NewShaderPipeline(null, sunvertexshader, null, null, geofind, null, null, null);
         }
 
         public void Start()
@@ -256,8 +275,11 @@ namespace EDDiscovery.UserControls.Map3D
                     Vector4 pos = new Vector4(d.pos.X + d.searchsize / 2, d.pos.Y + d.searchsize / 2, d.pos.Z + d.searchsize / 2, 0);       // from centre of box
 
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                        (x, y, z, startype) => { 
-                            return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); 
+                        (x, y, z, startype) => {
+                            if (NoSunList.Contains(new GalMapObjects.ObjectPosXYZ(x, y, z)))
+                                return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, -1);
+                            else
+                                return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, starimagearray.Item2[(int)startype]); 
                         },
                         (v, s) => { 
                             var dist = (pos - v).Length; return s + $" @ {dist:0.#}ly"; 
@@ -266,11 +288,11 @@ namespace EDDiscovery.UserControls.Map3D
                 else
                 {
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                                            (x, y, z, startype) => { 
-                                                if ( NoSunList.Contains( new GalMapObjects.ObjectPosXYZ(x,y,z)))
+                                            (x, y, z, startype) => {
+                                                if (NoSunList.Contains(new GalMapObjects.ObjectPosXYZ(x, y, z)))
                                                     return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, -1);
                                                 else
-                                                    return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0);
+                                                    return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, starimagearray.Item2[(int)startype]);
                                             },
                                             null);
                 }
@@ -382,31 +404,43 @@ namespace EDDiscovery.UserControls.Map3D
             time = time % rotperiodms;
             float fract = (float)time / rotperiodms;
             float angle = (float)(2 * Math.PI * fract);
-            sunvertex.ModelTranslation = Matrix4.CreateRotationY(-angle);
             float scale = Math.Max(1, Math.Min(4, eyedistance / 5000));
-            //     System.Diagnostics.Debug.WriteLine("Scale {0}", scale);
-            sunvertex.ModelTranslation *= Matrix4.CreateScale(scale);           // scale them a little with distance to pick them out better
+
+            sunvertexshader.ModelTranslation = Matrix4.CreateRotationY(-angle);
+            sunvertexshader.ModelTranslation *= Matrix4.CreateScale(scale);
         }
 
-        // returns name only, and z - if not found z = Max value, null
+        // returns system class but with name only, and z - if not found z = Max value, null
         public SystemClass Find(Point loc, GLRenderState rs, Size viewportsize, out float z)
         {
             z = float.MaxValue;
 
             if (sunshader.Enable)
             {
-                var find = slset.FindBlock(findshader, rs, loc, viewportsize);      // return block tag, index, z
-                if (find != null)
+                var findlist = slset.Find(findshader, rs, loc, viewportsize, 4);
+                if ( findlist != null )
                 {
-                    z = find.Item5;
-                    var userdata = slset.UserData[find.Item1[0].tag] as string[];
-                  //  System.Diagnostics.Debug.WriteLine($"SLSet {find.Item2} {find.Item3} {find.Item4} {find.Item5} {userdata[find.Item2]}");
+                    foreach (var fl in findlist)
+                    {
+                        var udid = slset.FindUserData(fl);
+                        var stringuserdatad = slset.UserData[udid.Item1[0].tag] as string[];
+                        string named = stringuserdatad[udid.Item2];
+                        System.Diagnostics.Debug.WriteLine($"Found {fl} = {named}");
+                    }
 
-                    string name = userdata[find.Item4];
-                    int atsign = name.IndexOf(" @");        // remove any information denoted by space @
-                    if (atsign>=0)
-                        name = name.Substring(0, atsign);
-                    return new SystemClass() { Name = name };       // without position note
+                    System.Diagnostics.Debug.WriteLine($"Galaxy find {findlist.Length}");
+
+                    var udi = slset.FindUserData(findlist[0]);
+                    if (udi != null)
+                    {
+                        var stringuserdata = slset.UserData[udi.Item1[0].tag] as string[];
+                        string name = stringuserdata[udi.Item2];
+                        int atsign = name.IndexOf(" @");        // remove any information denoted by space @
+                        if (atsign >= 0)
+                            name = name.Substring(0, atsign);
+                        z = findlist[0].Item4;
+                        return new SystemClass() { Name = name };       // without position note
+                    }
                 }
             }
 
@@ -417,10 +451,12 @@ namespace EDDiscovery.UserControls.Map3D
 
         private GLSetOfObjectsWithLabels slset; // main class holding drawing
 
+        private GLPLVertexShaderModelWorldTextureAutoScale sunvertexshader;
         private GLShaderPipeline sunshader;     // sun drawer
         private GLShaderPipeline textshader;     // text shader
-        private GLPLVertexShaderModelCoordWorldAutoscale sunvertex;
-        private GLBuffer shapebuf;
+        private GLBuffer starshapebuf;
+        private GLBuffer startexcoordbuf;
+        private Tuple<GLTexture2DArray, long[]> starimagearray;
 
         private GLShaderPipeline findshader;    // find shader for lookups
 

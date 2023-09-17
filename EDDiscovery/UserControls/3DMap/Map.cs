@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2019-2021 Robbyxp1 @ github.com
+ * Copyright 2019-2023 Robbyxp1 @ github.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -344,21 +344,47 @@ namespace EDDiscovery.UserControls.Map3D
 
             GLStorageBlock findresults = items.NewStorageBlock(findblock);
 
+            var starimagearray = new GLTexture2DArray();
+            Bitmap[] starcroppedbitmaps = BodyToImages.StarBitmaps(new RectangleF(16, 16, 68, 68));     // we own these
+            // debug output of what is shown..
+            //for (int b = 0; b < starcroppedbitmaps.Length; b++) starcroppedbitmaps[b].Save(@"c:\code\" + $"star{b}_{Enum.GetName(typeof(EDStar),b)}.bmp", System.Drawing.Imaging.ImageFormat.Png);
+            // textures are all the same size, based on texture[0]. Make sure its the biggest
+            starimagearray.CreateLoadBitmaps(starcroppedbitmaps, SizedInternalFormat.Rgba8, ownbmp: true, texturesize: starcroppedbitmaps[(int)EDStar.O].Size, alignment: ContentAlignment.MiddleCenter);
+            items.Add(starimagearray);
+
+            // control word for each star type. Note we have the ability to cull by star type by setting the control word to -1. bit 0-15 = image, bit 16 = no sunspots.
+            // See LPLFragmentShaderTexture2DWSelectorSunspot (subspot and texture select) and GLPLVertexShaderModelWorldTextureAutoScale (culling)
+            long[] starimagearraycontrolword = new long[starcroppedbitmaps.Length];
+            for (uint i = 0; i < starcroppedbitmaps.Length; i++)
+                starimagearraycontrolword[i] = i;
+            starimagearraycontrolword[(int)EDStar.N] |= 65536;          // don't show sunspots for these
+            starimagearraycontrolword[(int)EDStar.H] |= 65536;
+            starimagearraycontrolword[(int)EDStar.X] |= 65536;
+            starimagearraycontrolword[(int)EDStar.Nebula] |= 65536;
+            starimagearraycontrolword[(int)EDStar.StellarRemnantNebula] |= 65536;
+            starimagearraycontrolword[(int)EDStar.SuperMassiveBlackHole] |= 65536;
+
+            if ((parts & Parts.GalObjects) != 0)
+            {
+                galmapobjects = new GalMapObjects();
+                galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
+            }
+
             float galaxysunsize = 0.5f;
             float travelsunsize = 0.52f;        // slightly bigger hides the double painting
             float tapesize = 0.25f;
             if ((parts & Parts.TravelPath) != 0)
             {
                 travelpath = new TravelPath();
-                travelpath.Start("TP", 200000, travelsunsize, tapesize, findresults, true, items, rObjects);
-                travelpath.CreatePath(parent.DiscoveryForm.History);
+                travelpath.Start("TP", 200000, travelsunsize, tapesize, findresults, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), true, items, rObjects);
+                travelpath.CreatePath(parent.DiscoveryForm.History, galmapobjects?.PositionsWithEnable);
                 travelpath.SetSystem(parent.DiscoveryForm.History.LastSystem);
             }
 
             if ((parts & Parts.NavRoute) != 0)
             {
                 navroute = new TravelPath();
-                navroute.Start("NavRoute", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
+                navroute.Start("NavRoute", 10000, travelsunsize, tapesize, findresults, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), true, items, rObjects);
                 UpdateNavRoute();
             }
 
@@ -380,29 +406,21 @@ namespace EDDiscovery.UserControls.Map3D
                     //    galaxystars.BitMapSize = new Size(galaxystars.BitMapSize.Width, galaxystars.BitMapSize.Height * 2);     // more v height for ly text
                 }
 
-                galaxystars.Create(items, rObjects, galaxysunsize, findresults);
+                galaxystars.Create(items, rObjects, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), galaxysunsize, findresults);
             }
 
             if ((parts & Parts.Route) != 0)
             {
-                routepath = new TravelPath();
-                routepath.Start("Route", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
+                routepath = new TravelPath();       // we have no data here, it needs a push to display this, so we just create
+                routepath.Start("Route", 10000, travelsunsize, tapesize, findresults, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), true, items, rObjects);
             }
-
-            if ((parts & Parts.GalObjects) != 0)
-            {
-                galmapobjects = new GalMapObjects();
-                galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
-                UpdateNoSunList();
-            }
-
 
             System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
 
             // Matrix calc holding transform info
 
             matrixcalc = new GLMatrixCalc();
-            matrixcalc.PerspectiveNearZDistance = 1f;
+            matrixcalc.PerspectiveNearZDistance = 0.1f;
             matrixcalc.PerspectiveFarZDistance = 120000f / lyscale;
             matrixcalc.InPerspectiveMode = true;
             matrixcalc.ResizeViewPort(this, glwfc.Size);          // must establish size before starting
@@ -737,7 +755,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             if (travelpath != null )
             {
-                travelpath.CreatePath(parent.DiscoveryForm.History);
+                travelpath.CreatePath(parent.DiscoveryForm.History, galmapobjects?.PositionsWithEnable);
                 travelpath.SetSystem(parent.DiscoveryForm.History.LastSystem);
             }
 
@@ -751,9 +769,18 @@ namespace EDDiscovery.UserControls.Map3D
                 var route = parent.DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                 if (route?.Route != null) // If a navroute with a valid route..
                 {
-                    var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, null, x.StarPos.X, x.StarPos.Y, x.StarPos.Z)).Cast<ISystem>().ToList();
-                    navroute.CreatePath(syslist, Color.Purple);
+                    var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, null, x.StarPos.X, x.StarPos.Y, x.StarPos.Z, SystemSource.FromJournal, x.EDStarClass)).Cast<ISystem>().ToList();
+                    navroute.CreatePath(syslist, Color.Purple, galmapobjects?.PositionsWithEnable);
                 }
+            }
+        }
+
+        public void UpdateRoutePath()
+        {
+            if ( routepath != null )
+            {
+                var curroute = routepath.CurrentListSystem != null ? routepath.CurrentListSystem : new List<ISystem>();
+                routepath.CreatePath(curroute, Color.Green, galmapobjects?.PositionsWithEnable);
             }
         }
 
@@ -763,18 +790,19 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 if (galaxystars != null)
                 {
-                    galaxystars.NoSunList = galmapobjects.Positions;
                     galaxystars.Clear();
                 }
                 if (travelpath != null)
                 {
-                    travelpath.NoSunList = galmapobjects.Positions;
                     UpdateTravelPath();
+                }
+                if (navroute != null)
+                {
+                    UpdateNavRoute();
                 }
                 if (routepath != null)
                 {
-                    routepath.NoSunList = galmapobjects.Positions;
-                    UpdateNavRoute();
+                    UpdateRoutePath();
                 }
             }
         }
@@ -972,7 +1000,7 @@ namespace EDDiscovery.UserControls.Map3D
         public void SetRoute(List<ISystem> syslist)
         {
             if (routepath != null)
-                routepath.CreatePath(syslist, Color.Green);
+                routepath.CreatePath(syslist, Color.Green, galmapobjects?.PositionsWithEnable);
         }
 
         private void SetEntryText(string text)
@@ -1125,7 +1153,11 @@ namespace EDDiscovery.UserControls.Map3D
             AutoScaleMax = defaults.GetSetting("AUTOSCALE", 30);
 
             if (restorepos)
-                gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
+            {
+                var pos = defaults.GetSetting("POSCAMERA", "");
+                if (pos.HasChars() && !gl3dcontroller.SetPositionCamera(pos))     // go thru gl3dcontroller to set default position, so we reset the model matrix
+                    System.Diagnostics.Trace.WriteLine($"*** NOTE 3DMAPS {pos} did not decode");
+            }
         }
 
         public void SaveState(MapSaver defaults)
@@ -1156,7 +1188,8 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("GALSTARS", GalaxyStars);
             defaults.PutSetting("GALSTARSOBJ", GalaxyStarsMaxObjects);
             defaults.PutSetting("LOCALAREALY", LocalAreaSize);
-            defaults.PutSetting("POSCAMERA", gl3dcontroller.PosCamera.StringPositionCamera);
+            var pos = gl3dcontroller.PosCamera.StringPositionCamera;
+            defaults.PutSetting("POSCAMERA", pos);
             defaults.PutSetting("BKMK", bookmarks?.Enable ?? true);
             defaults.PutSetting("AUTOSCALE", AutoScaleMax);
         }
@@ -1167,36 +1200,63 @@ namespace EDDiscovery.UserControls.Map3D
 
         private Object FindObjectOnMap(Point loc)
         {
-            float hez = float.MaxValue, galobjz = float.MaxValue, sysz = float.MaxValue, routez = float.MaxValue, navroutez = float.MaxValue, bkmz = float.MaxValue;
+            // fixed debug loc = new Point(896, 344);
 
-            var gmo = galmapobjects?.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out galobjz);
-            var bkm = bookmarks?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out bkmz);
-            var he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out hez);     //z are maxvalue if not found, will return an HE since travelpath is made with it
-            var sys = galaxystars?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out sysz);
-            var rte = routepath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out routez);
-            var nav = navroute?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out navroutez);
+            float hez = float.MaxValue, gmoz = float.MaxValue, galstarz = float.MaxValue, routez = float.MaxValue, navz = float.MaxValue, bkmz = float.MaxValue;
 
-            if (gmo != null && galobjz < bkmz && galobjz < hez && galobjz < sysz && galobjz < routez && galobjz < navroutez)      // got gmo, and closer than the others
+            GalacticMapObject gmo = galmapobjects?.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out gmoz);      //z are maxvalue if not found
+            int? bkm = bookmarks?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out bkmz);
+            HistoryEntry he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out hez) as HistoryEntry;
+            ISystem galstar = galaxystars?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out galstarz);
+            SystemClass route = routepath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out routez) as SystemClass;
+            SystemClass nav = navroute?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out navz) as SystemClass;
+
+            if (gmo != null && gmoz < bkmz && gmoz < hez && gmoz < galstarz && gmoz < routez && gmoz < navz)      // got gmo, and closer than the others
+            {
+                System.Diagnostics.Debug.WriteLine($"Find GMO {gmo.Name}");
                 return gmo;
+            }
 
-            if (bkm != null && bkmz < hez && bkmz < sysz && bkmz < routez && bkmz < navroutez)
+            if (bkm != null && bkmz < hez && bkmz < galstarz && bkmz < routez && bkmz < navz)
             {
                 var bks = EliteDangerousCore.DB.GlobalBookMarkList.Instance.Bookmarks;
+                System.Diagnostics.Debug.WriteLine($"Find Bookmark {bks[bkm.Value].Name}");
                 return bks[bkm.Value];
             }
 
-            if (he != null )                            // he is prefered over others since it has more data associated with it
-                return he;
-            if (sys != null)
+            if (galstar != null)        // if its set, find it in the db to give more info on position etc
             {
-                ISystem s = EliteDangerousCore.DB.SystemCache.FindSystem(sys.Name); // look up by name
+                ISystem s = EliteDangerousCore.DB.SystemCache.FindSystem(galstar.Name); // look up by name
                 if (s != null)                          // must normally be found, so return
-                    return s;
+                    galstar = s;
+                else
+                    galstar = null;
             }
-            if (rte != null)
-                return rte;
+
+            // if he set, and less than galstar, or galstar is set and its name is the same as he, use he.  this gives preference to he's over galstar
+            if (he != null && (hez < galstarz || (galstar!=null && he.System.Name == galstar.Name)))
+            {
+                System.Diagnostics.Debug.WriteLine($"Find HE {he.System.Name}");
+                return he;
+            }
+
+            if (galstar != null && galstarz < navz && galstarz < routez)
+            {
+                System.Diagnostics.Debug.WriteLine($"Find Galstar {galstar.Name}");
+                return galstar;
+            }
+
+            if (route != null && routez < navz )
+            {
+                System.Diagnostics.Debug.WriteLine($"Find Route {route.Name}");
+                return route;
+            }
+
             if (nav != null)
+            {
+                System.Diagnostics.Debug.WriteLine($"Find NavRoute {route.Name}");
                 return nav;
+            }
 
             return null;
         }
@@ -1227,6 +1287,12 @@ namespace EDDiscovery.UserControls.Map3D
                 if ( dist>0)
                     info += $"Distance {dist:N1} ly";
             }
+
+            if (he != null)
+                info = info.AppendPrePad($"Star Type {he.System.MainStarType}",Environment.NewLine);
+
+            if (sys != null)
+                info = info.AppendPrePad($"Star Type {sys.MainStarType}",Environment.NewLine);
 
             info = info.AppendPrePad($"Position {pos.X:0.#}, {pos.Y:0.#}, {pos.Z:0.#}" + Environment.NewLine, Environment.NewLine);
 
@@ -1308,7 +1374,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 galaxyrenderable.InstanceCount = volumetricblock.Set(gl3dcontroller.MatrixCalc, volumetricboundingbox, gl3dcontroller.MatrixCalc.InPerspectiveMode ? 50.0f : 0);        // set up the volumentric uniform
                 //System.Diagnostics.Debug.WriteLine("GI {0}", galaxyrendererable.InstanceCount);
-                galaxyshader.SetDistance(gl3dcontroller.MatrixCalc.InPerspectiveMode ? c3d.MatrixCalc.EyeDistance : -1f);
+                galaxyshader.SetFader(gl3dcontroller.MatrixCalc.EyePosition, gl3dcontroller.MatrixCalc.EyeDistance, gl3dcontroller.MatrixCalc.InPerspectiveMode);
             }
 
             if (travelpath != null)

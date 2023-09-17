@@ -61,7 +61,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             Vector3 start;
 
-            float sy = ObjectExtensionsNumbersBool.Clamp(target.Y, -yclamp, yclamp); // need it floating to stop integer giggle at high res
+            float sy = target.Y.Clamp(-yclamp, yclamp); // need it floating to stop integer giggle at high res
 
             if (gridwidth == 10000)
             {

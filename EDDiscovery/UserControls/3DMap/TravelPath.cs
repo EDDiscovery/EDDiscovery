@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2019-2021 Robbyxp1 @ github.com
+ * Copyright 2019-2023 Robbyxp1 @ github.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -54,85 +54,103 @@ namespace EDDiscovery.UserControls.Map3D
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
-        public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
-        public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
-
-        public void Start(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
+        public void Start(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, Tuple<GLTexture2DArray, long[]> starimagearrayp, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
             this.MaxStars = maxstars;
             this.tapesize = tapesize;
             this.sunsize = sunsize;
+            this.starimagearray = starimagearrayp;
 
             // first the tape
+            {
 
-            var tapetex = new GLTexture2D(BaseUtils.Icons.IconSet.GetBitmap("GalMap.chevron"), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);        // tape image
-            items.Add(tapetex);
-            tapetex.SetSamplerMode(OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat, OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat);
+                var tapetex = new GLTexture2D(BaseUtils.Icons.IconSet.GetBitmap("GalMap.chevron"), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);        // tape image
+                items.Add(tapetex);
+                tapetex.SetSamplerMode(OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat, OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat);
 
-            // configure the fragger, set the replacement color, and set the distance where the replacement color is used for all pixels
-            tapefrag = new GLPLFragmentShaderTextureTriStripColorReplace(1, Color.FromArgb(255, 206, 0, 0), 1000);
-            // create the vertex shader with the autoscale required
-            var vert = new GLPLVertexShaderWorldTextureTriStripNorm(100, 1, 10000);
-            vert.SetWidth(tapesize);        // set the nominal tape width
-            
-            tapeshader = new GLShaderPipeline(vert, tapefrag);
-            items.Add(tapeshader);
+                // configure the fragger, set the replacement color, and set the distance where the replacement color is used for all pixels
+                tapefrag = new GLPLFragmentShaderTextureTriStripColorReplace(1, Color.FromArgb(255, 206, 0, 0), 1000);
+                // create the vertex shader with the autoscale required
+                var vert = new GLPLVertexShaderWorldTextureTriStripNorm(100, 1, 10000);
+                vert.SetWidth(tapesize);        // set the nominal tape width
 
-            GLRenderState rts = GLRenderState.Tri(OpenTK.Graphics.OpenGL4.DrawElementsType.UnsignedByte, cullface: false);        // set up a Tri strip, Default primitive restart
-            rts.DepthTest = depthtest;  // no depth test so always appears
+                tapeshader = new GLShaderPipeline(vert, tapefrag);
+                items.Add(tapeshader);
 
-            // now the renderer, set up with the render control, tape as the points, and bind a RenderDataTexture so the texture gets binded each time
+                GLRenderState rts = GLRenderState.Tri(OpenTK.Graphics.OpenGL4.DrawElementsType.UnsignedByte, cullface: false);        // set up a Tri strip, Default primitive restart
+                rts.DepthTest = depthtest;  // no depth test so always appears
 
-            var zerotape = new Vector4[] { Vector4.Zero };      // just use an dummy array to get this going
-            ritape = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rts, zerotape,zerotape, new GLRenderDataTexture(tapetex));
+                // now the renderer, set up with the render control, tape as the points, and bind a RenderDataTexture so the texture gets binded each time
 
-            tapepointbuf = items.LastBuffer();  // keep buffer for refill
+                var zerotape = new Vector4[] { Vector4.Zero };      // just use an dummy array to get this going
+                ritape = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rts, zerotape, zerotape, new GLRenderDataTexture(tapetex));
 
-            ritape.ElementBuffer = items.NewBuffer();       // empty buffer for element index for now
-            ritape.Visible = false;     // until its filled, not visible (important, we don't want render to execute unless its been fully set up below)
+                tapepointbuf = items.LastBuffer();  // keep buffer for refill
 
-            rObjects.Add(tapeshader, name + "-tape", ritape);   // add render to object list
+                ritape.ElementBuffer = items.NewBuffer();       // empty buffer for element index for now
+                ritape.Visible = false;     // until its filled, not visible (important, we don't want render to execute unless its been fully set up below)
+
+                rObjects.Add(tapeshader, name + "-tape", ritape);   // add render to object list
+            }
 
             // now the stars
+            {
+                starposbuf = items.NewBuffer();         // where we hold the vertexes for the suns, used by renderer and by finder
 
-            starposbuf = items.NewBuffer();         // where we hold the vertexes for the suns, used by renderer and by finder
+                // globe shape
+                var shape = GLSphereObjectFactory.CreateTexturedSphereFromTriangles(2, sunsize);
 
-            // the colour index of the stars is selected by the w parameter of the world position vertexes. 
-            // we autoscale to make them bigger at greater distances from eye
-            sunvertex = new GLPLVertexShaderModelCoordWorldAutoscale(new Color[] { Color.Yellow, Color.FromArgb(255, 230, 230, 1) }, 
-                                    autoscale:30, autoscalemin:1,autoscalemax:2, useeyedistance: false);
-            sunshader = new GLShaderPipeline(sunvertex, new GLPLStarSurfaceFragmentShader());
-            items.Add(sunshader);
+                // globe vertex
+                starshapebuf = new GLBuffer();
+                items.Add(starshapebuf);
+                starshapebuf.AllocateFill(shape.Item1);
 
-            var shape = GLSphereObjectFactory.CreateSphereFromTriangles(2, sunsize);
+                // globe tex coord
+                startexcoordbuf = new GLBuffer();
+                items.Add(startexcoordbuf);
+                startexcoordbuf.AllocateFill(shape.Item2);
 
-            GLRenderState rt = GLRenderState.Tri();     // render is triangles
-            rt.DepthTest = depthtest;
-            rt.DepthClamp = true;
-            rt.ClipDistanceEnable =1;       // and we enable clipping and culling
+                // the sun shader
+                sunvertexshader = new GLPLVertexShaderModelWorldTextureAutoScale(autoscale: 30, autoscalemin: 1f, autoscalemax: 2f, useeyedistance: false);
+                var sunfragmenttexture = new GLPLFragmentShaderTexture2DWSelectorSunspot();
+                sunshader = new GLShaderPipeline(sunvertexshader, sunfragmenttexture);
+                items.Add(sunshader);
 
-            renderersun = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, rt, shape, starposbuf, 0, null, 0, 1);
-            renderersun.Visible = false;            // until its filled, not visible
+                GLRenderDataTexture rdt = new GLRenderDataTexture(starimagearray.Item1);  // RDI is used to attach the texture
 
-            rObjects.Add(sunshader, name + "-suns", renderersun);
+                GLRenderState starrc = GLRenderState.Tri();     // render is triangles
+                starrc.DepthTest = depthtest;
+                starrc.DepthClamp = true;
+                starrc.ClipDistanceEnable =1;       // and we enable clipping and culling
 
-            // find compute
+                renderersun = GLRenderableItem.CreateVector4Vector2Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, starrc,
+                                             starshapebuf, 0, shape.Item1.Length,
+                                             startexcoordbuf, 0,
+                                             starposbuf, 0,
+                                             rdt, 
+                                             0,         // don't know at this point the instance count
+                                             1);        // divide starposbuf into instances
 
-            // find shader has obey culling enabled!
-            var geofind = new GLPLGeoShaderFindTriangles(bufferfindresults, 16);
+                renderersun.Visible = false;            // until its filled, not visible
 
-            findshader = items.NewShaderPipeline(null, sunvertex, null, null, geofind, null, null, null);
+                rObjects.Add(sunshader, name + "-suns", renderersun);
+            }
 
-            // we reuse the render state from above for the find, so it enables culling
-            rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, rt, shape, starposbuf, ic: 0, seconddivisor: 1);
+            // find compute, find shader has obey culling enabled!
+            {
+                var geofind = new GLPLGeoShaderFindTriangles(bufferfindresults, 32768);
+                findshader = items.NewShaderPipeline(null, sunvertexshader, null, null, geofind, null, null, null);
+            }
 
             // Sun names, handled by textrenderer
-            textrenderer = new GLBitmaps( name + "-text", rObjects, BitMapSize, depthtest: depthtest, cullface: false);
-            items.Add(textrenderer);
+            {
+                textrenderer = new GLBitmaps(name + "-text", rObjects, BitMapSize, depthtest: depthtest, cullface: false);
+                items.Add(textrenderer);
+            }
         }
 
         // tested to 50K+ stars
-        public void CreatePath(HistoryList hl)
+        public void CreatePath(HistoryList hl, HashSet<GalMapObjects.ObjectPosXYZ> nosunlist)
         {
             lasthl = hl;
             ISystem lastone = CurrentPos != -1 && CurrentPos < currentfilteredlistsys.Count ? currentfilteredlistsys[CurrentPos] : null;  // see if lastpos is there, and store it
@@ -147,9 +165,10 @@ namespace EDDiscovery.UserControls.Map3D
 
             CurrentPos = lastone == null ? -1 : currentfilteredlistsys.IndexOf(lastone);        // may be -1, may have been removed
 
-            CreatePathInt();
+            CreatePathInt(null,nosunlist);
         }
-        public void CreatePath(List<ISystem> syslist, Color tapecolour)
+
+        public void CreatePath(List<ISystem> syslist, Color tapecolour, HashSet<GalMapObjects.ObjectPosXYZ> nosunlist)
         {
             lasthl = null;
             ISystem lastone = CurrentPos != -1 && CurrentPos < currentfilteredlistsys.Count ? currentfilteredlistsys[CurrentPos] : null;  // see if lastpos is there, and store it
@@ -160,12 +179,11 @@ namespace EDDiscovery.UserControls.Map3D
 
             CurrentPos = lastone == null ? -1 : currentfilteredlistsys.IndexOf(lastone);        // may be -1, may have been removed
 
-            CreatePathInt(tapecolour);
+            CreatePathInt(tapecolour,nosunlist);
         }
 
-
-        // currentfilteredlist set, go..
-        private void CreatePathInt(Color? tapepathdefault = null)
+        // currentfilteredlist set, go.
+        private void CreatePathInt(Color? tapepathdefault = null, HashSet<GalMapObjects.ObjectPosXYZ> nosunlist = null)
         {
             if (!tapeshader.Compiled || !sunshader.Compiled)
                 return;
@@ -173,7 +191,7 @@ namespace EDDiscovery.UserControls.Map3D
             // Note W here selects the colour index of the stars, 0 = first, 1 = second etc
 
             Vector4[] positionsv4 = currentfilteredlistsys.Select(sys => new Vector4((float)sys.X, (float)sys.Y, (float)sys.Z,
-                            NoSunList.Contains(new GalMapObjects.ObjectPosXYZ(sys.X, sys.Y, sys.Z)) ? -1 : 0)).ToArray();
+                            (nosunlist?.Contains(new GalMapObjects.ObjectPosXYZ(sys.X, sys.Y, sys.Z))??false) ? -1 : starimagearray.Item2[(int)sys.MainStarType])).ToArray();
 
             Color[] color = new Color[currentfilteredlistsys.Count];
 
@@ -214,8 +232,6 @@ namespace EDDiscovery.UserControls.Map3D
             renderersun.InstanceCount = positionsv4.Length; // update the number of suns to draw.
             renderersun.Visible = positionsv4.Length > 0;       // only visible if positions..
 
-            rifind.InstanceCount = positionsv4.Length;  // update the find list
-
             // name bitmaps
 
             HashSet<object> hashset = new HashSet<object>(currentfilteredlistsys);            // so it can find it quickly
@@ -244,13 +260,12 @@ namespace EDDiscovery.UserControls.Map3D
                 time = time % rotperiodms;
                 float fract = (float)time / rotperiodms;
                 float angle = (float)(2 * Math.PI * fract);
-                sunvertex.ModelTranslation = Matrix4.CreateRotationY(-angle);
+                float scale = Math.Max(1, Math.Min(4, eyedistance / 5000));
+
+                sunvertexshader.ModelTranslation = Matrix4.CreateRotationY(-angle);
+                sunvertexshader.ModelTranslation *= Matrix4.CreateScale(scale);           // scale them a little with distance to pick them out better
 
                 const int pathperiodms = 10000;
-
-                float scale = Math.Max(1, Math.Min(4, eyedistance / 5000));
-                //System.Diagnostics.Debug.WriteLine("Scale {0}", scale);
-                sunvertex.ModelTranslation *= Matrix4.CreateScale(scale);           // scale them a little with distance to pick them out better
                 tapefrag.TexOffset = new Vector2(-(float)(time % pathperiodms) / pathperiodms, 0);
             }
         }
@@ -265,7 +280,7 @@ namespace EDDiscovery.UserControls.Map3D
                 var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
                 geo.SetScreenCoords(viewportloc, viewportsize);
 
-                rifind.Execute(findshader, state); // execute, discard
+                renderersun.Execute(findshader, state); // execute, discard
 
                 var res = geo.GetResult();
                 if (res != null)
@@ -345,14 +360,16 @@ namespace EDDiscovery.UserControls.Map3D
         private GLRenderableItem ritape;
 
         private GLShaderPipeline sunshader;
-        private GLPLVertexShaderModelCoordWorldAutoscale sunvertex;
+        private GLPLVertexShaderModelWorldTextureAutoScale sunvertexshader;
+        private GLBuffer starshapebuf;
+        private GLBuffer startexcoordbuf;
         private GLBuffer starposbuf;
+        private Tuple<GLTexture2DArray, long[]> starimagearray;
         private GLRenderableItem renderersun;
 
         private GLBitmaps textrenderer;     // star names
 
         private GLShaderPipeline findshader;        // finder
-        private GLRenderableItem rifind;
 
         private float tapesize;
         private float sunsize;

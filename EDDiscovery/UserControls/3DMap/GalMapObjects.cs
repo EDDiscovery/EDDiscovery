@@ -41,7 +41,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         public bool Enable { get { return objectshader.Enable; } }
 
-        public HashSet<ObjectPosXYZ> Positions { get; private set; } = new HashSet<ObjectPosXYZ>();     // positions of gal map objects
+        public HashSet<ObjectPosXYZ> Positions { get; private set; } = new HashSet<ObjectPosXYZ>();     // positions of gal map objects enabled - even if main shader is off
+        public HashSet<ObjectPosXYZ> PositionsWithEnable { get { return Enable ? Positions : new HashSet<ObjectPosXYZ>(); } }     // positions of gal map objects 
 
         // all enable set functions return a list of current gal objects positions
         public void SetShaderEnable(bool enable)
@@ -49,8 +50,6 @@ namespace EDDiscovery.UserControls.Map3D
             textrenderer.Enable = objectshader.Enable = enable;
             if (enable)
                 UpdateEnables();
-            else
-                Positions = new HashSet<ObjectPosXYZ>();
         }
         public void SetGalObjectTypeEnable(string id, bool state) { State[id] = state; UpdateEnables(); }
         public void SetAllEnables(string settings)
@@ -164,7 +163,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // add a find shader to look them up
 
-            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 16);        // pass thru normal vert/tcs/tes then to geoshader for results
+            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 32768);        // pass thru normal vert/tcs/tes then to geoshader for results
             findshader = items.NewShaderPipeline(null, vert, tcs, tes, geofind, null, null, null);
 
             // hook to modelworldbuffer, at modelpos and worldpos.  UpdateEnables will fill in instance count
@@ -266,11 +265,13 @@ namespace EDDiscovery.UserControls.Map3D
                 var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
                 geo.SetScreenCoords(viewportloc, viewportsize);
 
+                System.Diagnostics.Debug.WriteLine($"Execute gal obj find");
                 rifind.Execute(findshader, state); // execute, discard
 
                 var res = geo.GetResult();
                 if (res != null)
                 {
+                    System.Diagnostics.Debug.WriteLine($"gal obj find {res.Length}");
                     var renderablegalmapobjects = galmap.VisibleMapObjects; // list of displayable entries
                     int index = 0;
 

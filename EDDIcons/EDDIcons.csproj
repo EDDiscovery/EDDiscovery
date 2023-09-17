@@ -1081,6 +1081,8 @@
     <EmbeddedResource Include="Controls\NewRegion.png" />
     <EmbeddedResource Include="Controls\FlagsRedGreen.png" />
     <EmbeddedResource Include="Controls\Paste.png" />
+    <EmbeddedResource Include="Bodies\Stars\X.png" />
+    <EmbeddedResource Include="Bodies\RoguePlanet.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

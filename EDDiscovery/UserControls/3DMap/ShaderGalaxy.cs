@@ -15,7 +15,9 @@
 using GLOFC.GL4;
 using GLOFC.GL4.Shaders;
 using GLOFC.GL4.Shaders.Volumetric;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace EDDiscovery.UserControls.Map3D
 {
@@ -35,11 +37,11 @@ layout (binding=galtexbinding) uniform sampler2D tex;
 layout (binding=noisebinding) uniform sampler3D noise;     
 layout (binding=gaussiandistbinding) uniform sampler1D gaussian;  
 
-layout (location=10) uniform float fadeout;
+layout (location=10) uniform float fadein;
 
 void main(void)
 {
-    if ( fadeout < 0 )
+    if ( fadein < 0 )
     {
         vec4 c = texture(tex,vec2(vs_texcoord.x,vs_texcoord.z)); 
         color = vec4(c.xyz,1.0);     
@@ -66,7 +68,7 @@ void main(void)
                     float nv = texture(noise,vs_texcoord.xyz).x;
 
                     float alpha = min(max(brightness,0.5),(brightness>0.05) ? 0.3 : brightness);    // beware the 8 bit alpha (0.0039 per bit).
-                    color = vec4(c.xyz*(1.0+nv*0.2) * fadeout,alpha*(1.0+nv*0.1) * fadeout);        // noise adjusting brightness and alpha a little
+                    color = vec4(c.xyz*(1.0+nv*0.2) * fadein,alpha*(1.0+nv*0.1) * fadein);        // noise adjusting brightness and alpha a little
                 }
                 else 
                     discard;
@@ -88,14 +90,21 @@ void main(void)
 
         // use -1 to indicate no fade/alpha out
 
-        public void SetFader(float eyedist)
+        public void SetFader(Vector3 eyepos, float eyedistance, bool perspective)
         {
-            if (Compiled)
+            if (!perspective)
             {
-                float dist = 3000f;
-                float fade = (eyedist < 0) ? -1 : eyedist > dist ? 1.0f : eyedist / dist;
-                // System.Diagnostics.Debug.WriteLine("Fade out " + fade);
-                GL.ProgramUniform1(this.Id, 10, fade);
+                GL.ProgramUniform1(this.Id, 10, -1);
+            }
+            else
+            {
+                float disttocentre = (float)Math.Sqrt(eyepos.X * eyepos.X + (eyepos.Z - 26100) * (eyepos.Z - 26100));
+                float centrev = disttocentre > 30000 ? (disttocentre - 30000) / 5000.0f : 0;         // increases as distance incr
+                float vertr = eyepos.Y > 1500 ? (eyepos.Y - 1500) / 500 : 0;                    // increases as vert incr
+                float eyedr = (eyedistance > 1000) ? (eyedistance - 1000) / 500 : 0;
+                float value = Math.Min(centrev + vertr + eyedr, 1);
+                // System.Diagnostics.Debug.WriteLine($"Galbrightness {eyepos} {eyedistance} {disttocentre} : {centrev} {vertr} {eyedr} = {value}");
+                GL.ProgramUniform1(this.Id, 10, value);
             }
         }
     }
@@ -110,14 +119,12 @@ void main(void)
             Add(new GLPLGeometricShaderVolumetric(volumetricbinding), OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
             frag = new GalaxyFragmentPipeline(galtexbinding,noisebinding, gaussiandistbinding);
             Add(frag, OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader);
-            frag.SetFader(1000000.0f);
         }
 
-        public void SetDistance(float eyedist)
+        public void SetFader(Vector3 eyepos, float eyedistance, bool perspective)
         {
-            frag.SetFader(eyedist);
+            frag.SetFader(eyepos, eyedistance, perspective);
         }
-       
     }
 
 }

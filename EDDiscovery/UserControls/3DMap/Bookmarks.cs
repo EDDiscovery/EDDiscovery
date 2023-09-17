@@ -68,7 +68,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             rObjects.Add(objectshader, "bookmarks", ridisplay);
 
-            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 16);//, forwardfacing:false);
+            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 32768);//, forwardfacing:false);
             findshader = items.NewShaderPipeline(null, vert, null, null, geofind, null, null, null);
 
             // hook to modelworldbuffer, at modelpos and worldpos.  UpdateEnables will fill in instance count
