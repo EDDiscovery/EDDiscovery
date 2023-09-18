@@ -70,7 +70,7 @@ namespace EDDiscovery
             {
                 DateTime edsmdatetime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
 
-                bool spansh = SystemsDatabase.Instance.GetDBSource().Equals("SPANSH");
+                bool spansh = SystemsDatabase.Instance.DBSource.Equals("SPANSH");
                 var delta = DateTime.UtcNow.Subtract(edsmdatetime).TotalDays;
 
                 if (delta >= (spansh ? ForceEDSMFullDownloadDays : ForceSpanshFullDownloadDays))
@@ -83,7 +83,7 @@ namespace EDDiscovery
                 {
                     LogLine(string.Format("System data download from {0} required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), SystemsDatabase.Instance.GetDBSource()));
+                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), SystemsDatabase.Instance.DBSource));
                 }
             }
             else
@@ -112,7 +112,7 @@ namespace EDDiscovery
 
                     syncstate.ClearCounters();
 
-                    string sourcetype = SystemsDatabase.Instance.GetDBSource();
+                    string sourcetype = SystemsDatabase.Instance.DBSource;
                     bool spansh = sourcetype.Equals("SPANSH");
 
                     if (syncstate.perform_fullsync)

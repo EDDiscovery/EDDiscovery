@@ -62,7 +62,6 @@ namespace EDDiscovery.UserControls
 
             dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
 
-            DiscoveryForm.OnNewCalculatedRoute += discoveryForm_OnNewCalculatedRoute;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNoteChanged += Discoveryform_OnNoteChanged;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
@@ -125,7 +124,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridView,"V2");
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
 
-            DiscoveryForm.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNoteChanged -= Discoveryform_OnNoteChanged;
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
@@ -147,15 +145,11 @@ namespace EDDiscovery.UserControls
                 UpdateAllRows();
         }
 
-        private void discoveryForm_OnNewCalculatedRoute(List<ISystem> obj) // called when a new route is calculated
-        {
-            latestplottedroute = obj;
-        }
-
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             var push = actionobj as UserControlCommonBase.PushStars;
             var action = actionobj as UserControlCommonBase.PanelAction;
+            var pushlist = actionobj as UserControlCommonBase.PushRouteList;
             if (push != null)
             {
                 if (push.PushTo == PushStars.PushType.Expedition)
@@ -180,6 +174,11 @@ namespace EDDiscovery.UserControls
                     return true;
                 }
             }
+            else if ( pushlist != null)
+            { 
+                latestplottedroute = pushlist.Systems;
+            }
+
 
             return false;
         }

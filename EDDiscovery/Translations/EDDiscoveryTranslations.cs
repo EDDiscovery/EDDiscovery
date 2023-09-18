@@ -1183,6 +1183,7 @@ namespace EDDiscovery
 
         UserControlRoute_SystemCol, // Column Header 'System'
         UserControlRoute_DistanceCol, // Column Header 'Distance'
+        UserControlRoute_StarClassCol, // Column Header 'Star Class'
         UserControlRoute_WayPointDistCol, // Column Header 'Dist. Waypoint'
         UserControlRoute_DeviationCol, // Column Header 'Deviation'
         UserControlRoute_checkBox_FsdBoost, // Control 'Use Boosts'

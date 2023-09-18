@@ -178,6 +178,10 @@ namespace EDDiscovery.UserControls
         //      class PushResourceWantedList - synthesis/engineering pushes a list of wants to the resources panel
         //           Send to everyone
         //           Panel which grabs it should return true
+        //
+        //      class PushRouteList - route panel is pushing a list of systems calculated
+        //           Send to everyone
+        //           No Panel should grab it
 
         public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
         public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
@@ -199,6 +203,10 @@ namespace EDDiscovery.UserControls
         {
             public System.Collections.Generic.Dictionary<EliteDangerousCore.MaterialCommodityMicroResourceType, int> Resources { get; set; }      // push type and amount
         }
+        public class PushRouteList                  // use to push star list from route panel
+        {
+            public System.Collections.Generic.List<EliteDangerousCore.ISystem> Systems { get; set; }
+        };
 
         public class TravelHistoryStartStopChanged { }  // push start/stop has been changed
 

@@ -48,11 +48,11 @@ namespace EDDiscovery.UserControls.Map3D
         public bool TravelPathStartDateEnable { get; set; } = false;
         public bool TravelPathEndDateEnable { get; set; } = false;
         public Font Font { get; set; } = new Font("Arial", 8.5f);
-        public Size BitMapSize { get; set; } = new Size(96, 30);
         public Color ForeText { get; set; } = Color.White;
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
+        public Size TextBitMapSize { get; set; } = new Size(160, 16);
 
         public void Start(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, Tuple<GLTexture2DArray, long[]> starimagearrayp, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls.Map3D
                 startexcoordbuf.AllocateFill(shape.Item2);
 
                 // the sun shader
-                sunvertexshader = new GLPLVertexShaderModelWorldTextureAutoScale(autoscale: 30, autoscalemin: 1f, autoscalemax: 2f, useeyedistance: false);
+                sunvertexshader = new GLPLVertexShaderModelWorldTextureAutoScale(autoscale: 50, autoscalemin: 1f, autoscalemax: 50f, useeyedistance: false);
                 var sunfragmenttexture = new GLPLFragmentShaderTexture2DWSelectorSunspot();
                 sunshader = new GLShaderPipeline(sunvertexshader, sunfragmenttexture);
                 items.Add(sunshader);
@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // Sun names, handled by textrenderer
             {
-                textrenderer = new GLBitmaps(name + "-text", rObjects, BitMapSize, depthtest: depthtest, cullface: false);
+                textrenderer = new GLBitmaps(name + "-text", rObjects, TextBitMapSize, depthtest: depthtest, cullface: false);
                 items.Add(textrenderer);
             }
         }

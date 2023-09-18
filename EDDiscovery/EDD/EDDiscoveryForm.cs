@@ -65,7 +65,6 @@ namespace EDDiscovery
         #region Callbacks from us
         public event Action<Object> OnNewTarget;
         public event Action<Object, HistoryEntry> OnNoteChanged;        // UI.Note has been updated attached to this note
-        public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action OnAddOnsChanged;                            // add on changed
         public event Action OnPanelAdded;                               // panel was added by a user DLL
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM journal sync has completed 

@@ -614,6 +614,7 @@ SECTION UserControlRoute
 
 .SystemCol: "System" @
 .DistanceCol: "Distance" @
+.StarClassCol: "Star Class" @
 .WayPointDistCol: "Dist. Waypoint" @
 .DeviationCol: "Deviation" @
 .buttonExtTravelTo: "History" @

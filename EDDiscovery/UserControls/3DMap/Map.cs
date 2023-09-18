@@ -370,12 +370,22 @@ namespace EDDiscovery.UserControls.Map3D
                 galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
             }
 
-            float galaxysunsize = 0.5f;
-            float travelsunsize = 0.52f;        // slightly bigger hides the double painting
+            float galaxysunsize = 0.4f;
+            float travelsunsize = 0.5f;        // slightly bigger hides the double painting
+            float labelw = galaxysunsize * 10;
+            float labelh = galaxysunsize * 10 / 6;
+            float labelhoff = -(Math.Max(travelsunsize,galaxysunsize)/2.0f + labelh / 2.0f);
+            Size labelbitmapsize = new Size(160, 16);
+            Font labelfont = new Font("Arial", 8.25f);
             float tapesize = 0.25f;
+
             if ((parts & Parts.TravelPath) != 0)
             {
                 travelpath = new TravelPath();
+                travelpath.TextBitMapSize = labelbitmapsize;
+                travelpath.LabelSize = new Vector3(labelw, 0, labelh);
+                travelpath.LabelOffset = new Vector3(0, labelhoff, 0);
+                travelpath.Font = labelfont;
                 travelpath.Start("TP", 200000, travelsunsize, tapesize, findresults, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), true, items, rObjects);
                 travelpath.CreatePath(parent.DiscoveryForm.History, galmapobjects?.PositionsWithEnable);
                 travelpath.SetSystem(parent.DiscoveryForm.History.LastSystem);
@@ -384,6 +394,10 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.NavRoute) != 0)
             {
                 navroute = new TravelPath();
+                navroute.TextBitMapSize = labelbitmapsize;
+                navroute.LabelSize = new Vector3(labelw, 0, labelh);
+                navroute.LabelOffset = new Vector3(0, labelhoff, 0);
+                navroute.Font = labelfont;
                 navroute.Start("NavRoute", 10000, travelsunsize, tapesize, findresults, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), true, items, rObjects);
                 UpdateNavRoute();
             }
@@ -406,12 +420,22 @@ namespace EDDiscovery.UserControls.Map3D
                     //    galaxystars.BitMapSize = new Size(galaxystars.BitMapSize.Width, galaxystars.BitMapSize.Height * 2);     // more v height for ly text
                 }
 
+                galaxystars.TextBitMapSize = labelbitmapsize;
+                galaxystars.LabelSize = new Vector3(labelw, 0, labelh );
+                galaxystars.LabelOffset = new Vector3(0,labelhoff,0);
+                galaxystars.Font = labelfont;
+
                 galaxystars.Create(items, rObjects, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), galaxysunsize, findresults);
             }
 
             if ((parts & Parts.Route) != 0)
             {
                 routepath = new TravelPath();       // we have no data here, it needs a push to display this, so we just create
+                routepath.TextBitMapSize = labelbitmapsize;
+                routepath.LabelSize = new Vector3(labelw, 0, labelh);
+                routepath.LabelOffset = new Vector3(0, labelhoff, 0);
+                routepath.Font = labelfont;
+
                 routepath.Start("Route", 10000, travelsunsize, tapesize, findresults, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), true, items, rObjects);
             }
 
@@ -1288,11 +1312,11 @@ namespace EDDiscovery.UserControls.Map3D
                     info += $"Distance {dist:N1} ly";
             }
 
-            if (he != null)
-                info = info.AppendPrePad($"Star Type {he.System.MainStarType}",Environment.NewLine);
+            if (he != null && he.System.MainStarType != EDStar.Unknown)
+                info = info.AppendPrePad($"Star Type {Bodies.StarName(he.System.MainStarType)}",Environment.NewLine);
 
-            if (sys != null)
-                info = info.AppendPrePad($"Star Type {sys.MainStarType}",Environment.NewLine);
+            if (sys != null && sys.MainStarType != EDStar.Unknown)
+                info = info.AppendPrePad($"Star Type {Bodies.StarName(sys.MainStarType)}",Environment.NewLine);
 
             info = info.AppendPrePad($"Position {pos.X:0.#}, {pos.Y:0.#}, {pos.Z:0.#}" + Environment.NewLine, Environment.NewLine);
 

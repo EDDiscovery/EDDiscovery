@@ -76,6 +76,7 @@
             this.XCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.YCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ZCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StarClassCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
@@ -347,6 +348,7 @@
             this.textBox_From.AutoCompleteCommentMarker = null;
             this.textBox_From.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_From.AutoCompleteTimeout = 200;
             this.textBox_From.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_From.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_From.BorderColorScaling = 0.5F;
@@ -416,6 +418,7 @@
             this.textBox_To.AutoCompleteCommentMarker = null;
             this.textBox_To.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_To.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_To.AutoCompleteTimeout = 200;
             this.textBox_To.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_To.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_To.BorderColorScaling = 0.5F;
@@ -780,6 +783,7 @@
             // 
             // vScrollBarCustom1
             // 
+            this.vScrollBarCustom1.AlwaysHideScrollBar = false;
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
@@ -808,11 +812,13 @@
             // 
             // dataGridViewRoute
             // 
+            this.dataGridViewRoute.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewRoute.AllowUserToAddRows = false;
             this.dataGridViewRoute.AllowUserToDeleteRows = false;
             this.dataGridViewRoute.AllowUserToResizeRows = false;
             this.dataGridViewRoute.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewRoute.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewRoute.AutoSortByColumnName = false;
             this.dataGridViewRoute.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewRoute.ColumnReorder = true;
             this.dataGridViewRoute.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -821,11 +827,13 @@
             this.XCol,
             this.YCol,
             this.ZCol,
+            this.StarClassCol,
             this.WayPointDistCol,
             this.DeviationCol});
             this.dataGridViewRoute.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewRoute.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRoute.Name = "dataGridViewRoute";
+            this.dataGridViewRoute.PerColumnWordWrapControl = true;
             this.dataGridViewRoute.ReadOnly = true;
             this.dataGridViewRoute.RowHeaderMenuStrip = null;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -843,6 +851,7 @@
             this.dataGridViewRoute.TabIndex = 1;
             this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
             this.dataGridViewRoute.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellDoubleClick);
+            this.dataGridViewRoute.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewRoute_SortCompare);
             this.dataGridViewRoute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRoute_MouseDown);
             // 
             // SystemCol
@@ -876,6 +885,12 @@
             this.ZCol.HeaderText = "Z";
             this.ZCol.Name = "ZCol";
             this.ZCol.ReadOnly = true;
+            // 
+            // StarClassCol
+            // 
+            this.StarClassCol.HeaderText = "Star Class";
+            this.StarClassCol.Name = "StarClassCol";
+            this.StarClassCol.ReadOnly = true;
             // 
             // WayPointDistCol
             // 
@@ -942,13 +957,6 @@
         private BaseUtils.DataGridViewColumnControl dataGridViewRoute;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SystemCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DistanceCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn XCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn YCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ZCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn WayPointDistCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DeviationCol;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showInEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
@@ -956,5 +964,13 @@
         private ExtendedControls.ExtCheckBox checkBox_FsdBoost;
         private System.Windows.Forms.ToolStripMenuItem showScanToolStripMenuItem;
         private ExtendedControls.ExtCheckBox checkBoxEDSM;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SystemCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DistanceCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn XCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn YCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ZCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StarClassCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn WayPointDistCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DeviationCol;
     }
 }

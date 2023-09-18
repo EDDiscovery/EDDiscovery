@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
             tm.Start();
 
             extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
-            checkBoxCustomEDSMDownload.Text += " " + SystemsDatabase.Instance.GetDBSource();
+            checkBoxCustomEDSMDownload.Text += " " + SystemsDatabase.Instance.DBSource;
         }
 
         public void ConfigureHelpButton(ExtendedControls.ExtButtonDrawn p, string tag)

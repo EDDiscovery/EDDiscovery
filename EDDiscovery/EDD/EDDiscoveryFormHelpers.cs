@@ -41,11 +41,6 @@ namespace EDDiscovery
             OnNoteChanged?.Invoke(sender, snc);
         }
 
-        public void NewCalculatedRoute(List<ISystem> list)
-        {
-            OnNewCalculatedRoute?.Invoke(list);
-        }
-
         #endregion
 
         #region webserver

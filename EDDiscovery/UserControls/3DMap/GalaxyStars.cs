@@ -39,17 +39,18 @@ namespace EDDiscovery.UserControls.Map3D
         private Vector3 InvalidPos = new Vector3(-1000000, -1000000, -1000000);
         public Vector3 CurrentPos { get; set; } = new Vector3(-1000000, -1000000, -1000000);
         public Font Font { get; set; } = new Font("Arial", 8.5f);
-        public Size BitMapSize { get; set; } = new Size(96, 30);        // 30 is enough for two lines at 8.5f
         public Color ForeText { get; set; } = Color.FromArgb(255,220,220,220);
         public Color BackText { get; set; } = Color.Transparent;
-        public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
+        public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f / 4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1f, 0);
+        public Size TextBitMapSize { get; set; } = new Size(160, 16);
         // 0 = off, bit 0= stars, bit1 = labels
         public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode == 3; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
         public bool DBActive { get { return subthreadsrunning > 0; ; } }
         public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
         public int SectorSize { get; set; } = 100;
+
 
         public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
         public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
@@ -92,7 +93,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             slset = new GLSetOfObjectsWithLabels("SLSet", rObjects, texunitspergroup, 100, 10,
                                                             sunshader, starshapebuf, startexcoordbuf, shape.Item1.Length, starrc, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, starrdt,
-                                                            textshader, new Size(160, 16), textrc, SizedInternalFormat.Rgba8);
+                                                            textshader, TextBitMapSize, textrc, SizedInternalFormat.Rgba8);
 
             items.Add(slset);
 
