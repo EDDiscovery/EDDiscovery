@@ -1278,7 +1278,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (nav != null)
             {
-                System.Diagnostics.Debug.WriteLine($"Find NavRoute {route.Name}");
+                System.Diagnostics.Debug.WriteLine($"Find NavRoute {nav.Name}");
                 return nav;
             }
 
