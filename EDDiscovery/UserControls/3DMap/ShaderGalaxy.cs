@@ -94,7 +94,7 @@ void main(void)
         {
             if (!perspective)
             {
-                GL.ProgramUniform1(this.Id, 10, -1);
+                GL.ProgramUniform1(this.Id, 10, -1f);       // must be float, as GL knows its a float. if you use -1, it programs an INT and you get an error
             }
             else
             {

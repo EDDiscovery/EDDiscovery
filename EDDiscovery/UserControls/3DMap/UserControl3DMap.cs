@@ -155,6 +155,11 @@ namespace EDDiscovery.UserControls
             {
                 uc3d.PutSetting(id, value);
             }
+
+            public void DeleteSetting(string id)
+            {
+                uc3d.DeleteSetting(id);
+            }
         }
 
     }

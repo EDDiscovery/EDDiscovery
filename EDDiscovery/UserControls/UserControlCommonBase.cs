@@ -455,8 +455,15 @@ namespace EDDiscovery.UserControls
         public bool PutSetting<T>(string itemname, T value, bool global = false)
         {
             string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
-           // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
+            // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
             return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
+        }
+
+        public bool DeleteSetting(string itemname, bool global = false)
+        {
+            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
+            return EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey(name);
         }
 
         public string GetBoolSettingsAsString(params string[] paras)      // make up a bool semicolon control string from items

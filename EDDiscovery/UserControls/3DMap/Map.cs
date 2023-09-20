@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls.Map3D
     {
         void PutSetting<T>(string id, T value);
         T GetSetting<T>(string id, T defaultvalue);
+        void DeleteSetting(string id);
     }
 
     public class Map

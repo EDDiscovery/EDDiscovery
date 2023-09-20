@@ -135,7 +135,7 @@ namespace EDDiscovery
 #if DEBUGLOAD
                                 bool success = true;
                                 deletefile = false;
-                                downloadfile = spansh ? @"c:\code\examples\edsm\systems_6months.json" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
+                                downloadfile = spansh ? @"c:\code\spanshsystems.json.gz" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
 #else
                                 bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, reportProgress:ReportDownloadProgress);
 #endif
