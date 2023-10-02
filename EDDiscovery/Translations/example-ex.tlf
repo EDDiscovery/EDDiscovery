@@ -271,6 +271,7 @@ SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." @
 .EDSM: "Get galactic mapping from EDSM." @
+.GEC: "Get galactic mapping from GEC." @
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." @
 .RTH: "Reading travel history" @
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." @

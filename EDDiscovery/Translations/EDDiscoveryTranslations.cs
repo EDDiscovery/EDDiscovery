@@ -159,6 +159,7 @@ namespace EDDiscovery
 
         EDDiscoveryController_CD, // Closing down, please wait..
         EDDiscoveryController_EDSM, // Get galactic mapping from EDSM.
+        EDDiscoveryController_GEC, // Get galactic mapping from GEC.
         EDDiscoveryController_LN, // Loaded Notes, Bookmarks and Galactic mapping.
         EDDiscoveryController_RTH, // Reading travel history
         EDDiscoveryController_SyncEDSM, // Please continue running ED Discovery until refresh is complete.

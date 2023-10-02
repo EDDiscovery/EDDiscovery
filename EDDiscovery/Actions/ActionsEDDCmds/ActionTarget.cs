@@ -116,11 +116,11 @@ namespace EDDiscovery.Actions
                             }
                             else if (cmdname.Equals("GMO", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.GalacticMapping.Find(name, true);
+                                EliteDangerousCore.GMO.GalacticMapObject gmo = discoveryform.GalacticMapping.Find(name, true);
 
                                 if (gmo != null)
                                 {
-                                    TargetClass.SetTargetOnGMO("G:" + gmo.Name, gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
+                                    TargetClass.SetTargetOnGMO("G:" + gmo.NameList, gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
                                     discoveryform.NewTargetSet(this);
                                 }
 

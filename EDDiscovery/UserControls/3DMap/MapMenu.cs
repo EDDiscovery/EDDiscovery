@@ -12,7 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-using EliteDangerousCore.EDSM;
+using EliteDangerousCore.GMO;
 using GLOFC.GL4.Controls;
 using OpenTK;
 using QuickJSON;

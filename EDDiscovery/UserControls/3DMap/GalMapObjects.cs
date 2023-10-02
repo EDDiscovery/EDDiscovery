@@ -12,8 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-using EliteDangerousCore.EDSM;
-using GLOFC;
+using EliteDangerousCore.GMO;
 using GLOFC.GL4;
 using GLOFC.GL4.Bitmaps;
 using GLOFC.GL4.Shaders;
@@ -213,7 +212,7 @@ namespace EDDiscovery.UserControls.Map3D
                     posset.Add(pos);
                     //System.Diagnostics.Debug.WriteLine($"{renderablegalmapobjects[i].name} at {pos} {offset}");
 
-                    textrenderer.Add(o.ID, o.Name, Font,
+                    textrenderer.Add(o.ID, o.NameList, Font,
                         Color.White, Color.FromArgb(0, 255, 0, 255),
                         pos,
                         labelsize, new Vector3(0, 0, 0), textformat: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,

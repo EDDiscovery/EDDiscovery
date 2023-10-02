@@ -14,6 +14,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.GMO;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -793,8 +794,8 @@ namespace EDDiscovery.UserControls
                         GalacticMapObject gmo = DiscoveryForm.GalacticMapping.Find(textBoxTarget.Text, true);       // find gmo, any part
                         if (gmo != null)
                         {
-                            TargetClass.SetTargetOnGMO(gmo.Name,gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
-                            textBoxTarget.Text = gmo.Name;
+                            TargetClass.SetTargetOnGMO(gmo.NameList,gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
+                            textBoxTarget.Text = gmo.NameList;
                             DiscoveryForm.NewTargetSet(this);
                         }
                         else

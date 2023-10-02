@@ -15,6 +15,7 @@
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.GMO;
 using GLOFC;
 using GLOFC.Controller;
 using GLOFC.GL4;
@@ -65,18 +66,19 @@ namespace EDDiscovery.UserControls.Map3D
             Bookmarks = (1 << 9),
             ImageList = (1<<10),
 
-            Menu = (1<<15),
-            RightClick = (1 << 16),
-            SearchBox = (1 << 17),
-            GalaxyResetPos = (1 << 18),
-            PerspectiveChange = (1 << 19),
-            YHoldButton = (1 << 20),
-            LimitSelector = (1<<21),
+            Menu = (1<<16),
+            RightClick = (1 << 17),
+            SearchBox = (1 << 18),
+            GalaxyResetPos = (1 << 19),
+            PerspectiveChange = (1 << 20),
+            YHoldButton = (1 << 21),
+            LimitSelector = (1<<22),
 
             AutoEDSMStarsUpdate = (1 << 28),
             PrepopulateEDSMLocalArea = (1 << 29),
 
             Map3D = 0x10ffffff,
+            //Map3D = 0x010ff0001,
         }
 
         public Action<List<string>> AddSystemsToExpedition;
@@ -457,7 +459,7 @@ namespace EDDiscovery.UserControls.Map3D
             // Matrix calc holding transform info
 
             matrixcalc = new GLMatrixCalc();
-            matrixcalc.PerspectiveNearZDistance = 0.1f;
+            matrixcalc.PerspectiveNearZDistance = 0.5f;
             matrixcalc.PerspectiveFarZDistance = 120000f / lyscale;
             matrixcalc.InPerspectiveMode = true;
             matrixcalc.ResizeViewPort(this, glwfc.Size);          // must establish size before starting
@@ -531,6 +533,7 @@ namespace EDDiscovery.UserControls.Map3D
                                 tb.Font = cfg.Font = displaycontrol.Font;                             // set the font up first, as its needed for config
                                 var sizer = tb.CalculateTextArea(new Size(50, 24), new Size(displaycontrol.Width - 64, displaycontrol.Height - 64));
                                 tb.Size = sizer.Item1;
+                                tb.EnableVerticalScrollBar = true;
                                 tb.EnableHorizontalScrollBar = sizer.Item2;
                                 tb.CursorToEnd();
                                 tb.BackColor = cfg.BackColor;
@@ -699,11 +702,14 @@ namespace EDDiscovery.UserControls.Map3D
                     System.Diagnostics.Debug.WriteLine($"Autocomplete look up EDSM systems on {s}");
                     EliteDangerousCore.DB.SystemCache.ReturnSystemAutoCompleteList(s, obj, set);      // perform the system cache autocomplete
 
-                    // these, are static, so it will be safe to pick up in the thread
-                    var glist = edsmmapping.GalacticMapObjects.Where(x => s.Length < 3 ? x.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x).ToList();
-                    List<string> list = glist.Select(x => x.Name).ToList();
-                    foreach (var l in list)
-                        set.Add(l);
+                    foreach( var gmo in edsmmapping.GalacticMapObjects)
+                    {
+                        foreach( var name in gmo.Names)
+                        {
+                            if (s.Length < 3 ? name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : name.Contains(s, StringComparison.InvariantCultureIgnoreCase))
+                                set.Add(name);
+                        }
+                    }
                 };
 
                 tbac.PerformAutoCompleteInUIThread = (s, obj, set) =>    // complete autocomplete in UI thread, for parts declared in UI, run second
@@ -727,7 +733,7 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
                     System.Diagnostics.Debug.WriteLine("Selected " + tbac.Text);
-                    var gmo = edsmmapping?.GalacticMapObjects.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                    var gmo = edsmmapping?.GalacticMapObjects.Find(x => x.IsNameWildCard(tbac.Text,true));
 
                     Vector3? pos = null;
                     if (gmo != null)
@@ -1364,7 +1370,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (gmo != null && gmoz < bkmz && gmoz < hez && gmoz < galstarz && gmoz < routez && gmoz < navz)      // got gmo, and closer than the others
             {
-                System.Diagnostics.Debug.WriteLine($"Find GMO {gmo.Name}");
+                System.Diagnostics.Debug.WriteLine($"Find GMO {gmo.NameList}");
                 return gmo;
             }
 
@@ -1421,7 +1427,7 @@ namespace EDDiscovery.UserControls.Map3D
             var bkm = obj as EliteDangerousCore.DB.BookmarkClass;
             var sys = obj as ISystem;
 
-            string name = he != null ? he.System.Name : gmo != null ? gmo.Name : bkm != null ? bkm.Name : sys.Name;
+            string name = he != null ? he.System.Name : gmo != null ? gmo.NameList : bkm != null ? bkm.Name : sys.Name;
             if (bkm != null)
                 name = "Bookmark " + name;
 

@@ -12,7 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-using EliteDangerousCore.EDSM;
+using EliteDangerousCore.GMO;
 using OpenTK;
 using GLOFC;
 using GLOFC.GL4;
@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 if (gmo.GalMapType.Group == GalMapType.GroupType.Regions)
                 {
-                    string gmoname = gmo.Name;
+                    string gmoname = gmo.NameList;
 
                     List<Vector2> polygonxz = new List<Vector2>();                              // needs it in x/z and in vector2's
                     foreach (var pd in gmo.Points)
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                         if (corr != null)   // allows the centeroid to be nerfed slightly
                         {
-                            var entry = Array.Find(corr, x => gmo.Name.Contains(x.name, StringComparison.InvariantCultureIgnoreCase));
+                            var entry = Array.Find(corr, x => gmo.NameList.Contains(x.name, StringComparison.InvariantCultureIgnoreCase));
                             if (entry != null)
                                 centeroid = new Vector2(centeroid.X + entry.x, centeroid.Y + entry.y);
                         }
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls.Map3D
                         Vector3 bestpos = new Vector3(final.Item1.X, 0, final.Item1.Y);
                         Vector3 bestsize = new Vector3(final.Item2.X, 1, final.Item2.Y);
                         
-                        textrenderer.Add(null, gmo.Name, fnt, Color.White, Color.Transparent, bestpos, bestsize,new Vector3(0,0,0), fmt, alphafadescalar:5000, alphafadepos:500);
+                        textrenderer.Add(null, gmo.NameList, fnt, Color.White, Color.Transparent, bestpos, bestsize,new Vector3(0,0,0), fmt, alphafadescalar:5000, alphafadepos:500);
                     }
                 }
             }

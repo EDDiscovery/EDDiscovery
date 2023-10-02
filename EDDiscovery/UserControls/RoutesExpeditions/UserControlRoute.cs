@@ -17,6 +17,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.GMO;
 using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;

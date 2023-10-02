@@ -19,6 +19,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.GMO;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
@@ -404,29 +405,43 @@ namespace EDDiscovery
 
             //----------------------------------------------------------------- GMO etc load
 
-            string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
+            { 
+                string edsmgmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
 
-            if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gmofile))        // if allowed to load, and no gmo file, fetch immediately
-            {
-                LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                if (EDSMClass.DownloadGMOFileFromEDSM(gmofile))
-                    SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
-            }
+                if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
+                {
+                    LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
+                    if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile))
+                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
+                }
 
-            {
+                string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
+
+                if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
+                {
+                    LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
+                    if (DownloadGECFile(gecfile))
+                        SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
+                }
+
                 GalacticMapping = new GalacticMapping();
-                if (File.Exists(gmofile))
-                    GalacticMapping.ParseEDSMFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
-                GalacticMapping.LoadMarxObjects();
+
+                if (File.Exists(gecfile))
+                    GalacticMapping.ParseGMPFile(gecfile,int.MaxValue/2);                    // at this point, gal map data has been uploaded - get it into memory
+
+                if (File.Exists(edsmgmofile))
+                    GalacticMapping.ParseGMPFile(edsmgmofile,0);                            // at this point, gal map data has been uploaded - get it into memory
+
+                //GalacticMapping.LoadMarxObjects();
             }
 
             {
                 EliteRegions = new GalacticMapping();
                 var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
-                EliteRegions.ParseEDSMJson(text);                            // at this point, gal map data has been uploaded - get it into memory
+                EliteRegions.ParseGMPJson(text,int.MaxValue/2 + 100000);                            // at this point, gal map data has been uploaded - get it into memory
             }
 
-            SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMONames());
+            SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMPNames());
 
             Bodies.Prepopulate();           
 
