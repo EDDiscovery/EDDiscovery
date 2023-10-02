@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
             {
                 mapsave = new MapSaverImpl(this);
                 map.LoadState(mapsave, true, 0);
+                map.LoadImages();
 
                 map.AddSystemsToExpedition = (list) =>
                 {

@@ -14,8 +14,13 @@
 
 using EliteDangerousCore.EDSM;
 using GLOFC.GL4.Controls;
+using OpenTK;
+using QuickJSON;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using static GLOFC.GL4.Controls.GLBaseControl;
 
 namespace EDDiscovery.UserControls.Map3D
@@ -27,8 +32,9 @@ namespace EDDiscovery.UserControls.Map3D
         private const int iconsize = 32;
         public GLTextBoxAutoComplete EntryTextBox { get; private set; }
         public GLImage DBStatus { get; private set; }
+        private bool orderedclosemainmenu = false;  // import
 
-        public MapMenu(Map g, Map.Parts parts)
+        public MapMenu(Map g, Map.Parts parts, ImageCache imagecache)
         {
             map = g;
 
@@ -42,7 +48,9 @@ namespace EDDiscovery.UserControls.Map3D
             GLImage menuimage = new GLImage("MSMainMenu", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.hamburgermenu") );
             menuimage.ToolTipText = "Open configuration menu";
             map.displaycontrol.Add(menuimage);
-            menuimage.MouseClick = (o, e1) => { ShowMenu(parts); };
+            menuimage.MouseClick = (o, e1) => { 
+                ShowMenu(parts,imagecache); 
+            };
             hpos += menuimage.Width + hpad;
             
             if ((parts & Map.Parts.TravelPath) != 0)
@@ -127,25 +135,29 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 // if map open, and no ctrl hit or ctrl is not a child of galmenu
 
-                if (map.displaycontrol["Galmenu"]!= null && (ctrl == null || !map.displaycontrol["Galmenu"].IsThisOrChildOf(ctrl)))       
+                GLForm mapform = map.displaycontrol["Galmenu"] as GLForm;
+
+                if (mapform != null && ctrl == map.displaycontrol && map.displaycontrol.ModalFormsActive == false && mapform.FormShown && !orderedclosemainmenu)
                 {
-                    ((GLForm)map.displaycontrol["Galmenu"]).Close();
+                    System.Diagnostics.Debug.WriteLine($"Ordered close");       // import
+                    ((GLForm)mapform).Close();
                 }
             };
 
         }
 
         // on menu button..
-        public void ShowMenu(Map.Parts parts)
+        public void ShowMenu(Map.Parts parts, ImageCache imagecache)
         {
             //map.displaycontrol.ApplyToControlOfName("InfoBoxForm*", (c) => { ((GLForm)c).Close(); });      // close any info box forms (don't want to I think)
 
             map.displaycontrol.ApplyToControlOfName("MS*", (c) => { c.Visible = false; });      // hide the visiblity of the on screen controls
 
-            int leftmargin = 4;
-            int vpos = 10;
-            int hpad = 8;
-            int ypad = 10;
+            const int leftmargin = 4;
+            const int hpad = 8;
+            const int ypad = 10;
+
+            orderedclosemainmenu = false;       // reset
 
             GLForm pform = new GLForm("Galmenu", "Configure Map", new Rectangle(10, 10, 500, 600));
             pform.FormClosed = (frm) => { map.displaycontrol.ApplyToControlOfName("MS*", (c) => { c.Visible = true; }); };
@@ -162,10 +174,13 @@ namespace EDDiscovery.UserControls.Map3D
                 if ( nb != null)
                     map.LocalAreaSize = (int)nb.Value;
                 e.Handled = true;       // stop close
+                orderedclosemainmenu = true;
                 var ani = new GLControlAnimateScale(10, 400, true, new SizeF(0, 0));       // add a close animation
                 ani.FinishAction += (a, c, t) => { pform.ForceClose(); };   // when its complete, force close
                 pform.Animators.Add(ani); 
             };
+
+            int vpos = 10;
 
             {   // top buttons
                 int hpos = 0;
@@ -260,8 +275,6 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Map.Parts.EDSMStars) != 0)
             {
                 GLGroupBox tpgb = new GLGroupBox("GalaxyStarsGB", "Galaxy Stars", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 2));
-                tpgb.BackColor = Color.Transparent;
-                tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
 
                 int hpos = leftmargin;
@@ -319,8 +332,6 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Map.Parts.TravelPath) != 0)
             {
                 GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 3));
-                tpgb.BackColor = Color.Transparent;
-                tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
 
                 GLCheckBox buttp = new GLCheckBox("TravelPathTape", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.TravelPath") , null);
@@ -366,14 +377,11 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 GLGroupBox galgb = new GLGroupBox("GalGB", "Galaxy Objects", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 galgb.ClientHeight = (iconsize + 4) * 2;
-                galgb.BackColor = Color.Transparent;
-                galgb.ForeColor = Color.Orange;
                 pform.Add(galgb);
                 vpos += galgb.Height + ypad;
 
                 GLFlowLayoutPanel galfp = new GLFlowLayoutPanel("GALFP", DockingType.Fill, 0);
                 galfp.FlowPadding = new PaddingType(2, 2, 2, 2);
-                galfp.BackColor = Color.Transparent;
                 galgb.Add(galfp);
 
                 IReadOnlyDictionary<GalMapType.VisibleObjectsType, Image> icons = new BaseUtils.Icons.IconGroup<GalMapType.VisibleObjectsType>("GalMap");
@@ -401,10 +409,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Map.Parts.GalObjects) != 0 || (parts & Map.Parts.Bookmarks) != 0)
             {
-                GLGroupBox scalegb = new GLGroupBox("Scalar", "Scaling", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
+                GLGroupBox scalegb = new GLGroupBox("Scalar", "Scaling of objects", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 scalegb.ClientHeight = (iconsize + 4) * 1;
-                scalegb.BackColor = Color.Transparent;
-                scalegb.ForeColor = Color.Orange;
                 pform.Add(scalegb);
                 vpos += scalegb.Height + ypad;
                 GLTrackBar tb = new GLTrackBar("ScaleTB", new Rectangle(0, 0, iconsize*8, iconsize));
@@ -421,8 +427,6 @@ namespace EDDiscovery.UserControls.Map3D
 
                 GLGroupBox edsmregionsgb = new GLGroupBox("EDSMR", "EDSM Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 edsmregionsgb.ClientHeight = iconsize + 8;
-                edsmregionsgb.BackColor = Color.Transparent;
-                edsmregionsgb.ForeColor = Color.Orange;
                 pform.Add(edsmregionsgb);
                 vpos += edsmregionsgb.Height + ypad;
 
@@ -457,8 +461,6 @@ namespace EDDiscovery.UserControls.Map3D
 
                 GLGroupBox eliteregionsgb = new GLGroupBox("ELITER", "Elite Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 eliteregionsgb.ClientHeight = iconsize + 8;
-                eliteregionsgb.BackColor = Color.Transparent;
-                eliteregionsgb.ForeColor = Color.Orange;
                 pform.Add(eliteregionsgb);
                 vpos += eliteregionsgb.Height + ypad;
 
@@ -510,10 +512,357 @@ namespace EDDiscovery.UserControls.Map3D
                 butelre.CheckChanged += butedre.CheckChanged;
             }
 
+            if ((parts & Map.Parts.ImageList) != 0)
+            { 
+                GLGroupBox imagesgb = new GLGroupBox("Images", "Overlay Images", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
+                imagesgb.ClientHeight = iconsize + 8;
+                pform.Add(imagesgb);
+
+                GLCheckBox b1 = new GLCheckBox("ImagesEnable", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.Images"), null);
+                b1.ToolTipText = "Enable or disable images";
+                b1.Checked = map.UserImagesEnable;
+                b1.CheckOnClick = true;
+                b1.CheckChanged += (e1) => { map.UserImagesEnable = b1.Checked; };
+                imagesgb.Add(b1);
+
+                GLButton b2 = new GLButton("ImagesConfigure", new Rectangle(50, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ImagesEdit"), true);
+                b2.ToolTipText = "Configure image list";
+                b2.Click += (e, s) => ShowImagesMenu(imagecache.GetImageList(), (list) => { imagecache.SetImageList(list); });
+                imagesgb.Add(b2);
+
+                vpos += imagesgb.Height + ypad;
+            }
+
             pform.ClientHeight = vpos;
 
             map.displaycontrol.Add(pform);
         }
+
+        public void ShowImagesMenu(List<ImageCache.ImageEntry> imagelist, Action<List<ImageCache.ImageEntry>> onok)
+        {
+            GLForm iform = new GLForm("Imagesmenu", "Configure Images", new Rectangle(100, 50, 1200, 500), Color.FromArgb(220, 60, 60, 160), Color.Orange, true);
+
+            // provide opening animation
+            iform.ScaleWindow = new SizeF(0.0f, 0.0f);
+            iform.Animators.Add(new GLControlAnimateScale(10, 300, true, new SizeF(1, 1)));
+
+            // and closing animation
+            iform.FormClosing += (f, e) =>
+            {
+                e.Handled = true;       // stop close
+                var ani = new GLControlAnimateScale(10, 200, true, new SizeF(0, 0));       // add a close animation
+                ani.FinishAction += (a, c, t) => { iform.ForceClose(); };   // when its complete, force close
+                iform.Animators.Add(ani);
+                if (iform.DialogResult == GLForm.DialogResultEnum.OK)
+                    onok(imagelist);
+            };
+
+            GLScrollPanelScrollBar spanel = new GLScrollPanelScrollBar("ImagesScrollPanel", DockingType.Fill, 0F);
+            spanel.EnableHorzScrolling = false;
+            iform.Add(spanel);
+
+
+            GLPanel top = new GLPanel("Paneltop", new Size(0, 32), DockingType.Top, 0F);
+            iform.Add(top);
+
+            List<ImageCache.ImageEntry> inbuiltlist = new List<ImageCache.ImageEntry>
+            {
+                new ImageCache.ImageEntry("EDAstro Indexed Heat Map", @"https://edastro.com/mapcharts/visited-systems-indexedheatmap.png",
+                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Indexed Log Heat Map", @"https://edastro.com/mapcharts/visited-systems-heatmap.png",
+                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Indexed Heat Map+Regions", @"https://edastro.com/mapcharts/visited-systems-indexedregions.jpg",
+                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Indexed Log Heat Map+Regions", @"https://edastro.com/mapcharts/visited-systems-regions.png",
+                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Alien Map", @"https://edastro.com/mapcharts/codex/codex-aliens-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro ?-Type Anomalies Map", @"https://edastro.com/mapcharts/codex/codex-anomalies-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Crystal Structures Map", @"https://edastro.com/mapcharts/codex/codex-crystals-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Lagrange Clouds Map", @"https://edastro.com/mapcharts/codex/codex-lagrangeclouds-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Molluscs Map", @"https://edastro.com/mapcharts/codex/codex-molluscs-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Pre-Odyssey Surface Life Map", @"https://edastro.com/mapcharts/codex/codex-surface-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Trees Map", @"https://edastro.com/mapcharts/codex/codex-trees-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Pods Map", @"https://edastro.com/mapcharts/codex/codex-pods-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Bark Mounds Map", @"https://edastro.com/mapcharts/organic/organic-bark-mounds-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Brain Trees Map", @"https://edastro.com/mapcharts/organic/organic-brain-tree-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+                new ImageCache.ImageEntry("EDAstro Sinous Tubers Map", @"https://edastro.com/mapcharts/organic/organic-sinuous-tubers-regions.jpg",
+                                        true,new Vector3(6140,0,18850),new Vector2(102300,102300),new Vector3(0,0,0),false,false,0,0.4f),
+            };
+
+            GLComboBox presel = new GLComboBox("Preselects", new Rectangle(40, 4, 240, 24), inbuiltlist.Select(x => x.Name).ToList());
+            presel.ToolTipText = "Preselected images from the internet";
+            top.Add(presel);
+
+            map.displaycontrol.AddModalForm(iform);
+            iform.FormClosed += (s) =>
+            {
+                if (iform.DialogResult == GLForm.DialogResultEnum.OK)
+                    map.LoadImages();
+            };
+
+            List<string> resourcenames = BaseUtils.Icons.IconSet.Instance.Names().ToList();
+
+            int availablewidth = iform.ClientRectangle.Width - spanel.ScrollBarWidth;
+
+            PopulateImagesScrollPanel(spanel, top, imagelist, resourcenames, availablewidth);  // add after iform added to get correct scroll bar width
+
+            presel.SelectedIndexChanged += (s) =>
+            {
+                imagelist.Add(inbuiltlist[presel.SelectedIndex]);
+                PopulateImagesScrollPanel(spanel, null, imagelist, resourcenames, availablewidth);
+                spanel.VertScrollPos = int.MaxValue;        // goto bottom
+            };
+            presel.TabOrder = 0;
+            presel.SetFocus();
+        }
+
+        private void PopulateImagesScrollPanel(GLScrollPanelScrollBar spanel, GLPanel toppanel, List<ImageCache.ImageEntry> imagelist, List<string> resourcenames, int width)
+        {
+            spanel.SuspendLayout();
+            spanel.Remove();
+
+            int tabno = 1;
+
+            int leftmargin = 4;
+            int vpos = 10;
+            int ypad = 10;
+            int hpad = 8;
+            for (int entry = 0; entry < imagelist.Count; entry++)
+            {
+                var ie = imagelist[entry];
+
+                var cenable = new GLCheckBox($"En{entry}", new Rectangle(leftmargin, vpos, iconsize, iconsize), "", ie.Enabled);
+                cenable.CheckChanged += (s) => ie.Enabled = cenable.Checked;
+                cenable.ToolTipText = "Enable or disable this entry from showing";
+                spanel.Add(cenable, ref tabno);
+
+                int spaceavailable = width - iconsize * 11 - hpad * 12 - leftmargin * 2;
+
+                var name = new GLTextBoxAutoComplete("name", new Rectangle(cenable.Right + hpad, vpos, spaceavailable / 3, iconsize), ie.Name);
+                name.TextChanged += (s) => { ie.Name = name.Text; };
+                name.ToolTipText = "Name of entry";
+                spanel.Add(name, ref tabno);
+
+                spaceavailable -= spaceavailable / 3 + hpad;
+
+                var urlpath = new GLTextBoxAutoComplete("urlpath", new Rectangle(name.Right + hpad, vpos, spaceavailable, iconsize), ie.ImagePathOrURL);
+                urlpath.PerformAutoCompleteInThread += (input, sender, set) =>
+                {
+                    if (input.StartsWith("Image:", StringComparison.InvariantCultureIgnoreCase))
+                        input = input.Substring(9);
+                    foreach (var x in resourcenames)
+                    {
+                        if (x.Contains(input, StringComparison.InvariantCultureIgnoreCase))
+                            set.Add("Image:" + x);
+                    }
+                };
+
+                urlpath.ToolTipText = "Use Image:name for a EDD icon\r\n\"text\"[,font,size,forecolour,backcolour,format,bitmapwidth,bitmapheight] for text\r\nhttp:\\pathto for a internet image\r\n<path> for a local file";
+                urlpath.TextChanged += (s) => { ie.ImagePathOrURL = urlpath.Text; };
+                spanel.Add(urlpath, ref tabno);
+
+                var ccentre = new GLButton("cent", new Rectangle(urlpath.Right + hpad, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.Position"), true);
+                ccentre.Click += (s, e) => ShowVector3Menu(ie.Centre, true, ccentre.FindScreenCoords(), "Centre", (v) => ie.Centre = v);
+                ccentre.ToolTipText = "Centre of image in lightyears";
+                spanel.Add(ccentre, ref tabno);
+
+                var csize = new GLButton("size", new Rectangle(ccentre.Right + hpad, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.Sizer"), true);
+                csize.Click += (s, e) => ShowVector3Menu(new Vector3(ie.Size.X, ie.Size.Y, 0), false, csize.FindScreenCoords(), "Size", (v) => ie.Size = new Vector2(v.X, v.Y));
+                csize.ToolTipText = "Size of image in lightyears";
+                spanel.Add(csize, ref tabno);
+
+                var crot = new GLButton("rot", new Rectangle(csize.Right + hpad, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.Rotate"), true);
+                crot.Click += (s, e) => ShowVector3Menu(ie.RotationDegrees, true, crot.FindScreenCoords(), "Rotation Degrees", (v) => ie.RotationDegrees = v);
+                crot.ToolTipText = "Rotation around X,Y,Z in degrees";
+                spanel.Add(crot, ref tabno);
+
+                var crotaz = new GLCheckBox("rotaz", new Rectangle(crot.Right + hpad, vpos, iconsize, iconsize), "", ie.RotateToViewer);
+                crotaz.CheckChanged += (s) => ie.RotateToViewer = crotaz.Checked;
+                crotaz.ToolTipText = "Enables rotation to the viewer azimuth so it faces you";
+                spanel.Add(crotaz, ref tabno);
+
+                var crotel = new GLCheckBox("rotel", new Rectangle(crotaz.Right + hpad, vpos, iconsize, iconsize), "", ie.RotateElevation);
+                crotel.CheckChanged += (s) => ie.RotateElevation = crotel.Checked;
+                crotel.ToolTipText = "Enables rotation to the viewer elevation so it faces you";
+                spanel.Add(crotel, ref tabno);
+
+                var calscalar = new GLNumberBoxFloat("scalar", new Rectangle(crotel.Right + hpad, vpos, iconsize * 3 / 2, iconsize), ie.AlphaFadeScalar);
+                calscalar.Format = "0.#";
+                calscalar.ValueChanged += (s) => { ie.AlphaFadeScalar = calscalar.Value; };
+                calscalar.Minimum = 0;
+                calscalar.ToolTipText = "Alpha scaling by distance from eye. >0 fade out as distance decreases. <0 fade out as distance increase. 0 = fixed fade (determined by position)";
+                spanel.Add(calscalar, ref tabno);
+
+                var calpos = new GLNumberBoxFloat("pos", new Rectangle(calscalar.Right + hpad, vpos, iconsize * 3 / 2, iconsize), ie.AlphaFadePosition);
+                calpos.Format = "0.#";
+                calpos.ValueChanged += (s) => { ie.AlphaFadePosition = calpos.Value; };
+                calpos.Minimum = 0;
+                calpos.ToolTipText = "if scalar != 0, Distance where fade starts/end. If scalar = 0, alpha fading between 0-1";
+                spanel.Add(calpos, ref tabno);
+
+                GLButton delb = new GLButton("Del", new Rectangle(calpos.Right + hpad + hpad, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.Delete"), true);
+                delb.Click += (s, e) =>
+                {
+                    int sp = spanel.VertScrollPos;
+                    imagelist.Remove(ie);
+                    PopulateImagesScrollPanel(spanel, null, imagelist, resourcenames, width);
+                    spanel.VertScrollPos = sp;
+                };
+                delb.ToolTipText = "Delete entry";
+                spanel.Add(delb, ref tabno);
+
+                if (toppanel != null)
+                {
+                    toppanel.Add(new GLLabel("LEn", new Rectangle(cenable.Left, 4, iconsize + hpad, 20), "En"));
+                    toppanel.Add(new GLLabel("Lurl", new Rectangle(urlpath.Left, 4, 200, 20), "URL/Resource/Image/File"));
+                    toppanel.Add(new GLLabel("LPos", new Rectangle(ccentre.Left, 4, iconsize + hpad, 20), "Pos"));
+                    toppanel.Add(new GLLabel("LSize", new Rectangle(csize.Left, 4, iconsize + hpad, 20), "Size"));
+                    toppanel.Add(new GLLabel("LRot", new Rectangle(crot.Left, 4, iconsize + hpad, 20), "Rot"));
+                    toppanel.Add(new GLLabel("LDel", new Rectangle(delb.Left, 4, iconsize + hpad, 20), "Del"));
+                    toppanel.Add(new GLLabel("LMU", new Rectangle(delb.Right + hpad, 4, iconsize + hpad, 20), "Up"));
+                    toppanel.Add(new GLLabel("AZRot", new Rectangle(crotaz.Left, 4, iconsize + hpad, 20), "AZr"));
+                    toppanel.Add(new GLLabel("AZEl", new Rectangle(crotel.Left, 4, iconsize + hpad, 20), "ELr"));
+                    toppanel.Add(new GLLabel("als", new Rectangle(calscalar.Left, 4, iconsize * 3 / 2 + hpad, 20), "AlSc"));
+                    toppanel.Add(new GLLabel("ald", new Rectangle(calpos.Left, 4, iconsize * 3 / 2 + hpad, 20), "AlP/F"));
+                }
+
+                if (entry > 0)
+                {
+                    GLButton upb = new GLButton("Up", new Rectangle(delb.Right + hpad, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.ArrowsUp"), true);
+                    upb.Click += (s, e) =>
+                    {
+                        int sp = spanel.VertScrollPos;
+                        int entryno = imagelist.IndexOf(ie);
+                        if (entryno > 0)
+                        {
+                            var previous = imagelist[entryno - 1];
+                            imagelist.Remove(previous);      // this makes our current be in the previous slot
+                            imagelist.Insert(entryno, previous); // and we insert previous into our pos
+                        }
+                        PopulateImagesScrollPanel(spanel, null, imagelist, resourcenames, width);
+                        spanel.VertScrollPos = sp;
+                    };
+                    upb.ToolTipText = "Move entry up. Images are displayed in the order show, the lowest one has greates priority";
+                    spanel.Add(upb, ref tabno);
+                }
+
+                vpos += cenable.Height + ypad;
+            }
+
+            GLButton add = new GLButton("Add", new Rectangle(leftmargin, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.Add"), true);
+            add.Click += (s, e) =>
+            {
+                imagelist.Add(new ImageCache.ImageEntry("", "", true, new Vector3(0, 0, 0), new Vector2(200, 200), new Vector3(0, 0, 0)));
+                PopulateImagesScrollPanel(spanel, null, imagelist, resourcenames, width);
+                spanel.VertScrollPos = int.MaxValue;        // goto bottom
+            };
+            add.ToolTipText = "Add new entry";
+            spanel.Add(add, ref tabno);
+
+            GLButton save = new GLButton("Save", new Rectangle(add.Right + hpad, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.ExportFile"), true);
+            save.Click += (s, e) =>
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.FileName = "ImageList";
+                sfd.DefaultExt = "eddil";
+                sfd.Filter = "EDD Image List (*.eddil)|*.eddil|All Files (*.*)|*.*";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    bool success = false;
+                    JArray ret = JToken.FromObjectWithError(imagelist, true, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public).Array();
+                    if (ret != null)
+                    {
+                        var str = ret.ToString(true);
+                        success = BaseUtils.FileHelpers.TryWriteToFile(sfd.FileName, str);
+                    }
+                    if (!success)
+                    {
+                        GLMessageBox.Show("m1", spanel, new Point(int.MinValue, 0), $"Failed to save {sfd.FileName}", "Error",
+                                    GLMessageBox.MessageBoxButtons.OK);
+                    }
+                }
+
+            };
+            save.ToolTipText = "Save list to file";
+            spanel.Add(save, ref tabno);
+
+            GLButton load = new GLButton("Load", new Rectangle(save.Right + hpad, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("Controls.ImportFile"), true);
+            load.Click += (s, e) =>
+            {
+                OpenFileDialog sfd = new OpenFileDialog();
+                sfd.FileName = "ImageList";
+                sfd.DefaultExt = "eddil";
+                sfd.Filter = "EDD Image List (*.eddil)|*.eddil|All Files (*.*)|*.*";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    bool success = false;
+                    string str = BaseUtils.FileHelpers.TryReadAllTextFromFile(sfd.FileName);
+                    if (str != null)
+                    {
+                        JToken json = QuickJSON.JToken.Parse(str, QuickJSON.JToken.ParseOptions.CheckEOL);
+                        if (json != null)
+                        {
+                            var list = json.ToObject<List<ImageCache.ImageEntry>>();
+                            if (list != null)
+                            {
+                                imagelist.Clear();          // don't replace the imagelist, we need to use the same class, clear and add
+                                imagelist.AddRange(list);
+                                success = true;
+                            }
+                        }
+                    }
+
+                    if (success)
+                    {
+                        PopulateImagesScrollPanel(spanel, null, imagelist, resourcenames, width);
+                    }
+                    else
+                    {
+                        GLMessageBox.Show("m1", spanel, new Point(int.MinValue, 0), $"Failed to load {sfd.FileName}", "Error",
+                                    GLMessageBox.MessageBoxButtons.OK);
+                    }
+                }
+            };
+            load.ToolTipText = "Load the list from a file";
+            spanel.Add(load, ref tabno);
+
+            GLButton ok = new GLButton("OK", new Rectangle(width - leftmargin - 80, vpos, 80, iconsize), "OK");
+            ok.Click += (s, e) =>
+            {
+                spanel.FindForm().DialogResult = GLForm.DialogResultEnum.OK;
+                spanel.FindForm().Close();
+            };
+
+            ok.ToolTipText = "Accept and use this list";
+            spanel.Add(ok, ref tabno);
+
+            spanel.ResumeLayout();
+        }
+
+        public void ShowVector3Menu(Vector3 value, bool vector3, Point pos, string name, Action<Vector3> onok)
+        {
+            GLFormVector3 iform = new GLFormVector3("Vectormenu", name, value, new Rectangle(pos, new Size(250, 150)), vector2: !vector3);
+            iform.DialogResultChanged += (s, e) =>
+            {
+                System.Diagnostics.Debug.WriteLine($"ON OK {iform.Value.X} {iform.Value.Y} {iform.Value.Z}");
+                onok(new Vector3(iform.Value.X, iform.Value.Y, vector3 ? iform.Value.Z : 0));
+            };
+            map.displaycontrol.AddModalForm(iform);
+            iform.BackColor = Color.FromArgb(255, 90, 90, 100);
+
+        }
+
+
 
         public void UpdateCoords(GLOFC.Controller.Controller3D pc)
         {

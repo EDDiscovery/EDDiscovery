@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls.Map3D
             NavRoute = (1 << 7),
             Route = (1 << 8),
             Bookmarks = (1 << 9),
+            ImageList = (1<<10),
 
             Menu = (1<<15),
             RightClick = (1 << 16),
@@ -93,6 +94,9 @@ namespace EDDiscovery.UserControls.Map3D
         private GLRenderableItem galaxyrenderable;
         private GalaxyShader galaxyshader;
 
+        private ImageCache userimages;
+        private GLOFC.GL4.Bitmaps.GLBindlessTextureBitmaps usertexturebitmaps;
+
         private GLShaderPipeline gridtextshader;
         private GLShaderPipeline gridshader;
         private GLRenderableItem gridrenderable;
@@ -120,6 +124,7 @@ namespace EDDiscovery.UserControls.Map3D
         // global buffer blocks used
         private const int volumenticuniformblock = 2;
         private const int findblock = 3;
+        private const int userbitmapsarbblock = 4;
 
         private System.Diagnostics.Stopwatch hptimer = new System.Diagnostics.Stopwatch();
 
@@ -166,9 +171,16 @@ namespace EDDiscovery.UserControls.Map3D
 
             // parts = parts - (1 << 9);
 
-            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+            System.Diagnostics.Debug.Assert(glwfc.IsContextCurrent());
 
             Bitmap galaxybitmap = BaseUtils.Icons.IconSet.GetBitmap("GalMap.Galaxy_L180");
+
+            if ((parts & Parts.ImageList) != 0)
+            {
+                userimages = new ImageCache(items, rObjects);
+                usertexturebitmaps = new GLOFC.GL4.Bitmaps.GLBindlessTextureBitmaps("UserBitmaps", rObjects, userbitmapsarbblock, false);
+                items.Add(usertexturebitmaps);
+            }
 
             if ((parts & Parts.Galaxy) != 0) // galaxy
             {
@@ -440,7 +452,7 @@ namespace EDDiscovery.UserControls.Map3D
                 routepath.Start("Route", 10000, travelsunsize, tapesize, findresults, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), true, items, rObjects);
             }
 
-            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+            System.Diagnostics.Debug.Assert(glwfc.IsContextCurrent());
 
             // Matrix calc holding transform info
 
@@ -458,7 +470,7 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.SetFocus();
 
             displaycontrol.Paint += (ts) => {
-                System.Diagnostics.Debug.Assert(displaycontrol.IsCurrent());
+                System.Diagnostics.Debug.Assert(displaycontrol.IsContextCurrent());
                 // MCUB set up by Controller3DDraw which did the work first
                 galaxymenu?.UpdateCoords(gl3dcontroller);
                 displaycontrol.Animate(glwfc.ElapsedTimems);
@@ -497,12 +509,12 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Parts.Menu) != 0)
             {
-                galaxymenu = new MapMenu(this, parts);
+                galaxymenu = new MapMenu(this, parts, userimages);
             }
 
             if ((parts & Parts.RightClick) != 0)
             {
-                rightclickmenu = new GLContextMenu("RightClickMenu",
+                rightclickmenu = new GLContextMenu("RightClickMenu",true,
                     new GLMenuItem("RCMInfo", "Information")
                     {
                         MouseClick = (s, e) =>
@@ -759,7 +771,7 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Start();
             }
 
-            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+            System.Diagnostics.Debug.Assert(glwfc.IsContextCurrent());
 
             string shaderlog = GLShaderLog.ShaderLog;
             if (shaderlog.HasChars())
@@ -934,7 +946,7 @@ namespace EDDiscovery.UserControls.Map3D
                     }
                 };
 
-                dgv.ContextMenuGrid = new GLContextMenu("BookmarksRightClickMenu",
+                dgv.ContextMenuGrid = new GLContextMenu("BookmarksRightClickMenu", true,
                     new GLMenuItem("BKEdit", "Edit")
                     {
                         MouseClick = (s, e) =>
@@ -1084,6 +1096,8 @@ namespace EDDiscovery.UserControls.Map3D
         public DateTime TravelPathEndDateUTC { get { return travelpath?.TravelPathEndDateUTC ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDateUTC != value) { travelpath.TravelPathEndDateUTC = value; } } }
         public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
+        public bool UserImagesEnable { get { return usertexturebitmaps?.Enable ?? false; } set { if (usertexturebitmaps != null) { usertexturebitmaps.Enable = value; glwfc.Invalidate(); } } }
+
         public bool GalObjectDisplay
         {
             get { return galmapobjects?.Enable ?? true; }
@@ -1142,6 +1156,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void LoadState(MapSaver defaults, bool restorepos, int loadlimit)
         {
+            gl3dcontroller.ChangePerspectiveMode(defaults.GetSetting("GAL3DMode", true));
+
             GalaxyDisplay = defaults.GetSetting("GD", true);
             StarDotsSpritesDisplay = defaults.GetSetting("SDD", true);
             NavRouteDisplay = defaults.GetSetting("NRD", true);
@@ -1156,6 +1172,9 @@ namespace EDDiscovery.UserControls.Map3D
 
             GalObjectDisplay = defaults.GetSetting("GALOD", true);
             SetAllGalObjectTypeEnables(defaults.GetSetting("GALOBJLIST", ""));
+
+            UserImagesEnable = defaults.GetSetting("ImagesEnable", true);
+            userimages?.LoadFromString(defaults.GetSetting("ImagesList", ""));
 
             EDSMRegionsEnable = defaults.GetSetting("ERe", false);
             EDSMRegionsOutlineEnable = defaults.GetSetting("ERoe", false);
@@ -1190,6 +1209,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (!mapcreatedokay)
                 return;
 
+            defaults.PutSetting("GAL3DMode", gl3dcontroller.MatrixCalc.InPerspectiveMode);
             defaults.PutSetting("GD", GalaxyDisplay);
             defaults.PutSetting("SDD", StarDotsSpritesDisplay);
             defaults.PutSetting("TPD", TravelPathTapeDisplay);
@@ -1217,6 +1237,112 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("POSCAMERA", pos);
             defaults.PutSetting("BKMK", bookmarks?.Enable ?? true);
             defaults.PutSetting("AUTOSCALE", AutoScaleMax);
+
+            defaults.PutSetting("ImagesEnable", UserImagesEnable);
+            if (userimages != null)
+                defaults.PutSetting("ImagesList", userimages.ImageStringList());
+        }
+
+        #endregion
+
+        #region Images
+
+        public void LoadImages()
+        {
+            if (userimages != null)
+            {
+                usertexturebitmaps.Clear();
+                userimages.LoadBitmaps(
+                    null,   // resources
+                    (ie)=>  // text
+                    {
+                        BaseUtils.StringParser sp = new BaseUtils.StringParser(ie.ImagePathOrURL);
+                        
+                        // "Text with escape",font,size,colorfore,colorback,format,bitmapwidth,bitmapheight.
+                        // quote words if they have spaces
+                        // format is centre,right,left,top,bottom,middle,nowrap
+
+                        string text = sp.NextQuotedWordComma(replaceescape: true);
+
+                        if ( text != null )
+                        {
+                            string fontname = sp.NextQuotedWordComma() ?? "Arial";     // all may be null  
+                            double size = sp.NextDoubleComma(",") ?? 10;
+                            string forecolour = sp.NextQuotedWordComma() ?? "White";
+                            string backcolour = sp.NextQuotedWordComma() ?? "Transparent";
+                            string format = sp.NextQuotedWordComma() ?? "centre middle";
+                            int bitmapwidth = sp.NextIntComma(",") ?? 1024;
+                            int bitmapheight = sp.NextInt(",") ?? 256;
+
+                            Font fnt = new Font(fontname, (float)size);
+                            Color fore = Color.FromName(forecolour);
+                            Color back = Color.FromName(backcolour);
+                            StringFormat fmt = format.StringFormatFromName();
+
+                            usertexturebitmaps.Add(null, null, text, fnt,fore, back, new Size(bitmapwidth, bitmapheight),
+                                new Vector3(ie.Centre.X, ie.Centre.Y, ie.Centre.Z),
+                                new Vector3(ie.Size.X, 0, ie.Size.Y),
+                                new Vector3(ie.RotationDegrees.X.Radians(), ie.RotationDegrees.Y.Radians(), ie.RotationDegrees.Z.Radians()),
+                                fmt, 1,
+                                ie.RotateToViewer, ie.RotateElevation, ie.AlphaFadeScalar, ie.AlphaFadePosition);
+                            fnt.Dispose();
+                            fmt.Dispose();
+                        }
+
+                    },
+                    (ie) => // http load
+                    {
+                        System.Threading.Tasks.Task.Run(() =>
+                        {
+                            string name = ie.ImagePathOrURL;
+                            string filename = ie.ImagePathOrURL.Replace("http://", "", StringComparison.InvariantCultureIgnoreCase).
+                                        Replace("https://", "", StringComparison.InvariantCultureIgnoreCase).SafeFileString();
+                            string path = System.IO.Path.Combine(EDDOptions.Instance.DownloadedImages(), filename);
+                            System.Diagnostics.Debug.WriteLine($"HTTP load {name} to {path}");
+
+                            bool res = BaseUtils.DownloadFile.HTTPDownloadFile(name, path, false, out bool newfile);
+
+                            if (res)
+                            {
+                                parent.DiscoveryForm.BeginInvoke((MethodInvoker)delegate 
+                                {
+                                    if (ie.LoadBitmap(path))
+                                    {
+                                        usertexturebitmaps.Add(null, null, ie.Bitmap, 1,
+                                            new Vector3(ie.Centre.X, ie.Centre.Y, ie.Centre.Z),
+                                            new Vector3(ie.Size.X, 0, ie.Size.Y),
+                                            new Vector3(ie.RotationDegrees.X.Radians(), ie.RotationDegrees.Y.Radians(), ie.RotationDegrees.Z.Radians()),
+                                            ie.RotateToViewer, ie.RotateElevation, ie.AlphaFadeScalar, ie.AlphaFadePosition);
+                                    }
+                                });
+                            }
+                        });
+                    },
+                    (ie)=> //file
+                    {
+                        usertexturebitmaps.Add(null, null, ie.Bitmap, 1,
+                            new Vector3(ie.Centre.X, ie.Centre.Y, ie.Centre.Z),
+                            new Vector3(ie.Size.X, 0, ie.Size.Y),
+                            new Vector3(ie.RotationDegrees.X.Radians(), ie.RotationDegrees.Y.Radians(), ie.RotationDegrees.Z.Radians()),
+                            ie.RotateToViewer, ie.RotateElevation, ie.AlphaFadeScalar, ie.AlphaFadePosition);
+                    },
+                    (ie)=>  // image:
+                    {
+                        string name = ie.ImagePathOrURL.Substring(6).Trim();
+                        if ( BaseUtils.Icons.IconSet.Instance.Contains(name))
+                        {
+                            ie.Bitmap = (Bitmap)BaseUtils.Icons.IconSet.Instance.Get(name);
+                            ie.OwnBitmap = false;
+                            usertexturebitmaps.Add(null, null, ie.Bitmap, 1,
+                                new Vector3(ie.Centre.X, ie.Centre.Y, ie.Centre.Z),
+                                new Vector3(ie.Size.X, 0, ie.Size.Y),
+                                new Vector3(ie.RotationDegrees.X.Radians(), ie.RotationDegrees.Y.Radians(), ie.RotationDegrees.Z.Radians()),
+                                ie.RotateToViewer, ie.RotateElevation, ie.AlphaFadeScalar, ie.AlphaFadePosition);
+                        }
+                    }
+                    );
+
+            }
         }
 
         #endregion
@@ -1353,7 +1479,7 @@ namespace EDDiscovery.UserControls.Map3D
         // Context is set.
         public void Systick()
         {
-            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+            System.Diagnostics.Debug.Assert(glwfc.IsContextCurrent());
 
             gl3dcontroller.HandleKeyboardSlews(true, OtherKeys);
             gl3dcontroller.RecalcMatrixIfMoved();
@@ -1368,7 +1494,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (!mapcreatedokay)
                 return;
 
-            System.Diagnostics.Debug.Assert(glwfc.IsCurrent());
+            System.Diagnostics.Debug.Assert(glwfc.IsContextCurrent());
 
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
             mcb.SetFull(gl3dcontroller.MatrixCalc);        // set the matrix unform block to the controller 3d matrix calc.

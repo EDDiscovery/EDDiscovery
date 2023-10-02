@@ -20,67 +20,83 @@ namespace EDDiscovery.UserControls.Map3D
 {
     public static class MapThemer
     { 
-        public static void Theme(GLBaseControl s)      // run on each control during add, theme it
+        public static void Theme(GLBaseControl ctrl)      // run on each control during add, theme it
         {
+            //System.Diagnostics.Debug.WriteLine($"Theme {ctrl.Name} {ctrl.GetType().Name}");
+
             Color formback = Color.FromArgb(220, 60, 60, 70);
             Color buttonface = Color.FromArgb(255, 128, 128, 128);
             Color texc = Color.Orange;
 
-            var but = s as GLButton;
+            var but = ctrl as GLButton;
             if (but != null)
             {
                 but.ButtonFaceColor = buttonface;
                 but.ForeColor = texc;
                 but.BackColor = buttonface;
-                but.BorderColor = buttonface;
-                return;
+                but.FaceColorScaling = 1f;
+                but.BorderColor = Color.Black;
+                ctrl.Focusable = false;
             }
 
-            var cb = s as GLCheckBox;
+            var cb = ctrl as GLCheckBox;
             if (cb != null)
             {
+                cb.BackColor = formback;
                 cb.ButtonFaceColor = buttonface;
-                return;
+                cb.CheckBoxInnerColor = texc;
+                cb.TickBoxReductionRatio = 0.7f;
+                ctrl.Focusable = false;
             }
-            var cmb = s as GLComboBox;
+
+            var cmb = ctrl as GLComboBox;
             if (cmb != null)
             {
                 cmb.BackColor = formback ;
                 cmb.ForeColor = cmb.DropDownForeColor = texc;
                 cmb.FaceColor = cmb.DropDownBackgroundColor = buttonface;
                 cmb.BorderColor = formback;
-                return;
+                ctrl.Focusable = false;
             }
 
-            var dt = s as GLDateTimePicker;
+
+            var dt = ctrl as GLDateTimePicker;
             if (dt != null)
             {
                 dt.BackColor = buttonface;
                 dt.ForeColor = texc;
                 dt.Calendar.ButLeft.ForeColor = dt.Calendar.ButRight.ForeColor = texc;
                 dt.SelectedColor = Color.FromArgb(255, 160, 160, 160);
-                return;
             }
 
-            var fr = s as GLForm;
+            var fr = ctrl as GLForm;
             if (fr != null)
             {
                 fr.BackColor = formback;
                 fr.ForeColor = texc;
-                return;
             }
 
-            var tb = s as GLMultiLineTextBox;
+            var tb = ctrl as GLMultiLineTextBox;
             if (tb != null)
             {
                 tb.BackColor = formback;
                 tb.ForeColor = texc;
-                return;
+                if (!(tb.Parent is GLFormConfigurable))     // this is to stop themeing the box around the warning text
+                {
+                    tb.BorderColor = Color.Gray;
+                    tb.BorderWidth = 1;
+                }
+            }
+
+            var lb = ctrl as GLLabel;
+            if (lb != null)
+            {
+                lb.ForeColor = texc;
             }
 
             Color cmbck = Color.FromArgb(255, 128, 128, 128);
 
-            var ms = s as GLMenuStrip;
+            var ms = ctrl as GLMenuStrip;
             if (ms != null)
             {
                 ms.BackColor = cmbck;
@@ -88,7 +104,7 @@ namespace EDDiscovery.UserControls.Map3D
                 return;
             }
 
-            var mi = s as GLMenuItem;
+            var mi = ctrl as GLMenuItem;
             if (mi != null)
             {
                 mi.BackColor = cmbck;
@@ -98,7 +114,35 @@ namespace EDDiscovery.UserControls.Map3D
                 return;
             }
 
-            var dgv = s as GLDataGridView;
+            var gb = ctrl as GLGroupBox;
+            if (gb != null)
+            {
+                gb.BackColor = Color.Transparent;
+                gb.ForeColor = Color.Orange;
+            }
+
+            var flp = ctrl as GLFlowLayoutPanel;
+            if (flp != null)
+            {
+                flp.BackColor = formback;
+            }
+
+            var sp = ctrl as GLScrollPanelScrollBar;
+            if (sp != null)
+            {
+                sp.BackColor = formback;
+            }
+
+            var p = ctrl as GLPanel;
+            if (p != null)
+            {
+                p.BackColor = formback;
+            }
+
+
+
+
+            var dgv = ctrl as GLDataGridView;
             if ( dgv != null )
             {
                 dgv.DefaultCellStyle.Padding = new PaddingType(2);
@@ -123,7 +167,7 @@ namespace EDDiscovery.UserControls.Map3D
                 dgv.DefaultRowHeaderStyle.SelectedColor = dgv.DefaultCellStyle.SelectedColor = Color.FromArgb(128, 128, 128, 0);
             }
 
-            var trb = s as GLTrackBar;
+            var trb = ctrl as GLTrackBar;
             if ( trb != null )
             {
                 trb.BackColor = formback;

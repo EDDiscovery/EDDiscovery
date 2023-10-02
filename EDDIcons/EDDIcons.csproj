@@ -476,6 +476,10 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\Images.png" />
+    <EmbeddedResource Include="GalMap\ImagesEdit.png" />
+    <EmbeddedResource Include="Controls\Sizer.png" />
+    <EmbeddedResource Include="Controls\Rotate.png" />
     <EmbeddedResource Include="Journal\SupercruiseDestinationDrop.png" />
     <EmbeddedResource Include="Controls\Resources.png" />
     <EmbeddedResource Include="Panels\Resources.png" />
@@ -1083,6 +1087,11 @@
     <EmbeddedResource Include="Controls\Paste.png" />
     <EmbeddedResource Include="Bodies\Stars\X.png" />
     <EmbeddedResource Include="Bodies\RoguePlanet.png" />
+    <EmbeddedResource Include="Controls\ArrowsDown.png" />
+    <EmbeddedResource Include="Controls\ArrowsLeft.png" />
+    <EmbeddedResource Include="Controls\ArrowsUp.png" />
+    <EmbeddedResource Include="Controls\Position.png" />
+    <EmbeddedResource Include="Controls\Add.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

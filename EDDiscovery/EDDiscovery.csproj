@@ -165,8 +165,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.1.2.0\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.QuickJSON.1.4.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -227,6 +227,7 @@
     <Compile Include="UserControls\3DMap\GalaxyStars.cs" />
     <Compile Include="UserControls\3DMap\GalMapObjects.cs" />
     <Compile Include="UserControls\3DMap\GalMapRegions.cs" />
+    <Compile Include="UserControls\3DMap\ImageCache.cs" />
     <Compile Include="UserControls\3DMap\Map.cs" />
     <Compile Include="UserControls\3DMap\MapTheme.cs" />
     <Compile Include="UserControls\3DMap\MapMenu.cs" />

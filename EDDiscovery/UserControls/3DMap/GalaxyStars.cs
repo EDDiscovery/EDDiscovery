@@ -341,7 +341,7 @@ namespace EDDiscovery.UserControls.Map3D
             for (int i = 0; i < length; i++)
             {
                 Vector3 doff = worldpos[i + pos].W < 0 ? (disallowedoffset + offset) : offset;
-                mats[i] = GLPLVertexShaderMatrixTriStripTexture.CreateMatrix(worldpos[i + pos].Xyz + doff, size, rotationradians, rotatetoviewer, rotateelevation, alphafadescalar, alphafadepos, imagepos, visible);
+                mats[i] = GLStaticsMatrix4.CreateMatrix(worldpos[i + pos].Xyz + doff, size, rotationradians, rotatetoviewer, rotateelevation, alphafadescalar, alphafadepos, imagepos, visible);
             }
             return mats;
         }

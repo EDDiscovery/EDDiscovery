@@ -120,6 +120,7 @@ namespace EDDiscovery
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
         public string DLLExeDirectory() { return SubExeDirectory("DLL"); }
+        public string DownloadedImages() { return SubAppDirectory("Images"); }
         public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string CAPIDirectory() { return SubAppDirectory("CAPI"); }
         public string TempMoveDirectory() { return SubAppDirectory("MoveFolder"); }
