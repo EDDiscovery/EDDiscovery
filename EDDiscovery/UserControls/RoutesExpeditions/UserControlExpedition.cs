@@ -319,9 +319,9 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("N1") : "";
-                    row.Cells[ColumnDistStart.Index].Value = firstsys != null && sys != null && sys.HasCoordinate ? sys.Distance(firstsys).ToString("N1") : "";
-                    row.Cells[ColumnDistanceRemaining.Index].Value = lastsys != null && sys != null && sys.HasCoordinate ? sys.Distance(lastsys).ToString("N1") : "";
+                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("N2") : "";
+                    row.Cells[ColumnDistStart.Index].Value = firstsys != null && sys != null && sys.HasCoordinate ? sys.Distance(firstsys).ToString("N2") : "";
+                    row.Cells[ColumnDistanceRemaining.Index].Value = lastsys != null && sys != null && sys.HasCoordinate ? sys.Distance(lastsys).ToString("N2") : "";
                 }
 
                 txtCmlDistance.Text = totaldistance.ToString("N1") + " ly";
@@ -418,9 +418,9 @@ namespace EDDiscovery.UserControls
                     if (syslookup != null)
                     {
                         //System.Diagnostics.Debug.WriteLine($"Lookup for {sys.Name} Found co-ords");
-                        row.Cells[ColumnX.Index].Value = syslookup.X.ToString("N3");              // write culture specific location.
-                        row.Cells[ColumnY.Index].Value = syslookup.Y.ToString("N3");
-                        row.Cells[ColumnZ.Index].Value = syslookup.Z.ToString("N3");
+                        row.Cells[ColumnX.Index].Value = syslookup.X.ToString("N5");              // write culture specific location.
+                        row.Cells[ColumnY.Index].Value = syslookup.Y.ToString("N5");
+                        row.Cells[ColumnZ.Index].Value = syslookup.Z.ToString("N5");
                         sys = new SystemClass(syslookup);
                     }
                 }
@@ -428,7 +428,7 @@ namespace EDDiscovery.UserControls
                 row.Cells[0].Style.ForeColor = sys.HasCoordinate ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
-                row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("N1") : "";
+                row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("N2") : "";
 
                 StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmcheck);
 
@@ -720,7 +720,7 @@ namespace EDDiscovery.UserControls
                                     string header = rowheader != null && rowheader.Cells.Count > i ? rowheader[i] + ":" : "";
                                     string data = row[i];
                                     if (data.InvariantParseDoubleNull() != null && data.Contains(".")) // if its a number, and its a dotted number
-                                        data = data.InvariantParseDouble(0).ToString("0.##");
+                                        data = data.InvariantParseDouble(0).ToString("0.#####");
 
                                     note = note.AppendPrePad(header + data, Environment.NewLine);
                                 }
@@ -923,6 +923,13 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShow3DMap_Click(object sender, EventArgs e)
         {
+            //var savedroutes = SavedRouteClass.GetAllSavedRoutes();            // debug only
+            //SavedRouteClass tr = savedroutes.Find(x => x.Name == "Test2");
+            //if (tr != null)
+            //{
+            //    tr.TestHarness2();
+            //}
+
             if (outstandingprocessing != 0)
             {
                 Console.Beep(512, 500);

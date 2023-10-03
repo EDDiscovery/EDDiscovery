@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
                 {
                     var se = (SavedRouteClass.SystemEntry)system;
                     bool known = se.HasCoordinate;
-                    data = new object[] { se.Name, se.Note, known ? se.X.ToString("N3") : "", known ? se.Y.ToString("N3") : "", known ? se.Z.ToString("N3") : "" };
+                    data = new object[] { se.Name, se.Note, known ? se.X.ToString("N5") : "", known ? se.Y.ToString("N5") : "", known ? se.Z.ToString("N5") : "" };
                 }
                 else
                 {

@@ -447,7 +447,9 @@ namespace EDDiscovery.UserControls
 
         private void Merge(int panel)       // Merge a panel, which involves closing one, so we need to check
         {
-            SplitContainer insidesplitter = (SplitContainer)currentsplitter.Controls[panel].Controls[0];  // get that split container in the panel
+            SplitterPanel sp = panel == 0 ? currentsplitter.Panel1 : currentsplitter.Panel2;    // fix 3443 by looking it up
+
+            SplitContainer insidesplitter = (SplitContainer)sp.Controls[0];  // get that split container in the panel
 
             UserControlCommonBase uccb = insidesplitter.Panel2.Controls[0] as UserControlCommonBase;        // the panel may an embedded direct uccb.. 
             if ( uccb == null )
