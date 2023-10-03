@@ -100,6 +100,7 @@ namespace EDDiscovery.UserControls.Map3D
                 EntryTextBox.BackColor = Color.FromArgb(96, 50, 50, 50);
                 EntryTextBox.BorderColor = Color.Gray;
                 EntryTextBox.BorderWidth = 1;
+                EntryTextBox.ShowWaitButton = true;
                 map.displaycontrol.Add(EntryTextBox);
                 hpos += EntryTextBox.Width + hpad;
             }
@@ -651,6 +652,7 @@ namespace EDDiscovery.UserControls.Map3D
                 var name = new GLTextBoxAutoComplete("name", new Rectangle(cenable.Right + hpad, vpos, spaceavailable / 3, iconsize), ie.Name);
                 name.TextChanged += (s) => { ie.Name = name.Text; };
                 name.ToolTipText = "Name of entry";
+                name.ShowWaitButton = true;
                 spanel.Add(name, ref tabno);
 
                 spaceavailable -= spaceavailable / 3 + hpad;

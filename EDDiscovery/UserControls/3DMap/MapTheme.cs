@@ -88,6 +88,14 @@ namespace EDDiscovery.UserControls.Map3D
                 }
             }
 
+            var ac = ctrl as GLTextBoxAutoComplete;
+            if ( ac !=null )        // themed by GLMultiLineTextBox
+            {
+                ac.ListBox.BackColor = formback;
+                ac.ListBox.ForeColor = texc;
+
+            }
+
             var lb = ctrl as GLLabel;
             if (lb != null)
             {

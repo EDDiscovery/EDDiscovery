@@ -537,6 +537,7 @@ namespace EDDiscovery.UserControls.Map3D
                                 tb.EnableHorizontalScrollBar = sizer.Item2;
                                 tb.CursorToEnd();
                                 tb.BackColor = cfg.BackColor;
+                                tb.ReadOnly = true;
                                 cfg.AddOK("OK");            // order important for tab control
                                 cfg.AddButton("goto", "Goto", new Point(0, 0), anchor: AnchorType.AutoPlacement);
                                 if (bkm != null)
