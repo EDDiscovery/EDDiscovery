@@ -86,9 +86,12 @@ SECTION UserControlCompass
 .buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
 .extButtonShowControl.ToolTip: "Configure compass overlay" @
 .extButtonFont.ToolTip: "Configure font of compass" @
-.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhennolatlong: "Hide when Elite has no Lat/Long" @
+.hidewhennotarget: "Hide when no Lat/Long target is set" @
 .hidewhenonfoot: "Hide when on foot" @
 .cleartargetonleavingbody: "Clear target when leaving a body" @
+.hidewheninSRV: "Hide when in SRV" @
+.hidewheninship: "Hide when in ship" @
 
 
 SECTION UserControlWebBrowser
