@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls.Map3D
                 hpos += EntryTextBox.Width + hpad;
             }
 
-            if ((parts & Map.Parts.PrepopulateEDSMLocalArea) != 0)
+            if ((parts & Map.Parts.PrepopulateGalaxyStarsLocalArea) != 0)
             {
                 GLImage butpopstars = new GLImage("MSPopulate", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowMoreStars"));
                 butpopstars.ToolTipText = "Load star box at current look location";
@@ -273,7 +273,7 @@ namespace EDDiscovery.UserControls.Map3D
             }
 
 
-            if ((parts & Map.Parts.EDSMStars) != 0)
+            if ((parts & Map.Parts.GalaxyStars) != 0)
             {
                 GLGroupBox tpgb = new GLGroupBox("GalaxyStarsGB", "Galaxy Stars", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 2));
                 pform.Add(tpgb);
@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls.Map3D
                 tpgb.Add(butgalstarstext);
                 hpos += butgalstarstext.Width + hpad;
 
-                if ((parts & Map.Parts.PrepopulateEDSMLocalArea) != 0)
+                if ((parts & Map.Parts.PrepopulateGalaxyStarsLocalArea) != 0)
                 {
                     GLNumberBoxLong nblong = new GLNumberBoxLong("LYDist", new Rectangle(hpos, 0, 50, iconsize), map.LocalAreaSize);
                     nblong.Minimum = 1;

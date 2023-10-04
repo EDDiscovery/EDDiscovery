@@ -53,8 +53,8 @@ namespace EDDiscovery.UserControls
                   Map.Parts.None
                 | Map.Parts.Galaxy
                 | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute
-                | Map.Parts.EDSMStars
-                | Map.Parts.PrepopulateEDSMLocalArea
+                | Map.Parts.GalaxyStars
+                | Map.Parts.PrepopulateGalaxyStarsLocalArea
                 | Map.Parts.Menu
                 | Map.Parts.SearchBox | Map.Parts.RightClick
                 | Map.Parts.YHoldButton | Map.Parts.GalaxyResetPos

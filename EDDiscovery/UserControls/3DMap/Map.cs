@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls.Map3D
             Grid = (1 << 3),
             StarDots = (1 << 4),
             TravelPath = (1 << 5),
-            EDSMStars = (1 << 6),
+            GalaxyStars = (1 << 6),
             NavRoute = (1 << 7),
             Route = (1 << 8),
             Bookmarks = (1 << 9),
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls.Map3D
             LimitSelector = (1<<22),
 
             AutoEDSMStarsUpdate = (1 << 28),
-            PrepopulateEDSMLocalArea = (1 << 29),
+            PrepopulateGalaxyStarsLocalArea = (1 << 29),
 
             Map3D = 0x10ffffff,
             //Map3D = 0x010ff0001,
@@ -424,11 +424,11 @@ namespace EDDiscovery.UserControls.Map3D
                 UpdateBookmarks();
             }
 
-            if ((parts & Parts.EDSMStars) != 0)
+            if ((parts & Parts.GalaxyStars) != 0)
             {
                 galaxystars = new GalaxyStars();
 
-                if ((parts & Parts.PrepopulateEDSMLocalArea) != 0)        
+                if ((parts & Parts.PrepopulateGalaxyStarsLocalArea) != 0)        
                 {
                     galaxystars.SectorSize = 20;
                     //    galaxystars.ShowDistance = true;// decided show distance is a bad idea, but we keep the code in case i change my mind
@@ -529,6 +529,7 @@ namespace EDDiscovery.UserControls.Map3D
                                 System.Diagnostics.Debug.WriteLine($"Info {nl.Item1} {nl.Item2}");
 
                                 GLFormConfigurable cfg = new GLFormConfigurable("Info");
+                                cfg.Tag = "SolidBackground";
                                 GLMultiLineTextBox tb = new GLMultiLineTextBox("MLT", new Rectangle(10, 10, 1000, 1000), nl.Item3);
                                 tb.Font = cfg.Font = displaycontrol.Font;                             // set the font up first, as its needed for config
                                 var sizer = tb.CalculateTextArea(new Size(50, 24), new Size(displaycontrol.Width - 64, displaycontrol.Height - 64));
@@ -538,6 +539,7 @@ namespace EDDiscovery.UserControls.Map3D
                                 tb.CursorToEnd();
                                 tb.BackColor = cfg.BackColor;
                                 tb.ReadOnly = true;
+                                tb.SetSelection(0, 0);
                                 cfg.AddOK("OK");            // order important for tab control
                                 cfg.AddButton("goto", "Goto", new Point(0, 0), anchor: AnchorType.AutoPlacement);
                                 if (bkm != null)
@@ -765,7 +767,7 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         gl3dcontroller.SlewToPosition(pos.Value, -1);
 
-                        if ((parts & Parts.PrepopulateEDSMLocalArea) != 0)
+                        if ((parts & Parts.PrepopulateGalaxyStarsLocalArea) != 0)
                         {
                             galaxystars.Request9x3Box(pos.Value);
                         }
@@ -864,7 +866,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             HistoryEntry he = parent.DiscoveryForm.History.GetLast;       // may be null
             // basic check we are operating in this mode
-            if (galaxystars != null && he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0 )
+            if (galaxystars != null && he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateGalaxyStarsLocalArea) != 0 )
             {
                 var hepos = new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z);
 
@@ -1427,6 +1429,9 @@ namespace EDDiscovery.UserControls.Map3D
             var gmo = obj as GalacticMapObject;
             var bkm = obj as EliteDangerousCore.DB.BookmarkClass;
             var sys = obj as ISystem;
+
+            if (sys != null)
+                System.Diagnostics.Debug.WriteLine($"3dmap Lookup ISystem {sys.Name} edsmid {sys.EDSMID} sa {sys.SystemAddress}");
 
             string name = he != null ? he.System.Name : gmo != null ? gmo.NameList : bkm != null ? bkm.Name : sys.Name;
             if (bkm != null)

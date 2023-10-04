@@ -24,7 +24,10 @@ namespace EDDiscovery.UserControls.Map3D
         {
             //System.Diagnostics.Debug.WriteLine($"Theme {ctrl.Name} {ctrl.GetType().Name}");
 
-            Color formback = Color.FromArgb(220, 60, 60, 70);
+            GLForm form = ctrl.FindForm();
+            string tag = form?.Tag as string;
+            Color formback = tag == "SolidBackground" ?  Color.FromArgb(255,60,60,70) : Color.FromArgb(220, 60, 60, 70);
+            
             Color buttonface = Color.FromArgb(255, 128, 128, 128);
             Color texc = Color.Orange;
 

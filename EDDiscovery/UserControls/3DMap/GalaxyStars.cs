@@ -328,7 +328,7 @@ namespace EDDiscovery.UserControls.Map3D
                                             Vector3 size, Vector3 rotationradians,
                                             bool rotatetoviewer, bool rotateelevation,
                                             float alphafadescalar = 0,
-                                            float alphafadepos = 0,
+                                            float alphafadepos = 1,
                                             int imagepos = 0,
                                             bool visible = true,
                                             int pos = 0, int length = -1        // allowing you to pick out a part of the worldpos array
