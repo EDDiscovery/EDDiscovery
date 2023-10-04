@@ -228,6 +228,7 @@ namespace EDDiscovery
         UserControlCompass_hidewheninSRV,
         UserControlCompass_hidewheninship,
         UserControlCompass_hidewhennolatlong,
+        UserControlCompass_hidewhennotarget,
 
 
         ImportExportForm, // Control 'Export'
