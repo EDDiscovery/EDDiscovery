@@ -37,10 +37,11 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Start(GLItemsList items, GLRenderProgramSortedList rObjects, float bookmarksize, GLStorageBlock findbufferresults, bool depthtest)
         {
-            var vert = new GLPLVertexScaleLookatConfigurable(rotatetoviewer: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true); // above autoscale, 1f
+            var vert = new GLPLVertexScaleLookatConfigurable(rotatetoviewer: dorotate, rotateelevation: doelevation, texcoords: true, generateworldpos: true, 
+                                    useeyedistance:true); 
 
             const int texbindingpoint = 1;
-            var frag = new GLPLFragmentShaderTexture(texbindingpoint);       // binding - simple texturer based on vs model coords
+            var frag = new GLPLFragmentShaderTexture(texbindingpoint, true);       // binding - simple texturer based on vs model coords
 
             objectshader = new GLShaderPipeline(vert, null, null, null, frag);
             items.Add(objectshader);

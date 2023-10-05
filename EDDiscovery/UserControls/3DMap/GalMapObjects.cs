@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             const int texbindingpoint = 1;
             var vert = new GLPLVertexScaleLookatConfigurable(rotatetoviewer: dorotate, rotateelevation: doelevation,       // a look at vertex shader
-                                                             useeyedistance:false); 
+                                                             useeyedistance:true); 
             var tcs = new GLPLTesselationControl(10f);  // number of intermediate points
             tes = new GLPLTesselationEvaluateSinewave(wavesize, 1f);         // 0.2f in size, 1 wave across the object
             var frag = new GLPLFragmentShaderTexture2DDiscard(texbindingpoint);       // binding - takes image pos from tes. imagepos < 0 means discard

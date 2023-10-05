@@ -133,7 +133,9 @@ namespace EDDiscovery.UserControls.Map3D
         private int localareasize = 50;
         private UserControlCommonBase parent;
 
-        private int autoscalemax = 30;
+        private int autoscalegmo = 30;
+        private int autoscalebookmarks = 30;
+        private int autoscalegalstars = 30;
 
         private bool mapcreatedokay = false; 
 
@@ -361,8 +363,13 @@ namespace EDDiscovery.UserControls.Map3D
 
             var starimagearray = new GLTexture2DArray();
             Bitmap[] starcroppedbitmaps = BodyToImages.StarBitmaps(new RectangleF(16, 16, 68, 68));     // we own these
+            if ( !EliteDangerousCore.DB.SystemsDatabase.Instance.HasStarType )
+            {
+                starcroppedbitmaps[(int)EDStar.Unknown] = starcroppedbitmaps[(int)EDStar.G];        // no star info, use G type.
+            }
             // debug output of what is shown..
             //for (int b = 0; b < starcroppedbitmaps.Length; b++) starcroppedbitmaps[b].Save(@"c:\code\" + $"star{b}_{Enum.GetName(typeof(EDStar),b)}.bmp", System.Drawing.Imaging.ImageFormat.Png);
+
             // textures are all the same size, based on texture[0]. Make sure its the biggest
             starimagearray.CreateLoadBitmaps(starcroppedbitmaps, SizedInternalFormat.Rgba8, ownbmp: true, texturesize: starcroppedbitmaps[(int)EDStar.O].Size, alignment: ContentAlignment.MiddleCenter);
             items.Add(starimagearray);
@@ -440,7 +447,7 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.LabelOffset = new Vector3(0,labelhoff,0);
                 galaxystars.Font = labelfont;
 
-                galaxystars.Create(items, rObjects, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), galaxysunsize, findresults);
+                galaxystars.Create(items, rObjects, new Tuple<GLTexture2DArray, long[]>(starimagearray, starimagearraycontrolword), galaxysunsize, findresults, galmapobjects);
             }
 
             if ((parts & Parts.Route) != 0)
@@ -830,7 +837,7 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
-        public void UpdateNoSunList()       // feed in list of galmapobject positions to other classes so they don't repeat
+        public void UpdateDueToGMOEnableChanging()       // feed in list of galmapobject positions to other classes so they don't repeat
         {
             if (galmapobjects != null)
             {
@@ -1115,7 +1122,7 @@ namespace EDDiscovery.UserControls.Map3D
                 if (galmapobjects != null)
                 {
                     galmapobjects.SetShaderEnable(value);
-                    UpdateNoSunList();
+                    UpdateDueToGMOEnableChanging();
                     glwfc.Invalidate();
                 }
             }
@@ -1124,7 +1131,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (galmapobjects != null) 
             { 
                 galmapobjects.SetGalObjectTypeEnable(id, state);
-                UpdateNoSunList();
+                UpdateDueToGMOEnableChanging();
                 glwfc.Invalidate(); 
             } 
         }
@@ -1132,7 +1139,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (galmapobjects != null) 
             { 
                 galmapobjects.SetAllEnables(set);
-                UpdateNoSunList();
+                UpdateDueToGMOEnableChanging();
                 glwfc.Invalidate(); 
             } 
         }
@@ -1149,14 +1156,34 @@ namespace EDDiscovery.UserControls.Map3D
         public bool ShowBookmarks { get { return bookmarks?.Enable ?? true; } set { if (bookmarks != null) bookmarks.Enable = value; glwfc.Invalidate(); } }
         public int LocalAreaSize { get { return localareasize; } set { if ( value != localareasize ) { localareasize = value; UpdateEDSMStarsLocalArea(); } } }
 
-        public int AutoScaleMax { get { return autoscalemax; } set 
+        public int AutoScaleGMOs
+        {
+            get { return autoscalegmo; }
+            set
             {
-                autoscalemax = value;
-                System.Diagnostics.Debug.WriteLine($"AutoScalemax to {autoscalemax}");
+                autoscalegmo = value;
                 if (galmapobjects != null)
-                    galmapobjects.SetAutoScale(autoscalemax);
+                    galmapobjects.SetAutoScale(autoscalegmo);
+            }
+        }
+        public int AutoScaleBookmarks
+        {
+            get { return autoscalebookmarks; }
+            set
+            {
+                autoscalebookmarks = value;
                 if (bookmarks != null)
-                    bookmarks.SetAutoScale(autoscalemax);
+                    bookmarks.SetAutoScale(autoscalebookmarks);
+            }
+        }
+        public int AutoScaleGalaxyStars
+        {
+            get { return autoscalegalstars; }
+            set
+            {
+                autoscalegalstars = value;
+                if (galaxystars != null)
+                    galaxystars.SetAutoScale(autoscalegalstars);
             }
         }
         #endregion
@@ -1203,7 +1230,9 @@ namespace EDDiscovery.UserControls.Map3D
 
             ShowBookmarks = defaults.GetSetting("BKMK", true);
 
-            AutoScaleMax = defaults.GetSetting("AUTOSCALE", 30);
+            AutoScaleBookmarks = defaults.GetSetting("AUTOSCALEBookmarks", 30);
+            AutoScaleGMOs = defaults.GetSetting("AUTOSCALEGMO", 30);
+            AutoScaleGalaxyStars = defaults.GetSetting("AUTOSCALEGS", 4);
 
             if (restorepos)
             {
@@ -1245,7 +1274,9 @@ namespace EDDiscovery.UserControls.Map3D
             var pos = gl3dcontroller.PosCamera.StringPositionCamera;
             defaults.PutSetting("POSCAMERA", pos);
             defaults.PutSetting("BKMK", bookmarks?.Enable ?? true);
-            defaults.PutSetting("AUTOSCALE", AutoScaleMax);
+            defaults.PutSetting("AUTOSCALEBookmarks", AutoScaleBookmarks);
+            defaults.PutSetting("AUTOSCALEGMO", AutoScaleGMOs);
+            defaults.PutSetting("AUTOSCALEGS", AutoScaleGalaxyStars);
 
             defaults.PutSetting("ImagesEnable", UserImagesEnable);
             if (userimages != null)

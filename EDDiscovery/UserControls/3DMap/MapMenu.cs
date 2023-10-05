@@ -304,14 +304,13 @@ namespace EDDiscovery.UserControls.Map3D
                     hpos += nblong.Width + hpad;
 
                     GLLabel lylab = new GLLabel("LYLab", new Rectangle(hpos, 0, 30, iconsize), "Ly");
-                    lylab.ForeColor = Color.DarkOrange;
                     tpgb.Add(lylab);
                     hpos += lylab.Width + hpad;
                 }
 
                 if ((parts & Map.Parts.LimitSelector) != 0)
                 {
-                    GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, 0, 150, iconsize));
+                    GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, 0, 120, iconsize));
                     cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
                     cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
                     var list = new List<int>() { 750000, 500000, 250000, 100000 };
@@ -325,7 +324,18 @@ namespace EDDiscovery.UserControls.Map3D
                     cbstars.SelectedIndex = itemno;       // high default
                     cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
                     tpgb.Add(cbstars);
+                    hpos += cbstars.Width + hpad;
                 }
+
+                GLLabel lab = new GLLabel("ScaleLab", new Rectangle(hpos, 0, 50, iconsize), "Scale:");
+                GLTrackBar tb = new GLTrackBar("ScaleGS", new Rectangle(lab.Right + hpad, 0, iconsize * 4, iconsize));
+                tpgb.Add(lab);
+                tb.Minimum = 1;
+                tb.Maximum = 10;
+                tb.TickFrequency = 1;
+                tb.Value = map.AutoScaleGalaxyStars;
+                tb.ValueChanged += (s, v) => { map.AutoScaleGalaxyStars = v; };
+                tpgb.Add(tb);
 
                 vpos += tpgb.Height + ypad;
             }
@@ -376,12 +386,11 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Map.Parts.GalObjects) != 0)
             {
-                GLGroupBox galgb = new GLGroupBox("GalGB", "Galaxy Objects", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
-                galgb.ClientHeight = (iconsize + 4) * 2;
+                GLGroupBox galgb = new GLGroupBox("GalGB", "Galaxy Objects", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 10));
                 pform.Add(galgb);
-                vpos += galgb.Height + ypad;
 
-                GLFlowLayoutPanel galfp = new GLFlowLayoutPanel("GALFP", DockingType.Fill, 0);
+                GLFlowLayoutPanel galfp = new GLFlowLayoutPanel("GALFP", DockingType.Top,0);
+                galfp.AutoSize = true;
                 galfp.FlowPadding = new PaddingType(2, 2, 2, 2);
                 galgb.Add(galfp);
 
@@ -406,30 +415,28 @@ namespace EDDiscovery.UserControls.Map3D
                 butgonoff.Checked = map.GalObjectDisplay;
                 butgonoff.CheckChanged += (e1) => { map.GalObjectDisplay = !map.GalObjectDisplay; };
                 galfp.Add(butgonoff);
-            }
 
-            if ((parts & Map.Parts.GalObjects) != 0 || (parts & Map.Parts.Bookmarks) != 0)
-            {
-                GLGroupBox scalegb = new GLGroupBox("Scalar", "Scaling of objects", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
-                scalegb.ClientHeight = (iconsize + 4) * 1;
-                pform.Add(scalegb);
-                vpos += scalegb.Height + ypad;
-                GLTrackBar tb = new GLTrackBar("ScaleTB", new Rectangle(0, 0, iconsize*8, iconsize));
+                GLLabel lab = new GLLabel("ScaleLab", new Rectangle(leftmargin, galfp.Height + ypad, 50, iconsize), "Scale:");
+                galgb.Add(lab);
+                GLTrackBar tb = new GLTrackBar("ScaleGMO", new Rectangle(lab.Right, lab.Top, iconsize*8, iconsize));
                 tb.Minimum = 1;
-                tb.Maximum = 500;
-                tb.Value = map.AutoScaleMax;
-                tb.ValueChanged += (s,v) => { map.AutoScaleMax = v; };
-                scalegb.Add(tb);
+                tb.Maximum = 250;
+                tb.Value = map.AutoScaleGMOs;
+                tb.ValueChanged += (s,v) => { map.AutoScaleGMOs = v; };
+                galgb.Add(tb);
+
+                galgb.ClientHeight = galfp.Height + ypad + tb.Height + ypad;
+
+                vpos += galgb.Height + ypad;
             }
 
             if ((parts & Map.Parts.Regions) != 0)
             {
                 // EDSM regions
 
-                GLGroupBox edsmregionsgb = new GLGroupBox("EDSMR", "EDSM Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
+                GLGroupBox edsmregionsgb = new GLGroupBox("EDSMR", "EDSM Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth / 2, 50));
                 edsmregionsgb.ClientHeight = iconsize + 8;
                 pform.Add(edsmregionsgb);
-                vpos += edsmregionsgb.Height + ypad;
 
                 GLCheckBox butedre = new GLCheckBox("EDSMRE", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowGalaxy") , null);
                 butedre.ToolTipText = "Enable EDSM Regions";
@@ -460,10 +467,9 @@ namespace EDDiscovery.UserControls.Map3D
 
                 // elite regions
 
-                GLGroupBox eliteregionsgb = new GLGroupBox("ELITER", "Elite Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
+                GLGroupBox eliteregionsgb = new GLGroupBox("ELITER", "Elite Regions", new Rectangle(edsmregionsgb.Right + hpad, vpos, pform.ClientWidth - leftmargin*2 - edsmregionsgb.Width - hpad, 50));
                 eliteregionsgb.ClientHeight = iconsize + 8;
                 pform.Add(eliteregionsgb);
-                vpos += eliteregionsgb.Height + ypad;
 
                 GLCheckBox butelre = new GLCheckBox("ELITERE", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.ShowGalaxy") , null);
                 butelre.ToolTipText = "Enable Elite Regions";
@@ -511,6 +517,8 @@ namespace EDDiscovery.UserControls.Map3D
                 };
 
                 butelre.CheckChanged += butedre.CheckChanged;
+
+                vpos += edsmregionsgb.Height + ypad;
             }
 
             if ((parts & Map.Parts.ImageList) != 0)
@@ -532,6 +540,20 @@ namespace EDDiscovery.UserControls.Map3D
                 imagesgb.Add(b2);
 
                 vpos += imagesgb.Height + ypad;
+            }
+
+            if ((parts & Map.Parts.Bookmarks) != 0)
+            {
+                GLGroupBox scalegb = new GLGroupBox("Scalar", "Bookmarks Scaling", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
+                scalegb.ClientHeight = (iconsize + 4) * 1;
+                pform.Add(scalegb);
+                vpos += scalegb.Height + ypad;
+                GLTrackBar tb = new GLTrackBar("ScaleBK", new Rectangle(0, 0, iconsize * 8, iconsize));
+                tb.Minimum = 1;
+                tb.Maximum = 250;
+                tb.Value = map.AutoScaleBookmarks;
+                tb.ValueChanged += (s, v) => { map.AutoScaleBookmarks = v; };
+                scalegb.Add(tb);
             }
 
             pform.ClientHeight = vpos;

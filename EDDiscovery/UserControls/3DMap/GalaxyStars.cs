@@ -50,13 +50,16 @@ namespace EDDiscovery.UserControls.Map3D
         public bool DBActive { get { return subthreadsrunning > 0; ; } }
         public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
         public int SectorSize { get; set; } = 100;
-
-
-        public HashSet<GalMapObjects.ObjectPosXYZ> NoSunList = new HashSet<GalMapObjects.ObjectPosXYZ>();
+        public void SetAutoScale(int max)
+        {
+            sunshader.GetShader<GLPLVertexShaderModelWorldTextureAutoScaleConfigurable>().SetScalars(60, 1F, max);
+        }
         public Vector3 NoSunTextOffset { get; set; } = new Vector3(0, -1.2f, 0);
 
-        public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, Tuple<GLTexture2DArray, long[]> starimagearrayp, float sunsize, GLStorageBlock findbufferresults)
+        public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, Tuple<GLTexture2DArray, long[]> starimagearrayp, float sunsize, GLStorageBlock findbufferresults, GalMapObjects gmos)
         {
+            this.galaxyobjects = gmos;
+
             // globe shape
             var shape = GLSphereObjectFactory.CreateTexturedSphereFromTriangles(2, sunsize);
 
@@ -74,10 +77,12 @@ namespace EDDiscovery.UserControls.Map3D
 
             // the sun shader
 
-            sunvertexshader = new GLPLVertexShaderModelWorldTextureAutoScale(autoscale: 50, autoscalemin: 1f, autoscalemax: 50f, useeyedistance: false);
+            sunvertexshader = new GLPLVertexShaderModelWorldTextureAutoScaleConfigurable(useeyedistance: true);
             var sunfragmenttexture = new GLPLFragmentShaderTexture2DWSelectorSunspot();
             sunshader = new GLShaderPipeline(sunvertexshader, sunfragmenttexture);
             items.Add(sunshader);
+
+            SetAutoScale(300);
 
             var starrc = GLRenderState.Tri();     // render is triangles
             starrc.DepthTest = true;
@@ -271,13 +276,15 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (d.searchsize > 0)           // if not a clear..
             {
+                var nosunlist = galaxyobjects != null ? galaxyobjects.PositionsWithEnable : new HashSet<GalMapObjects.ObjectPosXYZ>();
+
                 if (ShowDistance)
                 {
                     Vector4 pos = new Vector4(d.pos.X + d.searchsize / 2, d.pos.Y + d.searchsize / 2, d.pos.Z + d.searchsize / 2, 0);       // from centre of box
 
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
                         (x, y, z, startype) => {
-                            if (NoSunList.Contains(new GalMapObjects.ObjectPosXYZ(x, y, z)))
+                            if (nosunlist.Contains(new GalMapObjects.ObjectPosXYZ(x, y, z)))
                                 return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, -1);
                             else
                                 return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, starimagearray.Item2[(int)startype]); 
@@ -290,7 +297,7 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
                                             (x, y, z, startype) => {
-                                                if (NoSunList.Contains(new GalMapObjects.ObjectPosXYZ(x, y, z)))
+                                                if (nosunlist.Contains(new GalMapObjects.ObjectPosXYZ(x, y, z)))
                                                     return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, -1);
                                                 else
                                                     return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, starimagearray.Item2[(int)startype]);
@@ -452,7 +459,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         private GLSetOfObjectsWithLabels slset; // main class holding drawing
 
-        private GLPLVertexShaderModelWorldTextureAutoScale sunvertexshader;
+        private GLPLVertexShaderModelWorldTextureAutoScaleConfigurable sunvertexshader;
         private GLShaderPipeline sunshader;     // sun drawer
         private GLShaderPipeline textshader;     // text shader
         private GLBuffer starshapebuf;
@@ -492,6 +499,9 @@ namespace EDDiscovery.UserControls.Map3D
         private const int MaxObjectsMargin = 1000;
         private const int MaxRequests = 27 * 2;
         private const int MaxSubthreads = 16;
+
+        private GalMapObjects galaxyobjects;
+
     }
 
 }
