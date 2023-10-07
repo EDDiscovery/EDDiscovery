@@ -524,6 +524,8 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.RightClick) != 0)
             {
                 rightclickmenu = new GLContextMenu("RightClickMenu",true,
+                    new GLMenuItemLabel("RCMTitle", "Context Menu"),
+                    new GLMenuItemSeparator("RCMSepar", 5,5, ContentAlignment.MiddleCenter),
                     new GLMenuItem("RCMInfo", "Information")
                     {
                         MouseClick = (s, e) =>
@@ -625,6 +627,14 @@ namespace EDDiscovery.UserControls.Map3D
                             ScanDisplayForm.ShowScanOrMarketForm(parent.FindForm(), s, true, parent.DiscoveryForm.History, 0.8f, System.Drawing.Color.Purple);
                         }
                     },
+                    new GLMenuItem("RCMViewSpansh", "View on Spansh")
+                    {
+                        Click = (s1) =>
+                        {
+                            ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
+                            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + s.SystemAddress.Value.ToStringInvariant());
+                        }
+                    },
                     new GLMenuItem("RCMViewEDSM", "View on EDSM")
                     {
                         Click = (s1) =>
@@ -681,18 +691,23 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     System.Diagnostics.Debug.WriteLine("Right click opening");
 
-                    bool issystem = rightclickmenu.Tag is ISystem || rightclickmenu.Tag is HistoryEntry;
+                    rightclickmenu.Size = new Size(10, 10);     // reset to small, and let the autosizer work again as we are going to change content
 
-                    ms["RCMAddExpedition"].Visible = ms["RCMViewStarDisplay"].Visible = ms["RCMViewEDSM"].Visible = issystem;
+                    var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
+                    ((GLMenuItemLabel)ms["RCMTitle"]).Text = nl.Item1 + " " + nl.Item2.ToString();
 
-                    if (issystem)
+                    ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : rightclickmenu.Tag is ISystem ? (ISystem)rightclickmenu.Tag : null;
+
+                    ms["RCMAddExpedition"].Visible = ms["RCMViewStarDisplay"].Visible = ms["RCMViewEDSM"].Visible = s != null;
+
+                    if (s!=null)
                     {
-                        var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
                         System.Diagnostics.Debug.WriteLine("Right click on system " + nl.Item1);
                         var bkm = EliteDangerousCore.DB.GlobalBookMarkList.Instance.FindBookmarkOnSystem(nl.Item1);
 
                         ms["RCMDeleteBookmark"].Visible = ms["RCMEditBookmark"].Visible = bkm != null;
                         ms["RCMNewBookmark"].Visible = bkm == null;
+                        ms["RCMViewSpansh"].Visible = s.SystemAddress != null;
                     }
                     else
                     {
@@ -1634,7 +1649,7 @@ namespace EDDiscovery.UserControls.Map3D
                         if (rightclickmenu != null)
                         {
                             rightclickmenu.Tag = item;
-                            rightclickmenu.Show(displaycontrol, e.Location);
+                            rightclickmenu.Show(displaycontrol, new Point(e.Location.X,e.Location.Y-32));
                         }
                     }
                 }

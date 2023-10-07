@@ -320,7 +320,8 @@ namespace EDDiscovery.UserControls
             DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             he.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string detail = EventDescription;
-            detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
+            //detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15, Environment.NewLine + "..."), Environment.NewLine);
+            detail = detail.AppendPrePad(EventDetailedInfo, Environment.NewLine);
 
             if (search.Enabled)
             {

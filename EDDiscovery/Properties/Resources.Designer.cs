@@ -194,51 +194,6 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eddb.io/.
-        /// </summary>
-        public static string URLeddb {
-            get {
-                return ResourceManager.GetString("URLeddb", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eddb.io/station/market-id/.
-        /// </summary>
-        public static string URLEDDBStationMarketId {
-            get {
-                return ResourceManager.GetString("URLEDDBStationMarketId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to http://eddb.io/system/.
-        /// </summary>
-        public static string URLEDDBSystem {
-            get {
-                return ResourceManager.GetString("URLEDDBSystem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eddb.io/system/name/.
-        /// </summary>
-        public static string URLEDDBSystemName {
-            get {
-                return ResourceManager.GetString("URLEDDBSystemName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eddiscovery.space/eddb/systems_populated.jsonl.
-        /// </summary>
-        public static string URLEDDBSystems {
-            get {
-                return ResourceManager.GetString("URLEDDBSystems", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://www.elitedangerous.com/.
         /// </summary>
         public static string URLEDHomepage {
@@ -379,15 +334,6 @@ namespace EDDiscovery.Properties {
         public static string URLReleaseVideo {
             get {
                 return ResourceManager.GetString("URLReleaseVideo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to http://ross.eddb.io/system/update/.
-        /// </summary>
-        public static string URLRossSystem {
-            get {
-                return ResourceManager.GetString("URLRossSystem", resourceCulture);
             }
         }
         

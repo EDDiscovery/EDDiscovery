@@ -185,11 +185,6 @@ namespace EDDiscovery.UserControls
 
                 //defaulturl = urlallowed;
             }
-            else if (source == "EDDB")
-            {
-                url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(sys.Name);
-                //defaulturl = urlallowed;
-            }
             else if (source == "Inara")
             {
                 url = Properties.Resources.URLInaraStarSystem + System.Web.HttpUtility.UrlEncode(sys.Name);

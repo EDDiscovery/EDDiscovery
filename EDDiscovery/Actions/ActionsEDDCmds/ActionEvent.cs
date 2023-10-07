@@ -198,9 +198,7 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("eddb"))
                         {
-                            string url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(he.System.Name);
-                            BaseUtils.BrowserInfo.LaunchBrowser(url);
-                            ap[prefix + "URL"] = url;
+                            ap.ReportError("Not implemented");
                         }
                         else if (cmdname.Equals("info"))
                         {

@@ -125,6 +125,20 @@ namespace EDDiscovery.UserControls.Map3D
                 return;
             }
 
+            var mis = ctrl as GLMenuItemSeparator;
+            if (mis != null)
+            {
+                mis.ForeColor = cmbck.Multiply(1.2f);
+                return;
+            }
+
+            var mil = ctrl as GLMenuItemLabel;
+            if (mil != null)
+            {
+                mil.ForeColor = Color.DarkOrange;
+                return;
+            }
+
             var gb = ctrl as GLGroupBox;
             if (gb != null)
             {

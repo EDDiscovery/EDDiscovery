@@ -358,6 +358,7 @@
             this.textBoxSystemName.AutoCompleteCommentMarker = null;
             this.textBoxSystemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxSystemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxSystemName.AutoCompleteTimeout = 500;
             this.textBoxSystemName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSystemName.BorderColorScaling = 0.5F;
@@ -384,6 +385,7 @@
             this.textBoxSystemName.Size = new System.Drawing.Size(166, 20);
             this.textBoxSystemName.TabIndex = 33;
             this.textBoxSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSystemName.TextChangedEvent = "";
             this.textBoxSystemName.WordWrap = true;
             // 
             // FindSystemsUserControl

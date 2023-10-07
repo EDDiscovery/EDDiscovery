@@ -339,9 +339,6 @@
     <Compile Include="UserControls\Webbrowser\UserControlInara.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Webbrowser\UserControlEDDB.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="UserControls\Webbrowser\UserControlEDSM.cs">
       <SubType>UserControl</SubType>
     </Compile>

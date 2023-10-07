@@ -60,6 +60,7 @@ namespace EDDiscovery.UserControls
             numberBoxDoubleZ.Value = dbsaver.GetSetting(dbZ, 0.0);
             checkBoxCustomCube.Checked = dbsaver.GetSetting(dbCube, false);
             extCheckBoxExcludeVisitedSystems.Checked = dbsaver.GetSetting(dbEVS, false);
+            buttonExtEDSM.Enabled = numberBoxMaxRadius.Value <= 100;
 
             if (textBoxSystemName.Text.Length > 0)
                 SetXYZ();
@@ -117,12 +118,6 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtEDSMClick(object sender, EventArgs e)
         {
-            if (numberBoxMaxRadius.Value > 100)
-            {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "This is a large radius, it make take a long time or not work, are you sure?", "Warning - Large radius", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.Cancel)
-                    return;
-            }
-
             Cursor = Cursors.WaitCursor;
 
             bool spherical = !checkBoxCustomCube.Checked;
@@ -319,9 +314,10 @@ namespace EDDiscovery.UserControls
             buttonExtNames.Enabled = textBoxSystemName.Text.Length > 0;
 
             bool validradius = numberBoxMinRadius.IsValid && numberBoxMaxRadius.IsValid;
-            buttonExtEDSM.Enabled = buttonExtNames.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
+
+            buttonExtEDSM.Enabled = validradius && numberBoxMaxRadius.Value <= 100 && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
+            buttonExtNames.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
             buttonExtDB.Enabled = buttonExtVisited.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
         }
-
     }
 }
