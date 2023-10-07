@@ -1646,6 +1646,7 @@ namespace EDDiscovery
         FindSystemsUserControl_buttonExtNames, // Control 'From DB Find Names'
         FindSystemsUserControl_buttonExtVisited, // Control 'From Visited Systems'
         FindSystemsUserControl_buttonExtDB, // Control 'From DB'
+        FindSystemsUserControl_extButtonFromSpansh, // Control 'From Spansh'
         FindSystemsUserControl_buttonExtEDSM, // Control 'From EDSM'
         FindSystemsUserControl_labelRadMax, // Control 'Max'
         FindSystemsUserControl_labelRadMin, // Control 'Radius ly Min'

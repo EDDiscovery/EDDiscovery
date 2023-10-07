@@ -48,6 +48,7 @@
             this.numberBoxDoubleX = new ExtendedControls.NumberBoxDouble();
             this.numberBoxMinRadius = new ExtendedControls.NumberBoxDouble();
             this.textBoxSystemName = new ExtendedControls.ExtTextBoxAutoComplete();
+            this.extButtonFromSpansh = new ExtendedControls.ExtButton();
             this.SuspendLayout();
             // 
             // labelRadMin
@@ -388,6 +389,16 @@
             this.textBoxSystemName.TextChangedEvent = "";
             this.textBoxSystemName.WordWrap = true;
             // 
+            // extButtonFromSpansh
+            // 
+            this.extButtonFromSpansh.Location = new System.Drawing.Point(168, 115);
+            this.extButtonFromSpansh.Name = "extButtonFromSpansh";
+            this.extButtonFromSpansh.Size = new System.Drawing.Size(176, 23);
+            this.extButtonFromSpansh.TabIndex = 38;
+            this.extButtonFromSpansh.Text = "From Spansh";
+            this.extButtonFromSpansh.UseVisualStyleBackColor = true;
+            this.extButtonFromSpansh.Click += new System.EventHandler(this.extButtonFromSpansh_Click);
+            // 
             // FindSystemsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -397,6 +408,7 @@
             this.Controls.Add(this.buttonExtNames);
             this.Controls.Add(this.buttonExtVisited);
             this.Controls.Add(this.buttonExtDB);
+            this.Controls.Add(this.extButtonFromSpansh);
             this.Controls.Add(this.buttonExtEDSM);
             this.Controls.Add(this.buttonExtExcel);
             this.Controls.Add(this.numberBoxMaxRadius);
@@ -412,7 +424,7 @@
             this.Controls.Add(this.labelX);
             this.Controls.Add(this.labelFilter);
             this.Name = "FindSystemsUserControl";
-            this.Size = new System.Drawing.Size(550, 122);
+            this.Size = new System.Drawing.Size(565, 146);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -439,5 +451,6 @@
         private System.Windows.Forms.Label labelZ;
         private ExtendedControls.ExtCheckBox checkBoxCustomCube;
         private ExtendedControls.ExtCheckBox extCheckBoxExcludeVisitedSystems;
+        private ExtendedControls.ExtButton extButtonFromSpansh;
     }
 }

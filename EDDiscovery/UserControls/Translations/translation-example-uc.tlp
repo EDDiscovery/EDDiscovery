@@ -627,7 +627,8 @@ SECTION UserControlRoute
 .buttonFromEDSM: "EDSM" @
 .buttonTargetFrom: "Target" @
 .cmd3DMap: "3D Map" @
-.labelLy2: "ly" @
+.labelLy2: "ly" @q
+tr
 .labelLy1: "ly" @
 .labelTo: "To" @
 .labelMaxJump: "Max jump" @

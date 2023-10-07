@@ -326,13 +326,14 @@ SECTION FindSystemsUserControl
 .labelRadMin: "Radius ly Min" @
 .labelFilter: "Star Name" @
 .Cannotfindsystem: "Cannot find system " @
-.EDSM: "EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about" @
+.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" @
 .buttonExtEDSM: "From EDSM" @
 .buttonExtDB: "From DB" @
 .buttonExtVisited: "From Visited Systems" @
 .checkBoxCustomCube: "Cube" @
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
+.extButtonFromSpansh: "From Spansh" @
 
 SECTION TravelHistoryFilter
 
