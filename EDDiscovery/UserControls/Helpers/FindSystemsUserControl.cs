@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
 
                 if (textBoxSystemName.Text.HasChars())
                 {
-                    rlist = null;
+                    rlist = spansh.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
                 }
                 else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
                 {
