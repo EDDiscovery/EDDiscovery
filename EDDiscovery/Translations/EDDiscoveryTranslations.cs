@@ -1425,10 +1425,12 @@ namespace EDDiscovery
         SearchStars_ColumnIndex, // Column Header 'Star'
         SearchStars_ColumnCentreDistance, // Column Header 'Centre Distance'
         SearchStars_ColumnCurrentDistance, // Column Header 'Current Distance'
+        SearchStars_ColumnStarType, // Column Header 'StarType'
         SearchStars_ColumnPosition, // Column Header 'Position'
 
         DataGridViewStarResults_3d, // ToolStrip control 'Go to star on 3D Map'
         DataGridViewStarResults_EDSM, // ToolStrip control 'View on EDSM'
+        DataGridViewStarResults_Spansh, // ToolStrip control 'View on Spansh'
         DataGridViewStarResults_Data, // ToolStrip control 'View Data On Entry'
         DataGridViewStarResults_Goto, // ToolStrip control 'Go to entry on grid'
 

@@ -39,7 +39,8 @@ namespace EDDiscovery.UserControls.Search
             new System.Windows.Forms.ToolStripMenuItem(),
             new System.Windows.Forms.ToolStripMenuItem(),
             new System.Windows.Forms.ToolStripMenuItem(),
-            new System.Windows.Forms.ToolStripMenuItem()
+            new System.Windows.Forms.ToolStripMenuItem(),
+            new System.Windows.Forms.ToolStripMenuItem(),
             });
             
             cms.Name = "historyContextMenu";
@@ -54,16 +55,21 @@ namespace EDDiscovery.UserControls.Search
             cms.Items[1].Name = "EDSM";
             cms.Items[1].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             cms.Items[2].Size = new System.Drawing.Size(186, 22);
-            cms.Items[2].Text = "View Data On Entry";
-            cms.Items[2].Name = "Data";
-            cms.Items[2].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
-            cms.Items[3].Text = "Go to entry on grid";
-            cms.Items[3].Name = "Goto";
-            cms.Items[3].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
+            cms.Items[2].Text = "View on Spansh";
+            cms.Items[2].Name = "Spansh";
+            cms.Items[2].Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
+            cms.Items[3].Size = new System.Drawing.Size(186, 22);
+            cms.Items[3].Text = "View Data On Entry";
+            cms.Items[3].Name = "Data";
+            cms.Items[3].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
+            cms.Items[4].Text = "Go to entry on grid";
+            cms.Items[4].Name = "Goto";
+            cms.Items[4].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
             cms.Opening += Cms_Opening;
             CellDoubleClick += cellDoubleClick;
 
-            var enumlistcms = new Enum[] { EDTx.DataGridViewStarResults_3d, EDTx.DataGridViewStarResults_EDSM, EDTx.DataGridViewStarResults_Data, EDTx.DataGridViewStarResults_Goto };
+            var enumlistcms = new Enum[] { EDTx.DataGridViewStarResults_3d, EDTx.DataGridViewStarResults_EDSM, EDTx.DataGridViewStarResults_Spansh, 
+                                EDTx.DataGridViewStarResults_Data, EDTx.DataGridViewStarResults_Goto };
             BaseUtils.Translator.Instance.TranslateToolstrip(cms, enumlistcms,this);
         }
 
@@ -102,6 +108,15 @@ namespace EDDiscovery.UserControls.Search
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
                 this.Cursor = Cursors.Default;
+            }
+        }
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+
+            if (sys != null && sys.SystemAddress != null)
+            {
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + sys.SystemAddress.Value.ToStringInvariant()); 
             }
         }
 

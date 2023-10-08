@@ -179,6 +179,7 @@ SECTION SearchStars
 
 .ColumnIndex: "Index" @
 .ColumnStar: "Star" @
+.ColumnStarType: "Star Type" @
 .ColumnCentreDistance: "Centre Distance" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
@@ -187,6 +188,7 @@ SECTION DataGridViewStarResults
 
 .3d: "Go to star on 3D Map" @
 .EDSM: "View on EDSM" @
+.Spansh: "View on Spansh" @
 .Data: "View Data On Entry" @
 .Goto: "Go to entry on grid" @
 

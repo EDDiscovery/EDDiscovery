@@ -51,14 +51,16 @@ namespace EDDiscovery.UserControls
             findSystemsUserControl.Excel += () => { dataGridView.Excel(dataGridView.ColumnCount); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
-            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };
+            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, 
+                                EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition, EDTx.SearchStars_ColumnStarType };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { findSystemsUserControl });
+
             dataGridView.Init(DiscoveryForm);
         }
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView);
+        //    DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
@@ -93,6 +95,7 @@ namespace EDDiscovery.UserControls
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
                     object[] rowobj = {     index.ToString(),
                                             sys.Name,
+                                            Bodies.StarName(sys.MainStarType),
                                             (ret.Item2>=0 ? ret.Item2.ToString("0.#") : ""),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")

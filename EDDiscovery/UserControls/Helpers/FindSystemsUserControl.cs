@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
                 {
-                    rlist = spansh.GetSystemsByCoord(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0, 10);
+                    rlist = spansh.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
                 }
                 else
                 {
