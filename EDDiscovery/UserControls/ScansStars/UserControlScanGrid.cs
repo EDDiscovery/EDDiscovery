@@ -118,7 +118,8 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
+                // tbd no spansh
+                scannode = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);        // get data with EDSM maybe
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -172,8 +173,9 @@ namespace EDDiscovery.UserControls
                 }
                 else if (sn.NodeType == StarScan.ScanNodeType.beltcluster )
                 {
+                    // tbd
                     // if have a scan, we show belts, and its not edsm body, or getting edsm
-                    if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                    if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked))
                     {
                         bdClass.Clear();
                         bdClass.Append("Belt Cluster");
@@ -205,8 +207,9 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
+                //tbd
                 // must have scan data and either not edsm body or edsm check
-                else if (sn.ScanData != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                else if (sn.ScanData != null && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked))
                 { 
                     var overlays = new StarColumnOverlays();
 
@@ -443,8 +446,8 @@ namespace EDDiscovery.UserControls
                         bdDetails.Append(Environment.NewLine).Append("Value".T(EDTx.UserControlScanGrid_Value)).Append(" ").Append(value.ToString("N0"));
                     }
 
-                    if ( sn.ScanData.IsEDSMBody)
-                        bdDetails.Append(Environment.NewLine).Append("EDSM");
+                    if ( sn.ScanData.IsWebSourced)
+                        bdDetails.Append(Environment.NewLine).Append(sn.ScanData.DataSourceName);
 
                     // pick an image
 
@@ -462,7 +465,7 @@ namespace EDDiscovery.UserControls
 
                     sn.ScanData.Jumponium(jumponiums);      // add to jumponiums hash any seen
                 }
-                else if ( !sn.EDSMCreatedNode )             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
+                else if ( !sn.WebCreatedNode )             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
                 {   
                     if (sn.SurfaceFeatures != null)
                     {

@@ -624,7 +624,7 @@ namespace EDDiscovery.UserControls.Map3D
                         Click = (s1) =>
                         {
                             ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
-                            ScanDisplayForm.ShowScanOrMarketForm(parent.FindForm(), s, true, parent.DiscoveryForm.History, 0.8f, System.Drawing.Color.Purple);
+                            ScanDisplayForm.ShowScanOrMarketForm(parent.FindForm(), s, EliteDangerousCore.WebExternalDataLookup.All, parent.DiscoveryForm.History, 0.8f, System.Drawing.Color.Purple);
                         }
                     },
                     new GLMenuItem("RCMViewSpansh", "View on Spansh")
@@ -632,7 +632,7 @@ namespace EDDiscovery.UserControls.Map3D
                         Click = (s1) =>
                         {
                             ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
-                            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + s.SystemAddress.Value.ToStringInvariant());
+                            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(s.SystemAddress.Value);
                         }
                     },
                     new GLMenuItem("RCMViewEDSM", "View on EDSM")

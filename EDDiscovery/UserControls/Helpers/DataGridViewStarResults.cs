@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019-2020 EDDiscovery development team
+ * Copyright © 2019-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore;
@@ -25,7 +23,7 @@ namespace EDDiscovery.UserControls.Search
 {
     public class DataGridViewStarResults : BaseUtils.DataGridViewColumnControl
     {
-        public bool CheckEDSM { get; set; }
+        public EliteDangerousCore.WebExternalDataLookup WebLookup { get; set; }
         public Action<HistoryEntry> GotoEntryClicked = null;
 
         private EDDiscoveryForm discoveryform;
@@ -70,6 +68,7 @@ namespace EDDiscovery.UserControls.Search
 
             var enumlistcms = new Enum[] { EDTx.DataGridViewStarResults_3d, EDTx.DataGridViewStarResults_EDSM, EDTx.DataGridViewStarResults_Spansh, 
                                 EDTx.DataGridViewStarResults_Data, EDTx.DataGridViewStarResults_Goto };
+
             BaseUtils.Translator.Instance.TranslateToolstrip(cms, enumlistcms,this);
         }
 
@@ -84,6 +83,7 @@ namespace EDDiscovery.UserControls.Search
         {
             rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
             ContextMenuStrip.Items[3].Visible = rightclicktag is HistoryEntry;
+            ContextMenuStrip.Items[2].Visible = SysFrom(rightclicktag)?.SystemAddress.HasValue ?? false;
         }
 
         private ISystem SysFrom(Object t)   // given tag, find the isystem, may be null. 
@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls.Search
 
             if (sys != null && sys.SystemAddress != null)
             {
-                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + sys.SystemAddress.Value.ToStringInvariant()); 
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(sys.SystemAddress.Value);
             }
         }
 
@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls.Search
 
         void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, CheckEDSM, discoveryform.History);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, WebLookup, discoveryform.History);
         }
 
         public void Excel(int columnsout)

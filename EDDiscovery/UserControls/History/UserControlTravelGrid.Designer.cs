@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
             this.gotoNextStartStopMarkerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToTrilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,6 +107,7 @@ namespace EDDiscovery.UserControls
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.extComboBoxQuickMarks = new ExtendedControls.ExtComboBox();
             this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
+            this.viewScanDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -296,6 +298,8 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItemStartStop,
             this.gotoNextStartStopMarkerToolStripMenuItem,
             this.mapGotoStartoolStripMenuItem,
+            this.viewScanDisplayToolStripMenuItem,
+            this.viewOnSpanshToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
             this.starMapColourToolStripMenuItem,
             this.addToTrilaterationToolStripMenuItem,
@@ -315,7 +319,7 @@ namespace EDDiscovery.UserControls
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 576);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 642);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // quickMarkToolStripMenuItem
@@ -376,6 +380,13 @@ namespace EDDiscovery.UserControls
             this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
             this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+            // 
+            // viewOnSpanshToolStripMenuItem
+            // 
+            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
+            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
+            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem
             // 
@@ -597,6 +608,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowColorScaling = 0.5F;
@@ -625,6 +637,7 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewTravel
             // 
+            this.dataGridViewTravel.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewTravel.AllowUserToAddRows = false;
             this.dataGridViewTravel.AllowUserToDeleteRows = false;
             this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -823,6 +836,13 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.UseMnemonic = true;
             this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
+            // viewScanDisplayToolStripMenuItem
+            // 
+            this.viewScanDisplayToolStripMenuItem.Name = "viewScanDisplayToolStripMenuItem";
+            this.viewScanDisplayToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.viewScanDisplayToolStripMenuItem.Text = "View Scan Display";
+            this.viewScanDisplayToolStripMenuItem.Click += new System.EventHandler(this.viewScanDisplayToolStripMenuItem_Click);
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -904,5 +924,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
     }
 }

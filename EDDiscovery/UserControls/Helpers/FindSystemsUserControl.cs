@@ -86,8 +86,10 @@ namespace EDDiscovery.UserControls
             ValidateEnable();
 
             var enumlist = new Enum[] { EDTx.FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, EDTx.FindSystemsUserControl_checkBoxCustomCube, 
-                EDTx.FindSystemsUserControl_buttonExtNames, EDTx.FindSystemsUserControl_buttonExtVisited, EDTx.FindSystemsUserControl_buttonExtDB,EDTx.FindSystemsUserControl_extButtonFromSpansh,
-                EDTx.FindSystemsUserControl_buttonExtEDSM, EDTx.FindSystemsUserControl_labelRadMax, EDTx.FindSystemsUserControl_labelRadMin, EDTx.FindSystemsUserControl_labelFilter };
+                EDTx.FindSystemsUserControl_buttonExtNames, EDTx.FindSystemsUserControl_buttonExtVisited, EDTx.FindSystemsUserControl_buttonExtDB,
+                EDTx.FindSystemsUserControl_extButtonFromSpansh,EDTx.FindSystemsUserControl_extButtonFromSpanshFindNames,
+                EDTx.FindSystemsUserControl_buttonExtEDSM, EDTx.FindSystemsUserControl_labelRadMax, EDTx.FindSystemsUserControl_labelRadMin, 
+                EDTx.FindSystemsUserControl_labelFilter };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ });
         }
 
@@ -111,6 +113,22 @@ namespace EDDiscovery.UserControls
             {
                 return SystemCache.FindSystemWildcard(textBoxSystemName.Text);
 
+            }).ContinueWith(task => this.Invoke(new Action(() =>
+            {
+                Cursor = Cursors.Default;
+                ReturnSystems((from x in task.Result select new Tuple<ISystem, double>(x, -1)).ToList());
+            }
+            )));
+        }
+
+        private void extButtonFromSpanshFindNames_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            Task taskEDSM = Task<List<ISystem>>.Factory.StartNew(() =>
+            {
+                SpanshClass sp = new SpanshClass();
+                return sp.GetSystems(textBoxSystemName.Text, true);
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
                 Cursor = Cursors.Default;
@@ -259,7 +277,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtVisitedClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
@@ -272,7 +290,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtDBClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
@@ -321,7 +339,7 @@ namespace EDDiscovery.UserControls
 
         private void SetXYZ()
         {
-            ISystem sys = SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, false);      // not doing edsm as done via INIT
+            ISystem sys = SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping);      // not doing edsm as done via INIT
 
             if (sys != null && sys.HasCoordinate)
             {
@@ -369,5 +387,6 @@ namespace EDDiscovery.UserControls
             buttonExtNames.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
             buttonExtDB.Enabled = buttonExtVisited.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
         }
+
     }
 }

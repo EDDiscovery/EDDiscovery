@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, true);     // if we have a name, find it
+               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // if we have a name, find it
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
@@ -361,7 +361,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.GalacticMapping, true);
+                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
@@ -476,7 +476,8 @@ namespace EDDiscovery.UserControls
                 plotter.ToSystem = !textBox_ToName.Text.Contains("@") && textBox_To.Text.HasChars() ? textBox_To.Text : "END POINT";
                 plotter.RouteMethod = (SystemCache.SystemsNearestMetric) comboBoxRoutingMetric.SelectedIndex;
                 plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
-                plotter.EDSM = checkBoxEDSM.Checked;
+                //tbd spansh
+                plotter.WebLookup = checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None;
 
                 int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
 
@@ -594,7 +595,7 @@ namespace EDDiscovery.UserControls
             if (row >= 0)
             {
                 ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);
             }
         }
 
@@ -637,7 +638,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewRoute.RightClickRowValid)
             {
                 ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);    // protected against sys = null
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);    // protected against sys = null
             }
         }
 

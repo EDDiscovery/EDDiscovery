@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019 EDDiscovery development team
+ * Copyright © 2019-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -25,7 +23,7 @@ namespace EDDiscovery.UserControls
     public static class ScanDisplayForm
     {
         // tag can be a Isystem or an He.. output depends on it.
-        public static async void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl, float opacity = 1, Color? keycolour = null)     
+        public static async void ShowScanOrMarketForm(Form parent, Object tag, WebExternalDataLookup lookup, HistoryList hl, float opacity = 1, Color? keycolour = null)     
         {
             if (tag == null)
                 return;
@@ -54,16 +52,16 @@ namespace EDDiscovery.UserControls
             else
             {      
                 sd = new ScanDisplayUserControl();
-                sd.SystemDisplay.ShowEDSMBodies =checkedsm;
+                sd.SystemDisplay.ShowWebBodies = lookup != WebExternalDataLookup.None;
                 int selsize = (int)(ExtendedControls.Theme.Current.GetFont.Height / 10.0f * 48.0f);
                 sd.SystemDisplay.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, checkedsm);    // look up system async
+                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, lookup);    // look up system async
                     
                 if ( data != null )
                 {
-                    long value = data.ScanValue(checkedsm);
+                    long value = data.ScanValue(lookup != WebExternalDataLookup.None);
                     title += " ~ " + value.ToString("N0") + " cr";
                 }
 

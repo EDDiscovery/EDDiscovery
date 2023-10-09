@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
                 SaveBackAnyChanges();
-                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.GalacticMapping, true) : null;
+                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : null;
 
                 updating = true;
                 BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sys, bk);

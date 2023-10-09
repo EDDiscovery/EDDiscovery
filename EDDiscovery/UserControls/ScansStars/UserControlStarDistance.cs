@@ -55,9 +55,13 @@ namespace EDDiscovery.UserControls
 
             checkBoxCube.Checked = GetSetting("Behaviour", false);
 
-            var enumlist = new Enum[] { EDTx.UserControlStarDistance_colName, EDTx.UserControlStarDistance_colDistance, EDTx.UserControlStarDistance_colVisited, EDTx.UserControlStarDistance_labelExtMin, EDTx.UserControlStarDistance_labelExtMax, EDTx.UserControlStarDistance_checkBoxCube };
-            var enumlistcms = new Enum[] { EDTx.UserControlStarDistance_viewSystemToolStripMenuItem, EDTx.UserControlStarDistance_viewOnEDSMToolStripMenuItem1, EDTx.UserControlStarDistance_addToTrilaterationToolStripMenuItem1, EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlStarDistance_textMinRadius_ToolTip, EDTx.UserControlStarDistance_textMaxRadius_ToolTip, EDTx.UserControlStarDistance_checkBoxCube_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlStarDistance_colName, EDTx.UserControlStarDistance_colDistance, EDTx.UserControlStarDistance_colVisited, 
+                EDTx.UserControlStarDistance_labelExtMin, EDTx.UserControlStarDistance_labelExtMax, EDTx.UserControlStarDistance_checkBoxCube };
+            var enumlistcms = new Enum[] { EDTx.UserControlStarDistance_viewSystemToolStripMenuItem, EDTx.UserControlStarDistance_viewOnEDSMToolStripMenuItem1,
+                EDTx.UserControlStarDistance_viewOnSpanshToolStripMenuItem,
+                EDTx.UserControlStarDistance_addToTrilaterationToolStripMenuItem1, EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.UserControlStarDistance_textMinRadius_ToolTip, EDTx.UserControlStarDistance_textMaxRadius_ToolTip, 
+                EDTx.UserControlStarDistance_checkBoxCube_ToolTip };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -239,21 +243,27 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (dataGridViewNearest.RightClickRowValid)
+            var rightclicksystem = dataGridViewNearest.RightClickRowValid ? (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag : null;
+            if (rightclicksystem != null)
             {
-                var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
-
-                if (rightclicksystem != null)
+                this.Cursor = Cursors.WaitCursor;
+                EDSMClass edsm = new EDSMClass();
+                if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
                 {
-                    this.Cursor = Cursors.WaitCursor;
-                    EDSMClass edsm = new EDSMClass();
-                    if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
-                    {
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
-                    }
-
-                    this.Cursor = Cursors.Default;
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
                 }
+
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rightclicksystem = dataGridViewNearest.RightClickRowValid ? (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag : null;
+            if (rightclicksystem != null && rightclicksystem.SystemAddress.HasValue)
+            {
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclicksystem.SystemAddress.Value);
+
             }
         }
 
@@ -293,7 +303,7 @@ namespace EDDiscovery.UserControls
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
                 if (rightclicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);
             }
         }
 
@@ -303,7 +313,7 @@ namespace EDDiscovery.UserControls
             {
                 var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
                 if (clicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);
             }
 
         }
@@ -412,5 +422,7 @@ namespace EDDiscovery.UserControls
 
             }
         }
+
+
     }
 }

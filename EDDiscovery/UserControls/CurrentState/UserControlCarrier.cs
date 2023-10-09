@@ -191,7 +191,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnThemeChanged += ClearDisplayFontJournalCAPI;
 
             dataGridViewItinerary.Init(DiscoveryForm);      // set up 
-            dataGridViewItinerary.CheckEDSM = true;
+            dataGridViewItinerary.WebLookup = EliteDangerousCore.WebExternalDataLookup.All;
         }
 
         public override void LoadLayout()
@@ -360,7 +360,7 @@ namespace EDDiscovery.UserControls
 
                     if (!it.StarSystem.HasCoordinate)
                     {
-                        ISystem p = await EliteDangerousCore.DB.SystemCache.FindSystemAsync(it.StarSystem, true);           // find, even in EDSM, synchronously for now
+                        ISystem p = await EliteDangerousCore.DB.SystemCache.FindSystemAsync(it.StarSystem, EliteDangerousCore.WebExternalDataLookup.All);           // find, even in EDSM, synchronously for now
                         if (IsClosed)       // may have closed in the meanwhile
                             return;
                         if (p != null)      // if found, replace star system with it, for future

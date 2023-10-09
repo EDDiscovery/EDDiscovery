@@ -250,7 +250,7 @@ namespace EDDiscovery.UserControls
             systemDisplay1.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             systemDisplay1.ShowAllG = true;
             systemDisplay1.ShowDist = true;
-            systemDisplay1.ShowEDSMBodies = false;
+            systemDisplay1.ShowWebBodies = false;
             systemDisplay1.ShowHabZone = true;
             systemDisplay1.ShowMaterials = true;
             systemDisplay1.ShowMoons = true;

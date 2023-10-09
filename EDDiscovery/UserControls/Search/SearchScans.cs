@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "UCSearchScans";
 
-            dataGridView.CheckEDSM = false; // for this, only our data is shown
+            dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None; // for this, only our data is shown
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);

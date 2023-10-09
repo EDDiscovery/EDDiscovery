@@ -338,38 +338,11 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://spansh.co.uk/body/.
-        /// </summary>
-        public static string URLSpanshBodyId {
-            get {
-                return ResourceManager.GetString("URLSpanshBodyId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://spansh.co.uk/station/.
-        /// </summary>
-        public static string URLSpanshStationMarketId {
-            get {
-                return ResourceManager.GetString("URLSpanshStationMarketId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to http://downloads.spansh.co.uk/systems{0}.json.gz.
         /// </summary>
         public static string URLSpanshSystemsRoot {
             get {
                 return ResourceManager.GetString("URLSpanshSystemsRoot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://spansh.co.uk/system/.
-        /// </summary>
-        public static string URLSpanshSystemSystemId {
-            get {
-                return ResourceManager.GetString("URLSpanshSystemSystemId", resourceCulture);
             }
         }
         

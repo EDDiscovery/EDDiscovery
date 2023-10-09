@@ -73,6 +73,7 @@ namespace EDDiscovery.UserControls
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
+            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
@@ -231,11 +232,12 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeSortingOfColumnsToolStripMenuItem,
             this.mapGotoStartoolStripMenuItem,
+            this.viewScanDisplayToolStripMenuItem,
+            this.viewOnSpanshToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
-            this.setNoteToolStripMenuItem,
-            this.viewScanDisplayToolStripMenuItem});
+            this.setNoteToolStripMenuItem});
             this.contextMenuStrip.Name = "historyContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(221, 114);
+            this.contextMenuStrip.Size = new System.Drawing.Size(221, 158);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -294,6 +296,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowColorScaling = 0.5F;
@@ -322,11 +325,13 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewStarList
             // 
+            this.dataGridViewStarList.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewStarList.AllowUserToAddRows = false;
             this.dataGridViewStarList.AllowUserToDeleteRows = false;
             this.dataGridViewStarList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewStarList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewStarList.AutoSortByColumnName = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -354,6 +359,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewStarList.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewStarList.Name = "dataGridViewStarList";
+            this.dataGridViewStarList.PerColumnWordWrapControl = true;
             this.dataGridViewStarList.RowHeaderMenuStrip = null;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
@@ -446,6 +452,13 @@ namespace EDDiscovery.UserControls
             this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
             this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
+            // viewOnSpanshToolStripMenuItem
+            // 
+            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
+            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
+            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
+            // 
             // UserControlStarList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -489,5 +502,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
         private ExtendedControls.ExtButton extButtonDisplayFilters;
+        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
     }
 }

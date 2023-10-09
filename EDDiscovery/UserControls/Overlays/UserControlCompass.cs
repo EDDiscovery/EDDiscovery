@@ -388,7 +388,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(current_sys, false);     // not edsm, so no delay
+                var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(current_sys);     // not edsm, so no delay
 
                 if ( sysnode != null)
                 {

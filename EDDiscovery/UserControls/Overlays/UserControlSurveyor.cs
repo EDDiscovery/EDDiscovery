@@ -382,13 +382,14 @@ namespace EDDiscovery.UserControls
             string text = "";
             if (sys != null)
             {
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
+                // tbd spansh
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.All);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
                 if (systemnode != null)
                 {
-                    int scanned = checkBoxEDSM.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonEDSM();
+                    int scanned = checkBoxEDSM.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonWeb();
 
                     if (scanned > 0)
                     {
@@ -632,7 +633,8 @@ namespace EDDiscovery.UserControls
 
                 // find if we have system nodes
 
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
+                // tbd spansh
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -666,7 +668,8 @@ namespace EDDiscovery.UserControls
                         bool matchedlandablevolcanism = sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
                         bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
-                        if (surveyordisplay == false && (!sd.IsEDSMBody || checkBoxEDSM.Checked)) // if to perform inbuilt checks - must have scan data to do this
+                        // tbd
+                        if (surveyordisplay == false && (!sd.IsWebSourced || checkBoxEDSM.Checked)) // if to perform inbuilt checks - must have scan data to do this
                         {
                             // work out if we want to display
                             surveyordisplay = (sd.IsLandable && IsSet(CtrlList.isLandable)) ||

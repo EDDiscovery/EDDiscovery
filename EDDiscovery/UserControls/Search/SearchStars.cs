@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "UCSearchStars";
 
-            dataGridView.CheckEDSM = true;
+            dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.All;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);

@@ -61,10 +61,11 @@ namespace EDDiscovery.WebServer
                 if (entry < 0 || entry >= hl.Count)
                     entry = hl.Count - 1;
 
+                // tbd no way to ask for anything but edsm
                 // seen instances of exceptions accessing icons in different threads.  so push up to discovery form. need to investigate.
                 discoveryform.Invoke((MethodInvoker)delegate
                 {
-                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM);
+                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);
 
                     if (sn != null)
                     {
@@ -80,7 +81,7 @@ namespace EDDiscovery.WebServer
                         sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
                         sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
                         sd.ValueLimit = (request.QueryString["valuelimit"] ?? "50000").InvariantParseInt(50000);
-                        sd.ShowEDSMBodies = checkEDSM;
+                        sd.ShowWebBodies = checkEDSM;
                         sd.SetSize(starsize);
                         sd.Font = new Font("MS Sans Serif", 8.25f);
                         sd.LargerFont = new Font("MS Sans Serif", 10f);

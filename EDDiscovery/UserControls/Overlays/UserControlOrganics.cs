@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
 
             if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
             {
-                StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System, false);
+                StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System, EliteDangerousCore.WebExternalDataLookup.None);
 
                 if (data != null && data.NodesByID.TryGetValue(lasthe.Status.BodyID.Value, out StarScan.ScanNode node))
                 {

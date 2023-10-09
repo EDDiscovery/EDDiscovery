@@ -179,7 +179,7 @@ SECTION SearchStars
 
 .ColumnIndex: "Index" @
 .ColumnStar: "Star" @
-.ColumnStarType: "Star Type" @
+.ColumnStarType: "Star type" @
 .ColumnCentreDistance: "Centre Distance" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
@@ -327,6 +327,8 @@ SECTION UserControlJournalGrid
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" @
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" @
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" @
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
@@ -985,6 +987,7 @@ SECTION UserControlStarList
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" @
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" @
 .viewOnEDSMToolStripMenuItem: "View on EDSM" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .setNoteToolStripMenuItem: "Set Note" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -1284,6 +1287,8 @@ SECTION UserControlTravelGrid
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" @
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" @
 .writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" @
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" @
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" @

@@ -334,6 +334,7 @@ SECTION FindSystemsUserControl
 .checkBoxCustomCube: "Cube" @
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
 .extButtonFromSpansh: "From Spansh" @
+.extButtonFromSpanshFindNames: "From Spansh Find Names" @
 
 SECTION TravelHistoryFilter
 

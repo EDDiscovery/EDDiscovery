@@ -201,7 +201,7 @@ namespace EDDiscovery.Forms
         }
         private void textBox_TextNameChanged(object sender, EventArgs e)
         {
-            ISystem f = SystemCache.FindSystem(textBoxName.Text, null, false);       // no edsm lookup, too slow to do interactively.
+            ISystem f = SystemCache.FindSystem(textBoxName.Text, null);       // no edsm lookup, too slow to do interactively.
             if (f != null && f.HasCoordinate)
             {
                 InitialisePos(f);

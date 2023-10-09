@@ -50,6 +50,7 @@ namespace EDDiscovery.WebServer
         }
 
         //EliteDangerousCore.UIEvents.UIOverallStatus status,
+        // TBD no way to ask for anything but edsm
         public JToken MakeResponse(int entry, string type, bool edsm)       // entry = -1 means latest
         {
             if (discoveryform.InvokeRequired)
@@ -75,7 +76,7 @@ namespace EDDiscovery.WebServer
 
                     HistoryEntry he = hl[entry];
 
-                    var scannode = discoveryform.History.StarScan.FindSystemSynchronous(he.System, edsm);        // get data without EDSM - don't want a web lookup
+                    var scannode = discoveryform.History.StarScan.FindSystemSynchronous(he.System, edsm ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);        // get data without EDSM - don't want a web lookup
                     var bodylist = scannode?.Bodies.ToList();       // may be null
 
                     response["Count"] = bodylist?.Count ?? 0;

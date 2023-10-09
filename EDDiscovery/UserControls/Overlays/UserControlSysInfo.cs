@@ -595,7 +595,7 @@ namespace EDDiscovery.UserControls
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
-                            var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(DiscoveryForm.History.GetLast.System, false);
+                            var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(DiscoveryForm.History.GetLast.System);
                             if (IsClosed)       //ASYNC! warning! may have closed.
                                 return;
 
@@ -696,7 +696,7 @@ namespace EDDiscovery.UserControls
         private void extButtonSpanshSystem_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.System.SystemAddress.HasValue)
-                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + last_he.System.SystemAddress.Value.ToStringInvariant());
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(last_he.System.SystemAddress.Value);
         }
 
         private void extButtonInaraStation_Click(object sender, EventArgs e)
@@ -713,9 +713,9 @@ namespace EDDiscovery.UserControls
             if (last_he != null)
             {
                 if (last_he.Status.MarketID != null)
-                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.Status.MarketID.ToStringInvariant());
+                    EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByMarketID(last_he.Status.MarketID.Value);
                 else if (last_he.FullBodyID.HasValue)
-                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
+                    EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByFullBodyID(last_he.FullBodyID.Value);
             }
         }
 

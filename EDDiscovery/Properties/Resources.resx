@@ -181,15 +181,6 @@
   <data name="URLInaraStation" xml:space="preserve">
     <value>https://inara.cz/galaxy-station/?search=</value>
   </data>
-  <data name="URLSpanshBodyId" xml:space="preserve">
-    <value>https://spansh.co.uk/body/</value>
-  </data>
-  <data name="URLSpanshStationMarketId" xml:space="preserve">
-    <value>https://spansh.co.uk/station/</value>
-  </data>
-  <data name="URLSpanshSystemSystemId" xml:space="preserve">
-    <value>https://spansh.co.uk/system/</value>
-  </data>
   <data name="URLProjectVideos" xml:space="preserve">
     <value>https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/</value>
   </data>

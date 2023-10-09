@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "UCSearchMC";
 
-            dataGridView.CheckEDSM = true;
+            dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.All;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);

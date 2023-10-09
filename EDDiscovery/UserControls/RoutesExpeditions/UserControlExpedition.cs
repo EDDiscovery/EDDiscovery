@@ -191,6 +191,7 @@ namespace EDDiscovery.UserControls
         {
             // if we are not EDSM checking, or nothing is outstanding, we can check to see if we can process
 
+            // tbd spansh?
             if (checkBoxEDSM.Checked == false || outstandingprocessing == 0)      // if not doing edsm, or no outstandings
             {
                 int maxlaunch = 20;     // max launch in non edsm mode, 
@@ -223,7 +224,8 @@ namespace EDDiscovery.UserControls
                             forcetotalsupdate = true;       // update when finished
                             labelBusy.Visible = true;       // make busy
 
-                            UpdateRowAsync(rowindex, checkBoxEDSM.Checked);
+                            // tbd no spansh option
+                            UpdateRowAsync(rowindex, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);
 
                             if (checkBoxEDSM.Checked)      // if we are doing EDSM checking, space it out.. only launch one. Won't launch another until all processing done
                                 return;
@@ -357,7 +359,7 @@ namespace EDDiscovery.UserControls
         // this is an async function - which needs very special handling
         // update a row with edsm check if required
 
-        private async void UpdateRowAsync(int rowindex, bool edsmcheck)
+        private async void UpdateRowAsync(int rowindex, EliteDangerousCore.WebExternalDataLookup lookup)
         {
             System.Threading.Interlocked.Increment(ref outstandingprocessing);      // increase processing count to indicate we are going. Doubt we need the interlock
 
@@ -409,9 +411,9 @@ namespace EDDiscovery.UserControls
                 // if not, try a lookup
                 if (!sys.HasCoordinate)
                 {
-                    System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Looking up async for {sys.Name} EDSM {edsmcheck}");
-                    var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.GalacticMapping, edsmcheck);
-                    System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Continuing for {sys.Name} EDSM {edsmcheck} found {syslookup}");
+                    System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Looking up async for {sys.Name} {lookup}");
+                    var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.GalacticMapping, lookup);
+                    System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Continuing for {sys.Name} found {syslookup}");
                     if (IsClosed)        // because its async, the await returns with void, and then this is called back, and we may be closing.
                         return;
 
@@ -430,14 +432,15 @@ namespace EDDiscovery.UserControls
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
                 row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("N2") : "";
 
-                StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmcheck);
+                // tbd edsm only
+                StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, lookup);
 
                 if (IsClosed)        // because its async, may be called during closedown. stop this
                     return;
 
                 if (sysnode != null)
                 {
-                    row.Cells[Scans.Index].Value = sysnode.StarPlanetsScannednonEDSM().ToString("0");
+                    row.Cells[Scans.Index].Value = sysnode.StarPlanetsScannednonWeb().ToString("0");
                     row.Cells[FSSBodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
                     row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsScanned().ToString("0");
                     row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
@@ -447,11 +450,12 @@ namespace EDDiscovery.UserControls
                     {
                         if (sn?.ScanData != null)  // must have scan data..
                         {
+                            // tbd
                             if (
-                                (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||     // major selectors for line display
-                                (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
-                                (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked)) ||
-                                (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                                (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked)) ||     // major selectors for line display
+                                (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked)) ||
+                                (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked)) ||
+                                (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked))
                                 )
                             {
                                 string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
@@ -473,15 +477,15 @@ namespace EDDiscovery.UserControls
                     row.Cells[FSSBodies.Index].Value =
                     row.Cells[KnownBodies.Index].Value =
                     row.Cells[Stars.Index].Value = "";
-                    row.Cells[Info.Index].Value = edsmcheck ? "No Body information found on EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                    row.Cells[Info.Index].Value = lookup != EliteDangerousCore.WebExternalDataLookup.None ? "No Body information found on web".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
                 }
             }
 
             System.Diagnostics.Debug.Assert(sys != null);
 
-            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Set Expedition Row {rowindex} tag is {sys} set cells[1] to {edsmcheck}");
+            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Set Expedition Row {rowindex} tag is {sys} set cells[1] to {lookup}");
             row.Tag = sys;      // keep system tag
-            row.Cells[1].Tag = edsmcheck;       // and record the edsm state. this indicates row has been processed
+            row.Cells[1].Tag = lookup != EliteDangerousCore.WebExternalDataLookup.None;       // and record the web state. this indicates row has been processed
 
             System.Threading.Interlocked.Decrement(ref outstandingprocessing);      // and decrease processing count..
         }
@@ -847,7 +851,7 @@ namespace EDDiscovery.UserControls
 
                     foreach ( var syse in rt.Systems)
                     {
-                        ISystem sys = SystemCache.FindSystem(syse.Name, DiscoveryForm.GalacticMapping, true);
+                        ISystem sys = SystemCache.FindSystem(syse.Name, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
                         if (sys != null)
                         {
                             var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
@@ -1219,7 +1223,7 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = SystemCache.FindSystem((string)obj,DiscoveryForm.GalacticMapping, true);     // use EDSM directly if required
+            ISystem sc = SystemCache.FindSystem((string)obj,DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // use EDSM directly if required
 
             if (sc == null)
                 sc = new SystemClass((string)obj,0,0,0);

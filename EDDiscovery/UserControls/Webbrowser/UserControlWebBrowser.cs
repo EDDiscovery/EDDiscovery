@@ -179,9 +179,9 @@ namespace EDDiscovery.UserControls
             else if (source == "Spansh")
             {
                 if (sys.SystemAddress.HasValue)
-                    url = Properties.Resources.URLSpanshSystemSystemId + sys.SystemAddress.Value.ToStringInvariant();
+                    url = EliteDangerousCore.Spansh.SpanshClass.URLForSystem(sys.SystemAddress.Value);
                 else
-                    url = "https://spansh.co.uk";
+                    url = EliteDangerousCore.Spansh.SpanshClass.RootURL;
 
                 //defaulturl = urlallowed;
             }

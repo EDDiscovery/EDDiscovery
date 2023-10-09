@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Discoveries";
 
-            dataGridView.CheckEDSM = false; // for this, only our data is shown
+            dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None; // for this, only our data is shown
             dataGridView.MakeDoubleBuffered();
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx

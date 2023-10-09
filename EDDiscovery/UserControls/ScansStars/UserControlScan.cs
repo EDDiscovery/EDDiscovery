@@ -55,7 +55,8 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ScanPanel";
 
-            panelStars.SystemDisplay.ShowEDSMBodies = checkBoxEDSM.Checked = GetSetting("EDSM", false);
+            checkBoxEDSM.Checked = GetSetting("EDSM", false);
+            panelStars.SystemDisplay.ShowWebBodies = checkBoxEDSM.Checked;      // tbd
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
             bodyfilters = GetSetting("BodyFilters", "All").Split(';');
@@ -174,7 +175,8 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked) : null;
+            // tbd spansh
+            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None) : null;
 #endif
             string control_text = "No System";
 
@@ -277,7 +279,7 @@ namespace EDDiscovery.UserControls
         private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting("EDSM", checkBoxEDSM.Checked);
-            panelStars.SystemDisplay.ShowEDSMBodies = checkBoxEDSM.Checked;
+            panelStars.SystemDisplay.ShowWebBodies = checkBoxEDSM.Checked;
             DrawSystem();
         }
 
@@ -459,7 +461,7 @@ namespace EDDiscovery.UserControls
         {
             if (showing_system == null)
                 return;
-            var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(showing_system, false);
+            var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(showing_system);
 
             if ( sysnode != null )
             {
