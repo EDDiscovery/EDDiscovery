@@ -61,8 +61,7 @@ namespace EDDiscovery.UserControls
             numberBoxDoubleZ.Value = dbsaver.GetSetting(dbZ, 0.0);
             checkBoxCustomCube.Checked = dbsaver.GetSetting(dbCube, false);
             extCheckBoxExcludeVisitedSystems.Checked = dbsaver.GetSetting(dbEVS, false);
-            buttonExtEDSM.Enabled = numberBoxMaxRadius.Value <= 100;
-
+            
             if (textBoxSystemName.Text.Length > 0)
                 SetXYZ();
 
@@ -221,7 +220,6 @@ namespace EDDiscovery.UserControls
 
         }
 
-
         private void AddList(List<Tuple<ISystem, double>> listsphere)
         {
             if (listsphere != null)
@@ -273,7 +271,6 @@ namespace EDDiscovery.UserControls
                 ReturnSystems(listsphere);
             }
         }
-
 
         private void buttonExtVisitedClick(object sender, EventArgs e)
         {
@@ -329,7 +326,7 @@ namespace EDDiscovery.UserControls
         bool ignoresystemnamechange = false;
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Text changed " + textBoxSystemName.Text);
+            //System.Diagnostics.Debug.WriteLine("Text changed " + textBoxSystemName.Text);
             if (!ignoresystemnamechange)
             {
                 SetXYZ();
@@ -378,15 +375,18 @@ namespace EDDiscovery.UserControls
 
         void ValidateEnable()
         {
-            buttonExtNames.Enabled = textBoxSystemName.Text.Length > 0;
+            buttonExtNames.Enabled = extButtonFromSpanshFindNames.Enabled = textBoxSystemName.Text.Length > 0;
 
             bool validradius = numberBoxMinRadius.IsValid && numberBoxMaxRadius.IsValid;
+            bool validradiusandxyzorvalidtext = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
 
-            buttonExtEDSM.Enabled = validradius && numberBoxMaxRadius.Value <= 100 && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
-            extButtonFromSpansh.Enabled = validradius && numberBoxMaxRadius.Value <= 200 && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
-            buttonExtNames.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
-            buttonExtDB.Enabled = buttonExtVisited.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
+            buttonExtEDSM.Enabled = validradiusandxyzorvalidtext && numberBoxMaxRadius.Value <= 100;
+            buttonExtVisited.Enabled = validradiusandxyzorvalidtext;
+            buttonExtDB.Enabled = validradiusandxyzorvalidtext;
+            extButtonFromSpansh.Enabled = validradiusandxyzorvalidtext && numberBoxMaxRadius.Value <= 100;
+
         }
+
 
     }
 }
