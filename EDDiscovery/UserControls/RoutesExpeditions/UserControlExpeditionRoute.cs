@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls
             foreach (var system in sysnames)
             {
                 object[] data;
+                long? id64 = null;
 
                 if (system is string)
                 {
@@ -49,15 +50,22 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     var se = (ISystem)system;
+                    id64 = se.SystemAddress;
                     data = new object[] { se.Name, "" };
                 }
 
                 if (((string)data[0]).HasChars())       // must have a name
                 {
                     if (insertIndex < 0)
-                        dataGridView.Rows.Add(data);
+                    {
+                        int rowno = dataGridView.Rows.Add(data);
+                        dataGridView.Rows[rowno].Cells[id64imported].Tag = id64;
+                    }
                     else
+                    {
+                        dataGridView.Rows[insertIndex].Cells[id64imported].Tag = id64;
                         dataGridView.Rows.Insert(insertIndex++, data);
+                    }
 
                     forcetotalsupdate = true;           // update the totals
                 }

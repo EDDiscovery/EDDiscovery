@@ -58,12 +58,12 @@ namespace EDDiscovery.UserControls
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
             edsmSpanshButton.ValueChanged += (s,ch) =>
             {
-                panelStars.SystemDisplay.ShowWebBodies = !edsmSpanshButton.IsNoneSet();
+                panelStars.SystemDisplay.ShowWebBodies = edsmSpanshButton.IsAnySet;
                 System.Diagnostics.Debug.WriteLine($"EDSM/Spansh changed {ch} spansh {edsmSpanshButton.SpanshEnabled} edsm {edsmSpanshButton.EDSMEnabled} showbodies {panelStars.SystemDisplay.ShowWebBodies} weblookup {edsmSpanshButton.WebLookup}");
                 DrawSystem();
             };
 
-            panelStars.SystemDisplay.ShowWebBodies = !edsmSpanshButton.IsNoneSet();
+            panelStars.SystemDisplay.ShowWebBodies = edsmSpanshButton.IsAnySet;
 
             bodyfilters = GetSetting("BodyFilters", "All").Split(';');
 
@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
 
                 if (data != null)
                 {
-                    long value = data.ScanValue(!edsmSpanshButton.IsNoneSet());
+                    long value = data.ScanValue(!edsmSpanshButton.IsAnySet);
                     control_text += " ~ " + value.ToString("N0") + " cr";
 
                     int scanned = data.StarPlanetsScanned();

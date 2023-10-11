@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         private string dbDisplayFilters = "DisplayFilters";
         private string dbRolledUp = "RolledUp";
         private string dbWordWrap = "WordWrap";
-        private string dbEDSM = "EDSM";
+        private string dbEDSMSpansh = "EDSMSpansh";
 
         const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
         const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
@@ -75,8 +75,11 @@ namespace EDDiscovery.UserControls
 
             displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics").Split(';');
 
-            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+            edsmSpanshButton.Init(this, dbEDSMSpansh, "");
+            edsmSpanshButton.ValueChanged += (s, ch) =>
+            {
+                System.Diagnostics.Debug.WriteLine($"EDSM/Spansh changed {ch} spansh {edsmSpanshButton.SpanshEnabled} edsm {edsmSpanshButton.EDSMEnabled} weblookup {edsmSpanshButton.WebLookup}");
+            };
 
             rollUpPanelTop.PinState = GetSetting(dbRolledUp, true);
 
@@ -185,6 +188,12 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+
+        // tags: row.tag holds the computed system class
+        const int systemnametagcell = 0;    //cells[0].Tag is the system name tag, set to detect differences in name
+        const int processedweblookup = 1;   //cells[processedweblookup].Tag is null (not processed), or indicates if a web lookup has occurred (bool)
+        const int id64imported = 2;         //cells[id64imported].Tag is long if we know the id64 when imported
+
         #region auto update
 
         private void Autoupdate_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
@@ -192,7 +201,7 @@ namespace EDDiscovery.UserControls
             // if we are not EDSM checking, or nothing is outstanding, we can check to see if we can process
 
             // tbd spansh?
-            if (checkBoxEDSM.Checked == false || outstandingprocessing == 0)      // if not doing edsm, or no outstandings
+            if (edsmSpanshButton.IsNoneSet || outstandingprocessing == 0)      // if not doing web, or no outstandings
             {
                 int maxlaunch = 20;     // max launch in non edsm mode, 
 
@@ -202,15 +211,15 @@ namespace EDDiscovery.UserControls
                 {
                     var row = dataGridView.Rows[rowindex];
                     var name = row.Cells[0].Value as string;            // name in grid now
-                    string nametag = row.Cells[0].Tag as string;        // null or system name, set in here, used to detect name change
+                    string nametag = row.Cells[systemnametagcell].Tag as string;        // null or system name, set in here, used to detect name change
                     SystemClass systemtag = row.Tag as SystemClass;     // null or set after processing. May or may not have co-ords
-                    bool? edsmtag = row.Cells[1].Tag != null ? (bool)row.Cells[1].Tag : default(bool?); // null or edsm flag is in tag 1 - meaning we processed
+                    bool? weblookup = row.Cells[processedweblookup].Tag != null ? (bool)row.Cells[processedweblookup].Tag : default(bool?); // null or edsm flag is in tag 1 - meaning we processed
 
                     // if name, so row can be valid
                     if (name.HasChars())
                     {
                         // if name tag is null, or name tag is not name, or edsm tag is set but different to current orders, process again
-                        if ((nametag == null || nametag != name) || (edsmtag.HasValue && edsmtag.Value != checkBoxEDSM.Checked))
+                        if ((nametag == null || nametag != name) || (weblookup.HasValue && weblookup.Value != edsmSpanshButton.IsAnySet))
                         {
                             if (nametag != null && nametag != name)        // if changed name.. we clear the xyz, so it will update
                             {
@@ -219,27 +228,27 @@ namespace EDDiscovery.UserControls
                                 row.Cells[ColumnZ.Index].Value = "";
                             }
 
-                            row.Cells[0].Tag = name;        // set to mark we processed with this name
-                            row.Cells[1].Tag = null;        // cancel the processed/edsm flag, it will be set on completion by process
+                            row.Cells[systemnametagcell].Tag = name;        // set to mark we processed with this name
+                            row.Cells[processedweblookup].Tag = null;        // cancel the processed/edsm flag, it will be set on completion by process
                             forcetotalsupdate = true;       // update when finished
                             labelBusy.Visible = true;       // make busy
 
                             // tbd no spansh option
-                            UpdateRowAsync(rowindex, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);
+                            UpdateRowAsync(rowindex, edsmSpanshButton.WebLookup );
 
-                            if (checkBoxEDSM.Checked)      // if we are doing EDSM checking, space it out.. only launch one. Won't launch another until all processing done
+                            if (edsmSpanshButton.IsAnySet)      // if we are doing Web checking, space it out.. only launch one. Won't launch another until all processing done
                                 return;
 
                             if (--maxlaunch == 0)           // if launch max, stop
                                 return;
                         }
-                        else if ( edsmtag.HasValue )        // if we have processed this line
+                        else if ( weblookup.HasValue )        // if we have processed this line
                         {
                             // lets see if the user has changed the co-ords manually
 
                             SystemClass gridsys = GetSystemClass(rowindex);     // get the system class from the grid. Will never be null, since here grid name is not null
 
-                            //System.Diagnostics.Debug.WriteLine($"Row {rowindex} processed, gridsys [{gridsys}] vs [{systemtag}], tag {row.Cells[1].Tag}");
+                            //System.Diagnostics.Debug.WriteLine($"Row {rowindex} processed, gridsys [{gridsys}] vs [{systemtag}], tag {row.cells[processedweblookup].Tag}");
 
                             // if we have a gridpos, lets see if either system tag was not set, or its different xyz using the ints to compare
 
@@ -271,7 +280,7 @@ namespace EDDiscovery.UserControls
             {
                 var row = dataGridView.Rows[rowindex];
                 var name = row.Cells[0].Value as string;
-                var edsmtag = row.Cells[1].Tag;
+                var edsmtag = row.Cells[processedweblookup].Tag;
                 if ( name.HasChars() && edsmtag == null) // if its got a name, and we have not processed it, stop
                 {
                     alldone = false;
@@ -353,7 +362,7 @@ namespace EDDiscovery.UserControls
         void UpdateAllRows()
         {
             foreach (DataGridViewRow row in dataGridView.Rows)      // clear all tags
-                row.Cells[0].Tag = null;
+                row.Cells[systemnametagcell].Tag = null;
         }
 
         // this is an async function - which needs very special handling
@@ -387,7 +396,7 @@ namespace EDDiscovery.UserControls
             // get the system, with name, and include xyz from grid
             SystemClass sys = GetSystemClass(rowindex);
 
-            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Update row {rowindex} {sys.Name} coord {sys.HasCoordinate}");
+            System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Update row {rowindex} {sys.Name} {sys.SystemAddress} coord {sys.X} {sys.Y} {sys.Z}");
 
             if (sys != null)
             {
@@ -452,10 +461,11 @@ namespace EDDiscovery.UserControls
                         {
                             // tbd
                             if (
-                                (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked)) ||     // major selectors for line display
-                                (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked)) ||
-                                (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked)) ||
-                                (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && (!sn.ScanData.IsWebSourced || checkBoxEDSM.Checked))
+                                (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||     // major selectors for line display
+                                (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||
+                                (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||
+                                (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && 
+                                            (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet))
                                 )
                             {
                                 string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
@@ -485,7 +495,7 @@ namespace EDDiscovery.UserControls
 
             System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Set Expedition Row {rowindex} tag is {sys} set cells[1] to {lookup}");
             row.Tag = sys;      // keep system tag
-            row.Cells[1].Tag = lookup != EliteDangerousCore.WebExternalDataLookup.None;       // and record the web state. this indicates row has been processed
+            row.Cells[processedweblookup].Tag = lookup != EliteDangerousCore.WebExternalDataLookup.None;       // and record the web state. this indicates row has been processed
 
             System.Threading.Interlocked.Decrement(ref outstandingprocessing);      // and decrease processing count..
         }
@@ -516,8 +526,10 @@ namespace EDDiscovery.UserControls
                     double? zpos = ((string)row.Cells[ColumnZ.Index].Value).ParseDoubleNull(System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number);
 
                     bool knownpos = xpos != null && ypos != null && zpos != null;
+                    long? id64 = row.Cells[id64imported].Tag as long?;      // so we may have passed thru a system id
+                    row.Cells[id64imported].Tag = null;         // we use this only once, as we are going to find a real system
 
-                    return knownpos ? new SystemClass(name, null, xpos.Value,ypos.Value,zpos.Value) : new SystemClass(name);
+                    return knownpos ? new SystemClass(name, id64, xpos.Value,ypos.Value,zpos.Value) : new SystemClass(name, id64);
                 }
             }
             return null;
@@ -1032,11 +1044,6 @@ namespace EDDiscovery.UserControls
 
             displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
             displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
-        }
-
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            PutSetting(dbEDSM, checkBoxEDSM.Checked);       // update the setting, and the autoupdate will take it up
         }
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)

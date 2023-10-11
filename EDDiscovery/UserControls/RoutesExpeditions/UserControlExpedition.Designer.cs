@@ -101,9 +101,9 @@ namespace EDDiscovery.UserControls
             this.buttonExtExport = new ExtendedControls.ExtButton();
             this.extButtonShow3DMap = new ExtendedControls.ExtButton();
             this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -662,7 +662,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.buttonExtExport);
             this.panelControls.Controls.Add(this.extButtonShow3DMap);
             this.panelControls.Controls.Add(this.extButtonDisplayFilters);
-            this.panelControls.Controls.Add(this.checkBoxEDSM);
+            this.panelControls.Controls.Add(this.edsmSpanshButton);
             this.panelControls.Controls.Add(this.extCheckBoxWordWrap);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
@@ -837,35 +837,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
             this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.ImageIndeterminate = null;
-            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(528, 1);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxEDSM.TabIndex = 33;
-            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM.");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
-            // 
             // extCheckBoxWordWrap
             // 
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
@@ -899,6 +870,17 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
+            // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(528, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 30;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
             // UserControlExpedition
             // 
@@ -960,7 +942,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton extButtonAddSystems;
         private ExtendedControls.ExtButton extButtonDisplayFilters;
-        private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private ExtendedControls.ExtButton extButtonNavRouteLatest;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
@@ -982,5 +963,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Stars;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHistoryNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
+        private EDSMSpanshButton edsmSpanshButton;
     }
 }

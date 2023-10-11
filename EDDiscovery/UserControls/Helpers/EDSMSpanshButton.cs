@@ -22,19 +22,21 @@ namespace EDDiscovery.UserControls
 
         public void Init(UserControlCommonBase ucb, string settingname, string defaultvalue)
         {
+            string startsetting = ucb.GetSetting(settingname, defaultvalue);
             Init(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption[]
             {
                 new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("EDSM","EDSM",EDDiscovery.Icons.Controls.EDSM),
                 new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSH","Spansh",EDDiscovery.Icons.Controls.spansh),
             }, 
-            ucb.GetSetting(settingname,defaultvalue),
+            startsetting,
             (newsetting) => { 
                 ucb.PutSetting(settingname, newsetting);
                 Image = newsetting.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
             },
             allornoneshown:false,
             closeboundaryregion:new System.Drawing.Size(64,64));
-            Image = settingname.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
+            
+            Image = startsetting.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
         }
 
         public bool SpanshEnabled { get { return IsSet("SPANSH"); } }
