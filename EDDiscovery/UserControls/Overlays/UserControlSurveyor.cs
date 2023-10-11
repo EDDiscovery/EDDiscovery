@@ -383,7 +383,7 @@ namespace EDDiscovery.UserControls
             if (sys != null)
             {
                 // tbd spansh
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.All);        // get data with EDSM
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
