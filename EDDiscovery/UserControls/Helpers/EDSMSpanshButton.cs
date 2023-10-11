@@ -25,8 +25,9 @@ namespace EDDiscovery.UserControls
             string startsetting = ucb.GetSetting(settingname, defaultvalue);
             Init(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption[]
             {
-                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("EDSM","EDSM",EDDiscovery.Icons.Controls.EDSM),
-                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSH","Spansh",EDDiscovery.Icons.Controls.spansh),
+                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("EDSM","EDSM",EDDiscovery.Icons.Controls.EDSM,"SPANSHEDSM"),
+                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSH","Spansh",EDDiscovery.Icons.Controls.spansh,"SPANSHEDSM"),
+                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSHEDSM","Spansh -> EDSM",EDDiscovery.Icons.Controls.spansh,"EDSM;SPANSH"),
             }, 
             startsetting,
             (newsetting) => { 
@@ -39,18 +40,25 @@ namespace EDDiscovery.UserControls
             Image = startsetting.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
         }
 
-        public bool SpanshEnabled { get { return IsSet("SPANSH"); } }
-        public bool EDSMEnabled { get { return IsSet("EDSM"); } }
+        //public bool SpanshEnabled { get { return IsSet("SPANSH") || IsSet("SPANSHEDSM"); } }
+        //public bool EDSMEnabled { get { return IsSet("EDSM") || IsSet("SPANSHEDSM"); } }
 
         public EliteDangerousCore.WebExternalDataLookup WebLookup { get
             {
-                if (SpanshEnabled && EDSMEnabled)
-                    return EliteDangerousCore.WebExternalDataLookup.All;
-                else if (SpanshEnabled)
-                    return EliteDangerousCore.WebExternalDataLookup.Spansh;
-                else if (EDSMEnabled)
+                if (IsSet("SPANSHEDSM"))
+                {
+                    return EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM;
+                }
+                else if (IsSet("SPANSH"))
+                {
+                    if (IsSet("EDSM"))
+                        return EliteDangerousCore.WebExternalDataLookup.All;
+                    else
+                        return EliteDangerousCore.WebExternalDataLookup.Spansh;
+                }
+                else if (IsSet("EDSM"))
                     return EliteDangerousCore.WebExternalDataLookup.EDSM;
-                else 
+                else
                     return EliteDangerousCore.WebExternalDataLookup.None;
             }
         }

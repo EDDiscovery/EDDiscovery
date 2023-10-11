@@ -59,7 +59,6 @@ namespace EDDiscovery.UserControls
             edsmSpanshButton.ValueChanged += (s,ch) =>
             {
                 panelStars.SystemDisplay.ShowWebBodies = edsmSpanshButton.IsAnySet;
-                System.Diagnostics.Debug.WriteLine($"EDSM/Spansh changed {ch} spansh {edsmSpanshButton.SpanshEnabled} edsm {edsmSpanshButton.EDSMEnabled} showbodies {panelStars.SystemDisplay.ShowWebBodies} weblookup {edsmSpanshButton.WebLookup}");
                 DrawSystem();
             };
 

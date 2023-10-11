@@ -536,6 +536,11 @@ namespace EDDiscovery
             helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this, contextMenuStripTabs.PointToScreen(new Point(0, 0)), tabControlMain.LastTabClicked); };
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
+
+
+            // debug part
+
+            //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol"), true);
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called

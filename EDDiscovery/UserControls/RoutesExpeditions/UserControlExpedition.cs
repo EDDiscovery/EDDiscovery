@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             edsmSpanshButton.Init(this, dbEDSMSpansh, "");
             edsmSpanshButton.ValueChanged += (s, ch) =>
             {
-                System.Diagnostics.Debug.WriteLine($"EDSM/Spansh changed {ch} spansh {edsmSpanshButton.SpanshEnabled} edsm {edsmSpanshButton.EDSMEnabled} weblookup {edsmSpanshButton.WebLookup}");
+                System.Diagnostics.Debug.WriteLine($"EDSM/Spansh changed {ch} spansh {edsmSpanshButton.WebLookup}");
             };
 
             rollUpPanelTop.PinState = GetSetting(dbRolledUp, true);
