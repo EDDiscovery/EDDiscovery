@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            EliteDangerousCore.SystemDisplay systemDisplay2 = new EliteDangerousCore.SystemDisplay();
+            EliteDangerousCore.SystemDisplay systemDisplay1 = new EliteDangerousCore.SystemDisplay();
             this.extCheckBoxStar = new ExtendedControls.ExtCheckBox();
             this.buttonSize = new ExtendedControls.ExtButton();
             this.extButtonHighValue = new ExtendedControls.ExtButton();
@@ -223,24 +223,24 @@ namespace EDDiscovery.UserControls
             this.panelStars.Location = new System.Drawing.Point(0, 30);
             this.panelStars.Name = "panelStars";
             this.panelStars.Size = new System.Drawing.Size(748, 652);
-            systemDisplay2.BackColor = System.Drawing.Color.Black;
-            systemDisplay2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            systemDisplay2.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline);
-            systemDisplay2.HideFullMaterials = false;
-            systemDisplay2.LabelColor = System.Drawing.Color.DarkOrange;
-            systemDisplay2.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            systemDisplay2.ShowAllG = true;
-            systemDisplay2.ShowDist = true;
-            systemDisplay2.ShowHabZone = true;
-            systemDisplay2.ShowMaterials = true;
-            systemDisplay2.ShowMoons = true;
-            systemDisplay2.ShowOnlyMaterialsRare = false;
-            systemDisplay2.ShowOverlays = true;
-            systemDisplay2.ShowPlanetClasses = true;
-            systemDisplay2.ShowStarClasses = true;
-            systemDisplay2.ShowWebBodies = false;
-            systemDisplay2.ValueLimit = 50000;
-            this.panelStars.SystemDisplay = systemDisplay2;
+            systemDisplay1.BackColor = System.Drawing.Color.Black;
+            systemDisplay1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            systemDisplay1.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline);
+            systemDisplay1.HideFullMaterials = false;
+            systemDisplay1.LabelColor = System.Drawing.Color.DarkOrange;
+            systemDisplay1.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            systemDisplay1.ShowAllG = true;
+            systemDisplay1.ShowDist = true;
+            systemDisplay1.ShowHabZone = true;
+            systemDisplay1.ShowMaterials = true;
+            systemDisplay1.ShowMoons = true;
+            systemDisplay1.ShowOnlyMaterialsRare = false;
+            systemDisplay1.ShowOverlays = true;
+            systemDisplay1.ShowPlanetClasses = true;
+            systemDisplay1.ShowStarClasses = true;
+            systemDisplay1.ShowWebBodies = false;
+            systemDisplay1.ValueLimit = 50000;
+            this.panelStars.SystemDisplay = systemDisplay1;
             this.panelStars.TabIndex = 5;
             // 
             // UserControlScan

@@ -137,6 +137,7 @@ namespace EDDiscovery.Icons
         public static Image EDDB { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDDB"); } }
         public static Image EDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDSM"); } }
         public static Image EDSMSpansh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDSMSpansh"); } }
+        public static Image EDSMSpanshOn { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDSMSpanshOn"); } }
         public static Image Inara { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Inara"); } }
         public static Image Popout { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Popout"); } }
         public static Image Selector { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Selector"); } }

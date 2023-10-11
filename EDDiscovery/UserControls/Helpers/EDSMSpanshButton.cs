@@ -28,9 +28,13 @@ namespace EDDiscovery.UserControls
                 new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSH","Spansh",EDDiscovery.Icons.Controls.spansh),
             }, 
             ucb.GetSetting(settingname,defaultvalue),
-            (s) => { ucb.PutSetting(settingname, s); },
+            (newsetting) => { 
+                ucb.PutSetting(settingname, newsetting);
+                Image = newsetting.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
+            },
             allornoneshown:false,
             closeboundaryregion:new System.Drawing.Size(64,64));
+            Image = settingname.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
         }
 
         public bool SpanshEnabled { get { return IsSet("SPANSH"); } }
