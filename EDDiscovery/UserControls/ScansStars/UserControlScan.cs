@@ -55,9 +55,15 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ScanPanel";
 
-            checkBoxEDSM.Checked = GetSetting("EDSM", false);
-            panelStars.SystemDisplay.ShowWebBodies = checkBoxEDSM.Checked;      // tbd
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
+            edsmSpanshButton.ValueChanged += (s,ch) =>
+            {
+                panelStars.SystemDisplay.ShowWebBodies = !edsmSpanshButton.IsNoneSet();
+                System.Diagnostics.Debug.WriteLine($"EDSM/Spansh changed {ch} spansh {edsmSpanshButton.SpanshEnabled} edsm {edsmSpanshButton.EDSMEnabled} showbodies {panelStars.SystemDisplay.ShowWebBodies} weblookup {edsmSpanshButton.WebLookup}");
+                DrawSystem();
+            };
+
+            panelStars.SystemDisplay.ShowWebBodies = !edsmSpanshButton.IsNoneSet();
 
             bodyfilters = GetSetting("BodyFilters", "All").Split(';');
 
@@ -176,7 +182,7 @@ namespace EDDiscovery.UserControls
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
             // tbd spansh
-            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None) : null;
+            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, edsmSpanshButton.WebLookup) : null;
 #endif
             string control_text = "No System";
 
@@ -186,7 +192,7 @@ namespace EDDiscovery.UserControls
 
                 if (data != null)
                 {
-                    long value = data.ScanValue(checkBoxEDSM.Checked);
+                    long value = data.ScanValue(!edsmSpanshButton.IsNoneSet());
                     control_text += " ~ " + value.ToString("N0") + " cr";
 
                     int scanned = data.StarPlanetsScanned();
@@ -274,13 +280,6 @@ namespace EDDiscovery.UserControls
                 extCheckBoxStar.Checked = false;
             }
 
-        }
-
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            PutSetting("EDSM", checkBoxEDSM.Checked);
-            panelStars.SystemDisplay.ShowWebBodies = checkBoxEDSM.Checked;
-            DrawSystem();
         }
 
         private void extButtonHighValue_Click(object sender, EventArgs e)

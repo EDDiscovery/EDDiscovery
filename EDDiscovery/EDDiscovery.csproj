@@ -283,6 +283,9 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\EDSMSpanshButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\Helpers\DataGridViewJumpToDialog.cs" />
     <Compile Include="UserControls\Helpers\FontHelpers.cs" />
     <Compile Include="UserControls\Helpers\PaintEventColumn.cs" />

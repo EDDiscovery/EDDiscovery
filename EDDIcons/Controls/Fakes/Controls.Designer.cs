@@ -423,6 +423,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap EDSMSpansh {
+            get {
+                object obj = ResourceManager.GetObject("EDSMSpansh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap EngineerApply {
             get {
                 object obj = ResourceManager.GetObject("EngineerApply", resourceCulture);
