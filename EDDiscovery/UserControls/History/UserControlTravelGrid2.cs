@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
                             var ri = scanof.FindRing(entry.BodyName);
                             ringtype = ri.RingClassID.ToString().SplitCapsWordFull();
 
-                            if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Metalic)
+                            if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Metallic)
                             {
                                 showicy = showrocky = showmr = false;
                             }

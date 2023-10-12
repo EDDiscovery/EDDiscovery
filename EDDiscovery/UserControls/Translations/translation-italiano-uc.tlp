@@ -601,7 +601,7 @@ SECTION UserControlRoute
 .labelMaxJump: "Max jump" => "Saltpo ax"
 .labelDistance: "Distance" => "Distanza"
 .labelMetric: "Metric" => "Metrica"
-.button_Route: "Find route" => "Cerca rotta"
+.extButtonRoute: "Find route" => "Cerca rotta"
 .labelFrom: "From" => "Da"
 .showInEDSMToolStripMenuItem: "Show in EDSM" => "Apri su EDSM"
 .copyToolStripMenuItem: "Copy" => "Copia"
@@ -625,7 +625,7 @@ SECTION UserControlRoute
 .textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "Y (Verticale) Co-ord"
 .textBox_ToX.ToolTip: "X Co-Ord" @
 .textBox_FromZ.ToolTip: "Z Co-ord" @
-.button_Route.ToolTip: "Compute the route" => "Calcola la rotta"
+.extButtonRoute.ToolTip: "Compute the route" => "Calcola la rotta"
 .textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "Y (Verticale) Co-ord"
 .textBox_FromX.ToolTip: "X Co-ord" @
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @

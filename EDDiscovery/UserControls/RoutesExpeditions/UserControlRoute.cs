@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "UCRoute";
 
-            button_Route.Enabled = false;
+            extButtonRoute.Enabled = false;
             cmd3DMap.Enabled = false;
 
             fromupdatetimer = new System.Windows.Forms.Timer();
@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
                 : (int) SystemCache.SystemsNearestMetric.IterativeNearestWaypoint;
 
             UpdateDistance();
-            button_Route.Enabled = IsValid();
+            extButtonRoute.Enabled = IsValid();
 
             changesilence = false;
 
@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_buttonExtTargetTo, EDTx.UserControlRoute_buttonToEDSM, EDTx.UserControlRoute_buttonFromEDSM, EDTx.UserControlRoute_buttonTargetFrom, 
                                         EDTx.UserControlRoute_cmd3DMap, EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo, 
                                         EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric, 
-                                        EDTx.UserControlRoute_button_Route, EDTx.UserControlRoute_labelFrom };
+                                        EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem };
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_cmd3DMap_ToolTip, EDTx.UserControlRoute_textBox_From_ToolTip, EDTx.UserControlRoute_textBox_Range_ToolTip, 
                                         EDTx.UserControlRoute_textBox_To_ToolTip, EDTx.UserControlRoute_textBox_Distance_ToolTip, EDTx.UserControlRoute_textBox_ToZ_ToolTip, 
                                         EDTx.UserControlRoute_textBox_ToY_ToolTip, EDTx.UserControlRoute_textBox_ToX_ToolTip, EDTx.UserControlRoute_textBox_FromZ_ToolTip, 
-                                        EDTx.UserControlRoute_button_Route_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip };
+                                        EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             DiscoveryForm.OnHistoryChange += HistoryChanged;
@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateDistance();
-            button_Route.Enabled = IsValid();
+            extButtonRoute.Enabled = IsValid();
             changesilence = false;
         }
         
@@ -404,7 +404,7 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateDistance();
-            button_Route.Enabled = IsValid();
+            extButtonRoute.Enabled = IsValid();
             changesilence = false;
         }
 
@@ -497,13 +497,13 @@ namespace EDDiscovery.UserControls
                 routingthread.Name = "Thread Route";
 
                 cmd3DMap.Enabled = false;
-                button_Route.Text = "Cancel".T(EDTx.Cancel);
+                extButtonRoute.Text = "Cancel".T(EDTx.Cancel);
                 routingthread.Start(plotter);
             }
             else
             {
                 plotter.StopPlotter = true;
-                button_Route.Enabled = false;
+                extButtonRoute.Enabled = false;
             }
         }
 
@@ -521,8 +521,8 @@ namespace EDDiscovery.UserControls
                 {
                     RequestPanelOperation(this, new PushRouteList() { Systems = routeSystems });
                     cmd3DMap.Enabled = true;
-                    button_Route.Text = "Find Route".TxID(EDTx.UserControlRoute_button_Route);
-                    button_Route.Enabled = true;
+                    extButtonRoute.Text = "Find Route".TxID(EDTx.UserControlRoute_extButtonRoute);
+                    extButtonRoute.Enabled = true;
                 }));
         }
 
@@ -581,7 +581,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxRoutingMetric_SelectedIndexChanged(object sender, EventArgs e)
         {
-            button_Route.Enabled = IsValid();
+            extButtonRoute.Enabled = IsValid();
         }
 
         private void textBox_Clicked(object sender, EventArgs e)

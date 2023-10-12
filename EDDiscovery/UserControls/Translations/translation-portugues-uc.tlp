@@ -601,7 +601,7 @@ SECTION UserControlRoute
 .labelMaxJump: "Max jump" @
 .labelDistance: "Distance" @
 .labelMetric: "Metric" @
-.button_Route: "Find route" @
+.extButtonRoute: "Find route" @
 .labelFrom: "From" @
 .showInEDSMToolStripMenuItem: "Show in EDSM" @
 .copyToolStripMenuItem: "Copy" @
@@ -625,7 +625,7 @@ SECTION UserControlRoute
 .textBox_ToY.ToolTip: "Y (Vertical) Co-ord" @
 .textBox_ToX.ToolTip: "X Co-Ord" @
 .textBox_FromZ.ToolTip: "Z Co-ord" @
-.button_Route.ToolTip: "Compute the route" @
+.extButtonRoute.ToolTip: "Compute the route" @
 .textBox_FromY.ToolTip: "Y (Vertical) Co-ord" @
 .textBox_FromX.ToolTip: "X Co-ord" @
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @

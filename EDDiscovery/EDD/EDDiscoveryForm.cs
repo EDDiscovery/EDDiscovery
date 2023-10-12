@@ -152,29 +152,25 @@ namespace EDDiscovery
         // called from EDDApplicationContext .. continues on with the construction of the system
         public void Init(Action<string> msg)  
         {
-            // some debug
-            //EliteDangerousCore.ItemData.ReformatNonCoriolisModules();     // clean up these modules list
-
-            //BaseUtils.MSTicks T = new MSTicks(100);
-            //while(T.NotTimedOut)
-            //{
-            //    System.Diagnostics.Debug.WriteLine($"Not timed out {Environment.TickCount}");
-            //    System.Threading.Thread.Sleep(50);
-            //}
-
-            //  System.Diagnostics.Debug.WriteLine($"timed out {T.TimedOut}");
-
             if (EDDOptions.Instance.Culture != null)
                 CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
 
             System.Diagnostics.Trace.WriteLine($"EDD UI Culture is {CultureInfo.CurrentCulture.Name} {System.Threading.Thread.CurrentThread.CurrentUICulture.Name}");
 
-            // previously in controller
+            // Clean up some log folders
 
             string logpath = EDDOptions.Instance.LogAppDirectory();
 
-            BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.hlog", 2, 256);        // Remove hlogs faster
-            BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.log", 10, 256);
+            FileHelpers.DeleteFiles(logpath, "*.hlog", new TimeSpan(2, 0, 0, 0), 256);        // Remove hlogs faster
+            FileHelpers.DeleteFiles(logpath, "*.log", new TimeSpan(10, 0, 0, 0), 256);
+
+            if (EDDOptions.Instance.ScanCachePath != null)                                    // clean out old scan jsons
+            {
+                FileHelpers.CreateDirectoryNoError(EDDOptions.Instance.ScanCachePath);
+                FileHelpers.DeleteFiles(EDDOptions.Instance.ScanCachePath, "*.json", new TimeSpan(7, 0, 0, 0), 256);
+            }
+
+            // attach debugger
 
             if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)       // no debugger, or tracelog option set
             {
@@ -537,10 +533,7 @@ namespace EDDiscovery
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
 
-
-            // debug part
-
-            //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol"), true);
+            PostInitDebug();        // call any debug we want at this point
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called

@@ -1207,7 +1207,7 @@ namespace EDDiscovery
         UserControlRoute_labelMaxJump, // Control 'Max jump'
         UserControlRoute_labelDistance, // Control 'Distance'
         UserControlRoute_labelMetric, // Control 'Metric'
-        UserControlRoute_button_Route, // Control 'Find route'
+        UserControlRoute_extButtonRoute, // Control 'Find route'
         UserControlRoute_labelFrom, // Control 'From'
         UserControlRoute_showInEDSMToolStripMenuItem, // ToolStrip control 'Show in EDSM'
         UserControlRoute_copyToolStripMenuItem, // ToolStrip control 'Copy'
@@ -1233,7 +1233,7 @@ namespace EDDiscovery
         UserControlRoute_textBox_ToY_ToolTip, // ToolTip 'Y (Vertical) Co-ord'
         UserControlRoute_textBox_ToX_ToolTip, // ToolTip 'X Co-Ord'
         UserControlRoute_textBox_FromZ_ToolTip, // ToolTip 'Z Co-ord'
-        UserControlRoute_button_Route_ToolTip, // ToolTip 'Compute the route'
+        UserControlRoute_extButtonRoute_ToolTip, // ToolTip 'Compute the route'
         UserControlRoute_textBox_FromY_ToolTip, // ToolTip 'Y (Vertical) Co-ord'
         UserControlRoute_textBox_FromX_ToolTip, // ToolTip 'X Co-ord'
         UserControlRoute_Confirm, // This will result in a large number ({0})) of jumps

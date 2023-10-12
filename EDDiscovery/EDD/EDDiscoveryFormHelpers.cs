@@ -490,6 +490,12 @@ namespace EDDiscovery
             return false;
         }
 
+        public static void PostInitDebug()
+        {
+            System.Diagnostics.Debug.WriteLine($"Post Init debug");
+            //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol"), true);
+        }
+
 
         #endregion
 

@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
         // tags: row.tag holds the computed system class
         const int systemnametagcell = 0;    //cells[0].Tag is the system name tag, set to detect differences in name
         const int processedweblookup = 1;   //cells[processedweblookup].Tag is null (not processed), or indicates if a web lookup has occurred (bool)
-        const int id64imported = 2;         //cells[id64imported].Tag is long if we know the id64 when imported
+        const int id64imported = 2;         //cells[id64imported].Tag is the system address, set if we imported it from external, or set if we did a db lookup
 
         #region auto update
 
@@ -229,7 +229,8 @@ namespace EDDiscovery.UserControls
                             }
 
                             row.Cells[systemnametagcell].Tag = name;        // set to mark we processed with this name
-                            row.Cells[processedweblookup].Tag = null;        // cancel the processed/edsm flag, it will be set on completion by process
+                            row.Cells[processedweblookup].Tag = null;       // cancel the processed/edsm flag, it will be set on completion by process
+                            row.Cells[id64imported].Tag = null;             // cancel any imported id64 tag
                             forcetotalsupdate = true;       // update when finished
                             labelBusy.Visible = true;       // make busy
 
@@ -417,8 +418,8 @@ namespace EDDiscovery.UserControls
 
                 row.Cells[Visits.Index].Value = DiscoveryForm.History.Visits(sys.Name).ToString("0");
 
-                // if not, try a lookup
-                if (!sys.HasCoordinate)
+                //  if we don't have a co-ord, or we don't have a system address, see if we can find it in db
+                if (!sys.HasCoordinate || !sys.SystemAddress.HasValue)
                 {
                     System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Looking up async for {sys.Name} {lookup}");
                     var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.GalacticMapping, lookup);
@@ -432,6 +433,10 @@ namespace EDDiscovery.UserControls
                         row.Cells[ColumnX.Index].Value = syslookup.X.ToString("N5");              // write culture specific location.
                         row.Cells[ColumnY.Index].Value = syslookup.Y.ToString("N5");
                         row.Cells[ColumnZ.Index].Value = syslookup.Z.ToString("N5");
+
+                        if ( sys.SystemAddress != null )                                // this is the id64 cache location used by GetSystemClass, update it
+                            row.Cells[id64imported].Tag = sys.SystemAddress;
+
                         sys = new SystemClass(syslookup);
                     }
                 }
@@ -526,8 +531,7 @@ namespace EDDiscovery.UserControls
                     double? zpos = ((string)row.Cells[ColumnZ.Index].Value).ParseDoubleNull(System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number);
 
                     bool knownpos = xpos != null && ypos != null && zpos != null;
-                    long? id64 = row.Cells[id64imported].Tag as long?;      // so we may have passed thru a system id
-                    row.Cells[id64imported].Tag = null;         // we use this only once, as we are going to find a real system
+                    long? id64 = row.Cells[id64imported].Tag as long?;      // we may have an id 64 tag if it was imported from somewhere
 
                     return knownpos ? new SystemClass(name, id64, xpos.Value,ypos.Value,zpos.Value) : new SystemClass(name, id64);
                 }

@@ -59,7 +59,7 @@
             this.textBox_ToX = new ExtendedControls.ExtTextBox();
             this.labelMetric = new System.Windows.Forms.Label();
             this.textBox_FromZ = new ExtendedControls.ExtTextBox();
-            this.button_Route = new ExtendedControls.ExtButton();
+            this.extButtonRoute = new ExtendedControls.ExtButton();
             this.textBox_FromY = new ExtendedControls.ExtTextBox();
             this.labelFrom = new System.Windows.Forms.Label();
             this.textBox_FromX = new ExtendedControls.ExtTextBox();
@@ -115,7 +115,7 @@
             this.panel1.Controls.Add(this.textBox_ToX);
             this.panel1.Controls.Add(this.labelMetric);
             this.panel1.Controls.Add(this.textBox_FromZ);
-            this.panel1.Controls.Add(this.button_Route);
+            this.panel1.Controls.Add(this.extButtonRoute);
             this.panel1.Controls.Add(this.textBox_FromY);
             this.panel1.Controls.Add(this.labelFrom);
             this.panel1.Controls.Add(this.textBox_FromX);
@@ -656,15 +656,15 @@
             // 
             // button_Route
             // 
-            this.button_Route.Enabled = false;
-            this.button_Route.Location = new System.Drawing.Point(57, 158);
-            this.button_Route.Name = "button_Route";
-            this.button_Route.Size = new System.Drawing.Size(111, 27);
-            this.button_Route.TabIndex = 40;
-            this.button_Route.Text = "Find route";
-            this.toolTip.SetToolTip(this.button_Route, "Compute the route");
-            this.button_Route.UseVisualStyleBackColor = true;
-            this.button_Route.Click += new System.EventHandler(this.button_Route_Click);
+            this.extButtonRoute.Enabled = false;
+            this.extButtonRoute.Location = new System.Drawing.Point(57, 158);
+            this.extButtonRoute.Name = "extButtonRoute";
+            this.extButtonRoute.Size = new System.Drawing.Size(111, 27);
+            this.extButtonRoute.TabIndex = 40;
+            this.extButtonRoute.Text = "Find route";
+            this.toolTip.SetToolTip(this.extButtonRoute, "Compute the route");
+            this.extButtonRoute.UseVisualStyleBackColor = true;
+            this.extButtonRoute.Click += new System.EventHandler(this.button_Route_Click);
             // 
             // textBox_FromY
             // 
@@ -950,7 +950,7 @@
         internal ExtendedControls.ExtTextBox textBox_ToX;
         private System.Windows.Forms.Label labelMetric;
         internal ExtendedControls.ExtTextBox textBox_FromZ;
-        private ExtendedControls.ExtButton button_Route;
+        private ExtendedControls.ExtButton extButtonRoute;
         internal ExtendedControls.ExtTextBox textBox_FromY;
         private System.Windows.Forms.Label labelFrom;
         internal ExtendedControls.ExtTextBox textBox_FromX;
