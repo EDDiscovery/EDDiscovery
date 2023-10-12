@@ -61,10 +61,14 @@ namespace EDDiscovery.UserControls
             DBBaseName = "Surveyor";
         }
 
+
         public override void Init()
         {
-            checkBoxEDSM.Checked = GetSetting("edsm", false);
-            checkBoxEDSM.Click += new System.EventHandler(this.checkBoxEDSM_Clicked);
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
+            edsmSpanshButton.ValueChanged += (s, ch) =>
+            {
+                DrawAll(last_sys);
+            };
 
             PopulateCtrlList();
 
@@ -383,13 +387,13 @@ namespace EDDiscovery.UserControls
             if (sys != null)
             {
                 // tbd spansh
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);        // get data with EDSM
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
                 if (systemnode != null)
                 {
-                    int scanned = checkBoxEDSM.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonWeb();
+                    int scanned = edsmSpanshButton.IsAnySet ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonWeb();
 
                     if (scanned > 0)
                     {
@@ -634,7 +638,7 @@ namespace EDDiscovery.UserControls
                 // find if we have system nodes
 
                 // tbd spansh
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);        // get data with EDSM
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -669,7 +673,7 @@ namespace EDDiscovery.UserControls
                         bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
                         // tbd
-                        if (surveyordisplay == false && (!sd.IsWebSourced || checkBoxEDSM.Checked)) // if to perform inbuilt checks - must have scan data to do this
+                        if (surveyordisplay == false && (!sd.IsWebSourced || edsmSpanshButton.IsAnySet)) // if to perform inbuilt checks - must have scan data to do this
                         {
                             // work out if we want to display
                             surveyordisplay = (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
@@ -1060,12 +1064,6 @@ namespace EDDiscovery.UserControls
             PutSetting("font", setting);
             displayfont = f;
             DrawAll(last_sys,true);
-        }
-
-        private void checkBoxEDSM_Clicked(object sender, EventArgs e)
-        {
-            PutSetting("edsm", checkBoxEDSM.Checked);
-            DrawAll(last_sys);
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)

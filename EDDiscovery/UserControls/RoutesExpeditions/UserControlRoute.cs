@@ -37,8 +37,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Timer toupdatetimer;
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
-        private string dbEDSM = "EDSM";
-
         public HistoryEntry last_history_he = null;
 
         public UserControlRoute()
@@ -102,8 +100,7 @@ namespace EDDiscovery.UserControls
 
             comboBoxRoutingMetric.Enabled = true;
 
-            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
 
             var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_StarClassCol, EDTx.UserControlRoute_WayPointDistCol, EDTx.UserControlRoute_DeviationCol, 
                                         EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom, 
@@ -476,8 +473,7 @@ namespace EDDiscovery.UserControls
                 plotter.ToSystem = !textBox_ToName.Text.Contains("@") && textBox_To.Text.HasChars() ? textBox_To.Text : "END POINT";
                 plotter.RouteMethod = (SystemCache.SystemsNearestMetric) comboBoxRoutingMetric.SelectedIndex;
                 plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
-                //tbd spansh
-                plotter.WebLookup = checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None;
+                plotter.WebLookup = edsmSpanshButton.WebLookup;
 
                 int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
 
@@ -640,11 +636,6 @@ namespace EDDiscovery.UserControls
                 ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);    // protected against sys = null
             }
-        }
-
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            PutSetting(dbEDSM, checkBoxEDSM.Checked);
         }
 
         #endregion

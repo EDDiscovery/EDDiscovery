@@ -43,7 +43,6 @@
             this.buttonToEDSM = new ExtendedControls.ExtButton();
             this.buttonFromEDSM = new ExtendedControls.ExtButton();
             this.buttonTargetFrom = new ExtendedControls.ExtButton();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.cmd3DMap = new ExtendedControls.ExtButton();
             this.textBox_From = new ExtendedControls.ExtTextBoxAutoComplete();
             this.textBox_Range = new ExtendedControls.NumberBoxLong();
@@ -79,6 +78,7 @@
             this.StarClassCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.panel1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -88,6 +88,7 @@
             // panel1
             // 
             this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.edsmSpanshButton);
             this.panel1.Controls.Add(this.checkBox_FsdBoost);
             this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.textBox_ToName);
@@ -99,7 +100,6 @@
             this.panel1.Controls.Add(this.buttonToEDSM);
             this.panel1.Controls.Add(this.buttonFromEDSM);
             this.panel1.Controls.Add(this.buttonTargetFrom);
-            this.panel1.Controls.Add(this.checkBoxEDSM);
             this.panel1.Controls.Add(this.cmd3DMap);
             this.panel1.Controls.Add(this.textBox_From);
             this.panel1.Controls.Add(this.textBox_Range);
@@ -122,7 +122,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(878, 188);
+            this.panel1.Size = new System.Drawing.Size(878, 189);
             this.panel1.TabIndex = 0;
             // 
             // checkBox_FsdBoost
@@ -153,7 +153,7 @@
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(304, 158);
             this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 59;
             this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
@@ -302,35 +302,6 @@
             this.toolTip.SetToolTip(this.buttonTargetFrom, "Copy the target system to start route entry");
             this.buttonTargetFrom.UseVisualStyleBackColor = true;
             this.buttonTargetFrom.Click += new System.EventHandler(this.buttonFromTarget_Click);
-            // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.ImageIndeterminate = null;
-            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(342, 157);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxEDSM.TabIndex = 33;
-            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "Lookup stars from EDSM if not found in database");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
             // 
             // cmd3DMap
             // 
@@ -654,7 +625,7 @@
             this.textBox_FromZ.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_From_Enter);
             // 
-            // button_Route
+            // extButtonRoute
             // 
             this.extButtonRoute.Enabled = false;
             this.extButtonRoute.Location = new System.Drawing.Point(57, 158);
@@ -775,9 +746,9 @@
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 188);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 189);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(878, 566);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(878, 565);
             this.dataViewScrollerPanel1.TabIndex = 29;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -799,7 +770,7 @@
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 566);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 565);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 4;
@@ -847,7 +818,7 @@
             this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewRoute.SingleRowSelect = true;
-            this.dataGridViewRoute.Size = new System.Drawing.Size(859, 566);
+            this.dataGridViewRoute.Size = new System.Drawing.Size(859, 565);
             this.dataGridViewRoute.TabIndex = 1;
             this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
             this.dataGridViewRoute.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellDoubleClick);
@@ -903,6 +874,17 @@
             this.DeviationCol.HeaderText = "Deviation";
             this.DeviationCol.Name = "DeviationCol";
             this.DeviationCol.ReadOnly = true;
+            // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(339, 157);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 70;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
             // UserControlRoute
             // 
@@ -963,7 +945,6 @@
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtCheckBox checkBox_FsdBoost;
         private System.Windows.Forms.ToolStripMenuItem showScanToolStripMenuItem;
-        private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private System.Windows.Forms.DataGridViewTextBoxColumn SystemCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DistanceCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn XCol;
@@ -972,5 +953,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StarClassCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WayPointDistCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeviationCol;
+        private EDSMSpanshButton edsmSpanshButton;
     }
 }

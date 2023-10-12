@@ -40,7 +40,6 @@ namespace EDDiscovery.UserControls
         }
 
         private string dbHistorySave = "EDUIHistory";
-        private string dbEDSM = "EDSM";
         private string dbDisplayFilters = "DisplayFilters";
 
         private string[] displayfilters;        // display filters
@@ -80,8 +79,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewStarList.Columns[2].ValueType = typeof(Int32);
 
-            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
 
             displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics;codex").Split(';');
 
@@ -521,7 +519,7 @@ namespace EDDiscovery.UserControls
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
         {
-            if (dataGridViewStarList.FirstDisplayedCell != null && checkBoxEDSM.Checked)
+            if (dataGridViewStarList.FirstDisplayedCell != null && edsmSpanshButton.IsAnySet)
             {
                 int top = dataGridViewStarList.FirstDisplayedCell.RowIndex;
                 if (top != autoupdaterowstart)
@@ -656,7 +654,7 @@ namespace EDDiscovery.UserControls
         private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // tbd spansh
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None, DiscoveryForm.History);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe, edsmSpanshButton.WebLookup, DiscoveryForm.History);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -706,7 +704,7 @@ namespace EDDiscovery.UserControls
                 {
                     var he = dataGridViewStarList.Rows[e.RowIndex].Tag as HistoryEntry;
                     // tbd spansh
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, checkBoxEDSM.Checked ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, edsmSpanshButton.WebLookup, DiscoveryForm.History);
                 }
             }
         }
@@ -745,11 +743,6 @@ namespace EDDiscovery.UserControls
             };
 
             displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
-        }
-
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            PutSetting(dbEDSM, checkBoxEDSM.Checked);
         }
 
         // Override of visits column sorting, to properly ordering as integers and not as strings - do not work as expected, yet...

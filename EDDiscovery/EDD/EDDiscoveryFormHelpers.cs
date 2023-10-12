@@ -494,6 +494,10 @@ namespace EDDiscovery
         {
             System.Diagnostics.Debug.WriteLine($"Post Init debug");
             //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol"), true);
+            //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol", 10477373803), true);
+            //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+            //sp.GetSystem("Sol");
+
         }
 
 
