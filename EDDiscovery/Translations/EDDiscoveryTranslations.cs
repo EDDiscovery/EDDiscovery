@@ -968,6 +968,7 @@ namespace EDDiscovery
         UserControlMiningOverlay_content, // discrete
         UserControlMiningOverlay_above, // discrete
         UserControlMiningOverlay_dist, // discrete
+        UserControlMiningOverlay_distall, // discrete
         UserControlMiningOverlay_astpros, // discrete
 
         UserControlSpanel_extButtonShowControl_ToolTip, // ToolTip 'Configure overall settings'
@@ -1175,6 +1176,9 @@ namespace EDDiscovery
         UserControlExpedition_insertRowAboveToolStripMenuItem,
         UserControlExpedition_setTargetToolStripMenuItem, // ToolStrip control 'Set Target'
         UserControlExpedition_editBookmarkToolStripMenuItem, // ToolStrip control 'Edit bookmark'
+        UserControlExpedition_viewSystemToolStripMenuItem,
+        UserControlExpedition_viewOnSpanshToolStripMenuItem,
+        UserControlExpedition_viewOnEDSMToolStripMenuItem,
         UserControlExpedition_Unsaved, // Expedition - There are unsaved changes to the current route.
         UserControlExpedition_Conflict, // The current route name conflicts with a well-known expedition.
         UserControlExpedition_Overwrite, // Warning: route already exists. Would you like to overwrite it?

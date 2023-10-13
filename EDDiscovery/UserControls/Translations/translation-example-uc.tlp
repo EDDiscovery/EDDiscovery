@@ -283,6 +283,10 @@ SECTION UserControlExpedition
 .labelDateStart: "Start Date:" @
 .labelRouteName: "Route Name:" @
 
+.viewSystemToolStripMenuItem: "View System" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+.viewOnEDSMToolStripMenuItem: "View on EDSM" @
+
 .copyToolStripMenuItem: "Copy" @
 .pasteToolStripMenuItem: "Paste" @
 
@@ -974,6 +978,7 @@ SECTION UserControlStarDistance
 .From: "From {0}" @
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" @
 .viewSystemToolStripMenuItem: "View System" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 
 SECTION UserControlStarList
 
@@ -1440,6 +1445,8 @@ SECTION UserControlMiningOverlay
 .extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
 .buttonExtExcel.ToolTip: "Export" @
 .extComboBoxChartOptions.ToolTip: "Select chart options" @
+.extCheckBoxChartBase.ToolTip: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" @
+.distall: "Distribution vs All" @
 
 SECTION UserControlFactions
 .colFaction: "Faction" @

@@ -101,9 +101,12 @@ namespace EDDiscovery.UserControls
             this.buttonExtExport = new ExtendedControls.ExtButton();
             this.extButtonShow3DMap = new ExtendedControls.ExtButton();
             this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
+            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -482,50 +485,53 @@ namespace EDDiscovery.UserControls
             this.cutToolStripMenuItem,
             this.insertRowAboveToolStripMenuItem,
             this.setTargetToolStripMenuItem,
-            this.editBookmarkToolStripMenuItem});
+            this.editBookmarkToolStripMenuItem,
+            this.viewSystemToolStripMenuItem,
+            this.viewOnSpanshToolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem});
             this.contextMenuCopyPaste.Name = "contextMenuCopyPaste";
-            this.contextMenuCopyPaste.Size = new System.Drawing.Size(162, 136);
+            this.contextMenuCopyPaste.Size = new System.Drawing.Size(181, 224);
             this.contextMenuCopyPaste.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCopyPaste_Opening);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // cutToolStripMenuItem
             // 
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cutToolStripMenuItem.Text = "Cut";
             this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
             // 
             // insertRowAboveToolStripMenuItem
             // 
             this.insertRowAboveToolStripMenuItem.Name = "insertRowAboveToolStripMenuItem";
-            this.insertRowAboveToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.insertRowAboveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.insertRowAboveToolStripMenuItem.Text = "Insert row above";
             this.insertRowAboveToolStripMenuItem.Click += new System.EventHandler(this.insertRowAboveToolStripMenuItem_Click);
             // 
             // setTargetToolStripMenuItem
             // 
             this.setTargetToolStripMenuItem.Name = "setTargetToolStripMenuItem";
-            this.setTargetToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.setTargetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setTargetToolStripMenuItem.Text = "Set Target";
             this.setTargetToolStripMenuItem.Click += new System.EventHandler(this.setTargetToolStripMenuItem_Click);
             // 
             // editBookmarkToolStripMenuItem
             // 
             this.editBookmarkToolStripMenuItem.Name = "editBookmarkToolStripMenuItem";
-            this.editBookmarkToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.editBookmarkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.editBookmarkToolStripMenuItem.Text = "Edit bookmark";
             this.editBookmarkToolStripMenuItem.Click += new System.EventHandler(this.editBookmarkToolStripMenuItem_Click);
             // 
@@ -837,6 +843,17 @@ namespace EDDiscovery.UserControls
             this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
             this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(528, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 30;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
             // extCheckBoxWordWrap
             // 
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
@@ -871,16 +888,26 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
-            // edsmSpanshButton
+            // viewOnSpanshToolStripMenuItem
             // 
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(528, 1);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 30;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
+            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
+            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            // 
+            // viewSystemToolStripMenuItem
+            // 
+            this.viewSystemToolStripMenuItem.Name = "viewSystemToolStripMenuItem";
+            this.viewSystemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewSystemToolStripMenuItem.Text = "View System";
+            this.viewSystemToolStripMenuItem.Click += new System.EventHandler(this.viewSystemToolStripMenuItem_Click);
             // 
             // UserControlExpedition
             // 
@@ -964,5 +991,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHistoryNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
         private EDSMSpanshButton edsmSpanshButton;
+        private System.Windows.Forms.ToolStripMenuItem viewSystemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
     }
 }

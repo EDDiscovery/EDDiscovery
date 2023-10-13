@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.ExtPictureBox();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
-            this.extCheckBoxChartBase = new System.Windows.Forms.CheckBox();
+            this.extCheckBoxChartBase = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxZeroRefined = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extComboBoxChartOptions = new ExtendedControls.ExtComboBox();
@@ -88,19 +88,30 @@ namespace EDDiscovery.UserControls
             // 
             // extCheckBoxChartBase
             // 
-            this.extCheckBoxChartBase.AutoSize = true;
-            this.extCheckBoxChartBase.Location = new System.Drawing.Point(295, 7);
+            this.extCheckBoxChartBase.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxChartBase.BackColor = System.Drawing.SystemColors.Control;
+            this.extCheckBoxChartBase.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxChartBase.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxChartBase.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxChartBase.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxChartBase.Image = global::EDDiscovery.Icons.Controls.AsteroidTotal;
+            this.extCheckBoxChartBase.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxChartBase.ImageIndeterminate = null;
+            this.extCheckBoxChartBase.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxChartBase.ImageUnchecked = null;
+            this.extCheckBoxChartBase.Location = new System.Drawing.Point(268, 3);
+            this.extCheckBoxChartBase.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxChartBase.Name = "extCheckBoxChartBase";
-            this.extCheckBoxChartBase.Size = new System.Drawing.Size(150, 17);
+            this.extCheckBoxChartBase.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxChartBase.TabIndex = 62;
-            this.extCheckBoxChartBase.Text = "Base chart on all asteroids";
-            this.toolTip.SetToolTip(this.extCheckBoxChartBase, "Default shows distribution of asteroids that actually contain the material");
-            this.extCheckBoxChartBase.UseVisualStyleBackColor = true;
+            this.extCheckBoxChartBase.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxChartBase, "Select chart between showing % chance for asteroids containing only this material" +
+        ", and % chance over all asteroids");
+            this.extCheckBoxChartBase.UseVisualStyleBackColor = false;
             // 
             // extCheckBoxZeroRefined
             // 
             this.extCheckBoxZeroRefined.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBoxZeroRefined.AutoSize = true;
             this.extCheckBoxZeroRefined.CheckBoxColor = System.Drawing.Color.Gray;
             this.extCheckBoxZeroRefined.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxZeroRefined.CheckBoxInnerColor = System.Drawing.Color.White;
@@ -112,7 +123,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxZeroRefined.Location = new System.Drawing.Point(235, 3);
             this.extCheckBoxZeroRefined.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxZeroRefined.Name = "extCheckBoxZeroRefined";
-            this.extCheckBoxZeroRefined.Size = new System.Drawing.Size(29, 23);
+            this.extCheckBoxZeroRefined.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxZeroRefined.TabIndex = 61;
             this.extCheckBoxZeroRefined.Text = ">0";
             this.extCheckBoxZeroRefined.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -124,9 +135,9 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(265, 3);
+            this.buttonExtExcel.Location = new System.Drawing.Point(303, 3);
             this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 60;
             this.toolTip.SetToolTip(this.buttonExtExcel, "Export");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
@@ -169,7 +180,6 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(894, 946);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.extPanelRollUp.ResumeLayout(false);
-            this.extPanelRollUp.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -182,6 +192,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtCheckBox extCheckBoxZeroRefined;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.CheckBox extCheckBoxChartBase;
+        private ExtendedControls.ExtCheckBox extCheckBoxChartBase;
     }
 }

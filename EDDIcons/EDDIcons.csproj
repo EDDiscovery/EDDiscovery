@@ -476,6 +476,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\Atmosphere.png" />
     <EmbeddedResource Include="GalMap\Images.png" />
     <EmbeddedResource Include="GalMap\ImagesEdit.png" />
     <EmbeddedResource Include="Controls\Sizer.png" />
@@ -967,9 +968,6 @@
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv7.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv8.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv9.png" />
-    <EmbeddedResource Include="Bodies\Nebula.png" />
-    <EmbeddedResource Include="Bodies\StellarRemnantNebula.png" />
-    <EmbeddedResource Include="Bodies\Unknown.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv12.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv13.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GG1v12.png" />
@@ -1086,7 +1084,6 @@
     <EmbeddedResource Include="Controls\FlagsRedGreen.png" />
     <EmbeddedResource Include="Controls\Paste.png" />
     <EmbeddedResource Include="Bodies\Stars\X.png" />
-    <EmbeddedResource Include="Bodies\RoguePlanet.png" />
     <EmbeddedResource Include="Controls\ArrowsDown.png" />
     <EmbeddedResource Include="Controls\ArrowsLeft.png" />
     <EmbeddedResource Include="Controls\ArrowsUp.png" />
@@ -1094,6 +1091,12 @@
     <EmbeddedResource Include="Controls\Add.png" />
     <EmbeddedResource Include="Controls\EDSMSpansh.png" />
     <EmbeddedResource Include="Controls\EDSMSpanshOn.png" />
+    <EmbeddedResource Include="Bodies\NotScanned.png" />
+    <EmbeddedResource Include="Bodies\Stars\Nebula.png" />
+    <EmbeddedResource Include="Bodies\Stars\RoguePlanet.png" />
+    <EmbeddedResource Include="Bodies\Stars\StellarRemnantNebula.png" />
+    <EmbeddedResource Include="Bodies\Stars\Unknown.png" />
+    <EmbeddedResource Include="Controls\AsteroidTotal.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

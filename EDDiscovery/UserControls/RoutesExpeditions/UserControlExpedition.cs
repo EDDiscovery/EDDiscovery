@@ -99,7 +99,10 @@ namespace EDDiscovery.UserControls
                                          EDTx.UserControlExpedition_buttonReverseRoute_ToolTip, EDTx.UserControlExpedition_extCheckBoxWordWrap_ToolTip };
             var enumlistcms = new Enum[] { EDTx.UserControlExpedition_copyToolStripMenuItem, EDTx.UserControlExpedition_cutToolStripMenuItem, EDTx.UserControlExpedition_pasteToolStripMenuItem,
                                             EDTx.UserControlExpedition_insertRowAboveToolStripMenuItem,
-                                          EDTx.UserControlExpedition_setTargetToolStripMenuItem, EDTx.UserControlExpedition_editBookmarkToolStripMenuItem };
+                                          EDTx.UserControlExpedition_setTargetToolStripMenuItem, EDTx.UserControlExpedition_editBookmarkToolStripMenuItem ,
+                                            EDTx.UserControlExpedition_viewSystemToolStripMenuItem, EDTx.UserControlExpedition_viewOnSpanshToolStripMenuItem,
+                                            EDTx.UserControlExpedition_viewOnEDSMToolStripMenuItem};
+
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -1152,6 +1155,10 @@ namespace EDDiscovery.UserControls
 
             var rows = dataGridView.SelectedRowAndCount(true, true, 0, false);      // same as below in insert, ascending, use cells if not row selection, leave on new row
             insertRowAboveToolStripMenuItem.Enabled = rows.Item1 != dataGridView.NewRowIndex;
+
+            rows = dataGridView.SelectedRowAndCount(true, true, -1, false);
+            viewOnEDSMToolStripMenuItem.Enabled = viewSystemToolStripMenuItem.Enabled = rows.Item1 >= 0 && rows.Item2 == 1 && dataGridView.Rows[rows.Item1].Tag != null && rows.Item1 != dataGridView.NewRowIndex;
+            viewOnSpanshToolStripMenuItem.Enabled = viewSystemToolStripMenuItem.Enabled && (dataGridView.Rows[rows.Item1].Tag as ISystem).SystemAddress.HasValue;
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1241,6 +1248,26 @@ namespace EDDiscovery.UserControls
 
             BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sc, null);
             UpdateAllRows(); // tbd must be better?
+        }
+
+
+        private void viewSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rows = dataGridView.SelectedRowAndCount(true, true, -1, false);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), dataGridView.Rows[rows.Item1].Tag as ISystem, edsmSpanshButton.WebLookup, DiscoveryForm.History);
+        }
+
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rows = dataGridView.SelectedRowAndCount(true, true, -1, false);
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem((dataGridView.Rows[rows.Item1].Tag as ISystem).SystemAddress.Value);
+        }
+
+        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rows = dataGridView.SelectedRowAndCount(true, true, -1, false);
+            EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
+            edsm.ShowSystemInEDSM((dataGridView.Rows[rows.Item1].Tag as ISystem).Name);
         }
 
         #endregion
@@ -1349,5 +1376,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }

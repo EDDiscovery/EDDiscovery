@@ -202,5 +202,6 @@ namespace EDDiscovery.Icons
         public static Image Docked { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Docked"); } }
         public static Image Paste { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Paste"); } }
         public static Image Resources { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Resources"); } }
+        public static Image AsteroidTotal { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.AsteroidTotal"); } }
     }
 }

@@ -42,7 +42,9 @@ namespace EDDiscovery.UserControls
 
             UpdateComboBox(null);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_Text };
+            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, 
+                        EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, 
+                        EDTx.UserControlMiningOverlay_extCheckBoxChartBase_Text };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             extPanelRollUp.SetToolTip(toolTip);
 
@@ -159,7 +161,7 @@ namespace EDDiscovery.UserControls
 
         class MaterialsFound
         {
-            public string matnamefd2;
+            public string matnamefd2;               // material name
             public string friendlyname;
 
             public double amountrefined;            // amount refined. Double because i've seen entries with floats
@@ -168,7 +170,7 @@ namespace EDDiscovery.UserControls
             public bool discovered;
 
             public int prospectednoasteroids;      // prospector entry updates this
-            public List<double> prospectedamounts;
+            public List<double> prospectedamounts;  // list of % against each asteroid for this material
 
             public int motherloadasteroids;         // number where in motherload.
 
@@ -461,7 +463,9 @@ namespace EDDiscovery.UserControls
                             chart.ChartAreas.Add(chartarea);
 
                             chart.Titles.Clear();
-                            var title = new Title((matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") + "Distribution".T(EDTx.UserControlMiningOverlay_dist), Docking.Top, displayfont, TextC);
+                            var title = new Title((matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") +
+                                            (extCheckBoxChartBase.Checked ? "Distribution vs All".T(EDTx.UserControlMiningOverlay_distall) : "Distribution if Contains".T(EDTx.UserControlMiningOverlay_dist)), 
+                                            Docking.Top, displayfont, TextC);
                             chart.Titles.Add(title);
 
                             Legend legend = null;
@@ -478,45 +482,41 @@ namespace EDDiscovery.UserControls
                             }
 
                             int mi = 0;
-                            foreach (var m in matdata)
+                            foreach (var material in matdata)
                             {
-                                
-                                    Series series = new Series();
-                                    series.Name = m.friendlyname;
-                                    series.ChartArea = "ChartArea1";
-                                    series.ChartType = SeriesChartType.Line;
-                                    series.Color = LineC[mi];
-                                    series.Legend = "Legend1";
+                                Series series = new Series();
+                                series.Name = material.friendlyname;
+                                series.ChartArea = "ChartArea1";
+                                series.ChartType = SeriesChartType.Line;
+                                series.Color = LineC[mi];
+                                series.Legend = "Legend1";
 
-                                    int i = 0;
-                                    if (!extCheckBoxChartBase.Checked)
+                                double min = material.prospectedamounts.Min();
+                                int asteroids = extCheckBoxChartBase.Checked ? prospected : material.prospectednoasteroids;
+
+                                //foreach (var x in material.prospectedamounts) System.Diagnostics.Debug.WriteLine($"Material {material.friendlyname} % {x}");
+
+                                for (int percent = 0; percent < CFDbMax; percent++)        // for each % chance up to CFdbMax (50)
+                                {
+                                    // if percent is less than the prospected amount minimum value don't show
+
+                                    if (percent >= (int)min)
                                     {
-                                        for (i = 0; i < CFDbMax; i++)        // 0 - fixed
-                                        {
-                                            int numberabove = m.prospectedamounts.Count(x => x >= i);
-                                            series.Points.Add(new DataPoint(i, ((double)numberabove) / m.prospectednoasteroids * 100.0));
-                                            series.Points[i].AxisLabel = i.ToString();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        for (i = 0; i < CFDbMax; i++)        // 0 - fixed
-                                        {
-                                            int numberabove = m.prospectedamounts.Count(x => x >= i);
-                                            if (i < (int)m.prospectedamounts.Min())
-                                            {
-                                                series.Points.Add(new DataPoint(i + 1, 100.0)); // +1 makes it go straight up instead of moving to the previous i
-                                            }
-                                        else
-                                            {
-                                                series.Points.Add(new DataPoint(i, ((double)numberabove) / prospected * 100.0));
-                                            }
-                                                series.Points[i].AxisLabel = i.ToString();
+                                        // here, see how many entries are at or above the percentage amount
+                                        int numberabove = material.prospectedamounts.Count(x => x >= percent);
+                                        // and therefore the chance is the number above / no of asteroids
+                                        double chance = ((double)numberabove) / asteroids * 100.0;
+
+                                        //System.Diagnostics.Debug.WriteLine($"Mining {material.friendlyname} %{percent} no {numberabove} {material.prospectednoasteroids} = {chance}, min is {min}");
+
+                                        series.Points.Add(new DataPoint(percent, chance));
+                                        series.Points[series.Points.Count - 1].AxisLabel = percent.ToString();
                                     }
                                 }
-                                    chart.Series.Add(series);
-                                    mi++;
                                 
+                                chart.Series.Add(series);
+                                mi++;
+                               
                             }
 
                             chart.EndInit();
