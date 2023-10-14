@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
 
         #region Implementation
 
-        List<HistoryEntry> curlist;     // found events
+        List<HistoryEntry> eventlist;   // found events
         HistoryEntry heabove, hebelow;  // markers
         bool incurrentplay;             // true when heabove is at top of history AND its not a stop event - so we are in a play session
         object selectedchart = null;    // chart count (if int) or material (string)
@@ -134,9 +134,9 @@ namespace EDDiscovery.UserControls
                     int cargoleft = cargocap - cargo; 
 
                     // if no list, or diff no of items (due to new entry) or different start point, we reset and display, else we just quit as current is good
-                    if (curlist == null || newlist.Count != curlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
+                    if (eventlist == null || newlist.Count != eventlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
                     {
-                        curlist = newlist;
+                        eventlist = newlist;
                         heabove = newheabove;
                         hebelow = newhebelow;
                         limpetsleftdisplay = limpetsleft;
@@ -151,9 +151,9 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            if (curlist != null)        // moved outside to no data..
+            if (eventlist != null)        // moved outside to no data..
             {
-                curlist = null;         // fall thru means no data, clear and display
+                eventlist = null;         // fall thru means no data, clear and display
                 heabove = hebelow = null;
                 Display();
             }
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
             content = new int[3];
             var found = new List<MaterialsFound>();
 
-            foreach (var e in curlist)
+            foreach (var e in eventlist)
             {
                 //System.Diagnostics.Debug.WriteLine("{0} {1} {2}", e.Indexno, e.EventTimeUTC, e.EventSummary);
 
@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
             pictureBox.ClearImageList();
             Controls.RemoveByKey("chart");
 
-            if (curlist != null)
+            if (eventlist != null)
             {
                 var found = ReadHistory( out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
 
@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
                         hpos[i] = hpos[i - 1] + colsw[i - 1];
 
                     int limpetscolpos = 0;
-                    if (curlist.Count() > 0)
+                    if (eventlist.Count() > 0)
                     {
                         lastrefined = found.Sum(x => x.amountrefined);      // for use by timer
 
@@ -423,6 +423,11 @@ namespace EDDiscovery.UserControls
                         else
                             matdata.Add(prospectedlist[selm.Value]);
 
+                        //int spaceleft = ClientRectangle.Height - pictureBox.Height - extPanelRollUp.Height;
+
+                        //if (spaceleft < 200)
+                        //    Height += 200 + pictureBox.Height - extPanelRollUp.Height;
+
                         try
                         {
                             Chart chart = new Chart();
@@ -511,6 +516,9 @@ namespace EDDiscovery.UserControls
 
                                         series.Points.Add(new DataPoint(percent, chance));
                                         series.Points[series.Points.Count - 1].AxisLabel = percent.ToString();
+
+                                        if (numberabove == 0 && percent % 10 == 0)      // if we have no items, terminate data at next 10% interval - chart will size
+                                            break;
                                     }
                                 }
                                 
@@ -562,11 +570,11 @@ namespace EDDiscovery.UserControls
 
         private string TimeText(bool setstart)
         {
-            if (curlist != null && curlist.Count > 0 )
+            if (eventlist != null && eventlist.Count > 0 )
             {
-                DateTime lasteventtime = curlist.Last().EventTimeUTC;        // last event time
+                DateTime lasteventtime = eventlist.Last().EventTimeUTC;        // last event time
                 bool inprogress = incurrentplay && (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // N min we are still in progress, and we are in current play
-                TimeSpan timemining = inprogress ? (DateTime.UtcNow - curlist.First().EventTimeUTC) : (lasteventtime - curlist.First().EventTimeUTC);
+                TimeSpan timemining = inprogress ? (DateTime.UtcNow - eventlist.First().EventTimeUTC) : (lasteventtime - eventlist.First().EventTimeUTC);
                 string text = timemining.ToString(@"hh\:mm\:ss");
                 if (lastrefined > 0 && timemining.TotalHours>0)
                 {
@@ -778,7 +786,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     });
 
-                    var proslist = curlist.Where(x => x.EntryType == JournalTypeEnum.ProspectedAsteroid).ToList();
+                    var proslist = eventlist.Where(x => x.EntryType == JournalTypeEnum.ProspectedAsteroid).ToList();
 
                     grd.GetSetsData.Add(delegate (int s, int r)
                     {
