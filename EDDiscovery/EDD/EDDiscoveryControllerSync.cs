@@ -197,7 +197,7 @@ namespace EDDiscovery
                                 {
                                     ReportSyncProgress("Download complete, updating database");
 
-                                    System.Diagnostics.Trace.WriteLine($"Peforming spansh update");
+                                    System.Diagnostics.Trace.WriteLine($"Peforming spansh update on data {delta} old from {url}");
 
                                     // we do this non overlapped with replace, to pause to allow main system to run ok
                                     SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grids, true, false );        
