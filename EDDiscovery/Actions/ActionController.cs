@@ -269,7 +269,8 @@ namespace EDDiscovery.Actions
                 ev.onEditSay = onEditSay;
                 ev.onInputButton = () =>
                 {
-                    DirectInputDevices.MapDialog mp = new DirectInputDevices.MapDialog();
+                    DirectInputDevices.InputMapDialog mp = new DirectInputDevices.InputMapDialog();
+                    ExtendedControls.Theme.Current.ApplyDialog(mp);
                     if ( mp.ShowDialog(discoveryform) == DialogResult.OK )
                     {
                         return new string[] { mp.DeviceName, mp.ButtonName, mp.Press.ToStringIntValue() };

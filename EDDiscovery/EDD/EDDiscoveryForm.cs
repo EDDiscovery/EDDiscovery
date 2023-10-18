@@ -483,6 +483,8 @@ namespace EDDiscovery
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
+            extButtonNewFeature.Visible = false;
+
             // ---------------------------------------------------------------- open all the major tabs except the built in ones
 
             msg.Invoke("Loading Tabs");
@@ -684,6 +686,9 @@ namespace EDDiscovery
                     string acklist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "");
                     Version curver = new Version(System.Reflection.Assembly.GetExecutingAssembly().GetVersionString());
 
+                    List<BaseUtils.Notifications.Notification> popupnotificationlist = new List<BaseUtils.Notifications.Notification>();
+
+                    // sorted by oldest first..
                     foreach (Notifications.Notification n in notelist)
                     {
                         Notifications.NotificationParas p = n.Select(EDDConfig.Instance.Language);
@@ -711,11 +716,18 @@ namespace EDDiscovery
                                 else
                                     LogLine(p.Text);
                             }
+                            else if (n.EntryType == "New")
+                            {
+                                extButtonNewFeature.Tag = n;
+                                extButtonNewFeature.Visible = true;
+                                bool read = UserDatabase.Instance.GetSettingString("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
+                                extButtonNewFeature.Image = read ? EDDiscovery.Icons.Controls.NewFeatureGreen : EDDiscovery.Icons.Controls.NewFeature;
+                            }
                         }
 
                     }
 
-                    ShowNotification();
+                    ShowNotification(popupnotificationlist);
 
                 }));
 
@@ -1200,6 +1212,21 @@ namespace EDDiscovery
             AboutBox(this);
         }
 
+        private void extButtonNewFeature_Click(object sender, EventArgs e)
+        {
+            Notifications.Notification n = extButtonNewFeature.Tag as Notifications.Notification;
+            Notifications.NotificationParas p = n.Select(EDDConfig.Instance.Language);
+
+            ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
+            infoform.Info(p.Caption, this.Icon, p.Text, pointsize: n.PointSize, enableurls: true);
+            infoform.LinkClicked += (ef) => { BaseUtils.BrowserInfo.LaunchBrowser(ef.LinkText); };
+            infoform.StartPosition = FormStartPosition.CenterParent;
+            infoform.Show(this);
+            UserDatabase.Instance.PutSettingString("NotificationLastNewFeature", n.StartUTC.ToStringZulu());
+            extButtonNewFeature.Image = EDDiscovery.Icons.Controls.NewFeatureGreen;
+        }
+
+
         private void toolStripMenuItemListBindings_Click(object sender, EventArgs e)
         {
             ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
@@ -1305,8 +1332,8 @@ namespace EDDiscovery
         }
 
 
-#endregion
 
+        #endregion
     }
 }
 

@@ -203,5 +203,7 @@ namespace EDDiscovery.Icons
         public static Image Paste { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Paste"); } }
         public static Image Resources { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Resources"); } }
         public static Image AsteroidTotal { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.AsteroidTotal"); } }
+        public static Image NewFeature { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.NewFeature"); } }
+        public static Image NewFeatureGreen { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.NewFeatureGreen"); } }
     }
 }

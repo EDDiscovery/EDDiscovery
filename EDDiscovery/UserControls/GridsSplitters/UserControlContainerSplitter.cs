@@ -330,6 +330,8 @@ namespace EDDiscovery.UserControls
         private SplitContainer MakeSplitContainer(Orientation ori, int lv)
         {
             SplitContainer sc = new SplitContainer() { Orientation = ori, Width = 1000, Height = 1000 };    // set width big to provide some res to splitter dist
+            sc.Name = "SplitContainer" + lv.ToString() + ori.ToString();
+
             sc.Dock = DockStyle.Fill;
             sc.FixedPanel = FixedPanel.None;    // indicate to scale splitter distance on resize of control
             sc.MouseClick += Sc_MouseClick;

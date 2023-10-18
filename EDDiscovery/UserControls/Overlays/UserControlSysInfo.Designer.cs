@@ -962,7 +962,7 @@ namespace EDDiscovery.UserControls
             this.panelFD.Location = new System.Drawing.Point(430, 18);
             this.panelFD.Name = "panelFD";
             this.panelFD.Size = new System.Drawing.Size(24, 24);
-            this.panelFD.TabIndex = 46;
+            this.panelFD.TabIndex = 9090;
             // 
             // labelTarget
             // 

@@ -322,8 +322,7 @@ namespace EDDiscovery
 
         #region Notifications
 
-        List<BaseUtils.Notifications.Notification> popupnotificationlist = new List<BaseUtils.Notifications.Notification>();
-        void ShowNotification()        // orgnanise pop ups one at a time..
+        void ShowNotification(List<BaseUtils.Notifications.Notification> popupnotificationlist)        // orgnanise pop ups one at a time..
         {
             if (popupnotificationlist.Count > 0)
             {
@@ -339,12 +338,13 @@ namespace EDDiscovery
                 ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
                 infoform.Info(p.Caption, this.Icon, p.Text, pointsize: popupnotificationlist[0].PointSize,
                         acknowledgeaction: act,
-                        acknowledgedata: popupnotificationlist[0].StartUTC);
+                        acknowledgedata: popupnotificationlist[0].StartUTC,enableurls:true);
+                infoform.LinkClicked += (e) => { BaseUtils.BrowserInfo.LaunchBrowser(e.LinkText); };
+                infoform.FormClosed += (s, e1) => { ShowNotification(popupnotificationlist); };     // chain to next, one at a time..
+                infoform.StartPosition = FormStartPosition.CenterParent;
 
-                infoform.FormClosed += (s, e1) => { ShowNotification(); };     // chain to next, one at a time..
-
-                popupnotificationlist.RemoveAt(0);
-                infoform.Show();
+                popupnotificationlist.RemoveAt(0);      // remove this one so it does not appear.
+                infoform.Show(this);
             }
         }
 

@@ -1097,6 +1097,8 @@
     <EmbeddedResource Include="Bodies\Stars\StellarRemnantNebula.png" />
     <EmbeddedResource Include="Bodies\Stars\Unknown.png" />
     <EmbeddedResource Include="Controls\AsteroidTotal.png" />
+    <EmbeddedResource Include="Controls\NewFeature.png" />
+    <EmbeddedResource Include="Controls\NewFeatureGreen.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
