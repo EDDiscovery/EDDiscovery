@@ -284,9 +284,11 @@ namespace EDDiscovery
             ThemeList.LoadBaseThemes();                                         // default themes and ones on disk loaded
             ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(), "*.eddtheme"); // load any file stored themes
 
+
             if (!EDDOptions.Instance.NoTheme)
             {
-                string deftheme = Environment.OSVersion.Platform == PlatformID.Win32NT ? "Elite Verdana Small" : "Windows Default";
+                bool fontav = FontLoader.IsFontAvailable("Verdana", 8F, FontStyle.Regular);
+                string deftheme = Environment.OSVersion.Platform == PlatformID.Win32NT && fontav ? "Elite Verdana Small" : "Windows Default";
                 ThemeList.SetThemeByName(deftheme);                // this is the default theme we use normally
                 var theme = GetThemeFromDB();
                 if (theme != null)
