@@ -640,4 +640,13 @@
   <data name="NewFeatureGreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\NewFeatureGreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SignalsBio" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\Bodies\SignalsBio.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SignalsGeo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\Bodies\SignalsGeo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SignalsGeoBio" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\Bodies\SignalsGeoBio.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

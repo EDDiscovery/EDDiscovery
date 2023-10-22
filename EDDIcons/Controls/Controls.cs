@@ -77,6 +77,9 @@ namespace EDDiscovery.Icons
         public static Image Scan_Bodies_HighValue { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.HighValue"); } }
         public static Image Scan_Bodies_Volcanism { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Volcanism"); } }
         public static Image Scan_Bodies_Signals { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Signals"); } }
+        public static Image Scan_Bodies_SignalsBio { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.SignalsBio"); } }
+        public static Image Scan_Bodies_SignalsGeo { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.SignalsGeo"); } }
+        public static Image Scan_Bodies_SignalsGeoBio { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.SignalsGeoBio"); } }
         public static Image Scan_Bodies_Mapped { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Mapped"); } }
         public static Image Scan_Bodies_RingOnly { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RingOnly"); } }
         public static Image Scan_DisplaySystemAlways { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.DisplaySystemAlways"); } }

@@ -476,6 +476,9 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\SignalsBio.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\SignalsGeo.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\SignalsGeoBio.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Atmosphere.png" />
     <EmbeddedResource Include="GalMap\Images.png" />
     <EmbeddedResource Include="GalMap\ImagesEdit.png" />
