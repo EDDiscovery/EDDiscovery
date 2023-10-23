@@ -422,7 +422,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses);
             displayfilter.AddStandardOption("dist", "Show distance of bodies".T(EDTx.UserControlScan_Distance), global::EDDiscovery.Icons.Controls.ShowDistances);
             displayfilter.AddStandardOption("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways);
-            displayfilter.AddStandardOption("starsondiffline", "Show body less stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses);
+            displayfilter.AddStandardOption("starsondiffline", "Show bodyless stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses);
 
             displayfilter.SaveSettings = (s, o) =>
             {
