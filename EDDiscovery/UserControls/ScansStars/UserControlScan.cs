@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
 
 // turn on for play testing of all your scans
@@ -424,6 +422,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses);
             displayfilter.AddStandardOption("dist", "Show distance of bodies".T(EDTx.UserControlScan_Distance), global::EDDiscovery.Icons.Controls.ShowDistances);
             displayfilter.AddStandardOption("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways);
+            displayfilter.AddStandardOption("starsondiffline", "Show body less stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses);
 
             displayfilter.SaveSettings = (s, o) =>
             {
@@ -451,6 +450,7 @@ namespace EDDiscovery.UserControls
             panelStars.SystemDisplay.ShowStarClasses = displayfilters.Contains("starclass") || all;
             panelStars.SystemDisplay.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;
             panelStars.SystemDisplay.ShowDist = displayfilters.Contains("dist") || all;
+            panelStars.SystemDisplay.NoPlanetStarsOnSameLine = displayfilters.Contains("starsondiffline") || all;
         }
 
 #region Export

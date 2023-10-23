@@ -1290,6 +1290,7 @@ namespace EDDiscovery
 
         UserControlScan_StatusIcons, // Show body status icons
         UserControlScan_SystemValue, // Show syatem and value in main display
+        UserControlScan_StarsOnDiffLines, // Show body less stars on separate lines
         UserControlScan_MatFull, // Hide materials which have reached their storage limit
         UserControlScan_ShowMaterials, //  Show Materials
         UserControlScan_ShowRaresOnly, // Show rare materials only
