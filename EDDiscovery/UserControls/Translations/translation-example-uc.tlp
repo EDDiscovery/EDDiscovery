@@ -1131,6 +1131,7 @@ SECTION UserControlStats
 .FLEETCARRIER: "Fleetcarrier" @
 .CQC: "CQC" @
 .Exobiology: "Exobiology" @
+.Thargoids: "Thargoids" @
 
 // used by faction panels now, kept here for backwards compat
 .GoodsBought: "Goods Bought" @
