@@ -28,10 +28,10 @@ namespace EDDiscovery.UserControls
             if (tag == null)
                 return;
 
-            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            ExtendedControls.ConfigurableForm form = new ExtendedControls.ConfigurableForm();
 
             Size infosize = parent.SizeWithinScreen(new Size(parent.Width * 6 / 8, parent.Height * 6 / 8), 128, 128 + 100);        // go for this, but allow this around window
-            int topmargin = 40;
+            int topmargin = 28+28;
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
             ISystem sys = he != null ? he.System : tag as ISystem;          // if so, sys is he.system, else its a direct sys
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
             {
                 he.FillInformation(out string info, out string detailed);
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
+                form.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
 
                 JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
                 title += ", " +"Station".T(EDTx.ScanDisplayForm_Station) + ": " + jm.Station;
@@ -58,15 +58,34 @@ namespace EDDiscovery.UserControls
                 sd.Size = infosize;
 
                 StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, lookup);    // look up system async
-                    
-                if ( data != null )
+
+                if (data != null)
                 {
                     long value = data.ScanValue(lookup != WebExternalDataLookup.None);
                     title += " ~ " + value.ToString("N0") + " cr";
                 }
 
+                DBSettingsSaver db = new DBSettingsSaver();
+
+                ScanDisplayBodyFiltersButton filterbut = new ScanDisplayBodyFiltersButton();
+                filterbut.Init(db, "BodyFilter");
+                filterbut.Image = EDDiscovery.Icons.Controls.EventFilter;
+                filterbut.ValueChanged += (s, e) =>
+                {
+                    sd.DrawSystem(data, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                };
+
+                ScanDisplayConfigureButton configbut = new ScanDisplayConfigureButton();
+                configbut.Init(db, "DisplayFilter");
+                configbut.Image = EDDiscovery.Icons.Controls.DisplayFilters;
+                configbut.ValueChanged += (s, e) =>
+                {
+                    configbut.ApplyDisplayFilters(sd);
+                    sd.DrawSystem(data, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                };
+
                 sd.BackColor = ExtendedControls.Theme.Current.Form;
-                sd.DrawSystem( data, null , hl.MaterialCommoditiesMicroResources.GetLast());
+                sd.DrawSystem(data, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
 
                 int wastedh = infosize.Height - sd.SystemDisplay.DisplayAreaUsed.Y - 10 - 40;
                 if (wastedh > 0)
@@ -74,29 +93,46 @@ namespace EDDiscovery.UserControls
 
                 asm = AutoScaleMode.None;   // because we are using a picture box, it does not autoscale, so we can't use that logic on it.
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
+                form.Add(new ExtendedControls.ConfigurableForm.Entry("Body", null, null, new Point(4, 28), new Size(28, 28), null) { control = filterbut });
+                form.Add(new ExtendedControls.ConfigurableForm.Entry("Con", null, null, new Point(4+28+4, 28), new Size(28, 28), null) { control = configbut });
+                form.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
             }
 
-            f.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
+            form.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
 
-            f.Trigger += (dialogname, controlname, ttag) =>
+            form.Trigger += (dialogname, controlname, ttag) =>
             {
                 if (controlname == "OK")
-                    f.ReturnResult(DialogResult.OK);
+                    form.ReturnResult(DialogResult.OK);
                 else if (controlname == "Close")
-                    f.ReturnResult(DialogResult.Cancel);
+                    form.ReturnResult(DialogResult.Cancel);
             };
 
-            f.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
+            form.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
 
             if (opacity < 1)
             {
-                f.Opacity = opacity;
-                f.BackColor = keycolour.Value;
-                f.TransparencyKey = keycolour.Value;
+                form.Opacity = opacity;
+                form.BackColor = keycolour.Value;
+                form.TransparencyKey = keycolour.Value;
             }
 
-            f.Show(parent);
+            form.Show(parent);
+        }
+
+        // class needed for buttons for save/restore - global for all instances
+        public class DBSettingsSaver : UserControlCommonBase.ISettingsSaver     
+        {
+            const string root = "ScanDisplayFormCommon_";
+            public T GetSetting<T>(string key, T defaultvalue)
+            {
+                return EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(root + key, defaultvalue);
+            }
+
+            public bool PutSetting<T>(string key, T value)
+            {
+                return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(root + key, value);
+            }
         }
     }
 }

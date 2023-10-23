@@ -543,7 +543,13 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public class DBSettingsSaver             // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save
+        public interface ISettingsSaver
+        {
+            T GetSetting<T>(string key, T defaultvalue);
+            bool PutSetting<T>(string key, T value);
+        }
+
+        public class DBSettingsSaver : ISettingsSaver     // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save
         {                                        // with a defined extra itemname.  this seems the only way to pass generic delegates
             public DBSettingsSaver(UserControlCommonBase b, string itemname)
             {

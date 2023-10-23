@@ -39,9 +39,6 @@ namespace EDDiscovery.UserControls
 
         bool closing = false;           // set when closing, to prevent a resize, which you can get, causing a big redraw
 
-        string[] bodyfilters;           // body filters
-        string[] displayfilters;        // display filters
-
         #region Init
         public UserControlScan()
         {
@@ -60,12 +57,24 @@ namespace EDDiscovery.UserControls
                 DrawSystem();
             };
 
+            UserControlCommonBase.DBSettingsSaver dbsaver = new DBSettingsSaver(this, "");
+
+            scanDisplayConfigureButton.Init(dbsaver, "DisplayFilters");
+            scanDisplayConfigureButton.ValueChanged += (s, ch) =>
+            {
+                scanDisplayConfigureButton.ApplyDisplayFilters(panelStars);
+                DrawSystem();
+            };
+
+            scanDisplayBodyFiltersButton.Init(dbsaver, "BodyFilters");
+            scanDisplayBodyFiltersButton.ValueChanged += (s, ch) =>
+            {
+                DrawSystem();
+            };
+
             panelStars.SystemDisplay.ShowWebBodies = edsmSpanshButton.IsAnySet;
 
-            bodyfilters = GetSetting("BodyFilters", "All").Split(';');
-
-            displayfilters = GetSetting("DisplayFilters", "moons;icons;mats;allg;habzone;starclass;planetclass;dist;").Split(';');
-            ApplyDisplayFilters();
+            scanDisplayConfigureButton.ApplyDisplayFilters(panelStars);
 
             panelStars.SystemDisplay.ValueLimit = GetSetting("ValueLimit", 50000);
 
@@ -211,7 +220,7 @@ namespace EDDiscovery.UserControls
 
             var curmats = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast();
 
-            panelStars.DrawSystem(data, showing_matcomds, curmats, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);
+            panelStars.DrawSystem(data, showing_matcomds, curmats, (HasControlTextArea() && !scanDisplayConfigureButton.DisplayFilters.Contains("sys")) ? null : control_text, scanDisplayBodyFiltersButton.BodyFilters);
 
             SetControlText(control_text);
         }
@@ -378,80 +387,6 @@ namespace EDDiscovery.UserControls
         }
 
 #endregion
-
-        private void extButtonFilter_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.CheckedIconListBoxFormGroup bodyfilter = new CheckedIconListBoxFormGroup();
-            bodyfilter.AddAllNone();
-            foreach (var x in Enum.GetValues(typeof(EDPlanet)))
-                bodyfilter.AddStandardOption(x.ToString(), Bodies.PlanetTypeName((EDPlanet)x) );
-            foreach (var x in Enum.GetNames(typeof(EDStar)))
-                bodyfilter.AddStandardOption(x.ToString(), Bodies.StarName(x.ParseEnum<EDStar>()));
-
-            // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
-            bodyfilter.AddStandardOption("star", "Star".T(EDTx.UserControlScan_Star));
-            bodyfilter.AddStandardOption("body", "Body".T(EDTx.UserControlScan_Body));
-            bodyfilter.AddStandardOption("barycentre", "Barycentre".T(EDTx.UserControlScan_Barycentre));
-            bodyfilter.AddStandardOption("belt", "Belt".T(EDTx.UserControlScan_Belt));
-
-            bodyfilter.SaveSettings = (s, o) => 
-            {
-                bodyfilters = s.Split(';');
-                PutSetting("BodyFilters", string.Join(";", bodyfilters));
-                DrawSystem();
-            };
-
-            bodyfilter.CloseBoundaryRegion = new Size(32, extButtonFilter.Height);
-
-            bodyfilter.Show(string.Join(";",bodyfilters), extButtonFilter, this.FindForm());
-        }
-
-        private void extButtonDisplayFilters_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-
-            displayfilter.AddAllNone();
-            displayfilter.AddStandardOption("icons", "Show body status icons".T(EDTx.UserControlScan_StatusIcons), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("mats", "Show Materials".T(EDTx.UserControlScan_ShowMaterials), global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials);
-            displayfilter.AddStandardOption("rares", "Show rare materials only".T(EDTx.UserControlScan_ShowRaresOnly), global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials);
-            displayfilter.AddStandardOption("matfull", "Hide materials which have reached their storage limit".T(EDTx.UserControlScan_MatFull), global::EDDiscovery.Icons.Controls.Scan_HideFullMaterials);
-            displayfilter.AddStandardOption("moons", "Show Moons".T(EDTx.UserControlScan_ShowMoons), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
-            displayfilter.AddStandardOption("allg", "Show G on all planets".T(EDTx.UserControlScan_AllG), global::EDDiscovery.Icons.Controls.ShowAllG);
-            displayfilter.AddStandardOption("habzone", "Show Habitation Zone".T(EDTx.UserControlScan_HabZone), global::EDDiscovery.Icons.Controls.ShowHabZone);
-            displayfilter.AddStandardOption("starclass", "Show Classes of Stars".T(EDTx.UserControlScan_StarClass), global::EDDiscovery.Icons.Controls.ShowStarClasses);
-            displayfilter.AddStandardOption("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses);
-            displayfilter.AddStandardOption("dist", "Show distance of bodies".T(EDTx.UserControlScan_Distance), global::EDDiscovery.Icons.Controls.ShowDistances);
-            displayfilter.AddStandardOption("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways);
-            displayfilter.AddStandardOption("starsondiffline", "Show bodyless stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses);
-
-            displayfilter.SaveSettings = (s, o) =>
-            {
-                displayfilters = s.Split(';');
-                PutSetting("DisplayFilters", string.Join(";", displayfilters));
-                ApplyDisplayFilters();
-                DrawSystem();
-            };
-
-            displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
-
-            displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
-        }
-
-        private void ApplyDisplayFilters()
-        {
-            bool all = displayfilters.Contains("All");
-            panelStars.SystemDisplay.ShowMoons = displayfilters.Contains("moons") || all;
-            panelStars.SystemDisplay.ShowOverlays = displayfilters.Contains("icons") || all;
-            panelStars.SystemDisplay.ShowMaterials = displayfilters.Contains("mats") || all;
-            panelStars.SystemDisplay.ShowOnlyMaterialsRare = displayfilters.Contains("rares") || all;
-            panelStars.SystemDisplay.HideFullMaterials = displayfilters.Contains("matfull") || all;
-            panelStars.SystemDisplay.ShowAllG = displayfilters.Contains("allg") || all;
-            panelStars.SystemDisplay.ShowHabZone = displayfilters.Contains("habzone") || all;
-            panelStars.SystemDisplay.ShowStarClasses = displayfilters.Contains("starclass") || all;
-            panelStars.SystemDisplay.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;
-            panelStars.SystemDisplay.ShowDist = displayfilters.Contains("dist") || all;
-            panelStars.SystemDisplay.NoPlanetStarsOnSameLine = displayfilters.Contains("starsondiffline") || all;
-        }
 
 #region Export
 

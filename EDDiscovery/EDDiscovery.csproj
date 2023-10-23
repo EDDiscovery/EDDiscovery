@@ -283,6 +283,12 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplayBodyFilters.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplayConfigureButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\Helpers\EDSMSpanshButton.cs">
       <SubType>Component</SubType>
     </Compile>
