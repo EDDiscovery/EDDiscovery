@@ -1390,18 +1390,13 @@ namespace EDDiscovery.UserControls
 
         void StatsGame(JournalStats currentstat)
         {
-            string collapseExpand = GameStatTreeState();
-
-            if (string.IsNullOrEmpty(collapseExpand))
-                collapseExpand = GetSetting(dbStatsTreeStateSave, "YYYYYYYYYYYYYYYYY");
-
-            if (collapseExpand.Length < 17)
-                collapseExpand += new string('Y', 17);
 
             JournalStatistics stats = currentstat.laststats;
 
             if (stats != null) // may not have one
             {
+                string collapseExpand = GameStatTreeState();
+
                 AddTreeList("N1", "@", new string[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(stats.EventTimeUTC).ToString() }, collapseExpand[0]);
 
                 AddTreeList("N2", "Bank Account".T(EDTx.UserControlStats_BankAccount), stats.BankAccount.Format("").Split(Environment.NewLine),collapseExpand[1]);
@@ -1423,7 +1418,7 @@ namespace EDDiscovery.UserControls
                 AddTreeList("N15", "CQC".T(EDTx.UserControlStats_CQC), stats.CQC.Format("").Split(Environment.NewLine), collapseExpand[14]);
                 AddTreeList("N16", "Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
                 AddTreeList("N17", "Exobiology".T(EDTx.UserControlStats_Exobiology), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
-                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("").Split(Environment.NewLine), collapseExpand[17]);
+                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("",true).Split(Environment.NewLine), collapseExpand[17]);
             }
             else
                 treeViewStats.Nodes.Clear();
@@ -1460,13 +1455,19 @@ namespace EDDiscovery.UserControls
         string GameStatTreeState()
         {
             string result = "";
-            if (treeViewStats.Nodes.Count > 0)
+            if (treeViewStats.Nodes.Count > 0)          // if nodes there, report state
             {
                 foreach (TreeNode tn in treeViewStats.Nodes)
                     result += tn.IsExpanded ? "Y" : "N";
             }
             else
-                result = GetSetting(dbStatsTreeStateSave, "YYYYYYYYYYYYY");
+            {
+                result = GetSetting(dbStatsTreeStateSave, "");
+
+                if (result.Length < 64)                     // So we set the save to a stupid size so if people add new entries above and forget it won't crash
+                    result += new string('N', 64 - result.Length);
+            }
+
             return result;
         }
         #endregion
