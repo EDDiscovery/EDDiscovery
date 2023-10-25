@@ -607,6 +607,7 @@ namespace EDDiscovery
         UserControlStats_CQC, // CQC
         UserControlStats_FLEETCARRIER, // Fleetcarrier
         UserControlStats_Exobiology, // Exobiology
+        UserControlStats_Thargoids, // Thargoids
         UserControlStats_Name, // Name
         UserControlStats_Ident, // Ident
         UserControlStats_BodiesScanned, // Bodies Scanned
