@@ -1418,8 +1418,7 @@ namespace EDDiscovery.UserControls
                 AddTreeList("N15", "CQC".T(EDTx.UserControlStats_CQC), stats.CQC.Format("").Split(Environment.NewLine), collapseExpand[14]);
                 AddTreeList("N16", "Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
                 AddTreeList("N17", "Exobiology".T(EDTx.UserControlStats_Exobiology), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
-                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("",
-                    false).Split(Environment.NewLine), collapseExpand[17]);
+                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("",true).Split(Environment.NewLine), collapseExpand[17]);
             }
             else
                 treeViewStats.Nodes.Clear();
