@@ -1418,7 +1418,8 @@ namespace EDDiscovery.UserControls
                 AddTreeList("N15", "CQC".T(EDTx.UserControlStats_CQC), stats.CQC.Format("").Split(Environment.NewLine), collapseExpand[14]);
                 AddTreeList("N16", "Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
                 AddTreeList("N17", "Exobiology".T(EDTx.UserControlStats_Exobiology), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
-                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("",true).Split(Environment.NewLine), collapseExpand[17]);
+                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("",
+                    false).Split(Environment.NewLine), collapseExpand[17]);
             }
             else
                 treeViewStats.Nodes.Clear();
@@ -1434,6 +1435,27 @@ namespace EDDiscovery.UserControls
         {
             TreeNode[] parents = treeViewStats.Nodes.Find(parentid, false);                     // find parent id in tree
             TreeNode pnode = (parents.Length == 0) ? (treeViewStats.Nodes.Add(parentid,parenttext)) : parents[0];  // if not found, add it, else get it
+
+            if (pnode.Nodes.Count > 0)          // defend against nodes coming and going so we don't show bad data from previous searches
+            {
+                if (pnode.Nodes.Count != children.Length)   // different length
+                {
+                    pnode.Nodes.Clear();
+                }
+                else
+                {
+                    int exno = 0;
+                    foreach( TreeNode cn in pnode.Nodes)        // check IDs are in the same order
+                    {
+                        string childid = parentid + "-" + (exno++).ToString();       // make up a child id
+                        if ( cn.Name != childid)
+                        {
+                            pnode.Nodes.Clear();
+                            break;
+                        }
+                    }
+                }
+            }
 
             int eno = 0;
             foreach( var childtext in children)
