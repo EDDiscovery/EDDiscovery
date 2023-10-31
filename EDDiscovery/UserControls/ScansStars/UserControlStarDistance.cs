@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
             foreach (DataGridViewRow r in selectedRows)
                 syslist.Add(r.Cells[0].Value.ToString());
 
-            RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = pushtype, Systems = syslist });
+            RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = pushtype, SystemNames = syslist });
         }
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)

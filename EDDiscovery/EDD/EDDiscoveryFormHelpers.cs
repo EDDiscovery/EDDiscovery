@@ -190,8 +190,6 @@ namespace EDDiscovery
         #region 3dmap
         public UserControls.UserControl3DMap Open3DMap()         // Current map - open at last position or configured position
         {
-            var t3dmap = typeof(UserControls.UserControl3DMap);
-
             UserControls.UserControlCommonBase uccb = null;
 
             var tabfind3dmap = tabControlMain.Find(PanelInformation.PanelIDs.Map3D);
@@ -493,7 +491,18 @@ namespace EDDiscovery
         public static void PostInitDebug()
         {
             System.Diagnostics.Debug.WriteLine($"Post Init debug");
-            //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol"), true);
+            var sp = new EliteDangerousCore.Spansh.SpanshClass();
+
+           //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
+
+           // while (true)
+           // {
+           //     System.Threading.Thread.Sleep(2000);
+           //     var resp = sp.TryGetRoadToRiches(queryid);
+           // }
+
+            // var ret = sp.GetStations("Sol", 4);
+
             //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol", 10477373803), true);
             //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
             //sp.GetSystem("Sol");

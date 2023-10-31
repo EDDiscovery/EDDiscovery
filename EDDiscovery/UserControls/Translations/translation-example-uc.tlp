@@ -624,6 +624,7 @@ SECTION UserControlPanelSelector
 SECTION UserControlRoute
 
 .SystemCol: "System" @
+.NoteCol: "Note" @
 .DistanceCol: "Distance" @
 .StarClassCol: "Star Class" @
 .WayPointDistCol: "Dist. Waypoint" @
@@ -631,8 +632,6 @@ SECTION UserControlRoute
 .buttonExtTravelTo: "History" @
 .buttonExtTravelFrom: "History" @
 .buttonExtTargetTo: "Target" @
-.buttonToEDSM: "EDSM" @
-.buttonFromEDSM: "EDSM" @
 .buttonTargetFrom: "Target" @
 .cmd3DMap: "3D Map" @
 .labelLy2: "ly" @

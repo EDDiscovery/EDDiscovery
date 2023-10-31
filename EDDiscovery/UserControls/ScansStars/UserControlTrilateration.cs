@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
             var push = actionobj as UserControlCommonBase.PushStars;
             if (push != null && (push.PushTo == PushStars.PushType.TriWanted || push.PushTo == PushStars.PushType.TriSystems))
             {
-                foreach (string s in push.Systems)
+                foreach (string s in push.SystemNames)
                 {
                     if (push.PushTo == PushStars.PushType.TriWanted)
                         AddWantedSystem(s);

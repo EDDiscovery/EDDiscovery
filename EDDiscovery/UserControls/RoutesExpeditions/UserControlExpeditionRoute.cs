@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
                 {
                     var se = (ISystem)system;
                     id64 = se.SystemAddress;
-                    data = new object[] { se.Name, "" };
+                    data = new object[] { se.Name, se.Tag as string ?? ""};         // Tag may have info in it for notes, if so, use it
                 }
 
                 if (((string)data[0]).HasChars())       // must have a name

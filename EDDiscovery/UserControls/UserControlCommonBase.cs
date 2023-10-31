@@ -190,7 +190,10 @@ namespace EDDiscovery.UserControls
         {
             public enum PushType { TriWanted, TriSystems, Expedition };
             public PushType PushTo { get; set; }
-            public System.Collections.Generic.List<string> Systems { get; set; }
+            public System.Collections.Generic.List<string> SystemNames { get; set; }
+            public System.Collections.Generic.List<EliteDangerousCore.ISystem> SystemList { get; set; } // expedition can use either
+            public bool MakeVisible { get; set; } = false;
+            public string RouteTitle { get; set; } = null;
         };
         public class PanelAction                    // perform an action
         {

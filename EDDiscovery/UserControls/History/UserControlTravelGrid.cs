@@ -1009,13 +1009,13 @@ namespace EDDiscovery.UserControls
             }
 
             if (dist)
-                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriSystems, Systems = systemnamelist });
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriSystems, SystemNames = systemnamelist });
 
             if (wanted)
-                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriWanted, Systems = systemnamelist });
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriWanted, SystemNames = systemnamelist });
 
             if (expedition)
-                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, Systems = systemnamelist });
+                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemNames = systemnamelist });
 
         }
         private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)

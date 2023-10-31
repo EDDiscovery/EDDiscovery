@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
 
                 map.AddSystemsToExpedition = (list) =>
                 {
-                    RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, Systems = list });
+                    RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemNames = list });
                 };
 
                 // start clock

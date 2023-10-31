@@ -333,6 +333,9 @@
     <Compile Include="UserControls\RoutesExpeditions\UserControlExpeditionRoute.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRouteHelpers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.cs">
       <SubType>UserControl</SubType>
     </Compile>

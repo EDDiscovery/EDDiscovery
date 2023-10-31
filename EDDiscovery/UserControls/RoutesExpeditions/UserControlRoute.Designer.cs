@@ -31,37 +31,45 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlRoute));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.checkBox_FsdBoost = new ExtendedControls.ExtCheckBox();
-            this.buttonExtExcel = new ExtendedControls.ExtButton();
-            this.textBox_ToName = new ExtendedControls.ExtTextBox();
-            this.textBox_FromName = new ExtendedControls.ExtTextBox();
+            this.controlPanel = new System.Windows.Forms.Panel();
+            this.groupBoxSpansh = new ExtendedControls.ExtGroupBox();
+            this.extButtonSpanshRoadToRiches = new ExtendedControls.ExtButton();
+            this.groupBoxInternal = new ExtendedControls.ExtGroupBox();
             this.comboBoxRoutingMetric = new ExtendedControls.ExtComboBox();
-            this.buttonExtTravelTo = new ExtendedControls.ExtButton();
-            this.buttonExtTravelFrom = new ExtendedControls.ExtButton();
-            this.buttonExtTargetTo = new ExtendedControls.ExtButton();
-            this.buttonToEDSM = new ExtendedControls.ExtButton();
-            this.buttonFromEDSM = new ExtendedControls.ExtButton();
-            this.buttonTargetFrom = new ExtendedControls.ExtButton();
-            this.cmd3DMap = new ExtendedControls.ExtButton();
-            this.textBox_From = new ExtendedControls.ExtTextBoxAutoComplete();
-            this.textBox_Range = new ExtendedControls.NumberBoxLong();
-            this.textBox_To = new ExtendedControls.ExtTextBoxAutoComplete();
-            this.labelLy2 = new System.Windows.Forms.Label();
-            this.labelLy1 = new System.Windows.Forms.Label();
-            this.textBox_Distance = new ExtendedControls.ExtTextBox();
-            this.labelTo = new System.Windows.Forms.Label();
-            this.textBox_ToZ = new ExtendedControls.ExtTextBox();
-            this.labelMaxJump = new System.Windows.Forms.Label();
-            this.textBox_ToY = new ExtendedControls.ExtTextBox();
-            this.labelDistance = new System.Windows.Forms.Label();
-            this.textBox_ToX = new ExtendedControls.ExtTextBox();
             this.labelMetric = new System.Windows.Forms.Label();
-            this.textBox_FromZ = new ExtendedControls.ExtTextBox();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.extButtonRoute = new ExtendedControls.ExtButton();
-            this.textBox_FromY = new ExtendedControls.ExtTextBox();
-            this.labelFrom = new System.Windows.Forms.Label();
+            this.groupBoxPara = new ExtendedControls.ExtGroupBox();
+            this.textBox_From = new ExtendedControls.ExtTextBoxAutoComplete();
             this.textBox_FromX = new ExtendedControls.ExtTextBox();
+            this.checkBox_FsdBoost = new ExtendedControls.ExtCheckBox();
+            this.labelFrom = new System.Windows.Forms.Label();
+            this.textBox_FromY = new ExtendedControls.ExtTextBox();
+            this.textBox_ToName = new ExtendedControls.ExtTextBox();
+            this.textBox_FromZ = new ExtendedControls.ExtTextBox();
+            this.textBox_Range = new ExtendedControls.NumberBoxLong();
+            this.textBox_FromName = new ExtendedControls.ExtTextBox();
+            this.labelLy2 = new System.Windows.Forms.Label();
+            this.textBox_ToX = new ExtendedControls.ExtTextBox();
+            this.labelLy1 = new System.Windows.Forms.Label();
+            this.textBox_ToY = new ExtendedControls.ExtTextBox();
+            this.textBox_Distance = new ExtendedControls.ExtTextBox();
+            this.buttonExtTravelTo = new ExtendedControls.ExtButton();
+            this.labelMaxJump = new System.Windows.Forms.Label();
+            this.labelDistance = new System.Windows.Forms.Label();
+            this.textBox_ToZ = new ExtendedControls.ExtTextBox();
+            this.buttonExtTravelFrom = new ExtendedControls.ExtButton();
+            this.labelTo = new System.Windows.Forms.Label();
+            this.buttonExtTargetTo = new ExtendedControls.ExtButton();
+            this.textBox_To = new ExtendedControls.ExtTextBoxAutoComplete();
+            this.buttonToEDSM = new ExtendedControls.ExtButton();
+            this.buttonTargetFrom = new ExtendedControls.ExtButton();
+            this.extButtonToSpansh = new ExtendedControls.ExtButton();
+            this.extButtonFromSpansh = new ExtendedControls.ExtButton();
+            this.buttonFromEDSM = new ExtendedControls.ExtButton();
+            this.extButtonExpeditionPush = new ExtendedControls.ExtButton();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.cmd3DMap = new ExtendedControls.ExtButton();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +79,7 @@
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewRoute = new BaseUtils.DataGridViewColumnControl();
             this.SystemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NoteCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DistanceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.YCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,140 +87,73 @@
             this.StarClassCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
-            this.panel1.SuspendLayout();
+            this.controlPanel.SuspendLayout();
+            this.groupBoxSpansh.SuspendLayout();
+            this.groupBoxInternal.SuspendLayout();
+            this.groupBoxPara.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel1
+            // controlPanel
             // 
-            this.panel1.AutoSize = true;
-            this.panel1.Controls.Add(this.edsmSpanshButton);
-            this.panel1.Controls.Add(this.checkBox_FsdBoost);
-            this.panel1.Controls.Add(this.buttonExtExcel);
-            this.panel1.Controls.Add(this.textBox_ToName);
-            this.panel1.Controls.Add(this.textBox_FromName);
-            this.panel1.Controls.Add(this.comboBoxRoutingMetric);
-            this.panel1.Controls.Add(this.buttonExtTravelTo);
-            this.panel1.Controls.Add(this.buttonExtTravelFrom);
-            this.panel1.Controls.Add(this.buttonExtTargetTo);
-            this.panel1.Controls.Add(this.buttonToEDSM);
-            this.panel1.Controls.Add(this.buttonFromEDSM);
-            this.panel1.Controls.Add(this.buttonTargetFrom);
-            this.panel1.Controls.Add(this.cmd3DMap);
-            this.panel1.Controls.Add(this.textBox_From);
-            this.panel1.Controls.Add(this.textBox_Range);
-            this.panel1.Controls.Add(this.textBox_To);
-            this.panel1.Controls.Add(this.labelLy2);
-            this.panel1.Controls.Add(this.labelLy1);
-            this.panel1.Controls.Add(this.textBox_Distance);
-            this.panel1.Controls.Add(this.labelTo);
-            this.panel1.Controls.Add(this.textBox_ToZ);
-            this.panel1.Controls.Add(this.labelMaxJump);
-            this.panel1.Controls.Add(this.textBox_ToY);
-            this.panel1.Controls.Add(this.labelDistance);
-            this.panel1.Controls.Add(this.textBox_ToX);
-            this.panel1.Controls.Add(this.labelMetric);
-            this.panel1.Controls.Add(this.textBox_FromZ);
-            this.panel1.Controls.Add(this.extButtonRoute);
-            this.panel1.Controls.Add(this.textBox_FromY);
-            this.panel1.Controls.Add(this.labelFrom);
-            this.panel1.Controls.Add(this.textBox_FromX);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(878, 189);
-            this.panel1.TabIndex = 0;
+            this.controlPanel.AutoSize = true;
+            this.controlPanel.Controls.Add(this.groupBoxSpansh);
+            this.controlPanel.Controls.Add(this.groupBoxInternal);
+            this.controlPanel.Controls.Add(this.groupBoxPara);
+            this.controlPanel.Controls.Add(this.extButtonExpeditionPush);
+            this.controlPanel.Controls.Add(this.buttonExtExcel);
+            this.controlPanel.Controls.Add(this.cmd3DMap);
+            this.controlPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.controlPanel.Location = new System.Drawing.Point(0, 0);
+            this.controlPanel.Name = "controlPanel";
+            this.controlPanel.Size = new System.Drawing.Size(878, 301);
+            this.controlPanel.TabIndex = 0;
             // 
-            // checkBox_FsdBoost
+            // groupBoxSpansh
             // 
-            this.checkBox_FsdBoost.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox_FsdBoost.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBox_FsdBoost.CheckBoxDisabledScaling = 0.5F;
-            this.checkBox_FsdBoost.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBox_FsdBoost.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBox_FsdBoost.ImageButtonDisabledScaling = 0.5F;
-            this.checkBox_FsdBoost.ImageIndeterminate = null;
-            this.checkBox_FsdBoost.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBox_FsdBoost.ImageUnchecked = null;
-            this.checkBox_FsdBoost.Location = new System.Drawing.Point(420, 139);
-            this.checkBox_FsdBoost.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBox_FsdBoost.Name = "checkBox_FsdBoost";
-            this.checkBox_FsdBoost.Size = new System.Drawing.Size(135, 18);
-            this.checkBox_FsdBoost.TabIndex = 32;
-            this.checkBox_FsdBoost.Text = "Use Boosts";
-            this.checkBox_FsdBoost.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBox_FsdBoost, "The route finder will try and use FSD injections in case a direct route could not" +
-        " be found.");
-            this.checkBox_FsdBoost.UseVisualStyleBackColor = true;
+            this.groupBoxSpansh.BackColorScaling = 0.5F;
+            this.groupBoxSpansh.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxSpansh.BorderColorScaling = 0.5F;
+            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshRoadToRiches);
+            this.groupBoxSpansh.Location = new System.Drawing.Point(4, 207);
+            this.groupBoxSpansh.Name = "groupBoxSpansh";
+            this.groupBoxSpansh.Size = new System.Drawing.Size(781, 57);
+            this.groupBoxSpansh.TabIndex = 73;
+            this.groupBoxSpansh.TabStop = false;
+            this.groupBoxSpansh.Text = "Spansh";
+            this.groupBoxSpansh.TextPadding = 0;
+            this.groupBoxSpansh.TextStartPosition = -1;
             // 
-            // buttonExtExcel
+            // extButtonSpanshRoadToRiches
             // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(304, 158);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
-            this.buttonExtExcel.TabIndex = 59;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            this.extButtonSpanshRoadToRiches.Enabled = false;
+            this.extButtonSpanshRoadToRiches.Location = new System.Drawing.Point(6, 19);
+            this.extButtonSpanshRoadToRiches.Name = "extButtonSpanshRoadToRiches";
+            this.extButtonSpanshRoadToRiches.Size = new System.Drawing.Size(95, 27);
+            this.extButtonSpanshRoadToRiches.TabIndex = 40;
+            this.extButtonSpanshRoadToRiches.Text = "Road to Riches";
+            this.extButtonSpanshRoadToRiches.UseVisualStyleBackColor = true;
+            this.extButtonSpanshRoadToRiches.Click += new System.EventHandler(this.button_Route_Click);
             // 
-            // textBox_ToName
+            // groupBoxInternal
             // 
-            this.textBox_ToName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToName.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToName.BorderColorScaling = 0.5F;
-            this.textBox_ToName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToName.ClearOnFirstChar = false;
-            this.textBox_ToName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToName.EndButtonEnable = true;
-            this.textBox_ToName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToName.EndButtonImage")));
-            this.textBox_ToName.EndButtonVisible = false;
-            this.textBox_ToName.InErrorCondition = false;
-            this.textBox_ToName.Location = new System.Drawing.Point(342, 31);
-            this.textBox_ToName.Multiline = false;
-            this.textBox_ToName.Name = "textBox_ToName";
-            this.textBox_ToName.ReadOnly = true;
-            this.textBox_ToName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToName.SelectionLength = 0;
-            this.textBox_ToName.SelectionStart = 0;
-            this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_ToName.TabIndex = 22;
-            this.textBox_ToName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
-            this.textBox_ToName.WordWrap = true;
-            // 
-            // textBox_FromName
-            // 
-            this.textBox_FromName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromName.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromName.BorderColorScaling = 0.5F;
-            this.textBox_FromName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromName.ClearOnFirstChar = false;
-            this.textBox_FromName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromName.EndButtonEnable = true;
-            this.textBox_FromName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromName.EndButtonImage")));
-            this.textBox_FromName.EndButtonVisible = false;
-            this.textBox_FromName.InErrorCondition = false;
-            this.textBox_FromName.Location = new System.Drawing.Point(57, 31);
-            this.textBox_FromName.Multiline = false;
-            this.textBox_FromName.Name = "textBox_FromName";
-            this.textBox_FromName.ReadOnly = true;
-            this.textBox_FromName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromName.SelectionLength = 0;
-            this.textBox_FromName.SelectionStart = 0;
-            this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_FromName.TabIndex = 12;
-            this.textBox_FromName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromName, "Alternate name");
-            this.textBox_FromName.WordWrap = true;
+            this.groupBoxInternal.BackColorScaling = 0.5F;
+            this.groupBoxInternal.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxInternal.BorderColorScaling = 0.5F;
+            this.groupBoxInternal.Controls.Add(this.comboBoxRoutingMetric);
+            this.groupBoxInternal.Controls.Add(this.labelMetric);
+            this.groupBoxInternal.Controls.Add(this.edsmSpanshButton);
+            this.groupBoxInternal.Controls.Add(this.extButtonRoute);
+            this.groupBoxInternal.Location = new System.Drawing.Point(4, 145);
+            this.groupBoxInternal.Name = "groupBoxInternal";
+            this.groupBoxInternal.Size = new System.Drawing.Size(781, 55);
+            this.groupBoxInternal.TabIndex = 72;
+            this.groupBoxInternal.TabStop = false;
+            this.groupBoxInternal.Text = "EDD Router";
+            this.groupBoxInternal.TextPadding = 0;
+            this.groupBoxInternal.TextStartPosition = -1;
             // 
             // comboBoxRoutingMetric
             // 
@@ -223,7 +165,7 @@
             this.comboBoxRoutingMetric.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 121);
+            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(62, 19);
             this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -237,82 +179,79 @@
             this.toolTip.SetToolTip(this.comboBoxRoutingMetric, "Pick the metric to use when searching for a route");
             this.comboBoxRoutingMetric.ValueMember = "";
             // 
-            // buttonExtTravelTo
+            // labelMetric
             // 
-            this.buttonExtTravelTo.Location = new System.Drawing.Point(342, 83);
-            this.buttonExtTravelTo.Name = "buttonExtTravelTo";
-            this.buttonExtTravelTo.Size = new System.Drawing.Size(72, 23);
-            this.buttonExtTravelTo.TabIndex = 26;
-            this.buttonExtTravelTo.Text = "History";
-            this.toolTip.SetToolTip(this.buttonExtTravelTo, "Copy the entry in the main travel grid to end route entry");
-            this.buttonExtTravelTo.UseVisualStyleBackColor = true;
-            this.buttonExtTravelTo.Click += new System.EventHandler(this.buttonToHistory_Click);
+            this.labelMetric.AutoSize = true;
+            this.labelMetric.Location = new System.Drawing.Point(8, 21);
+            this.labelMetric.Name = "labelMetric";
+            this.labelMetric.Size = new System.Drawing.Size(36, 13);
+            this.labelMetric.TabIndex = 30;
+            this.labelMetric.Text = "Metric";
             // 
-            // buttonExtTravelFrom
+            // edsmSpanshButton
             // 
-            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 83);
-            this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
-            this.buttonExtTravelFrom.Size = new System.Drawing.Size(72, 23);
-            this.buttonExtTravelFrom.TabIndex = 16;
-            this.buttonExtTravelFrom.Text = "History";
-            this.toolTip.SetToolTip(this.buttonExtTravelFrom, "Copy the entry in the main travel grid to start route entry");
-            this.buttonExtTravelFrom.UseVisualStyleBackColor = true;
-            this.buttonExtTravelFrom.Click += new System.EventHandler(this.buttonFromHistory_Click);
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(302, 16);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 70;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
-            // buttonExtTargetTo
+            // extButtonRoute
             // 
-            this.buttonExtTargetTo.Location = new System.Drawing.Point(420, 83);
-            this.buttonExtTargetTo.Name = "buttonExtTargetTo";
-            this.buttonExtTargetTo.Size = new System.Drawing.Size(72, 23);
-            this.buttonExtTargetTo.TabIndex = 27;
-            this.buttonExtTargetTo.Text = "Target";
-            this.toolTip.SetToolTip(this.buttonExtTargetTo, "Copy the target system to end route entry");
-            this.buttonExtTargetTo.UseVisualStyleBackColor = true;
-            this.buttonExtTargetTo.Click += new System.EventHandler(this.buttonToTarget_Click);
+            this.extButtonRoute.Enabled = false;
+            this.extButtonRoute.Location = new System.Drawing.Point(337, 17);
+            this.extButtonRoute.Name = "extButtonRoute";
+            this.extButtonRoute.Size = new System.Drawing.Size(111, 27);
+            this.extButtonRoute.TabIndex = 40;
+            this.extButtonRoute.Text = "Find route";
+            this.toolTip.SetToolTip(this.extButtonRoute, "Compute the route");
+            this.extButtonRoute.UseVisualStyleBackColor = true;
+            this.extButtonRoute.Click += new System.EventHandler(this.button_Route_Click);
             // 
-            // buttonToEDSM
+            // groupBoxPara
             // 
-            this.buttonToEDSM.Location = new System.Drawing.Point(498, 83);
-            this.buttonToEDSM.Name = "buttonToEDSM";
-            this.buttonToEDSM.Size = new System.Drawing.Size(72, 23);
-            this.buttonToEDSM.TabIndex = 28;
-            this.buttonToEDSM.Text = "EDSM";
-            this.toolTip.SetToolTip(this.buttonToEDSM, "Open this end route system in EDSM");
-            this.buttonToEDSM.UseVisualStyleBackColor = true;
-            this.buttonToEDSM.Click += new System.EventHandler(this.buttonToEDSM_Click);
-            // 
-            // buttonFromEDSM
-            // 
-            this.buttonFromEDSM.Location = new System.Drawing.Point(213, 83);
-            this.buttonFromEDSM.Name = "buttonFromEDSM";
-            this.buttonFromEDSM.Size = new System.Drawing.Size(72, 23);
-            this.buttonFromEDSM.TabIndex = 18;
-            this.buttonFromEDSM.Text = "EDSM";
-            this.toolTip.SetToolTip(this.buttonFromEDSM, "Open this start route system in EDSM");
-            this.buttonFromEDSM.UseVisualStyleBackColor = true;
-            this.buttonFromEDSM.Click += new System.EventHandler(this.buttonFromEDSM_Click);
-            // 
-            // buttonTargetFrom
-            // 
-            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 83);
-            this.buttonTargetFrom.Name = "buttonTargetFrom";
-            this.buttonTargetFrom.Size = new System.Drawing.Size(72, 23);
-            this.buttonTargetFrom.TabIndex = 17;
-            this.buttonTargetFrom.Text = "Target";
-            this.toolTip.SetToolTip(this.buttonTargetFrom, "Copy the target system to start route entry");
-            this.buttonTargetFrom.UseVisualStyleBackColor = true;
-            this.buttonTargetFrom.Click += new System.EventHandler(this.buttonFromTarget_Click);
-            // 
-            // cmd3DMap
-            // 
-            this.cmd3DMap.Location = new System.Drawing.Point(174, 158);
-            this.cmd3DMap.Name = "cmd3DMap";
-            this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
-            this.cmd3DMap.TabIndex = 50;
-            this.cmd3DMap.Text = "3D Map";
-            this.toolTip.SetToolTip(this.cmd3DMap, "Show route on 3D Map");
-            this.cmd3DMap.UseVisualStyleBackColor = true;
-            this.cmd3DMap.Click += new System.EventHandler(this.cmd3DMap_Click);
+            this.groupBoxPara.BackColorScaling = 0.5F;
+            this.groupBoxPara.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxPara.BorderColorScaling = 0.5F;
+            this.groupBoxPara.Controls.Add(this.textBox_From);
+            this.groupBoxPara.Controls.Add(this.textBox_FromX);
+            this.groupBoxPara.Controls.Add(this.checkBox_FsdBoost);
+            this.groupBoxPara.Controls.Add(this.labelFrom);
+            this.groupBoxPara.Controls.Add(this.textBox_FromY);
+            this.groupBoxPara.Controls.Add(this.textBox_ToName);
+            this.groupBoxPara.Controls.Add(this.textBox_FromZ);
+            this.groupBoxPara.Controls.Add(this.textBox_Range);
+            this.groupBoxPara.Controls.Add(this.textBox_FromName);
+            this.groupBoxPara.Controls.Add(this.labelLy2);
+            this.groupBoxPara.Controls.Add(this.textBox_ToX);
+            this.groupBoxPara.Controls.Add(this.labelLy1);
+            this.groupBoxPara.Controls.Add(this.textBox_ToY);
+            this.groupBoxPara.Controls.Add(this.textBox_Distance);
+            this.groupBoxPara.Controls.Add(this.buttonExtTravelTo);
+            this.groupBoxPara.Controls.Add(this.labelMaxJump);
+            this.groupBoxPara.Controls.Add(this.labelDistance);
+            this.groupBoxPara.Controls.Add(this.textBox_ToZ);
+            this.groupBoxPara.Controls.Add(this.buttonExtTravelFrom);
+            this.groupBoxPara.Controls.Add(this.labelTo);
+            this.groupBoxPara.Controls.Add(this.buttonExtTargetTo);
+            this.groupBoxPara.Controls.Add(this.textBox_To);
+            this.groupBoxPara.Controls.Add(this.buttonToEDSM);
+            this.groupBoxPara.Controls.Add(this.buttonTargetFrom);
+            this.groupBoxPara.Controls.Add(this.extButtonToSpansh);
+            this.groupBoxPara.Controls.Add(this.extButtonFromSpansh);
+            this.groupBoxPara.Controls.Add(this.buttonFromEDSM);
+            this.groupBoxPara.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.groupBoxPara.Location = new System.Drawing.Point(4, 4);
+            this.groupBoxPara.Name = "groupBoxPara";
+            this.groupBoxPara.Size = new System.Drawing.Size(855, 134);
+            this.groupBoxPara.TabIndex = 71;
+            this.groupBoxPara.TabStop = false;
+            this.groupBoxPara.Text = "Parameters";
+            this.groupBoxPara.TextPadding = 0;
+            this.groupBoxPara.TextStartPosition = -1;
             // 
             // textBox_From
             // 
@@ -336,7 +275,7 @@
             this.textBox_From.EndButtonVisible = false;
             this.textBox_From.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_From.InErrorCondition = false;
-            this.textBox_From.Location = new System.Drawing.Point(57, 5);
+            this.textBox_From.Location = new System.Drawing.Point(62, 19);
             this.textBox_From.Multiline = false;
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.ReadOnly = false;
@@ -351,6 +290,154 @@
             this.textBox_From.WordWrap = true;
             this.textBox_From.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
             this.textBox_From.Enter += new System.EventHandler(this.textBox_From_Enter);
+            // 
+            // textBox_FromX
+            // 
+            this.textBox_FromX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_FromX.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_FromX.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_FromX.BorderColorScaling = 0.5F;
+            this.textBox_FromX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_FromX.ClearOnFirstChar = false;
+            this.textBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromX.EndButtonEnable = true;
+            this.textBox_FromX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromX.EndButtonImage")));
+            this.textBox_FromX.EndButtonVisible = false;
+            this.textBox_FromX.InErrorCondition = false;
+            this.textBox_FromX.Location = new System.Drawing.Point(62, 71);
+            this.textBox_FromX.Multiline = false;
+            this.textBox_FromX.Name = "textBox_FromX";
+            this.textBox_FromX.ReadOnly = false;
+            this.textBox_FromX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_FromX.SelectionLength = 0;
+            this.textBox_FromX.SelectionStart = 0;
+            this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
+            this.textBox_FromX.TabIndex = 13;
+            this.textBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_FromX, "X Co-ord");
+            this.textBox_FromX.WordWrap = true;
+            this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
+            this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
+            this.textBox_FromX.Enter += new System.EventHandler(this.textBox_From_Enter);
+            // 
+            // checkBox_FsdBoost
+            // 
+            this.checkBox_FsdBoost.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox_FsdBoost.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBox_FsdBoost.CheckBoxDisabledScaling = 0.5F;
+            this.checkBox_FsdBoost.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBox_FsdBoost.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBox_FsdBoost.ImageButtonDisabledScaling = 0.5F;
+            this.checkBox_FsdBoost.ImageIndeterminate = null;
+            this.checkBox_FsdBoost.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBox_FsdBoost.ImageUnchecked = null;
+            this.checkBox_FsdBoost.Location = new System.Drawing.Point(689, 45);
+            this.checkBox_FsdBoost.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBox_FsdBoost.Name = "checkBox_FsdBoost";
+            this.checkBox_FsdBoost.Size = new System.Drawing.Size(135, 18);
+            this.checkBox_FsdBoost.TabIndex = 32;
+            this.checkBox_FsdBoost.Text = "Use Boosts";
+            this.checkBox_FsdBoost.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBox_FsdBoost, "The route finder will try and use FSD injections in case a direct route could not" +
+        " be found.");
+            this.checkBox_FsdBoost.UseVisualStyleBackColor = true;
+            // 
+            // labelFrom
+            // 
+            this.labelFrom.AutoSize = true;
+            this.labelFrom.Location = new System.Drawing.Point(8, 20);
+            this.labelFrom.Name = "labelFrom";
+            this.labelFrom.Size = new System.Drawing.Size(30, 13);
+            this.labelFrom.TabIndex = 10;
+            this.labelFrom.Text = "From";
+            // 
+            // textBox_FromY
+            // 
+            this.textBox_FromY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_FromY.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_FromY.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_FromY.BorderColorScaling = 0.5F;
+            this.textBox_FromY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_FromY.ClearOnFirstChar = false;
+            this.textBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromY.EndButtonEnable = true;
+            this.textBox_FromY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromY.EndButtonImage")));
+            this.textBox_FromY.EndButtonVisible = false;
+            this.textBox_FromY.InErrorCondition = false;
+            this.textBox_FromY.Location = new System.Drawing.Point(140, 71);
+            this.textBox_FromY.Multiline = false;
+            this.textBox_FromY.Name = "textBox_FromY";
+            this.textBox_FromY.ReadOnly = false;
+            this.textBox_FromY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_FromY.SelectionLength = 0;
+            this.textBox_FromY.SelectionStart = 0;
+            this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
+            this.textBox_FromY.TabIndex = 14;
+            this.textBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_FromY, "Y (Vertical) Co-ord");
+            this.textBox_FromY.WordWrap = true;
+            this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
+            this.textBox_FromY.Click += new System.EventHandler(this.textBox_Clicked);
+            this.textBox_FromY.Enter += new System.EventHandler(this.textBox_From_Enter);
+            // 
+            // textBox_ToName
+            // 
+            this.textBox_ToName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_ToName.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_ToName.BorderColorScaling = 0.5F;
+            this.textBox_ToName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_ToName.ClearOnFirstChar = false;
+            this.textBox_ToName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToName.EndButtonEnable = true;
+            this.textBox_ToName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToName.EndButtonImage")));
+            this.textBox_ToName.EndButtonVisible = false;
+            this.textBox_ToName.InErrorCondition = false;
+            this.textBox_ToName.Location = new System.Drawing.Point(396, 45);
+            this.textBox_ToName.Multiline = false;
+            this.textBox_ToName.Name = "textBox_ToName";
+            this.textBox_ToName.ReadOnly = true;
+            this.textBox_ToName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_ToName.SelectionLength = 0;
+            this.textBox_ToName.SelectionStart = 0;
+            this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_ToName.TabIndex = 22;
+            this.textBox_ToName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
+            this.textBox_ToName.WordWrap = true;
+            // 
+            // textBox_FromZ
+            // 
+            this.textBox_FromZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_FromZ.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_FromZ.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_FromZ.BorderColorScaling = 0.5F;
+            this.textBox_FromZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_FromZ.ClearOnFirstChar = false;
+            this.textBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromZ.EndButtonEnable = true;
+            this.textBox_FromZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromZ.EndButtonImage")));
+            this.textBox_FromZ.EndButtonVisible = false;
+            this.textBox_FromZ.InErrorCondition = false;
+            this.textBox_FromZ.Location = new System.Drawing.Point(218, 71);
+            this.textBox_FromZ.Multiline = false;
+            this.textBox_FromZ.Name = "textBox_FromZ";
+            this.textBox_FromZ.ReadOnly = false;
+            this.textBox_FromZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_FromZ.SelectionLength = 0;
+            this.textBox_FromZ.SelectionStart = 0;
+            this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
+            this.textBox_FromZ.TabIndex = 15;
+            this.textBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-ord");
+            this.textBox_FromZ.WordWrap = true;
+            this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
+            this.textBox_FromZ.Click += new System.EventHandler(this.textBox_Clicked);
+            this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_From_Enter);
             // 
             // textBox_Range
             // 
@@ -367,8 +454,8 @@
             this.textBox_Range.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Range.EndButtonImage")));
             this.textBox_Range.EndButtonVisible = false;
             this.textBox_Range.Format = "D";
-            this.textBox_Range.InErrorCondition = false;
-            this.textBox_Range.Location = new System.Drawing.Point(498, 113);
+            this.textBox_Range.InErrorCondition = true;
+            this.textBox_Range.Location = new System.Drawing.Point(767, 19);
             this.textBox_Range.Maximum = ((long)(999));
             this.textBox_Range.Minimum = ((long)(1));
             this.textBox_Range.Multiline = false;
@@ -383,6 +470,230 @@
             this.toolTip.SetToolTip(this.textBox_Range, "Give your jump range, or search range for long jumps");
             this.textBox_Range.Value = ((long)(0));
             this.textBox_Range.WordWrap = true;
+            // 
+            // textBox_FromName
+            // 
+            this.textBox_FromName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_FromName.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_FromName.BorderColorScaling = 0.5F;
+            this.textBox_FromName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_FromName.ClearOnFirstChar = false;
+            this.textBox_FromName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromName.EndButtonEnable = true;
+            this.textBox_FromName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromName.EndButtonImage")));
+            this.textBox_FromName.EndButtonVisible = false;
+            this.textBox_FromName.InErrorCondition = false;
+            this.textBox_FromName.Location = new System.Drawing.Point(62, 45);
+            this.textBox_FromName.Multiline = false;
+            this.textBox_FromName.Name = "textBox_FromName";
+            this.textBox_FromName.ReadOnly = true;
+            this.textBox_FromName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_FromName.SelectionLength = 0;
+            this.textBox_FromName.SelectionStart = 0;
+            this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_FromName.TabIndex = 12;
+            this.textBox_FromName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_FromName, "Alternate name");
+            this.textBox_FromName.WordWrap = true;
+            // 
+            // labelLy2
+            // 
+            this.labelLy2.AutoSize = true;
+            this.labelLy2.Location = new System.Drawing.Point(382, 102);
+            this.labelLy2.Name = "labelLy2";
+            this.labelLy2.Size = new System.Drawing.Size(14, 13);
+            this.labelLy2.TabIndex = 69;
+            this.labelLy2.Text = "ly";
+            // 
+            // textBox_ToX
+            // 
+            this.textBox_ToX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_ToX.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_ToX.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_ToX.BorderColorScaling = 0.5F;
+            this.textBox_ToX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_ToX.ClearOnFirstChar = false;
+            this.textBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToX.EndButtonEnable = true;
+            this.textBox_ToX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToX.EndButtonImage")));
+            this.textBox_ToX.EndButtonVisible = false;
+            this.textBox_ToX.InErrorCondition = false;
+            this.textBox_ToX.Location = new System.Drawing.Point(396, 71);
+            this.textBox_ToX.Multiline = false;
+            this.textBox_ToX.Name = "textBox_ToX";
+            this.textBox_ToX.ReadOnly = false;
+            this.textBox_ToX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_ToX.SelectionLength = 0;
+            this.textBox_ToX.SelectionStart = 0;
+            this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
+            this.textBox_ToX.TabIndex = 23;
+            this.textBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_ToX, "X Co-Ord");
+            this.textBox_ToX.WordWrap = true;
+            this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
+            this.textBox_ToX.Click += new System.EventHandler(this.textBox_Clicked);
+            this.textBox_ToX.Enter += new System.EventHandler(this.textBox_To_Enter);
+            // 
+            // labelLy1
+            // 
+            this.labelLy1.AutoSize = true;
+            this.labelLy1.Location = new System.Drawing.Point(827, 22);
+            this.labelLy1.Name = "labelLy1";
+            this.labelLy1.Size = new System.Drawing.Size(14, 13);
+            this.labelLy1.TabIndex = 39;
+            this.labelLy1.Text = "ly";
+            // 
+            // textBox_ToY
+            // 
+            this.textBox_ToY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_ToY.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_ToY.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_ToY.BorderColorScaling = 0.5F;
+            this.textBox_ToY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_ToY.ClearOnFirstChar = false;
+            this.textBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToY.EndButtonEnable = true;
+            this.textBox_ToY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToY.EndButtonImage")));
+            this.textBox_ToY.EndButtonVisible = false;
+            this.textBox_ToY.InErrorCondition = false;
+            this.textBox_ToY.Location = new System.Drawing.Point(474, 71);
+            this.textBox_ToY.Multiline = false;
+            this.textBox_ToY.Name = "textBox_ToY";
+            this.textBox_ToY.ReadOnly = false;
+            this.textBox_ToY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_ToY.SelectionLength = 0;
+            this.textBox_ToY.SelectionStart = 0;
+            this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
+            this.textBox_ToY.TabIndex = 24;
+            this.textBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_ToY, "Y (Vertical) Co-ord");
+            this.textBox_ToY.WordWrap = true;
+            this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
+            this.textBox_ToY.Click += new System.EventHandler(this.textBox_Clicked);
+            this.textBox_ToY.Enter += new System.EventHandler(this.textBox_To_Enter);
+            // 
+            // textBox_Distance
+            // 
+            this.textBox_Distance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_Distance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_Distance.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_Distance.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_Distance.BorderColorScaling = 0.5F;
+            this.textBox_Distance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_Distance.ClearOnFirstChar = false;
+            this.textBox_Distance.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_Distance.EndButtonEnable = true;
+            this.textBox_Distance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Distance.EndButtonImage")));
+            this.textBox_Distance.EndButtonVisible = false;
+            this.textBox_Distance.InErrorCondition = false;
+            this.textBox_Distance.Location = new System.Drawing.Point(322, 98);
+            this.textBox_Distance.Multiline = false;
+            this.textBox_Distance.Name = "textBox_Distance";
+            this.textBox_Distance.ReadOnly = true;
+            this.textBox_Distance.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_Distance.SelectionLength = 0;
+            this.textBox_Distance.SelectionStart = 0;
+            this.textBox_Distance.Size = new System.Drawing.Size(57, 20);
+            this.textBox_Distance.TabIndex = 61;
+            this.textBox_Distance.TabStop = false;
+            this.textBox_Distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_Distance, "Distance between start and end");
+            this.textBox_Distance.WordWrap = true;
+            this.textBox_Distance.Click += new System.EventHandler(this.textBox_Clicked);
+            // 
+            // buttonExtTravelTo
+            // 
+            this.buttonExtTravelTo.Location = new System.Drawing.Point(480, 97);
+            this.buttonExtTravelTo.Name = "buttonExtTravelTo";
+            this.buttonExtTravelTo.Size = new System.Drawing.Size(72, 23);
+            this.buttonExtTravelTo.TabIndex = 26;
+            this.buttonExtTravelTo.Text = "History";
+            this.toolTip.SetToolTip(this.buttonExtTravelTo, "Copy the entry in the main travel grid to end route entry");
+            this.buttonExtTravelTo.UseVisualStyleBackColor = true;
+            this.buttonExtTravelTo.Click += new System.EventHandler(this.buttonToHistory_Click);
+            // 
+            // labelMaxJump
+            // 
+            this.labelMaxJump.AutoSize = true;
+            this.labelMaxJump.Location = new System.Drawing.Point(688, 20);
+            this.labelMaxJump.Name = "labelMaxJump";
+            this.labelMaxJump.Size = new System.Drawing.Size(52, 13);
+            this.labelMaxJump.TabIndex = 45;
+            this.labelMaxJump.Text = "Max jump";
+            // 
+            // labelDistance
+            // 
+            this.labelDistance.AutoSize = true;
+            this.labelDistance.Location = new System.Drawing.Point(254, 100);
+            this.labelDistance.Name = "labelDistance";
+            this.labelDistance.Size = new System.Drawing.Size(49, 13);
+            this.labelDistance.TabIndex = 60;
+            this.labelDistance.Text = "Distance";
+            // 
+            // textBox_ToZ
+            // 
+            this.textBox_ToZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_ToZ.BackErrorColor = System.Drawing.Color.Red;
+            this.textBox_ToZ.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_ToZ.BorderColorScaling = 0.5F;
+            this.textBox_ToZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_ToZ.ClearOnFirstChar = false;
+            this.textBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToZ.EndButtonEnable = true;
+            this.textBox_ToZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToZ.EndButtonImage")));
+            this.textBox_ToZ.EndButtonVisible = false;
+            this.textBox_ToZ.InErrorCondition = false;
+            this.textBox_ToZ.Location = new System.Drawing.Point(552, 71);
+            this.textBox_ToZ.Multiline = false;
+            this.textBox_ToZ.Name = "textBox_ToZ";
+            this.textBox_ToZ.ReadOnly = false;
+            this.textBox_ToZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_ToZ.SelectionLength = 0;
+            this.textBox_ToZ.SelectionStart = 0;
+            this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
+            this.textBox_ToZ.TabIndex = 25;
+            this.textBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_ToZ, "Z Co-ord");
+            this.textBox_ToZ.WordWrap = true;
+            this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
+            this.textBox_ToZ.Click += new System.EventHandler(this.textBox_Clicked);
+            this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_To_Enter);
+            // 
+            // buttonExtTravelFrom
+            // 
+            this.buttonExtTravelFrom.Location = new System.Drawing.Point(62, 97);
+            this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
+            this.buttonExtTravelFrom.Size = new System.Drawing.Size(72, 23);
+            this.buttonExtTravelFrom.TabIndex = 16;
+            this.buttonExtTravelFrom.Text = "History";
+            this.toolTip.SetToolTip(this.buttonExtTravelFrom, "Copy the entry in the main travel grid to start route entry");
+            this.buttonExtTravelFrom.UseVisualStyleBackColor = true;
+            this.buttonExtTravelFrom.Click += new System.EventHandler(this.buttonFromHistory_Click);
+            // 
+            // labelTo
+            // 
+            this.labelTo.AutoSize = true;
+            this.labelTo.Location = new System.Drawing.Point(348, 19);
+            this.labelTo.Name = "labelTo";
+            this.labelTo.Size = new System.Drawing.Size(20, 13);
+            this.labelTo.TabIndex = 20;
+            this.labelTo.Text = "To";
+            // 
+            // buttonExtTargetTo
+            // 
+            this.buttonExtTargetTo.Location = new System.Drawing.Point(558, 97);
+            this.buttonExtTargetTo.Name = "buttonExtTargetTo";
+            this.buttonExtTargetTo.Size = new System.Drawing.Size(72, 23);
+            this.buttonExtTargetTo.TabIndex = 27;
+            this.buttonExtTargetTo.Text = "Target";
+            this.toolTip.SetToolTip(this.buttonExtTargetTo, "Copy the target system to end route entry");
+            this.buttonExtTargetTo.UseVisualStyleBackColor = true;
+            this.buttonExtTargetTo.Click += new System.EventHandler(this.buttonToTarget_Click);
             // 
             // textBox_To
             // 
@@ -406,7 +717,7 @@
             this.textBox_To.EndButtonVisible = false;
             this.textBox_To.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_To.InErrorCondition = false;
-            this.textBox_To.Location = new System.Drawing.Point(342, 5);
+            this.textBox_To.Location = new System.Drawing.Point(396, 19);
             this.textBox_To.Multiline = false;
             this.textBox_To.Name = "textBox_To";
             this.textBox_To.ReadOnly = false;
@@ -422,289 +733,93 @@
             this.textBox_To.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
             this.textBox_To.Enter += new System.EventHandler(this.textBox_To_Enter);
             // 
-            // labelLy2
+            // buttonToEDSM
             // 
-            this.labelLy2.AutoSize = true;
-            this.labelLy2.Location = new System.Drawing.Point(563, 160);
-            this.labelLy2.Name = "labelLy2";
-            this.labelLy2.Size = new System.Drawing.Size(14, 13);
-            this.labelLy2.TabIndex = 69;
-            this.labelLy2.Text = "ly";
+            this.buttonToEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
+            this.buttonToEDSM.Location = new System.Drawing.Point(638, 18);
+            this.buttonToEDSM.Name = "buttonToEDSM";
+            this.buttonToEDSM.Size = new System.Drawing.Size(28, 28);
+            this.buttonToEDSM.TabIndex = 28;
+            this.toolTip.SetToolTip(this.buttonToEDSM, "Open this end route system in EDSM");
+            this.buttonToEDSM.UseVisualStyleBackColor = true;
+            this.buttonToEDSM.Click += new System.EventHandler(this.buttonToEDSM_Click);
             // 
-            // labelLy1
+            // buttonTargetFrom
             // 
-            this.labelLy1.AutoSize = true;
-            this.labelLy1.Location = new System.Drawing.Point(563, 115);
-            this.labelLy1.Name = "labelLy1";
-            this.labelLy1.Size = new System.Drawing.Size(14, 13);
-            this.labelLy1.TabIndex = 39;
-            this.labelLy1.Text = "ly";
+            this.buttonTargetFrom.Location = new System.Drawing.Point(140, 97);
+            this.buttonTargetFrom.Name = "buttonTargetFrom";
+            this.buttonTargetFrom.Size = new System.Drawing.Size(72, 23);
+            this.buttonTargetFrom.TabIndex = 17;
+            this.buttonTargetFrom.Text = "Target";
+            this.toolTip.SetToolTip(this.buttonTargetFrom, "Copy the target system to start route entry");
+            this.buttonTargetFrom.UseVisualStyleBackColor = true;
+            this.buttonTargetFrom.Click += new System.EventHandler(this.buttonFromTarget_Click);
             // 
-            // textBox_Distance
+            // extButtonToSpansh
             // 
-            this.textBox_Distance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_Distance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_Distance.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_Distance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_Distance.BorderColorScaling = 0.5F;
-            this.textBox_Distance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_Distance.ClearOnFirstChar = false;
-            this.textBox_Distance.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_Distance.EndButtonEnable = true;
-            this.textBox_Distance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Distance.EndButtonImage")));
-            this.textBox_Distance.EndButtonVisible = false;
-            this.textBox_Distance.InErrorCondition = false;
-            this.textBox_Distance.Location = new System.Drawing.Point(498, 164);
-            this.textBox_Distance.Multiline = false;
-            this.textBox_Distance.Name = "textBox_Distance";
-            this.textBox_Distance.ReadOnly = true;
-            this.textBox_Distance.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_Distance.SelectionLength = 0;
-            this.textBox_Distance.SelectionStart = 0;
-            this.textBox_Distance.Size = new System.Drawing.Size(57, 20);
-            this.textBox_Distance.TabIndex = 61;
-            this.textBox_Distance.TabStop = false;
-            this.textBox_Distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_Distance, "Distance between start and end");
-            this.textBox_Distance.WordWrap = true;
-            this.textBox_Distance.Click += new System.EventHandler(this.textBox_Clicked);
+            this.extButtonToSpansh.Image = global::EDDiscovery.Icons.Controls.spansh;
+            this.extButtonToSpansh.Location = new System.Drawing.Point(638, 52);
+            this.extButtonToSpansh.Name = "extButtonToSpansh";
+            this.extButtonToSpansh.Size = new System.Drawing.Size(28, 28);
+            this.extButtonToSpansh.TabIndex = 18;
+            this.extButtonToSpansh.UseVisualStyleBackColor = true;
+            this.extButtonToSpansh.Click += new System.EventHandler(this.extButtonToSpansh_Click);
             // 
-            // labelTo
+            // extButtonFromSpansh
             // 
-            this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(301, 6);
-            this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(20, 13);
-            this.labelTo.TabIndex = 20;
-            this.labelTo.Text = "To";
+            this.extButtonFromSpansh.Image = global::EDDiscovery.Icons.Controls.spansh;
+            this.extButtonFromSpansh.Location = new System.Drawing.Point(302, 52);
+            this.extButtonFromSpansh.Name = "extButtonFromSpansh";
+            this.extButtonFromSpansh.Size = new System.Drawing.Size(28, 28);
+            this.extButtonFromSpansh.TabIndex = 18;
+            this.extButtonFromSpansh.UseVisualStyleBackColor = true;
+            this.extButtonFromSpansh.Click += new System.EventHandler(this.extButtonFromSpansh_Click);
             // 
-            // textBox_ToZ
+            // buttonFromEDSM
             // 
-            this.textBox_ToZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToZ.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_ToZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToZ.BorderColorScaling = 0.5F;
-            this.textBox_ToZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToZ.ClearOnFirstChar = false;
-            this.textBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToZ.EndButtonEnable = true;
-            this.textBox_ToZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToZ.EndButtonImage")));
-            this.textBox_ToZ.EndButtonVisible = false;
-            this.textBox_ToZ.InErrorCondition = false;
-            this.textBox_ToZ.Location = new System.Drawing.Point(498, 57);
-            this.textBox_ToZ.Multiline = false;
-            this.textBox_ToZ.Name = "textBox_ToZ";
-            this.textBox_ToZ.ReadOnly = false;
-            this.textBox_ToZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToZ.SelectionLength = 0;
-            this.textBox_ToZ.SelectionStart = 0;
-            this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToZ.TabIndex = 25;
-            this.textBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToZ, "Z Co-ord");
-            this.textBox_ToZ.WordWrap = true;
-            this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
-            this.textBox_ToZ.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_To_Enter);
+            this.buttonFromEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
+            this.buttonFromEDSM.Location = new System.Drawing.Point(302, 18);
+            this.buttonFromEDSM.Name = "buttonFromEDSM";
+            this.buttonFromEDSM.Size = new System.Drawing.Size(28, 28);
+            this.buttonFromEDSM.TabIndex = 18;
+            this.toolTip.SetToolTip(this.buttonFromEDSM, "Open this start route system in EDSM");
+            this.buttonFromEDSM.UseVisualStyleBackColor = true;
+            this.buttonFromEDSM.Click += new System.EventHandler(this.buttonFromEDSM_Click);
             // 
-            // labelMaxJump
+            // extButtonExpeditionPush
             // 
-            this.labelMaxJump.AutoSize = true;
-            this.labelMaxJump.Location = new System.Drawing.Point(419, 114);
-            this.labelMaxJump.Name = "labelMaxJump";
-            this.labelMaxJump.Size = new System.Drawing.Size(52, 13);
-            this.labelMaxJump.TabIndex = 45;
-            this.labelMaxJump.Text = "Max jump";
+            this.extButtonExpeditionPush.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonExpeditionPush.Image = global::EDDiscovery.Icons.Controls.expedition;
+            this.extButtonExpeditionPush.Location = new System.Drawing.Point(155, 270);
+            this.extButtonExpeditionPush.Name = "extButtonExpeditionPush";
+            this.extButtonExpeditionPush.Size = new System.Drawing.Size(28, 28);
+            this.extButtonExpeditionPush.TabIndex = 59;
+            this.toolTip.SetToolTip(this.extButtonExpeditionPush, "Push to expedition");
+            this.extButtonExpeditionPush.UseVisualStyleBackColor = true;
+            this.extButtonExpeditionPush.Click += new System.EventHandler(this.extButtonExpeditionPush_Click);
             // 
-            // textBox_ToY
+            // buttonExtExcel
             // 
-            this.textBox_ToY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToY.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_ToY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToY.BorderColorScaling = 0.5F;
-            this.textBox_ToY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToY.ClearOnFirstChar = false;
-            this.textBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToY.EndButtonEnable = true;
-            this.textBox_ToY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToY.EndButtonImage")));
-            this.textBox_ToY.EndButtonVisible = false;
-            this.textBox_ToY.InErrorCondition = false;
-            this.textBox_ToY.Location = new System.Drawing.Point(420, 57);
-            this.textBox_ToY.Multiline = false;
-            this.textBox_ToY.Name = "textBox_ToY";
-            this.textBox_ToY.ReadOnly = false;
-            this.textBox_ToY.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToY.SelectionLength = 0;
-            this.textBox_ToY.SelectionStart = 0;
-            this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToY.TabIndex = 24;
-            this.textBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToY, "Y (Vertical) Co-ord");
-            this.textBox_ToY.WordWrap = true;
-            this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
-            this.textBox_ToY.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToY.Enter += new System.EventHandler(this.textBox_To_Enter);
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(121, 270);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 59;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
-            // labelDistance
+            // cmd3DMap
             // 
-            this.labelDistance.AutoSize = true;
-            this.labelDistance.Location = new System.Drawing.Point(423, 166);
-            this.labelDistance.Name = "labelDistance";
-            this.labelDistance.Size = new System.Drawing.Size(49, 13);
-            this.labelDistance.TabIndex = 60;
-            this.labelDistance.Text = "Distance";
-            // 
-            // textBox_ToX
-            // 
-            this.textBox_ToX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToX.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_ToX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToX.BorderColorScaling = 0.5F;
-            this.textBox_ToX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToX.ClearOnFirstChar = false;
-            this.textBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToX.EndButtonEnable = true;
-            this.textBox_ToX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToX.EndButtonImage")));
-            this.textBox_ToX.EndButtonVisible = false;
-            this.textBox_ToX.InErrorCondition = false;
-            this.textBox_ToX.Location = new System.Drawing.Point(342, 57);
-            this.textBox_ToX.Multiline = false;
-            this.textBox_ToX.Name = "textBox_ToX";
-            this.textBox_ToX.ReadOnly = false;
-            this.textBox_ToX.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToX.SelectionLength = 0;
-            this.textBox_ToX.SelectionStart = 0;
-            this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToX.TabIndex = 23;
-            this.textBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToX, "X Co-Ord");
-            this.textBox_ToX.WordWrap = true;
-            this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
-            this.textBox_ToX.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToX.Enter += new System.EventHandler(this.textBox_To_Enter);
-            // 
-            // labelMetric
-            // 
-            this.labelMetric.AutoSize = true;
-            this.labelMetric.Location = new System.Drawing.Point(3, 123);
-            this.labelMetric.Name = "labelMetric";
-            this.labelMetric.Size = new System.Drawing.Size(36, 13);
-            this.labelMetric.TabIndex = 30;
-            this.labelMetric.Text = "Metric";
-            // 
-            // textBox_FromZ
-            // 
-            this.textBox_FromZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromZ.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_FromZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromZ.BorderColorScaling = 0.5F;
-            this.textBox_FromZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromZ.ClearOnFirstChar = false;
-            this.textBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromZ.EndButtonEnable = true;
-            this.textBox_FromZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromZ.EndButtonImage")));
-            this.textBox_FromZ.EndButtonVisible = false;
-            this.textBox_FromZ.InErrorCondition = false;
-            this.textBox_FromZ.Location = new System.Drawing.Point(213, 57);
-            this.textBox_FromZ.Multiline = false;
-            this.textBox_FromZ.Name = "textBox_FromZ";
-            this.textBox_FromZ.ReadOnly = false;
-            this.textBox_FromZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromZ.SelectionLength = 0;
-            this.textBox_FromZ.SelectionStart = 0;
-            this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromZ.TabIndex = 15;
-            this.textBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-ord");
-            this.textBox_FromZ.WordWrap = true;
-            this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
-            this.textBox_FromZ.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_From_Enter);
-            // 
-            // extButtonRoute
-            // 
-            this.extButtonRoute.Enabled = false;
-            this.extButtonRoute.Location = new System.Drawing.Point(57, 158);
-            this.extButtonRoute.Name = "extButtonRoute";
-            this.extButtonRoute.Size = new System.Drawing.Size(111, 27);
-            this.extButtonRoute.TabIndex = 40;
-            this.extButtonRoute.Text = "Find route";
-            this.toolTip.SetToolTip(this.extButtonRoute, "Compute the route");
-            this.extButtonRoute.UseVisualStyleBackColor = true;
-            this.extButtonRoute.Click += new System.EventHandler(this.button_Route_Click);
-            // 
-            // textBox_FromY
-            // 
-            this.textBox_FromY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromY.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_FromY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromY.BorderColorScaling = 0.5F;
-            this.textBox_FromY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromY.ClearOnFirstChar = false;
-            this.textBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromY.EndButtonEnable = true;
-            this.textBox_FromY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromY.EndButtonImage")));
-            this.textBox_FromY.EndButtonVisible = false;
-            this.textBox_FromY.InErrorCondition = false;
-            this.textBox_FromY.Location = new System.Drawing.Point(135, 57);
-            this.textBox_FromY.Multiline = false;
-            this.textBox_FromY.Name = "textBox_FromY";
-            this.textBox_FromY.ReadOnly = false;
-            this.textBox_FromY.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromY.SelectionLength = 0;
-            this.textBox_FromY.SelectionStart = 0;
-            this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromY.TabIndex = 14;
-            this.textBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromY, "Y (Vertical) Co-ord");
-            this.textBox_FromY.WordWrap = true;
-            this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
-            this.textBox_FromY.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromY.Enter += new System.EventHandler(this.textBox_From_Enter);
-            // 
-            // labelFrom
-            // 
-            this.labelFrom.AutoSize = true;
-            this.labelFrom.Location = new System.Drawing.Point(3, 6);
-            this.labelFrom.Name = "labelFrom";
-            this.labelFrom.Size = new System.Drawing.Size(30, 13);
-            this.labelFrom.TabIndex = 10;
-            this.labelFrom.Text = "From";
-            // 
-            // textBox_FromX
-            // 
-            this.textBox_FromX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromX.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_FromX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromX.BorderColorScaling = 0.5F;
-            this.textBox_FromX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromX.ClearOnFirstChar = false;
-            this.textBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromX.EndButtonEnable = true;
-            this.textBox_FromX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromX.EndButtonImage")));
-            this.textBox_FromX.EndButtonVisible = false;
-            this.textBox_FromX.InErrorCondition = false;
-            this.textBox_FromX.Location = new System.Drawing.Point(57, 57);
-            this.textBox_FromX.Multiline = false;
-            this.textBox_FromX.Name = "textBox_FromX";
-            this.textBox_FromX.ReadOnly = false;
-            this.textBox_FromX.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromX.SelectionLength = 0;
-            this.textBox_FromX.SelectionStart = 0;
-            this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromX.TabIndex = 13;
-            this.textBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromX, "X Co-ord");
-            this.textBox_FromX.WordWrap = true;
-            this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
-            this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromX.Enter += new System.EventHandler(this.textBox_From_Enter);
+            this.cmd3DMap.Location = new System.Drawing.Point(4, 270);
+            this.cmd3DMap.Name = "cmd3DMap";
+            this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
+            this.cmd3DMap.TabIndex = 50;
+            this.cmd3DMap.Text = "3D Map";
+            this.toolTip.SetToolTip(this.cmd3DMap, "Show route on 3D Map");
+            this.cmd3DMap.UseVisualStyleBackColor = true;
+            this.cmd3DMap.Click += new System.EventHandler(this.cmd3DMap_Click);
             // 
             // contextMenuStrip
             // 
@@ -746,9 +861,9 @@
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 189);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 301);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(878, 565);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(878, 453);
             this.dataViewScrollerPanel1.TabIndex = 29;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -770,7 +885,7 @@
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 565);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 453);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 4;
@@ -794,6 +909,7 @@
             this.dataGridViewRoute.ColumnReorder = true;
             this.dataGridViewRoute.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SystemCol,
+            this.NoteCol,
             this.DistanceCol,
             this.XCol,
             this.YCol,
@@ -818,7 +934,7 @@
             this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewRoute.SingleRowSelect = true;
-            this.dataGridViewRoute.Size = new System.Drawing.Size(859, 565);
+            this.dataGridViewRoute.Size = new System.Drawing.Size(859, 453);
             this.dataGridViewRoute.TabIndex = 1;
             this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
             this.dataGridViewRoute.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellDoubleClick);
@@ -832,6 +948,13 @@
             this.SystemCol.MinimumWidth = 50;
             this.SystemCol.Name = "SystemCol";
             this.SystemCol.ReadOnly = true;
+            // 
+            // NoteCol
+            // 
+            this.NoteCol.FillWeight = 200F;
+            this.NoteCol.HeaderText = "Notes";
+            this.NoteCol.Name = "NoteCol";
+            this.NoteCol.ReadOnly = true;
             // 
             // DistanceCol
             // 
@@ -875,27 +998,20 @@
             this.DeviationCol.Name = "DeviationCol";
             this.DeviationCol.ReadOnly = true;
             // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(339, 157);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 70;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
-            // 
             // UserControlRoute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel1);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.controlPanel);
             this.Name = "UserControlRoute";
             this.Size = new System.Drawing.Size(878, 754);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.controlPanel.ResumeLayout(false);
+            this.groupBoxSpansh.ResumeLayout(false);
+            this.groupBoxInternal.ResumeLayout(false);
+            this.groupBoxInternal.PerformLayout();
+            this.groupBoxPara.ResumeLayout(false);
+            this.groupBoxPara.PerformLayout();
             this.contextMenuStrip.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).EndInit();
@@ -906,7 +1022,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel controlPanel;
         private ExtendedControls.ExtButton buttonExtExcel;
         internal ExtendedControls.ExtTextBox textBox_ToName;
         internal ExtendedControls.ExtTextBox textBox_FromName;
@@ -945,7 +1061,9 @@
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtCheckBox checkBox_FsdBoost;
         private System.Windows.Forms.ToolStripMenuItem showScanToolStripMenuItem;
+        private EDSMSpanshButton edsmSpanshButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn SystemCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NoteCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DistanceCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn XCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn YCol;
@@ -953,6 +1071,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StarClassCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WayPointDistCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeviationCol;
-        private EDSMSpanshButton edsmSpanshButton;
+        private ExtendedControls.ExtButton extButtonSpanshRoadToRiches;
+        private ExtendedControls.ExtGroupBox groupBoxSpansh;
+        private ExtendedControls.ExtGroupBox groupBoxInternal;
+        private ExtendedControls.ExtGroupBox groupBoxPara;
+        private ExtendedControls.ExtButton extButtonToSpansh;
+        private ExtendedControls.ExtButton extButtonFromSpansh;
+        private ExtendedControls.ExtButton extButtonExpeditionPush;
     }
 }

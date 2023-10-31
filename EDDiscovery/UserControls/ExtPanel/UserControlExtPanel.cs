@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
                                         name.EqualsIIC("trisystems") ? PushStars.PushType.TriSystems :
                                         PushStars.PushType.Expedition;
 
-                return RequestPanelOperation?.Invoke(this, new PushStars { PushTo = pt, Systems = list }) ?? false; 
+                return RequestPanelOperation?.Invoke(this, new PushStars { PushTo = pt, SystemNames = list }) ?? false; 
             };
             callbacks.PushCSVToExpedition = (file) =>
             {

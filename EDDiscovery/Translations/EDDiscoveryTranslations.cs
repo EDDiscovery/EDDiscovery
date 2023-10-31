@@ -1194,6 +1194,7 @@ namespace EDDiscovery
         UserControlExpedition_GMOInfo, // Unknown system, system is without co-ordinates
 
         UserControlRoute_SystemCol, // Column Header 'System'
+        UserControlRoute_NoteCol, // Column Header 'Note'
         UserControlRoute_DistanceCol, // Column Header 'Distance'
         UserControlRoute_StarClassCol, // Column Header 'Star Class'
         UserControlRoute_WayPointDistCol, // Column Header 'Dist. Waypoint'
@@ -1202,8 +1203,6 @@ namespace EDDiscovery
         UserControlRoute_buttonExtTravelTo, // Control 'History'
         UserControlRoute_buttonExtTravelFrom, // Control 'History'
         UserControlRoute_buttonExtTargetTo, // Control 'Target'
-        UserControlRoute_buttonToEDSM, // Control 'EDSM'
-        UserControlRoute_buttonFromEDSM, // Control 'EDSM'
         UserControlRoute_buttonTargetFrom, // Control 'Target'
         UserControlRoute_cmd3DMap, // Control '3D Map'
         UserControlRoute_labelLy2, // Control 'ly'
@@ -1249,6 +1248,11 @@ namespace EDDiscovery
         UserControlRoute_M4, // discrete
         UserControlRoute_M5, // discrete
         UserControlRoute_M6, // discrete
+        UserControlRoute_groupBoxSpansh,
+        UserControlRoute_extButtonSpanshRoadToRiches,
+        UserControlRoute_groupBoxInternal,
+        UserControlRoute_groupBoxPara,
+
 
         UserControlWebBrowser_extButtonIE11Warning, // Control 'Using IE11 - click here to get WebView2'
         UserControlWebBrowser_extCheckBoxBack_ToolTip, // ToolTip 'Back'

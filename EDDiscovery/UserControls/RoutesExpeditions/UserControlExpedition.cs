@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -160,7 +160,17 @@ namespace EDDiscovery.UserControls
             {
                 if (push.PushTo == PushStars.PushType.Expedition)
                 {
-                    AppendOrInsertSystems(-1, push.Systems);
+                    if (push.SystemList != null)
+                    {
+                        AppendOrInsertSystems(-1, push.SystemList);     // systems list 
+                    }
+                    else
+                        AppendOrInsertSystems(-1, push.SystemNames);   // push names
+
+                    if ( push.MakeVisible )
+                        MakeVisible();
+                    if (push.RouteTitle != null)
+                        textBoxRouteName.Text = push.RouteTitle;
                     return true;
                 }
             }
@@ -449,7 +459,6 @@ namespace EDDiscovery.UserControls
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
                 row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("N2") : "";
 
-                // tbd edsm only
                 StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, lookup);
 
                 if (IsClosed)        // because its async, may be called during closedown. stop this
