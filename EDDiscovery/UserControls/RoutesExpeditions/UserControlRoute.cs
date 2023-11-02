@@ -714,6 +714,7 @@ namespace EDDiscovery.UserControls
                     prev = system;
                 }
 
+                routeSystems = res.Item2;
                 EnableOutputButtons(res.Item2.Count>0);
                 EnableRouteButtonsIfValid();
             }

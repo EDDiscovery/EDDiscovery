@@ -237,7 +237,8 @@ namespace EDDiscovery.UserControls
 
         public void EnableRouteButtons(bool internalb = false, bool spansh = false, bool metric = false)
         {
-            extButtonSpanshRoadToRiches.Enabled = extButtonNeutronRouter.Enabled= spansh;
+            extButtonSpanshRoadToRiches.Enabled = extButtonNeutronRouter.Enabled= 
+                extButtonSpanshAmmoniaWorlds.Enabled = extButtonSpanshEarthLikes.Enabled = spansh;
             extButtonRoute.Enabled = internalb;
             comboBoxRoutingMetric.Enabled = metric;
         }
