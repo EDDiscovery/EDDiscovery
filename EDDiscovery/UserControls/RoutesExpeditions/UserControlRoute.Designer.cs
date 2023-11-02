@@ -33,6 +33,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.controlPanel = new System.Windows.Forms.Panel();
             this.groupBoxSpansh = new ExtendedControls.ExtGroupBox();
+            this.extButtonNeutronRouter = new ExtendedControls.ExtButton();
+            this.extButtonSpanshEarthLikes = new ExtendedControls.ExtButton();
+            this.extButtonSpanshAmmoniaWorlds = new ExtendedControls.ExtButton();
             this.extButtonSpanshRoadToRiches = new ExtendedControls.ExtButton();
             this.groupBoxInternal = new ExtendedControls.ExtGroupBox();
             this.comboBoxRoutingMetric = new ExtendedControls.ExtComboBox();
@@ -116,6 +119,9 @@
             this.groupBoxSpansh.BackColorScaling = 0.5F;
             this.groupBoxSpansh.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxSpansh.BorderColorScaling = 0.5F;
+            this.groupBoxSpansh.Controls.Add(this.extButtonNeutronRouter);
+            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshEarthLikes);
+            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshAmmoniaWorlds);
             this.groupBoxSpansh.Controls.Add(this.extButtonSpanshRoadToRiches);
             this.groupBoxSpansh.Location = new System.Drawing.Point(4, 207);
             this.groupBoxSpansh.Name = "groupBoxSpansh";
@@ -126,16 +132,45 @@
             this.groupBoxSpansh.TextPadding = 0;
             this.groupBoxSpansh.TextStartPosition = -1;
             // 
+            // extButtonNeutronRouter
+            // 
+            this.extButtonNeutronRouter.Location = new System.Drawing.Point(6, 19);
+            this.extButtonNeutronRouter.Name = "extButtonNeutronRouter";
+            this.extButtonNeutronRouter.Size = new System.Drawing.Size(100, 27);
+            this.extButtonNeutronRouter.TabIndex = 40;
+            this.extButtonNeutronRouter.Text = "Neutron Router";
+            this.extButtonNeutronRouter.UseVisualStyleBackColor = true;
+            this.extButtonNeutronRouter.Click += new System.EventHandler(this.extButtonNeutronRouter_Click);
+            // 
+            // extButtonSpanshEarthLikes
+            // 
+            this.extButtonSpanshEarthLikes.Location = new System.Drawing.Point(323, 19);
+            this.extButtonSpanshEarthLikes.Name = "extButtonSpanshEarthLikes";
+            this.extButtonSpanshEarthLikes.Size = new System.Drawing.Size(100, 27);
+            this.extButtonSpanshEarthLikes.TabIndex = 40;
+            this.extButtonSpanshEarthLikes.Text = "Earth Likes";
+            this.extButtonSpanshEarthLikes.UseVisualStyleBackColor = true;
+            this.extButtonSpanshEarthLikes.Click += new System.EventHandler(this.extButtonSpanshEarthLikes_Click);
+            // 
+            // extButtonSpanshAmmoniaWorlds
+            // 
+            this.extButtonSpanshAmmoniaWorlds.Location = new System.Drawing.Point(217, 19);
+            this.extButtonSpanshAmmoniaWorlds.Name = "extButtonSpanshAmmoniaWorlds";
+            this.extButtonSpanshAmmoniaWorlds.Size = new System.Drawing.Size(100, 27);
+            this.extButtonSpanshAmmoniaWorlds.TabIndex = 40;
+            this.extButtonSpanshAmmoniaWorlds.Text = "Ammonia Worlds";
+            this.extButtonSpanshAmmoniaWorlds.UseVisualStyleBackColor = true;
+            this.extButtonSpanshAmmoniaWorlds.Click += new System.EventHandler(this.extButtonSpanshAmmoniaWorlds_Click);
+            // 
             // extButtonSpanshRoadToRiches
             // 
-            this.extButtonSpanshRoadToRiches.Enabled = false;
-            this.extButtonSpanshRoadToRiches.Location = new System.Drawing.Point(6, 19);
+            this.extButtonSpanshRoadToRiches.Location = new System.Drawing.Point(111, 19);
             this.extButtonSpanshRoadToRiches.Name = "extButtonSpanshRoadToRiches";
-            this.extButtonSpanshRoadToRiches.Size = new System.Drawing.Size(95, 27);
+            this.extButtonSpanshRoadToRiches.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshRoadToRiches.TabIndex = 40;
             this.extButtonSpanshRoadToRiches.Text = "Road to Riches";
             this.extButtonSpanshRoadToRiches.UseVisualStyleBackColor = true;
-            this.extButtonSpanshRoadToRiches.Click += new System.EventHandler(this.button_Route_Click);
+            this.extButtonSpanshRoadToRiches.Click += new System.EventHandler(this.extButtonSpanshRoadToRiches_Click);
             // 
             // groupBoxInternal
             // 
@@ -951,7 +986,7 @@
             // 
             // NoteCol
             // 
-            this.NoteCol.FillWeight = 200F;
+            this.NoteCol.FillWeight = 300F;
             this.NoteCol.HeaderText = "Notes";
             this.NoteCol.Name = "NoteCol";
             this.NoteCol.ReadOnly = true;
@@ -1062,6 +1097,13 @@
         private ExtendedControls.ExtCheckBox checkBox_FsdBoost;
         private System.Windows.Forms.ToolStripMenuItem showScanToolStripMenuItem;
         private EDSMSpanshButton edsmSpanshButton;
+        private ExtendedControls.ExtButton extButtonSpanshRoadToRiches;
+        private ExtendedControls.ExtGroupBox groupBoxSpansh;
+        private ExtendedControls.ExtGroupBox groupBoxInternal;
+        private ExtendedControls.ExtGroupBox groupBoxPara;
+        private ExtendedControls.ExtButton extButtonToSpansh;
+        private ExtendedControls.ExtButton extButtonFromSpansh;
+        private ExtendedControls.ExtButton extButtonExpeditionPush;
         private System.Windows.Forms.DataGridViewTextBoxColumn SystemCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NoteCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DistanceCol;
@@ -1071,12 +1113,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StarClassCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WayPointDistCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeviationCol;
-        private ExtendedControls.ExtButton extButtonSpanshRoadToRiches;
-        private ExtendedControls.ExtGroupBox groupBoxSpansh;
-        private ExtendedControls.ExtGroupBox groupBoxInternal;
-        private ExtendedControls.ExtGroupBox groupBoxPara;
-        private ExtendedControls.ExtButton extButtonToSpansh;
-        private ExtendedControls.ExtButton extButtonFromSpansh;
-        private ExtendedControls.ExtButton extButtonExpeditionPush;
+        private ExtendedControls.ExtButton extButtonNeutronRouter;
+        private ExtendedControls.ExtButton extButtonSpanshAmmoniaWorlds;
+        private ExtendedControls.ExtButton extButtonSpanshEarthLikes;
     }
 }

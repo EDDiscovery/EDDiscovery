@@ -19,6 +19,7 @@ using EliteDangerousCore.GMO;
 using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -43,12 +44,13 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
+
+
         public override void Init()
         {
             DBBaseName = "UCRoute";
 
-            extButtonRoute.Enabled = false;
-            buttonExtExcel.Enabled = extButtonExpeditionPush.Enabled = cmd3DMap.Enabled = false;
+            EnableOutputButtons();
 
             fromupdatetimer = new System.Windows.Forms.Timer();
             toupdatetimer = new System.Windows.Forms.Timer();
@@ -93,11 +95,9 @@ namespace EDDiscovery.UserControls
                 : (int) SystemCache.SystemsNearestMetric.IterativeNearestWaypoint;
 
             UpdateDistance();
-            extButtonRoute.Enabled = IsValid();
-
+            EnableRouteButtonsIfValid();
+            
             changesilence = false;
-
-            comboBoxRoutingMetric.Enabled = true;
 
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
 
@@ -108,7 +108,9 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_cmd3DMap, EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
                                         EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
                                         EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
-                                        EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara};
+                                        EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
+                                        EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,
+                                        EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara};
                                         
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
@@ -126,11 +128,16 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             DiscoveryForm.OnHistoryChange += HistoryChanged;
+
+            waitforspanshresulttimer.Interval = 1000;
+            waitforspanshresulttimer.Tick += Waitforspanshresulttimer_Tick;
+
+            NoteCol.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
         }
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewRoute);
+           // tbd DGVLoadColumnLayout(dataGridViewRoute);
         }
 
         public override void InitialDisplay()
@@ -245,7 +252,7 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateDistance();
-            extButtonRoute.Enabled = IsValid();
+            EnableRouteButtonsIfValid();
             changesilence = false;
         }
         
@@ -371,7 +378,7 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateDistance();
-            extButtonRoute.Enabled = IsValid();
+            EnableRouteButtonsIfValid();
             changesilence = false;
         }
 
@@ -469,14 +476,17 @@ namespace EDDiscovery.UserControls
                 routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(EDDRoutingThread));
                 routingthread.Name = "Thread Route";
 
-                cmd3DMap.Enabled = false;
                 extButtonRoute.Text = "Cancel".T(EDTx.Cancel);
+
+                EnableOutputButtons();
+                EnableRouteButtons(true, false, false);        // keep cancel valid
+
                 routingthread.Start(plotter);
             }
             else
             {
                 plotter.StopPlotter = true;
-                extButtonRoute.Enabled = false;
+                EnableRouteButtons();
             }
         }
 
@@ -493,9 +503,9 @@ namespace EDDiscovery.UserControls
             this.BeginInvoke(new Action(() =>
                 {
                     RequestPanelOperation(this, new PushRouteList() { Systems = routeSystems });
-                    buttonExtExcel.Enabled = extButtonExpeditionPush.Enabled = cmd3DMap.Enabled = true;
+                    EnableOutputButtons(true);
                     extButtonRoute.Text = "Find Route".TxID(EDTx.UserControlRoute_extButtonRoute);
-                    extButtonRoute.Enabled = true;
+                    EnableRouteButtonsIfValid();
                 }));
         }
 
@@ -508,9 +518,9 @@ namespace EDDiscovery.UserControls
                         info.name,
                         info?.system?.Tag as string ?? "",
                         double.IsNaN(info.dist) ? "" : info.dist.ToString("N2"),
-                        info.pos == null ? "" : info.pos.X.ToString("0.00"),
-                        info.pos == null ? "" : info.pos.Y.ToString("0.00"),
-                        info.pos == null ? "" : info.pos.Z.ToString("0.00"),
+                        info.pos == null ? "" : info.pos.X.ToString("0.####"),
+                        info.pos == null ? "" : info.pos.Y.ToString("0.####"),
+                        info.pos == null ? "" : info.pos.Z.ToString("0.####"),
                         info.pos == null ? "" : info.system == null ? Bodies.StarName(EDStar.Unknown) : Bodies.StarName(info.system.MainStarType),
                         double.IsNaN(info.waypointdist) ? "" : info.waypointdist.ToString("0.0"),
                         double.IsNaN(info.deviation) ? "" : info.deviation.ToString("0.0")
@@ -528,6 +538,193 @@ namespace EDDiscovery.UserControls
 
             WaitHandle.WaitAny(new WaitHandle[] { CloseRequested, ar.AsyncWaitHandle });
         }
+
+        #endregion
+
+        #region Spansh
+
+        const int topmargin = 30;
+        const int dataleft = 120;
+        Size numberboxsize = new Size(64, 24);
+        Size checkboxsize = new Size(134, 24);
+        Size labelsize = new Size(96, 24);
+        System.Windows.Forms.Timer waitforspanshresulttimer = new System.Windows.Forms.Timer();
+        EliteDangerousCore.Spansh.SpanshClass sp;
+        string spanshjobname;
+        enum Spanshquerytype { RoadToRiches, Neutron, AmmoniaWorlds, EarthLikes };
+        Spanshquerytype spanshquerytype;
+
+        private void extButtonSpanshRoadToRiches_Click(object sender, EventArgs e)
+        {
+            CommonSpanshQuery(Spanshquerytype.RoadToRiches);
+        }
+
+        private void extButtonSpanshAmmoniaWorlds_Click(object sender, EventArgs e)
+        {
+            CommonSpanshQuery(Spanshquerytype.AmmoniaWorlds);
+        }
+
+        private void extButtonSpanshEarthLikes_Click(object sender, EventArgs e)
+        {
+            CommonSpanshQuery(Spanshquerytype.EarthLikes);
+        }
+
+        private void CommonSpanshQuery(Spanshquerytype qt)
+        { 
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int vpos = topmargin;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Search radius:", new Point(4, vpos + 4), labelsize, null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("radius", typeof(ExtendedControls.NumberBoxInt), qt == Spanshquerytype.RoadToRiches ? "25" : "500", new Point(dataleft, vpos), numberboxsize, "Search radius along path to search for worlds") { numberboxlongminimum = 10 });
+            vpos += 32;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Max Systems:", new Point(4, vpos + 4), labelsize, null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("maxsystems", typeof(ExtendedControls.NumberBoxInt), "100", new Point(dataleft, vpos), numberboxsize, "Maximum systems to route through") { numberboxlongminimum = 1 });
+            vpos += 32;
+
+            if (qt == Spanshquerytype.RoadToRiches)
+            {
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("mappingvalue", typeof(ExtendedControls.ExtCheckBox), "Use mapping value", new Point(4, vpos), checkboxsize, "Base on mapping not scan value") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
+                vpos += 32;
+            }
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("avoidthargoids", typeof(ExtendedControls.ExtCheckBox), "Avoid thargoids", new Point(4, vpos), checkboxsize, "Avoid Thargoids") { checkboxchecked = true, contentalign = ContentAlignment.MiddleRight });
+            vpos += 32;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Max LS:", new Point(4, vpos + 4), labelsize, null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("maxls", typeof(ExtendedControls.NumberBoxInt), qt == Spanshquerytype.RoadToRiches ? "1000000" : "50000", new Point(dataleft, vpos), numberboxsize, "Maximum LS from arrival to consider") { numberboxlongminimum = 10 });
+            vpos += 32;
+
+            if (qt == Spanshquerytype.RoadToRiches)
+            {
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Min Scan Value:", new Point(4, vpos + 4), labelsize, null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("minscan", typeof(ExtendedControls.NumberBoxInt), "100000", new Point(dataleft, vpos), numberboxsize, "Minimum value of body") { numberboxlongminimum = 100 });
+                vpos += 32;
+            }
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("loop", typeof(ExtendedControls.ExtCheckBox), "Return to start", new Point(4, vpos), checkboxsize, "Return to start system for route") { checkboxchecked = true, contentalign = ContentAlignment.MiddleRight });
+            vpos += 48;
+            f.AddOK(new Point(140, vpos), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+            f.InstallStandardTriggers();
+            f.Trigger += (name, text, obj) =>
+            {
+                f.GetControl("OK").Enabled = f.GetControl<ExtendedControls.NumberBoxInt>("radius").IsValid && 
+                                             f.GetControl<ExtendedControls.NumberBoxInt>("maxsystems").IsValid &&
+                                            (f.GetControl<ExtendedControls.NumberBoxInt>("maxls")?.IsValid??true) && 
+                                            (f.GetControl<ExtendedControls.NumberBoxInt>("minscan")?.IsValid??true);
+            };
+
+            if (f.ShowDialogCentred(FindForm(), FindForm().Icon, qt.ToString().SplitCapsWordFull(), closeicon: true) == DialogResult.OK)
+            {
+                sp = new EliteDangerousCore.Spansh.SpanshClass();
+
+                if (qt == Spanshquerytype.RoadToRiches)
+                {
+                    spanshjobname = sp.RequestRoadToRichesAmmonia(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
+                                                        f.GetBool("avoidthargoids").Value, f.GetBool("loop").Value, f.GetInt("maxls").Value, f.GetInt("minscan").Value, f.GetBool("mappingvalue").Value);
+                }
+                else 
+                {
+                    spanshjobname = sp.RequestRoadToRichesAmmonia(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
+                                                        f.GetBool("avoidthargoids").Value, f.GetBool("loop").Value, f.GetInt("maxls").Value, 1, bodytypes:qt == Spanshquerytype.AmmoniaWorlds ? "Ammonia world" : "Earth-like world");
+
+                }
+                StartSpanshQueryOp(qt);
+            }
+        }
+
+
+        private void extButtonNeutronRouter_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int vpos = topmargin;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Efficiency:", new Point(4, vpos + 4), labelsize, null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("efficiency", typeof(ExtendedControls.NumberBoxInt), "60", new Point(dataleft, vpos), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { numberboxlongminimum = 1 });
+            vpos += 48;
+            f.AddOK(new Point(140, vpos), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+            f.InstallStandardTriggers();
+            f.Trigger += (name, text, obj) =>
+            {
+                f.GetControl("OK").Enabled = f.GetControl<ExtendedControls.NumberBoxInt>("efficiency").IsValid;
+            };
+
+            if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Neutron Router", closeicon: true) == DialogResult.OK)
+            {
+                sp = new EliteDangerousCore.Spansh.SpanshClass();
+                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, f.GetInt("efficiency").Value);
+                StartSpanshQueryOp(Spanshquerytype.Neutron);
+            }
+        }
+
+        private void StartSpanshQueryOp(Spanshquerytype qt)
+        {
+            if (spanshjobname != null)
+            {
+                spanshquerytype = qt;
+                dataGridViewRoute.Rows.Clear();
+                EnableOutputButtons();
+                EnableRouteButtons();
+                waitforspanshresulttimer.Interval = 2000;
+                waitforspanshresulttimer.Start();
+            }
+            else
+            {
+                //tbd
+            }
+        }
+
+        private void Waitforspanshresulttimer_Tick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Spansh job tick {Environment.TickCount}");
+            var res = spanshquerytype != Spanshquerytype.Neutron ? sp.TryGetRoadToRichesAmmonia(spanshjobname)
+                                                                      : sp.TryGetNeutronRouter(spanshjobname);
+            if (res == null)
+            {
+                waitforspanshresulttimer.Stop();
+                System.Diagnostics.Debug.WriteLine($"Spansh failed with null");
+                EnableRouteButtonsIfValid();
+            }
+            else if (res.Item1 == true)
+            {
+                System.Diagnostics.Debug.WriteLine($"Spansh job got");
+                waitforspanshresulttimer.Stop();
+
+                ISystem prev = null;
+                foreach (ISystem system in res.Item2)
+                {
+                    DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
+                    rw.CreateCells(dataGridViewRoute,
+                            system.Name,
+                            system.Tag as string ?? "",
+                            prev != null ? system.Distance(prev).ToString("0.#") : "",
+                            system.X.ToString("0.####"),
+                            system.Y.ToString("0.####"),
+                            system.Z.ToString("0.####"),
+                            "",
+                            "",
+                            ""
+                            );
+
+                    rw.Tag = system;       // may be null if waypoint or not a system
+                    rw.Cells[0].Tag = system.Name;    // write the name of the system into the cells'tag for copying
+                    dataGridViewRoute.Rows.Add(rw);
+                    prev = system;
+                }
+
+                EnableOutputButtons(res.Item2.Count>0);
+                EnableRouteButtonsIfValid();
+            }
+            else
+            {
+                waitforspanshresulttimer.Stop();
+                waitforspanshresulttimer.Interval = waitforspanshresulttimer.Interval < 16000 ? waitforspanshresulttimer.Interval * 2 : 16000;
+                waitforspanshresulttimer.Start();
+            }
+        }
+
 
         #endregion
 

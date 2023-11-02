@@ -216,9 +216,9 @@ namespace EDDiscovery.UserControls
             // tbd spansh?
             if (edsmSpanshButton.IsNoneSet || outstandingprocessing == 0)      // if not doing web, or no outstandings
             {
-                int maxlaunch = 20;     // max launch in non edsm mode, 
+                int maxlaunch = edsmSpanshButton.WebLookup == WebExternalDataLookup.EDSM ? 1 : edsmSpanshButton.WebLookup == WebExternalDataLookup.None ? 20 : 2;
 
-                //System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Expedition Checking rows");
+              // System.Diagnostics.Debug.WriteLine($"{AppTicks.MSd} Expedition Checking rows {maxlaunch}");
 
                 for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows
                 {
@@ -249,9 +249,6 @@ namespace EDDiscovery.UserControls
 
                             // tbd no spansh option
                             UpdateRowAsync(rowindex, edsmSpanshButton.WebLookup );
-
-                            if (edsmSpanshButton.IsAnySet)      // if we are doing Web checking, space it out.. only launch one. Won't launch another until all processing done
-                                return;
 
                             if (--maxlaunch == 0)           // if launch max, stop
                                 return;
@@ -883,7 +880,7 @@ namespace EDDiscovery.UserControls
                         if (sys != null)
                         {
                             var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
-                            List<JournalScan> sysscans = jl?.Item1;
+                            List<JournalScan> sysscans = jl?.Bodies;
                             if (sysscans != null)
                                 scans.AddRange(sysscans);
                         }

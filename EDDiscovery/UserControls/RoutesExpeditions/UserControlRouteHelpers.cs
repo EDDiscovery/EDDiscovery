@@ -226,7 +226,27 @@ namespace EDDiscovery.UserControls
             }
         }
 
+
         #endregion
+
+
+        public void EnableRouteButtonsIfValid()
+        {
+            EnableRouteButtons(IsValid(), IsValid(), IsValid());
+        }
+
+        public void EnableRouteButtons(bool internalb = false, bool spansh = false, bool metric = false)
+        {
+            extButtonSpanshRoadToRiches.Enabled = extButtonNeutronRouter.Enabled= spansh;
+            extButtonRoute.Enabled = internalb;
+            comboBoxRoutingMetric.Enabled = metric;
+        }
+
+        public void EnableOutputButtons(bool en = false)
+        {
+
+            buttonExtExcel.Enabled = extButtonExpeditionPush.Enabled = cmd3DMap.Enabled = en;
+        }
 
     }
 }

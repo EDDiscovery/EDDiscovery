@@ -491,15 +491,18 @@ namespace EDDiscovery
         public static void PostInitDebug()
         {
             System.Diagnostics.Debug.WriteLine($"Post Init debug");
-            var sp = new EliteDangerousCore.Spansh.SpanshClass();
 
-           //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
+            // var sys = SystemCache.FindSystem("Lembava", WebExternalDataLookup.Spansh);
+            // var sp = new EliteDangerousCore.Spansh.SpanshClass();
 
-           // while (true)
-           // {
-           //     System.Threading.Thread.Sleep(2000);
-           //     var resp = sp.TryGetRoadToRiches(queryid);
-           // }
+            //  var isy = sp.GetSystem("sol");
+            //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
+
+            // while (true)
+            // {
+            //     System.Threading.Thread.Sleep(2000);
+            //     var resp = sp.TryGetRoadToRiches(queryid);
+            // }
 
             // var ret = sp.GetStations("Sol", 4);
 
@@ -507,6 +510,8 @@ namespace EDDiscovery
             //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
             //sp.GetSystem("Sol");
 
+          //EDSMClass edsm = new EDSMClass();
+         // edsm.GetSystem("Sol");
         }
 
 

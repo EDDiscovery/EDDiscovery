@@ -1250,7 +1250,10 @@ namespace EDDiscovery
         UserControlRoute_M6, // discrete
         UserControlRoute_groupBoxSpansh,
         UserControlRoute_extButtonSpanshRoadToRiches,
+        UserControlRoute_extButtonNeutronRouter,
         UserControlRoute_groupBoxInternal,
+        UserControlRoute_extButtonSpanshAmmoniaWorlds,
+        UserControlRoute_extButtonSpanshEarthLikes,
         UserControlRoute_groupBoxPara,
 
 
