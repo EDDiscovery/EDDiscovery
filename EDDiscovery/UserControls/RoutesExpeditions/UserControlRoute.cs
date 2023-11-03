@@ -649,7 +649,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
             var stationlist = sp.GetStations(textBox_From.Text, 0.25);
             var withmarket = stationlist?.Where(x => x.HasMarket).ToList();
-            if (withmarket != null)
+            if (withmarket != null && withmarket.Count>0)
             {
                 var stationnames = withmarket.Select(x => x.StationName).OrderBy(x=>x).ToList();
 
@@ -684,7 +684,10 @@ namespace EDDiscovery.UserControls
                     StartSpanshQueryOp(Spanshquerytype.TradeRouter);
                 }
             }
-
+            else
+            {
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), $"No stations found at {textBox_From.Text}", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+            }
         }
 
 
@@ -701,7 +704,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                //tbd
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), $"Spansh failed to return a job id. Try again!", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
             }
         }
 
@@ -760,6 +763,7 @@ namespace EDDiscovery.UserControls
             }
 
             waitforspanshresulttimer.Stop();
+            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), $"Spansh failed to return valid data to query. Try again!", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
             System.Diagnostics.Debug.WriteLine($"Spansh failed with null");
             EnableRouteButtonsIfValid();
         }
