@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
                                         EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
                                         EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
-                                        EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,
+                                        EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
                                         EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara};
                                         
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
@@ -544,14 +544,14 @@ namespace EDDiscovery.UserControls
         #region Spansh
 
         const int topmargin = 30;
-        const int dataleft = 120;
+        const int dataleft = 140;
         Size numberboxsize = new Size(64, 24);
-        Size checkboxsize = new Size(134, 24);
-        Size labelsize = new Size(96, 24);
+        Size comboboxsize = new Size(200, 24);
+        Size checkboxsize = new Size(154, 24);
+        Size labelsize = new Size(138, 24);
         System.Windows.Forms.Timer waitforspanshresulttimer = new System.Windows.Forms.Timer();
-        EliteDangerousCore.Spansh.SpanshClass sp;
         string spanshjobname;
-        enum Spanshquerytype { RoadToRiches, Neutron, AmmoniaWorlds, EarthLikes };
+        enum Spanshquerytype { RoadToRiches, Neutron, AmmoniaWorlds, EarthLikes, TradeRouter };
         Spanshquerytype spanshquerytype;
 
         private void extButtonSpanshRoadToRiches_Click(object sender, EventArgs e)
@@ -570,66 +570,50 @@ namespace EDDiscovery.UserControls
         }
 
         private void CommonSpanshQuery(Spanshquerytype qt)
-        { 
+        {
+            bool roadtoriches = qt == Spanshquerytype.RoadToRiches;
+
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
             int vpos = topmargin;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Search radius:", new Point(4, vpos + 4), labelsize, null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("radius", typeof(ExtendedControls.NumberBoxInt), qt == Spanshquerytype.RoadToRiches ? "25" : "500", new Point(dataleft, vpos), numberboxsize, "Search radius along path to search for worlds") { numberboxlongminimum = 10 });
-            vpos += 32;
+            f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("radius", typeof(ExtendedControls.NumberBoxInt), qt == Spanshquerytype.RoadToRiches ? "25" : "500", new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { numberboxlongminimum = 10 });
+            f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize,new ExtendedControls.ConfigurableForm.Entry("maxsystems", typeof(ExtendedControls.NumberBoxInt), "100", new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { numberboxlongminimum = 1 });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Max Systems:", new Point(4, vpos + 4), labelsize, null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("maxsystems", typeof(ExtendedControls.NumberBoxInt), "100", new Point(dataleft, vpos), numberboxsize, "Maximum systems to route through") { numberboxlongminimum = 1 });
-            vpos += 32;
-
-            if (qt == Spanshquerytype.RoadToRiches)
+            if (roadtoriches)
             {
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("mappingvalue", typeof(ExtendedControls.ExtCheckBox), "Use mapping value", new Point(4, vpos), checkboxsize, "Base on mapping not scan value") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
-                vpos += 32;
+                f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("mappingvalue", typeof(ExtendedControls.ExtCheckBox), "Use mapping value", new Point(4, 0), checkboxsize, "Base on mapping not scan value") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
             }
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("avoidthargoids", typeof(ExtendedControls.ExtCheckBox), "Avoid thargoids", new Point(4, vpos), checkboxsize, "Avoid Thargoids") { checkboxchecked = true, contentalign = ContentAlignment.MiddleRight });
-            vpos += 32;
+            f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("avoidthargoids", typeof(ExtendedControls.ExtCheckBox), "Avoid thargoids", new Point(4, 0), checkboxsize, "Avoid Thargoids") { checkboxchecked = true, contentalign = ContentAlignment.MiddleRight });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Max LS:", new Point(4, vpos + 4), labelsize, null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("maxls", typeof(ExtendedControls.NumberBoxInt), qt == Spanshquerytype.RoadToRiches ? "1000000" : "50000", new Point(dataleft, vpos), numberboxsize, "Maximum LS from arrival to consider") { numberboxlongminimum = 10 });
-            vpos += 32;
+            f.AddLabelAndEntry("Max LS", new Point(4,4), ref vpos, 32, labelsize,new ExtendedControls.ConfigurableForm.Entry("maxls", typeof(ExtendedControls.NumberBoxInt), qt == Spanshquerytype.RoadToRiches ? "1000000" : "50000", new Point(dataleft, 0), numberboxsize, "Maximum LS from arrival to consider") { numberboxlongminimum = 10 });
 
-            if (qt == Spanshquerytype.RoadToRiches)
+            if (roadtoriches)
             {
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Min Scan Value:", new Point(4, vpos + 4), labelsize, null));
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("minscan", typeof(ExtendedControls.NumberBoxInt), "100000", new Point(dataleft, vpos), numberboxsize, "Minimum value of body") { numberboxlongminimum = 100 });
-                vpos += 32;
+                f.AddLabelAndEntry("Min Scan Value", new Point(4,4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("minscan", typeof(ExtendedControls.NumberBoxInt), "100000", new Point(dataleft, 0), numberboxsize, "Minimum value of body") { numberboxlongminimum = 100 });
             }
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("loop", typeof(ExtendedControls.ExtCheckBox), "Return to start", new Point(4, vpos), checkboxsize, "Return to start system for route") { checkboxchecked = true, contentalign = ContentAlignment.MiddleRight });
-            vpos += 48;
-            f.AddOK(new Point(140, vpos), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+            f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("loop", typeof(ExtendedControls.ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { checkboxchecked = true, contentalign = ContentAlignment.MiddleRight });
+            
+            f.AddOK(new Point(140, vpos+16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) =>
             {
-                f.GetControl("OK").Enabled = f.GetControl<ExtendedControls.NumberBoxInt>("radius").IsValid && 
-                                             f.GetControl<ExtendedControls.NumberBoxInt>("maxsystems").IsValid &&
-                                            (f.GetControl<ExtendedControls.NumberBoxInt>("maxls")?.IsValid??true) && 
-                                            (f.GetControl<ExtendedControls.NumberBoxInt>("minscan")?.IsValid??true);
+                f.GetControl("OK").Enabled = f.IsAllValid();
             };
 
             if (f.ShowDialogCentred(FindForm(), FindForm().Icon, qt.ToString().SplitCapsWordFull(), closeicon: true) == DialogResult.OK)
             {
-                sp = new EliteDangerousCore.Spansh.SpanshClass();
+                EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
 
-                if (qt == Spanshquerytype.RoadToRiches)
-                {
-                    spanshjobname = sp.RequestRoadToRichesAmmonia(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
-                                                        f.GetBool("avoidthargoids").Value, f.GetBool("loop").Value, f.GetInt("maxls").Value, f.GetInt("minscan").Value, f.GetBool("mappingvalue").Value);
-                }
-                else 
-                {
-                    spanshjobname = sp.RequestRoadToRichesAmmonia(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
-                                                        f.GetBool("avoidthargoids").Value, f.GetBool("loop").Value, f.GetInt("maxls").Value, 1, bodytypes:qt == Spanshquerytype.AmmoniaWorlds ? "Ammonia world" : "Earth-like world");
-
-                }
+                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, 
+                                                    f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
+                                                    f.GetBool("avoidthargoids").Value, f.GetBool("loop").Value, f.GetInt("maxls").Value,
+                                                    roadtoriches ? f.GetInt("minscan").Value : 1,
+                                                    roadtoriches ? f.GetBool("mappingvalue").Value : default(bool?),
+                                                    roadtoriches ? null : qt == Spanshquerytype.AmmoniaWorlds ? "Ammonia world" : "Earth-like world"
+                                                    );
                 StartSpanshQueryOp(qt);
             }
         }
@@ -641,23 +625,68 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Efficiency:", new Point(4, vpos + 4), labelsize, null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("efficiency", typeof(ExtendedControls.NumberBoxInt), "60", new Point(dataleft, vpos), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { numberboxlongminimum = 1 });
-            vpos += 48;
-            f.AddOK(new Point(140, vpos), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+            f.AddLabelAndEntry("Efficiency", new Point(4,4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("efficiency", typeof(ExtendedControls.NumberBoxInt), "60", new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { numberboxlongminimum = 1 });
+            
+            f.AddOK(new Point(140, vpos+16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) =>
             {
-                f.GetControl("OK").Enabled = f.GetControl<ExtendedControls.NumberBoxInt>("efficiency").IsValid;
+                f.GetControl("OK").Enabled = f.IsAllValid();
             };
 
             if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Neutron Router", closeicon: true) == DialogResult.OK)
             {
-                sp = new EliteDangerousCore.Spansh.SpanshClass();
+                EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                 spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, f.GetInt("efficiency").Value);
                 StartSpanshQueryOp(Spanshquerytype.Neutron);
             }
         }
+
+        private void extButtonSpanshTradeRouter_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+            var stationlist = sp.GetStations(textBox_From.Text, 0.25);
+            var withmarket = stationlist?.Where(x => x.HasMarket).ToList();
+            if (withmarket != null)
+            {
+                var stationnames = withmarket.Select(x => x.StationName).OrderBy(x=>x).ToList();
+
+                int vpos = topmargin;
+
+                f.AddLabelAndEntry("Station", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("station", stationnames[0], new Point(dataleft, 0), comboboxsize, "Station name", stationnames));
+                f.AddLabelAndEntry("Starting Capital", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("capital", typeof(ExtendedControls.NumberBoxLong), "1000", new Point(dataleft, 0), numberboxsize, "Starting capital") { numberboxlongminimum = 100 });
+                f.AddLabelAndEntry("Max Hop Distance", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("hopd", typeof(ExtendedControls.NumberBoxInt), "50", new Point(dataleft, 0), numberboxsize, "Maximum distance you can jump") { numberboxlongminimum = 1 });
+                f.AddLabelAndEntry("Max Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("cargo", typeof(ExtendedControls.NumberBoxInt), "7", new Point(dataleft, 0), numberboxsize, "Maximum cargo you can carry") { numberboxlongminimum = 1 });
+                f.AddLabelAndEntry("Max Hops", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("hops", typeof(ExtendedControls.NumberBoxInt), "5", new Point(dataleft, 0), numberboxsize, "Maximum hops between stations") { numberboxlongminimum = 1 });
+                f.AddLabelAndEntry("Max Arrival distance", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("dls", typeof(ExtendedControls.NumberBoxInt), "1000000", new Point(dataleft, 0), numberboxsize, "Maximum arrival distance of station") { numberboxlongminimum = 1 });
+                f.AddLabelAndEntry("Max Market Age (Days)", new Point(4, 4), ref vpos, 32, labelsize, new ExtendedControls.ConfigurableForm.Entry("mage", typeof(ExtendedControls.NumberBoxDouble), "30", new Point(dataleft, 0), numberboxsize, "Maximum age of the station data you accept") { numberboxdoubleminimum = 0.01 });
+                f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("largepad", typeof(ExtendedControls.ExtCheckBox), "Require Large Pad", new Point(4, 0), checkboxsize, "Ship needs a large pad") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("planetary", typeof(ExtendedControls.ExtCheckBox), "Allow Planetary", new Point(4, 0), checkboxsize, "Accept planetary ports") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("prohibited", typeof(ExtendedControls.ExtCheckBox), "Allow Prohibited", new Point(4, 0), checkboxsize, "Allow prohibited commodities") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("loop", typeof(ExtendedControls.ExtCheckBox), "Avoid Loops", new Point(4, 0), checkboxsize, "Don't loop back to previous station") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ExtendedControls.ConfigurableForm.Entry("permit", typeof(ExtendedControls.ExtCheckBox), "Allow Permit Systems", new Point(4, 0), checkboxsize, "You have the permit to these systems") { checkboxchecked = false, contentalign = ContentAlignment.MiddleRight });
+
+                f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+
+                f.InstallStandardTriggers();
+                f.Trigger += (name, text, obj) =>
+                {
+                    f.GetControl("OK").Enabled = f.IsAllValid();
+                };
+
+                if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Trade Router", closeicon: true) == DialogResult.OK)
+                {
+                    spanshjobname = sp.RequestTradeRouter(textBox_From.Text, f.Get("station"),
+                        f.GetInt("hops").Value, f.GetInt("hopd").Value, f.GetLong("capital").Value, f.GetInt("cargo").Value, f.GetInt("dls").Value, (int)(f.GetDouble("mage").Value * 86400),
+                        f.GetBool("largepad").Value, f.GetBool("prohibited").Value, f.GetBool("planetary").Value, f.GetBool("loop").Value, f.GetBool("permit").Value);
+                    StartSpanshQueryOp(Spanshquerytype.TradeRouter);
+                }
+            }
+
+        }
+
 
         private void StartSpanshQueryOp(Spanshquerytype qt)
         {
@@ -679,53 +708,61 @@ namespace EDDiscovery.UserControls
         private void Waitforspanshresulttimer_Tick(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"Spansh job tick {Environment.TickCount}");
-            var res = spanshquerytype != Spanshquerytype.Neutron ? sp.TryGetRoadToRichesAmmonia(spanshjobname)
-                                                                      : sp.TryGetNeutronRouter(spanshjobname);
-            if (res == null)
+            EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+            try
             {
-                waitforspanshresulttimer.Stop();
-                System.Diagnostics.Debug.WriteLine($"Spansh failed with null");
-                EnableRouteButtonsIfValid();
-            }
-            else if (res.Item1 == true)
-            {
-                System.Diagnostics.Debug.WriteLine($"Spansh job got");
-                waitforspanshresulttimer.Stop();
+                var res = spanshquerytype == Spanshquerytype.TradeRouter ? sp.TryGetTradeRouter(spanshjobname) :
+                          spanshquerytype == Spanshquerytype.Neutron ? sp.TryGetNeutronRouter(spanshjobname) : sp.TryGetRoadToRichesAmmonia(spanshjobname);
 
-                ISystem prev = null;
-                foreach (ISystem system in res.Item2)
+                if (res != null && res.Item1 == false)      // if not ready
                 {
-                    DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
-                    rw.CreateCells(dataGridViewRoute,
-                            system.Name,
-                            system.Tag as string ?? "",
-                            prev != null ? system.Distance(prev).ToString("0.#") : "",
-                            system.X.ToString("0.####"),
-                            system.Y.ToString("0.####"),
-                            system.Z.ToString("0.####"),
-                            "",
-                            "",
-                            ""
-                            );
-
-                    rw.Tag = system;       // may be null if waypoint or not a system
-                    rw.Cells[0].Tag = system.Name;    // write the name of the system into the cells'tag for copying
-                    dataGridViewRoute.Rows.Add(rw);
-                    prev = system;
+                    waitforspanshresulttimer.Stop();
+                    waitforspanshresulttimer.Interval = waitforspanshresulttimer.Interval < 16000 ? waitforspanshresulttimer.Interval * 2 : 16000;
+                    waitforspanshresulttimer.Start();
+                    return;
                 }
+                else if (res != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Spansh job got");
+                    waitforspanshresulttimer.Stop();
 
-                routeSystems = res.Item2;
-                EnableOutputButtons(res.Item2.Count>0);
-                EnableRouteButtonsIfValid();
+                    ISystem prev = null;
+                    foreach (ISystem system in res.Item2)
+                    {
+                        DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
+                        rw.CreateCells(dataGridViewRoute,
+                                system.Name,
+                                system.Tag as string ?? "",
+                                prev != null ? system.Distance(prev).ToString("0.#") : "",
+                                system.X.ToString("0.####"),
+                                system.Y.ToString("0.####"),
+                                system.Z.ToString("0.####"),
+                                "",
+                                "",
+                                ""
+                                );
+
+                        rw.Tag = system;       // may be null if waypoint or not a system
+                        rw.Cells[0].Tag = system.Name;    // write the name of the system into the cells'tag for copying
+                        dataGridViewRoute.Rows.Add(rw);
+                        prev = system;
+                    }
+
+                    routeSystems = res.Item2;
+                    EnableOutputButtons(res.Item2.Count > 0);
+                    EnableRouteButtonsIfValid();
+                    return;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                waitforspanshresulttimer.Stop();
-                waitforspanshresulttimer.Interval = waitforspanshresulttimer.Interval < 16000 ? waitforspanshresulttimer.Interval * 2 : 16000;
-                waitforspanshresulttimer.Start();
+                System.Diagnostics.Debug.WriteLine($"Spansh result exception {ex}");
             }
-        }
 
+            waitforspanshresulttimer.Stop();
+            System.Diagnostics.Debug.WriteLine($"Spansh failed with null");
+            EnableRouteButtonsIfValid();
+        }
 
         #endregion
 

@@ -90,6 +90,7 @@
             this.StarClassCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.extButtonSpanshTradeRouter = new ExtendedControls.ExtButton();
             this.controlPanel.SuspendLayout();
             this.groupBoxSpansh.SuspendLayout();
             this.groupBoxInternal.SuspendLayout();
@@ -120,6 +121,7 @@
             this.groupBoxSpansh.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxSpansh.BorderColorScaling = 0.5F;
             this.groupBoxSpansh.Controls.Add(this.extButtonNeutronRouter);
+            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshTradeRouter);
             this.groupBoxSpansh.Controls.Add(this.extButtonSpanshEarthLikes);
             this.groupBoxSpansh.Controls.Add(this.extButtonSpanshAmmoniaWorlds);
             this.groupBoxSpansh.Controls.Add(this.extButtonSpanshRoadToRiches);
@@ -1033,6 +1035,16 @@
             this.DeviationCol.Name = "DeviationCol";
             this.DeviationCol.ReadOnly = true;
             // 
+            // extButtonSpanshTradeRouter
+            // 
+            this.extButtonSpanshTradeRouter.Location = new System.Drawing.Point(429, 19);
+            this.extButtonSpanshTradeRouter.Name = "extButtonSpanshTradeRouter";
+            this.extButtonSpanshTradeRouter.Size = new System.Drawing.Size(100, 27);
+            this.extButtonSpanshTradeRouter.TabIndex = 40;
+            this.extButtonSpanshTradeRouter.Text = "Trade Router";
+            this.extButtonSpanshTradeRouter.UseVisualStyleBackColor = true;
+            this.extButtonSpanshTradeRouter.Click += new System.EventHandler(this.extButtonSpanshTradeRouter_Click);
+            // 
             // UserControlRoute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1116,5 +1128,6 @@
         private ExtendedControls.ExtButton extButtonNeutronRouter;
         private ExtendedControls.ExtButton extButtonSpanshAmmoniaWorlds;
         private ExtendedControls.ExtButton extButtonSpanshEarthLikes;
+        private ExtendedControls.ExtButton extButtonSpanshTradeRouter;
     }
 }

@@ -1254,6 +1254,7 @@ namespace EDDiscovery
         UserControlRoute_groupBoxInternal,
         UserControlRoute_extButtonSpanshAmmoniaWorlds,
         UserControlRoute_extButtonSpanshEarthLikes,
+        UserControlRoute_extButtonSpanshTradeRouter,
         UserControlRoute_groupBoxPara,
 
 
