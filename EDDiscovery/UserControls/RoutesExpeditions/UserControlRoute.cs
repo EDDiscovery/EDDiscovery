@@ -648,7 +648,7 @@ namespace EDDiscovery.UserControls
 
             EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
             var stationlist = sp.GetStations(textBox_From.Text, 0.25);
-            var withmarket = stationlist?.Where(x => x.HasMarket).ToList();
+            var withmarket = stationlist?.Where(x => x.HasMarket && x.Market != null && x.Market.Count > 0).ToList();
             if (withmarket != null && withmarket.Count>0)
             {
                 var stationnames = withmarket.Select(x => x.StationName).OrderBy(x=>x).ToList();
@@ -695,12 +695,19 @@ namespace EDDiscovery.UserControls
         {
             if (spanshjobname != null)
             {
-                spanshquerytype = qt;
-                dataGridViewRoute.Rows.Clear();
-                EnableOutputButtons();
-                EnableRouteButtons();
-                waitforspanshresulttimer.Interval = 2000;
-                waitforspanshresulttimer.Start();
+                if (spanshjobname.StartsWith("!"))
+                {
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), $"Spansh returned error: {spanshjobname.Substring(1)}", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                }
+                else
+                {
+                    spanshquerytype = qt;
+                    dataGridViewRoute.Rows.Clear();
+                    EnableOutputButtons();
+                    EnableRouteButtons();
+                    waitforspanshresulttimer.Interval = 2000;
+                    waitforspanshresulttimer.Start();
+                }
             }
             else
             {
