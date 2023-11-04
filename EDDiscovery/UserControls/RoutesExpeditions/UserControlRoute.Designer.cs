@@ -34,33 +34,35 @@
             this.controlPanel = new System.Windows.Forms.Panel();
             this.groupBoxSpansh = new ExtendedControls.ExtGroupBox();
             this.extButtonNeutronRouter = new ExtendedControls.ExtButton();
+            this.extButtonSpanshTradeRouter = new ExtendedControls.ExtButton();
             this.extButtonSpanshEarthLikes = new ExtendedControls.ExtButton();
             this.extButtonSpanshAmmoniaWorlds = new ExtendedControls.ExtButton();
             this.extButtonSpanshRoadToRiches = new ExtendedControls.ExtButton();
             this.groupBoxInternal = new ExtendedControls.ExtGroupBox();
             this.comboBoxRoutingMetric = new ExtendedControls.ExtComboBox();
             this.labelMetric = new System.Windows.Forms.Label();
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.extButtonRoute = new ExtendedControls.ExtButton();
             this.groupBoxPara = new ExtendedControls.ExtGroupBox();
             this.textBox_From = new ExtendedControls.ExtTextBoxAutoComplete();
-            this.textBox_FromX = new ExtendedControls.ExtTextBox();
+            this.valueBox_FromX = new ExtendedControls.NumberBoxDouble();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.checkBox_FsdBoost = new ExtendedControls.ExtCheckBox();
             this.labelFrom = new System.Windows.Forms.Label();
-            this.textBox_FromY = new ExtendedControls.ExtTextBox();
+            this.valueBox_FromY = new ExtendedControls.NumberBoxDouble();
             this.textBox_ToName = new ExtendedControls.ExtTextBox();
-            this.textBox_FromZ = new ExtendedControls.ExtTextBox();
-            this.textBox_Range = new ExtendedControls.NumberBoxLong();
+            this.valueBox_FromZ = new ExtendedControls.NumberBoxDouble();
+            this.valueBox_Range = new ExtendedControls.NumberBoxLong();
             this.textBox_FromName = new ExtendedControls.ExtTextBox();
             this.labelLy2 = new System.Windows.Forms.Label();
-            this.textBox_ToX = new ExtendedControls.ExtTextBox();
+            this.valueBox_ToX = new ExtendedControls.NumberBoxDouble();
             this.labelLy1 = new System.Windows.Forms.Label();
-            this.textBox_ToY = new ExtendedControls.ExtTextBox();
+            this.valueBox_ToY = new ExtendedControls.NumberBoxDouble();
             this.textBox_Distance = new ExtendedControls.ExtTextBox();
             this.buttonExtTravelTo = new ExtendedControls.ExtButton();
+            this.labelEDSMBut = new System.Windows.Forms.Label();
             this.labelMaxJump = new System.Windows.Forms.Label();
             this.labelDistance = new System.Windows.Forms.Label();
-            this.textBox_ToZ = new ExtendedControls.ExtTextBox();
+            this.valueBox_ToZ = new ExtendedControls.NumberBoxDouble();
             this.buttonExtTravelFrom = new ExtendedControls.ExtButton();
             this.labelTo = new System.Windows.Forms.Label();
             this.buttonExtTargetTo = new ExtendedControls.ExtButton();
@@ -90,7 +92,6 @@
             this.StarClassCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.extButtonSpanshTradeRouter = new ExtendedControls.ExtButton();
             this.controlPanel.SuspendLayout();
             this.groupBoxSpansh.SuspendLayout();
             this.groupBoxInternal.SuspendLayout();
@@ -136,7 +137,7 @@
             // 
             // extButtonNeutronRouter
             // 
-            this.extButtonNeutronRouter.Location = new System.Drawing.Point(6, 19);
+            this.extButtonNeutronRouter.Location = new System.Drawing.Point(4, 19);
             this.extButtonNeutronRouter.Name = "extButtonNeutronRouter";
             this.extButtonNeutronRouter.Size = new System.Drawing.Size(100, 27);
             this.extButtonNeutronRouter.TabIndex = 40;
@@ -144,9 +145,19 @@
             this.extButtonNeutronRouter.UseVisualStyleBackColor = true;
             this.extButtonNeutronRouter.Click += new System.EventHandler(this.extButtonNeutronRouter_Click);
             // 
+            // extButtonSpanshTradeRouter
+            // 
+            this.extButtonSpanshTradeRouter.Location = new System.Drawing.Point(444, 19);
+            this.extButtonSpanshTradeRouter.Name = "extButtonSpanshTradeRouter";
+            this.extButtonSpanshTradeRouter.Size = new System.Drawing.Size(100, 27);
+            this.extButtonSpanshTradeRouter.TabIndex = 40;
+            this.extButtonSpanshTradeRouter.Text = "Trade Router";
+            this.extButtonSpanshTradeRouter.UseVisualStyleBackColor = true;
+            this.extButtonSpanshTradeRouter.Click += new System.EventHandler(this.extButtonSpanshTradeRouter_Click);
+            // 
             // extButtonSpanshEarthLikes
             // 
-            this.extButtonSpanshEarthLikes.Location = new System.Drawing.Point(323, 19);
+            this.extButtonSpanshEarthLikes.Location = new System.Drawing.Point(334, 19);
             this.extButtonSpanshEarthLikes.Name = "extButtonSpanshEarthLikes";
             this.extButtonSpanshEarthLikes.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshEarthLikes.TabIndex = 40;
@@ -156,7 +167,7 @@
             // 
             // extButtonSpanshAmmoniaWorlds
             // 
-            this.extButtonSpanshAmmoniaWorlds.Location = new System.Drawing.Point(217, 19);
+            this.extButtonSpanshAmmoniaWorlds.Location = new System.Drawing.Point(224, 19);
             this.extButtonSpanshAmmoniaWorlds.Name = "extButtonSpanshAmmoniaWorlds";
             this.extButtonSpanshAmmoniaWorlds.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshAmmoniaWorlds.TabIndex = 40;
@@ -166,7 +177,7 @@
             // 
             // extButtonSpanshRoadToRiches
             // 
-            this.extButtonSpanshRoadToRiches.Location = new System.Drawing.Point(111, 19);
+            this.extButtonSpanshRoadToRiches.Location = new System.Drawing.Point(114, 19);
             this.extButtonSpanshRoadToRiches.Name = "extButtonSpanshRoadToRiches";
             this.extButtonSpanshRoadToRiches.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshRoadToRiches.TabIndex = 40;
@@ -181,7 +192,6 @@
             this.groupBoxInternal.BorderColorScaling = 0.5F;
             this.groupBoxInternal.Controls.Add(this.comboBoxRoutingMetric);
             this.groupBoxInternal.Controls.Add(this.labelMetric);
-            this.groupBoxInternal.Controls.Add(this.edsmSpanshButton);
             this.groupBoxInternal.Controls.Add(this.extButtonRoute);
             this.groupBoxInternal.Location = new System.Drawing.Point(4, 145);
             this.groupBoxInternal.Name = "groupBoxInternal";
@@ -225,21 +235,10 @@
             this.labelMetric.TabIndex = 30;
             this.labelMetric.Text = "Metric";
             // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(302, 16);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 70;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
-            // 
             // extButtonRoute
             // 
             this.extButtonRoute.Enabled = false;
-            this.extButtonRoute.Location = new System.Drawing.Point(337, 17);
+            this.extButtonRoute.Location = new System.Drawing.Point(302, 17);
             this.extButtonRoute.Name = "extButtonRoute";
             this.extButtonRoute.Size = new System.Drawing.Size(111, 27);
             this.extButtonRoute.TabIndex = 40;
@@ -254,23 +253,25 @@
             this.groupBoxPara.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxPara.BorderColorScaling = 0.5F;
             this.groupBoxPara.Controls.Add(this.textBox_From);
-            this.groupBoxPara.Controls.Add(this.textBox_FromX);
+            this.groupBoxPara.Controls.Add(this.valueBox_FromX);
+            this.groupBoxPara.Controls.Add(this.edsmSpanshButton);
             this.groupBoxPara.Controls.Add(this.checkBox_FsdBoost);
             this.groupBoxPara.Controls.Add(this.labelFrom);
-            this.groupBoxPara.Controls.Add(this.textBox_FromY);
+            this.groupBoxPara.Controls.Add(this.valueBox_FromY);
             this.groupBoxPara.Controls.Add(this.textBox_ToName);
-            this.groupBoxPara.Controls.Add(this.textBox_FromZ);
-            this.groupBoxPara.Controls.Add(this.textBox_Range);
+            this.groupBoxPara.Controls.Add(this.valueBox_FromZ);
+            this.groupBoxPara.Controls.Add(this.valueBox_Range);
             this.groupBoxPara.Controls.Add(this.textBox_FromName);
             this.groupBoxPara.Controls.Add(this.labelLy2);
-            this.groupBoxPara.Controls.Add(this.textBox_ToX);
+            this.groupBoxPara.Controls.Add(this.valueBox_ToX);
             this.groupBoxPara.Controls.Add(this.labelLy1);
-            this.groupBoxPara.Controls.Add(this.textBox_ToY);
+            this.groupBoxPara.Controls.Add(this.valueBox_ToY);
             this.groupBoxPara.Controls.Add(this.textBox_Distance);
             this.groupBoxPara.Controls.Add(this.buttonExtTravelTo);
+            this.groupBoxPara.Controls.Add(this.labelEDSMBut);
             this.groupBoxPara.Controls.Add(this.labelMaxJump);
             this.groupBoxPara.Controls.Add(this.labelDistance);
-            this.groupBoxPara.Controls.Add(this.textBox_ToZ);
+            this.groupBoxPara.Controls.Add(this.valueBox_ToZ);
             this.groupBoxPara.Controls.Add(this.buttonExtTravelFrom);
             this.groupBoxPara.Controls.Add(this.labelTo);
             this.groupBoxPara.Controls.Add(this.buttonExtTargetTo);
@@ -326,37 +327,55 @@
             this.toolTip.SetToolTip(this.textBox_From, "Select system to start the route");
             this.textBox_From.WordWrap = true;
             this.textBox_From.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
-            this.textBox_From.Enter += new System.EventHandler(this.textBox_From_Enter);
             // 
-            // textBox_FromX
+            // valueBox_FromX
             // 
-            this.textBox_FromX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromX.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_FromX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromX.BorderColorScaling = 0.5F;
-            this.textBox_FromX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromX.ClearOnFirstChar = false;
-            this.textBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromX.EndButtonEnable = true;
-            this.textBox_FromX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromX.EndButtonImage")));
-            this.textBox_FromX.EndButtonVisible = false;
-            this.textBox_FromX.InErrorCondition = false;
-            this.textBox_FromX.Location = new System.Drawing.Point(62, 71);
-            this.textBox_FromX.Multiline = false;
-            this.textBox_FromX.Name = "textBox_FromX";
-            this.textBox_FromX.ReadOnly = false;
-            this.textBox_FromX.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromX.SelectionLength = 0;
-            this.textBox_FromX.SelectionStart = 0;
-            this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromX.TabIndex = 13;
-            this.textBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromX, "X Co-ord");
-            this.textBox_FromX.WordWrap = true;
-            this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
-            this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromX.Enter += new System.EventHandler(this.textBox_From_Enter);
+            this.valueBox_FromX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.valueBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.valueBox_FromX.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBox_FromX.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBox_FromX.BorderColorScaling = 0.5F;
+            this.valueBox_FromX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBox_FromX.ClearOnFirstChar = false;
+            this.valueBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBox_FromX.DelayBeforeNotification = 0;
+            this.valueBox_FromX.EndButtonEnable = true;
+            this.valueBox_FromX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_FromX.EndButtonImage")));
+            this.valueBox_FromX.EndButtonVisible = false;
+            this.valueBox_FromX.Format = "G";
+            this.valueBox_FromX.InErrorCondition = false;
+            this.valueBox_FromX.Location = new System.Drawing.Point(62, 71);
+            this.valueBox_FromX.Maximum = 1.7976931348623157E+308D;
+            this.valueBox_FromX.Minimum = -1.7976931348623157E+308D;
+            this.valueBox_FromX.Multiline = false;
+            this.valueBox_FromX.Name = "valueBox_FromX";
+            this.valueBox_FromX.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_FromX.ReadOnly = false;
+            this.valueBox_FromX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBox_FromX.SelectionLength = 0;
+            this.valueBox_FromX.SelectionStart = 0;
+            this.valueBox_FromX.Size = new System.Drawing.Size(72, 20);
+            this.valueBox_FromX.TabIndex = 13;
+            this.valueBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.valueBox_FromX, "X Co-ord");
+            this.valueBox_FromX.Value = 0D;
+            this.valueBox_FromX.WordWrap = true;
+            this.valueBox_FromX.ValueChanged += new System.EventHandler(this.valueBox_From_ValueChanged);
+            // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(796, 67);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 70;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
             // checkBox_FsdBoost
             // 
@@ -389,35 +408,43 @@
             this.labelFrom.TabIndex = 10;
             this.labelFrom.Text = "From";
             // 
-            // textBox_FromY
+            // valueBox_FromY
             // 
-            this.textBox_FromY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromY.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_FromY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromY.BorderColorScaling = 0.5F;
-            this.textBox_FromY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromY.ClearOnFirstChar = false;
-            this.textBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromY.EndButtonEnable = true;
-            this.textBox_FromY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromY.EndButtonImage")));
-            this.textBox_FromY.EndButtonVisible = false;
-            this.textBox_FromY.InErrorCondition = false;
-            this.textBox_FromY.Location = new System.Drawing.Point(140, 71);
-            this.textBox_FromY.Multiline = false;
-            this.textBox_FromY.Name = "textBox_FromY";
-            this.textBox_FromY.ReadOnly = false;
-            this.textBox_FromY.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromY.SelectionLength = 0;
-            this.textBox_FromY.SelectionStart = 0;
-            this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromY.TabIndex = 14;
-            this.textBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromY, "Y (Vertical) Co-ord");
-            this.textBox_FromY.WordWrap = true;
-            this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
-            this.textBox_FromY.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromY.Enter += new System.EventHandler(this.textBox_From_Enter);
+            this.valueBox_FromY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.valueBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.valueBox_FromY.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBox_FromY.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBox_FromY.BorderColorScaling = 0.5F;
+            this.valueBox_FromY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBox_FromY.ClearOnFirstChar = false;
+            this.valueBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBox_FromY.DelayBeforeNotification = 0;
+            this.valueBox_FromY.EndButtonEnable = true;
+            this.valueBox_FromY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_FromY.EndButtonImage")));
+            this.valueBox_FromY.EndButtonVisible = false;
+            this.valueBox_FromY.Format = "G";
+            this.valueBox_FromY.InErrorCondition = false;
+            this.valueBox_FromY.Location = new System.Drawing.Point(140, 71);
+            this.valueBox_FromY.Maximum = 1.7976931348623157E+308D;
+            this.valueBox_FromY.Minimum = -1.7976931348623157E+308D;
+            this.valueBox_FromY.Multiline = false;
+            this.valueBox_FromY.Name = "valueBox_FromY";
+            this.valueBox_FromY.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_FromY.ReadOnly = false;
+            this.valueBox_FromY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBox_FromY.SelectionLength = 0;
+            this.valueBox_FromY.SelectionStart = 0;
+            this.valueBox_FromY.Size = new System.Drawing.Size(72, 20);
+            this.valueBox_FromY.TabIndex = 14;
+            this.valueBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.valueBox_FromY, "Y (Vertical) Co-ord");
+            this.valueBox_FromY.Value = 0D;
+            this.valueBox_FromY.WordWrap = true;
+            this.valueBox_FromY.ValueChanged += new System.EventHandler(this.valueBox_From_ValueChanged);
             // 
             // textBox_ToName
             // 
@@ -446,67 +473,76 @@
             this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
             this.textBox_ToName.WordWrap = true;
             // 
-            // textBox_FromZ
+            // valueBox_FromZ
             // 
-            this.textBox_FromZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromZ.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_FromZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromZ.BorderColorScaling = 0.5F;
-            this.textBox_FromZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromZ.ClearOnFirstChar = false;
-            this.textBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromZ.EndButtonEnable = true;
-            this.textBox_FromZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromZ.EndButtonImage")));
-            this.textBox_FromZ.EndButtonVisible = false;
-            this.textBox_FromZ.InErrorCondition = false;
-            this.textBox_FromZ.Location = new System.Drawing.Point(218, 71);
-            this.textBox_FromZ.Multiline = false;
-            this.textBox_FromZ.Name = "textBox_FromZ";
-            this.textBox_FromZ.ReadOnly = false;
-            this.textBox_FromZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromZ.SelectionLength = 0;
-            this.textBox_FromZ.SelectionStart = 0;
-            this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromZ.TabIndex = 15;
-            this.textBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-ord");
-            this.textBox_FromZ.WordWrap = true;
-            this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
-            this.textBox_FromZ.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_From_Enter);
+            this.valueBox_FromZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.valueBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.valueBox_FromZ.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBox_FromZ.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBox_FromZ.BorderColorScaling = 0.5F;
+            this.valueBox_FromZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBox_FromZ.ClearOnFirstChar = false;
+            this.valueBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBox_FromZ.DelayBeforeNotification = 0;
+            this.valueBox_FromZ.EndButtonEnable = true;
+            this.valueBox_FromZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_FromZ.EndButtonImage")));
+            this.valueBox_FromZ.EndButtonVisible = false;
+            this.valueBox_FromZ.Format = "G";
+            this.valueBox_FromZ.InErrorCondition = false;
+            this.valueBox_FromZ.Location = new System.Drawing.Point(218, 71);
+            this.valueBox_FromZ.Maximum = 1.7976931348623157E+308D;
+            this.valueBox_FromZ.Minimum = -1.7976931348623157E+308D;
+            this.valueBox_FromZ.Multiline = false;
+            this.valueBox_FromZ.Name = "valueBox_FromZ";
+            this.valueBox_FromZ.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_FromZ.ReadOnly = false;
+            this.valueBox_FromZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBox_FromZ.SelectionLength = 0;
+            this.valueBox_FromZ.SelectionStart = 0;
+            this.valueBox_FromZ.Size = new System.Drawing.Size(72, 20);
+            this.valueBox_FromZ.TabIndex = 15;
+            this.valueBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.valueBox_FromZ, "Z Co-ord");
+            this.valueBox_FromZ.Value = 0D;
+            this.valueBox_FromZ.WordWrap = true;
+            this.valueBox_FromZ.ValueChanged += new System.EventHandler(this.valueBox_From_ValueChanged);
             // 
-            // textBox_Range
+            // valueBox_Range
             // 
-            this.textBox_Range.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBox_Range.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBox_Range.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_Range.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_Range.BorderColorScaling = 0.5F;
-            this.textBox_Range.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_Range.ClearOnFirstChar = false;
-            this.textBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_Range.DelayBeforeNotification = 0;
-            this.textBox_Range.EndButtonEnable = true;
-            this.textBox_Range.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Range.EndButtonImage")));
-            this.textBox_Range.EndButtonVisible = false;
-            this.textBox_Range.Format = "D";
-            this.textBox_Range.InErrorCondition = true;
-            this.textBox_Range.Location = new System.Drawing.Point(767, 19);
-            this.textBox_Range.Maximum = ((long)(999));
-            this.textBox_Range.Minimum = ((long)(1));
-            this.textBox_Range.Multiline = false;
-            this.textBox_Range.Name = "textBox_Range";
-            this.textBox_Range.ReadOnly = false;
-            this.textBox_Range.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_Range.SelectionLength = 0;
-            this.textBox_Range.SelectionStart = 0;
-            this.textBox_Range.Size = new System.Drawing.Size(57, 20);
-            this.textBox_Range.TabIndex = 33;
-            this.textBox_Range.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_Range, "Give your jump range, or search range for long jumps");
-            this.textBox_Range.Value = ((long)(0));
-            this.textBox_Range.WordWrap = true;
+            this.valueBox_Range.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.valueBox_Range.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.valueBox_Range.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBox_Range.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBox_Range.BorderColorScaling = 0.5F;
+            this.valueBox_Range.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBox_Range.ClearOnFirstChar = false;
+            this.valueBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBox_Range.DelayBeforeNotification = 0;
+            this.valueBox_Range.EndButtonEnable = true;
+            this.valueBox_Range.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_Range.EndButtonImage")));
+            this.valueBox_Range.EndButtonVisible = false;
+            this.valueBox_Range.Format = "D";
+            this.valueBox_Range.InErrorCondition = true;
+            this.valueBox_Range.Location = new System.Drawing.Point(767, 19);
+            this.valueBox_Range.Maximum = ((long)(999));
+            this.valueBox_Range.Minimum = ((long)(1));
+            this.valueBox_Range.Multiline = false;
+            this.valueBox_Range.Name = "valueBox_Range";
+            this.valueBox_Range.NumberStyles = System.Globalization.NumberStyles.AllowThousands;
+            this.valueBox_Range.ReadOnly = false;
+            this.valueBox_Range.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBox_Range.SelectionLength = 0;
+            this.valueBox_Range.SelectionStart = 0;
+            this.valueBox_Range.Size = new System.Drawing.Size(57, 20);
+            this.valueBox_Range.TabIndex = 33;
+            this.valueBox_Range.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.valueBox_Range, "Give your jump range, or search range for long jumps");
+            this.valueBox_Range.Value = ((long)(0));
+            this.valueBox_Range.WordWrap = true;
             // 
             // textBox_FromName
             // 
@@ -544,35 +580,43 @@
             this.labelLy2.TabIndex = 69;
             this.labelLy2.Text = "ly";
             // 
-            // textBox_ToX
+            // valueBox_ToX
             // 
-            this.textBox_ToX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToX.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_ToX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToX.BorderColorScaling = 0.5F;
-            this.textBox_ToX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToX.ClearOnFirstChar = false;
-            this.textBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToX.EndButtonEnable = true;
-            this.textBox_ToX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToX.EndButtonImage")));
-            this.textBox_ToX.EndButtonVisible = false;
-            this.textBox_ToX.InErrorCondition = false;
-            this.textBox_ToX.Location = new System.Drawing.Point(396, 71);
-            this.textBox_ToX.Multiline = false;
-            this.textBox_ToX.Name = "textBox_ToX";
-            this.textBox_ToX.ReadOnly = false;
-            this.textBox_ToX.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToX.SelectionLength = 0;
-            this.textBox_ToX.SelectionStart = 0;
-            this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToX.TabIndex = 23;
-            this.textBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToX, "X Co-Ord");
-            this.textBox_ToX.WordWrap = true;
-            this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
-            this.textBox_ToX.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToX.Enter += new System.EventHandler(this.textBox_To_Enter);
+            this.valueBox_ToX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.valueBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.valueBox_ToX.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBox_ToX.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBox_ToX.BorderColorScaling = 0.5F;
+            this.valueBox_ToX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBox_ToX.ClearOnFirstChar = false;
+            this.valueBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBox_ToX.DelayBeforeNotification = 0;
+            this.valueBox_ToX.EndButtonEnable = true;
+            this.valueBox_ToX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_ToX.EndButtonImage")));
+            this.valueBox_ToX.EndButtonVisible = false;
+            this.valueBox_ToX.Format = "G";
+            this.valueBox_ToX.InErrorCondition = false;
+            this.valueBox_ToX.Location = new System.Drawing.Point(396, 71);
+            this.valueBox_ToX.Maximum = 1.7976931348623157E+308D;
+            this.valueBox_ToX.Minimum = -1.7976931348623157E+308D;
+            this.valueBox_ToX.Multiline = false;
+            this.valueBox_ToX.Name = "valueBox_ToX";
+            this.valueBox_ToX.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_ToX.ReadOnly = false;
+            this.valueBox_ToX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBox_ToX.SelectionLength = 0;
+            this.valueBox_ToX.SelectionStart = 0;
+            this.valueBox_ToX.Size = new System.Drawing.Size(72, 20);
+            this.valueBox_ToX.TabIndex = 23;
+            this.valueBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.valueBox_ToX, "X Co-Ord");
+            this.valueBox_ToX.Value = 0D;
+            this.valueBox_ToX.WordWrap = true;
+            this.valueBox_ToX.ValueChanged += new System.EventHandler(this.valueBox_To_ValueChanged);
             // 
             // labelLy1
             // 
@@ -583,35 +627,43 @@
             this.labelLy1.TabIndex = 39;
             this.labelLy1.Text = "ly";
             // 
-            // textBox_ToY
+            // valueBox_ToY
             // 
-            this.textBox_ToY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToY.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_ToY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToY.BorderColorScaling = 0.5F;
-            this.textBox_ToY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToY.ClearOnFirstChar = false;
-            this.textBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToY.EndButtonEnable = true;
-            this.textBox_ToY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToY.EndButtonImage")));
-            this.textBox_ToY.EndButtonVisible = false;
-            this.textBox_ToY.InErrorCondition = false;
-            this.textBox_ToY.Location = new System.Drawing.Point(474, 71);
-            this.textBox_ToY.Multiline = false;
-            this.textBox_ToY.Name = "textBox_ToY";
-            this.textBox_ToY.ReadOnly = false;
-            this.textBox_ToY.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToY.SelectionLength = 0;
-            this.textBox_ToY.SelectionStart = 0;
-            this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToY.TabIndex = 24;
-            this.textBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToY, "Y (Vertical) Co-ord");
-            this.textBox_ToY.WordWrap = true;
-            this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
-            this.textBox_ToY.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToY.Enter += new System.EventHandler(this.textBox_To_Enter);
+            this.valueBox_ToY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.valueBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.valueBox_ToY.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBox_ToY.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBox_ToY.BorderColorScaling = 0.5F;
+            this.valueBox_ToY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBox_ToY.ClearOnFirstChar = false;
+            this.valueBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBox_ToY.DelayBeforeNotification = 0;
+            this.valueBox_ToY.EndButtonEnable = true;
+            this.valueBox_ToY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_ToY.EndButtonImage")));
+            this.valueBox_ToY.EndButtonVisible = false;
+            this.valueBox_ToY.Format = "G";
+            this.valueBox_ToY.InErrorCondition = false;
+            this.valueBox_ToY.Location = new System.Drawing.Point(474, 71);
+            this.valueBox_ToY.Maximum = 1.7976931348623157E+308D;
+            this.valueBox_ToY.Minimum = -1.7976931348623157E+308D;
+            this.valueBox_ToY.Multiline = false;
+            this.valueBox_ToY.Name = "valueBox_ToY";
+            this.valueBox_ToY.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_ToY.ReadOnly = false;
+            this.valueBox_ToY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBox_ToY.SelectionLength = 0;
+            this.valueBox_ToY.SelectionStart = 0;
+            this.valueBox_ToY.Size = new System.Drawing.Size(72, 20);
+            this.valueBox_ToY.TabIndex = 24;
+            this.valueBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.valueBox_ToY, "Y (Vertical) Co-ord");
+            this.valueBox_ToY.Value = 0D;
+            this.valueBox_ToY.WordWrap = true;
+            this.valueBox_ToY.ValueChanged += new System.EventHandler(this.valueBox_To_ValueChanged);
             // 
             // textBox_Distance
             // 
@@ -653,6 +705,15 @@
             this.buttonExtTravelTo.UseVisualStyleBackColor = true;
             this.buttonExtTravelTo.Click += new System.EventHandler(this.buttonToHistory_Click);
             // 
+            // labelEDSMBut
+            // 
+            this.labelEDSMBut.AutoSize = true;
+            this.labelEDSMBut.Location = new System.Drawing.Point(688, 75);
+            this.labelEDSMBut.Name = "labelEDSMBut";
+            this.labelEDSMBut.Size = new System.Drawing.Size(69, 13);
+            this.labelEDSMBut.TabIndex = 45;
+            this.labelEDSMBut.Text = "Web Lookup";
+            // 
             // labelMaxJump
             // 
             this.labelMaxJump.AutoSize = true;
@@ -671,35 +732,43 @@
             this.labelDistance.TabIndex = 60;
             this.labelDistance.Text = "Distance";
             // 
-            // textBox_ToZ
+            // valueBox_ToZ
             // 
-            this.textBox_ToZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToZ.BackErrorColor = System.Drawing.Color.Red;
-            this.textBox_ToZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToZ.BorderColorScaling = 0.5F;
-            this.textBox_ToZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToZ.ClearOnFirstChar = false;
-            this.textBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToZ.EndButtonEnable = true;
-            this.textBox_ToZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToZ.EndButtonImage")));
-            this.textBox_ToZ.EndButtonVisible = false;
-            this.textBox_ToZ.InErrorCondition = false;
-            this.textBox_ToZ.Location = new System.Drawing.Point(552, 71);
-            this.textBox_ToZ.Multiline = false;
-            this.textBox_ToZ.Name = "textBox_ToZ";
-            this.textBox_ToZ.ReadOnly = false;
-            this.textBox_ToZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToZ.SelectionLength = 0;
-            this.textBox_ToZ.SelectionStart = 0;
-            this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToZ.TabIndex = 25;
-            this.textBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToZ, "Z Co-ord");
-            this.textBox_ToZ.WordWrap = true;
-            this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
-            this.textBox_ToZ.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_To_Enter);
+            this.valueBox_ToZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.valueBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.valueBox_ToZ.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBox_ToZ.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBox_ToZ.BorderColorScaling = 0.5F;
+            this.valueBox_ToZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBox_ToZ.ClearOnFirstChar = false;
+            this.valueBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBox_ToZ.DelayBeforeNotification = 0;
+            this.valueBox_ToZ.EndButtonEnable = true;
+            this.valueBox_ToZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_ToZ.EndButtonImage")));
+            this.valueBox_ToZ.EndButtonVisible = false;
+            this.valueBox_ToZ.Format = "G";
+            this.valueBox_ToZ.InErrorCondition = false;
+            this.valueBox_ToZ.Location = new System.Drawing.Point(552, 71);
+            this.valueBox_ToZ.Maximum = 1.7976931348623157E+308D;
+            this.valueBox_ToZ.Minimum = -1.7976931348623157E+308D;
+            this.valueBox_ToZ.Multiline = false;
+            this.valueBox_ToZ.Name = "valueBox_ToZ";
+            this.valueBox_ToZ.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
+            | System.Globalization.NumberStyles.AllowLeadingSign) 
+            | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands) 
+            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_ToZ.ReadOnly = false;
+            this.valueBox_ToZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBox_ToZ.SelectionLength = 0;
+            this.valueBox_ToZ.SelectionStart = 0;
+            this.valueBox_ToZ.Size = new System.Drawing.Size(72, 20);
+            this.valueBox_ToZ.TabIndex = 25;
+            this.valueBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.valueBox_ToZ, "Z Co-ord");
+            this.valueBox_ToZ.Value = 0D;
+            this.valueBox_ToZ.WordWrap = true;
+            this.valueBox_ToZ.ValueChanged += new System.EventHandler(this.valueBox_To_ValueChanged);
             // 
             // buttonExtTravelFrom
             // 
@@ -768,7 +837,6 @@
             this.toolTip.SetToolTip(this.textBox_To, "Select the system to end in");
             this.textBox_To.WordWrap = true;
             this.textBox_To.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
-            this.textBox_To.Enter += new System.EventHandler(this.textBox_To_Enter);
             // 
             // buttonToEDSM
             // 
@@ -1035,16 +1103,6 @@
             this.DeviationCol.Name = "DeviationCol";
             this.DeviationCol.ReadOnly = true;
             // 
-            // extButtonSpanshTradeRouter
-            // 
-            this.extButtonSpanshTradeRouter.Location = new System.Drawing.Point(429, 19);
-            this.extButtonSpanshTradeRouter.Name = "extButtonSpanshTradeRouter";
-            this.extButtonSpanshTradeRouter.Size = new System.Drawing.Size(100, 27);
-            this.extButtonSpanshTradeRouter.TabIndex = 40;
-            this.extButtonSpanshTradeRouter.Text = "Trade Router";
-            this.extButtonSpanshTradeRouter.UseVisualStyleBackColor = true;
-            this.extButtonSpanshTradeRouter.Click += new System.EventHandler(this.extButtonSpanshTradeRouter_Click);
-            // 
             // UserControlRoute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1082,23 +1140,23 @@
         private ExtendedControls.ExtButton buttonTargetFrom;
         private ExtendedControls.ExtButton cmd3DMap;
         internal ExtendedControls.ExtTextBoxAutoComplete textBox_From;
-        internal ExtendedControls.NumberBoxLong textBox_Range;
+        internal ExtendedControls.NumberBoxLong valueBox_Range;
         internal ExtendedControls.ExtTextBoxAutoComplete textBox_To;
         private System.Windows.Forms.Label labelLy2;
         private System.Windows.Forms.Label labelLy1;
         internal ExtendedControls.ExtTextBox textBox_Distance;
         private System.Windows.Forms.Label labelTo;
-        internal ExtendedControls.ExtTextBox textBox_ToZ;
+        internal ExtendedControls.NumberBoxDouble valueBox_ToZ;
         private System.Windows.Forms.Label labelMaxJump;
-        internal ExtendedControls.ExtTextBox textBox_ToY;
+        internal ExtendedControls.NumberBoxDouble valueBox_ToY;
         private System.Windows.Forms.Label labelDistance;
-        internal ExtendedControls.ExtTextBox textBox_ToX;
+        internal ExtendedControls.NumberBoxDouble valueBox_ToX;
         private System.Windows.Forms.Label labelMetric;
-        internal ExtendedControls.ExtTextBox textBox_FromZ;
+        internal ExtendedControls.NumberBoxDouble valueBox_FromZ;
         private ExtendedControls.ExtButton extButtonRoute;
-        internal ExtendedControls.ExtTextBox textBox_FromY;
+        internal ExtendedControls.NumberBoxDouble valueBox_FromY;
         private System.Windows.Forms.Label labelFrom;
-        internal ExtendedControls.ExtTextBox textBox_FromX;
+        internal ExtendedControls.NumberBoxDouble valueBox_FromX;
         private BaseUtils.DataGridViewColumnControl dataGridViewRoute;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
@@ -1129,5 +1187,6 @@
         private ExtendedControls.ExtButton extButtonSpanshAmmoniaWorlds;
         private ExtendedControls.ExtButton extButtonSpanshEarthLikes;
         private ExtendedControls.ExtButton extButtonSpanshTradeRouter;
+        private System.Windows.Forms.Label labelEDSMBut;
     }
 }

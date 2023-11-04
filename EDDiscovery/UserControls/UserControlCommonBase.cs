@@ -17,7 +17,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public class UserControlCommonBase : UserControl
+
+    public class UserControlCommonBase : UserControl, EliteDangerousCore.DB.IUserDatabaseSettingsSaver
     {
         #region Status
 
@@ -445,26 +446,40 @@ namespace EDDiscovery.UserControls
 
         // get/put a setting - type needs to be bool, int, double, long, DateTime, string
 
-        public T GetSetting<T>(string itemname, T defaultvalue, bool global = false)
+        public T GetSetting<T>(string itemname, T defaultvalue)
         {
             System.Diagnostics.Debug.Assert(DBBaseName != null);
-            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            //string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            string name = DBName(DisplayNumber, DBBaseName, itemname);
             var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue);
 
-          //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
+            //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
+            return res;
+        }
+        public T GetSettingGlobal<T>(string itemname, T defaultvalue)
+        {
+            System.Diagnostics.Debug.Assert(DBBaseName != null);
+            var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(itemname, defaultvalue);
             return res;
         }
 
-        public bool PutSetting<T>(string itemname, T value, bool global = false)
+        public bool PutSetting<T>(string itemname, T value)
         {
-            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            //string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            string name = DBName(DisplayNumber, DBBaseName, itemname);
             // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
             return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
         }
 
-        public bool DeleteSetting(string itemname, bool global = false)
+        public bool PutSettingGlobal<T>(string itemname, T value)
         {
-            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(itemname, value);
+        }
+
+        public bool DeleteSetting(string itemname)
+        {
+            //string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            string name = DBName(DisplayNumber, DBBaseName, itemname);
             // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
             return EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey(name);
         }
@@ -546,13 +561,8 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public interface ISettingsSaver
-        {
-            T GetSetting<T>(string key, T defaultvalue);
-            bool PutSetting<T>(string key, T value);
-        }
 
-        public class DBSettingsSaver : ISettingsSaver     // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save
+        public class DBSettingsSaver : EliteDangerousCore.DB.IUserDatabaseSettingsSaver     // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save
         {                                        // with a defined extra itemname.  this seems the only way to pass generic delegates
             public DBSettingsSaver(UserControlCommonBase b, string itemname)
             {

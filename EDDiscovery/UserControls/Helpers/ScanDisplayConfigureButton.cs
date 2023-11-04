@@ -25,7 +25,7 @@ namespace EDDiscovery.UserControls
         public string Setting { get; private set; }
         public string[] DisplayFilters { get { return Setting.Split(";"); } }
 
-        public void Init(UserControlCommonBase.ISettingsSaver ucb, string settingname)
+        public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver ucb, string settingname)
         {
             Setting = ucb.GetSetting(settingname, "moons;icons;mats;allg;habzone;starclass;planetclass;dist;");
 

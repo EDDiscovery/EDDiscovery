@@ -23,7 +23,7 @@ namespace EDDiscovery.UserControls
     public static class ScanDisplayForm
     {
         // tag can be a Isystem or an He.. output depends on it.
-        public static async void ShowScanOrMarketForm(Form parent, Object tag, WebExternalDataLookup lookup, HistoryList hl, float opacity = 1, Color? keycolour = null)     
+        public static async void ShowScanOrMarketForm(Form parent, Object tag, HistoryList hl, float opacity = 1, Color? keycolour = null, WebExternalDataLookup? forcedlookup = null)     
         {
             if (tag == null)
                 return;
@@ -35,7 +35,6 @@ namespace EDDiscovery.UserControls
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
             ISystem sys = he != null ? he.System : tag as ISystem;          // if so, sys is he.system, else its a direct sys
-            ScanDisplayUserControl sd = null;
             string title = "System".T(EDTx.ScanDisplayForm_Sys) + ": " + sys.Name;
 
             AutoScaleMode asm = AutoScaleMode.Font;
@@ -50,52 +49,64 @@ namespace EDDiscovery.UserControls
                 title += ", " +"Station".T(EDTx.ScanDisplayForm_Station) + ": " + jm.Station;
             }
             else
-            {      
-                sd = new ScanDisplayUserControl();
-                sd.SystemDisplay.ShowWebBodies = lookup != WebExternalDataLookup.None;
+            {
+                StarScan.SystemNode nodedata = null;
+                DBSettingsSaver db = new DBSettingsSaver();
+                EDSMSpanshButton edsmSpanshButton = new EDSMSpanshButton();
+                ScanDisplayBodyFiltersButton filterbut = new ScanDisplayBodyFiltersButton();
+                ScanDisplayConfigureButton configbut = new ScanDisplayConfigureButton();
+                ScanDisplayUserControl sd = new ScanDisplayUserControl();
+
+                if (forcedlookup == null)   // if we not forced into the mode
+                {
+                    edsmSpanshButton.Init(db, "EDSMSpansh", "");
+                    edsmSpanshButton.ValueChanged += (s, e) =>
+                    {
+                        nodedata = hl.StarScan.FindSystemSynchronous(sys, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
+                        sd.SystemDisplay.ShowWebBodies = edsmSpanshButton.WebLookup != WebExternalDataLookup.None;
+                        sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                    };
+                }
+
+                sd.SystemDisplay.ShowWebBodies = (forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup) != WebExternalDataLookup.None;
                 int selsize = (int)(ExtendedControls.Theme.Current.GetFont.Height / 10.0f * 48.0f);
                 sd.SystemDisplay.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, lookup);    // look up system async
+                nodedata = await hl.StarScan.FindSystemAsync(sys, forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup);    // look up system async
 
-                if (data != null)
-                {
-                    long value = data.ScanValue(lookup != WebExternalDataLookup.None);
-                    title += " ~ " + value.ToString("N0") + " cr";
-                }
+                //if (data != null) // can't do right now as value changes if edsm button is there, may fix later tbd
+                //{
+                //    long value = data.ScanValue(lookup != WebExternalDataLookup.None);
+                //    title += " ~ " + value.ToString("N0") + " cr";
+                //}
 
-                DBSettingsSaver db = new DBSettingsSaver();
-
-                ScanDisplayBodyFiltersButton filterbut = new ScanDisplayBodyFiltersButton();
                 filterbut.Init(db, "BodyFilter");
                 filterbut.Image = EDDiscovery.Icons.Controls.EventFilter;
                 filterbut.ValueChanged += (s, e) =>
                 {
-                    sd.DrawSystem(data, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                    sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
                 };
 
-                ScanDisplayConfigureButton configbut = new ScanDisplayConfigureButton();
                 configbut.Init(db, "DisplayFilter");
                 configbut.Image = EDDiscovery.Icons.Controls.DisplayFilters;
                 configbut.ValueChanged += (s, e) =>
                 {
                     configbut.ApplyDisplayFilters(sd);
-                    sd.DrawSystem(data, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                    sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
                 };
 
                 sd.BackColor = ExtendedControls.Theme.Current.Form;
-                sd.DrawSystem(data, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
-
-                int wastedh = infosize.Height - sd.SystemDisplay.DisplayAreaUsed.Y - 10 - 40;
-                if (wastedh > 0)
-                    infosize.Height -= wastedh;
+                sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
 
                 asm = AutoScaleMode.None;   // because we are using a picture box, it does not autoscale, so we can't use that logic on it.
 
                 form.Add(new ExtendedControls.ConfigurableForm.Entry("Body", null, null, new Point(4, 28), new Size(28, 28), null) { control = filterbut });
-                form.Add(new ExtendedControls.ConfigurableForm.Entry("Con", null, null, new Point(4+28+4, 28), new Size(28, 28), null) { control = configbut });
+                form.Add(new ExtendedControls.ConfigurableForm.Entry("Con", null, null, new Point(4 + 28 + 8, 28), new Size(28, 28), null) { control = configbut });
+                if ( !forcedlookup.HasValue)
+                    form.Add(new ExtendedControls.ConfigurableForm.Entry("edsm", null, null, new Point(4 + 28 + 8 + 28 + 8, 28), new Size(28, 28), null) { control = edsmSpanshButton });
                 form.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
+                form.AllowResize = true;
             }
 
             form.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
@@ -121,7 +132,7 @@ namespace EDDiscovery.UserControls
         }
 
         // class needed for buttons for save/restore - global for all instances
-        public class DBSettingsSaver : UserControlCommonBase.ISettingsSaver     
+        public class DBSettingsSaver : EliteDangerousCore.DB.IUserDatabaseSettingsSaver
         {
             const string root = "ScanDisplayFormCommon_";
             public T GetSetting<T>(string key, T defaultvalue)

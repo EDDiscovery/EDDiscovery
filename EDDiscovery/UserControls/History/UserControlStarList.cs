@@ -654,7 +654,7 @@ namespace EDDiscovery.UserControls
         private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // tbd spansh
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe, edsmSpanshButton.WebLookup, DiscoveryForm.History);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe,  DiscoveryForm.History, forcedlookup: edsmSpanshButton.WebLookup);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -704,7 +704,7 @@ namespace EDDiscovery.UserControls
                 {
                     var he = dataGridViewStarList.Rows[e.RowIndex].Tag as HistoryEntry;
                     // tbd spansh
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, edsmSpanshButton.WebLookup, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, DiscoveryForm.History, forcedlookup: edsmSpanshButton.WebLookup);
                 }
             }
         }

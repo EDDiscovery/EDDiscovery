@@ -1260,7 +1260,7 @@ namespace EDDiscovery.UserControls
         private void viewSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var rows = dataGridView.SelectedRowAndCount(true, true, -1, false);
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), dataGridView.Rows[rows.Item1].Tag as ISystem, edsmSpanshButton.WebLookup, DiscoveryForm.History);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), dataGridView.Rows[rows.Item1].Tag as ISystem, DiscoveryForm.History, forcedlookup: edsmSpanshButton.WebLookup);
         }
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)

@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
             if (row >= 0)
             {
                 ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, DiscoveryForm.History);
             }
         }
 
@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewRoute.RightClickRowValid)
             {
                 ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);    // protected against sys = null
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, DiscoveryForm.History);    // protected against sys = null
             }
         }
 

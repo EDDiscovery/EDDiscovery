@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls.Search
 
         void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, WebLookup, discoveryform.History);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, discoveryform.History, forcedlookup: WebLookup);
         }
 
         public void Excel(int columnsout)

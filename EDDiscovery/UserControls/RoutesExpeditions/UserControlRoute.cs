@@ -55,9 +55,9 @@ namespace EDDiscovery.UserControls
             fromupdatetimer = new System.Windows.Forms.Timer();
             toupdatetimer = new System.Windows.Forms.Timer();
 
-            fromupdatetimer.Interval = 500;
+            fromupdatetimer.Interval = 1000;
             fromupdatetimer.Tick += FromUpdateTick;
-            toupdatetimer.Interval = 500;
+            toupdatetimer.Interval = 1000;
             toupdatetimer.Tick += ToUpdateTick;
 
             string[] MetricNames = {        // synchronise with SystemCache.SystemsNearestMetric, really should be translated, but there you go.
@@ -81,13 +81,13 @@ namespace EDDiscovery.UserControls
 
             textBox_From.Text = GetSetting("_RouteFrom", "");
             textBox_To.Text = GetSetting("_RouteTo", "");
-            textBox_Range.Value = GetSetting("_RouteRange", 30);
-            textBox_FromX.Text = GetSetting("_RouteFromX", "");
-            textBox_FromY.Text = GetSetting("_RouteFromY", "");
-            textBox_FromZ.Text = GetSetting("_RouteFromZ", "");
-            textBox_ToX.Text = GetSetting("_RouteToX", "");
-            textBox_ToY.Text = GetSetting("_RouteToY", "");
-            textBox_ToZ.Text = GetSetting("_RouteToZ", "");
+            valueBox_Range.Value = GetSetting("_RouteRange", 30);
+            valueBox_FromX.ValueNoChange = GetSetting("_RouteFromX", 0.0);
+            valueBox_FromY.ValueNoChange = GetSetting("_RouteFromY", 0.0);
+            valueBox_FromZ.ValueNoChange = GetSetting("_RouteFromZ", 0.0);
+            valueBox_ToX.ValueNoChange = GetSetting("_RouteToX", 0.0);
+            valueBox_ToY.ValueNoChange = GetSetting("_RouteToY", 0.0);
+            valueBox_ToZ.ValueNoChange = GetSetting("_RouteToZ", 0.0);
 
             int metricvalue = GetSetting("RouteMetric", 0);
             comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(SystemCache.SystemsNearestMetric), metricvalue)
@@ -104,7 +104,7 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_NoteCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_StarClassCol, EDTx.UserControlRoute_WayPointDistCol,
                                         EDTx.UserControlRoute_DeviationCol,
                                         EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom,
-                                        EDTx.UserControlRoute_buttonExtTargetTo,  EDTx.UserControlRoute_buttonTargetFrom,
+                                        EDTx.UserControlRoute_buttonExtTargetTo,  EDTx.UserControlRoute_buttonTargetFrom, EDTx.UserControlRoute_labelEDSMBut,
                                         EDTx.UserControlRoute_cmd3DMap, EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
                                         EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
                                         EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
@@ -160,24 +160,19 @@ namespace EDDiscovery.UserControls
 
             PutSetting("_RouteFrom", textBox_From.Text);
             PutSetting("_RouteTo", textBox_To.Text);
-            PutSetting("_RouteRange", (int)textBox_Range.Value);
-            PutSetting("_RouteFromX", textBox_FromX.Text);
-            PutSetting("_RouteFromY", textBox_FromY.Text);
-            PutSetting("_RouteFromZ", textBox_FromZ.Text);
-            PutSetting("_RouteToX", textBox_ToX.Text);
-            PutSetting("_RouteToY", textBox_ToY.Text);
-            PutSetting("_RouteToZ", textBox_ToZ.Text);
+            PutSetting("_RouteRange", (int)valueBox_Range.Value);
+            PutSetting("_RouteFromX", valueBox_FromX.Value);
+            PutSetting("_RouteFromY", valueBox_FromY.Value);
+            PutSetting("_RouteFromZ", valueBox_FromZ.Value);
+            PutSetting("_RouteToX", valueBox_ToX.Value);
+            PutSetting("_RouteToY", valueBox_ToY.Value);
+            PutSetting("_RouteToZ", valueBox_ToZ.Value);
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
         public void HistoryChanged()           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
         {
-            if (DiscoveryForm.History.Count > 0)
-            {
-                UpdateTo(null);
-                UpdateFrom(null);
-                last_history_he = DiscoveryForm.History.GetLast;
-            }
+            last_history_he = DiscoveryForm.History.GetLast;
         }
 
         #endregion
@@ -188,15 +183,19 @@ namespace EDDiscovery.UserControls
 
         #region From
 
+
         private bool GetCoordsFrom(out Point3D pos)
         {
-            double x = 0, y = 0, z = 0;
-
-            bool worked = System.Double.TryParse(textBox_FromX.Text, out x) &&
-                            System.Double.TryParse(textBox_FromY.Text, out y) &&
-                            System.Double.TryParse(textBox_FromZ.Text, out z);
-            pos = new Point3D(x, y, z);
-            return worked;
+            if (valueBox_FromX.IsValid && valueBox_FromY.IsValid && valueBox_FromZ.IsValid)
+            {
+                pos = new Point3D(valueBox_FromX.Value, valueBox_FromY.Value, valueBox_FromZ.Value);
+                return true;
+            }
+            else
+            {
+                pos = new Point3D(0, 0, 0);
+                return false;
+            }
         }
 
         // give box updating, and optional new From name
@@ -210,32 +209,30 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // if we have a name, find it
+                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // if we have a name, find it
+
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
-                    textBox_FromX.Text = ds1.X.ToString("0.00");
-                    textBox_FromY.Text = ds1.Y.ToString("0.00");
-                    textBox_FromZ.Text = ds1.Z.ToString("0.00");
+                    valueBox_FromX.ValueNoChange = ds1.X;
+                    valueBox_FromY.ValueNoChange = ds1.Y;
+                    valueBox_FromZ.ValueNoChange = ds1.Z;
                 }
                 else
-                    textBox_FromX.Text = textBox_FromY.Text = textBox_FromZ.Text = "";
+                {
+                    valueBox_FromX.SetBlank();
+                    valueBox_FromY.SetBlank();
+                    valueBox_FromZ.SetBlank();
+                }
             }
             else
             {
                 string res = "",resname="";
                 if (GetCoordsFrom(out Point3D curpos))          // else if we have co-ords, find nearest
                 {
-                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    Cursor = Cursors.WaitCursor;
 
-                    if (nearest != null)
-                    {
-                        if (nearestgmo != null && nearest.Distance(curpos.X, curpos.Y, curpos.Z) > nearestgmo.GetSystem().Distance(curpos.X, curpos.Y, curpos.Z))
-                            nearest = nearestgmo.GetSystem();
-                    }
-                    else
-                        nearest = nearestgmo?.GetSystem();
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 40, edsmSpanshButton.WebLookup, DiscoveryForm.GalacticMapping);
 
                     if (nearest != null)
                     {
@@ -245,6 +242,7 @@ namespace EDDiscovery.UserControls
                         if (distance > 0.1)
                             resname = nearest.Name + " @ " + distance.ToString("0.00") + "ly";
                     }
+                    Cursor = Cursors.Default;
                 }
 
                 textBox_From.Text = res;
@@ -254,15 +252,6 @@ namespace EDDiscovery.UserControls
             UpdateDistance();
             EnableRouteButtonsIfValid();
             changesilence = false;
-        }
-        
-        private void textBox_From_Enter(object sender, EventArgs e)
-        {
-            fromupdatetimer.Stop();
-            fromupdatetimer.Start();
-            fromupdatetimer.Tag = sender;
-            if ( sender != textBox_From)
-                ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // entering selects everything
         }
 
         void FromUpdateTick(object sender, EventArgs e)                 // timer timed out, 
@@ -276,9 +265,16 @@ namespace EDDiscovery.UserControls
             if (!changesilence)
             {
                 fromupdatetimer.Stop();
-                fromupdatetimer.Start();
                 fromupdatetimer.Tag = sender;
+                fromupdatetimer.Start();
             }
+        }
+
+        private void valueBox_From_ValueChanged(object sender, EventArgs e)
+        {
+            fromupdatetimer.Stop();
+            fromupdatetimer.Tag = sender;
+            fromupdatetimer.Start();
         }
 
         private void buttonFromHistory_Click(object sender, EventArgs e)
@@ -317,13 +313,16 @@ namespace EDDiscovery.UserControls
 
         public bool GetCoordsTo(out Point3D pos)
         {
-            double x = 0, y = 0, z = 0;
-
-            bool worked = System.Double.TryParse(textBox_ToX.Text, out x) &&
-                            System.Double.TryParse(textBox_ToY.Text, out y) &&
-                            System.Double.TryParse(textBox_ToZ.Text, out z);
-            pos = new Point3D(x, y, z);
-            return worked;
+            if (valueBox_ToX.IsValid && valueBox_ToY.IsValid && valueBox_ToZ.IsValid)
+            {
+                pos = new Point3D(valueBox_ToX.Value, valueBox_ToY.Value, valueBox_ToZ.Value);
+                return true;
+            }
+            else
+            {
+                pos = new Point3D(0, 0, 0);
+                return false;
+            }
         }
 
         private void UpdateTo(object sender, string optupdateto = null)
@@ -339,12 +338,16 @@ namespace EDDiscovery.UserControls
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
-                    textBox_ToX.Text = ds1.X.ToString("0.00");
-                    textBox_ToY.Text = ds1.Y.ToString("0.00");
-                    textBox_ToZ.Text = ds1.Z.ToString("0.00");
+                    valueBox_ToX.ValueNoChange = ds1.X;
+                    valueBox_ToY.ValueNoChange = ds1.Y;
+                    valueBox_ToZ.ValueNoChange = ds1.Z;
                 }
                 else
-                    textBox_ToX.Text = textBox_ToY.Text = textBox_ToZ.Text = "";
+                {
+                    valueBox_ToX.SetBlank();
+                    valueBox_ToY.SetBlank();
+                    valueBox_ToZ.SetBlank();
+                }
             }
             else
             {
@@ -352,16 +355,9 @@ namespace EDDiscovery.UserControls
 
                 if (GetCoordsTo(out Point3D curpos))
                 {
-                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    Cursor = Cursors.WaitCursor;
 
-                    if (nearest != null)
-                    {
-                        if (nearestgmo != null && nearest.Distance(curpos.X, curpos.Y, curpos.Z) > nearestgmo.GetSystem().Distance(curpos.X, curpos.Y, curpos.Z))
-                            nearest = nearestgmo.GetSystem();
-                    }
-                    else
-                        nearest = nearestgmo?.GetSystem();
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 40, edsmSpanshButton.WebLookup, DiscoveryForm.GalacticMapping);
 
                     if (nearest != null)
                     {
@@ -371,6 +367,7 @@ namespace EDDiscovery.UserControls
                         if (distance > 0.1)
                             resname = nearest.Name + " @ " + distance.ToString("0.00") + "ly";
                     }
+                    Cursor = Cursors.Default;
                 }
 
                 textBox_To.Text = res;
@@ -380,16 +377,6 @@ namespace EDDiscovery.UserControls
             UpdateDistance();
             EnableRouteButtonsIfValid();
             changesilence = false;
-        }
-
-
-        private void textBox_To_Enter(object sender, EventArgs e)   // To has been tabbed/clicked..
-        {
-            toupdatetimer.Stop();
-            toupdatetimer.Start();
-            toupdatetimer.Tag = sender;
-            if (sender != textBox_To)
-                ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // entering selects everything
         }
 
         void ToUpdateTick(object sender, EventArgs e)
@@ -403,9 +390,16 @@ namespace EDDiscovery.UserControls
             if (!changesilence)
             {
                 toupdatetimer.Stop();
-                toupdatetimer.Start();
                 toupdatetimer.Tag = sender;
+                toupdatetimer.Start();
             }
+        }
+
+        private void valueBox_To_ValueChanged(object sender, EventArgs e)
+        {
+            toupdatetimer.Stop();
+            toupdatetimer.Tag = sender;
+            toupdatetimer.Start();
         }
 
         private void buttonToHistory_Click(object sender, EventArgs e)
@@ -432,7 +426,6 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
         }
 
-
         private void extButtonToSpansh_Click(object sender, EventArgs e)
         {
             string sysname = SystemNameOnly(textBox_To.Text);
@@ -450,7 +443,7 @@ namespace EDDiscovery.UserControls
             if (routingthread == null  || !routingthread.IsAlive)
             {
                 plotter = new RoutePlotter();
-                plotter.MaxRange = textBox_Range.Value;
+                plotter.MaxRange = valueBox_Range.Value;
                 GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
                 GetCoordsTo(out plotter.Coordsto);
                 plotter.FromSystem = !textBox_FromName.Text.Contains("@") && textBox_From.Text.HasChars() ? textBox_From.Text : "START POINT";
@@ -607,7 +600,7 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
 
-                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, 
+                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, (int)valueBox_Range.Value, 
                                                     f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
                                                     f.GetBool("avoidthargoids").Value, f.GetBool("loop").Value, f.GetInt("maxls").Value,
                                                     roadtoriches ? f.GetInt("minscan").Value : 1,
@@ -637,7 +630,7 @@ namespace EDDiscovery.UserControls
             if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Neutron Router", closeicon: true) == DialogResult.OK)
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, f.GetInt("efficiency").Value);
+                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)valueBox_Range.Value, f.GetInt("efficiency").Value);
                 StartSpanshQueryOp(Spanshquerytype.Neutron);
             }
         }

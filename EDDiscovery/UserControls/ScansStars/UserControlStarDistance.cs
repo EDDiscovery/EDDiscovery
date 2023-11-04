@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
                 if (rightclicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, DiscoveryForm.History);
             }
         }
 
@@ -313,7 +313,7 @@ namespace EDDiscovery.UserControls
             {
                 var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
                 if (clicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem,  DiscoveryForm.History);
             }
 
         }

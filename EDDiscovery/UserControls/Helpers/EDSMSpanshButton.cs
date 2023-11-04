@@ -20,7 +20,7 @@ namespace EDDiscovery.UserControls
     {
         // use ValueChanged to pick up the change 
 
-        public void Init(UserControlCommonBase ucb, string settingname, string defaultvalue)
+        public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver ucb, string settingname, string defaultvalue)
         {
             string startsetting = ucb.GetSetting(settingname, defaultvalue);
             Init(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption[]
@@ -39,9 +39,6 @@ namespace EDDiscovery.UserControls
             
             Image = startsetting.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
         }
-
-        //public bool SpanshEnabled { get { return IsSet("SPANSH") || IsSet("SPANSHEDSM"); } }
-        //public bool EDSMEnabled { get { return IsSet("EDSM") || IsSet("SPANSHEDSM"); } }
 
         public EliteDangerousCore.WebExternalDataLookup WebLookup { get
             {

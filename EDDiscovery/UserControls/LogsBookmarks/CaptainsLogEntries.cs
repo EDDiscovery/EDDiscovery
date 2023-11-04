@@ -560,7 +560,7 @@ namespace EDDiscovery.UserControls
             ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
 
             if ( sys != null )
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, DiscoveryForm.History);
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
 

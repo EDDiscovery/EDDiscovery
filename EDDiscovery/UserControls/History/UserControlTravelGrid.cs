@@ -1020,7 +1020,7 @@ namespace EDDiscovery.UserControls
         }
         private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe, EliteDangerousCore.WebExternalDataLookup.All, DiscoveryForm.History); 
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe, DiscoveryForm.History); 
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)

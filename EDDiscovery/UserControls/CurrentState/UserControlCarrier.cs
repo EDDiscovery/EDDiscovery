@@ -284,8 +284,8 @@ namespace EDDiscovery.UserControls
             }
 
             // capi enable/disable  - get stats
-            DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global:true);
-            int capicmdrid = GetSetting(dbCAPICommander, -1, global:true);
+            DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
+            int capicmdrid = GetSettingGlobal(dbCAPICommander, -1);
             bool capisamecmdr = DiscoveryForm.History.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
@@ -834,9 +834,9 @@ namespace EDDiscovery.UserControls
 
                 // record when and who did capi, and clear data.  
 
-                PutSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);                 
-                PutSetting(dbCAPICommander, DiscoveryForm.History.CommanderId, global: true);
-                PutSetting(dbCAPISave, "", global: true);
+                PutSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
+                PutSettingGlobal(dbCAPICommander, DiscoveryForm.History.CommanderId);
+                PutSettingGlobal(dbCAPISave, "");
 
                 // don't hold up the main thread, do it in a task, as its a HTTP operation
 
@@ -865,7 +865,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\fc.json", fc.Json.ToString(true));
                                     System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
-                                    PutSetting(dbCAPISave, fleetcarrier, global: true);       // store data into global capi slot
+                                    PutSettingGlobal(dbCAPISave, fleetcarrier);       // store data into global capi slot
                                     break;
                                 }
                                 else
@@ -907,8 +907,8 @@ namespace EDDiscovery.UserControls
 
         private void DisplayCAPIFromDB()
         {
-            string capi = GetSetting(dbCAPISave, "", global: true);
-            int capicmd = GetSetting(dbCAPICommander, -1, global: true);
+            string capi = GetSettingGlobal(dbCAPISave, "");
+            int capicmd = GetSettingGlobal(dbCAPICommander, -1);
 
             // if its a valid capi for commander, turn it into a FC entity
             var fc = (capi.Length > 0 && capicmd == DiscoveryForm.History.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
@@ -934,7 +934,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);
+                DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
                 labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
                 capidisplayedtime = capitime;
 

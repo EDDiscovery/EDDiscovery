@@ -1204,6 +1204,7 @@ namespace EDDiscovery
         UserControlRoute_buttonExtTravelFrom, // Control 'History'
         UserControlRoute_buttonExtTargetTo, // Control 'Target'
         UserControlRoute_buttonTargetFrom, // Control 'Target'
+        UserControlRoute_labelEDSMBut,
         UserControlRoute_cmd3DMap, // Control '3D Map'
         UserControlRoute_labelLy2, // Control 'ly'
         UserControlRoute_labelLy1, // Control 'ly'
