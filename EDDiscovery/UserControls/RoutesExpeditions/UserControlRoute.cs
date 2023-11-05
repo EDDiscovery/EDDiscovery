@@ -35,16 +35,12 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Timer toupdatetimer;
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
-        private HistoryEntry last_history_he = null;
-
         #region  Init
 
         public UserControlRoute()
         {
             InitializeComponent();
         }
-
-
 
         public override void Init()
         {
@@ -127,8 +123,6 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            DiscoveryForm.OnHistoryChange += HistoryChanged;
-
             waitforspanshresulttimer.Interval = 1000;
             waitforspanshresulttimer.Tick += Waitforspanshresulttimer_Tick;
 
@@ -156,8 +150,6 @@ namespace EDDiscovery.UserControls
                 routingthread.Join();
             }
 
-            DiscoveryForm.OnHistoryChange -= HistoryChanged;
-
             PutSetting("_RouteFrom", textBox_From.Text);
             PutSetting("_RouteTo", textBox_To.Text);
             PutSetting("_RouteRange", (int)valueBox_Range.Value);
@@ -170,19 +162,9 @@ namespace EDDiscovery.UserControls
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
-        public void HistoryChanged()           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
-        {
-            last_history_he = DiscoveryForm.History.GetLast;
-        }
-
         #endregion
-        public override void ReceiveHistoryEntry(HistoryEntry he)
-        {
-            last_history_he = he;       // keep track
-        }
 
         #region From
-
 
         private bool GetCoordsFrom(out Point3D pos)
         {
@@ -279,10 +261,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromHistory_Click(object sender, EventArgs e)
         {
+            var last_history_he = DiscoveryForm.History.GetLast;
             if (last_history_he != null)
-            {
                 UpdateFrom(textBox_From, last_history_he.System.Name);
-            }
         }
 
         private void buttonFromTarget_Click(object sender, EventArgs e)
@@ -404,10 +385,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonToHistory_Click(object sender, EventArgs e)
         {
+            var last_history_he = DiscoveryForm.History.GetLast;
             if (last_history_he != null)
-            {
-                UpdateTo(textBox_From, last_history_he.System.Name);
-            }
+                UpdateTo(textBox_To, last_history_he.System.Name);
         }
 
         private void buttonToTarget_Click(object sender, EventArgs e)
@@ -712,21 +692,27 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.WriteLine($"Spansh job tick {Environment.TickCount}");
             EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+
+            string errstring;
+
             try
             {
                 var res = spanshquerytype == Spanshquerytype.TradeRouter ? sp.TryGetTradeRouter(spanshjobname) :
                           spanshquerytype == Spanshquerytype.Neutron ? sp.TryGetNeutronRouter(spanshjobname) : sp.TryGetRoadToRichesAmmonia(spanshjobname);
 
-                if (res != null && res.Item1 == false)      // if not ready
+                if (res.Item1 != null)          // error return
+                {
+                    errstring = res.Item1;
+                }
+                else if (res.Item2 == null)      // if not ready, no error
                 {
                     waitforspanshresulttimer.Stop();
-                    waitforspanshresulttimer.Interval = waitforspanshresulttimer.Interval < 16000 ? waitforspanshresulttimer.Interval * 2 : 16000;
+                    waitforspanshresulttimer.Interval = waitforspanshresulttimer.Interval < 8000 ? waitforspanshresulttimer.Interval * 2 : 8000;
                     waitforspanshresulttimer.Start();
                     return;
                 }
-                else if (res != null)
+                else
                 {
-                    System.Diagnostics.Debug.WriteLine($"Spansh job got");
                     waitforspanshresulttimer.Stop();
 
                     ISystem prev = null;
@@ -760,11 +746,12 @@ namespace EDDiscovery.UserControls
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Spansh result exception {ex}");
+                errstring = ex.Message;
             }
 
             waitforspanshresulttimer.Stop();
-            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), $"Spansh failed to return valid data to query. Try again!", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
-            System.Diagnostics.Debug.WriteLine($"Spansh failed with null");
+            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), $"Spansh returned: {errstring}", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+            System.Diagnostics.Debug.WriteLine($"Spansh failed with {errstring}");
             EnableRouteButtonsIfValid();
         }
 
