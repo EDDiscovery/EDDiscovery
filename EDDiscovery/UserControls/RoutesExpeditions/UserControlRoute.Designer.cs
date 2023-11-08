@@ -31,9 +31,13 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlRoute));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.controlPanel = new System.Windows.Forms.Panel();
-            this.groupBoxSpansh = new ExtendedControls.ExtGroupBox();
+            this.outputPanel = new System.Windows.Forms.Panel();
+            this.extButtonExpeditionPush = new ExtendedControls.ExtButton();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.cmd3DMap = new ExtendedControls.ExtButton();
             this.extButtonNeutronRouter = new ExtendedControls.ExtButton();
+            this.extButtonSpanshGalaxyPlotter = new ExtendedControls.ExtButton();
+            this.extButtonFleetCarrier = new ExtendedControls.ExtButton();
             this.extButtonSpanshTradeRouter = new ExtendedControls.ExtButton();
             this.extButtonSpanshEarthLikes = new ExtendedControls.ExtButton();
             this.extButtonSpanshAmmoniaWorlds = new ExtendedControls.ExtButton();
@@ -72,9 +76,6 @@
             this.extButtonToSpansh = new ExtendedControls.ExtButton();
             this.extButtonFromSpansh = new ExtendedControls.ExtButton();
             this.buttonFromEDSM = new ExtendedControls.ExtButton();
-            this.extButtonExpeditionPush = new ExtendedControls.ExtButton();
-            this.buttonExtExcel = new ExtendedControls.ExtButton();
-            this.cmd3DMap = new ExtendedControls.ExtButton();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,52 +93,69 @@
             this.StarClassCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.controlPanel.SuspendLayout();
-            this.groupBoxSpansh.SuspendLayout();
+            this.extButtonExoMastery = new ExtendedControls.ExtButton();
+            this.flowLayoutPanel1 = new ExtendedControls.ExtFlowLayoutPanel();
+            this.groupBoxSpansh = new ExtendedControls.ExtGroupBox();
+            this.outputPanel.SuspendLayout();
             this.groupBoxInternal.SuspendLayout();
             this.groupBoxPara.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.groupBoxSpansh.SuspendLayout();
             this.SuspendLayout();
             // 
-            // controlPanel
+            // outputPanel
             // 
-            this.controlPanel.AutoSize = true;
-            this.controlPanel.Controls.Add(this.groupBoxSpansh);
-            this.controlPanel.Controls.Add(this.groupBoxInternal);
-            this.controlPanel.Controls.Add(this.groupBoxPara);
-            this.controlPanel.Controls.Add(this.extButtonExpeditionPush);
-            this.controlPanel.Controls.Add(this.buttonExtExcel);
-            this.controlPanel.Controls.Add(this.cmd3DMap);
-            this.controlPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.controlPanel.Location = new System.Drawing.Point(0, 0);
-            this.controlPanel.Name = "controlPanel";
-            this.controlPanel.Size = new System.Drawing.Size(878, 301);
-            this.controlPanel.TabIndex = 0;
+            this.outputPanel.AutoSize = true;
+            this.outputPanel.Controls.Add(this.extButtonExpeditionPush);
+            this.outputPanel.Controls.Add(this.buttonExtExcel);
+            this.outputPanel.Controls.Add(this.cmd3DMap);
+            this.outputPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.outputPanel.Location = new System.Drawing.Point(0, 241);
+            this.outputPanel.Name = "outputPanel";
+            this.outputPanel.Size = new System.Drawing.Size(990, 35);
+            this.outputPanel.TabIndex = 0;
             // 
-            // groupBoxSpansh
+            // extButtonExpeditionPush
             // 
-            this.groupBoxSpansh.BackColorScaling = 0.5F;
-            this.groupBoxSpansh.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxSpansh.BorderColorScaling = 0.5F;
-            this.groupBoxSpansh.Controls.Add(this.extButtonNeutronRouter);
-            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshTradeRouter);
-            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshEarthLikes);
-            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshAmmoniaWorlds);
-            this.groupBoxSpansh.Controls.Add(this.extButtonSpanshRoadToRiches);
-            this.groupBoxSpansh.Location = new System.Drawing.Point(4, 207);
-            this.groupBoxSpansh.Name = "groupBoxSpansh";
-            this.groupBoxSpansh.Size = new System.Drawing.Size(781, 57);
-            this.groupBoxSpansh.TabIndex = 73;
-            this.groupBoxSpansh.TabStop = false;
-            this.groupBoxSpansh.Text = "Spansh";
-            this.groupBoxSpansh.TextPadding = 0;
-            this.groupBoxSpansh.TextStartPosition = -1;
+            this.extButtonExpeditionPush.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonExpeditionPush.Image = global::EDDiscovery.Icons.Controls.expedition;
+            this.extButtonExpeditionPush.Location = new System.Drawing.Point(155, 4);
+            this.extButtonExpeditionPush.Name = "extButtonExpeditionPush";
+            this.extButtonExpeditionPush.Size = new System.Drawing.Size(28, 28);
+            this.extButtonExpeditionPush.TabIndex = 59;
+            this.toolTip.SetToolTip(this.extButtonExpeditionPush, "Push to expedition");
+            this.extButtonExpeditionPush.UseVisualStyleBackColor = true;
+            this.extButtonExpeditionPush.Click += new System.EventHandler(this.extButtonExpeditionPush_Click);
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(121, 4);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 59;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // cmd3DMap
+            // 
+            this.cmd3DMap.Location = new System.Drawing.Point(4, 4);
+            this.cmd3DMap.Name = "cmd3DMap";
+            this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
+            this.cmd3DMap.TabIndex = 50;
+            this.cmd3DMap.Text = "3D Map";
+            this.toolTip.SetToolTip(this.cmd3DMap, "Show route on 3D Map");
+            this.cmd3DMap.UseVisualStyleBackColor = true;
+            this.cmd3DMap.Click += new System.EventHandler(this.cmd3DMap_Click);
             // 
             // extButtonNeutronRouter
             // 
-            this.extButtonNeutronRouter.Location = new System.Drawing.Point(4, 19);
+            this.extButtonNeutronRouter.Location = new System.Drawing.Point(3, 3);
             this.extButtonNeutronRouter.Name = "extButtonNeutronRouter";
             this.extButtonNeutronRouter.Size = new System.Drawing.Size(100, 27);
             this.extButtonNeutronRouter.TabIndex = 40;
@@ -145,9 +163,29 @@
             this.extButtonNeutronRouter.UseVisualStyleBackColor = true;
             this.extButtonNeutronRouter.Click += new System.EventHandler(this.extButtonNeutronRouter_Click);
             // 
+            // extButtonSpanshGalaxyPlotter
+            // 
+            this.extButtonSpanshGalaxyPlotter.Location = new System.Drawing.Point(639, 3);
+            this.extButtonSpanshGalaxyPlotter.Name = "extButtonSpanshGalaxyPlotter";
+            this.extButtonSpanshGalaxyPlotter.Size = new System.Drawing.Size(100, 27);
+            this.extButtonSpanshGalaxyPlotter.TabIndex = 40;
+            this.extButtonSpanshGalaxyPlotter.Text = "Galaxy Plotter";
+            this.extButtonSpanshGalaxyPlotter.UseVisualStyleBackColor = true;
+            this.extButtonSpanshGalaxyPlotter.Click += new System.EventHandler(this.extButtonSpanshGalaxyPlotter_Click);
+            // 
+            // extButtonFleetCarrier
+            // 
+            this.extButtonFleetCarrier.Location = new System.Drawing.Point(533, 3);
+            this.extButtonFleetCarrier.Name = "extButtonFleetCarrier";
+            this.extButtonFleetCarrier.Size = new System.Drawing.Size(100, 27);
+            this.extButtonFleetCarrier.TabIndex = 40;
+            this.extButtonFleetCarrier.Text = "Fleet Carrier";
+            this.extButtonFleetCarrier.UseVisualStyleBackColor = true;
+            this.extButtonFleetCarrier.Click += new System.EventHandler(this.extButtonFleetCarrier_Click);
+            // 
             // extButtonSpanshTradeRouter
             // 
-            this.extButtonSpanshTradeRouter.Location = new System.Drawing.Point(444, 19);
+            this.extButtonSpanshTradeRouter.Location = new System.Drawing.Point(427, 3);
             this.extButtonSpanshTradeRouter.Name = "extButtonSpanshTradeRouter";
             this.extButtonSpanshTradeRouter.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshTradeRouter.TabIndex = 40;
@@ -157,7 +195,7 @@
             // 
             // extButtonSpanshEarthLikes
             // 
-            this.extButtonSpanshEarthLikes.Location = new System.Drawing.Point(334, 19);
+            this.extButtonSpanshEarthLikes.Location = new System.Drawing.Point(321, 3);
             this.extButtonSpanshEarthLikes.Name = "extButtonSpanshEarthLikes";
             this.extButtonSpanshEarthLikes.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshEarthLikes.TabIndex = 40;
@@ -167,7 +205,7 @@
             // 
             // extButtonSpanshAmmoniaWorlds
             // 
-            this.extButtonSpanshAmmoniaWorlds.Location = new System.Drawing.Point(224, 19);
+            this.extButtonSpanshAmmoniaWorlds.Location = new System.Drawing.Point(215, 3);
             this.extButtonSpanshAmmoniaWorlds.Name = "extButtonSpanshAmmoniaWorlds";
             this.extButtonSpanshAmmoniaWorlds.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshAmmoniaWorlds.TabIndex = 40;
@@ -177,7 +215,7 @@
             // 
             // extButtonSpanshRoadToRiches
             // 
-            this.extButtonSpanshRoadToRiches.Location = new System.Drawing.Point(114, 19);
+            this.extButtonSpanshRoadToRiches.Location = new System.Drawing.Point(109, 3);
             this.extButtonSpanshRoadToRiches.Name = "extButtonSpanshRoadToRiches";
             this.extButtonSpanshRoadToRiches.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshRoadToRiches.TabIndex = 40;
@@ -193,9 +231,10 @@
             this.groupBoxInternal.Controls.Add(this.comboBoxRoutingMetric);
             this.groupBoxInternal.Controls.Add(this.labelMetric);
             this.groupBoxInternal.Controls.Add(this.extButtonRoute);
-            this.groupBoxInternal.Location = new System.Drawing.Point(4, 145);
+            this.groupBoxInternal.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxInternal.Location = new System.Drawing.Point(0, 134);
             this.groupBoxInternal.Name = "groupBoxInternal";
-            this.groupBoxInternal.Size = new System.Drawing.Size(781, 55);
+            this.groupBoxInternal.Size = new System.Drawing.Size(990, 55);
             this.groupBoxInternal.TabIndex = 72;
             this.groupBoxInternal.TabStop = false;
             this.groupBoxInternal.Text = "EDD Router";
@@ -281,10 +320,11 @@
             this.groupBoxPara.Controls.Add(this.extButtonToSpansh);
             this.groupBoxPara.Controls.Add(this.extButtonFromSpansh);
             this.groupBoxPara.Controls.Add(this.buttonFromEDSM);
+            this.groupBoxPara.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxPara.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.groupBoxPara.Location = new System.Drawing.Point(4, 4);
+            this.groupBoxPara.Location = new System.Drawing.Point(0, 0);
             this.groupBoxPara.Name = "groupBoxPara";
-            this.groupBoxPara.Size = new System.Drawing.Size(855, 134);
+            this.groupBoxPara.Size = new System.Drawing.Size(990, 134);
             this.groupBoxPara.TabIndex = 71;
             this.groupBoxPara.TabStop = false;
             this.groupBoxPara.Text = "Parameters";
@@ -891,41 +931,6 @@
             this.buttonFromEDSM.UseVisualStyleBackColor = true;
             this.buttonFromEDSM.Click += new System.EventHandler(this.buttonFromEDSM_Click);
             // 
-            // extButtonExpeditionPush
-            // 
-            this.extButtonExpeditionPush.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonExpeditionPush.Image = global::EDDiscovery.Icons.Controls.expedition;
-            this.extButtonExpeditionPush.Location = new System.Drawing.Point(155, 270);
-            this.extButtonExpeditionPush.Name = "extButtonExpeditionPush";
-            this.extButtonExpeditionPush.Size = new System.Drawing.Size(28, 28);
-            this.extButtonExpeditionPush.TabIndex = 59;
-            this.toolTip.SetToolTip(this.extButtonExpeditionPush, "Push to expedition");
-            this.extButtonExpeditionPush.UseVisualStyleBackColor = true;
-            this.extButtonExpeditionPush.Click += new System.EventHandler(this.extButtonExpeditionPush_Click);
-            // 
-            // buttonExtExcel
-            // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(121, 270);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
-            this.buttonExtExcel.TabIndex = 59;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
-            // 
-            // cmd3DMap
-            // 
-            this.cmd3DMap.Location = new System.Drawing.Point(4, 270);
-            this.cmd3DMap.Name = "cmd3DMap";
-            this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
-            this.cmd3DMap.TabIndex = 50;
-            this.cmd3DMap.Text = "3D Map";
-            this.toolTip.SetToolTip(this.cmd3DMap, "Show route on 3D Map");
-            this.cmd3DMap.UseVisualStyleBackColor = true;
-            this.cmd3DMap.Click += new System.EventHandler(this.cmd3DMap_Click);
-            // 
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -966,9 +971,9 @@
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 301);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 276);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(878, 453);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(990, 478);
             this.dataViewScrollerPanel1.TabIndex = 29;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -984,13 +989,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = true;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(859, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(971, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 453);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 478);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 4;
@@ -1039,7 +1044,7 @@
             this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewRoute.SingleRowSelect = true;
-            this.dataGridViewRoute.Size = new System.Drawing.Size(859, 453);
+            this.dataGridViewRoute.Size = new System.Drawing.Size(971, 478);
             this.dataGridViewRoute.TabIndex = 1;
             this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
             this.dataGridViewRoute.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellDoubleClick);
@@ -1103,16 +1108,62 @@
             this.DeviationCol.Name = "DeviationCol";
             this.DeviationCol.ReadOnly = true;
             // 
+            // extButtonExoMastery
+            // 
+            this.extButtonExoMastery.Location = new System.Drawing.Point(745, 3);
+            this.extButtonExoMastery.Name = "extButtonExoMastery";
+            this.extButtonExoMastery.Size = new System.Drawing.Size(100, 27);
+            this.extButtonExoMastery.TabIndex = 40;
+            this.extButtonExoMastery.Text = "Exo Mastery";
+            this.extButtonExoMastery.UseVisualStyleBackColor = true;
+            this.extButtonExoMastery.Click += new System.EventHandler(this.extButtonExoMastery_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.extButtonNeutronRouter);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonSpanshRoadToRiches);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonSpanshAmmoniaWorlds);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonSpanshEarthLikes);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonSpanshTradeRouter);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonFleetCarrier);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonSpanshGalaxyPlotter);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonExoMastery);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(984, 33);
+            this.flowLayoutPanel1.TabIndex = 74;
+            // 
+            // groupBoxSpansh
+            // 
+            this.groupBoxSpansh.AutoSize = true;
+            this.groupBoxSpansh.BackColorScaling = 0.5F;
+            this.groupBoxSpansh.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxSpansh.BorderColorScaling = 0.5F;
+            this.groupBoxSpansh.Controls.Add(this.flowLayoutPanel1);
+            this.groupBoxSpansh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxSpansh.Location = new System.Drawing.Point(0, 189);
+            this.groupBoxSpansh.Name = "groupBoxSpansh";
+            this.groupBoxSpansh.Size = new System.Drawing.Size(990, 52);
+            this.groupBoxSpansh.TabIndex = 73;
+            this.groupBoxSpansh.TabStop = false;
+            this.groupBoxSpansh.Text = "Spansh";
+            this.groupBoxSpansh.TextPadding = 0;
+            this.groupBoxSpansh.TextStartPosition = -1;
+            // 
             // UserControlRoute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel1);
-            this.Controls.Add(this.controlPanel);
+            this.Controls.Add(this.outputPanel);
+            this.Controls.Add(this.groupBoxSpansh);
+            this.Controls.Add(this.groupBoxInternal);
+            this.Controls.Add(this.groupBoxPara);
             this.Name = "UserControlRoute";
-            this.Size = new System.Drawing.Size(878, 754);
-            this.controlPanel.ResumeLayout(false);
-            this.groupBoxSpansh.ResumeLayout(false);
+            this.Size = new System.Drawing.Size(990, 754);
+            this.outputPanel.ResumeLayout(false);
             this.groupBoxInternal.ResumeLayout(false);
             this.groupBoxInternal.PerformLayout();
             this.groupBoxPara.ResumeLayout(false);
@@ -1120,6 +1171,9 @@
             this.contextMenuStrip.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.groupBoxSpansh.ResumeLayout(false);
+            this.groupBoxSpansh.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1127,7 +1181,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel controlPanel;
+        private System.Windows.Forms.Panel outputPanel;
         private ExtendedControls.ExtButton buttonExtExcel;
         internal ExtendedControls.ExtTextBox textBox_ToName;
         internal ExtendedControls.ExtTextBox textBox_FromName;
@@ -1168,7 +1222,6 @@
         private System.Windows.Forms.ToolStripMenuItem showScanToolStripMenuItem;
         private EDSMSpanshButton edsmSpanshButton;
         private ExtendedControls.ExtButton extButtonSpanshRoadToRiches;
-        private ExtendedControls.ExtGroupBox groupBoxSpansh;
         private ExtendedControls.ExtGroupBox groupBoxInternal;
         private ExtendedControls.ExtGroupBox groupBoxPara;
         private ExtendedControls.ExtButton extButtonToSpansh;
@@ -1188,5 +1241,10 @@
         private ExtendedControls.ExtButton extButtonSpanshEarthLikes;
         private ExtendedControls.ExtButton extButtonSpanshTradeRouter;
         private System.Windows.Forms.Label labelEDSMBut;
+        private ExtendedControls.ExtButton extButtonFleetCarrier;
+        private ExtendedControls.ExtButton extButtonSpanshGalaxyPlotter;
+        private ExtendedControls.ExtButton extButtonExoMastery;
+        private ExtendedControls.ExtFlowLayoutPanel flowLayoutPanel1;
+        private ExtendedControls.ExtGroupBox groupBoxSpansh;
     }
 }

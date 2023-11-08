@@ -139,7 +139,7 @@ namespace EDDiscovery
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
-            journalmonitor.OnNewFilteredJournalEntry += NewJournalEntryFromScanner;
+            journalmonitor.OnNewFilteredJournalEntry += NewFilteredJournalEntryFromScanner;
             journalmonitor.OnNewUIEvent += NewUIEventFromScanner;
             journalmonitor.OnNewRawJournalEntry += NewRawJournalEntryFromScanner;
 

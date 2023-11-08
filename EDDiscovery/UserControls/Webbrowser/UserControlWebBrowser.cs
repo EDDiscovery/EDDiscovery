@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
 
             string deflist = GetSetting("Allowed", "");
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { textboxmultiline = true });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { TextBoxMultiline = true });
 
             f.AddOK(new Point(width - 100, 180));
             f.AddCancel(new Point(width - 200, 180));

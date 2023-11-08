@@ -110,7 +110,7 @@ namespace EDDiscovery
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(Label),
                             string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent.".T(EDTx.EDDiscoveryForm_SendEDSMCaption), helist.Count),
                              new Point(5, 30), new Size(width - 5 - 20, 100), null)
-                { textboxmultiline = true });
+                { TextBoxMultiline = true });
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("All", typeof(ExtendedControls.ExtButton),
                             "Send All to EDSM".T(EDTx.EDDiscoveryForm_SendEDSMAll),

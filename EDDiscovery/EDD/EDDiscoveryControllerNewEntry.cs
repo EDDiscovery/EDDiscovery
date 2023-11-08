@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2019 EDDiscovery development team
+ * Copyright © 2015 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -25,8 +23,9 @@ namespace EDDiscovery
 {
     public partial class EDDiscoveryController
     {
-        private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
-        private System.Threading.Timer journalqueuedelaytimer;
+        // journalmonitor, which is an EDJournalUIScanner, is controlled by this class
+        // It is made in Init(), and the controllerhistory.cs stars and stops the scanner
+        // the scanner three callbacks as hooked into this EDDiscoveryController.
 
         // on UI thread. hooked into journal monitor and receives all new entries with no DB filtering
         public void NewRawJournalEntryFromScanner(JournalEntry je, StatusReader sr)
@@ -38,7 +37,7 @@ namespace EDDiscovery
         // on UI thread. hooked into journal monitor and receives new entries post DB filtering..
         // Also call if you programatically add an entry
         // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
-        public void NewJournalEntryFromScanner(JournalEntry je, StatusReader sr)
+        public void NewFilteredJournalEntryFromScanner(JournalEntry je, StatusReader sr)
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
@@ -105,7 +104,7 @@ namespace EDDiscovery
                 OnNewJournalEntryUnfiltered?.Invoke(current);         // Called before any removal or merging, so this is the raw journal list
 
                 HistoryEntry historyentry = History.MakeHistoryEntry(current);
-                OnNewHistoryEntryUnfiltered?.Invoke(historyentry);
+                OnNewHistoryEntryUnfiltered?.Invoke(historyentry);     // this is post merge
 
                 while (journalqueue.Count > 0)                      // go thru the list and find merge candidates
                 {
@@ -248,7 +247,7 @@ namespace EDDiscovery
                                 InvokeAsyncOnUiThread(() =>
                                 {
                                     Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                    NewJournalEntryFromScanner(entry, null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
+                                    NewFilteredJournalEntryFromScanner(entry, null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
                                                                                             // EDDN handler will pick up EDDCommodityPrices and send it.
                                 });
 
@@ -290,7 +289,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewJournalEntryFromScanner(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewFilteredJournalEntryFromScanner(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 
@@ -306,7 +305,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewJournalEntryFromScanner(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewFilteredJournalEntryFromScanner(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 
@@ -325,6 +324,7 @@ namespace EDDiscovery
 
         }
 
-
+        private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
+        private System.Threading.Timer journalqueuedelaytimer;
     }
 }

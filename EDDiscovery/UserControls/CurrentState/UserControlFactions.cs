@@ -504,7 +504,7 @@ namespace EDDiscovery.UserControls
                 DGVLoadColumnLayout(mluc.dataGridView, "ShowMission");
 
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-                { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
 
                 f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
                 f.InstallStandardTriggers();
@@ -585,7 +585,7 @@ namespace EDDiscovery.UserControls
 
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-                { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
                 f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
                 f.InstallStandardTriggers();
                 f.AllowResize = true;
@@ -631,7 +631,7 @@ namespace EDDiscovery.UserControls
 
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-                { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
                 f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
                 f.InstallStandardTriggers();
                 f.AllowResize = true;
@@ -808,7 +808,7 @@ namespace EDDiscovery.UserControls
 
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(960, 400), null)
-                { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
                 f.AddOK(new Point(960 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
                 f.InstallStandardTriggers();
                 f.AllowResize = true;

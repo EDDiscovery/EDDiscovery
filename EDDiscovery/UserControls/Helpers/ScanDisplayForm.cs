@@ -101,11 +101,11 @@ namespace EDDiscovery.UserControls
 
                 asm = AutoScaleMode.None;   // because we are using a picture box, it does not autoscale, so we can't use that logic on it.
 
-                form.Add(new ExtendedControls.ConfigurableForm.Entry("Body", null, null, new Point(4, 28), new Size(28, 28), null) { control = filterbut });
-                form.Add(new ExtendedControls.ConfigurableForm.Entry("Con", null, null, new Point(4 + 28 + 8, 28), new Size(28, 28), null) { control = configbut });
+                form.Add(new ExtendedControls.ConfigurableForm.Entry(filterbut, "Body", null, new Point(4, 28), new Size(28, 28), null));
+                form.Add(new ExtendedControls.ConfigurableForm.Entry(configbut, "Con",  null, new Point(4 + 28 + 8, 28), new Size(28, 28), null));
                 if ( !forcedlookup.HasValue)
-                    form.Add(new ExtendedControls.ConfigurableForm.Entry("edsm", null, null, new Point(4 + 28 + 8 + 28 + 8, 28), new Size(28, 28), null) { control = edsmSpanshButton });
-                form.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
+                    form.Add(new ExtendedControls.ConfigurableForm.Entry(edsmSpanshButton, "edsm", null, new Point(4 + 28 + 8 + 28 + 8, 28), new Size(28, 28), null));
+                form.Add(new ExtendedControls.ConfigurableForm.Entry(sd, "Sys", null, new Point(0, topmargin), infosize, null));
                 form.AllowResize = true;
             }
 

@@ -296,7 +296,7 @@ namespace EDDiscovery.UserControls
 
             cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(ExtendedControls.NumberBoxLong), panelStars.SystemDisplay.ValueLimit.ToStringInvariant(),
                                         new Point(5, 30), new Size(width - 5 - 20, 24), null)
-            { numberboxlongminimum = 1, numberboxlongmaximum = 2000000000 });
+            { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 2000000000 });
 
             cf.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK),
                         new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
