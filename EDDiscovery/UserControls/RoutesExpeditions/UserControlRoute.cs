@@ -35,6 +35,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Timer toupdatetimer;
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
+        private int computing = 0;      // 0 = none, 1 = internal, 2 = web
+
         #region  Init
 
         public UserControlRoute()
@@ -466,14 +468,14 @@ namespace EDDiscovery.UserControls
                 extButtonRoute.Text = "Cancel".T(EDTx.Cancel);
 
                 EnableOutputButtons();
-                EnableRouteButtons(true, false, false);        // keep internal db buttons valid
+                computing = 1;
+                EnableRouteButtonsIfValid();
 
                 routingthread.Start(plotter);
             }
             else
             {
                 plotter.StopPlotter = true;
-                EnableRouteButtons(false,false,false);
             }
         }
 
@@ -492,6 +494,7 @@ namespace EDDiscovery.UserControls
                     RequestPanelOperation(this, new PushRouteList() { Systems = routeSystems });
                     EnableOutputButtons(true);
                     extButtonRoute.Text = "Find Route".TxID(EDTx.UserControlRoute_extButtonRoute);
+                    computing = 0;
                     EnableRouteButtonsIfValid();
                 }));
         }
@@ -577,8 +580,8 @@ namespace EDDiscovery.UserControls
             if (roadtoriches)
                 f.AddLabelAndEntry("Min Scan Value", new Point(4,4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("minscan", typeof(NumberBoxInt), "100000", new Point(dataleft, 0), numberboxsize, "Minimum value of body") { NumberBoxLongMinimum = 100 });
 
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = true, ContentAlign = ContentAlignment.MiddleRight });
-          
+            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
+
             f.AddOK(new Point(140, vpos+16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
@@ -738,7 +741,7 @@ namespace EDDiscovery.UserControls
             f.AddLabelAndEntry("Jump Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("jr", typeof(NumberBoxDouble), jumprange.ToStringInvariant("N2"), new Point(dataleft, 0), numberboxsize, "Jump range of ship, based on no cargo but max fuel") { NumberBoxDoubleMinimum = 3});
             f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("radius", typeof(NumberBoxInt), "25", new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
             f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxsystems", typeof(NumberBoxInt), "100", new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = true, ContentAlign = ContentAlignment.MiddleRight });
+            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
             f.AddLabelAndEntry("Max LS", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxls", typeof(NumberBoxInt), "1000000" , new Point(dataleft, 0), numberboxsize, "Maximum LS from arrival to consider") { NumberBoxLongMinimum = 10 });
             f.AddLabelAndEntry("Min Value", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("minv", typeof(NumberBoxInt), "10000000", new Point(dataleft, 0), numberboxsize, "Minimum value of scans") { NumberBoxLongMinimum = 100 });
             f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
@@ -772,7 +775,8 @@ namespace EDDiscovery.UserControls
                     spanshquerytype = qt;
                     dataGridViewRoute.Rows.Clear();
                     EnableOutputButtons();
-                    EnableRouteButtons(false,false,false);
+                    computing = 2;
+                    EnableRouteButtonsIfValid();
                     waitforspanshresulttimer.Interval = 2000;
                     waitforspanshresulttimer.Start();
                 }
@@ -837,6 +841,7 @@ namespace EDDiscovery.UserControls
 
                     routeSystems = res.Item2;
                     EnableOutputButtons(res.Item2.Count > 0);
+                    computing = 0;
                     EnableRouteButtonsIfValid();
                     return;
                 }
@@ -850,6 +855,7 @@ namespace EDDiscovery.UserControls
             waitforspanshresulttimer.Stop();
             MessageBoxTheme.Show(this.FindForm(), $"Spansh returned: {errstring}", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
             System.Diagnostics.Debug.WriteLine($"Spansh failed with {errstring}");
+            computing = 0;
             EnableRouteButtonsIfValid();
         }
 

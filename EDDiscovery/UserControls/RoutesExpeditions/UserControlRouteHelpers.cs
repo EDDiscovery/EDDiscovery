@@ -212,26 +212,26 @@ namespace EDDiscovery.UserControls
 
         public void EnableRouteButtonsIfValid()
         {
-            bool valid = valueBox_ToX.IsValid && valueBox_ToY.IsValid && valueBox_ToZ.IsValid &&
+            bool numsvalid = valueBox_ToX.IsValid && valueBox_ToY.IsValid && valueBox_ToZ.IsValid &&
                         valueBox_FromX.IsValid && valueBox_FromY.IsValid && valueBox_FromZ.IsValid && valueBox_Range.IsValid;
-            EnableRouteButtons(valid, valid, true);
-        }
+            bool fromvalid = textBox_From.Text.HasChars();
+            bool tovalid = textBox_To.Text.HasChars();
+            bool notcomputing = computing == 0;
 
-        public void EnableRouteButtons(bool internalb, bool routers, bool entrybuttons)
-        {
-            extButtonRoute.Enabled = internalb;
+            extButtonRoute.Enabled = numsvalid && computing != 2;
+            comboBoxRoutingMetric.Enabled = notcomputing;
 
-            comboBoxRoutingMetric.Enabled = 
-            extButtonSpanshRoadToRiches.Enabled = extButtonNeutronRouter.Enabled = extButtonSpanshTradeRouter.Enabled = extButtonFleetCarrier.Enabled =
-            extButtonSpanshAmmoniaWorlds.Enabled = extButtonSpanshEarthLikes.Enabled =
-            extButtonExoMastery.Enabled = extButtonSpanshGalaxyPlotter.Enabled = routers;
+            extButtonExoMastery.Enabled = extButtonSpanshRoadToRiches.Enabled = extButtonSpanshAmmoniaWorlds.Enabled = extButtonSpanshEarthLikes.Enabled = fromvalid && notcomputing;
+            extButtonNeutronRouter.Enabled = fromvalid && tovalid && notcomputing;
+            extButtonSpanshTradeRouter.Enabled = fromvalid && notcomputing;
+            extButtonSpanshGalaxyPlotter.Enabled = extButtonFleetCarrier.Enabled = fromvalid && tovalid && notcomputing;
 
             textBox_To.Enabled = textBox_ToName.Enabled = buttonExtTravelTo.Enabled = buttonExtTargetTo.Enabled =
             textBox_From.Enabled = textBox_FromName.Enabled = buttonExtTravelFrom.Enabled = buttonTargetFrom.Enabled =
             valueBox_FromX.Enabled = valueBox_FromY.Enabled = valueBox_FromZ.Enabled =
             valueBox_ToX.Enabled = valueBox_ToY.Enabled = valueBox_ToZ.Enabled =
-            edsmSpanshButton.Enabled = 
-            valueBox_Range.Enabled = checkBox_FsdBoost.Enabled = entrybuttons;
+            edsmSpanshButton.Enabled =
+            valueBox_Range.Enabled = checkBox_FsdBoost.Enabled = notcomputing;
         }
 
         public void EnableOutputButtons(bool en = false)
