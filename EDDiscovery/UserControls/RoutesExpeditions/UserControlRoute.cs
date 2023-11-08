@@ -622,7 +622,7 @@ namespace EDDiscovery.UserControls
 
                 f.AddLabelAndEntry("Station", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("station", stationnames[0], new Point(dataleft, 0), comboboxsize, "Station name", stationnames));
                 f.AddLabelAndEntry("Starting Capital", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("capital", typeof(NumberBoxLong), "1000", new Point(dataleft, 0), numberboxsize, "Starting capital") { NumberBoxLongMinimum = 100 });
-                f.AddLabelAndEntry("Max Hop Distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("hopd", typeof(NumberBoxDouble), jumprange.ToString("N2"), new Point(dataleft, 0), numberboxsize, "Maximum distance you can jump") { NumberBoxLongMinimum = 1 });
+                f.AddLabelAndEntry("Max Hop Distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("hopd", typeof(NumberBoxDouble), jumprange.ToStringInvariant("N2"), new Point(dataleft, 0), numberboxsize, "Maximum distance you can jump") { NumberBoxLongMinimum = 1 });
                 f.AddLabelAndEntry("Max Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("cargo", typeof(NumberBoxInt), "7", new Point(dataleft, 0), numberboxsize, "Maximum cargo you can carry") { NumberBoxLongMinimum = 1 });
                 f.AddLabelAndEntry("Max Hops", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("hops", typeof(NumberBoxInt), "5", new Point(dataleft, 0), numberboxsize, "Maximum hops between stations") { NumberBoxLongMinimum = 1 });
                 f.AddLabelAndEntry("Max Arrival distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("dls", typeof(NumberBoxInt), "1000000", new Point(dataleft, 0), numberboxsize, "Maximum arrival distance of station") { NumberBoxLongMinimum = 1 });
@@ -722,7 +722,7 @@ namespace EDDiscovery.UserControls
 
             var jumprange = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
 
-            f.AddLabelAndEntry("Jump Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("jr", typeof(NumberBoxDouble), jumprange.ToString("N1"), new Point(dataleft, 0), numberboxsize, "Jump range of ship, based on no cargo but max fuel") { NumberBoxDoubleMinimum = 3});
+            f.AddLabelAndEntry("Jump Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("jr", typeof(NumberBoxDouble), jumprange.ToStringInvariant("N2"), new Point(dataleft, 0), numberboxsize, "Jump range of ship, based on no cargo but max fuel") { NumberBoxDoubleMinimum = 3});
             f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("radius", typeof(NumberBoxInt), "25", new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
             f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxsystems", typeof(NumberBoxInt), "100", new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
             f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = true, ContentAlign = ContentAlignment.MiddleRight });
