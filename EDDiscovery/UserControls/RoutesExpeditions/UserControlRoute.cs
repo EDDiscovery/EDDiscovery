@@ -128,6 +128,19 @@ namespace EDDiscovery.UserControls
             waitforspanshresulttimer.Tick += Waitforspanshresulttimer_Tick;
 
             NoteCol.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+            valueBox_FromX.ValidityChanged += ValidityChanges;
+            valueBox_FromY.ValidityChanged += ValidityChanges;
+            valueBox_FromZ.ValidityChanged += ValidityChanges;
+            valueBox_ToX.ValidityChanged += ValidityChanges;
+            valueBox_ToY.ValidityChanged += ValidityChanges;
+            valueBox_ToZ.ValidityChanged += ValidityChanges;
+            valueBox_Range.ValidityChanged += ValidityChanges;
+        }
+
+        private void ValidityChanges(NumberBox<double> nb,bool v)
+        {
+            EnableRouteButtonsIfValid();
         }
 
         public override void LoadLayout()
@@ -424,7 +437,7 @@ namespace EDDiscovery.UserControls
             if (routingthread == null  || !routingthread.IsAlive)
             {
                 plotter = new RoutePlotter();
-                plotter.MaxRange = valueBox_Range.Value;
+                plotter.MaxRange = (float)valueBox_Range.Value;
                 GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
                 GetCoordsTo(out plotter.Coordsto);
                 plotter.FromSystem = !textBox_FromName.Text.Contains("@") && textBox_From.Text.HasChars() ? textBox_From.Text : "START POINT";
@@ -453,14 +466,14 @@ namespace EDDiscovery.UserControls
                 extButtonRoute.Text = "Cancel".T(EDTx.Cancel);
 
                 EnableOutputButtons();
-                EnableRouteButtons(true, false);        // keep cancel valid
+                EnableRouteButtons(true, false, false);        // keep internal db buttons valid
 
                 routingthread.Start(plotter);
             }
             else
             {
                 plotter.StopPlotter = true;
-                EnableRouteButtons();
+                EnableRouteButtons(false,false,false);
             }
         }
 
@@ -759,7 +772,7 @@ namespace EDDiscovery.UserControls
                     spanshquerytype = qt;
                     dataGridViewRoute.Rows.Clear();
                     EnableOutputButtons();
-                    EnableRouteButtons();
+                    EnableRouteButtons(false,false,false);
                     waitforspanshresulttimer.Interval = 2000;
                     waitforspanshresulttimer.Start();
                 }

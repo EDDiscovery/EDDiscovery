@@ -32,21 +32,6 @@ namespace EDDiscovery.UserControls
             return s;
         }
 
-        private bool IsValid()                          // good to go if we have coords and a routing 
-        {
-            bool readytocalc = true;
-
-            if (!GetCoordsFrom(out Point3D pos))        // coords must be valid
-                readytocalc = false;
-            else if (!GetCoordsTo(out pos))
-                readytocalc = false;
-
-            if (comboBoxRoutingMetric.SelectedIndex < 0)
-                readytocalc = false;
-
-            return readytocalc;
-        }
-
         private void UpdateDistance()
         {
             string dist = "";
@@ -172,12 +157,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
-        private void comboBoxRoutingMetric_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            extButtonRoute.Enabled = IsValid();
-        }
-
         private void textBox_Clicked(object sender, EventArgs e)
         {
             ((ExtendedControls.ExtTextBox)sender).SelectAll(); // clicking highlights everything
@@ -229,28 +208,30 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Control validity
 
         public void EnableRouteButtonsIfValid()
         {
-            EnableRouteButtons(IsValid(), IsValid());
+            bool valid = valueBox_ToX.IsValid && valueBox_ToY.IsValid && valueBox_ToZ.IsValid &&
+                        valueBox_FromX.IsValid && valueBox_FromY.IsValid && valueBox_FromZ.IsValid && valueBox_Range.IsValid;
+            EnableRouteButtons(valid, valid, true);
         }
 
-        public void EnableRouteButtons(bool internalb = false, bool routingbuttons = false)
+        public void EnableRouteButtons(bool internalb, bool routers, bool entrybuttons)
         {
-            extButtonSpanshRoadToRiches.Enabled = extButtonNeutronRouter.Enabled = extButtonSpanshTradeRouter.Enabled = extButtonFleetCarrier.Enabled =
-                extButtonSpanshAmmoniaWorlds.Enabled = extButtonSpanshEarthLikes.Enabled =
-                extButtonExoMastery.Enabled = extButtonSpanshGalaxyPlotter.Enabled =
-                textBox_To.Enabled = textBox_ToName.Enabled = buttonExtTravelTo.Enabled = buttonExtTargetTo.Enabled =
-                textBox_From.Enabled = textBox_FromName.Enabled = buttonExtTravelFrom.Enabled = buttonTargetFrom.Enabled =
-                valueBox_FromX.Enabled = valueBox_FromY.Enabled = valueBox_FromZ.Enabled =
-                valueBox_ToX.Enabled = valueBox_ToY.Enabled = valueBox_ToZ.Enabled =
-                valueBox_Range.Enabled = checkBox_FsdBoost.Enabled = 
-                edsmSpanshButton.Enabled =
-                routingbuttons;
-
-            comboBoxRoutingMetric.Enabled = routingbuttons;
-
             extButtonRoute.Enabled = internalb;
+
+            comboBoxRoutingMetric.Enabled = 
+            extButtonSpanshRoadToRiches.Enabled = extButtonNeutronRouter.Enabled = extButtonSpanshTradeRouter.Enabled = extButtonFleetCarrier.Enabled =
+            extButtonSpanshAmmoniaWorlds.Enabled = extButtonSpanshEarthLikes.Enabled =
+            extButtonExoMastery.Enabled = extButtonSpanshGalaxyPlotter.Enabled = routers;
+
+            textBox_To.Enabled = textBox_ToName.Enabled = buttonExtTravelTo.Enabled = buttonExtTargetTo.Enabled =
+            textBox_From.Enabled = textBox_FromName.Enabled = buttonExtTravelFrom.Enabled = buttonTargetFrom.Enabled =
+            valueBox_FromX.Enabled = valueBox_FromY.Enabled = valueBox_FromZ.Enabled =
+            valueBox_ToX.Enabled = valueBox_ToY.Enabled = valueBox_ToZ.Enabled =
+            edsmSpanshButton.Enabled = 
+            valueBox_Range.Enabled = checkBox_FsdBoost.Enabled = entrybuttons;
         }
 
         public void EnableOutputButtons(bool en = false)
@@ -258,5 +239,6 @@ namespace EDDiscovery.UserControls
             buttonExtExcel.Enabled = extButtonExpeditionPush.Enabled = cmd3DMap.Enabled = en;
         }
 
+        #endregion
     }
 }

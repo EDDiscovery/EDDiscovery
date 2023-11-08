@@ -55,7 +55,7 @@
             this.valueBox_FromY = new ExtendedControls.NumberBoxDouble();
             this.textBox_ToName = new ExtendedControls.ExtTextBox();
             this.valueBox_FromZ = new ExtendedControls.NumberBoxDouble();
-            this.valueBox_Range = new ExtendedControls.NumberBoxLong();
+            this.valueBox_Range = new ExtendedControls.NumberBoxDouble();
             this.textBox_FromName = new ExtendedControls.ExtTextBox();
             this.labelLy2 = new System.Windows.Forms.Label();
             this.valueBox_ToX = new ExtendedControls.NumberBoxDouble();
@@ -565,14 +565,12 @@
             this.valueBox_Range.EndButtonEnable = true;
             this.valueBox_Range.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_Range.EndButtonImage")));
             this.valueBox_Range.EndButtonVisible = false;
-            this.valueBox_Range.Format = "D";
             this.valueBox_Range.InErrorCondition = true;
             this.valueBox_Range.Location = new System.Drawing.Point(767, 19);
             this.valueBox_Range.Maximum = ((long)(999));
             this.valueBox_Range.Minimum = ((long)(1));
             this.valueBox_Range.Multiline = false;
             this.valueBox_Range.Name = "valueBox_Range";
-            this.valueBox_Range.NumberStyles = System.Globalization.NumberStyles.AllowThousands;
             this.valueBox_Range.ReadOnly = false;
             this.valueBox_Range.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_Range.SelectionLength = 0;
@@ -1194,7 +1192,7 @@
         private ExtendedControls.ExtButton buttonTargetFrom;
         private ExtendedControls.ExtButton cmd3DMap;
         internal ExtendedControls.ExtTextBoxAutoComplete textBox_From;
-        internal ExtendedControls.NumberBoxLong valueBox_Range;
+        internal ExtendedControls.NumberBoxDouble valueBox_Range;
         internal ExtendedControls.ExtTextBoxAutoComplete textBox_To;
         private System.Windows.Forms.Label labelLy2;
         private System.Windows.Forms.Label labelLy1;
