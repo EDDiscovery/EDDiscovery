@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore;
@@ -360,7 +358,7 @@ namespace EDDiscovery.UserControls
 
                     if (!it.StarSystem.HasCoordinate)
                     {
-                        ISystem p = await EliteDangerousCore.DB.SystemCache.FindSystemAsync(it.StarSystem, EliteDangerousCore.WebExternalDataLookup.All);           // find, even in EDSM, synchronously for now
+                        ISystem p = await EliteDangerousCore.SystemCache.FindSystemAsync(it.StarSystem, EliteDangerousCore.WebExternalDataLookup.All);           // find, even in EDSM, synchronously for now
                         if (IsClosed)       // may have closed in the meanwhile
                             return;
                         if (p != null)      // if found, replace star system with it, for future

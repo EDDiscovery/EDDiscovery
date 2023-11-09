@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
         private int computing = 0;      // 0 = none, 1 = internal, 2 = web
+        private double jumprangelastfound;
 
         #region  Init
 
@@ -79,7 +80,7 @@ namespace EDDiscovery.UserControls
 
             textBox_From.Text = GetSetting("_RouteFrom", "");
             textBox_To.Text = GetSetting("_RouteTo", "");
-            valueBox_Range.Value = GetSetting("_RouteRange", 30);
+            jumprangelastfound = valueBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
             valueBox_FromX.ValueNoChange = GetSetting("_RouteFromX", 0.0);
             valueBox_FromY.ValueNoChange = GetSetting("_RouteFromY", 0.0);
             valueBox_FromZ.ValueNoChange = GetSetting("_RouteFromZ", 0.0);
@@ -138,11 +139,24 @@ namespace EDDiscovery.UserControls
             valueBox_ToY.ValidityChanged += ValidityChanges;
             valueBox_ToZ.ValidityChanged += ValidityChanges;
             valueBox_Range.ValidityChanged += ValidityChanges;
+
+            DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += DiscoveryForm_OnNewEntry;
         }
 
-        private void ValidityChanges(NumberBox<double> nb,bool v)
+        private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
-            EnableRouteButtonsIfValid();
+            double? range = he.ShipInformation?.GetJumpRange(0);
+            if (range.HasValue && range != jumprangelastfound)      // if we selected a different ship or changed modules, detected by jump range changing, update
+            {
+                System.Diagnostics.Debug.WriteLine($"Router ship range has changed, updating");
+                jumprangelastfound = valueBox_Range.Value = range.Value;
+            }
+        }
+
+        private void DiscoveryForm_OnHistoryChange()
+        {
+            jumprangelastfound = valueBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
         }
 
         public override void LoadLayout()
@@ -168,7 +182,6 @@ namespace EDDiscovery.UserControls
 
             PutSetting("_RouteFrom", textBox_From.Text);
             PutSetting("_RouteTo", textBox_To.Text);
-            PutSetting("_RouteRange", (int)valueBox_Range.Value);
             PutSetting("_RouteFromX", valueBox_FromX.Value);
             PutSetting("_RouteFromY", valueBox_FromY.Value);
             PutSetting("_RouteFromZ", valueBox_FromZ.Value);
@@ -176,6 +189,8 @@ namespace EDDiscovery.UserControls
             PutSetting("_RouteToY", valueBox_ToY.Value);
             PutSetting("_RouteToZ", valueBox_ToZ.Value);
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
+
+            DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
         }
 
         #endregion
@@ -207,7 +222,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // if we have a name, find it
+                ISystem ds1 = SystemCache.FindSystem(textBox_From.Text, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // if we have a name, find it
 
                 if (ds1 != null)
                 {
@@ -292,16 +307,14 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromEDSM_Click(object sender, EventArgs e)
         {
-            string sysname = SystemNameOnly(textBox_From.Text);
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysname))
+            if (!edsm.ShowSystemInEDSM(textBox_From.Text))
                 MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
         }
 
         private void extButtonFromSpansh_Click(object sender, EventArgs e)
         {
-            string sysname = SystemNameOnly(textBox_From.Text);
-            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(sysname);
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(textBox_From.Text);
         }
 
         #endregion
@@ -331,7 +344,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
+                ISystem ds1 = SystemCache.FindSystem(textBox_To.Text, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
@@ -416,16 +429,14 @@ namespace EDDiscovery.UserControls
 
         private void buttonToEDSM_Click(object sender, EventArgs e)
         {
-            string sysname = SystemNameOnly(textBox_To.Text);
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysname))
+            if (!edsm.ShowSystemInEDSM(textBox_To.Text))
                 MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
         }
 
         private void extButtonToSpansh_Click(object sender, EventArgs e)
         {
-            string sysname = SystemNameOnly(textBox_To.Text);
-            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(sysname);
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(textBox_To.Text);
         }
 
         #endregion
@@ -580,7 +591,7 @@ namespace EDDiscovery.UserControls
             if (roadtoriches)
                 f.AddLabelAndEntry("Min Scan Value", new Point(4,4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("minscan", typeof(NumberBoxInt), "100000", new Point(dataleft, 0), numberboxsize, "Minimum value of body") { NumberBoxLongMinimum = 100 });
 
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
+            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = !textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
 
             f.AddOK(new Point(140, vpos+16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
@@ -590,7 +601,7 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
 
-                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, (int)valueBox_Range.Value, 
+                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, valueBox_Range.Value,
                                                     f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
                                                     f.GetBool("avoidthargoids").Value, f.GetBool("loop").Value, f.GetInt("maxls").Value,
                                                     roadtoriches ? f.GetInt("minscan").Value : 1,
@@ -634,11 +645,8 @@ namespace EDDiscovery.UserControls
 
                 int vpos = topmargin;
 
-                var jumprange = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange() ?? 25;
-
                 f.AddLabelAndEntry("Station", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("station", stationnames[0], new Point(dataleft, 0), comboboxsize, "Station name", stationnames));
                 f.AddLabelAndEntry("Starting Capital", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("capital", typeof(NumberBoxLong), "1000", new Point(dataleft, 0), numberboxsize, "Starting capital") { NumberBoxLongMinimum = 100 });
-                f.AddLabelAndEntry("Max Hop Distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("hopd", typeof(NumberBoxDouble), jumprange.ToStringInvariant("N2"), new Point(dataleft, 0), numberboxsize, "Maximum distance you can jump") { NumberBoxLongMinimum = 1 });
                 f.AddLabelAndEntry("Max Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("cargo", typeof(NumberBoxInt), "7", new Point(dataleft, 0), numberboxsize, "Maximum cargo you can carry") { NumberBoxLongMinimum = 1 });
                 f.AddLabelAndEntry("Max Hops", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("hops", typeof(NumberBoxInt), "5", new Point(dataleft, 0), numberboxsize, "Maximum hops between stations") { NumberBoxLongMinimum = 1 });
                 f.AddLabelAndEntry("Max Arrival distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("dls", typeof(NumberBoxInt), "1000000", new Point(dataleft, 0), numberboxsize, "Maximum arrival distance of station") { NumberBoxLongMinimum = 1 });
@@ -655,7 +663,7 @@ namespace EDDiscovery.UserControls
                 if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Trade Router", closeicon: true) == DialogResult.OK)
                 {
                     spanshjobname = sp.RequestTradeRouter(textBox_From.Text, f.Get("station"),
-                        f.GetInt("hops").Value, f.GetDouble("hopd").Value, f.GetLong("capital").Value, f.GetInt("cargo").Value, f.GetInt("dls").Value, (int)(f.GetDouble("mage").Value * 86400),
+                        f.GetInt("hops").Value, valueBox_Range.Value, f.GetLong("capital").Value, f.GetInt("cargo").Value, f.GetInt("dls").Value, (int)(f.GetDouble("mage").Value * 86400),
                         f.GetBool("largepad").Value, f.GetBool("prohibited").Value, f.GetBool("planetary").Value, f.GetBool("loop").Value, f.GetBool("permit").Value);
                     StartSpanshQueryOp(Spanshquerytype.TradeRouter);
                 }
@@ -736,12 +744,9 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
-            var jumprange = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
-
-            f.AddLabelAndEntry("Jump Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("jr", typeof(NumberBoxDouble), jumprange.ToStringInvariant("N2"), new Point(dataleft, 0), numberboxsize, "Jump range of ship, based on no cargo but max fuel") { NumberBoxDoubleMinimum = 3});
             f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("radius", typeof(NumberBoxInt), "25", new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
             f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxsystems", typeof(NumberBoxInt), "100", new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
+            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = !textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
             f.AddLabelAndEntry("Max LS", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxls", typeof(NumberBoxInt), "1000000" , new Point(dataleft, 0), numberboxsize, "Maximum LS from arrival to consider") { NumberBoxLongMinimum = 10 });
             f.AddLabelAndEntry("Min Value", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("minv", typeof(NumberBoxInt), "10000000", new Point(dataleft, 0), numberboxsize, "Minimum value of scans") { NumberBoxLongMinimum = 100 });
             f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
@@ -752,7 +757,7 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
 
-                spanshjobname = sp.RequestExomastery(textBox_From.Text, textBox_To.Text, f.GetDouble("jr").Value,
+                spanshjobname = sp.RequestExomastery(textBox_From.Text, textBox_To.Text, valueBox_Range.Value, 
                                                     f.GetInt("radius").Value, f.GetInt("maxsystems").Value,
                                                     f.GetBool("loop").Value, f.GetInt("maxls").Value, f.GetInt("minv").Value);
                 StartSpanshQueryOp(Spanshquerytype.ExoMastery);
@@ -822,7 +827,7 @@ namespace EDDiscovery.UserControls
                     {
                         DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
                         rw.CreateCells(dataGridViewRoute,
-                                system.Name + ":" + system.SystemAddress,
+                                system.Name,
                                 system.Tag as string ?? "",
                                 prev != null ? system.Distance(prev).ToString("0.#") : "",
                                 system.X.ToString("0.####"),
@@ -830,7 +835,11 @@ namespace EDDiscovery.UserControls
                                 system.Z.ToString("0.####"),
                                 "",
                                 "",
+#if DEBUG
+                                system.SystemAddress.ToString()
+#else
                                 ""
+#endif
                                 );
 
                         rw.Tag = system;       // may be null if waypoint or not a system
@@ -859,7 +868,7 @@ namespace EDDiscovery.UserControls
             EnableRouteButtonsIfValid();
         }
 
-        #endregion
+#endregion
 
     }
 }

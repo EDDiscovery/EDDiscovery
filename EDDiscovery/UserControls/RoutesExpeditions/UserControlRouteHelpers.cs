@@ -23,15 +23,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlRoute
     {
-        string SystemNameOnly(string s)             // removes @ at end.
-        {
-            int atpos = s?.IndexOf('@') ?? -1;
-            if (s != null && atpos != -1)
-                s = s.Substring(0, atpos);
-            s = s?.Trim();
-            return s;
-        }
-
+  
         private void UpdateDistance()
         {
             string dist = "";
@@ -209,6 +201,11 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Control validity
+
+        private void ValidityChanges(ExtendedControls.NumberBox<double> nb, bool v)
+        {
+            EnableRouteButtonsIfValid();
+        }
 
         public void EnableRouteButtonsIfValid()
         {

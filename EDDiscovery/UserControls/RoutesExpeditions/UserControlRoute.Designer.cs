@@ -382,18 +382,15 @@
             this.valueBox_FromX.EndButtonEnable = true;
             this.valueBox_FromX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_FromX.EndButtonImage")));
             this.valueBox_FromX.EndButtonVisible = false;
-            this.valueBox_FromX.Format = "G";
+            this.valueBox_FromX.Format = "N4";
             this.valueBox_FromX.InErrorCondition = false;
             this.valueBox_FromX.Location = new System.Drawing.Point(62, 71);
             this.valueBox_FromX.Maximum = 1.7976931348623157E+308D;
             this.valueBox_FromX.Minimum = -1.7976931348623157E+308D;
             this.valueBox_FromX.Multiline = false;
             this.valueBox_FromX.Name = "valueBox_FromX";
-            this.valueBox_FromX.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
-            | System.Globalization.NumberStyles.AllowLeadingSign) 
-            | System.Globalization.NumberStyles.AllowDecimalPoint) 
-            | System.Globalization.NumberStyles.AllowThousands) 
-            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_FromX.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.valueBox_FromX.ReadOnly = false;
             this.valueBox_FromX.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_FromX.SelectionLength = 0;
@@ -462,18 +459,15 @@
             this.valueBox_FromY.EndButtonEnable = true;
             this.valueBox_FromY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_FromY.EndButtonImage")));
             this.valueBox_FromY.EndButtonVisible = false;
-            this.valueBox_FromY.Format = "G";
+            this.valueBox_FromY.Format = "N4";
             this.valueBox_FromY.InErrorCondition = false;
             this.valueBox_FromY.Location = new System.Drawing.Point(140, 71);
             this.valueBox_FromY.Maximum = 1.7976931348623157E+308D;
             this.valueBox_FromY.Minimum = -1.7976931348623157E+308D;
             this.valueBox_FromY.Multiline = false;
             this.valueBox_FromY.Name = "valueBox_FromY";
-            this.valueBox_FromY.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
-            | System.Globalization.NumberStyles.AllowLeadingSign) 
-            | System.Globalization.NumberStyles.AllowDecimalPoint) 
-            | System.Globalization.NumberStyles.AllowThousands) 
-            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_FromY.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.valueBox_FromY.ReadOnly = false;
             this.valueBox_FromY.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_FromY.SelectionLength = 0;
@@ -527,18 +521,15 @@
             this.valueBox_FromZ.EndButtonEnable = true;
             this.valueBox_FromZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_FromZ.EndButtonImage")));
             this.valueBox_FromZ.EndButtonVisible = false;
-            this.valueBox_FromZ.Format = "G";
+            this.valueBox_FromZ.Format = "N4";
             this.valueBox_FromZ.InErrorCondition = false;
             this.valueBox_FromZ.Location = new System.Drawing.Point(218, 71);
             this.valueBox_FromZ.Maximum = 1.7976931348623157E+308D;
             this.valueBox_FromZ.Minimum = -1.7976931348623157E+308D;
             this.valueBox_FromZ.Multiline = false;
             this.valueBox_FromZ.Name = "valueBox_FromZ";
-            this.valueBox_FromZ.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
-            | System.Globalization.NumberStyles.AllowLeadingSign) 
-            | System.Globalization.NumberStyles.AllowDecimalPoint) 
-            | System.Globalization.NumberStyles.AllowThousands) 
-            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_FromZ.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.valueBox_FromZ.ReadOnly = false;
             this.valueBox_FromZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_FromZ.SelectionLength = 0;
@@ -565,12 +556,15 @@
             this.valueBox_Range.EndButtonEnable = true;
             this.valueBox_Range.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_Range.EndButtonImage")));
             this.valueBox_Range.EndButtonVisible = false;
-            this.valueBox_Range.InErrorCondition = true;
+            this.valueBox_Range.Format = "N2";
+            this.valueBox_Range.InErrorCondition = false;
             this.valueBox_Range.Location = new System.Drawing.Point(767, 19);
-            this.valueBox_Range.Maximum = ((long)(999));
-            this.valueBox_Range.Minimum = ((long)(1));
+            this.valueBox_Range.Maximum = 999D;
+            this.valueBox_Range.Minimum = 1D;
             this.valueBox_Range.Multiline = false;
             this.valueBox_Range.Name = "valueBox_Range";
+            this.valueBox_Range.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.valueBox_Range.ReadOnly = false;
             this.valueBox_Range.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_Range.SelectionLength = 0;
@@ -578,8 +572,10 @@
             this.valueBox_Range.Size = new System.Drawing.Size(57, 20);
             this.valueBox_Range.TabIndex = 33;
             this.valueBox_Range.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.valueBox_Range, "Give your jump range, or search range for long jumps");
-            this.valueBox_Range.Value = ((long)(0));
+            this.toolTip.SetToolTip(this.valueBox_Range, "Give your jump range, or search range for long jumps. This is updated on history " +
+        "change or change of ship/modules to the jump range with  zero cargo and maximum " +
+        "fuel");
+            this.valueBox_Range.Value = 25D;
             this.valueBox_Range.WordWrap = true;
             // 
             // textBox_FromName
@@ -632,18 +628,15 @@
             this.valueBox_ToX.EndButtonEnable = true;
             this.valueBox_ToX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_ToX.EndButtonImage")));
             this.valueBox_ToX.EndButtonVisible = false;
-            this.valueBox_ToX.Format = "G";
+            this.valueBox_ToX.Format = "N4";
             this.valueBox_ToX.InErrorCondition = false;
             this.valueBox_ToX.Location = new System.Drawing.Point(396, 71);
             this.valueBox_ToX.Maximum = 1.7976931348623157E+308D;
             this.valueBox_ToX.Minimum = -1.7976931348623157E+308D;
             this.valueBox_ToX.Multiline = false;
             this.valueBox_ToX.Name = "valueBox_ToX";
-            this.valueBox_ToX.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
-            | System.Globalization.NumberStyles.AllowLeadingSign) 
-            | System.Globalization.NumberStyles.AllowDecimalPoint) 
-            | System.Globalization.NumberStyles.AllowThousands) 
-            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_ToX.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.valueBox_ToX.ReadOnly = false;
             this.valueBox_ToX.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_ToX.SelectionLength = 0;
@@ -679,18 +672,15 @@
             this.valueBox_ToY.EndButtonEnable = true;
             this.valueBox_ToY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_ToY.EndButtonImage")));
             this.valueBox_ToY.EndButtonVisible = false;
-            this.valueBox_ToY.Format = "G";
+            this.valueBox_ToY.Format = "N4";
             this.valueBox_ToY.InErrorCondition = false;
             this.valueBox_ToY.Location = new System.Drawing.Point(474, 71);
             this.valueBox_ToY.Maximum = 1.7976931348623157E+308D;
             this.valueBox_ToY.Minimum = -1.7976931348623157E+308D;
             this.valueBox_ToY.Multiline = false;
             this.valueBox_ToY.Name = "valueBox_ToY";
-            this.valueBox_ToY.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
-            | System.Globalization.NumberStyles.AllowLeadingSign) 
-            | System.Globalization.NumberStyles.AllowDecimalPoint) 
-            | System.Globalization.NumberStyles.AllowThousands) 
-            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_ToY.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.valueBox_ToY.ReadOnly = false;
             this.valueBox_ToY.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_ToY.SelectionLength = 0;
@@ -784,18 +774,15 @@
             this.valueBox_ToZ.EndButtonEnable = true;
             this.valueBox_ToZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBox_ToZ.EndButtonImage")));
             this.valueBox_ToZ.EndButtonVisible = false;
-            this.valueBox_ToZ.Format = "G";
+            this.valueBox_ToZ.Format = "N4";
             this.valueBox_ToZ.InErrorCondition = false;
             this.valueBox_ToZ.Location = new System.Drawing.Point(552, 71);
             this.valueBox_ToZ.Maximum = 1.7976931348623157E+308D;
             this.valueBox_ToZ.Minimum = -1.7976931348623157E+308D;
             this.valueBox_ToZ.Multiline = false;
             this.valueBox_ToZ.Name = "valueBox_ToZ";
-            this.valueBox_ToZ.NumberStyles = ((System.Globalization.NumberStyles)((((((System.Globalization.NumberStyles.AllowLeadingWhite | System.Globalization.NumberStyles.AllowTrailingWhite) 
-            | System.Globalization.NumberStyles.AllowLeadingSign) 
-            | System.Globalization.NumberStyles.AllowDecimalPoint) 
-            | System.Globalization.NumberStyles.AllowThousands) 
-            | System.Globalization.NumberStyles.AllowExponent)));
+            this.valueBox_ToZ.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.valueBox_ToZ.ReadOnly = false;
             this.valueBox_ToZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.valueBox_ToZ.SelectionLength = 0;

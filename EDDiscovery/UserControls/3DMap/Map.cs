@@ -725,7 +725,7 @@ namespace EDDiscovery.UserControls.Map3D
                 tbac.PerformAutoCompleteInThread = (s, obj, set) =>       // in the autocomplete thread, so EDSM lookup
                 {
                     System.Diagnostics.Debug.WriteLine($"Autocomplete look up EDSM systems on {s}");
-                    EliteDangerousCore.DB.SystemCache.ReturnSystemAutoCompleteList(s, obj, set);      // perform the system cache autocomplete
+                    EliteDangerousCore.SystemCache.ReturnSystemAutoCompleteList(s, obj, set);      // perform the system cache autocomplete
 
                     foreach( var gmo in edsmmapping.GalacticMapObjects)
                     {
@@ -774,7 +774,7 @@ namespace EDDiscovery.UserControls.Map3D
                         if (isys == null)
                             isys = navroute?.CurrentListSystem?.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
                         if (isys == null)
-                            isys = EliteDangerousCore.DB.SystemCache.FindSystem(tbac.Text);     // final chance, the system DB
+                            isys = EliteDangerousCore.SystemCache.FindSystem(tbac.Text);     // final chance, the system DB
 
                         if (isys != null)
                         {
@@ -1432,7 +1432,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (galstar != null)        // if its set, find it in the db to give more info on position etc
             {
-                ISystem s = EliteDangerousCore.DB.SystemCache.FindSystem(galstar.Name); // look up by name
+                ISystem s = EliteDangerousCore.SystemCache.FindSystem(galstar.Name); // look up by name
                 if (s != null)                          // must normally be found, so return
                     galstar = s;
                 else
