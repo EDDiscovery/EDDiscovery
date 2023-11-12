@@ -363,6 +363,7 @@
     <Compile Include="UserControls\Webbrowser\BrowserBase.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserWebView2.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserIE11.cs" />
+    <Compile Include="WebServer\EDDWebGenericUI.cs" />
     <Compile Include="WebServer\EDDWebTexts.cs" />
     <Compile Include="WebServer\EDDWebPresskey.cs" />
     <Compile Include="WebServer\EDDWebJournal.cs" />

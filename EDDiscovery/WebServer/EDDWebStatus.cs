@@ -148,6 +148,7 @@ namespace EDDiscovery.WebServer
             ship["Materials"] = (counts[(int)MaterialCommodityMicroResourceType.CatType.Raw] + counts[(int)MaterialCommodityMicroResourceType.CatType.Manufactured]).ToStringInvariant();
             ship["MicroResources"] = (counts[(int)MaterialCommodityMicroResourceType.CatType.Data] + counts[(int)MaterialCommodityMicroResourceType.CatType.Component] +
                                        counts[(int)MaterialCommodityMicroResourceType.CatType.Item] + counts[(int)MaterialCommodityMicroResourceType.CatType.Consumable]).ToStringInvariant();
+            ship["CurrentBoost"] = he.Status.CurrentBoost;
             response["Ship"] = ship;
 
             JObject travel = new JObject();
@@ -166,6 +167,15 @@ namespace EDDiscovery.WebServer
 
             response["Bodyname"] = he.WhereAmI;
 
+            response["Bodytype"] = he.Status.BodyType;      // new nov 23
+            response["BodyApproached"] = he.Status.BodyApproached;
+            response["BodyID"] = he.Status.BodyID;
+            response["StationName"] = he.Status.StationName;        // may be null
+            response["StationType"] = he.Status.StationType;
+            response["StationFaction"] = he.Status.StationFaction;
+            response["OnCrewWithCaptain"] = he.Status.OnCrewWithCaptain;
+            response["Multiplayer"] = he.Status.MultiPlayer;
+
             if (he.System.HasCoordinate)         // cursystem has them?
             {
                 response["HomeDist"] = he.System.Distance(EDCommander.Current.HomeSystemIOrSol).ToString("0.##");
@@ -175,9 +185,21 @@ namespace EDDiscovery.WebServer
                 response["SolDist"] = response["HomeDist"] = "-";
 
             response["GameMode"] = he.GameModeGroup;
+            response["Group"] = he.Status.Group;
+            response["Wanted"] = he.Status.Wanted;
             response["Credits"] = he.Credits.ToStringInvariant();
             response["Commander"] = EDCommander.Current.Name;
-            response["Mode"] = he.TravelState.ToString();
+
+            response["Mode"] = he.TravelState.ToString();           
+
+            response["OnFoot"] = he.Status.OnFoot;      // nov 23
+            response["OnFootFleetCarrier"] = he.Status.OnFootFleetCarrier;
+            response["IsDocked"] = he.Status.IsDocked;
+            response["IsLandedInShipOrSRV"] = he.Status.IsLandedInShipOrSRV;
+            response["BookedDropship"] = he.Status.BookedDropship;
+            response["BookedTaxi"] = he.Status.BookedTaxi;
+            response["FSDJumpNextSystemName"] = he.Status.FSDJumpNextSystemName;
+            response["InFSDJumpSequence"] = he.Status.FSDJumpSequence;
 
             return response;
         }
@@ -187,3 +209,4 @@ namespace EDDiscovery.WebServer
 
 
 
+    

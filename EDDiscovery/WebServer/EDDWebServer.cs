@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019-2021 EDDiscovery development team
+ * Copyright © 2019-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,40 +10,34 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
- 
-using BaseUtils;
+
 using BaseUtils.WebServer;
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
-using QuickJSON;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Windows.Forms;
 
 // how to debug
 // -wsf c:\code\eddiscovery\WebSite\EDD  to point EDD at the website
 // open the SLN in the website in another VS instance
-// use ISS Express (Google Chrome) to run the website - you will be able to single step etc
+// use ISS Express (Google Chrome) to run the website - you will be able to single step etc. In EDD Debug Properties, the Start URL is localhost:6502
 // until the js file is needed, a debug point will show not bound.  thats okay.
 // use the console inspector control-shift-I to debug also in chrome
 
 namespace EDDiscovery.WebServer
 {
     // JSON Websockets Interface definition:
+    // Query is from web client
+    // Push is from EDD spontaneous
+    //
+    //-------------------------------------------------------------------------------------------------------------------
     // Query requesttype=journal : fields start, length
     //          responsetype = journalrequest, fields   : firstrow = -1 none, or first row number
     //                                                  : Commander
     //                                                  : rows[] containing journaliconpath, eventtimeutc, summary, info, note
     // Push responsetype = journalrefresh, fields as per journalrequest
     // Push responsetype = journalpush, fields as per journalrequest, insert at front, new rows
-    //
+    //-------------------------------------------------------------------------------------------------------------------
     // Query requesttype=status : fields entry number
     //          responsetype = status, fields           : entry = -1 none, or entry number
     //                                                  : SystemData object containing records
@@ -52,19 +46,31 @@ namespace EDDiscovery.WebServer
     //                                                  : Travel object
     //                                                  : Bodyname, HomeDist, SolDist, GameMode, Credits, Commander, Mode
     // Push responsetype = status, fields as above
-    //
+    //-------------------------------------------------------------------------------------------------------------------
     // Query requesttype=indicator. No fields
-    //          responsetype = indicator, fields        : Various status fields
+    //          responsetype = indicator, fields        : Various status fields taken fro UIOverallStatus
     //
     // Push responsetype = indicatorpush, fields as above
-    //
-    // Query requesttype= presskey, fields              : key = binding name optional keydelay, shiftdelay, updelay
+    //-------------------------------------------------------------------------------------------------------------------
+    // Query requesttype = presskey, fields              : key = binding name optional keydelay, shiftdelay, updelay
     //          responsetype = status, 100 or 400.
-    //
+    //-------------------------------------------------------------------------------------------------------------------
     // Query requesttype=scandata : fields entry number, edsm flag
     //          responsetype = entry, objectlist..          : entry = -1 none, or entry number. See code for fields
-    // Push responsetype=scandatachanged                : indicate scan data has changed
     //
+    // Push responsetype=scandatachanged                : indicate scan data has changed
+    //-------------------------------------------------------------------------------------------------------------------
+    // Push responsetype = genericui, fields are:       (From EDD 17.0 Nov 12 2023)
+    //      data.EventTimeUTC,
+    //      data.EventTypeID 
+    // EventTypeID=FSDTarget, property data.FSDTarget containing properties StarSystem, StarClass, EDStarClass, SystemAddress, RemainingJumpsInRoute, FriendlStarClass
+    // EventTypeID=Music, properties Track, MusicTrackID
+    // EventTypeID=UnderAttack, properties Target
+    // EventTypeID=ShipTargeted, property data.ShipTargeted containing properties TargetLocked=false always (Normal ShipTargeted comes thru the journal interface)
+    // EventTypeID=NavRouteClear, property data.NavRouteClear, no properties.
+    // Ones containing data."EventID" contain other game data: CommanderID, EventTimeLocal, IsBeta, IsOdyssey, GameVersion, Build.
+    //
+    //-------------------------------------------------------------------------------------------------------------------
     // .png load of image from /systemmap/ folder - image name is not important, encoded query field /systemmap/map.png?entry=n&field=n& .. etc
     // Push responsetype=systemmapchanged               : indicate scan system map has changed
 
@@ -207,6 +213,12 @@ namespace EDDiscovery.WebServer
             if (obj.EventTypeID == UITypeEnum.OverallStatus)
             {
                 httpws.SendWebSockets(indicator.Refresh(obj as UIOverallStatus), false); // push indicator push
+            }
+            else if ( obj.EventTypeID == UITypeEnum.FSDTarget || obj.EventTypeID == UITypeEnum.Music || obj.EventTypeID == UITypeEnum.UnderAttack || obj.EventTypeID == UITypeEnum.ShipTargeted ||
+                        obj.EventTypeID == UITypeEnum.NavRouteClear )
+            {
+                var uipush = new GenericUIPush();
+                httpws.SendWebSockets(uipush.Refresh(obj), false); // push json of event 
             }
         }
 
