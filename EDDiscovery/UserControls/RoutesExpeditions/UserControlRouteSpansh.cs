@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
                                                     );
                 StartSpanshQueryOp(qt);
 
-                labelRouteName.Text = $"{textBox_From.Text}{(loop ? " Loop" : ("-" + textBox_To.Text))} ({qt.ToString()})";
+                labelRouteName.Text = $"{textBox_From.Text}{(loop ? " Loop" : (" - " + textBox_To.Text))} ({qt.ToString()})";
             }
         }
 
@@ -139,7 +139,7 @@ namespace EDDiscovery.UserControls
                 nrefficiency = f.GetInt("efficiency").Value;
                 spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency);
                 StartSpanshQueryOp(Spanshquerytype.Neutron);
-                labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (Neutron)";
+                labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Neutron)";
             }
         }
 
@@ -274,7 +274,7 @@ namespace EDDiscovery.UserControls
                 spanshjobname = sp.RequestFleetCarrierRouter(textBox_From.Text, destlist, fccapused, fcdeterminetritium);
                 StartSpanshQueryOp(Spanshquerytype.FleetCarrier);
 
-                labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (FC)";
+                labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (FC)";
             }
         }
 
@@ -328,7 +328,7 @@ namespace EDDiscovery.UserControls
                     spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si , gpalgo.ToLower().Replace(" ","_"));
                     StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
 
-                    labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (Plotter)";
+                    labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Plotter)";
                 }
             }
         }
@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
                                                     loop, exomaxls, exominvalue);
                 StartSpanshQueryOp(Spanshquerytype.ExoMastery);
 
-                labelRouteName.Text = $"{textBox_From.Text}{(loop ? " Loop" : ("-" + textBox_To.Text))} (Exo)";
+                labelRouteName.Text = $"{textBox_From.Text}{(loop ? " Loop" : (" - " + textBox_To.Text))} (Exo)";
             }
         }
 

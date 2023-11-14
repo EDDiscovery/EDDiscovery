@@ -43,15 +43,17 @@ namespace EDDiscovery.UserControls
                 }
                 else if (system is SavedRouteClass.SystemEntry)
                 {
-                    var se = (SavedRouteClass.SystemEntry)system;
-                    bool known = se.HasCoordinate;
+                    var se = (SavedRouteClass.SystemEntry)system;           
+                    bool known = se.HasCoordinate;                          
                     data = new object[] { se.Name, se.Note, known ? se.X.ToString("N5") : "", known ? se.Y.ToString("N5") : "", known ? se.Z.ToString("N5") : "" };
                 }
                 else
                 {
                     var se = (ISystem)system;
                     id64 = se.SystemAddress;
-                    data = new object[] { se.Name, se.Tag as string ?? ""};         // Tag may have info in it for notes, if so, use it
+                    string note = se.Tag as string ?? "";// Tag may have info in it for notes, if so, use it
+                    bool known = se.HasCoordinate;
+                    data = new object[] { se.Name, note , known ? se.X.ToString("N5") : "", known ? se.Y.ToString("N5") : "", known ? se.Z.ToString("N5"): "" };         
                 }
 
                 if (((string)data[0]).HasChars())       // must have a name

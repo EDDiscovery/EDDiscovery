@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
         private void extButtonExpeditionSave_Click(object sender, EventArgs e)
         {
             string res = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Route Name:".TxID(EDTx.UserControlExpedition_labelRouteName), labelRouteName.Text, 
-                            "Save Expedition".TxID(EDTx.UserControlExpedition_extButtonSave_ToolTip), this.FindForm().Icon);
+                            "Save Expedition".TxID(EDTx.UserControlExpedition_extButtonSave_ToolTip), this.FindForm().Icon, widthboxes:400);
 
             if (  res != null)
             {
