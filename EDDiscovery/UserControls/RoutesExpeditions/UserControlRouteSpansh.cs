@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
                                                     );
                 StartSpanshQueryOp(qt);
 
-                labelRouteName.Text = $"{textBox_From.Text} {(loop ? " Loop" : ("-" + textBox_To.Text))} ({qt.ToString()})";
+                labelRouteName.Text = $"{textBox_From.Text}{(loop ? " Loop" : ("-" + textBox_To.Text))} ({qt.ToString()})";
             }
         }
 
@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
                                                     loop, exomaxls, exominvalue);
                 StartSpanshQueryOp(Spanshquerytype.ExoMastery);
 
-                labelRouteName.Text = $"{textBox_From.Text} {(loop ? " Loop" : ("-" + textBox_To.Text))} (Exo)";
+                labelRouteName.Text = $"{textBox_From.Text}{(loop ? " Loop" : ("-" + textBox_To.Text))} (Exo)";
             }
         }
 

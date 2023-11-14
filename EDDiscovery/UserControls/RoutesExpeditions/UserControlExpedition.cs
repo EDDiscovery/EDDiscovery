@@ -1068,6 +1068,7 @@ namespace EDDiscovery.UserControls
         private void UpdateWordWrap()
         {
             dataGridView.SetWordWrap(extCheckBoxWordWrap.Checked);
+            Note.DefaultCellStyle.WrapMode = DataGridViewTriState.True;     // notes are by default word wrapped.
             extPanelDataGridViewScroll.UpdateScroll();
         }
 

@@ -164,7 +164,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            // tbd DGVLoadColumnLayout(dataGridViewRoute);
+            DGVLoadColumnLayout(dataGridViewRoute);
         }
 
         public override void InitialDisplay()
