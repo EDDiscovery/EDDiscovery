@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonExpeditionPush_Click(object sender, EventArgs e)
         {
-            var req = new UserControlCommonBase.PushStars() { PushTo = PushStars.PushType.Expedition, SystemList = routeSystems, MakeVisible = true, RouteTitle = textBox_From.Text + " - " + textBox_To.Text };
+            var req = new UserControlCommonBase.PushStars() { PushTo = PushStars.PushType.Expedition, SystemList = routeSystems, MakeVisible = true, RouteTitle = labelRouteName.Text };
 
             bool serviced = RequestPanelOperation.Invoke(this, req);
 
@@ -129,6 +129,36 @@ namespace EDDiscovery.UserControls
             {
                 DiscoveryForm.SelectTabPage("Expedition", true, false);         // ensure expedition is open
                 RequestPanelOperation.Invoke(this, req);
+            }
+        }
+
+        private void extButtonExpeditionSave_Click(object sender, EventArgs e)
+        {
+            string res = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Route Name:".TxID(EDTx.UserControlExpedition_labelRouteName), labelRouteName.Text, 
+                            "Save Expedition".TxID(EDTx.UserControlExpedition_extButtonSave_ToolTip), this.FindForm().Icon);
+
+            if (  res != null)
+            {
+                var savedroutes = EliteDangerousCore.DB.SavedRouteClass.GetAllSavedRoutes();
+                var overwriteroute = savedroutes.Where(r => r.Name.Equals(res)).FirstOrDefault();
+
+                if (overwriteroute != null)
+                {
+                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?".T(EDTx.UserControlExpedition_Overwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo) != DialogResult.Yes)
+                        return;
+
+                    overwriteroute.Delete();
+                }
+
+                EliteDangerousCore.DB.SavedRouteClass newrt = new EliteDangerousCore.DB.SavedRouteClass(res);
+
+                foreach( var sys in routeSystems)
+                {
+                    var entry = new EliteDangerousCore.DB.SavedRouteClass.SystemEntry(sys);
+                    newrt.Systems.Add(entry);
+                }
+
+                newrt.Add();
             }
         }
 
@@ -180,6 +210,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewRoute.RightClickRowValid)
+            {
+                ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
+
+                if (sys != null) // paranoia because it should not be enabled otherwise
+                {
+                    EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(sys);
+                }
+            }
+        }
+
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridViewRoute.GetCellCount(DataGridViewElementStates.Selected) > 0)
@@ -209,8 +252,8 @@ namespace EDDiscovery.UserControls
 
         public void EnableRouteButtonsIfValid()
         {
-            bool numsvalid = valueBox_ToX.IsValid && valueBox_ToY.IsValid && valueBox_ToZ.IsValid &&
-                        valueBox_FromX.IsValid && valueBox_FromY.IsValid && valueBox_FromZ.IsValid && valueBox_Range.IsValid;
+            bool numsvalid = textBox_ToX.IsValid && textBox_ToY.IsValid && textBox_ToZ.IsValid &&
+                        textBox_FromX.IsValid && textBox_FromY.IsValid && textBox_FromZ.IsValid && textBox_Range.IsValid;
             bool fromvalid = textBox_From.Text.HasChars();
             bool tovalid = textBox_To.Text.HasChars();
             bool notcomputing = computing == 0;
@@ -225,15 +268,15 @@ namespace EDDiscovery.UserControls
 
             textBox_To.Enabled = textBox_ToName.Enabled = buttonExtTravelTo.Enabled = buttonExtTargetTo.Enabled =
             textBox_From.Enabled = textBox_FromName.Enabled = buttonExtTravelFrom.Enabled = buttonTargetFrom.Enabled =
-            valueBox_FromX.Enabled = valueBox_FromY.Enabled = valueBox_FromZ.Enabled =
-            valueBox_ToX.Enabled = valueBox_ToY.Enabled = valueBox_ToZ.Enabled =
+            textBox_FromX.Enabled = textBox_FromY.Enabled = textBox_FromZ.Enabled =
+            textBox_ToX.Enabled = textBox_ToY.Enabled = textBox_ToZ.Enabled =
             edsmSpanshButton.Enabled =
-            valueBox_Range.Enabled = checkBox_FsdBoost.Enabled = notcomputing;
+            textBox_Range.Enabled = checkBox_FsdBoost.Enabled = notcomputing;
         }
 
         public void EnableOutputButtons(bool en = false)
         {
-            buttonExtExcel.Enabled = extButtonExpeditionPush.Enabled = cmd3DMap.Enabled = en;
+            extButtonExpeditionSave.Enabled = buttonExtExcel.Enabled = extButtonExpeditionPush.Enabled = cmd3DMap.Enabled = en;
         }
 
         #endregion

@@ -78,13 +78,13 @@ namespace EDDiscovery.UserControls
 
             textBox_From.Text = GetSetting("_RouteFrom", "");
             textBox_To.Text = GetSetting("_RouteTo", "");
-            jumprangelastfound = valueBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
-            valueBox_FromX.ValueNoChange = GetSetting("_RouteFromX", 0.0);
-            valueBox_FromY.ValueNoChange = GetSetting("_RouteFromY", 0.0);
-            valueBox_FromZ.ValueNoChange = GetSetting("_RouteFromZ", 0.0);
-            valueBox_ToX.ValueNoChange = GetSetting("_RouteToX", 0.0);
-            valueBox_ToY.ValueNoChange = GetSetting("_RouteToY", 0.0);
-            valueBox_ToZ.ValueNoChange = GetSetting("_RouteToZ", 0.0);
+            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
+            textBox_FromX.ValueNoChange = GetSetting("_RouteFromX", 0.0);
+            textBox_FromY.ValueNoChange = GetSetting("_RouteFromY", 0.0);
+            textBox_FromZ.ValueNoChange = GetSetting("_RouteFromZ", 0.0);
+            textBox_ToX.ValueNoChange = GetSetting("_RouteToX", 0.0);
+            textBox_ToY.ValueNoChange = GetSetting("_RouteToY", 0.0);
+            textBox_ToZ.ValueNoChange = GetSetting("_RouteToZ", 0.0);
 
             int metricvalue = GetSetting("RouteMetric", 0);
             comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(SystemCache.SystemsNearestMetric), metricvalue)
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_DeviationCol,
                                         EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom,
                                         EDTx.UserControlRoute_buttonExtTargetTo,  EDTx.UserControlRoute_buttonTargetFrom, EDTx.UserControlRoute_labelEDSMBut,
-                                        EDTx.UserControlRoute_cmd3DMap, EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
+                                        EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
                                         EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
                                         EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
                                         EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
@@ -112,7 +112,8 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem };
+            var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem,
+                                            EDTx.UserControlRoute_viewOnSpanshToolStripMenuItem};
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
 
             var enumlisttt = new Enum[] { EDTx.UserControlRoute_checkBox_FsdBoost_ToolTip, EDTx.UserControlRoute_buttonExtExcel_ToolTip, EDTx.UserControlRoute_textBox_ToName_ToolTip,
@@ -122,7 +123,9 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_cmd3DMap_ToolTip, EDTx.UserControlRoute_textBox_From_ToolTip, EDTx.UserControlRoute_textBox_Range_ToolTip,
                                         EDTx.UserControlRoute_textBox_To_ToolTip, EDTx.UserControlRoute_textBox_Distance_ToolTip, EDTx.UserControlRoute_textBox_ToZ_ToolTip,
                                         EDTx.UserControlRoute_textBox_ToY_ToolTip, EDTx.UserControlRoute_textBox_ToX_ToolTip, EDTx.UserControlRoute_textBox_FromZ_ToolTip,
-                                        EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip };
+                                        EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip,
+                                        EDTx.UserControlRoute_extButtonExpeditionSave_ToolTip,EDTx.UserControlRoute_extButtonExpeditionPush_ToolTip,
+                                        };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             waitforspanshresulttimer.Interval = 1000;
@@ -130,13 +133,15 @@ namespace EDDiscovery.UserControls
 
             NoteCol.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
-            valueBox_FromX.ValidityChanged += ValidityChanges;
-            valueBox_FromY.ValidityChanged += ValidityChanges;
-            valueBox_FromZ.ValidityChanged += ValidityChanges;
-            valueBox_ToX.ValidityChanged += ValidityChanges;
-            valueBox_ToY.ValidityChanged += ValidityChanges;
-            valueBox_ToZ.ValidityChanged += ValidityChanges;
-            valueBox_Range.ValidityChanged += ValidityChanges;
+            textBox_FromX.ValidityChanged += ValidityChanges;
+            textBox_FromY.ValidityChanged += ValidityChanges;
+            textBox_FromZ.ValidityChanged += ValidityChanges;
+            textBox_ToX.ValidityChanged += ValidityChanges;
+            textBox_ToY.ValidityChanged += ValidityChanges;
+            textBox_ToZ.ValidityChanged += ValidityChanges;
+            textBox_Range.ValidityChanged += ValidityChanges;
+
+            labelRouteName.Text = "";
 
             DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
             DiscoveryForm.OnNewEntry += DiscoveryForm_OnNewEntry;
@@ -148,13 +153,13 @@ namespace EDDiscovery.UserControls
             if (range.HasValue && range != jumprangelastfound)      // if we selected a different ship or changed modules, detected by jump range changing, update
             {
                 System.Diagnostics.Debug.WriteLine($"Router ship range has changed, updating");
-                jumprangelastfound = valueBox_Range.Value = range.Value;
+                jumprangelastfound = textBox_Range.Value = range.Value;
             }
         }
 
         private void DiscoveryForm_OnHistoryChange()
         {
-            jumprangelastfound = valueBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
+            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
         }
 
         public override void LoadLayout()
@@ -180,12 +185,12 @@ namespace EDDiscovery.UserControls
 
             PutSetting("_RouteFrom", textBox_From.Text);
             PutSetting("_RouteTo", textBox_To.Text);
-            PutSetting("_RouteFromX", valueBox_FromX.Value);
-            PutSetting("_RouteFromY", valueBox_FromY.Value);
-            PutSetting("_RouteFromZ", valueBox_FromZ.Value);
-            PutSetting("_RouteToX", valueBox_ToX.Value);
-            PutSetting("_RouteToY", valueBox_ToY.Value);
-            PutSetting("_RouteToZ", valueBox_ToZ.Value);
+            PutSetting("_RouteFromX", textBox_FromX.Value);
+            PutSetting("_RouteFromY", textBox_FromY.Value);
+            PutSetting("_RouteFromZ", textBox_FromZ.Value);
+            PutSetting("_RouteToX", textBox_ToX.Value);
+            PutSetting("_RouteToY", textBox_ToY.Value);
+            PutSetting("_RouteToZ", textBox_ToZ.Value);
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
 
             DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
@@ -197,9 +202,9 @@ namespace EDDiscovery.UserControls
 
         private bool GetCoordsFrom(out Point3D pos)
         {
-            if (valueBox_FromX.IsValid && valueBox_FromY.IsValid && valueBox_FromZ.IsValid)
+            if (textBox_FromX.IsValid && textBox_FromY.IsValid && textBox_FromZ.IsValid)
             {
-                pos = new Point3D(valueBox_FromX.Value, valueBox_FromY.Value, valueBox_FromZ.Value);
+                pos = new Point3D(textBox_FromX.Value, textBox_FromY.Value, textBox_FromZ.Value);
                 return true;
             }
             else
@@ -225,15 +230,15 @@ namespace EDDiscovery.UserControls
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
-                    valueBox_FromX.ValueNoChange = ds1.X;
-                    valueBox_FromY.ValueNoChange = ds1.Y;
-                    valueBox_FromZ.ValueNoChange = ds1.Z;
+                    textBox_FromX.ValueNoChange = ds1.X;
+                    textBox_FromY.ValueNoChange = ds1.Y;
+                    textBox_FromZ.ValueNoChange = ds1.Z;
                 }
                 else
                 {
-                    valueBox_FromX.SetBlank();
-                    valueBox_FromY.SetBlank();
-                    valueBox_FromZ.SetBlank();
+                    textBox_FromX.SetBlank();
+                    textBox_FromY.SetBlank();
+                    textBox_FromZ.SetBlank();
                 }
             }
             else
@@ -321,9 +326,9 @@ namespace EDDiscovery.UserControls
 
         public bool GetCoordsTo(out Point3D pos)
         {
-            if (valueBox_ToX.IsValid && valueBox_ToY.IsValid && valueBox_ToZ.IsValid)
+            if (textBox_ToX.IsValid && textBox_ToY.IsValid && textBox_ToZ.IsValid)
             {
-                pos = new Point3D(valueBox_ToX.Value, valueBox_ToY.Value, valueBox_ToZ.Value);
+                pos = new Point3D(textBox_ToX.Value, textBox_ToY.Value, textBox_ToZ.Value);
                 return true;
             }
             else
@@ -346,15 +351,15 @@ namespace EDDiscovery.UserControls
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
-                    valueBox_ToX.ValueNoChange = ds1.X;
-                    valueBox_ToY.ValueNoChange = ds1.Y;
-                    valueBox_ToZ.ValueNoChange = ds1.Z;
+                    textBox_ToX.ValueNoChange = ds1.X;
+                    textBox_ToY.ValueNoChange = ds1.Y;
+                    textBox_ToZ.ValueNoChange = ds1.Z;
                 }
                 else
                 {
-                    valueBox_ToX.SetBlank();
-                    valueBox_ToY.SetBlank();
-                    valueBox_ToZ.SetBlank();
+                    textBox_ToX.SetBlank();
+                    textBox_ToY.SetBlank();
+                    textBox_ToZ.SetBlank();
                 }
             }
             else
@@ -448,7 +453,7 @@ namespace EDDiscovery.UserControls
             if (routingthread == null || !routingthread.IsAlive)
             {
                 plotter = new RoutePlotter();
-                plotter.MaxRange = (float)valueBox_Range.Value;
+                plotter.MaxRange = (float)textBox_Range.Value;
                 GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
                 GetCoordsTo(out plotter.Coordsto);
                 plotter.FromSystem = !textBox_FromName.Text.Contains("@") && textBox_From.Text.HasChars() ? textBox_From.Text : "START POINT";
@@ -480,6 +485,7 @@ namespace EDDiscovery.UserControls
                 computing = 1;
                 EnableRouteButtonsIfValid();
 
+                labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (DB)";
                 routingthread.Start(plotter);
             }
             else
@@ -539,5 +545,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }

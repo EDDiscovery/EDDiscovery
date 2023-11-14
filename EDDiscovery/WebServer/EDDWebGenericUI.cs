@@ -39,7 +39,7 @@ namespace EDDiscovery.WebServer
 
             response["data"] = objjson;
 
-            System.Diagnostics.Debug.WriteLine($"Web GenericUI {response.ToString(true)}");
+            //System.Diagnostics.Debug.WriteLine($"Web GenericUI {response.ToString(true)}");
 
             return response;
         }

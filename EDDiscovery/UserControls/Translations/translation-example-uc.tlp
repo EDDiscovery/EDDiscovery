@@ -623,62 +623,72 @@ SECTION UserControlPanelSelector
 
 SECTION UserControlRoute
 
-.SystemCol: "System" @
-.NoteCol: "Note" @
-.DistanceCol: "Distance" @
-.StarClassCol: "Star Class" @
-.WayPointDistCol: "Dist. Waypoint" @
-.DeviationCol: "Deviation" @
-.buttonExtTravelTo: "History" @
-.buttonExtTravelFrom: "History" @
-.buttonExtTargetTo: "Target" @
-.buttonTargetFrom: "Target" @
-.cmd3DMap: "3D Map" @
-.labelLy2: "ly" @
-.labelLy1: "ly" @
-.labelTo: "To" @
-.labelMaxJump: "Max jump" @
-.labelDistance: "Distance" @
-.labelMetric: "Metric" @
-.extButtonRoute: "Find route" @
-.labelFrom: "From" @
-.showInEDSMToolStripMenuItem: "Show in EDSM" @
-.copyToolStripMenuItem: "Copy" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.textBox_ToName.ToolTip: "Alternate Name" @
-.textBox_FromName.ToolTip: "Alternate name" @
-.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" @
-.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" @
-.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" @
-.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" @
-.buttonToEDSM.ToolTip: "Open this end route system in EDSM" @
-.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" @
-.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" @
-.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
-.cmd3DMap.ToolTip: "Show route on 3D Map" @
-.textBox_From.ToolTip: "Select system to start the route" @
-.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" @
-.textBox_To.ToolTip: "Select the system to end in" @
-.textBox_Distance.ToolTip: "Distance between start and end" @
-.textBox_ToZ.ToolTip: "Z Co-ord" @
-.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" @
-.textBox_ToX.ToolTip: "X Co-Ord" @
-.textBox_FromZ.ToolTip: "Z Co-ord" @
-.extButtonRoute.ToolTip: "Compute the route" @
-.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" @
-.textBox_FromX.ToolTip: "X Co-ord" @
-.Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
-.NoRoute: "No route set up, retry" @
-.checkBox_FsdBoost: "Use Boosts" @
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
-.showScanToolStripMenuItem: "View Scan Display" @
-
 .M1: "Nearest to Waypoint" @
 .M2: "Minimum Deviation from Path" @
 .M3: "Nearest to Waypoint with dev<=100ly" @
 .M4: "Nearest to Waypoint with dev<=250ly" @
 .M5: "Nearest to Waypoint with dev<=500ly" @
 .M6: "Nearest to Waypoint + Deviation / 2" @
+.SystemCol: "System" @
+.NoteCol: "Notes" @
+.DistanceCol: "Distance" @
+.StarClassCol: "Star Class" @
+.WayPointDistCol: "Dist. Waypoint" @
+.DeviationCol: "Deviation" @
+.groupBoxSpansh: "Spansh" @
+.extButtonNeutronRouter: "Neutron Router" @
+.extButtonSpanshRoadToRiches: "Road to Riches" @
+.extButtonSpanshAmmoniaWorlds: "Ammonia Worlds" @
+.extButtonSpanshEarthLikes: "Earth Likes" @
+.extButtonSpanshTradeRouter: "Trade Router" @
+.extButtonFleetCarrier: "Fleet Carrier" @
+.extButtonSpanshGalaxyPlotter: "Galaxy Plotter" @
+.extButtonExoMastery: "Exo Mastery" @
+.groupBoxInternal: "EDD Router" @
+.labelMetric: "Metric" @
+.extButtonRoute: "Find route" @
+.groupBoxPara: "Parameters" @
+.checkBox_FsdBoost: "Use Boosts" @
+.labelFrom: "From" @
+.labelLy2: "ly" @
+.labelLy1: "ly" @
+.buttonExtTravelTo: "History" @
+.labelEDSMBut: "Web Lookup" @
+.labelMaxJump: "Max jump" @
+.labelDistance: "Distance" @
+.buttonExtTravelFrom: "History" @
+.labelTo: "To" @
+.buttonExtTargetTo: "Target" @
+.buttonTargetFrom: "Target" @
+.copyToolStripMenuItem: "Copy" @
+.showScanToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+.showInEDSMToolStripMenuItem: "View on EDSM" @
+.extButtonExpeditionPush.ToolTip: "Push to expedition" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.cmd3DMap.ToolTip: "Show route on 3D Map" @
+.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" @
+.extButtonRoute.ToolTip: "Compute the route" @
+.textBox_From.ToolTip: "Select system to start the route" @
+.textBox_FromX.ToolTip: "X Co-ord" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
+.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" @
+.textBox_ToName.ToolTip: "Alternate Name" @
+.textBox_FromZ.ToolTip: "Z Co-ord" @
+.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" @
+.textBox_FromName.ToolTip: "Alternate name" @
+.textBox_ToX.ToolTip: "X Co-Ord" @
+.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" @
+.textBox_Distance.ToolTip: "Distance between start and end" @
+.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" @
+.textBox_ToZ.ToolTip: "Z Co-ord" @
+.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" @
+.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" @
+.textBox_To.ToolTip: "Select the system to end in" @
+.buttonToEDSM.ToolTip: "Open this end route system in EDSM" @
+.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" @
+.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" @
+.extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
 
 
 SECTION UserControlRouteTracker

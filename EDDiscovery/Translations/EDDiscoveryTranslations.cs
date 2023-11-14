@@ -1205,7 +1205,6 @@ namespace EDDiscovery
         UserControlRoute_buttonExtTargetTo, // Control 'Target'
         UserControlRoute_buttonTargetFrom, // Control 'Target'
         UserControlRoute_labelEDSMBut,
-        UserControlRoute_cmd3DMap, // Control '3D Map'
         UserControlRoute_labelLy2, // Control 'ly'
         UserControlRoute_labelLy1, // Control 'ly'
         UserControlRoute_labelTo, // Control 'To'
@@ -1217,6 +1216,7 @@ namespace EDDiscovery
         UserControlRoute_showInEDSMToolStripMenuItem, // ToolStrip control 'Show in EDSM'
         UserControlRoute_copyToolStripMenuItem, // ToolStrip control 'Copy'
         UserControlRoute_showScanToolStripMenuItem, // ToolStrip control 'View Scan Display'
+        UserControlRoute_viewOnSpanshToolStripMenuItem,
         UserControlRoute_checkBox_FsdBoost_ToolTip, // ToolTip 'The route finder will try and use FSD injections in case a direct route could not be found.'
         UserControlRoute_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'
         UserControlRoute_textBox_ToName_ToolTip, // ToolTip 'Alternate Name'
@@ -1241,6 +1241,8 @@ namespace EDDiscovery
         UserControlRoute_extButtonRoute_ToolTip, // ToolTip 'Compute the route'
         UserControlRoute_textBox_FromY_ToolTip, // ToolTip 'Y (Vertical) Co-ord'
         UserControlRoute_textBox_FromX_ToolTip, // ToolTip 'X Co-ord'
+        UserControlRoute_extButtonExpeditionSave_ToolTip,
+        UserControlRoute_extButtonExpeditionPush_ToolTip,
         UserControlRoute_Confirm, // This will result in a large number ({0})) of jumps
         UserControlRoute_NoRoute, // No route set up, retry
         UserControlRoute_M1,    // discrete

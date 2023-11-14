@@ -105,14 +105,18 @@ namespace EDDiscovery.UserControls
                     csusemap = f.GetBool("mappingvalue").Value;
                 }
 
-                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, valueBox_Range.Value,
+                bool loop = f.GetBool("loop").Value;
+
+                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, textBox_Range.Value,
                                                     csradius[si], csmaxsys[si],
-                                                    csavoidt[si], f.GetBool("loop").Value, csmaxls[si],
+                                                    csavoidt[si], loop, csmaxls[si],
                                                     roadtoriches ? csminvalue : 1,
                                                     roadtoriches ? csusemap : default(bool?),
                                                     roadtoriches ? null : qt == Spanshquerytype.AmmoniaWorlds ? "Ammonia world" : "Earth-like world"
                                                     );
                 StartSpanshQueryOp(qt);
+
+                labelRouteName.Text = $"{textBox_From.Text} {(loop ? " Loop" : ("-" + textBox_To.Text))} ({qt.ToString()})";
             }
         }
 
@@ -133,8 +137,9 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                 nrefficiency = f.GetInt("efficiency").Value;
-                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)valueBox_Range.Value, nrefficiency);
+                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency);
                 StartSpanshQueryOp(Spanshquerytype.Neutron);
+                labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (Neutron)";
             }
         }
 
@@ -196,9 +201,11 @@ namespace EDDiscovery.UserControls
                     tradepermit = f.GetBool("permit").Value;
 
                     spanshjobname = sp.RequestTradeRouter(textBox_From.Text, tradestation,
-                        tradehops, valueBox_Range.Value, tradecapital, tradecargo, tradedls, (int)(trademage * 86400),
+                        tradehops, textBox_Range.Value, tradecapital, tradecargo, tradedls, (int)(trademage * 86400),
                         tradelpad, tradeproh, tradeallowp, tradeloops, tradepermit);
                     StartSpanshQueryOp(Spanshquerytype.TradeRouter);
+
+                    labelRouteName.Text = $"{textBox_From.Text} @ {tradestation} (Trade)";
                 }
             }
             else
@@ -266,6 +273,8 @@ namespace EDDiscovery.UserControls
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                 spanshjobname = sp.RequestFleetCarrierRouter(textBox_From.Text, destlist, fccapused, fcdeterminetritium);
                 StartSpanshQueryOp(Spanshquerytype.FleetCarrier);
+
+                labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (FC)";
             }
         }
 
@@ -282,6 +291,7 @@ namespace EDDiscovery.UserControls
         private bool gpusesupercharge = false;
         private bool gpusefsdinjections = true;
         private bool gpexcludesecondary = true;
+        private string gpalgo = "Optimistic";
 
         private void extButtonSpanshGalaxyPlotter_Click(object sender, EventArgs e)
         {
@@ -298,6 +308,8 @@ namespace EDDiscovery.UserControls
                 f.Add(ref vpos, 32, new ConfigurableForm.Entry("usc", gpusesupercharge, "Use supercharge", new Point(4, 0), checkboxsize, "Use neutron boosts") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableForm.Entry("fsd", gpusefsdinjections, "Use FSD Injections", new Point(4, 0), checkboxsize, "Use FSD Injections to speed travel") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableForm.Entry("ess", gpexcludesecondary, "Exclude secondary stars", new Point(4, 0), checkboxsize, "Exclude secondary stars from consideration for neutron boosting/scooping") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableForm.Entry("algo", gpalgo, new Point(4, 0), textboxsize, "Pick routing algorithm", new List<string> { "Optimistic", "Fuel", "Fuel Jumps", "Guided", "Pessimistic"}));
+
                 f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
                 f.InstallStandardTriggers();
                 f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
@@ -311,9 +323,12 @@ namespace EDDiscovery.UserControls
                     gpusesupercharge = f.GetBool("usc").Value;
                     gpusefsdinjections = f.GetBool("fsd").Value;
                     gpexcludesecondary = f.GetBool("ess").Value;
+                    gpalgo = f.Get("algo");
 
-                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si);
+                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si , gpalgo.ToLower().Replace(" ","_"));
                     StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
+
+                    labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (Plotter)";
                 }
             }
         }
@@ -345,13 +360,15 @@ namespace EDDiscovery.UserControls
                 exomaxsystems = f.GetInt("maxsystems").Value;
                 exomaxls = f.GetInt("maxls").Value;
                 exominvalue = f.GetInt("minv").Value;
+                bool loop = f.GetBool("loop").Value;
 
-                spanshjobname = sp.RequestExomastery(textBox_From.Text, textBox_To.Text, valueBox_Range.Value,
+                spanshjobname = sp.RequestExomastery(textBox_From.Text, textBox_To.Text, textBox_Range.Value,
                                                     exosearchradius, exomaxsystems,
-                                                    f.GetBool("loop").Value, exomaxls, exominvalue);
+                                                    loop, exomaxls, exominvalue);
                 StartSpanshQueryOp(Spanshquerytype.ExoMastery);
-            }
 
+                labelRouteName.Text = $"{textBox_From.Text} {(loop ? " Loop" : ("-" + textBox_To.Text))} (Exo)";
+            }
         }
 
 
