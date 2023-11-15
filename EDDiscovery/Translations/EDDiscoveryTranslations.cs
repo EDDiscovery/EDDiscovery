@@ -563,7 +563,6 @@ namespace EDDiscovery
         UserControlStats_labelEndDate, // Control 'To'
         UserControlStats_TotalNoofjumps, // Total No of jumps:
         UserControlStats_FSDjumps, // FSD jumps:
-        UserControlStats_Beltcluster, // Belt cluster
         UserControlStats_JumpHistory, // Jump History
         UserControlStats_24hc, // 24 Hours:
         UserControlStats_OneWeek, // , One Week:
@@ -644,26 +643,6 @@ namespace EDDiscovery
         UserControlStats_InterdictedNPCSucceeded,
         UserControlStats_InterdictedNPCFailed,
         UserControlStats_PVPKills,
-        UserControlStats_BountiesThargoid,
-        UserControlStats_BountiesOnFootNPC,
-        UserControlStats_BountiesSkimmers,
-        UserControlStats_ShipsUnknown,
-        UserControlStats_ShipsElite,
-        UserControlStats_ShipsDeadly,
-        UserControlStats_ShipsDangerous,
-        UserControlStats_ShipsMaster,
-        UserControlStats_ShipsExpert,
-        UserControlStats_ShipsCompetent,
-        UserControlStats_ShipsNovice,
-        UserControlStats_ShipsHarmless,
-        UserControlStats_PVPElite,
-        UserControlStats_PVPDeadly,
-        UserControlStats_PVPDangerous,
-        UserControlStats_PVPMaster,
-        UserControlStats_PVPExpert,
-        UserControlStats_PVPCompetent,
-        UserControlStats_PVPNovice,
-        UserControlStats_PVPHarmless,
 
 
         UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, // ToolTip 'Display incomplete scans'

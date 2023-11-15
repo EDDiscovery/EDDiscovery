@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
 using System;
 using System.Windows.Forms;
 
@@ -20,26 +21,16 @@ namespace EDDiscovery.UserControls
 {
     public partial class StatsTimeUserControl : UserControl
     {
-        public enum TimeModeType
-        {
-            Summary = 0,
-            Day = 1,
-            Week = 2,
-            Month = 3,
-            Year = 4,
-            NotSet = 999,
-        }
-
-        public Action<TimeModeType, TimeModeType> TimeModeChanged;          // time mode changed
+        public Action<JournalStatsInfo.TimeModeType, JournalStatsInfo.TimeModeType> TimeModeChanged;          // time mode changed
         public Action StarPlanetModeChanged;                                // Star planet changed
 
         public bool StarMode { get; private set; } = false;
 
-        public TimeModeType TimeMode
+        public JournalStatsInfo.TimeModeType TimeMode
         {
             get
             {
-                return (TimeModeType)comboBoxTimeMode.SelectedIndex;
+                return (JournalStatsInfo.TimeModeType)comboBoxTimeMode.SelectedIndex;
             }
             set
             {
@@ -48,7 +39,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public TimeModeType PreviousTimeMode { get; private set; }
+        public JournalStatsInfo.TimeModeType PreviousTimeMode { get; private set; }
 
         public StatsTimeUserControl()
         {
@@ -58,7 +49,7 @@ namespace EDDiscovery.UserControls
             comboBoxTimeMode.Items.Add("Week".T(EDTx.StatsTimeUserControl_Week));
             comboBoxTimeMode.Items.Add("Month".T(EDTx.StatsTimeUserControl_Month));
             comboBoxTimeMode.Items.Add("Year".T(EDTx.TravelHistoryFilter_Year));
-            PreviousTimeMode = TimeModeType.Summary;
+            PreviousTimeMode = JournalStatsInfo.TimeModeType.Summary;
         }
 
         public void DisplayStarsPlanetSelector(bool on)
