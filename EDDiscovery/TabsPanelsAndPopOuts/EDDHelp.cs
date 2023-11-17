@@ -96,6 +96,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Discoveries", ["wiki"] = "/Using-the-Discoveries-Panel", ["video"] = "https://youtu.be/GZGVuimjEeI" },
                 new JObject() { ["panel"] = "Carrier", ["wiki"] = "/Using-the-Carrier-Panel", ["video"] = "https://youtu.be/zot3a7uHQfQ" },
                 new JObject() { ["panel"] = "Resources", ["wiki"] = "/Using-the-Resources-Panel", ["video"] = "https://youtu.be/U1id5TxS8bs" },
+                new JObject() { ["panel"] = "SpanshStations", ["wiki"] = "/Using-the-Spansh-Station-Panel", ["video"] = "" },
 
                 // special
 

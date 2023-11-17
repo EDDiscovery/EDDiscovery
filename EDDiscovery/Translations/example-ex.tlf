@@ -164,9 +164,10 @@ SECTION PopOutInfo
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @
 .Carrier.Description: "Data about your fleet carrier" @
-PopOutInfo.Resources.Title: "Resources" @
-PopOutInfo.Resources.Description: "All Materials, Commodity, MicroResources" @
-
+.Resources.Title: "Resources" @
+.Resources.Description: "All Materials, Commodity, MicroResources" @
+.SpanshStations.Title: "Spansh Stations" @
+.SpanshStations.Description: "Stations in the system from spansh web data" @
 
 SECTION EDDiscoveryForm
 

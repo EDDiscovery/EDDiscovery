@@ -345,6 +345,12 @@
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.Designer.cs">
       <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\StationData\UserControlSpanshStations.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlSpanshStations.Designer.cs">
+      <DependentUpon>UserControlSpanshStations.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Search\ScanSortControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -957,6 +963,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlDiscoveries.resx">
       <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlSpanshStations.resx">
+      <DependentUpon>UserControlSpanshStations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Search\ScanSortControl.resx">
       <DependentUpon>ScanSortControl.cs</DependentUpon>

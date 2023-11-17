@@ -160,6 +160,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.EndButtonEnable = true;
             this.textMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMaxRadius.EndButtonImage")));
+            this.textMaxRadius.EndButtonSize16ths = 10;
             this.textMaxRadius.EndButtonVisible = false;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
@@ -169,6 +170,8 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
+            this.textMaxRadius.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.textMaxRadius.ReadOnly = false;
             this.textMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMaxRadius.SelectionLength = 0;
@@ -194,6 +197,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.EndButtonEnable = true;
             this.textMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMinRadius.EndButtonImage")));
+            this.textMinRadius.EndButtonSize16ths = 10;
             this.textMinRadius.EndButtonVisible = false;
             this.textMinRadius.Format = "0.#######";
             this.textMinRadius.InErrorCondition = false;
@@ -203,6 +207,8 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
+            this.textMinRadius.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.textMinRadius.ReadOnly = false;
             this.textMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMinRadius.SelectionLength = 0;

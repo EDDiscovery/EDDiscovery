@@ -488,12 +488,15 @@ namespace EDDiscovery
             return false;
         }
 
+        #endregion
+
+        #region Debug
         public static void PostInitDebug()
         {
             System.Diagnostics.Debug.WriteLine($"Post Init debug");
+            // var sp = new EliteDangerousCore.Spansh.SpanshClass();
 
             // var sys = SystemCache.FindSystem("Lembava", WebExternalDataLookup.Spansh);
-            // var sp = new EliteDangerousCore.Spansh.SpanshClass();
 
             //  var isy = sp.GetSystem("sol");
             //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
@@ -502,16 +505,21 @@ namespace EDDiscovery
             // {
             //     System.Threading.Thread.Sleep(2000);
             //     var resp = sp.TryGetRoadToRiches(queryid);
-            // }
+            // }Aaw
 
             // var ret = sp.GetStations("Sol", 4);
 
-            //EliteDangerousCore.Spansh.SpanshClass.GetBodiesList(new SystemClass("Sol", 10477373803), true);
+            SystemClass sol = new SystemClass("Sol", 10477373803);
+            //sp.GetBodies(sol);
+           // sp.GetStationsByDump(sol,10000000,false);
+
             //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
             //sp.GetSystem("Sol");
 
-          //EDSMClass edsm = new EDSMClass();
-         // edsm.GetSystem("Sol");
+            //EDSMClass edsm = new EDSMClass();
+            // edsm.GetSystem("Sol");
+
+
         }
 
 

@@ -70,7 +70,6 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewNearest);
-
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
@@ -82,7 +81,6 @@ namespace EDDiscovery.UserControls
             PutSetting("Min", textMinRadius.Value);
             PutSetting("Max", textMaxRadius.Value);
             PutSetting("Behaviour", checkBoxCube.Checked);
-
         }
 
         public override void InitialDisplay()
@@ -90,16 +88,12 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-        }
-
         private void Discoveryform_OnHistoryChange()
         {
             KickComputation(DiscoveryForm.History.GetLast);   // copes with getlast = null
         }
 
+        // sent by its travel history grid
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             KickComputation(he);
@@ -213,6 +207,8 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_MouseDown(object sender, MouseEventArgs e)
         {
+            viewSystemToolStripMenuItem.Enabled =
+            viewOnSpanshToolStripMenuItem.Enabled = 
             viewOnEDSMToolStripMenuItem1.Enabled = dataGridViewNearest.RightClickRowValid;
         }
 
@@ -243,28 +239,22 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            var rightclicksystem = dataGridViewNearest.RightClickRowValid ? (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag : null;
-            if (rightclicksystem != null)
+            // check above for right click valid
+            var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
+            this.Cursor = Cursors.WaitCursor;
+            EDSMClass edsm = new EDSMClass();
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
             {
-                this.Cursor = Cursors.WaitCursor;
-                EDSMClass edsm = new EDSMClass();
-                if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
-                {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
-                }
-
-                this.Cursor = Cursors.Default;
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
             }
+
+            this.Cursor = Cursors.Default;
         }
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var rightclicksystem = dataGridViewNearest.RightClickRowValid ? (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag : null;
-            if (rightclicksystem != null && rightclicksystem.SystemAddress.HasValue)
-            {
-                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclicksystem.SystemAddress.Value);
-
-            }
+            var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclicksystem);
         }
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
