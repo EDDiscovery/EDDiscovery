@@ -358,7 +358,7 @@ namespace EDDiscovery.UserControls
             bool duetoship = false;
             bool duetoother = false;
             bool duetomissions = false;
-            bool duetoidentifiers = DiscoveryForm.History.IdentifierList.Generation != lastprocessedidgen;  // global history kick if Ids changed, not on he, but if its changed, a new he would be coming in
+            bool duetoidentifiers = Identifiers.Generation != lastprocessedidgen;  // global history kick if Ids changed, not on he, but if its changed, a new he would be coming in
 
             if (he.Status.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
             {
@@ -382,7 +382,7 @@ namespace EDDiscovery.UserControls
             {
                 //System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
-                lastprocessedidgen = DiscoveryForm.History.IdentifierList.Generation;   // stop identifiers kicking again
+                lastprocessedidgen = Identifiers.Generation;   // stop identifiers kicking again
             }
         }
 
@@ -591,7 +591,7 @@ namespace EDDiscovery.UserControls
                             // else body name destination or $POI $MULTIPLAYER etc
                             // Its not localised, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
 
-                            destname = JournalFieldNaming.SignalBodyName(DiscoveryForm.History.IdentifierList, lastdestination.Name);   
+                            destname = JournalFieldNaming.SignalBodyName(lastdestination.Name);   
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 

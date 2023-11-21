@@ -223,6 +223,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Commodity {
+            get {
+                object obj = ResourceManager.GetObject("Commodity", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap ConfigureAddOnActions {
             get {
                 object obj = ResourceManager.GetObject("ConfigureAddOnActions", resourceCulture);
@@ -246,6 +256,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Coriolis {
             get {
                 object obj = ResourceManager.GetObject("Coriolis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CoriolisYellow {
+            get {
+                object obj = ResourceManager.GetObject("CoriolisYellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -346,6 +366,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Eccentric {
             get {
                 object obj = ResourceManager.GetObject("Eccentric", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Economy {
+            get {
+                object obj = ResourceManager.GetObject("Economy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -983,6 +1013,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Outfitting {
+            get {
+                object obj = ResourceManager.GetObject("Outfitting", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Outlines {
             get {
                 object obj = ResourceManager.GetObject("Outlines", resourceCulture);
@@ -1016,6 +1056,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Pause {
             get {
                 object obj = ResourceManager.GetObject("Pause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap People {
+            get {
+                object obj = ResourceManager.GetObject("People", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1546,6 +1596,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Shipyard {
+            get {
+                object obj = ResourceManager.GetObject("Shipyard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

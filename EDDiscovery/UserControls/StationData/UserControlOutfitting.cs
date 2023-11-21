@@ -93,8 +93,7 @@ namespace EDDiscovery.UserControls
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
-
-            comboBoxYards.Items.AddRange(ItemData.GetAllModTypes());
+            comboBoxYards.Items.AddRange(ItemData.GetAllModules(true,true).Select(x=>x.ModType).Distinct());
 
             var list = (from x in ofl.GetFilteredList() select x.Ident()).ToList();
             comboBoxYards.Items.AddRange(list);
@@ -182,7 +181,7 @@ namespace EDDiscovery.UserControls
                     ItemData.ShipModule sm = ItemData.GetShipModuleProperties(item.FDName);
                     itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
 
-                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), item.BuyPrice.ToString("N1") + "cr" };
+                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), item.BuyPrice.ToString("N0") };
                     dataGridViewOutfitting.Rows.Add(rowobj);
                 }
             }
@@ -210,7 +209,7 @@ namespace EDDiscovery.UserControls
 
                 string info = sm.InfoMassPower(false);
 
-                object[] rowobj = { i.ModType, i.Name, info, sm.Mass.ToString("0.#t"),i.BuyPrice.ToString("N1") + "cr" };
+                object[] rowobj = { i.ModType, i.Name, info, sm.Mass.ToString("0.#t"),i.BuyPrice.ToString("N0") };
                 dataGridViewOutfitting.Rows.Add(rowobj);
             }
 

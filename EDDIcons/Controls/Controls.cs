@@ -209,5 +209,11 @@ namespace EDDiscovery.Icons
         public static Image NewFeature { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.NewFeature"); } }
         public static Image NewFeatureGreen { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.NewFeatureGreen"); } }
         public static Image expedition { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.expedition"); } }
+        public static Image Commodity { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Commodity"); } }
+        public static Image Outfitting { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Outfitting"); } }
+        public static Image Shipyard { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Shipyard"); } }
+        public static Image CoriolisYellow { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.CoriolisYellow"); } }
+        public static Image People { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.People"); } }
+        public static Image Economy { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Economy"); } }
     }
 }

@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 StarScan.SystemNode nodedata = null;
-                DBSettingsSaver db = new DBSettingsSaver();
+                EliteDangerousCore.DB.UserDatabaseSettingsSaver db = new EliteDangerousCore.DB.UserDatabaseSettingsSaver(EliteDangerousCore.DB.UserDatabase.Instance, "ScanDisplayFormCommon_");
                 EDSMSpanshButton edsmSpanshButton = new EDSMSpanshButton();
                 ScanDisplayBodyFiltersButton filterbut = new ScanDisplayBodyFiltersButton();
                 ScanDisplayConfigureButton configbut = new ScanDisplayConfigureButton();
@@ -129,21 +129,6 @@ namespace EDDiscovery.UserControls
             }
 
             form.Show(parent);
-        }
-
-        // class needed for buttons for save/restore - global for all instances
-        public class DBSettingsSaver : EliteDangerousCore.DB.IUserDatabaseSettingsSaver
-        {
-            const string root = "ScanDisplayFormCommon_";
-            public T GetSetting<T>(string key, T defaultvalue)
-            {
-                return EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(root + key, defaultvalue);
-            }
-
-            public bool PutSetting<T>(string key, T value)
-            {
-                return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(root + key, value);
-            }
         }
     }
 }

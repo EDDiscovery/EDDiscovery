@@ -160,8 +160,8 @@ namespace EDDiscovery.UserControls
             ConfigurableForm f = new ConfigurableForm();
 
             EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-            var stationlist = sp.GetStationsByDump(new SystemClass(textBox_From.Text),int.MaxValue,false);
-            var withmarket = stationlist?.Where(x => x.HasMarket).ToList();
+            var stationlist = sp.GetStationsByDump(new SystemClass(textBox_From.Text));
+            var withmarket = stationlist?.Where(x => x.HasMarket && x.IsFleetCarrier == false).ToList();
             if (withmarket != null && withmarket.Count > 0)
             {
                 var stationnames = withmarket.Select(x => x.StationName).OrderBy(x => x).ToList();

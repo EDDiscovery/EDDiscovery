@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
         public Action<List<Tuple<ISystem, double>>> ReturnSystems;      // return may be null
 
         public Action Excel;                                            // excel pressed
-        UserControlCommonBase.DBSettingsSaver dbsaver;
+        UserDatabaseSettingsSaver dbsaver;
         EDDiscoveryForm discoveryform;
 
         private string dbStar = "Star"; 
@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(UserControlCommonBase.DBSettingsSaver db, bool showexcel , EDDiscoveryForm disc )
+        public void Init(UserDatabaseSettingsSaver db, bool showexcel , EDDiscoveryForm disc )
         {
             dbsaver = db;
             discoveryform = disc;

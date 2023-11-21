@@ -1124,7 +1124,7 @@ namespace EDDiscovery.UserControls
             dropdown.Items = list;
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(sender as Control);
-            dropdown.SelectedIndexChanged += (s, ea) =>
+            dropdown.SelectedIndexChanged += (s, ea, key) =>
             {
                 if (dropdown.SelectedIndex == 0)    // off
                 {

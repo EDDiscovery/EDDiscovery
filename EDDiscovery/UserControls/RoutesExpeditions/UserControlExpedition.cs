@@ -596,7 +596,7 @@ namespace EDDiscovery.UserControls
                 dropdown.Items = savedroutes.Select(x => x.Name).ToList();
                 dropdown.FlatStyle = FlatStyle.Popup;
                 dropdown.PositionBelow(sender as Control);
-                dropdown.SelectedIndexChanged += (s, ea) =>
+                dropdown.SelectedIndexChanged += (s, ea, key) =>
                 {
                     if (PromptAndSaveIfNeeded())
                     {
@@ -1009,7 +1009,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DBSettingsSaver db = new DBSettingsSaver(this, "Sys");
+            UserDatabaseSettingsSaver db = new UserDatabaseSettingsSaver(this, "Sys");
 
             f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExpedition_AddSys),
                                 callback: () =>

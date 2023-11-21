@@ -303,6 +303,12 @@
       <DependentUpon>MissionListUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\BookmarkHelpers.cs" />
+    <Compile Include="UserControls\Helpers\SpanshStationsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\SpanshStationsUserControl.Designer.cs">
+      <DependentUpon>SpanshStationsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\History\UserControlTravelGrid2.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -864,6 +870,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\MissionListUserControl.resx">
       <DependentUpon>MissionListUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\SpanshStationsUserControl.resx">
+      <DependentUpon>SpanshStationsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
       <DependentUpon>TagsForm.cs</DependentUpon>

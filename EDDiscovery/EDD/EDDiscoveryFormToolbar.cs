@@ -132,7 +132,7 @@ namespace EDDiscovery
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.PositionBelow(buttonExtPopOut);
             popoutdropdown.FitImagesToItemHeight = true;
-            popoutdropdown.SelectedIndexChanged += (s, ea) =>
+            popoutdropdown.SelectedIndexChanged += (s, ea,key) =>
             {
                 PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
             };

@@ -15,6 +15,7 @@
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,7 +46,7 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            DBSettingsSaver db = new DBSettingsSaver(this, "SearchFindSys");
+            UserDatabaseSettingsSaver db = new UserDatabaseSettingsSaver(this, "SearchFindSys");
 
             findSystemsUserControl.Init(db, true, DiscoveryForm);
             findSystemsUserControl.Excel += () => { dataGridView.Excel(dataGridView.ColumnCount); };

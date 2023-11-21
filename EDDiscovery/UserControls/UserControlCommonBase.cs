@@ -562,27 +562,6 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public class DBSettingsSaver : EliteDangerousCore.DB.IUserDatabaseSettingsSaver     // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save
-        {                                        // with a defined extra itemname.  this seems the only way to pass generic delegates
-            public DBSettingsSaver(UserControlCommonBase b, string itemname)
-            {
-                root = itemname;
-                ba = b;
-            }
-            public T GetSetting<T>(string key, T defaultvalue)
-            {
-                return ba.GetSetting(root+key, defaultvalue);
-            }
-
-            public bool PutSetting<T>(string key, T value)
-            {
-                return ba.PutSetting(root+key, value);
-            }
-
-            private string root;
-            private UserControlCommonBase ba;
-        }
-
-        #endregion
+         #endregion
     }
 }

@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
                         rw.Cells[0].Tag = entry.TimeUTC;      // column 0 gets time utc
                         //System.Diagnostics.Debug.WriteLine($"Captains Log {rw.Index} date time utc {rw.Cells[0].Tag}");
 
-                        List<string> taglist = entry.Tags?.SplitNoEmptyStrings(';');        // may be null - we do not use all or none note
+                        List<string> taglist = entry.Tags?.SplitNoEmptyStrings(';').ToList();        // may be null - we do not use all or none note
                         rw.Cells[4].Tag = taglist;
                         if (taglist != null)
                             rw.MinimumHeight = Math.Max(taglist.Count * TagSpacing, MinRowSize);

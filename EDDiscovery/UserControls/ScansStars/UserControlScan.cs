@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
                 DrawSystem();
             };
 
-            UserControlCommonBase.DBSettingsSaver dbsaver = new DBSettingsSaver(this, "");
+            UserDatabaseSettingsSaver dbsaver = new UserDatabaseSettingsSaver(this, "");
 
             scanDisplayConfigureButton.Init(dbsaver, "DisplayFilters");
             scanDisplayConfigureButton.ValueChanged += (s, ch) =>
@@ -351,7 +351,7 @@ namespace EDDiscovery.UserControls
             dropdown.ImageItems = imagelist.ToList();
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(buttonSize);
-            dropdown.SelectedIndexChanged += (s, ea) =>
+            dropdown.SelectedIndexChanged += (s, ea, key) =>
             {
                 int size = textlist[dropdown.SelectedIndex].InvariantParseInt(64);
                 SetSizeImage(size);

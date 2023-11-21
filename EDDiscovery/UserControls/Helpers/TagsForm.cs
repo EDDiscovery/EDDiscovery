@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
             dropdown.ImageItems = images;
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(sender as Control);
-            dropdown.SelectedIndexChanged += (s, ea) =>
+            dropdown.SelectedIndexChanged += (s, ea, key) =>
             {
                 Image img = images[dropdown.SelectedIndex];
                 but.Image = img;

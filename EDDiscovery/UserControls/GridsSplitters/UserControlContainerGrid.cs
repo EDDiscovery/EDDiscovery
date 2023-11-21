@@ -369,7 +369,7 @@ namespace EDDiscovery.UserControls
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.PositionBelow(buttonExtPopOut);
             popoutdropdown.FitImagesToItemHeight = true;
-            popoutdropdown.SelectedIndexChanged += (s, ea) =>
+            popoutdropdown.SelectedIndexChanged += (s, ea, key) =>
             {
                 UserControlCommonBase uccb = PanelInformation.Create(pids[popoutdropdown.SelectedIndex]);
                 UserControlContainerResizable uccr = CreateInitPanel(uccb);
