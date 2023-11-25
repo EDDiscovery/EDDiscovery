@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
             new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starsondiffline", "Show bodyless stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses),
             }, 
             Setting,
-            (newsetting) => {
+            (newsetting,ch) => {
                 Setting = newsetting;
                 ucb.PutSetting(settingname, newsetting);
             },

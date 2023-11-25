@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
                 new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSHEDSM","Spansh -> EDSM",EDDiscovery.Icons.Controls.spansh,"EDSM;SPANSH"),
             }, 
             startsetting,
-            (newsetting) => { 
+            (newsetting,ch) => { 
                 ucb.PutSetting(settingname, newsetting);
                 Image = newsetting.HasChars() ? EDDiscovery.Icons.Controls.EDSMSpanshOn : EDDiscovery.Icons.Controls.EDSMSpansh;
             },

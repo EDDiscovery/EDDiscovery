@@ -215,5 +215,6 @@ namespace EDDiscovery.Icons
         public static Image CoriolisYellow { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.CoriolisYellow"); } }
         public static Image People { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.People"); } }
         public static Image Economy { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Economy"); } }
+        public static Image Home { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Home"); } }
     }
 }

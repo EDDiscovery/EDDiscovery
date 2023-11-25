@@ -494,7 +494,23 @@ namespace EDDiscovery
         public static void PostInitDebug()
         {
             System.Diagnostics.Debug.WriteLine($"Post Init debug");
-            // var sp = new EliteDangerousCore.Spansh.SpanshClass();
+            var sp = new EliteDangerousCore.Spansh.SpanshClass();
+
+
+            //JToken tk = JToken.Parse(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\spanshmodtypes"));
+            //JArray mt = tk["values"].Array();
+            //foreach (var m in mt)
+            //{
+            //    string name = m.Str().Replace(" ", "").Replace("-", "_");
+            //    System.Diagnostics.Debug.Write($"{name},");
+            //}
+
+
+
+
+
+            //   var list = sp.GetServices("Scirth", new string[] { "Apex Interstellar", "Black Market" }, 12);
+            // var list = sp.GetServices("Scirth", new string[] { "Interstellar Factors Contact" }, 12);
 
             // var sys = SystemCache.FindSystem("Lembava", WebExternalDataLookup.Spansh);
 

@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
 
             Init(options,
             Setting,
-            (newsetting) => {
+            (newsetting,ch) => {
                 Setting = newsetting;
                 ucb.PutSetting(settingname, newsetting);
             },

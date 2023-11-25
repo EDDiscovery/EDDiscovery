@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
-            comboBoxYards.Items.AddRange(ItemData.GetAllModules(true,true).Select(x=>x.ModType).Distinct());
+            comboBoxYards.Items.AddRange(ItemData.GetModules(true,true,true,true,true).Select(x=>x.ModTypeString).Distinct()); // return all types of modules including unknown
 
             var list = (from x in ofl.GetFilteredList() select x.Ident()).ToList();
             comboBoxYards.Items.AddRange(list);

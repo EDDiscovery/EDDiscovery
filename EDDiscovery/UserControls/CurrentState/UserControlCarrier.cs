@@ -1076,7 +1076,7 @@ namespace EDDiscovery.UserControls
                             var modp = ItemData.GetShipModuleProperties(ord.Name);
 
                             string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
-                            string mtype = modp?.ModType ?? ord.Category ?? "";
+                            string mtype = modp?.ModTypeString ?? ord.Category ?? "";
                             string mass = modp?.Mass.ToString("N1") ?? "";
                             string power = modp?.Power.ToString("N1") ?? "";
                             string info = modp?.Info ?? "";
