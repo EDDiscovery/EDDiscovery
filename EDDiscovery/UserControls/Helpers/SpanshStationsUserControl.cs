@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls.Helpers
                 GetFilter(FilterSettings.Shipyard),
                 (newsetting, ch) => { SetFilter(FilterSettings.Shipyard, newsetting, ch); });
 
-            // tbd could use Identifers to localise later
+            // could use Identifers to localise later
             var economy = EconomyDefinitions.Types.Select(x => new CheckedIconListBoxFormGroup.StandardOption(x.Key, x.Value));
 
             extButtonEconomy.SettingsSplittingChar = '\u2345';     // because ; is used in identifiers
@@ -313,7 +313,11 @@ namespace EDDiscovery.UserControls.Helpers
         private void viewMarketToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
+            ViewMarket(si);
+        }
 
+        private void ViewMarket(StationInfo si)
+        { 
             var dgvpanel = new ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
             dgvpanel.DataGrid.CreateTextColumns("Category", 100, 5,
                                                 "Name", 150, 5,
@@ -360,7 +364,11 @@ namespace EDDiscovery.UserControls.Helpers
         private void viewOutfittingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
+            ViewOutfitting(si);
+        }
 
+        private void ViewOutfitting(StationInfo si)
+        { 
             var dgvpanel = new ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
             dgvpanel.DataGrid.CreateTextColumns("Category", 100, 5,
                                                 "Name", 150, 5);
@@ -395,7 +403,10 @@ namespace EDDiscovery.UserControls.Helpers
         private void viewShipyardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as StationInfo;
-
+            ViewShipyard(si);
+        }
+        private void ViewShipyard(StationInfo si)
+        { 
             var dgvpanel = new ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
             dgvpanel.DataGrid.CreateTextColumns("Name", 100, 5);
 
@@ -425,6 +436,20 @@ namespace EDDiscovery.UserControls.Helpers
             saver.DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowShipyard");
         }
 
+        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if ( e.RowIndex>=0)
+            {
+                EliteDangerousCore.StationInfo si = dataGridView.Rows[e.RowIndex].Tag as EliteDangerousCore.StationInfo;
+                if (e.ColumnIndex == colOutfitting.Index && si.HasOutfitting)
+                    ViewOutfitting(si);
+                else if (e.ColumnIndex == colShipyard.Index && si.HasShipyard)
+                    ViewShipyard(si);
+                else if (e.ColumnIndex == colHasMarket.Index && si.HasMarket)
+                    ViewMarket(si);
+            }
+        }
+
         #endregion
 
         #region Searches
@@ -437,7 +462,7 @@ namespace EDDiscovery.UserControls.Helpers
         Size checkboxsize = new Size(154, 24);
         Size labelsize = new Size(dataleft - 4, 24);
 
-        int servicessearchdistance = 20;
+        int servicessearchdistance = 40;
         bool[] servicestate = new bool[128];
         bool servicesclearfilters = true;
 
@@ -447,7 +472,7 @@ namespace EDDiscovery.UserControls.Helpers
             Search(services, FilterSettings.Services, ref servicesclearfilters, ref servicestate, ref servicessearchdistance, 400);
         }
 
-        int commoditiessearchdistance = 20;
+        int commoditiessearchdistance = 40;
         bool[] commoditiesstate = new bool[2048];
         bool commoditiesclearfilter = true;
 
@@ -457,22 +482,93 @@ namespace EDDiscovery.UserControls.Helpers
             Search(commodities, FilterSettings.Commodities, ref commoditiesclearfilter, ref commoditiesstate, ref commoditiessearchdistance, 1800);
         }
 
-        int economysearchdistance = 20;
-        bool[] economystate = new bool[2048];
+        int economysearchdistance = 40;
+        bool[] economystate = new bool[64];
         bool economyclearfilter = true;
         private void extButtonSearchEconomy_Click(object sender, EventArgs e)
         {
-            var economy = EconomyDefinitions.Types.Values.Select(x=>x);
-            Search(economy, FilterSettings.Economy, ref economyclearfilter, ref economystate, ref economysearchdistance, 1800);
+            var economy = EconomyDefinitions.Types.Values.Select(x => x);
+            Search(economy, FilterSettings.Economy, ref economyclearfilter, ref economystate, ref economysearchdistance, 200);
 
         }
 
+        int shipssearchdistance = 40;
+        bool[] shipsstate = new bool[128];
+        bool shipsclearfilter = true;
         private void extButtonSearchShips_Click(object sender, EventArgs e)
         {
+            var ships = ItemData.GetSpaceships().Select(x => x.ContainsKey(ItemData.ShipPropID.EDCDName) ? ((ItemData.ShipInfoString)x[ItemData.ShipPropID.EDCDName]).Value : ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value);
+            Search(ships, FilterSettings.Shipyard, ref shipsclearfilter, ref shipsstate, ref shipssearchdistance, 400);
+        }
+
+        const int maxresults = 200;
+
+        private void Search(IEnumerable<string> names, FilterSettings filter, ref bool clearfilters, ref bool[] state, ref int searchdistance, int dialogdepth)
+        {
+            string title = filter.ToString().SplitCapsWordFull();
+
+            ConfigurableForm f = new ConfigurableForm();
+            int vpos = 40;
+            f.Add(new ConfigurableForm.Entry("CLRF", clearfilters, "Clear other filters", new Point(240, vpos), new Size(160, 22), title + " is cleared, clear the others as well"));
+            f.AddLabelAndEntry("Maximum Distance", new Point(4, 4), ref vpos, 40, labelsize, new ConfigurableForm.Entry("radius", searchdistance, new Point(dataleft, 0), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1 });
+            int i = 0;
+            int svpos = vpos;
+            int colx = 4;
+            foreach (var sv in names)
+            {
+                f.Add(ref vpos, 24, new ConfigurableForm.Entry("S_" + sv, state[i++], sv, new Point(colx, 0), new Size(200, 22), "Search for " + sv));
+                if (vpos > dialogdepth)
+                {
+                    vpos = svpos;
+                    colx += 200;
+                }
+            }
+
+            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Search", new Point(400, 40), new Size(80, 24), null));
+            f.InstallStandardTriggers();
+            f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
+
+            if (extTextBoxAutoCompleteSystem.Text.HasChars())
+            {
+                string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
+
+                if (f.ShowDialogCentred(FindForm(), FindForm().Icon, $"Find {title} from {systemname}", closeicon: true) == DialogResult.OK)
+                {
+                    var checkedlist = f.GetCheckedList("S_").Select(x => x.Substring(2)).ToArray();
+                    state = f.GetCheckBoxBools("S_");
+                    searchdistance = f.GetInt("radius").Value;
+                    clearfilters = f.GetBool("CLRF").Value;
+
+                    if (checkedlist.Length > 0)
+                    {
+                        EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                        List<StationInfo> ssd = null;
+
+                        if (filter == FilterSettings.Services)
+                            ssd = sp.SearchServices(systemname, checkedlist, searchdistance, maxresults);
+                        else if (filter == FilterSettings.Commodities)
+                            ssd = sp.SearchCommodities(systemname, checkedlist, searchdistance, maxresults);
+                        else if (filter == FilterSettings.Economy)
+                            ssd = sp.SearchEconomy(systemname, checkedlist, searchdistance, maxresults);
+                        else if (filter == FilterSettings.Shipyard)
+                            ssd = sp.SearchShips(systemname, checkedlist, searchdistance, maxresults);
+
+                        if (ssd?.Count > 0)
+                        {
+                            DrawSearch(ssd, clearfilters, filter);
+                        }
+                        else
+                        {
+                            MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                        }
+                    }
+                }
+            }
 
         }
 
-        int outfittingsearchdistance = 20;
+
+        int outfittingsearchdistance = 40;
         bool[] outfittingmodtypes = new bool[256];
         bool[] outfittingclasses = new bool[8] { true, false, false, false, false, false, false, false };   // 0 =all, 0..6
         bool[] outfittingratings = new bool[8] { true, false, false, false, false, false, false, false };   // 0 = all, A..G
@@ -487,7 +583,7 @@ namespace EDDiscovery.UserControls.Helpers
             ConfigurableForm f = new ConfigurableForm();
             int vpos = 40;
             f.Add(new ConfigurableForm.Entry("CLRF", outfittingclearfilters, "Clear other filters", new Point(240, vpos), new Size(160, 22), title + " is cleared, clear the others as well"));
-            f.AddLabelAndEntry("Maximum Distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("radius", outfittingsearchdistance, new Point(dataleft, 0), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1 });
+            f.AddLabelAndEntry("Maximum Distance", new Point(4, 4), ref vpos, 40, labelsize, new ConfigurableForm.Entry("radius", outfittingsearchdistance, new Point(dataleft, 0), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1 });
             int i = 0;
             int svpos = vpos;
             int colx = 4;
@@ -547,7 +643,7 @@ namespace EDDiscovery.UserControls.Helpers
                     if ( modlist.Length>0 && outfittingclasses.Contains(true) && outfittingratings.Contains(true))
                     {
                         EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                        List<StationInfo> ssd = sp.SearchOutfitting(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, 100);
+                        List<StationInfo> ssd = sp.SearchOutfitting(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, maxresults);
                         if (ssd?.Count > 0)
                         {
                             DrawSearch(ssd, outfittingclearfilters, FilterSettings.Outfitting);
@@ -563,68 +659,6 @@ namespace EDDiscovery.UserControls.Helpers
         }
 
 
-        private void Search( IEnumerable<string> names, FilterSettings filter, ref bool clearfilters, ref bool[] state, ref int searchdistance , int dialogdepth )
-        {
-            string title = filter.ToString().SplitCapsWordFull();
-
-            ConfigurableForm f = new ConfigurableForm();
-            int vpos = 40;
-            f.Add(new ConfigurableForm.Entry("CLRF", clearfilters, "Clear other filters", new Point(240, vpos), new Size(160, 22), title  + " is cleared, clear the others as well"));
-            f.AddLabelAndEntry("Maximum Distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("radius", searchdistance, new Point(dataleft, 0), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1 });
-            int i = 0;
-            int svpos = vpos;
-            int colx = 4;
-            foreach (var sv in names)
-            {
-                f.Add(ref vpos, 24, new ConfigurableForm.Entry("S_" + sv, state[i++], sv, new Point(colx, 0), new Size(200, 22), "Search for " + sv));
-                if (vpos > dialogdepth)
-                {
-                    vpos = svpos;
-                    colx += 200;
-                }
-            }
-
-            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Search", new Point(400, 40), new Size(80, 24), null));
-            f.InstallStandardTriggers();
-            f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
-
-            if (extTextBoxAutoCompleteSystem.Text.HasChars() )
-            {
-                string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
-
-                if (f.ShowDialogCentred(FindForm(), FindForm().Icon, $"Find {title} from {systemname}", closeicon: true) == DialogResult.OK)
-                {
-                    var checkedlist = f.GetCheckedList("S_").Select(x => x.Substring(2)).ToArray();
-                    state = f.GetCheckBoxBools("S_");
-                    searchdistance = f.GetInt("radius").Value;
-                    clearfilters = f.GetBool("CLRF").Value;
-
-                    if (checkedlist.Length > 0)
-                    {
-                        EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                        List<StationInfo> ssd = null;
-
-                        if (filter == FilterSettings.Services)
-                            ssd = sp.SearchServices(systemname, checkedlist, searchdistance, 100);
-                        else if (filter == FilterSettings.Commodities)
-                            ssd = sp.SearchCommodities(systemname, checkedlist, searchdistance, 100);
-                        else if (filter == FilterSettings.Economy)
-                            ssd = sp.SearchEconomy(systemname, checkedlist, searchdistance, 100);
-
-                        if (ssd?.Count > 0)
-                        {
-                            DrawSearch(ssd, clearfilters, filter);
-                        }
-                        else
-                        {
-                            MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
-                        }
-                    }
-                }
-            }
-
-        }
-   
 
         #endregion
 
@@ -695,5 +729,5 @@ namespace EDDiscovery.UserControls.Helpers
 
         #endregion
 
-       }
+    }
 }
