@@ -243,7 +243,7 @@ namespace EDDiscovery.UserControls
             {
                 if (control == "add")
                 {
-                    int numcontrols = f.GetList("idest").Count;     // get number up there
+                    int numcontrols = f.GetByStartingName("idest").Length;     // get number up there
                     int pos = addvpos + numcontrols * 32;           // work out where next should be
                     f.MoveControls(pos - 10, 32);                     // move anything after this (less a bit for safety) to space
                     AddFCDest(f, controlnumber++, pos);             // and add
@@ -265,7 +265,7 @@ namespace EDDiscovery.UserControls
             {
                 fccapused = f.GetInt("cap").Value;
                 fcdeterminetritium = f.GetBool("tritium").Value;
-                fcdestinations = f.GetList("idest").Where(x => x.Length > 0).ToList();
+                fcdestinations = f.GetByStartingName("idest").Where(x => x.Length > 0).ToList();
 
                 var destlist = new List<string>(fcdestinations);
                 destlist.Add(textBox_To.Text);

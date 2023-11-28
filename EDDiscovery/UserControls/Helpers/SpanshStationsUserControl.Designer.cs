@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls.Helpers
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.flowLayouSearch = new System.Windows.Forms.FlowLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelSystem = new System.Windows.Forms.Label();
             this.extTextBoxAutoCompleteSystem = new ExtendedControls.ExtTextBoxAutoComplete();
             this.extButtonTravelSystem = new ExtendedControls.ExtButton();
             this.labelMaxLs = new System.Windows.Forms.Label();
@@ -59,13 +59,16 @@ namespace EDDiscovery.UserControls.Helpers
             this.extButtonEconomy = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
             this.extButtonShipyard = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
             this.extButtonOutfitting = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
-            this.extButtonSortCommodities = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
             this.panelControls = new System.Windows.Forms.Panel();
             this.flowLayoutPanelFilters = new System.Windows.Forms.FlowLayoutPanel();
-            this.label2 = new System.Windows.Forms.Label();
+            this.extButtonEditCommodities = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
+            this.labelShow = new System.Windows.Forms.Label();
+            this.labelFilter = new System.Windows.Forms.Label();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.labelSettings = new System.Windows.Forms.Label();
             this.colSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistanceRef = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -75,9 +78,13 @@ namespace EDDiscovery.UserControls.Helpers
             this.colLattitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colLongitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colHasMarket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPrice1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPrice2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPrice3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colOutfitting = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colShipyard = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAllegiance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colEconomy = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colGovernment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colServices = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,16 +102,18 @@ namespace EDDiscovery.UserControls.Helpers
             // flowLayouSearch
             // 
             this.flowLayouSearch.AutoSize = true;
-            this.flowLayouSearch.Controls.Add(this.label1);
+            this.flowLayouSearch.Controls.Add(this.labelSystem);
             this.flowLayouSearch.Controls.Add(this.extTextBoxAutoCompleteSystem);
             this.flowLayouSearch.Controls.Add(this.extButtonTravelSystem);
             this.flowLayouSearch.Controls.Add(this.labelMaxLs);
             this.flowLayouSearch.Controls.Add(this.valueBoxMaxLs);
+            this.flowLayouSearch.Controls.Add(this.labelSearch);
             this.flowLayouSearch.Controls.Add(this.extButtonSearchCommodities);
             this.flowLayouSearch.Controls.Add(this.extButtonSearchServiceTypes);
             this.flowLayouSearch.Controls.Add(this.extButtonSearchEconomy);
             this.flowLayouSearch.Controls.Add(this.extButtonSearchShips);
             this.flowLayouSearch.Controls.Add(this.extButtonSearchOutfitting);
+            this.flowLayouSearch.Controls.Add(this.labelSettings);
             this.flowLayouSearch.Controls.Add(this.extCheckBoxWordWrap);
             this.flowLayouSearch.Controls.Add(this.buttonExtExcel);
             this.flowLayouSearch.Dock = System.Windows.Forms.DockStyle.Top;
@@ -114,15 +123,15 @@ namespace EDDiscovery.UserControls.Helpers
             this.flowLayouSearch.TabIndex = 25;
             this.flowLayouSearch.WrapContents = false;
             // 
-            // label1
+            // labelSystem
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 4);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 31;
-            this.label1.Text = "System";
+            this.labelSystem.AutoSize = true;
+            this.labelSystem.Location = new System.Drawing.Point(4, 6);
+            this.labelSystem.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelSystem.Name = "labelSystem";
+            this.labelSystem.Size = new System.Drawing.Size(41, 13);
+            this.labelSystem.TabIndex = 31;
+            this.labelSystem.Text = "System";
             // 
             // extTextBoxAutoCompleteSystem
             // 
@@ -169,14 +178,15 @@ namespace EDDiscovery.UserControls.Helpers
             this.extButtonTravelSystem.Name = "extButtonTravelSystem";
             this.extButtonTravelSystem.Size = new System.Drawing.Size(22, 22);
             this.extButtonTravelSystem.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonTravelSystem, "Press to go back to current travel history system");
             this.extButtonTravelSystem.UseVisualStyleBackColor = true;
             this.extButtonTravelSystem.Click += new System.EventHandler(this.extButtonTravelSystem_Click);
             // 
             // labelMaxLs
             // 
             this.labelMaxLs.AutoSize = true;
-            this.labelMaxLs.Location = new System.Drawing.Point(251, 4);
-            this.labelMaxLs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
+            this.labelMaxLs.Location = new System.Drawing.Point(251, 6);
+            this.labelMaxLs.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
             this.labelMaxLs.Name = "labelMaxLs";
             this.labelMaxLs.Size = new System.Drawing.Size(41, 13);
             this.labelMaxLs.TabIndex = 3;
@@ -223,8 +233,8 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonSearchCommodities
             // 
             this.extButtonSearchCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
-            this.extButtonSearchCommodities.Location = new System.Drawing.Point(400, 3);
-            this.extButtonSearchCommodities.Margin = new System.Windows.Forms.Padding(12, 3, 3, 3);
+            this.extButtonSearchCommodities.Location = new System.Drawing.Point(441, 3);
+            this.extButtonSearchCommodities.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
             this.extButtonSearchCommodities.Name = "extButtonSearchCommodities";
             this.extButtonSearchCommodities.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchCommodities.TabIndex = 34;
@@ -235,7 +245,7 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonSearchServiceTypes
             // 
             this.extButtonSearchServiceTypes.Image = global::EDDiscovery.Icons.Controls.People;
-            this.extButtonSearchServiceTypes.Location = new System.Drawing.Point(434, 3);
+            this.extButtonSearchServiceTypes.Location = new System.Drawing.Point(475, 3);
             this.extButtonSearchServiceTypes.Name = "extButtonSearchServiceTypes";
             this.extButtonSearchServiceTypes.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchServiceTypes.TabIndex = 34;
@@ -246,30 +256,33 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonSearchEconomy
             // 
             this.extButtonSearchEconomy.Image = global::EDDiscovery.Icons.Controls.Economy;
-            this.extButtonSearchEconomy.Location = new System.Drawing.Point(468, 3);
+            this.extButtonSearchEconomy.Location = new System.Drawing.Point(509, 3);
             this.extButtonSearchEconomy.Name = "extButtonSearchEconomy";
             this.extButtonSearchEconomy.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchEconomy.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonSearchEconomy, "Search for stations with economies across systems");
             this.extButtonSearchEconomy.UseVisualStyleBackColor = true;
             this.extButtonSearchEconomy.Click += new System.EventHandler(this.extButtonSearchEconomy_Click);
             // 
             // extButtonSearchShips
             // 
             this.extButtonSearchShips.Image = global::EDDiscovery.Icons.Controls.Shipyard;
-            this.extButtonSearchShips.Location = new System.Drawing.Point(502, 3);
+            this.extButtonSearchShips.Location = new System.Drawing.Point(543, 3);
             this.extButtonSearchShips.Name = "extButtonSearchShips";
             this.extButtonSearchShips.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchShips.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonSearchShips, "Search for stations with ships across systems");
             this.extButtonSearchShips.UseVisualStyleBackColor = true;
             this.extButtonSearchShips.Click += new System.EventHandler(this.extButtonSearchShips_Click);
             // 
             // extButtonSearchOutfitting
             // 
             this.extButtonSearchOutfitting.Image = global::EDDiscovery.Icons.Controls.Outfitting;
-            this.extButtonSearchOutfitting.Location = new System.Drawing.Point(536, 3);
+            this.extButtonSearchOutfitting.Location = new System.Drawing.Point(577, 3);
             this.extButtonSearchOutfitting.Name = "extButtonSearchOutfitting";
             this.extButtonSearchOutfitting.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchOutfitting.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonSearchOutfitting, "Search for stations with outfitting modules across systems");
             this.extButtonSearchOutfitting.UseVisualStyleBackColor = true;
             this.extButtonSearchOutfitting.Click += new System.EventHandler(this.extButtonSearchOutfitting_Click);
             // 
@@ -293,8 +306,8 @@ namespace EDDiscovery.UserControls.Helpers
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(579, 2);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(12, 2, 4, 2);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(649, 2);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
@@ -307,13 +320,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = ((System.Drawing.Image)(resources.GetObject("buttonExtExcel.Image")));
-            this.buttonExtExcel.Location = new System.Drawing.Point(615, 2);
+            this.buttonExtExcel.Location = new System.Drawing.Point(685, 2);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 29;
             this.toolTip.SetToolTip(this.buttonExtExcel, "Output grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // contextMenuStrip
             // 
@@ -363,7 +377,7 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonType
             // 
             this.extButtonType.Image = global::EDDiscovery.Icons.Controls.CoriolisYellow;
-            this.extButtonType.Location = new System.Drawing.Point(4, 2);
+            this.extButtonType.Location = new System.Drawing.Point(41, 2);
             this.extButtonType.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.extButtonType.Name = "extButtonType";
             this.extButtonType.SettingsSplittingChar = ';';
@@ -375,7 +389,7 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonCommodities
             // 
             this.extButtonCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
-            this.extButtonCommodities.Location = new System.Drawing.Point(40, 2);
+            this.extButtonCommodities.Location = new System.Drawing.Point(77, 2);
             this.extButtonCommodities.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.extButtonCommodities.Name = "extButtonCommodities";
             this.extButtonCommodities.SettingsSplittingChar = ';';
@@ -387,7 +401,7 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonServices
             // 
             this.extButtonServices.Image = global::EDDiscovery.Icons.Controls.People;
-            this.extButtonServices.Location = new System.Drawing.Point(76, 2);
+            this.extButtonServices.Location = new System.Drawing.Point(113, 2);
             this.extButtonServices.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.extButtonServices.Name = "extButtonServices";
             this.extButtonServices.SettingsSplittingChar = ';';
@@ -399,7 +413,7 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonEconomy
             // 
             this.extButtonEconomy.Image = global::EDDiscovery.Icons.Controls.Economy;
-            this.extButtonEconomy.Location = new System.Drawing.Point(112, 2);
+            this.extButtonEconomy.Location = new System.Drawing.Point(149, 2);
             this.extButtonEconomy.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.extButtonEconomy.Name = "extButtonEconomy";
             this.extButtonEconomy.SettingsSplittingChar = ';';
@@ -411,7 +425,7 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonShipyard
             // 
             this.extButtonShipyard.Image = global::EDDiscovery.Icons.Controls.Shipyard;
-            this.extButtonShipyard.Location = new System.Drawing.Point(148, 2);
+            this.extButtonShipyard.Location = new System.Drawing.Point(185, 2);
             this.extButtonShipyard.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.extButtonShipyard.Name = "extButtonShipyard";
             this.extButtonShipyard.SettingsSplittingChar = ';';
@@ -423,7 +437,7 @@ namespace EDDiscovery.UserControls.Helpers
             // extButtonOutfitting
             // 
             this.extButtonOutfitting.Image = global::EDDiscovery.Icons.Controls.Outfitting;
-            this.extButtonOutfitting.Location = new System.Drawing.Point(184, 2);
+            this.extButtonOutfitting.Location = new System.Drawing.Point(221, 2);
             this.extButtonOutfitting.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.extButtonOutfitting.Name = "extButtonOutfitting";
             this.extButtonOutfitting.SettingsSplittingChar = ';';
@@ -431,18 +445,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.extButtonOutfitting.TabIndex = 32;
             this.toolTip.SetToolTip(this.extButtonOutfitting, "Filter on outfitting");
             this.extButtonOutfitting.UseVisualStyleBackColor = true;
-            // 
-            // extButtonSortCommodities
-            // 
-            this.extButtonSortCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
-            this.extButtonSortCommodities.Location = new System.Drawing.Point(254, 2);
-            this.extButtonSortCommodities.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.extButtonSortCommodities.Name = "extButtonSortCommodities";
-            this.extButtonSortCommodities.SettingsSplittingChar = ';';
-            this.extButtonSortCommodities.Size = new System.Drawing.Size(28, 28);
-            this.extButtonSortCommodities.TabIndex = 32;
-            this.toolTip.SetToolTip(this.extButtonSortCommodities, "Sort by Commodity price");
-            this.extButtonSortCommodities.UseVisualStyleBackColor = true;
             // 
             // panelControls
             // 
@@ -458,29 +460,32 @@ namespace EDDiscovery.UserControls.Helpers
             // flowLayoutPanelFilters
             // 
             this.flowLayoutPanelFilters.AutoSize = true;
+            this.flowLayoutPanelFilters.Controls.Add(this.labelFilter);
             this.flowLayoutPanelFilters.Controls.Add(this.extButtonType);
             this.flowLayoutPanelFilters.Controls.Add(this.extButtonCommodities);
             this.flowLayoutPanelFilters.Controls.Add(this.extButtonServices);
             this.flowLayoutPanelFilters.Controls.Add(this.extButtonEconomy);
             this.flowLayoutPanelFilters.Controls.Add(this.extButtonShipyard);
             this.flowLayoutPanelFilters.Controls.Add(this.extButtonOutfitting);
-            this.flowLayoutPanelFilters.Controls.Add(this.label2);
-            this.flowLayoutPanelFilters.Controls.Add(this.extButtonSortCommodities);
+            this.flowLayoutPanelFilters.Controls.Add(this.labelShow);
+            this.flowLayoutPanelFilters.Controls.Add(this.extButtonEditCommodities);
             this.flowLayoutPanelFilters.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanelFilters.Location = new System.Drawing.Point(0, 34);
             this.flowLayoutPanelFilters.Name = "flowLayoutPanelFilters";
             this.flowLayoutPanelFilters.Size = new System.Drawing.Size(978, 32);
             this.flowLayoutPanelFilters.TabIndex = 26;
             // 
-            // label2
+            // extButtonEditCommodities
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(220, 4);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Sort";
+            this.extButtonEditCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
+            this.extButtonEditCommodities.Location = new System.Drawing.Point(299, 2);
+            this.extButtonEditCommodities.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonEditCommodities.Name = "extButtonEditCommodities";
+            this.extButtonEditCommodities.Size = new System.Drawing.Size(28, 28);
+            this.extButtonEditCommodities.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonEditCommodities, "Show up to three commodities, either buy or sell price");
+            this.extButtonEditCommodities.UseVisualStyleBackColor = true;
+            this.extButtonEditCommodities.Click += new System.EventHandler(this.extButtonEditCommodities_Click);
             // 
             // dataViewScrollerPanel
             // 
@@ -553,9 +558,13 @@ namespace EDDiscovery.UserControls.Helpers
             this.colLattitude,
             this.colLongitude,
             this.colHasMarket,
+            this.ColPrice1,
+            this.ColPrice2,
+            this.ColPrice3,
             this.colOutfitting,
             this.colShipyard,
             this.colAllegiance,
+            this.colFaction,
             this.colEconomy,
             this.colGovernment,
             this.colServices,
@@ -592,6 +601,46 @@ namespace EDDiscovery.UserControls.Helpers
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
+            // 
+            // labelShow
+            // 
+            this.labelShow.AutoSize = true;
+            this.labelShow.Location = new System.Drawing.Point(257, 4);
+            this.labelShow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
+            this.labelShow.Name = "labelShow";
+            this.labelShow.Size = new System.Drawing.Size(34, 13);
+            this.labelShow.TabIndex = 3;
+            this.labelShow.Text = "Show";
+            // 
+            // labelFilter
+            // 
+            this.labelFilter.AutoSize = true;
+            this.labelFilter.Location = new System.Drawing.Point(4, 6);
+            this.labelFilter.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelFilter.Name = "labelFilter";
+            this.labelFilter.Size = new System.Drawing.Size(29, 13);
+            this.labelFilter.TabIndex = 3;
+            this.labelFilter.Text = "Filter";
+            // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(392, 6);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 3;
+            this.labelSearch.Text = "Search";
+            // 
+            // labelSettings
+            // 
+            this.labelSettings.AutoSize = true;
+            this.labelSettings.Location = new System.Drawing.Point(612, 6);
+            this.labelSettings.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelSettings.Name = "labelSettings";
+            this.labelSettings.Size = new System.Drawing.Size(29, 13);
+            this.labelSettings.TabIndex = 3;
+            this.labelSettings.Text = "Misc";
             // 
             // colSystem
             // 
@@ -654,6 +703,27 @@ namespace EDDiscovery.UserControls.Helpers
             this.colHasMarket.Name = "colHasMarket";
             this.colHasMarket.ReadOnly = true;
             // 
+            // ColPrice1
+            // 
+            this.ColPrice1.FillWeight = 50F;
+            this.ColPrice1.HeaderText = "Price 1";
+            this.ColPrice1.Name = "ColPrice1";
+            this.ColPrice1.ReadOnly = true;
+            // 
+            // ColPrice2
+            // 
+            this.ColPrice2.FillWeight = 50F;
+            this.ColPrice2.HeaderText = "Price 2";
+            this.ColPrice2.Name = "ColPrice2";
+            this.ColPrice2.ReadOnly = true;
+            // 
+            // ColPrice3
+            // 
+            this.ColPrice3.FillWeight = 50F;
+            this.ColPrice3.HeaderText = "Price 3";
+            this.ColPrice3.Name = "ColPrice3";
+            this.ColPrice3.ReadOnly = true;
+            // 
             // colOutfitting
             // 
             this.colOutfitting.FillWeight = 50F;
@@ -673,6 +743,12 @@ namespace EDDiscovery.UserControls.Helpers
             this.colAllegiance.HeaderText = "Allegiance";
             this.colAllegiance.Name = "colAllegiance";
             this.colAllegiance.ReadOnly = true;
+            // 
+            // colFaction
+            // 
+            this.colFaction.HeaderText = "Faction";
+            this.colFaction.Name = "colFaction";
+            this.colFaction.ReadOnly = true;
             // 
             // colEconomy
             // 
@@ -738,7 +814,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         #endregion
         private System.Windows.Forms.FlowLayoutPanel flowLayouSearch;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelSystem;
         private ExtendedControls.ExtTextBoxAutoComplete extTextBoxAutoCompleteSystem;
         private System.Windows.Forms.Label labelMaxLs;
         private ExtendedControls.NumberBoxDouble valueBoxMaxLs;
@@ -762,6 +838,16 @@ namespace EDDiscovery.UserControls.Helpers
         private System.Windows.Forms.Panel panelControls;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelFilters;
         private ExtendedControls.ExtButton extButtonSearchServiceTypes;
+        private ExtendedControls.ExtButton extButtonSearchCommodities;
+        private ExtendedControls.ExtButton extButtonTravelSystem;
+        private ExtendedControls.ExtButton extButtonSearchEconomy;
+        private ExtendedControls.ExtButton extButtonSearchShips;
+        private ExtendedControls.ExtButton extButtonSearchOutfitting;
+        private ExtendedControls.ExtButton extButtonEditCommodities;
+        private System.Windows.Forms.Label labelShow;
+        private System.Windows.Forms.Label labelFilter;
+        private System.Windows.Forms.Label labelSearch;
+        private System.Windows.Forms.Label labelSettings;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDistanceRef;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBodyName;
@@ -771,21 +857,18 @@ namespace EDDiscovery.UserControls.Helpers
         private System.Windows.Forms.DataGridViewTextBoxColumn colLattitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLongitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn colHasMarket;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice3;
         private System.Windows.Forms.DataGridViewTextBoxColumn colOutfitting;
         private System.Windows.Forms.DataGridViewTextBoxColumn colShipyard;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAllegiance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEconomy;
         private System.Windows.Forms.DataGridViewTextBoxColumn colGovernment;
         private System.Windows.Forms.DataGridViewTextBoxColumn colServices;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSmallPad;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMediumPads;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLargePads;
-        private ExtendedControls.ExtButton extButtonSearchCommodities;
-        private ExtendedControls.ExtButton extButtonTravelSystem;
-        private System.Windows.Forms.Label label2;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonSortCommodities;
-        private ExtendedControls.ExtButton extButtonSearchEconomy;
-        private ExtendedControls.ExtButton extButtonSearchShips;
-        private ExtendedControls.ExtButton extButtonSearchOutfitting;
     }
 }

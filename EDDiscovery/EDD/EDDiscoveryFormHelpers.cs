@@ -493,6 +493,8 @@ namespace EDDiscovery
         #region Debug
         public static void PostInitDebug()
         {
+         //   var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);
+
             System.Diagnostics.Debug.WriteLine($"Post Init debug");
             var sp = new EliteDangerousCore.Spansh.SpanshClass();
 

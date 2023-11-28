@@ -15,6 +15,7 @@
 using EliteDangerousCore;
 using ExtendedControls;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -30,9 +31,11 @@ namespace EDDiscovery.UserControls.Helpers
         private ISystem defaultsystem;
         private List<StationInfo> stationdata;
 
+        bool showcommoditiesstationtobuyprice = false;      // on columns, show buy price, else sell price (if has stock)
+
         private const string dbLS = "MaxLs";
 
-        enum FilterSettings { Type, Commodities, Outfitting, Shipyard, Economy, Services };
+        enum FilterSettings { Type, Commodities, Outfitting, Shipyard, Economy, Services};
         ExtButtonWithCheckedIconListBoxGroup[] filters;
 
         private const string dbWordWrap = "WordWrap";
@@ -66,7 +69,7 @@ namespace EDDiscovery.UserControls.Helpers
                 (newsetting,ch) => { SetFilter(FilterSettings.Type, newsetting, ch); });
 
 
-            var comitems = MaterialCommodityMicroResourceType.GetCommodities(true)
+            var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast)
                             .Select(x => new CheckedIconListBoxFormGroup.StandardOption(x.FDName, x.Name));
 
             extButtonCommodities.InitAllNoneAllBack(comitems,
@@ -108,6 +111,8 @@ namespace EDDiscovery.UserControls.Helpers
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
+            ColPrice1.Visible = ColPrice2.Visible = ColPrice3.Visible = 
+            colDistanceRef.Visible = colSystem.Visible = false;
         }
 
         public void Close()
@@ -150,35 +155,52 @@ namespace EDDiscovery.UserControls.Helpers
 
             colDistanceRef.Visible = colSystem.Visible = false;
             extButtonTravelSystem.Enabled = explicity_set_system;
+
             Draw(true);
         }
 
-        private void DrawSearch(List<StationInfo> si, bool clearotherfilters, FilterSettings alwaysclear)
+        private bool DrawSearch(List<StationInfo> si, bool clearotherfilters, FilterSettings alwaysclear)
         {
-            foreach (FilterSettings e in Enum.GetValues(typeof(FilterSettings)))
+            if (si == null)
             {
-                if (clearotherfilters || e == alwaysclear)     // go thru filters and reset the filter
-                {
-                    SetFilter(e, CheckedIconListBoxFormGroup.Disabled, false);  // update the DB
-                    filters[(int)e].Set(CheckedIconListBoxFormGroup.Disabled);  // we need to update the button with the same setting
-                }
+                MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                return false;
             }
+            else
+            {
+                foreach (FilterSettings e in Enum.GetValues(typeof(FilterSettings)))
+                {
+                    if (clearotherfilters || e == alwaysclear)     // go thru filters and reset the filter
+                    {
+                        SetFilter(e, CheckedIconListBoxFormGroup.Disabled, false);  // update the DB
+                        filters[(int)e].Set(CheckedIconListBoxFormGroup.Disabled);  // we need to update the button with the same setting
+                    }
+                }
 
-            stationdata = si;
-            explicity_set_system = true;
-            colDistanceRef.Visible = colSystem.Visible = true;
-            extButtonTravelSystem.Enabled = true;
-            if (!extTextBoxAutoCompleteSystem.Text.Contains("("))           // name gets postfix added
-                extTextBoxAutoCompleteSystem.TextNoChange += " (Search)";
-            extTextBoxAutoCompleteSystem.ClearOnFirstChar = true;
-            Draw(true);
+                stationdata = si.ToList();
+                explicity_set_system = true;
+
+                colDistanceRef.Visible = colSystem.Visible = true;
+                extButtonTravelSystem.Enabled = true;
+
+                if (!extTextBoxAutoCompleteSystem.Text.Contains("("))           // name gets postfix added
+                    extTextBoxAutoCompleteSystem.TextNoChange += " (Search)";
+                extTextBoxAutoCompleteSystem.ClearOnFirstChar = true;
+                Draw(true);
+
+                return true;
+            }
         }
 
 
-        public void Draw(bool removesort)
+        private void Draw(bool removesort)
         {
             DataGridViewColumn sortcolprev = (dataGridView.SortedColumn?.Visible??false) ? dataGridView.SortedColumn : colSystem.Visible ? colSystem : colBodyName;
             SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Ascending;
+
+            ColPrice1.Visible = ColPrice1.Tag != null;
+            ColPrice2.Visible = ColPrice2.Tag != null;
+            ColPrice3.Visible = ColPrice3.Tag != null;
 
             dataViewScrollerPanel.Suspend();
             dataGridView.Rows.Clear();
@@ -223,9 +245,13 @@ namespace EDDiscovery.UserControls.Helpers
                             station.Latitude.HasValue ? station.Latitude.Value.ToString("N4") : "",
                             station.Longitude.HasValue ? station.Longitude.Value.ToString("N4") : "",
                             station.MarketStateString,
+                            ColPrice1.Tag != null ? station.GetItemPriceString((string)ColPrice1.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
+                            ColPrice2.Tag != null ? station.GetItemPriceString((string)ColPrice2.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
+                            ColPrice3.Tag != null ? station.GetItemPriceString((string)ColPrice3.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
                             station.OutfittingStateString,
                             station.ShipyardStateString,
                             station.Allegiance ?? "",
+                            station.Faction ?? "",
                             station.Economy_Localised ?? "",
                             station.Government_Localised ?? "",
                             ss,
@@ -242,6 +268,12 @@ namespace EDDiscovery.UserControls.Helpers
                             rw.Cells[colServices.Index].ToolTipText = ss.Replace(", ", Environment.NewLine);
                         if ( station.EconomyList!=null)
                             rw.Cells[colEconomy.Index].ToolTipText = string.Join(Environment.NewLine, station.EconomyList.Select(x=>$"{x.Name_Localised} : {(x.Proportion*100.0):N1}%"));
+                        if (ColPrice1.Tag != null)
+                            rw.Cells[ColPrice1.Index].ToolTipText = station.GetItemString((string)ColPrice1.Tag);
+                        if (ColPrice2.Tag != null)
+                            rw.Cells[ColPrice2.Index].ToolTipText = station.GetItemString((string)ColPrice2.Tag);
+                        if (ColPrice3.Tag != null)
+                            rw.Cells[ColPrice3.Index].ToolTipText = station.GetItemString((string)ColPrice3.Tag);
                     }
                 }
             }
@@ -267,8 +299,11 @@ namespace EDDiscovery.UserControls.Helpers
         {
             if (e.Column == colBodyName || e.Column == colSystem)
                 e.SortDataGridViewColumnAlphaInt();
-            else if (e.Column == colDistance || e.Column == colDistanceRef || e.Column == colLattitude || e.Column == colLongitude)
+            else if (e.Column == colDistance || e.Column == colDistanceRef || e.Column == colLattitude || e.Column == colLongitude ||
+                     e.Column == ColPrice1 || e.Column == ColPrice2 || e.Column == ColPrice3)
                 e.SortDataGridViewColumnNumeric();
+            else if ( e.Column == colHasMarket || e.Column == colOutfitting || e.Column == colShipyard )
+                e.SortDataGridViewColumnNumeric("\u2713 ");
         }
 
         private void valueBoxMaxLs_ValueChanged(object sender, EventArgs e)
@@ -286,7 +321,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         #endregion
 
-        #region Right click
+        #region Right click and UIs
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
@@ -306,134 +341,28 @@ namespace EDDiscovery.UserControls.Helpers
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
+            StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
             EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByMarketID(si.MarketID.Value);
         }
 
         private void viewMarketToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
-            ViewMarket(si);
+            StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
+            si.ViewMarket(FindForm(), saver);
         }
 
-        private void ViewMarket(StationInfo si)
-        { 
-            var dgvpanel = new ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-            dgvpanel.DataGrid.CreateTextColumns("Category", 100, 5,
-                                                "Name", 150, 5,
-                                                "Buy", 50, 5,
-                                                "Stock", 50, 5,
-                                                "Sell", 50, 5
-                                                );
-
-            dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 2) ev.SortDataGridViewColumnNumeric(); };
-            dgvpanel.DataGrid.RowHeadersVisible = false;
-
-            saver.DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowMarket");
-
-            foreach (var commd in si.Market.EmptyIfNull())
-            {
-                object[] rowobj = { commd.loccategory,
-#if DEBUG
-                    commd.locName + ":" + commd.fdname,
-#else
-                    commd.locName,
-#endif
-                    commd.buyPrice.ToString("N0"),
-                                    commd.stock.ToString("N0"),
-                                    commd.sellPrice.ToString("N0") };
-                var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
-                row.CreateCells(dgvpanel.DataGrid, rowobj);
-                dgvpanel.DataGrid.Rows.Add(row);
-            }
-
-            ConfigurableForm f = new ConfigurableForm();
-            f.Add(new ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-            { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
-            f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-            f.InstallStandardTriggers();
-            f.AllowResize = true;
-
-            string title = "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + si.StationName + " " + (si.MarketUpdateUTC.Year > 2000 ? EDDConfig.Instance.ConvertTimeToSelected(si.MarketUpdateUTC).ToString() : "No Data");
-            f.ShowDialogCentred(FindForm(), FindForm().Icon, title, closeicon: true);
-
-            saver.DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowMarket");
-
-        }
-
+  
         private void viewOutfittingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
-            ViewOutfitting(si);
+            StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as EliteDangerousCore.StationInfo;
+            si.ViewOutfitting(FindForm(), saver);
         }
 
-        private void ViewOutfitting(StationInfo si)
-        { 
-            var dgvpanel = new ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-            dgvpanel.DataGrid.CreateTextColumns("Category", 100, 5,
-                                                "Name", 150, 5);
-
-            dgvpanel.DataGrid.RowHeadersVisible = false;
-
-            saver.DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowOutfitting");
-
-            foreach (var oi in si.Outfitting.EmptyIfNull())
-            {
-                object[] rowobj = { oi.ModType,
-                                    oi.Name };
-                var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
-                row.CreateCells(dgvpanel.DataGrid, rowobj);
-                dgvpanel.DataGrid.Rows.Add(row);
-            }
-
-            ConfigurableForm f = new ConfigurableForm();
-            f.Add(new ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-            { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
-            f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-            f.InstallStandardTriggers();
-            f.AllowResize = true;
-
-            string title = "Outfitting for " + si.StationName + " " + (si.OutfittingUpdateUTC.Year>2000 ? EDDConfig.Instance.ConvertTimeToSelected(si.OutfittingUpdateUTC).ToString() : "No Data");
-            f.ShowDialogCentred(FindForm(), FindForm().Icon, title, closeicon: true);
-
-            saver.DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowOutfitting");
-
-        }
-
+  
         private void viewShipyardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StationInfo si = dataGridView.Rows[dataGridView.RightClickRow].Tag as StationInfo;
-            ViewShipyard(si);
-        }
-        private void ViewShipyard(StationInfo si)
-        { 
-            var dgvpanel = new ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-            dgvpanel.DataGrid.CreateTextColumns("Name", 100, 5);
-
-            dgvpanel.DataGrid.RowHeadersVisible = false;
-
-            saver.DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowShipyard");
-
-            foreach (var oi in si.Shipyard.EmptyIfNull())
-            {
-                object[] rowobj = { oi.ShipType_Localised,
-                                    };
-                var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
-                row.CreateCells(dgvpanel.DataGrid, rowobj);
-                dgvpanel.DataGrid.Rows.Add(row);
-            }
-
-            ConfigurableForm f = new ConfigurableForm();
-            f.Add(new ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-            { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
-            f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-            f.InstallStandardTriggers();
-            f.AllowResize = true;
-
-            string title = "Shipyard for " + si.StationName + " " + (si.ShipyardUpdateUTC.Year > 2000 ? EDDConfig.Instance.ConvertTimeToSelected(si.ShipyardUpdateUTC).ToString() : "No Data");
-            f.ShowDialogCentred(FindForm(), FindForm().Icon, title, closeicon: true);
-
-            saver.DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowShipyard");
+            si.ViewShipyard(FindForm(), saver);
         }
 
         private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -442,129 +371,218 @@ namespace EDDiscovery.UserControls.Helpers
             {
                 EliteDangerousCore.StationInfo si = dataGridView.Rows[e.RowIndex].Tag as EliteDangerousCore.StationInfo;
                 if (e.ColumnIndex == colOutfitting.Index && si.HasOutfitting)
-                    ViewOutfitting(si);
+                    si.ViewOutfitting(FindForm(), saver);
                 else if (e.ColumnIndex == colShipyard.Index && si.HasShipyard)
-                    ViewShipyard(si);
+                    si.ViewShipyard(FindForm(), saver);
                 else if (e.ColumnIndex == colHasMarket.Index && si.HasMarket)
-                    ViewMarket(si);
+                    si.ViewMarket(FindForm(), saver);
             }
         }
 
+   
         #endregion
 
         #region Searches
 
-        const int topmargin = 30;
-        const int dataleft = 140;
-        Size numberboxsize = new Size(64, 24);
-        Size comboboxsize = new Size(200, 24);
-        Size textboxsize = new Size(200, 28);
-        Size checkboxsize = new Size(154, 24);
-        Size labelsize = new Size(dataleft - 4, 24);
+        Size numberboxsize = new Size(60, 24);
+        Size labelsize = new Size(120, 24);
+        const int maxresults = 200;
 
         int servicessearchdistance = 40;
-        bool[] servicestate = new bool[128];
+        HashSet<string> servicestate = new HashSet<string>();
         bool servicesclearfilters = true;
 
         private void extButtonSearchServiceTypes_Click(object sender, EventArgs e)
         {
-            var services = StationDefinitions.ServiceTypes.Select(x => x.Value).Distinct();
-            Search(services, FilterSettings.Services, ref servicesclearfilters, ref servicestate, ref servicessearchdistance, 400);
+            string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
+
+            SearchDialog((f)=> {
+                var services = StationDefinitions.ServiceTypes.Select(x => x.Value).Distinct().ToArray();
+                f.AddBools(services, services, servicestate, 4, 24, 200, 4, 200, "S_");
+                AddSearchEntries(f, servicesclearfilters, servicessearchdistance);
+            },
+            (f) => {
+                servicestate = f.GetCheckedListNames("S_").ToHashSet();
+                servicessearchdistance = f.GetInt("radius").Value;
+                servicesclearfilters = f.GetBool("CLRF").Value;
+                var checkedlist = f.GetCheckedListEntries("S_").Select(x => x.Name.Substring(2)).ToArray();
+                if (checkedlist.Length > 0)
+                {
+                    EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                    DrawSearch(sp.SearchServices(systemname, checkedlist, servicessearchdistance, maxresults), servicesclearfilters, FilterSettings.Services);
+                }
+            },
+            $"Services from {systemname}");
         }
 
         int commoditiessearchdistance = 40;
-        bool[] commoditiesstate = new bool[2048];
-        bool commoditiesclearfilter = true;
+        HashSet<string> commoditiesstate = new HashSet<string>();
+        bool commoditiesclearfilters = true;
 
         private void extButtonSearchCommodities_Click(object sender, EventArgs e)
         {
-            var commodities = MaterialCommodityMicroResourceType.GetCommodities(true).Select(x=>x.EnglishName);
-            Search(commodities, FilterSettings.Commodities, ref commoditiesclearfilter, ref commoditiesstate, ref commoditiessearchdistance, 1800);
+            string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
+            SearchDialog((f) => {
+                var commodities = MaterialCommodityMicroResourceType.GetNormalCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
+                var rarecommodities = MaterialCommodityMicroResourceType.GetRareCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
+                int max = f.AddBools(commodities.Select(x => x.EnglishName + "\u2345" + x.FDName).ToArray(), commodities.Select(x => x.Name).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
+
+                // tag consists of english name <separ> fdname
+                f.AddBools(rarecommodities.Select(x => x.EnglishName + "\u2345" + x.FDName).ToArray(), rarecommodities.Select(x => x.Name).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
+                AddSearchEntries(f, commoditiesclearfilters, commoditiessearchdistance,700);
+
+                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesstationtobuyprice, "Sell to Station", new Point(600, 4), new Size(160, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { Panel = ConfigurableForm.Entry.PanelType.Top });
+            }, 
+            (f)=>
+            {
+                commoditiesstate = f.GetCheckedListNames("S_").ToHashSet();
+                commoditiessearchdistance = f.GetInt("radius").Value;
+                commoditiesclearfilters = f.GetBool("CLRF").Value;
+                showcommoditiesstationtobuyprice = f.GetBool("B_Buy").Value;
+
+                var entries = f.GetCheckedListEntries("S_");
+
+                if (entries.Length > 0)
+                {
+                    EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                
+                    var search = entries.Select(x => new EliteDangerousCore.Spansh.SpanshClass.SearchCommoditity 
+                    {   EnglishName = x.Name.Substring(2,x.Name.IndexOf('\u2345')-2),                                  // extract the english name
+                        supply = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,      // if we want to buy, we need the supply to be >=1
+                        demand = showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,       // if we want to sell, we need demand
+                        buyprice = showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null      // if we want to sell, we need a price
+                    }).ToArray();
+
+                    var res = sp.SearchCommodities(systemname, search, commoditiessearchdistance, maxresults);
+
+                    if ( res != null )
+                    {
+                        ColPrice1.Tag = entries.Length >= 1 ? entries[0].Name.Substring(entries[0].Name.IndexOf('\u2345') + 1) : null;      // need to get the fdname for the columns
+                        ColPrice1.HeaderText = entries.Length >= 1 ? entries[0].TextValue : "?";
+
+                        ColPrice2.Tag = entries.Length >= 2 ? entries[0].Name.Substring(entries[1].Name.IndexOf('\u2345') + 1) : null;
+                        ColPrice2.HeaderText = entries.Length >= 2 ? entries[1].TextValue : "?";
+
+                        ColPrice3.Tag = entries.Length >= 3 ? entries[0].Name.Substring(entries[2].Name.IndexOf('\u2345') + 1) : null;
+                        ColPrice3.HeaderText = entries.Length >= 3 ? entries[2].TextValue : "?";
+
+                        showcommoditiesstate = commoditiesstate.Take(3).Select(x=>x.Substring(x.IndexOf('\u2345')+1)).ToHashSet();     // take the list, limit to 3, get the fdname only, fill in the c-state
+
+                        DrawSearch(res, commoditiesclearfilters, FilterSettings.Commodities);
+                        //Draw(false);
+                    }
+                }
+            },
+            $"Commodities from {systemname}");
         }
 
+        HashSet<string> showcommoditiesstate = new HashSet<string>();
+        private void extButtonEditCommodities_Click(object sender, EventArgs e)
+        {
+            SearchDialog((f) => {
+                var commodities = MaterialCommodityMicroResourceType.GetNormalCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
+                var rarecommodities = MaterialCommodityMicroResourceType.GetRareCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
+                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesstationtobuyprice, "Sell to Station", new Point(600, 4), new Size(160, 22), 
+                                    $"Set = Show price station buys the commodity at {Environment.NewLine} Clear = Show station sell price") { Panel = ConfigurableForm.Entry.PanelType.Top });
+
+                int max = f.AddBools(commodities.Select(x => x.FDName).ToArray(), commodities.Select(x => x.Name).ToArray(), showcommoditiesstate, 4, 24, 1000, 4, 200, "S_");
+                f.AddBools(rarecommodities.Select(x => x.FDName).ToArray(), rarecommodities.Select(x => x.Name).ToArray(), showcommoditiesstate, max + 16, 24, 500, 4, 200, "S_");
+
+                f.Trigger += (d, ctrlname, text) => { f.RadioButton("S_", ctrlname, 3); };
+            },
+            (f) =>
+            {
+                showcommoditiesstate = f.GetCheckedListNames("S_").ToHashSet();
+                showcommoditiesstationtobuyprice = f.GetBool("B_Buy").Value;
+
+                var entries = f.GetCheckedListEntries("S_");        // 0 to 3.. 
+
+                ColPrice1.Tag = entries.Length >= 1 ? entries[0].Name.Substring(2) : null;
+                ColPrice1.HeaderText = entries.Length >= 1 ? entries[0].TextValue : "?";
+
+                ColPrice2.Tag = entries.Length >= 2 ? entries[1].Name.Substring(2) : null;
+                ColPrice2.HeaderText = entries.Length >= 2 ? entries[1].TextValue : "?";
+
+                ColPrice3.Tag = entries.Length >= 3 ? entries[2].Name.Substring(2) : null;
+                ColPrice3.HeaderText = entries.Length >= 3 ? entries[2].TextValue : "?";
+
+                Draw(false);
+            },
+            $"Select Commodities to show");
+        }
+
+
         int economysearchdistance = 40;
-        bool[] economystate = new bool[64];
-        bool economyclearfilter = true;
+        HashSet<string> economystate = new HashSet<string>();
+        bool economyclearfilters = true;
         private void extButtonSearchEconomy_Click(object sender, EventArgs e)
         {
-            var economy = EconomyDefinitions.Types.Values.Select(x => x);
-            Search(economy, FilterSettings.Economy, ref economyclearfilter, ref economystate, ref economysearchdistance, 200);
+            string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
+            SearchDialog((f) => {
+                var economy = EconomyDefinitions.Types.Values.Select(x => x).ToArray();
+                f.AddBools(economy,economy, economystate, 4, 24, 200, 4, 120, "S_");
+                AddSearchEntries(f, economyclearfilters, economysearchdistance);
+            },
+            (f) => {
+                economystate = f.GetCheckedListNames("S_").ToHashSet();
+                economysearchdistance = f.GetInt("radius").Value;
+                economyclearfilters = f.GetBool("CLRF").Value;
+                var checkedlist = f.GetCheckedListEntries("S_").Select(x => x.Name.Substring(2)).ToArray();
+                if (checkedlist.Length > 0)
+                {
+                    EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                    DrawSearch(sp.SearchEconomy(systemname, checkedlist, economysearchdistance, maxresults), economyclearfilters, FilterSettings.Economy);
+                }
+            },
+            $"Economies from {systemname}");
         }
 
         int shipssearchdistance = 40;
-        bool[] shipsstate = new bool[128];
-        bool shipsclearfilter = true;
+        HashSet<string> shipsstate = new HashSet<string>();
+        bool shipsclearfilters = true;
         private void extButtonSearchShips_Click(object sender, EventArgs e)
         {
-            var ships = ItemData.GetSpaceships().Select(x => x.ContainsKey(ItemData.ShipPropID.EDCDName) ? ((ItemData.ShipInfoString)x[ItemData.ShipPropID.EDCDName]).Value : ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value);
-            Search(ships, FilterSettings.Shipyard, ref shipsclearfilter, ref shipsstate, ref shipssearchdistance, 400);
+            string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
+
+            SearchDialog((f) => {
+                var ships = ItemData.GetSpaceships().Select(x => x.ContainsKey(ItemData.ShipPropID.EDCDName) ? ((ItemData.ShipInfoString)x[ItemData.ShipPropID.EDCDName]).Value : ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value).ToArray();
+                f.AddBools(ships, ships, shipsstate, 4, 24, 200, 4, 200, "S_");
+                AddSearchEntries(f, shipsclearfilters, shipssearchdistance);
+            },
+            (f) => {
+                shipsstate = f.GetCheckedListNames("S_").ToHashSet();
+                shipssearchdistance = f.GetInt("radius").Value;
+                shipsclearfilters = f.GetBool("CLRF").Value;
+                var checkedlist = f.GetCheckedListEntries("S_").Select(x => x.Name.Substring(2)).ToArray();
+                if (checkedlist.Length > 0)
+                {
+                    EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                    DrawSearch(sp.SearchShips(systemname, checkedlist, shipssearchdistance, maxresults), shipsclearfilters, FilterSettings.Shipyard);
+                }
+            },
+            $"Ships from {systemname}");
         }
 
-        const int maxresults = 200;
-
-        private void Search(IEnumerable<string> names, FilterSettings filter, ref bool clearfilters, ref bool[] state, ref int searchdistance, int dialogdepth)
+        private void AddSearchEntries(ConfigurableForm f, bool clearfilters, int searchdistance, int posclearfilter = 600)
         {
-            string title = filter.ToString().SplitCapsWordFull();
+            f.AddLabelAndEntry("Maximum Distance", new Point(400, 8), labelsize, new ConfigurableForm.Entry("radius", searchdistance, new Point(400 + labelsize.Width, 4), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1, Panel = ConfigurableForm.Entry.PanelType.Top });
+            f.Add(new ConfigurableForm.Entry("CLRF", clearfilters, "Clear other filters", new Point(posclearfilter, 4), new Size(160, 22), "Type filter is cleared, clear the others as well") { Panel = ConfigurableForm.Entry.PanelType.Top });
+        }
 
+        private void SearchDialog(Action<ConfigurableForm> addtoform, Action<ConfigurableForm> okpressed, string title)
+        {
             ConfigurableForm f = new ConfigurableForm();
-            int vpos = 40;
-            f.Add(new ConfigurableForm.Entry("CLRF", clearfilters, "Clear other filters", new Point(240, vpos), new Size(160, 22), title + " is cleared, clear the others as well"));
-            f.AddLabelAndEntry("Maximum Distance", new Point(4, 4), ref vpos, 40, labelsize, new ConfigurableForm.Entry("radius", searchdistance, new Point(dataleft, 0), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1 });
-            int i = 0;
-            int svpos = vpos;
-            int colx = 4;
-            foreach (var sv in names)
-            {
-                f.Add(ref vpos, 24, new ConfigurableForm.Entry("S_" + sv, state[i++], sv, new Point(colx, 0), new Size(200, 22), "Search for " + sv));
-                if (vpos > dialogdepth)
-                {
-                    vpos = svpos;
-                    colx += 200;
-                }
-            }
-
-            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Search", new Point(400, 40), new Size(80, 24), null));
+            f.TopPanelHeight = 32;
+            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableForm.Entry.PanelType.Top });
+            addtoform(f);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
 
-            if (extTextBoxAutoCompleteSystem.Text.HasChars())
+            if (f.ShowDialogCentred(FindForm(), FindForm().Icon, title, closeicon: true) == DialogResult.OK)
             {
-                string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
-
-                if (f.ShowDialogCentred(FindForm(), FindForm().Icon, $"Find {title} from {systemname}", closeicon: true) == DialogResult.OK)
-                {
-                    var checkedlist = f.GetCheckedList("S_").Select(x => x.Substring(2)).ToArray();
-                    state = f.GetCheckBoxBools("S_");
-                    searchdistance = f.GetInt("radius").Value;
-                    clearfilters = f.GetBool("CLRF").Value;
-
-                    if (checkedlist.Length > 0)
-                    {
-                        EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                        List<StationInfo> ssd = null;
-
-                        if (filter == FilterSettings.Services)
-                            ssd = sp.SearchServices(systemname, checkedlist, searchdistance, maxresults);
-                        else if (filter == FilterSettings.Commodities)
-                            ssd = sp.SearchCommodities(systemname, checkedlist, searchdistance, maxresults);
-                        else if (filter == FilterSettings.Economy)
-                            ssd = sp.SearchEconomy(systemname, checkedlist, searchdistance, maxresults);
-                        else if (filter == FilterSettings.Shipyard)
-                            ssd = sp.SearchShips(systemname, checkedlist, searchdistance, maxresults);
-
-                        if (ssd?.Count > 0)
-                        {
-                            DrawSearch(ssd, clearfilters, filter);
-                        }
-                        else
-                        {
-                            MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
-                        }
-                    }
-                }
+                okpressed(f);
             }
-
         }
 
 
@@ -578,40 +596,28 @@ namespace EDDiscovery.UserControls.Helpers
         {
             string title = "Outfitting";
 
-            var moditems = ItemData.GetModules().Select(x => x.ModTypeString).Distinct();      // only return buyable modules
+            var moditems = ItemData.GetModules().Select(x => x.ModTypeString).Distinct().ToArray();      // only return buyable modules
 
             ConfigurableForm f = new ConfigurableForm();
-            int vpos = 40;
-            f.Add(new ConfigurableForm.Entry("CLRF", outfittingclearfilters, "Clear other filters", new Point(240, vpos), new Size(160, 22), title + " is cleared, clear the others as well"));
-            f.AddLabelAndEntry("Maximum Distance", new Point(4, 4), ref vpos, 40, labelsize, new ConfigurableForm.Entry("radius", outfittingsearchdistance, new Point(dataleft, 0), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1 });
-            int i = 0;
-            int svpos = vpos;
-            int colx = 4;
-            foreach (var sv in moditems)
-            {
-                f.Add(ref vpos, 24, new ConfigurableForm.Entry("M_" + sv, outfittingmodtypes[i++], sv, new Point(colx, 0), new Size(200, 22), "Search for " + sv));
-                if (vpos > 600)
-                {
-                    vpos = svpos;
-                    colx += 200;
-                }
-            }
+            f.TopPanelHeight = 32;
+            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Search", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableForm.Entry.PanelType.Top });
+            f.AddLabelAndEntry("Maximum Distance", new Point(400, 8), labelsize, new ConfigurableForm.Entry("radius", outfittingsearchdistance, new Point(400 + labelsize.Width, 4), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1, Panel = ConfigurableForm.Entry.PanelType.Top });
+            f.Add(new ConfigurableForm.Entry("CLRF", outfittingclearfilters, "Clear other filters", new Point(600, 4), new Size(160, 22), title + " is cleared, clear the others as well") { Panel = ConfigurableForm.Entry.PanelType.Top });
 
-            vpos = 640;
+            f.AddBools(moditems, moditems, outfittingmodtypes, 4, 24, 550, 4, 200, "M_");
 
+            int vpos = 580;
             for (int cls = 0; cls <= 7; cls++)
             {
-                f.Add(new ConfigurableForm.Entry("C_" + cls, outfittingclasses[cls], cls == 0 ? "All Classes" : "Class " + (cls-1), new Point(cls * 150, vpos), new Size(140, 22), null));
+                f.Add(new ConfigurableForm.Entry("C_" + cls, outfittingclasses[cls], cls == 0 ? "All Classes" : "Class " + (cls-1), new Point(4+cls * 150, vpos), new Size(140, 22), null));
             }
 
             vpos += 30;
-
             for (int rating = 0; rating <= 7; rating++)
             {
-                f.Add(new ConfigurableForm.Entry("R_" + rating, outfittingratings[rating], rating == 0 ? "All Ratings" : "Rating " + (char)('A'-1+rating), new Point(rating * 150, vpos), new Size(140, 22), null));
+                f.Add(new ConfigurableForm.Entry("R_" + rating, outfittingratings[rating], rating == 0 ? "All Ratings" : "Rating " + (char)('A'-1+rating), new Point(4+rating * 150, vpos), new Size(140, 22), null));
             }
 
-            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Search", new Point(400, 40), new Size(80, 24), null));
             f.InstallStandardTriggers();
             f.Trigger += (name, ctrl, obj) => {
                 System.Diagnostics.Debug.WriteLine($"Click on {name} {ctrl}");
@@ -632,7 +638,7 @@ namespace EDDiscovery.UserControls.Helpers
 
                 if (f.ShowDialogCentred(FindForm(), FindForm().Icon, $"Find {title} from {systemname}", closeicon: true) == DialogResult.OK)
                 {
-                    var modlist = f.GetCheckedList("M_").Select(x => x.Substring(2)).ToArray();
+                    var modlist = f.GetCheckedListNames("M_").ToArray();
 
                     outfittingmodtypes = f.GetCheckBoxBools("M_");
                     outfittingclasses = f.GetCheckBoxBools("C_");
@@ -660,6 +666,7 @@ namespace EDDiscovery.UserControls.Helpers
 
 
 
+
         #endregion
 
         #region Misc
@@ -682,7 +689,7 @@ namespace EDDiscovery.UserControls.Helpers
             return saver.GetSetting(f.ToString(), CheckedIconListBoxFormGroup.Disabled);
         }
 
-        private void Excel()
+        private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ImportExportForm frm = new Forms.ImportExportForm();
             frm.Export(new string[] { "View" },
