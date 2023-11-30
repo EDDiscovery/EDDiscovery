@@ -529,7 +529,7 @@ namespace EDDiscovery
 
             SystemClass sol = new SystemClass("Sol", 10477373803);
             //sp.GetBodies(sol);
-           // sp.GetStationsByDump(sol,10000000,false);
+            // sp.GetStationsByDump(sol,10000000,false);
 
             //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
             //sp.GetSystem("Sol");
@@ -537,7 +537,9 @@ namespace EDDiscovery
             //EDSMClass edsm = new EDSMClass();
             // edsm.GetSystem("Sol");
 
-
+            //var permitlist = SystemsDB.GetListPermitSystems();
+            //foreach (var x in permitlist)
+            //    System.Diagnostics.Debug.WriteLine($"{x.Name} {x.SystemAddress} {x.X} {x.Y} {x.Z}");
         }
 
 

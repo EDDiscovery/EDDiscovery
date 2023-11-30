@@ -694,7 +694,7 @@ namespace EDDiscovery.UserControls.Map3D
                     rightclickmenu.Size = new Size(10, 10);     // reset to small, and let the autosizer work again as we are going to change content
 
                     var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
-                    ((GLMenuItemLabel)ms["RCMTitle"]).Text = nl.Item1 + " " + nl.Item2.ToString();
+                    ((GLMenuItemLabel)ms["RCMTitle"]).Text = nl.Item1 + " " + nl.Item2.ToString() + (nl.Item4 ? " Permit Required":"");
 
                     ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : rightclickmenu.Tag is ISystem ? (ISystem)rightclickmenu.Tag : null;
 
@@ -1469,7 +1469,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         // from obj, return info about it, its name, location, and description
         // give current he for information purposes
-        private Tuple<string, Vector3, string> NameLocationDescription(Object obj, HistoryEntry curpos)       
+        private Tuple<string, Vector3, string, bool> NameLocationDescription(Object obj, HistoryEntry curpos)       
         {
             var he = obj as HistoryEntry;
             var gmo = obj as GalacticMapObject;
@@ -1479,12 +1479,15 @@ namespace EDDiscovery.UserControls.Map3D
             if (sys != null)
                 System.Diagnostics.Debug.WriteLine($"3dmap Lookup ISystem {sys.Name} edsmid {sys.EDSMID} sa {sys.SystemAddress}");
 
-            string name = he != null ? he.System.Name : gmo != null ? gmo.NameList : bkm != null ? bkm.Name : sys.Name;
+            if (he != null)     // if we have a he, we have a system, so move it in 
+                sys = he.System;
+
+            string name = gmo != null ? gmo.NameList : bkm != null ? bkm.Name : sys.Name;
+
             if (bkm != null)
                 name = "Bookmark " + name;
 
-            Vector3 pos = he != null ? new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z) :
-                            gmo != null ? new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z) :
+            Vector3 pos =  gmo != null ? new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z) :
                                 bkm != null ? new Vector3((float)bkm.x, (float)bkm.y, (float)bkm.z) :
                                     new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
 
@@ -1497,11 +1500,17 @@ namespace EDDiscovery.UserControls.Map3D
                     info += $"Distance {dist:N1} ly";
             }
 
-            if (he != null && he.System.MainStarType != EDStar.Unknown)
-                info = info.AppendPrePad($"Star Type {Bodies.StarName(he.System.MainStarType)}",Environment.NewLine);
-
-            if (sys != null && sys.MainStarType != EDStar.Unknown)
-                info = info.AppendPrePad($"Star Type {Bodies.StarName(sys.MainStarType)}",Environment.NewLine);
+            bool permit = false;
+            if (sys != null)
+            {
+                if (sys.MainStarType != EDStar.Unknown)
+                    info = info.AppendPrePad($"Star Type {Bodies.StarName(sys.MainStarType)}", Environment.NewLine);
+                if (EliteDangerousCore.DB.SystemsDatabase.Instance.IsPermitSystem(sys))
+                {
+                    info = info.AppendPrePad("Permit System", Environment.NewLine);
+                    permit = true;
+                }
+            }
 
             info = info.AppendPrePad($"Position {pos.X:0.#}, {pos.Y:0.#}, {pos.Z:0.#}" + Environment.NewLine, Environment.NewLine);
 
@@ -1527,7 +1536,7 @@ namespace EDDiscovery.UserControls.Map3D
                 info = info.AppendPrePad(bkm.Note, Environment.NewLine);
             }
 
-            return new Tuple<string, Vector3, string>(name, pos, info);
+            return new Tuple<string, Vector3, string, bool>(name, pos, info, permit);
         }
 
         #endregion
