@@ -36,6 +36,8 @@ namespace EDDiscovery.UserControls
         private int computing = 0;      // 0 = none, 1 = internal, 2 = web
         private double jumprangelastfound;
 
+        private const string dbPermit = "PermitAllowed";
+
         #region  Init
 
         public UserControlRoute()
@@ -108,7 +110,8 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
                                         EDTx.UserControlRoute_extButtonFleetCarrier,EDTx.UserControlRoute_extButtonSpanshGalaxyPlotter,EDTx.UserControlRoute_extButtonExoMastery,
                                         EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
-                                        EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara};
+                                        EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara,
+                                        EDTx.UserControlRoute_extCheckBoxPermitSystems};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
@@ -145,6 +148,8 @@ namespace EDDiscovery.UserControls
 
             DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
             DiscoveryForm.OnNewEntry += DiscoveryForm_OnNewEntry;
+            DiscoveryForm.OnSyncComplete += DiscoveryForm_OnSyncComplete;
+            extCheckBoxPermitSystems.Click += ExtCheckBoxPermitSystems_Click; ;
         }
 
         private void DiscoveryForm_OnNewEntry(HistoryEntry he)
@@ -162,9 +167,20 @@ namespace EDDiscovery.UserControls
             jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
         }
 
+        private void DiscoveryForm_OnSyncComplete(long arg1, long arg2)
+        {
+            SetPermit();
+        }
+        private void SetPermit()
+        {
+            bool permitsystems = SystemsDatabase.Instance.PermitSystems.Count > 0;
+            extCheckBoxPermitSystems.Enabled = permitsystems;
+            extCheckBoxPermitSystems.Checked = permitsystems ? GetSetting(dbPermit, false) : false;
+        }
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewRoute);
+            SetPermit();
         }
 
         public override void InitialDisplay()
@@ -194,6 +210,8 @@ namespace EDDiscovery.UserControls
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
 
             DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnSyncComplete -= DiscoveryForm_OnSyncComplete;
+            DiscoveryForm.OnNewEntry -= DiscoveryForm_OnNewEntry;
         }
 
         #endregion
@@ -461,6 +479,7 @@ namespace EDDiscovery.UserControls
                 plotter.RouteMethod = (SystemCache.SystemsNearestMetric)comboBoxRoutingMetric.SelectedIndex;
                 plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
                 plotter.WebLookup = edsmSpanshButton.WebLookup;
+                plotter.DiscardList = extCheckBoxPermitSystems.Enabled ? (extCheckBoxPermitSystems.Checked ? null : SystemsDatabase.Instance.PermitSystems) : null;
 
                 int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
 
@@ -496,9 +515,9 @@ namespace EDDiscovery.UserControls
 
         private Thread routingthread;
 
-        private void EDDRoutingThread(object _plotter)
+        private void EDDRoutingThread(object plotter)
         {
-            RoutePlotter p = (RoutePlotter)_plotter;
+            RoutePlotter p = (RoutePlotter)plotter;
 
             routeSystems = null;    // so its null until route interative finishes
 

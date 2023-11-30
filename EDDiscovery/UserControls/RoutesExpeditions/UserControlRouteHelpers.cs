@@ -179,6 +179,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void ExtCheckBoxPermitSystems_Click(object sender, EventArgs e)
+        {
+            PutSetting(dbPermit, extCheckBoxPermitSystems.Checked);
+        }
+
+
         private void textBox_Clicked(object sender, EventArgs e)
         {
             ((ExtendedControls.ExtTextBox)sender).SelectAll(); // clicking highlights everything

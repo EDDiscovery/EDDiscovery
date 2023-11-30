@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlRoute));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.outputPanel = new System.Windows.Forms.Panel();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.extButtonExpeditionSave = new ExtendedControls.ExtButton();
@@ -99,6 +99,7 @@
             this.extButtonExoMastery = new ExtendedControls.ExtButton();
             this.flowLayoutPanel1 = new ExtendedControls.ExtFlowLayoutPanel();
             this.groupBoxSpansh = new ExtendedControls.ExtGroupBox();
+            this.extCheckBoxPermitSystems = new ExtendedControls.ExtCheckBox();
             this.outputPanel.SuspendLayout();
             this.groupBoxInternal.SuspendLayout();
             this.groupBoxPara.SuspendLayout();
@@ -257,6 +258,7 @@
             this.groupBoxInternal.Controls.Add(this.comboBoxRoutingMetric);
             this.groupBoxInternal.Controls.Add(this.labelMetric);
             this.groupBoxInternal.Controls.Add(this.extButtonRoute);
+            this.groupBoxInternal.Controls.Add(this.extCheckBoxPermitSystems);
             this.groupBoxInternal.Controls.Add(this.checkBox_FsdBoost);
             this.groupBoxInternal.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxInternal.Location = new System.Drawing.Point(0, 134);
@@ -396,7 +398,7 @@
             this.textBox_From.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBox_From.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBox_From.EndButtonEnable = false;
-            this.textBox_From.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_From.EndButtonImage")));
+            this.textBox_From.EndButtonSize16ths = 10;
             this.textBox_From.EndButtonVisible = false;
             this.textBox_From.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_From.InErrorCondition = false;
@@ -411,11 +413,12 @@
             this.textBox_From.TabIndex = 11;
             this.textBox_From.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBox_From.TextChangedEvent = "";
+            this.textBox_From.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBox_From, "Select system to start the route");
             this.textBox_From.WordWrap = true;
             this.textBox_From.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
             // 
-            // valueBox_FromX
+            // textBox_FromX
             // 
             this.textBox_FromX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
@@ -427,7 +430,8 @@
             this.textBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_FromX.DelayBeforeNotification = 0;
             this.textBox_FromX.EndButtonEnable = true;
-            this.textBox_FromX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromX.EndButtonImage")));
+            this.textBox_FromX.EndButtonImage = null;
+            this.textBox_FromX.EndButtonSize16ths = 10;
             this.textBox_FromX.EndButtonVisible = false;
             this.textBox_FromX.Format = "N4";
             this.textBox_FromX.InErrorCondition = false;
@@ -445,6 +449,7 @@
             this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
             this.textBox_FromX.TabIndex = 13;
             this.textBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_FromX.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.textBox_FromX, "X Co-ord");
             this.textBox_FromX.Value = 0D;
             this.textBox_FromX.WordWrap = true;
@@ -470,7 +475,7 @@
             this.labelFrom.TabIndex = 10;
             this.labelFrom.Text = "From";
             // 
-            // valueBox_FromY
+            // textBox_FromY
             // 
             this.textBox_FromY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
@@ -482,7 +487,8 @@
             this.textBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_FromY.DelayBeforeNotification = 0;
             this.textBox_FromY.EndButtonEnable = true;
-            this.textBox_FromY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromY.EndButtonImage")));
+            this.textBox_FromY.EndButtonImage = null;
+            this.textBox_FromY.EndButtonSize16ths = 10;
             this.textBox_FromY.EndButtonVisible = false;
             this.textBox_FromY.Format = "N4";
             this.textBox_FromY.InErrorCondition = false;
@@ -500,6 +506,7 @@
             this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
             this.textBox_FromY.TabIndex = 14;
             this.textBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_FromY.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.textBox_FromY, "Y (Vertical) Co-ord");
             this.textBox_FromY.Value = 0D;
             this.textBox_FromY.WordWrap = true;
@@ -517,6 +524,7 @@
             this.textBox_ToName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_ToName.EndButtonEnable = true;
             this.textBox_ToName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToName.EndButtonImage")));
+            this.textBox_ToName.EndButtonSize16ths = 10;
             this.textBox_ToName.EndButtonVisible = false;
             this.textBox_ToName.InErrorCondition = false;
             this.textBox_ToName.Location = new System.Drawing.Point(396, 45);
@@ -529,10 +537,11 @@
             this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
             this.textBox_ToName.TabIndex = 22;
             this.textBox_ToName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_ToName.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
             this.textBox_ToName.WordWrap = true;
             // 
-            // valueBox_FromZ
+            // textBox_FromZ
             // 
             this.textBox_FromZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
@@ -544,7 +553,8 @@
             this.textBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_FromZ.DelayBeforeNotification = 0;
             this.textBox_FromZ.EndButtonEnable = true;
-            this.textBox_FromZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromZ.EndButtonImage")));
+            this.textBox_FromZ.EndButtonImage = null;
+            this.textBox_FromZ.EndButtonSize16ths = 10;
             this.textBox_FromZ.EndButtonVisible = false;
             this.textBox_FromZ.Format = "N4";
             this.textBox_FromZ.InErrorCondition = false;
@@ -562,12 +572,13 @@
             this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
             this.textBox_FromZ.TabIndex = 15;
             this.textBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_FromZ.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-ord");
             this.textBox_FromZ.Value = 0D;
             this.textBox_FromZ.WordWrap = true;
             this.textBox_FromZ.ValueChanged += new System.EventHandler(this.valueBox_From_ValueChanged);
             // 
-            // valueBox_Range
+            // textBox_Range
             // 
             this.textBox_Range.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBox_Range.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
@@ -579,7 +590,8 @@
             this.textBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_Range.DelayBeforeNotification = 0;
             this.textBox_Range.EndButtonEnable = true;
-            this.textBox_Range.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Range.EndButtonImage")));
+            this.textBox_Range.EndButtonImage = null;
+            this.textBox_Range.EndButtonSize16ths = 10;
             this.textBox_Range.EndButtonVisible = false;
             this.textBox_Range.Format = "N2";
             this.textBox_Range.InErrorCondition = false;
@@ -597,6 +609,7 @@
             this.textBox_Range.Size = new System.Drawing.Size(57, 20);
             this.textBox_Range.TabIndex = 33;
             this.textBox_Range.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_Range.TextNoChange = "25.00";
             this.toolTip.SetToolTip(this.textBox_Range, "Give your jump range, or search range for long jumps. This is updated on history " +
         "change or change of ship/modules to the jump range with  zero cargo and maximum " +
         "fuel");
@@ -615,6 +628,7 @@
             this.textBox_FromName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_FromName.EndButtonEnable = true;
             this.textBox_FromName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromName.EndButtonImage")));
+            this.textBox_FromName.EndButtonSize16ths = 10;
             this.textBox_FromName.EndButtonVisible = false;
             this.textBox_FromName.InErrorCondition = false;
             this.textBox_FromName.Location = new System.Drawing.Point(62, 45);
@@ -627,6 +641,7 @@
             this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
             this.textBox_FromName.TabIndex = 12;
             this.textBox_FromName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_FromName.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBox_FromName, "Alternate name");
             this.textBox_FromName.WordWrap = true;
             // 
@@ -639,7 +654,7 @@
             this.labelLy2.TabIndex = 69;
             this.labelLy2.Text = "ly";
             // 
-            // valueBox_ToX
+            // textBox_ToX
             // 
             this.textBox_ToX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
@@ -651,7 +666,8 @@
             this.textBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_ToX.DelayBeforeNotification = 0;
             this.textBox_ToX.EndButtonEnable = true;
-            this.textBox_ToX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToX.EndButtonImage")));
+            this.textBox_ToX.EndButtonImage = null;
+            this.textBox_ToX.EndButtonSize16ths = 10;
             this.textBox_ToX.EndButtonVisible = false;
             this.textBox_ToX.Format = "N4";
             this.textBox_ToX.InErrorCondition = false;
@@ -669,6 +685,7 @@
             this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
             this.textBox_ToX.TabIndex = 23;
             this.textBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_ToX.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.textBox_ToX, "X Co-Ord");
             this.textBox_ToX.Value = 0D;
             this.textBox_ToX.WordWrap = true;
@@ -683,7 +700,7 @@
             this.labelLy1.TabIndex = 39;
             this.labelLy1.Text = "ly";
             // 
-            // valueBox_ToY
+            // textBox_ToY
             // 
             this.textBox_ToY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
@@ -695,7 +712,8 @@
             this.textBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_ToY.DelayBeforeNotification = 0;
             this.textBox_ToY.EndButtonEnable = true;
-            this.textBox_ToY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToY.EndButtonImage")));
+            this.textBox_ToY.EndButtonImage = null;
+            this.textBox_ToY.EndButtonSize16ths = 10;
             this.textBox_ToY.EndButtonVisible = false;
             this.textBox_ToY.Format = "N4";
             this.textBox_ToY.InErrorCondition = false;
@@ -713,6 +731,7 @@
             this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
             this.textBox_ToY.TabIndex = 24;
             this.textBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_ToY.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.textBox_ToY, "Y (Vertical) Co-ord");
             this.textBox_ToY.Value = 0D;
             this.textBox_ToY.WordWrap = true;
@@ -730,6 +749,7 @@
             this.textBox_Distance.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_Distance.EndButtonEnable = true;
             this.textBox_Distance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Distance.EndButtonImage")));
+            this.textBox_Distance.EndButtonSize16ths = 10;
             this.textBox_Distance.EndButtonVisible = false;
             this.textBox_Distance.InErrorCondition = false;
             this.textBox_Distance.Location = new System.Drawing.Point(322, 98);
@@ -743,6 +763,7 @@
             this.textBox_Distance.TabIndex = 61;
             this.textBox_Distance.TabStop = false;
             this.textBox_Distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_Distance.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBox_Distance, "Distance between start and end");
             this.textBox_Distance.WordWrap = true;
             this.textBox_Distance.Click += new System.EventHandler(this.textBox_Clicked);
@@ -785,7 +806,7 @@
             this.labelDistance.TabIndex = 60;
             this.labelDistance.Text = "Distance";
             // 
-            // valueBox_ToZ
+            // textBox_ToZ
             // 
             this.textBox_ToZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
@@ -797,7 +818,8 @@
             this.textBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_ToZ.DelayBeforeNotification = 0;
             this.textBox_ToZ.EndButtonEnable = true;
-            this.textBox_ToZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToZ.EndButtonImage")));
+            this.textBox_ToZ.EndButtonImage = null;
+            this.textBox_ToZ.EndButtonSize16ths = 10;
             this.textBox_ToZ.EndButtonVisible = false;
             this.textBox_ToZ.Format = "N4";
             this.textBox_ToZ.InErrorCondition = false;
@@ -815,6 +837,7 @@
             this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
             this.textBox_ToZ.TabIndex = 25;
             this.textBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_ToZ.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.textBox_ToZ, "Z Co-ord");
             this.textBox_ToZ.Value = 0D;
             this.textBox_ToZ.WordWrap = true;
@@ -869,7 +892,7 @@
             this.textBox_To.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBox_To.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBox_To.EndButtonEnable = false;
-            this.textBox_To.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_To.EndButtonImage")));
+            this.textBox_To.EndButtonSize16ths = 10;
             this.textBox_To.EndButtonVisible = false;
             this.textBox_To.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_To.InErrorCondition = false;
@@ -884,6 +907,7 @@
             this.textBox_To.TabIndex = 21;
             this.textBox_To.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBox_To.TextChangedEvent = "";
+            this.textBox_To.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBox_To, "Select the system to end in");
             this.textBox_To.WordWrap = true;
             this.textBox_To.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
@@ -1051,14 +1075,14 @@
             this.dataGridViewRoute.PerColumnWordWrapControl = true;
             this.dataGridViewRoute.ReadOnly = true;
             this.dataGridViewRoute.RowHeaderMenuStrip = null;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewRoute.SingleRowSelect = true;
@@ -1170,6 +1194,25 @@
             this.groupBoxSpansh.TextPadding = 0;
             this.groupBoxSpansh.TextStartPosition = -1;
             // 
+            // extCheckBoxPermitSystems
+            // 
+            this.extCheckBoxPermitSystems.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxPermitSystems.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxPermitSystems.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxPermitSystems.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxPermitSystems.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxPermitSystems.ImageIndeterminate = null;
+            this.extCheckBoxPermitSystems.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxPermitSystems.ImageUnchecked = null;
+            this.extCheckBoxPermitSystems.Location = new System.Drawing.Point(536, 19);
+            this.extCheckBoxPermitSystems.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxPermitSystems.Name = "extCheckBoxPermitSystems";
+            this.extCheckBoxPermitSystems.Size = new System.Drawing.Size(135, 18);
+            this.extCheckBoxPermitSystems.TabIndex = 32;
+            this.extCheckBoxPermitSystems.Text = "Use Permit Systems";
+            this.extCheckBoxPermitSystems.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxPermitSystems.UseVisualStyleBackColor = true;
+            // 
             // UserControlRoute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1268,5 +1311,6 @@
         private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
         private ExtendedControls.ExtButton extButtonExpeditionSave;
         private System.Windows.Forms.Label labelRouteName;
+        private ExtendedControls.ExtCheckBox extCheckBoxPermitSystems;
     }
 }
