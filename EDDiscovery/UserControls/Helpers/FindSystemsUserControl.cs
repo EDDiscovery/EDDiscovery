@@ -102,9 +102,12 @@ namespace EDDiscovery.UserControls
             dbsaver.PutSetting(dbEVS, extCheckBoxExcludeVisitedSystems.Checked);
         }
 
+        // find from star name
         private void buttonExtNamesClick(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+
+            HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Keys.ToHashSet() : new HashSet<string>();
 
             Task taskEDSM = Task<HashSet<ISystem>>.Factory.StartNew(() =>
             {
@@ -113,14 +116,18 @@ namespace EDDiscovery.UserControls
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
                 Cursor = Cursors.Default;
-                ReturnSystems((from x in task.Result select new Tuple<ISystem, double>(x, -1)).ToList());
+                var ret = task.Result.Where(x => !excluded.Contains(x.Name)).Select(y => new Tuple<ISystem, double>(y, -1)).ToList();
+                ReturnSystems(ret);
             }
             )));
         }
 
+        // find from star name
         private void extButtonFromSpanshFindNames_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+
+            HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Keys.ToHashSet() : new HashSet<string>();
 
             Task taskEDSM = Task<List<ISystem>>.Factory.StartNew(() =>
             {
@@ -129,10 +136,56 @@ namespace EDDiscovery.UserControls
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
                 Cursor = Cursors.Default;
-                ReturnSystems((from x in task.Result select new Tuple<ISystem, double>(x, -1)).ToList());
+                var ret = task.Result.Where(x => !excluded.Contains(x.Name)).Select(y => new Tuple<ISystem, double>(y, -1)).ToList();
+                ReturnSystems(ret);
             }
             )));
         }
+
+        private void buttonExtVisitedClick(object sender, EventArgs e)
+        {
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+
+            if (sys != null)
+            {
+                var list = HistoryList.FindSystemsWithinLy(discoveryform.History.EntryOrder(), sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
+                ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void buttonExtDBClick(object sender, EventArgs e)
+        {
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+
+            if (sys != null)
+            {
+                Cursor = Cursors.WaitCursor;
+
+                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Values.Select(x => x.System.Name).ToHashSet() : new HashSet<string>();
+
+                Task<List<Tuple<ISystem, double>>>.Factory.StartNew(() =>
+                {
+                    BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
+
+                    SystemCache.GetSystemListBySqDistancesFrom(distlist, sys.X, sys.Y, sys.Z, 50000,
+                                numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked, excluded);
+
+                    var res = (from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList();
+                    return res;
+
+                }).ContinueWith(task => this.Invoke(new Action(() =>
+                {
+                    var res = task.Result;
+                    ReturnSystems(res);
+                    Cursor = Cursors.Default;
+                })));
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
 
         private void buttonExtEDSMClick(object sender, EventArgs e)
         {
@@ -222,7 +275,7 @@ namespace EDDiscovery.UserControls
         {
             if (listsphere != null)
             {
-                bool excvisited = extCheckBoxExcludeVisitedSystems.Checked;
+                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Values.Select(x => x.System.Name).ToHashSet() : new HashSet<string>();
                 bool spherical = !checkBoxCustomCube.Checked;
 
                 if (!spherical)       // if cubed, need to filter them out
@@ -241,17 +294,17 @@ namespace EDDiscovery.UserControls
                                         Math.Abs(s.Item1.X - centre.X) <= numberBoxMaxRadius.Value &&
                                         Math.Abs(s.Item1.Y - centre.Y) <= numberBoxMaxRadius.Value &&
                                         Math.Abs(s.Item1.Z - centre.Z) <= numberBoxMaxRadius.Value &&
-                                        (!excvisited || discoveryform.History.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null)
+                                        !excluded.Contains(s.Item1.Name)
                                       select s).ToList();
 
                         //System.Diagnostics.Debug.WriteLine("To " + listsphere.Count());
                         //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine(">" + x.Item1.ToString());
                     }
                 }
-                else if (excvisited)  // if exc visited, need to filter them out
+                else 
                 {
                     listsphere = (from s in listsphere
-                                  where discoveryform.History.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null
+                                  where !excluded.Contains(s.Item1.Name)
                                   select s).ToList();
                 }
             }
@@ -270,51 +323,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void buttonExtVisitedClick(object sender, EventArgs e)
-        {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
-
-            if (sys != null)
-            {
-                var list = HistoryList.FindSystemsWithinLy(discoveryform.History.EntryOrder(), sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
-                ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
-            }
-            else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-
-        private void buttonExtDBClick(object sender, EventArgs e)
-        {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
-
-            if (sys != null)
-            {
-                Cursor = Cursors.WaitCursor;
-
-                // work out the excluded system name list
-                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Values.Select(x=>x.System.Name).ToHashSet() : new HashSet<string>();
-
-                Task<List<Tuple<ISystem,double>>>.Factory.StartNew(() =>
-                {
-                    BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
-
-                    SystemCache.GetSystemListBySqDistancesFrom(distlist, sys.X, sys.Y, sys.Z, 50000,
-                                numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked, excluded);
-
-                    var res = (from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList();
-
-                    return res;
-
-                }).ContinueWith(task => this.Invoke(new Action(() =>
-                {
-                    var res = task.Result;
-                    ReturnSystems(res);
-                    Cursor = Cursors.Default;
-                })));
-            }
-            else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
