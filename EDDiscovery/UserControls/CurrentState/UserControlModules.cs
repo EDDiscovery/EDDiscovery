@@ -375,8 +375,8 @@ namespace EDDiscovery.UserControls
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
 
             string typename = sm.LocalisedItem;
-            if (typename.IsEmpty())
-                typename = ItemData.GetShipModuleProperties(sm.ItemFD).ModTypeString;
+            if (typename.IsEmpty() && ItemData.TryGetShipModule(sm.ItemFD,out ItemData.ShipModule modp, false))
+                typename = modp.ModTypeString;
 
             string eng = "";
             string engtooltip = null;

@@ -1073,25 +1073,40 @@ namespace EDDiscovery.UserControls
                         for (int i = 0; i < modules.Count; i++)
                         {
                             var ord = modules[i];
-                            var modp = ItemData.GetShipModuleProperties(ord.Name);
+                            if (ItemData.TryGetShipModule(ord.Name, out ItemData.ShipModule modp, false))       // find, no create
+                            {
+                                string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
+                                string mtype = modp?.ModTypeString ?? ord.Category ?? "";
+                                string mass = modp?.Mass.ToString("N1") ?? "";
+                                string power = modp?.Power.ToString("N1") ?? "";
+                                string info = modp?.Info ?? "";
 
-                            string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
-                            string mtype = modp?.ModTypeString ?? ord.Category ?? "";
-                            string mass = modp?.Mass.ToString("N1") ?? "";
-                            string power = modp?.Power.ToString("N1") ?? "";
-                            string info = modp?.Info ?? "";
+                                object[] rowobj = {
+                                                name,
+                                                mtype,
+                                                mass,
+                                                power,
+                                                ord.Cost.ToString("N0"),
+                                                ord.Stock.ToString("N0"),
+                                                info,
+                                            };
 
-                            object[] rowobj = {
-                                            name,
-                                            mtype,
-                                            mass,
-                                            power,
-                                            ord.Cost.ToString("N0"),
-                                            ord.Stock.ToString("N0"),
-                                            info,
-                                        };
+                                dataGridViewCAPIModules.Rows.Add(rowobj);
+                            }
+                            else
+                            {
+                                object[] rowobj = {
+                                                ord.Name,
+                                                ord.Category,
+                                                0,
+                                                0,
+                                                ord.Cost.ToString("N0"),
+                                                ord.Stock.ToString("N0"),
+                                                "Not found",
+                                            };
 
-                            dataGridViewCAPIModules.Rows.Add(rowobj);
+                                dataGridViewCAPIModules.Rows.Add(rowobj);
+                            }
                         }
                     }
 

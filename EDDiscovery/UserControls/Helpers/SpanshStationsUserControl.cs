@@ -76,7 +76,7 @@ namespace EDDiscovery.UserControls.Helpers
                 GetFilter(FilterSettings.Commodities),
                 (newsetting,ch) => { SetFilter(FilterSettings.Commodities, newsetting, ch); });
 
-            var moditems = ItemData.GetModules().Select(x => x.ModTypeString).Distinct().      // only return buyable modules
+            var moditems = ItemData.GetShipModulesList().Select(x => x.ModTypeString).Distinct().      // only return buyable modules
                             Select(x2 => new CheckedIconListBoxFormGroup.StandardOption(x2, x2));
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
@@ -596,7 +596,7 @@ namespace EDDiscovery.UserControls.Helpers
         {
             string title = "Outfitting";
 
-            var moditems = ItemData.GetModules().Select(x => x.ModTypeString).Distinct().ToArray();      // only return buyable modules
+            var moditems = ItemData.GetShipModulesList().Select(x => x.ModTypeString).Distinct().ToArray();      // only return buyable modules
 
             ConfigurableForm f = new ConfigurableForm();
             f.TopPanelHeight = 32;
