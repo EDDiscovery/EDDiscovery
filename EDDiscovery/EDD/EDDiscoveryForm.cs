@@ -118,8 +118,6 @@ namespace EDDiscovery
         private BaseUtils.GitHubRelease newRelease;
         private Timer periodicchecktimer;
         private bool in_system_sync = false;        // between start/end sync of databases
-        private Tuple<string, string, string, string> dllresults;   // hold results between load and shown
-        private string dllsalloweddisallowed; // holds DLL allowed between load and shown
 
         #endregion
 
@@ -614,48 +612,11 @@ namespace EDDiscovery
             };
 
             // Check on DLL load result and see if new DLLs
+
+            DLLVerify();
+
+            // Continue..
  
-            if (dllresults.Item3.HasChars())       // new DLLs
-            {
-                string[] list = dllresults.Item3.Split(',');
-                bool changed = false;
-                foreach (var dll in list)
-                {
-                    if (ExtendedControls.MessageBoxTheme.Show(this,
-                                    string.Format(("The following application extension DLL have been found" + Environment.NewLine +
-                                    "Do you wish to allow it to be used?" + Environment.NewLine + Environment.NewLine +
-                                    "{0} " + Environment.NewLine
-                                    ).T(EDTx.EDDiscoveryForm_DLLW), dll),
-                                    "Warning".T(EDTx.Warning),
-                                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                    {
-                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("+" + dll, ",");
-                        changed = true;
-                    }
-                    else
-                    {
-                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("-" + dll, ",");
-                    }
-                }
-
-                if (changed)
-                {
-                    DLLManager.UnLoad();
-                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Reload DLL");
-                    dllresults = DLLStart(ref dllsalloweddisallowed);
-                }
-            }
-
-            EDDConfig.Instance.DLLPermissions = dllsalloweddisallowed;        // write back the permission string
-
-            if (dllresults.Item1.HasChars())   // ok
-                LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), dllresults.Item1));
-            if (dllresults.Item2.HasChars())   // failed
-                LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), dllresults.Item2));
-            if (dllresults.Item4.HasChars())   // failed
-                LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), dllresults.Item4));
-
-
 
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 

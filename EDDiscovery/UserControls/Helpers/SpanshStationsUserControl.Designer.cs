@@ -40,11 +40,13 @@ namespace EDDiscovery.UserControls.Helpers
             this.extButtonTravelSystem = new ExtendedControls.ExtButton();
             this.labelMaxLs = new System.Windows.Forms.Label();
             this.valueBoxMaxLs = new ExtendedControls.NumberBoxDouble();
+            this.labelSearch = new System.Windows.Forms.Label();
             this.extButtonSearchCommodities = new ExtendedControls.ExtButton();
             this.extButtonSearchServiceTypes = new ExtendedControls.ExtButton();
             this.extButtonSearchEconomy = new ExtendedControls.ExtButton();
             this.extButtonSearchShips = new ExtendedControls.ExtButton();
             this.extButtonSearchOutfitting = new ExtendedControls.ExtButton();
+            this.labelSettings = new System.Windows.Forms.Label();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -59,16 +61,14 @@ namespace EDDiscovery.UserControls.Helpers
             this.extButtonEconomy = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
             this.extButtonShipyard = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
             this.extButtonOutfitting = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
+            this.extButtonEditCommodities = new ExtendedControls.ExtButton();
             this.panelControls = new System.Windows.Forms.Panel();
             this.flowLayoutPanelFilters = new System.Windows.Forms.FlowLayoutPanel();
-            this.extButtonEditCommodities = new ExtendedControls.ExtButton();
+            this.labelFilter = new System.Windows.Forms.Label();
+            this.labelShow = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
-            this.labelShow = new System.Windows.Forms.Label();
-            this.labelFilter = new System.Windows.Forms.Label();
-            this.labelSearch = new System.Windows.Forms.Label();
-            this.labelSettings = new System.Windows.Forms.Label();
             this.colSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistanceRef = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -79,8 +79,11 @@ namespace EDDiscovery.UserControls.Helpers
             this.colLongitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colHasMarket = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColPrice1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColStockDemand1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColPrice2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColStockDemand2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColPrice3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColStockDemand3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colOutfitting = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colShipyard = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAllegiance = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -230,6 +233,16 @@ namespace EDDiscovery.UserControls.Helpers
             this.valueBoxMaxLs.WordWrap = true;
             this.valueBoxMaxLs.ValueChanged += new System.EventHandler(this.valueBoxMaxLs_ValueChanged);
             // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(392, 6);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 3;
+            this.labelSearch.Text = "Search";
+            // 
             // extButtonSearchCommodities
             // 
             this.extButtonSearchCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
@@ -285,6 +298,16 @@ namespace EDDiscovery.UserControls.Helpers
             this.toolTip.SetToolTip(this.extButtonSearchOutfitting, "Search for stations with outfitting modules across systems");
             this.extButtonSearchOutfitting.UseVisualStyleBackColor = true;
             this.extButtonSearchOutfitting.Click += new System.EventHandler(this.extButtonSearchOutfitting_Click);
+            // 
+            // labelSettings
+            // 
+            this.labelSettings.AutoSize = true;
+            this.labelSettings.Location = new System.Drawing.Point(612, 6);
+            this.labelSettings.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelSettings.Name = "labelSettings";
+            this.labelSettings.Size = new System.Drawing.Size(29, 13);
+            this.labelSettings.TabIndex = 3;
+            this.labelSettings.Text = "Misc";
             // 
             // extCheckBoxWordWrap
             // 
@@ -446,6 +469,18 @@ namespace EDDiscovery.UserControls.Helpers
             this.toolTip.SetToolTip(this.extButtonOutfitting, "Filter on outfitting");
             this.extButtonOutfitting.UseVisualStyleBackColor = true;
             // 
+            // extButtonEditCommodities
+            // 
+            this.extButtonEditCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
+            this.extButtonEditCommodities.Location = new System.Drawing.Point(299, 2);
+            this.extButtonEditCommodities.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonEditCommodities.Name = "extButtonEditCommodities";
+            this.extButtonEditCommodities.Size = new System.Drawing.Size(28, 28);
+            this.extButtonEditCommodities.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonEditCommodities, "Show up to three commodities, either buy or sell price");
+            this.extButtonEditCommodities.UseVisualStyleBackColor = true;
+            this.extButtonEditCommodities.Click += new System.EventHandler(this.extButtonEditCommodities_Click);
+            // 
             // panelControls
             // 
             this.panelControls.AutoSize = true;
@@ -475,17 +510,25 @@ namespace EDDiscovery.UserControls.Helpers
             this.flowLayoutPanelFilters.Size = new System.Drawing.Size(978, 32);
             this.flowLayoutPanelFilters.TabIndex = 26;
             // 
-            // extButtonEditCommodities
+            // labelFilter
             // 
-            this.extButtonEditCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
-            this.extButtonEditCommodities.Location = new System.Drawing.Point(299, 2);
-            this.extButtonEditCommodities.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.extButtonEditCommodities.Name = "extButtonEditCommodities";
-            this.extButtonEditCommodities.Size = new System.Drawing.Size(28, 28);
-            this.extButtonEditCommodities.TabIndex = 34;
-            this.toolTip.SetToolTip(this.extButtonEditCommodities, "Show up to three commodities, either buy or sell price");
-            this.extButtonEditCommodities.UseVisualStyleBackColor = true;
-            this.extButtonEditCommodities.Click += new System.EventHandler(this.extButtonEditCommodities_Click);
+            this.labelFilter.AutoSize = true;
+            this.labelFilter.Location = new System.Drawing.Point(4, 6);
+            this.labelFilter.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelFilter.Name = "labelFilter";
+            this.labelFilter.Size = new System.Drawing.Size(29, 13);
+            this.labelFilter.TabIndex = 3;
+            this.labelFilter.Text = "Filter";
+            // 
+            // labelShow
+            // 
+            this.labelShow.AutoSize = true;
+            this.labelShow.Location = new System.Drawing.Point(257, 4);
+            this.labelShow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
+            this.labelShow.Name = "labelShow";
+            this.labelShow.Size = new System.Drawing.Size(34, 13);
+            this.labelShow.TabIndex = 3;
+            this.labelShow.Text = "Show";
             // 
             // dataViewScrollerPanel
             // 
@@ -559,8 +602,11 @@ namespace EDDiscovery.UserControls.Helpers
             this.colLongitude,
             this.colHasMarket,
             this.ColPrice1,
+            this.ColStockDemand1,
             this.ColPrice2,
+            this.ColStockDemand2,
             this.ColPrice3,
+            this.ColStockDemand3,
             this.colOutfitting,
             this.colShipyard,
             this.colAllegiance,
@@ -602,46 +648,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
             // 
-            // labelShow
-            // 
-            this.labelShow.AutoSize = true;
-            this.labelShow.Location = new System.Drawing.Point(257, 4);
-            this.labelShow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
-            this.labelShow.Name = "labelShow";
-            this.labelShow.Size = new System.Drawing.Size(34, 13);
-            this.labelShow.TabIndex = 3;
-            this.labelShow.Text = "Show";
-            // 
-            // labelFilter
-            // 
-            this.labelFilter.AutoSize = true;
-            this.labelFilter.Location = new System.Drawing.Point(4, 6);
-            this.labelFilter.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
-            this.labelFilter.Name = "labelFilter";
-            this.labelFilter.Size = new System.Drawing.Size(29, 13);
-            this.labelFilter.TabIndex = 3;
-            this.labelFilter.Text = "Filter";
-            // 
-            // labelSearch
-            // 
-            this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(392, 6);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
-            this.labelSearch.Name = "labelSearch";
-            this.labelSearch.Size = new System.Drawing.Size(41, 13);
-            this.labelSearch.TabIndex = 3;
-            this.labelSearch.Text = "Search";
-            // 
-            // labelSettings
-            // 
-            this.labelSettings.AutoSize = true;
-            this.labelSettings.Location = new System.Drawing.Point(612, 6);
-            this.labelSettings.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
-            this.labelSettings.Name = "labelSettings";
-            this.labelSettings.Size = new System.Drawing.Size(29, 13);
-            this.labelSettings.TabIndex = 3;
-            this.labelSettings.Text = "Misc";
-            // 
             // colSystem
             // 
             this.colSystem.FillWeight = 75F;
@@ -651,7 +657,7 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // colDistanceRef
             // 
-            this.colDistanceRef.FillWeight = 50F;
+            this.colDistanceRef.FillWeight = 40F;
             this.colDistanceRef.HeaderText = "LY Distance";
             this.colDistanceRef.Name = "colDistanceRef";
             this.colDistanceRef.ReadOnly = true;
@@ -673,6 +679,7 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // colDistance
             // 
+            this.colDistance.FillWeight = 40F;
             this.colDistance.HeaderText = "Distance";
             this.colDistance.MinimumWidth = 50;
             this.colDistance.Name = "colDistance";
@@ -686,12 +693,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // colLattitude
             // 
+            this.colLattitude.FillWeight = 50F;
             this.colLattitude.HeaderText = "Latitude";
             this.colLattitude.Name = "colLattitude";
             this.colLattitude.ReadOnly = true;
             // 
             // colLongitude
             // 
+            this.colLongitude.FillWeight = 50F;
             this.colLongitude.HeaderText = "Longitude";
             this.colLongitude.Name = "colLongitude";
             this.colLongitude.ReadOnly = true;
@@ -710,6 +719,13 @@ namespace EDDiscovery.UserControls.Helpers
             this.ColPrice1.Name = "ColPrice1";
             this.ColPrice1.ReadOnly = true;
             // 
+            // ColStockDemand1
+            // 
+            this.ColStockDemand1.FillWeight = 50F;
+            this.ColStockDemand1.HeaderText = "S/D 1";
+            this.ColStockDemand1.Name = "ColStockDemand1";
+            this.ColStockDemand1.ReadOnly = true;
+            // 
             // ColPrice2
             // 
             this.ColPrice2.FillWeight = 50F;
@@ -717,12 +733,26 @@ namespace EDDiscovery.UserControls.Helpers
             this.ColPrice2.Name = "ColPrice2";
             this.ColPrice2.ReadOnly = true;
             // 
+            // ColStockDemand2
+            // 
+            this.ColStockDemand2.FillWeight = 50F;
+            this.ColStockDemand2.HeaderText = "S/D 2";
+            this.ColStockDemand2.Name = "ColStockDemand2";
+            this.ColStockDemand2.ReadOnly = true;
+            // 
             // ColPrice3
             // 
             this.ColPrice3.FillWeight = 50F;
             this.ColPrice3.HeaderText = "Price 3";
             this.ColPrice3.Name = "ColPrice3";
             this.ColPrice3.ReadOnly = true;
+            // 
+            // ColStockDemand3
+            // 
+            this.ColStockDemand3.FillWeight = 50F;
+            this.ColStockDemand3.HeaderText = "S/D 3";
+            this.ColStockDemand3.Name = "ColStockDemand3";
+            this.ColStockDemand3.ReadOnly = true;
             // 
             // colOutfitting
             // 
@@ -740,6 +770,7 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // colAllegiance
             // 
+            this.colAllegiance.FillWeight = 50F;
             this.colAllegiance.HeaderText = "Allegiance";
             this.colAllegiance.Name = "colAllegiance";
             this.colAllegiance.ReadOnly = true;
@@ -758,6 +789,7 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // colGovernment
             // 
+            this.colGovernment.FillWeight = 75F;
             this.colGovernment.HeaderText = "Government";
             this.colGovernment.Name = "colGovernment";
             this.colGovernment.ReadOnly = true;
@@ -771,21 +803,21 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // colSmallPad
             // 
-            this.colSmallPad.FillWeight = 50F;
+            this.colSmallPad.FillWeight = 25F;
             this.colSmallPad.HeaderText = "SPad";
             this.colSmallPad.Name = "colSmallPad";
             this.colSmallPad.ReadOnly = true;
             // 
             // colMediumPads
             // 
-            this.colMediumPads.FillWeight = 50F;
+            this.colMediumPads.FillWeight = 25F;
             this.colMediumPads.HeaderText = "MPad";
             this.colMediumPads.Name = "colMediumPads";
             this.colMediumPads.ReadOnly = true;
             // 
             // colLargePads
             // 
-            this.colLargePads.FillWeight = 50F;
+            this.colLargePads.FillWeight = 25F;
             this.colLargePads.HeaderText = "LPad";
             this.colLargePads.Name = "colLargePads";
             this.colLargePads.ReadOnly = true;
@@ -858,8 +890,11 @@ namespace EDDiscovery.UserControls.Helpers
         private System.Windows.Forms.DataGridViewTextBoxColumn colLongitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn colHasMarket;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColStockDemand1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColStockDemand2;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColStockDemand3;
         private System.Windows.Forms.DataGridViewTextBoxColumn colOutfitting;
         private System.Windows.Forms.DataGridViewTextBoxColumn colShipyard;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAllegiance;

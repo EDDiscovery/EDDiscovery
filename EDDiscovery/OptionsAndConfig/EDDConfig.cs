@@ -250,8 +250,11 @@ namespace EDDiscovery
             }
             set
             {
-                displayTimeFormat = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("DisplayUTC", value);
+                if (displayTimeFormat != value)
+                {
+                    displayTimeFormat = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("DisplayUTC", value);
+                }
             }
         }
 
@@ -263,8 +266,11 @@ namespace EDDiscovery
             }
             set
             {
-                defaultwavedevice = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("WaveAudioDevice", value);
+                if (defaultwavedevice != value)
+                {
+                    defaultwavedevice = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("WaveAudioDevice", value);
+                }
             }
         }
 
@@ -276,8 +282,11 @@ namespace EDDiscovery
             }
             set
             {
-                defaultvoicedevice = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("VoiceAudioDevice", value);
+                if (defaultvoicedevice != null)
+                {
+                    defaultvoicedevice = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("VoiceAudioDevice", value);
+                }
             }
         }
 
@@ -289,8 +298,11 @@ namespace EDDiscovery
             }
             set
             {
-                clickthrukey = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ClickThruKey", (int)value);
+                if (clickthrukey != value)
+                {
+                    clickthrukey = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ClickThruKey", (int)value);
+                }
             }
         }
 
@@ -302,8 +314,11 @@ namespace EDDiscovery
             }
             set
             {
-                systemdbdownload = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("EDSMEDDBDownloadData", value);  // use old name
+                if (systemdbdownload != value )
+                {
+                    systemdbdownload = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("EDSMEDDBDownloadData", value); 
+                }
             }
         }
 
@@ -316,8 +331,11 @@ namespace EDDiscovery
             }
             set
             {
-                fullhistoryloaddaylimit = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("FullHistoryLoadDayLimit", value);
+                if (fullhistoryloaddaylimit != value)
+                {
+                    fullhistoryloaddaylimit = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("FullHistoryLoadDayLimit", value);
+                }
             }
         }
 
@@ -329,8 +347,11 @@ namespace EDDiscovery
             }
             set
             {
-                essentialeventtype = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EssentialEventType", value);
+                if (essentialeventtype != value)
+                {
+                    essentialeventtype = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EssentialEventType", value);
+                }
             }
         }
 
@@ -342,8 +363,11 @@ namespace EDDiscovery
             }
             set
             {
-                coriolisURL = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("CorolisURL", value);
+                if (coriolisURL != value)
+                {
+                    coriolisURL = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("CorolisURL", value);
+                }
             }
         }
 
@@ -355,8 +379,11 @@ namespace EDDiscovery
             }
             set
             {
-                eddshipyardURL = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EDDShipyardURL", value);
+                if (eddshipyardURL != value)
+                {
+                    eddshipyardURL = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EDDShipyardURL", value);
+                }
             }
         }
 
@@ -368,8 +395,11 @@ namespace EDDiscovery
             }
             set
             {
-                language = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DefaultLanguage", value);
+                if (language != value)
+                {
+                    language = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DefaultLanguage", value);
+                }
             }
         }
 
@@ -381,8 +411,11 @@ namespace EDDiscovery
             }
             set
             {
-                drawduringresize = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("DrawDuringResizeWindow", value);
+                if (drawduringresize != value)
+                {
+                    drawduringresize = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("DrawDuringResizeWindow", value);
+                }
             }
         }
 
@@ -394,8 +427,11 @@ namespace EDDiscovery
             }
             set
             {
-                sortpanelsalpha = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("PanelsSortedByName", value); 
+                if (sortpanelsalpha != value)
+                {
+                    sortpanelsalpha = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("PanelsSortedByName", value);
+                }
             }
         }
 
@@ -410,8 +446,11 @@ namespace EDDiscovery
             }
             set
             {
-                edsmfullsystemsurl = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EDSMFullSystemsURL", value);
+                if (edsmfullsystemsurl != value)
+                {
+                    edsmfullsystemsurl = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EDSMFullSystemsURL", value);
+                }
             }
         }
 
@@ -426,8 +465,11 @@ namespace EDDiscovery
             }
             set
             {
-                spanshsystemsurl = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("SpanshSystemsURL", value);
+                if (spanshsystemsurl != value)
+                {
+                    spanshsystemsurl = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("SpanshSystemsURL", value);
+                }
             }
         }
 
@@ -485,8 +527,11 @@ namespace EDDiscovery
             }
             set
             {
-                webserverport = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("WebServerPort", webserverport);
+                if (webserverport != value)
+                {
+                    webserverport = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("WebServerPort", webserverport);
+                }
             }
         }
 
@@ -498,8 +543,11 @@ namespace EDDiscovery
             }
             set
             {
-                webserverenable = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("WebServerEnable", webserverenable);
+                if (webserverenable != value)
+                {
+                    webserverenable = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("WebServerEnable", webserverenable);
+                }
             }
         }
 
@@ -511,8 +559,11 @@ namespace EDDiscovery
             }
             set
             {
-                dllpermissions = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", value);
+                if (dllpermissions != value)
+                {
+                    dllpermissions = value;
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", value);
+                }
             }
         }
 
