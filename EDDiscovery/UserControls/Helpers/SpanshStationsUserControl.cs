@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         int commoditiessearchdistance = 40;
         HashSet<string> commoditiesstate = new HashSet<string>();
-        bool commoditiesclearfilters = true , commoditieslargepad = false;
+        bool commoditiesclearfilters = true , commoditieslargepad = false, commoditiescarriers = true;
 
         private void extButtonSearchCommodities_Click(object sender, EventArgs e)
         {
@@ -411,16 +411,16 @@ namespace EDDiscovery.UserControls.Helpers
                 int max = f.AddBools(commodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), commodities.Select(x => x.Name).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
                 f.AddBools(rarecommodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), rarecommodities.Select(x => x.Name).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
 
-                AddSearchEntries(f, commoditiessearchdistance, commoditiesclearfilters, commoditieslargepad,lpadx:700,clearfilterx:800);
+                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesstationtobuyprice, "Sell to Station", new Point(600, 4), new Size(100, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { Panel = ConfigurableForm.Entry.PanelType.Top });
 
-                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesstationtobuyprice, "Sell to Station", new Point(600, 4), new Size(160, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { Panel = ConfigurableForm.Entry.PanelType.Top });
+                AddSearchEntries(f, commoditiessearchdistance, commoditiesclearfilters, commoditieslargepad, commoditiescarriers, lpadx:700,carrierx:800,clearfilterx:900);
+
             }, 
             (f)=>
             {
+                SetValues(f, ref commoditiessearchdistance, ref commoditiesclearfilters, ref commoditieslargepad, ref commoditiescarriers);
+
                 commoditiesstate = f.GetCheckedListNames("S_").ToHashSet();
-                commoditiessearchdistance = f.GetInt("radius").Value;
-                commoditiesclearfilters = f.GetBool("CLRF").Value;
-                commoditieslargepad = f.GetBool("LPAD").Value;
                 showcommoditiesstationtobuyprice = f.GetBool("B_Buy").Value;
 
                 var entries = f.GetCheckedListEntries("S_");
@@ -440,7 +440,7 @@ namespace EDDiscovery.UserControls.Helpers
                         buyprice = showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null      // if we want to sell, we need a price
                     }).ToArray();
 
-                    var res = sp.SearchCommodities(systemname, search, commoditiessearchdistance, commoditieslargepad ? true : default(bool?), maxresults);
+                    var res = sp.SearchCommodities(systemname, search, commoditiessearchdistance, commoditieslargepad ? true : default(bool?), commoditiescarriers, maxresults);
 
                     if ( res != null )
                     {
@@ -499,7 +499,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         int servicessearchdistance = 40;
         HashSet<string> servicestate = new HashSet<string>();
-        bool servicesclearfilters = true, serviceslargepad = false;
+        bool servicesclearfilters = true, serviceslargepad = false, servicescarriers = true;
 
         private void extButtonSearchServiceTypes_Click(object sender, EventArgs e)
         {
@@ -508,19 +508,18 @@ namespace EDDiscovery.UserControls.Helpers
             ConfigurableForm.ShowDialogCentred((f) => {
                 var services = StationDefinitions.ServiceTypes.Select(x => x.Value).Distinct().ToArray();
                 f.AddBools(services, services, servicestate, 4, 24, 200, 4, 200, "S_");
-                AddSearchEntries(f, servicessearchdistance, servicesclearfilters, serviceslargepad);
+                AddSearchEntries(f, servicessearchdistance, servicesclearfilters, serviceslargepad, servicescarriers);
             },
             (f) => {
+                SetValues(f, ref servicessearchdistance, ref servicesclearfilters, ref serviceslargepad, ref servicescarriers);
+
                 servicestate = f.GetCheckedListNames("S_").ToHashSet();
-                servicessearchdistance = f.GetInt("radius").Value;
-                servicesclearfilters = f.GetBool("CLRF").Value;
-                serviceslargepad = f.GetBool("LPAD").Value;
 
                 var checkedlist = f.GetCheckedListEntries("S_").Select(x => x.Name.Substring(2)).ToArray();
                 if (checkedlist.Length > 0)
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    DrawSearch(sp.SearchServices(systemname, checkedlist, servicessearchdistance, serviceslargepad ? true : default(bool?),maxresults), servicesclearfilters, FilterSettings.Services);
+                    DrawSearch(sp.SearchServices(systemname, checkedlist, servicessearchdistance, serviceslargepad ? true : default(bool?),servicescarriers, maxresults), servicesclearfilters, FilterSettings.Services);
                 }
             },
             this, $"Services from {systemname}",32);
@@ -537,13 +536,13 @@ namespace EDDiscovery.UserControls.Helpers
             ConfigurableForm.ShowDialogCentred((f) => {
                 var economy = EconomyDefinitions.Types.Values.Select(x => x).ToArray();
                 f.AddBools(economy,economy, economystate, 4, 24, 120, 4, 120, "S_");
-                AddSearchEntries(f, economysearchdistance, economyclearfilters, economylargepad);
+                AddSearchEntries(f, economysearchdistance, economyclearfilters, economylargepad, null, clearfilterx:700);
             },
             (f) => {
+                bool _ = false;
+                SetValues(f, ref economysearchdistance, ref economyclearfilters, ref economylargepad, ref _);
+
                 economystate = f.GetCheckedListNames("S_").ToHashSet();
-                economysearchdistance = f.GetInt("radius").Value;
-                economyclearfilters = f.GetBool("CLRF").Value;
-                economylargepad = f.GetBool("LPAD").Value;
 
                 var checkedlist = f.GetCheckedListEntries("S_").Select(x => x.Name.Substring(2)).ToArray();
                 if (checkedlist.Length > 0)
@@ -557,7 +556,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         int shipssearchdistance = 40;
         HashSet<string> shipsstate = new HashSet<string>();
-        bool shipsclearfilters = true, shipslargepad = false;
+        bool shipsclearfilters = true, shipslargepad = false, shipscarriers = true;
         private void extButtonSearchShips_Click(object sender, EventArgs e)
         {
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
@@ -565,36 +564,27 @@ namespace EDDiscovery.UserControls.Helpers
             ConfigurableForm.ShowDialogCentred((f) => {
                 var ships = ItemData.GetSpaceships().Select(x => x.ContainsKey(ItemData.ShipPropID.EDCDName) ? ((ItemData.ShipInfoString)x[ItemData.ShipPropID.EDCDName]).Value : ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value).ToArray();
                 f.AddBools(ships, ships, shipsstate, 4, 24, 200, 4, 200, "S_");
-                AddSearchEntries(f, shipssearchdistance, shipsclearfilters, shipslargepad);
+                AddSearchEntries(f, shipssearchdistance, shipsclearfilters, shipslargepad, shipscarriers);
             },
             (f) => {
+                SetValues(f, ref shipssearchdistance, ref shipsclearfilters, ref shipslargepad, ref shipscarriers);
+
                 shipsstate = f.GetCheckedListNames("S_").ToHashSet();
-                shipssearchdistance = f.GetInt("radius").Value;
-                shipsclearfilters = f.GetBool("CLRF").Value;
-                shipslargepad = f.GetBool("LPAD").Value;
                 var checkedlist = f.GetCheckedListEntries("S_").Select(x => x.Name.Substring(2)).ToArray();
                 if (checkedlist.Length > 0)
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    DrawSearch(sp.SearchShips(systemname, checkedlist, shipssearchdistance, shipslargepad? true : default(bool?), maxresults), shipsclearfilters, FilterSettings.Shipyard);
+                    DrawSearch(sp.SearchShips(systemname, checkedlist, shipssearchdistance, shipslargepad? true : default(bool?),shipscarriers, maxresults), shipsclearfilters, FilterSettings.Shipyard);
                 }
             },
             this, $"Ships from {systemname}",32);
-        }
-
-        private void AddSearchEntries(ConfigurableForm f, int searchdistance, bool clearfilters, bool lpad, int maxdx = 400, int lpadx = 600, int clearfilterx = 700)
-        {
-            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableForm.Entry.PanelType.Top });
-            f.AddLabelAndEntry("Maximum Distance", new Point(maxdx, 8), labelsize, new ConfigurableForm.Entry("radius", searchdistance, new Point(maxdx + labelsize.Width, 4), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1, Panel = ConfigurableForm.Entry.PanelType.Top });
-            f.Add(new ConfigurableForm.Entry("LPAD", lpad, "Large Pad", new Point(lpadx, 4), new Size(100, 22), "Large pad is required") { Panel = ConfigurableForm.Entry.PanelType.Top });
-            f.Add(new ConfigurableForm.Entry("CLRF", clearfilters, "Clear other filters", new Point(clearfilterx, 4), new Size(160, 22), "Type filter is cleared, clear the others as well") { Panel = ConfigurableForm.Entry.PanelType.Top });
         }
 
         int outfittingsearchdistance = 40;
         bool[] outfittingmodtypes = new bool[256];
         bool[] outfittingclasses = new bool[8] { true, false, false, false, false, false, false, false };   // 0 =all, 0..6
         bool[] outfittingratings = new bool[8] { true, false, false, false, false, false, false, false };   // 0 = all, A..G
-        bool outfittingclearfilters = true, outfittinglargepad = false;
+        bool outfittingclearfilters = true, outfittinglargepad = false, outfittingcarriers = true;
 
         private void extButtonSearchOutfitting_Click(object sender, EventArgs e)
         {
@@ -617,7 +607,7 @@ namespace EDDiscovery.UserControls.Helpers
                     f.Add(new ConfigurableForm.Entry("R_" + rating, outfittingratings[rating], rating == 0 ? "All Ratings" : "Rating " + (char)('A' - 1 + rating), new Point(4 + rating * 150, vpos), new Size(140, 22), null));
                 }
 
-                AddSearchEntries(f, outfittingsearchdistance, outfittingclearfilters, outfittinglargepad);
+                AddSearchEntries(f, outfittingsearchdistance, outfittingclearfilters, outfittinglargepad, outfittingcarriers);
 
                 f.Trigger += (name, ctrl, obj) => {
                     System.Diagnostics.Debug.WriteLine($"Click on {name} {ctrl}");
@@ -644,7 +634,7 @@ namespace EDDiscovery.UserControls.Helpers
                 if (modlist.Length > 0 && outfittingclasses.Contains(true) && outfittingratings.Contains(true))
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    List<StationInfo> ssd = sp.SearchOutfitting(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, outfittinglargepad ? true : default(bool?), maxresults);
+                    List<StationInfo> ssd = sp.SearchOutfitting(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, outfittinglargepad ? true : default(bool?), outfittingcarriers, maxresults);
                     if (ssd?.Count > 0)
                     {
                         DrawSearch(ssd, outfittingclearfilters, FilterSettings.Outfitting);
@@ -656,6 +646,23 @@ namespace EDDiscovery.UserControls.Helpers
 
                 }
             }, this, "Outfitting from {systemname}",32);
+        }
+
+        private void AddSearchEntries(ConfigurableForm f, int searchdistance, bool clearfilters, bool lpad, bool? carrier, int maxdx = 400, int lpadx = 600, int carrierx = 700, int clearfilterx = 800)
+        {
+            f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableForm.Entry.PanelType.Top });
+            f.AddLabelAndEntry("Maximum Distance", new Point(maxdx, 8), labelsize, new ConfigurableForm.Entry("radius", searchdistance, new Point(maxdx + labelsize.Width, 4), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1, Panel = ConfigurableForm.Entry.PanelType.Top });
+            f.Add(new ConfigurableForm.Entry("LPAD", lpad, "Large Pad", new Point(lpadx, 4), new Size(100, 22), "Large pad is required") { Panel = ConfigurableForm.Entry.PanelType.Top });
+            if (carrier.HasValue)
+                f.Add(new ConfigurableForm.Entry("CARRIER", carrier.Value, "Incl Carriers", new Point(carrierx, 4), new Size(100, 22), "Drake Class Carriers are to be included") { Panel = ConfigurableForm.Entry.PanelType.Top });
+            f.Add(new ConfigurableForm.Entry("CLRF", clearfilters, "Clear other filters", new Point(clearfilterx, 4), new Size(160, 22), "Type filter is cleared, clear the others as well") { Panel = ConfigurableForm.Entry.PanelType.Top });
+        }
+        private void SetValues(ConfigurableForm f, ref int commoditiessearchdistance, ref bool commoditiesclearfilters, ref bool commoditieslargepad, ref bool commoditiescarriers)
+        {
+            commoditiessearchdistance = f.GetInt("radius").Value;
+            commoditiesclearfilters = f.GetBool("CLRF").Value;
+            commoditieslargepad = f.GetBool("LPAD").Value;
+            commoditiescarriers = f.GetBool("CARRIER").Value;
         }
 
 
