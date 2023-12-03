@@ -416,7 +416,7 @@ namespace EDDiscovery.UserControls.Helpers
                 AddSearchEntries(f, commoditiessearchdistance, commoditiesclearfilters, commoditieslargepad, commoditiescarriers, lpadx:700,carrierx:800,clearfilterx:900);
 
             }, 
-            (f)=>
+            async (f)=>
             {
                 SetValues(f, ref commoditiessearchdistance, ref commoditiesclearfilters, ref commoditieslargepad, ref commoditiescarriers);
 
@@ -434,13 +434,13 @@ namespace EDDiscovery.UserControls.Helpers
                         EnglishName = x.Name.Substring(2, x.Name.IndexOf(separ) - 2),                               // extract the english name, remove the S_ prefix
 
                         supply = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,      // if we want to buy, we need the supply to be >=1
-                        sellprice = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,   // if we want to buy, we need a sell price to be >=1
+                     //   sellprice = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,   // if we want to buy, we need a sell price to be >=1 (TBD)
 
                         demand = showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,       // if we want to sell, we need demand
                         buyprice = showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null      // if we want to sell, we need a price
                     }).ToArray();
 
-                    var res = sp.SearchCommodities(systemname, search, commoditiessearchdistance, commoditieslargepad ? true : default(bool?), commoditiescarriers, maxresults);
+                    var res = await sp.SearchCommoditiesAsync(systemname, search, commoditiessearchdistance, commoditieslargepad ? true : default(bool?), commoditiescarriers, maxresults);
 
                     if ( res != null )
                     {
@@ -510,7 +510,7 @@ namespace EDDiscovery.UserControls.Helpers
                 f.AddBools(services, services, servicestate, 4, 24, 200, 4, 200, "S_");
                 AddSearchEntries(f, servicessearchdistance, servicesclearfilters, serviceslargepad, servicescarriers);
             },
-            (f) => {
+            async (f) => {
                 SetValues(f, ref servicessearchdistance, ref servicesclearfilters, ref serviceslargepad, ref servicescarriers);
 
                 servicestate = f.GetCheckedListNames("S_").ToHashSet();
@@ -519,7 +519,8 @@ namespace EDDiscovery.UserControls.Helpers
                 if (checkedlist.Length > 0)
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    DrawSearch(sp.SearchServices(systemname, checkedlist, servicessearchdistance, serviceslargepad ? true : default(bool?),servicescarriers, maxresults), servicesclearfilters, FilterSettings.Services);
+                    var res = await sp.SearchServicesAsync(systemname, checkedlist, servicessearchdistance, serviceslargepad ? true : default(bool?), servicescarriers, maxresults);
+                    DrawSearch(res, servicesclearfilters, FilterSettings.Services);
                 }
             },
             this, $"Services from {systemname}",32);
@@ -538,7 +539,7 @@ namespace EDDiscovery.UserControls.Helpers
                 f.AddBools(economy,economy, economystate, 4, 24, 120, 4, 120, "S_");
                 AddSearchEntries(f, economysearchdistance, economyclearfilters, economylargepad, null, clearfilterx:700);
             },
-            (f) => {
+            async (f) => {
                 bool _ = false;
                 SetValues(f, ref economysearchdistance, ref economyclearfilters, ref economylargepad, ref _);
 
@@ -548,7 +549,8 @@ namespace EDDiscovery.UserControls.Helpers
                 if (checkedlist.Length > 0)
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    DrawSearch(sp.SearchEconomy(systemname, checkedlist, economysearchdistance, economylargepad ? true : default(bool?),maxresults), economyclearfilters, FilterSettings.Economy);;
+                    var res = await sp.SearchEconomyAsync(systemname, checkedlist, economysearchdistance, economylargepad ? true : default(bool?), maxresults);
+                    DrawSearch(res, economyclearfilters, FilterSettings.Economy);;
                 }
             },
             this, $"Economies from {systemname}",32);
@@ -566,7 +568,7 @@ namespace EDDiscovery.UserControls.Helpers
                 f.AddBools(ships, ships, shipsstate, 4, 24, 200, 4, 200, "S_");
                 AddSearchEntries(f, shipssearchdistance, shipsclearfilters, shipslargepad, shipscarriers);
             },
-            (f) => {
+            async (f) => {
                 SetValues(f, ref shipssearchdistance, ref shipsclearfilters, ref shipslargepad, ref shipscarriers);
 
                 shipsstate = f.GetCheckedListNames("S_").ToHashSet();
@@ -574,7 +576,8 @@ namespace EDDiscovery.UserControls.Helpers
                 if (checkedlist.Length > 0)
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    DrawSearch(sp.SearchShips(systemname, checkedlist, shipssearchdistance, shipslargepad? true : default(bool?),shipscarriers, maxresults), shipsclearfilters, FilterSettings.Shipyard);
+                    var res = await sp.SearchShipsAsync(systemname, checkedlist, shipssearchdistance, shipslargepad ? true : default(bool?), shipscarriers, maxresults);
+                    DrawSearch(res, shipsclearfilters, FilterSettings.Shipyard);
                 }
             },
             this, $"Ships from {systemname}",32);
@@ -622,7 +625,7 @@ namespace EDDiscovery.UserControls.Helpers
                         f.SetCheckedList(new string[] { "R_0" }, false);
                 };
             }, 
-            (f) => {
+            async (f) => {
                 var modlist = f.GetCheckedListNames("M_").ToArray();
 
                 outfittingmodtypes = f.GetCheckBoxBools("M_");
@@ -634,7 +637,7 @@ namespace EDDiscovery.UserControls.Helpers
                 if (modlist.Length > 0 && outfittingclasses.Contains(true) && outfittingratings.Contains(true))
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    List<StationInfo> ssd = sp.SearchOutfitting(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, outfittinglargepad ? true : default(bool?), outfittingcarriers, maxresults);
+                    List<StationInfo> ssd = await sp.SearchOutfittingAsync(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, outfittinglargepad ? true : default(bool?), outfittingcarriers, maxresults);
                     if (ssd?.Count > 0)
                     {
                         DrawSearch(ssd, outfittingclearfilters, FilterSettings.Outfitting);
