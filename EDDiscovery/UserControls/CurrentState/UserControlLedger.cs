@@ -170,18 +170,23 @@ namespace EDDiscovery.UserControls
                     {
                         var row = CreateRow(filteredlist[i], eventfilter, textBoxFilter.Text);      // create if not filtered out
                         if (row != null)
-                            rowsToAdd.Add(row);
+                            rowsToAdd.Add(row);         // add..
+                        else
+                            filteredlist[i] = null;     // use null to indicate filtered out to chart below
                     }
 
                     dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
 
                     extChartLedger.BeginInit();
 
-                    for (int i = 0; i < filteredlist.Count;  i++)       // ledger is not filtered, and ledger is filled in date ascending order
-                    { 
-                        DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(filteredlist[i].EventTimeUTC);
-                        //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {filteredlist[i].CashTotal}");
-                        extChartLedger.AddXY(seltime, filteredlist[i].CashTotal);   // purposely no chart tips - uses too much space, no need with grid reflection
+                    for (int i = 0; i < filteredlist.Count;  i++)       // chart is filled in date ascending order
+                    {
+                        if (filteredlist[i] != null)        // if not filtered out, add
+                        {
+                            DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(filteredlist[i].EventTimeUTC);
+                            //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {filteredlist[i].CashTotal}");
+                            extChartLedger.AddXY(seltime, filteredlist[i].CashTotal);   // purposely no chart tips - uses too much space, no need with grid reflection
+                        }
                     }
 
                     extChartLedger.EndInit();
@@ -242,12 +247,11 @@ namespace EDDiscovery.UserControls
                 if (row != null)
                 {
                     dataGridViewLedger.Rows.Insert(0, row);     // insert at top
-                }
 
-                var seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
-                //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {tx.CashTotal}");
-                extChartLedger.AddXY(seltime, tx.CashTotal);
-                //extChartLedger.Refresh();
+                    var seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
+                    //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {tx.CashTotal}");
+                    extChartLedger.AddXY(seltime, tx.CashTotal);
+                }
 
                 transactioncountatdisplay++;
             }
