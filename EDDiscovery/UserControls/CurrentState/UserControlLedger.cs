@@ -165,6 +165,7 @@ namespace EDDiscovery.UserControls
                     var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
 
                     var rowsToAdd = new List<DataGridViewRow>(filteredlist.Count);
+                    bool[] filteredout = new bool[filteredlist.Count];
 
                     for (int i = filteredlist.Count - 1; i >= 0; i--)       // fill the rows backwards, oldest first
                     {
@@ -172,7 +173,7 @@ namespace EDDiscovery.UserControls
                         if (row != null)
                             rowsToAdd.Add(row);         // add..
                         else
-                            filteredlist[i] = null;     // use null to indicate filtered out to chart below
+                            filteredout[i] = true;      // remember
                     }
 
                     dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
@@ -181,7 +182,7 @@ namespace EDDiscovery.UserControls
 
                     for (int i = 0; i < filteredlist.Count;  i++)       // chart is filled in date ascending order
                     {
-                        if (filteredlist[i] != null)        // if not filtered out, add
+                        if (!filteredout[i])        // if not filtered out, add
                         {
                             DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(filteredlist[i].EventTimeUTC);
                             //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {filteredlist[i].CashTotal}");
