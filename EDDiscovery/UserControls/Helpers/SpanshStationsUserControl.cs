@@ -31,11 +31,11 @@ namespace EDDiscovery.UserControls.Helpers
         private ISystem defaultsystem;
         private List<StationInfo> stationdata;
 
-        bool showcommoditiesstationtobuyprice = false;      // on columns, show buy price, else sell price (if has stock)
+        bool showcommoditiesselltostation = false;      // on columns, show buy price, else sell price (if has stock)
 
         private const string dbLS = "MaxLs";
 
-        enum FilterSettings { Type, Commodities, Outfitting, Shipyard, Economy, Services};
+        enum FilterSettings { Type, CommoditiesBuy, CommoditiesSell, Outfitting, Shipyard, Economy, Services};
         ExtButtonWithCheckedIconListBoxGroup[] filters;
 
         private const string dbWordWrap = "WordWrap";
@@ -61,7 +61,7 @@ namespace EDDiscovery.UserControls.Helpers
             };
             extTextBoxAutoCompleteSystem.AutoCompleteTimeout = 1000;
 
-            filters = new ExtButtonWithCheckedIconListBoxGroup[] { extButtonType, extButtonCommodities, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
+            filters = new ExtButtonWithCheckedIconListBoxGroup[] { extButtonType, extButtonCommoditiesBuy, extButtonCommoditiesSell, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
 
             var porttype = StationDefinitions.StarportTypes.Values.Distinct().Select(x => new CheckedIconListBoxFormGroup.StandardOption(x,x));
             extButtonType.InitAllNoneAllBack(porttype,
@@ -72,9 +72,13 @@ namespace EDDiscovery.UserControls.Helpers
             var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast)
                             .Select(x => new CheckedIconListBoxFormGroup.StandardOption(x.FDName, x.Name));
 
-            extButtonCommodities.InitAllNoneAllBack(comitems,
-                GetFilter(FilterSettings.Commodities),
-                (newsetting,ch) => { SetFilter(FilterSettings.Commodities, newsetting, ch); });
+            extButtonCommoditiesBuy.InitAllNoneAllBack(comitems,
+                GetFilter(FilterSettings.CommoditiesBuy),
+                (newsetting, ch) => { SetFilter(FilterSettings.CommoditiesBuy, newsetting, ch); });
+
+            extButtonCommoditiesSell.InitAllNoneAllBack(comitems,
+                GetFilter(FilterSettings.CommoditiesSell),
+                (newsetting, ch) => { SetFilter(FilterSettings.CommoditiesSell, newsetting, ch); });
 
             var moditems = ItemData.GetShipModulesList().Select(x => x.ModTypeString).Distinct().      // only return buyable modules
                             Select(x2 => new CheckedIconListBoxFormGroup.StandardOption(x2, x2));
@@ -160,7 +164,9 @@ namespace EDDiscovery.UserControls.Helpers
             Draw(true);
         }
 
-        private bool DrawSearch(List<StationInfo> si, bool clearotherfilters, FilterSettings alwaysclear)
+        // clearallfilters means all filters are cleared
+        // alwaysclear means filter will always clear this
+        private bool DrawSearch(List<StationInfo> si, bool clearallfilters, FilterSettings alwaysclear)
         {
             if (si == null)
             {
@@ -171,7 +177,8 @@ namespace EDDiscovery.UserControls.Helpers
             {
                 foreach (FilterSettings e in Enum.GetValues(typeof(FilterSettings)))
                 {
-                    if (clearotherfilters || e == alwaysclear)     // go thru filters and reset the filter
+                    // go thru filters and reset the filter. alwaysclear == commoditiesbuy clears sell as well
+                    if (clearallfilters || e == alwaysclear || (e == FilterSettings.CommoditiesSell && alwaysclear == FilterSettings.CommoditiesBuy))     
                     {
                         SetFilter(e, CheckedIconListBoxFormGroup.Disabled, false);  // update the DB
                         filters[(int)e].Set(CheckedIconListBoxFormGroup.Disabled);  // we need to update the button with the same setting
@@ -212,8 +219,11 @@ namespace EDDiscovery.UserControls.Helpers
                     if (!extButtonType.IsDisabled)
                         filterin &= extButtonType.Get().HasChars() && extButtonType.Get().SplitNoEmptyStartFinish(extButtonType.SettingsSplittingChar).Contains(stationtype, StringComparison.InvariantCultureIgnoreCase) >= 0;
 
-                    if (!extButtonCommodities.IsDisabled)
-                        filterin &= extButtonCommodities.Get().HasChars() && station.HasAnyItemToBuy(extButtonCommodities.Get().SplitNoEmptyStartFinish(extButtonCommodities.SettingsSplittingChar));
+                    if (!extButtonCommoditiesBuy.IsDisabled)
+                        filterin &= extButtonCommoditiesBuy.Get().HasChars() && station.HasAnyItemInStock(extButtonCommoditiesBuy.Get().SplitNoEmptyStartFinish(extButtonCommoditiesBuy.SettingsSplittingChar));
+
+                    if (!extButtonCommoditiesSell.IsDisabled)
+                        filterin &= extButtonCommoditiesSell.Get().HasChars() && station.HasAnyItemWithDemandAndPrice(extButtonCommoditiesSell.Get().SplitNoEmptyStartFinish(extButtonCommoditiesSell.SettingsSplittingChar));
 
                     if (!extButtonOutfitting.IsDisabled)
                         filterin &= extButtonOutfitting.Get().HasChars() && station.HasAnyModuleTypes(extButtonOutfitting.Get().SplitNoEmptyStartFinish(extButtonOutfitting.SettingsSplittingChar));
@@ -241,12 +251,12 @@ namespace EDDiscovery.UserControls.Helpers
                             station.Latitude.HasValue ? station.Latitude.Value.ToString("N4") : "",
                             station.Longitude.HasValue ? station.Longitude.Value.ToString("N4") : "",
                             station.MarketStateString,
-                            ColPrice1.Tag != null ? station.GetItemPriceString((string)ColPrice1.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
-                            ColPrice1.Tag != null ? station.GetItemStockDemandString((string)ColPrice1.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
-                            ColPrice2.Tag != null ? station.GetItemPriceString((string)ColPrice2.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
-                            ColPrice2.Tag != null ? station.GetItemStockDemandString((string)ColPrice2.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
-                            ColPrice3.Tag != null ? station.GetItemPriceString((string)ColPrice3.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
-                            ColPrice3.Tag != null ? station.GetItemStockDemandString((string)ColPrice3.Tag,showcommoditiesstationtobuyprice) ?? "" : "",
+                            ColPrice1.Tag != null ? station.GetItemPriceString((string)ColPrice1.Tag,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice1.Tag != null ? station.GetItemStockDemandString((string)ColPrice1.Tag,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice2.Tag != null ? station.GetItemPriceString((string)ColPrice2.Tag,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice2.Tag != null ? station.GetItemStockDemandString((string)ColPrice2.Tag,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice3.Tag != null ? station.GetItemPriceString((string)ColPrice3.Tag,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice3.Tag != null ? station.GetItemStockDemandString((string)ColPrice3.Tag,showcommoditiesselltostation) ?? "" : "",
                             station.OutfittingStateString,
                             station.ShipyardStateString,
                             station.Allegiance ?? "",
@@ -292,7 +302,7 @@ namespace EDDiscovery.UserControls.Helpers
             ColStockDemand1.Visible = ColPrice1.Visible = ColPrice1.Tag != null;
             ColStockDemand2.Visible = ColPrice2.Visible = ColPrice2.Tag != null;
             ColStockDemand3.Visible = ColPrice3.Visible = ColPrice3.Tag != null;
-            ColStockDemand1.HeaderText = ColStockDemand2.HeaderText = ColStockDemand3.HeaderText = showcommoditiesstationtobuyprice ? "Demand" : "Stock";
+            ColStockDemand1.HeaderText = ColStockDemand2.HeaderText = ColStockDemand3.HeaderText = showcommoditiesselltostation ? "Demand" : "Stock";
 
             dataViewScrollerPanel.Resume();
 
@@ -411,7 +421,7 @@ namespace EDDiscovery.UserControls.Helpers
                 int max = f.AddBools(commodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), commodities.Select(x => x.Name).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
                 f.AddBools(rarecommodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), rarecommodities.Select(x => x.Name).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
 
-                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesstationtobuyprice, "Sell to Station", new Point(600, 4), new Size(100, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { Panel = ConfigurableForm.Entry.PanelType.Top });
+                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(100, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { Panel = ConfigurableForm.Entry.PanelType.Top });
 
                 AddSearchEntries(f, commoditiessearchdistance, commoditiesclearfilters, commoditieslargepad, commoditiescarriers, lpadx:700,carrierx:800,clearfilterx:900);
 
@@ -421,7 +431,7 @@ namespace EDDiscovery.UserControls.Helpers
                 SetValues(f, ref commoditiessearchdistance, ref commoditiesclearfilters, ref commoditieslargepad, ref commoditiescarriers);
 
                 commoditiesstate = f.GetCheckedListNames("S_").ToHashSet();
-                showcommoditiesstationtobuyprice = f.GetBool("B_Buy").Value;
+                showcommoditiesselltostation = f.GetBool("B_Buy").Value;
 
                 var entries = f.GetCheckedListEntries("S_");
 
@@ -433,11 +443,11 @@ namespace EDDiscovery.UserControls.Helpers
                     {
                         EnglishName = x.Name.Substring(2, x.Name.IndexOf(separ) - 2),                               // extract the english name, remove the S_ prefix
 
-                        supply = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,      // if we want to buy, we need the supply to be >=1
+                        supply = !showcommoditiesselltostation ? new Tuple<int, int>(1, int.MaxValue) : null,      // if we want to buy, we need the supply to be >=1
                      //   sellprice = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,   // if we want to buy, we need a sell price to be >=1 (TBD)
 
-                        demand = showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,       // if we want to sell, we need demand
-                        buyprice = showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null      // if we want to sell, we need a price
+                        demand = showcommoditiesselltostation ? new Tuple<int, int>(1, int.MaxValue) : null,       // if we want to sell, we need demand
+                        buyprice = showcommoditiesselltostation ? new Tuple<int, int>(1, int.MaxValue) : null      // if we want to sell, we need a price
                     }).ToArray();
 
                     var res = await sp.SearchCommoditiesAsync(systemname, search, commoditiessearchdistance, commoditieslargepad ? true : default(bool?), commoditiescarriers, maxresults);
@@ -455,7 +465,7 @@ namespace EDDiscovery.UserControls.Helpers
 
                         showcommoditiesstate = commoditiesstate.Take(3).Select(x=>x.Substring(x.IndexOf(separ) +1)).ToHashSet();     // take the list, limit to 3, get the fdname only, fill in the c-state
 
-                        DrawSearch(res, commoditiesclearfilters, FilterSettings.Commodities);
+                        DrawSearch(res, commoditiesclearfilters, FilterSettings.CommoditiesBuy);        // use Buy, will clear sell as well
                     }
                 }
             },
@@ -468,18 +478,19 @@ namespace EDDiscovery.UserControls.Helpers
             ConfigurableForm.ShowDialogCentred((f) => {
                 var commodities = MaterialCommodityMicroResourceType.GetNormalCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
                 var rarecommodities = MaterialCommodityMicroResourceType.GetRareCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
-                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesstationtobuyprice, "Sell to Station", new Point(600, 4), new Size(160, 22), 
+                f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(160, 22), 
                                     $"Set = Show price station buys the commodity at {Environment.NewLine} Clear = Show station sell price") { Panel = ConfigurableForm.Entry.PanelType.Top });
 
                 int max = f.AddBools(commodities.Select(x => x.FDName).ToArray(), commodities.Select(x => x.Name).ToArray(), showcommoditiesstate, 4, 24, 1000, 4, 200, "S_");
                 f.AddBools(rarecommodities.Select(x => x.FDName).ToArray(), rarecommodities.Select(x => x.Name).ToArray(), showcommoditiesstate, max + 16, 24, 500, 4, 200, "S_");
+                f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableForm.Entry.PanelType.Top });
 
                 f.Trigger += (d, ctrlname, text) => { f.RadioButton("S_", ctrlname, 3); };
             },
             (f) =>
             {
                 showcommoditiesstate = f.GetCheckedListNames("S_").ToHashSet();
-                showcommoditiesstationtobuyprice = f.GetBool("B_Buy").Value;
+                showcommoditiesselltostation = f.GetBool("B_Buy").Value;
 
                 var entries = f.GetCheckedListEntries("S_");        // 0 to 3.. 
 

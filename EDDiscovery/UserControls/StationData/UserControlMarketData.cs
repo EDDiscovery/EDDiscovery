@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                     // if hasdemand is set, we display if we have demand, or if we have a comparision to display
                     // else if not buy toggle is off, or when on its when it can be bought or we have a comparision to display
 
-                    if (hasdemand ? (c.HasDemand || c.ComparisionBuy) : (!buyonly || c.CanBeBought || c.ComparisionBuy))
+                    if (hasdemand ? (c.HasDemand || c.ComparisionBuy) : (!buyonly || c.HasStock || c.ComparisionBuy))
                     {
                         MaterialCommodityMicroResourceType mc = MaterialCommodityMicroResourceType.GetByFDName(c.fdname);
 
