@@ -48,18 +48,22 @@ namespace EDDiscovery.UserControls.Search
             cms.Items[0].Text = "Go to star on 3D Map";
             cms.Items[0].Name = "3d";
             cms.Items[0].Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+
             cms.Items[1].Size = new System.Drawing.Size(186, 22);
-            cms.Items[1].Text = "View on EDSM";
-            cms.Items[1].Name = "EDSM";
-            cms.Items[1].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            cms.Items[1].Text = "View Scan Display";
+            cms.Items[1].Name = "Data";
+            cms.Items[1].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
+
             cms.Items[2].Size = new System.Drawing.Size(186, 22);
             cms.Items[2].Text = "View on Spansh";
             cms.Items[2].Name = "Spansh";
             cms.Items[2].Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
+
             cms.Items[3].Size = new System.Drawing.Size(186, 22);
-            cms.Items[3].Text = "View Data On Entry";
-            cms.Items[3].Name = "Data";
-            cms.Items[3].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
+            cms.Items[3].Text = "View on EDSM";
+            cms.Items[3].Name = "EDSM";
+            cms.Items[3].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+
             cms.Items[4].Text = "Go to entry on grid";
             cms.Items[4].Name = "Goto";
             cms.Items[4].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
@@ -82,11 +86,10 @@ namespace EDDiscovery.UserControls.Search
         private void Cms_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
-            ContextMenuStrip.Items[3].Visible = rightclicktag is HistoryEntry;
-            ContextMenuStrip.Items[2].Visible = SysFrom(rightclicktag)?.SystemAddress.HasValue ?? false;
+            ContextMenuStrip.Items[2].Visible = SystemClassFrom(rightclicktag)?.SystemAddress.HasValue ?? false;        // spansh
         }
 
-        private ISystem SysFrom(Object t)   // given tag, find the isystem, may be null. 
+        private ISystem SystemClassFrom(Object t)   // given tag, find the isystem, may be null. 
         {
             if (t is HistoryEntry)
                 return ((HistoryEntry)t).System;
@@ -98,7 +101,7 @@ namespace EDDiscovery.UserControls.Search
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+            var sys = SystemClassFrom(rightclicktag);       // if rightclicktag == null, then we get null.
 
             if (sys != null)
             {
@@ -112,7 +115,7 @@ namespace EDDiscovery.UserControls.Search
         }
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+            var sys = SystemClassFrom(rightclicktag);       // if rightclicktag == null, then we get null.
 
             if (sys != null && sys.SystemAddress != null)
             {
@@ -122,10 +125,10 @@ namespace EDDiscovery.UserControls.Search
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+            var sys = SystemClassFrom(rightclicktag);       // if rightclicktag == null, then we get null.
             if (sys != null)
             {
-                discoveryform.Open3DMap(SysFrom(rightclicktag));
+                discoveryform.Open3DMap(SystemClassFrom(rightclicktag));
             }
         }
 
@@ -232,7 +235,7 @@ namespace EDDiscovery.UserControls.Search
                         for (int i = 0; i < columnsout; i++)
                             data.Add(rw.Cells[i].Value);
 
-                        ISystem sys = SysFrom(rw.Tag);
+                        ISystem sys = SystemClassFrom(rw.Tag);
                         
                         if (sys != null)        // in case we don't have a valid tag
                         {
