@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
-                EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar,
+                EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar,EDTx.SearchScans_ColumnSystem,
                 EDTx.SearchScans_scanSortControl_labelSort};
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
@@ -283,6 +283,7 @@ namespace EDDiscovery.UserControls
                     ISystem sys = he.System;
 
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
+                                            he.System.Name,
                                             name,
                                             he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),

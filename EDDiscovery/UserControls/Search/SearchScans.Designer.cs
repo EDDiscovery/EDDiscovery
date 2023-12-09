@@ -48,6 +48,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnBody = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -139,6 +140,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnDate,
+            this.ColumnSystem,
             this.ColumnBody,
             this.ColumnPosition,
             this.ColumnCurrentDistance,
@@ -165,6 +167,13 @@ namespace EDDiscovery.UserControls
             this.ColumnDate.FillWeight = 60F;
             this.ColumnDate.HeaderText = "Date";
             this.ColumnDate.Name = "ColumnDate";
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.FillWeight = 60F;
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
             // 
             // ColumnBody
             // 
@@ -568,7 +577,10 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonImport;
         private ExtendedControls.ExtCheckBox extCheckBoxDebug;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private ExtendedControls.ExtButton extButtonNew;
+        private Search.ScanSortControl scanSortControl;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBody;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
@@ -577,7 +589,5 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnParentParent;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStarStar;
-        private ExtendedControls.ExtButton extButtonNew;
-        private Search.ScanSortControl scanSortControl;
     }
 }

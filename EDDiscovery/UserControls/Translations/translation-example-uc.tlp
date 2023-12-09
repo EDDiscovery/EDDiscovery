@@ -149,6 +149,7 @@ SECTION SearchScans
 .ColumnStar: "Star" @
 .ColumnParentParent: "Grandparent" @
 .ColumnStarStar: "Parent of Star" @
+.ColumnSystem: "System" @
 .comboBoxSearches.ToolTip: "Select a predefined condition" @
 .buttonFind.ToolTip: "Search for condition below" @
 .buttonSave.ToolTip: "Save current condition" @

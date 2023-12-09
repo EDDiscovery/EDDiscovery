@@ -1373,6 +1373,7 @@ namespace EDDiscovery
         SearchScans_ColumnParent, // Column Header 'Parent'
         SearchScans_ColumnParentParent, // Column Header 'Parent.Parent'
         SearchScans_ColumnStar, // Column Header 'Star'
+        SearchScans_ColumnSystem, // Column Header 'System'
         SearchScans_ColumnStarStar, // Column Header 'Star.Star'
         SearchScans_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchScans_ColumnPosition, // Column Header 'Position'
