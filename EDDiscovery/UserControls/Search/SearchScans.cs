@@ -230,8 +230,10 @@ namespace EDDiscovery.UserControls
 
                 DiscoveryForm.History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
 
-                // what variables are in use, so we don't enumerate the lot.
-                var allvars = BaseUtils.Condition.EvalVariablesUsed(cond.List);
+                QueryFunctionHandler func = new QueryFunctionHandler();     // use same func handler as query
+                BaseUtils.Eval evl = new BaseUtils.Eval(func);
+
+                BaseUtils.Condition.InUse(cond.List, evl, out HashSet<string> allvars, out HashSet<string> allfuncs);
 
                 // see if we need any default vars, at the moment, they all start with one
                 var defaultvars = new BaseUtils.Variables();
@@ -246,7 +248,7 @@ namespace EDDiscovery.UserControls
 
                 var results = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
 
-                var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars);
+                var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars,allfuncs);
                 var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), computedsearch);
                 System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {DiscoveryForm.History.EntryOrder().Count}");
 
@@ -447,7 +449,8 @@ namespace EDDiscovery.UserControls
 
             private bool ascending;
             private string condition;
-            private BaseUtils.EvalVariables sorteval = new BaseUtils.EvalVariables();
+            private BaseUtils.Eval evl = new BaseUtils.Eval(new QueryFunctionHandler());
+            private HashSet<string>[] sorteval = new HashSet<string>[2];
 
             public RowComparer(string c, bool ad)
             {
@@ -455,10 +458,9 @@ namespace EDDiscovery.UserControls
                 ascending = ad;
                 InError = null;
 
-                var vars = BaseUtils.Eval.VarsInUse((evl) => { evl.Evaluate(condition); });
-                sorteval.VarsInUse = new HashSet<string>[2];
-                sorteval.VarsInUse[0] = vars.Where(x => x.StartsWith("left.")).Select(x => x.Substring(5)).ToHashSet();
-                sorteval.VarsInUse[1] = vars.Where(x => x.StartsWith("right.")).Select(x => x.Substring(6)).ToHashSet();
+                evl.SymbolsFuncsInExpression(condition, out HashSet<string> vars, out HashSet<string> _);
+                sorteval[0] = vars.Where(x => x.StartsWith("left.")).Select(x => x.Substring(5)).ToHashSet();
+                sorteval[1] = vars.Where(x => x.StartsWith("right.")).Select(x => x.Substring(6)).ToHashSet();
             }
 
             public int Compare(object lo, object ro)
@@ -483,13 +485,15 @@ namespace EDDiscovery.UserControls
 
                         // sorteval already has varsinuse computed, extract variables from scans
 
-                        sorteval.Values = new BaseUtils.Variables();
-                        sorteval.Values.AddPropertiesFieldsOfClass(leftscan, "left.", ignoretypes, 5, sorteval.VarsInUse[0], ensuredoublerep: true, classsepar: ".");
-                        sorteval.Values.AddPropertiesFieldsOfClass(rightscan, "right.", ignoretypes, 5, sorteval.VarsInUse[1], ensuredoublerep: true, classsepar: ".");
-                        sorteval.Values["left.Child.Count"] = ((lefthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
-                        sorteval.Values["right.Child.Count"] = ((righthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
+                        BaseUtils.Variables values = new BaseUtils.Variables();
 
-                        object res = sorteval.Evaluate(condition);  // eval
+                        values.AddPropertiesFieldsOfClass(leftscan, "left.", ignoretypes, 5, sorteval[0], ensuredoublerep: true, classsepar: ".");
+                        values.AddPropertiesFieldsOfClass(rightscan, "right.", ignoretypes, 5, sorteval[1], ensuredoublerep: true, classsepar: ".");
+                        values["left.Child.Count"] = ((lefthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
+                        values["right.Child.Count"] = ((righthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
+
+                        evl.ReturnSymbolValue = values;      // point evaluator at this set of values
+                        object res = evl.Evaluate(condition);  // eval
 
                         if (res is long)       // long, we have a result, convert and store
                         {

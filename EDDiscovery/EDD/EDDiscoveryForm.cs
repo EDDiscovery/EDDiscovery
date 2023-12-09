@@ -647,7 +647,7 @@ namespace EDDiscovery
                 this.BeginInvoke(new Action(() =>
                 {
                     string acklist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "");
-                    Version curver = new Version(System.Reflection.Assembly.GetExecutingAssembly().GetVersionString());
+                    Version curver = new Version(System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString());
 
                     List<BaseUtils.Notifications.Notification> popupnotificationlist = new List<BaseUtils.Notifications.Notification>();
 

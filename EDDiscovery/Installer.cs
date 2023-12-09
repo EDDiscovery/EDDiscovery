@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using BaseUtils;
 using System;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace EDDiscovery
 
                 if (rel != null)
                 {
-                    var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionString();
+                    var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString();
                     var releaseVersion = rel.ReleaseVersion;
 
                     Version v1 = new Version(releaseVersion);

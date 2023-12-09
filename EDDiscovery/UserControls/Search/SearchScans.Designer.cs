@@ -243,8 +243,9 @@ namespace EDDiscovery.UserControls
             // 
             // conditionFilterUC
             // 
+            this.conditionFilterUC.AutoCompleteCommentMarker = " | ";
             this.conditionFilterUC.AutoCompleteOnMatch = false;
-            this.conditionFilterUC.AutoCompleteStringCropLength = 132;
+            this.conditionFilterUC.AutoCompleteStringCropLength = 1000;
             this.conditionFilterUC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.conditionFilterUC.Location = new System.Drawing.Point(0, 0);
             this.conditionFilterUC.Name = "conditionFilterUC";

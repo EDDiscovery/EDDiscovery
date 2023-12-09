@@ -425,7 +425,7 @@ namespace EDDiscovery.Actions
 
             using (ActionLanguage.Manager.AddOnManagerForm dmf = new ActionLanguage.Manager.AddOnManagerForm())
             {
-                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
+                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues();
                 System.Diagnostics.Debug.Assert(edversion != null);
 
                 dmf.Init("EDDiscovery", manage, this.Icon, edversion, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , EDDOptions.Instance.CheckGithubFiles );
