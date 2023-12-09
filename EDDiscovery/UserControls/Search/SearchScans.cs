@@ -547,11 +547,11 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 0)
+            if (e.Column == ColumnDate)
                 e.SortDataGridViewColumnDate();
-            else if (e.Column.Index == 1)
+            else if (e.Column == ColumnBody || e.Column == ColumnSystem)
                 e.SortDataGridViewColumnAlphaInt();
-            else if (e.Column.Index == 3)
+            else if (e.Column == ColumnCurrentDistance)
                 e.SortDataGridViewColumnNumeric();
         }
 
