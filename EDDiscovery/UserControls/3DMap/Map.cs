@@ -511,10 +511,6 @@ namespace EDDiscovery.UserControls.Map3D
             // start hooks the glwfc paint function up, first, so it gets to go first
             // No ui events from glwfc.
             gl3dcontroller.Start(matrixcalc, glwfc, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: false);
-            gl3dcontroller.Hook(displaycontrol, glwfc); // we get 3dcontroller events from displaycontrol, so it will get them when everything else is unselected
-            displaycontrol.Hook();  // now we hook up display control to glwin, and paint
-
-            displaycontrol.MouseClick += MouseClickOnMap;       // grab mouse UI
 
             if ((parts & Parts.Menu) != 0)
             {
@@ -812,7 +808,18 @@ namespace EDDiscovery.UserControls.Map3D
                 inf.Show();
             }
 
+            // change - we now wait until every is set up before we hook to get user events.  If a click comes in too soon, we may not be ready
+
+            System.Diagnostics.Debug.WriteLine($"Map created, hook events");
+
+            gl3dcontroller.Hook(displaycontrol, glwfc); // we get 3dcontroller events from displaycontrol, so it will get them when everything else is unselected
+            displaycontrol.Hook();  // now we hook up display control to glwin, and paint
+            displaycontrol.MouseClick += MouseClickOnMap;       // grab mouse UI
+
+            System.Diagnostics.Debug.WriteLine($"Map create finished");
+            // finished
             mapcreatedokay = GLShaderLog.Okay;      // record shader status
+
             return mapcreatedokay;
         }
         #endregion
@@ -1207,6 +1214,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void LoadState(MapSaver defaults, bool restorepos, int loadlimit)
         {
+            System.Diagnostics.Debug.WriteLine($"Load state");
+
             gl3dcontroller.ChangePerspectiveMode(defaults.GetSetting("GAL3DMode", true));
 
             GalaxyDisplay = defaults.GetSetting("GD", true);
@@ -1255,6 +1264,7 @@ namespace EDDiscovery.UserControls.Map3D
                 if (pos.HasChars() && !gl3dcontroller.SetPositionCamera(pos))     // go thru gl3dcontroller to set default position, so we reset the model matrix
                     System.Diagnostics.Trace.WriteLine($"*** NOTE 3DMAPS {pos} did not decode");
             }
+            System.Diagnostics.Debug.WriteLine($"Load state finished");
         }
 
         public void SaveState(MapSaver defaults)
@@ -1406,6 +1416,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         private Object FindObjectOnMap(Point loc)
         {
+            System.Diagnostics.Debug.WriteLine($"Click find object on map");
+
             // fixed debug loc = new Point(896, 344);
 
             float hez = float.MaxValue, gmoz = float.MaxValue, galstarz = float.MaxValue, routez = float.MaxValue, navz = float.MaxValue, bkmz = float.MaxValue;
@@ -1561,6 +1573,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (!mapcreatedokay)
                 return;
 
+            System.Diagnostics.Debug.WriteLine($"Controller 3d draw");
             System.Diagnostics.Debug.Assert(glwfc.IsContextCurrent());
 
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));

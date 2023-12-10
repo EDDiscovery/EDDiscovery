@@ -338,25 +338,10 @@ namespace EDDiscovery.UserControls
 
                     if (lastresultlog.HasChars())
                     {
-                        if (lastresultlog.Length < 2000000)
+                        string fname = System.IO.Path.GetTempFileName() + ".log";
+                        if ( BaseUtils.FileHelpers.TryWriteToFile(fname,lastresultlog))
                         {
-                            this.Cursor = Cursors.WaitCursor;
-                            ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-                            ifrm.Info("Log", DiscoveryForm.Icon, lastresultlog);
-                            ifrm.Show(this);
-                            this.Cursor = Cursors.Default;
-                        }
-                        else
-                        {
-                            SaveFileDialog dlg = new SaveFileDialog();
-
-                            dlg.Filter = "Log| *.log";
-                            dlg.Title = "Export";
-
-                            if (dlg.ShowDialog(this) == DialogResult.OK)
-                            {
-                                System.IO.File.WriteAllText(dlg.FileName, lastresultlog);
-                            }
+                            System.Diagnostics.Process.Start(fname);
                         }
                     }
                 }
