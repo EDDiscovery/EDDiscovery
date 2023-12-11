@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
                     object[] rowobj = {     index.ToString(),
                                             sys.Name,
-                                            Bodies.StarName(sys.MainStarType),
+                                            Stars.StarName(sys.MainStarType),
                                             (ret.Item2>=0 ? ret.Item2.ToString("0.#") : ""),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")

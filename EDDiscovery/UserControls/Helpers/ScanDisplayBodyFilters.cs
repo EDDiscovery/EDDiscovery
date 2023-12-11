@@ -34,10 +34,10 @@ namespace EDDiscovery.UserControls
 
             var options = new List<ExtendedControls.CheckedIconListBoxFormGroup.StandardOption>();
             foreach (var x in Enum.GetValues(typeof(EDPlanet)))
-                options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption(x.ToString(), Bodies.PlanetTypeName((EDPlanet)x)));
+                options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption(x.ToString(), Planets.PlanetName((EDPlanet)x)));
 
             foreach (var x in Enum.GetNames(typeof(EDStar)))
-                options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption(x.ToString(), Bodies.StarName(x.ParseEnum<EDStar>())));
+                options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption(x.ToString(), Stars.StarName(x.ParseEnum<EDStar>())));
 
             // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
             options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("star", "Star".T(EDTx.UserControlScan_Star)));

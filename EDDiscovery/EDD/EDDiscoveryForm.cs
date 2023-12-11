@@ -439,7 +439,8 @@ namespace EDDiscovery
 
             SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMPNames());
 
-            Bodies.Prepopulate();           
+            Stars.Prepopulate();            // we do it this way instead of statically because we don't want them autofilled
+            Planets.Prepopulate();
 
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;

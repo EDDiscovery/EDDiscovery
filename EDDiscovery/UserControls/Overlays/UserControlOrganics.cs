@@ -290,6 +290,9 @@ namespace EDDiscovery.UserControls
                                     {
                                         DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
 
+                                        string valuestr = os.Item2.EstimatedValue.HasValue ? os.Item2.EstimatedValue.Value.ToString("N0") :
+                                                            os.Item2.PotentialEstimatedValue.HasValue ? "(" + os.Item2.PotentialEstimatedValue.Value.ToString("N0") + ")" : "";
+
                                         object[] data = new object[]
                                         {
                                                 time.ToStringYearFirst(),
@@ -300,7 +303,7 @@ namespace EDDiscovery.UserControls
                                                 os.Item2.Species_Localised_Short,
                                                 os.Item2.Variant_Localised_Short,
                                                 os.Item2.ScanType,
-                                                os.Item2.EstimatedValue?.ToString("N0") ??""
+                                                valuestr,
                                         };
 
                                         dataGridView.Rows.Add(data);
