@@ -27,7 +27,7 @@ namespace EDDiscovery.UserControls
 
         public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver ucb, string settingname)
         {
-            Setting = ucb.GetSetting(settingname, "moons;icons;mats;allg;habzone;starclass;planetclass;dist;");
+            Setting = ucb.GetSetting(settingname, "moons;icons;mats;allg;habzone;starclass;planetclass;dist;starage;starmass");
 
             Init(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption[]
             {
@@ -37,6 +37,9 @@ namespace EDDiscovery.UserControls
             new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("matfull", "Hide materials which have reached their storage limit".T(EDTx.UserControlScan_MatFull), global::EDDiscovery.Icons.Controls.Scan_HideFullMaterials),
             new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("moons", "Show Moons".T(EDTx.UserControlScan_ShowMoons), global::EDDiscovery.Icons.Controls.Scan_ShowMoons),
             new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("allg", "Show G on all planets".T(EDTx.UserControlScan_AllG), global::EDDiscovery.Icons.Controls.ShowAllG),
+            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("planetmass", "Show mass of planets".T(EDTx.UserControlScan_PlanetMass), global::EDDiscovery.Icons.Controls.ShowAllG),
+            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starmass", "Show mass of stars".T(EDTx.UserControlScan_StarMass), global::EDDiscovery.Icons.Controls.ShowAllG),
+            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starage", "Show age of stars".T(EDTx.UserControlScan_StarAge), global::EDDiscovery.Icons.Controls.ShowAllG),
             new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("habzone", "Show Habitation Zone".T(EDTx.UserControlScan_HabZone), global::EDDiscovery.Icons.Controls.ShowHabZone),
             new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starclass", "Show Classes of Stars".T(EDTx.UserControlScan_StarClass), global::EDDiscovery.Icons.Controls.ShowStarClasses),
             new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses),
@@ -63,6 +66,9 @@ namespace EDDiscovery.UserControls
             sduc.SystemDisplay.ShowOnlyMaterialsRare = displayfilters.Contains("rares") || all;
             sduc.SystemDisplay.HideFullMaterials = displayfilters.Contains("matfull") || all;
             sduc.SystemDisplay.ShowAllG = displayfilters.Contains("allg") || all;
+            sduc.SystemDisplay.ShowPlanetMass = displayfilters.Contains("planetmass") || all;
+            sduc.SystemDisplay.ShowStarMass = displayfilters.Contains("starmass") || all;
+            sduc.SystemDisplay.ShowStarAge = displayfilters.Contains("starage") || all;
             sduc.SystemDisplay.ShowHabZone = displayfilters.Contains("habzone") || all;
             sduc.SystemDisplay.ShowStarClasses = displayfilters.Contains("starclass") || all;
             sduc.SystemDisplay.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;

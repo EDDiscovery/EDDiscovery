@@ -227,7 +227,7 @@ namespace EDDiscovery.UserControls
                     string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.FullName);
                     if (node.ScanData != null)
                     {
-                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText(),
+                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText,
                                                 (node.ScanData.nSurfaceGravityG?.ToString("N1") ?? "?") + "G", node.ScanData.Atmosphere, node.CountBioSignals.ToString(), ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
                     }
 

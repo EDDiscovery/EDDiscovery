@@ -76,6 +76,9 @@ namespace EDDiscovery.WebServer
                         sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
                         sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
                         sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
+                        sd.ShowPlanetMass = (request.QueryString["showplanetmass"] ?? "false").InvariantParseBool(false);
+                        sd.ShowStarMass = (request.QueryString["showstarmass"] ?? "false").InvariantParseBool(false);
+                        sd.ShowStarAge = (request.QueryString["showstarage"] ?? "true").InvariantParseBool(true);
                         sd.ShowHabZone = (request.QueryString["showhabzone"] ?? "true").InvariantParseBool(true);
                         sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
                         sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);

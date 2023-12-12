@@ -1295,6 +1295,9 @@ namespace EDDiscovery
         UserControlScan_Barycentre, // discrete
         UserControlScan_Body, // discrete
         UserControlScan_AllG,// discrete
+        UserControlScan_PlanetMass,// discrete
+        UserControlScan_StarMass,// discrete
+        UserControlScan_StarAge,// discrete
         UserControlScan_HabZone,// discrete
         UserControlScan_PlanetClass,// discrete
         UserControlScan_StarClass,// discrete

@@ -45,14 +45,14 @@ namespace EDDiscovery.UserControls.Search
             cms.Size = new System.Drawing.Size(187, 70);
 
             cms.Items[0].Size = new System.Drawing.Size(186, 22);
-            cms.Items[0].Text = "Go to star on 3D Map";
-            cms.Items[0].Name = "3d";
-            cms.Items[0].Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+            cms.Items[0].Text = "View Scan Display";
+            cms.Items[0].Name = "Data";
+            cms.Items[0].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
 
             cms.Items[1].Size = new System.Drawing.Size(186, 22);
-            cms.Items[1].Text = "View Scan Display";
-            cms.Items[1].Name = "Data";
-            cms.Items[1].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
+            cms.Items[1].Text = "Go to star on 3D Map";
+            cms.Items[1].Name = "3d";
+            cms.Items[1].Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
 
             cms.Items[2].Size = new System.Drawing.Size(186, 22);
             cms.Items[2].Text = "View on Spansh";

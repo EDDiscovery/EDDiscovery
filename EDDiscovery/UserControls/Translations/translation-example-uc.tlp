@@ -190,7 +190,7 @@ SECTION DataGridViewStarResults
 .3d: "Go to star on 3D Map" @
 .EDSM: "View on EDSM" @
 .Spansh: "View on Spansh" @
-.Data: "View Data On Entry" @
+.Data: "View Scan Display" @
 .Goto: "Go to entry on grid" @
 
 SECTION UserControlEngineering
@@ -645,6 +645,7 @@ SECTION UserControlRoute
 .extButtonFleetCarrier: "Fleet Carrier" @
 .extButtonSpanshGalaxyPlotter: "Galaxy Plotter" @
 .extButtonExoMastery: "Exo Mastery" @
+.extCheckBoxPermitSystems: "Use Permit Systems" @
 .groupBoxInternal: "EDD Router" @
 .labelMetric: "Metric" @
 .extButtonRoute: "Find route" @
@@ -746,6 +747,10 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" @
 .StarClass: "Show Classes of Stars" @
 .Distance: "Show distance of bodies" @
+.PlanetMass: "Show mass of planets" @
+.StarMass: "Show mass of stars" @
+.StarAge: "Show age of stars" @
+
 .Expired: "Expired:" @
 .StarsOnDiffLines: "Show bodyless stars on separate lines" @
 
