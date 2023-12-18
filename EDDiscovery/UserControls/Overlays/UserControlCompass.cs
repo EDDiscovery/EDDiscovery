@@ -563,12 +563,12 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
             displayfilter.AddAllNone();
             displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when Elite has no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); //tbd
-            displayfilter.AddStandardOption(CtrlList.hidewithnotarget.ToString(), "Hide when no Lat/Long target is set".TxID(EDTx.UserControlCompass_hidewhennotarget)); //tbd
-            displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); //tbd
-            displayfilter.AddStandardOption(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); //tbd
-            displayfilter.AddStandardOption(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship)); //tbd
-            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); //tbd
+            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when Elite has no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); 
+            displayfilter.AddStandardOption(CtrlList.hidewithnotarget.ToString(), "Hide when no Lat/Long target is set".TxID(EDTx.UserControlCompass_hidewhennotarget)); 
+            displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); 
+            displayfilter.AddStandardOption(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); 
+            displayfilter.AddStandardOption(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship));
+            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 

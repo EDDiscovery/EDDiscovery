@@ -55,7 +55,7 @@ namespace EDDiscovery.WebServer
     // Query requesttype = presskey, fields              : key = binding name optional keydelay, shiftdelay, updelay
     //          responsetype = status, 100 or 400.
     //-------------------------------------------------------------------------------------------------------------------
-    // Query requesttype=scandata : fields entry number, edsm flag
+    // Query requesttype=scandata : fields entry number, "edsm" true/false, "spansh" true/false (EDD 17.0)
     //          responsetype = entry, objectlist..          : entry = -1 none, or entry number. See code for fields
     //
     // Push responsetype=scandatachanged                : indicate scan data has changed
@@ -71,7 +71,8 @@ namespace EDDiscovery.WebServer
     // Ones containing data."EventID" contain other game data: CommanderID, EventTimeLocal, IsBeta, IsOdyssey, GameVersion, Build.
     //
     //-------------------------------------------------------------------------------------------------------------------
-    // .png load of image from /systemmap/ folder - image name is not important, encoded query field /systemmap/map.png?entry=n&field=n& .. etc
+    // .png load of image from /systemmap/ folder - image name is not important, encoded query field /systemmap/map.png?entry=n&EDSM=true&SPANSH=true  (SPANSH from 17.0)
+    //
     // Push responsetype=systemmapchanged               : indicate scan system map has changed
 
     public class EDDWebServer

@@ -15,7 +15,6 @@
 // turn on for play testing of all your scans
 //#define PLAYTHRU
 
-using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using ExtendedControls;
@@ -187,7 +186,6 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            // tbd spansh
             StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, edsmSpanshButton.WebLookup) : null;
 #endif
             string control_text = "No System";

@@ -213,7 +213,6 @@ namespace EDDiscovery.UserControls
         {
             // if we are not EDSM checking, or nothing is outstanding, we can check to see if we can process
 
-            // tbd spansh?
             if (edsmSpanshButton.IsNoneSet || outstandingprocessing == 0)      // if not doing web, or no outstandings
             {
                 int maxlaunch = edsmSpanshButton.WebLookup == WebExternalDataLookup.EDSM ? 1 : edsmSpanshButton.WebLookup == WebExternalDataLookup.None ? 20 : 2;
@@ -247,7 +246,6 @@ namespace EDDiscovery.UserControls
                             forcetotalsupdate = true;       // update when finished
                             labelBusy.Visible = true;       // make busy
 
-                            // tbd no spansh option
                             UpdateRowAsync(rowindex, edsmSpanshButton.WebLookup );
 
                             if (--maxlaunch == 0)           // if launch max, stop
@@ -473,7 +471,6 @@ namespace EDDiscovery.UserControls
                     {
                         if (sn?.ScanData != null)  // must have scan data..
                         {
-                            // tbd
                             if (
                                 (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||     // major selectors for line display
                                 (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||
@@ -1254,7 +1251,7 @@ namespace EDDiscovery.UserControls
                 sc = new SystemClass((string)obj,0,0,0);
 
             BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sc, null);
-            UpdateAllRows(); // tbd must be better?
+            UpdateAllRows();
         }
 
 

@@ -75,12 +75,6 @@ namespace EDDiscovery.UserControls
 
                 nodedata = await hl.StarScan.FindSystemAsync(sys, forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup);    // look up system async
 
-                //if (data != null) // can't do right now as value changes if edsm button is there, may fix later tbd
-                //{
-                //    long value = data.ScanValue(lookup != WebExternalDataLookup.None);
-                //    title += " ~ " + value.ToString("N0") + " cr";
-                //}
-
                 filterbut.Init(db, "BodyFilter");
                 filterbut.Image = EDDiscovery.Icons.Controls.EventFilter;
                 filterbut.ValueChanged += (s, e) =>

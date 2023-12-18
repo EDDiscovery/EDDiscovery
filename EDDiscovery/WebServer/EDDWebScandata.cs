@@ -45,17 +45,17 @@ namespace EDDiscovery.WebServer
         {
             int entry = message["entry"].Int(0);
             bool edsm = message["edsm"].Bool(false);
+            bool spansh = message["spansh"].Bool(false);        // 17.0 new spansh
             System.Diagnostics.Debug.WriteLine("scandata Request " + key + " Entry" + entry + " EDSM " + edsm);
-            return MakeResponse(entry, "scandata", edsm);
+            return MakeResponse(entry, "scandata", edsm, spansh);
         }
 
         //EliteDangerousCore.UIEvents.UIOverallStatus status,
-        // TBD no way to ask for anything but edsm
-        public JToken MakeResponse(int entry, string type, bool edsm)       // entry = -1 means latest
+        public JToken MakeResponse(int entry, string type, bool edsm, bool spansh)       // entry = -1 means latest
         {
             if (discoveryform.InvokeRequired)
             {
-                return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type, edsm)));
+                return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type, edsm , spansh)));
             }
             else
             {
@@ -76,7 +76,11 @@ namespace EDDiscovery.WebServer
 
                     HistoryEntry he = hl[entry];
 
-                    var scannode = discoveryform.History.StarScan.FindSystemSynchronous(he.System, edsm ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);  
+                    var lookup = edsm ? (spansh ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
+                                 spansh ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
+
+                    var scannode = discoveryform.History.StarScan.FindSystemSynchronous(he.System, lookup);  
+
                     var bodylist = scannode?.Bodies.ToList();       // may be null
 
                     response["Count"] = bodylist?.Count ?? 0;

@@ -119,7 +119,6 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                // tbd no spansh
                 scannode = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, edsmSpanshButton.WebLookup);        // get data with EDSM maybe
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
@@ -174,7 +173,6 @@ namespace EDDiscovery.UserControls
                 }
                 else if (sn.NodeType == StarScan.ScanNodeType.beltcluster )
                 {
-                    // tbd
                     // if have a scan, we show belts, and its not edsm body, or getting edsm
                     if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet ))
                     {
@@ -208,7 +206,6 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                //tbd
                 // must have scan data and either not edsm body or edsm check
                 else if (sn.ScanData != null && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet))
                 { 

@@ -49,6 +49,7 @@ namespace EDDiscovery.WebServer
 
             int entry = (request.QueryString["entry"] ?? "-1").InvariantParseInt(-1);
             bool checkEDSM = (request.QueryString["EDSM"] ?? "false").InvariantParseBool(false);
+            bool checkSPANSH = (request.QueryString["SPANSH"] ?? "false").InvariantParseBool(false);
 
             Bitmap img = null;
             JObject response = new JObject();
@@ -61,11 +62,14 @@ namespace EDDiscovery.WebServer
                 if (entry < 0 || entry >= hl.Count)
                     entry = hl.Count - 1;
 
-                // tbd no way to ask for anything but edsm
                 // seen instances of exceptions accessing icons in different threads.  so push up to discovery form. need to investigate.
+
                 discoveryform.Invoke((MethodInvoker)delegate
                 {
-                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);
+                    var lookup = checkEDSM ? (checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
+                                checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
+
+                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, lookup);
 
                     if (sn != null)
                     {

@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls.Helpers
                 GetFilter(FilterSettings.Services),
                 (newsetting, ch) => { SetFilter(FilterSettings.Services, newsetting, ch); });
 
-            ///  tbd   saver.DGVLoadColumnLayout(dataGridView);
+            saver.DGVLoadColumnLayout(dataGridView);
             valueBoxMaxLs.ValueNoChange = saver.GetSetting(dbLS, 1000000.0);
 
             extCheckBoxWordWrap.Checked = saver.GetSetting(dbWordWrap, false);
@@ -448,7 +448,7 @@ namespace EDDiscovery.UserControls.Helpers
                         EnglishName = x.Name.Substring(2, x.Name.IndexOf(separ) - 2),                               // extract the english name, remove the S_ prefix
 
                         supply = !showcommoditiesselltostation ? new Tuple<int, int>(1, int.MaxValue) : null,      // if we want to buy, we need the supply to be >=1
-                     //   sellprice = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,   // if we want to buy, we need a sell price to be >=1 (TBD)
+                     //   sellprice = !showcommoditiesstationtobuyprice ? new Tuple<int, int>(1, int.MaxValue) : null,   // if we want to buy, we need a sell price to be >=1 - we have removed this for now
 
                         demand = showcommoditiesselltostation ? new Tuple<int, int>(1, int.MaxValue) : null,       // if we want to sell, we need demand
                         buyprice = showcommoditiesselltostation ? new Tuple<int, int>(1, int.MaxValue) : null      // if we want to sell, we need a price

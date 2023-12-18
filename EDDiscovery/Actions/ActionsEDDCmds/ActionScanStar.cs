@@ -64,12 +64,22 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
-                EliteDangerousCore.WebExternalDataLookup lookup = EliteDangerousCore.WebExternalDataLookup.None;
-                if ( cmdname != null && cmdname.Equals("EDSM",StringComparison.InvariantCultureIgnoreCase))
+                bool edsm = false;
+                if (cmdname != null && cmdname.Equals("EDSM", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    lookup = EliteDangerousCore.WebExternalDataLookup.EDSM;
+                    edsm = true;
                     cmdname = sp.NextQuotedWord();
                 }
+
+                bool spansh = false;
+                if (cmdname != null && cmdname.Equals("SPANSH", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    spansh = true;
+                    cmdname = sp.NextQuotedWord();
+                }
+
+                var lookup = edsm ? (spansh ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
+                    spansh ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
 
                 if (cmdname != null)
                 {
@@ -79,7 +89,6 @@ namespace EDDiscovery.Actions
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
-                    // tbd spansh
                     ap[prefix + "EDSMLookup"] = EliteDangerousCore.EDSM.EDSMClass.HasBodyLookupOccurred(cmdname).ToStringIntValue();
                     ap[prefix + "EDSMNoData"] = EliteDangerousCore.EDSM.EDSMClass.HasNoDataBeenStoredOnBody(cmdname).ToStringIntValue();
 
@@ -158,7 +167,7 @@ namespace EDDiscovery.Actions
             {
                 ap[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
                 ap[prefix + "_edsmbody"] = sc.DataSource == SystemSource.FromEDSM ? "1" : "0";
-                ap[prefix + "_source"] = sc.DataSource.ToString();      // tbd document
+                ap[prefix + "_source"] = sc.DataSource.ToString();   
                 ap[prefix + "_bodyname"] = sc.BodyName;
                 ap[prefix + "_bodydesignation"] = sc.BodyDesignationOrName;
                 ap[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
@@ -242,13 +251,22 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
-                // tbd spansh
-                EliteDangerousCore.WebExternalDataLookup lookup = EliteDangerousCore.WebExternalDataLookup.None;
+                bool edsm = false;
                 if (cmdname != null && cmdname.Equals("EDSM", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    lookup = EliteDangerousCore.WebExternalDataLookup.EDSM;
+                    edsm = true;
                     cmdname = sp.NextQuotedWord();
                 }
+
+                bool spansh = false;
+                if (cmdname != null && cmdname.Equals("SPANSH", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    spansh = true;
+                    cmdname = sp.NextQuotedWord();
+                }
+
+                var lookup = edsm ? (spansh ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
+                    spansh ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
 
                 if (cmdname != null)
                 {

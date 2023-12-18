@@ -196,7 +196,7 @@ namespace EDDiscovery
         }
 
         // Note ASYNC so we must use data return method
-        // tbd edsm only
+        // tbd edsm only - will need to do a spansh one..
         private async void DLLRequestScanData(object requesttag, object usertag, string systemname, bool edsmlookup)           
         {
             var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit

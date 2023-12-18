@@ -561,8 +561,6 @@ namespace EDDiscovery.UserControls
                                 imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".TxID(EDTx.UserControlCarrier_CrewName) + ": " + crewname, normfont, color);
                             }
 
-                            // TBD add tick
-
                             if (active)
                             {
                                 imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active".TxID(EDTx.UserControlCarrier_ServiceActive), normfont, color);

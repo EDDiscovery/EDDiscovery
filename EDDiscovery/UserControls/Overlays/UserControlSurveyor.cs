@@ -386,7 +386,6 @@ namespace EDDiscovery.UserControls
             string text = "";
             if (sys != null)
             {
-                // tbd spansh
                 StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
@@ -637,7 +636,6 @@ namespace EDDiscovery.UserControls
 
                 // find if we have system nodes
 
-                // tbd spansh
                 StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
                 if (IsClosed)   // may close during await..
                     return;
@@ -672,7 +670,6 @@ namespace EDDiscovery.UserControls
                         bool matchedlandablevolcanism = sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
                         bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
-                        // tbd
                         if (surveyordisplay == false && (!sd.IsWebSourced || edsmSpanshButton.IsAnySet)) // if to perform inbuilt checks - must have scan data to do this
                         {
                             // work out if we want to display
