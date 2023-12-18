@@ -1242,6 +1242,7 @@ namespace EDDiscovery
         UserControlRoute_extButtonSpanshTradeRouter,
         UserControlRoute_groupBoxPara,
         UserControlRoute_extCheckBoxPermitSystems,
+        UserControlRoute_labelCargo,
 
 
         UserControlWebBrowser_extButtonIE11Warning, // Control 'Using IE11 - click here to get WebView2'

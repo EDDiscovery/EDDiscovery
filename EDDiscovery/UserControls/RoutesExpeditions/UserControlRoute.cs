@@ -80,13 +80,14 @@ namespace EDDiscovery.UserControls
 
             textBox_From.Text = GetSetting("_RouteFrom", "");
             textBox_To.Text = GetSetting("_RouteTo", "");
-            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
             textBox_FromX.ValueNoChange = GetSetting("_RouteFromX", 0.0);
             textBox_FromY.ValueNoChange = GetSetting("_RouteFromY", 0.0);
             textBox_FromZ.ValueNoChange = GetSetting("_RouteFromZ", 0.0);
             textBox_ToX.ValueNoChange = GetSetting("_RouteToX", 0.0);
             textBox_ToY.ValueNoChange = GetSetting("_RouteToY", 0.0);
             textBox_ToZ.ValueNoChange = GetSetting("_RouteToZ", 0.0);
+            numberBoxIntCargo.ValueNoChange = GetSetting("_Cargo", 0);
+            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value) ?? 25;
 
             int metricvalue = GetSetting("RouteMetric", 0);
             comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(SystemCache.SystemsNearestMetric), metricvalue)
@@ -111,7 +112,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_extButtonFleetCarrier,EDTx.UserControlRoute_extButtonSpanshGalaxyPlotter,EDTx.UserControlRoute_extButtonExoMastery,
                                         EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
                                         EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara,
-                                        EDTx.UserControlRoute_extCheckBoxPermitSystems};
+                                        EDTx.UserControlRoute_extCheckBoxPermitSystems, EDTx.UserControlRoute_labelCargo };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
@@ -143,6 +144,7 @@ namespace EDDiscovery.UserControls
             textBox_ToY.ValidityChanged += ValidityChanges;
             textBox_ToZ.ValidityChanged += ValidityChanges;
             textBox_Range.ValidityChanged += ValidityChanges;
+            numberBoxIntCargo.ValueChanged += NumberBoxIntCargo_ValueChanged;
 
             labelRouteName.Text = "";
 
@@ -152,9 +154,17 @@ namespace EDDiscovery.UserControls
             extCheckBoxPermitSystems.Click += ExtCheckBoxPermitSystems_Click; ;
         }
 
+        private void NumberBoxIntCargo_ValueChanged(object sender, EventArgs e)
+        {
+            double? range = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value);
+            if (range != null)
+                textBox_Range.Value = range.Value;
+        }
+
         private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
-            double? range = he.ShipInformation?.GetJumpRange(0);
+            double? range = he.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value);      // using cargo, what is the range?
+
             if (range.HasValue && range != jumprangelastfound)      // if we selected a different ship or changed modules, detected by jump range changing, update
             {
                 System.Diagnostics.Debug.WriteLine($"Router ship range has changed, updating");
@@ -164,7 +174,7 @@ namespace EDDiscovery.UserControls
 
         private void DiscoveryForm_OnHistoryChange()
         {
-            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(0) ?? 25;
+            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value) ?? 25;
         }
 
         private void DiscoveryForm_OnSyncComplete(long arg1, long arg2)
@@ -208,6 +218,7 @@ namespace EDDiscovery.UserControls
             PutSetting("_RouteToY", textBox_ToY.Value);
             PutSetting("_RouteToZ", textBox_ToZ.Value);
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
+            PutSetting("_Cargo", numberBoxIntCargo.Value);
 
             DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
             DiscoveryForm.OnSyncComplete -= DiscoveryForm_OnSyncComplete;
@@ -243,7 +254,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-                ISystem ds1 = SystemCache.FindSystem(textBox_From.Text, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // if we have a name, find it
+                ISystem ds1 = SystemCache.FindSystem(textBox_From.Text, DiscoveryForm.GalacticMapping, edsmSpanshButton.WebLookup);     // if we have a name, find it
 
                 if (ds1 != null)
                 {
@@ -365,7 +376,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = SystemCache.FindSystem(textBox_To.Text, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
+                ISystem ds1 = SystemCache.FindSystem(textBox_To.Text, DiscoveryForm.GalacticMapping, edsmSpanshButton.WebLookup);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;

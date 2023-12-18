@@ -1127,6 +1127,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public bool NavRouteDisplay { get { return navroute?.EnableTape ?? true; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
         public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? true; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
+        public bool TravelPathTapeStars { get { return travelpath?.EnableStars ?? true; } set { if (travelpath != null) travelpath.EnableStars = value; glwfc.Invalidate(); } }
         public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
         public void TravelPathRefresh() { if (travelpath != null) UpdateTravelPath(); }   // travelpath.Refresh() manually after these have changed
         public DateTime TravelPathStartDateUTC { get { return travelpath?.TravelPathStartDateUTC ?? new DateTime(2014,12,14); } set { if (travelpath != null && travelpath.TravelPathStartDateUTC != value) { travelpath.TravelPathStartDateUTC = value; } } }
@@ -1222,6 +1223,7 @@ namespace EDDiscovery.UserControls.Map3D
             StarDotsSpritesDisplay = defaults.GetSetting("SDD", true);
             NavRouteDisplay = defaults.GetSetting("NRD", true);
             TravelPathTapeDisplay = defaults.GetSetting("TPD", true);
+            TravelPathTapeStars = defaults.GetSetting("TPStars", true);
             TravelPathTextDisplay = defaults.GetSetting("TPText", true);
             TravelPathStartDateUTC = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
@@ -1276,6 +1278,7 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("GD", GalaxyDisplay);
             defaults.PutSetting("SDD", StarDotsSpritesDisplay);
             defaults.PutSetting("TPD", TravelPathTapeDisplay);
+            defaults.PutSetting("TPStars", TravelPathTapeStars);
             defaults.PutSetting("TPText", TravelPathTextDisplay);
             defaults.PutSetting("NRD", NavRouteDisplay);
             defaults.PutSetting("TPSD", TravelPathStartDateUTC);
@@ -1573,7 +1576,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (!mapcreatedokay)
                 return;
 
-            System.Diagnostics.Debug.WriteLine($"Controller 3d draw");
+            //System.Diagnostics.Debug.WriteLine($"Controller 3d draw");
             System.Diagnostics.Debug.Assert(glwfc.IsContextCurrent());
 
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
@@ -1707,7 +1710,7 @@ namespace EDDiscovery.UserControls.Map3D
             }
             if (kb.HasBeenPressed(Keys.D4, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {
-                TravelPathTapeDisplay = !TravelPathTapeDisplay;
+                TravelPathTapeDisplay = TravelPathTapeStars = TravelPathTextDisplay = !TravelPathTapeDisplay;
             }
             if (kb.HasBeenPressed(Keys.D5, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {

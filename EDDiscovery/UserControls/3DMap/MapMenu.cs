@@ -340,18 +340,35 @@ namespace EDDiscovery.UserControls.Map3D
                 vpos += tpgb.Height + ypad;
             }
 
-            if ((parts & Map.Parts.TravelPath) != 0)
+            if ((parts & Map.Parts.TravelPath) != 0 )
             {
                 GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 3));
                 pform.Add(tpgb);
 
-                GLCheckBox buttp = new GLCheckBox("TravelPathTape", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.TravelPath") , null);
-                buttp.ToolTipText = "Show travel path";
-                buttp.Checked = map.TravelPathTapeDisplay;
-                buttp.CheckChanged += (e1) => { map.TravelPathTapeDisplay = buttp.Checked; };
-                tpgb.Add(buttp);
+                int hpos = leftmargin;
 
-                GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(50, 0, 350, 30), System.DateTime.Now);
+                GLCheckBox buttape = new GLCheckBox("TravelPathTape", new Rectangle(hpos, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.TravelPath"), null);
+                buttape.ToolTipText = "Show travel path tape";
+                buttape.Checked = map.TravelPathTapeDisplay;
+                buttape.CheckChanged += (e1) => { map.TravelPathTapeDisplay = buttape.Checked; };
+                tpgb.Add(buttape);
+                hpos += buttape.Width + hpad;
+
+                GLCheckBox butstars = new GLCheckBox("TravelPathStars", new Rectangle(hpos, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.GalaxyStar"), null);
+                butstars.ToolTipText = "Show travel path stars";
+                butstars.Checked = map.TravelPathTapeStars;
+                butstars.CheckChanged += (e1) => { map.TravelPathTapeStars = butstars.Checked; };
+                tpgb.Add(butstars);
+
+                GLCheckBox buttptext = new GLCheckBox("TravelPathText", new Rectangle(hpos, iconsize+2, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.GalaxyStarsText"), null);
+                buttptext.ToolTipText = "Show names of stars when zoomed in";
+                buttptext.Checked = map.TravelPathTextDisplay;
+                buttptext.CheckChanged += (e1) => { map.TravelPathTextDisplay = !map.TravelPathTextDisplay; };
+                tpgb.Add(buttptext);
+
+                hpos += buttptext.Width + hpad;
+
+                GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(hpos, 0, 350, 30), System.DateTime.Now);
                 dtps.SuspendLayout();
                 dtps.AutoSize = true;
                 dtps.ShowCheckBox = dtps.ShowCalendar = true;
@@ -363,13 +380,7 @@ namespace EDDiscovery.UserControls.Map3D
                 dtps.ResumeLayout();
                 tpgb.Add(dtps);
 
-                GLCheckBox buttptext = new GLCheckBox("TravelPathText", new Rectangle(leftmargin, 34, iconsize, iconsize), BaseUtils.Icons.IconSet.GetBitmap("GalMap.GalaxyStarsText") , null);
-                buttptext.ToolTipText = "Show names of stars when zoomed in";
-                buttptext.Checked = map.TravelPathTextDisplay;
-                buttptext.CheckChanged += (e1) => { map.TravelPathTextDisplay = !map.TravelPathTextDisplay; };
-                tpgb.Add(buttptext);
-
-                GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(50, 34, 350, 30), System.DateTime.Now);
+                GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(hpos, iconsize+2, 350, 30), System.DateTime.Now);
                 dtpe.SuspendLayout();
                 dtpe.AutoSize = true;
                 dtpe.ShowCheckBox = dtps.ShowCalendar = true;

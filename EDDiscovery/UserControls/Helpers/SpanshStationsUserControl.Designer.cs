@@ -38,8 +38,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.labelSystem = new System.Windows.Forms.Label();
             this.extTextBoxAutoCompleteSystem = new ExtendedControls.ExtTextBoxAutoComplete();
             this.extButtonTravelSystem = new ExtendedControls.ExtButton();
-            this.labelMaxLs = new System.Windows.Forms.Label();
-            this.valueBoxMaxLs = new ExtendedControls.NumberBoxDouble();
             this.labelSearch = new System.Windows.Forms.Label();
             this.extButtonSearchCommodities = new ExtendedControls.ExtButton();
             this.extButtonSearchServiceTypes = new ExtendedControls.ExtButton();
@@ -49,6 +47,8 @@ namespace EDDiscovery.UserControls.Helpers
             this.labelSettings = new System.Windows.Forms.Label();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.labelMaxLs = new System.Windows.Forms.Label();
+            this.valueBoxMaxLs = new ExtendedControls.NumberBoxDouble();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMarketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -185,54 +185,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.extButtonTravelSystem.UseVisualStyleBackColor = true;
             this.extButtonTravelSystem.Click += new System.EventHandler(this.extButtonTravelSystem_Click);
             // 
-            // labelMaxLs
-            // 
-            this.labelMaxLs.AutoSize = true;
-            this.labelMaxLs.Location = new System.Drawing.Point(293, 6);
-            this.labelMaxLs.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
-            this.labelMaxLs.Name = "labelMaxLs";
-            this.labelMaxLs.Size = new System.Drawing.Size(41, 13);
-            this.labelMaxLs.TabIndex = 3;
-            this.labelMaxLs.Text = "Max Ls";
-            // 
-            // valueBoxMaxLs
-            // 
-            this.valueBoxMaxLs.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.valueBoxMaxLs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.valueBoxMaxLs.BackErrorColor = System.Drawing.Color.Red;
-            this.valueBoxMaxLs.BorderColor = System.Drawing.Color.Transparent;
-            this.valueBoxMaxLs.BorderColorScaling = 0.5F;
-            this.valueBoxMaxLs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.valueBoxMaxLs.ClearOnFirstChar = false;
-            this.valueBoxMaxLs.ControlBackground = System.Drawing.SystemColors.Control;
-            this.valueBoxMaxLs.DelayBeforeNotification = 500;
-            this.valueBoxMaxLs.EndButtonEnable = true;
-            this.valueBoxMaxLs.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBoxMaxLs.EndButtonImage")));
-            this.valueBoxMaxLs.EndButtonSize16ths = 10;
-            this.valueBoxMaxLs.EndButtonVisible = false;
-            this.valueBoxMaxLs.Format = "0.#######";
-            this.valueBoxMaxLs.InErrorCondition = false;
-            this.valueBoxMaxLs.Location = new System.Drawing.Point(342, 2);
-            this.valueBoxMaxLs.Margin = new System.Windows.Forms.Padding(4, 2, 4, 0);
-            this.valueBoxMaxLs.Maximum = 10000000D;
-            this.valueBoxMaxLs.Minimum = 0D;
-            this.valueBoxMaxLs.Multiline = false;
-            this.valueBoxMaxLs.Name = "valueBoxMaxLs";
-            this.valueBoxMaxLs.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
-            | System.Globalization.NumberStyles.AllowThousands)));
-            this.valueBoxMaxLs.ReadOnly = false;
-            this.valueBoxMaxLs.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.valueBoxMaxLs.SelectionLength = 0;
-            this.valueBoxMaxLs.SelectionStart = 0;
-            this.valueBoxMaxLs.Size = new System.Drawing.Size(84, 20);
-            this.valueBoxMaxLs.TabIndex = 1;
-            this.valueBoxMaxLs.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.valueBoxMaxLs.TextNoChange = "1000000";
-            this.toolTip.SetToolTip(this.valueBoxMaxLs, "Maximum station distance");
-            this.valueBoxMaxLs.Value = 1000000D;
-            this.valueBoxMaxLs.WordWrap = true;
-            this.valueBoxMaxLs.ValueChanged += new System.EventHandler(this.valueBoxMaxLs_ValueChanged);
-            // 
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
@@ -351,6 +303,54 @@ namespace EDDiscovery.UserControls.Helpers
             this.toolTip.SetToolTip(this.buttonExtExcel, "Output grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // labelMaxLs
+            // 
+            this.labelMaxLs.AutoSize = true;
+            this.labelMaxLs.Location = new System.Drawing.Point(293, 6);
+            this.labelMaxLs.Margin = new System.Windows.Forms.Padding(4, 6, 4, 0);
+            this.labelMaxLs.Name = "labelMaxLs";
+            this.labelMaxLs.Size = new System.Drawing.Size(41, 13);
+            this.labelMaxLs.TabIndex = 3;
+            this.labelMaxLs.Text = "Max Ls";
+            // 
+            // valueBoxMaxLs
+            // 
+            this.valueBoxMaxLs.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.valueBoxMaxLs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.valueBoxMaxLs.BackErrorColor = System.Drawing.Color.Red;
+            this.valueBoxMaxLs.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBoxMaxLs.BorderColorScaling = 0.5F;
+            this.valueBoxMaxLs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.valueBoxMaxLs.ClearOnFirstChar = false;
+            this.valueBoxMaxLs.ControlBackground = System.Drawing.SystemColors.Control;
+            this.valueBoxMaxLs.DelayBeforeNotification = 500;
+            this.valueBoxMaxLs.EndButtonEnable = true;
+            this.valueBoxMaxLs.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("valueBoxMaxLs.EndButtonImage")));
+            this.valueBoxMaxLs.EndButtonSize16ths = 10;
+            this.valueBoxMaxLs.EndButtonVisible = false;
+            this.valueBoxMaxLs.Format = "0.#######";
+            this.valueBoxMaxLs.InErrorCondition = false;
+            this.valueBoxMaxLs.Location = new System.Drawing.Point(342, 2);
+            this.valueBoxMaxLs.Margin = new System.Windows.Forms.Padding(4, 2, 4, 0);
+            this.valueBoxMaxLs.Maximum = 10000000D;
+            this.valueBoxMaxLs.Minimum = 0D;
+            this.valueBoxMaxLs.Multiline = false;
+            this.valueBoxMaxLs.Name = "valueBoxMaxLs";
+            this.valueBoxMaxLs.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
+            this.valueBoxMaxLs.ReadOnly = false;
+            this.valueBoxMaxLs.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.valueBoxMaxLs.SelectionLength = 0;
+            this.valueBoxMaxLs.SelectionStart = 0;
+            this.valueBoxMaxLs.Size = new System.Drawing.Size(84, 20);
+            this.valueBoxMaxLs.TabIndex = 1;
+            this.valueBoxMaxLs.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.valueBoxMaxLs.TextNoChange = "1000000";
+            this.toolTip.SetToolTip(this.valueBoxMaxLs, "Maximum station distance");
+            this.valueBoxMaxLs.Value = 1000000D;
+            this.valueBoxMaxLs.WordWrap = true;
+            this.valueBoxMaxLs.ValueChanged += new System.EventHandler(this.valueBoxMaxLs_ValueChanged);
             // 
             // contextMenuStrip
             // 

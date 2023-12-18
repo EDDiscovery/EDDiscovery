@@ -202,6 +202,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         private void Draw(bool removesort)
         {
+            bool wassorted = dataGridView.SortedColumn != null;
             DataGridViewColumn sortcolprev = (dataGridView.SortedColumn?.Visible??false) ? dataGridView.SortedColumn : colSystem.Visible ? colSystem : colBodyName;
             SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Ascending;
 
@@ -289,8 +290,11 @@ namespace EDDiscovery.UserControls.Helpers
 
             if (!removesort)
             {
-                dataGridView.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridView.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+                if (wassorted)
+                {
+                    dataGridView.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                    dataGridView.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+                }
             }
             else
             {

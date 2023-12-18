@@ -48,8 +48,10 @@
             this.comboBoxRoutingMetric = new ExtendedControls.ExtComboBox();
             this.labelMetric = new System.Windows.Forms.Label();
             this.extButtonRoute = new ExtendedControls.ExtButton();
+            this.extCheckBoxPermitSystems = new ExtendedControls.ExtCheckBox();
             this.checkBox_FsdBoost = new ExtendedControls.ExtCheckBox();
             this.groupBoxPara = new ExtendedControls.ExtGroupBox();
+            this.numberBoxIntCargo = new ExtendedControls.NumberBoxInt();
             this.textBox_From = new ExtendedControls.ExtTextBoxAutoComplete();
             this.textBox_FromX = new ExtendedControls.NumberBoxDouble();
             this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
@@ -61,11 +63,13 @@
             this.textBox_FromName = new ExtendedControls.ExtTextBox();
             this.labelLy2 = new System.Windows.Forms.Label();
             this.textBox_ToX = new ExtendedControls.NumberBoxDouble();
+            this.labelTons = new System.Windows.Forms.Label();
             this.labelLy1 = new System.Windows.Forms.Label();
             this.textBox_ToY = new ExtendedControls.NumberBoxDouble();
             this.textBox_Distance = new ExtendedControls.ExtTextBox();
             this.buttonExtTravelTo = new ExtendedControls.ExtButton();
             this.labelEDSMBut = new System.Windows.Forms.Label();
+            this.labelCargo = new System.Windows.Forms.Label();
             this.labelMaxJump = new System.Windows.Forms.Label();
             this.labelDistance = new System.Windows.Forms.Label();
             this.textBox_ToZ = new ExtendedControls.NumberBoxDouble();
@@ -99,7 +103,6 @@
             this.extButtonExoMastery = new ExtendedControls.ExtButton();
             this.flowLayoutPanel1 = new ExtendedControls.ExtFlowLayoutPanel();
             this.groupBoxSpansh = new ExtendedControls.ExtGroupBox();
-            this.extCheckBoxPermitSystems = new ExtendedControls.ExtCheckBox();
             this.outputPanel.SuspendLayout();
             this.groupBoxInternal.SuspendLayout();
             this.groupBoxPara.SuspendLayout();
@@ -315,6 +318,25 @@
             this.extButtonRoute.UseVisualStyleBackColor = true;
             this.extButtonRoute.Click += new System.EventHandler(this.button_Route_Click);
             // 
+            // extCheckBoxPermitSystems
+            // 
+            this.extCheckBoxPermitSystems.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxPermitSystems.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxPermitSystems.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxPermitSystems.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxPermitSystems.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxPermitSystems.ImageIndeterminate = null;
+            this.extCheckBoxPermitSystems.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxPermitSystems.ImageUnchecked = null;
+            this.extCheckBoxPermitSystems.Location = new System.Drawing.Point(536, 19);
+            this.extCheckBoxPermitSystems.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxPermitSystems.Name = "extCheckBoxPermitSystems";
+            this.extCheckBoxPermitSystems.Size = new System.Drawing.Size(135, 18);
+            this.extCheckBoxPermitSystems.TabIndex = 32;
+            this.extCheckBoxPermitSystems.Text = "Use Permit Systems";
+            this.extCheckBoxPermitSystems.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxPermitSystems.UseVisualStyleBackColor = true;
+            // 
             // checkBox_FsdBoost
             // 
             this.checkBox_FsdBoost.CheckBoxColor = System.Drawing.Color.Gray;
@@ -341,6 +363,7 @@
             this.groupBoxPara.BackColorScaling = 0.5F;
             this.groupBoxPara.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxPara.BorderColorScaling = 0.5F;
+            this.groupBoxPara.Controls.Add(this.numberBoxIntCargo);
             this.groupBoxPara.Controls.Add(this.textBox_From);
             this.groupBoxPara.Controls.Add(this.textBox_FromX);
             this.groupBoxPara.Controls.Add(this.edsmSpanshButton);
@@ -352,11 +375,13 @@
             this.groupBoxPara.Controls.Add(this.textBox_FromName);
             this.groupBoxPara.Controls.Add(this.labelLy2);
             this.groupBoxPara.Controls.Add(this.textBox_ToX);
+            this.groupBoxPara.Controls.Add(this.labelTons);
             this.groupBoxPara.Controls.Add(this.labelLy1);
             this.groupBoxPara.Controls.Add(this.textBox_ToY);
             this.groupBoxPara.Controls.Add(this.textBox_Distance);
             this.groupBoxPara.Controls.Add(this.buttonExtTravelTo);
             this.groupBoxPara.Controls.Add(this.labelEDSMBut);
+            this.groupBoxPara.Controls.Add(this.labelCargo);
             this.groupBoxPara.Controls.Add(this.labelMaxJump);
             this.groupBoxPara.Controls.Add(this.labelDistance);
             this.groupBoxPara.Controls.Add(this.textBox_ToZ);
@@ -379,6 +404,40 @@
             this.groupBoxPara.Text = "Parameters";
             this.groupBoxPara.TextPadding = 0;
             this.groupBoxPara.TextStartPosition = -1;
+            // 
+            // numberBoxIntCargo
+            // 
+            this.numberBoxIntCargo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.numberBoxIntCargo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.numberBoxIntCargo.BackErrorColor = System.Drawing.Color.Red;
+            this.numberBoxIntCargo.BorderColor = System.Drawing.Color.Transparent;
+            this.numberBoxIntCargo.BorderColorScaling = 0.5F;
+            this.numberBoxIntCargo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numberBoxIntCargo.ClearOnFirstChar = false;
+            this.numberBoxIntCargo.ControlBackground = System.Drawing.SystemColors.Control;
+            this.numberBoxIntCargo.DelayBeforeNotification = 0;
+            this.numberBoxIntCargo.EndButtonEnable = true;
+            this.numberBoxIntCargo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxIntCargo.EndButtonImage")));
+            this.numberBoxIntCargo.EndButtonSize16ths = 10;
+            this.numberBoxIntCargo.EndButtonVisible = false;
+            this.numberBoxIntCargo.Format = "D";
+            this.numberBoxIntCargo.InErrorCondition = false;
+            this.numberBoxIntCargo.Location = new System.Drawing.Point(767, 45);
+            this.numberBoxIntCargo.Maximum = 9999;
+            this.numberBoxIntCargo.Minimum = 0;
+            this.numberBoxIntCargo.Multiline = false;
+            this.numberBoxIntCargo.Name = "numberBoxIntCargo";
+            this.numberBoxIntCargo.NumberStyles = ((System.Globalization.NumberStyles)((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowThousands)));
+            this.numberBoxIntCargo.ReadOnly = false;
+            this.numberBoxIntCargo.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.numberBoxIntCargo.SelectionLength = 0;
+            this.numberBoxIntCargo.SelectionStart = 0;
+            this.numberBoxIntCargo.Size = new System.Drawing.Size(57, 23);
+            this.numberBoxIntCargo.TabIndex = 71;
+            this.numberBoxIntCargo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxIntCargo.TextNoChange = "0";
+            this.numberBoxIntCargo.Value = 0;
+            this.numberBoxIntCargo.WordWrap = true;
             // 
             // textBox_From
             // 
@@ -458,7 +517,7 @@
             // edsmSpanshButton
             // 
             this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(796, 44);
+            this.edsmSpanshButton.Location = new System.Drawing.Point(796, 85);
             this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.edsmSpanshButton.Name = "edsmSpanshButton";
             this.edsmSpanshButton.SettingsSplittingChar = ';';
@@ -594,7 +653,7 @@
             this.textBox_Range.EndButtonSize16ths = 10;
             this.textBox_Range.EndButtonVisible = false;
             this.textBox_Range.Format = "N2";
-            this.textBox_Range.InErrorCondition = false;
+            this.textBox_Range.InErrorCondition = true;
             this.textBox_Range.Location = new System.Drawing.Point(767, 19);
             this.textBox_Range.Maximum = 999D;
             this.textBox_Range.Minimum = 1D;
@@ -691,6 +750,15 @@
             this.textBox_ToX.WordWrap = true;
             this.textBox_ToX.ValueChanged += new System.EventHandler(this.valueBox_To_ValueChanged);
             // 
+            // labelTons
+            // 
+            this.labelTons.AutoSize = true;
+            this.labelTons.Location = new System.Drawing.Point(827, 48);
+            this.labelTons.Name = "labelTons";
+            this.labelTons.Size = new System.Drawing.Size(10, 13);
+            this.labelTons.TabIndex = 39;
+            this.labelTons.Text = "t";
+            // 
             // labelLy1
             // 
             this.labelLy1.AutoSize = true;
@@ -782,11 +850,20 @@
             // labelEDSMBut
             // 
             this.labelEDSMBut.AutoSize = true;
-            this.labelEDSMBut.Location = new System.Drawing.Point(688, 52);
+            this.labelEDSMBut.Location = new System.Drawing.Point(688, 93);
             this.labelEDSMBut.Name = "labelEDSMBut";
             this.labelEDSMBut.Size = new System.Drawing.Size(69, 13);
             this.labelEDSMBut.TabIndex = 45;
             this.labelEDSMBut.Text = "Web Lookup";
+            // 
+            // labelCargo
+            // 
+            this.labelCargo.AutoSize = true;
+            this.labelCargo.Location = new System.Drawing.Point(690, 46);
+            this.labelCargo.Name = "labelCargo";
+            this.labelCargo.Size = new System.Drawing.Size(35, 13);
+            this.labelCargo.TabIndex = 45;
+            this.labelCargo.Text = "Cargo";
             // 
             // labelMaxJump
             // 
@@ -1194,25 +1271,6 @@
             this.groupBoxSpansh.TextPadding = 0;
             this.groupBoxSpansh.TextStartPosition = -1;
             // 
-            // extCheckBoxPermitSystems
-            // 
-            this.extCheckBoxPermitSystems.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxPermitSystems.CheckBoxDisabledScaling = 0.5F;
-            this.extCheckBoxPermitSystems.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.extCheckBoxPermitSystems.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxPermitSystems.ImageButtonDisabledScaling = 0.5F;
-            this.extCheckBoxPermitSystems.ImageIndeterminate = null;
-            this.extCheckBoxPermitSystems.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBoxPermitSystems.ImageUnchecked = null;
-            this.extCheckBoxPermitSystems.Location = new System.Drawing.Point(536, 19);
-            this.extCheckBoxPermitSystems.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.extCheckBoxPermitSystems.Name = "extCheckBoxPermitSystems";
-            this.extCheckBoxPermitSystems.Size = new System.Drawing.Size(135, 18);
-            this.extCheckBoxPermitSystems.TabIndex = 32;
-            this.extCheckBoxPermitSystems.Text = "Use Permit Systems";
-            this.extCheckBoxPermitSystems.TickBoxReductionRatio = 0.75F;
-            this.extCheckBoxPermitSystems.UseVisualStyleBackColor = true;
-            // 
             // UserControlRoute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1312,5 +1370,8 @@
         private ExtendedControls.ExtButton extButtonExpeditionSave;
         private System.Windows.Forms.Label labelRouteName;
         private ExtendedControls.ExtCheckBox extCheckBoxPermitSystems;
+        private ExtendedControls.NumberBoxInt numberBoxIntCargo;
+        private System.Windows.Forms.Label labelTons;
+        private System.Windows.Forms.Label labelCargo;
     }
 }

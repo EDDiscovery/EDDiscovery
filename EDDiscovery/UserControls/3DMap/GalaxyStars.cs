@@ -122,14 +122,14 @@ namespace EDDiscovery.UserControls.Map3D
             requestorthread.Join();
             while(subthreadsrunning > 0)
             {
-                System.Diagnostics.Debug.WriteLine("Sub thread running");
+                //System.Diagnostics.Debug.WriteLine("Sub thread running");
                 Thread.Sleep(100);
             }
-            System.Diagnostics.Debug.WriteLine("Stopped on gal stars");
+            //System.Diagnostics.Debug.WriteLine("Stopped on gal stars");
 
             while (cleanbitmaps.TryDequeue(out Sector sectoclean))
             {
-                System.Diagnostics.Debug.WriteLine($"Final Clean bitmap for {sectoclean.pos}");
+                //System.Diagnostics.Debug.WriteLine($"Final Clean bitmap for {sectoclean.pos}");
                 GLOFC.Utils.BitMapHelpers.Dispose(sectoclean.bitmaps);
                 sectoclean.bitmaps = null;
             }

@@ -1182,7 +1182,7 @@ namespace EDDiscovery.UserControls
                 {
                     var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
-                    currentRoute.FillInCoordinates();                           // fill in any co-ords into DB - it may be in the DB without known co-ords
+                    currentRoute?.FillInCoordinates();                           // fill in any co-ords into DB - it may be in the DB without known co-ords
                     //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded route with {currentRoute?.Systems.Count}");
                 }
             }
