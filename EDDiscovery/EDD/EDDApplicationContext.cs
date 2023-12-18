@@ -177,6 +177,28 @@ namespace EDDiscovery
 
                 SetLoadingMsg("Initialising Databases");
 
+                string msg = UserDatabase.Instance.CheckConnection();
+                if (msg.HasChars())
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: User DB is corrupt at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath + Environment.NewLine + Environment.NewLine +
+                                                         "Database is unusable. Use safe mode to remove it and start again. All user settings will be lost" + Environment.NewLine + Environment.NewLine +
+                                                         msg,
+                                                         "User DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    SwitchContext(new SafeModeForm(false));
+                    return;
+                }
+
+                msg = SystemsDatabase.Instance.CheckConnection();
+                if (msg.HasChars())
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: System DB is corrupt at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
+                                                         "Database is unusable. Use safe mode to remove it and start again. User settings will be retained" + Environment.NewLine + Environment.NewLine +
+                                                         msg,
+                                                         "System DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    SwitchContext(new SafeModeForm(false));
+                    return;
+                }
+
                 UserDatabase.Instance.Name = "UserDB";
                 UserDatabase.Instance.MinThreads = 1;
                 UserDatabase.Instance.MaxThreads = 2;     
@@ -184,12 +206,6 @@ namespace EDDiscovery
 
                 if (EDDOptions.Instance.DeleteSystemDB)
                     BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath);
-
-                SystemsDatabase.WALMode = true;
-                SystemsDatabase.Instance.Name = "SystemDB";
-                SystemsDatabase.Instance.MinThreads = 1;
-                SystemsDatabase.Instance.MaxThreads = 8;
-                SystemsDatabase.Instance.MultiThreaded = true;  // starts up the threads
 
                 try
                 {
@@ -203,9 +219,16 @@ namespace EDDiscovery
                                                          "Database is unusable. Use safe mode to remove it and start again. All user settings will be lost" + Environment.NewLine + Environment.NewLine +
                                                          ex.Message.ToString(),
                                                          "User DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    UserDatabase.Instance.Stop();
                     SwitchContext(new SafeModeForm(false));
                     return;
                 }
+
+                SystemsDatabase.WALMode = true;
+                SystemsDatabase.Instance.Name = "SystemDB";
+                SystemsDatabase.Instance.MinThreads = 1;
+                SystemsDatabase.Instance.MaxThreads = 8;
+                SystemsDatabase.Instance.MultiThreaded = true;  // starts up the threads
 
                 try
                 {
@@ -220,6 +243,8 @@ namespace EDDiscovery
                                                          "Database is unusable. Use safe mode to remove it and start again. User settings will be retained" + Environment.NewLine + Environment.NewLine +
                                                          ex.Message.ToString(),
                                                          "System DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    SystemsDatabase.Instance.Stop();
+                    UserDatabase.Instance.Stop();
                     SwitchContext(new SafeModeForm(false));
                     return;
                 }
@@ -230,6 +255,7 @@ namespace EDDiscovery
                                                          "produced by a newer version, at " + EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath + Environment.NewLine + Environment.NewLine +
                                                          "Database is unusable. Use safe mode to remove it and start again. User settings will be retained",
                                                          "System DB corrupt", System.Windows.Forms.MessageBoxButtons.OK);
+                    UserDatabase.Instance.Stop();
                     SystemsDatabase.Instance.Stop();
                     SwitchContext(new SafeModeForm(false));
                     return;
