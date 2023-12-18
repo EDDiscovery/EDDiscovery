@@ -169,6 +169,8 @@ SECTION PopOutInfo
 .Carrier.Description: "Data about your fleet carrier" @
 .Resources.Title: "Resources" @
 .Resources.Description: "All Materials, Commodity, MicroResources" @
+.SpanshStations.Title: "Spansh Stations" @
+.SpanshStations.Description: "Stations in the system from spansh web data" @
 
 SECTION EDDiscoveryForm
 
@@ -254,7 +256,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" => "Modificar Perfíis"
 .PL: "Profile {0} Loaded" => "Perfil {0} Caregado"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Painel de Pop Out"
-.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery is updating the EDSM and EDDB databases\r\nPremi OK para fechar agora, Cancela para esperar o fim da atualização"
+.CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery is updating the EDSM and EDDB databases\r\nPremi OK para fechar agora, Cancela para esperar o fim da atualização"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "Abre EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "Esconde icona da barra d serviço"
 .notifyIconMenu_Exit: "E&xit" => "&Sai"
@@ -272,11 +274,12 @@ SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." => "Fechando, por favor esperar..."
 .EDSM: "Get galactic mapping from EDSM." => "Requisitando dados galácticos a EDSM."
+.GEC: "Get galactic mapping from GEC." @
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caregando anotações, favoritos e dados de mapa galácticos."
 .RTH: "Reading travel history" => "Lendo o histórico de viajem"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Por favor, continua a usar EDDiscovery até o completo refresco."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronização a EDSM e EDDB disabilitados. Abilitá-los nos ajustes do comandante"
-.EDSMU: "EDSM systems update complete with {0} systems" => "Attualização EDSM completada com {0} sistemas"
+.EDSMU: "Systems update complete with {0} systems" => "Attualização EDSM completada com {0} sistemas"
 .PLF: "Processing log file {0}" => "Processando o file de registro {0}"
 .RD: "Refresh Displays" => "Recarregando a exibição"
 .HRC: "History refresh complete." => "Recarregamento do histórico completo"
@@ -326,13 +329,15 @@ SECTION FindSystemsUserControl
 .labelRadMin: "Radius ly Min" => "Ráio Min (ly)"
 .labelFilter: "Star Name" => "Nome do Sistema"
 .Cannotfindsystem: "Cannot find system " => "Impossível achar o sistema"
-.EDSM: "EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about" @
+.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" => "Cerca neve dal DB"
 .buttonExtEDSM: "From EDSM" => "Cerca da EDSM"
 .buttonExtDB: "From DB" => "Da banco de dados"
 .buttonExtVisited: "From Visited Systems" => "De sistemas visitados"
 .checkBoxCustomCube: "Cube" => "Cubo"
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Exclui sistemas visitados"
+.extButtonFromSpansh: "From Spansh" @
+.extButtonFromSpanshFindNames: "From Spansh Find Names" @
 
 SECTION TravelHistoryFilter
 
@@ -414,11 +419,12 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seletor de Setores Galácticos"
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Você inclui novos setores!\r\nIsto requer baixar novamente por completo todos os dados EDSM\r\nConfirma?"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronização de todos os dados desabilitados nos ajustes.\r\nRehabilitar para atualizar dados galácticos"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Você removeu setores!\r\nIsto requer a limpeza de todos os registros, coisa que necessita de tempo. Confirma?"
-.GALSELEX: "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery baixa dados estelares da EDSM/EDDB, dados usados para te oferecer dados adicionais. Seleciona quantos desses dados você quer baixar e armazenar. Quantos mais dados estelares você baixar, mas espaço no disco e mais memória RAM serão usados."
+.GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery baixa dados estelares da EDSM/EDDB, dados usados para te oferecer dados adicionais. Seleciona quantos desses dados você quer baixar e armazenar. Quantos mais dados estelares você baixar, mas espaço no disco e mais memória RAM serão usados."
 .Select: "Select: " => "Seleciona"
 .GALSELEN: "Select the data set" => "Escolhe o set de dados estelares"
+.GALSELSRC: "Select the data source" @
 .PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
-.GALSELTitle: "Select EDSM Galaxy Data" => "Seleciona os Dados Estelares EDSM"
+.GALSELTitle: "Select Galaxy Data" => "Seleciona os Dados Estelares EDSM"
 
 SECTION MoveToCommander
 

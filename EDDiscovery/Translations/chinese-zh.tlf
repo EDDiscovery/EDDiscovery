@@ -169,6 +169,8 @@ SECTION PopOutInfo
 .Carrier.Description: "Data about your fleet carrier" @
 .Resources.Title: "Resources" @
 .Resources.Description: "All Materials, Commodity, MicroResources" @
+.SpanshStations.Title: "Spansh Stations" @
+.SpanshStations.Description: "Stations in the system from spansh web data" @
 
 SECTION EDDiscoveryForm
 
@@ -254,7 +256,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" => "编辑配置文件"
 .PL: "Profile {0} Loaded" => "配置文件{0}已加载"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "打开新的弹窗面板"
-.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery正在更新EDSM和EDDB的数据库\r\n现在退出请选择确认，等待更新完成请选择取消"
+.CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery正在更新EDSM和EDDB的数据库\r\n现在退出请选择确认，等待更新完成请选择取消"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "打开EDDiscovery(O)"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "隐藏托盘图标(&H)"
 .notifyIconMenu_Exit: "E&xit" => "退出(&X)"
@@ -272,11 +274,12 @@ SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." => "正在关闭中，请稍后..."
 .EDSM: "Get galactic mapping from EDSM." => "从EDSM获取银河星图。"
+.GEC: "Get galactic mapping from GEC." @
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "笔记，书签以及银河星图已加载。"
 .RTH: "Reading travel history" => "读取航行记录中"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "请在刷新完成之前不要关闭EDDiscovery"
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "同步至EDSM和EDDB已被禁用，从设置面板重新开启"
-.EDSMU: "EDSM systems update complete with {0} systems" => "EDSM完成更新了{0}个星系"
+.EDSMU: "Systems update complete with {0} systems" => "EDSM完成更新了{0}个星系"
 .PLF: "Processing log file {0}" => "正在处理日志文件 {0}"
 .RD: "Refresh Displays" => "刷新显示"
 .HRC: "History refresh complete." => "航行记录刷新完成。"
@@ -326,13 +329,15 @@ SECTION FindSystemsUserControl
 .labelRadMin: "Radius ly Min" => "范围(ly)：最近"
 .labelFilter: "Star Name" => "星系名称"
 .Cannotfindsystem: "Cannot find system " => "找不到星系"
-.EDSM: "EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about" @
+.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" => "从数据库查找名称"
 .buttonExtEDSM: "From EDSM" => "从EDSM搜索"
 .buttonExtDB: "From DB" => "从数据库搜索"
 .buttonExtVisited: "From Visited Systems" => "从星系访问记录里搜索"
 .checkBoxCustomCube: "Cube" => "立方体"
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
+.extButtonFromSpansh: "From Spansh" @
+.extButtonFromSpanshFindNames: "From Spansh Find Names" @
 
 SECTION TravelHistoryFilter
 
@@ -414,11 +419,12 @@ GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "你添加了新的星域！\r\n这将会需要完全重新下载EDSM数据\r\n确认要继续吗？"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "星系数据同步已被禁用。\r\n若要让星系数据更新，请从设置里重新启用星系数据下载"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "你移除了一些星域！\r\n这将会花上一段时间来从数据库里清除数据\r\n确认要继续吗？"
-.GALSELEX: "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
+.GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
 .Select: "Select: " => "选择："
 .GALSELEN: "Select the data set" => "选择数据集"
+.GALSELSRC: "Select the data source" @
 .PresstoAccept: "Press to Accept" => "点击以接受"
-.GALSELTitle: "Select EDSM Galaxy Data" => "选择 EDSM 银河星图数据"
+.GALSELTitle: "Select Galaxy Data" => "选择 EDSM 银河星图数据"
 
 SECTION MoveToCommander
 

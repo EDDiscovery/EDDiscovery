@@ -691,6 +691,7 @@ SECTION UserControlRoute
 .buttonTargetFrom.ToolTip: "Copy the target system to start route entry" @
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" @
 .extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
+.labelCargo: "Cargo" @
 
 
 SECTION UserControlRouteTracker

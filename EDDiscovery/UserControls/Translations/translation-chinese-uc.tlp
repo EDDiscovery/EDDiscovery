@@ -85,9 +85,12 @@ SECTION UserControlCompass
 .buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
 .extButtonShowControl.ToolTip: "Configure compass overlay" @
 .extButtonFont.ToolTip: "Configure font of compass" @
-.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhennolatlong: "Hide when Elite has no Lat/Long" @
+.hidewhennotarget: "Hide when no Lat/Long target is set" @
 .hidewhenonfoot: "Hide when on foot" @
 .cleartargetonleavingbody: "Clear target when leaving a body" @
+.hidewheninSRV: "Hide when in SRV" @
+.hidewheninship: "Hide when in ship" @
 
 SECTION UserControlWebBrowser
 
@@ -144,6 +147,7 @@ SECTION SearchScans
 .ColumnStar: "Star" @
 .ColumnParentParent: "Grandparent" @
 .ColumnStarStar: "Parent of Star" @
+.ColumnSystem: "System" @
 .comboBoxSearches.ToolTip: "Select a predefined condition" @
 .buttonFind.ToolTip: "Search for condition below" @
 .buttonSave.ToolTip: "Save current condition" @
@@ -173,6 +177,7 @@ SECTION SearchStars
 
 .ColumnIndex: "Index" @
 .ColumnStar: "Star" => "星系"
+.ColumnStarType: "Star type" @
 .ColumnCentreDistance: "Centre Distance" => "中心距离(ly)"
 .ColumnCurrentDistance: "Current Distance" => "当前距离(ly)"
 .ColumnPosition: "Position" => "坐标(X,Y,Z)"
@@ -181,7 +186,8 @@ SECTION DataGridViewStarResults
 
 .3d: "Go to star on 3D Map" => "跳转至3D星图"
 .EDSM: "View on EDSM" => "在EDSM网站上查看"
-.Data: "View Data On Entry" => "查看该条目的数据"
+.Spansh: "View on Spansh" @
+.Data: "View Scan Display" => "查看该条目的数据"
 .Goto: "Go to entry on grid" @
 
 SECTION UserControlEngineering
@@ -268,6 +274,9 @@ SECTION UserControlExpedition
 .labelEndDate: "End Date:" => "结束日期："
 .labelDateStart: "Start Date:" => "开始日期："
 .labelRouteName: "Route Name:" => "航线名称："
+.viewSystemToolStripMenuItem: "View System" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+.viewOnEDSMToolStripMenuItem: "View on EDSM" @
 .copyToolStripMenuItem: "Copy" => "复制"
 .pasteToolStripMenuItem: "Paste" => "粘贴"
 .cutToolStripMenuItem: "Cut" @
@@ -306,6 +315,8 @@ SECTION UserControlJournalGrid
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "对这条项目运行脚本"
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "复制航行日志条目到剪切板"
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
 .TTFilt1: "Filtered {0}" => "过滤掉了{0}"
 .TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
@@ -584,61 +595,74 @@ SECTION UserControlPanelSelector
 
 SECTION UserControlRoute
 
-.SystemCol: "System" => "星系"
-.DistanceCol: "Distance" => "距离"
-.WayPointDistCol: "Dist. Waypoint" => "航点距离"
-.DeviationCol: "Deviation" => "偏航值"
-.buttonExtTravelTo: "History" => "航行记录"
-.buttonExtTravelFrom: "History" => "航行记录"
-.buttonExtTargetTo: "Target" => "目标"
-.buttonToEDSM: "EDSM" @
-.buttonFromEDSM: "EDSM" @
-.buttonTargetFrom: "Target" => "目标"
-.cmd3DMap: "3D Map" => "3D星图"
-.labelLy2: "ly" @
-.labelLy1: "ly" @
-.labelTo: "To" => "到"
-.labelMaxJump: "Max jump" => "FSD跳跃范围"
-.labelDistance: "Distance" => "直线距离"
-.labelMetric: "Metric" => "计算方法"
-.extButtonRoute: "Find route" => "规划航线"
-.labelFrom: "From" => "从"
-.showInEDSMToolStripMenuItem: "Show in EDSM" => "在EDSM网站上查看"
-.copyToolStripMenuItem: "Copy" => "复制"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "导出表格中的数据到Excel中"
-.textBox_ToName.ToolTip: "Alternate Name" => "别名"
-.textBox_FromName.ToolTip: "Alternate name" => "别名"
-.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "选择一个用来计算航线的方法"
-.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "将主航行历史里选中的条目当作航线终点"
-.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "将主航行历史里选中的条目当作航线起点"
-.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "将目标星系当作航线终点"
-.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "在EDSM中查看这个终点星系"
-.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "在EDSM中查看这个起点星系"
-.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "将目标星系当作航线起点"
-.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
-.cmd3DMap.ToolTip: "Show route on 3D Map" => "在3D星图中显示航线"
-.textBox_From.ToolTip: "Select system to start the route" => "选择一个星系作为起点"
-.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "输入你的飞船的FSD跳跃范围"
-.textBox_To.ToolTip: "Select the system to end in" => "选择一个星系作为终点"
-.textBox_Distance.ToolTip: "Distance between start and end" => "起点与终点间的直线距离"
-.textBox_ToZ.ToolTip: "Z Co-ord" => "Z坐标"
-.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "Y坐标"
-.textBox_ToX.ToolTip: "X Co-Ord" => "X坐标"
-.textBox_FromZ.ToolTip: "Z Co-ord" => "Z坐标"
-.extButtonRoute.ToolTip: "Compute the route" => "计算航线"
-.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "Y坐标"
-.textBox_FromX.ToolTip: "X Co-ord" => "X坐标"
-.Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "这将导致大量的FSD跳跃（{0}次）\r\n是否继续？"
-.NoRoute: "No route set up, retry" => "没有创建任何路径，请重试"
-.checkBox_FsdBoost: "Use Boosts" @
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
-.showScanToolStripMenuItem: "View Scan Display" @
 .M1: "Nearest to Waypoint" @
 .M2: "Minimum Deviation from Path" @
 .M3: "Nearest to Waypoint with dev<=100ly" @
 .M4: "Nearest to Waypoint with dev<=250ly" @
 .M5: "Nearest to Waypoint with dev<=500ly" @
 .M6: "Nearest to Waypoint + Deviation / 2" @
+.SystemCol: "System" => "星系"
+.NoteCol: "Notes" @
+.DistanceCol: "Distance" => "距离"
+.StarClassCol: "Star Class" @
+.WayPointDistCol: "Dist. Waypoint" => "航点距离"
+.DeviationCol: "Deviation" => "偏航值"
+.groupBoxSpansh: "Spansh" @
+.extButtonNeutronRouter: "Neutron Router" @
+.extButtonSpanshRoadToRiches: "Road to Riches" @
+.extButtonSpanshAmmoniaWorlds: "Ammonia Worlds" @
+.extButtonSpanshEarthLikes: "Earth Likes" @
+.extButtonSpanshTradeRouter: "Trade Router" @
+.extButtonFleetCarrier: "Fleet Carrier" @
+.extButtonSpanshGalaxyPlotter: "Galaxy Plotter" @
+.extButtonExoMastery: "Exo Mastery" @
+.extCheckBoxPermitSystems: "Use Permit Systems" @
+.groupBoxInternal: "EDD Router" @
+.labelMetric: "Metric" => "计算方法"
+.extButtonRoute: "Find route" => "规划航线"
+.groupBoxPara: "Parameters" @
+.checkBox_FsdBoost: "Use Boosts" @
+.labelFrom: "From" => "从"
+.labelLy2: "ly" @
+.labelLy1: "ly" @
+.buttonExtTravelTo: "History" => "航行记录"
+.labelEDSMBut: "Web Lookup" @
+.labelMaxJump: "Max jump" => "FSD跳跃范围"
+.labelDistance: "Distance" => "直线距离"
+.buttonExtTravelFrom: "History" => "航行记录"
+.labelTo: "To" => "到"
+.buttonExtTargetTo: "Target" => "目标"
+.buttonTargetFrom: "Target" => "目标"
+.copyToolStripMenuItem: "Copy" => "复制"
+.showScanToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+.showInEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
+.extButtonExpeditionPush.ToolTip: "Push to expedition" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "导出表格中的数据到Excel中"
+.cmd3DMap.ToolTip: "Show route on 3D Map" => "在3D星图中显示航线"
+.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "选择一个用来计算航线的方法"
+.extButtonRoute.ToolTip: "Compute the route" => "计算航线"
+.textBox_From.ToolTip: "Select system to start the route" => "选择一个星系作为起点"
+.textBox_FromX.ToolTip: "X Co-ord" => "X坐标"
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
+.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "Y坐标"
+.textBox_ToName.ToolTip: "Alternate Name" => "别名"
+.textBox_FromZ.ToolTip: "Z Co-ord" => "Z坐标"
+.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "输入你的飞船的FSD跳跃范围"
+.textBox_FromName.ToolTip: "Alternate name" => "别名"
+.textBox_ToX.ToolTip: "X Co-Ord" => "X坐标"
+.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "Y坐标"
+.textBox_Distance.ToolTip: "Distance between start and end" => "起点与终点间的直线距离"
+.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "将主航行历史里选中的条目当作航线终点"
+.textBox_ToZ.ToolTip: "Z Co-ord" => "Z坐标"
+.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "将主航行历史里选中的条目当作航线起点"
+.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "将目标星系当作航线终点"
+.textBox_To.ToolTip: "Select the system to end in" => "选择一个星系作为终点"
+.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "在EDSM中查看这个终点星系"
+.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "将目标星系当作航线起点"
+.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "在EDSM中查看这个起点星系"
+.extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
+.labelCargo: "Cargo" @
 
 SECTION UserControlRouteTracker
 
@@ -690,7 +714,11 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" @
 .StarClass: "Show Classes of Stars" @
 .Distance: "Show distance of bodies" @
+.PlanetMass: "Show mass of planets" @
+.StarMass: "Show mass of stars" @
+.StarAge: "Show age of stars" @
 .Expired: "Expired:" @
+.StarsOnDiffLines: "Show bodyless stars on separate lines" @
 
 SECTION UserControlScanGrid
 
@@ -750,7 +778,7 @@ SECTION UserControlSettings
 .groupBoxCustomScreenShots: "Screenshots conversion" => "截图"
 .buttonExtScreenshot: "Configure" => "配置"
 .checkBoxCustomEnableScreenshots: "Enable" => "启用截图格式转换"
-.groupBoxCustomEDSM: "EDSM Control" => "EDSM/EDDB选项"
+.groupBoxCustomEDSM: "System DB Control" => "EDSM/EDDB选项"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "选择星域"
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" => "启用星系数据下载"
 .groupBoxPopOuts: "Window Options" => "界面设置"
@@ -814,6 +842,8 @@ SECTION UserControlSettings
 .Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .NoMap: "No map available!" @
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "操作已完成，请关闭此窗口。\r\n如果你已经打开了3D星图，做出的改变在下次启动EDDiscovery之前不会展现\r\n"
+.extButtonReloadStarDatabase: "Reload Star Database" @
+.RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
 
 SECTION UserControlShipYards
 
@@ -914,6 +944,7 @@ SECTION UserControlStarDistance
 .From: "From {0}" => "距离 {0} 星系"
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .viewSystemToolStripMenuItem: "View System" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 
 SECTION UserControlStarList
 
@@ -926,6 +957,7 @@ SECTION UserControlStarList
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "取消排序"
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "跳转至3D星图"
 .viewOnEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .setNoteToolStripMenuItem: "Set Note" => "添加笔记"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
@@ -1053,6 +1085,7 @@ SECTION UserControlStats
 .FLEETCARRIER: "Fleetcarrier" @
 .CQC: "CQC" @
 .Exobiology: "Exobiology" @
+.Thargoids: "Thargoids" @
 .GoodsBought: "Goods Bought" => "收购的商品"
 .GoodsSold: "Goods Sold" => "出售的商品"
 .GoodsProfit: "Goods Profit" @
@@ -1207,6 +1240,8 @@ SECTION UserControlTravelGrid
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "对这项条目运行脚本"
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "复制航行日志条目到剪切板和系统日志"
 .writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" @
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" @
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" @
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" @
@@ -1352,6 +1387,8 @@ SECTION UserControlMiningOverlay
 .extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
 .buttonExtExcel.ToolTip: "Export" @
 .extComboBoxChartOptions.ToolTip: "Select chart options" @
+.extCheckBoxChartBase.ToolTip: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" @
+.distall: "Distribution vs All" @
 
 SECTION UserControlFactions
 
@@ -1413,6 +1450,19 @@ SECTION UserControlOrganics
 .at: "At {0}" @
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 .extButtonAlignment.ToolTip: "Alignment" @
+.ColDate: "Date" @
+.ColStarSystem: "Star System" @
+.ColBodyName: "Body Name" @
+.ColBodyType: "Body Type" @
+.ColGenus: "Genus" @
+.ColSpecies: "Species" @
+.ColVariant: "Variant" @
+.ColLastScanType: "Last Scan Type" @
+.ColValue: "Value" @
+.labelTime: "Time" @
+.labelStart: "Start" @
+.labelEnd: "End" @
+.comboBoxTime.ToolTip: "Select the entries by age" @
 
 SECTION ScanDisplayForm
 
