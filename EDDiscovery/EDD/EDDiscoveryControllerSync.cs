@@ -137,29 +137,31 @@ namespace EDDiscovery
                                 deletefile = false;
                                 downloadfile = spansh ? @"c:\code\spanshsystems.json.gz" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
 #else
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, reportProgress:ReportDownloadProgress);
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, cancelRequested:()=>PendingClose, reportProgress:ReportDownloadProgress);
 #endif
-
-                                syncstate.perform_fullsync = false;
-
-                                if (success)
+                                if (!PendingClose)      // if not closing
                                 {
-                                    ReportSyncProgress("Download complete, creating database");
+                                    syncstate.perform_fullsync = false;
 
-                                    syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, 200000, () => PendingClose, ReportSyncProgress, method:3);
+                                    if (success)
+                                    {
+                                        ReportSyncProgress("Download complete, creating database");
 
-                                    if ( deletefile )
+                                        syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, 200000, () => PendingClose, ReportSyncProgress, method: 3);
+
+                                        if (deletefile)
+                                            BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+
+                                        if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
+                                            return;
+                                    }
+                                    else
+                                    {
+                                        ReportSyncProgress("");
+                                        LogLineHighlight("Failed to download full systems file. Try re-running EDD later");
                                         BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
-
-                                    if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
-                                        return;
-                                }
-                                else
-                                {
-                                    ReportSyncProgress("");
-                                    LogLineHighlight("Failed to download full systems file. Try re-running EDD later");
-                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
-                                    return;     // new! if we failed to download, fail here, wait for another time
+                                        return;     // new! if we failed to download, fail here, wait for another time
+                                    }
                                 }
                             }
                             catch (Exception ex)

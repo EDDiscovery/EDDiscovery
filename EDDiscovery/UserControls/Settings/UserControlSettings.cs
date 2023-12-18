@@ -642,7 +642,7 @@ namespace EDDiscovery.UserControls
                     "Only use this if you are happy to download the dataset again").T(EDTx.UserControlSettings_RELOAD), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 bool force = EDDApplicationContext.RestartOptions != null;
-                EDDApplicationContext.RestartOptions = "-deletesystemdb";
+                EDDApplicationContext.RestartOptions = $"-deletesystemdb -systemsdbpath {EDDOptions.Instance.SystemDatabasePath}";
 
                 if (!force)
                 {
