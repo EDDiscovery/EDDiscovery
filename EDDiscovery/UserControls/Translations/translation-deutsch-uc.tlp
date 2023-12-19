@@ -849,7 +849,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Konfiguriere weitere Screenshotoptionen"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Screenshotkonvertiereung An/Aus"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Konfiguriere welcher Teil der Galaxie in der Datenbank gespeichert wird"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "Klicken um den Download von Sternen von EDSM zu aktivieren. Wird beim nächsten Start angewendet"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." => "Klicken um den Download von Sternen von EDSM oder SPANSH zu aktivieren. Wird beim nächsten Start angewendet"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Paneellsite alphanumerisch anstatt in Gruppen sortiert. Erfordert Neustart."
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Dieses Fenster und seine Ableger zuoberst"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Anhaken um EDD zu erlauben die Leinwand während der Größenänderung des Hauptfensters neu zu zeichnen. Nur Deaktivieren wenn dies zu langsam ist."
