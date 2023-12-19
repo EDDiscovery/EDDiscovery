@@ -41,11 +41,6 @@ namespace EDDiscovery
             OnNoteChanged?.Invoke(sender, snc);
         }
 
-        public void NewCalculatedRoute(List<ISystem> list)
-        {
-            OnNewCalculatedRoute?.Invoke(list);
-        }
-
         #endregion
 
         #region webserver
@@ -115,7 +110,7 @@ namespace EDDiscovery
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(Label),
                             string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent.".T(EDTx.EDDiscoveryForm_SendEDSMCaption), helist.Count),
                              new Point(5, 30), new Size(width - 5 - 20, 100), null)
-                { textboxmultiline = true });
+                { TextBoxMultiline = true });
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("All", typeof(ExtendedControls.ExtButton),
                             "Send All to EDSM".T(EDTx.EDDiscoveryForm_SendEDSMAll),
@@ -195,8 +190,6 @@ namespace EDDiscovery
         #region 3dmap
         public UserControls.UserControl3DMap Open3DMap()         // Current map - open at last position or configured position
         {
-            var t3dmap = typeof(UserControls.UserControl3DMap);
-
             UserControls.UserControlCommonBase uccb = null;
 
             var tabfind3dmap = tabControlMain.Find(PanelInformation.PanelIDs.Map3D);
@@ -327,8 +320,7 @@ namespace EDDiscovery
 
         #region Notifications
 
-        List<BaseUtils.Notifications.Notification> popupnotificationlist = new List<BaseUtils.Notifications.Notification>();
-        void ShowNotification()        // orgnanise pop ups one at a time..
+        void ShowNotification(List<BaseUtils.Notifications.Notification> popupnotificationlist)        // orgnanise pop ups one at a time..
         {
             if (popupnotificationlist.Count > 0)
             {
@@ -344,12 +336,13 @@ namespace EDDiscovery
                 ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
                 infoform.Info(p.Caption, this.Icon, p.Text, pointsize: popupnotificationlist[0].PointSize,
                         acknowledgeaction: act,
-                        acknowledgedata: popupnotificationlist[0].StartUTC);
+                        acknowledgedata: popupnotificationlist[0].StartUTC,enableurls:true);
+                infoform.LinkClicked += (e) => { BaseUtils.BrowserInfo.LaunchBrowser(e.LinkText); };
+                infoform.FormClosed += (s, e1) => { ShowNotification(popupnotificationlist); };     // chain to next, one at a time..
+                infoform.StartPosition = FormStartPosition.CenterParent;
 
-                infoform.FormClosed += (s, e1) => { ShowNotification(); };     // chain to next, one at a time..
-
-                popupnotificationlist.RemoveAt(0);
-                infoform.Show();
+                popupnotificationlist.RemoveAt(0);      // remove this one so it does not appear.
+                infoform.Show(this);
             }
         }
 
@@ -382,18 +375,12 @@ namespace EDDiscovery
 
         #endregion
 
-        #region EDSM Star Sync 
+        #region DB Star Sync 
 
-        private void edsmRefreshTimer_Tick(object sender, EventArgs e)
+        public void ForceSystemDBFullRefresh()
         {
-            Controller.AsyncPerformSync();
-        }
-
-        public void ForceEDSMFullRefresh()
-        {
-            SystemsDatabase.Instance.ForceEDSMFullUpdate();
-            SystemsDatabase.Instance.ForceEDSMAliasFullUpdate();
-            Controller.AsyncPerformSync(true, true);
+            SystemsDatabase.Instance.ForceFullUpdate();
+            Controller.AsyncPerformSync(true);
         }
 
         #endregion
@@ -486,6 +473,74 @@ namespace EDDiscovery
             }
         }
 
+        public static bool DownloadGECFile(string file)
+        {
+            try
+            {
+                string url = @"https://edastro.com/gec/json/all";
+                return BaseUtils.DownloadFile.HTTPDownloadFile(url, file, false, out bool newfile);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("DownloadFromGEC exception:" + ex.Message);
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region Debug
+        public static void PostInitDebug()
+        {
+         //   var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);
+
+            System.Diagnostics.Debug.WriteLine($"Post Init debug");
+            var sp = new EliteDangerousCore.Spansh.SpanshClass();
+
+
+            //JToken tk = JToken.Parse(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\spanshmodtypes"));
+            //JArray mt = tk["values"].Array();
+            //foreach (var m in mt)
+            //{
+            //    string name = m.Str().Replace(" ", "").Replace("-", "_");
+            //    System.Diagnostics.Debug.Write($"{name},");
+            //}
+
+
+
+
+
+            //   var list = sp.GetServices("Scirth", new string[] { "Apex Interstellar", "Black Market" }, 12);
+            // var list = sp.GetServices("Scirth", new string[] { "Interstellar Factors Contact" }, 12);
+
+            // var sys = SystemCache.FindSystem("Lembava", WebExternalDataLookup.Spansh);
+
+            //  var isy = sp.GetSystem("sol");
+            //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
+
+            // while (true)
+            // {
+            //     System.Threading.Thread.Sleep(2000);
+            //     var resp = sp.TryGetRoadToRiches(queryid);
+            // }Aaw
+
+            // var ret = sp.GetStations("Sol", 4);
+
+            SystemClass sol = new SystemClass("Sol", 10477373803);
+            //sp.GetBodies(sol);
+            // sp.GetStationsByDump(sol,10000000,false);
+
+            //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+            //sp.GetSystem("Sol");
+
+            //EDSMClass edsm = new EDSMClass();
+            // edsm.GetSystem("Sol");
+
+            //var permitlist = SystemsDB.GetListPermitSystems();
+            //foreach (var x in permitlist)
+            //    System.Diagnostics.Debug.WriteLine($"{x.Name} {x.SystemAddress} {x.X} {x.Y} {x.Z}");
+        }
 
 
         #endregion

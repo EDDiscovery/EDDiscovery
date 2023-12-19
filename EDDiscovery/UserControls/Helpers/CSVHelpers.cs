@@ -190,7 +190,7 @@ namespace EDDiscovery.UserControls
                                 string name = scan.StarSystem ?? scan.BodyName;   // early scans did not have starsystem
                                 ISystem sys = null;
                                 if (name.HasChars())
-                                    sys = SystemCache.FindSystem(name, null, false);       // not doing EDSM Due to no of lookups. Should be in the cache since its one of ours
+                                    sys = SystemCache.FindSystem(name, null);       // not doing EDSM Due to no of lookups. Should be in the cache since its one of ours
 
                                 if (sys != null)
                                 {

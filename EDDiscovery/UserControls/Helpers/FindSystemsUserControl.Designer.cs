@@ -48,12 +48,14 @@
             this.numberBoxDoubleX = new ExtendedControls.NumberBoxDouble();
             this.numberBoxMinRadius = new ExtendedControls.NumberBoxDouble();
             this.textBoxSystemName = new ExtendedControls.ExtTextBoxAutoComplete();
+            this.extButtonFromSpansh = new ExtendedControls.ExtButton();
+            this.extButtonFromSpanshFindNames = new ExtendedControls.ExtButton();
             this.SuspendLayout();
             // 
             // labelRadMin
             // 
             this.labelRadMin.AutoSize = true;
-            this.labelRadMin.Location = new System.Drawing.Point(6, 62);
+            this.labelRadMin.Location = new System.Drawing.Point(2, 71);
             this.labelRadMin.Name = "labelRadMin";
             this.labelRadMin.Size = new System.Drawing.Size(70, 13);
             this.labelRadMin.TabIndex = 34;
@@ -62,7 +64,7 @@
             // labelFilter
             // 
             this.labelFilter.AutoSize = true;
-            this.labelFilter.Location = new System.Drawing.Point(19, 11);
+            this.labelFilter.Location = new System.Drawing.Point(3, 9);
             this.labelFilter.Name = "labelFilter";
             this.labelFilter.Size = new System.Drawing.Size(57, 13);
             this.labelFilter.TabIndex = 35;
@@ -71,7 +73,7 @@
             // labelRadMax
             // 
             this.labelRadMax.AutoSize = true;
-            this.labelRadMax.Location = new System.Drawing.Point(49, 88);
+            this.labelRadMax.Location = new System.Drawing.Point(165, 71);
             this.labelRadMax.Name = "labelRadMax";
             this.labelRadMax.Size = new System.Drawing.Size(27, 13);
             this.labelRadMax.TabIndex = 34;
@@ -80,7 +82,7 @@
             // labelX
             // 
             this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(69, 36);
+            this.labelX.Location = new System.Drawing.Point(6, 45);
             this.labelX.Name = "labelX";
             this.labelX.Size = new System.Drawing.Size(14, 13);
             this.labelX.TabIndex = 35;
@@ -89,7 +91,7 @@
             // labelY
             // 
             this.labelY.AutoSize = true;
-            this.labelY.Location = new System.Drawing.Point(198, 36);
+            this.labelY.Location = new System.Drawing.Point(135, 45);
             this.labelY.Name = "labelY";
             this.labelY.Size = new System.Drawing.Size(14, 13);
             this.labelY.TabIndex = 35;
@@ -98,7 +100,7 @@
             // labelZ
             // 
             this.labelZ.AutoSize = true;
-            this.labelZ.Location = new System.Drawing.Point(330, 36);
+            this.labelZ.Location = new System.Drawing.Point(267, 45);
             this.labelZ.Name = "labelZ";
             this.labelZ.Size = new System.Drawing.Size(14, 13);
             this.labelZ.TabIndex = 35;
@@ -115,7 +117,7 @@
             this.extCheckBoxExcludeVisitedSystems.ImageIndeterminate = null;
             this.extCheckBoxExcludeVisitedSystems.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxExcludeVisitedSystems.ImageUnchecked = null;
-            this.extCheckBoxExcludeVisitedSystems.Location = new System.Drawing.Point(360, 91);
+            this.extCheckBoxExcludeVisitedSystems.Location = new System.Drawing.Point(9, 163);
             this.extCheckBoxExcludeVisitedSystems.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxExcludeVisitedSystems.Name = "extCheckBoxExcludeVisitedSystems";
             this.extCheckBoxExcludeVisitedSystems.Size = new System.Drawing.Size(140, 17);
@@ -135,7 +137,7 @@
             this.checkBoxCustomCube.ImageIndeterminate = null;
             this.checkBoxCustomCube.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomCube.ImageUnchecked = null;
-            this.checkBoxCustomCube.Location = new System.Drawing.Point(456, 33);
+            this.checkBoxCustomCube.Location = new System.Drawing.Point(194, 163);
             this.checkBoxCustomCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomCube.Name = "checkBoxCustomCube";
             this.checkBoxCustomCube.Size = new System.Drawing.Size(51, 17);
@@ -146,7 +148,7 @@
             // 
             // buttonExtNames
             // 
-            this.buttonExtNames.Location = new System.Drawing.Point(288, 3);
+            this.buttonExtNames.Location = new System.Drawing.Point(270, 3);
             this.buttonExtNames.Name = "buttonExtNames";
             this.buttonExtNames.Size = new System.Drawing.Size(176, 23);
             this.buttonExtNames.TabIndex = 37;
@@ -156,7 +158,7 @@
             // 
             // buttonExtVisited
             // 
-            this.buttonExtVisited.Location = new System.Drawing.Point(360, 62);
+            this.buttonExtVisited.Location = new System.Drawing.Point(9, 100);
             this.buttonExtVisited.Name = "buttonExtVisited";
             this.buttonExtVisited.Size = new System.Drawing.Size(176, 23);
             this.buttonExtVisited.TabIndex = 38;
@@ -166,7 +168,7 @@
             // 
             // buttonExtDB
             // 
-            this.buttonExtDB.Location = new System.Drawing.Point(168, 88);
+            this.buttonExtDB.Location = new System.Drawing.Point(9, 129);
             this.buttonExtDB.Name = "buttonExtDB";
             this.buttonExtDB.Size = new System.Drawing.Size(176, 23);
             this.buttonExtDB.TabIndex = 38;
@@ -176,7 +178,7 @@
             // 
             // buttonExtEDSM
             // 
-            this.buttonExtEDSM.Location = new System.Drawing.Point(168, 62);
+            this.buttonExtEDSM.Location = new System.Drawing.Point(227, 100);
             this.buttonExtEDSM.Name = "buttonExtEDSM";
             this.buttonExtEDSM.Size = new System.Drawing.Size(176, 23);
             this.buttonExtEDSM.TabIndex = 38;
@@ -188,7 +190,7 @@
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(502, 5);
+            this.buttonExtExcel.Location = new System.Drawing.Point(287, 158);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 36;
@@ -208,14 +210,17 @@
             this.numberBoxMaxRadius.DelayBeforeNotification = 0;
             this.numberBoxMaxRadius.EndButtonEnable = true;
             this.numberBoxMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxMaxRadius.EndButtonImage")));
+            this.numberBoxMaxRadius.EndButtonSize16ths = 10;
             this.numberBoxMaxRadius.EndButtonVisible = false;
             this.numberBoxMaxRadius.Format = "0.##";
             this.numberBoxMaxRadius.InErrorCondition = false;
-            this.numberBoxMaxRadius.Location = new System.Drawing.Point(95, 88);
+            this.numberBoxMaxRadius.Location = new System.Drawing.Point(211, 71);
             this.numberBoxMaxRadius.Maximum = 100000D;
             this.numberBoxMaxRadius.Minimum = 0D;
             this.numberBoxMaxRadius.Multiline = false;
             this.numberBoxMaxRadius.Name = "numberBoxMaxRadius";
+            this.numberBoxMaxRadius.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxMaxRadius.ReadOnly = false;
             this.numberBoxMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxMaxRadius.SelectionLength = 0;
@@ -223,6 +228,7 @@
             this.numberBoxMaxRadius.Size = new System.Drawing.Size(48, 20);
             this.numberBoxMaxRadius.TabIndex = 32;
             this.numberBoxMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxMaxRadius.TextNoChange = "0";
             this.numberBoxMaxRadius.Value = 0D;
             this.numberBoxMaxRadius.WordWrap = true;
             // 
@@ -239,14 +245,17 @@
             this.numberBoxDoubleZ.DelayBeforeNotification = 0;
             this.numberBoxDoubleZ.EndButtonEnable = true;
             this.numberBoxDoubleZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleZ.EndButtonImage")));
+            this.numberBoxDoubleZ.EndButtonSize16ths = 10;
             this.numberBoxDoubleZ.EndButtonVisible = false;
             this.numberBoxDoubleZ.Format = "0.##";
             this.numberBoxDoubleZ.InErrorCondition = false;
-            this.numberBoxDoubleZ.Location = new System.Drawing.Point(350, 32);
+            this.numberBoxDoubleZ.Location = new System.Drawing.Point(287, 41);
             this.numberBoxDoubleZ.Maximum = 80000D;
             this.numberBoxDoubleZ.Minimum = -20000D;
             this.numberBoxDoubleZ.Multiline = false;
             this.numberBoxDoubleZ.Name = "numberBoxDoubleZ";
+            this.numberBoxDoubleZ.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxDoubleZ.ReadOnly = false;
             this.numberBoxDoubleZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxDoubleZ.SelectionLength = 0;
@@ -254,6 +263,7 @@
             this.numberBoxDoubleZ.Size = new System.Drawing.Size(80, 20);
             this.numberBoxDoubleZ.TabIndex = 32;
             this.numberBoxDoubleZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxDoubleZ.TextNoChange = "0";
             this.numberBoxDoubleZ.Value = 0D;
             this.numberBoxDoubleZ.WordWrap = true;
             this.numberBoxDoubleZ.Enter += new System.EventHandler(this.numberBoxDoubleXYZ_Enter);
@@ -271,14 +281,17 @@
             this.numberBoxDoubleY.DelayBeforeNotification = 0;
             this.numberBoxDoubleY.EndButtonEnable = true;
             this.numberBoxDoubleY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleY.EndButtonImage")));
+            this.numberBoxDoubleY.EndButtonSize16ths = 10;
             this.numberBoxDoubleY.EndButtonVisible = false;
             this.numberBoxDoubleY.Format = "0.##";
             this.numberBoxDoubleY.InErrorCondition = false;
-            this.numberBoxDoubleY.Location = new System.Drawing.Point(218, 32);
+            this.numberBoxDoubleY.Location = new System.Drawing.Point(155, 41);
             this.numberBoxDoubleY.Maximum = 5000D;
             this.numberBoxDoubleY.Minimum = -5000D;
             this.numberBoxDoubleY.Multiline = false;
             this.numberBoxDoubleY.Name = "numberBoxDoubleY";
+            this.numberBoxDoubleY.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxDoubleY.ReadOnly = false;
             this.numberBoxDoubleY.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxDoubleY.SelectionLength = 0;
@@ -286,6 +299,7 @@
             this.numberBoxDoubleY.Size = new System.Drawing.Size(80, 20);
             this.numberBoxDoubleY.TabIndex = 32;
             this.numberBoxDoubleY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxDoubleY.TextNoChange = "0";
             this.numberBoxDoubleY.Value = 0D;
             this.numberBoxDoubleY.WordWrap = true;
             this.numberBoxDoubleY.Enter += new System.EventHandler(this.numberBoxDoubleXYZ_Enter);
@@ -303,14 +317,17 @@
             this.numberBoxDoubleX.DelayBeforeNotification = 0;
             this.numberBoxDoubleX.EndButtonEnable = true;
             this.numberBoxDoubleX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleX.EndButtonImage")));
+            this.numberBoxDoubleX.EndButtonSize16ths = 10;
             this.numberBoxDoubleX.EndButtonVisible = false;
             this.numberBoxDoubleX.Format = "0.##";
             this.numberBoxDoubleX.InErrorCondition = false;
-            this.numberBoxDoubleX.Location = new System.Drawing.Point(95, 32);
+            this.numberBoxDoubleX.Location = new System.Drawing.Point(32, 41);
             this.numberBoxDoubleX.Maximum = 40000D;
             this.numberBoxDoubleX.Minimum = -40000D;
             this.numberBoxDoubleX.Multiline = false;
             this.numberBoxDoubleX.Name = "numberBoxDoubleX";
+            this.numberBoxDoubleX.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxDoubleX.ReadOnly = false;
             this.numberBoxDoubleX.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxDoubleX.SelectionLength = 0;
@@ -318,6 +335,7 @@
             this.numberBoxDoubleX.Size = new System.Drawing.Size(80, 20);
             this.numberBoxDoubleX.TabIndex = 32;
             this.numberBoxDoubleX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxDoubleX.TextNoChange = "0";
             this.numberBoxDoubleX.Value = 0D;
             this.numberBoxDoubleX.WordWrap = true;
             this.numberBoxDoubleX.Enter += new System.EventHandler(this.numberBoxDoubleXYZ_Enter);
@@ -335,14 +353,17 @@
             this.numberBoxMinRadius.DelayBeforeNotification = 0;
             this.numberBoxMinRadius.EndButtonEnable = true;
             this.numberBoxMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxMinRadius.EndButtonImage")));
+            this.numberBoxMinRadius.EndButtonSize16ths = 10;
             this.numberBoxMinRadius.EndButtonVisible = false;
             this.numberBoxMinRadius.Format = "0.##";
             this.numberBoxMinRadius.InErrorCondition = false;
-            this.numberBoxMinRadius.Location = new System.Drawing.Point(95, 62);
+            this.numberBoxMinRadius.Location = new System.Drawing.Point(91, 71);
             this.numberBoxMinRadius.Maximum = 100000D;
             this.numberBoxMinRadius.Minimum = 0D;
             this.numberBoxMinRadius.Multiline = false;
             this.numberBoxMinRadius.Name = "numberBoxMinRadius";
+            this.numberBoxMinRadius.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxMinRadius.ReadOnly = false;
             this.numberBoxMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxMinRadius.SelectionLength = 0;
@@ -350,6 +371,7 @@
             this.numberBoxMinRadius.Size = new System.Drawing.Size(48, 20);
             this.numberBoxMinRadius.TabIndex = 32;
             this.numberBoxMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxMinRadius.TextNoChange = "0";
             this.numberBoxMinRadius.Value = 0D;
             this.numberBoxMinRadius.WordWrap = true;
             // 
@@ -358,6 +380,7 @@
             this.textBoxSystemName.AutoCompleteCommentMarker = null;
             this.textBoxSystemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxSystemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxSystemName.AutoCompleteTimeout = 500;
             this.textBoxSystemName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSystemName.BorderColorScaling = 0.5F;
@@ -370,11 +393,11 @@
             this.textBoxSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxSystemName.EndButtonEnable = false;
-            this.textBoxSystemName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSystemName.EndButtonImage")));
+            this.textBoxSystemName.EndButtonSize16ths = 10;
             this.textBoxSystemName.EndButtonVisible = false;
             this.textBoxSystemName.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxSystemName.InErrorCondition = false;
-            this.textBoxSystemName.Location = new System.Drawing.Point(95, 6);
+            this.textBoxSystemName.Location = new System.Drawing.Point(79, 4);
             this.textBoxSystemName.Multiline = false;
             this.textBoxSystemName.Name = "textBoxSystemName";
             this.textBoxSystemName.ReadOnly = false;
@@ -384,7 +407,29 @@
             this.textBoxSystemName.Size = new System.Drawing.Size(166, 20);
             this.textBoxSystemName.TabIndex = 33;
             this.textBoxSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSystemName.TextChangedEvent = "";
+            this.textBoxSystemName.TextNoChange = "";
             this.textBoxSystemName.WordWrap = true;
+            // 
+            // extButtonFromSpansh
+            // 
+            this.extButtonFromSpansh.Location = new System.Drawing.Point(227, 129);
+            this.extButtonFromSpansh.Name = "extButtonFromSpansh";
+            this.extButtonFromSpansh.Size = new System.Drawing.Size(176, 23);
+            this.extButtonFromSpansh.TabIndex = 38;
+            this.extButtonFromSpansh.Text = "From Spansh";
+            this.extButtonFromSpansh.UseVisualStyleBackColor = true;
+            this.extButtonFromSpansh.Click += new System.EventHandler(this.extButtonFromSpansh_Click);
+            // 
+            // extButtonFromSpanshFindNames
+            // 
+            this.extButtonFromSpanshFindNames.Location = new System.Drawing.Point(452, 3);
+            this.extButtonFromSpanshFindNames.Name = "extButtonFromSpanshFindNames";
+            this.extButtonFromSpanshFindNames.Size = new System.Drawing.Size(176, 23);
+            this.extButtonFromSpanshFindNames.TabIndex = 37;
+            this.extButtonFromSpanshFindNames.Text = "From Spansh Find Names";
+            this.extButtonFromSpanshFindNames.UseVisualStyleBackColor = true;
+            this.extButtonFromSpanshFindNames.Click += new System.EventHandler(this.extButtonFromSpanshFindNames_Click);
             // 
             // FindSystemsUserControl
             // 
@@ -392,9 +437,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.extCheckBoxExcludeVisitedSystems);
             this.Controls.Add(this.checkBoxCustomCube);
+            this.Controls.Add(this.extButtonFromSpanshFindNames);
             this.Controls.Add(this.buttonExtNames);
             this.Controls.Add(this.buttonExtVisited);
             this.Controls.Add(this.buttonExtDB);
+            this.Controls.Add(this.extButtonFromSpansh);
             this.Controls.Add(this.buttonExtEDSM);
             this.Controls.Add(this.buttonExtExcel);
             this.Controls.Add(this.numberBoxMaxRadius);
@@ -410,7 +457,7 @@
             this.Controls.Add(this.labelX);
             this.Controls.Add(this.labelFilter);
             this.Name = "FindSystemsUserControl";
-            this.Size = new System.Drawing.Size(550, 122);
+            this.Size = new System.Drawing.Size(661, 199);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -437,5 +484,7 @@
         private System.Windows.Forms.Label labelZ;
         private ExtendedControls.ExtCheckBox checkBoxCustomCube;
         private ExtendedControls.ExtCheckBox extCheckBoxExcludeVisitedSystems;
+        private ExtendedControls.ExtButton extButtonFromSpansh;
+        private ExtendedControls.ExtButton extButtonFromSpanshFindNames;
     }
 }

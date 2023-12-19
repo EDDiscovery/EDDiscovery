@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -23,6 +21,7 @@ using System.Windows.Forms;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.Spansh;
 
 namespace EDDiscovery.UserControls
 {
@@ -31,7 +30,7 @@ namespace EDDiscovery.UserControls
         public Action<List<Tuple<ISystem, double>>> ReturnSystems;      // return may be null
 
         public Action Excel;                                            // excel pressed
-        UserControlCommonBase.DBSettingsSaver dbsaver;
+        UserDatabaseSettingsSaver dbsaver;
         EDDiscoveryForm discoveryform;
 
         private string dbStar = "Star"; 
@@ -48,7 +47,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(UserControlCommonBase.DBSettingsSaver db, bool showexcel , EDDiscoveryForm disc )
+        public void Init(UserDatabaseSettingsSaver db, bool showexcel , EDDiscoveryForm disc )
         {
             dbsaver = db;
             discoveryform = disc;
@@ -60,7 +59,7 @@ namespace EDDiscovery.UserControls
             numberBoxDoubleZ.Value = dbsaver.GetSetting(dbZ, 0.0);
             checkBoxCustomCube.Checked = dbsaver.GetSetting(dbCube, false);
             extCheckBoxExcludeVisitedSystems.Checked = dbsaver.GetSetting(dbEVS, false);
-
+            
             if (textBoxSystemName.Text.Length > 0)
                 SetXYZ();
 
@@ -83,7 +82,11 @@ namespace EDDiscovery.UserControls
 
             ValidateEnable();
 
-            var enumlist = new Enum[] { EDTx.FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, EDTx.FindSystemsUserControl_checkBoxCustomCube, EDTx.FindSystemsUserControl_buttonExtNames, EDTx.FindSystemsUserControl_buttonExtVisited, EDTx.FindSystemsUserControl_buttonExtDB, EDTx.FindSystemsUserControl_buttonExtEDSM, EDTx.FindSystemsUserControl_labelRadMax, EDTx.FindSystemsUserControl_labelRadMin, EDTx.FindSystemsUserControl_labelFilter };
+            var enumlist = new Enum[] { EDTx.FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, EDTx.FindSystemsUserControl_checkBoxCustomCube, 
+                EDTx.FindSystemsUserControl_buttonExtNames, EDTx.FindSystemsUserControl_buttonExtVisited, EDTx.FindSystemsUserControl_buttonExtDB,
+                EDTx.FindSystemsUserControl_extButtonFromSpansh,EDTx.FindSystemsUserControl_extButtonFromSpanshFindNames,
+                EDTx.FindSystemsUserControl_buttonExtEDSM, EDTx.FindSystemsUserControl_labelRadMax, EDTx.FindSystemsUserControl_labelRadMin, 
+                EDTx.FindSystemsUserControl_labelFilter };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ });
         }
 
@@ -99,9 +102,12 @@ namespace EDDiscovery.UserControls
             dbsaver.PutSetting(dbEVS, extCheckBoxExcludeVisitedSystems.Checked);
         }
 
+        // find from star name
         private void buttonExtNamesClick(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+
+            HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Keys.ToHashSet() : new HashSet<string>();
 
             Task taskEDSM = Task<HashSet<ISystem>>.Factory.StartNew(() =>
             {
@@ -110,107 +116,35 @@ namespace EDDiscovery.UserControls
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
                 Cursor = Cursors.Default;
-                ReturnSystems((from x in task.Result select new Tuple<ISystem, double>(x, -1)).ToList());
+                var ret = task.Result.Where(x => !excluded.Contains(x.Name)).Select(y => new Tuple<ISystem, double>(y, -1)).ToList();
+                ReturnSystems(ret);
             }
             )));
         }
 
-        private void buttonExtEDSMClick(object sender, EventArgs e)
+        // find from star name
+        private void extButtonFromSpanshFindNames_Click(object sender, EventArgs e)
         {
-            if (numberBoxMaxRadius.Value > 100)
-            {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "This is a large radius, it make take a long time or not work, are you sure?", "Warning - Large radius", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.Cancel)
-                    return;
-            }
-
             Cursor = Cursors.WaitCursor;
 
-            bool spherical = !checkBoxCustomCube.Checked;
+            HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Keys.ToHashSet() : new HashSet<string>();
 
-            Task taskEDSM = Task<List<Tuple<ISystem, double>>>.Factory.StartNew(() =>
+            Task taskEDSM = Task<List<ISystem>>.Factory.StartNew(() =>
             {
-                EDSMClass edsm = new EDSMClass();
-                // cube: use *1.412 (sqrt(2)) to reach out to far corner of cube
-                // cube: must get centre system, to know what co-ords it is..
-
-                List<Tuple<ISystem, double>> rlist = null;
-
-                if (!string.IsNullOrWhiteSpace(textBoxSystemName.Text))
-                {
-                    rlist = edsm.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
-                }
-                else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
-                {
-                    rlist = edsm.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
-                }
-                else
-                {
-                    rlist = new List<Tuple<ISystem, double>>();
-                }
-
-                if (rlist != null && rlist.Count > 0 && !SystemsDatabase.Instance.RebuildRunning)   // if db free for use, ensure they are all in the db
-                    SystemsDatabase.Instance.StoreSystems(rlist.Select(x => x.Item1).ToList());     // won't do anything if rebuilding
-
-                return rlist;
-
+                SpanshClass sp = new SpanshClass();
+                return sp.GetSystems(textBoxSystemName.Text, true);
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
-                List<Tuple<ISystem, double>> listsphere = task.Result;
-
-                if ( listsphere != null )
-                {
-                    bool excvisited = extCheckBoxExcludeVisitedSystems.Checked;
-
-                    if (!spherical)       // if cubed, need to filter them out
-                    {
-                        ISystem centre = listsphere.Find(x => x.Item2 <= 1)?.Item1;     // find centre, i.e less 1 ly distance
-                        if (centre != null)
-                        {
-                            //System.Diagnostics.Debug.WriteLine("From " + listsphere.Count());
-                            //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine("<" + x.Item1.ToString());
-
-                            double mindistsq = numberBoxMinRadius.Value * numberBoxMinRadius.Value;     // mindist is the square line distance, per stardistance use
-
-                            listsphere = (from s in listsphere
-                                          where
-                                            (s.Item1.X - centre.X) * (s.Item1.X - centre.X) + (s.Item1.Y - centre.Y) * (s.Item1.Y - centre.Y) + (s.Item1.Z - centre.Z) * (s.Item1.Z - centre.Z) >= mindistsq &&
-                                            Math.Abs(s.Item1.X - centre.X) <= numberBoxMaxRadius.Value &&
-                                            Math.Abs(s.Item1.Y - centre.Y) <= numberBoxMaxRadius.Value &&
-                                            Math.Abs(s.Item1.Z - centre.Z) <= numberBoxMaxRadius.Value &&
-                                            (!excvisited || discoveryform.History.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null)
-                                          select s).ToList();
-
-                            //System.Diagnostics.Debug.WriteLine("To " + listsphere.Count());
-                            //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine(">" + x.Item1.ToString());
-                        }
-                    }
-                    else if ( excvisited )  // if exc visited, need to filter them out
-                    {
-                        listsphere = (from s in listsphere
-                                      where discoveryform.History.FindLastFSDCarrierJumpBySystemName(s.Item1.Name) == null
-                                      select s).ToList();
-                    }
-                }
-
-                if (listsphere == null)
-                {
-                    string resp = String.Format("EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about".T(EDTx.FindSystemsUserControl_EDSM), textBoxSystemName.Text);
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), resp, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-
                 Cursor = Cursors.Default;
-
-                if (listsphere != null)
-                {
-                    ReturnSystems(listsphere);
-                }
+                var ret = task.Result.Where(x => !excluded.Contains(x.Name)).Select(y => new Tuple<ISystem, double>(y, -1)).ToList();
+                ReturnSystems(ret);
             }
             )));
         }
 
         private void buttonExtVisitedClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
@@ -223,16 +157,15 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtDBClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
                 Cursor = Cursors.WaitCursor;
 
-                // work out the excluded system name list
-                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Values.Select(x=>x.System.Name).ToHashSet() : new HashSet<string>();
+                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Values.Select(x => x.System.Name).ToHashSet() : new HashSet<string>();
 
-                Task<List<Tuple<ISystem,double>>>.Factory.StartNew(() =>
+                Task<List<Tuple<ISystem, double>>>.Factory.StartNew(() =>
                 {
                     BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
 
@@ -240,7 +173,6 @@ namespace EDDiscovery.UserControls
                                 numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked, excluded);
 
                     var res = (from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList();
-
                     return res;
 
                 }).ContinueWith(task => this.Invoke(new Action(() =>
@@ -254,6 +186,144 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+
+        private void buttonExtEDSMClick(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            bool spherical = !checkBoxCustomCube.Checked;
+
+            Task taskEDSM = Task<List<Tuple<ISystem, double>>>.Factory.StartNew(() =>
+            {
+                EDSMClass edsm = new EDSMClass();
+                // cube: use *1.412 (sqrt(2)) to reach out to far corner of cube
+                // cube: must get centre system, to know what co-ords it is..
+
+                List<Tuple<ISystem, double>> rlist = null;
+
+                if (textBoxSystemName.Text.HasChars())
+                {
+                    // debug statements to check edsm - good place to put them
+                    //var found = edsm.GetSystem(textBoxSystemName.Text);
+                    //var found2 = edsm.GetSystems(new List<string> { "Sol", "Lembava" });
+                    //var logs = edsm.GetLogs(null, new DateTime(2023, 4, 13), out List<EliteDangerousCore.JournalEvents.JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime, out BaseUtils.ResponseData response);
+
+                    rlist = edsm.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                }
+                else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
+                {
+                    rlist = edsm.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                }
+                else
+                {
+                    rlist = new List<Tuple<ISystem, double>>();
+                }
+
+                if (rlist != null && rlist.Count > 0) // if something to store.. send it
+                    SystemsDatabase.Instance.StoreSystems(rlist.Select(x => x.Item1));     // won't do anything if rebuilding
+
+                return rlist;
+
+            }).ContinueWith(task => this.Invoke(new Action(() =>
+            {
+                AddList(task.Result);
+            }
+            )));
+        }
+
+        private void extButtonFromSpansh_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            bool spherical = !checkBoxCustomCube.Checked;
+
+            Task taskspansh = Task<List<Tuple<ISystem, double>>>.Factory.StartNew(() =>
+            {
+                SpanshClass spansh = new SpanshClass();
+                // cube: use *1.412 (sqrt(2)) to reach out to far corner of cube
+                // cube: must get centre system, to know what co-ords it is..
+
+                List<Tuple<ISystem, double>> rlist = null;
+
+                if (textBoxSystemName.Text.HasChars())
+                {
+                    rlist = spansh.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                }
+                else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
+                {
+                    rlist = spansh.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                }
+                else
+                {
+                    rlist = new List<Tuple<ISystem, double>>();
+                }
+
+                if (rlist != null && rlist.Count > 0) // if something to store.. send it
+                    SystemsDatabase.Instance.StoreSystems(rlist.Select(x => x.Item1));     // won't do anything if rebuilding
+
+                return rlist;
+
+            }).ContinueWith(task => this.Invoke(new Action(() =>
+            {
+                AddList(task.Result);
+            }
+            )));
+
+        }
+
+        private void AddList(List<Tuple<ISystem, double>> listsphere)
+        {
+            if (listsphere != null)
+            {
+                HashSet<string> excluded = extCheckBoxExcludeVisitedSystems.Checked ? discoveryform.History.Visited.Values.Select(x => x.System.Name).ToHashSet() : new HashSet<string>();
+                bool spherical = !checkBoxCustomCube.Checked;
+
+                if (!spherical)       // if cubed, need to filter them out
+                {
+                    ISystem centre = listsphere.Find(x => x.Item2 <= 1)?.Item1;     // find centre, i.e less 1 ly distance
+                    if (centre != null)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("From " + listsphere.Count());
+                        //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine("<" + x.Item1.ToString());
+
+                        double mindistsq = numberBoxMinRadius.Value * numberBoxMinRadius.Value;     // mindist is the square line distance, per stardistance use
+
+                        listsphere = (from s in listsphere
+                                      where
+                                        (s.Item1.X - centre.X) * (s.Item1.X - centre.X) + (s.Item1.Y - centre.Y) * (s.Item1.Y - centre.Y) + (s.Item1.Z - centre.Z) * (s.Item1.Z - centre.Z) >= mindistsq &&
+                                        Math.Abs(s.Item1.X - centre.X) <= numberBoxMaxRadius.Value &&
+                                        Math.Abs(s.Item1.Y - centre.Y) <= numberBoxMaxRadius.Value &&
+                                        Math.Abs(s.Item1.Z - centre.Z) <= numberBoxMaxRadius.Value &&
+                                        !excluded.Contains(s.Item1.Name)
+                                      select s).ToList();
+
+                        //System.Diagnostics.Debug.WriteLine("To " + listsphere.Count());
+                        //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine(">" + x.Item1.ToString());
+                    }
+                }
+                else 
+                {
+                    listsphere = (from s in listsphere
+                                  where !excluded.Contains(s.Item1.Name)
+                                  select s).ToList();
+                }
+            }
+
+            if (listsphere == null)
+            {
+                string resp = String.Format("Website did not return any data on {0}\nIt may be a galactic object that it does not know about".T(EDTx.FindSystemsUserControl_EDSM), textBoxSystemName.Text);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), resp, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            Cursor = Cursors.Default;
+
+            if (listsphere != null)
+            {
+                ReturnSystems(listsphere);
+            }
+        }
+
+
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Excel?.Invoke();
@@ -262,7 +332,7 @@ namespace EDDiscovery.UserControls
         bool ignoresystemnamechange = false;
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Text changed " + textBoxSystemName.Text);
+            //System.Diagnostics.Debug.WriteLine("Text changed " + textBoxSystemName.Text);
             if (!ignoresystemnamechange)
             {
                 SetXYZ();
@@ -272,7 +342,7 @@ namespace EDDiscovery.UserControls
 
         private void SetXYZ()
         {
-            ISystem sys = SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, false);      // not doing edsm as done via INIT
+            ISystem sys = SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping);      // not doing edsm as done via INIT
 
             if (sys != null && sys.HasCoordinate)
             {
@@ -311,12 +381,18 @@ namespace EDDiscovery.UserControls
 
         void ValidateEnable()
         {
-            buttonExtNames.Enabled = textBoxSystemName.Text.Length > 0;
+            buttonExtNames.Enabled = extButtonFromSpanshFindNames.Enabled = textBoxSystemName.Text.Length > 0;
 
             bool validradius = numberBoxMinRadius.IsValid && numberBoxMaxRadius.IsValid;
-            buttonExtEDSM.Enabled = buttonExtNames.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
-            buttonExtDB.Enabled = buttonExtVisited.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
+            bool validradiusandxyzorvalidtext = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
+
+            buttonExtEDSM.Enabled = validradiusandxyzorvalidtext && numberBoxMaxRadius.Value <= 100;
+            buttonExtVisited.Enabled = validradiusandxyzorvalidtext;
+            buttonExtDB.Enabled = validradiusandxyzorvalidtext;
+            extButtonFromSpansh.Enabled = validradiusandxyzorvalidtext && numberBoxMaxRadius.Value <= 100;
+
         }
+
 
     }
 }

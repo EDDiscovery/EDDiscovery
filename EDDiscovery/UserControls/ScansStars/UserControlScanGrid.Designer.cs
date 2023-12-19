@@ -44,11 +44,10 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.extButtonHabZones = new ExtendedControls.ExtButton();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewScangrid = new BaseUtils.DataGridViewColumnControl();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,6 +61,7 @@ namespace EDDiscovery.UserControls
             this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
@@ -101,35 +101,6 @@ namespace EDDiscovery.UserControls
             this.extButtonHabZones.UseVisualStyleBackColor = false;
             this.extButtonHabZones.Click += new System.EventHandler(this.extButtonHabZones_Click);
             // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.ImageIndeterminate = null;
-            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(88, 1);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxEDSM.TabIndex = 33;
-            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "EDSM lookup toggle");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
-            // 
             // dataViewScrollerPanel2
             // 
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScangrid);
@@ -144,11 +115,13 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewScangrid
             // 
+            this.dataGridViewScangrid.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewScangrid.AllowUserToAddRows = false;
             this.dataGridViewScangrid.AllowUserToDeleteRows = false;
             this.dataGridViewScangrid.AllowUserToResizeRows = false;
             this.dataGridViewScangrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewScangrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+            this.dataGridViewScangrid.AutoSortByColumnName = false;
             this.dataGridViewScangrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewScangrid.ColumnReorder = true;
             this.dataGridViewScangrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -157,17 +130,18 @@ namespace EDDiscovery.UserControls
             this.colClass,
             this.colDistance,
             this.colBriefing});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewScangrid.Name = "dataGridViewScangrid";
+            this.dataGridViewScangrid.PerColumnWordWrapControl = true;
             this.dataGridViewScangrid.ReadOnly = true;
             this.dataGridViewScangrid.RowHeaderMenuStrip = null;
             this.dataGridViewScangrid.RowHeadersVisible = false;
@@ -223,6 +197,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustom2
             // 
+            this.vScrollBarCustom2.AlwaysHideScrollBar = false;
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
@@ -278,7 +253,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.BackColor = System.Drawing.SystemColors.Control;
             this.panelControls.Controls.Add(this.extButtonShowControl);
             this.panelControls.Controls.Add(this.extButtonHabZones);
-            this.panelControls.Controls.Add(this.checkBoxEDSM);
+            this.panelControls.Controls.Add(this.edsmSpanshButton);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
@@ -311,6 +286,17 @@ namespace EDDiscovery.UserControls
             this.toolStripJumponiumProgressBar.Name = "toolStripJumponiumProgressBar";
             this.toolStripJumponiumProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripJumponiumProgressBar.Size = new System.Drawing.Size(100, 17);
+            // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(88, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 36;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
             // UserControlScanGrid
             // 
@@ -350,6 +336,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel panelControls;
         private ExtendedControls.ExtButton extButtonShowControl;
         private ExtendedControls.ExtButton extButtonHabZones;
-        private ExtendedControls.ExtCheckBox checkBoxEDSM;
+        private EDSMSpanshButton edsmSpanshButton;
     }
 }

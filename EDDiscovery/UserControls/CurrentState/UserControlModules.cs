@@ -15,6 +15,7 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using ExtendedControls;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -374,8 +375,8 @@ namespace EDDiscovery.UserControls
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
 
             string typename = sm.LocalisedItem;
-            if (typename.IsEmpty())
-                typename = ItemData.GetShipModuleProperties(sm.ItemFD).ModType;
+            if (typename.IsEmpty() && ItemData.TryGetShipModule(sm.ItemFD,out ItemData.ShipModule modp, false))
+                typename = modp.ModTypeString;
 
             string eng = "";
             string engtooltip = null;
@@ -528,17 +529,19 @@ namespace EDDiscovery.UserControls
             if (si != null)
             {
                 string errstr;
-                string s = si.ToJSONCoriolis(out errstr);
+                string coriolis = si.ToJSONCoriolis(out errstr);
 
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
 
-                string uri = EDDConfig.Instance.CoriolisURL + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
+                System.Diagnostics.Debug.WriteLine("Coriolis Export " + si.JSONCoriolis(out string error).ToString(true));
+
+                string uri = EDDConfig.Instance.CoriolisURL + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(coriolis) + "&bn=" + Uri.EscapeDataString(si.Name);
 
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info("Cannot launch browser, use this JSON for manual Coriolis import", FindForm().Icon, s);
+                    info.Info("Cannot launch browser, use this JSON for manual Coriolis import", FindForm().Icon, coriolis);
                     info.ShowDialog(FindForm());
                 }
             }
@@ -571,7 +574,15 @@ namespace EDDiscovery.UserControls
             {
                 string loadoutjournalline = si.ToJSONLoadout();
 
-                //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
+                // test code
+                //loadoutjournalline = BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\edsysidewinder.out");
+                //QuickJSON.JToken tk = QuickJSON.JToken.Parse(loadoutjournalline, out string err);
+                //QuickJSON.JArray tk1 = tk.Array();
+                //QuickJSON.JObject tko = tk1[0]["data"].Object();
+                //loadoutjournalline = tko.ToString(true);
+
+                System.Diagnostics.Debug.WriteLine("EDSY Export " + si.JSONLoadout().ToString(true));
+                //System.Diagnostics.Debug.WriteLine("EDSY Export " + loadoutjournalline);
 
                 string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(loadoutjournalline);
 
@@ -606,7 +617,7 @@ namespace EDDiscovery.UserControls
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:".T(EDTx.UserControlModules_FW), new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble),
                 last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
-            { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
+            { NumberBoxDoubleMinimum = 0, NumberBoxDoubleMaximum = 100, NumberBoxFormat = "0.##" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Sell", typeof(ExtendedControls.ExtButton), "Force Sell".T(EDTx.UserControlModules_ForceSell), new Point(10, 80), new Size(80, 24),null));
 

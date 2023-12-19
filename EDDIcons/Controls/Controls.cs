@@ -77,6 +77,9 @@ namespace EDDiscovery.Icons
         public static Image Scan_Bodies_HighValue { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.HighValue"); } }
         public static Image Scan_Bodies_Volcanism { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Volcanism"); } }
         public static Image Scan_Bodies_Signals { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Signals"); } }
+        public static Image Scan_Bodies_SignalsBio { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.SignalsBio"); } }
+        public static Image Scan_Bodies_SignalsGeo { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.SignalsGeo"); } }
+        public static Image Scan_Bodies_SignalsGeoBio { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.SignalsGeoBio"); } }
         public static Image Scan_Bodies_Mapped { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Mapped"); } }
         public static Image Scan_Bodies_RingOnly { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RingOnly"); } }
         public static Image Scan_DisplaySystemAlways { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.DisplaySystemAlways"); } }
@@ -136,6 +139,8 @@ namespace EDDiscovery.Icons
         public static Image spansh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.spansh"); } }
         public static Image EDDB { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDDB"); } }
         public static Image EDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDSM"); } }
+        public static Image EDSMSpansh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDSMSpansh"); } }
+        public static Image EDSMSpanshOn { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.EDSMSpanshOn"); } }
         public static Image Inara { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Inara"); } }
         public static Image Popout { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Popout"); } }
         public static Image Selector { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Selector"); } }
@@ -200,5 +205,18 @@ namespace EDDiscovery.Icons
         public static Image Docked { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Docked"); } }
         public static Image Paste { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Paste"); } }
         public static Image Resources { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Resources"); } }
+        public static Image AsteroidTotal { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.AsteroidTotal"); } }
+        public static Image NewFeature { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.NewFeature"); } }
+        public static Image NewFeatureGreen { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.NewFeatureGreen"); } }
+        public static Image expedition { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.expedition"); } }
+        public static Image Commodity { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Commodity"); } }
+        public static Image CommoditySell { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.CommoditySell"); } }
+        public static Image CommodityBuy { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.CommodityBuy"); } }
+        public static Image Outfitting { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Outfitting"); } }
+        public static Image Shipyard { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Shipyard"); } }
+        public static Image CoriolisYellow { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.CoriolisYellow"); } }
+        public static Image People { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.People"); } }
+        public static Image Economy { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Economy"); } }
+        public static Image Home { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Home"); } }
     }
 }

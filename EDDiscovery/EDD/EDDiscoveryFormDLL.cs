@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2022 EDDiscovery development team
+ * Copyright © 2015 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -17,13 +17,17 @@ using EliteDangerousCore.DB;
 using QuickJSON;
 using System;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery
 {
     public partial class EDDiscoveryForm
     {
         private EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
+        private Tuple<string, string, string, string> dllresults;   // hold results between load and shown
+        private string dllsalloweddisallowed; // holds DLL allowed between load and shown
 
+        // called on Load
         public void DLLStart()
         {
             EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(EDDOptions.Instance.DLLAppDirectory());      // any needed assemblies from here
@@ -76,8 +80,75 @@ namespace EDDiscovery
                 UpdatePanelListInContextMenuStrip();
                 OnPanelAdded?.Invoke();
             };
+
             dllsalloweddisallowed = EDDConfig.Instance.DLLPermissions;
-            dllresults = DLLStart(ref dllsalloweddisallowed);       // we run it, and keep the results for processing in Shown
+
+            dllresults = DLLLoad();       // we run it, and keep the results for processing in Shown
+        }
+
+        // load DLLs
+        public Tuple<string, string, string, string> DLLLoad()
+        {
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load DLL");
+
+            string verstring = EDDApplicationContext.AppVersion;
+            string[] options = new string[] { EDDDLLInterfaces.EDDDLLIF.FLAG_HOSTNAME + "EDDiscovery",
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_JOURNALVERSION + EliteDangerousCore.DLL.EDDDLLCallerHE.JournalVersion.ToStringInvariant(),
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLBACKVERSION + DLLCallBacks.ver.ToStringInvariant(),
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLVERSION + EliteDangerousCore.DLL.EDDDLLCaller.DLLCallerVersion.ToStringInvariant(),
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_PANELCALLBACKVERSION + UserControls.UserControlExtPanel.PanelCallBackVersion.ToStringInvariant(),
+                                            };
+
+            string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
+            bool[] autodisallow = new bool[] { false, true };
+            return DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref dllsalloweddisallowed,
+                                                             (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
+        }
+
+
+
+        // called on Show
+        public void DLLVerify()
+        {
+            if (dllresults.Item3.HasChars())       // new DLLs
+            {
+                string[] list = dllresults.Item3.Split(',');
+                bool changed = false;
+                foreach (var dll in list)
+                {
+                    if (ExtendedControls.MessageBoxTheme.Show(this,
+                                    string.Format(("The following application extension DLL have been found" + Environment.NewLine +
+                                    "Do you wish to allow it to be used?" + Environment.NewLine + Environment.NewLine +
+                                    "{0} " + Environment.NewLine
+                                    ).T(EDTx.EDDiscoveryForm_DLLW), dll),
+                                    "Warning".T(EDTx.Warning),
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    {
+                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("+" + dll, ",");
+                        changed = true;
+                    }
+                    else
+                    {
+                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("-" + dll, ",");
+                    }
+                }
+
+                if (changed)
+                {
+                    DLLManager.UnLoad();
+                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Reload DLL");
+                    dllresults = DLLLoad();
+                }
+            }
+
+            EDDConfig.Instance.DLLPermissions = dllsalloweddisallowed;        // write back the permission string
+
+            if (dllresults.Item1.HasChars())   // ok
+                LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), dllresults.Item1));
+            if (dllresults.Item2.HasChars())   // failed
+                LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), dllresults.Item2));
+            if (dllresults.Item4.HasChars())   // failed
+                LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), dllresults.Item4));
         }
 
 
@@ -125,6 +196,7 @@ namespace EDDiscovery
         }
 
         // Note ASYNC so we must use data return method
+        // tbd edsm only - will need to do a spansh one..
         private async void DLLRequestScanData(object requesttag, object usertag, string systemname, bool edsmlookup)           
         {
             var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit
@@ -138,7 +210,7 @@ namespace EDDiscovery
                 if (syslookup.HasChars())
                 {
                     var sc = History.StarScan;
-                    var snode = await sc.FindSystemAsync(new SystemClass(syslookup), edsmlookup);       // async lookup
+                    var snode = await sc.FindSystemAsync(new SystemClass(syslookup), edsmlookup ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);       // async lookup
                     if (snode != null)
                         json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                 }
@@ -202,24 +274,6 @@ namespace EDDiscovery
             return outfitting.ToString();
         }
 
-
-        public Tuple<string, string, string, string> DLLStart(ref string alloweddlls)
-        {
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load DLL");
-
-            string verstring = EDDApplicationContext.AppVersion;
-            string[] options = new string[] { EDDDLLInterfaces.EDDDLLIF.FLAG_HOSTNAME + "EDDiscovery",
-                                              EDDDLLInterfaces.EDDDLLIF.FLAG_JOURNALVERSION + EliteDangerousCore.DLL.EDDDLLCallerHE.JournalVersion.ToStringInvariant(), 
-                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLBACKVERSION + DLLCallBacks.ver.ToStringInvariant(),
-                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLVERSION + EliteDangerousCore.DLL.EDDDLLCaller.DLLCallerVersion.ToStringInvariant(),
-                                              EDDDLLInterfaces.EDDDLLIF.FLAG_PANELCALLBACKVERSION + UserControls.UserControlExtPanel.PanelCallBackVersion.ToStringInvariant(),
-                                            };
-
-            string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
-            bool[] autodisallow = new bool[] { false, true };
-            return DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls,
-                                                             (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
-        }
 
 
     }

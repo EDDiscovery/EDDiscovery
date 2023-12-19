@@ -15,6 +15,7 @@
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,20 +40,22 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "UCSearchStars";
 
-            dataGridView.CheckEDSM = true;
+            dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.All;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            DBSettingsSaver db = new DBSettingsSaver(this, "SearchFindSys");
+            UserDatabaseSettingsSaver db = new UserDatabaseSettingsSaver(this, "SearchFindSys");
 
             findSystemsUserControl.Init(db, true, DiscoveryForm);
             findSystemsUserControl.Excel += () => { dataGridView.Excel(dataGridView.ColumnCount); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
-            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition };
+            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, 
+                                EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition, EDTx.SearchStars_ColumnStarType };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { findSystemsUserControl });
+
             dataGridView.Init(DiscoveryForm);
         }
 
@@ -93,6 +96,7 @@ namespace EDDiscovery.UserControls
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
                     object[] rowobj = {     index.ToString(),
                                             sys.Name,
+                                            Stars.StarName(sys.MainStarType),
                                             (ret.Item2>=0 ? ret.Item2.ToString("0.#") : ""),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")

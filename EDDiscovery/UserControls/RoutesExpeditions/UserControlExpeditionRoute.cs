@@ -27,12 +27,15 @@ namespace EDDiscovery.UserControls
         #region Routes
 
         // insert or append (insertindex=-1) to the grid, either systementry, Isystems or strings
-        public void AppendOrInsertSystems(int insertIndex, IEnumerable<object> sysnames, bool updatesystemrows = true)
+        // rows will be inserted with cells[0].tag set to null, so it will cause them to autoupdate
+        // totals will be asked to update
+        public void AppendOrInsertSystems(int insertIndex, IEnumerable<object> sysnames)
         {
             int i = 0;
             foreach (var system in sysnames)
             {
                 object[] data;
+                long? id64 = null;
 
                 if (system is string)
                 {
@@ -40,29 +43,37 @@ namespace EDDiscovery.UserControls
                 }
                 else if (system is SavedRouteClass.SystemEntry)
                 {
-                    var se = (SavedRouteClass.SystemEntry)system;
-                    bool known = se.HasCoordinate;
-                    data = new object[] { se.Name, se.Note, known ? se.X.ToString("0.##") : "", known ? se.Y.ToString("0.##") : "", known ? se.Z.ToString("0.##") : "" };
+                    var se = (SavedRouteClass.SystemEntry)system;           
+                    bool known = se.HasCoordinate;                          
+                    data = new object[] { se.Name, se.Note, known ? se.X.ToString("N5") : "", known ? se.Y.ToString("N5") : "", known ? se.Z.ToString("N5") : "" };
                 }
                 else
                 {
                     var se = (ISystem)system;
-                    data = new object[] { se.Name, "" };
+                    id64 = se.SystemAddress;
+                    string note = se.Tag as string ?? "";// Tag may have info in it for notes, if so, use it
+                    bool known = se.HasCoordinate;
+                    data = new object[] { se.Name, note , known ? se.X.ToString("N5") : "", known ? se.Y.ToString("N5") : "", known ? se.Z.ToString("N5"): "" };         
                 }
 
                 if (((string)data[0]).HasChars())       // must have a name
                 {
                     if (insertIndex < 0)
-                        dataGridView.Rows.Add(data);
+                    {
+                        int rowno = dataGridView.Rows.Add(data);
+                        dataGridView.Rows[rowno].Cells[id64imported].Tag = id64;
+                    }
                     else
+                    {
+                        dataGridView.Rows[insertIndex].Cells[id64imported].Tag = id64;
                         dataGridView.Rows.Insert(insertIndex++, data);
+                    }
+
+                    forcetotalsupdate = true;           // update the totals
                 }
 
                 i++;
             }
-
-            if (updatesystemrows)
-                UpdateSystemRows();
         }
 
         // if the data in the grid is set, and different to the loadedroute, or the grid is not empty.  
@@ -81,14 +92,16 @@ namespace EDDiscovery.UserControls
 
             route.Systems.Clear();
 
+            // grid xyz is in culture specific mode
+
             var data = dataGridView.Rows.OfType<DataGridViewRow>()
                 .Where(r => r.Index < dataGridView.NewRowIndex && (r.Cells[0].Value as string).HasChars())
                 .Select(r => new SavedRouteClass.SystemEntry(
                                     (r.Cells[SystemName.Index].Value as string) ?? "", // sometimes they can end up null
                                     (r.Cells[Note.Index].Value as string) ?? "",
-                                    ((string)r.Cells[ColumnX.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown),
-                                    ((string)r.Cells[ColumnY.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown),
-                                    ((string)r.Cells[ColumnZ.Index].Value).InvariantParseDouble(SavedRouteClass.SystemEntry.NotKnown)
+                                    ((string)r.Cells[ColumnX.Index].Value).ParseDouble(SavedRouteClass.SystemEntry.NotKnown, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number),
+                                    ((string)r.Cells[ColumnY.Index].Value).ParseDouble(SavedRouteClass.SystemEntry.NotKnown, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number),
+                                    ((string)r.Cells[ColumnZ.Index].Value).ParseDouble(SavedRouteClass.SystemEntry.NotKnown, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number)
                                     ));
 
             route.Systems.AddRange(data);

@@ -85,9 +85,12 @@ SECTION UserControlCompass
 .buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
 .extButtonShowControl.ToolTip: "Configure compass overlay" @
 .extButtonFont.ToolTip: "Configure font of compass" @
-.hidewhennolatlong: "Hide when no Lat/Long" @
+.hidewhennolatlong: "Hide when Elite has no Lat/Long" @
+.hidewhennotarget: "Hide when no Lat/Long target is set" @
 .hidewhenonfoot: "Hide when on foot" @
 .cleartargetonleavingbody: "Clear target when leaving a body" @
+.hidewheninSRV: "Hide when in SRV" @
+.hidewheninship: "Hide when in ship" @
 
 SECTION UserControlWebBrowser
 
@@ -144,6 +147,7 @@ SECTION SearchScans
 .ColumnStar: "Star" @
 .ColumnParentParent: "Grandparent" @
 .ColumnStarStar: "Parent of Star" @
+.ColumnSystem: "System" @
 .comboBoxSearches.ToolTip: "Select a predefined condition" @
 .buttonFind.ToolTip: "Search for condition below" @
 .buttonSave.ToolTip: "Save current condition" @
@@ -173,6 +177,7 @@ SECTION SearchStars
 
 .ColumnIndex: "Index" @
 .ColumnStar: "Star" => "Étoile"
+.ColumnStarType: "Star type" @
 .ColumnCentreDistance: "Centre Distance" => "Distance du centre"
 .ColumnCurrentDistance: "Current Distance" => "Disctance actuelle"
 .ColumnPosition: "Position" @
@@ -181,7 +186,8 @@ SECTION DataGridViewStarResults
 
 .3d: "Go to star on 3D Map" => "Aller à l'étoile sur la carte 3D"
 .EDSM: "View on EDSM" => "Voir sur EDSM"
-.Data: "View Data On Entry" => "Voir les données sur l'entrée"
+.Spansh: "View on Spansh" @
+.Data: "View Scan Display" => "Voir les données sur l'entrée"
 .Goto: "Go to entry on grid" @
 
 SECTION UserControlEngineering
@@ -268,6 +274,9 @@ SECTION UserControlExpedition
 .labelEndDate: "End Date:" => "Date de fin: "
 .labelDateStart: "Start Date:" => "Date de début: "
 .labelRouteName: "Route Name:" => "Nom de l'itinéraire: "
+.viewSystemToolStripMenuItem: "View System" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+.viewOnEDSMToolStripMenuItem: "View on EDSM" @
 .copyToolStripMenuItem: "Copy" => "Copier"
 .pasteToolStripMenuItem: "Paste" => "Coller"
 .cutToolStripMenuItem: "Cut" @
@@ -306,6 +315,8 @@ SECTION UserControlJournalGrid
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Définir le départ/arrivée pour le calcul d'itinéraire"
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Éxécuter les actions sur cette entrée"
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "Copier cette entrée dans le presse-papier"
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .TT1: " showing {0} original {1}" => " montre {0} original {1}"
 .TTFilt1: "Filtered {0}" => "Filtré {0}"
 .TTSelAge: "Select the entries by age, " => "Sélection des entrées par age, "
@@ -584,61 +595,74 @@ SECTION UserControlPanelSelector
 
 SECTION UserControlRoute
 
-.SystemCol: "System" => "Système"
-.DistanceCol: "Distance" @
-.WayPointDistCol: "Dist. Waypoint" => "Dist. Point de passage"
-.DeviationCol: "Deviation" => "Déviation"
-.buttonExtTravelTo: "History" => "Historique"
-.buttonExtTravelFrom: "History" => "Historique"
-.buttonExtTargetTo: "Target" => "Cible"
-.buttonToEDSM: "EDSM" @
-.buttonFromEDSM: "EDSM" @
-.buttonTargetFrom: "Target" => "Cible"
-.cmd3DMap: "3D Map" => "Carte 3D"
-.labelLy2: "ly" => "al"
-.labelLy1: "ly" => "al"
-.labelTo: "To" => "vers"
-.labelMaxJump: "Max jump" => "saut max"
-.labelDistance: "Distance" @
-.labelMetric: "Metric" => "métrique"
-.button_Route: "Find route" => "Trouver itinéraire"
-.labelFrom: "From" => "Depuis"
-.showInEDSMToolStripMenuItem: "Show in EDSM" => "Afficher dans EDSM"
-.copyToolStripMenuItem: "Copy" => "Copier"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi des données vers Excel"
-.textBox_ToName.ToolTip: "Alternate Name" => "Nom alternatif"
-.textBox_FromName.ToolTip: "Alternate name" => "Nom alternatif"
-.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "Choisir le métrique à utiliser lors du calcul d'itinéraire"
-.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "Copier l'entrée de l'historique de voyage principal vers la fin d'itinéraire"
-.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "Copier l'entrée de l'historique de voyage principal vers le début d'itinéraire"
-.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "Copier le système cible vers la fin d'itinéraire"
-.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Ouvrir cette fin d'itinéraire dans EDSM"
-.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Ouvrir ce début d'itinéraire dans EDSM"
-.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Copier le système cible vers le début d'itinéraire"
-.checkBoxEDSM.ToolTip: "Lookup stars from EDSM if not found in database" @
-.cmd3DMap.ToolTip: "Show route on 3D Map" => "Afficher l'itinéraire sur la carte 3D"
-.textBox_From.ToolTip: "Select system to start the route" => "Sélectionner un système pour le début de l'itinéraire"
-.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "Saisir votre portée de saut, ou recherche de portée pour les sauts longs"
-.textBox_To.ToolTip: "Select the system to end in" => "Sélectioner le système d'arrivée"
-.textBox_Distance.ToolTip: "Distance between start and end" => "Distance entre le départ et l'arrivée"
-.textBox_ToZ.ToolTip: "Z Co-ord" @
-.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" @
-.textBox_ToX.ToolTip: "X Co-Ord" @
-.textBox_FromZ.ToolTip: "Z Co-ord" @
-.button_Route.ToolTip: "Compute the route" => "Calculer l'itinéraire"
-.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" @
-.textBox_FromX.ToolTip: "X Co-ord" @
-.Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "Ceci va générer une grande quantité ({0}) de sauts\r\nMerci de confirmer"
-.NoRoute: "No route set up, retry" => "Pas d'itinéraire planifié, réessayez"
-.checkBox_FsdBoost: "Use Boosts" => "Utilisation des injection"
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." => "L'itinéraire essaiera d'utiliser des injection FSD au cas ou une route directe ne pourrait pas"
-.showScanToolStripMenuItem: "View Scan Display" => "Afficher visualisation du scan"
 .M1: "Nearest to Waypoint" @
 .M2: "Minimum Deviation from Path" @
 .M3: "Nearest to Waypoint with dev<=100ly" @
 .M4: "Nearest to Waypoint with dev<=250ly" @
 .M5: "Nearest to Waypoint with dev<=500ly" @
 .M6: "Nearest to Waypoint + Deviation / 2" @
+.SystemCol: "System" => "Système"
+.NoteCol: "Notes" @
+.DistanceCol: "Distance" @
+.StarClassCol: "Star Class" @
+.WayPointDistCol: "Dist. Waypoint" => "Dist. Point de passage"
+.DeviationCol: "Deviation" => "Déviation"
+.groupBoxSpansh: "Spansh" @
+.extButtonNeutronRouter: "Neutron Router" @
+.extButtonSpanshRoadToRiches: "Road to Riches" @
+.extButtonSpanshAmmoniaWorlds: "Ammonia Worlds" @
+.extButtonSpanshEarthLikes: "Earth Likes" @
+.extButtonSpanshTradeRouter: "Trade Router" @
+.extButtonFleetCarrier: "Fleet Carrier" @
+.extButtonSpanshGalaxyPlotter: "Galaxy Plotter" @
+.extButtonExoMastery: "Exo Mastery" @
+.extCheckBoxPermitSystems: "Use Permit Systems" @
+.groupBoxInternal: "EDD Router" @
+.labelMetric: "Metric" => "métrique"
+.extButtonRoute: "Find route" => "Trouver itinéraire"
+.groupBoxPara: "Parameters" @
+.checkBox_FsdBoost: "Use Boosts" => "Utilisation des injection"
+.labelFrom: "From" => "Depuis"
+.labelLy2: "ly" => "al"
+.labelLy1: "ly" => "al"
+.buttonExtTravelTo: "History" => "Historique"
+.labelEDSMBut: "Web Lookup" @
+.labelMaxJump: "Max jump" => "saut max"
+.labelDistance: "Distance" @
+.buttonExtTravelFrom: "History" => "Historique"
+.labelTo: "To" => "vers"
+.buttonExtTargetTo: "Target" => "Cible"
+.buttonTargetFrom: "Target" => "Cible"
+.copyToolStripMenuItem: "Copy" => "Copier"
+.showScanToolStripMenuItem: "View Scan Display" => "Afficher visualisation du scan"
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+.showInEDSMToolStripMenuItem: "View on EDSM" => "Afficher dans EDSM"
+.extButtonExpeditionPush.ToolTip: "Push to expedition" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi des données vers Excel"
+.cmd3DMap.ToolTip: "Show route on 3D Map" => "Afficher l'itinéraire sur la carte 3D"
+.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "Choisir le métrique à utiliser lors du calcul d'itinéraire"
+.extButtonRoute.ToolTip: "Compute the route" => "Calculer l'itinéraire"
+.textBox_From.ToolTip: "Select system to start the route" => "Sélectionner un système pour le début de l'itinéraire"
+.textBox_FromX.ToolTip: "X Co-ord" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." => "L'itinéraire essaiera d'utiliser des injection FSD au cas ou une route directe ne pourrait pas"
+.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" @
+.textBox_ToName.ToolTip: "Alternate Name" => "Nom alternatif"
+.textBox_FromZ.ToolTip: "Z Co-ord" @
+.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "Saisir votre portée de saut, ou recherche de portée pour les sauts longs"
+.textBox_FromName.ToolTip: "Alternate name" => "Nom alternatif"
+.textBox_ToX.ToolTip: "X Co-Ord" @
+.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" @
+.textBox_Distance.ToolTip: "Distance between start and end" => "Distance entre le départ et l'arrivée"
+.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "Copier l'entrée de l'historique de voyage principal vers la fin d'itinéraire"
+.textBox_ToZ.ToolTip: "Z Co-ord" @
+.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "Copier l'entrée de l'historique de voyage principal vers le début d'itinéraire"
+.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "Copier le système cible vers la fin d'itinéraire"
+.textBox_To.ToolTip: "Select the system to end in" => "Sélectioner le système d'arrivée"
+.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Ouvrir cette fin d'itinéraire dans EDSM"
+.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Copier le système cible vers le début d'itinéraire"
+.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Ouvrir ce début d'itinéraire dans EDSM"
+.extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
+.labelCargo: "Cargo" @
 
 SECTION UserControlRouteTracker
 
@@ -690,7 +714,11 @@ SECTION UserControlScan
 .PlanetClass: "Show Classes of Planets" => "Afficher les classes de planètes"
 .StarClass: "Show Classes of Stars" => "Afficher les classes d'étoile"
 .Distance: "Show distance of bodies" => "Afficher la distance des corps"
+.PlanetMass: "Show mass of planets" @
+.StarMass: "Show mass of stars" @
+.StarAge: "Show age of stars" @
 .Expired: "Expired:" @
+.StarsOnDiffLines: "Show bodyless stars on separate lines" @
 
 SECTION UserControlScanGrid
 
@@ -750,7 +778,7 @@ SECTION UserControlSettings
 .groupBoxCustomScreenShots: "Screenshots conversion" => "Conversion de capture d'écran"
 .buttonExtScreenshot: "Configure" => "Configurer"
 .checkBoxCustomEnableScreenshots: "Enable" => "Activer"
-.groupBoxCustomEDSM: "EDSM Control" => "Contrôle d'EDSM/EDDB"
+.groupBoxCustomEDSM: "System DB Control" => "Contrôle d'EDSM/EDDB"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Sélectionner les secteurs galactiques"
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Activer le téléchargement des données stellaires"
 .groupBoxPopOuts: "Window Options" => "Options de fenêtre"
@@ -814,6 +842,8 @@ SECTION UserControlSettings
 .Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .NoMap: "No map available!" @
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Terminé, Merci de fermer la fenêtre.\r\nSi vous avez déjà une carte 3D ouverte, les changement ne seront visibles qu'au prochain démarrage d'EDD\r\n"
+.extButtonReloadStarDatabase: "Reload Star Database" @
+.RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
 
 SECTION UserControlShipYards
 
@@ -914,6 +944,7 @@ SECTION UserControlStarDistance
 .From: "From {0}" => "Depuis {0}"
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
 .viewSystemToolStripMenuItem: "View System" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 
 SECTION UserControlStarList
 
@@ -926,6 +957,7 @@ SECTION UserControlStarList
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Supprimer le tri des colonnes"
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Aller à l'étoile dans la carte 3D"
 .viewOnEDSMToolStripMenuItem: "View on EDSM" => "Afficher sur EDSM"
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .setNoteToolStripMenuItem: "Set Note" => "Définir une note"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplacer automatiquement le curseur sur la dernier entrée quand elle arrive"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi des données dans Excel"
@@ -1053,6 +1085,7 @@ SECTION UserControlStats
 .FLEETCARRIER: "Fleetcarrier" @
 .CQC: "CQC" @
 .Exobiology: "Exobiology" @
+.Thargoids: "Thargoids" @
 .GoodsBought: "Goods Bought" => "Marchandises achetées"
 .GoodsSold: "Goods Sold" => "Marchandises vendues"
 .GoodsProfit: "Goods Profit" @
@@ -1207,6 +1240,8 @@ SECTION UserControlTravelGrid
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Effectuer des actions sur cette entrée"
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "Copier l'entrée du journal dans le presse-papier/log"
 .writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "Écrire la classe d'événement dans le log (debug)"
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Éxécution des actions dans la selection pour débug vocal (debug)"
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Éxécution de la selection via le système d'Inara (Debug)"
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Éxécuter l'entrée via le système de profil (Debug)"
@@ -1352,6 +1387,8 @@ SECTION UserControlMiningOverlay
 .extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
 .buttonExtExcel.ToolTip: "Export" @
 .extComboBoxChartOptions.ToolTip: "Select chart options" @
+.extCheckBoxChartBase.ToolTip: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" @
+.distall: "Distribution vs All" @
 
 SECTION UserControlFactions
 
@@ -1413,6 +1450,19 @@ SECTION UserControlOrganics
 .at: "At {0}" @
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 .extButtonAlignment.ToolTip: "Alignment" @
+.ColDate: "Date" @
+.ColStarSystem: "Star System" @
+.ColBodyName: "Body Name" @
+.ColBodyType: "Body Type" @
+.ColGenus: "Genus" @
+.ColSpecies: "Species" @
+.ColVariant: "Variant" @
+.ColLastScanType: "Last Scan Type" @
+.ColValue: "Value" @
+.labelTime: "Time" @
+.labelStart: "Start" @
+.labelEnd: "End" @
+.comboBoxTime.ToolTip: "Select the entries by age" @
 
 SECTION ScanDisplayForm
 

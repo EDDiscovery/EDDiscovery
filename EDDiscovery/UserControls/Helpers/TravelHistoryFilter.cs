@@ -147,7 +147,8 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public List<HistoryEntry> FilterLatestFirst(List<HistoryEntry> list)      // list should be in latest first order, supports a limited set
+        // list should be in latest first order, supports a limited set
+        public List<HistoryEntry> FilterLatestFirst(List<HistoryEntry> list)      
         {
             if (MaximumNumberOfItems.HasValue)
             {
@@ -165,22 +166,24 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        // list in is in ascending order, return in ascending date order
         public List<Ledger.Transaction> Filter(List<Ledger.Transaction> txlist )
-        {                                                               // LASTDOCK not supported
+        {                                                             
             if (MaximumNumberOfItems.HasValue)
             {
-                return txlist.OrderByDescending(s => s.EventTimeUTC).Take(MaximumNumberOfItems.Value).ToList();
+                int startdata = Math.Max(0, txlist.Count - MaximumNumberOfItems.Value);
+                return txlist.GetRange(startdata, txlist.Count - startdata);
             }
             else if (MaximumDataAge.HasValue)
             {
                 var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
-                return (from tx in txlist where tx.EventTimeUTC >= oldestData orderby tx.EventTimeUTC descending select tx).ToList();
+                return txlist.Where(x => x.EventTimeUTC >= oldestData).ToList();
             }
             else
                 return txlist;
         }
 
-        public static void InitaliseComboBox(ExtendedControls.ExtComboBox cc, string last, bool incldockstartend = true, bool inclnumberlimit = true)
+        public static void InitaliseComboBox(ExtendedControls.ExtComboBox cc, string last, bool incldock, bool inclnumberlimit, bool inclstartend)
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
@@ -210,9 +213,12 @@ namespace EDDiscovery.UserControls
                 el.Add(TravelHistoryFilter.Last(500));
             };
 
-            if (incldockstartend)
+            if (incldock)
             {
                 el.Add(TravelHistoryFilter.LastDock());
+            }
+            if (inclstartend)
+            {
                 el.Add(TravelHistoryFilter.StartEnd());
             }
 

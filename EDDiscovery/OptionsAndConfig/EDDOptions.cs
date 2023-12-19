@@ -39,12 +39,13 @@ namespace EDDiscovery
             }
         }
 
-        static EDDOptions options = null;
-
         public string VersionDisplayString { get; private set; }
-        public string AppDataDirectory { get; private set; }
-        public string UserDatabasePath { get; private set; }
+        public string AppDataDirectory { get; private set; }    
+        public string UserDatabasePath { get; private set; }       
+        public string UserDatabaseFilename { get; private set; } = "EDDUser.sqlite";
         public string SystemDatabasePath { get; private set; }
+        public string ScanCachePath { get; private set; }
+        public string SystemDatabaseFilename { get; private set; } = "EDDSystem.sqlite";
         public string IconsPath { get; private set; }
         public bool NoWindowReposition { get; set; }
         public bool MinimiseOnOpen { get; set; }
@@ -52,7 +53,7 @@ namespace EDDiscovery
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
-        public bool NoTabs { get; set; }
+        public bool NoTabs { get; private set; }
         public bool TabsReset { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
@@ -66,31 +67,33 @@ namespace EDDiscovery
         public bool CheckRelease { get; private set; }
         public bool CheckGithubFiles { get; private set; }
         public bool ResetLanguage { get; set; }
-        public string SelectLanguage { get; set; }
-        public bool SafeMode { get; set; }
-        public bool DisableMerge { get; set; }
-        public string NotificationFolderOverride { get; set; }      // normally null..
-        public float FontSize { get; set; }                           // override font size, 0 if not
-        public string Font { get; set; }                           // override font, null if not
-        public string Commander { get; set; }                   // set commander, null if not
-        public string Profile { get; set; }                   // set profile, null if not
-        public bool TempDirInDataDir { get; set; }
-        public string WebServerFolder { get; set; }             // normally empty, so selects zip server
-        public bool LowPriority { get; set; }
-        public System.Diagnostics.ProcessPriorityClass ProcessPriorityClass { get; set; } = System.Diagnostics.ProcessPriorityClass.Normal;
-        public bool ForceTLS12 { get; set; }
-        public bool DisableTimeDisplay { get; set; }
-        public bool DisableCommanderSelect { get; set; }
-        public bool DisableVersionDisplay { get; set; }
-        public string OutputEventHelp { get; set; }
-        public string DefaultJournalFolder { get; set; }        // default is null, use computed value
-        public string DefaultJournalMatchFilename { get; set; } = "Journal*.log";      
-        public DateTime MinJournalDateUTC { get; set; }        // default is MinDate
-        public bool EnableTGRightDebugClicks { get; set; }
-        public bool AutoLoadNextCommander { get; set; }
-        public int HistoryLoadDayLimit { get; set; }    // default zero not set
+        public string SelectLanguage { get; private set; }
+        public bool SafeMode { get; private set; }
+        public bool DisableMerge { get; private set; }
+        public string NotificationFolderOverride { get; private set; }      // normally null..
+        public float FontSize { get; private set; }                           // override font size, 0 if not
+        public string Font { get; private set; }                           // override font, null if not
+        public string Commander { get; private set; }                   // set commander, null if not
+        public string Profile { get; private set; }                   // set profile, null if not
+        public bool TempDirInDataDir { get; private set; }
+        public string WebServerFolder { get; private set; }             // normally empty, so selects zip server
+        public bool LowPriority { get; private set; }
+        public System.Diagnostics.ProcessPriorityClass ProcessPriorityClass { get; private set; } = System.Diagnostics.ProcessPriorityClass.Normal;
+        public bool ForceTLS12 { get; private set; }
+        public bool DisableTimeDisplay { get; private set; }
+        public bool DisableCommanderSelect { get; private set; }
+        public bool DisableVersionDisplay { get; private set; }
+        public string OutputEventHelp { get; private set; }
+        public string DefaultJournalFolder { get; private set; }        // default is null, use computed value
+        public string DefaultJournalMatchFilename { get; private set; } = "Journal*.log";      
+        public DateTime MinJournalDateUTC { get; private set; }        // default is MinDate
+        public bool EnableTGRightDebugClicks { get; private set; }
+        public bool AutoLoadNextCommander { get; private set; }
+        public int HistoryLoadDayLimit { get; private set; }    // default zero not set
 
-        public string Culture { get; set; }             // default null use system culture, use de-DE etc
+        public bool DeleteSystemDB { get; private set; }
+        public bool KeepSystemDataDownloadedFiles { get; private set; }
+        public string Culture { get; private set; }             // default null use system culture, use de-DE etc
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -118,6 +121,7 @@ namespace EDDiscovery
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
         public string DLLExeDirectory() { return SubExeDirectory("DLL"); }
+        public string DownloadedImages() { return SubAppDirectory("Images"); }
         public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string CAPIDirectory() { return SubAppDirectory("CAPI"); }
         public string TempMoveDirectory() { return SubAppDirectory("MoveFolder"); }
@@ -126,10 +130,6 @@ namespace EDDiscovery
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
         public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
-
-        private string AppFolder;      // internal to use.. for -appfolder option
-        private bool StoreDataInProgramDirectory;  // internal to us, to indicate app folder is relative to exe not %localappdata%
-        private string translationfolder; // internal to us
 
         #endregion
 
@@ -223,6 +223,10 @@ namespace EDDiscovery
             {
                 UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-userdbfilename")
+            {
+                UserDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname == "-cmdr" || optname == "-commander")
             {
                 Commander = toeol ? ca.Rest() : ca.NextEmpty();
@@ -234,6 +238,16 @@ namespace EDDiscovery
             else if (optname == "-systemsdbpath")
             {
                 SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-scancachepath")
+            {
+                ScanCachePath = toeol ? ca.Rest() : ca.NextEmpty();
+                if (ScanCachePath.Equals("Disabled", StringComparison.InvariantCultureIgnoreCase))
+                    ScanCachePath = null;
+            }
+            else if (optname == "-systemsdbfilename" )
+            {
+                SystemDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname == "-iconspath")
             {
@@ -305,11 +319,11 @@ namespace EDDiscovery
                     case "norepositionwindow": NoWindowReposition = true; break;
                     case "minimize": case "minimise": MinimiseOnOpen = true; break;
                     case "maximise": case "maximize": MaximiseOnOpen = true; break;
-                    case "portable": StoreDataInProgramDirectory = true; break;
+                    case "portable": PortableInstall = true; break;
                     case "nrw": NoWindowReposition = true; break;
                     case "showactionbutton": ActionButton = true; break;
                     case "noload": NoLoad = true; break;
-                    case "nosystems": NoSystemsLoad = true; break;
+                    case "nosystemsload": NoSystemsLoad = true; break;
                     case "logexceptions": LogExceptions = true; break;
                     case "nogithubpacks": DontAskGithubForPacks = true; break;
                     case "checkrelease": CheckRelease = true; break;
@@ -349,6 +363,8 @@ namespace EDDiscovery
                     case "enabletgrightclicks": EnableTGRightDebugClicks = true; break;
                     case "autoloadnextcommander": AutoLoadNextCommander = true; break;
                     case "null": break;     // null option - used by installer when it writes a app options file if it does not want to do anything
+                    case "deletesystemdb": DeleteSystemDB = true; break;
+                    case "keepsystemdownloadedfiles": KeepSystemDataDownloadedFiles = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -414,7 +430,7 @@ namespace EDDiscovery
             {   
                 AppDataDirectory = AppFolder;
             }
-            else if (StoreDataInProgramDirectory)       // if store in program folder, its exe/appfolder
+            else if (PortableInstall)                   // if store in program folder, its exe/appfolder
             {
                 AppDataDirectory = Path.Combine(ExeDirectory(), AppFolder);
             }
@@ -493,23 +509,27 @@ namespace EDDiscovery
 
             // finally ensure we have a path for the dbs
 
-            if (UserDatabasePath == null)
-                ResetUserDatabasePath();
+            if (UserDatabasePath == null )
+            {
+                UserDatabasePath = Path.Combine(AppDataDirectory, UserDatabaseFilename);
+            }
             if (SystemDatabasePath == null)
-                ResetSystemDatabasePath();
+            {
+                SystemDatabasePath = Path.Combine(AppDataDirectory, SystemDatabaseFilename);
+            }
+            if (ScanCachePath == null)
+            {
+                ScanCachePath = Path.Combine(AppDataDirectory, "WebScans");
+            }
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }
 
-        public void ResetSystemDatabasePath()
-        {
-            SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
-        }
+        private static EDDOptions options = null;
+        private string AppFolder;      // internal to use.. for -appfolder option
+        private bool PortableInstall;  // internal to us, to indicate app folder is relative to exe not %localappdata%
+        private string translationfolder; // internal to us
 
-        public void ResetUserDatabasePath()
-        {
-            UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
-        }
 
         #endregion
 

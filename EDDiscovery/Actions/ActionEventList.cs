@@ -29,8 +29,7 @@ namespace EDDiscovery.Actions
 
         protected static List<ActionEvent> eddevents = new List<ActionEvent>()
         {
-            new ActionEventEDList("onInstall", "ProgramEvent", "Program", null
-                ),
+            new ActionEventEDList("onInstall", "ProgramEvent", "Program", null ),
             new ActionEventEDList("onRefreshStart", "ProgramEvent", "Program",null ),
             new ActionEventEDList("onRefreshEnd", "ProgramEvent", "Program"  , null),
             new ActionEventEDList("onKeyPress", "KeyPress", "UI",
@@ -131,7 +130,9 @@ namespace EDDiscovery.Actions
                 {
                     new BaseUtils.TypeHelpers.PropertyNameInfo("KeyPress", "Logical name of key", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable")
                 }
-                ),
+                ), //21
+
+            new ActionEventEDList("onEliteInputRaw","EliteUIEvent",  "InputToKey",null),
 
             new ActionEventEDList("All","","Misc",null),                      // All, special match only
         };
@@ -158,6 +159,7 @@ namespace EDDiscovery.Actions
         public static ActionEvent onVoiceInput { get { return eddevents[19]; } }
         public static ActionEvent onVoiceInputFailed { get { return eddevents[20]; } }
         public static ActionEvent onKeyReleased { get { return eddevents[21]; } }
+        public static ActionEvent onInputToKey { get { return eddevents[22]; } }
         // for events marked with run at refresh, get an HE per entry
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", "",null); }
 

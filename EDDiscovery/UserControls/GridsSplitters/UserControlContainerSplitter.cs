@@ -330,6 +330,8 @@ namespace EDDiscovery.UserControls
         private SplitContainer MakeSplitContainer(Orientation ori, int lv)
         {
             SplitContainer sc = new SplitContainer() { Orientation = ori, Width = 1000, Height = 1000 };    // set width big to provide some res to splitter dist
+            sc.Name = "SplitContainer" + lv.ToString() + ori.ToString();
+
             sc.Dock = DockStyle.Fill;
             sc.FixedPanel = FixedPanel.None;    // indicate to scale splitter distance on resize of control
             sc.MouseClick += Sc_MouseClick;
@@ -447,7 +449,9 @@ namespace EDDiscovery.UserControls
 
         private void Merge(int panel)       // Merge a panel, which involves closing one, so we need to check
         {
-            SplitContainer insidesplitter = (SplitContainer)currentsplitter.Controls[panel].Controls[0];  // get that split container in the panel
+            SplitterPanel sp = panel == 0 ? currentsplitter.Panel1 : currentsplitter.Panel2;    // fix 3443 by looking it up
+
+            SplitContainer insidesplitter = (SplitContainer)sp.Controls[0];  // get that split container in the panel
 
             UserControlCommonBase uccb = insidesplitter.Panel2.Controls[0] as UserControlCommonBase;        // the panel may an embedded direct uccb.. 
             if ( uccb == null )

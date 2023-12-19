@@ -66,6 +66,11 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
+            var enumlist = new Enum[] {EDTx.UserControlOrganics_ColDate, EDTx.UserControlOrganics_ColStarSystem, EDTx.UserControlOrganics_ColBodyName, EDTx.UserControlOrganics_ColBodyType,
+            EDTx.UserControlOrganics_ColGenus, EDTx.UserControlOrganics_ColSpecies, EDTx.UserControlOrganics_ColVariant, EDTx.UserControlOrganics_ColLastScanType,
+            EDTx.UserControlOrganics_ColValue, EDTx.UserControlOrganics_labelTime, EDTx.UserControlOrganics_labelStart, EDTx.UserControlOrganics_labelEnd};
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
             var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip,
                                         EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip ,
                                         EDTx.UserControlOrganics_extButtonAlignment_ToolTip};
@@ -86,6 +91,10 @@ namespace EDDiscovery.UserControls
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             extCheckBoxShowIncomplete.Checked = GetSetting("ShowIncomplete", true);
             extCheckBoxShowIncomplete.Click += ExtCheckBoxShowIncomplete_Click;
+
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, "", true, false, false);
+            comboBoxTime.Text = "";
+            this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
 
             labelValue.Text = "";       // as its set to <code>
         }
@@ -199,7 +208,7 @@ namespace EDDiscovery.UserControls
 
             if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
             {
-                StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System, false);
+                StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System);
 
                 if (data != null && data.NodesByID.TryGetValue(lasthe.Status.BodyID.Value, out StarScan.ScanNode node))
                 {
@@ -218,7 +227,7 @@ namespace EDDiscovery.UserControls
                     string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.FullName);
                     if (node.ScanData != null)
                     {
-                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText(),
+                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText,
                                                 (node.ScanData.nSurfaceGravityG?.ToString("N1") ?? "?") + "G", node.ScanData.Atmosphere, node.CountBioSignals.ToString(), ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
                     }
 
@@ -264,7 +273,7 @@ namespace EDDiscovery.UserControls
                 {
                     foreach (var starkvp in syskvp.Value.StarNodes)
                     {
-                        foreach (var body in starkvp.Value.Descendants)
+                        foreach (var body in starkvp.Value.Bodies)
                         {
                             if (body.Organics != null)
                             {
@@ -281,6 +290,9 @@ namespace EDDiscovery.UserControls
                                     {
                                         DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
 
+                                        string valuestr = os.Item2.EstimatedValue.HasValue ? os.Item2.EstimatedValue.Value.ToString("N0") :
+                                                            os.Item2.PotentialEstimatedValue.HasValue ? "(" + os.Item2.PotentialEstimatedValue.Value.ToString("N0") + ")" : "";
+
                                         object[] data = new object[]
                                         {
                                                 time.ToStringYearFirst(),
@@ -291,7 +303,7 @@ namespace EDDiscovery.UserControls
                                                 os.Item2.Species_Localised_Short,
                                                 os.Item2.Variant_Localised_Short,
                                                 os.Item2.ScanType,
-                                                os.Item2.EstimatedValue?.ToString("N0") ??""
+                                                valuestr,
                                         };
 
                                         dataGridView.Rows.Add(data);
@@ -438,13 +450,48 @@ namespace EDDiscovery.UserControls
             DrawGrid();
         }
 
+        private void comboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (updatedprogramatically == false)
+            {
+                var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                updatedprogramatically = true;
+                if (filter.Lastdockflag)
+                {
+                    HistoryEntry he = DiscoveryForm.History.GetLastHistoryEntry(x=>x.journalEntry.EventTypeID == JournalTypeEnum.Docked);
+                    if (he != null)
+                    {
+                        extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
+                        extDateTimePickerStartDate.Checked = true;
+                    }
+                    else
+                        extDateTimePickerStartDate.Checked = false;
+                }
+                else if (filter.MaximumDataAge.HasValue)
+                {
+                    DateTime start = DateTime.UtcNow.Subtract(filter.MaximumDataAge.Value);
+                    extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(start);
+                    extDateTimePickerStartDate.Checked = true;
+                }
+                else
+                    extDateTimePickerStartDate.Checked = false;
+
+                extDateTimePickerEndDate.Checked = false;
+                comboBoxTime.Text = "";
+
+                updatedprogramatically = false;
+                SaveStartStopDate();
+                DrawGrid();
+            }
+
+        }
+
         bool updatedprogramatically = false;
         private void DateTimePicker_ValueChangedStart(object sender, EventArgs e)
         {
             if (!updatedprogramatically)
             {
-                PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
-                PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
+                SaveStartStopDate();
                 DrawGrid();
             }
         }
@@ -453,10 +500,18 @@ namespace EDDiscovery.UserControls
         {
             if (!updatedprogramatically)
             {
-                PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
-                PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
+                SaveStartStopDate();
                 DrawGrid();
             }
+        }
+
+        private void SaveStartStopDate()
+        {
+            PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
+            PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
+            PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
+            PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
+
         }
 
         private void VerifyDates()
@@ -473,8 +528,8 @@ namespace EDDiscovery.UserControls
             updatedprogramatically = false;
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

@@ -56,13 +56,13 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Spanel", ["wiki"] = "/Using-the-SPanel", ["video"] = "" },
                 new JObject() { ["panel"] = "NotePanel", ["wiki"] = "/Using-the-Note-Panel", ["video"] = "" },
 
-                new JObject() { ["panel"] = "RouteTracker", ["wiki"] = "/Using-the-Surveyor-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "RouteTracker", ["wiki"] = "/Using-the-Surveyor-Panel", ["video"] = "https://youtu.be/dcuNn4o7gJ4" },
                 new JObject() { ["panel"] = "Grid", ["wiki"] = "/Using-the-Grid", ["video"] = "https://youtu.be/fSnxTDL90B4?t=346" },
                 new JObject() { ["panel"] = "StarList", ["wiki"] = "/Using-the-Star-List-Grid", ["video"] = "" },
                 new JObject() { ["panel"] = "EstimatedValues", ["wiki"] = "/Using-the-Estimated-Exploration-Values-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Search", ["wiki"] = "/Using-the-Search-Panel", ["video"] = "https://youtu.be/GZGVuimjEeI" },
                 new JObject() { ["panel"] = "ShoppingList", ["wiki"] = "/Using-the-Shopping-List-Panel", ["video"] = "https://youtu.be/gI6rKmgqGb0" },
-                new JObject() { ["panel"] = "Route", ["wiki"] = "/Using-the-Route-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "Route", ["wiki"] = "/Using-the-Route-Panel", ["video"] = "https://youtu.be/zw_RlzX0yn4" },
                 new JObject() { ["panel"] = "Expedition", ["wiki"] = "/Using-the-Expeditions-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Trilateration", ["wiki"] = "/Using-the-Trilateration-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Settings", ["wiki"] = "/Using-the-Settings-Panel", ["video"] = "/watch?v=v5g03mYdYAw" },
@@ -82,7 +82,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "EDSM", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
                 new JObject() { ["panel"] = "MaterialTrader", ["wiki"] = "/Using-the-Material-Trader-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Map2D", ["wiki"] = "/Using-the-2D-Map", ["video"] = "" },
-                new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "" },
+                new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "https://youtu.be/D-U8euLWbKU" },
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Spansh", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "https://youtu.be/qeLnq-pU14I" },
 
@@ -96,6 +96,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Discoveries", ["wiki"] = "/Using-the-Discoveries-Panel", ["video"] = "https://youtu.be/GZGVuimjEeI" },
                 new JObject() { ["panel"] = "Carrier", ["wiki"] = "/Using-the-Carrier-Panel", ["video"] = "https://youtu.be/zot3a7uHQfQ" },
                 new JObject() { ["panel"] = "Resources", ["wiki"] = "/Using-the-Resources-Panel", ["video"] = "https://youtu.be/U1id5TxS8bs" },
+                new JObject() { ["panel"] = "SpanshStations", ["wiki"] = "/Using-the-Spansh-Station-Panel", ["video"] = "https://youtu.be/pivLR8FzpmY" },
 
                 // special
 

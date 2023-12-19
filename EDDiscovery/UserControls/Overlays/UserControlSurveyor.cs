@@ -61,10 +61,14 @@ namespace EDDiscovery.UserControls
             DBBaseName = "Surveyor";
         }
 
+
         public override void Init()
         {
-            checkBoxEDSM.Checked = GetSetting("edsm", false);
-            checkBoxEDSM.Click += new System.EventHandler(this.checkBoxEDSM_Clicked);
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
+            edsmSpanshButton.ValueChanged += (s, ch) =>
+            {
+                DrawAll(last_sys);
+            };
 
             PopulateCtrlList();
 
@@ -264,7 +268,7 @@ namespace EDDiscovery.UserControls
                 JournalStartJump jsj = he.journalEntry as JournalStartJump;
                 if (jsj.IsHyperspace)                                       // needs to be a hyperspace one, not supercruise
                 {
-                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
+                    last_sys = new SystemClass(jsj.StarSystem, jsj.SystemAddress);       // important need system address as scan uses it for quick lookup
                     starclass = jsj.FriendlyStarClass;
                     bodies_found = 0;
                     all_found = false;
@@ -382,13 +386,13 @@ namespace EDDiscovery.UserControls
             string text = "";
             if (sys != null)
             {
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
                 if (systemnode != null)
                 {
-                    int scanned = checkBoxEDSM.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonEDSM();
+                    int scanned = edsmSpanshButton.IsAnySet ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonWeb();
 
                     if (scanned > 0)
                     {
@@ -632,7 +636,7 @@ namespace EDDiscovery.UserControls
 
                 // find if we have system nodes
 
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -666,7 +670,7 @@ namespace EDDiscovery.UserControls
                         bool matchedlandablevolcanism = sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
                         bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
-                        if (surveyordisplay == false && (!sd.IsEDSMBody || checkBoxEDSM.Checked)) // if to perform inbuilt checks - must have scan data to do this
+                        if (surveyordisplay == false && (!sd.IsWebSourced || edsmSpanshButton.IsAnySet)) // if to perform inbuilt checks - must have scan data to do this
                         {
                             // work out if we want to display
                             surveyordisplay = (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
@@ -688,10 +692,12 @@ namespace EDDiscovery.UserControls
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
                                 (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
 
-                            // qualify choice by mapped
-                            surveyordisplay &= !sd.Mapped || IsSet(CtrlList.hideMapped) == false;
                         }
 
+                        // qualify choice by mapped - now applies to both discovery searches and surveyor displays
+                        surveyordisplay &= !sd.Mapped || IsSet(CtrlList.hideMapped) == false;
+
+                        // if we do display..
                         if (surveyordisplay)
                         {
                             var silstring = sd.SurveyorInfoLine(sys,
@@ -714,7 +720,6 @@ namespace EDDiscovery.UserControls
 
                             if (searchresultfornode != null) // if search results are set for this body, add text
                             {
-                                searchresults.Remove(sn.FullName);  // we have processed it, finish
                                 string info = string.Join(", ", searchresultfornode.Select(x=>x.FilterPassed).Distinct());
                                 silstring += " : " + info;
                             }
@@ -724,10 +729,14 @@ namespace EDDiscovery.UserControls
                             ldrawsystemvalue += sd.EstimatedValue;
                         }
 
+                        // if we had a search result, remove it from the list as we have considered it above.  Even if we decided not to print it!
+                        if ( searchresultfornode != null )
+                            searchresults.Remove(sn.FullName);  
+
                     }   // end for..
                 }       // end of system node look thru
 
-                // we may have searches without scan nodes, so present
+                // Any searches left print - they may have been triggered outside of a scan node
 
                 foreach (var kvp in searchresults.EmptyIfNull())            // by bodyname
                 {
@@ -1054,12 +1063,6 @@ namespace EDDiscovery.UserControls
             DrawAll(last_sys,true);
         }
 
-        private void checkBoxEDSM_Clicked(object sender, EventArgs e)
-        {
-            PutSetting("edsm", checkBoxEDSM.Checked);
-            DrawAll(last_sys);
-        }
-
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
@@ -1072,7 +1075,7 @@ namespace EDDiscovery.UserControls
 
             int width = 430;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalsdisplayed, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { textboxmultiline = true });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalsdisplayed, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { TextBoxMultiline = true });
 
             f.AddOK(new Point(width - 100, 180));
             f.AddCancel(new Point(width - 200, 180));
@@ -1118,7 +1121,7 @@ namespace EDDiscovery.UserControls
             dropdown.Items = list;
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(sender as Control);
-            dropdown.SelectedIndexChanged += (s, ea) =>
+            dropdown.SelectedIndexChanged += (s, ea, key) =>
             {
                 if (dropdown.SelectedIndex == 0)    // off
                 {
@@ -1176,7 +1179,7 @@ namespace EDDiscovery.UserControls
                 {
                     var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
-                    currentRoute.FillInCoordinates();                           // fill in any co-ords into DB - it may be in the DB without known co-ords
+                    currentRoute?.FillInCoordinates();                           // fill in any co-ords into DB - it may be in the DB without known co-ords
                     //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded route with {currentRoute?.Systems.Count}");
                 }
             }

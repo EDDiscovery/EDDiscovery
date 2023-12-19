@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019 EDDiscovery development team
+ * Copyright © 2019-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -25,19 +23,18 @@ namespace EDDiscovery.UserControls
     public static class ScanDisplayForm
     {
         // tag can be a Isystem or an He.. output depends on it.
-        public static async void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl, float opacity = 1, Color? keycolour = null)     
+        public static async void ShowScanOrMarketForm(Form parent, Object tag, HistoryList hl, float opacity = 1, Color? keycolour = null, WebExternalDataLookup? forcedlookup = null)     
         {
             if (tag == null)
                 return;
 
-            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            ExtendedControls.ConfigurableForm form = new ExtendedControls.ConfigurableForm();
 
             Size infosize = parent.SizeWithinScreen(new Size(parent.Width * 6 / 8, parent.Height * 6 / 8), 128, 128 + 100);        // go for this, but allow this around window
-            int topmargin = 40;
+            int topmargin = 28+28;
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
             ISystem sys = he != null ? he.System : tag as ISystem;          // if so, sys is he.system, else its a direct sys
-            ScanDisplayUserControl sd = null;
             string title = "System".T(EDTx.ScanDisplayForm_Sys) + ": " + sys.Name;
 
             AutoScaleMode asm = AutoScaleMode.Font;
@@ -46,59 +43,86 @@ namespace EDDiscovery.UserControls
             {
                 he.FillInformation(out string info, out string detailed);
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
+                form.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
 
                 JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
                 title += ", " +"Station".T(EDTx.ScanDisplayForm_Station) + ": " + jm.Station;
             }
             else
-            {      
-                sd = new ScanDisplayUserControl();
-                sd.SystemDisplay.ShowEDSMBodies =checkedsm;
+            {
+                StarScan.SystemNode nodedata = null;
+                EliteDangerousCore.DB.UserDatabaseSettingsSaver db = new EliteDangerousCore.DB.UserDatabaseSettingsSaver(EliteDangerousCore.DB.UserDatabase.Instance, "ScanDisplayFormCommon_");
+                EDSMSpanshButton edsmSpanshButton = new EDSMSpanshButton();
+                ScanDisplayBodyFiltersButton filterbut = new ScanDisplayBodyFiltersButton();
+                ScanDisplayConfigureButton configbut = new ScanDisplayConfigureButton();
+                ScanDisplayUserControl sd = new ScanDisplayUserControl();
+
+                if (forcedlookup == null)   // if we not forced into the mode
+                {
+                    edsmSpanshButton.Init(db, "EDSMSpansh", "");
+                    edsmSpanshButton.ValueChanged += (s, e) =>
+                    {
+                        nodedata = hl.StarScan.FindSystemSynchronous(sys, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
+                        sd.SystemDisplay.ShowWebBodies = edsmSpanshButton.WebLookup != WebExternalDataLookup.None;
+                        sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                    };
+                }
+
+                sd.SystemDisplay.ShowWebBodies = (forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup) != WebExternalDataLookup.None;
                 int selsize = (int)(ExtendedControls.Theme.Current.GetFont.Height / 10.0f * 48.0f);
                 sd.SystemDisplay.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, checkedsm);    // look up system async
-                    
-                if ( data != null )
+                nodedata = await hl.StarScan.FindSystemAsync(sys, forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup);    // look up system async
+
+                filterbut.Init(db, "BodyFilter");
+                filterbut.Image = EDDiscovery.Icons.Controls.EventFilter;
+                filterbut.ValueChanged += (s, e) =>
                 {
-                    long value = data.ScanValue(checkedsm);
-                    title += " ~ " + value.ToString("N0") + " cr";
-                }
+                    sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                };
+
+                configbut.Init(db, "DisplayFilter");
+                configbut.Image = EDDiscovery.Icons.Controls.DisplayFilters;
+                configbut.ValueChanged += (s, e) =>
+                {
+                    configbut.ApplyDisplayFilters(sd);
+                    sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                };
 
                 sd.BackColor = ExtendedControls.Theme.Current.Form;
-                sd.DrawSystem( data, null , hl.MaterialCommoditiesMicroResources.GetLast());
-
-                int wastedh = infosize.Height - sd.SystemDisplay.DisplayAreaUsed.Y - 10 - 40;
-                if (wastedh > 0)
-                    infosize.Height -= wastedh;
+                sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
 
                 asm = AutoScaleMode.None;   // because we are using a picture box, it does not autoscale, so we can't use that logic on it.
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
+                form.Add(new ExtendedControls.ConfigurableForm.Entry(filterbut, "Body", null, new Point(4, 28), new Size(28, 28), null));
+                form.Add(new ExtendedControls.ConfigurableForm.Entry(configbut, "Con",  null, new Point(4 + 28 + 8, 28), new Size(28, 28), null));
+                if ( !forcedlookup.HasValue)
+                    form.Add(new ExtendedControls.ConfigurableForm.Entry(edsmSpanshButton, "edsm", null, new Point(4 + 28 + 8 + 28 + 8, 28), new Size(28, 28), null));
+                form.Add(new ExtendedControls.ConfigurableForm.Entry(sd, "Sys", null, new Point(0, topmargin), infosize, null));
+                form.AllowResize = true;
             }
 
-            f.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
+            form.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
 
-            f.Trigger += (dialogname, controlname, ttag) =>
+            form.Trigger += (dialogname, controlname, ttag) =>
             {
                 if (controlname == "OK")
-                    f.ReturnResult(DialogResult.OK);
+                    form.ReturnResult(DialogResult.OK);
                 else if (controlname == "Close")
-                    f.ReturnResult(DialogResult.Cancel);
+                    form.ReturnResult(DialogResult.Cancel);
             };
 
-            f.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
+            form.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
 
             if (opacity < 1)
             {
-                f.Opacity = opacity;
-                f.BackColor = keycolour.Value;
-                f.TransparencyKey = keycolour.Value;
+                form.Opacity = opacity;
+                form.BackColor = keycolour.Value;
+                form.TransparencyKey = keycolour.Value;
             }
 
-            f.Show(parent);
+            form.Show(parent);
         }
     }
 }

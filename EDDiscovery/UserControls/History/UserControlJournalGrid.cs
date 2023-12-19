@@ -102,7 +102,10 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlJournalGrid_ColumnInformation, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
 
             var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, 
-                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, 
+                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem,
+                EDTx.UserControlJournalGrid_viewOnSpanshToolStripMenuItem,
+                EDTx.UserControlJournalGrid_viewScanDisplayToolStripMenuItem,
+                EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, 
                 EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
 
             var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, 
@@ -112,7 +115,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""));
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""), true,true,true);
 
             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
                 searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
@@ -320,7 +323,8 @@ namespace EDDiscovery.UserControls
             DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             he.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string detail = EventDescription;
-            detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
+            //detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15, Environment.NewLine + "..."), Environment.NewLine);
+            detail = detail.AppendPrePad(EventDetailedInfo, Environment.NewLine);
 
             if (search.Enabled)
             {
@@ -431,6 +435,8 @@ namespace EDDiscovery.UserControls
             toolStripMenuItemStartStop.Enabled = rightclickhe != null;
             mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
+            viewOnSpanshToolStripMenuItem.Enabled = (rightclickhe != null);
+            viewScanDisplayToolStripMenuItem.Enabled = (rightclickhe != null);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
             jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
         }
@@ -468,11 +474,22 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.Open3DMap(rightclickhe?.System);
         }
 
+        private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe,  DiscoveryForm.History);     
+        }
+
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDSMClass edsm = new EDSMClass();
             if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
+        }
+
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickhe.System.SystemAddress.HasValue)
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclickhe.System.SystemAddress.Value);
         }
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with travel grid call
@@ -649,7 +666,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
+
         #endregion
+
 
     }
 }

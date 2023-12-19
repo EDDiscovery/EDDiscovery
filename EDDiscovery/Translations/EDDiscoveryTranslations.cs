@@ -159,6 +159,7 @@ namespace EDDiscovery
 
         EDDiscoveryController_CD, // Closing down, please wait..
         EDDiscoveryController_EDSM, // Get galactic mapping from EDSM.
+        EDDiscoveryController_GEC, // Get galactic mapping from GEC.
         EDDiscoveryController_LN, // Loaded Notes, Bookmarks and Galactic mapping.
         EDDiscoveryController_RTH, // Reading travel history
         EDDiscoveryController_SyncEDSM, // Please continue running ED Discovery until refresh is complete.
@@ -266,7 +267,9 @@ namespace EDDiscovery
         GalaxySectorSelect_NoSync, // Synchronisation to star data disabled in settings.
         GalaxySectorSelect_GALSELEX, // ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed
         GalaxySectorSelect_GALSELEN, // Enter number to jump to or near to
+        GalaxySectorSelect_GALSELSRD, // Enter number to jump to or near to
         GalaxySectorSelect_Select, // GalaxySectorSelect
+        GalaxySectorSelect_Area, 
         GalaxySectorSelect_PresstoAccept, // Press to Accept
         GalaxySectorSelect_GALSELTitle, // Select EDSM Galaxy Data
         GalaxySectorSelect_RS, // You have removed sectors!
@@ -377,7 +380,8 @@ namespace EDDiscovery
         UserControlSettings_button_edittheme_ToolTip, // ToolTip 'Edit theme and change colours fonts'
         UserControlSettings_buttonSaveTheme_ToolTip, // ToolTip 'Save theme to disk'
         UserControlSettings_checkBoxOrderRowsInverted_ToolTip, // ToolTip 'Number oldest entry 1, latest entry highest'
-        
+        UserControlSettings_extButtonReloadStarDatabase,
+
         UserControlSettings_comboBoxClickThruKey_ToolTip, // ToolTip 'Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards'
         UserControlSettings_comboBoxCustomEssentialEntries_ToolTip, // ToolTip 'Select which items you consider essential to load older than the time above'
         UserControlSettings_comboBoxCustomHistoryLoadTime_ToolTip, // ToolTip 'Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now'
@@ -416,6 +420,7 @@ namespace EDDiscovery
         UserControlSettings_EJS, // Jumps and Scans
         UserControlSettings_EJ, // Jumps
         UserControlSettings_EN, // Nothing
+        UserControlSettings_RELOAD, 
         UserControlSettings_DelCmdr, // delete commander
         UserControlSettings_Font, // The font used by this theme is not available on your system.
         UserControlSettings_NoMap, // No map downloaded
@@ -558,7 +563,6 @@ namespace EDDiscovery
         UserControlStats_labelEndDate, // Control 'To'
         UserControlStats_TotalNoofjumps, // Total No of jumps:
         UserControlStats_FSDjumps, // FSD jumps:
-        UserControlStats_Beltcluster, // Belt cluster
         UserControlStats_JumpHistory, // Jump History
         UserControlStats_24hc, // 24 Hours:
         UserControlStats_OneWeek, // , One Week:
@@ -602,6 +606,7 @@ namespace EDDiscovery
         UserControlStats_CQC, // CQC
         UserControlStats_FLEETCARRIER, // Fleetcarrier
         UserControlStats_Exobiology, // Exobiology
+        UserControlStats_Thargoids, // Thargoids
         UserControlStats_Name, // Name
         UserControlStats_Ident, // Ident
         UserControlStats_BodiesScanned, // Bodies Scanned
@@ -638,26 +643,6 @@ namespace EDDiscovery
         UserControlStats_InterdictedNPCSucceeded,
         UserControlStats_InterdictedNPCFailed,
         UserControlStats_PVPKills,
-        UserControlStats_BountiesThargoid,
-        UserControlStats_BountiesOnFootNPC,
-        UserControlStats_BountiesSkimmers,
-        UserControlStats_ShipsUnknown,
-        UserControlStats_ShipsElite,
-        UserControlStats_ShipsDeadly,
-        UserControlStats_ShipsDangerous,
-        UserControlStats_ShipsMaster,
-        UserControlStats_ShipsExpert,
-        UserControlStats_ShipsCompetent,
-        UserControlStats_ShipsNovice,
-        UserControlStats_ShipsHarmless,
-        UserControlStats_PVPElite,
-        UserControlStats_PVPDeadly,
-        UserControlStats_PVPDangerous,
-        UserControlStats_PVPMaster,
-        UserControlStats_PVPExpert,
-        UserControlStats_PVPCompetent,
-        UserControlStats_PVPNovice,
-        UserControlStats_PVPHarmless,
 
 
         UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, // ToolTip 'Display incomplete scans'
@@ -667,6 +652,19 @@ namespace EDDiscovery
         UserControlOrganics_extButtonAlignment_ToolTip, // ToolTip 'Word Wrap'
         UserControlOrganics_at, // At {0}
         UserControlOrganics_sysinfo, // 
+        
+        UserControlOrganics_ColDate,
+        UserControlOrganics_ColStarSystem,
+        UserControlOrganics_ColBodyName,
+        UserControlOrganics_ColBodyType,
+        UserControlOrganics_ColGenus,
+        UserControlOrganics_ColSpecies,
+        UserControlOrganics_ColVariant,
+        UserControlOrganics_ColLastScanType,
+        UserControlOrganics_ColValue,
+        UserControlOrganics_labelTime,
+        UserControlOrganics_labelStart,
+        UserControlOrganics_labelEnd,
 
 
 
@@ -705,6 +703,8 @@ namespace EDDiscovery
         UserControlJournalGrid_jumpToEntryToolStripMenuItem, // ToolStrip control 'Jump to Entry'
         UserControlJournalGrid_mapGotoStartoolStripMenuItem, // ToolStrip control 'Go to star on 3D Map'
         UserControlJournalGrid_viewOnEDSMToolStripMenuItem, // ToolStrip control 'View on EDSM'
+        UserControlJournalGrid_viewOnSpanshToolStripMenuItem, // ToolStrip control 'View on EDSM'
+        UserControlJournalGrid_viewScanDisplayToolStripMenuItem, // ToolStrip control 'View on EDSM'
         UserControlJournalGrid_toolStripMenuItemStartStop, // ToolStrip control 'Set Start/Stop point for travel calculations'
         UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, // ToolStrip control 'Run Actions on this entry'
         UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem, // ToolStrip control 'Copy journal entry to clipboard'
@@ -728,6 +728,8 @@ namespace EDDiscovery
         UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, // ToolStrip control 'Jump to next Start/Stop marker'
         UserControlTravelGrid_mapGotoStartoolStripMenuItem, // ToolStrip control 'Go to star on 3D Map'
         UserControlTravelGrid_viewOnEDSMToolStripMenuItem, // ToolStrip control 'View on EDSM'
+        UserControlTravelGrid_viewScanDisplayToolStripMenuItem, // ToolStrip control 'View on EDSM'
+        UserControlTravelGrid_viewOnSpanshToolStripMenuItem, // ToolStrip control 'View on Spansh'
         UserControlTravelGrid_starMapColourToolStripMenuItem, // ToolStrip control 'Star Map Colour...'
         UserControlTravelGrid_addToTrilaterationToolStripMenuItem, // ToolStrip control 'Add to ...'
         UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem, // ToolStrip control 'System on Trilateration Panel'
@@ -800,6 +802,7 @@ namespace EDDiscovery
         UserControlStarList_removeSortingOfColumnsToolStripMenuItem, // ToolStrip control 'Remove sorting of columns'
         UserControlStarList_mapGotoStartoolStripMenuItem, // ToolStrip control 'Go to star on 3D Map'
         UserControlStarList_viewOnEDSMToolStripMenuItem, // ToolStrip control 'View on EDSM'
+        UserControlStarList_viewOnSpanshToolStripMenuItem, // ToolStrip control 'View on EDSM'
         UserControlStarList_setNoteToolStripMenuItem, // ToolStrip control 'Set Note'
         UserControlStarList_viewScanDisplayToolStripMenuItem, // ToolStrip control 'View Scan Display'
         UserControlStarList_comboBoxTime_ToolTip, // ToolTip 'Select the entries by age'
@@ -928,6 +931,8 @@ namespace EDDiscovery
         UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, // ToolTip 'Display items with zero refined items'
         UserControlMiningOverlay_buttonExtExcel_ToolTip, // ToolTip 'Export'
         UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, // ToolTip 'Select chart options'
+        UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, // ToolTip 'Default shows distribution of asteroids that actually contain the material'
+        UserControlMiningOverlay_extCheckBoxChartBase_Text, // Text 'Base chart on all asteroids'
         UserControlMiningOverlay_Limcargo, // discrete
         UserControlMiningOverlay_Proscoll, // discrete
         UserControlMiningOverlay_ref, // discrete
@@ -943,6 +948,7 @@ namespace EDDiscovery
         UserControlMiningOverlay_content, // discrete
         UserControlMiningOverlay_above, // discrete
         UserControlMiningOverlay_dist, // discrete
+        UserControlMiningOverlay_distall, // discrete
         UserControlMiningOverlay_astpros, // discrete
 
         UserControlSpanel_extButtonShowControl_ToolTip, // ToolTip 'Configure overall settings'
@@ -1150,6 +1156,9 @@ namespace EDDiscovery
         UserControlExpedition_insertRowAboveToolStripMenuItem,
         UserControlExpedition_setTargetToolStripMenuItem, // ToolStrip control 'Set Target'
         UserControlExpedition_editBookmarkToolStripMenuItem, // ToolStrip control 'Edit bookmark'
+        UserControlExpedition_viewSystemToolStripMenuItem,
+        UserControlExpedition_viewOnSpanshToolStripMenuItem,
+        UserControlExpedition_viewOnEDSMToolStripMenuItem,
         UserControlExpedition_Unsaved, // Expedition - There are unsaved changes to the current route.
         UserControlExpedition_Conflict, // The current route name conflicts with a well-known expedition.
         UserControlExpedition_Overwrite, // Warning: route already exists. Would you like to overwrite it?
@@ -1164,28 +1173,29 @@ namespace EDDiscovery
         UserControlExpedition_GMOInfo, // Unknown system, system is without co-ordinates
 
         UserControlRoute_SystemCol, // Column Header 'System'
+        UserControlRoute_NoteCol, // Column Header 'Note'
         UserControlRoute_DistanceCol, // Column Header 'Distance'
+        UserControlRoute_StarClassCol, // Column Header 'Star Class'
         UserControlRoute_WayPointDistCol, // Column Header 'Dist. Waypoint'
         UserControlRoute_DeviationCol, // Column Header 'Deviation'
         UserControlRoute_checkBox_FsdBoost, // Control 'Use Boosts'
         UserControlRoute_buttonExtTravelTo, // Control 'History'
         UserControlRoute_buttonExtTravelFrom, // Control 'History'
         UserControlRoute_buttonExtTargetTo, // Control 'Target'
-        UserControlRoute_buttonToEDSM, // Control 'EDSM'
-        UserControlRoute_buttonFromEDSM, // Control 'EDSM'
         UserControlRoute_buttonTargetFrom, // Control 'Target'
-        UserControlRoute_cmd3DMap, // Control '3D Map'
+        UserControlRoute_labelEDSMBut,
         UserControlRoute_labelLy2, // Control 'ly'
         UserControlRoute_labelLy1, // Control 'ly'
         UserControlRoute_labelTo, // Control 'To'
         UserControlRoute_labelMaxJump, // Control 'Max jump'
         UserControlRoute_labelDistance, // Control 'Distance'
         UserControlRoute_labelMetric, // Control 'Metric'
-        UserControlRoute_button_Route, // Control 'Find route'
+        UserControlRoute_extButtonRoute, // Control 'Find route'
         UserControlRoute_labelFrom, // Control 'From'
         UserControlRoute_showInEDSMToolStripMenuItem, // ToolStrip control 'Show in EDSM'
         UserControlRoute_copyToolStripMenuItem, // ToolStrip control 'Copy'
         UserControlRoute_showScanToolStripMenuItem, // ToolStrip control 'View Scan Display'
+        UserControlRoute_viewOnSpanshToolStripMenuItem,
         UserControlRoute_checkBox_FsdBoost_ToolTip, // ToolTip 'The route finder will try and use FSD injections in case a direct route could not be found.'
         UserControlRoute_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'
         UserControlRoute_textBox_ToName_ToolTip, // ToolTip 'Alternate Name'
@@ -1207,9 +1217,11 @@ namespace EDDiscovery
         UserControlRoute_textBox_ToY_ToolTip, // ToolTip 'Y (Vertical) Co-ord'
         UserControlRoute_textBox_ToX_ToolTip, // ToolTip 'X Co-Ord'
         UserControlRoute_textBox_FromZ_ToolTip, // ToolTip 'Z Co-ord'
-        UserControlRoute_button_Route_ToolTip, // ToolTip 'Compute the route'
+        UserControlRoute_extButtonRoute_ToolTip, // ToolTip 'Compute the route'
         UserControlRoute_textBox_FromY_ToolTip, // ToolTip 'Y (Vertical) Co-ord'
         UserControlRoute_textBox_FromX_ToolTip, // ToolTip 'X Co-ord'
+        UserControlRoute_extButtonExpeditionSave_ToolTip,
+        UserControlRoute_extButtonExpeditionPush_ToolTip,
         UserControlRoute_Confirm, // This will result in a large number ({0})) of jumps
         UserControlRoute_NoRoute, // No route set up, retry
         UserControlRoute_M1,    // discrete
@@ -1218,6 +1230,20 @@ namespace EDDiscovery
         UserControlRoute_M4, // discrete
         UserControlRoute_M5, // discrete
         UserControlRoute_M6, // discrete
+        UserControlRoute_groupBoxSpansh,
+        UserControlRoute_extButtonSpanshRoadToRiches,
+        UserControlRoute_extButtonNeutronRouter,
+        UserControlRoute_extButtonFleetCarrier,
+        UserControlRoute_extButtonSpanshGalaxyPlotter,
+        UserControlRoute_extButtonExoMastery,
+        UserControlRoute_groupBoxInternal,
+        UserControlRoute_extButtonSpanshAmmoniaWorlds,
+        UserControlRoute_extButtonSpanshEarthLikes,
+        UserControlRoute_extButtonSpanshTradeRouter,
+        UserControlRoute_groupBoxPara,
+        UserControlRoute_extCheckBoxPermitSystems,
+        UserControlRoute_labelCargo,
+
 
         UserControlWebBrowser_extButtonIE11Warning, // Control 'Using IE11 - click here to get WebView2'
         UserControlWebBrowser_extCheckBoxBack_ToolTip, // ToolTip 'Back'
@@ -1260,6 +1286,7 @@ namespace EDDiscovery
 
         UserControlScan_StatusIcons, // Show body status icons
         UserControlScan_SystemValue, // Show syatem and value in main display
+        UserControlScan_StarsOnDiffLines, // Show body less stars on separate lines
         UserControlScan_MatFull, // Hide materials which have reached their storage limit
         UserControlScan_ShowMaterials, //  Show Materials
         UserControlScan_ShowRaresOnly, // Show rare materials only
@@ -1269,6 +1296,9 @@ namespace EDDiscovery
         UserControlScan_Barycentre, // discrete
         UserControlScan_Body, // discrete
         UserControlScan_AllG,// discrete
+        UserControlScan_PlanetMass,// discrete
+        UserControlScan_StarMass,// discrete
+        UserControlScan_StarAge,// discrete
         UserControlScan_HabZone,// discrete
         UserControlScan_PlanetClass,// discrete
         UserControlScan_StarClass,// discrete
@@ -1283,6 +1313,7 @@ namespace EDDiscovery
         UserControlStarDistance_checkBoxCube, // Control 'Cube'
         UserControlStarDistance_viewSystemToolStripMenuItem, // ToolStrip control 'View System'
         UserControlStarDistance_viewOnEDSMToolStripMenuItem1, // ToolStrip control 'View on EDSM'
+        UserControlStarDistance_viewOnSpanshToolStripMenuItem, // ToolStrip control 'View on Spansh'
         UserControlStarDistance_addToTrilaterationToolStripMenuItem1, // ToolStrip control 'Add to Trilateration'
         UserControlStarDistance_addToExpeditionToolStripMenuItem, // ToolStrip control 'Add to Expedition'
         UserControlStarDistance_textMinRadius_ToolTip, // ToolTip 'Minimum star distance in ly'
@@ -1346,6 +1377,7 @@ namespace EDDiscovery
         SearchScans_ColumnParent, // Column Header 'Parent'
         SearchScans_ColumnParentParent, // Column Header 'Parent.Parent'
         SearchScans_ColumnStar, // Column Header 'Star'
+        SearchScans_ColumnSystem, // Column Header 'System'
         SearchScans_ColumnStarStar, // Column Header 'Star.Star'
         SearchScans_ColumnCurrentDistance, // Column Header 'Current Distance'
         SearchScans_ColumnPosition, // Column Header 'Position'
@@ -1404,10 +1436,12 @@ namespace EDDiscovery
         SearchStars_ColumnIndex, // Column Header 'Star'
         SearchStars_ColumnCentreDistance, // Column Header 'Centre Distance'
         SearchStars_ColumnCurrentDistance, // Column Header 'Current Distance'
+        SearchStars_ColumnStarType, // Column Header 'StarType'
         SearchStars_ColumnPosition, // Column Header 'Position'
 
         DataGridViewStarResults_3d, // ToolStrip control 'Go to star on 3D Map'
         DataGridViewStarResults_EDSM, // ToolStrip control 'View on EDSM'
+        DataGridViewStarResults_Spansh, // ToolStrip control 'View on Spansh'
         DataGridViewStarResults_Data, // ToolStrip control 'View Data On Entry'
         DataGridViewStarResults_Goto, // ToolStrip control 'Go to entry on grid'
 
@@ -1625,6 +1659,8 @@ namespace EDDiscovery
         FindSystemsUserControl_buttonExtNames, // Control 'From DB Find Names'
         FindSystemsUserControl_buttonExtVisited, // Control 'From Visited Systems'
         FindSystemsUserControl_buttonExtDB, // Control 'From DB'
+        FindSystemsUserControl_extButtonFromSpansh, // Control 'From Spansh'
+        FindSystemsUserControl_extButtonFromSpanshFindNames, // Control 'From Spansh Find Names'
         FindSystemsUserControl_buttonExtEDSM, // Control 'From EDSM'
         FindSystemsUserControl_labelRadMax, // Control 'Max'
         FindSystemsUserControl_labelRadMin, // Control 'Radius ly Min'
@@ -1680,6 +1716,7 @@ namespace EDDiscovery
         UserControlSynthesis_buttonClear_ToolTip, // ToolTip 'Set all wanted values to zero'
         UserControlSynthesis_chkNotHistoric_ToolTip, // ToolTip 'When red, use the materials at the cursor to estimate, when green always use the latest materials.'
         UserControlSynthesis_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
+        UserControlSynthesis_extButtonPushResources_ToolTip,
 
         UserControlEngineering_UpgradeCol, // Column Header 'Upgrade/Mat'
         UserControlEngineering_ModuleCol, // Column Header 'Module'
@@ -1700,6 +1737,7 @@ namespace EDDiscovery
         UserControlEngineering_buttonClear_ToolTip, // ToolTip 'Set all wanted values to zero'
         UserControlEngineering_chkNotHistoric_ToolTip, // ToolTip 'When red, use the materials at the cursor to estimate, when green always use the latest materials.'
         UserControlEngineering_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
+        UserControlEngineering_extButtonPushResources_ToolTip,
 
         UserControlEngineers_buttonFilterEngineer_ToolTip, 
         UserControlEngineers_extCheckBoxWordWrap_ToolTip, 

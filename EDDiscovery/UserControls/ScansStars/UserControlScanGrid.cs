@@ -61,10 +61,11 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.SetToolTip(toolTip);
 
-            // retrieve context menu entries check state from DB
-
-            checkBoxEDSM.Checked = GetSetting("checkEDSM", true);
-            checkBoxEDSM.Click += CheckBoxEDSM_Click;
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
+            edsmSpanshButton.ValueChanged += (s, ch) =>
+            {
+                DrawSystem(last_he, true);
+            };
 
             rollUpPanelTop.PinState = GetSetting(dbRolledUp, true);
             PopulateCtrlList();
@@ -118,7 +119,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
+                scannode = await DiscoveryForm.History.StarScan.FindSystemAsync(he.System, edsmSpanshButton.WebLookup);        // get data with EDSM maybe
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -173,7 +174,7 @@ namespace EDDiscovery.UserControls
                 else if (sn.NodeType == StarScan.ScanNodeType.beltcluster )
                 {
                     // if have a scan, we show belts, and its not edsm body, or getting edsm
-                    if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                    if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet ))
                     {
                         bdClass.Clear();
                         bdClass.Append("Belt Cluster");
@@ -206,7 +207,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 // must have scan data and either not edsm body or edsm check
-                else if (sn.ScanData != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                else if (sn.ScanData != null && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet))
                 { 
                     var overlays = new StarColumnOverlays();
 
@@ -443,8 +444,8 @@ namespace EDDiscovery.UserControls
                         bdDetails.Append(Environment.NewLine).Append("Value".T(EDTx.UserControlScanGrid_Value)).Append(" ").Append(value.ToString("N0"));
                     }
 
-                    if ( sn.ScanData.IsEDSMBody)
-                        bdDetails.Append(Environment.NewLine).Append("EDSM");
+                    if ( sn.ScanData.IsWebSourced)
+                        bdDetails.Append(Environment.NewLine).Append(sn.ScanData.DataSourceName);
 
                     // pick an image
 
@@ -462,7 +463,7 @@ namespace EDDiscovery.UserControls
 
                     sn.ScanData.Jumponium(jumponiums);      // add to jumponiums hash any seen
                 }
-                else if ( !sn.EDSMCreatedNode )             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
+                else if ( !sn.WebCreatedNode )             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
                 {   
                     if (sn.SurfaceFeatures != null)
                     {
@@ -488,7 +489,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewScangrid.Rows.Add(new object[] { null, sn.FullName, "?", "?" , bdDetails });
                     
                     var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
-                    cur.Tag = JournalScan.GetPlanetImageNotScanned();
+                    cur.Tag = BodyToImages.GetPlanetImageNotScanned();
                 }
             }
 
@@ -503,7 +504,7 @@ namespace EDDiscovery.UserControls
                 toolStripJumponiumProgressBar.ToolTipText = toolStripJumponiumProgressBar.Value + " jumponium materials found in system.".T(EDTx.UserControlScanGrid_JS);
 
             string report = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.System.Name, stars, planets, terrestrial, gasgiants, moons);
-            report = "~" + scannode.ScanValue( checkBoxEDSM.Checked).ToString() + " cr " + report;
+            report = "~" + scannode.ScanValue( edsmSpanshButton.IsAnySet).ToString() + " cr " + report;
             SetControlText(scannode.System.Name);
             toolStripStatusTotalValue.Text = report;
 
@@ -611,11 +612,6 @@ namespace EDDiscovery.UserControls
             displayfilter.Show(CtrlStateAsString(), button, this.FindForm());
         }
 
-        private void CheckBoxEDSM_Click(object sender, EventArgs e)
-        {
-            PutSetting("checkEDSM", checkBoxEDSM.Checked);
-            DrawSystem(last_he, true);
-        }
 
         #endregion
 

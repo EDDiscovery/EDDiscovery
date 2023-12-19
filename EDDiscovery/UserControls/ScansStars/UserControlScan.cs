@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,14 +10,11 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
 
 // turn on for play testing of all your scans
 //#define PLAYTHRU
 
-using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using ExtendedControls;
@@ -41,9 +38,6 @@ namespace EDDiscovery.UserControls
 
         bool closing = false;           // set when closing, to prevent a resize, which you can get, causing a big redraw
 
-        string[] bodyfilters;           // body filters
-        string[] displayfilters;        // display filters
-
         #region Init
         public UserControlScan()
         {
@@ -55,13 +49,31 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ScanPanel";
 
-            panelStars.SystemDisplay.ShowEDSMBodies = checkBoxEDSM.Checked = GetSetting("EDSM", false);
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
+            edsmSpanshButton.ValueChanged += (s,ch) =>
+            {
+                panelStars.SystemDisplay.ShowWebBodies = edsmSpanshButton.IsAnySet;
+                DrawSystem();
+            };
 
-            bodyfilters = GetSetting("BodyFilters", "All").Split(';');
+            UserDatabaseSettingsSaver dbsaver = new UserDatabaseSettingsSaver(this, "");
 
-            displayfilters = GetSetting("DisplayFilters", "moons;icons;mats;allg;habzone;starclass;planetclass;dist;").Split(';');
-            ApplyDisplayFilters();
+            scanDisplayConfigureButton.Init(dbsaver, "DisplayFilters");
+            scanDisplayConfigureButton.ValueChanged += (s, ch) =>
+            {
+                scanDisplayConfigureButton.ApplyDisplayFilters(panelStars);
+                DrawSystem();
+            };
+
+            scanDisplayBodyFiltersButton.Init(dbsaver, "BodyFilters");
+            scanDisplayBodyFiltersButton.ValueChanged += (s, ch) =>
+            {
+                DrawSystem();
+            };
+
+            panelStars.SystemDisplay.ShowWebBodies = edsmSpanshButton.IsAnySet;
+
+            scanDisplayConfigureButton.ApplyDisplayFilters(panelStars);
 
             panelStars.SystemDisplay.ValueLimit = GetSetting("ValueLimit", 50000);
 
@@ -174,7 +186,7 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked) : null;
+            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, edsmSpanshButton.WebLookup) : null;
 #endif
             string control_text = "No System";
 
@@ -184,7 +196,7 @@ namespace EDDiscovery.UserControls
 
                 if (data != null)
                 {
-                    long value = data.ScanValue(checkBoxEDSM.Checked);
+                    long value = data.ScanValue(!edsmSpanshButton.IsAnySet);
                     control_text += " ~ " + value.ToString("N0") + " cr";
 
                     int scanned = data.StarPlanetsScanned();
@@ -206,7 +218,7 @@ namespace EDDiscovery.UserControls
 
             var curmats = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast();
 
-            panelStars.DrawSystem(data, showing_matcomds, curmats, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);
+            panelStars.DrawSystem(data, showing_matcomds, curmats, (HasControlTextArea() && !scanDisplayConfigureButton.DisplayFilters.Contains("sys")) ? null : control_text, scanDisplayBodyFiltersButton.BodyFilters);
 
             SetControlText(control_text);
         }
@@ -274,13 +286,6 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            PutSetting("EDSM", checkBoxEDSM.Checked);
-            panelStars.SystemDisplay.ShowEDSMBodies = checkBoxEDSM.Checked;
-            DrawSystem();
-        }
-
         private void extButtonHighValue_Click(object sender, EventArgs e)
         {
             ExtendedControls.ConfigurableForm cf = new ConfigurableForm();
@@ -289,7 +294,7 @@ namespace EDDiscovery.UserControls
 
             cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(ExtendedControls.NumberBoxLong), panelStars.SystemDisplay.ValueLimit.ToStringInvariant(),
                                         new Point(5, 30), new Size(width - 5 - 20, 24), null)
-            { numberboxlongminimum = 1, numberboxlongmaximum = 2000000000 });
+            { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 2000000000 });
 
             cf.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK),
                         new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
@@ -344,7 +349,7 @@ namespace EDDiscovery.UserControls
             dropdown.ImageItems = imagelist.ToList();
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(buttonSize);
-            dropdown.SelectedIndexChanged += (s, ea) =>
+            dropdown.SelectedIndexChanged += (s, ea, key) =>
             {
                 int size = textlist[dropdown.SelectedIndex].InvariantParseInt(64);
                 SetSizeImage(size);
@@ -381,85 +386,13 @@ namespace EDDiscovery.UserControls
 
 #endregion
 
-        private void extButtonFilter_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.CheckedIconListBoxFormGroup bodyfilter = new CheckedIconListBoxFormGroup();
-            bodyfilter.AddAllNone();
-            foreach (var x in Enum.GetValues(typeof(EDPlanet)))
-                bodyfilter.AddStandardOption(x.ToString(), Bodies.PlanetTypeName((EDPlanet)x) );
-            foreach (var x in Enum.GetNames(typeof(EDStar)))
-                bodyfilter.AddStandardOption(x.ToString(), Bodies.StarName(x.ParseEnum<EDStar>()));
-
-            // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
-            bodyfilter.AddStandardOption("star", "Star".T(EDTx.UserControlScan_Star));
-            bodyfilter.AddStandardOption("body", "Body".T(EDTx.UserControlScan_Body));
-            bodyfilter.AddStandardOption("barycentre", "Barycentre".T(EDTx.UserControlScan_Barycentre));
-            bodyfilter.AddStandardOption("belt", "Belt".T(EDTx.UserControlScan_Belt));
-
-            bodyfilter.SaveSettings = (s, o) => 
-            {
-                bodyfilters = s.Split(';');
-                PutSetting("BodyFilters", string.Join(";", bodyfilters));
-                DrawSystem();
-            };
-
-            bodyfilter.CloseBoundaryRegion = new Size(32, extButtonFilter.Height);
-
-            bodyfilter.Show(string.Join(";",bodyfilters), extButtonFilter, this.FindForm());
-        }
-
-        private void extButtonDisplayFilters_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-
-            displayfilter.AddAllNone();
-            displayfilter.AddStandardOption("icons", "Show body status icons".T(EDTx.UserControlScan_StatusIcons), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("mats", "Show Materials".T(EDTx.UserControlScan_ShowMaterials), global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials);
-            displayfilter.AddStandardOption("rares", "Show rare materials only".T(EDTx.UserControlScan_ShowRaresOnly), global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials);
-            displayfilter.AddStandardOption("matfull", "Hide materials which have reached their storage limit".T(EDTx.UserControlScan_MatFull), global::EDDiscovery.Icons.Controls.Scan_HideFullMaterials);
-            displayfilter.AddStandardOption("moons", "Show Moons".T(EDTx.UserControlScan_ShowMoons), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
-            displayfilter.AddStandardOption("allg", "Show G on all planets".T(EDTx.UserControlScan_AllG), global::EDDiscovery.Icons.Controls.ShowAllG);
-            displayfilter.AddStandardOption("habzone", "Show Habitation Zone".T(EDTx.UserControlScan_HabZone), global::EDDiscovery.Icons.Controls.ShowHabZone);
-            displayfilter.AddStandardOption("starclass", "Show Classes of Stars".T(EDTx.UserControlScan_StarClass), global::EDDiscovery.Icons.Controls.ShowStarClasses);
-            displayfilter.AddStandardOption("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses);
-            displayfilter.AddStandardOption("dist", "Show distance of bodies".T(EDTx.UserControlScan_Distance), global::EDDiscovery.Icons.Controls.ShowDistances);
-            displayfilter.AddStandardOption("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways);
-
-            displayfilter.SaveSettings = (s, o) =>
-            {
-                displayfilters = s.Split(';');
-                PutSetting("DisplayFilters", string.Join(";", displayfilters));
-                ApplyDisplayFilters();
-                DrawSystem();
-            };
-
-            displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
-
-            displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
-        }
-
-        private void ApplyDisplayFilters()
-        {
-            bool all = displayfilters.Contains("All");
-            panelStars.SystemDisplay.ShowMoons = displayfilters.Contains("moons") || all;
-            panelStars.SystemDisplay.ShowOverlays = displayfilters.Contains("icons") || all;
-            panelStars.SystemDisplay.ShowMaterials = displayfilters.Contains("mats") || all;
-            panelStars.SystemDisplay.ShowOnlyMaterialsRare = displayfilters.Contains("rares") || all;
-            panelStars.SystemDisplay.HideFullMaterials = displayfilters.Contains("matfull") || all;
-            panelStars.SystemDisplay.ShowAllG = displayfilters.Contains("allg") || all;
-            panelStars.SystemDisplay.ShowHabZone = displayfilters.Contains("habzone") || all;
-            panelStars.SystemDisplay.ShowStarClasses = displayfilters.Contains("starclass") || all;
-            panelStars.SystemDisplay.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;
-            panelStars.SystemDisplay.ShowDist = displayfilters.Contains("dist") || all;
-        }
-
 #region Export
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             if (showing_system == null)
                 return;
-            var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(showing_system, false);
+            var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(showing_system);
 
             if ( sysnode != null )
             {

@@ -55,14 +55,7 @@ namespace EDDiscovery.UserControls
         // because of the async awaits, we are in effect multithreaded, best to have a concurrent queue
         private ConcurrentQueue<JournalEntry> entriesqueued = new ConcurrentQueue<JournalEntry>();
 
-        private class DataReturn        // used to pass data from thread back to user control
-        {
-            public string[][] griddata;
-            public int[][] chart1data;
-            public string[] chart2labels;
-            public int[][] chart2data;
-            public string[] chart1labels;
-        }
+
 
         static Color[] piechartcolours = new Color[] { Color.Red, Color.Green, Color.Blue, Color.DarkCyan, Color.Magenta, Color.Brown, Color.Orange, Color.Yellow, Color.Fuchsia };
 
@@ -499,7 +492,7 @@ namespace EDDiscovery.UserControls
                     if ( newstats || enqueued )     // if we did newstate, or enqueued, all of the below can now be out of date
                     {                               // we may not be currently displaying them, but we will need to refresh if we select them again
                         System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Stats clear flags due to ns{newstats} eq{enqueued} ");
-                        lasttraveltimemode = lastscantimemode = lastcombattimemode = StatsTimeUserControl.TimeModeType.NotSet;
+                        lasttraveltimemode = lastscantimemode = lastcombattimemode = JournalStatsInfo.TimeModeType.NotSet;
                         laststatsgeneraldisplayed = laststatsbyshipdisplayed = laststatsledgerdisplayed = laststatsrankdisplayed= false;
                     }
 
@@ -786,7 +779,7 @@ namespace EDDiscovery.UserControls
 
         #region Travel Panel *********************************************************************************************************************
 
-        private StatsTimeUserControl.TimeModeType lasttraveltimemode = StatsTimeUserControl.TimeModeType.NotSet;
+        private JournalStatsInfo.TimeModeType lasttraveltimemode = JournalStatsInfo.TimeModeType.NotSet;
 
         async void StatsTravel(JournalStats currentstat, DateTime starttimeutc, DateTime endtimeutc)
         {
@@ -797,12 +790,12 @@ namespace EDDiscovery.UserControls
             int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 99;
             SortOrder sortorder = dataGridViewTravel.SortOrder;
 
-            var tupletimes = timemode == StatsTimeUserControl.TimeModeType.Summary ?
+            var tupletimes = timemode == JournalStatsInfo.TimeModeType.Summary ?
                                     SetupSummary(starttimeutc, endtimeutc, currentstat.lastdockedutc, dataGridViewTravel, dbTravel) :
                                     SetUpDaysMonthsYear(endtimeutc, dataGridViewTravel, timemode, dbTravel);
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Travel stats interval begin {timemode}");
-            var res = await ComputeTravel(currentstat, tupletimes);
+            var res = await JournalStatsInfo.ComputeTravel(currentstat, tupletimes);
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Travel stats interval end {timemode}");
             if (IsClosed)
                 return;
@@ -834,47 +827,7 @@ namespace EDDiscovery.UserControls
             labelStatus.Text = "";  // not working now
         }
 
-        private static System.Threading.Tasks.Task<string[][]> ComputeTravel(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
-        {
-            return System.Threading.Tasks.Task.Run(() =>
-            {
-                int results = 10;
-
-                string[][] res = new string[results][];
-                for (var i = 0; i < results; i++)
-                    res[i] = new string[tupletimes.Item1.Length];
-
-                for (var ii = 0; ii < tupletimes.Item1.Length; ii++)
-                {
-                    var startutc = tupletimes.Item1[ii];
-                    var endutc = tupletimes.Item2[ii];
-
-                    var fsdStats = currentstat.FSDJumps.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
-                    var jetconeboosts = currentstat.JetConeBoost.Where(x => x.utc >= startutc && x.utc < endutc).ToList();
-                    var scanStats = currentstat.Scans.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var saascancomplete = currentstat.SAAScanComplete.Values.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var organicscans = currentstat.OrganicScans.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-
-                    int row = 0;
-                    res[row++][ii] = fsdStats.Count.ToString("N0");
-                    res[row++][ii] = fsdStats.Sum(j => j.jumpdist).ToString("N2");
-                    res[row++][ii] = fsdStats.Where(j => j.boostvalue == 1).Count().ToString("N0");
-                    res[row++][ii] = fsdStats.Where(j => j.boostvalue == 2).Count().ToString("N0");
-
-                    res[row++][ii] = fsdStats.Where(j => j.boostvalue == 3).Count().ToString("N0");
-                    res[row++][ii] = jetconeboosts.Count().ToString("N0");
-                    res[row++][ii] = scanStats.Count.ToString("N0");       // scan count
-                    res[row++][ii] = saascancomplete.Count().ToString("N0");   // mapped
-
-                    res[row++][ii] = scanStats.Sum(x => (long)x.EstimatedValue).ToString("N0");
-                    res[row++][ii] = organicscans.Sum(x => (long)(x.EstimatedValue ?? 0)).ToString("N0");
-                    System.Diagnostics.Debug.Assert(row == results);
-                }
-
-                return res;
-            });
-        }
-        private void userControlStatsTimeTravel_TimeModeChanged(StatsTimeUserControl.TimeModeType previous, StatsTimeUserControl.TimeModeType next)
+        private void userControlStatsTimeTravel_TimeModeChanged(JournalStatsInfo.TimeModeType previous, JournalStatsInfo.TimeModeType next)
         {
             if (previous != next)
             {
@@ -889,7 +842,7 @@ namespace EDDiscovery.UserControls
 
         #region SCAN  ****************************************************************************************************************
 
-        private StatsTimeUserControl.TimeModeType lastscantimemode = StatsTimeUserControl.TimeModeType.NotSet;
+        private JournalStatsInfo.TimeModeType lastscantimemode = JournalStatsInfo.TimeModeType.NotSet;
         private bool lastscanstarmode = false;
 
         async void StatsScan(JournalStats currentstat, DateTime starttimeutc, DateTime endtimeutc )
@@ -902,12 +855,12 @@ namespace EDDiscovery.UserControls
 
             var timemode = userControlStatsTimeScan.TimeMode;
 
-            var tupletimes = timemode == StatsTimeUserControl.TimeModeType.Summary ?
+            var tupletimes = timemode == JournalStatsInfo.TimeModeType.Summary ?
                                     SetupSummary(starttimeutc, endtimeutc, currentstat.lastdockedutc, dataGridViewScan, dbScan) :
                              SetUpDaysMonthsYear(endtimeutc, dataGridViewScan, timemode, dbScan);
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Scan stats interval begin {timemode}");
-            var cres = await ComputeScans(currentstat, tupletimes, userControlStatsTimeScan.StarMode);
+            var cres = await JournalStatsInfo.ComputeScans(currentstat, tupletimes, userControlStatsTimeScan.StarMode);
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Scan stats interval end {timemode}");
             if (IsClosed)
                 return;
@@ -943,7 +896,7 @@ namespace EDDiscovery.UserControls
         int scanchartcolumn = 0;
         private void FillScanChart()
         {
-            DataReturn res = (DataReturn)extChartScan.Tag;
+            var res = (JournalStatsInfo.DataReturn)extChartScan.Tag;
 
             int[] scandata = res.chart1data[scanchartcolumn];
 
@@ -975,103 +928,12 @@ namespace EDDiscovery.UserControls
 
         private void ScanChartArrowPressed(bool right)
         {
-            DataReturn res = (DataReturn)extChartScan.Tag;
+            var res = (JournalStatsInfo.DataReturn)extChartScan.Tag;
             scanchartcolumn = MoveChart(right ? 1 : -1, dataGridViewScan.ColumnCount - 1, res.chart1data, res.chart1data, scanchartcolumn);
             FillScanChart();
         }
-        private static System.Threading.Tasks.Task<DataReturn> ComputeScans(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes, bool starmode)
-        {
-            return System.Threading.Tasks.Task.Run(() =>
-            {
-                DataReturn crs = new DataReturn();
 
-                int results = starmode ? Enum.GetValues(typeof(EDStar)).Length : Enum.GetValues(typeof(EDPlanet)).Length;
-
-                crs.chart1labels = new string[results];     // fill up chart labels
-                if (starmode)
-                {
-                    int i = 0;
-                    foreach (EDStar startype in Enum.GetValues(typeof(EDStar)))
-                        crs.chart1labels[i++] = Bodies.StarName(startype);
-                }
-                else
-                {
-                    int i = 0;
-                    foreach (EDPlanet planettype in Enum.GetValues(typeof(EDPlanet)))
-                        crs.chart1labels[i++] = planettype == EDPlanet.Unknown_Body_Type ? "Belt Cluster".T(EDTx.UserControlStats_Beltcluster) : Bodies.PlanetTypeName(planettype);
-                }
-
-                int intervals = tupletimes.Item1.Length;
-
-                crs.chart1data = new int[intervals][];        // outer [] is intervals      CHART 1 is PVP
-                for (var i = 0; i < intervals; i++)
-                    crs.chart1data[i] = new int[crs.chart1labels.Length];
-
-                var scanlists = new List<JournalScan>[intervals];
-                for (int ii = 0; ii < intervals; ii++)
-                    scanlists[ii] = currentstat.Scans.Values.Where(x => x.EventTimeUTC >= tupletimes.Item1[ii] && x.EventTimeUTC < tupletimes.Item2[ii]).ToList();
-
-                results++;      // 1 more for totals at end
-
-                crs.griddata = new string[results][];
-                for (var i = 0; i < results; i++)
-                    crs.griddata[i] = new string[intervals];
-
-                long[] totals = new long[intervals];
-
-                if (starmode)
-                {
-                    int row = 0;
-                    foreach (EDStar startype in Enum.GetValues(typeof(EDStar)))
-                    {
-                        for (int ii = 0; ii < intervals; ii++)
-                        {
-                            int num = 0;
-                            for (int jj = 0; jj < scanlists[ii].Count; jj++)
-                            {
-                                if (scanlists[ii][jj].StarTypeID == startype && scanlists[ii][jj].IsStar)
-                                    num++;
-                            }
-
-                            crs.chart1data[ii][row] = num;
-                            crs.griddata[row][ii] = num.ToString("N0");
-                            totals[ii] += num;
-                        }
-
-                        row++;
-                    }
-                }
-                else
-                {
-                    int row = 0;
-                    foreach (EDPlanet planettype in Enum.GetValues(typeof(EDPlanet)))
-                    {
-                        for (int ii = 0; ii < intervals; ii++)
-                        {
-                            int num = 0;
-                            for (int jj = 0; jj < scanlists[ii].Count; jj++)
-                            {
-                                // System.Diagnostics.Debug.WriteLine($"Planet for {planettype} {scanlists[ii][jj].PlanetTypeID} {scanlists[ii][jj].EventTimeUTC}");
-                                if (scanlists[ii][jj].PlanetTypeID == planettype && !scanlists[ii][jj].IsStar)
-                                    num++;
-                            }
-
-                            crs.chart1data[ii][row] = planettype == EDPlanet.Unknown_Body_Type ? 0 : num;       // we knock out of the chart belt clusters
-                            crs.griddata[row][ii] = num.ToString("N0");
-                            totals[ii] += num;
-                        }
-                        row++;
-                    }
-                }
-
-                for (int i = 0; i < intervals; i++)
-                    crs.griddata[results-1][i] = totals[i].ToString("N0");
-
-                return crs;
-            });
-        }
-
-        private void userControlStatsTimeScan_TimeModeChanged(StatsTimeUserControl.TimeModeType previous, StatsTimeUserControl.TimeModeType next)
+        private void userControlStatsTimeScan_TimeModeChanged(JournalStatsInfo.TimeModeType previous, JournalStatsInfo.TimeModeType next)
         {
             if (previous != next)
             {
@@ -1106,7 +968,7 @@ namespace EDDiscovery.UserControls
 
         #region Combat  ****************************************************************************************************************************
 
-        private StatsTimeUserControl.TimeModeType lastcombattimemode = StatsTimeUserControl.TimeModeType.NotSet;
+        private JournalStatsInfo.TimeModeType lastcombattimemode = JournalStatsInfo.TimeModeType.NotSet;
         async void StatsCombat(JournalStats currentstat, DateTime starttimeutc, DateTime endtimeutc)
         {
             statsTimeUserControlCombat.Enabled = false;
@@ -1116,12 +978,12 @@ namespace EDDiscovery.UserControls
 
             var timemode = statsTimeUserControlCombat.TimeMode;
 
-            var tupletimes = timemode == StatsTimeUserControl.TimeModeType.Summary ?
+            var tupletimes = timemode == JournalStatsInfo.TimeModeType.Summary ?
                                     SetupSummary(starttimeutc, endtimeutc, currentstat.lastdockedutc, dataGridViewCombat, dbCombat) :
                              SetUpDaysMonthsYear(endtimeutc, dataGridViewCombat, timemode, dbCombat);
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS", true)} Combat stats interval begin {timemode}");
-            var cres = await ComputeCombat(currentstat, tupletimes);
+            var cres = await JournalStatsInfo.ComputeCombat(currentstat, tupletimes);
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("STATS")} Combat stats interval end {timemode}");
             if (IsClosed)
                 return;
@@ -1176,7 +1038,7 @@ namespace EDDiscovery.UserControls
         int combatchartcolumn = 0;
         private void FillCombatChart()
         {
-            DataReturn res = (DataReturn)extChartCombat.Tag;
+            var res = (JournalStatsInfo.DataReturn)extChartCombat.Tag;
 
             extChartCombat.SetCurrentSeries(0);     // 0 is NPC PIE
 
@@ -1230,144 +1092,13 @@ namespace EDDiscovery.UserControls
 
         private void CombatChartArrowPressed(bool right)
         {
-            DataReturn res = (DataReturn)extChartCombat.Tag;
+            var res = (JournalStatsInfo.DataReturn)extChartCombat.Tag;
             combatchartcolumn = MoveChart(right ? 1 : -1, dataGridViewCombat.ColumnCount - 1, res.chart1data, res.chart2data, combatchartcolumn);
             FillCombatChart();
         }
 
-        private static System.Threading.Tasks.Task<DataReturn> ComputeCombat(JournalStats currentstat, Tuple<DateTime[], DateTime[]> tupletimes)
-        {
-            return System.Threading.Tasks.Task.Run(() =>
-            {
-                DataReturn crs = new DataReturn();
 
-                int intervals = tupletimes.Item1.Length;
-
-                int results = 40;                               // does not need to be accurate
-                crs.griddata = new string[results][];         // outer [] is results
-                for (var i = 0; i < results; i++)
-                    crs.griddata[i] = new string[intervals];
-
-                crs.chart1labels = new string[]
-                {
-                    "Bounties on Thargoids".T(EDTx.UserControlStats_BountiesThargoid),
-                    "Bounties on On Foot NPC".T(EDTx.UserControlStats_BountiesOnFootNPC), 
-                    "Bounties on Skimmers".T(EDTx.UserControlStats_BountiesSkimmers), 
-                    "Ships Unknown Rank".T(EDTx.UserControlStats_ShipsUnknown),
-                    "Ships Elite Rank".T(EDTx.UserControlStats_ShipsElite),
-                    "Ships Deadly Rank".T(EDTx.UserControlStats_ShipsDeadly),
-                    "Ships Dangerous Rank".T(EDTx.UserControlStats_ShipsDangerous),
-                    "Ships Master Rank".T(EDTx.UserControlStats_ShipsMaster),
-                    "Ships Expert Rank".T(EDTx.UserControlStats_ShipsExpert),
-                    "Ships Competent Rank".T(EDTx.UserControlStats_ShipsCompetent),
-                    "Ships Novice Rank".T(EDTx.UserControlStats_ShipsNovice),
-                    "Ships Harmless Rank".T(EDTx.UserControlStats_ShipsHarmless),
-                };
-
-                crs.chart1data = new int[intervals][];        // outer [] is intervals      CHART 1 is PVP
-                for (var i = 0; i < intervals; i++)
-                    crs.chart1data[i] = new int[crs.chart1labels.Length];
-
-                crs.chart2labels = new string[]
-                {
-                     "PVP Elite Rank".T(EDTx.UserControlStats_PVPElite),
-                     "PVP Deadly Rank".T(EDTx.UserControlStats_PVPDeadly),
-                     "PVP Dangerous Rank".T(EDTx.UserControlStats_PVPDangerous),
-                     "PVP Master Rank".T(EDTx.UserControlStats_PVPMaster),
-                     "PVP Expert Rank".T(EDTx.UserControlStats_PVPExpert),
-                     "PVP Competent Rank".T(EDTx.UserControlStats_PVPCompetent),
-                     "PVP Novice Rank".T(EDTx.UserControlStats_PVPNovice),
-                     "PVP Harmless Rank".T(EDTx.UserControlStats_PVPHarmless),
-                };
-
-                crs.chart2data = new int[intervals][];        // outer [] is intervals
-                for (var i = 0; i < intervals; i++)
-                    crs.chart2data[i] = new int[crs.chart2labels.Length];
-
-                for (var ii = 0; ii < intervals; ii++)
-                {
-                    var startutc = tupletimes.Item1[ii];
-                    var endutc = tupletimes.Item2[ii];
-
-                    var pvpStats = currentstat.PVPKills.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var bountyStats = currentstat.Bounties.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var crimesStats = currentstat.Crimes.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var sfactionkillbonds = currentstat.FactionKillBonds.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var interdictions = currentstat.Interdiction.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-                    var interdicted = currentstat.Interdicted.Where(x => x.EventTimeUTC >= startutc && x.EventTimeUTC < endutc).ToList();
-
-                    //foreach(var x in bountyStats) System.Diagnostics.Debug.WriteLine($"{ii} = {x.EventTimeUTC} {x.Target} {x.IsShip} {x.IsThargoid} {x.IsOnFootNPC} {x.VictimFaction}");
-
-                    int row = 0;
-
-                    crs.griddata[row++][ii] = bountyStats.Count.ToString("N0");
-                    crs.griddata[row++][ii] = bountyStats.Select(x => x.TotalReward).Sum().ToString("N0");
-                    crs.griddata[row++][ii] = bountyStats.Where(x => x.IsShip).Count().ToString("N0");
-
-                    int p = 0;
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.IsThargoid).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.IsOnFootNPC).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.IsSkimmer).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsUnknownShip).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsEliteAboveShip).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Deadly)).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Dangerous)).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Master)).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Expert)).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Competent)).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsRankShip(CombatRank.Novice)).Count();
-                    crs.chart1data[ii][p++] = bountyStats.Where(x => x.StatsHarmlessShip).Count();
-
-                    for (int pp = 0; pp < p; pp++)
-                    {
-                        //if ( ii==0)
-                        //crs.chart1data[ii][pp] = (pp + 1);
-                        //crs.chart1data[ii][pp] = 0;
-                        crs.griddata[row++][ii] = crs.chart1data[ii][pp].ToString("N0");
-                    }
-
-                    crs.griddata[row++][ii] = crimesStats.Count.ToString("N0");
-                    crs.griddata[row++][ii] = crimesStats.Select(x => x.Cost).Sum().ToString("N0");
-
-                    crs.griddata[row++][ii] = sfactionkillbonds.Count.ToString("N0");
-                    crs.griddata[row++][ii] = sfactionkillbonds.Select(x => x.Reward).Sum().ToString("N0");
-
-                    crs.griddata[row++][ii] = interdictions.Where(x => x.Success && x.IsPlayer).Count().ToString("N0");
-                    crs.griddata[row++][ii] = interdictions.Where(x => !x.Success && x.IsPlayer).Count().ToString("N0");
-                    crs.griddata[row++][ii] = interdictions.Where(x => x.Success && !x.IsPlayer).Count().ToString("N0");
-                    crs.griddata[row++][ii] = interdictions.Where(x => !x.Success && !x.IsPlayer).Count().ToString("N0");
-
-                    crs.griddata[row++][ii] = interdicted.Where(x => x.Submitted && x.IsPlayer).Count().ToString("N0");
-                    crs.griddata[row++][ii] = interdicted.Where(x => !x.Submitted && x.IsPlayer).Count().ToString("N0");
-                    crs.griddata[row++][ii] = interdicted.Where(x => x.Submitted && !x.IsPlayer).Count().ToString("N0");
-                    crs.griddata[row++][ii] = interdicted.Where(x => !x.Submitted && !x.IsPlayer).Count().ToString("N0");
-
-                    crs.griddata[row++][ii] = pvpStats.Count.ToString("N0");
-
-                    p = 0;
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank >= CombatRank.Elite).Count();
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Deadly).Count();
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Dangerous).Count();
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Master).Count();
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Expert).Count();
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Competent).Count();
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank == CombatRank.Novice).Count();
-                    crs.chart2data[ii][p++] = pvpStats.Where(x => x.CombatRank <= CombatRank.Mostly_Harmless).Count();
-
-                    for (int pp = 0; pp < p; pp++)
-                    {
-                        //if ( ii == 2)
-                        //crs.chart2data[ii][pp] = (pp + 1);
-                        //crs.chart2data[ii][pp] = 0;
-                        crs.griddata[row++][ii] = crs.chart2data[ii][pp].ToString("N0");
-                    }
-                }
-
-                return crs;
-            });
-        }
-
-        private void userControlStatsTimeCombat_TimeModeChanged(StatsTimeUserControl.TimeModeType previous, StatsTimeUserControl.TimeModeType next)
+        private void userControlStatsTimeCombat_TimeModeChanged(JournalStatsInfo.TimeModeType previous, JournalStatsInfo.TimeModeType next)
         {
             if (previous != next)
             {
@@ -1390,18 +1121,13 @@ namespace EDDiscovery.UserControls
 
         void StatsGame(JournalStats currentstat)
         {
-            string collapseExpand = GameStatTreeState();
-
-            if (string.IsNullOrEmpty(collapseExpand))
-                collapseExpand = GetSetting(dbStatsTreeStateSave, "YYYYYYYYYYYYYYYY");
-
-            if (collapseExpand.Length < 16)
-                collapseExpand += new string('Y', 16);
 
             JournalStatistics stats = currentstat.laststats;
 
             if (stats != null) // may not have one
             {
+                string collapseExpand = GameStatTreeState();
+
                 AddTreeList("N1", "@", new string[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(stats.EventTimeUTC).ToString() }, collapseExpand[0]);
 
                 AddTreeList("N2", "Bank Account".T(EDTx.UserControlStats_BankAccount), stats.BankAccount.Format("").Split(Environment.NewLine),collapseExpand[1]);
@@ -1423,6 +1149,7 @@ namespace EDDiscovery.UserControls
                 AddTreeList("N15", "CQC".T(EDTx.UserControlStats_CQC), stats.CQC.Format("").Split(Environment.NewLine), collapseExpand[14]);
                 AddTreeList("N16", "Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
                 AddTreeList("N17", "Exobiology".T(EDTx.UserControlStats_Exobiology), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
+                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("",true).Split(Environment.NewLine), collapseExpand[17]);
             }
             else
                 treeViewStats.Nodes.Clear();
@@ -1438,6 +1165,27 @@ namespace EDDiscovery.UserControls
         {
             TreeNode[] parents = treeViewStats.Nodes.Find(parentid, false);                     // find parent id in tree
             TreeNode pnode = (parents.Length == 0) ? (treeViewStats.Nodes.Add(parentid,parenttext)) : parents[0];  // if not found, add it, else get it
+
+            if (pnode.Nodes.Count > 0)          // defend against nodes coming and going so we don't show bad data from previous searches
+            {
+                if (pnode.Nodes.Count != children.Length)   // different length
+                {
+                    pnode.Nodes.Clear();
+                }
+                else
+                {
+                    int exno = 0;
+                    foreach( TreeNode cn in pnode.Nodes)        // check IDs are in the same order
+                    {
+                        string childid = parentid + "-" + (exno++).ToString();       // make up a child id
+                        if ( cn.Name != childid)
+                        {
+                            pnode.Nodes.Clear();
+                            break;
+                        }
+                    }
+                }
+            }
 
             int eno = 0;
             foreach( var childtext in children)
@@ -1459,13 +1207,19 @@ namespace EDDiscovery.UserControls
         string GameStatTreeState()
         {
             string result = "";
-            if (treeViewStats.Nodes.Count > 0)
+            if (treeViewStats.Nodes.Count > 0)          // if nodes there, report state
             {
                 foreach (TreeNode tn in treeViewStats.Nodes)
                     result += tn.IsExpanded ? "Y" : "N";
             }
             else
-                result = GetSetting(dbStatsTreeStateSave, "YYYYYYYYYYYYY");
+            {
+                result = GetSetting(dbStatsTreeStateSave, "");
+
+                if (result.Length < 64)                     // So we set the save to a stupid size so if people add new entries above and forget it won't crash
+                    result += new string('N', 64 - result.Length);
+            }
+
             return result;
         }
         #endregion
@@ -1518,12 +1272,12 @@ namespace EDDiscovery.UserControls
                 strarr[1] = kvp.Value.Ident ?? "-";
 
                 piefsdjumps[row] = fsd.Count();
-                strarr[2] = piefsdjumps[row].ToString();
+                strarr[2] = piefsdjumps[row].ToString("N0");
                 piejumpdist[row] = fsd.Sum(x => x.jumpdist);
                 strarr[3] = piejumpdist[row].ToString("N0");
                 piescans[row] = scans.Count();
                 strarr[4] = piescans[row].ToString("N0");
-                strarr[5] = kvp.Value.Died.ToString();
+                strarr[5] = kvp.Value.Died.ToString("N0");
                 StatToDGV(dataGridViewByShip, kvp.Key, strarr, true);
                 row++;
             }
@@ -1587,40 +1341,35 @@ namespace EDDiscovery.UserControls
         // set up a time date array with the limit times in utc, and set up the grid view columns
         private Tuple<DateTime[],DateTime[]> SetupSummary(DateTime starttimeutc, DateTime endtimeutc, DateTime lastdockedutc, DataGridView gridview, string dbname)
         {
-            DateTime[] starttimesutc = new DateTime[5];
-            DateTime[] endtimesutc = new DateTime[5];
-            starttimesutc[0] = endtimeutc.AddDays(-1).AddSeconds(1);
-            starttimesutc[1] = endtimeutc.AddDays(-7).AddSeconds(1);
-            starttimesutc[2] = endtimeutc.AddMonths(-1).AddSeconds(1);
-            starttimesutc[3] = lastdockedutc;
-            starttimesutc[4] = starttimeutc;
-            endtimesutc[0] = endtimesutc[1] = endtimesutc[2] = endtimesutc[3] = endtimesutc[4] = endtimeutc;
+            var ret = JournalStatsInfo.SetupSummary(starttimeutc, endtimeutc, lastdockedutc);
 
             if (gridview.Columns.Count == 0)
             {
                 gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true});
                
-                for (int i = 0; i < starttimesutc.Length; i++)
+                for (int i = 0; i < ret.Item1.Length; i++)
                     gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol"+i , ReadOnly = true});          // Name is important
 
                 DGVLoadColumnLayout(gridview, dbname + "Summary");           // changed mode, therefore load layout
             }
 
-            gridview.Columns[1].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[0]).ToShortDateString() + "..";
-            gridview.Columns[2].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[1]).ToShortDateString() + "..";
-            gridview.Columns[3].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimesutc[2]).ToShortDateString() + "..";
+            gridview.Columns[1].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1[0]).ToShortDateString() + "..";
+            gridview.Columns[2].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1[1]).ToShortDateString() + "..";
+            gridview.Columns[3].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1[2]).ToShortDateString() + "..";
             gridview.Columns[4].HeaderText = "Last dock".T(EDTx.UserControlStats_Lastdock);
             gridview.Columns[5].HeaderText = "All".T(EDTx.UserControlStats_All);
 
             //for (int i = 0; i < starttimeutc.Length; i++)  System.Diagnostics.Debug.WriteLine($"Time {starttimeutc[i].ToString()} - {endtimeutc[i].ToString()} {starttimeutc[i].Kind}");
 
-            return new Tuple<DateTime[], DateTime[]>(starttimesutc, endtimesutc);
+            return ret;
         }
 
         // set up a time date array with the limit times in utc over months, and set up the grid view columns
-        private Tuple<DateTime[], DateTime[]> SetUpDaysMonthsYear(DateTime endtimenowutc, DataGridView gridview, StatsTimeUserControl.TimeModeType timemode, string dbname)
+        private Tuple<DateTime[], DateTime[]> SetUpDaysMonthsYear(DateTime endtimenowutc, DataGridView gridview, JournalStatsInfo.TimeModeType timemode, string dbname)
         {
-            int intervals = timemode == StatsTimeUserControl.TimeModeType.Year ? Math.Min(12, endtimenowutc.Year - 2013) : 12;
+            var ret = JournalStatsInfo.SetUpDaysMonthsYear(endtimenowutc, timemode);
+
+            int intervals = ret.Item1.Length;
 
             if (gridview.Columns.Count == 0)
             {
@@ -1632,39 +1381,18 @@ namespace EDDiscovery.UserControls
                 DGVLoadColumnLayout(gridview, dbname + timemode.ToString());           // changed mode, therefore load layout
             }
 
-            DateTime[] starttimeutc = new DateTime[intervals];
-            DateTime[] endtimeutc = new DateTime[intervals];
-
             for (int ii = 0; ii < intervals; ii++)
             {
-                if (ii == 0)
-                {
-                    if (timemode == StatsTimeUserControl.TimeModeType.Month)
-                        endtimeutc[0] = endtimenowutc.EndOfMonth().AddSeconds(1);
-                    else if (timemode == StatsTimeUserControl.TimeModeType.Week)
-                        endtimeutc[0] = endtimenowutc.EndOfWeek().AddSeconds(1);
-                    else if (timemode == StatsTimeUserControl.TimeModeType.Year)
-                        endtimeutc[0] = endtimenowutc.EndOfYear().AddSeconds(1);
-                    else
-                        endtimeutc[0] = endtimenowutc.AddSeconds(1);
-                }
-                else
-                    endtimeutc[ii] = starttimeutc[ii - 1];
+                var stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1[ii]);
 
-                starttimeutc[ii] = timemode == StatsTimeUserControl.TimeModeType.Day ? endtimeutc[ii].AddDays(-1) :
-                                timemode == StatsTimeUserControl.TimeModeType.Week ? endtimeutc[ii].AddDays(-7) :
-                                timemode == StatsTimeUserControl.TimeModeType.Year ? endtimeutc[ii].AddYears(-1) :
-                                endtimeutc[ii].AddMonths(-1);
-
-                var stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimeutc[ii]);
-                gridview.Columns[ii + 1].HeaderText = timemode == StatsTimeUserControl.TimeModeType.Month ? stime.ToString("MM/yyyy") : 
-                        timemode == StatsTimeUserControl.TimeModeType.Year ? stime.ToString("yyyy") : 
+                gridview.Columns[ii + 1].HeaderText = timemode == JournalStatsInfo.TimeModeType.Month ? stime.ToString("MM/yyyy") :
+                        timemode == JournalStatsInfo.TimeModeType.Year ? stime.ToString("yyyy") :
                         stime.ToShortDateString();
             }
 
             //for (int i = 0; i < starttimeutc.Length; i++)  System.Diagnostics.Debug.WriteLine($"Time {starttimeutc[i].ToString()} - {endtimeutc[i].ToString()} {starttimeutc[i].Kind}");
 
-            return new Tuple<DateTime[], DateTime[]>(starttimeutc, endtimeutc);
+            return ret;
         }
 
         // moves curpos ignoring empty areas. dir  = +1 right, -1 left, 0 test and move right if empty

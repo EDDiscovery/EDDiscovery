@@ -49,6 +49,7 @@ namespace EDDiscovery.WebServer
 
             int entry = (request.QueryString["entry"] ?? "-1").InvariantParseInt(-1);
             bool checkEDSM = (request.QueryString["EDSM"] ?? "false").InvariantParseBool(false);
+            bool checkSPANSH = (request.QueryString["SPANSH"] ?? "false").InvariantParseBool(false);
 
             Bitmap img = null;
             JObject response = new JObject();
@@ -62,9 +63,13 @@ namespace EDDiscovery.WebServer
                     entry = hl.Count - 1;
 
                 // seen instances of exceptions accessing icons in different threads.  so push up to discovery form. need to investigate.
+
                 discoveryform.Invoke((MethodInvoker)delegate
                 {
-                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM);
+                    var lookup = checkEDSM ? (checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
+                                checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
+
+                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, lookup);
 
                     if (sn != null)
                     {
@@ -75,12 +80,15 @@ namespace EDDiscovery.WebServer
                         sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
                         sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
                         sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
+                        sd.ShowPlanetMass = (request.QueryString["showplanetmass"] ?? "false").InvariantParseBool(false);
+                        sd.ShowStarMass = (request.QueryString["showstarmass"] ?? "false").InvariantParseBool(false);
+                        sd.ShowStarAge = (request.QueryString["showstarage"] ?? "true").InvariantParseBool(true);
                         sd.ShowHabZone = (request.QueryString["showhabzone"] ?? "true").InvariantParseBool(true);
                         sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
                         sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
                         sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
                         sd.ValueLimit = (request.QueryString["valuelimit"] ?? "50000").InvariantParseInt(50000);
-                        sd.ShowEDSMBodies = checkEDSM;
+                        sd.ShowWebBodies = checkEDSM;
                         sd.SetSize(starsize);
                         sd.Font = new Font("MS Sans Serif", 8.25f);
                         sd.LargerFont = new Font("MS Sans Serif", 10f);

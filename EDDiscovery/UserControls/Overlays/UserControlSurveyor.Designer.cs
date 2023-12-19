@@ -47,7 +47,6 @@ namespace EDDiscovery.UserControls
             this.extButtonPlanets = new ExtendedControls.ExtButton();
             this.extButtonStars = new ExtendedControls.ExtButton();
             this.extButtonShowControl = new ExtendedControls.ExtButton();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
@@ -66,6 +65,7 @@ namespace EDDiscovery.UserControls
             this.extPictureBoxFuel = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScanSummary = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxTarget = new ExtendedControls.ExtPictureBox();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxSystemDetails)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
@@ -119,35 +119,6 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.UseVisualStyleBackColor = false;
             this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
             // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.ImageIndeterminate = null;
-            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(248, 1);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxEDSM.TabIndex = 33;
-            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "EDSM lookup toggle");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
-            // 
             // extCheckBoxWordWrap
             // 
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
@@ -192,6 +163,7 @@ namespace EDDiscovery.UserControls
             // 
             // extScrollBar
             // 
+            this.extScrollBar.AlwaysHideScrollBar = false;
             this.extScrollBar.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBar.ArrowColorScaling = 0.5F;
@@ -259,7 +231,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonShowControl);
             this.panelControls.Controls.Add(this.extButtonAlignment);
             this.panelControls.Controls.Add(this.extButtonFSS);
-            this.panelControls.Controls.Add(this.checkBoxEDSM);
+            this.panelControls.Controls.Add(this.edsmSpanshButton);
             this.panelControls.Controls.Add(this.extButtonSetRoute);
             this.panelControls.Controls.Add(this.extButtonControlRoute);
             this.panelControls.Controls.Add(this.extButtonFont);
@@ -403,6 +375,17 @@ namespace EDDiscovery.UserControls
             this.extPictureBoxTarget.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.extPictureBoxTarget.TabIndex = 19;
             // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(248, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 35;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -442,7 +425,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonPlanets;
         private ExtendedControls.ExtButton extButtonStars;
         private ExtendedControls.ExtButton extButtonShowControl;
-        private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private ExtendedControls.ExtButton extButtonFSS;
         private ExtendedControls.ExtButton extButtonAlignment;
@@ -456,5 +438,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPictureBox extPictureBoxFuel;
         private ExtendedControls.ExtPictureBox extPictureBoxScanSummary;
         private ExtendedControls.ExtPictureBox extPictureBoxTarget;
+        private EDSMSpanshButton edsmSpanshButton;
     }
 }

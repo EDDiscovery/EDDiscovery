@@ -68,12 +68,12 @@ namespace EDDiscovery.Actions
                         string wildcard = sp.NextQuotedWord() ?? "*";
 
                         int count = 1;
-                        foreach( var g in discoveryform.GalacticMapping.GalacticMapObjects)
+                        foreach( var gmo in discoveryform.GalacticMapping.GalacticMapObjects)
                         {
-                            if (g.Name.WildCardMatch(wildcard, true))
+                            if (gmo.IsNameWildCard(wildcard,true))
                             {
                                 string nprefix = prefix + (count++).ToStringInvariant() + "_";
-                                DumpGMO(ap, nprefix, g);
+                                DumpGMO(ap, nprefix, gmo);
                             }
                         }
 
@@ -89,7 +89,7 @@ namespace EDDiscovery.Actions
                         {
                             if (cmdname.Equals("EXISTS", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.GalacticMapping.Find(name, false);
+                                EliteDangerousCore.GMO.GalacticMapObject gmo = discoveryform.GalacticMapping.Find(name, false);
                                 ap[prefix + "Exists"] = (gmo != null).ToStringIntValue();
                                 if ( gmo != null )
                                     DumpGMO(ap, prefix, gmo);
@@ -112,9 +112,9 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        void DumpGMO(ActionProgramRun ap, string nprefix, EliteDangerousCore.EDSM.GalacticMapObject g)
+        void DumpGMO(ActionProgramRun ap, string nprefix, EliteDangerousCore.GMO.GalacticMapObject g)
         {
-            ap[nprefix + "Name"] = g.Name;
+            ap[nprefix + "Name"] = g.NameList;
             ap[nprefix + "Type"] = g.Type;
             ap[nprefix + "Search"] = g.GalMapSearch;
             ap[nprefix + "MapURL"] = g.GalMapUrl;

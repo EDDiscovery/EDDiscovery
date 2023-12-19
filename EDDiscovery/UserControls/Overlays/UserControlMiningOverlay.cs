@@ -27,6 +27,7 @@ namespace EDDiscovery.UserControls
         private string dbChart = "ChartSel";
         private string dbZeroRefined = "ZeroRefined";
         private string dbRolledUp = "RolledUp";
+        private string dbChartBase = "ChartBase";
 
         #region Init
 
@@ -41,7 +42,9 @@ namespace EDDiscovery.UserControls
 
             UpdateComboBox(null);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, 
+                        EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, 
+                        EDTx.UserControlMiningOverlay_extCheckBoxChartBase_Text };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             extPanelRollUp.SetToolTip(toolTip);
 
@@ -49,6 +52,8 @@ namespace EDDiscovery.UserControls
             extCheckBoxZeroRefined.Checked = GetSetting(dbZeroRefined, false);
             extCheckBoxZeroRefined.CheckedChanged += new System.EventHandler(this.extCheckBoxZeroRefined_CheckedChanged);
             extPanelRollUp.PinState = GetSetting(dbRolledUp, true);
+            extCheckBoxChartBase.Checked = GetSetting(dbChartBase, false);
+            extCheckBoxChartBase.CheckedChanged += new System.EventHandler(this.extCheckBoxChartBase_CheckedChanged);
 
             timetimer = new Timer();
             timetimer.Interval = 1000;
@@ -97,7 +102,7 @@ namespace EDDiscovery.UserControls
 
         #region Implementation
 
-        List<HistoryEntry> curlist;     // found events
+        List<HistoryEntry> eventlist;   // found events
         HistoryEntry heabove, hebelow;  // markers
         bool incurrentplay;             // true when heabove is at top of history AND its not a stop event - so we are in a play session
         object selectedchart = null;    // chart count (if int) or material (string)
@@ -129,9 +134,9 @@ namespace EDDiscovery.UserControls
                     int cargoleft = cargocap - cargo; 
 
                     // if no list, or diff no of items (due to new entry) or different start point, we reset and display, else we just quit as current is good
-                    if (curlist == null || newlist.Count != curlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
+                    if (eventlist == null || newlist.Count != eventlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
                     {
-                        curlist = newlist;
+                        eventlist = newlist;
                         heabove = newheabove;
                         hebelow = newhebelow;
                         limpetsleftdisplay = limpetsleft;
@@ -146,9 +151,9 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            if (curlist != null)        // moved outside to no data..
+            if (eventlist != null)        // moved outside to no data..
             {
-                curlist = null;         // fall thru means no data, clear and display
+                eventlist = null;         // fall thru means no data, clear and display
                 heabove = hebelow = null;
                 Display();
             }
@@ -156,7 +161,7 @@ namespace EDDiscovery.UserControls
 
         class MaterialsFound
         {
-            public string matnamefd2;
+            public string matnamefd2;               // material name
             public string friendlyname;
 
             public double amountrefined;            // amount refined. Double because i've seen entries with floats
@@ -165,7 +170,7 @@ namespace EDDiscovery.UserControls
             public bool discovered;
 
             public int prospectednoasteroids;      // prospector entry updates this
-            public List<double> prospectedamounts;
+            public List<double> prospectedamounts;  // list of % against each asteroid for this material
 
             public int motherloadasteroids;         // number where in motherload.
 
@@ -197,7 +202,7 @@ namespace EDDiscovery.UserControls
             content = new int[3];
             var found = new List<MaterialsFound>();
 
-            foreach (var e in curlist)
+            foreach (var e in eventlist)
             {
                 //System.Diagnostics.Debug.WriteLine("{0} {1} {2}", e.Indexno, e.EventTimeUTC, e.EventSummary);
 
@@ -285,7 +290,7 @@ namespace EDDiscovery.UserControls
             pictureBox.ClearImageList();
             Controls.RemoveByKey("chart");
 
-            if (curlist != null)
+            if (eventlist != null)
             {
                 var found = ReadHistory( out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
 
@@ -314,7 +319,7 @@ namespace EDDiscovery.UserControls
                         hpos[i] = hpos[i - 1] + colsw[i - 1];
 
                     int limpetscolpos = 0;
-                    if (curlist.Count() > 0)
+                    if (eventlist.Count() > 0)
                     {
                         lastrefined = found.Sum(x => x.amountrefined);      // for use by timer
 
@@ -418,6 +423,11 @@ namespace EDDiscovery.UserControls
                         else
                             matdata.Add(prospectedlist[selm.Value]);
 
+                        //int spaceleft = ClientRectangle.Height - pictureBox.Height - extPanelRollUp.Height;
+
+                        //if (spaceleft < 200)
+                        //    Height += 200 + pictureBox.Height - extPanelRollUp.Height;
+
                         try
                         {
                             Chart chart = new Chart();
@@ -458,7 +468,9 @@ namespace EDDiscovery.UserControls
                             chart.ChartAreas.Add(chartarea);
 
                             chart.Titles.Clear();
-                            var title = new Title((matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") + "Distribution".T(EDTx.UserControlMiningOverlay_dist), Docking.Top, displayfont, TextC);
+                            var title = new Title((matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") +
+                                            (extCheckBoxChartBase.Checked ? "Distribution vs All".T(EDTx.UserControlMiningOverlay_distall) : "Distribution if Contains".T(EDTx.UserControlMiningOverlay_dist)), 
+                                            Docking.Top, displayfont, TextC);
                             chart.Titles.Add(title);
 
                             Legend legend = null;
@@ -475,25 +487,44 @@ namespace EDDiscovery.UserControls
                             }
 
                             int mi = 0;
-                            foreach (var m in matdata)
+                            foreach (var material in matdata)
                             {
                                 Series series = new Series();
-                                series.Name = m.friendlyname;
+                                series.Name = material.friendlyname;
                                 series.ChartArea = "ChartArea1";
                                 series.ChartType = SeriesChartType.Line;
                                 series.Color = LineC[mi];
                                 series.Legend = "Legend1";
 
-                                int i = 0;
-                                for (i = 0; i < CFDbMax; i++)        // 0 - fixed
-                                {
-                                    int numberabove = m.prospectedamounts.Count(x => x >= i);
-                                    series.Points.Add(new DataPoint(i, (double)numberabove / m.prospectednoasteroids * 100.0));
-                                    series.Points[i].AxisLabel = i.ToString();
-                                }
+                                double min = material.prospectedamounts.Min();
+                                int asteroids = extCheckBoxChartBase.Checked ? prospected : material.prospectednoasteroids;
 
+                                //foreach (var x in material.prospectedamounts) System.Diagnostics.Debug.WriteLine($"Material {material.friendlyname} % {x}");
+
+                                for (int percent = 0; percent < CFDbMax; percent++)        // for each % chance up to CFdbMax (50)
+                                {
+                                    // if percent is less than the prospected amount minimum value don't show
+
+                                    if (percent >= (int)min)
+                                    {
+                                        // here, see how many entries are at or above the percentage amount
+                                        int numberabove = material.prospectedamounts.Count(x => x >= percent);
+                                        // and therefore the chance is the number above / no of asteroids
+                                        double chance = ((double)numberabove) / asteroids * 100.0;
+
+                                        //System.Diagnostics.Debug.WriteLine($"Mining {material.friendlyname} %{percent} no {numberabove} {material.prospectednoasteroids} = {chance}, min is {min}");
+
+                                        series.Points.Add(new DataPoint(percent, chance));
+                                        series.Points[series.Points.Count - 1].AxisLabel = percent.ToString();
+
+                                        if (numberabove == 0 && percent % 10 == 0)      // if we have no items, terminate data at next 10% interval - chart will size
+                                            break;
+                                    }
+                                }
+                                
                                 chart.Series.Add(series);
                                 mi++;
+                               
                             }
 
                             chart.EndInit();
@@ -539,11 +570,11 @@ namespace EDDiscovery.UserControls
 
         private string TimeText(bool setstart)
         {
-            if (curlist != null && curlist.Count > 0 )
+            if (eventlist != null && eventlist.Count > 0 )
             {
-                DateTime lasteventtime = curlist.Last().EventTimeUTC;        // last event time
+                DateTime lasteventtime = eventlist.Last().EventTimeUTC;        // last event time
                 bool inprogress = incurrentplay && (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // N min we are still in progress, and we are in current play
-                TimeSpan timemining = inprogress ? (DateTime.UtcNow - curlist.First().EventTimeUTC) : (lasteventtime - curlist.First().EventTimeUTC);
+                TimeSpan timemining = inprogress ? (DateTime.UtcNow - eventlist.First().EventTimeUTC) : (lasteventtime - eventlist.First().EventTimeUTC);
                 string text = timemining.ToString(@"hh\:mm\:ss");
                 if (lastrefined > 0 && timemining.TotalHours>0)
                 {
@@ -617,6 +648,12 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void extCheckBoxChartBase_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting(dbChartBase, extCheckBoxChartBase.Checked);
+            Display();
+        }
+
         #endregion
 
         #region excel
@@ -661,24 +698,24 @@ namespace EDDiscovery.UserControls
                     {
                         if (r == 0)
                         {
-                            return new object[] { "","","", prospected.ToString("N0"),"","","","","",
-                                              content[0].ToString("N0"),
-                                              content[1].ToString("N0"),
-                                              content[2].ToString("N0") };
+                            return new object[] { "","","", prospected.ToString("N0",grd.FormatCulture),"","","","","",
+                                              content[0].ToString("N0",grd.FormatCulture),
+                                              content[1].ToString("N0",grd.FormatCulture),
+                                              content[2].ToString("N0",grd.FormatCulture) };
                         }
                         else if (r <= found.Count)
                         {
                             MaterialsFound f = found[r - 1];
                             return new object[] { f.friendlyname, f.amountrefined, f.amountcollected-f.amountdiscarded,
-                                              f.prospectednoasteroids>0 ? f.prospectednoasteroids.ToString("N0") : "" ,
-                                              f.prospectednoasteroids>0 ? (100.0 * (double)f.prospectednoasteroids / prospected).ToString("N1") : "" ,
-                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Average().ToString("N1") : "",
-                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Min().ToString("N1") : "",
-                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Max().ToString("N1") : "",
-                                              f.motherloadasteroids>0 ? f.motherloadasteroids.ToString("N0") : "" ,
-                                              f.prospectednoasteroids>0 ? f.content[0].ToString("N0") :"",
-                                              f.prospectednoasteroids>0 ? f.content[1].ToString("N0") : "",
-                                              f.prospectednoasteroids>0 ? f.content[2].ToString("N0") : "",
+                                              f.prospectednoasteroids>0 ? f.prospectednoasteroids.ToString("N0",grd.FormatCulture) : "" ,
+                                              f.prospectednoasteroids>0 ? (100.0 * (double)f.prospectednoasteroids / prospected).ToString("N1",grd.FormatCulture) : "" ,
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Average().ToString("N1",grd.FormatCulture) : "",
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Min().ToString("N1",grd.FormatCulture) : "",
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Max().ToString("N1",grd.FormatCulture) : "",
+                                              f.motherloadasteroids>0 ? f.motherloadasteroids.ToString("N0",grd.FormatCulture) : "" ,
+                                              f.prospectednoasteroids>0 ? f.content[0].ToString("N0",grd.FormatCulture) :"",
+                                              f.prospectednoasteroids>0 ? f.content[1].ToString("N0",grd.FormatCulture) : "",
+                                              f.prospectednoasteroids>0 ? f.content[2].ToString("N0",grd.FormatCulture) : "",
                                               f.discovered ? "*" : ""  };
                         }
                         else
@@ -749,7 +786,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     });
 
-                    var proslist = curlist.Where(x => x.EntryType == JournalTypeEnum.ProspectedAsteroid).ToList();
+                    var proslist = eventlist.Where(x => x.EntryType == JournalTypeEnum.ProspectedAsteroid).ToList();
 
                     grd.GetSetsData.Add(delegate (int s, int r)
                     {

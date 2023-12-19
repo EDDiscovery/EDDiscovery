@@ -17,7 +17,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public class UserControlCommonBase : UserControl
+
+    public class UserControlCommonBase : UserControl, EliteDangerousCore.DB.IUserDatabaseSettingsSaver
     {
         #region Status
 
@@ -178,6 +179,10 @@ namespace EDDiscovery.UserControls
         //      class PushResourceWantedList - synthesis/engineering pushes a list of wants to the resources panel
         //           Send to everyone
         //           Panel which grabs it should return true
+        //
+        //      class PushRouteList - route panel is pushing a list of systems calculated
+        //           Send to everyone
+        //           No Panel should grab it
 
         public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
         public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
@@ -186,7 +191,10 @@ namespace EDDiscovery.UserControls
         {
             public enum PushType { TriWanted, TriSystems, Expedition };
             public PushType PushTo { get; set; }
-            public System.Collections.Generic.List<string> Systems { get; set; }
+            public System.Collections.Generic.List<string> SystemNames { get; set; }
+            public System.Collections.Generic.List<EliteDangerousCore.ISystem> SystemList { get; set; } // expedition can use either
+            public bool MakeVisible { get; set; } = false;
+            public string RouteTitle { get; set; } = null;
         };
         public class PanelAction                    // perform an action
         {
@@ -199,6 +207,10 @@ namespace EDDiscovery.UserControls
         {
             public System.Collections.Generic.Dictionary<EliteDangerousCore.MaterialCommodityMicroResourceType, int> Resources { get; set; }      // push type and amount
         }
+        public class PushRouteList                  // use to push star list from route panel
+        {
+            public System.Collections.Generic.List<EliteDangerousCore.ISystem> Systems { get; set; }
+        };
 
         public class TravelHistoryStartStopChanged { }  // push start/stop has been changed
 
@@ -434,21 +446,42 @@ namespace EDDiscovery.UserControls
 
         // get/put a setting - type needs to be bool, int, double, long, DateTime, string
 
-        public T GetSetting<T>(string itemname, T defaultvalue, bool global = false)
+        public T GetSetting<T>(string itemname, T defaultvalue)
         {
             System.Diagnostics.Debug.Assert(DBBaseName != null);
-            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            //string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            string name = DBName(DisplayNumber, DBBaseName, itemname);
             var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue);
 
-          //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
+            //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
+            return res;
+        }
+        public T GetSettingGlobal<T>(string itemname, T defaultvalue)
+        {
+            System.Diagnostics.Debug.Assert(DBBaseName != null);
+            var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(itemname, defaultvalue);
             return res;
         }
 
-        public bool PutSetting<T>(string itemname, T value, bool global = false)
+        public bool PutSetting<T>(string itemname, T value)
         {
-            string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
-           // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
+            //string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            string name = DBName(DisplayNumber, DBBaseName, itemname);
+            // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
             return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
+        }
+
+        public bool PutSettingGlobal<T>(string itemname, T value)
+        {
+            return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(itemname, value);
+        }
+
+        public bool DeleteSetting(string itemname)
+        {
+            //string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
+            string name = DBName(DisplayNumber, DBBaseName, itemname);
+            // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
+            return EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey(name);
         }
 
         public string GetBoolSettingsAsString(params string[] paras)      // make up a bool semicolon control string from items
@@ -528,27 +561,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public class DBSettingsSaver             // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save
-        {                                        // with a defined extra itemname.  this seems the only way to pass generic delegates
-            public DBSettingsSaver(UserControlCommonBase b, string itemname)
-            {
-                root = itemname;
-                ba = b;
-            }
-            public T GetSetting<T>(string key, T defaultvalue)
-            {
-                return ba.GetSetting(root+key, defaultvalue);
-            }
 
-            public bool PutSetting<T>(string key, T value)
-            {
-                return ba.PutSetting(root+key, value);
-            }
-
-            private string root;
-            private UserControlCommonBase ba;
-        }
-
-        #endregion
+         #endregion
     }
 }

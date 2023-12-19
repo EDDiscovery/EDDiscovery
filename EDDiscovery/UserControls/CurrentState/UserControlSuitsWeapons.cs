@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
                                                 );
 
 
-                            System.Diagnostics.Debug.WriteLine($"Suit ${sname} row {rw.Cells[1].Tag}");
+                            //System.Diagnostics.Debug.WriteLine($"Suit ${sname} row {rw.Cells[1].Tag}");
                             if (i > 0)
                                 rw.Cells[1].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
 

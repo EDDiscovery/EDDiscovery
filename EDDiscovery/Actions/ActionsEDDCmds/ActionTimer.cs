@@ -30,7 +30,7 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList();
-            return (s != null && s.Count >= 2 && s.Count <= 3) ? s : null;
+            return (s != null && s.Count >= 1 && s.Count <= 3) ? s : null;
         }
 
         public override string VerifyActionCorrect()
@@ -45,16 +45,18 @@ namespace EDDiscovery.Actions
                             new string[] { "TimerName", "Milliseconds", "Opt JID" }, l?.ToArray());
             if (r != null)
             {
-                userdata = r.ToStringCommaList(2);       // min 2
+                userdata = r.ToStringCommaList(1);       // min 2
             }
 
             return (r != null);
         }
 
         static List<Timer> timers = new List<Timer>();          // timers are static and shared between all instances..  Programs instances of this class come and go
+        static int timerid = 1;
 
         class TimerInfo
         {
+            public int timerid;                 // id is assigned just to help debug this, increments per timer definition
             public string name;
             public ActionProgramRun ap;
             public HistoryEntry he;
@@ -70,56 +72,75 @@ namespace EDDiscovery.Actions
 
                 if (ap.Functions.ExpandStrings(ctrl, out exp) != BaseUtils.Functions.ExpandResult.Failed)
                 {
-                    int time;
-                    if (exp[1].InvariantParse(out time))
+                    if (exp[0].StartsWith("-"))         // - means cancel
                     {
-                        HistoryEntry he = null;
-                        long jid;
-                        if (exp.Count >= 3)
-                        {
-                            if (exp[2].InvariantParse(out jid))
-                            {
-                                he = (ap.ActionController as ActionController).HistoryList.GetByJID(jid);
+                        exp[0] = exp[0].Substring(1);
 
-                                if (he == null)
+                        Timer told = timers.Find(x => ((TimerInfo)x.Tag).name.Equals(exp[0]));
+
+                        if (told != null)
+                        {
+                            //System.Diagnostics.Debug.WriteLine($"Delete timer {((TimerInfo)told.Tag).timerid} {exp[0]}");
+                            told.Stop();
+                            told.Dispose();
+                            timers.Remove(told);
+                        }
+                    }
+                    else
+                    {
+                        int time;
+                        if (exp[1].InvariantParse(out time))        // if number decodes
+                        {
+                            HistoryEntry he = null;
+                            long jid;
+                            if (exp.Count >= 3)                     // if jid present
+                            {
+                                if (exp[2].InvariantParse(out jid))
                                 {
-                                    ap.ReportError("Timer could not find event " + jid);
+                                    he = (ap.ActionController as ActionController).HistoryList.GetByJID(jid);
+
+                                    if (he == null)
+                                    {
+                                        ap.ReportError("Timer could not find event " + jid);
+                                        return true;
+                                    }
+                                }
+                                else
+                                {
+                                    ap.ReportError("Timer JID is not an integer");
                                     return true;
                                 }
                             }
-                            else
+
+                            if (exp[0].StartsWith("+"))         // + name means replace if running - restart
                             {
-                                ap.ReportError("Timer JID is not an integer ");
-                                return true;
+                                exp[0] = exp[0].Substring(1);
+
+                                Timer told = timers.Find(x => ((TimerInfo)x.Tag).name.Equals(exp[0]));
+
+                                if (told != null)
+                                {
+                                    //System.Diagnostics.Debug.WriteLine($"Replace timer {((TimerInfo)told.Tag).timerid} {exp[0]}");
+                                    told.Stop();
+                                    told.Interval = time;
+                                    told.Start();
+                                    return true;
+                                }
                             }
+
+                            Timer t = new Timer() { Interval = time };
+                            t.Tick += Timer_Tick;
+                            t.Tag = new TimerInfo() { timerid = timerid, ap = ap, name = exp[0], he = he };
+                            timers.Add(t);
+                            t.Start();
+                            
+                            //System.Diagnostics.Debug.WriteLine($"Timer {timerid} Go {exp[0]}");
+                            
+                            timerid++;
                         }
-
-                        if (exp[0].StartsWith("+"))         // + name means replace if running
-                        {
-                            exp[0] = exp[0].Substring(1);
-
-                            Timer told = timers.Find(x => ((TimerInfo)x.Tag).name.Equals(exp[0]));
-                            //System.Diagnostics.Debug.WriteLine("Timers " + timers.Count);
-
-                            if ( told != null )
-                            {
-                                System.Diagnostics.Debug.WriteLine("Replace timer " + exp[0]);
-                                told.Stop();
-                                told.Interval = time;
-                                told.Start();
-                                return true;
-                            }
-                        }
-
-                        Timer t = new Timer() { Interval = time };
-                        t.Tick += Timer_Tick;
-                        t.Tag = new TimerInfo() { ap = ap, name = exp[0] , he = he};
-                        timers.Add(t);
-                        t.Start();
-                        System.Diagnostics.Debug.WriteLine("Timer Go " + exp[0]);
+                        else
+                            ap.ReportError("Timer bad name or time count");
                     }
-                    else
-                        ap.ReportError("Timer bad name or time count");
                 }
                 else
                     ap.ReportError(exp[0]);
@@ -137,9 +158,9 @@ namespace EDDiscovery.Actions
 
             TimerInfo ti = t.Tag as TimerInfo;
 
+            //System.Diagnostics.Debug.WriteLine($"Timer ticked {ti.timerid} {ti.name}");
             (ti.ap.ActionController as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, new Variables("TimerName", ti.name), now: false);    // queue at end an event
 
-            //System.Diagnostics.Debug.WriteLine("REMOVED Timers " + timers.Count);
             timers.Remove(t);   // done with it
             t.Dispose();
         }

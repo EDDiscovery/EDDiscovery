@@ -320,10 +320,13 @@ namespace EDDiscovery
             // and the uccb must be in AutoScaleMode.Inherit mode so it does end up double scaling
 
             var scale = this.FindForm().CurrentAutoScaleFactor();
-            System.Diagnostics.Debug.WriteLine($"MajorTabControl apply scaling to {uccb.Name} {scale}");
-            uccb.Scale(scale);      
+            System.Diagnostics.Debug.WriteLine($"MajorTabControl apply scaling {scale}");
+            uccb.Scale(scale);
 
-            ExtendedControls.Theme.Current.ApplyStd(page); 
+            System.Diagnostics.Debug.WriteLine($"MajorTabControl apply theming");
+            ExtendedControls.Theme.Current.ApplyStd(page);
+
+            System.Diagnostics.Debug.WriteLine($"MajorTabControl finished");
 
             page.ResumeLayout();
 

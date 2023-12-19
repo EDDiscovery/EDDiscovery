@@ -14,6 +14,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.GMO;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -117,7 +118,8 @@ namespace EDDiscovery.UserControls
 
         private bool travelhistoryisattop = true;
 
-        HistoryEntry last_he = null;
+        private HistoryEntry last_he = null;
+        private uint lastprocessedidgen = uint.MaxValue;
 
         private ControlHelpersStaticFunc.ControlDragger drag = new ControlHelpersStaticFunc.ControlDragger();
 
@@ -323,7 +325,6 @@ namespace EDDiscovery.UserControls
                 if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        // if name or bodyid has changed
                 {
                     //System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
-
                     lastdestination = j;
                     Display(last_he);
                 }
@@ -357,6 +358,7 @@ namespace EDDiscovery.UserControls
             bool duetoship = false;
             bool duetoother = false;
             bool duetomissions = false;
+            bool duetoidentifiers = Identifiers.Generation != lastprocessedidgen;  // global history kick if Ids changed, not on he, but if its changed, a new he would be coming in
 
             if (he.Status.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
             {
@@ -376,10 +378,11 @@ namespace EDDiscovery.UserControls
                 duetomissions = last_he.MissionList != he.MissionList;
             }
 
-            if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions)
+            if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions || duetoidentifiers)
             {
                 //System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
+                lastprocessedidgen = Identifiers.Generation;   // stop identifiers kicking again
             }
         }
 
@@ -405,7 +408,7 @@ namespace EDDiscovery.UserControls
                 bool hasmarketid = he?.Status.MarketID.HasValue ?? false;
                 bool hasbodyormarketid = hasmarketid || he.FullBodyID.HasValue;
 
-                extButtonEDDBStation.Enabled = extButtonInaraStation.Enabled = hasmarketid;
+                extButtonInaraStation.Enabled = hasmarketid;
                 extButtonSpanshStation.Enabled = hasbodyormarketid;
 
                 if (he.System.HasCoordinate)         // cursystem has them?
@@ -433,7 +436,7 @@ namespace EDDiscovery.UserControls
                 //                System.Diagnostics.Debug.WriteLine("UserControlSysInfo sys info {0} {1} {2}", he.System.Name, he.System.EDSMID, he.System.EDDBID);
 
 
-                extButtonEDSMSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = true;
+                extButtonEDSMSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = true;
 
                 string allegiance, economy, gov, faction, factionstate, security;
                 hl.ReturnSystemInfo(he, out allegiance, out economy, out gov, out faction, out factionstate, out security);
@@ -566,10 +569,10 @@ namespace EDDiscovery.UserControls
                 if (travelhistoryisattop && ( lastdestination != null || (lasttarget != null && lasttarget.StarSystem != he.System.Name)))
                 {
                     string starname = "";
-                    string bodyname = "";
+                    string destname = "";
                     string starclass = "";
                     string distance = "";
-                    string pos = "";
+                    string onbody = "";
                     Color textdistcolor = ExtendedControls.Theme.Current.TextBlockColor;
 
                     //bool sysinfoincurrentsystem = he.System.Name == (discoveryform.history.LastOrDefault?.System.Name ?? "xx");
@@ -585,17 +588,21 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {
-                            bodyname = lastdestination.Name;    // else body
-                          //  System.Diagnostics.Debug.WriteLine($"Destination select body {lastdestination.BodyID}");
+                            // else body name destination or $POI $MULTIPLAYER etc
+                            // Its not localised, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
 
-                            var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(DiscoveryForm.History.GetLast.System, false);
+                            destname = JournalFieldNaming.SignalBodyName(lastdestination.Name);   
+
+                            //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
+
+                            var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(DiscoveryForm.History.GetLast.System);
                             if (IsClosed)       //ASYNC! warning! may have closed.
                                 return;
 
-                            // with a found system, see if we can get the body name
+                            // with a found system, see if we can get the body name so we know what body its on
                             if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID, out StarScan.ScanNode body))
                             {
-                                pos = body.FullName.ReplaceIfStartsWith(he.System.Name).Trim();
+                                onbody = body.FullName.ReplaceIfStartsWith(he.System.Name).Trim();
 
                                 if (body.ScanData != null)
                                     distance = body.ScanData.DistanceFromArrivalLS.ToString("N0") + "ls";
@@ -630,13 +637,13 @@ namespace EDDiscovery.UserControls
                                     textdistcolor = ExtendedControls.Theme.Current.TextBlockHighlightColor;
                             }
 
-                            pos = $"{sys.X:N1}, {sys.Y:N1}, {sys.Z:N1}";
+                            onbody = $"{sys.X:N1}, {sys.Y:N1}, {sys.Z:N1}";
                         }
                     }
 
-                    extTextBoxNextDestination.Text = $"{starname}{bodyname}{starclass}";
+                    extTextBoxNextDestination.Text = $"{starname}{destname}{starclass}";
                     extTextBoxNextDestinationDistance.Text = distance;
-                    extTextBoxNextDestinationPosition.Text = pos;
+                    extTextBoxNextDestinationPosition.Text = onbody;
                     extTextBoxNextDestinationDistance.ForeColor = textdistcolor;
                 }
                 else
@@ -656,8 +663,8 @@ namespace EDDiscovery.UserControls
                                 extTextBoxStationFaction.Text = extTextBoxNextDestination.Text = 
                                 "";
 
-                extButtonEDSMSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = false;
-                extButtonEDDBStation.Enabled = extButtonInaraStation.Enabled = extButtonSpanshStation.Enabled = false;
+                extButtonEDSMSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = false;
+                extButtonInaraStation.Enabled = extButtonSpanshStation.Enabled = false;
                 extButtonCoriolis.Enabled = extButtonEDSY.Enabled = false;
             }
         }
@@ -665,14 +672,6 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Clicks
-
-        private void buttonEDDBSystem_Click(object sender, EventArgs e)
-        {
-            if (last_he != null)
-            {
-                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBSystemName + HttpUtility.UrlEncode(last_he.System.Name));
-            }
-        }
 
         private void buttonEDSMSystem_Click(object sender, EventArgs e)
         {
@@ -697,7 +696,7 @@ namespace EDDiscovery.UserControls
         private void extButtonSpanshSystem_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.System.SystemAddress.HasValue)
-                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + last_he.System.SystemAddress.Value.ToStringInvariant());
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(last_he.System.SystemAddress.Value);
         }
 
         private void extButtonInaraStation_Click(object sender, EventArgs e)
@@ -709,20 +708,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void extButtonEDDBStation_Click(object sender, EventArgs e)
-        {
-            if (last_he != null && last_he.Status.MarketID != null)
-                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBStationMarketId + last_he.Status.MarketID.ToStringInvariant());
-        }
-
         private void extButtonSpanshStation_Click(object sender, EventArgs e)
         {
             if (last_he != null)
             {
                 if (last_he.Status.MarketID != null)
-                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.Status.MarketID.ToStringInvariant());
+                    EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByMarketID(last_he.Status.MarketID.Value);
                 else if (last_he.FullBodyID.HasValue)
-                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
+                    EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByFullBodyID(last_he.FullBodyID.Value);
             }
         }
 
@@ -787,8 +780,8 @@ namespace EDDiscovery.UserControls
                         GalacticMapObject gmo = DiscoveryForm.GalacticMapping.Find(textBoxTarget.Text, true);       // find gmo, any part
                         if (gmo != null)
                         {
-                            TargetClass.SetTargetOnGMO(gmo.Name,gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
-                            textBoxTarget.Text = gmo.Name;
+                            TargetClass.SetTargetOnGMO(gmo.NameList,gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
+                            textBoxTarget.Text = gmo.NameList;
                             DiscoveryForm.NewTargetSet(this);
                         }
                         else
@@ -1047,11 +1040,8 @@ namespace EDDiscovery.UserControls
                                         extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
-                                        extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        extButtonEDSMSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
                                         itembottom = Math.Max(extButtonEDSMSystem.Bottom, itembottom);
-
-                                        extButtonEDDBSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonEDDBSystem.Visible = false;
                                     }
 
                                     break;
@@ -1062,14 +1052,10 @@ namespace EDDiscovery.UserControls
                                         extButtonEDSMSystem.Location = new Point(datapos.X, datapos.Y);
                                         extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
                                         extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
                                         labelOpen.Visible = true;
                                         itembottom = extButtonEDSMSystem.Bottom;
-
-                                        // removed april 23 - kept code in case something else comes along
-                                        extButtonEDDBSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonEDDBSystem.Visible = false;
                                     }
                                     break;
 
@@ -1089,14 +1075,11 @@ namespace EDDiscovery.UserControls
                                     labelOpenStation.Location = labpos;
                                     extButtonInaraStation.Location = new Point(datapos.X, datapos.Y); 
                                     extButtonSpanshStation.Location = new Point(extButtonInaraStation.Right + hspacing, extButtonInaraStation.Top);
-                                    labelOpenStation.Tag = extButtonEDDBStation.Tag = extButtonInaraStation.Tag = extButtonSpanshStation.Tag = si;
+                                    labelOpenStation.Tag = extButtonInaraStation.Tag = extButtonSpanshStation.Tag = si;
                                     extButtonInaraStation.Visible = extButtonSpanshStation.Visible = true;
                                     labelOpenStation.Visible = true;
                                     itembottom = extButtonInaraStation.Bottom;
 
-                                    // removed april 23 - kept code in case something else comes along
-                                    extButtonEDDBStation.Visible = false;
-                                    extButtonEDDBStation.Location = new Point(extButtonSpanshStation.Right + hspacing, extButtonInaraStation.Top);
                                     break;
 
                                 case ControlBits.BitSelShipyardButtons:

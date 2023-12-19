@@ -164,9 +164,10 @@ SECTION PopOutInfo
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @
 .Carrier.Description: "Data about your fleet carrier" @
-PopOutInfo.Resources.Title: "Resources" @
-PopOutInfo.Resources.Description: "All Materials, Commodity, MicroResources" @
-
+.Resources.Title: "Resources" @
+.Resources.Description: "All Materials, Commodity, MicroResources" @
+.SpanshStations.Title: "Spansh Stations" @
+.SpanshStations.Description: "Stations in the system from spansh web data" @
 
 SECTION EDDiscoveryForm
 
@@ -252,7 +253,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" @
 .PL: "Profile {0} Loaded" @
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." @
-.CloseWarning: "EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete" @
+.CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" @
 .notifyIconMenu_Open: "&Open EDDiscovery" @
 .notifyIconMenu_Hide: "&Hide Tray Icon" @
 .notifyIconMenu_Exit: "E&xit" @
@@ -271,11 +272,12 @@ SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." @
 .EDSM: "Get galactic mapping from EDSM." @
+.GEC: "Get galactic mapping from GEC." @
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." @
 .RTH: "Reading travel history" @
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." @
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" @
-.EDSMU: "EDSM systems update complete with {0} systems" @
+.EDSMU: "Systems update complete with {0} systems" @
 .PLF: "Processing log file {0}" @
 .RD: "Refresh Displays" @
 .HRC: "History refresh complete." @
@@ -325,13 +327,15 @@ SECTION FindSystemsUserControl
 .labelRadMin: "Radius ly Min" @
 .labelFilter: "Star Name" @
 .Cannotfindsystem: "Cannot find system " @
-.EDSM: "EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about" @
+.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" @
 .buttonExtEDSM: "From EDSM" @
 .buttonExtDB: "From DB" @
 .buttonExtVisited: "From Visited Systems" @
 .checkBoxCustomCube: "Cube" @
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
+.extButtonFromSpansh: "From Spansh" @
+.extButtonFromSpanshFindNames: "From Spansh Find Names" @
 
 SECTION TravelHistoryFilter
 
@@ -418,11 +422,12 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" @
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" @
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" @
-.GALSELEX: "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." @
+.GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." @
 .Select: "Select: " @
 .GALSELEN: "Select the data set" @
+.GALSELSRC: "Select the data source" @
 .PresstoAccept: "Press to Accept" @
-.GALSELTitle: "Select EDSM Galaxy Data" @
+.GALSELTitle: "Select Galaxy Data" @
 
 SECTION MoveToCommander
 

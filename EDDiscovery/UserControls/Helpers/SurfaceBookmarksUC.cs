@@ -67,7 +67,7 @@ namespace EDDiscovery.Forms
         private async void LoadGrid(string systemName, HistoryList helist)
         {
             //System.Diagnostics.Debug.WriteLine($"Lookup for planets '{systemName}'");
-            var lookup = await helist.StarScan.FindSystemAsync(new SystemClass(systemName), true);
+            var lookup = await helist.StarScan.FindSystemAsync(new SystemClass(systemName), EliteDangerousCore.WebExternalDataLookup.All);
 
             // lets present all, even if not landable, as you may want a whole planet bookmark
             var bodies = lookup?.Bodies?.Select(b => b.FullName.ReplaceIfStartsWith(systemName) + (b.CustomName != null ? " " + b.CustomName : ""));

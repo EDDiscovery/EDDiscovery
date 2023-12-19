@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), incldockstartend: false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false,true,false);
 
             splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
 
@@ -156,6 +156,8 @@ namespace EDDiscovery.UserControls
             if (ledger != null && ledger.Transactions.Count > 0)
             {
                 var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                
+                // transactions are in date ascending, and filtered list is too in date ascending
                 List<Ledger.Transaction> filteredlist = filter.Filter(ledger.Transactions);
 
                 if (filteredlist.Count > 0)
@@ -163,22 +165,31 @@ namespace EDDiscovery.UserControls
                     var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
 
                     var rowsToAdd = new List<DataGridViewRow>(filteredlist.Count);
+                    bool[] filteredout = new bool[filteredlist.Count];
+
+                    for (int i = filteredlist.Count - 1; i >= 0; i--)       // fill the rows backwards, oldest first
+                    {
+                        var row = CreateRow(filteredlist[i], eventfilter, textBoxFilter.Text);      // create if not filtered out
+                        if (row != null)
+                            rowsToAdd.Add(row);         // add..
+                        else
+                            filteredout[i] = true;      // remember
+                    }
+
+                    dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
 
                     extChartLedger.BeginInit();
 
-                    for (int i = filteredlist.Count - 1; i >= 0; i--)
+                    for (int i = 0; i < filteredlist.Count;  i++)       // chart is filled in date ascending order
                     {
-                        var row = CreateRow(filteredlist[i], eventfilter, textBoxFilter.Text);      // create if not filtered out
-
-                        if (row != null)
+                        if (!filteredout[i])        // if not filtered out, add
                         {
-                            rowsToAdd.Add(row);
                             DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(filteredlist[i].EventTimeUTC);
+                            //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {filteredlist[i].CashTotal}");
                             extChartLedger.AddXY(seltime, filteredlist[i].CashTotal);   // purposely no chart tips - uses too much space, no need with grid reflection
                         }
                     }
 
-                    dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
                     extChartLedger.EndInit();
                 }
 
@@ -234,10 +245,12 @@ namespace EDDiscovery.UserControls
                 var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
                 var row = CreateRow(tx, eventfilter, textBoxFilter.Text);
 
-                if ( row!=null)
+                if (row != null)
                 {
                     dataGridViewLedger.Rows.Insert(0, row);     // insert at top
+
                     var seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
+                    //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {tx.CashTotal}");
                     extChartLedger.AddXY(seltime, tx.CashTotal);
                 }
 

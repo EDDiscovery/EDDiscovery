@@ -126,11 +126,12 @@ namespace EDDiscovery.UserControls
             {
                 System.Diagnostics.Debug.WriteLine($"Spansh detects csv file ready {newfiledetected}");
                 waitforaccesstimer.Stop();
-                bool serviced = RequestPanelOperation(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = newfiledetected });
+                var req = new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = newfiledetected };
+                bool serviced = RequestPanelOperation(this, req);
                 if ( !serviced) // no-one serviced it, so create an expedition tab, and then reissue
                 {
                     DiscoveryForm.SelectTabPage("Expedition", true, false);         // ensure expedition is open
-                    RequestPanelOperation(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = newfiledetected });
+                    RequestPanelOperation(this, req);
                 }
                 newfiledetected = null;
             }

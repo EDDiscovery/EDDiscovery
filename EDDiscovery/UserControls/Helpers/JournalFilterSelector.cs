@@ -120,10 +120,6 @@ namespace EDDiscovery.UserControls
                             RemoveGroupOption(index);
                         }
                     }
-                    else
-                    {
-                        // don't like  ExtendedControls.MessageBoxTheme.Show($"Cannot delete".TxID(EDTx.TBD) + " " + text, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    }
                 }
                 else if ( e.Button == MouseButtons.Left)
                 {

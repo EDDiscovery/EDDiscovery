@@ -49,6 +49,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.ColumnIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStarType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCentreDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,14 +64,15 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 114);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 185);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 602);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 531);
             this.dataViewScrollerPanel.TabIndex = 7;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowColorScaling = 0.5F;
@@ -86,7 +88,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 602);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 531);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -99,16 +101,17 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridView
             // 
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.AutoSortByColumnName = false;
-            this.dataGridView.CheckEDSM = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnIndex,
             this.ColumnStar,
+            this.ColumnStarType,
             this.ColumnCentreDistance,
             this.ColumnCurrentDistance,
             this.ColumnPosition});
@@ -120,8 +123,9 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(788, 602);
+            this.dataGridView.Size = new System.Drawing.Size(788, 531);
             this.dataGridView.TabIndex = 0;
+            this.dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
             // ColumnIndex
@@ -137,6 +141,13 @@ namespace EDDiscovery.UserControls
             this.ColumnStar.MinimumWidth = 50;
             this.ColumnStar.Name = "ColumnStar";
             this.ColumnStar.ReadOnly = true;
+            // 
+            // ColumnStarType
+            // 
+            this.ColumnStarType.FillWeight = 50F;
+            this.ColumnStarType.HeaderText = "Star type";
+            this.ColumnStarType.Name = "ColumnStarType";
+            this.ColumnStarType.ReadOnly = true;
             // 
             // ColumnCentreDistance
             // 
@@ -168,7 +179,7 @@ namespace EDDiscovery.UserControls
             this.findSystemsUserControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.findSystemsUserControl.Location = new System.Drawing.Point(0, 0);
             this.findSystemsUserControl.Name = "findSystemsUserControl";
-            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 114);
+            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 185);
             this.findSystemsUserControl.TabIndex = 32;
             // 
             // SearchStars
@@ -194,6 +205,7 @@ namespace EDDiscovery.UserControls
         private FindSystemsUserControl findSystemsUserControl;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStarType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCentreDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;

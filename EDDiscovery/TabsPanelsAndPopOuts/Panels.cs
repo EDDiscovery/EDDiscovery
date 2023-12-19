@@ -24,7 +24,7 @@ namespace EDDiscovery
 {
     static public class PanelInformation
     {
-        public enum PanelIDs        // id's.. used in tab controls, and in button pop outs button
+        public enum PanelIDs          // id's.. used in tab controls, and in button pop outs button
         {
             GroupMarker = -1,
 
@@ -87,6 +87,7 @@ namespace EDDiscovery
             Discoveries = 57,
             Carrier=58,
             Resources=59,
+            SpanshStations=60,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -117,10 +118,11 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
             { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier", "Carrier", "Data about your fleet carrier") },
 
-            { new PanelInfo( "Shipyard Data") },
+            { new PanelInfo( "Station Data") },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Market data view, giving commodity price information where available" ) },
             { new PanelInfo( PanelIDs.ShipYardPanel, typeof(UserControlShipYards), "Ship Yards", "ShipYards", "Ship yards information from places you have visited") },
             { new PanelInfo( PanelIDs.OutfittingPanel, typeof(UserControlOutfitting), "Outfitting", "Outfitting", "Outfitting items in ship yards from places you have visited") },
+            { new PanelInfo( PanelIDs.SpanshStations, typeof(UserControlSpanshStations), "Spansh Stations", "SpanshStations", "Stations in the system from spansh web data") },
 
             { new PanelInfo( "Engineering/Synthesis") },
             { new PanelInfo( PanelIDs.Synthesis, typeof(UserControlSynthesis), "Synthesis", "Synthesis", "Synthesis planner") },

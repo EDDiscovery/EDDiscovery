@@ -231,9 +231,6 @@ namespace EDDiscovery.Forms
                                 "Reset Databases", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     BaseUtils.FileHelpers.DeleteFileNoError(optionfile);
-                    EDDiscovery.EDDOptions.Instance.ResetSystemDatabasePath();
-                    EDDiscovery.EDDOptions.Instance.ResetUserDatabasePath();
-
                     buttonRun.Visible = false;      // can't run, must exit
                 }
             }

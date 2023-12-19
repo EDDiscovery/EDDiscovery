@@ -194,51 +194,6 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eddb.io/.
-        /// </summary>
-        public static string URLeddb {
-            get {
-                return ResourceManager.GetString("URLeddb", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eddb.io/station/market-id/.
-        /// </summary>
-        public static string URLEDDBStationMarketId {
-            get {
-                return ResourceManager.GetString("URLEDDBStationMarketId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to http://eddb.io/system/.
-        /// </summary>
-        public static string URLEDDBSystem {
-            get {
-                return ResourceManager.GetString("URLEDDBSystem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eddb.io/system/name/.
-        /// </summary>
-        public static string URLEDDBSystemName {
-            get {
-                return ResourceManager.GetString("URLEDDBSystemName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eddiscovery.space/eddb/systems_populated.jsonl.
-        /// </summary>
-        public static string URLEDDBSystems {
-            get {
-                return ResourceManager.GetString("URLEDDBSystems", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://www.elitedangerous.com/.
         /// </summary>
         public static string URLEDHomepage {
@@ -383,38 +338,11 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://ross.eddb.io/system/update/.
+        ///   Looks up a localized string similar to http://downloads.spansh.co.uk/systems{0}.json.gz.
         /// </summary>
-        public static string URLRossSystem {
+        public static string URLSpanshSystemsRoot {
             get {
-                return ResourceManager.GetString("URLRossSystem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://spansh.co.uk/body/.
-        /// </summary>
-        public static string URLSpanshBodyId {
-            get {
-                return ResourceManager.GetString("URLSpanshBodyId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://spansh.co.uk/station/.
-        /// </summary>
-        public static string URLSpanshStationMarketId {
-            get {
-                return ResourceManager.GetString("URLSpanshStationMarketId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://spansh.co.uk/system/.
-        /// </summary>
-        public static string URLSpanshSystemSystemId {
-            get {
-                return ResourceManager.GetString("URLSpanshSystemSystemId", resourceCulture);
+                return ResourceManager.GetString("URLSpanshSystemsRoot", resourceCulture);
             }
         }
         

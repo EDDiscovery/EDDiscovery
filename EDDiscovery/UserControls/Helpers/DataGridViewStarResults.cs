@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019-2020 EDDiscovery development team
+ * Copyright © 2019-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore;
@@ -25,7 +23,7 @@ namespace EDDiscovery.UserControls.Search
 {
     public class DataGridViewStarResults : BaseUtils.DataGridViewColumnControl
     {
-        public bool CheckEDSM { get; set; }
+        public EliteDangerousCore.WebExternalDataLookup WebLookup { get; set; }
         public Action<HistoryEntry> GotoEntryClicked = null;
 
         private EDDiscoveryForm discoveryform;
@@ -39,31 +37,42 @@ namespace EDDiscovery.UserControls.Search
             new System.Windows.Forms.ToolStripMenuItem(),
             new System.Windows.Forms.ToolStripMenuItem(),
             new System.Windows.Forms.ToolStripMenuItem(),
-            new System.Windows.Forms.ToolStripMenuItem()
+            new System.Windows.Forms.ToolStripMenuItem(),
+            new System.Windows.Forms.ToolStripMenuItem(),
             });
             
             cms.Name = "historyContextMenu";
             cms.Size = new System.Drawing.Size(187, 70);
 
             cms.Items[0].Size = new System.Drawing.Size(186, 22);
-            cms.Items[0].Text = "Go to star on 3D Map";
-            cms.Items[0].Name = "3d";
-            cms.Items[0].Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+            cms.Items[0].Text = "View Scan Display";
+            cms.Items[0].Name = "Data";
+            cms.Items[0].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
+
             cms.Items[1].Size = new System.Drawing.Size(186, 22);
-            cms.Items[1].Text = "View on EDSM";
-            cms.Items[1].Name = "EDSM";
-            cms.Items[1].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            cms.Items[1].Text = "Go to star on 3D Map";
+            cms.Items[1].Name = "3d";
+            cms.Items[1].Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+
             cms.Items[2].Size = new System.Drawing.Size(186, 22);
-            cms.Items[2].Text = "View Data On Entry";
-            cms.Items[2].Name = "Data";
-            cms.Items[2].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
-            cms.Items[3].Text = "Go to entry on grid";
-            cms.Items[3].Name = "Goto";
-            cms.Items[3].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
+            cms.Items[2].Text = "View on Spansh";
+            cms.Items[2].Name = "Spansh";
+            cms.Items[2].Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
+
+            cms.Items[3].Size = new System.Drawing.Size(186, 22);
+            cms.Items[3].Text = "View on EDSM";
+            cms.Items[3].Name = "EDSM";
+            cms.Items[3].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+
+            cms.Items[4].Text = "Go to entry on grid";
+            cms.Items[4].Name = "Goto";
+            cms.Items[4].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
             cms.Opening += Cms_Opening;
             CellDoubleClick += cellDoubleClick;
 
-            var enumlistcms = new Enum[] { EDTx.DataGridViewStarResults_3d, EDTx.DataGridViewStarResults_EDSM, EDTx.DataGridViewStarResults_Data, EDTx.DataGridViewStarResults_Goto };
+            var enumlistcms = new Enum[] { EDTx.DataGridViewStarResults_3d, EDTx.DataGridViewStarResults_EDSM, EDTx.DataGridViewStarResults_Spansh, 
+                                EDTx.DataGridViewStarResults_Data, EDTx.DataGridViewStarResults_Goto };
+
             BaseUtils.Translator.Instance.TranslateToolstrip(cms, enumlistcms,this);
         }
 
@@ -77,10 +86,10 @@ namespace EDDiscovery.UserControls.Search
         private void Cms_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
-            ContextMenuStrip.Items[3].Visible = rightclicktag is HistoryEntry;
+            ContextMenuStrip.Items[2].Visible = SystemClassFrom(rightclicktag)?.SystemAddress.HasValue ?? false;        // spansh
         }
 
-        private ISystem SysFrom(Object t)   // given tag, find the isystem, may be null. 
+        private ISystem SystemClassFrom(Object t)   // given tag, find the isystem, may be null. 
         {
             if (t is HistoryEntry)
                 return ((HistoryEntry)t).System;
@@ -92,7 +101,7 @@ namespace EDDiscovery.UserControls.Search
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+            var sys = SystemClassFrom(rightclicktag);       // if rightclicktag == null, then we get null.
 
             if (sys != null)
             {
@@ -104,13 +113,22 @@ namespace EDDiscovery.UserControls.Search
                 this.Cursor = Cursors.Default;
             }
         }
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var sys = SystemClassFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+
+            if (sys != null && sys.SystemAddress != null)
+            {
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(sys.SystemAddress.Value);
+            }
+        }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sys = SysFrom(rightclicktag);       // if rightclicktag == null, then we get null.
+            var sys = SystemClassFrom(rightclicktag);       // if rightclicktag == null, then we get null.
             if (sys != null)
             {
-                discoveryform.Open3DMap(SysFrom(rightclicktag));
+                discoveryform.Open3DMap(SystemClassFrom(rightclicktag));
             }
         }
 
@@ -170,7 +188,7 @@ namespace EDDiscovery.UserControls.Search
 
         void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, CheckEDSM, discoveryform.History);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), tag, discoveryform.History, forcedlookup: WebLookup);
         }
 
         public void Excel(int columnsout)
@@ -217,13 +235,13 @@ namespace EDDiscovery.UserControls.Search
                         for (int i = 0; i < columnsout; i++)
                             data.Add(rw.Cells[i].Value);
 
-                        ISystem sys = SysFrom(rw.Tag);
+                        ISystem sys = SystemClassFrom(rw.Tag);
                         
                         if (sys != null)        // in case we don't have a valid tag
                         {
-                            data.Add(sys.X.ToString("0.#"));
-                            data.Add(sys.Y.ToString("0.#"));
-                            data.Add(sys.Z.ToString("0.#"));
+                            data.Add(sys.X);
+                            data.Add(sys.Y);
+                            data.Add(sys.Z);
                         }
 
                         return data.ToArray();

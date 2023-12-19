@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,7 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
  * 
  */
 
@@ -56,9 +55,6 @@ namespace EDDiscovery.UserControls
 
             extPanelRollUp.SetToolTip(toolTip);
 
-            checkBoxEDSM.Checked = GetSetting("EDSM", false);
-            checkBoxEDSM.CheckedChanged += CheckBoxEDSM_CheckedChanged;
-
             extCheckBoxShowImpossible.Checked = GetSetting("Impossible", false);
             extCheckBoxShowImpossible.CheckedChanged += ExtCheckBoxShowImpossible_CheckedChanged;
 
@@ -71,6 +67,12 @@ namespace EDDiscovery.UserControls
             checkBoxShowZeros.CheckedChanged += CheckBoxShowZeros_CheckedChanged;
 
             extPanelRollUp.PinState = GetSetting("PinState", true);
+
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
+            edsmSpanshButton.ValueChanged += (s, e) =>
+            {
+                DrawSystem();
+            };
         }
 
         public override void LoadLayout()
@@ -131,7 +133,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
+            StarScan.SystemNode last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, edsmSpanshButton.WebLookup);
 
             if (last_sn != null)
             {
@@ -139,7 +141,9 @@ namespace EDDiscovery.UserControls
 
                 foreach (var bodies in last_sn.Bodies)
                 {
-                    if (bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
+                    // we have scan data, and a name, and either edsm spansh set or no web bordies
+
+                    if (bodies.ScanData != null && bodies.ScanData.BodyName != null && (edsmSpanshButton.IsAnySet || !bodies.ScanData.IsWebSourced))     
                     {
                         //System.Diagnostics.Debug.WriteLine("Estimated values Recalc for " + bodies.ScanData.BodyName);
                         var ev = bodies.ScanData.RecalcEstimatedValues();
@@ -182,7 +186,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewEstimatedValues.Rows.Add(new object[] {
                                         GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
                                         spclass,
-                                        bodies.ScanData.IsEDSMBody ? "EDSM" : "",
+                                        bodies.ScanData.DataSourceName,
                                         (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : nullimg),
                                         (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg),
                                         pr31condition ? Icons.Controls.Scan_NotDiscoveredButMapped : bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
@@ -212,12 +216,6 @@ namespace EDDiscovery.UserControls
         private string GetBodySimpleName(string bodyName, string systemName)
         {
             return bodyName.ReplaceIfStartsWith(systemName,musthaveextra:true).Trim();
-        }
-
-        private void CheckBoxEDSM_CheckedChanged(object sender, System.EventArgs e)
-        {
-            PutSetting("EDSM", checkBoxEDSM.Checked);
-            DrawSystem();
         }
 
         private void CheckBoxShowZeros_CheckedChanged(object sender, EventArgs e)

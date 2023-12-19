@@ -53,6 +53,7 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.addToExpeditionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,11 +81,12 @@ namespace EDDiscovery.UserControls
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewSystemToolStripMenuItem,
+            this.viewOnSpanshToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem1,
             this.addToTrilaterationToolStripMenuItem1,
             this.addToExpeditionToolStripMenuItem});
             this.contextMenuStrip.Name = "closestContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(176, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(176, 114);
             // 
             // viewSystemToolStripMenuItem
             // 
@@ -92,6 +94,13 @@ namespace EDDiscovery.UserControls
             this.viewSystemToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.viewSystemToolStripMenuItem.Text = "View System";
             this.viewSystemToolStripMenuItem.Click += new System.EventHandler(this.viewSystemToolStripMenuItem_Click);
+            // 
+            // viewOnSpanshToolStripMenuItem
+            // 
+            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
+            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
+            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem1
             // 
@@ -151,6 +160,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.EndButtonEnable = true;
             this.textMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMaxRadius.EndButtonImage")));
+            this.textMaxRadius.EndButtonSize16ths = 10;
             this.textMaxRadius.EndButtonVisible = false;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
@@ -160,6 +170,8 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
+            this.textMaxRadius.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.textMaxRadius.ReadOnly = false;
             this.textMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMaxRadius.SelectionLength = 0;
@@ -185,6 +197,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.EndButtonEnable = true;
             this.textMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMinRadius.EndButtonImage")));
+            this.textMinRadius.EndButtonSize16ths = 10;
             this.textMinRadius.EndButtonVisible = false;
             this.textMinRadius.Format = "0.#######";
             this.textMinRadius.InErrorCondition = false;
@@ -194,6 +207,8 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
+            this.textMinRadius.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.textMinRadius.ReadOnly = false;
             this.textMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMinRadius.SelectionLength = 0;
@@ -271,6 +286,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowColorScaling = 0.5F;
@@ -300,6 +316,7 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewNearest
             // 
+            this.dataGridViewNearest.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewNearest.AllowUserToAddRows = false;
             this.dataGridViewNearest.AllowUserToDeleteRows = false;
             this.dataGridViewNearest.AllowUserToResizeRows = false;
@@ -412,5 +429,6 @@ namespace EDDiscovery.UserControls
         private FlowLayoutPanel flowLayoutStarDistances;
         private ToolStripMenuItem viewSystemToolStripMenuItem;
         private ExtendedControls.ExtButton buttonExtExcel;
+        private ToolStripMenuItem viewOnSpanshToolStripMenuItem;
     }
 }

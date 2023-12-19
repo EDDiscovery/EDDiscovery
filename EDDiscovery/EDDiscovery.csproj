@@ -144,28 +144,28 @@
       <DependentUpon>Controls.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </None>
-    <Reference Include="GLOFC, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.1.0.3\lib\net48\GLOFC.dll</HintPath>
+    <Reference Include="GLOFC, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.GLOFC.1.1.0\lib\net48\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.1054.31, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=3.3.2.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.3.3.2\lib\net20\OpenTK.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\OpenTK.3.3.2\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.QuickJSON.1.1.0\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.QuickJSON.1.4.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -226,6 +226,7 @@
     <Compile Include="UserControls\3DMap\GalaxyStars.cs" />
     <Compile Include="UserControls\3DMap\GalMapObjects.cs" />
     <Compile Include="UserControls\3DMap\GalMapRegions.cs" />
+    <Compile Include="UserControls\3DMap\ImageCache.cs" />
     <Compile Include="UserControls\3DMap\Map.cs" />
     <Compile Include="UserControls\3DMap\MapTheme.cs" />
     <Compile Include="UserControls\3DMap\MapMenu.cs" />
@@ -281,6 +282,15 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplayBodyFilters.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplayConfigureButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\EDSMSpanshButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\Helpers\DataGridViewJumpToDialog.cs" />
     <Compile Include="UserControls\Helpers\FontHelpers.cs" />
     <Compile Include="UserControls\Helpers\PaintEventColumn.cs" />
@@ -292,6 +302,12 @@
       <DependentUpon>MissionListUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\BookmarkHelpers.cs" />
+    <Compile Include="UserControls\Helpers\SpanshStationsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\SpanshStationsUserControl.Designer.cs">
+      <DependentUpon>SpanshStationsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\History\UserControlTravelGrid2.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -322,11 +338,23 @@
     <Compile Include="UserControls\RoutesExpeditions\UserControlExpeditionRoute.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRouteSpansh.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRouteHelpers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.Designer.cs">
       <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlSpanshStations.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlSpanshStations.Designer.cs">
+      <DependentUpon>UserControlSpanshStations.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Search\ScanSortControl.cs">
       <SubType>UserControl</SubType>
@@ -335,9 +363,6 @@
       <DependentUpon>ScanSortControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Webbrowser\UserControlInara.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\Webbrowser\UserControlEDDB.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Webbrowser\UserControlEDSM.cs">
@@ -349,6 +374,7 @@
     <Compile Include="UserControls\Webbrowser\BrowserBase.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserWebView2.cs" />
     <Compile Include="UserControls\Webbrowser\BrowserIE11.cs" />
+    <Compile Include="WebServer\EDDWebGenericUI.cs" />
     <Compile Include="WebServer\EDDWebTexts.cs" />
     <Compile Include="WebServer\EDDWebPresskey.cs" />
     <Compile Include="WebServer\EDDWebJournal.cs" />
@@ -844,6 +870,9 @@
     <EmbeddedResource Include="UserControls\Helpers\MissionListUserControl.resx">
       <DependentUpon>MissionListUserControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\SpanshStationsUserControl.resx">
+      <DependentUpon>SpanshStationsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
       <DependentUpon>TagsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -942,6 +971,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlDiscoveries.resx">
       <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlSpanshStations.resx">
+      <DependentUpon>UserControlSpanshStations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Search\ScanSortControl.resx">
       <DependentUpon>ScanSortControl.cs</DependentUpon>
@@ -1237,7 +1269,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets'))" />
   </Target>
   <Target Name="Version" BeforeTargets="Build">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
@@ -1251,7 +1283,7 @@
       <GitPath Condition=" '$(GitPath)' == '' ">git</GitPath>
     </PropertyGroup>
     <PropertyGroup>
-      <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\..\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
+      <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\$(SolutionDir)\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
     </PropertyGroup>
     <PropertyGroup>
       <In>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/Properties/AssemblyInfo.cs'))</In>
@@ -1294,5 +1326,5 @@ namespace CAPI
     </PropertyGroup>
     <WriteLinesToFile File="CapiClientID.cs" Overwrite="true" Lines="$(LauncherCmd)" />
   </Target>
-  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" />
+  <Import Project="$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Web.WebView2.1.0.1054.31\build\Microsoft.Web.WebView2.targets')" />
 </Project>

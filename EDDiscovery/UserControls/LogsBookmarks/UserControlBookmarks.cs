@@ -1,4 +1,18 @@
-﻿using EDDiscovery.Forms;
+﻿/*
+ * Copyright © 2016-2023 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
@@ -202,7 +216,7 @@ namespace EDDiscovery.UserControls
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
                 SaveBackAnyChanges();
-                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.GalacticMapping, true) : null;
+                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : null;
 
                 updating = true;
                 BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sys, bk);
@@ -321,7 +335,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
+            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -392,12 +406,12 @@ namespace EDDiscovery.UserControls
                         List<Object> retrow = new List<Object>
                         {
                             bk.isRegion ? "Region" : "System",
-                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC).ToStringYearFirst(),
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC),
                             bk.isRegion ? bk.Heading : bk.StarName,
                             bk.Note,
-                            bk.x.ToString("0.####"),
-                            bk.y.ToString("0.####"),
-                            bk.z.ToString("0.####"),
+                            bk.x,
+                            bk.y,
+                            bk.z,
                         };
 
                         System.Diagnostics.Debug.WriteLine("Export system " + bkrowno + " " + bk.StarName);
@@ -410,8 +424,17 @@ namespace EDDiscovery.UserControls
                                 plloc.Item1.Name,
                                 plloc.Item2.Name,
                                 plloc.Item2.Comment,
-                                plloc.Item2.IsWholePlanetBookmark ? "" : plloc.Item2.Latitude.ToString("0.##"),
-                                plloc.Item2.IsWholePlanetBookmark ? "" : plloc.Item2.Longitude.ToString("0.##"),
+                            };
+
+                            if (plloc.Item2.IsWholePlanetBookmark)
+                            {
+                                planetrow.Add("");
+                                planetrow.Add("");
+                            }
+                            else
+                            {
+                                planetrow.Add(plloc.Item2.Latitude);
+                                planetrow.Add(plloc.Item2.Longitude);
                             };
 
                             if (!firstplanetrow)
@@ -455,46 +478,38 @@ namespace EDDiscovery.UserControls
 
                     BookmarkClass currentbk = null;
 
-                    var Regexyyyyddmm = new System.Text.RegularExpressions.Regex(@"\d\d\d\d-\d\d-\d\d", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.Singleline);
-
                     foreach (var r in rows)
                     {
                         string type = r[0];
-                        string date = r[1];
 
-                        if (type.HasChars() && date.HasChars())
+                        if (type.HasChars())
                         {
                             bool region = type?.Equals("Region", StringComparison.InvariantCultureIgnoreCase) ?? false;
 
-                            DateTime timeutc = DateTime.MinValue;
+                            DateTime? timeutc = r.GetDateTime(1);
 
-                            bool isyyyy = Regexyyyyddmm.IsMatch(date);      // excel, after getting our output in, converts the damn thing to local dates.. this distinguishes it.
-
-                            bool success = isyyyy ? DateTime.TryParse(date, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc) :
-                                                                                    DateTime.TryParse(date, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc);
-
-                            if (success)
+                            if (timeutc.HasValue)
                             {
-                                timeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(timeutc);     // assume import is in selected time base, convert
+                                timeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(timeutc.Value);     // assume import is in selected time base, convert
 
                                 string name = r[2];
                                 string note = r[3];
-                                double? x = r[4].InvariantParseDoubleNull();
-                                double? y = r[5].InvariantParseDoubleNull();
-                                double? z = r[6].InvariantParseDoubleNull();
+                                double? x = r.GetDouble(4);
+                                double? y = r.GetDouble(5);
+                                double? z = r.GetDouble(6);
 
                                 if (x != null && y != null && z != null)
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6}", type, timeutc.ToStringZulu(), name, note, x, y, z);
+                                    System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6}", type, timeutc.Value.ToStringZulu(), name, note, x, y, z);
 
                                     currentbk = GlobalBookMarkList.Instance.FindBookmark(name, region);
 
                                     if (currentbk != null)
                                     {
-                                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, timeutc, note, currentbk.PlanetaryMarks);
+                                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, timeutc.Value, note, currentbk.PlanetaryMarks);
                                     }
                                     else
-                                        currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, timeutc, note, null);
+                                        currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, timeutc.Value, note, null);
                                 }
                                 else
                                 {
@@ -511,8 +526,8 @@ namespace EDDiscovery.UserControls
                         {
                             string locname = r[8];
                             string comment = r[9];
-                            double? latitude = r[10].InvariantParseDoubleNull();
-                            double? longitude = r[11].InvariantParseDoubleNull();
+                            double? latitude = r.GetDouble(10);
+                            double? longitude = r.GetDouble(11);
 
                             if (!locname.HasChars() && latitude == null && longitude == null) // whole planet bookmark
                             {

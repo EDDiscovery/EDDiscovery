@@ -46,15 +46,15 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             EliteDangerousCore.SystemDisplay systemDisplay1 = new EliteDangerousCore.SystemDisplay();
             this.extCheckBoxStar = new ExtendedControls.ExtCheckBox();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.buttonSize = new ExtendedControls.ExtButton();
             this.extButtonHighValue = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.extButtonFilter = new ExtendedControls.ExtButton();
-            this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.scanDisplayBodyFiltersButton = new EDDiscovery.UserControls.ScanDisplayBodyFiltersButton();
+            this.scanDisplayConfigureButton = new EDDiscovery.UserControls.ScanDisplayConfigureButton();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.panelStars = new EDDiscovery.UserControls.ScanDisplayUserControl();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
@@ -91,36 +91,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.UseVisualStyleBackColor = false;
             this.extCheckBoxStar.Click += new System.EventHandler(this.extCheckBoxStar_Click);
             // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.SystemColors.Control;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.Scan_FetchEDSMBodies;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.ImageIndeterminate = null;
-            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(160, 1);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxEDSM.TabIndex = 3;
-            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
-            // 
             // buttonSize
             // 
             this.buttonSize.BackColor = System.Drawing.SystemColors.Control;
@@ -140,7 +110,7 @@ namespace EDDiscovery.UserControls
             this.extButtonHighValue.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonHighValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonHighValue.Image = global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue;
-            this.extButtonHighValue.Location = new System.Drawing.Point(192, 1);
+            this.extButtonHighValue.Location = new System.Drawing.Point(152, 1);
             this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.extButtonHighValue.Name = "extButtonHighValue";
             this.extButtonHighValue.Size = new System.Drawing.Size(28, 28);
@@ -154,7 +124,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.BackColor = System.Drawing.SystemColors.Control;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(232, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(192, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -169,34 +139,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
-            // 
-            // extButtonFilter
-            // 
-            this.extButtonFilter.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.extButtonFilter.Location = new System.Drawing.Point(40, 1);
-            this.extButtonFilter.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonFilter.Name = "extButtonFilter";
-            this.extButtonFilter.Size = new System.Drawing.Size(28, 28);
-            this.extButtonFilter.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonFilter, "Filter Bodies");
-            this.extButtonFilter.UseVisualStyleBackColor = false;
-            this.extButtonFilter.Click += new System.EventHandler(this.extButtonFilter_Click);
-            // 
-            // extButtonDisplayFilters
-            // 
-            this.extButtonDisplayFilters.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonDisplayFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonDisplayFilters.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonDisplayFilters.Location = new System.Drawing.Point(80, 1);
-            this.extButtonDisplayFilters.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
-            this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
-            this.extButtonDisplayFilters.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonDisplayFilters, "Settings");
-            this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
-            this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
             // rollUpPanelTop
             // 
@@ -224,17 +166,51 @@ namespace EDDiscovery.UserControls
             this.panelControls.AutoSize = true;
             this.panelControls.BackColor = System.Drawing.SystemColors.Control;
             this.panelControls.Controls.Add(this.extCheckBoxStar);
-            this.panelControls.Controls.Add(this.extButtonFilter);
-            this.panelControls.Controls.Add(this.extButtonDisplayFilters);
+            this.panelControls.Controls.Add(this.scanDisplayBodyFiltersButton);
+            this.panelControls.Controls.Add(this.scanDisplayConfigureButton);
             this.panelControls.Controls.Add(this.buttonSize);
-            this.panelControls.Controls.Add(this.checkBoxEDSM);
             this.panelControls.Controls.Add(this.extButtonHighValue);
             this.panelControls.Controls.Add(this.buttonExtExcel);
+            this.panelControls.Controls.Add(this.edsmSpanshButton);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(748, 30);
             this.panelControls.TabIndex = 32;
+            // 
+            // scanDisplayBodyFiltersButton
+            // 
+            this.scanDisplayBodyFiltersButton.Image = global::EDDiscovery.Icons.Controls.EventFilter;
+            this.scanDisplayBodyFiltersButton.Location = new System.Drawing.Point(40, 1);
+            this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.scanDisplayBodyFiltersButton.Name = "scanDisplayBodyFiltersButton";
+            this.scanDisplayBodyFiltersButton.SettingsSplittingChar = ';';
+            this.scanDisplayBodyFiltersButton.Size = new System.Drawing.Size(28, 28);
+            this.scanDisplayBodyFiltersButton.TabIndex = 32;
+            this.scanDisplayBodyFiltersButton.UseVisualStyleBackColor = true;
+            // 
+            // scanDisplayConfigureButton
+            // 
+            this.scanDisplayConfigureButton.Cursor = System.Windows.Forms.Cursors.PanSW;
+            this.scanDisplayConfigureButton.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.scanDisplayConfigureButton.Location = new System.Drawing.Point(80, 1);
+            this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.scanDisplayConfigureButton.Name = "scanDisplayConfigureButton";
+            this.scanDisplayConfigureButton.SettingsSplittingChar = ';';
+            this.scanDisplayConfigureButton.Size = new System.Drawing.Size(28, 28);
+            this.scanDisplayConfigureButton.TabIndex = 31;
+            this.scanDisplayConfigureButton.UseVisualStyleBackColor = true;
+            // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(232, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 30;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
             // panelStars
             // 
@@ -248,9 +224,9 @@ namespace EDDiscovery.UserControls
             systemDisplay1.HideFullMaterials = false;
             systemDisplay1.LabelColor = System.Drawing.Color.DarkOrange;
             systemDisplay1.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            systemDisplay1.NoPlanetStarsOnSameLine = true;
             systemDisplay1.ShowAllG = true;
             systemDisplay1.ShowDist = true;
-            systemDisplay1.ShowEDSMBodies = false;
             systemDisplay1.ShowHabZone = true;
             systemDisplay1.ShowMaterials = true;
             systemDisplay1.ShowMoons = true;
@@ -258,6 +234,7 @@ namespace EDDiscovery.UserControls
             systemDisplay1.ShowOverlays = true;
             systemDisplay1.ShowPlanetClasses = true;
             systemDisplay1.ShowStarClasses = true;
+            systemDisplay1.ShowWebBodies = false;
             systemDisplay1.ValueLimit = 50000;
             this.panelStars.SystemDisplay = systemDisplay1;
             this.panelStars.TabIndex = 5;
@@ -281,7 +258,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtPanelRollUp rollUpPanelTop;
         private ScanDisplayUserControl panelStars;
@@ -289,7 +265,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonHighValue;
         private ExtendedControls.ExtCheckBox extCheckBoxStar;
         private System.Windows.Forms.FlowLayoutPanel panelControls;
-        private ExtendedControls.ExtButton extButtonFilter;
-        private ExtendedControls.ExtButton extButtonDisplayFilters;
+        private EDSMSpanshButton edsmSpanshButton;
+        private ScanDisplayConfigureButton scanDisplayConfigureButton;
+        private ScanDisplayBodyFiltersButton scanDisplayBodyFiltersButton;
     }
 }

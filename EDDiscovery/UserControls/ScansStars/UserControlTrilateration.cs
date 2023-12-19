@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
             var push = actionobj as UserControlCommonBase.PushStars;
             if (push != null && (push.PushTo == PushStars.PushType.TriWanted || push.PushTo == PushStars.PushType.TriSystems))
             {
-                foreach (string s in push.Systems)
+                foreach (string s in push.SystemNames)
                 {
                     if (push.PushTo == PushStars.PushType.TriWanted)
                         AddWantedSystem(s);
@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
                         return;
                     }
 
-                    var system = SystemCache.FindSystem(value, DiscoveryForm.GalacticMapping, false);
+                    var system = SystemCache.FindSystem(value, DiscoveryForm.GalacticMapping);
                     var enteredSystems = GetEnteredSystems();
                     if (cell.Value != null)
                     {
@@ -577,7 +577,7 @@ namespace EDDiscovery.UserControls
                 sysName = r.Cells[1].Value.ToString();
                 if (r.Cells[0].Value.ToString() == "Local")
                 {
-                    var sys = SystemCache.FindSystem(sysName, DiscoveryForm.GalacticMapping, false);
+                    var sys = SystemCache.FindSystem(sysName, DiscoveryForm.GalacticMapping);
                     if (sys == null)
                         edsmCheckNames.Add(sysName);
                     else
@@ -853,7 +853,7 @@ namespace EDDiscovery.UserControls
          * it creates a new System entity, otherwise logs it and returns null. */
         private ISystem getSystemForTrilateration(string systemName, bool fromEDSM)
         {
-            var system = SystemCache.FindSystem(systemName, DiscoveryForm.GalacticMapping, false);
+            var system = SystemCache.FindSystem(systemName, DiscoveryForm.GalacticMapping);
 
             if (system == null)
             {
@@ -901,7 +901,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (WantedSystemClass sys in wanted)
                 {
-                    ISystem star = SystemCache.FindSystem(sys.system, DiscoveryForm.GalacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(sys.system, DiscoveryForm.GalacticMapping);
                     if (star == null)
                         star = new SystemClass(sys.system);
 
@@ -926,7 +926,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (var system in pushed)
                 {
-                    ISystem star = SystemCache.FindSystem(system, DiscoveryForm.GalacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(system, DiscoveryForm.GalacticMapping);
                     if (star == null)
                         star = new SystemClass(system);
 
@@ -976,7 +976,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (string systemName in sector)
                 {
-                    ISystem star = SystemCache.FindSystem(systemName, DiscoveryForm.GalacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(systemName, DiscoveryForm.GalacticMapping);
                     if (star == null)
                         star = new SystemClass(systemName);
 
@@ -1034,7 +1034,7 @@ namespace EDDiscovery.UserControls
                 if (oldSystem != null && !oldSystem.HasCoordinate)
                 {
                     var value = systemCell.Value as string;
-                    var newSystem = SystemCache.FindSystem(value, DiscoveryForm.GalacticMapping, false);
+                    var newSystem = SystemCache.FindSystem(value, DiscoveryForm.GalacticMapping);
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
@@ -1104,7 +1104,7 @@ namespace EDDiscovery.UserControls
 
                 wanted.Add(toAdd);
 
-                ISystem star = SystemCache.FindSystem(sysName, DiscoveryForm.GalacticMapping, false); 
+                ISystem star = SystemCache.FindSystem(sysName, DiscoveryForm.GalacticMapping); 
                 if (star == null)
                     star = new SystemClass(sysName);
 

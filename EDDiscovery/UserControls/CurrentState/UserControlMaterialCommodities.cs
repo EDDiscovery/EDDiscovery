@@ -99,16 +99,16 @@ namespace EDDiscovery.UserControls
             cfs = new JournalFilterSelector();
             cfs.AddAllNone();
 
-            var matitems = MaterialCommodityMicroResourceType.GetMaterials(true);
+            var matitems = MaterialCommodityMicroResourceType.GetMaterials(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
             var mattypes = MaterialCommodityMicroResourceType.GetTypes((x) => x.IsMaterial, true);
             var matcats = MaterialCommodityMicroResourceType.GetCategories((x) => x.IsMaterial, true);
             string matpostfix = "";
 
-            var comitems = MaterialCommodityMicroResourceType.GetCommodities(true);
+            var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);
             var comtypes = MaterialCommodityMicroResourceType.GetTypes((x) => x.IsCommodity, true);
             string compostfix = "";
 
-            var mritems = MaterialCommodityMicroResourceType.GetMicroResources(true);
+            var mritems = MaterialCommodityMicroResourceType.GetMicroResources(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
             var mrcats = MaterialCommodityMicroResourceType.GetCategories((x) => x.IsMicroResources, true);
             string mrpostfix = "";
 
@@ -352,10 +352,10 @@ namespace EDDiscovery.UserControls
                 dataViewScrollerPanel.SuspendLayout();
             }
 
-            MaterialCommodityMicroResourceType[] allitems = PanelMode == PanelType.Materials ? MaterialCommodityMicroResourceType.GetMaterials(true) :
-                                                            PanelMode == PanelType.MicroResources ? MaterialCommodityMicroResourceType.GetMicroResources(true) :
-                                                            PanelMode == PanelType.Commodities ? MaterialCommodityMicroResourceType.GetCommodities(true) :
-                                                            MaterialCommodityMicroResourceType.Get(x => true, true);     // get all sorted
+            MaterialCommodityMicroResourceType[] allitems = PanelMode == PanelType.Materials ? MaterialCommodityMicroResourceType.GetMaterials(MaterialCommodityMicroResourceType.SortMethod.Alphabetical) :
+                                                            PanelMode == PanelType.MicroResources ? MaterialCommodityMicroResourceType.GetMicroResources(MaterialCommodityMicroResourceType.SortMethod.Alphabetical) :
+                                                            PanelMode == PanelType.Commodities ? MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast) :
+                                                            MaterialCommodityMicroResourceType.Get(x => true, MaterialCommodityMicroResourceType.SortMethod.Alphabetical);     // get all sorted
 
             bool displayallnonzeroitemsinshoppinglist = displayinshoppinglist.Contains(AllNonZeroMarker);
 
@@ -643,7 +643,7 @@ namespace EDDiscovery.UserControls
                         MaterialCommodityMicroResourceType mcrt = null;
                         int count = int.MinValue;
 
-                        if (amountcol >= 0 && amountcol < r.Cells.Count && int.TryParse(r.Cells[amountcol], System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int cv1))
+                        if (amountcol >= 0 && amountcol < r.Cells.Count && int.TryParse(r.Cells[amountcol], System.Globalization.NumberStyles.None, csv.FormatCulture, out int cv1))
                             count = cv1;
 
                         for (int i = 0; i < r.Cells.Count; i++)
@@ -654,7 +654,7 @@ namespace EDDiscovery.UserControls
                             var mcd = MaterialCommodityMicroResourceType.GetByEnglishName(c);
                             if (mcd != null)
                                 mcrt = mcd;
-                            else if (count == int.MinValue && int.TryParse(c, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int cv))
+                            else if (count == int.MinValue && int.TryParse(c, System.Globalization.NumberStyles.None, csv.FormatCulture, out int cv))
                                 count = cv;
                         }
 

@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore;
@@ -191,7 +189,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnThemeChanged += ClearDisplayFontJournalCAPI;
 
             dataGridViewItinerary.Init(DiscoveryForm);      // set up 
-            dataGridViewItinerary.CheckEDSM = true;
+            dataGridViewItinerary.WebLookup = EliteDangerousCore.WebExternalDataLookup.All;
         }
 
         public override void LoadLayout()
@@ -284,8 +282,8 @@ namespace EDDiscovery.UserControls
             }
 
             // capi enable/disable  - get stats
-            DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global:true);
-            int capicmdrid = GetSetting(dbCAPICommander, -1, global:true);
+            DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
+            int capicmdrid = GetSettingGlobal(dbCAPICommander, -1);
             bool capisamecmdr = DiscoveryForm.History.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
@@ -360,7 +358,7 @@ namespace EDDiscovery.UserControls
 
                     if (!it.StarSystem.HasCoordinate)
                     {
-                        ISystem p = await EliteDangerousCore.DB.SystemCache.FindSystemAsync(it.StarSystem, true);           // find, even in EDSM, synchronously for now
+                        ISystem p = await EliteDangerousCore.SystemCache.FindSystemAsync(it.StarSystem, EliteDangerousCore.WebExternalDataLookup.All);           // find, even in EDSM, synchronously for now
                         if (IsClosed)       // may have closed in the meanwhile
                             return;
                         if (p != null)      // if found, replace star system with it, for future
@@ -562,8 +560,6 @@ namespace EDDiscovery.UserControls
 
                                 imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".TxID(EDTx.UserControlCarrier_CrewName) + ": " + crewname, normfont, color);
                             }
-
-                            // TBD add tick
 
                             if (active)
                             {
@@ -834,9 +830,9 @@ namespace EDDiscovery.UserControls
 
                 // record when and who did capi, and clear data.  
 
-                PutSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);                 
-                PutSetting(dbCAPICommander, DiscoveryForm.History.CommanderId, global: true);
-                PutSetting(dbCAPISave, "", global: true);
+                PutSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
+                PutSettingGlobal(dbCAPICommander, DiscoveryForm.History.CommanderId);
+                PutSettingGlobal(dbCAPISave, "");
 
                 // don't hold up the main thread, do it in a task, as its a HTTP operation
 
@@ -865,7 +861,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\fc.json", fc.Json.ToString(true));
                                     System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
-                                    PutSetting(dbCAPISave, fleetcarrier, global: true);       // store data into global capi slot
+                                    PutSettingGlobal(dbCAPISave, fleetcarrier);       // store data into global capi slot
                                     break;
                                 }
                                 else
@@ -907,8 +903,8 @@ namespace EDDiscovery.UserControls
 
         private void DisplayCAPIFromDB()
         {
-            string capi = GetSetting(dbCAPISave, "", global: true);
-            int capicmd = GetSetting(dbCAPICommander, -1, global: true);
+            string capi = GetSettingGlobal(dbCAPISave, "");
+            int capicmd = GetSettingGlobal(dbCAPICommander, -1);
 
             // if its a valid capi for commander, turn it into a FC entity
             var fc = (capi.Length > 0 && capicmd == DiscoveryForm.History.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
@@ -934,7 +930,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                DateTime capitime = GetSetting(dbCAPIDateUTC, DateTime.UtcNow, global: true);
+                DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
                 labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
                 capidisplayedtime = capitime;
 
@@ -1075,25 +1071,40 @@ namespace EDDiscovery.UserControls
                         for (int i = 0; i < modules.Count; i++)
                         {
                             var ord = modules[i];
-                            var modp = ItemData.GetShipModuleProperties(ord.Name);
+                            if (ItemData.TryGetShipModule(ord.Name, out ItemData.ShipModule modp, false))       // find, no create
+                            {
+                                string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
+                                string mtype = modp?.ModTypeString ?? ord.Category ?? "";
+                                string mass = modp?.Mass.ToString("N1") ?? "";
+                                string power = modp?.Power.ToString("N1") ?? "";
+                                string info = modp?.Info ?? "";
 
-                            string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
-                            string mtype = modp?.ModType ?? ord.Category ?? "";
-                            string mass = modp?.Mass.ToString("N1") ?? "";
-                            string power = modp?.Power.ToString("N1") ?? "";
-                            string info = modp?.Info ?? "";
+                                object[] rowobj = {
+                                                name,
+                                                mtype,
+                                                mass,
+                                                power,
+                                                ord.Cost.ToString("N0"),
+                                                ord.Stock.ToString("N0"),
+                                                info,
+                                            };
 
-                            object[] rowobj = {
-                                            name,
-                                            mtype,
-                                            mass,
-                                            power,
-                                            ord.Cost.ToString("N0"),
-                                            ord.Stock.ToString("N0"),
-                                            info,
-                                        };
+                                dataGridViewCAPIModules.Rows.Add(rowobj);
+                            }
+                            else
+                            {
+                                object[] rowobj = {
+                                                ord.Name,
+                                                ord.Category,
+                                                0,
+                                                0,
+                                                ord.Cost.ToString("N0"),
+                                                ord.Stock.ToString("N0"),
+                                                "Not found",
+                                            };
 
-                            dataGridViewCAPIModules.Rows.Add(rowobj);
+                                dataGridViewCAPIModules.Rows.Add(rowobj);
+                            }
                         }
                     }
 

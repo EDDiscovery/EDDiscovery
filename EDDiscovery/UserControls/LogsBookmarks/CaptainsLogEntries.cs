@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
                         rw.Cells[0].Tag = entry.TimeUTC;      // column 0 gets time utc
                         //System.Diagnostics.Debug.WriteLine($"Captains Log {rw.Index} date time utc {rw.Cells[0].Tag}");
 
-                        List<string> taglist = entry.Tags?.SplitNoEmptyStrings(';');        // may be null - we do not use all or none note
+                        List<string> taglist = entry.Tags?.SplitNoEmptyStrings(';').ToList();        // may be null - we do not use all or none note
                         rw.Cells[4].Tag = taglist;
                         if (taglist != null)
                             rw.MinimumHeight = Math.Max(taglist.Count * TagSpacing, MinRowSize);
@@ -540,7 +540,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, true);
+            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
             DiscoveryForm.Open3DMap(s);
         }
 
@@ -557,10 +557,10 @@ namespace EDDiscovery.UserControls
 
         private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, true);
+            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
 
             if ( sys != null )
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, DiscoveryForm.History);
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
 

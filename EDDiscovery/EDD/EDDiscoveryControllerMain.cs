@@ -139,7 +139,7 @@ namespace EDDiscovery
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
-            journalmonitor.OnNewFilteredJournalEntry += NewJournalEntryFromScanner;
+            journalmonitor.OnNewFilteredJournalEntry += NewFilteredJournalEntryFromScanner;
             journalmonitor.OnNewUIEvent += NewUIEventFromScanner;
             journalmonitor.OnNewRawJournalEntry += NewRawJournalEntryFromScanner;
 
@@ -229,8 +229,7 @@ namespace EDDiscovery
 
             ReportSyncProgress("");
 
-            bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
-            if (checkGithub)      // not normal in debug, due to git hub choking
+            if (EDDOptions.Instance.CheckGithubFiles)      // not normal in debug, due to git hub choking
             {
                 DateTime lastdownloadtime = UserDatabase.Instance.GetSettingDate("DownloadFilesLastTime", DateTime.MinValue);
 
@@ -246,14 +245,25 @@ namespace EDDiscovery
                 }
             }
 
-            // if we have a gmo file, but its out of date, refresh it for next time, do it in background thread since not critical.
+            // if we have a edsm gmo file, but its out of date, refresh it for next time, do it in background thread since not critical.
             string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
 
-            if (!EDDOptions.Instance.NoSystemsLoad && File.Exists(gmofile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetEDSMGalMapLast()).TotalDays > 14 )
+            if (!EDDOptions.Instance.NoSystemsLoad && File.Exists(gmofile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetEDSMGalMapLast()).TotalDays >= 7)
             {
                 LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
                 if (EDSMClass.DownloadGMOFileFromEDSM(gmofile))
                     SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
+
+            }
+
+            // if we have a gec file, but its out of date, refresh it for next time, do it in background thread since not critical.
+            string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
+
+            if (!EDDOptions.Instance.NoSystemsLoad && File.Exists(gecfile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetGECGalMapLast()).TotalDays >= 7)
+            {
+                LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
+                if (EDDiscoveryForm.DownloadGECFile(gecfile))
+                    SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
 
             }
 
@@ -302,7 +312,7 @@ namespace EDDiscovery
 
                     if (wh == 1)
                     {
-                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
+                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.SystemDBDownload)      // if no system off, and EDSM download on
                             DoPerformSync();
                     }
                 }
@@ -362,15 +372,6 @@ namespace EDDiscovery
             {
                 System.Diagnostics.Debug.WriteLine("******* Exception trying to write to ui thread log");
             }
-        }
-
-        public void ReportSyncProgress(string message)
-        {
-            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, message));
-        }
-        public void ReportRefreshProgress(int percent, string message)
-        {
-            InvokeAsyncOnUiThread(() => OnReportRefreshProgress?.Invoke(percent, message));
         }
 
         #endregion

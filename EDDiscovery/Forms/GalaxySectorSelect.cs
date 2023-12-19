@@ -166,7 +166,7 @@ namespace EDDiscovery.Forms
                     ("You have added new sectors!" + Environment.NewLine + "This will require a complete re-download of the EDSM data" + Environment.NewLine + "Confirm you wish to do this?").T(EDTx.GalaxySectorSelect_RD), 
                     "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    if (!EDDConfig.Instance.EDSMDownload)
+                    if (!EDDConfig.Instance.SystemDBDownload)
                         ExtendedControls.MessageBoxTheme.Show(this, ("Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated").T(EDTx.GalaxySectorSelect_NoSync), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     Action = ActionToDo.Add;
@@ -227,34 +227,40 @@ namespace EDDiscovery.Forms
 
         // Present a menu to ask how much data to download..
 
-        public static Tuple<string,string> SelectGalaxyMenu(Form parent)
+        public static Tuple<string,string,string> SelectGalaxyMenu(Form parent)
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
             var list = DefaultGalaxyOptions.Where(x => x.Item2 != "Custom" && x.Item2 != "Reset").Select(x => x.Item1).ToList();
 
             int width = 500;
-            string text = "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD.".T(EDTx.GalaxySectorSelect_GALSELEX);
+            string text = "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD.".T(EDTx.GalaxySectorSelect_GALSELEX);
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), text,  new Point(10, 30), new Size(width-50, 100), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 130), new Size(130, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", DefaultGalaxyOptions[2].Item1,
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Source", "EDSM",
                         new Point(140, 130), new Size(width - 140 - 100, 24),
+                        "Select the data source".T(EDTx.GalaxySectorSelect_GALSELEN), new List<string> { "EDSM", "SPANSH" }));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Area:".T(EDTx.GalaxySectorSelect_Area), new Point(10, 200), new Size(130, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", DefaultGalaxyOptions[2].Item1,
+                        new Point(140, 200), new Size(width - 140 - 100, 24),
                         "Select the data set".T(EDTx.GalaxySectorSelect_GALSELEN), list));
 
-            f.AddOK(new Point(width - 40 - 80, 170), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept));
+            f.AddOK(new Point(width - 40 - 80, 260), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
                 if (controlname == "OK")
                     f.ReturnResult(DialogResult.OK);
             };
-            
-            DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select EDSM Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));
+
+            f.Shown += (e1,e2) => { ((ExtendedControls.ExtComboBox)f.GetControl("Source")).Activate(); };
+
+            DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));
 
             string sel = f.Get("Entry");
             int index = DefaultGalaxyOptions.FindIndex((x) => { return x.Item1 == sel; });
-            return DefaultGalaxyOptions[ index ];
-
+            string src = f.Get("Source");
+            return new Tuple<string,string,string>(src, DefaultGalaxyOptions[index].Item1, DefaultGalaxyOptions[index].Item2);
         }
 
     }

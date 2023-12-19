@@ -65,17 +65,27 @@ namespace EDDiscovery.Actions
                 }
 
                 bool edsm = false;
-                if ( cmdname != null && cmdname.Equals("EDSM",StringComparison.InvariantCultureIgnoreCase))
+                if (cmdname != null && cmdname.Equals("EDSM", StringComparison.InvariantCultureIgnoreCase))
                 {
                     edsm = true;
                     cmdname = sp.NextQuotedWord();
                 }
 
+                bool spansh = false;
+                if (cmdname != null && cmdname.Equals("SPANSH", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    spansh = true;
+                    cmdname = sp.NextQuotedWord();
+                }
+
+                var lookup = edsm ? (spansh ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
+                    spansh ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
+
                 if (cmdname != null)
                 {
                     StarScan scan = (ap.ActionController as ActionController).HistoryList.StarScan;
 
-                    StarScan.SystemNode sn = scan.FindSystemSynchronous(new SystemClass(cmdname), edsm);
+                    StarScan.SystemNode sn = scan.FindSystemSynchronous(new SystemClass(cmdname), lookup);
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -156,7 +166,8 @@ namespace EDDiscovery.Actions
             if ( sc != null )
             {
                 ap[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
-                ap[prefix + "_edsmbody"] = sc.IsEDSMBody ? "1" : "0";
+                ap[prefix + "_edsmbody"] = sc.DataSource == SystemSource.FromEDSM ? "1" : "0";
+                ap[prefix + "_source"] = sc.DataSource.ToString();   
                 ap[prefix + "_bodyname"] = sc.BodyName;
                 ap[prefix + "_bodydesignation"] = sc.BodyDesignationOrName;
                 ap[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
@@ -247,10 +258,20 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
+                bool spansh = false;
+                if (cmdname != null && cmdname.Equals("SPANSH", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    spansh = true;
+                    cmdname = sp.NextQuotedWord();
+                }
+
+                var lookup = edsm ? (spansh ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
+                    spansh ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
+
                 if (cmdname != null)
                 {
                     EDDiscoveryForm f = ((ActionController)ap.ActionController).DiscoveryForm;
-                    ISystem sc = SystemCache.FindSystem(cmdname, f.GalacticMapping, edsm);        // find thru history, will include history entries
+                    ISystem sc = SystemCache.FindSystem(cmdname, f.GalacticMapping, lookup);        // find thru history, will include history entries
 
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 

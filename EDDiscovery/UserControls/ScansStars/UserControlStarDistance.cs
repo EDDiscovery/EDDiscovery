@@ -55,9 +55,13 @@ namespace EDDiscovery.UserControls
 
             checkBoxCube.Checked = GetSetting("Behaviour", false);
 
-            var enumlist = new Enum[] { EDTx.UserControlStarDistance_colName, EDTx.UserControlStarDistance_colDistance, EDTx.UserControlStarDistance_colVisited, EDTx.UserControlStarDistance_labelExtMin, EDTx.UserControlStarDistance_labelExtMax, EDTx.UserControlStarDistance_checkBoxCube };
-            var enumlistcms = new Enum[] { EDTx.UserControlStarDistance_viewSystemToolStripMenuItem, EDTx.UserControlStarDistance_viewOnEDSMToolStripMenuItem1, EDTx.UserControlStarDistance_addToTrilaterationToolStripMenuItem1, EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlStarDistance_textMinRadius_ToolTip, EDTx.UserControlStarDistance_textMaxRadius_ToolTip, EDTx.UserControlStarDistance_checkBoxCube_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlStarDistance_colName, EDTx.UserControlStarDistance_colDistance, EDTx.UserControlStarDistance_colVisited, 
+                EDTx.UserControlStarDistance_labelExtMin, EDTx.UserControlStarDistance_labelExtMax, EDTx.UserControlStarDistance_checkBoxCube };
+            var enumlistcms = new Enum[] { EDTx.UserControlStarDistance_viewSystemToolStripMenuItem, EDTx.UserControlStarDistance_viewOnEDSMToolStripMenuItem1,
+                EDTx.UserControlStarDistance_viewOnSpanshToolStripMenuItem,
+                EDTx.UserControlStarDistance_addToTrilaterationToolStripMenuItem1, EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.UserControlStarDistance_textMinRadius_ToolTip, EDTx.UserControlStarDistance_textMaxRadius_ToolTip, 
+                EDTx.UserControlStarDistance_checkBoxCube_ToolTip };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -66,7 +70,6 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewNearest);
-
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
@@ -78,7 +81,6 @@ namespace EDDiscovery.UserControls
             PutSetting("Min", textMinRadius.Value);
             PutSetting("Max", textMaxRadius.Value);
             PutSetting("Behaviour", checkBoxCube.Checked);
-
         }
 
         public override void InitialDisplay()
@@ -86,16 +88,12 @@ namespace EDDiscovery.UserControls
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-        }
-
         private void Discoveryform_OnHistoryChange()
         {
             KickComputation(DiscoveryForm.History.GetLast);   // copes with getlast = null
         }
 
+        // sent by its travel history grid
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             KickComputation(he);
@@ -209,6 +207,8 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_MouseDown(object sender, MouseEventArgs e)
         {
+            viewSystemToolStripMenuItem.Enabled =
+            viewOnSpanshToolStripMenuItem.Enabled = 
             viewOnEDSMToolStripMenuItem1.Enabled = dataGridViewNearest.RightClickRowValid;
         }
 
@@ -234,27 +234,27 @@ namespace EDDiscovery.UserControls
             foreach (DataGridViewRow r in selectedRows)
                 syslist.Add(r.Cells[0].Value.ToString());
 
-            RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = pushtype, Systems = syslist });
+            RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = pushtype, SystemNames = syslist });
         }
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (dataGridViewNearest.RightClickRowValid)
+            // check above for right click valid
+            var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
+            this.Cursor = Cursors.WaitCursor;
+            EDSMClass edsm = new EDSMClass();
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
             {
-                var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
-
-                if (rightclicksystem != null)
-                {
-                    this.Cursor = Cursors.WaitCursor;
-                    EDSMClass edsm = new EDSMClass();
-                    if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
-                    {
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
-                    }
-
-                    this.Cursor = Cursors.Default;
-                }
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
             }
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclicksystem);
         }
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
                 if (rightclicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, DiscoveryForm.History);
             }
         }
 
@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
             {
                 var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
                 if (clicksystem != null)
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem,  DiscoveryForm.History);
             }
 
         }
@@ -332,8 +332,8 @@ namespace EDDiscovery.UserControls
                         {
                             if ( r == 0 )
                             {
-                                return new object[] { last_he.System.Name, "0", DiscoveryForm.History.GetVisitsCount(last_he.System.Name).ToString("#"),
-                                            last_he.System.X.ToString("F2"), last_he.System.Y.ToString("F2"), last_he.System.Z.ToString("F2") };
+                                return new object[] { last_he.System.Name, "0", DiscoveryForm.History.GetVisitsCount(last_he.System.Name),
+                                            last_he.System.X.ToString("F2",grd.FormatCulture), last_he.System.Y.ToString("F2",grd.FormatCulture), last_he.System.Z.ToString("F2",grd.FormatCulture) };
                             }
                             else
                             {
@@ -345,9 +345,9 @@ namespace EDDiscovery.UserControls
                                     rw.Cells[0].Value,
                                     rw.Cells[1].Value,
                                     rw.Cells[2].Value,
-                                    clicksystem.X.ToString("F2") ?? "",
-                                    clicksystem.Y.ToString("F2") ?? "",
-                                    clicksystem.Z.ToString("F2") ?? "",
+                                    clicksystem.X.ToString("F2",grd.FormatCulture) ?? "",
+                                    clicksystem.Y.ToString("F2",grd.FormatCulture) ?? "",
+                                    clicksystem.Z.ToString("F2",grd.FormatCulture) ?? "",
                                 };
                             }
                         }
@@ -412,5 +412,7 @@ namespace EDDiscovery.UserControls
 
             }
         }
+
+
     }
 }

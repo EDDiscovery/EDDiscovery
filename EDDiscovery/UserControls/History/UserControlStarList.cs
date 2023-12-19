@@ -40,7 +40,6 @@ namespace EDDiscovery.UserControls
         }
 
         private string dbHistorySave = "EDUIHistory";
-        private string dbEDSM = "EDSM";
         private string dbDisplayFilters = "DisplayFilters";
 
         private string[] displayfilters;        // display filters
@@ -80,8 +79,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewStarList.Columns[2].ValueType = typeof(Int32);
 
-            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
 
             displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics;codex").Split(';');
 
@@ -95,15 +93,19 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer() { Interval = 20 };
             todotimer.Tick += Todotimer_Tick;
 
-            var enumlist = new Enum[] { EDTx.UserControlStarList_ColumnTime, EDTx.UserControlStarList_ColumnSystem, EDTx.UserControlStarList_ColumnVisits, EDTx.UserControlStarList_ColumnInformation, EDTx.UserControlStarList_Value, EDTx.UserControlStarList_labelTime, EDTx.UserControlStarList_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.UserControlStarList_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlStarList_mapGotoStartoolStripMenuItem, EDTx.UserControlStarList_viewOnEDSMToolStripMenuItem, EDTx.UserControlStarList_setNoteToolStripMenuItem, EDTx.UserControlStarList_viewScanDisplayToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlStarList_comboBoxTime_ToolTip, EDTx.UserControlStarList_checkBoxEDSM_ToolTip, EDTx.UserControlStarList_textBoxSearch_ToolTip, EDTx.UserControlStarList_buttonExtExcel_ToolTip, EDTx.UserControlStarList_checkBoxCursorToTop_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlStarList_ColumnTime, EDTx.UserControlStarList_ColumnSystem, EDTx.UserControlStarList_ColumnVisits, 
+                EDTx.UserControlStarList_ColumnInformation, EDTx.UserControlStarList_Value, EDTx.UserControlStarList_labelTime, EDTx.UserControlStarList_labelSearch };
+            var enumlistcms = new Enum[] { EDTx.UserControlStarList_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlStarList_mapGotoStartoolStripMenuItem,
+                EDTx.UserControlStarList_viewOnEDSMToolStripMenuItem, EDTx.UserControlStarList_viewOnSpanshToolStripMenuItem, EDTx.UserControlStarList_setNoteToolStripMenuItem, 
+                EDTx.UserControlStarList_viewScanDisplayToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.UserControlStarList_comboBoxTime_ToolTip, EDTx.UserControlStarList_checkBoxEDSM_ToolTip, 
+                EDTx.UserControlStarList_textBoxSearch_ToolTip, EDTx.UserControlStarList_buttonExtExcel_ToolTip, EDTx.UserControlStarList_checkBoxCursorToTop_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false, true, false);
 
              if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
                 searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
@@ -222,7 +224,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (rowpresent != null)       // only need to do something if its displayed
                     {
-                        var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(rowhe.System, false); // may be null
+                        var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(rowhe.System); // may be null
                         string info = Infoline(rowhe.System, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
                         rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
@@ -336,7 +338,7 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
-            var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(he.System, false); // may be null
+            var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(he.System); // may be null
 
             string visits = DiscoveryForm.History.Visits(he.System.Name).ToString();
             string info = Infoline(he.System, node);  // lookup node, using star name, no EDSM lookup.
@@ -501,23 +503,23 @@ namespace EDDiscovery.UserControls
         {
         }
 
-        public void CheckEDSM()
+        public void CheckWeb()
         {
             if (dataGridViewStarList.CurrentCell != null)
-                CheckEDSM(dataGridViewStarList.CurrentRow);
+                CheckWeb(dataGridViewStarList.CurrentRow);
         }
 
-        public async void CheckEDSM(DataGridViewRow row)
+        public async void CheckWeb(DataGridViewRow row)
         {
             HistoryEntry he = row.Tag as HistoryEntry;
-            var node = await DiscoveryForm.History.StarScan?.FindSystemAsync(he.System, true);  // try an EDSM lookup, cache data, then redisplay.
+            var node = await DiscoveryForm.History.StarScan?.FindSystemAsync(he.System, EliteDangerousCore.WebExternalDataLookup.All);  // try an EDSM lookup, cache data, then redisplay.
             row.Cells[Columns.OtherInformation].Value = Infoline(he.System,node);
             row.Cells[Columns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
         {
-            if (dataGridViewStarList.FirstDisplayedCell != null && checkBoxEDSM.Checked)
+            if (dataGridViewStarList.FirstDisplayedCell != null && edsmSpanshButton.IsAnySet)
             {
                 int top = dataGridViewStarList.FirstDisplayedCell.RowIndex;
                 if (top != autoupdaterowstart)
@@ -544,7 +546,7 @@ namespace EDDiscovery.UserControls
                     if (!EDSMClass.HasBodyLookupOccurred(he.System.Name))       // this tells us if a body lookup has occurred
                     {
                         System.Diagnostics.Debug.WriteLine("StarList EDSM Update row" + row);
-                        CheckEDSM(rw);
+                        CheckWeb(rw);
                         break;
                     }
                     else
@@ -563,7 +565,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            CheckEDSM();
+            CheckWeb();
             FireChangeSelection();
         }
 
@@ -598,7 +600,7 @@ namespace EDDiscovery.UserControls
 
             if (cursorkeydown)
             {
-                CheckEDSM();
+                CheckWeb();
                 FireChangeSelection();
             }
         }
@@ -616,11 +618,11 @@ namespace EDDiscovery.UserControls
         }
 
 
-        HistoryEntry rightclicksystem = null;
+        HistoryEntry rightclickhe = null;
 
         private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
         {
-            rightclicksystem = dataGridViewStarList.RightClickRowValid ? (HistoryEntry)(dataGridViewStarList.Rows[dataGridViewStarList.RightClickRow].Tag as HistoryEntry) : null;
+            rightclickhe = dataGridViewStarList.RightClickRowValid ? (HistoryEntry)(dataGridViewStarList.Rows[dataGridViewStarList.RightClickRow].Tag as HistoryEntry) : null;
         }
 
         #endregion
@@ -632,8 +634,10 @@ namespace EDDiscovery.UserControls
             if (dataGridViewStarList.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
                 e.Cancel = true;
 
-            mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+            mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
+            viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
+            viewScanDisplayToolStripMenuItem.Enabled = (rightclickhe != null);
+            viewOnSpanshToolStripMenuItem.Enabled = (rightclickhe != null);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewStarList.SortedColumn != null;
         }
 
@@ -644,28 +648,39 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.Open3DMap(rightclicksystem?.System);
+            DiscoveryForm.Open3DMap(rightclickhe?.System);
+        }
+
+        private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe,  DiscoveryForm.History, forcedlookup: edsmSpanshButton.WebLookup);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
+            EDSMClass edsm = new EDSMClass();
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name))
+            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarList_NoEDSM));
+        }
+
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickhe.System.SystemAddress.HasValue)
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclickhe.System.SystemAddress.Value);
         }
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
+            if (rightclickhe != null)
             {
-                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem))
+                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclickhe))
                 {
                     if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {
-                        System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclicksystem.System != null);
-                        rightclicksystem.journalEntry.UpdateSystemNote(noteform.NoteText, rightclicksystem.System.Name, EDCommander.Current.SyncToEdsm);
-                        DiscoveryForm.NoteChanged(this, rightclicksystem);
+                        System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclickhe.System != null);
+                        rightclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, rightclickhe.System.Name, EDCommander.Current.SyncToEdsm);
+                        DiscoveryForm.NoteChanged(this, rightclickhe);
                     }
                 }
             }
@@ -687,18 +702,11 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     var he = dataGridViewStarList.Rows[e.RowIndex].Tag as HistoryEntry;
-                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, checkBoxEDSM.Checked, DiscoveryForm.History);
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), he, DiscoveryForm.History, forcedlookup: edsmSpanshButton.WebLookup);
                 }
             }
         }
 
-        private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (rightclicksystem != null)
-            {
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, checkBoxEDSM.Checked, DiscoveryForm.History);
-            }
-        }
         #endregion
 
         #region Events
@@ -733,11 +741,6 @@ namespace EDDiscovery.UserControls
             };
 
             displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
-        }
-
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            PutSetting(dbEDSM, checkBoxEDSM.Checked);
         }
 
         // Override of visits column sorting, to properly ordering as integers and not as strings - do not work as expected, yet...
@@ -799,10 +802,10 @@ namespace EDDiscovery.UserControls
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
                             EventDescription,
                             EventDetailedInfo,
-                            he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
-                            he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.TravelledJumps.ToString() : "",
-                            he.isTravelling ? he.TravelledMissingJumps.ToString() : "",
+                            he.isTravelling ? he.TravelledDistance.ToString("N1",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledSeconds.ToString("N0",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledJumps.ToString("N0",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledMissingJumps.ToString("N0",grd.FormatCulture) : "",
                             };
                     };
 
@@ -817,6 +820,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
 
     }
 }

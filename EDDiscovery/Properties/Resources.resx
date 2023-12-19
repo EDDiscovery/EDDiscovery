@@ -121,9 +121,6 @@
   <data name="maphelp3d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\3dmaphelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="URLeddb" xml:space="preserve">
-    <value>https://eddb.io/</value>
-  </data>
   <data name="URLEDHomepage" xml:space="preserve">
     <value>https://www.elitedangerous.com/</value>
   </data>
@@ -163,17 +160,8 @@
   <data name="URLEDShipyard" xml:space="preserve">
     <value>http://www.edshipyard.com/</value>
   </data>
-  <data name="URLEDDBSystems" xml:space="preserve">
-    <value>https://eddiscovery.space/eddb/systems_populated.jsonl</value>
-  </data>
   <data name="URLEDSMFullSystems" xml:space="preserve">
     <value>https://www.edsm.net/dump/systemsWithCoordinates.json.gz</value>
-  </data>
-  <data name="URLEDDBSystem" xml:space="preserve">
-    <value>http://eddb.io/system/</value>
-  </data>
-  <data name="URLRossSystem" xml:space="preserve">
-    <value>http://ross.eddb.io/system/update/</value>
   </data>
   <data name="EDD_License" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EDD License.rtf;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
@@ -187,26 +175,11 @@
   <data name="URLEDCD" xml:space="preserve">
     <value>https://edcd.github.io/</value>
   </data>
-  <data name="URLEDDBStationMarketId" xml:space="preserve">
-    <value>https://eddb.io/station/market-id/</value>
-  </data>
-  <data name="URLEDDBSystemName" xml:space="preserve">
-    <value>https://eddb.io/system/name/</value>
-  </data>
   <data name="URLInaraStarSystem" xml:space="preserve">
     <value>https://inara.cz/galaxy-starsystem/?search=</value>
   </data>
   <data name="URLInaraStation" xml:space="preserve">
     <value>https://inara.cz/galaxy-station/?search=</value>
-  </data>
-  <data name="URLSpanshBodyId" xml:space="preserve">
-    <value>https://spansh.co.uk/body/</value>
-  </data>
-  <data name="URLSpanshStationMarketId" xml:space="preserve">
-    <value>https://spansh.co.uk/station/</value>
-  </data>
-  <data name="URLSpanshSystemSystemId" xml:space="preserve">
-    <value>https://spansh.co.uk/system/</value>
   </data>
   <data name="URLProjectVideos" xml:space="preserve">
     <value>https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/</value>
@@ -225,5 +198,8 @@
   </data>
   <data name="URLWebView2" xml:space="preserve">
     <value>https://developer.microsoft.com/en-us/microsoft-edge/webview2/</value>
+  </data>
+  <data name="URLSpanshSystemsRoot" xml:space="preserve">
+    <value>http://downloads.spansh.co.uk/systems{0}.json.gz</value>
   </data>
 </root>

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017-2019 EDDiscovery development team
+ * Copyright © 2017-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,15 +10,11 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using ActionLanguage;
 using AudioExtensions;
 using BaseUtils;
-using QuickJSON;
-using EDDiscovery.Forms;
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
@@ -200,7 +196,8 @@ namespace EDDiscovery.Actions
             ActionPackEditPackForm frm = new ActionPackEditPackForm();
 
             frm.AdditionalNames += Frm_onAdditionalNames;
-            frm.CreateActionPackEdit += SetPackEditorAndCondition;
+            frm.GetEventEditor += GetEventEditorForCondition;
+            frm.GetClassNameFromCondition += GetClassNameFromCondition;
             ActionFile f = actionfiles.Get(name);
 
             if (f != null)
@@ -224,24 +221,73 @@ namespace EDDiscovery.Actions
                 return false;
         }
 
-        // called when a new group is set up, what editor do you want?  and you can alter the condition
-        // for new entries, cd = AlwaysTrue. For older entries, the condition
-        private ActionPackEditBase SetPackEditorAndCondition(string group, Condition cd)
+        // we want a class name from the condition.. so we can work out which condition editor to use.
+        private string GetClassNameFromCondition(Condition cd)
         {
-            if (group == "Voice")
+            // special, since it uses OnEliteInputRaw
+
+            if (cd.EventName == ActionEventEDList.onInputToKey.TriggerName && cd.Fields.Count == 3 && cd.Fields[0].ItemName == "Device" && cd.Fields[1].ItemName == "EventName" && cd.Fields[2].ItemName == "Pressed")
             {
-                ActionPackEditVoice ev = new ActionPackEditVoice();
+                return ActionEventEDList.onInputToKey.UIClass;
+            }
+            else
+            {
+                var events = ActionEventEDList.EventList(excludejournaluitranslatedevents: true);
+                ActionEvent ev = events.Find(x => x.TriggerName == cd.EventName);
+                return (ev == null) ? "Misc" : ev.UIClass;
+            }
+        }
+
+
+        // called when a new entry is set up, what editor do you want?  and you can alter the condition
+        // for new entries, cd = AlwaysTrue. For older entries, the condition
+        private ActionPackEditEventBase GetEventEditorForCondition(string classtype, Condition cd)
+        {
+            if (classtype == "Voice")
+            {
+                ActionPackEditEventVoice ev = new ActionPackEditEventVoice();
                 ev.Height = 28;
                 ev.onEditKeys = onEditKeys;
                 ev.onEditSay = onEditSay;
 
                 // make sure the voice condition is right.. if not, reset.
 
-                if (cd.EventName != Actions.ActionEventEDList.onVoiceInput.TriggerName || 
-                        ( !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList) && !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon)))
+                if (cd.EventName != Actions.ActionEventEDList.onVoiceInput.TriggerName ||
+                        (!cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList) && !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon)))
                 {
                     cd.EventName = Actions.ActionEventEDList.onVoiceInput.TriggerName;
                     cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList, "?"));     // Voiceinput being the variable set to the expression
+                }
+
+                return ev;
+            }
+            else if (classtype == "InputToKey")
+            {
+                ActionPackEditEventInputToKey ev = new ActionPackEditEventInputToKey();
+                ev.Height = 28;
+                ev.onEditKeys = onEditKeys;
+                ev.onEditSay = onEditSay;
+                ev.onInputButton = () =>
+                {
+                    DirectInputDevices.InputMapDialog mp = new DirectInputDevices.InputMapDialog();
+                    ExtendedControls.Theme.Current.ApplyDialog(mp);
+                    if ( mp.ShowDialog(discoveryform) == DialogResult.OK )
+                    {
+                        return new string[] { mp.DeviceName, mp.ButtonName, mp.Press.ToStringIntValue() };
+                    }
+                    else
+                        return null;
+                };
+
+                // make sure the voice condition is right.. if not, reset.
+
+                if (cd.EventName != Actions.ActionEventEDList.onInputToKey.TriggerName || cd.Fields.Count != 3 || cd.Fields[0].ItemName != "Device" || cd.Fields[1].ItemName != "EventName" || cd.Fields[2].ItemName != "Pressed")
+                {
+                    cd.EventName = Actions.ActionEventEDList.onEliteInputRaw.TriggerName;
+                    cd.InnerCondition = Condition.LogicalCondition.And;
+                    cd.Set(new ConditionEntry("Device", ConditionEntry.MatchType.Equals, "?"));
+                    cd.Add(new ConditionEntry("EventName", ConditionEntry.MatchType.Equals, "?"));
+                    cd.Add(new ConditionEntry("Pressed", ConditionEntry.MatchType.NumericEquals, "1"));
                 }
 
                 return ev;
@@ -379,7 +425,7 @@ namespace EDDiscovery.Actions
 
             using (ActionLanguage.Manager.AddOnManagerForm dmf = new ActionLanguage.Manager.AddOnManagerForm())
             {
-                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
+                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues();
                 System.Diagnostics.Debug.Assert(edversion != null);
 
                 dmf.Init("EDDiscovery", manage, this.Icon, edversion, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , EDDOptions.Instance.CheckGithubFiles );

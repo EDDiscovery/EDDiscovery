@@ -628,7 +628,7 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
             this.userControlStatsTimeTravel.Size = new System.Drawing.Size(1065, 26);
             this.userControlStatsTimeTravel.TabIndex = 0;
-            this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
+            this.userControlStatsTimeTravel.TimeMode = EliteDangerousCore.JournalStatsInfo.TimeModeType.Summary;
             // 
             // tabPageScan
             // 
@@ -743,7 +743,7 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
             this.userControlStatsTimeScan.Size = new System.Drawing.Size(1065, 26);
             this.userControlStatsTimeScan.TabIndex = 1;
-            this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
+            this.userControlStatsTimeScan.TimeMode = EliteDangerousCore.JournalStatsInfo.TimeModeType.Summary;
             // 
             // tabPageCombat
             // 
@@ -860,7 +860,7 @@ namespace EDDiscovery.UserControls
             this.statsTimeUserControlCombat.Name = "statsTimeUserControlCombat";
             this.statsTimeUserControlCombat.Size = new System.Drawing.Size(1059, 26);
             this.statsTimeUserControlCombat.TabIndex = 4;
-            this.statsTimeUserControlCombat.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
+            this.statsTimeUserControlCombat.TimeMode = EliteDangerousCore.JournalStatsInfo.TimeModeType.Summary;
             // 
             // tabPageGameStats
             // 

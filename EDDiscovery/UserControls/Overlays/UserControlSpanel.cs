@@ -321,7 +321,7 @@ namespace EDDiscovery.UserControls
                         {
                             StarScan scan = hl.StarScan;
 
-                            StarScan.SystemNode sn = await scan.FindSystemAsync(last.System, true);    // EDSM look up here..
+                            StarScan.SystemNode sn = await scan.FindSystemAsync(last.System, EliteDangerousCore.WebExternalDataLookup.All);    // web lookup
 
                             StringBuilder res = new StringBuilder();
 

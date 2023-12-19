@@ -69,7 +69,6 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
             this.extScrollBarSettings = new ExtendedControls.ExtScrollBar();
             this.groupBoxCommanders = new ExtendedControls.ExtGroupBox();
-            this.extSplitterResizeParentGroupBoxCommanders = new ExtendedControls.ExtSplitterResizeParent();
             this.dataViewScrollerCommanders = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewCommanders = new BaseUtils.DataGridViewBaseEnhancements();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -79,6 +78,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCommanders = new ExtendedControls.ExtScrollBar();
             this.flowLayoutButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonDrawnHelpCommanders = new ExtendedControls.ExtButtonDrawn();
+            this.extSplitterResizeParentGroupBoxCommanders = new ExtendedControls.ExtSplitterResizeParent();
             this.groupBoxTheme = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpTheme = new ExtendedControls.ExtButtonDrawn();
             this.groupBoxCustomHistoryLoad = new ExtendedControls.ExtGroupBox();
@@ -113,6 +113,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpSafeMode = new ExtendedControls.ExtButtonDrawn();
             this.labelSafeMode = new System.Windows.Forms.Label();
+            this.extButtonReloadStarDatabase = new ExtendedControls.ExtButton();
             this.extPanelScroll.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerCommanders.SuspendLayout();
@@ -339,14 +340,14 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtEDSMConfigureArea
             // 
-            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(9, 49);
+            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(9, 43);
             this.buttonExtEDSMConfigureArea.Name = "buttonExtEDSMConfigureArea";
             this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(243, 23);
             this.buttonExtEDSMConfigureArea.TabIndex = 10;
             this.buttonExtEDSMConfigureArea.Text = "Select Galaxy Sectors";
             this.toolTip.SetToolTip(this.buttonExtEDSMConfigureArea, "Configure what parts of the galaxy is stored in the databases");
             this.buttonExtEDSMConfigureArea.UseVisualStyleBackColor = true;
-            this.buttonExtEDSMConfigureArea.Click += new System.EventHandler(this.buttonExtEDSMConfigureArea_Click);
+            this.buttonExtEDSMConfigureArea.Click += new System.EventHandler(this.buttonExtSystemDBConfigureArea_Click);
             // 
             // checkBoxCustomEDSMDownload
             // 
@@ -513,6 +514,7 @@ namespace EDDiscovery.UserControls
             // 
             // extScrollBarSettings
             // 
+            this.extScrollBarSettings.AlwaysHideScrollBar = false;
             this.extScrollBarSettings.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarSettings.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBarSettings.ArrowColorScaling = 0.5F;
@@ -556,17 +558,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.Text = "Commanders";
             this.groupBoxCommanders.TextPadding = 0;
             this.groupBoxCommanders.TextStartPosition = -1;
-            // 
-            // extSplitterResizeParentGroupBoxCommanders
-            // 
-            this.extSplitterResizeParentGroupBoxCommanders.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.extSplitterResizeParentGroupBoxCommanders.Location = new System.Drawing.Point(3, 147);
-            this.extSplitterResizeParentGroupBoxCommanders.MaxSize = 2147483647;
-            this.extSplitterResizeParentGroupBoxCommanders.MinSize = 10;
-            this.extSplitterResizeParentGroupBoxCommanders.Name = "extSplitterResizeParentGroupBoxCommanders";
-            this.extSplitterResizeParentGroupBoxCommanders.Size = new System.Drawing.Size(956, 3);
-            this.extSplitterResizeParentGroupBoxCommanders.TabIndex = 27;
-            this.extSplitterResizeParentGroupBoxCommanders.TabStop = false;
             // 
             // dataViewScrollerCommanders
             // 
@@ -650,6 +641,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCommanders
             // 
+            this.vScrollBarCommanders.AlwaysHideScrollBar = false;
             this.vScrollBarCommanders.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCommanders.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCommanders.ArrowColorScaling = 0.5F;
@@ -711,6 +703,17 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpCommanders.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.extButtonDrawnHelpCommanders.UseMnemonic = true;
             this.extButtonDrawnHelpCommanders.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
+            // extSplitterResizeParentGroupBoxCommanders
+            // 
+            this.extSplitterResizeParentGroupBoxCommanders.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.extSplitterResizeParentGroupBoxCommanders.Location = new System.Drawing.Point(3, 147);
+            this.extSplitterResizeParentGroupBoxCommanders.MaxSize = 2147483647;
+            this.extSplitterResizeParentGroupBoxCommanders.MinSize = 10;
+            this.extSplitterResizeParentGroupBoxCommanders.Name = "extSplitterResizeParentGroupBoxCommanders";
+            this.extSplitterResizeParentGroupBoxCommanders.Size = new System.Drawing.Size(956, 3);
+            this.extSplitterResizeParentGroupBoxCommanders.TabIndex = 27;
+            this.extSplitterResizeParentGroupBoxCommanders.TabStop = false;
             // 
             // groupBoxTheme
             // 
@@ -1086,14 +1089,15 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomEDSM.BorderColorScaling = 0.5F;
             this.groupBoxCustomEDSM.Controls.Add(this.extButtonDrawnHelpEDSM);
+            this.groupBoxCustomEDSM.Controls.Add(this.extButtonReloadStarDatabase);
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
             this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMDownload);
             this.groupBoxCustomEDSM.Location = new System.Drawing.Point(3, 344);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
-            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(281, 85);
+            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(281, 105);
             this.groupBoxCustomEDSM.TabIndex = 21;
             this.groupBoxCustomEDSM.TabStop = false;
-            this.groupBoxCustomEDSM.Text = "EDSM Control";
+            this.groupBoxCustomEDSM.Text = "System DB Control";
             this.groupBoxCustomEDSM.TextPadding = 0;
             this.groupBoxCustomEDSM.TextStartPosition = -1;
             // 
@@ -1306,6 +1310,16 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to ano" +
     "ther drive, reset UI, and other maintenance tasks...\r\n\r\n";
             // 
+            // extButtonReloadStarDatabase
+            // 
+            this.extButtonReloadStarDatabase.Location = new System.Drawing.Point(10, 72);
+            this.extButtonReloadStarDatabase.Name = "extButtonReloadStarDatabase";
+            this.extButtonReloadStarDatabase.Size = new System.Drawing.Size(243, 23);
+            this.extButtonReloadStarDatabase.TabIndex = 10;
+            this.extButtonReloadStarDatabase.Text = "Reload Star Database";
+            this.extButtonReloadStarDatabase.UseVisualStyleBackColor = true;
+            this.extButtonReloadStarDatabase.Click += new System.EventHandler(this.extButtonReloadStarDatabase_Click);
+            // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1409,5 +1423,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpDLL;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpCommanders;
         private ExtendedControls.ExtSplitterResizeParent extSplitterResizeParentGroupBoxCommanders;
+        private ExtendedControls.ExtButton extButtonReloadStarDatabase;
     }
 }

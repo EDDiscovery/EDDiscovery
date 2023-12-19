@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2019 EDDiscovery development team
+ * Copyright © 2015 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,15 +10,12 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore.EDSM;
 using System;
 using System.Diagnostics;
 using System.Threading;
-using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using System.IO;
 using System.Net;
@@ -29,31 +26,30 @@ namespace EDDiscovery
     {
         private class SystemsSyncState
         {
-            public bool perform_edsm_fullsync = false;
-            public bool perform_edsm_alias_sync = false;
+            public bool perform_fullsync = false;
 
-            public long edsm_fullsync_count = 0;
-            public long edsm_updatesync_count = 0;
+            public long fullsync_count = 0;
+            public long updatesync_count = 0;
 
             public void ClearCounters()
             {
-                edsm_fullsync_count = 0;
-                edsm_updatesync_count = 0;
+                fullsync_count = 0;
+                updatesync_count = 0;
             }
         }
 
         private SystemsSyncState syncstate = new SystemsSyncState();
 
-        private int resyncEDSMRequestedFlag = 0;            // flag gets set during EDSM refresh, cleared at end, interlocked exchange during request..
+        private int resyncSysDBRequestedFlag = 0;            // flag gets set during SysDB refresh, cleared at end, interlocked exchange during request..
 
-        public bool AsyncPerformSync(bool edsm_alias_sync = false, bool edsmfullsync = false)      // UI thread.
+        public bool AsyncPerformSync(bool fullsync)      // UI thread.
         {
+            System.Diagnostics.Debug.WriteLine($"Ask for sync start {fullsync}");
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            if (Interlocked.CompareExchange(ref resyncEDSMRequestedFlag, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref resyncSysDBRequestedFlag, 1, 0) == 0)
             {
-                syncstate.perform_edsm_alias_sync |= edsm_alias_sync;
-                syncstate.perform_edsm_fullsync |= edsmfullsync;
+                syncstate.perform_fullsync |= fullsync;
                 resyncRequestedEvent.Set();
                 return true;
             }
@@ -63,34 +59,31 @@ namespace EDDiscovery
             }
         }
 
-        const int ForcedFullDownloadDays = 56;      // beyond this time, we force a full download
-        const int UpdateFetchHours = 12;             // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
-        const int ForcedAliasDownloadDays = 7;      // beyond this time, we force an alias hidden system download
+        const int ForceEDSMFullDownloadDays = 56;      // beyond this time, we force a full download
+        const int ForceSpanshFullDownloadDays = 170;   // beyond this time, we force a full download
+        const int MiniumSpanshUpdateAge = 3;           // beyond this time, we update spansh
+        const int EDSMUpdateFetchHours = 12;           // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
 
         public void CheckForSync()      // called in background init
         {
-            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)        // if enabled
+            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.SystemDBDownload)        // if enabled
             {
-                DateTime edsmdatetime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
+                DateTime edsmdatetime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
 
-                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForcedFullDownloadDays*10)   
+                bool spansh = SystemsDatabase.Instance.DBSource.Equals("SPANSH");
+                var delta = DateTime.UtcNow.Subtract(edsmdatetime).TotalDays;
+
+                if (delta >= (spansh ? ForceEDSMFullDownloadDays : ForceSpanshFullDownloadDays))
                 {
-                    System.Diagnostics.Debug.WriteLine("EDSM Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
-                    syncstate.perform_edsm_fullsync = true;       // do a full sync.
+                    System.Diagnostics.Debug.WriteLine("Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
+                    syncstate.perform_fullsync = true;       // do a full sync.
                 }
 
-                DateTime aliasdatetime = SystemsDatabase.Instance.GetLastAliasDownloadTime();
-
-                if (DateTime.UtcNow.Subtract(aliasdatetime).TotalDays >= ForcedAliasDownloadDays)     
-                    syncstate.perform_edsm_alias_sync = true;
-
-                if (syncstate.perform_edsm_alias_sync || syncstate.perform_edsm_fullsync)
+                if (syncstate.perform_fullsync)
                 {
-                    string databases = "EDSM";
-
                     LogLine(string.Format("System data download from {0} required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), databases));
+                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), SystemsDatabase.Instance.DBSource));
                 }
             }
             else
@@ -101,96 +94,133 @@ namespace EDDiscovery
 
         private void DoPerformSync()        // in Background worker
         {
+            System.Diagnostics.Debug.WriteLine($"Do perform sync starts {syncstate.perform_fullsync}");
+
             InvokeAsyncOnUiThread.Invoke(() => OnSyncStarting?.Invoke());       // tell listeners sync is starting
 
-            resyncEDSMRequestedFlag = 1;     // sync is happening, stop any async requests..
+            resyncSysDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            if (EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
+            if (EDDConfig.Instance.SystemDBDownload)      // if system DB is to be loaded
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download from EDSM");
+                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download");
 
                 try
                 {
                     bool[] grids = new bool[GridId.MaxGridID];
-                    foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                    foreach (int i in GridId.FromString(SystemsDatabase.Instance.GetGridIDs()))
                         grids[i] = true;
 
                     syncstate.ClearCounters();
 
-                    if (syncstate.perform_edsm_fullsync || syncstate.perform_edsm_alias_sync)
+                    string sourcetype = SystemsDatabase.Instance.DBSource;
+                    bool spansh = sourcetype.Equals("SPANSH");
+
+                    if (syncstate.perform_fullsync)
                     {
-                        if (syncstate.perform_edsm_fullsync && !PendingClose)
+                        if (syncstate.perform_fullsync && !PendingClose)
                         {
                             // Download new systems
                             try
                             {
-                                string edsmsystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmsystems.json.gz");
+                                string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, spansh ? "spanshsystems.json.gz" : "edsmsystems.json.gz");
 
-                                ReportSyncProgress("Performing full download of System Data from EDSM");
+                                ReportSyncProgress("Performing full download of System Data");
 
-                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EDDConfig.Instance.EDSMFullSystemsURL);
+                                string url = spansh ? string.Format(EDDConfig.Instance.SpanshSystemsURL, "") : EDDConfig.Instance.EDSMFullSystemsURL;
 
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EDDConfig.Instance.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
+                                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} Full system download using URL {url} to {downloadfile}");
 
-                                //edsmsystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmsystems.json");     // debug
-                                //BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);
-                                //File.Copy(@"\code\edsm\edsmsystems.1e6.json", edsmsystems);
-                                //bool success = true;
+                                bool deletefile = !EDDOptions.Instance.KeepSystemDataDownloadedFiles;
 
-                                syncstate.perform_edsm_fullsync = false;
-
-                                if (success)
+#if DEBUGLOAD
+                                bool success = true;
+                                deletefile = false;
+                                downloadfile = spansh ? @"c:\code\spanshsystems.json.gz" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
+#else
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, cancelRequested:()=>PendingClose, reportProgress:ReportDownloadProgress);
+#endif
+                                if (!PendingClose)      // if not closing
                                 {
-                                    ReportSyncProgress("Download complete, creating database");
+                                    syncstate.perform_fullsync = false;
 
-                                    syncstate.edsm_fullsync_count = SystemsDatabase.Instance.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
+                                    if (success)
+                                    {
+                                        ReportSyncProgress("Download complete, creating database");
 
-                                    if (syncstate.edsm_fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
-                                        return;
+                                        syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, 200000, () => PendingClose, ReportSyncProgress, method: 3);
 
-                                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
-                                }
-                                else
-                                {
-                                    ReportSyncProgress("");
-                                    LogLineHighlight("Failed to download full EDSM systems file. Try re-running EDD later");
-                                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
-                                    return;     // new! if we failed to download, fail here, wait for another time
-                                }
+                                        if (deletefile)
+                                            BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
 
-                            }
-                            catch (Exception ex)
-                            {
-                                LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
-                            }
-                        }
-
-                        if (!PendingClose && syncstate.perform_edsm_alias_sync)
-                        {
-                            try
-                            {
-                                EDSMClass edsm = new EDSMClass();
-                                string edsmhiddensystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmhiddensystems.json");
-                                string jsonhidden = edsm.GetHiddenSystems(edsmhiddensystems);
-
-                                if (jsonhidden != null)
-                                {
-                                    SystemsDB.ParseAliasString(jsonhidden);
-                                    syncstate.perform_edsm_alias_sync = false;
-
-                                    SystemsDatabase.Instance.SetLastEDSMAliasDownloadTime();
+                                        if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
+                                            return;
+                                    }
+                                    else
+                                    {
+                                        ReportSyncProgress("");
+                                        LogLineHighlight("Failed to download full systems file. Try re-running EDD later");
+                                        BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                                        return;     // new! if we failed to download, fail here, wait for another time
+                                    }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                LogLineHighlight("GetEDSMAlias exception: " + ex.Message);
+                                LogLineHighlight("System DB Full Sync exception:" + ex.Message);
                             }
                         }
+
                     }
 
                     if (!PendingClose)          // perform an update sync to get any new EDSM data
                     {
-                        syncstate.edsm_updatesync_count = UpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                        if (spansh)
+                        {
+                            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastRecordTimeUTC();
+                            var delta = DateTime.UtcNow.Subtract(lastrecordtime).TotalDays;
+                            string filename = delta < 7 ? "_1week" : delta < 14 ? "_2weeks" : delta < 28 ? "_1month" : "_6months";
+                            string url = string.Format(EDDConfig.Instance.SpanshSystemsURL, filename);
+                            string downloadfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "systemsdelta.json.gz");
+                            bool deletefile = !EDDOptions.Instance.KeepSystemDataDownloadedFiles;
+
+#if DEBUGLOAD
+                            {
+                                bool success = true;
+                                downloadfile = @"c:\code\examples\edsm\systems_1week.json";
+                                deletefile = false;
+#else
+                            if ( delta >= MiniumSpanshUpdateAge )        // if its older than this, we will do an update
+                            {
+                                ReportSyncProgress($"Performing partial download of System Data from {url}");
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile);
+#endif
+
+                                if (success)        // grabbed sucessfully
+                                {
+                                    ReportSyncProgress("Download complete, updating database");
+
+                                    System.Diagnostics.Trace.WriteLine($"Peforming spansh update on data {delta} old from {url}");
+
+                                    // we do this non overlapped with replace, to pause to allow main system to run ok
+                                    SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grids, true, false );        
+                                    syncstate.updatesync_count = loader3.ParseJSONFile(downloadfile, () => PendingClose, ReportSyncProgress);
+                                    loader3.Finish();
+
+                                    System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count}");
+                                }
+                                else
+                                {
+                                    LogLine("Download of Spansh systems from the server failed (no data returned), will try next time program is run");
+                                }
+
+                                if ( deletefile )
+                                    BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                            }
+                        }
+                        else
+                        {
+                            syncstate.updatesync_count = EDSMUpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                        }
                     }
                 }
                 catch (OperationCanceledException)
@@ -212,66 +242,59 @@ namespace EDDiscovery
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
-                LogLine(string.Format("EDSM systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
+            if (syncstate.fullsync_count > 0 || syncstate.updatesync_count > 0)
+                LogLine(string.Format("Systems update complete with {0:N0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
 
-            // since we don't assign EDSM IDs to journal entries any more, this is pointless.. removing 
-
-            //if (syncstate.edsm_fullsync_count > 0 )   // if we have done a resync, or a major update sync (arb no)
-            //{
-            //    LogLine("Refresh due to updating EDSM system data".T(EDTx.EDDiscoveryController_Refresh));
-            //    RefreshHistoryAsync();
-            //}
-
-            OnSyncComplete?.Invoke(syncstate.edsm_fullsync_count, syncstate.edsm_updatesync_count);
+            OnSyncComplete?.Invoke(syncstate.fullsync_count, syncstate.updatesync_count);
 
             ReportSyncProgress("");
 
-            resyncEDSMRequestedFlag = 0;        // releases flag and allow another async to happen
+            resyncSysDBRequestedFlag = 0;        // releases flag and allow another async to happen
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
-        public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
+        public long EDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
-            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
+            // smallish block size, non overlap, allow overwrite
+            SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grididallow, false, false);       
 
-            DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForcedFullDownloadDays);        // limit download to this amount of days
-            if (lastrecordtime < maximumupdatetimewindow)
-                lastrecordtime = maximumupdatetimewindow;               // this stops crazy situations where somehow we have a very old date but the full sync did not take care of it
+            DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForceEDSMFullDownloadDays);        // limit download to this amount of days
+            if (loader3.LastDate < maximumupdatetimewindow)
+                loader3.LastDate = maximumupdatetimewindow;               // this stops crazy situations where somehow we have a very old date but the full sync did not take care of it
 
             long updates = 0;
 
             double fetchmult = 1;
 
-            DateTime minimumfetchspan = DateTime.UtcNow.AddHours(-UpdateFetchHours / 2);        // we don't bother fetching if last record time is beyond this point
+            DateTime minimumfetchspan = DateTime.UtcNow.AddHours(-EDSMUpdateFetchHours / 2);        // we don't bother fetching if last record time is beyond this point
 
-            while (lastrecordtime < minimumfetchspan)                                   // stop at X mins before now, so we don't get in a condition
+            while (loader3.LastDate < minimumfetchspan)                              // stop at X mins before now, so we don't get in a condition
             {                                                                           // where we do a set, the time moves to just before now, 
                                                                                         // and we then do another set with minimum amount of hours
                 if (PendingClose())
-                    return updates;
+                    break;
 
                 if ( updates == 0)
                     LogLine("Checking for updated EDSM systems (may take a few moments).");
 
                 EDSMClass edsm = new EDSMClass();
 
-                double hourstofetch = UpdateFetchHours;        //EDSM new server feb 2021, more capable, 
+                double hourstofetch = EDSMUpdateFetchHours;        //EDSM new server feb 2021, more capable, 
 
-                DateTime enddate = lastrecordtime + TimeSpan.FromHours(hourstofetch * fetchmult);
+                DateTime enddate = loader3.LastDate + TimeSpan.FromHours(hourstofetch * fetchmult);
                 if (enddate > DateTime.UtcNow)
                     enddate = DateTime.UtcNow;
 
-                LogLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
-                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()} {hourstofetch}");
+                LogLine($"Downloading systems from UTC {loader3.LastDate} to {enddate}");
+                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {loader3.LastDate} to {enddate} {hourstofetch}");
 
                 string json = null;
                 BaseUtils.ResponseData response;
                 try
                 {
                     Stopwatch sw = new Stopwatch();
-                    response = edsm.RequestSystemsData(lastrecordtime, enddate, timeout: 20000);
+                    response = edsm.RequestSystemsData(loader3.LastDate, enddate, timeout: 20000);
                     fetchmult = Math.Max(0.1, Math.Min(Math.Min(fetchmult * 1.1, 1.0), 5000.0 / sw.ElapsedMilliseconds));
                 }
                 catch (WebException ex)
@@ -287,13 +310,13 @@ namespace EDDiscovery
                         LogLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
                     }
 
-                    return updates;
+                    break;
                 }
                 catch (Exception ex)
                 {
                     ReportProgress($"EDSM request failed");
                     LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
-                    return updates;
+                    break;
                 }
 
                 if (response.Error)
@@ -312,7 +335,7 @@ namespace EDDiscovery
                     else
                     {
                         LogLine($"Download of EDSM systems from the server failed ({response.StatusCode.ToString()}), will try next time program is run");
-                        return updates;
+                        break;
                     }
                 }
 
@@ -322,42 +345,26 @@ namespace EDDiscovery
                 {
                     ReportProgress("EDSM request failed");
                     LogLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
-                    return updates;
+                    break;
                 }
 
                 // debug File.WriteAllText(@"c:\code\json.txt", json);
 
-                DateTime prevrectime = lastrecordtime;
-                System.Diagnostics.Debug.WriteLine("Last record time {0} JSON size {1}", lastrecordtime.ToUniversalTime(), json.Length);
+                ReportProgress($"EDSM star database update from UTC " + loader3.LastDate.ToString() );
 
-                long updated = 0;
+                var prevrectime = loader3.LastDate;
 
-                try
+                long updated = loader3.ParseJSONString(json, PendingClose, ReportSyncProgress);
+
+                System.Diagnostics.Trace.WriteLine($"EDSM parital download updated {updated} to {loader3.LastDate}");
+
+                // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
+                if (loader3.LastDate <= prevrectime)
                 {
-                    ReportProgress($"EDSM star database update from UTC " + lastrecordtime.ToUniversalTime().ToString() );
-
-                    updated = SystemsDB.ParseEDSMJSONString(json, grididallow, ref lastrecordtime, PendingClose, ReportProgress, "");
-
-                    System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
-                    System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());
-
-                    // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
-                    if (lastrecordtime <= prevrectime)
-                    {
-                        lastrecordtime += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
-                    }
-                }
-                catch (Exception e)
-                {
-                    System.Diagnostics.Debug.WriteLine("SysClassEDSM.2 Exception " + e.ToString());
-                    ReportProgress("EDSM request failed");
-                    LogLine("Processing EDSM systems download failed, will try next time program is run");
-                    return updates;
+                    loader3.LastDate += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
                 }
 
                 updates += updated;
-
-                SystemsDatabase.Instance.SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
 
                 int delay = 10;     // Anthor's normal delay 
                 int ratelimitlimit;
@@ -389,8 +396,21 @@ namespace EDDiscovery
                 }
             }
 
+            loader3.Finish();
             return updates;
         }
+
+
+        public void ReportSyncProgress(string message)
+        {
+            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, message));
+        }
+
+        public void ReportDownloadProgress(long count, double rate)
+        {
+            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, $"Downloaded {count/1024:N0} KB at {rate/1024/1024:N2} MBbits/sec"));
+        }
+
     }
 }
 

@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
                     if (override_system == null && checkBoxAutoTrack.Checked)       // if not overriding, and tracking, present
                     {
                         JournalStartJump jsj = historyhe.journalEntry as JournalStartJump;
-                        last_sys_tracked = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
+                        last_sys_tracked = new SystemClass(jsj.StarSystem, jsj.SystemAddress);
                         PresentSystem(last_sys_tracked);
                     }
                 }
@@ -179,15 +179,10 @@ namespace EDDiscovery.UserControls
             else if (source == "Spansh")
             {
                 if (sys.SystemAddress.HasValue)
-                    url = Properties.Resources.URLSpanshSystemSystemId + sys.SystemAddress.Value.ToStringInvariant();
+                    url = EliteDangerousCore.Spansh.SpanshClass.URLForSystem(sys.SystemAddress.Value);
                 else
-                    url = "https://spansh.co.uk";
+                    url = EliteDangerousCore.Spansh.SpanshClass.RootURL;
 
-                //defaulturl = urlallowed;
-            }
-            else if (source == "EDDB")
-            {
-                url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(sys.Name);
                 //defaulturl = urlallowed;
             }
             else if (source == "Inara")
@@ -300,7 +295,7 @@ namespace EDDiscovery.UserControls
 
             string deflist = GetSetting("Allowed", "");
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { textboxmultiline = true });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { TextBoxMultiline = true });
 
             f.AddOK(new Point(width - 100, 180));
             f.AddCancel(new Point(width - 200, 180));

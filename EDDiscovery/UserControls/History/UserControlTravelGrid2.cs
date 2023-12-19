@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
                             var ri = scanof.FindRing(entry.BodyName);
                             ringtype = ri.RingClassID.ToString().SplitCapsWordFull();
 
-                            if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Metalic)
+                            if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Metallic)
                             {
                                 showicy = showrocky = showmr = false;
                             }
@@ -259,15 +259,15 @@ namespace EDDiscovery.UserControls
                                 EventDescription,
                                 EventDetailedInfo,
                                 dataGridViewTravel.Rows[r].Cells[4].Value,
-                                he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
-                                he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                                he.isTravelling ? he.TravelledJumps.ToString() : "",
-                                he.isTravelling ? he.TravelledMissingJumps.ToString() : "",
+                                he.isTravelling ? he.TravelledDistance.ToString("N1",grd.FormatCulture) : "",
+                                he.isTravelling ? he.TravelledSeconds.ToString("N0",grd.FormatCulture) : "",
+                                he.isTravelling ? he.TravelledJumps.ToString("N0",grd.FormatCulture) : "",
+                                he.isTravelling ? he.TravelledMissingJumps.ToString("N0",grd.FormatCulture) : "",
                                 he.System.X,
                                 he.System.Y,
                                 he.System.Z,
                                 he.Journalid,
-                                he.System.EDSMID,
+                                0,
                             };
                         };
 

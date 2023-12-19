@@ -109,8 +109,6 @@ namespace EDDiscovery.UserControls
             this.extButtonEDSMSystem = new ExtendedControls.ExtButton();
             this.labelCredits = new System.Windows.Forms.Label();
             this.extButtonEDSY = new ExtendedControls.ExtButton();
-            this.extButtonEDDBStation = new ExtendedControls.ExtButton();
-            this.extButtonEDDBSystem = new ExtendedControls.ExtButton();
             this.labelShip = new System.Windows.Forms.Label();
             this.labelMaterials = new System.Windows.Forms.Label();
             this.labelVisits = new System.Windows.Forms.Label();
@@ -570,8 +568,6 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.extButtonEDSMSystem);
             this.extPanelScroll.Controls.Add(this.labelCredits);
             this.extPanelScroll.Controls.Add(this.extButtonEDSY);
-            this.extPanelScroll.Controls.Add(this.extButtonEDDBStation);
-            this.extPanelScroll.Controls.Add(this.extButtonEDDBSystem);
             this.extPanelScroll.Controls.Add(this.labelShip);
             this.extPanelScroll.Controls.Add(this.labelMaterials);
             this.extPanelScroll.Controls.Add(this.labelVisits);
@@ -966,7 +962,7 @@ namespace EDDiscovery.UserControls
             this.panelFD.Location = new System.Drawing.Point(430, 18);
             this.panelFD.Name = "panelFD";
             this.panelFD.Size = new System.Drawing.Size(24, 24);
-            this.panelFD.TabIndex = 46;
+            this.panelFD.TabIndex = 9090;
             // 
             // labelTarget
             // 
@@ -1176,36 +1172,6 @@ namespace EDDiscovery.UserControls
             this.extButtonEDSY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extButtonEDSY.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.extButtonEDSY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
-            // 
-            // extButtonEDDBStation
-            // 
-            this.extButtonEDDBStation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonEDDBStation.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.extButtonEDDBStation.Image = global::EDDiscovery.Icons.Controls.EDDB;
-            this.extButtonEDDBStation.Location = new System.Drawing.Point(380, 98);
-            this.extButtonEDDBStation.Name = "extButtonEDDBStation";
-            this.extButtonEDDBStation.Padding = new System.Windows.Forms.Padding(2);
-            this.extButtonEDDBStation.Size = new System.Drawing.Size(44, 20);
-            this.extButtonEDDBStation.TabIndex = 5;
-            this.extButtonEDDBStation.Click += new System.EventHandler(this.extButtonEDDBStation_Click);
-            this.extButtonEDDBStation.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
-            this.extButtonEDDBStation.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
-            this.extButtonEDDBStation.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
-            // 
-            // extButtonEDDBSystem
-            // 
-            this.extButtonEDDBSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonEDDBSystem.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.extButtonEDDBSystem.Image = global::EDDiscovery.Icons.Controls.EDDB;
-            this.extButtonEDDBSystem.Location = new System.Drawing.Point(372, 38);
-            this.extButtonEDDBSystem.Name = "extButtonEDDBSystem";
-            this.extButtonEDDBSystem.Padding = new System.Windows.Forms.Padding(2);
-            this.extButtonEDDBSystem.Size = new System.Drawing.Size(44, 20);
-            this.extButtonEDDBSystem.TabIndex = 5;
-            this.extButtonEDDBSystem.Click += new System.EventHandler(this.buttonEDDBSystem_Click);
-            this.extButtonEDDBSystem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
-            this.extButtonEDDBSystem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
-            this.extButtonEDDBSystem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelShip
             // 
@@ -2079,7 +2045,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelState;
         private ExtendedControls.ExtTextBox textBoxEconomy;
         private ExtendedControls.ExtTextBox textBoxState;
-        private ExtendedControls.ExtButton extButtonEDDBSystem;
         private ExtendedControls.ExtTextBox textBoxHomeDist;
         private System.Windows.Forms.Label labelHomeDist;
         private ExtendedControls.ExtButton extButtonEDSMSystem;
@@ -2146,7 +2111,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelOpenStation;
         private ExtendedControls.ExtButton extButtonSpanshStation;
         private ExtendedControls.ExtButton extButtonInaraStation;
-        private ExtendedControls.ExtButton extButtonEDDBStation;
         private System.Windows.Forms.Label labelOpenShip;
         private ExtendedControls.ExtButton extButtonCoriolis;
         private ExtendedControls.ExtButton extButtonEDSY;

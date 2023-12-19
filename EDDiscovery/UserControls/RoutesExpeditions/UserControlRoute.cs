@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019 EDDiscovery development team
+ * Copyright © 2019-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,18 +10,15 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
 
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using EMK.LightGeometry;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -36,9 +33,12 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Timer toupdatetimer;
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
-        private string dbEDSM = "EDSM";
+        private int computing = 0;      // 0 = none, 1 = internal, 2 = web
+        private double jumprangelastfound;
 
-        public HistoryEntry last_history_he = null;
+        private const string dbPermit = "PermitAllowed";
+
+        #region  Init
 
         public UserControlRoute()
         {
@@ -49,15 +49,14 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "UCRoute";
 
-            button_Route.Enabled = false;
-            cmd3DMap.Enabled = false;
+            EnableOutputButtons();
 
             fromupdatetimer = new System.Windows.Forms.Timer();
             toupdatetimer = new System.Windows.Forms.Timer();
 
-            fromupdatetimer.Interval = 500;
+            fromupdatetimer.Interval = 1000;
             fromupdatetimer.Tick += FromUpdateTick;
-            toupdatetimer.Interval = 500;
+            toupdatetimer.Interval = 1000;
             toupdatetimer.Tick += ToUpdateTick;
 
             string[] MetricNames = {        // synchronise with SystemCache.SystemsNearestMetric, really should be translated, but there you go.
@@ -76,48 +75,122 @@ namespace EDDiscovery.UserControls
 
             textBox_From.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
             textBox_From.AutoCompleteTimeout = 500;
-            textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete , true);
+            textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
             textBox_To.AutoCompleteTimeout = 500;
 
             textBox_From.Text = GetSetting("_RouteFrom", "");
             textBox_To.Text = GetSetting("_RouteTo", "");
-            textBox_Range.Value = GetSetting("_RouteRange", 30);
-            textBox_FromX.Text = GetSetting("_RouteFromX", "");
-            textBox_FromY.Text = GetSetting("_RouteFromY", "");
-            textBox_FromZ.Text = GetSetting("_RouteFromZ", "");
-            textBox_ToX.Text = GetSetting("_RouteToX", "");
-            textBox_ToY.Text = GetSetting("_RouteToY", "");
-            textBox_ToZ.Text = GetSetting("_RouteToZ", "");
+            textBox_FromX.ValueNoChange = GetSetting("_RouteFromX", 0.0);
+            textBox_FromY.ValueNoChange = GetSetting("_RouteFromY", 0.0);
+            textBox_FromZ.ValueNoChange = GetSetting("_RouteFromZ", 0.0);
+            textBox_ToX.ValueNoChange = GetSetting("_RouteToX", 0.0);
+            textBox_ToY.ValueNoChange = GetSetting("_RouteToY", 0.0);
+            textBox_ToZ.ValueNoChange = GetSetting("_RouteToZ", 0.0);
+            numberBoxIntCargo.ValueNoChange = GetSetting("_Cargo", 0);
+            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value) ?? 25;
 
             int metricvalue = GetSetting("RouteMetric", 0);
             comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(SystemCache.SystemsNearestMetric), metricvalue)
                 ? metricvalue
-                : (int) SystemCache.SystemsNearestMetric.IterativeNearestWaypoint;
+                : (int)SystemCache.SystemsNearestMetric.IterativeNearestWaypoint;
 
             UpdateDistance();
-            button_Route.Enabled = IsValid();
+            EnableRouteButtonsIfValid();
 
             changesilence = false;
 
-            comboBoxRoutingMetric.Enabled = true;
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
 
-            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
-
-            var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_WayPointDistCol, EDTx.UserControlRoute_DeviationCol, EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom, EDTx.UserControlRoute_buttonExtTargetTo, EDTx.UserControlRoute_buttonToEDSM, EDTx.UserControlRoute_buttonFromEDSM, EDTx.UserControlRoute_buttonTargetFrom, EDTx.UserControlRoute_cmd3DMap, EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo, EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric, EDTx.UserControlRoute_button_Route, EDTx.UserControlRoute_labelFrom };
-            var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlRoute_checkBox_FsdBoost_ToolTip, EDTx.UserControlRoute_buttonExtExcel_ToolTip, EDTx.UserControlRoute_textBox_ToName_ToolTip, EDTx.UserControlRoute_textBox_FromName_ToolTip, EDTx.UserControlRoute_comboBoxRoutingMetric_ToolTip, EDTx.UserControlRoute_buttonExtTravelTo_ToolTip, EDTx.UserControlRoute_buttonExtTravelFrom_ToolTip, EDTx.UserControlRoute_buttonExtTargetTo_ToolTip, EDTx.UserControlRoute_buttonToEDSM_ToolTip, EDTx.UserControlRoute_buttonFromEDSM_ToolTip, EDTx.UserControlRoute_buttonTargetFrom_ToolTip, EDTx.UserControlRoute_checkBoxEDSM_ToolTip, EDTx.UserControlRoute_cmd3DMap_ToolTip, EDTx.UserControlRoute_textBox_From_ToolTip, EDTx.UserControlRoute_textBox_Range_ToolTip, EDTx.UserControlRoute_textBox_To_ToolTip, EDTx.UserControlRoute_textBox_Distance_ToolTip, EDTx.UserControlRoute_textBox_ToZ_ToolTip, EDTx.UserControlRoute_textBox_ToY_ToolTip, EDTx.UserControlRoute_textBox_ToX_ToolTip, EDTx.UserControlRoute_textBox_FromZ_ToolTip, EDTx.UserControlRoute_button_Route_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_NoteCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_StarClassCol, EDTx.UserControlRoute_WayPointDistCol,
+                                        EDTx.UserControlRoute_DeviationCol,
+                                        EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom,
+                                        EDTx.UserControlRoute_buttonExtTargetTo,  EDTx.UserControlRoute_buttonTargetFrom, EDTx.UserControlRoute_labelEDSMBut,
+                                        EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
+                                        EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
+                                        EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
+                                        EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
+                                        EDTx.UserControlRoute_extButtonFleetCarrier,EDTx.UserControlRoute_extButtonSpanshGalaxyPlotter,EDTx.UserControlRoute_extButtonExoMastery,
+                                        EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
+                                        EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara,
+                                        EDTx.UserControlRoute_extCheckBoxPermitSystems, EDTx.UserControlRoute_labelCargo };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem,
+                                            EDTx.UserControlRoute_viewOnSpanshToolStripMenuItem};
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlRoute_checkBox_FsdBoost_ToolTip, EDTx.UserControlRoute_buttonExtExcel_ToolTip, EDTx.UserControlRoute_textBox_ToName_ToolTip,
+                                        EDTx.UserControlRoute_textBox_FromName_ToolTip, EDTx.UserControlRoute_comboBoxRoutingMetric_ToolTip, EDTx.UserControlRoute_buttonExtTravelTo_ToolTip,
+                                        EDTx.UserControlRoute_buttonExtTravelFrom_ToolTip, EDTx.UserControlRoute_buttonExtTargetTo_ToolTip, EDTx.UserControlRoute_buttonToEDSM_ToolTip,
+                                        EDTx.UserControlRoute_buttonFromEDSM_ToolTip, EDTx.UserControlRoute_buttonTargetFrom_ToolTip, EDTx.UserControlRoute_checkBoxEDSM_ToolTip,
+                                        EDTx.UserControlRoute_cmd3DMap_ToolTip, EDTx.UserControlRoute_textBox_From_ToolTip, EDTx.UserControlRoute_textBox_Range_ToolTip,
+                                        EDTx.UserControlRoute_textBox_To_ToolTip, EDTx.UserControlRoute_textBox_Distance_ToolTip, EDTx.UserControlRoute_textBox_ToZ_ToolTip,
+                                        EDTx.UserControlRoute_textBox_ToY_ToolTip, EDTx.UserControlRoute_textBox_ToX_ToolTip, EDTx.UserControlRoute_textBox_FromZ_ToolTip,
+                                        EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip,
+                                        EDTx.UserControlRoute_extButtonExpeditionSave_ToolTip,EDTx.UserControlRoute_extButtonExpeditionPush_ToolTip,
+                                        };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            DiscoveryForm.OnHistoryChange += HistoryChanged;
+            waitforspanshresulttimer.Interval = 1000;
+            waitforspanshresulttimer.Tick += Waitforspanshresulttimer_Tick;
+
+            NoteCol.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+            textBox_FromX.ValidityChanged += ValidityChanges;
+            textBox_FromY.ValidityChanged += ValidityChanges;
+            textBox_FromZ.ValidityChanged += ValidityChanges;
+            textBox_ToX.ValidityChanged += ValidityChanges;
+            textBox_ToY.ValidityChanged += ValidityChanges;
+            textBox_ToZ.ValidityChanged += ValidityChanges;
+            textBox_Range.ValidityChanged += ValidityChanges;
+            numberBoxIntCargo.ValueChanged += NumberBoxIntCargo_ValueChanged;
+
+            labelRouteName.Text = "";
+
+            DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += DiscoveryForm_OnNewEntry;
+            DiscoveryForm.OnSyncComplete += DiscoveryForm_OnSyncComplete;
+            extCheckBoxPermitSystems.Click += ExtCheckBoxPermitSystems_Click; ;
         }
 
+        private void NumberBoxIntCargo_ValueChanged(object sender, EventArgs e)
+        {
+            double? range = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value);
+            if (range != null)
+                textBox_Range.Value = range.Value;
+        }
+
+        private void DiscoveryForm_OnNewEntry(HistoryEntry he)
+        {
+            double? range = he.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value);      // using cargo, what is the range?
+
+            if (range.HasValue && range != jumprangelastfound)      // if we selected a different ship or changed modules, detected by jump range changing, update
+            {
+                System.Diagnostics.Debug.WriteLine($"Router ship range has changed, updating");
+                jumprangelastfound = textBox_Range.Value = range.Value;
+            }
+        }
+
+        private void DiscoveryForm_OnHistoryChange()
+        {
+            jumprangelastfound = textBox_Range.Value = DiscoveryForm.History.GetLast?.ShipInformation?.GetJumpRange(numberBoxIntCargo.Value) ?? 25;
+        }
+
+        private void DiscoveryForm_OnSyncComplete(long arg1, long arg2)
+        {
+            SetPermit();
+        }
+        private void SetPermit()
+        {
+            bool permitsystems = SystemsDatabase.Instance.PermitSystems.Count > 0;
+            extCheckBoxPermitSystems.Enabled = permitsystems;
+            extCheckBoxPermitSystems.Checked = permitsystems ? GetSetting(dbPermit, false) : false;
+        }
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewRoute);
+            SetPermit();
         }
 
         public override void InitialDisplay()
@@ -136,70 +209,20 @@ namespace EDDiscovery.UserControls
                 routingthread.Join();
             }
 
-            DiscoveryForm.OnHistoryChange -= HistoryChanged;
-
             PutSetting("_RouteFrom", textBox_From.Text);
             PutSetting("_RouteTo", textBox_To.Text);
-            PutSetting("_RouteRange", (int)textBox_Range.Value);
-            PutSetting("_RouteFromX", textBox_FromX.Text);
-            PutSetting("_RouteFromY", textBox_FromY.Text);
-            PutSetting("_RouteFromZ", textBox_FromZ.Text);
-            PutSetting("_RouteToX", textBox_ToX.Text);
-            PutSetting("_RouteToY", textBox_ToY.Text);
-            PutSetting("_RouteToZ", textBox_ToZ.Text);
+            PutSetting("_RouteFromX", textBox_FromX.Value);
+            PutSetting("_RouteFromY", textBox_FromY.Value);
+            PutSetting("_RouteFromZ", textBox_FromZ.Value);
+            PutSetting("_RouteToX", textBox_ToX.Value);
+            PutSetting("_RouteToY", textBox_ToY.Value);
+            PutSetting("_RouteToZ", textBox_ToZ.Value);
             PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
-        }
+            PutSetting("_Cargo", numberBoxIntCargo.Value);
 
-        public void HistoryChanged()           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
-        {
-            if (DiscoveryForm.History.Count > 0)
-            {
-                UpdateTo(null);
-                UpdateFrom(null);
-                last_history_he = DiscoveryForm.History.GetLast;
-            }
-        }
-
-        string SystemNameOnly(string s)             // removes @ at end.
-        {
-            int atpos = s?.IndexOf('@') ?? -1;
-            if (s != null && atpos != -1)
-                s = s.Substring(0, atpos);
-            s = s?.Trim();
-            return s;
-        }
-
-        public override void ReceiveHistoryEntry(HistoryEntry he)
-        {
-            last_history_he = he;       // keep track
-        }
-
-        #region Helpers
-
-        private bool IsValid()                          // good to go if we have coords and a routing 
-        {
-            bool readytocalc = true;
-
-            if (!GetCoordsFrom(out Point3D pos))        // coords must be valid
-                readytocalc = false;
-            else if (!GetCoordsTo(out pos))
-                readytocalc = false;
-            
-            if (comboBoxRoutingMetric.SelectedIndex < 0)
-                readytocalc = false;
-
-            return readytocalc;
-        }
-
-        private void UpdateDistance()
-        {
-            string dist = "";
-            if (GetCoordsFrom(out Point3D from) && GetCoordsTo(out Point3D to))
-            {
-                dist = Point3D.DistanceBetween(from, to).ToString("0.00");
-            }
-
-            textBox_Distance.Text = dist;
+            DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnSyncComplete -= DiscoveryForm_OnSyncComplete;
+            DiscoveryForm.OnNewEntry -= DiscoveryForm_OnNewEntry;
         }
 
         #endregion
@@ -208,13 +231,16 @@ namespace EDDiscovery.UserControls
 
         private bool GetCoordsFrom(out Point3D pos)
         {
-            double x = 0, y = 0, z = 0;
-
-            bool worked = System.Double.TryParse(textBox_FromX.Text, out x) &&
-                            System.Double.TryParse(textBox_FromY.Text, out y) &&
-                            System.Double.TryParse(textBox_FromZ.Text, out z);
-            pos = new Point3D(x, y, z);
-            return worked;
+            if (textBox_FromX.IsValid && textBox_FromY.IsValid && textBox_FromZ.IsValid)
+            {
+                pos = new Point3D(textBox_FromX.Value, textBox_FromY.Value, textBox_FromZ.Value);
+                return true;
+            }
+            else
+            {
+                pos = new Point3D(0, 0, 0);
+                return false;
+            }
         }
 
         // give box updating, and optional new From name
@@ -228,32 +254,30 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), DiscoveryForm.GalacticMapping, true);     // if we have a name, find it
+                ISystem ds1 = SystemCache.FindSystem(textBox_From.Text, DiscoveryForm.GalacticMapping, edsmSpanshButton.WebLookup);     // if we have a name, find it
+
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
-                    textBox_FromX.Text = ds1.X.ToString("0.00");
-                    textBox_FromY.Text = ds1.Y.ToString("0.00");
-                    textBox_FromZ.Text = ds1.Z.ToString("0.00");
+                    textBox_FromX.ValueNoChange = ds1.X;
+                    textBox_FromY.ValueNoChange = ds1.Y;
+                    textBox_FromZ.ValueNoChange = ds1.Z;
                 }
                 else
-                    textBox_FromX.Text = textBox_FromY.Text = textBox_FromZ.Text = "";
+                {
+                    textBox_FromX.SetBlank();
+                    textBox_FromY.SetBlank();
+                    textBox_FromZ.SetBlank();
+                }
             }
             else
             {
-                string res = "",resname="";
+                string res = "", resname = "";
                 if (GetCoordsFrom(out Point3D curpos))          // else if we have co-ords, find nearest
                 {
-                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    Cursor = Cursors.WaitCursor;
 
-                    if (nearest != null)
-                    {
-                        if (nearestgmo != null && nearest.Distance(curpos.X, curpos.Y, curpos.Z) > nearestgmo.GetSystem().Distance(curpos.X, curpos.Y, curpos.Z))
-                            nearest = nearestgmo.GetSystem();
-                    }
-                    else
-                        nearest = nearestgmo?.GetSystem();
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 40, edsmSpanshButton.WebLookup, DiscoveryForm.GalacticMapping);
 
                     if (nearest != null)
                     {
@@ -263,6 +287,7 @@ namespace EDDiscovery.UserControls
                         if (distance > 0.1)
                             resname = nearest.Name + " @ " + distance.ToString("0.00") + "ly";
                     }
+                    Cursor = Cursors.Default;
                 }
 
                 textBox_From.Text = res;
@@ -270,17 +295,8 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateDistance();
-            button_Route.Enabled = IsValid();
+            EnableRouteButtonsIfValid();
             changesilence = false;
-        }
-        
-        private void textBox_From_Enter(object sender, EventArgs e)
-        {
-            fromupdatetimer.Stop();
-            fromupdatetimer.Start();
-            fromupdatetimer.Tag = sender;
-            if ( sender != textBox_From)
-                ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // entering selects everything
         }
 
         void FromUpdateTick(object sender, EventArgs e)                 // timer timed out, 
@@ -294,17 +310,23 @@ namespace EDDiscovery.UserControls
             if (!changesilence)
             {
                 fromupdatetimer.Stop();
-                fromupdatetimer.Start();
                 fromupdatetimer.Tag = sender;
+                fromupdatetimer.Start();
             }
+        }
+
+        private void valueBox_From_ValueChanged(object sender, EventArgs e)
+        {
+            fromupdatetimer.Stop();
+            fromupdatetimer.Tag = sender;
+            fromupdatetimer.Start();
         }
 
         private void buttonFromHistory_Click(object sender, EventArgs e)
         {
+            var last_history_he = DiscoveryForm.History.GetLast;
             if (last_history_he != null)
-            {
                 UpdateFrom(textBox_From, last_history_he.System.Name);
-            }
         }
 
         private void buttonFromTarget_Click(object sender, EventArgs e)
@@ -317,10 +339,14 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromEDSM_Click(object sender, EventArgs e)
         {
-            string sysname = SystemNameOnly(textBox_From.Text);
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysname))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
+            if (!edsm.ShowSystemInEDSM(textBox_From.Text))
+                MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
+        }
+
+        private void extButtonFromSpansh_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(textBox_From.Text);
         }
 
         #endregion
@@ -329,34 +355,41 @@ namespace EDDiscovery.UserControls
 
         public bool GetCoordsTo(out Point3D pos)
         {
-            double x = 0, y = 0, z = 0;
-
-            bool worked = System.Double.TryParse(textBox_ToX.Text, out x) &&
-                            System.Double.TryParse(textBox_ToY.Text, out y) &&
-                            System.Double.TryParse(textBox_ToZ.Text, out z);
-            pos = new Point3D(x, y, z);
-            return worked;
+            if (textBox_ToX.IsValid && textBox_ToY.IsValid && textBox_ToZ.IsValid)
+            {
+                pos = new Point3D(textBox_ToX.Value, textBox_ToY.Value, textBox_ToZ.Value);
+                return true;
+            }
+            else
+            {
+                pos = new Point3D(0, 0, 0);
+                return false;
+            }
         }
 
         private void UpdateTo(object sender, string optupdateto = null)
         {
             changesilence = true;
 
-            if (optupdateto!= null)
+            if (optupdateto != null)
                 textBox_To.Text = optupdateto;
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), DiscoveryForm.GalacticMapping, true);
+                ISystem ds1 = SystemCache.FindSystem(textBox_To.Text, DiscoveryForm.GalacticMapping, edsmSpanshButton.WebLookup);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;
-                    textBox_ToX.Text = ds1.X.ToString("0.00");
-                    textBox_ToY.Text = ds1.Y.ToString("0.00");
-                    textBox_ToZ.Text = ds1.Z.ToString("0.00");
+                    textBox_ToX.ValueNoChange = ds1.X;
+                    textBox_ToY.ValueNoChange = ds1.Y;
+                    textBox_ToZ.ValueNoChange = ds1.Z;
                 }
                 else
-                    textBox_ToX.Text = textBox_ToY.Text = textBox_ToZ.Text = "";
+                {
+                    textBox_ToX.SetBlank();
+                    textBox_ToY.SetBlank();
+                    textBox_ToZ.SetBlank();
+                }
             }
             else
             {
@@ -364,16 +397,9 @@ namespace EDDiscovery.UserControls
 
                 if (GetCoordsTo(out Point3D curpos))
                 {
-                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 100);
-                    GalacticMapObject nearestgmo = DiscoveryForm.GalacticMapping.FindNearest(curpos.X, curpos.Y, curpos.Z);
+                    Cursor = Cursors.WaitCursor;
 
-                    if (nearest != null)
-                    {
-                        if (nearestgmo != null && nearest.Distance(curpos.X, curpos.Y, curpos.Z) > nearestgmo.GetSystem().Distance(curpos.X, curpos.Y, curpos.Z))
-                            nearest = nearestgmo.GetSystem();
-                    }
-                    else
-                        nearest = nearestgmo?.GetSystem();
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z, 40, edsmSpanshButton.WebLookup, DiscoveryForm.GalacticMapping);
 
                     if (nearest != null)
                     {
@@ -383,6 +409,7 @@ namespace EDDiscovery.UserControls
                         if (distance > 0.1)
                             resname = nearest.Name + " @ " + distance.ToString("0.00") + "ly";
                     }
+                    Cursor = Cursors.Default;
                 }
 
                 textBox_To.Text = res;
@@ -390,18 +417,8 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateDistance();
-            button_Route.Enabled = IsValid();
+            EnableRouteButtonsIfValid();
             changesilence = false;
-        }
-
-
-        private void textBox_To_Enter(object sender, EventArgs e)   // To has been tabbed/clicked..
-        {
-            toupdatetimer.Stop();
-            toupdatetimer.Start();
-            toupdatetimer.Tag = sender;
-            if (sender != textBox_To)
-                ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // entering selects everything
         }
 
         void ToUpdateTick(object sender, EventArgs e)
@@ -415,17 +432,23 @@ namespace EDDiscovery.UserControls
             if (!changesilence)
             {
                 toupdatetimer.Stop();
-                toupdatetimer.Start();
                 toupdatetimer.Tag = sender;
+                toupdatetimer.Start();
             }
+        }
+
+        private void valueBox_To_ValueChanged(object sender, EventArgs e)
+        {
+            toupdatetimer.Stop();
+            toupdatetimer.Tag = sender;
+            toupdatetimer.Start();
         }
 
         private void buttonToHistory_Click(object sender, EventArgs e)
         {
+            var last_history_he = DiscoveryForm.History.GetLast;
             if (last_history_he != null)
-            {
-                UpdateTo(textBox_From, last_history_he.System.Name);
-            }
+                UpdateTo(textBox_To, last_history_he.System.Name);
         }
 
         private void buttonToTarget_Click(object sender, EventArgs e)
@@ -438,37 +461,42 @@ namespace EDDiscovery.UserControls
 
         private void buttonToEDSM_Click(object sender, EventArgs e)
         {
-            string sysname = SystemNameOnly(textBox_To.Text);
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysname))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
+            if (!edsm.ShowSystemInEDSM(textBox_To.Text))
+                MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
+        }
+
+        private void extButtonToSpansh_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(textBox_To.Text);
         }
 
         #endregion
 
-        #region UI
+        #region Internal Route Plotter
 
-        RoutePlotter plotter = null;
+        private RoutePlotter plotter = null;
 
         private void button_Route_Click(object sender, EventArgs e)
         {
-            if (routingthread == null  || !routingthread.IsAlive)
+            if (routingthread == null || !routingthread.IsAlive)
             {
                 plotter = new RoutePlotter();
-                plotter.MaxRange = textBox_Range.Value;
+                plotter.MaxRange = (float)textBox_Range.Value;
                 GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
                 GetCoordsTo(out plotter.Coordsto);
                 plotter.FromSystem = !textBox_FromName.Text.Contains("@") && textBox_From.Text.HasChars() ? textBox_From.Text : "START POINT";
                 plotter.ToSystem = !textBox_ToName.Text.Contains("@") && textBox_To.Text.HasChars() ? textBox_To.Text : "END POINT";
-                plotter.RouteMethod = (SystemCache.SystemsNearestMetric) comboBoxRoutingMetric.SelectedIndex;
+                plotter.RouteMethod = (SystemCache.SystemsNearestMetric)comboBoxRoutingMetric.SelectedIndex;
                 plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
-                plotter.EDSM = checkBoxEDSM.Checked;
+                plotter.WebLookup = edsmSpanshButton.WebLookup;
+                plotter.DiscardList = extCheckBoxPermitSystems.Enabled ? (extCheckBoxPermitSystems.Checked ? null : SystemsDatabase.Instance.PermitSystems) : null;
 
                 int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
 
                 if (PossibleJumps > 100)
                 {
-                    DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                    DialogResult res = MessageBoxTheme.Show(FindForm(),
                         string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").T(EDTx.UserControlRoute_Confirm),
                         PossibleJumps), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
                     if (res != System.Windows.Forms.DialogResult.Yes)
@@ -478,50 +506,57 @@ namespace EDDiscovery.UserControls
                 }
 
                 dataGridViewRoute.Rows.Clear();
-                routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(RoutingThread));
+                routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(EDDRoutingThread));
                 routingthread.Name = "Thread Route";
 
-                cmd3DMap.Enabled = false;
-                button_Route.Text = "Cancel".T(EDTx.Cancel);
+                extButtonRoute.Text = "Cancel".T(EDTx.Cancel);
+
+                EnableOutputButtons();
+                computing = 1;
+                EnableRouteButtonsIfValid();
+
+                labelRouteName.Text = $"{textBox_From.Text}-{textBox_To.Text} (DB)";
                 routingthread.Start(plotter);
             }
             else
             {
                 plotter.StopPlotter = true;
-                button_Route.Enabled = false;
             }
         }
 
         private Thread routingthread;
 
-        private void RoutingThread(object _plotter)
+        private void EDDRoutingThread(object plotter)
         {
-            RoutePlotter p = (RoutePlotter)_plotter;
+            RoutePlotter p = (RoutePlotter)plotter;
 
             routeSystems = null;    // so its null until route interative finishes
 
-            routeSystems = p.RouteIterative(AppendData);
+            routeSystems = p.RouteIterative(EDDAppendData);
 
-            this.BeginInvoke(new Action(() => 
+            this.BeginInvoke(new Action(() =>
                 {
-                    DiscoveryForm.NewCalculatedRoute(routeSystems);
-                    cmd3DMap.Enabled = true;
-                    button_Route.Text = "Find Route".TxID(EDTx.UserControlRoute_button_Route);
-                    button_Route.Enabled = true;
+                    RequestPanelOperation(this, new PushRouteList() { Systems = routeSystems });
+                    EnableOutputButtons(true);
+                    extButtonRoute.Text = "Find Route".TxID(EDTx.UserControlRoute_extButtonRoute);
+                    computing = 0;
+                    EnableRouteButtonsIfValid();
                 }));
         }
 
-        private void AppendData(RoutePlotter.ReturnInfo info)   // IN thread context, need to invoke
+        private void EDDAppendData(RoutePlotter.ReturnInfo info)   // IN thread context, need to invoke
         {
             var ar = BeginInvoke((MethodInvoker)delegate      // using Invoke blocks the thread until the UI finishes.  Using BeginInvoke async causes it to overload the UI
             {
                 DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
                 rw.CreateCells(dataGridViewRoute,
                         info.name,
+                        info?.system?.Tag as string ?? "",
                         double.IsNaN(info.dist) ? "" : info.dist.ToString("N2"),
-                        info.pos == null ? "" : info.pos.X.ToString("0.00"),
-                        info.pos == null ? "" : info.pos.Y.ToString("0.00"),
-                        info.pos == null ? "" : info.pos.Z.ToString("0.00"),
+                        info.pos == null ? "" : info.pos.X.ToString("0.####"),
+                        info.pos == null ? "" : info.pos.Y.ToString("0.####"),
+                        info.pos == null ? "" : info.pos.Z.ToString("0.####"),
+                        info.pos == null ? "" : info.system == null ? Stars.StarName(EDStar.Unknown) : Stars.StarName(info.system.MainStarType),
                         double.IsNaN(info.waypointdist) ? "" : info.waypointdist.ToString("0.0"),
                         double.IsNaN(info.deviation) ? "" : info.deviation.ToString("0.0")
                         );
@@ -532,163 +567,11 @@ namespace EDDiscovery.UserControls
                 dataGridViewRoute.Rows.Add(rw);
                 if (!rw.Displayed)
                 {
-                    dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex(dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex()+1);
+                    dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex(dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex() + 1);
                 }
             });
 
             WaitHandle.WaitAny(new WaitHandle[] { CloseRequested, ar.AsyncWaitHandle });
-        }
-
-
-        #endregion
-
-        #region Other UI
-
-        private void cmd3DMap_Click(object sender, EventArgs e)
-        {
-            if (routeSystems != null && routeSystems.Any())
-            {
-                float dist;
-                if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
-                    dist = 30;
-
-                DiscoveryForm.Open3DMap(routeSystems.First(), routeSystems);
-
-            }
-            else
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up, retry".T(EDTx.UserControlRoute_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
-                return;
-            }
-        }
-
-
-        private void comboBoxRoutingMetric_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            button_Route.Enabled = IsValid();
-        }
-
-        private void textBox_Clicked(object sender, EventArgs e)
-        {
-            ((ExtendedControls.ExtTextBox)sender).SelectAll(); // clicking highlights everything
-        }
-
-        private void dataGridViewRoute_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int row = dataGridViewRoute.CurrentCell?.RowIndex ?? -1;
-            if (row >= 0)
-            {
-                ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);
-            }
-        }
-
-        private void dataGridViewRoute_MouseDown(object sender, MouseEventArgs e)
-        {
-            showInEDSMToolStripMenuItem.Enabled = dataGridViewRoute.RightClickRowValid && dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag != null;
-            showScanToolStripMenuItem.Enabled = dataGridViewRoute.RightClickRowValid && dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag != null;
-            copyToolStripMenuItem.Enabled = dataGridViewRoute.GetCellCount(DataGridViewElementStates.Selected) > 0;
-        }
-
-        private void showInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewRoute.RightClickRowValid)
-            {
-                ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
-
-                if (sys != null) // paranoia because it should not be enabled otherwise
-                {
-                    this.Cursor = Cursors.WaitCursor;
-
-                    EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-                    if (!edsm.ShowSystemInEDSM(sys.Name))
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
-
-                    this.Cursor = Cursors.Default;
-                }
-            }
-        }
-
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewRoute.GetCellCount(DataGridViewElementStates.Selected) > 0)
-            {
-                SetClipboard(dataGridViewRoute.GetClipboardContent());
-            }
-        }
-
-        private void showScanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewRoute.RightClickRowValid)
-            {
-                ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, DiscoveryForm.History);    // protected against sys = null
-            }
-        }
-
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            PutSetting(dbEDSM, checkBoxEDSM.Checked);
-        }
-
-        #endregion
-
-        #region Excel
-        private void buttonExtExcel_Click(object sender, EventArgs e)
-        {
-            if ( dataGridViewRoute.Rows.Count == 0)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No Route Plotted", "Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-            Forms.ImportExportForm frm = new Forms.ImportExportForm();
-            frm.Export( new string[] { "All" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
-
-            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
-            {
-                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
-
-                grd.GetLineStatus += delegate (int r)
-                {
-                    if (r < dataGridViewRoute.Rows.Count)
-                        return BaseUtils.CSVWriteGrid.LineStatus.OK;
-                    else
-                        return BaseUtils.CSVWriteGrid.LineStatus.EOF;
-                };
-
-                grd.GetLine += delegate (int r)
-                {
-                    DataGridViewRow rw = dataGridViewRoute.Rows[r];
-
-                    return new Object[] { rw.Cells[0].Value,rw.Cells[1].Value,
-                                          rw.Cells[2].Value,rw.Cells[3].Value,rw.Cells[4].Value,
-                                          rw.Cells[5].Value,rw.Cells[6].Value };
-                };
-
-                grd.GetHeader += delegate (int c)
-                {
-                    return (c < dataGridViewRoute.Columns.Count) ? dataGridViewRoute.Columns[c].HeaderText : null;
-                };
-
-                grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
-            }
-        }
-
-        private void dataGridViewRoute_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridViewCell cell = dataGridViewRoute.CurrentCell;
-            if (cell != null)
-            {
-                // If a cell contains a tag (i.e. a system name), copy the string of the tag
-                // else, copy whatever text is inside
-                string s = "";
-                if (cell.Tag != null)
-                    s = cell.Tag.ToString();
-                else
-                    s = (string)cell.Value;
-                SetClipboardText(s);
-            }
         }
 
         #endregion

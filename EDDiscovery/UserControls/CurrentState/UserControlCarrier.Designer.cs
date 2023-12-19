@@ -324,7 +324,6 @@
             this.dataGridViewItinerary.AllowUserToDeleteRows = false;
             this.dataGridViewItinerary.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewItinerary.AutoSortByColumnName = true;
-            this.dataGridViewItinerary.CheckEDSM = false;
             this.dataGridViewItinerary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewItinerary.ColumnReorder = true;
             this.dataGridViewItinerary.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {

@@ -52,10 +52,11 @@ namespace EDDiscovery.UserControls
             {
                 mapsave = new MapSaverImpl(this);
                 map.LoadState(mapsave, true, 0);
+                map.LoadImages();
 
                 map.AddSystemsToExpedition = (list) =>
                 {
-                    RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, Systems = list });
+                    RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemNames = list });
                 };
 
                 // start clock
@@ -154,6 +155,11 @@ namespace EDDiscovery.UserControls
             public void PutSetting<T>(string id, T value)
             {
                 uc3d.PutSetting(id, value);
+            }
+
+            public void DeleteSetting(string id)
+            {
+                uc3d.DeleteSetting(id);
             }
         }
 
