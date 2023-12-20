@@ -1,5 +1,5 @@
 ﻿Warning: "Warning" => "Advertencia"
-Today: "Today" => "Hoy dia"
+Today: "Today" => "Hoy"
 t24h: "24h" => "24h"
 t7days: "7 days" => "7 días"
 All: "All" => "Todo"
@@ -9,7 +9,7 @@ Delete: "Delete" => "Borrar"
 Campaign: "Campaign" => "Campaña"
 NoScan: "No Scan" => "Sin escaneo"
 GameTime: "Game Time" => "Hora de juego"
-Time: "Time" => "Tiempo"
+Time: "Time" => "Hora"
 NoData: "No Data" => "Sin datos"
 None: "None" => "Ninguno"
 on: "on" => "Encendido"
@@ -17,7 +17,7 @@ Off: "Off" => "Apagado"
 Unknown: "Unknown" => "Desconocido"
 Information: "Information" => "Información"
 NoPos: "No Pos" => "No pos"
-RemoveAll: "Remove All" @
+RemoveAll: "Remove All" => "Eliminar Todo"
 
 SECTION StartUp
 
@@ -25,7 +25,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
-.WordWrap: "Word Wrap (Override)" @
+.WordWrap: "Word Wrap (Override)" => "Ajuste de línea (Anular)"
 
 SECTION SafeModeForm
 
@@ -33,10 +33,10 @@ SafeModeForm: "EDDiscovery Safe Mode" => "Modo seguro de EDDiscovery"
 .buttonCancel: "Cancel" => "Cancelar"
 .buttonRun: "Run" => "Correr"
 .buttonRemoveJournals: "Remove Journals" @
-.buttonDeleteUserDB: "Delete/Rebuild User DB" @
+.buttonDeleteUserDB: "Delete/Rebuild User DB" => "Eliminar/Reconstruir base de datos de usuario"
 .buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Eliminar/reconstruir la base de datos del sistema"
-.buttonResetDBLoc: "Reset DB Location" @
-.buttonBackup: "Backup Database" @
+.buttonResetDBLoc: "Reset DB Location" => "Restablecer ubicación de la base de datos"
+.buttonBackup: "Backup Database" => "Hacer Copia de seguridad de la base de datos"
 .buttonDbs: "Move Databases" => "Mover bases de datos"
 .buttonLang: "Reset Language to English" => "Restablecer idioma a inglés"
 .buttonActionPacks: "Remove all Action Packs" => "Eliminar todos los paquetes de acción"
@@ -129,7 +129,7 @@ SECTION PopOutInfo
 .Grid.Title: "Grid" => "Cuadrícula"
 .SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Divisor (permite colocar otros paneles en el mismo)"
 .SplitterControl.Title: "Splitter" => "Divisor"
-.PanelSelector.Description: "" @
+.PanelSelector.Description: "" => "Descripción"
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Búsqueda"
 .Search.Description: "Search" => "Búsqueda"
@@ -155,22 +155,22 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" => "Contador Micro-recursos"
 .SuitsWeapons.Title: "Suits & Weapons" => "Trajes y armas"
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" => "Trajes, Equipamiento, Armas"
-.Map3D.Title: "3D Map" @
-.Map3D.Description: "3D Map of galaxy" @
-.LocalMap3D.Title: "Local 3D Map" @
-.LocalMap3D.Description: "Local 3D Map of systems near you" @
-.Organics.Title: "Organic Scans" @
-.Organics.Description: "Organic scans of current body and historic scans" @
-.Engineers.Title: "Engineers" @
-.Engineers.Description: "List of Engineers, status, recipes" @
-.Discoveries.Title: "Discoveries" @
+.Map3D.Title: "3D Map" => "Mapa 3D"
+.Map3D.Description: "3D Map of galaxy" => "Mapa 3D de la Galaxia"
+.LocalMap3D.Title: "Local 3D Map" => "Mapa 3D Local"
+.LocalMap3D.Description: "Local 3D Map of systems near you" => "Mapa 3D local de sistemas cercanos"
+.Organics.Title: "Organic Scans" => "Escaneos Orgánicos"
+.Organics.Description: "Organic scans of current body and historic scans" => "Escaneos orgánicos del cuerpo actual y escaneos históricos"
+.Engineers.Title: "Engineers" => "Ingenieros"
+.Engineers.Description: "List of Engineers, status, recipes" => "Lista de ingenieros, estado, recetas"
+.Discoveries.Title: "Discoveries" => "Descubrimientos"
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @
 .Carrier.Description: "Data about your fleet carrier" @
-.Resources.Title: "Resources" @
-.Resources.Description: "All Materials, Commodity, MicroResources" @
-.SpanshStations.Title: "Spansh Stations" @
-.SpanshStations.Description: "Stations in the system from spansh web data" @
+.Resources.Title: "Resources" => "Recursos"
+.Resources.Description: "All Materials, Commodity, MicroResources" => "Todos los materiales, productos básicos, micro-recursos"
+.SpanshStations.Title: "Spansh Stations" => "Estaciones de Spansh"
+.SpanshStations.Description: "Stations in the system from spansh web data" => "Estaciones en el sistema desde datos web de Spansh"
 
 SECTION EDDiscoveryForm
 
@@ -216,7 +216,7 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Página del proyecto (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Informar problema/idea"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Buscar actualizaciones"
-.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" => "Listar Atajos de Elite"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Haga clic con el botón derecho para agregar o quitar pestañas, haga clic con el botón izquierdo y arrastre para reordenar"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Úselo para seleccionar un nuevo perfil o editar la configuración del perfil"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Seleccione el comandante para ver"
@@ -256,7 +256,7 @@ SECTION EDDiscoveryForm
 .EP: "Edit Profiles" => "Editar perfiles"
 .PL: "Profile {0} Loaded" => "Perfil {0} cargado"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Panel emergente ..."
-.CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery está actualizando las bases de datos de EDSM y EDDB\r\nPulse Aceptar para cerrar ahora, Cancelar para esperar hasta que se complete la actualización"
+.CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery está actualizando las bases de los sistemas\r\nPulse Aceptar para cerrar ahora, Cancelar para esperar hasta que se complete la actualización"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Abrir EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Ocultar icono de bandeja"
 .notifyIconMenu_Exit: "E&xit" => "Salida"
@@ -274,7 +274,7 @@ SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." => "Cerrando, por favor espere .."
 .EDSM: "Get galactic mapping from EDSM." => "Obtenga mapeo galáctico de EDSM"
-.GEC: "Get galactic mapping from GEC." @
+.GEC: "Get galactic mapping from GEC." => "Obtener mapeo galáctico de GEC."
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Notas cargadas, marcadores y cartografía galáctica"
 .RTH: "Reading travel history" => "Leer el historial de viajes"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Continúe ejecutando ED Discovery hasta que se complete la actualización"
@@ -336,8 +336,8 @@ SECTION FindSystemsUserControl
 .buttonExtVisited: "From Visited Systems" => "Desde los sistemas visitados"
 .checkBoxCustomCube: "Cube" => "Cubo"
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Excluir sistemas visitados"
-.extButtonFromSpansh: "From Spansh" @
-.extButtonFromSpanshFindNames: "From Spansh Find Names" @
+.extButtonFromSpansh: "From Spansh" => "Desde Spansh"
+.extButtonFromSpanshFindNames: "From Spansh Find Names" => "Desde Spansh Buscar Nombres"
 
 SECTION TravelHistoryFilter
 
@@ -383,8 +383,8 @@ SECTION ImportExportForm
 
 ImportExportForm: "Export data" => "ExportForm"
 .buttonExport: "Export" => "Exportar"
-.ImportTitle: "Import data" @
-.ImportButton: "Import" @
+.ImportTitle: "Import data" => "Importar datos"
+.ImportButton: "Import" => "Importar"
 .labelCVSSep: "CSV Separator" => "Separador CSV"
 .radioButtonComma: "Comma" => "Coma"
 .radioButtonSemiColon: "Semicolon" => "Punto y coma"
@@ -392,9 +392,9 @@ ImportExportForm: "Export data" => "ExportForm"
 .checkBoxCustomAutoOpen: "Open" => "Abrir"
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-.labelPaste: "Click Paste or drag text or files to input box" @
+.labelPaste: "Click Paste or drag text or files to input box" => "Haz clic en Pegar o arrastra texto o archivos a la casilla de entrada"
 .extRadioButtonTab: "Tab" @
-.extCheckBoxExcludeHeader: "Exclude Header Row" @
+.extCheckBoxExcludeHeader: "Exclude Header Row" => "Excluir fila de encabezado"
 
 SECTION Form2DMap
 
@@ -422,7 +422,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "GalaxySectorSelect"
 .GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery descarga datos de estrellas de EDSM/EDDB que se utilizan para brindarle datos adicionales. Seleccione cuántos datos desea almacenar. Cuanto más galaxia seleccione, mayor será el almacenamiento necesario"
 .Select: "Select: " => "Seleccione: "
 .GALSELEN: "Select the data set" => "Seleccione el conjunto de datos"
-.GALSELSRC: "Select the data source" @
+.GALSELSRC: "Select the data source" => "Seleccione la fuente de datos"
 .PresstoAccept: "Press to Accept" => "Presione para aceptar"
 .GALSELTitle: "Select Galaxy Data" => "Seleccione EDSM Galaxy Data"
 
@@ -475,8 +475,8 @@ SECTION MessageBoxTheme
 .OK: "OK" => "OK"
 .No: "No" => "No"
 .Yes: "Yes" => "Sí"
-.Add: "Add" @
-.Set: "Set" @
+.Add: "Add" => "Agregar"
+.Set: "Set" => "Establecer"
 
 SECTION DataGridViewDialogs
 
@@ -506,9 +506,9 @@ KeyForm: "Define Key Sequence" => "Definir secuencia de teclas"
 .buttonNext: "Next" => "Próximo"
 .buttonTest: "Test" => "Prueba"
 .PK: "Press Key" => "Presione la tecla"
-.NOPN: "Name a process to test sending keys" @
-.KERR: "Error {0} - check entry" @
-.NOP: "No process names to send keys to" @
+.NOPN: "Name a process to test sending keys" => "Nombrar un proceso para probar el envío de teclas"
+.KERR: "Error {0} - check entry" => "Error {0} - revisa la entrada"
+.NOP: "No process names to send keys to" => "No hay nombres de procesos para enviar teclas"
 
 SECTION UserControlForm
 
@@ -535,99 +535,99 @@ SECTION CommanderForm
 
 SECTION SpeechConfigure
 
-SpeechConfigure: "Configure Speech" @
-.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
-.buttonExtTest: "Test" @
-.buttonExtDevice: "Device" @
-.buttonExtEffects: "Effects" @
+SpeechConfigure: "Configure Speech" => "Configurar Habla"
+.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Establecer texto a decir (usar ; para separar frases seleccionables al azar y {} para agrupar)"
+.buttonExtTest: "Test" => "Prueba"
+.buttonExtDevice: "Device" => "Dispositivo"
+.buttonExtEffects: "Effects" => "Efectos"
 .checkBoxCustomLiteral: "Literal" @
-.checkBoxCustomComplete: "Wait until speech completes" @
-.labelEndTrigger: "End Trigger" @
-.labelStartTrigger: "Start Trigger" @
-.labelRate: "Rate" @
-.labelVoice: "Voice" @
-.labelVolume: "Volume" @
-.checkBoxCustomR: "Override" @
-.checkBoxCustomV: "Override" @
+.checkBoxCustomComplete: "Wait until speech completes" => "Esperar hasta que termine el habla"
+.labelEndTrigger: "End Trigger" => "Finalizar Desencadenador"
+.labelStartTrigger: "Start Trigger" => "Iniciar Desencadenador"
+.labelRate: "Rate" => "Ritmo"
+.labelVoice: "Voice" => "Voz"
+.labelVolume: "Volume" => "Volumen"
+.checkBoxCustomR: "Override" => "Anular"
+.checkBoxCustomV: "Override" => "Anular"
 
 SECTION WaveConfigureDialog
 
-WaveConfigureDialog: "Configure Wave" @
-.buttonExtDevice: "Device" @
-.labelStartTrigger: "Start Trigger" @
-.labelEndTrigger: "End Trigger" @
-.labelTitle: "Select Default device, volume and effects" @
-.buttonExtBrowse: "Browse" @
-.checkBoxCustomComplete: "Wait until audio completes" @
-.buttonExtEffects: "Effects" @
-.buttonExtTest: "Test" @
-.checkBoxCustomV: "Override" @
-.labelVolume: "Volume" @
+WaveConfigureDialog: "Configure Wave" => "Configurar Onda"
+.buttonExtDevice: "Device" => "Dispositivo"
+.labelStartTrigger: "Start Trigger" => "Iniciar Desencadenador"
+.labelEndTrigger: "End Trigger" => "Finalizar Desencadenador"
+.labelTitle: "Select Default device, volume and effects" => "Seleccionar dispositivo predeterminado, volumen y efectos"
+.buttonExtBrowse: "Browse" => "Navegar"
+.checkBoxCustomComplete: "Wait until audio completes" => "Esperar hasta que el audio se complete"
+.buttonExtEffects: "Effects" => "Efectos"
+.buttonExtTest: "Test" => "Prueba"
+.checkBoxCustomV: "Override" => "Anular"
+.labelVolume: "Volume" => "Volumen"
 
 SECTION SoundEffectsDialog
 
-SoundEffectsDialog: "Sound Effects" @
-.labelEcho: "Echo" @
-.buttonExtTest: "Test" @
-.labelEchoMix: "Mix" @
-.labelChorus: "Chorus" @
-.checkBoxCustomNone: "No effects" @
-.labelReverb: "Reverb" @
-.checkBoxP: "Enable" @
-.checkBoxG: "Enable" @
-.labelDistortion: "Distortion" @
-.checkBoxD: "Enable" @
+SoundEffectsDialog: "Sound Effects" => "Efectos de Sonido"
+.labelEcho: "Echo" => "Eco"
+.buttonExtTest: "Test" => "Prueba"
+.labelEchoMix: "Mix" => "Mezcla"
+.labelChorus: "Chorus" => "Coro"
+.checkBoxCustomNone: "No effects" => "Sin efectos"
+.labelReverb: "Reverb" => "Reverberación"
+.checkBoxP: "Enable" => "Habilitar"
+.checkBoxG: "Enable" => "Habilitar"
+.labelDistortion: "Distortion" => "Distorsión"
+.checkBoxD: "Enable" => "Habilitar"
 .labelEchoFeedback: "Feedback" @
-.labelPitch: "Pitch" @
-.labelGargle: "Gargle" @
-.labelChorusMix: "Mix" @
-.labelEchoDelay: "Delay" @
-.checkBoxR: "Enable" @
-.labelReverbMix: "Mix" @
-.labelDistortionGain: "Gain" @
+.labelPitch: "Pitch" => "Tono"
+.labelGargle: "Gargle" => "Gargarismo"
+.labelChorusMix: "Mix" => "Mezcla"
+.labelEchoDelay: "Delay" => "Retardo"
+.checkBoxR: "Enable" => "Habilitar"
+.labelReverbMix: "Mix" => "Mezcla"
+.labelDistortionGain: "Gain" => "Ganancia"
 .labelChorusFeedback: "Feedback" @
-.checkBoxC: "Enable" @
-.labelPitchOctave: "Octave" @
-.labelGargleFrequency: "Frequency" @
-.checkBoxE: "Enable" @
-.labelReverbTime: "Time" @
-.labelDistortionEdge: "Edge" @
-.labelChorusDelay: "Delay" @
-.labelChorusDepth: "Depth" @
-.labelReverbHFRatio: "HF Ratio" @
-.labelDistortionCentreFreq: "Cent Freq" @
-.labelDistortionFreqWidth: "Freq Width" @
+.checkBoxC: "Enable" => "Habilitar"
+.labelPitchOctave: "Octave" => "Octava"
+.labelGargleFrequency: "Frequency" => "Frecuencia"
+.checkBoxE: "Enable" => "Habilitar"
+.labelReverbTime: "Time" => "Tiempo"
+.labelDistortionEdge: "Edge" => "Borde"
+.labelChorusDelay: "Delay" => "Retardo"
+.labelChorusDepth: "Depth" => "Profundidad"
+.labelReverbHFRatio: "HF Ratio" => "Relación de AF"
+.labelDistortionCentreFreq: "Cent Freq" => "Freq. Central"
+.labelDistortionFreqWidth: "Freq Width" => "Ancho de Frecuencia"
 
 SECTION AudioDeviceConfigure
 
-AudioDeviceConfigure: "Audio Device Select" @
-.labelText: "Select Device" @
+AudioDeviceConfigure: "Audio Device Select" => "Seleccionar Dispositivo de Audio"
+.labelText: "Select Device" => "Seleccionar Dispositivo"
 
 SECTION ActionPackEditPackForm
 
-.buttonInstallationVars: "Install Parameters" @
-.labelEditProg: "Program" @
+.buttonInstallationVars: "Install Parameters" => "Parametros de Instalación"
+.labelEditProg: "Program" => "Programa"
 
 SECTION ActionProgramEditForm
 
 ActionProgramEditForm: "Action Program" @
-.labelName: "Name:" @
-.buttonExtDisk: "As File" @
-.buttonExtLoad: "Load" @
-.buttonExtSave: "Save" @
-.buttonExtEdit: "Text Edit" @
-.extButtonHeader: "Header" @
+.labelName: "Name:" => "Nombre"
+.buttonExtDisk: "As File" => "Como Archivo"
+.buttonExtLoad: "Load" => "Cargar"
+.buttonExtSave: "Save" => "Guardar"
+.buttonExtEdit: "Text Edit" => "Editar Texto"
+.extButtonHeader: "Header" => "Encabezado"
 
 SECTION ActionPackEditForm
 
-.ci: "Configuration items for installation - specialist use" @
-.ip: "Input parameters to pass to program on run" @
-.df: "Define Variable:" @
-.cp: "Variables to pass into called program" @
+.ci: "Configuration items for installation - specialist use" => "Elementos de configuración para la instalación - uso especializado"
+.ip: "Input parameters to pass to program on run" => "Parámetros de entrada para pasar al programa en ejecución"
+.df: "Define Variable:" => "Definir Variable:"
+.cp: "Variables to pass into called program" => "Variables para pasar al programa llamado"
 
 SECTION ActionPackVariablesForm
 
-.gv: "Global User variables to pass to program on run" @
+.gv: "Global User variables to pass to program on run" => "Variables globales del usuario para pasar al programa en ejecución"
 
 include translation-spanish-uc.tlp
 
