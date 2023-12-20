@@ -32,7 +32,7 @@ SECTION SafeModeForm
 SafeModeForm: "EDDiscovery Safe Mode" => "Modo seguro de EDDiscovery"
 .buttonCancel: "Cancel" => "Cancelar"
 .buttonRun: "Run" => "Correr"
-.buttonRemoveJournals: "Remove Journals" @
+.buttonRemoveJournals: "Remove Journals" => "Eliminar Diario"
 .buttonDeleteUserDB: "Delete/Rebuild User DB" => "Eliminar/Reconstruir base de datos de usuario"
 .buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Eliminar/reconstruir la base de datos del sistema"
 .buttonResetDBLoc: "Reset DB Location" => "Restablecer ubicación de la base de datos"
@@ -47,7 +47,7 @@ SafeModeForm: "EDDiscovery Safe Mode" => "Modo seguro de EDDiscovery"
 
 SECTION InfoForm
 
-.buttonAcknowledge: "Acknowledge" @
+.buttonAcknowledge: "Acknowledge" => "Entendido"
 
 SECTION PopOutInfo
 
@@ -164,9 +164,9 @@ SECTION PopOutInfo
 .Engineers.Title: "Engineers" => "Ingenieros"
 .Engineers.Description: "List of Engineers, status, recipes" => "Lista de ingenieros, estado, recetas"
 .Discoveries.Title: "Discoveries" => "Descubrimientos"
-.Discoveries.Description: "Discoveries Observer List" @
-.Carrier.Title: "Carrier" @
-.Carrier.Description: "Data about your fleet carrier" @
+.Discoveries.Description: "Discoveries Observer List" => "Lista de Descubrimientos Observados"
+.Carrier.Title: "Carrier" => "Portanaves"
+.Carrier.Description: "Data about your fleet carrier" => "Datos sobre tu Portanaves"
 .Resources.Title: "Resources" => "Recursos"
 .Resources.Description: "All Materials, Commodity, MicroResources" => "Todos los materiales, productos básicos, micro-recursos"
 .SpanshStations.Title: "Spansh Stations" => "Estaciones de Spansh"
@@ -577,7 +577,7 @@ SoundEffectsDialog: "Sound Effects" => "Efectos de Sonido"
 .checkBoxG: "Enable" => "Habilitar"
 .labelDistortion: "Distortion" => "Distorsión"
 .checkBoxD: "Enable" => "Habilitar"
-.labelEchoFeedback: "Feedback" @
+.labelEchoFeedback: "Feedback" => "Retroalimentación"
 .labelPitch: "Pitch" => "Tono"
 .labelGargle: "Gargle" => "Gargarismo"
 .labelChorusMix: "Mix" => "Mezcla"
@@ -585,7 +585,7 @@ SoundEffectsDialog: "Sound Effects" => "Efectos de Sonido"
 .checkBoxR: "Enable" => "Habilitar"
 .labelReverbMix: "Mix" => "Mezcla"
 .labelDistortionGain: "Gain" => "Ganancia"
-.labelChorusFeedback: "Feedback" @
+.labelChorusFeedback: "Feedback" => "Retroalimentación"
 .checkBoxC: "Enable" => "Habilitar"
 .labelPitchOctave: "Octave" => "Octava"
 .labelGargleFrequency: "Frequency" => "Frecuencia"
