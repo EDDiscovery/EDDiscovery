@@ -1338,7 +1338,7 @@ SECTION UserControlTrilateration
 .Cmdr: "Please enter commander name before submitting the system!" => "¡Ingrese el nombre del comandante antes de enviar el sistema!"
 .Horray: "EDSM submission succeeded, trilateration successful." => "La presentación a EDSM se realizó correctamente, la trilateración fue exitosa"
 .Failed: "EDSM submission succeeded, but trilateration failed. Try adding more distances." => "La presentación a EDSM se realizó correctamente, pero la trilateración falló. Intente agregar más distancias"
-.Dead: "EDSM submission failed." => "Agregar todos los sistemas de EDSM"
+.Dead: "EDSM submission failed." => "Falló el envío a EDSM"
 .Co: "Only systems with coordinates or already known to EDSM can be added" => "Solo se pueden agregar sistemas con coordenadas o ya conocidos por EDSM"
 .PU: "Position unknown" => "Posición desconocida"
 .PF: "Position found" => "Posición encontrada"
