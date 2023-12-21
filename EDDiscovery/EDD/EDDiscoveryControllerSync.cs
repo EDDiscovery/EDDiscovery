@@ -137,7 +137,7 @@ namespace EDDiscovery
                                 deletefile = false;
                                 downloadfile = spansh ? @"c:\code\spanshsystems.json.gz" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
 #else
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, cancelRequested:()=>PendingClose, reportProgress:ReportDownloadProgress);
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, cancelRequested:()=>PendingClose, reportProgress: ReportDownloadProgress);
 #endif
                                 if (!PendingClose)      // if not closing
                                 {
@@ -189,10 +189,10 @@ namespace EDDiscovery
                                 downloadfile = @"c:\code\examples\edsm\systems_1week.json";
                                 deletefile = false;
 #else
-                            if ( delta >= MiniumSpanshUpdateAge )        // if its older than this, we will do an update
+                            if ( delta >= MiniumSpanshUpdateAge)        // if its older than this, we will do an update
                             {
                                 ReportSyncProgress($"Performing partial download of System Data from {url}");
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile);
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, reportProgress: ReportDownloadProgress);
 #endif
 
                                 if (success)        // grabbed sucessfully

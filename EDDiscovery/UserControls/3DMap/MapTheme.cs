@@ -96,7 +96,18 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 ac.ListBox.BackColor = formback;
                 ac.ListBox.ForeColor = texc;
+                ac.EndButton.BackColor = formback;
+                ac.EndButton.ImageFixedSize = new Size(12, 12);
 
+                System.Drawing.Imaging.ColorMap colormap1 = new System.Drawing.Imaging.ColorMap();       
+                colormap1.OldColor = Color.FromArgb(0, 0, 0);       // black to texc
+                colormap1.NewColor = texc;
+
+                System.Drawing.Imaging.ColorMap colormap2 = new System.Drawing.Imaging.ColorMap();       
+                colormap2.OldColor = Color.FromArgb(255, 255, 255);                 // white border
+                colormap2.NewColor = Color.DarkOrange;
+
+                ac.EndButton.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap1, colormap2 });
             }
 
             var lb = ctrl as GLLabel;

@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls.Map3D
                 EntryTextBox.BackColor = Color.FromArgb(96, 50, 50, 50);
                 EntryTextBox.BorderColor = Color.Gray;
                 EntryTextBox.BorderWidth = 1;
-                EntryTextBox.ShowWaitButton = true;
+                EntryTextBox.ShowEndButton = true;
                 map.displaycontrol.Add(EntryTextBox);
                 hpos += EntryTextBox.Width + hpad;
             }
@@ -682,15 +682,15 @@ namespace EDDiscovery.UserControls.Map3D
 
                 int spaceavailable = width - iconsize * 11 - hpad * 12 - leftmargin * 2;
 
-                var name = new GLTextBoxAutoComplete("name", new Rectangle(cenable.Right + hpad, vpos, spaceavailable / 3, iconsize), ie.Name);
+                var name = new GLTextBox("name", new Rectangle(cenable.Right + hpad, vpos, spaceavailable / 3, iconsize), ie.Name);
                 name.TextChanged += (s) => { ie.Name = name.Text; };
                 name.ToolTipText = "Name of entry";
-                name.ShowWaitButton = true;
                 spanel.Add(name, ref tabno);
 
                 spaceavailable -= spaceavailable / 3 + hpad;
 
                 var urlpath = new GLTextBoxAutoComplete("urlpath", new Rectangle(name.Right + hpad, vpos, spaceavailable, iconsize), ie.ImagePathOrURL);
+                urlpath.ShowEndButton = true;
                 urlpath.PerformAutoCompleteInThread += (input, sender, set) =>
                 {
                     if (input.StartsWith("Image:", StringComparison.InvariantCultureIgnoreCase))
