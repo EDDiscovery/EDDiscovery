@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             DBBaseName = "ShoppingList";
 
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
-            userControlEngineering.isEmbedded = true;
+            userControlEngineering.DontShowShoppingList = true;
             userControlEngineering.DBBaseName = "SLEngineering";            // makes it unique to the SL
             userControlEngineering.RequestPanelOperation += RequestPanelOperation;
 
@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls
 
             useHistoric = userControlEngineering.isHistoric;
 
-            userControlSynthesis.isEmbedded = true;
+            userControlSynthesis.DontShowShoppingList = true;
             userControlSynthesis.DBBaseName = "SLSynthesis";            // makes it unique to the SL
             userControlSynthesis.RequestPanelOperation += RequestPanelOperation;
             userControlSynthesis.Init(DiscoveryForm, DisplayNumber);

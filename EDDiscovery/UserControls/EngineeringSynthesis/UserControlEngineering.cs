@@ -24,7 +24,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEngineering : UserControlCommonBase
     {
-        public bool isEmbedded { get; set; } = false;
+        public bool DontShowShoppingList { get; set; } = false;
         public bool isHistoric { get; set; } = false;
 
         public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewEngineering);
             chkNotHistoric.Checked = !isHistoric;       // upside down now
-            chkNotHistoric.Visible = !isEmbedded;
+            chkNotHistoric.Visible = !DontShowShoppingList;
             this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
         }
 
@@ -291,7 +291,8 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = (res.Item5 >= 100.0) ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                     }
 
-                    if (WantedPerRecipe[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
+                    // add to wanted list, either if visible or we don't show shopping list (therefore embedded)
+                    if (WantedPerRecipe[rno] > 0 && (visible || DontShowShoppingList))      
                     {
                         wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]));
                     }
@@ -304,7 +305,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (!isEmbedded)
+                if (!DontShowShoppingList)
                 {
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
                     foreach (var kvp in NeededResources)        // and add new..
@@ -317,7 +318,9 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if ( fdrow>=0 && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
+                // need to ensure within bounds (we add/remove rows from the grid for the shopping list results)
+
+                if ( fdrow >= 0 && fdrow < dataGridViewEngineering.RowCount && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
                     dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex(fdrow);
             }
 

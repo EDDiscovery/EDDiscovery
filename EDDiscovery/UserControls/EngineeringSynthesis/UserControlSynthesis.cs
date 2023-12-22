@@ -25,7 +25,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSynthesis : UserControlCommonBase
     {
-        public bool isEmbedded { get; set; } = false;
+        public bool DontShowShoppingList { get; set; } = false;
         public bool isHistoric { get; set; } = false;
 
         public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
@@ -104,6 +104,7 @@ namespace EDDiscovery.UserControls
                     row.Visible = false;
                 }
             }
+            System.Diagnostics.Debug.WriteLine($"Synth Rows are {dataGridViewSynthesis.RowCount}");
 
             isHistoric = GetSetting(dbHistoricMatsSave, false);
 
@@ -128,7 +129,7 @@ namespace EDDiscovery.UserControls
             dataGridViewSynthesis.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewSynthesis);
             chkNotHistoric.Checked = !isHistoric;
-            chkNotHistoric.Visible = !isEmbedded;
+            chkNotHistoric.Visible = !DontShowShoppingList;
             this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);     // now trigger
         }
 
@@ -269,13 +270,15 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    if (WantedPerRecipe[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
+                    // add to wanted list, either if visible or we don't show shopping list (therefore embedded)
+
+                    if (WantedPerRecipe[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || DontShowShoppingList))
                     {
                         wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.SynthesisRecipes[rno], WantedPerRecipe[rno]));
                     }
                 }
 
-                if (!isEmbedded)
+                if (!DontShowShoppingList)
                 {
                     dataGridViewSynthesis.RowCount = Recipes.SynthesisRecipes.Count;         // truncate previous shopping list..
 
@@ -289,7 +292,8 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (fdrow >= 0 && dataGridViewSynthesis.Rows[fdrow].Visible)        // better check visible, may have changed..
+                // need to ensure within bounds (we add/remove rows from the grid for the shopping list results)
+                if (fdrow >= 0 && fdrow < dataGridViewSynthesis.RowCount && dataGridViewSynthesis.Rows[fdrow].Visible)        // better check visible, may have changed..
                     dataGridViewSynthesis.SafeFirstDisplayedScrollingRowIndex(fdrow);
 
             }
