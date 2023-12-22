@@ -574,7 +574,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void ShowImagesMenu(List<ImageCache.ImageEntry> imagelist, Action<List<ImageCache.ImageEntry>> onok)
         {
-            GLForm iform = new GLForm("Imagesmenu", "Configure Images", new Rectangle(100, 50, 1200, 500), Color.FromArgb(220, 60, 60, 160), Color.Orange, true);
+            GLForm iform = new GLForm("Imagesmenu", "Configure Images", new Rectangle(100, 50, 1300, 500), Color.FromArgb(220, 60, 60, 160), Color.Orange, true);
 
             // provide opening animation
             iform.ScaleWindow = new SizeF(0.0f, 0.0f);
@@ -680,7 +680,7 @@ namespace EDDiscovery.UserControls.Map3D
                 cenable.ToolTipText = "Enable or disable this entry from showing";
                 spanel.Add(cenable, ref tabno);
 
-                int spaceavailable = width - iconsize * 11 - hpad * 12 - leftmargin * 2;
+                int spaceavailable = width - iconsize * 12 - hpad * 12 - leftmargin * 2;
 
                 var name = new GLTextBox("name", new Rectangle(cenable.Right + hpad, vpos, spaceavailable / 3, iconsize), ie.Name);
                 name.TextChanged += (s) => { ie.Name = name.Text; };
@@ -731,14 +731,13 @@ namespace EDDiscovery.UserControls.Map3D
                 crotel.ToolTipText = "Enables rotation to the viewer elevation so it faces you";
                 spanel.Add(crotel, ref tabno);
 
-                var calscalar = new GLNumberBoxFloat("scalar", new Rectangle(crotel.Right + hpad, vpos, iconsize * 3 / 2, iconsize), ie.AlphaFadeScalar);
+                var calscalar = new GLNumberBoxFloat("scalar", new Rectangle(crotel.Right + hpad, vpos, iconsize * 4 / 2, iconsize), ie.AlphaFadeScalar);
                 calscalar.Format = "0.#";
                 calscalar.ValueChanged += (s) => { ie.AlphaFadeScalar = calscalar.Value; };
-                calscalar.Minimum = 0;
                 calscalar.ToolTipText = "Alpha scaling by distance from eye. >0 fade out as distance decreases. <0 fade out as distance increase. 0 = fixed fade (determined by position)";
                 spanel.Add(calscalar, ref tabno);
 
-                var calpos = new GLNumberBoxFloat("pos", new Rectangle(calscalar.Right + hpad, vpos, iconsize * 3 / 2, iconsize), ie.AlphaFadePosition);
+                var calpos = new GLNumberBoxFloat("pos", new Rectangle(calscalar.Right + hpad, vpos, iconsize * 4 / 2, iconsize), ie.AlphaFadePosition);
                 calpos.Format = "0.#";
                 calpos.ValueChanged += (s) => { ie.AlphaFadePosition = calpos.Value; };
                 calpos.Minimum = 0;
