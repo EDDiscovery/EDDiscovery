@@ -147,6 +147,7 @@ namespace EDDiscovery.UserControls
             this.txtP2PDIstance.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtP2PDIstance.EndButtonEnable = true;
             this.txtP2PDIstance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtP2PDIstance.EndButtonImage")));
+            this.txtP2PDIstance.EndButtonSize16ths = 10;
             this.txtP2PDIstance.EndButtonVisible = false;
             this.txtP2PDIstance.InErrorCondition = false;
             this.txtP2PDIstance.Location = new System.Drawing.Point(529, 29);
@@ -160,6 +161,7 @@ namespace EDDiscovery.UserControls
             this.txtP2PDIstance.Size = new System.Drawing.Size(100, 20);
             this.txtP2PDIstance.TabIndex = 10;
             this.txtP2PDIstance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtP2PDIstance.TextNoChange = "";
             this.txtP2PDIstance.WordWrap = true;
             // 
             // txtCmlDistance
@@ -174,6 +176,7 @@ namespace EDDiscovery.UserControls
             this.txtCmlDistance.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtCmlDistance.EndButtonEnable = true;
             this.txtCmlDistance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtCmlDistance.EndButtonImage")));
+            this.txtCmlDistance.EndButtonSize16ths = 10;
             this.txtCmlDistance.EndButtonVisible = false;
             this.txtCmlDistance.InErrorCondition = false;
             this.txtCmlDistance.Location = new System.Drawing.Point(529, 53);
@@ -187,6 +190,7 @@ namespace EDDiscovery.UserControls
             this.txtCmlDistance.Size = new System.Drawing.Size(100, 20);
             this.txtCmlDistance.TabIndex = 9;
             this.txtCmlDistance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtCmlDistance.TextNoChange = "";
             this.txtCmlDistance.WordWrap = true;
             // 
             // buttonReverseRoute
@@ -303,6 +307,7 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxRouteName.EndButtonEnable = true;
             this.textBoxRouteName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxRouteName.EndButtonImage")));
+            this.textBoxRouteName.EndButtonSize16ths = 10;
             this.textBoxRouteName.EndButtonVisible = false;
             this.textBoxRouteName.InErrorCondition = false;
             this.textBoxRouteName.Location = new System.Drawing.Point(78, 5);
@@ -316,6 +321,7 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.Size = new System.Drawing.Size(211, 20);
             this.textBoxRouteName.TabIndex = 1;
             this.textBoxRouteName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxRouteName.TextNoChange = "";
             this.textBoxRouteName.WordWrap = true;
             // 
             // labelRouteName

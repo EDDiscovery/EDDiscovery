@@ -121,69 +121,23 @@ namespace EDDiscovery.UserControls
 
         private void extButtonExpeditionPush_Click(object sender, EventArgs e)
         {
-            var req = new UserControlCommonBase.PushStars() { PushTo = PushStars.PushType.Expedition, SystemList = routeSystems, MakeVisible = true, RouteTitle = labelRouteName.Text };
-
-            bool serviced = RequestPanelOperation.Invoke(this, req);
-
-            if (!serviced) // no-one serviced it, so create an expedition tab, and then reissue
-            {
-                DiscoveryForm.SelectTabPage("Expedition", true, false);         // ensure expedition is open
-                RequestPanelOperation.Invoke(this, req);
-            }
+            RouteHelpers.ExpeditionPush(labelRouteName.Text, routeSystems, this, DiscoveryForm);
         }
 
         private void extButtonExpeditionSave_Click(object sender, EventArgs e)
         {
-            string res = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Route Name:".TxID(EDTx.UserControlExpedition_labelRouteName), labelRouteName.Text, 
-                            "Save Expedition".TxID(EDTx.UserControlExpedition_extButtonSave_ToolTip), this.FindForm().Icon, widthboxes:400);
-
-            if (  res != null)
-            {
-                var savedroutes = EliteDangerousCore.DB.SavedRouteClass.GetAllSavedRoutes();
-                var overwriteroute = savedroutes.Where(r => r.Name.Equals(res)).FirstOrDefault();
-
-                if (overwriteroute != null)
-                {
-                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?".T(EDTx.UserControlExpedition_Overwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo) != DialogResult.Yes)
-                        return;
-
-                    overwriteroute.Delete();
-                }
-
-                EliteDangerousCore.DB.SavedRouteClass newrt = new EliteDangerousCore.DB.SavedRouteClass(res);
-
-                foreach( var sys in routeSystems)
-                {
-                    var entry = new EliteDangerousCore.DB.SavedRouteClass.SystemEntry(sys);
-                    newrt.Systems.Add(entry);
-                }
-
-                newrt.Add();
-            }
+            RouteHelpers.ExpeditionSave(this.FindForm(), labelRouteName.Text, routeSystems);
         }
 
         private void cmd3DMap_Click(object sender, EventArgs e)
         {
-            if (routeSystems != null && routeSystems.Any())
-            {
-                float dist;
-                if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
-                    dist = 30;
-
-                DiscoveryForm.Open3DMap(routeSystems.First(), routeSystems);
-            }
-            else
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up, retry".T(EDTx.UserControlRoute_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
-                return;
-            }
+            RouteHelpers.Open3DMap(routeSystems, DiscoveryForm);
         }
 
         private void ExtCheckBoxPermitSystems_Click(object sender, EventArgs e)
         {
             PutSetting(dbPermit, extCheckBoxPermitSystems.Checked);
         }
-
 
         private void textBox_Clicked(object sender, EventArgs e)
         {
@@ -277,6 +231,7 @@ namespace EDDiscovery.UserControls
             textBox_FromX.Enabled = textBox_FromY.Enabled = textBox_FromZ.Enabled =
             textBox_ToX.Enabled = textBox_ToY.Enabled = textBox_ToZ.Enabled =
             edsmSpanshButton.Enabled =
+            numberBoxIntCargo.Enabled = 
             textBox_Range.Enabled = checkBox_FsdBoost.Enabled = notcomputing;
         }
 

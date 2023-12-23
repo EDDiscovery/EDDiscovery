@@ -50,6 +50,9 @@
             this.textBoxSystemName = new ExtendedControls.ExtTextBoxAutoComplete();
             this.extButtonFromSpansh = new ExtendedControls.ExtButton();
             this.extButtonFromSpanshFindNames = new ExtendedControls.ExtButton();
+            this.extButtonExpeditionSave = new ExtendedControls.ExtButton();
+            this.extButtonExpeditionPush = new ExtendedControls.ExtButton();
+            this.cmd3DMap = new ExtendedControls.ExtButton();
             this.SuspendLayout();
             // 
             // labelRadMin
@@ -190,9 +193,9 @@
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(287, 158);
+            this.buttonExtExcel.Location = new System.Drawing.Point(283, 158);
             this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 36;
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
@@ -431,10 +434,45 @@
             this.extButtonFromSpanshFindNames.UseVisualStyleBackColor = true;
             this.extButtonFromSpanshFindNames.Click += new System.EventHandler(this.extButtonFromSpanshFindNames_Click);
             // 
+            // extButtonExpeditionSave
+            // 
+            this.extButtonExpeditionSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonExpeditionSave.Image = global::EDDiscovery.Icons.Controls.Save;
+            this.extButtonExpeditionSave.Location = new System.Drawing.Point(352, 158);
+            this.extButtonExpeditionSave.Name = "extButtonExpeditionSave";
+            this.extButtonExpeditionSave.Size = new System.Drawing.Size(28, 28);
+            this.extButtonExpeditionSave.TabIndex = 62;
+            this.extButtonExpeditionSave.UseVisualStyleBackColor = true;
+            this.extButtonExpeditionSave.Click += new System.EventHandler(this.extButtonExpeditionSave_Click);
+            // 
+            // extButtonExpeditionPush
+            // 
+            this.extButtonExpeditionPush.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonExpeditionPush.Image = global::EDDiscovery.Icons.Controls.expedition;
+            this.extButtonExpeditionPush.Location = new System.Drawing.Point(317, 158);
+            this.extButtonExpeditionPush.Name = "extButtonExpeditionPush";
+            this.extButtonExpeditionPush.Size = new System.Drawing.Size(28, 28);
+            this.extButtonExpeditionPush.TabIndex = 61;
+            this.extButtonExpeditionPush.UseVisualStyleBackColor = true;
+            this.extButtonExpeditionPush.Click += new System.EventHandler(this.extButtonExpeditionPush_Click);
+            // 
+            // cmd3DMap
+            // 
+            this.cmd3DMap.Image = global::EDDiscovery.Icons.Controls.Map3D;
+            this.cmd3DMap.Location = new System.Drawing.Point(250, 158);
+            this.cmd3DMap.Name = "cmd3DMap";
+            this.cmd3DMap.Size = new System.Drawing.Size(28, 28);
+            this.cmd3DMap.TabIndex = 60;
+            this.cmd3DMap.UseVisualStyleBackColor = true;
+            this.cmd3DMap.Click += new System.EventHandler(this.cmd3DMap_Click);
+            // 
             // FindSystemsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.extButtonExpeditionSave);
+            this.Controls.Add(this.extButtonExpeditionPush);
+            this.Controls.Add(this.cmd3DMap);
             this.Controls.Add(this.extCheckBoxExcludeVisitedSystems);
             this.Controls.Add(this.checkBoxCustomCube);
             this.Controls.Add(this.extButtonFromSpanshFindNames);
@@ -486,5 +524,8 @@
         private ExtendedControls.ExtCheckBox extCheckBoxExcludeVisitedSystems;
         private ExtendedControls.ExtButton extButtonFromSpansh;
         private ExtendedControls.ExtButton extButtonFromSpanshFindNames;
+        private ExtendedControls.ExtButton extButtonExpeditionSave;
+        private ExtendedControls.ExtButton extButtonExpeditionPush;
+        private ExtendedControls.ExtButton cmd3DMap;
     }
 }

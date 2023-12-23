@@ -49,6 +49,10 @@ namespace EDDiscovery.UserControls
             tabStrip.OnPostCreateTab += (tab, ctrl, si) =>
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
+                
+                if (ctrl is SearchStars)                            // this one we need to tell where this is
+                    ((SearchStars)ctrl).SearchUC = this;
+
                 uccb.Init(DiscoveryForm, DisplayNumber);
                 ExtendedControls.Theme.Current.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
                 uccb.LoadLayout();

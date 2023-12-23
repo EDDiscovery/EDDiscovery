@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -21,6 +20,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace EDDiscovery.UserControls
 {
@@ -29,6 +29,10 @@ namespace EDDiscovery.UserControls
 
     public partial class SearchStars : UserControlCommonBase
     {
+        public UserControlCommonBase SearchUC { get; set; }     // set by user control search so we have ref to the main uccb
+
+        private List<ISystem> routeSystems;
+
         #region Init
 
         public SearchStars()
@@ -50,6 +54,24 @@ namespace EDDiscovery.UserControls
 
             findSystemsUserControl.Init(db, true, DiscoveryForm);
             findSystemsUserControl.Excel += () => { dataGridView.Excel(dataGridView.ColumnCount); };
+            findSystemsUserControl.Map3D += () => { if (routeSystems?.Count > 0) RouteHelpers.Open3DMap(routeSystems, DiscoveryForm); };
+            findSystemsUserControl.SaveExpedition += () => 
+            {
+                if (routeSystems?.Count > 0)
+                {
+                    string name = routeSystems[0].Name + " - " + routeSystems.Last().Name;
+                    RouteHelpers.ExpeditionSave(this.FindForm(), name, routeSystems);
+                }
+            };
+            findSystemsUserControl.SendToExpedition += () =>
+            {
+                if (routeSystems?.Count > 0)
+                {
+                    string name = routeSystems[0].Name + " - " + routeSystems.Last().Name;
+                    RouteHelpers.ExpeditionPush(name, routeSystems, SearchUC, DiscoveryForm);       // we need to give it the search uc as the thing to push the request thru
+                }
+            };
+
             findSystemsUserControl.ReturnSystems += StarsFound;
 
             var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, 
@@ -89,6 +111,7 @@ namespace EDDiscovery.UserControls
                 ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
                 bool centresort = false;
 
+                routeSystems = new List<ISystem>();
                 int index = 1;
                 foreach (Tuple<ISystem, double> ret in systems)
                 {
@@ -105,6 +128,8 @@ namespace EDDiscovery.UserControls
                     var rowindex = dataGridView.Rows.Add(rowobj);
                     dataGridView.Rows[rowindex].Tag = sys;
                     centresort |= ret.Item2 >= 0;
+
+                    routeSystems.Add(sys);
                     index++;
                 }
 

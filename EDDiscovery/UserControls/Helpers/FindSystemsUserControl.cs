@@ -29,7 +29,11 @@ namespace EDDiscovery.UserControls
     {
         public Action<List<Tuple<ISystem, double>>> ReturnSystems;      // return may be null
 
-        public Action Excel;                                            // excel pressed
+        public Action Excel;                                            // button actions
+        public Action Map3D;                                            
+        public Action SaveExpedition;                                            
+        public Action SendToExpedition;                                          
+
         UserDatabaseSettingsSaver dbsaver;
         EDDiscoveryForm discoveryform;
 
@@ -47,7 +51,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public void Init(UserDatabaseSettingsSaver db, bool showexcel , EDDiscoveryForm disc )
+        public void Init(UserDatabaseSettingsSaver db, bool showexports , EDDiscoveryForm disc )
         {
             dbsaver = db;
             discoveryform = disc;
@@ -78,7 +82,8 @@ namespace EDDiscovery.UserControls
             numberBoxMinRadius.SetComparitor(numberBoxMaxRadius, -2);     // need to do this after values are set
             numberBoxMaxRadius.SetComparitor(numberBoxMinRadius, 2);
 
-            buttonExtExcel.Visible = showexcel;
+            cmd3DMap.Visible = extButtonExpeditionPush.Visible = extButtonExpeditionSave.Visible = 
+            buttonExtExcel.Visible = showexports;
 
             ValidateEnable();
 
@@ -87,6 +92,7 @@ namespace EDDiscovery.UserControls
                 EDTx.FindSystemsUserControl_extButtonFromSpansh,EDTx.FindSystemsUserControl_extButtonFromSpanshFindNames,
                 EDTx.FindSystemsUserControl_buttonExtEDSM, EDTx.FindSystemsUserControl_labelRadMax, EDTx.FindSystemsUserControl_labelRadMin, 
                 EDTx.FindSystemsUserControl_labelFilter };
+          
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ });
         }
 
@@ -324,11 +330,6 @@ namespace EDDiscovery.UserControls
         }
 
 
-        private void buttonExtExcel_Click(object sender, EventArgs e)
-        {
-            Excel?.Invoke();
-        }
-
         bool ignoresystemnamechange = false;
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
@@ -393,6 +394,24 @@ namespace EDDiscovery.UserControls
 
         }
 
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            Excel?.Invoke();
+        }
 
+        private void extButtonExpeditionSave_Click(object sender, EventArgs e)
+        {
+            SaveExpedition?.Invoke();
+        }
+
+        private void extButtonExpeditionPush_Click(object sender, EventArgs e)
+        {
+            SendToExpedition?.Invoke();
+        }
+
+        private void cmd3DMap_Click(object sender, EventArgs e)
+        {
+            Map3D?.Invoke();
+        }
     }
 }

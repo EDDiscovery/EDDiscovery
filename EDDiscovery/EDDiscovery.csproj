@@ -282,6 +282,7 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\RouteHelpers.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayBodyFilters.cs">
       <SubType>Component</SubType>
     </Compile>

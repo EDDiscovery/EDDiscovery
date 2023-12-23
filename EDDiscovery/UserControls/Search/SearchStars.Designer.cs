@@ -64,9 +64,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 185);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 189);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 531);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 527);
             this.dataViewScrollerPanel.TabIndex = 7;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 531);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 527);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(788, 531);
+            this.dataGridView.Size = new System.Drawing.Size(788, 527);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
             this.findSystemsUserControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.findSystemsUserControl.Location = new System.Drawing.Point(0, 0);
             this.findSystemsUserControl.Name = "findSystemsUserControl";
-            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 185);
+            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 189);
             this.findSystemsUserControl.TabIndex = 32;
             // 
             // SearchStars
