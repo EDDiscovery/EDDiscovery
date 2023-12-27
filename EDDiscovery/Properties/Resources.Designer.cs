@@ -74,13 +74,13 @@ namespace EDDiscovery.Properties {
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
-        ///Eahlstan, Fito-wolf, Dr.Smile, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+        ///Eahlstan, Jugom, Fito-wolf, Dr.Smile, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Program Concept by:
         ///Cmdr Finwen  (Robert Wahlström)
         ///
         ///Previous Contributors:
-        ///Merovech, Bravada Cadela [rest of string was truncated]&quot;;.
+        ///Merovech, Bravada [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Credits {
             get {
@@ -146,32 +146,6 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Help for 3D star Map.
-        ///
-        ///Keyboard:
-        ///	WASD	Move forward, left, back, right 
-        ///	Arrow Pad	Move forward, left, back, right 
-        ///	RF	Move up and down
-        ///	Shift	Increase moving speed by 2, used in conjunction with above keys
-        ///	+ or Z	Zoom in
-        ///	- or X	Zoom out
-        ///	1 to 9	Zoom in (1) to out (9) in increments
-        ///	Keypad 4	Yaw left
-        ///	Keypad 6	Yaw right
-        ///	Keypad 8	Pitch up
-        ///	Keypad 5 or 2	Pitch down
-        ///	Q or Keypad 7	Roll left
-        ///	E or Keypad 9	Roll right
-        ///	F1 ?	This help
-        ///	F3 F4	Increase or decrease the light year limit for displ [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string maphelp3d {
-            get {
-                return ResourceManager.GetString("maphelp3d", resourceCulture);
             }
         }
         
@@ -329,7 +303,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://www.youtube.com/embed/y1XTqBGDdgo.
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/1QlA2V_U_DY.
         /// </summary>
         public static string URLReleaseVideo {
             get {

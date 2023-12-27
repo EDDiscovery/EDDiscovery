@@ -196,6 +196,7 @@ namespace EDDiscovery.UserControls
                 if ( ok )
                 {
                     var list = MaterialCommodityMicroResourceType.Get(x => x.MaterialGroup == matgroup);
+                  //  System.Diagnostics.Debug.WriteLine($"\nMTrader {matgroup} = {String.Join(",",list.Select(x=>x.FDName))}");
                     mcl.Add(new Tuple<MaterialCommodityMicroResourceType.MaterialGroupType, MaterialCommodityMicroResourceType[]>(matgroup,list));
                     mattxgroupnames[matgroup] = list[0].TranslatedMaterialGroup;
                 }

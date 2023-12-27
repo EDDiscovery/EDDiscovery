@@ -86,6 +86,8 @@ namespace EDDiscovery.UserControls
             buttonExtExcel.Visible = showexports;
 
             ValidateEnable();
+            
+            // Dec 23 TBD missing tooltips on some of these will fix up later in next version
 
             var enumlist = new Enum[] { EDTx.FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, EDTx.FindSystemsUserControl_checkBoxCustomCube, 
                 EDTx.FindSystemsUserControl_buttonExtNames, EDTx.FindSystemsUserControl_buttonExtVisited, EDTx.FindSystemsUserControl_buttonExtDB,

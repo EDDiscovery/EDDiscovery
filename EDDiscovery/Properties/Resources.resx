@@ -117,10 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="maphelp3d" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\3dmaphelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="URLEDHomepage" xml:space="preserve">
     <value>https://www.elitedangerous.com/</value>
   </data>
@@ -148,6 +144,7 @@
   <data name="URLGithubDownload" xml:space="preserve">
     <value>https://api.github.com/repos/EDDiscovery/EDDiscovery/</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="edlogo_3mo_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\edlogo_3mo_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -188,7 +185,7 @@
     <value>https://www.youtube.com</value>
   </data>
   <data name="URLReleaseVideo" xml:space="preserve">
-    <value>https://www.youtube.com/embed/y1XTqBGDdgo</value>
+    <value>https://www.youtube.com/embed/1QlA2V_U_DY</value>
   </data>
   <data name="EDD_Licence_Mono" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EDD Licence Mono.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

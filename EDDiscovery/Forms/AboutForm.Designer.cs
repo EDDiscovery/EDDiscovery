@@ -70,11 +70,11 @@ namespace EDDiscovery.Forms
             this.panelLeft = new System.Windows.Forms.Panel();
             this.panelWebBrowser = new System.Windows.Forms.Panel();
             this.panelName = new System.Windows.Forms.Panel();
+            this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.panelRight = new System.Windows.Forms.Panel();
             this.panelDevs = new System.Windows.Forms.Panel();
             this.panelDevsSurround = new System.Windows.Forms.Panel();
             this.extTextBoxDevs = new ExtendedControls.ExtTextBox();
-            this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.panelLinksBR.SuspendLayout();
             this.flowLayoutPanelLabels.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
@@ -118,6 +118,7 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxLicense.BorderColorScaling = 0.5F;
             this.textBoxLicense.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxLicense.DetectUrls = true;
             this.textBoxLicense.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBoxLicense.HideScrollBar = true;
             this.textBoxLicense.Location = new System.Drawing.Point(0, 64);
@@ -415,6 +416,20 @@ namespace EDDiscovery.Forms
             this.panelName.Size = new System.Drawing.Size(682, 64);
             this.panelName.TabIndex = 2;
             // 
+            // labelNoAffiliation
+            // 
+            this.labelNoAffiliation.AutoSize = true;
+            this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelNoAffiliation.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelNoAffiliation.Location = new System.Drawing.Point(326, 0);
+            this.labelNoAffiliation.Margin = new System.Windows.Forms.Padding(0);
+            this.labelNoAffiliation.Name = "labelNoAffiliation";
+            this.labelNoAffiliation.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.labelNoAffiliation.Size = new System.Drawing.Size(198, 44);
+            this.labelNoAffiliation.TabIndex = 18;
+            this.labelNoAffiliation.Text = "(C) 2015-2023 \r\nRobby && EDDiscovery Team";
+            this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // panelRight
             // 
             this.panelRight.Controls.Add(this.panelLinksBR);
@@ -460,6 +475,7 @@ namespace EDDiscovery.Forms
             this.extTextBoxDevs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extTextBoxDevs.EndButtonEnable = true;
             this.extTextBoxDevs.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxDevs.EndButtonImage")));
+            this.extTextBoxDevs.EndButtonSize16ths = 10;
             this.extTextBoxDevs.EndButtonVisible = false;
             this.extTextBoxDevs.InErrorCondition = false;
             this.extTextBoxDevs.Location = new System.Drawing.Point(5, 5);
@@ -472,21 +488,8 @@ namespace EDDiscovery.Forms
             this.extTextBoxDevs.Size = new System.Drawing.Size(290, 598);
             this.extTextBoxDevs.TabIndex = 4;
             this.extTextBoxDevs.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxDevs.TextNoChange = "";
             this.extTextBoxDevs.WordWrap = true;
-            // 
-            // labelNoAffiliation
-            // 
-            this.labelNoAffiliation.AutoSize = true;
-            this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelNoAffiliation.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNoAffiliation.Location = new System.Drawing.Point(326, 0);
-            this.labelNoAffiliation.Margin = new System.Windows.Forms.Padding(0);
-            this.labelNoAffiliation.Name = "labelNoAffiliation";
-            this.labelNoAffiliation.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
-            this.labelNoAffiliation.Size = new System.Drawing.Size(198, 44);
-            this.labelNoAffiliation.TabIndex = 18;
-            this.labelNoAffiliation.Text = "(C) 2015-2023 \r\nRobby && EDDiscovery Team";
-            this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // AboutForm
             // 
