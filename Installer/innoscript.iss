@@ -4,7 +4,7 @@
 #ifndef MyAppVersion
 #define MyAppVersion "12.1.710"
 #endif
-#define MyAppPublisher "EDDiscovery Team (Robby)"
+#define MyAppPublisher "Robby & EDDiscovery Team"
 #define MyAppURL "https://github.com/EDDiscovery"
 #define MyAppExeName "EDDiscovery.exe"
 
@@ -28,7 +28,7 @@ DefaultGroupName={#MyAppName}
 DisableDirPage=no
 DisableWelcomePage=no
 DirExistsWarning=auto
-; LicenseFile="{#SourcePath}\..\EDDiscovery\Resources\EDD License.rtf"
+LicenseFile="{#SourcePath}\..\EDDiscovery\Resources\EDD License.rtf"
 OutputBaseFilename={#MyAppName}-{#MyAppVersion}
 OutputDir="{#SourcePath}\installers"
 SolidCompression=yes
