@@ -408,7 +408,7 @@ namespace EDDiscovery
 
         public void ReportDownloadProgress(long count, double rate)
         {
-            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, $"Downloaded {count/1024:N0} KB at {rate/1024/1024:N2} MBbits/sec"));
+            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, $"Downloaded {count/1024:N0} KB at {rate/1024/1024:N2} MBits/sec"));
         }
 
     }
