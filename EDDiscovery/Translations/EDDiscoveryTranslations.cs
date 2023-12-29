@@ -747,7 +747,6 @@ namespace EDDiscovery
         UserControlTravelGrid_runActionsAcrossSelectionToolSpeechStripMenuItem, // ToolStrip control 'Run actions across selection for speech debugging (Debug)'
         UserControlTravelGrid_runSelectionThroughInaraSystemToolStripMenuItem, // ToolStrip control 'Run selection through Inara System (Debug)'
         UserControlTravelGrid_runEntryThroughProfileSystemToolStripMenuItem, // ToolStrip control 'Run entry through Profile System (Debug)'
-        UserControlTravelGrid_runSelectionThroughIGAUDebugToolStripMenuItem, // ToolStrip control 'Run selection through IGAU (Debug)'
         UserControlTravelGrid_runSelectionThroughEDDNThruTestToolStripMenuItem, // ToolStrip control 'Run selection through EDDN Test Server (Debug)'
         UserControlTravelGrid_runSelectionThroughEDAstroDebugToolStripMenuItem, // ToolStrip control 'Run selection through EDAstro (Debug)'
         UserControlTravelGrid_sendJournalEntriesToDLLsToolStripMenuItem, // ToolStrip control 'Send selection to DLLs (Debug)'

@@ -149,11 +149,6 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
             }
 
-            if (EDCommander.Current.SyncToIGAU)
-            {
-                EliteDangerousCore.IGAU.IGAUSync.NewEvent(LogLine, he);
-            }
-
             if (EDCommander.Current.SyncToEDAstro)
             {
                 EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { he });

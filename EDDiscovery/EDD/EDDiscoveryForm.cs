@@ -70,7 +70,6 @@ namespace EDDiscovery
         public event Action OnPanelAdded;                               // panel was added by a user DLL
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM journal sync has completed 
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
-        public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
                                                                         // theme is changing/ then has been changed by settings, hook if you have some UI which needs refreshing due to it. 
         public event Action OnThemeChanging;                            // Note you won't get it on startup because theme is applied to form before tabs/panels are setup. Before themeing
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
@@ -365,16 +364,6 @@ namespace EDDiscovery
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
                     OnEDDNSyncComplete?.Invoke(count);
                     ActionRun(Actions.ActionEventEDList.onEDDNSync, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
-                });
-            };
-
-            EliteDangerousCore.IGAU.IGAUSync.SentEvents = (count) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
-            {
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
-                    OnIGAUSyncComplete?.Invoke(count);
-                    ActionRun(Actions.ActionEventEDList.onIGAUSync, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
                 });
             };
 

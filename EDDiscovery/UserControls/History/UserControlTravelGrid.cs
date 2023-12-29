@@ -124,7 +124,6 @@ namespace EDDiscovery.UserControls
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
             runSelectionThroughInaraSystemToolStripMenuItem.Visible =
             runEntryThroughProfileSystemToolStripMenuItem.Visible =
-            runSelectionThroughIGAUDebugToolStripMenuItem.Visible =
             runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
             sendJournalEntriesToDLLsToolStripMenuItem.Visible =
             travelGridInDebugModeToolStripMenuItem.Visible = 
@@ -150,7 +149,7 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlTravelGrid_removeJournalEntryToolStripMenuItem, EDTx.UserControlTravelGrid_runActionsOnThisEntryToolStripMenuItem, 
                 EDTx.UserControlTravelGrid_copyJournalEntryToClipboardToolStripMenuItem, EDTx.UserControlTravelGrid_writeEventInfoToLogDebugToolStripMenuItem, 
                 EDTx.UserControlTravelGrid_runActionsAcrossSelectionToolSpeechStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughInaraSystemToolStripMenuItem, 
-                EDTx.UserControlTravelGrid_runEntryThroughProfileSystemToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughIGAUDebugToolStripMenuItem, 
+                EDTx.UserControlTravelGrid_runEntryThroughProfileSystemToolStripMenuItem,
                 EDTx.UserControlTravelGrid_runSelectionThroughEDDNThruTestToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughEDAstroDebugToolStripMenuItem, 
                 EDTx.UserControlTravelGrid_sendJournalEntriesToDLLsToolStripMenuItem, EDTx.UserControlTravelGrid_showSystemVisitedForeColourToolStripMenuItem,
                 EDTx.UserControlTravelGrid_travelGridInDebugModeToolStripMenuItem };
@@ -1299,14 +1298,6 @@ namespace EDDiscovery.UserControls
         private void runEntryThroughProfileSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DiscoveryForm.CheckActionProfile(rightclickhe);
-        }
-
-        private void runSelectionThroughIGAUDebugToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (rightclickhe != null)
-            {
-                EliteDangerousCore.IGAU.IGAUSync.NewEvent(DiscoveryForm.LogLine, rightclickhe);
-            }
         }
 
         private void runSelectionThroughEDDNDebugNoSendToolStripMenuItem_Click(object sender, EventArgs e)

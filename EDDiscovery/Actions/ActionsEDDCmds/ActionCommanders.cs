@@ -128,7 +128,7 @@ namespace EDDiscovery.Actions
             ap[prefix + "SyncFromEDSM"] = cmdr.SyncFromEdsm.ToStringIntValue();
             ap[prefix + "SyncToEDDN"] = cmdr.SyncToEddn.ToStringIntValue();
             ap[prefix + "SyncToEGO"] = false.ToStringIntValue();
-            ap[prefix + "SyncToIGAU"] = cmdr.SyncToIGAU.ToStringIntValue();
+            ap[prefix + "SyncToIGAU"] = false.ToStringIntValue();   // removed 17.0.1
             ap[prefix + "SyncToINARA"] = cmdr.SyncToInara.ToStringIntValue();
             ap[prefix + "Deleted"] = cmdr.Deleted.ToStringIntValue();
         }

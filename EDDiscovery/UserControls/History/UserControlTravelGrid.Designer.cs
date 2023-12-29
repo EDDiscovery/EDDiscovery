@@ -81,7 +81,6 @@ namespace EDDiscovery.UserControls
             this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runSelectionThroughIGAUDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughEDDNThruTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughEDAstroDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendJournalEntriesToDLLsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -225,6 +224,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSearch.EndButtonEnable = true;
             this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
+            this.textBoxSearch.EndButtonSize16ths = 10;
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
             this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
@@ -238,6 +238,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
             this.textBoxSearch.TabIndex = 1;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSearch.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
@@ -312,7 +313,6 @@ namespace EDDiscovery.UserControls
             this.runActionsAcrossSelectionToolSpeechStripMenuItem,
             this.runSelectionThroughInaraSystemToolStripMenuItem,
             this.runEntryThroughProfileSystemToolStripMenuItem,
-            this.runSelectionThroughIGAUDebugToolStripMenuItem,
             this.runSelectionThroughEDDNThruTestToolStripMenuItem,
             this.runSelectionThroughEDAstroDebugToolStripMenuItem,
             this.sendJournalEntriesToDLLsToolStripMenuItem,
@@ -510,13 +510,6 @@ namespace EDDiscovery.UserControls
             this.runEntryThroughProfileSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.runEntryThroughProfileSystemToolStripMenuItem.Text = "Run entry through Profile System (Debug)";
             this.runEntryThroughProfileSystemToolStripMenuItem.Click += new System.EventHandler(this.runEntryThroughProfileSystemToolStripMenuItem_Click);
-            // 
-            // runSelectionThroughIGAUDebugToolStripMenuItem
-            // 
-            this.runSelectionThroughIGAUDebugToolStripMenuItem.Name = "runSelectionThroughIGAUDebugToolStripMenuItem";
-            this.runSelectionThroughIGAUDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.runSelectionThroughIGAUDebugToolStripMenuItem.Text = "Run selection through IGAU (Debug)";
-            this.runSelectionThroughIGAUDebugToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughIGAUDebugToolStripMenuItem_Click);
             // 
             // runSelectionThroughEDDNThruTestToolStripMenuItem
             // 
@@ -909,7 +902,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem rollUpAfter5ToolStripMenuItem;
         private ExtendedControls.ExtCheckBox extCheckBoxOutlines;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
-        private System.Windows.Forms.ToolStripMenuItem runSelectionThroughIGAUDebugToolStripMenuItem;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDDNThruTestToolStripMenuItem;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
