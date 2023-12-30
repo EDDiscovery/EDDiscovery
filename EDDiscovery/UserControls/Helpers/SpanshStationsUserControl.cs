@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls.Helpers
 
             filters = new ExtButtonWithCheckedIconListBoxGroup[] { extButtonType, extButtonCommoditiesBuy, extButtonCommoditiesSell, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
 
-            var porttype = StationDefinitions.StarportTypes.Values.Distinct().Select(x => new CheckedIconListBoxFormGroup.StandardOption(x,x));
+            var porttype = StationDefinitions.StarportNameTypes.Values.Distinct().Select(x => new CheckedIconListBoxFormGroup.StandardOption(x,x));
             extButtonType.InitAllNoneAllBack(porttype,
                 GetFilter(FilterSettings.Type),
                 (newsetting,ch) => { SetFilter(FilterSettings.Type, newsetting, ch); });
