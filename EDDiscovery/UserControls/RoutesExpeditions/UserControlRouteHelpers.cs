@@ -230,6 +230,7 @@ namespace EDDiscovery.UserControls
             textBox_From.Enabled = textBox_FromName.Enabled = buttonExtTravelFrom.Enabled = buttonTargetFrom.Enabled =
             textBox_FromX.Enabled = textBox_FromY.Enabled = textBox_FromZ.Enabled =
             textBox_ToX.Enabled = textBox_ToY.Enabled = textBox_ToZ.Enabled =
+            extCheckBoxPermitSystems.Enabled =
             edsmSpanshButton.Enabled =
             numberBoxIntCargo.Enabled = 
             textBox_Range.Enabled = checkBox_FsdBoost.Enabled = notcomputing;
