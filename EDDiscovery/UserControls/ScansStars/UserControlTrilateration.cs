@@ -120,14 +120,14 @@ namespace EDDiscovery.UserControls
 
         private void buttonStartNew_Click(object sender, EventArgs e)
         {
-            HistoryEntry he = DiscoveryForm.History.GetLastFSDOnly();
+            HistoryEntry he = DiscoveryForm.History.GetLastLocation();
             if (he != null)
                 Set(he.System);
         }
 
         private void toolStripButtonSector_Click(object sender, EventArgs e)
         {
-            HistoryEntry he = DiscoveryForm.History.GetLastFSDOnly();
+            HistoryEntry he = DiscoveryForm.History.GetLastLocation();
             if (he != null)
                 Set(he.System);
         }
@@ -399,7 +399,7 @@ namespace EDDiscovery.UserControls
         {
             try
             {
-                HistoryEntry he = DiscoveryForm.History.GetLastFSDOnly();
+                HistoryEntry he = DiscoveryForm.History.GetLastLocation();
 
                 if (he != null && !he.System.Name.Equals(targetsystem.Name, StringComparison.OrdinalIgnoreCase))
                 {
