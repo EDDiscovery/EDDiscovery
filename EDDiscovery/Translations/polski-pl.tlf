@@ -1,23 +1,23 @@
-﻿Warning: "Warning" => "Uwaga"
-Today: "Today" => "Dzisiaj"
-t24h: "24h" => "24 godz."
-t7days: "7 days" => "7 Dni"
-All: "All" => "Wszystko"
-OK: "OK" @
-Cancel: "Cancel" => "Anuluj"
-Delete: "Delete" => "Usuń"
-Campaign: "Campaign" => "Kampania"
-NoScan: "No Scan" => "Brak Skanu"
-GameTime: "Game Time" => "Czas Gry"
-Time: "Time" => "Czas"
-NoData: "No Data" => "Brak Danych"
-None: "None" => "Nic"
-on: "on" => "Wł."
-Off: "Off" => "Wył."
-Unknown: "Unknown" => "Nieznane"
-Information: "Information" => "Informacja"
-NoPos: "No Pos" => "Brak Pozycji"
-RemoveAll: "Remove All" @
+﻿.Warning: "Warning" => "Uwaga"
+.Today: "Today" => "Dzisiaj"
+.t24h: "24h" => "24 godz."
+.t7days: "7 days" => "7 Dni"
+.All: "All" => "Wszystko"
+.OK: "OK" @
+.Cancel: "Cancel" => "Anuluj"
+.Delete: "Delete" => "Usuń"
+.Campaign: "Campaign" => "Kampania"
+.NoScan: "No Scan" => "Brak Skanu"
+.GameTime: "Game Time" => "Czas Gry"
+.Time: "Time" => "Czas"
+.NoData: "No Data" => "Brak Danych"
+.None: "None" => "Nic"
+.on: "on" => "Wł."
+.Off: "Off" => "Wył."
+.Unknown: "Unknown" => "Nieznane"
+.Information: "Information" => "Informacja"
+.NoPos: "No Pos" => "Brak Pozycji"
+.RemoveAll: "Remove All" @
 
 SECTION StartUp
 
@@ -29,7 +29,7 @@ SECTION DataGridView
 
 SECTION SafeModeForm
 
-SafeModeForm: "EDDiscovery Safe Mode" => "Tryb Bezpieczny EDDiscovery"
+.SafeModeForm: "EDDiscovery Safe Mode" => "Tryb Bezpieczny EDDiscovery"
 .buttonCancel: "Cancel" => "Anuluj"
 .buttonRun: "Run" => "Uruchom program"
 .buttonRemoveJournals: "Remove Journals" @
@@ -381,7 +381,7 @@ SECTION AddOnManagerForm
 
 SECTION ImportExportForm
 
-ImportExportForm: "Export data" => "Eksport"
+.ImportExportForm: "Export data" => "Eksport"
 .buttonExport: "Export" => "Eksportuj"
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
@@ -406,7 +406,7 @@ SECTION Form2DMap
 
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "Galaxy Sector Select" => "Wybór Sektora Galaktyki"
+.GalaxySectorSelect: "Galaxy Sector Select" => "Wybór Sektora Galaktyki"
 .buttonExtSet: "Set" => "Ustaw"
 .labelSectorName: "Sector" => "Sektor"
 .Custom: "Custom" => "Niestandardowe"
@@ -428,13 +428,13 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Wybór Sektora Galaktyki"
 
 SECTION MoveToCommander
 
-MoveToCommander: "Move To Commander" => "Przenieś do Dowódcy"
+.MoveToCommander: "Move To Commander" => "Przenieś do Dowódcy"
 .buttonTransfer: "Transfer" => "Przenieś"
 .label1: "Move selected history to commander." => "Przenieś zaznaczoną historię do Dowódcy."
 
 SECTION NewReleaseForm
 
-NewReleaseForm: "EDDiscovery Release" => "Wydanie EDDiscovery"
+.NewReleaseForm: "EDDiscovery Release" => "Wydanie EDDiscovery"
 .labelName: "Name" => "Nazwa"
 .btnClose: "&Close" => "&Zamknij"
 .labelURL: "GitHub URL" => "URL GitHub"
@@ -446,7 +446,7 @@ NewReleaseForm: "EDDiscovery Release" => "Wydanie EDDiscovery"
 
 SECTION ProfileEditor
 
-ProfileEditor: "ProfileEditor" => "Edytor Profili"
+.ProfileEditor: "ProfileEditor" => "Edytor Profili"
 .buttonExtGlobals: "Globals" => "Dane Globalne"
 .Custom: "Custom" => "Niestandardowe"
 .Trigger: "Trigger" => "Wyzwalacz"
@@ -458,7 +458,7 @@ ProfileEditor: "ProfileEditor" => "Edytor Profili"
 
 SECTION SetNoteForm
 
-SetNoteForm: "Set Note" => "Ustaw Notatkę"
+.SetNoteForm: "Set Note" => "Ustaw Notatkę"
 .labelTTimestamp: "Timestamp:" => "Datownik: "
 .buttonSave: "Save" => "Zapisz"
 .labelTSystem: "System:" => "Układ: "
@@ -488,7 +488,7 @@ SECTION DataGridViewDialogs
 
 SECTION KeyForm
 
-KeyForm: "Define Key Sequence" => "Zdefiniuj Sekwencję Klawiszy"
+.KeyForm: "Define Key Sequence" => "Zdefiniuj Sekwencję Klawiszy"
 .radioButtonUp: "Up" => "Góra"
 .radioButtonDown: "Down" => "Dół"
 .radioButtonPress: "Press" => "Naciśnięcie"
@@ -535,7 +535,7 @@ SECTION CommanderForm
 
 SECTION SpeechConfigure
 
-SpeechConfigure: "Configure Speech" @
+.SpeechConfigure: "Configure Speech" @
 .Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
 .buttonExtTest: "Test" @
 .buttonExtDevice: "Device" @
@@ -552,7 +552,7 @@ SpeechConfigure: "Configure Speech" @
 
 SECTION WaveConfigureDialog
 
-WaveConfigureDialog: "Configure Wave" @
+.WaveConfigureDialog: "Configure Wave" @
 .buttonExtDevice: "Device" @
 .labelStartTrigger: "Start Trigger" @
 .labelEndTrigger: "End Trigger" @
@@ -566,7 +566,7 @@ WaveConfigureDialog: "Configure Wave" @
 
 SECTION SoundEffectsDialog
 
-SoundEffectsDialog: "Sound Effects" @
+.SoundEffectsDialog: "Sound Effects" @
 .labelEcho: "Echo" @
 .buttonExtTest: "Test" @
 .labelEchoMix: "Mix" @
@@ -600,7 +600,7 @@ SoundEffectsDialog: "Sound Effects" @
 
 SECTION AudioDeviceConfigure
 
-AudioDeviceConfigure: "Audio Device Select" @
+.AudioDeviceConfigure: "Audio Device Select" @
 .labelText: "Select Device" @
 
 SECTION ActionPackEditPackForm
@@ -610,7 +610,7 @@ SECTION ActionPackEditPackForm
 
 SECTION ActionProgramEditForm
 
-ActionProgramEditForm: "Action Program" @
+.ActionProgramEditForm: "Action Program" @
 .labelName: "Name:" @
 .buttonExtDisk: "As File" @
 .buttonExtLoad: "Load" @

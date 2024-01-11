@@ -1,23 +1,23 @@
-﻿Warning: "Warning" => "警告"
-Today: "Today" => "今天"
-t24h: "24h" => "24小时"
-t7days: "7 days" => "7天"
-All: "All" => "全部"
-OK: "OK" => "确认"
-Cancel: "Cancel" => "取消"
-Delete: "Delete" => "删除"
-Campaign: "Campaign" => "战役"
-NoScan: "No Scan" => "无扫描"
-GameTime: "Game Time" => "游戏事件"
-Time: "Time" => "时间"
-NoData: "No Data" => "无数据"
-None: "None" => "无"
-on: "on" => "在"
-Off: "Off" => "关闭"
-Unknown: "Unknown" => "未知"
-Information: "Information" => "提示"
-NoPos: "No Pos" => "无坐标"
-RemoveAll: "Remove All" @
+﻿.Warning: "Warning" => "警告"
+.Today: "Today" => "今天"
+.t24h: "24h" => "24小时"
+.t7days: "7 days" => "7天"
+.All: "All" => "全部"
+.OK: "OK" => "确认"
+.Cancel: "Cancel" => "取消"
+.Delete: "Delete" => "删除"
+.Campaign: "Campaign" => "战役"
+.NoScan: "No Scan" => "无扫描"
+.GameTime: "Game Time" => "游戏事件"
+.Time: "Time" => "时间"
+.NoData: "No Data" => "无数据"
+.None: "None" => "无"
+.on: "on" => "在"
+.Off: "Off" => "关闭"
+.Unknown: "Unknown" => "未知"
+.Information: "Information" => "提示"
+.NoPos: "No Pos" => "无坐标"
+.RemoveAll: "Remove All" @
 
 SECTION StartUp
 
@@ -29,7 +29,7 @@ SECTION DataGridView
 
 SECTION SafeModeForm
 
-SafeModeForm: "EDDiscovery Safe Mode" @
+.SafeModeForm: "EDDiscovery Safe Mode" @
 .buttonCancel: "Cancel" @
 .buttonRun: "Run" @
 .buttonRemoveJournals: "Remove Journals" @
@@ -381,7 +381,7 @@ SECTION AddOnManagerForm
 
 SECTION ImportExportForm
 
-ImportExportForm: "Export data" => "导出"
+.ImportExportForm: "Export data" => "导出"
 .buttonExport: "Export" => "导出"
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
@@ -406,7 +406,7 @@ SECTION Form2DMap
 
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星域"
+.GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星域"
 .buttonExtSet: "Set" => "保存"
 .labelSectorName: "Sector" => "星域"
 .Custom: "Custom" => "自定义"
@@ -428,13 +428,13 @@ GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星
 
 SECTION MoveToCommander
 
-MoveToCommander: "Move To Commander" => "转移至指挥官..."
+.MoveToCommander: "Move To Commander" => "转移至指挥官..."
 .buttonTransfer: "Transfer" => "转移"
 .label1: "Move selected history to commander." => "将选中的航行记录转移到另一位指挥官那里。"
 
 SECTION NewReleaseForm
 
-NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Version"
+.NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Version"
 .labelName: "Name" => "名称"
 .btnClose: "&Close" => "关闭(&C)"
 .labelURL: "GitHub URL" => "Github 链接"
@@ -446,7 +446,7 @@ NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Version"
 
 SECTION ProfileEditor
 
-ProfileEditor: "ProfileEditor" => "配置编辑器"
+.ProfileEditor: "ProfileEditor" => "配置编辑器"
 .buttonExtGlobals: "Globals" => "全局设定"
 .Custom: "Custom" => "自定义"
 .Trigger: "Trigger" => "触发器"
@@ -458,7 +458,7 @@ ProfileEditor: "ProfileEditor" => "配置编辑器"
 
 SECTION SetNoteForm
 
-SetNoteForm: "Set Note" => "创建笔记"
+.SetNoteForm: "Set Note" => "创建笔记"
 .labelTTimestamp: "Timestamp:" => "时间："
 .buttonSave: "Save" => "保存"
 .labelTSystem: "System:" => "星系："
@@ -535,7 +535,7 @@ SECTION CommanderForm
 
 SECTION SpeechConfigure
 
-SpeechConfigure: "Configure Speech" @
+.SpeechConfigure: "Configure Speech" @
 .Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
 .buttonExtTest: "Test" @
 .buttonExtDevice: "Device" @
@@ -552,7 +552,7 @@ SpeechConfigure: "Configure Speech" @
 
 SECTION WaveConfigureDialog
 
-WaveConfigureDialog: "Configure Wave" @
+.WaveConfigureDialog: "Configure Wave" @
 .buttonExtDevice: "Device" @
 .labelStartTrigger: "Start Trigger" @
 .labelEndTrigger: "End Trigger" @
@@ -566,7 +566,7 @@ WaveConfigureDialog: "Configure Wave" @
 
 SECTION SoundEffectsDialog
 
-SoundEffectsDialog: "Sound Effects" @
+.SoundEffectsDialog: "Sound Effects" @
 .labelEcho: "Echo" @
 .buttonExtTest: "Test" @
 .labelEchoMix: "Mix" @
@@ -600,7 +600,7 @@ SoundEffectsDialog: "Sound Effects" @
 
 SECTION AudioDeviceConfigure
 
-AudioDeviceConfigure: "Audio Device Select" @
+.AudioDeviceConfigure: "Audio Device Select" @
 .labelText: "Select Device" @
 
 SECTION ActionPackEditPackForm
@@ -610,7 +610,7 @@ SECTION ActionPackEditPackForm
 
 SECTION ActionProgramEditForm
 
-ActionProgramEditForm: "Action Program" @
+.ActionProgramEditForm: "Action Program" @
 .labelName: "Name:" @
 .buttonExtDisk: "As File" @
 .buttonExtLoad: "Load" @

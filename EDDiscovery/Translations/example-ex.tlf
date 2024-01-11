@@ -1,33 +1,35 @@
-﻿Warning: "Warning" @
-Today: "Today" @
-t24h: "24h" @
-t7days: "7 days" @
-All: "All" @
-OK: "OK" @
-Cancel: "Cancel" @
-Delete: "Delete" @
-Campaign: "Campaign" @
-NoScan: "No Scan" @
-GameTime: "Game Time" @
-Time: "Time" @
-NoData: "No Data" @
-None: "None" @
-on: "on" @
-Off: "Off" @
-Unknown: "Unknown" @
-Information: "Information" @
-NoPos: "No Pos" @
-RemoveAll : "Remove All" @
+﻿.Warning: "Warning" @
+.Today: "Today" @
+.t24h: "24h" @
+.t7days: "7 days" @
+.All: "All" @
+.OK: "OK" @
+.Cancel: "Cancel" @
+.Delete: "Delete" @
+.Campaign: "Campaign" @
+.NoScan: "No Scan" @
+.GameTime: "Game Time" @
+.Time: "Time" @
+.NoData: "No Data" @
+.None: "None" @
+.on: "on" @
+.Off: "Off" @
+.Unknown: "Unknown" @
+.Information: "Information" @
+.NoPos: "No Pos" @
+.RemoveAll : "Remove All" @
 
 SECTION StartUp
+
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
 
 SECTION DataGridView
+
 .WordWrap: "Word Wrap (Override)" @
 
 SECTION SafeModeForm
 
-SafeModeForm: "EDDiscovery Safe Mode" @
+.SafeModeForm: "EDDiscovery Safe Mode" @
 .buttonCancel: "Cancel" @
 .buttonRun: "Run" @
 .buttonRemoveJournals: "Remove Journals" @
@@ -44,6 +46,7 @@ SafeModeForm: "EDDiscovery Safe Mode" @
 .buttonResetTheme: "Reset Theme" @
 
 SECTION InfoForm
+
 .buttonAcknowledge: "Acknowledge" @
 
 SECTION PopOutInfo
@@ -380,7 +383,7 @@ SECTION AddOnManagerForm
 
 SECTION ImportExportForm
 
-ImportExportForm: "Export data" @
+.ImportExportForm: "Export data" @
 .buttonExport: "Export" @
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
@@ -409,7 +412,7 @@ SECTION Form2DMap
 
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "Galaxy Sector Select" @
+.GalaxySectorSelect: "Galaxy Sector Select" @
 .buttonExtSet: "Set" @
 .labelSectorName: "Sector" @
 .Custom: "Custom" @
@@ -431,7 +434,7 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 
 SECTION MoveToCommander
 
-MoveToCommander: "Move To Commander" @
+.MoveToCommander: "Move To Commander" @
 .buttonTransfer: "Transfer" @
 .label1: "Move selected history to commander." @
 
@@ -449,7 +452,7 @@ NewReleaseForm: "EDDiscovery Release" @
 
 SECTION ProfileEditor
 
-ProfileEditor: "ProfileEditor" @
+.ProfileEditor: "ProfileEditor" @
 .buttonExtGlobals: "Globals" @
 .Custom: "Custom" @
 .Trigger: "Trigger" @
@@ -461,7 +464,7 @@ ProfileEditor: "ProfileEditor" @
 
 SECTION SetNoteForm
 
-SetNoteForm: "Set Note" @
+.SetNoteForm: "Set Note" @
 .labelTTimestamp: "Timestamp:" @
 .buttonSave: "Save" @
 .labelTSystem: "System:" @
@@ -491,23 +494,23 @@ SECTION DataGridViewDialogs
 
 SECTION KeyForm
 
-KeyForm: "Define Key Sequence" @
-KeyForm.radioButtonUp: "Up" @
-KeyForm.radioButtonDown: "Down" @
-KeyForm.radioButtonPress: "Press" @
-KeyForm.checkBoxShift: "Shift" @
-KeyForm.checkBoxCtrl: "Ctrl" @
-KeyForm.checkBoxAlt: "Alt" @
-KeyForm.checkBoxKey: "'Press Key'" @
-KeyForm.labelNextDelay: "Current Delay" @
-KeyForm.labelSelKeys: "Select Key" @
-KeyForm.labelDelay: "Start Delay(ms)" @
-KeyForm.labelSendTo: "Send To" @
-KeyForm.buttonReset: "Reset" @
-KeyForm.labelKeys: "Keys" @
-KeyForm.buttonDelete: "Delete" @
-KeyForm.buttonNext: "Next" @
-KeyForm.buttonTest: "Test" @
+.KeyForm: "Define Key Sequence" @
+.KeyForm.radioButtonUp: "Up" @
+.KeyForm.radioButtonDown: "Down" @
+.KeyForm.radioButtonPress: "Press" @
+.KeyForm.checkBoxShift: "Shift" @
+.KeyForm.checkBoxCtrl: "Ctrl" @
+.KeyForm.checkBoxAlt: "Alt" @
+.KeyForm.checkBoxKey: "'Press Key'" @
+.KeyForm.labelNextDelay: "Current Delay" @
+.KeyForm.labelSelKeys: "Select Key" @
+.KeyForm.labelDelay: "Start Delay(ms)" @
+.KeyForm.labelSendTo: "Send To" @
+.KeyForm.buttonReset: "Reset" @
+.KeyForm.labelKeys: "Keys" @
+.KeyForm.buttonDelete: "Delete" @
+.KeyForm.buttonNext: "Next" @
+.KeyForm.buttonTest: "Test" @
 .PK: "Press Key" @
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
@@ -538,7 +541,7 @@ SECTION CommanderForm
 
 SECTION SpeechConfigure
 
-SpeechConfigure: "Configure Speech" @
+.SpeechConfigure: "Configure Speech" @
 .Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
 .buttonExtTest: "Test" @
 .buttonExtDevice: "Device" @
@@ -554,7 +557,8 @@ SpeechConfigure: "Configure Speech" @
 .checkBoxCustomV: "Override" @
 
 Section WaveConfigureDialog
-WaveConfigureDialog: "Configure Wave" @
+
+.WaveConfigureDialog: "Configure Wave" @
 .buttonExtDevice: "Device" @
 .labelStartTrigger: "Start Trigger" @
 .labelEndTrigger: "End Trigger" @
@@ -567,7 +571,8 @@ WaveConfigureDialog: "Configure Wave" @
 .labelVolume: "Volume" @
 
 Section SoundEffectsDialog
-SoundEffectsDialog: "Sound Effects" @
+
+.SoundEffectsDialog: "Sound Effects" @
 .labelEcho: "Echo" @
 .buttonExtTest: "Test" @
 .labelEchoMix: "Mix" @
@@ -598,17 +603,18 @@ SoundEffectsDialog: "Sound Effects" @
 .labelReverbHFRatio: "HF Ratio" @
 .labelDistortionCentreFreq: "Cent Freq" @
 .labelDistortionFreqWidth: "Freq Width" @
-
-Section AudioDeviceConfigure
-AudioDeviceConfigure: "Audio Device Select" @
+.Section AudioDeviceConfigure
+.AudioDeviceConfigure: "Audio Device Select" @
 .labelText: "Select Device" @
 
 Section ActionPackEditPackForm
+
 .buttonInstallationVars: "Install Parameters" @
 .labelEditProg: "Program" @
 
 Section ActionProgramEditForm
-ActionProgramEditForm : "Action Program" @
+
+.ActionProgramEditForm : "Action Program" @
 .labelName: "Name:" @
 .buttonExtDisk: "As File" @
 .buttonExtLoad: "Load" @
@@ -617,13 +623,15 @@ ActionProgramEditForm : "Action Program" @
 .extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
+
 .ci: "Configuration items for installation - specialist use" @
 .ip: "Input parameters to pass to program on run" @
 .df: "Define Variable:" @
 .cp: "Variables to pass into called program" @
 
-ActionPackVariablesForm.gv: "Global User variables to pass to program on run" @
+SECTION ActionPackVariablesForm
 
+.ActionPackVariablesForm.gv: "Global User variables to pass to program on run" @
 
 include translation-example-uc.tlp
 

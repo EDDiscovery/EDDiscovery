@@ -778,7 +778,7 @@ SECTION UserControlSettings
 .groupBoxCustomScreenShots: "Screenshots conversion" => "Conversión de capturas de pantalla"
 .buttonExtScreenshot: "Configure" => "Configurar"
 .checkBoxCustomEnableScreenshots: "Enable" => "Permitir"
-.groupBoxCustomEDSM: "System DB Control" => ""Control de BD de Sistemas"
+.groupBoxCustomEDSM: "System DB Control" => "Control de BD de Sistemas"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Seleccionar sectores de galaxias"
 .checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Habilitar descarga de datos de estrellas"
 .groupBoxPopOuts: "Window Options" => "Opciones de ventana"
