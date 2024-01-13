@@ -20,6 +20,7 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.GMO;
+using EliteDangerousCore.GEC;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
@@ -396,7 +397,7 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                    if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile))
+                    if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile,()=>false))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
@@ -405,7 +406,7 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
                 {
                     LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
-                    if (DownloadGECFile(gecfile))
+                    if (GECClass.DownloadGECFile(gecfile,()=>false))
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
 

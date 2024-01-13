@@ -650,6 +650,7 @@ namespace EDDiscovery
         UserControlOrganics_extButtonFont_ToolTip, // ToolTip 'Font'
         UserControlOrganics_extCheckBoxWordWrap_ToolTip, // ToolTip 'Word Wrap'
         UserControlOrganics_extButtonAlignment_ToolTip, // ToolTip 'Word Wrap'
+        UserControlOrganics_comboBoxTime_ToolTip,
         UserControlOrganics_at, // At {0}
         UserControlOrganics_sysinfo, // 
         

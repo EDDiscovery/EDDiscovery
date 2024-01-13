@@ -73,6 +73,7 @@ namespace EDDiscovery.UserControls
 
             var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip,
                                         EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip ,
+                                        EDTx.UserControlOrganics_comboBoxTime_ToolTip,
                                         EDTx.UserControlOrganics_extButtonAlignment_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             rollUpPanelTop.SetToolTip(toolTip);

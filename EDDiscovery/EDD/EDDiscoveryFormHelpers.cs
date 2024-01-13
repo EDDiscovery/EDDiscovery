@@ -472,21 +472,7 @@ namespace EDDiscovery
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(cname, theme.GetColor(ci).ToArgb());
             }
         }
-
-        public static bool DownloadGECFile(string file)
-        {
-            try
-            {
-                string url = @"https://edastro.com/gec/json/all";
-                return BaseUtils.DownloadFile.HTTPDownloadFile(url, file, false, out bool newfile);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("DownloadFromGEC exception:" + ex.Message);
-            }
-
-            return false;
-        }
+  
 
         #endregion
 
