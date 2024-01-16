@@ -67,7 +67,7 @@
             // labelFilter
             // 
             this.labelFilter.AutoSize = true;
-            this.labelFilter.Location = new System.Drawing.Point(3, 9);
+            this.labelFilter.Location = new System.Drawing.Point(3, 8);
             this.labelFilter.Name = "labelFilter";
             this.labelFilter.Size = new System.Drawing.Size(57, 13);
             this.labelFilter.TabIndex = 35;
@@ -400,7 +400,7 @@
             this.textBoxSystemName.EndButtonVisible = false;
             this.textBoxSystemName.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxSystemName.InErrorCondition = false;
-            this.textBoxSystemName.Location = new System.Drawing.Point(79, 4);
+            this.textBoxSystemName.Location = new System.Drawing.Point(96, 4);
             this.textBoxSystemName.Multiline = false;
             this.textBoxSystemName.Name = "textBoxSystemName";
             this.textBoxSystemName.ReadOnly = false;
