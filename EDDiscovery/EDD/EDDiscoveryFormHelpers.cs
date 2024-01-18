@@ -385,7 +385,7 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Logging
+        #region Logging - good for any thread
 
         public void LogLine(string text)
         {
@@ -405,9 +405,14 @@ namespace EDDiscovery
 
         public void LogLineColor(string text, Color color)
         {
-            System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            LogText += text + Environment.NewLine;      // keep this, may be the only log showing
-            OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
+            if (!Application.MessageLoop)
+                this.BeginInvoke((MethodInvoker)delegate { LogLineColor(text, color); });
+            else
+            {
+                System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                LogText += text + Environment.NewLine;      // keep this, may be the only log showing
+                OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
+            }
         }
 
         #endregion
