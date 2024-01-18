@@ -474,7 +474,7 @@ namespace EDDiscovery
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
-            extButtonNewFeature.Visible = false;
+            panelToolBar.SetVisibility(extButtonNewFeature, false);         // use the panel tool bar interface to set it invisible, as the TB controls visibility itself
 
             // ---------------------------------------------------------------- open all the major tabs except the built in ones
 
@@ -673,9 +673,9 @@ namespace EDDiscovery
                             else if (n.EntryType == "New")
                             {
                                 extButtonNewFeature.Tag = n;
-                                extButtonNewFeature.Visible = true;
                                 bool read = UserDatabase.Instance.GetSettingString("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
                                 extButtonNewFeature.Image = read ? EDDiscovery.Icons.Controls.NewFeatureGreen : EDDiscovery.Icons.Controls.NewFeature;
+                                panelToolBar.SetVisibility(extButtonNewFeature, true);         // use the panel tool bar interface to set it visible, as the TB controls visibility itself
                             }
                         }
 
