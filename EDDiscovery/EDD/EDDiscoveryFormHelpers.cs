@@ -387,36 +387,47 @@ namespace EDDiscovery
 
         #region Controller event handlers 
 
-        string syncprogressstring = "", refreshprogressstring = "";
+        const int maxstatusmessages = 4;
+        private string[] messages = new string[maxstatusmessages] { "", "", "", "" };
+        private int[] progress = new int[maxstatusmessages] { -1, -1, -1, -1 };
 
-        private void ReportSyncProgress(int percentComplete, string message)
+        private void StatusLineUpdate(int category, int percentComplete, string message)
         {
-            if (!Controller.PendingClose)
+            if ( category == -1 )
             {
-                if (percentComplete >= 0)
-                {
-                    toolStripProgressBarEDD.Visible = true;
-                    toolStripProgressBarEDD.Value = percentComplete;
-                }
-                else
-                {
-                    toolStripProgressBarEDD.Visible = false;
-                }
-
-                syncprogressstring = message;
-                toolStripStatusLabelEDD.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
+                category = 0;
+                progress = new int[maxstatusmessages] { -1, -1, -1, -1 };
+                messages = new string[maxstatusmessages] { "", "", "", "" };
             }
+
+            progress[category] = percentComplete;
+            messages[category] = message;
+
+            int maxprogress = progress.Max();
+            toolStripProgressBarEDD.Visible = maxprogress >= 0;
+            if (maxprogress >= 0)
+            {
+                toolStripProgressBarEDD.Value = maxprogress;
+                if (maxprogress > 0)
+                {
+                    toolStripProgressBarEDD.Value = maxprogress - 1;  // disables the animation
+                    toolStripProgressBarEDD.Value = maxprogress;
+                }
+            }
+                
+            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Status message {category} {percentComplete} '{message}' set bar to {maxprogress}");
+
+            string text = "";
+            foreach(var m in messages)
+            {
+                if (m.Length > 0)
+                    text = text.AppendPrePad(m, " | ");
+            }
+
+            toolStripStatusLabelEDD.Text = text;
+            statusStripEDD.Refresh();
         }
 
-        private void ReportRefreshProgress(int percentComplete, string message)      // percent not implemented for this
-        {
-            if (!Controller.PendingClose)
-            {
-                refreshprogressstring = message;
-                toolStripStatusLabelEDD.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
-                Update();       // nasty but it works - needed since we are doing UI work here and the UI thread will be blocked
-            }
-        }
 
         #endregion
 

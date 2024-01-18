@@ -135,11 +135,10 @@ namespace EDDiscovery
             Controller.OnRefreshCommanders += Controller_RefreshCommanders;
             Controller.OnRefreshComplete += Controller_RefreshComplete;
             Controller.OnRefreshStarting += Controller_RefreshStarting;
-            Controller.OnReportRefreshProgress += ReportRefreshProgress;
 
             Controller.OnSyncStarting += () => {  in_system_sync = true; };
             Controller.OnSyncComplete += (c1,c2) => { in_system_sync = false; };
-            Controller.OnReportSyncProgress += ReportSyncProgress;
+            Controller.StatusLineUpdate += StatusLineUpdate;
 
             Controller.OnNewHistoryEntryUnfiltered += Controller_NewHistoryEntryUnfiltered; // called before being added to the HE, unfiltered, unmerged stream
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
@@ -876,7 +875,7 @@ namespace EDDiscovery
 
                 if (goforit)
                 {
-                    ReportRefreshProgress(-1, "Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
+                    StatusLineUpdate(-1,-1,"Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
                     actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                     Controller.Shutdown();
                 }

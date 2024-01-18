@@ -14,7 +14,6 @@
 
 using EliteDangerousCore.EDSM;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using EliteDangerousCore.DB;
 using System.IO;
@@ -45,7 +44,7 @@ namespace EDDiscovery
         public bool AsyncPerformSync(bool fullsync)      // UI thread.
         {
             System.Diagnostics.Debug.WriteLine($"Ask for sync start {fullsync}");
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (Interlocked.CompareExchange(ref resyncSysDBRequestedFlag, 1, 0) == 0)
             {
@@ -102,7 +101,7 @@ namespace EDDiscovery
 
             if (EDDConfig.Instance.SystemDBDownload)      // if system DB is to be loaded
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download");
+                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download");
 
                 try
                 {
@@ -128,7 +127,7 @@ namespace EDDiscovery
 
                                 string url = spansh ? string.Format(EDDConfig.Instance.SpanshSystemsURL, "") : EDDConfig.Instance.EDSMFullSystemsURL;
 
-                                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} Full system download using URL {url} to {downloadfile}");
+                                System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} Full system download using URL {url} to {downloadfile}");
 
                                 bool deletefile = !EDDOptions.Instance.KeepSystemDataDownloadedFiles;
 
@@ -240,7 +239,7 @@ namespace EDDiscovery
 
         private void PerformSyncCompletedonUI()
         {
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (syncstate.fullsync_count > 0 || syncstate.updatesync_count > 0)
                 LogLine(string.Format("Systems update complete with {0:N0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
@@ -251,7 +250,7 @@ namespace EDDiscovery
 
             resyncSysDBRequestedFlag = 0;        // releases flag and allow another async to happen
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
+            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
         public long EDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
@@ -293,7 +292,7 @@ namespace EDDiscovery
                 BaseUtils.ResponseData response;
                 try
                 {
-                    Stopwatch sw = new Stopwatch();
+                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                     response = edsm.RequestSystemsData(loader3.LastDate, enddate, timeout: 20000);
                     fetchmult = Math.Max(0.1, Math.Min(Math.Min(fetchmult * 1.1, 1.0), 5000.0 / sw.ElapsedMilliseconds));
                 }
@@ -403,12 +402,12 @@ namespace EDDiscovery
 
         public void ReportSyncProgress(string message)
         {
-            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, message));
+            InvokeAsyncOnUiThread(() => StatusLineUpdate?.Invoke(0,-1, message));
         }
 
         public void ReportDownloadProgress(long count, double rate)
         {
-            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, $"Downloaded {count/1024:N0} KB at {rate/1024/1024:N2} MB/sec"));
+            InvokeAsyncOnUiThread(() => StatusLineUpdate?.Invoke(0,-1, $"Downloaded {count/1024:N0} KB at {rate/1024/1024:N2} MB/sec"));
         }
 
     }

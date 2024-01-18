@@ -49,7 +49,6 @@ namespace EDDiscovery
                                                                             // Commanders may have been added. 
         public event Action OnHistoryChange;                                // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
-        public event Action<int, string> OnReportRefreshProgress;           // UI. Refresh progress reporter
 
         // DURING A new Journal entry by the monitor, in order..
 
@@ -78,7 +77,8 @@ namespace EDDiscovery
 
         public event Action OnSyncStarting;                                 // UI. EDSM sync starting
         public event Action<long,long> OnSyncComplete;                      // UI. SYNC has completed, full count, update count
-        public event Action<int, string> OnReportSyncProgress;              // UI. SYNC progress reporter
+
+        public event Action<int, int, string> StatusLineUpdate;             // UI. Status line update - category, progress, message
 
         // Due to background taskc completing async to the rest
 

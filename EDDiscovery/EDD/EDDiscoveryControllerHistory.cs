@@ -15,7 +15,6 @@
 using EliteDangerousCore;
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Threading;
 
 namespace EDDiscovery
@@ -164,7 +163,7 @@ namespace EDDiscovery
             {
                 lastRefreshArgs = args;           // we are processing this set of operations
 
-                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Load history for Cmdr {args.CurrentCommander} {EDCommander.Current.Name}");
+                System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Load history for Cmdr {args.CurrentCommander} {EDCommander.Current.Name}");
 
                 if (args.RemoveDuplicateFSDEntries)
                 {
@@ -179,14 +178,14 @@ namespace EDDiscovery
 
                     string[] stdfolders = stdfolder != null ? new string[] { stdfolder, EDDOptions.Instance.CAPIDirectory() } : new string[] { EDDOptions.Instance.CAPIDirectory() };
 
-                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC setup watchers def {string.Join(";", stdfolders)}");
+                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC setup watchers def {string.Join(";", stdfolders)}");
 
 
                     journalmonitor.SetupWatchers(stdfolders, EDDOptions.Instance.DefaultJournalMatchFilename, EDDOptions.Instance.MinJournalDateUTC);         // monitors are stopped, set up watchers
 
                     int forcereloadoflastn = args.ForceJournalReload ? int.MaxValue / 2 : 0;     // if forcing a reload, we indicate that by setting the reload count to a very high value, but not enough to cause int wrap
 
-                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Parse journal files");
+                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Parse journal files");
 
                     journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)), 
                                                                          EDDOptions.Instance.MinJournalDateUTC,
@@ -218,7 +217,7 @@ namespace EDDiscovery
 
                     if (linkedcmdrid >= 0 && EDCommander.GetCommander(linkedcmdrid) != null )      // if loading a linked commander (new nov 22 u14)
                     {
-                        HistoryList.LoadHistory(newhistory, (s) => ReportRefreshProgress(-1, s), () => PendingClose,
+                        HistoryList.LoadHistory(newhistory, (p,s) => ReportRefreshProgress(p, s), () => PendingClose,
                                                         linkedcmdrid, cmdr.Name,
                                                         EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                         essentialitemslist,
@@ -227,7 +226,7 @@ namespace EDDiscovery
                     }
 
                     // then load any data from our commander
-                    HistoryList.LoadHistory(newhistory, (s) => ReportRefreshProgress(-1, s), () => PendingClose,
+                    HistoryList.LoadHistory(newhistory, (p,s) => ReportRefreshProgress(p, s), () => PendingClose,
                                                     args.CurrentCommander, cmdr.Name,
                                                     EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                     essentialitemslist,
@@ -251,16 +250,14 @@ namespace EDDiscovery
 
                 EDCommander.Current.FID = hist.GetCommanderFID();                   // ensure FID is set.. the other place it gets changed is a read of LoadGame.
 
-                ReportRefreshProgress(-1, "Done");
-
-                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()}  EDC Load history complete with {hist.Count} records");
+                System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()}  EDC Load history complete with {hist.Count} records");
             }
             catch (Exception ex)
             {
                 LogLineHighlight("History Refresh Error: " + ex);
             }
 
-            ReportRefreshProgress(-1, "Refresh Displays".T(EDTx.EDDiscoveryController_RD));
+            ReportRefreshProgress(100, "Refresh Displays".T(EDTx.EDDiscoveryController_RD));
 
             InvokeAsyncOnUiThread(() => ForegroundHistoryRefreshCompleteonUI(hist));
         }
@@ -269,11 +266,11 @@ namespace EDDiscovery
 
         private void ForegroundHistoryRefreshCompleteonUI(HistoryList hist)
         {
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);     // in UI Thread
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);     // in UI Thread
 
             if (!PendingClose)
             {
-                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC foreground history refresh start");
+                System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC foreground history refresh start");
 
                 if (hist != null)       // if we had an exception above, we may have an empty history
                 {
@@ -283,22 +280,22 @@ namespace EDDiscovery
 
                     EdsmLogFetcher.StopCheck();     // ensure edsm has stopped. previosly asked to stop above by an async call
 
-                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh commanders Invoke");
+                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh commanders Invoke");
 
                     OnRefreshCommanders?.Invoke();
 
-                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Invoke");
+                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Invoke");
 
                     OnHistoryChange?.Invoke();
 
-                    Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Completed");
+                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Completed");
                 }
 
-                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Start monitor");
+                System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Start monitor");
 
                 journalmonitor.StartMonitor(true);
 
-                Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh Complete Invoke");
+                System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh Complete Invoke");
 
                 OnRefreshComplete?.Invoke();                            // History is completed
 
@@ -319,7 +316,7 @@ namespace EDDiscovery
                         
                         FrontierCAPI.CAPIServer= stype;
 
-                        Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Login with CAPI server type {stype} {EDCommander.Current.RootName}");
+                        System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Login with CAPI server type {stype} {EDCommander.Current.RootName}");
 
                         System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
                         {
@@ -349,7 +346,7 @@ namespace EDDiscovery
 
         public void ReportRefreshProgress(int percent, string message)
         {
-            InvokeAsyncOnUiThread(() => OnReportRefreshProgress?.Invoke(percent, message));
+            InvokeAsyncOnUiThread(() => StatusLineUpdate?.Invoke(1, percent, message));
         }
 
     }
