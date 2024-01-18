@@ -30,7 +30,6 @@ namespace EDDiscovery
         #region Variables
         public HistoryList History { get; private set; } = new HistoryList();       // we always have a history
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
-        public string LogText { get { return logtext; } }
 
         public bool PendingClose { get; private set; }                      // we want to close boys!      set once, then we close
 
@@ -54,20 +53,20 @@ namespace EDDiscovery
 
         public event Action<UIEvent> OnNewUIEvent;                          // UI. MAJOR. UC. Mirrored. Always called irrespective of commander
 
-
         // In order. Current commander only
 
-        public event Action OnNewCommanderDuringPlayDetected;                         // UI. Called during play when a new commander has been found (not during history load)
+        public event Action OnNewCommanderDuringPlayDetected;               // UI. Called during play when a new commander has been found (not during history load)
         public event Action<JournalEntry> OnNewJournalEntryUnfiltered;      // UI. Called when a new journal entry is read.  Not filtered by history system
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered;      // UI. Called when a new history entry is created and databases into it updated, but before adding.  Not filtered by history system
         public event Action<HistoryEntry> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called after HE has been added to the history list.  Post filtering
         public event Action<HistoryEntry> OnNewEntrySecond;    // UI. Called after OnNewEntry for more processing. Post filtering
-
         // If a UC is a Cursor Control type, then OnNewEntry should also fire the cursor control OnChangedSelection, OnTravelSelectionChanged after onNewEntry has been received by the cursor UC
 
-        // IF a log print occurs
+        // Status/Logging updates
 
-        public event Action<string, Color> OnNewLogEntry;                   // UI. MAJOR. UC. Mirrored. New log entry generated.
+        public event Action<string> LogLineHighlight;                       // these can be run in a thread.  EDF invokes them
+        public event Action<string> LogLine;
+        public event Action<int, int, string> StatusLineUpdate;             
 
         // During a Close
 
@@ -78,7 +77,6 @@ namespace EDDiscovery
         public event Action OnSyncStarting;                                 // UI. EDSM sync starting
         public event Action<long,long> OnSyncComplete;                      // UI. SYNC has completed, full count, update count
 
-        public event Action<int, int, string> StatusLineUpdate;             // UI. Status line update - category, progress, message
 
         // Due to background taskc completing async to the rest
 
@@ -88,8 +86,6 @@ namespace EDDiscovery
         #endregion
 
         #region Variables
-        private string logtext = "";     // to keep in case of no logs..
-
         private EDJournalUIScanner journalmonitor;
 
         private Thread backgroundWorker;
@@ -132,7 +128,7 @@ namespace EDDiscovery
                 LogLineHighlight($"Log Writer Exception: {ex}");
             };
 
-            EdsmLogFetcher = new EDSMLogFetcher(LogLine);
+            EdsmLogFetcher = new EDSMLogFetcher(LogLine, StatusLineUpdate);
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);

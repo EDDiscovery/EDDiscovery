@@ -71,13 +71,13 @@ namespace EDDiscovery.Actions
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
             {
-                audiodriverwave = AudioHelper.GetAudioDriver(ctrl.LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
-                audiodriverspeech = AudioHelper.GetAudioDriver(ctrl.LogLineHighlight, EDDConfig.Instance.DefaultVoiceDevice);
+                audiodriverwave = AudioHelper.GetAudioDriver(frm.LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
+                audiodriverspeech = AudioHelper.GetAudioDriver(frm.LogLineHighlight, EDDConfig.Instance.DefaultVoiceDevice);
                 ISpeechEngine speechengine;
 
-                speechengine = AudioHelper.GetSpeechEngine(ctrl.LogLineHighlight);
+                speechengine = AudioHelper.GetSpeechEngine(frm.LogLineHighlight);
                 speechsynth = new AudioExtensions.SpeechSynthesizer(speechengine);
-                voicerecon = AudioHelper.GetVoiceRecognition(ctrl.LogLineHighlight);
+                voicerecon = AudioHelper.GetVoiceRecognition(frm.LogLineHighlight);
             }
             else
             {

@@ -73,19 +73,19 @@ namespace EDDiscovery
                     System.Diagnostics.Debug.WriteLine("Serve from " + servefrom + " on port " + EDDConfig.Instance.WebServerPort);
 
                     if (WebServer.Start(servefrom))   // may fail due to some security reasons
-                        Controller.LogLine("Web server enabled".T(EDTx.EDDiscoveryForm_WSE));
+                        LogLine("Web server enabled".T(EDTx.EDDiscoveryForm_WSE));
                     else
                     {
-                        Controller.LogLineHighlight("Web server failed to start".T(EDTx.EDDiscoveryForm_WSF));
+                        LogLineHighlight("Web server failed to start".T(EDTx.EDDiscoveryForm_WSF));
                         return false;
                     }
                 }
                 else
-                    Controller.LogLineHighlight("Web server disabled due to incorrect folder or missing zip file".T(EDTx.EDDiscoveryForm_WSERR));
+                    LogLineHighlight("Web server disabled due to incorrect folder or missing zip file".T(EDTx.EDDiscoveryForm_WSERR));
             }
             else
             {
-                Controller.LogLine("*** Web server is disabled ***".T(EDTx.EDDiscoveryForm_WSD));
+                LogLine("*** Web server is disabled ***".T(EDTx.EDDiscoveryForm_WSD));
             }
 
             return true;
@@ -385,6 +385,33 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Logging
+
+        public void LogLine(string text)
+        {
+            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockColor);
+        }
+
+        public void LogLineHighlight(string text)
+        {
+            BaseUtils.TraceLog.WriteLine(text);
+            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockHighlightColor);
+        }
+
+        public void LogLineSuccess(string text)
+        {
+            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockSuccessColor);
+        }
+
+        public void LogLineColor(string text, Color color)
+        {
+            System.Diagnostics.Debug.Assert(Application.MessageLoop);
+            LogText += text + Environment.NewLine;      // keep this, may be the only log showing
+            OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
+        }
+
+        #endregion
+
         #region Controller event handlers 
 
         const int maxstatusmessages = 4;
@@ -393,6 +420,8 @@ namespace EDDiscovery
 
         private void StatusLineUpdate(int category, int percentComplete, string message)
         {
+            System.Diagnostics.Debug.Assert(Application.MessageLoop);
+
             if ( category == -1 )
             {
                 category = 0;

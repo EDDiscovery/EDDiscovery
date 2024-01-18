@@ -59,7 +59,7 @@ namespace EDDiscovery
 
         public HistoryList History { get { return Controller.History; } }
 
-        public string LogText { get { return Controller.LogText; } }
+        public string LogText { get; private set; } = "";
 
         public EliteDangerousCore.UIEvents.UIOverallStatus UIOverallStatus { get { return Controller.UIOverallStatus; } }
         #endregion
@@ -75,6 +75,7 @@ namespace EDDiscovery
         public event Action OnThemeChanging;                            // Note you won't get it on startup because theme is applied to form before tabs/panels are setup. Before themeing
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
+        public event Action<string, Color> OnNewLogEntry;               // Mirrored. New log entry generated.
         #endregion
 
         #region Events due to EDDiscoveryControl 
@@ -83,17 +84,9 @@ namespace EDDiscovery
         public event Action<HistoryEntry> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered { add { Controller.OnNewHistoryEntryUnfiltered += value; } remove { Controller.OnNewHistoryEntryUnfiltered -= value; } }
         public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
-        public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
         public event Action<long, long> OnSyncComplete { add { Controller.OnSyncComplete += value; } remove { Controller.OnSyncComplete -= value; } }
 
-        #endregion
-
-        #region Logging
-        public void LogLine(string text) { Controller.LogLine(text); }
-        public void LogLineHighlight(string text) { Controller.LogLineHighlight(text); }
-        public void LogLineSuccess(string text) { Controller.LogLineSuccess(text); }
-        public void LogLineColor(string text, Color color) { Controller.LogLineColor(text, color); }
         #endregion
 
         #region History
@@ -138,12 +131,15 @@ namespace EDDiscovery
 
             Controller.OnSyncStarting += () => {  in_system_sync = true; };
             Controller.OnSyncComplete += (c1,c2) => { in_system_sync = false; };
-            Controller.StatusLineUpdate += StatusLineUpdate;
 
             Controller.OnNewHistoryEntryUnfiltered += Controller_NewHistoryEntryUnfiltered; // called before being added to the HE, unfiltered, unmerged stream
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
             Controller.OnNewCommanderDuringPlayDetected += Controller_NewCommanderDuringPlay;
+
+            Controller.LogLine += (s) => { this.BeginInvoke((MethodInvoker)delegate { LogLine(s); }); };
+            Controller.LogLineHighlight += (s) => { this.BeginInvoke((MethodInvoker)delegate { LogLineHighlight(s); }); };
+            Controller.StatusLineUpdate += (c,p,s) => { this.BeginInvoke((MethodInvoker)delegate { StatusLineUpdate(c,p,s); }); };
         }
 
         // called from EDDApplicationContext .. continues on with the construction of the system
@@ -440,7 +436,8 @@ namespace EDDiscovery
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_exitToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchLogsAgainToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchStarDataAgainToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchLogsAgainToolStripMenuItem,
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_fetchStarDataAgainToolStripMenuItem,
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_rescanAllJournalFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_sendHistoricDataToInaraToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildUserDBIndexesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildSystemDBIndexesToolStripMenuItem,
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_showLogfilesToolStripMenuItem,
@@ -692,7 +689,7 @@ namespace EDDiscovery
             Installer.CheckForNewInstallerAsync((rel) =>  // in thread
             {
                 newRelease = rel;
-                BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
+                BeginInvoke(new Action(() => LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
                 BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".T(EDTx.EDDiscoveryForm_NRA)));
             });
 
@@ -957,7 +954,7 @@ namespace EDDiscovery
             }
         }
 
-        private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void syncStarDataSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.Instance.SystemDBDownload)
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));

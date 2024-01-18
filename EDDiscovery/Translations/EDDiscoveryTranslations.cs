@@ -77,11 +77,11 @@ namespace EDDiscovery
         EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, // ToolStrip control 'Synchronise with EDSM'
         EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, // ToolStrip control 'Send Unsynced Journals To EDSM'
         EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchLogsAgainToolStripMenuItem, // ToolStrip control 'Fetch Logs Again'
-        EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchStarDataAgainToolStripMenuItem, // ToolStrip control 'Fetch Star Data Again'
         EDDiscoveryForm_adminToolStripMenuItem_rescanAllJournalFilesToolStripMenuItem, // ToolStrip control 'Re-scan all journal files'
         EDDiscoveryForm_adminToolStripMenuItem_sendHistoricDataToInaraToolStripMenuItem, // ToolStrip control 'Send to Inara historic data (previous ships, stored modules)'
         EDDiscoveryForm_adminToolStripMenuItem_rebuildUserDBIndexesToolStripMenuItem, // ToolStrip control 'Rebuild User DB Indexes'
         EDDiscoveryForm_adminToolStripMenuItem_rebuildSystemDBIndexesToolStripMenuItem, // ToolStrip control 'Rebuild System DB Indexes'
+        EDDiscoveryForm_adminToolStripMenuItem_fetchStarDataAgainToolStripMenuItem,
         EDDiscoveryForm_adminToolStripMenuItem_updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem, // ToolStrip control 'Update systems with unknown co-ordinates'
         EDDiscoveryForm_adminToolStripMenuItem_showLogfilesToolStripMenuItem, // ToolStrip control 'Show journal files directory of current commander'
         EDDiscoveryForm_adminToolStripMenuItem_dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem, // ToolStrip control 'Reset all history to current commander'

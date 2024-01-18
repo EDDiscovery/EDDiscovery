@@ -261,7 +261,7 @@ SECTION EDDiscoveryForm
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Ocultar icono de bandeja"
 .notifyIconMenu_Exit: "E&xit" => "Salida"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Recuperar registros de nuevo"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Obtener datos de estrellas de nuevo"
+.adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Obtener datos de estrellas de nuevo"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" => "Reconstruir índices de base de datos de usuario"
 .adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" => "Actualizar sistemas con coordenadas desconocidas"
 .WSE: "Web server enabled" => "Servidor web habilitado"

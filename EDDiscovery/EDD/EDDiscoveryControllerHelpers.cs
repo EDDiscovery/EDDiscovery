@@ -25,42 +25,6 @@ namespace EDDiscovery
 {
     public partial class EDDiscoveryController
     {
-        #region Logging
-        public void LogLine(string text)
-        {
-            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockColor);
-        }
-
-        public void LogLineHighlight(string text)
-        {
-            TraceLog.WriteLine(text);
-            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockHighlightColor);
-        }
-
-        public void LogLineSuccess(string text)
-        {
-            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockSuccessColor);
-        }
-
-        public void LogLineColor(string text, Color color)
-        {
-            try
-            {
-                InvokeAsyncOnUiThread(() =>
-                {
-                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
-
-                    OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
-                });
-            }
-            catch
-            {
-                System.Diagnostics.Debug.WriteLine("******* Exception trying to write to ui thread log");
-            }
-        }
-
-        #endregion
-
         #region Aux file downloads
 
         // in its own thread..

@@ -346,7 +346,7 @@ namespace EDDiscovery
 
         public void ReportRefreshProgress(int percent, string message)
         {
-            InvokeAsyncOnUiThread(() => StatusLineUpdate?.Invoke(1, percent, message));
+            StatusLineUpdate?.Invoke(1, percent, message);
         }
 
     }
