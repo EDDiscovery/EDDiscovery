@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            spanshStationsUserControl.Init(this);
+            spanshStationsUserControl.Init(this,()=>IsClosed);
         }
 
         public override void Closing()

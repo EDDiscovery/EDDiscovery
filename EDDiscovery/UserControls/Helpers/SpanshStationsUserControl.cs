@@ -15,7 +15,6 @@
 using EliteDangerousCore;
 using ExtendedControls;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -26,27 +25,14 @@ namespace EDDiscovery.UserControls.Helpers
 {
     public partial class SpanshStationsUserControl : UserControl
     {
-        private EliteDangerousCore.DB.IUserDatabaseSettingsSaver saver;
-        private bool explicity_set_system = false;
-        private ISystem defaultsystem;
-        private List<StationInfo> stationdata;
-
-        bool showcommoditiesselltostation = false;      // on columns, show buy price, else sell price (if has stock)
-
-        private const string dbLS = "MaxLs";
-
-        enum FilterSettings { Type, CommoditiesBuy, CommoditiesSell, Outfitting, Shipyard, Economy, Services};
-        ExtButtonWithCheckedIconListBoxGroup[] filters;
-
-        private const string dbWordWrap = "WordWrap";
-
         public SpanshStationsUserControl()
         {
             InitializeComponent();
         }
 
-        public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver saver)
+        public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver saver, Func<bool> isClosed)
         {
+            this.IsClosed = isClosed;
             this.saver = saver;
             colOutfitting.DefaultCellStyle.Alignment =
               colShipyard.DefaultCellStyle.Alignment =
@@ -157,6 +143,8 @@ namespace EDDiscovery.UserControls.Helpers
 
             EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
             stationdata = await sp.GetStationsByDumpAsync(sys);
+            if (IsClosed())      // async protect!
+                return;
 
             colDistanceRef.Visible = colSystem.Visible = false;
             extButtonTravelSystem.Enabled = explicity_set_system;
@@ -456,7 +444,7 @@ namespace EDDiscovery.UserControls.Helpers
 
                     var res = await sp.SearchCommoditiesAsync(systemname, search, commoditiessearchdistance, commoditieslargepad ? true : default(bool?), commoditiescarriers, maxresults);
 
-                    if ( res != null )
+                    if ( res != null && !IsClosed() )      // must have a result and async protect
                     {
                         ColPrice1.Tag = entries.Length >= 1 ? entries[0].Name.Substring(entries[0].Name.IndexOf(separ) + 1) : null;      // need to get the fdname for the columns
                         ColPrice1.HeaderText = entries.Length >= 1 ? entries[0].TextValue : "?";
@@ -535,7 +523,10 @@ namespace EDDiscovery.UserControls.Helpers
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                     var res = await sp.SearchServicesAsync(systemname, checkedlist, servicessearchdistance, serviceslargepad ? true : default(bool?), servicescarriers, maxresults);
-                    DrawSearch(res, servicesclearfilters, FilterSettings.Services);
+                    if (!IsClosed())      // async protect!
+                    {
+                        DrawSearch(res, servicesclearfilters, FilterSettings.Services);
+                    }
                 }
             },
             this, $"Services from {systemname}",32);
@@ -565,7 +556,10 @@ namespace EDDiscovery.UserControls.Helpers
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                     var res = await sp.SearchEconomyAsync(systemname, checkedlist, economysearchdistance, economylargepad ? true : default(bool?), maxresults);
-                    DrawSearch(res, economyclearfilters, FilterSettings.Economy);;
+                    if (!IsClosed())      // async protect!
+                    {
+                        DrawSearch(res, economyclearfilters, FilterSettings.Economy); ;
+                    }
                 }
             },
             this, $"Economies from {systemname}",32);
@@ -592,7 +586,10 @@ namespace EDDiscovery.UserControls.Helpers
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                     var res = await sp.SearchShipsAsync(systemname, checkedlist, shipssearchdistance, shipslargepad ? true : default(bool?), shipscarriers, maxresults);
-                    DrawSearch(res, shipsclearfilters, FilterSettings.Shipyard);
+                    if (!IsClosed())      // async protect!
+                    {
+                        DrawSearch(res, shipsclearfilters, FilterSettings.Shipyard);
+                    }
                 }
             },
             this, $"Ships from {systemname}",32);
@@ -652,14 +649,19 @@ namespace EDDiscovery.UserControls.Helpers
                 if (modlist.Length > 0 && outfittingclasses.Contains(true) && outfittingratings.Contains(true))
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                    
                     List<StationInfo> ssd = await sp.SearchOutfittingAsync(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, outfittinglargepad ? true : default(bool?), outfittingcarriers, maxresults);
-                    if (ssd?.Count > 0)
+
+                    if (!IsClosed())      // async protect!
                     {
-                        DrawSearch(ssd, outfittingclearfilters, FilterSettings.Outfitting);
-                    }
-                    else
-                    {
-                        MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                        if (ssd?.Count > 0)
+                        {
+                            DrawSearch(ssd, outfittingclearfilters, FilterSettings.Outfitting);
+                        }
+                        else
+                        {
+                            MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                        }
                     }
 
                 }
@@ -753,5 +755,24 @@ namespace EDDiscovery.UserControls.Helpers
 
         #endregion
 
+        #region vars
+
+        private EliteDangerousCore.DB.IUserDatabaseSettingsSaver saver;
+        private bool explicity_set_system = false;
+        private ISystem defaultsystem;
+        private List<StationInfo> stationdata;
+
+        private bool showcommoditiesselltostation = false;      // on columns, show buy price, else sell price (if has stock)
+
+        private const string dbLS = "MaxLs";
+
+        private enum FilterSettings { Type, CommoditiesBuy, CommoditiesSell, Outfitting, Shipyard, Economy, Services };
+        private ExtButtonWithCheckedIconListBoxGroup[] filters;
+
+        private const string dbWordWrap = "WordWrap";
+
+        private Func<bool> IsClosed;
+
+        #endregion
     }
 }
