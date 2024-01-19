@@ -81,9 +81,9 @@ namespace EDDiscovery.UserControls
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
             // pickers we don't worry about the Kind, we use the picker convert functions later 
-            extDateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.GameLaunchTimeUTC()).StartOfDay();
+            extDateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow));
             extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
-            extDateTimePickerEndDate.Value = GetSetting(dbEndDate, DateTime.UtcNow.EndOfDay()).EndOfDay();
+            extDateTimePickerEndDate.Value = GetSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow));
             extDateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
             VerifyDates();
             extDateTimePickerStartDate.ValueChanged += DateTimePicker_ValueChangedStart;
@@ -260,8 +260,8 @@ namespace EDDiscovery.UserControls
             if (DiscoveryForm.History != null)        //??its never null?
             {
                 // change display time to utc
-                DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value.StartOfDay()) : default(DateTime?);
-                DateTime? endutc = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
+                DateTime? startutc = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerStartDate.Value) : default(DateTime?);
+                DateTime? endutc = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(extDateTimePickerEndDate.Value) : default(DateTime?);
 
                 DataGridViewColumn sortcolprev = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorderprev = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
