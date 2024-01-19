@@ -417,7 +417,7 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Controller event handlers 
+        #region Status Line Control
 
         const int maxstatusmessages = 4;
         private string[] messages = new string[maxstatusmessages] { "", "", "", "" };
@@ -427,7 +427,7 @@ namespace EDDiscovery
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
 
-            if ( category == -1 )
+            if ( category == -1 )       // -1 means clear down, closing. So cancel notifications
             {
                 category = 0;
                 progress = new int[maxstatusmessages] { -1, -1, -1, -1 };
@@ -449,7 +449,7 @@ namespace EDDiscovery
                 }
             }
                 
-            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Status message {category} {percentComplete} '{message}' set bar to {maxprogress}");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} Status message {category} {percentComplete} '{message}' set bar to {maxprogress}");
 
             string text = "";
             foreach(var m in messages)
@@ -558,7 +558,7 @@ namespace EDDiscovery
 
             // var ret = sp.GetStations("Sol", 4);
 
-            SystemClass sol = new SystemClass("Sol", 10477373803);
+            //SystemClass sol = new SystemClass("Sol", 10477373803);
             //sp.GetBodies(sol);
             // sp.GetStationsByDump(sol,10000000,false);
 
