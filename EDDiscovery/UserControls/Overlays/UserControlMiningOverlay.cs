@@ -62,7 +62,6 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            Resize += UserControlMiningOverlay_Resize;
         }
 
         public override void InitialDisplay()
@@ -90,13 +89,15 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
+            // for the next version , screen out and only trigger on types..
+            // synced with ReadHistory
+            //if ( he.EntryType == JournalTypeEnum.AsteroidCracked || he.EntryType == JournalTypeEnum.ProspectedAsteroid || he.EntryType == JournalTypeEnum.LaunchDrone ||
+            //    he.EntryType == JournalTypeEnum.MiningRefined || he.EntryType == JournalTypeEnum.MaterialCollected || he.EntryType == JournalTypeEnum.MaterialDiscarded || 
+             //   he.EntryType == JournalTypeEnum.MaterialDiscovered )
+
             Display(he);
         }
 
-        private void UserControlMiningOverlay_Resize(object sender, EventArgs e)
-        {
-            Display();
-        }
 
         #endregion
 
@@ -338,7 +339,7 @@ namespace EDDiscovery.UserControls
                         if (collectorsused > 0 || prospectorsused > 0 || asteroidscracked > 0)
                             text += string.Format(", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}".T(EDTx.UserControlMiningOverlay_Proscoll), prospectorsused, collectorsused, asteroidscracked);
 
-                        var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(this.Width - hpos[limpetscolpos] - 20, this.Height),
+                        var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(2000, this.Height),
                                     text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
 
                         vpos = ieprosp.Location.Bottom + displayfont.ScalePixels(2);
@@ -529,9 +530,15 @@ namespace EDDiscovery.UserControls
 
                             chart.EndInit();
 
-                            Controls.Add(chart);
-                            Controls.SetChildIndex(chart, 0);
-
+                            try
+                            {
+                                Controls.Add(chart);
+                                Controls.SetChildIndex(chart, 0);       // #3471 seen an exception here, but I can't make it do it. Hide error
+                            }
+                            catch ( Exception ex)
+                            {
+                                System.Diagnostics.Trace.WriteLine($"Mining overlay Exception during add/set child {ex}");
+                            }
                         }
                         catch (NotImplementedException)
                         {
