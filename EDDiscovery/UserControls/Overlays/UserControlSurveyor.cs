@@ -26,33 +26,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSurveyor : UserControlCommonBase
     {
-        private StringAlignment alignment = StringAlignment.Near;
-        private string fsssignalsdisplayed = "";
-
-        const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
-        const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
-        const double eccentricityLimit = 0.95; //orbital eccentricity limit
-
-        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
-        private EliteDangerousCore.UIEvents.UIMode.ModeType uimode = EliteDangerousCore.UIEvents.UIMode.ModeType.None;
-
-        const string NavRouteNameLabel = "!*NavRoute";      // special label to identify a save of using the nav route - not user presented
-        private string translatednavroutename = "";
-        private SavedRouteClass currentRoute = null;
-        private string lastsystemroute;
-
-        private ShipInformation shipinfo;   // and last ship info
-        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
-
-        private Font displayfont;
-        
-        private ISystem last_sys = null;
-        private string starclass = "";
-        private Timer drawsystemupdatetimer;
-        private int bodies_found;
-        private bool all_found = false;
-        private bool doresize = false;
-
         #region Initialisation
 
         public UserControlSurveyor()
@@ -60,14 +33,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             DBBaseName = "Surveyor";
         }
-
-
         public override void Init()
         {
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
             edsmSpanshButton.ValueChanged += (s, ch) =>
             {
-                DrawAll(last_sys);
+                DrawAll(cur_sys);
             };
 
             PopulateCtrlList();
@@ -97,7 +68,7 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
 
-            drawsystemupdatetimer = new Timer() { Interval = 250 };
+            drawsystemupdatetimer = new Timer() { Interval = 500 };
             drawsystemupdatetimer.Tick += DrawSystemUpdatetimer_Tick;
         }
 
@@ -125,14 +96,14 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnHistoryChange()
         {
             var hl = DiscoveryForm.History;
-            last_sys = hl.GetLast?.System;      // may be null
+            cur_sys = hl.GetLast?.System;      // may be null
             shipfsdinfo = hl.GetLast?.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
             shipinfo = hl.GetLast?.ShipInformation;
 
             LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber}  History Load '{currentRoute?.Name}' {currentRoute?.Id} systems {currentRoute?.Systems.Count} lastsys '{last_sys?.Name}'");
 
-            DrawAll(last_sys);
+            DrawAll(cur_sys);
             SetVisibility();
 
             //t.Interval = 200; t.Tick += (s, e) => { var sys = currentRoute.PosAlongRoute(percent, 0); DrawSystem(sys, sys.Name); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
@@ -147,8 +118,8 @@ namespace EDDiscovery.UserControls
             {
                 //System.Diagnostics.Debug.WriteLine("Surveyor {displaynumber} new entry, load nav route");
                 LoadRoute(NavRouteNameLabel);
-                last_sys = DiscoveryForm.History.GetLast?.System;      // may be null, make sure its set.
-                CalculateThenDrawSystem(last_sys);
+                cur_sys = DiscoveryForm.History.GetLast?.System;      // may be null, make sure its set.
+                CalculateThenDrawSystemSignals(cur_sys);
             }
         }
 
@@ -158,7 +129,7 @@ namespace EDDiscovery.UserControls
         }
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
         {
-            CalculateThenDrawSystem(last_sys);
+            CalculateThenDrawSystemSignals(cur_sys);
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)
@@ -194,17 +165,17 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor set transparency {on} {curcol}");
 
-            extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
+            extPictureBoxScrollSystemDetails.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
 
             this.BackColor = curcol;
-            extPictureBoxScroll.BackColor =  curcol;
+            extPictureBoxScrollSystemDetails.BackColor =  curcol;
             rollUpPanelTop.Visible = !on;
             SetVisibility(!on);     // set our visible mode for text, but override to on if we are not transparent
         }
 
         public override void TransparencyModeChanged(bool on)
         {
-            DrawAll(last_sys);
+            DrawAll(cur_sys);
         }
 
         // normally we use uistate/uimode to determine if the output is visible. We can override this, for use when transparent mode is on but its not transparent
@@ -222,7 +193,7 @@ namespace EDDiscovery.UserControls
             }
 
             //System.Diagnostics.Debug.WriteLine($"Surveyor Visibility uimode {uimode} uistate {uistate} Visibility {showit} route {currentRoute!=null}");
-            extPictureBoxScroll.Visible = showit;
+            extPictureBoxScrollSystemDetails.Visible = showit;
             extPictureBoxScanSummary.Visible = IsSet(CtrlList.showscansum) && showit;
             extPictureBoxTitle.Visible = IsSet(CtrlList.showsysinfo) && showit;
             extPictureBoxRoute.Visible = currentRoute != null && showit;
@@ -233,88 +204,112 @@ namespace EDDiscovery.UserControls
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
             if ( doresize)
-                DrawAll(last_sys,true);     // don't recalc
+                DrawAll(cur_sys,true);     // don't recalc
         }
 
-        private void DrawSystemUpdatetimer_Tick(object sender, EventArgs e)
-        {
-         //   System.Diagnostics.Debug.WriteLine($"Surveyor {Environment.TickCount % 10000} timer expired on {last_sys.Name}");
-            drawsystemupdatetimer.Stop();
-            DrawScanSummary(last_sys);
-            CalculateThenDrawSystem(last_sys);
-        }
+        // problems:
+        // fssSIGNALDISCOVERED OR OTHERS BETWEEN START JUMP AND FSDJUMP WILL HAVE PREVIOUS SYSTEM ASSIGNED. HOW TO COPE
+
+        bool instartjump = false;
+
         public override void ReceiveHistoryEntry(HistoryEntry he)
-        { 
-            bool islatest = Object.ReferenceEquals(DiscoveryForm.History.GetLast, he);        // is this the latest
-
-            // can't say i love this idea, there must be a better solution, but..
-            // from scan of logs on 18/9/22 these are ones which I saw between startjump and fsdjump. Excluding the ones turned in ui events in edjournalreader.cs
-
-            var excludedevents = new JournalTypeEnum[] { JournalTypeEnum.Friends, JournalTypeEnum.HeatDamage, JournalTypeEnum.HeatWarning, JournalTypeEnum.ReceiveText,
-                                                        JournalTypeEnum.ShieldState, JournalTypeEnum.Scanned, JournalTypeEnum.ShipTargeted,JournalTypeEnum.UnderAttack,
-                                                        JournalTypeEnum.FuelScoop, JournalTypeEnum.ApproachBody, JournalTypeEnum.LeaveBody, 
-                                                        JournalTypeEnum.ReservoirReplenished, JournalTypeEnum.ShipLocker, 
-                                                        };
-
-            if (islatest && Array.IndexOf(excludedevents, he.EntryType) >= 0)        // if latest, and its an excluded event, we ignore, so we don't let it interrupt the start jump sequence..
-                return;
-
+        {
             // something has changed and just blindly for now recalc the fsd info
             shipfsdinfo = he.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
             shipinfo = he.ShipInformation;
 
-            if (he.EntryType == JournalTypeEnum.StartJump)                  // start jump on hyperspace preempts everything
+            bool islatest = Object.ReferenceEquals(DiscoveryForm.History.GetLast, he);        // is this the latest
+            bool jumpover = he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump;
+
+            if (islatest)       // if at top of history.. if not, we don't do startjump sequencing
+            {
+                if (instartjump && !jumpover)       // if in a start jump, and jump not over.. throw away all events between start jump and fsd jump
+                {
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor  in jump sequence reject entry");
+                    return;
+                }
+
+                if (jumpover)       // when jump is over, we release instartjump, ensure cur_sys has the full info, and then kick for a full display
+                {
+                    instartjump = false;
+                    cur_sys = he.System;        // ensure fully populated
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor arrived in system {cur_sys.Name}");
+                    DrawAll(cur_sys);      // we are in the system now, draw all, in case we had signals between start jump and now, and to update the route/fuel thingies
+                    return;
+                }
+            }
+
+            if (he.EntryType == JournalTypeEnum.StartJump)                  // start jump stops rest of below working
             {
                 JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                if (jsj.IsHyperspace)                                       // needs to be a hyperspace one, not supercruise
+                
+                // needs to be a hyperspace one, not supercruise, and needs to be at top of list, so we are processing real time
+                if (jsj.IsHyperspace && islatest ) 
                 {
-                    last_sys = new SystemClass(jsj.StarSystem, jsj.SystemAddress);       // important need system address as scan uses it for quick lookup
-                    starclass = jsj.FriendlyStarClass;
+                    // important need system address as scan uses it for quick lookup
+                    // set our system to the next system
+                    cur_sys = new SystemClass(jsj.StarSystem, jsj.SystemAddress);
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor start jump changed to {cur_sys.Name} Draw title, scan summary, scan system");
+
+                    starclass = jsj.FriendlyStarClass;  // reset vars
                     bodies_found = 0;
                     all_found = false;
+
+                    instartjump = true;     // begin start jump sequence
+
                     DrawTitle();
-                    DrawScanSummary(last_sys);
-                    CalculateThenDrawSystem(last_sys);       // no route or fuel needed
+                    // no route,target or fuel needed
+                    CalculateThenDrawScanSummary(cur_sys);     // do this on the next system
+                    CalculateThenDrawSystemSignals(cur_sys);
                 }
 
                 return;     // ignore otherwise and don't let the stuff below happen since its an IStarScan and it will cause a recomputation
             }
 
-            if (last_sys == null || last_sys.Name != he.System.Name) // If not got a system, or different name
+            instartjump = false;            // if we got here, we are not in a start jump sequence, we are clicking around
+
+            // If not got a system, or different name
+            if (cur_sys == null || cur_sys.Name != he.System.Name)
             {
                 starclass = null;           // we cancel out the text info fields
                 bodies_found = 0;
                 all_found = false;
-                last_sys = he.System;       // and set, then
-                DrawTitle();
-                DrawAll(last_sys);
-                return;
+                cur_sys = he.System;       // and set, then
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor noted system change to {cur_sys.Name} DrawAll");
+                DrawAll(cur_sys);
+                return;         // finish, do nothing else
             }
             else
-                last_sys = he.System;       // its the same system, but since we may have synthesised a last_sys in startjump, and we have a real one from the journal, make sure its updated
+                cur_sys = he.System;       // its the same system, but since we may have synthesised a cur_sys in startjump, and we have a real one from the journal, make sure its updated
 
-            if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // title uses body count and all found, so update it
+            // if FSDJump/CarrierJump, when clicking around (in a start jump sequence we won't get this far down)
+            // these affect fuel use and route, and cancel start jump sequence
+            if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump) 
+            {
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor FSDJump draw fuel/route");
+                DrawFuel();
+                DrawRoute(cur_sys);
+            }
+            else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // title uses body count and all found, so update it
             {
                 JournalFSSAllBodiesFound fs = he.journalEntry as JournalFSSAllBodiesFound;
                 all_found = true;
                 bodies_found = fs.Count;
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor FSSAllbodies found Draw title");
                 DrawTitle();      
             }
-            else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan) // title and summary are affected    
+            else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan) // discovery scan carriers body counts
             {
                 var je = he.journalEntry as JournalFSSDiscoveryScan;
                 bodies_found = je.BodyCount;
-                DrawTitle();                //  title uses bodies_found
-                DrawScanSummary(last_sys);  // but scan summary also uses FSS body count, via the value stored inside the scan star structures
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor FSSDiscoveryscan found on {cur_sys.Name} Draw Title Scan Summary");
+                DrawTitle();
+                CalculateThenDrawScanSummary(cur_sys);
             }
-            else if ( he.EntryType == JournalTypeEnum.FuelScoop || he.EntryType == JournalTypeEnum.ReservoirReplenished )
+            else if (he.EntryType == JournalTypeEnum.FuelScoop || he.EntryType == JournalTypeEnum.ReservoirReplenished)
             {
+                instartjump = false;
                 DrawFuel();
-            }
-            else if ( he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump ) // these affect fuel use and route
-            {
-                DrawFuel();
-                DrawRoute(last_sys);
             }
 
             // these are in IStarScan, but we don't need to do anything here, as they don't affect the display
@@ -324,48 +319,75 @@ namespace EDDiscovery.UserControls
             }
 
             // IStarScan : FSSSignalDiscovery, SAASignalsFound, FSSBodySignals, Scan all involved in Searches
-            // Scan is involved in inbuilt presentations
+            // Scan is involved in searches
             // ScanBaryCentre is also indirectly involved in Searches
 
             else if (he.journalEntry is IStarScan )
             {
-                //  System.Diagnostics.Debug.WriteLine($"Surveyor Update due to {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
-                drawsystemupdatetimer.Stop();       // kick the scan aggregator timer 
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor Update due to {he.EventTimeUTC} {he.journalEntry.EventTypeStr}");
+
+                // kick the scan aggregator timer 
+                drawsystemupdatetimer.Stop();      
                 drawsystemupdatetimer.Start();
             }
         }
 
+        // when we get a starscan update, we set a timer in the hope of aggregating them and preventing repeated recalcs. timer ticked out
+        private void DrawSystemUpdatetimer_Tick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor timer expired on {cur_sys.Name}");
+            drawsystemupdatetimer.Stop();
+            CalculateThenDrawScanSummary(cur_sys);
+            CalculateThenDrawSystemSignals(cur_sys);
+        }
 
         #endregion
 
         #region Display
 
-        private void DrawAll(ISystem sys, bool presentsystemonly = false)
+        // Display all. If resizeonly is on, the await parts are not recalculated, but are drawn from previous calculated data
+        private void DrawAll(ISystem sys, bool resizeonly = false)
         {
-        //    System.Diagnostics.Debug.WriteLine($"\nSurveyor draw All {presentsystemonly}");
+            //    System.Diagnostics.Debug.WriteLine($"\nSurveyor draw All {presentsystemonly}");
 
-            DrawTitle();            // these calculate and draw quick
+            // these calculate and draw quick
+            DrawTitle();        
             DrawRoute(sys);
             DrawTarget();
             DrawFuel();
-            DrawScanSummary(sys);
-            if (presentsystemonly)  // used during resize
+
+            if (resizeonly)  // used during resize
             {
-                lock (extPictureBoxScroll)      // because of the async call, we lock the local structures drawsystem* over the draw, so a calculate can't reset them during the draw
+                lock (scansummarytext)
+                {
+                    DrawScanSummaryUnlocked();
+                }
+                lock (extPictureBoxScrollSystemDetails)      // because of the async call, we lock the local structures drawsystem* over the draw, so a calculate can't reset them during the draw
                 {
                     DrawSystemUnlocked();
                 }
             }
             else
-                CalculateThenDrawSystem(sys);
+            {
+                CalculateThenDrawScanSummary(sys);
+                CalculateThenDrawSystemSignals(sys);
+            }
         }
 
-        // title
+        // stack consists of:
+        // Title - drawn direct
+        // Route - drawn direct
+        // Target - drawn direct
+        // Fuel - drawn direct
+        // Scan summary of values - async await, then draw
+        // Body and search data - async await, then draw
+
+        // title, immediate, no async
         private void DrawTitle()
         {
            // System.Diagnostics.Debug.WriteLine($"Surveyor draw title with {IsTransparentModeOn}");
 
-            string text = last_sys?.Name ?? "";
+            string text = cur_sys?.Name ?? "";
             if (starclass.HasChars() && IsSet(CtrlList.showstarclass))
                 text += " | " + starclass;
             if (bodies_found > 0 && !all_found)
@@ -377,41 +399,7 @@ namespace EDDiscovery.UserControls
             DrawTextIntoBox(extPictureBoxTitle, text);
         }
 
-        // draw the scan summmary info
-
-        private async void DrawScanSummary(ISystem sys)
-        {
-           // System.Diagnostics.Debug.WriteLine($"Surveyor scan summary ${sys?.Name}");
-
-            string text = "";
-            if (sys != null)
-            {
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
-                if (IsClosed)   // may close during await..
-                    return;
-
-                if (systemnode != null)
-                {
-                    int scanned = edsmSpanshButton.IsAnySet ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonWeb();
-
-                    if (scanned > 0)
-                    {
-                        text = text.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : ""), Environment.NewLine);
-                    }
-
-                    long value = systemnode.ScanValue(false);
-
-                    if (value > 0 && IsSet(CtrlList.showValues))
-                    {
-                        text.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "", Environment.NewLine));
-                        text = text.AppendPrePad("~ " + value.ToString("N0") + " cr", "; ");
-                    }
-                }
-            }
-
-            DrawTextIntoBox(extPictureBoxScanSummary, text);
-        }
-
+        // draw route, direct, no async
         private void DrawRoute(ISystem sys)
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor draw route {sys?.Name}");
@@ -495,8 +483,8 @@ namespace EDDiscovery.UserControls
                                 lastroutetext += Environment.NewLine + String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
                         }
 
-                        if ( IsSet(RouteControl.shownotetext) && closest.waypointnote.HasChars())
-                            lastroutetext = lastroutetext.AppendPrePad(closest.waypointnote,Environment.NewLine);
+                        if (IsSet(RouteControl.shownotetext) && closest.waypointnote.HasChars())
+                            lastroutetext = lastroutetext.AppendPrePad(closest.waypointnote, Environment.NewLine);
 
                         string name = closest.nextsystem.Name;
 
@@ -522,6 +510,7 @@ namespace EDDiscovery.UserControls
             DrawTextIntoBox(extPictureBoxRoute, lastroutetext);
         }
 
+        // Target, direct, no async
         private void DrawTarget()
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor draw target");
@@ -530,9 +519,9 @@ namespace EDDiscovery.UserControls
 
             if (TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z))
             {
-                if (last_sys != null)     // double checky
+                if (cur_sys != null)     // double checky
                 {
-                    double dist = last_sys.Distance(x, y, z);
+                    double dist = cur_sys.Distance(x, y, z);
 
                     string jumpstr = "";
                     if (shipfsdinfo != null)
@@ -551,13 +540,14 @@ namespace EDDiscovery.UserControls
             DrawTextIntoBox(extPictureBoxTarget, lasttargettext);
         }
 
+        // Fuel, direct, no async
         private void DrawFuel()
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor draw fuel");
 
             string fueltext = "";
 
-            if ( shipinfo != null)
+            if (shipinfo != null)
             {
                 double fuel = shipinfo.FuelLevel;
                 double tanksize = shipinfo.FuelCapacity;
@@ -579,19 +569,57 @@ namespace EDDiscovery.UserControls
             DrawTextIntoBox(extPictureBoxFuel, fueltext);
         }
 
+        // calculate then draw the scan summmary info. Await
+        private async void CalculateThenDrawScanSummary(ISystem sys)
+        {
+            // System.Diagnostics.Debug.WriteLine($"Surveyor scan summary ${sys?.Name}");
 
-        // we keep the results of the last CalculatethenDrawSystem so we can just DrawSystem later
-        // we also set it to null in case DrawSystem gets called first before a calculate
+            scansummarytext = "";
 
-        private SortedList<string, string> drawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
-        private string drawsystemsignallist = "";
-        private long drawsystemvalue = 0;
+            if (sys != null)
+            {
+                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
+                if (IsClosed)   // may close during await..
+                    return;
+
+                if (sys != cur_sys)
+                {
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor Cancelled CalculateThenDrawScanSummary as cursys has changed during await");
+                    return;
+                }
+
+                if (systemnode != null)
+                {
+                    int scanned = edsmSpanshButton.IsAnySet ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonWeb();
+
+                    if (scanned > 0)
+                    {
+                        scansummarytext = scansummarytext.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : ""), Environment.NewLine);
+                    }
+
+                    long value = systemnode.ScanValue(false);
+
+                    if (value > 0 && IsSet(CtrlList.showValues))
+                    {
+                        scansummarytext.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "", Environment.NewLine));
+                        scansummarytext = scansummarytext.AppendPrePad("~ " + value.ToString("N0") + " cr", "; ");
+                    }
+                }
+            }
+
+            lock (scansummarytext)
+                DrawScanSummaryUnlocked();
+        }
+
+        private void DrawScanSummaryUnlocked()
+        {
+            DrawTextIntoBox(extPictureBoxScanSummary, scansummarytext);
+        }
 
         // recalc the system drawSystem* values, then lock, set the locals above, then lock draw
-
-        async private void CalculateThenDrawSystem(ISystem sys)
+        async private void CalculateThenDrawSystemSignals(ISystem sys)
         {
-            System.Diagnostics.Debug.WriteLine($"Surveyor {DisplayNumber} calc system {sys?.Name}");
+            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor {DisplayNumber} calc system {sys?.Name}");
 
             SortedList<string, string> ldrawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
             string ldrawsystemsignallist = "";
@@ -617,7 +645,7 @@ namespace EDDiscovery.UserControls
                         var defaultvars = new BaseUtils.Variables();
                         defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep: true);
 
-                        System.Diagnostics.Debug.WriteLine($"  Surveyor runs {searchesactive.Length} searches");
+                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} ... Surveyor runs {searchesactive.Length} searches");
                         foreach (var searchname in searchesactive)
                         {
                             // await is horrible, anything can happen, even closing
@@ -625,6 +653,7 @@ namespace EDDiscovery.UserControls
 
                             if (IsClosed)       // if we was ordered to close, abore
                                 return;
+
                         }
 
                         //System.Diagnostics.Debug.WriteLine($"  Surveyor reports {searchresults.Count} results");
@@ -636,12 +665,16 @@ namespace EDDiscovery.UserControls
 
                 // find if we have system nodes
 
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Find System Async {sys.Name}");
+
                 StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
                 if (IsClosed)   // may close during await..
                     return;
 
                 if (systemnode != null)     // if we have a node (should do of course since july 22 due to AddLocation in scan node)
                 {
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Process node {sys.Name}");
+
                     foreach (StarScan.ScanNode sn in systemnode.Bodies.EmptyIfNull().Where(x => x.ScanData != null))        // only nodes with scan data can be treated here
                     {
                         var sd = sn.ScanData;
@@ -784,7 +817,13 @@ namespace EDDiscovery.UserControls
                 }
             }       // end sys
 
-            lock (extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock, set vars, draw, unlock
+            if (sys != cur_sys)
+            {
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor Cancelled CalculateThenDrawSystemSignals as cursys has changed during await");
+                return;
+            }
+
+            lock (extPictureBoxScrollSystemDetails)      // because of the async call above, we may be running two of these at the same time. So, we lock, set vars, draw, unlock
             {
                 drawsystemtext = ldrawsystemtext;                   // we keep these in variables so we can just draw again. Nasty
                 drawsystemsignallist = ldrawsystemsignallist;
@@ -798,7 +837,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawSystemUnlocked()
         {
-            //System.Diagnostics.Debug.WriteLine($"Surveyor present system results");
+            System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor present system results");
 
             extPictureBoxSystemDetails.ClearImageList();
 
@@ -860,7 +899,7 @@ namespace EDDiscovery.UserControls
 
             frmt.Dispose();
 
-            extPictureBoxScroll.Render();
+            extPictureBoxScrollSystemDetails.Render();
             Refresh();
         }
 
@@ -1044,7 +1083,7 @@ namespace EDDiscovery.UserControls
 
                 PopulateCtrlList();
                 SetVisibility();
-                DrawAll(last_sys);
+                DrawAll(cur_sys);
             };
 
             if ( saveasstring == null)
@@ -1060,13 +1099,13 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
             PutSetting("font", setting);
             displayfont = f;
-            DrawAll(last_sys,true);
+            DrawAll(cur_sys,true);
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
-            DrawAll(last_sys,true);
+            DrawAll(cur_sys,true);
         }
 
         private void extButtonFSS_Click(object sender, EventArgs e)
@@ -1097,7 +1136,7 @@ namespace EDDiscovery.UserControls
             {
                 fsssignalsdisplayed = f.Get("Text");
                 PutSetting("fsssignals", fsssignalsdisplayed);
-                CalculateThenDrawSystem(last_sys);
+                CalculateThenDrawSystemSignals(cur_sys);
             }
         }
 
@@ -1138,7 +1177,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 SetVisibility();
-                DrawRoute(last_sys);
+                DrawRoute(cur_sys);
             };
 
             ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
@@ -1232,7 +1271,7 @@ namespace EDDiscovery.UserControls
             {
                 routecontrolsettings = s;
                 PutSetting("routecontrol", s);
-                DrawRoute(last_sys);
+                DrawRoute(cur_sys);
                 DrawFuel();
                 SetVisibility();
             };
@@ -1242,6 +1281,47 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region vars
+
+        // we keep the results of the last CalculatethenDrawSystem so we can just DrawSystem later
+        // we also set it to null in case DrawSystem gets called first before a calculate
+
+        private SortedList<string, string> drawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
+        private string drawsystemsignallist = "";
+        private long drawsystemvalue = 0;
+        
+        // we keep the results of the last scan summary
+        private string scansummarytext = "";
+
+        private StringAlignment alignment = StringAlignment.Near;
+        private string fsssignalsdisplayed = "";
+
+        private const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
+        private const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
+        private const double eccentricityLimit = 0.95; //orbital eccentricity limit
+
+        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        private EliteDangerousCore.UIEvents.UIMode.ModeType uimode = EliteDangerousCore.UIEvents.UIMode.ModeType.None;
+
+        private const string NavRouteNameLabel = "!*NavRoute";      // special label to identify a save of using the nav route - not user presented
+        private string translatednavroutename = "";
+        private SavedRouteClass currentRoute = null;
+        private string lastsystemroute;
+
+        private ShipInformation shipinfo;   // and last ship info
+        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
+
+        private Font displayfont;
+
+        private ISystem cur_sys = null;
+        private string starclass = "";
+        private Timer drawsystemupdatetimer;
+        private int bodies_found;
+        private bool all_found = false;
+        private bool doresize = false;
+
+
+        #endregion
 
     }
 

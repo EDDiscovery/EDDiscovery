@@ -298,7 +298,10 @@ namespace EDDiscovery.Forms
         {
             if (UserDatabase.Instance.Name != "UserDB")       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
             {
-                if (MessageBox.Show(this, "Confirm you want all journal entries removed from the DB" + Environment.NewLine +
+                EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
+
+                if (MessageBox.Show(this, "Confirm you want all journal entries removed from the DB at:" + Environment.NewLine + Environment.NewLine +
+                                opt.UserDatabasePath + Environment.NewLine + Environment.NewLine +
                                 "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." + Environment.NewLine +
                                 "EDD on start will then rescan any journal logs it finds from the folder locations of commanders listed in the settings panels" + Environment.NewLine + 
                                 "Notes will be kept but may be on the wrong entries",
@@ -314,11 +317,14 @@ namespace EDDiscovery.Forms
         {
             if (UserDatabase.Instance.Name != "UserDB")       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
             {
-                if (MessageBox.Show(this, "Confirm you want all journal entries and commanders removed from the DB" + Environment.NewLine +
+                EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
+
+                if (MessageBox.Show(this, "Confirm you want all journal entries and commanders removed from the DB at:" + Environment.NewLine + Environment.NewLine +
+                                opt.UserDatabasePath + Environment.NewLine + Environment.NewLine +
                                 "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." + Environment.NewLine +
                                 "EDD on start will then rescan any journal logs it finds in the standard Elite folders and create only commanders found in those logs" + Environment.NewLine +
                                 "Notes will be kept but may be on the wrong entries",
-                                "Delete Journal Entries", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                                "Delete Journal Entries and Commanders", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     UserDatabase.Instance.Initialize();
                     UserDatabase.Instance.ClearJournals();
