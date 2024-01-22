@@ -207,9 +207,6 @@ namespace EDDiscovery.UserControls
                 DrawAll(cur_sys,true);     // don't recalc
         }
 
-        // problems:
-        // fssSIGNALDISCOVERED OR OTHERS BETWEEN START JUMP AND FSDJUMP WILL HAVE PREVIOUS SYSTEM ASSIGNED. HOW TO COPE
-
         bool instartjump = false;
 
         public override void ReceiveHistoryEntry(HistoryEntry he)
@@ -225,7 +222,13 @@ namespace EDDiscovery.UserControls
             {
                 if (instartjump && !jumpover)       // if in a start jump, and jump not over.. throw away all events between start jump and fsd jump
                 {
-                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor  in jump sequence reject entry");
+                    if (he.EntryType == JournalTypeEnum.FSSSignalDiscovered &&
+                            ((JournalFSSSignalDiscovered)he.journalEntry).Signals[0].SystemAddress == cur_sys.SystemAddress)      // we may, unlikely, get signals from the next system
+                    {
+                        CalculateThenDrawSystemSignals(cur_sys);        // present..
+                    }
+
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor in jump sequence reject entry {he.EntryType}");
                     return;
                 }
 
