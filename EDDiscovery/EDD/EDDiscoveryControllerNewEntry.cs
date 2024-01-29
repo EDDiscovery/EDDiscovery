@@ -167,7 +167,10 @@ namespace EDDiscovery
 
                     // finally, CAPI, if docked, and CAPI is go for pc commander, do capi procedure
 
-                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander && he.Status.TravelState != HistoryEntryStatus.TravelStateType.TaxiDocked)
+                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && 
+                            !EDCommander.Current.ConsoleCommander && he.Status.TravelState != HistoryEntryStatus.TravelStateType.TaxiDocked
+                            && he.Status.TravelState != HistoryEntryStatus.TravelStateType.MulticrewDocked &&
+                            he.Status.MultiPlayer == false)
                     {
                         var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
                         DoCAPI(dockevt.StationName, he.System.Name, History.Shipyards.AllowCobraMkIV);
