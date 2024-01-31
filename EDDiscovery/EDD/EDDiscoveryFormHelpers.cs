@@ -423,19 +423,21 @@ namespace EDDiscovery
         private string[] messages = new string[maxstatusmessages] { "", "", "", "" };
         private int[] progress = new int[maxstatusmessages] { -1, -1, -1, -1 };
 
-        private void StatusLineUpdate(int category, int percentComplete, string message)
+        public enum StatusLineUpdateType { CloseDown = -1, SystemData = 0, History = 1, EDSMLogFetcher = 2, CAPIJournal = 3 }
+
+        private void StatusLineUpdate(StatusLineUpdateType category, int percentComplete, string message)
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
 
-            if ( category == -1 )       // -1 means clear down, closing. So cancel notifications
+            if ( category == StatusLineUpdateType.CloseDown )       // -1 means clear down, closing. So cancel notifications
             {
-                category = 0;
+                category = StatusLineUpdateType.SystemData;
                 progress = new int[maxstatusmessages] { -1, -1, -1, -1 };
                 messages = new string[maxstatusmessages] { "", "", "", "" };
             }
 
-            progress[category] = percentComplete;
-            messages[category] = message;
+            progress[(int)category] = percentComplete;
+            messages[(int)category] = message;
 
             int maxprogress = progress.Max();
             toolStripProgressBarEDD.Visible = maxprogress >= 0;

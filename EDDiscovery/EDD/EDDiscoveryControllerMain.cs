@@ -62,11 +62,11 @@ namespace EDDiscovery
         public event Action<HistoryEntry> OnNewEntrySecond;    // UI. Called after OnNewEntry for more processing. Post filtering
         // If a UC is a Cursor Control type, then OnNewEntry should also fire the cursor control OnChangedSelection, OnTravelSelectionChanged after onNewEntry has been received by the cursor UC
 
-        // Status/Logging updates
+        // Status/Logging updates. These can be run in a thread.  EDF invokes them
 
-        public event Action<string> LogLineHighlight;                       // these can be run in a thread.  EDF invokes them
+        public event Action<string> LogLineHighlight;                       
         public event Action<string> LogLine;
-        public event Action<int, int, string> StatusLineUpdate;             
+        public event Action<EDDiscoveryForm.StatusLineUpdateType, int, string> StatusLineUpdate;             
 
         // During a Close
 
@@ -128,7 +128,7 @@ namespace EDDiscovery
                 LogLineHighlight($"Log Writer Exception: {ex}");
             };
 
-            EdsmLogFetcher = new EDSMLogFetcher(LogLine, StatusLineUpdate);
+            EdsmLogFetcher = new EDSMLogFetcher(LogLine, (s) => StatusLineUpdate(EDDiscoveryForm.StatusLineUpdateType.EDSMLogFetcher, -1,s));
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);

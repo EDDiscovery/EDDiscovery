@@ -872,7 +872,7 @@ namespace EDDiscovery
 
                 if (goforit)
                 {
-                    StatusLineUpdate(-1,-1,"Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
+                    StatusLineUpdate(EDDiscoveryForm.StatusLineUpdateType.CloseDown, -1,"Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
                     actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                     Controller.Shutdown();
                 }

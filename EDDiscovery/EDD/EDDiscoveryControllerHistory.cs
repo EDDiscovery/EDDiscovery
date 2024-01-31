@@ -96,7 +96,7 @@ namespace EDDiscovery
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background history refresh worker running");
 
-            int capirefreshinterval = 10000;        // how often we check CAPI system.  This is not the poll interval.
+            int capirefreshinterval = 8000;        // how often we check CAPI system.  
 
             while (!PendingClose)
             {
@@ -140,7 +140,9 @@ namespace EDDiscovery
                             var retstate = FrontierCAPI.ManageJournalDownload(EDCommander.Current.ConsoleUploadHistory, EDDOptions.Instance.CAPIDirectory(), 
                                             EDCommander.Current.Name, 
                                             new TimeSpan(0,15,0),       // journal poll interval
-                                            28);    // and days back in time to look
+                                            28, 
+                                            ReportCAPICommanderProgress, 2000       // keep message up for 2 seconds
+                                            );    // and days back in time to look
 
                             if (EDCommander.Current.ConsoleUploadHistory == null || !retstate.DeepEquals(EDCommander.Current.ConsoleUploadHistory))     // if changed
                             {
@@ -346,7 +348,11 @@ namespace EDDiscovery
 
         public void ReportRefreshProgress(int percent, string message)
         {
-            StatusLineUpdate?.Invoke(1, percent, message);
+            StatusLineUpdate?.Invoke(EDDiscoveryForm.StatusLineUpdateType.History, percent, message);      // can be invoked in thread
+        }
+        public void ReportCAPICommanderProgress(string message)
+        {
+            StatusLineUpdate?.Invoke(EDDiscoveryForm.StatusLineUpdateType.CAPIJournal, -1, message);      // can be invoked in thread
         }
 
     }

@@ -402,12 +402,12 @@ namespace EDDiscovery
 
         public void ReportSyncProgress(string message)
         {
-            StatusLineUpdate?.Invoke(0, -1, message);
+            StatusLineUpdate?.Invoke(EDDiscoveryForm.StatusLineUpdateType.SystemData, -1, message);
         }
 
         public void ReportDownloadProgress(long count, double rate)
         {
-            StatusLineUpdate?.Invoke(0, -1, $"Downloaded {count / 1024:N0} KB at {rate / 1024 / 1024:N2} MB/sec");
+            StatusLineUpdate?.Invoke(EDDiscoveryForm.StatusLineUpdateType.SystemData, -1, $"Downloaded {count / 1024:N0} KB at {rate / 1024 / 1024:N2} MB/sec");
         }
 
     }
