@@ -792,6 +792,8 @@ namespace EDDiscovery
         UserControlTravelGrid_StartStopHidden,      // you must define this one fully if you include it
         UserControlTravelGrid_StartStopNotFound,      // you must define this one fully if you include it
 
+        UserControlTravelGrid_entryfilteredout,      
+
         UserControlStarList_ColumnTime, // Column Header 'Last Visit'
         UserControlStarList_ColumnSystem, // Column Header 'System'
         UserControlStarList_ColumnVisits, // Column Header 'Visits'

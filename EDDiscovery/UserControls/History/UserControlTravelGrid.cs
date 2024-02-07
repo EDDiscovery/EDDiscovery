@@ -539,10 +539,17 @@ namespace EDDiscovery.UserControls
 
         public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if ( actionobj is long )
+            if ( actionobj is UserControlCommonBase.RequestTravelToJID)
             {
-                GotoPosByJID((long)actionobj);
-                return true;
+                var ttj = actionobj as UserControlCommonBase.RequestTravelToJID;
+                if (GotoPosByJID(ttj.JID))
+                {
+                    if (ttj.MakeVisible)
+                        MakeVisible();
+                    return true;
+                }
+                else
+                    return false;
             }
             else if ( actionobj is UserControlCommonBase.RequestTravelHistoryPos )
             {
@@ -574,7 +581,7 @@ namespace EDDiscovery.UserControls
             return false;
         }
 
-        public void GotoPosByJID(long jid)       // -1 if fails
+        public bool GotoPosByJID(long jid)       
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             //System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
@@ -585,7 +592,10 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.DisplayRow(rowno, true);
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
+                return true;
             }
+            else
+                return false;
         }
 
         public void FireChangeSelection()
@@ -1196,7 +1206,8 @@ namespace EDDiscovery.UserControls
         {
             List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
             long jid = jids[extComboBoxQuickMarks.SelectedIndex];
-            GotoPosByJID(jid);
+            if (!GotoPosByJID(jid))
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
         }
 
         #endregion

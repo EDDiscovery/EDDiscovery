@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright 2016-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -11,12 +11,10 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * 
  */
 
- using System;
+using System;
 using System.Drawing;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -43,16 +41,13 @@ namespace EDDiscovery.UserControls
             {
                 UserControlCommonBase uccb = (UserControlCommonBase)Activator.CreateInstance((Type)tab.TagList[si], null);
                 uccb.Name = tab.TextList[si];
+                uccb.ParentUCCB = this;
                 return uccb;
             };
 
             tabStrip.OnPostCreateTab += (tab, ctrl, si) =>
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-                
-                if (ctrl is SearchStars)                            // this one we need to tell where this is
-                    ((SearchStars)ctrl).SearchUC = this;
-
                 uccb.Init(DiscoveryForm, DisplayNumber);
                 ExtendedControls.Theme.Current.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
                 uccb.LoadLayout();

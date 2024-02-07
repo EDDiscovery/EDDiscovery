@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls
         public int DisplayNumber { get; private set; }                // set on Init
         public bool IsPrimaryHistoryDisplayNumber { get { return DisplayNumber == DisplayNumberSplitterStart; } }
         public EDDiscoveryForm DiscoveryForm { get; private set; }    // set on Init    
+        public UserControlCommonBase ParentUCCB { get; set; }    // only for UCCBs under UCCBs, this is set to the parent UCCB (search)
         public bool IsClosed { get; private set; }                    // set after CloseDown called. Use this if your doing await stuff which may mean your class gets called after close
 
         public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
@@ -156,7 +157,9 @@ namespace EDDiscovery.UserControls
         //          Sent up to tab - MainTab distributes it to other tabs and forms, Other throws it away
         //          All panels must return false so no-one grabs it
         //
-        //      long - request travel grid to go to this jid 
+        //      class RequestTravelToJID
+        //           request travel grid to go to this jid 
+        //
         //      class RequestTravelHistoryPos - request primary travel grid to call back directly to sender with the current HE (may be null)
         //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution (like the main tab will)
         //           If not ack, sent up to tab - Other will send it to maintab only
@@ -186,6 +189,11 @@ namespace EDDiscovery.UserControls
 
         public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
         public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
+        public class RequestTravelToJID 
+        { 
+            public long JID { get; set; }
+            public bool MakeVisible { get; set; } = false;
+        };
         public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he. TG will return true 
         public class PushStars                          // use to push star list to other panels 
         {

@@ -318,7 +318,9 @@ namespace EDDiscovery.UserControls
             if (dataGridViewLedger.RightClickRow != -1)
             {
                 long v = (long)dataGridViewLedger.Rows[dataGridViewLedger.RightClickRow].Tag;
-                RequestPanelOperation(this, v);
+
+                if (!RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = v, MakeVisible = true }))
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
             }
         }
 

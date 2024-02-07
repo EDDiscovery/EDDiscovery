@@ -67,6 +67,7 @@ namespace EDDiscovery.UserControls.Search
             cms.Items[4].Text = "Go to entry on grid";
             cms.Items[4].Name = "Goto";
             cms.Items[4].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
+
             cms.Opening += Cms_Opening;
             CellDoubleClick += cellDoubleClick;
 
@@ -86,7 +87,9 @@ namespace EDDiscovery.UserControls.Search
         private void Cms_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
+
             ContextMenuStrip.Items[2].Visible = SystemClassFrom(rightclicktag)?.SystemAddress.HasValue ?? false;        // spansh
+            ContextMenuStrip.Items[4].Visible = GotoEntryClicked != null;
         }
 
         private ISystem SystemClassFrom(Object t)   // given tag, find the isystem, may be null. 

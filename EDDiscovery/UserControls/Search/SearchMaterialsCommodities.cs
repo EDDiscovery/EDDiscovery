@@ -75,7 +75,12 @@ namespace EDDiscovery.UserControls
             comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".T(EDTx.SearchMaterialsCommodities_AND), "OR".T(EDTx.SearchMaterialsCommodities_OR) });
             comboBoxCustomCMANDOR.SelectedIndex = GetSetting(dbCMANDOR, 0);
 
-            dataGridView.GotoEntryClicked += (he) => { RequestPanelOperation(this,he.Journalid); };
+            // we need to ask our parent UCCB for the panel op - remembering we are not a normal UCCB # 3478
+            dataGridView.GotoEntryClicked += (he) => 
+            {
+                if (!ParentUCCB.RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }))
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+            };
         }
 
         public override void LoadLayout()

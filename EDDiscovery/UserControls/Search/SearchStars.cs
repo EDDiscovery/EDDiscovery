@@ -29,8 +29,6 @@ namespace EDDiscovery.UserControls
 
     public partial class SearchStars : UserControlCommonBase
     {
-        public UserControlCommonBase SearchUC { get; set; }     // set by user control search so we have ref to the main uccb
-
         private List<ISystem> routeSystems;
 
         #region Init
@@ -68,7 +66,7 @@ namespace EDDiscovery.UserControls
                 if (routeSystems?.Count > 0)
                 {
                     string name = routeSystems[0].Name + " - " + routeSystems.Last().Name;
-                    RouteHelpers.ExpeditionPush(name, routeSystems, SearchUC, DiscoveryForm);       // we need to give it the search uc as the thing to push the request thru
+                    RouteHelpers.ExpeditionPush(name, routeSystems, ParentUCCB, DiscoveryForm);       // we need to give it the search uc as the thing to push the request thru
                 }
             };
 

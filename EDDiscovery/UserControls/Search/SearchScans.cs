@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright 2016-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
+
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
@@ -117,6 +116,13 @@ namespace EDDiscovery.UserControls
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
             labelCount.Visible = false;
+
+            dataGridView.GotoEntryClicked += (he) =>
+            {
+                if (!ParentUCCB.RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }))
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+            };
+
         }
         public override void LoadLayout()
         {
@@ -295,7 +301,7 @@ namespace EDDiscovery.UserControls
                                             };
 
                     int row = dataGridView.Rows.Add(rowobj);
-                    dataGridView.Rows[row].Tag = he.System;
+                    dataGridView.Rows[row].Tag = he;
                     dataGridView.Rows[row].Cells[0].Tag = kvp.Value;
                     dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
                 }

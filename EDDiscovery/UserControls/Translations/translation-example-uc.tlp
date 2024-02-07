@@ -1343,6 +1343,8 @@ SECTION UserControlTravelGrid
 .StartStopHidden: "Next start/stop marker is hidden" @
 .StartStopNotFound: "No start/stop marker found below" @
 
+.entryfilteredout: "Entry filtered out of grid" @
+
 SECTION UserControlCaptainsLog
 
 .Diary: "Diary" @

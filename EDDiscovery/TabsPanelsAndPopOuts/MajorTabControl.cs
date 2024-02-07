@@ -206,6 +206,19 @@ namespace EDDiscovery
             }
         }
 
+        public bool SelectPrimarySplitterTab()      // select the primary splitter
+        {
+            foreach (TabPage p in TabPages)      
+            {
+                if (p.Tag != null)
+                {
+                    SelectTab(p);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public TabPage GetMajorTab(PanelInformation.PanelIDs ptype)
         {
             return (from TabPage x in TabPages where ((UserControls.UserControlCommonBase)x.Controls[0]).PanelID == ptype select x).FirstOrDefault();
@@ -341,7 +354,7 @@ namespace EDDiscovery
         {
             //System.Diagnostics.Debug.WriteLine($"Tab Primary request {actionobj}");
 
-            System.Diagnostics.Debug.Assert(!(actionobj is long));      // should not get jid moves from primary tab
+            System.Diagnostics.Debug.Assert(!(actionobj is long));      // do not support this
 
             foreach (TabPage tp in TabPages)
             {
@@ -369,6 +382,8 @@ namespace EDDiscovery
         // request came from secondary panel 
         private bool RequestPanelOperationOther(TabPage page, UserControls.UserControlCommonBase sender, object actionobj)
         {
+            System.Diagnostics.Debug.Assert(!(actionobj is long));      // do not support this
+
             return PerformOperationOther(page, sender, actionobj);
         }
 

@@ -58,28 +58,35 @@ namespace EDDiscovery
                 }
             }
             else
-            {
-                TabPage p = tabControlMain.GetMajorTab(id.Value);   // does ID exist?
-                if (p == null)          // no, either open it, or error
-                {
-                    if (openit)
-                    {
-                        tabControlMain.EnsureMajorTabIsPresent(id.Value, true);
-                        return true;
-                    }
-                }
-                else
-                {                   // yes, either close it or select, no error
-                    if (closeit)
-                        tabControlMain.RemoveTab(p);
-                    else
-                        tabControlMain.SelectTab(p);
+                return SelectTabPage(id.Value, openit, closeit);
 
+            return false;
+        }
+
+        public bool SelectTabPage(PanelInformation.PanelIDs id, bool openit, bool closeit)
+        {
+            TabPage p = tabControlMain.GetMajorTab(id);   // does ID exist?
+            if (p == null)          // no, either open it, or error
+            {
+                if (openit)
+                {
+                    tabControlMain.EnsureMajorTabIsPresent(id, true);
                     return true;
                 }
             }
+            else
+            {                   // yes, either close it or select, no error
+                if (closeit)
+                    tabControlMain.RemoveTab(p);
+                else
+                    tabControlMain.SelectTab(p);
+
+                return true;
+            }
+
             return false;
         }
+
 
         private bool IsNonRemovableTab(int n)
         {

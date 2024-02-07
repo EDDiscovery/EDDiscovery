@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2022 - 2022 EDDiscovery development team
+ * Copyright © 2022 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EDDiscovery.Controls;
@@ -87,6 +85,14 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             updatetimer = new Timer() { Interval = 1000 };
             updatetimer.Tick += Updatetimer_Tick;
+
+            // we need to ask our parent UCCB for the panel op - remembering we are not a normal UCCB # 3478
+            dataGridView.GotoEntryClicked += (he) =>
+            {
+                if (!RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }))
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+            };
+
         }
 
         public override void LoadLayout()
@@ -321,7 +327,7 @@ namespace EDDiscovery.UserControls
                 if (addto)      // else not in grid, so add to grid
                 {
                     int row = dataGridView.Rows.Add(rowobj);
-                    dataGridView.Rows[row].Tag = he.System;
+                    dataGridView.Rows[row].Tag = he;
                     dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
                 }
             }
