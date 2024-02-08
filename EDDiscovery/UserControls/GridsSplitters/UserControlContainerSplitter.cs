@@ -344,62 +344,72 @@ namespace EDDiscovery.UserControls
 
         // called by the panels to do something - pass to siblings, and then work out if we should pass upwards
         // a panel may claim the event, in which case its not sent up
-        private bool SplitterRequestAction(UserControlCommonBase sender, object actionobj)
+        private PanelActionState SplitterRequestAction(UserControlCommonBase sender, object actionobj)
         {
-            //System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} request action {actionobj}");
+            System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} request action {actionobj}");
 
-            bool done = false;
+            PanelActionState retstate = PanelActionState.NotHandled;
 
             RunActionOnSplitterTree((sp, c, uccb) =>    // reflect to us first
             {
-                if (uccb != null && uccb != sender && !done )   // make sure we have one, and don't send to sender, and we are not done (claimed)
+                if (uccb != null && uccb != sender && !IsPASResult(retstate) )   // make sure we have one, and don't send to sender, and we are not done (claimed)
                 {
-                   // System.Diagnostics.Debug.WriteLine($"Splitter .. uccb {uccb.PanelID} perform operation {actionobj}");
-                    done = uccb.PerformPanelOperation(sender, actionobj);
-                    if (done)
+                    System.Diagnostics.Debug.WriteLine($"...splitter {uccb.PanelID} perform operation {actionobj}");
+
+                    var state = uccb.PerformPanelOperation(sender, actionobj);
+
+                    System.Diagnostics.Debug.WriteLine($"...splitter {uccb.PanelID} perform operation {actionobj} result {state}");
+
+                    if (state != PanelActionState.NotHandled)       // if not handled, retstate is set, either to HandledContinue (and we cont processing) or to a result
                     {
-                       // System.Diagnostics.Debug.WriteLine($"Splitter .. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                        retstate = state;
+                        if (IsPASResult(state))
+                            System.Diagnostics.Debug.WriteLine($"...splitter {uccb.PanelID} claimed call {actionobj} result {state}");
                     }
                 }
             });
 
-            if ( !done )
+            if (!IsPASResult(retstate))     // if not claimed, pass up
             {
-                //System.Diagnostics.Debug.WriteLine($".. no claim on {actionobj}, pass on up the chain");
+                System.Diagnostics.Debug.WriteLine($".. splitter no claim on {actionobj}, pass on up the chain");
                 return RequestPanelOperation.Invoke(sender, actionobj);     // No one claimed it, so pass it up the chain
             }
             else
-                return done;
+                return retstate;
         }
 
         // called from above for us to do something, work out if we should pass it down
         // we don't pass up some travel grid stuff if we have a travel grid ourselves
         // sender can't be us since we are being called from above.
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            //System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} perform action {actionobj}");
+            System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} perform action {actionobj}");
 
-            if (IsOperationTHPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid)!=null)
+            if (IsOperationHistoryPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid)!=null)
             {
-                //System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH for {actionobj}");
-                return false;
+                System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH in the splitter for {actionobj}");
+                return PanelActionState.NotHandled;
             }
 
-            bool done = false;
+            PanelActionState retstate = PanelActionState.NotHandled;
 
-            RunActionOnSplitterTree((sp, c, uccb) =>    // send Hes and JID moves to all
+            RunActionOnSplitterTree((sp, c, uccb) =>    
             {
-                if (uccb != null && !done)
+                if (uccb != null && !IsPASResult(retstate)) // if valid, and we have not stopped distributing because someone has claimed it
                 {
-                    done = uccb.PerformPanelOperation(sender, actionobj);
-                    if (done)
+                    System.Diagnostics.Debug.WriteLine($"...splitter perform action from above {uccb.PanelID} perform operation {actionobj}");
+                    var state = uccb.PerformPanelOperation(sender, actionobj);
+                    System.Diagnostics.Debug.WriteLine($"...splitter perform action from above {uccb.PanelID} perform operation {actionobj} result {state}");
+
+                    if (IsPASResult(state))
                     {
-                        //System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj}");
+                        retstate = state;
+                        System.Diagnostics.Debug.WriteLine($".. uccb {uccb.PanelID} claimed this operation {actionobj} {state}");
                     }
                 }
             });
 
-            return done;
+            return retstate;
         }
 
 

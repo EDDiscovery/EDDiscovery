@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
 
         // called when class is created. Override to get panel info if required
 
-        public virtual void Creation(PanelInformation.PanelInfo p)      
+        public virtual void Creation(PanelInformation.PanelInfo p)
         {
             System.Diagnostics.Debug.WriteLine($"UCCB Create {this.Name}");
             PanelID = p.PopoutID;
@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
         public virtual void SetTransparency(bool ison, Color curcol) { }
 
         // TransparentModeChange is called on startup, and only then if the user changes the transparent major mode on/off
-        public virtual void TransparencyModeChanged(bool on) { }         
+        public virtual void TransparencyModeChanged(bool on) { }
 
         // then LoadLayout, InitialDisplay is called
         public virtual void LoadLayout() { }        // then a chance to load a layout. 
@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
         // override to say default to be transparent
         public virtual bool DefaultTransparent { get { return false; } }
         // override to know
-        public virtual void onControlTextVisibilityChanged(bool newvalue)       
+        public virtual void onControlTextVisibilityChanged(bool newvalue)
         {
         }
         // override to prevent closure
@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
 
         #region Closedown
         // Call to close down panel.
-        public void CloseDown()     
+        public void CloseDown()
         {
             IsClosed = true;
             Closing();
@@ -151,50 +151,34 @@ namespace EDDiscovery.UserControls
         #region Panel communication
 
         // Action request system - replaces UCTG. Allows comms between panels
-        // Requests/Performs are:
-        //      HistoryEntry - sent by all TG on cursor moves.
-        //          Splitter/grid distributes it around the siblings - they response false
-        //          Sent up to tab - MainTab distributes it to other tabs and forms, Other throws it away
-        //          All panels must return false so no-one grabs it
-        //
-        //      class RequestTravelToJID
-        //           request travel grid to go to this jid 
-        //
-        //      class RequestTravelHistoryPos - request primary travel grid to call back directly to sender with the current HE (may be null)
-        //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution (like the main tab will)
-        //           If not ack, sent up to tab - Other will send it to maintab only
-        //           Panel should return true
-        //
-        //      class PushStars - someone is pushing a system list to expedition or trilat
-        //           Splitter/grid distributes it around the siblings - if a recipient is there and uses it, they respond true, which stops the distribution
-        //           Sent up to major tab - both types will distribute it to all tabs and the first recepient will cancel it
-        //           Distributed to all forms
-        //           Panel should return true
-        //
-        //      class PanelAction - perform this string action on a tab panel
-        //           Sent into all tabs, and to all forms, first one accepting it will cancel it.
-        //           Panel should return true if serviced
-        //
-        //      class TravelHistoryStartStopChanged - someone set a start stop flag
-        //           Sent to everone.
-        //           Panel should return false
-        //
-        //      class PushResourceWantedList - synthesis/engineering pushes a list of wants to the resources panel
-        //           Send to everyone
-        //           Panel which grabs it should return true
-        //
-        //      class PushRouteList - route panel is pushing a list of systems calculated
-        //           Send to everyone
-        //           No Panel should grab it
+        public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is RequestTravelToJID || actionobj is RequestTravelHistoryPos; }
+        public static bool IsOperationHistoryPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
 
-        public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is long || actionobj is RequestTravelHistoryPos; }
-        public static bool IsOperationTHPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
+        // HistoryEntry - sent by all TG on cursor moves.
+        //          Splitter/grid distributes it around the siblings - they response HandledContinue or NotHandled
+        //          Sent up to tab - MainTab distributes it to other tabs and forms
+        //          All panels must return HandledContinue or NotHandled so no one grabs it
+
+        //      class RequestTravelToJID
+        //           request travel grid to go to this jid. Success or Failure or NotHandled
         public class RequestTravelToJID 
         { 
             public long JID { get; set; }
             public bool MakeVisible { get; set; } = false;
         };
+
+        // RequestTravelHistoryPos - request primary travel grid to call back directly to sender with the current HE (may be null)
+        //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution (like the main tab will)
+        //           If not ack, sent up to tab - Other will send it to maintab only
+        //           Panel should return Success when it claims it
         public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he. TG will return true 
+
+        // PushStars - someone is pushing a system list to expedition or trilat
+        //           Splitter/grid distributes it around the siblings - if a recipient is there and uses it, they respond true, which stops the distribution
+        //           Sent up to major tab - both types will distribute it to all tabs and the first recepient will cancel it
+        //           Distributed to all forms
+        //           Panel should return Success when it claims it
+
         public class PushStars                          // use to push star list to other panels 
         {
             public enum PushType { TriWanted, TriSystems, Expedition };
@@ -204,6 +188,10 @@ namespace EDDiscovery.UserControls
             public bool MakeVisible { get; set; } = false;
             public string RouteTitle { get; set; } = null;
         };
+
+        // PanelAction - perform this string action on a tab panel
+        //           Sent into all tabs, and to all forms, first one accepting it will cancel it.
+        //           Panel should return Success if serviced
         public class PanelAction                    // perform an action
         {
             public const string ImportCSV = "ImportCSV";                // data is the filename string, to expedition panel
@@ -211,17 +199,31 @@ namespace EDDiscovery.UserControls
             public string Action { get; set; }
             public object Data { get; set; }
         }
+
+        // PushResourceWantedList - synthesis/engineering pushes a list of wants to the resources panel
+        //           Send to everyone
+        //           Panel which grabs it should return Success
+        //
         public class PushResourceWantedList         // use to push resource list to resource panel
         {
             public System.Collections.Generic.Dictionary<EliteDangerousCore.MaterialCommodityMicroResourceType, int> Resources { get; set; }      // push type and amount
         }
+
+        // PushRouteList - route panel is pushing a list of systems calculated
+        //           Send to everyone
+        //           No Panel should grab it. return HandledContinue or NotHandled so it goes to everyone
         public class PushRouteList                  // use to push star list from route panel
         {
             public System.Collections.Generic.List<EliteDangerousCore.ISystem> Systems { get; set; }
         };
 
+        // TravelHistoryStartStopChanged - someone set a start stop flag
+        //           Sent to everone.
+        //           Panel should return HandedContinue or NotHandled
         public class TravelHistoryStartStopChanged { }  // push start/stop has been changed
 
+        // Compass Target
+        // compass should return Success when it grabs it
         public class SetCompassTarget
         {
             public string Name { get; set; }
@@ -229,19 +231,25 @@ namespace EDDiscovery.UserControls
             public double Longitude { get; set; }
         }
 
-        // Request action. Return if positively services by a single panel, or false if panels either don't use it or pass it on
-        // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
+        public enum PanelActionState { NotHandled = 0, HandledContinue = 1, Success, Failed };
+        public static bool IsPASResult(PanelActionState s) => (int)s >= 2;
 
-        public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        
+        // Request action. Return one of the PAS State
+        // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
+        public Func<UserControlCommonBase, object, PanelActionState> RequestPanelOperation;        
 
         // panel is asked for operation, return true to indicate its swallowed, or false to say pass it onto next guy. 
         // the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry
         // either override PerformPanelOperation for the full monty, or override ReceiveHistoryEntry if your just interested in HE receive
-        public virtual bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public virtual PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             if (actionobj is EliteDangerousCore.HistoryEntry)
+            {
                 ReceiveHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
-            return false;
+                return PanelActionState.HandledContinue;
+            }
+            else
+                return PanelActionState.NotHandled;
         } 
         public virtual void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {

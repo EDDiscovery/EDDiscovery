@@ -32,7 +32,7 @@ namespace EDDiscovery
 
         public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
-        public Func<UserControlCommonBase, object,bool> RequestPanelOperation;        // Request other panel does work
+        public Func<UserControlCommonBase, object, UserControlCommonBase.PanelActionState> RequestPanelOperation;        // Request other panel does work
 
         private static string PopOutSaveID(PanelInformation.PanelIDs p)
         {
@@ -129,7 +129,7 @@ namespace EDDiscovery
             return uccb;
         }
 
-        public bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public UserControlCommonBase.PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             return usercontrolsforms.PerformPanelOperation(sender, actionobj);
         }

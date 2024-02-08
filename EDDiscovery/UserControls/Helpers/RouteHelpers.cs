@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
         {
             var req = new UserControlCommonBase.PushStars() { PushTo = PushStars.PushType.Expedition, SystemList = routeSystems, MakeVisible = true, RouteTitle = exampleroutename };
 
-            bool serviced = ucb.RequestPanelOperation.Invoke(ucb, req);
+            bool serviced = ucb.RequestPanelOperation.Invoke(ucb, req) != PanelActionState.NotHandled;
 
             if (!serviced) // no-one serviced it, so create an expedition tab, and then reissue
             {

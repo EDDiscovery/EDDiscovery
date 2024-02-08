@@ -272,7 +272,7 @@ namespace EDDiscovery.UserControls
             Display(last_mcl,false);        // need to redraw the shopping list
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             PushResourceWantedList pr = actionobj as PushResourceWantedList;
             if (pr != null && PanelMode == UserControlMaterialCommodities.PanelType.All )
@@ -300,7 +300,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     Display(last_mcl);
-                    return true;
+                    return PanelActionState.Success;
                 }
             }
 
@@ -310,10 +310,11 @@ namespace EDDiscovery.UserControls
                 uint mcl = he.MaterialCommodity;
                 if (mcl != last_mcl)
                     Display(mcl);
+
+                return PanelActionState.HandledContinue;
             }
 
-            return false;
-
+            return PanelActionState.NotHandled;
         }
 
         #endregion

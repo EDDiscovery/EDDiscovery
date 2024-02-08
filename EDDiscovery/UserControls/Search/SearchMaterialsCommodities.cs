@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             // we need to ask our parent UCCB for the panel op - remembering we are not a normal UCCB # 3478
             dataGridView.GotoEntryClicked += (he) => 
             {
-                if (!ParentUCCB.RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }))
+                if (ParentUCCB.RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }) == PanelActionState.Failed)
                     ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
             };
         }

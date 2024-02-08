@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             if (actionobj is SetCompassTarget sct)
             {
@@ -230,9 +230,9 @@ namespace EDDiscovery.UserControls
                     PopulateBookmarkComboSetBookmarkEnable();
                 }
                 comboBoxBookmarks.SelectedItem = sct.Name;      // must be in list, so select and set the compass
-                return true;
+                return PanelActionState.Success;
             }
-            return false;
+            return PanelActionState.NotHandled;
         }
 
         #endregion

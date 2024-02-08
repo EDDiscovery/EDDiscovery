@@ -55,8 +55,12 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
-            var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol, EDTx.UserControlMarketData_labelLocation, EDTx.UserControlMarketData_labelVs, EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxHasDemand, EDTx.UserControlMarketData_checkBoxAutoSwap };
-            var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
+            var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, 
+                            EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, 
+                            EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol, EDTx.UserControlMarketData_labelLocation, EDTx.UserControlMarketData_labelVs, 
+                            EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxHasDemand, EDTx.UserControlMarketData_checkBoxAutoSwap };
+            var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, 
+                                    EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
@@ -204,7 +208,7 @@ namespace EDDiscovery.UserControls
                     // if hasdemand is set, we display if we have demand, or if we have a comparision to display
                     // else if not buy toggle is off, or when on its when it can be bought or we have a comparision to display
 
-                    if (hasdemand ? (c.HasDemand || c.ComparisionBuy) : (!buyonly || c.HasStock || c.ComparisionBuy))
+                    if (hasdemand ? (c.HasGoodDemand || c.ComparisionBuy) : (!buyonly || c.HasStock || c.ComparisionBuy))
                     {
                         MaterialCommodityMicroResourceType mc = MaterialCommodityMicroResourceType.GetByFDName(c.fdname);
 
@@ -217,8 +221,8 @@ namespace EDDiscovery.UserControls
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
                                             c.CargoCarried,
-                                            c.demand > 1 ? c.demand.ToString() : "" ,       // 1 because lots of them are marked with 1, which is a frontier marker showing they want it weakly
-                                            c.stock > 0 ? c.stock.ToString() : "" ,
+                                            c.HasGoodDemand ? c.demand.ToString() : "" ,       
+                                            c.HasStock ? c.stock.ToString() : "" ,
                                             c.meanPrice > 0 ? c.meanPrice.ToString() : "",
                                             c.ComparisionLR,
                                             c.ComparisionRL };
@@ -233,6 +237,10 @@ namespace EDDiscovery.UserControls
 
                         dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =
                         dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = c.ToString();
+                    }
+                    else
+                    {
+
                     }
                 }
 

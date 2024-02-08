@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
             callbacks.DGVTransparent = (g, t, c) => DGVTransparent((DataGridView)g, t, c);
             callbacks.RequestTravelGridPosition = () => 
             { 
-                return RequestPanelOperation?.Invoke(this, new RequestTravelHistoryPos()) ?? false; 
+                return (RequestPanelOperation?.Invoke(this, new RequestTravelHistoryPos()) ?? PanelActionState.NotHandled) == PanelActionState.Success; 
             };
             callbacks.PushStars = (name,list) => 
             {
@@ -75,11 +75,11 @@ namespace EDDiscovery.UserControls
                                         name.EqualsIIC("trisystems") ? PushStars.PushType.TriSystems :
                                         PushStars.PushType.Expedition;
 
-                return RequestPanelOperation?.Invoke(this, new PushStars { PushTo = pt, SystemNames = list }) ?? false; 
+                return (RequestPanelOperation?.Invoke(this, new PushStars { PushTo = pt, SystemNames = list }) ?? PanelActionState.NotHandled )== PanelActionState.Success; 
             };
             callbacks.PushCSVToExpedition = (file) =>
             {
-                return RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = file }) ?? false;
+                return (RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = file }) ?? PanelActionState.NotHandled) == PanelActionState.Success;
             };
 
             var th = ExtendedControls.Theme.Current;

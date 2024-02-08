@@ -332,18 +332,21 @@ namespace EDDiscovery.UserControls
         }
 
         // override and intercept events
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             if (actionobj is EliteDangerousCore.HistoryEntry)       // he from travel grid
             {
+                System.Diagnostics.Debug.WriteLine($"systeminfo perform panel operation history");
                 NewHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
+                return PanelActionState.HandledContinue;
             }
             else if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)  // travel change
             {
                 Display(last_he);
+                return PanelActionState.HandledContinue;
             }
 
-            return false;
+            return PanelActionState.NotHandled;
         }
 
 

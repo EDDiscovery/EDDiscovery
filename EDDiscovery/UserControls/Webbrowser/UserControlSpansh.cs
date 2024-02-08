@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine($"Spansh detects csv file ready {newfiledetected}");
                 waitforaccesstimer.Stop();
                 var req = new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = newfiledetected };
-                bool serviced = RequestPanelOperation(this, req);
+                bool serviced = RequestPanelOperation(this, req) != PanelActionState.NotHandled;
                 if ( !serviced) // no-one serviced it, so create an expedition tab, and then reissue
                 {
                     DiscoveryForm.SelectTabPage("Expedition", true, false);         // ensure expedition is open

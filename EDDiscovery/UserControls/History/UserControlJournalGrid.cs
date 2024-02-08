@@ -542,14 +542,15 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)
             {
                 Display(current_historylist, false);
+                return PanelActionState.HandledContinue;
             }
 
-            return false;
+            return PanelActionState.NotHandled;
         }
 
         public void FireChangeSelection()       // keep for now

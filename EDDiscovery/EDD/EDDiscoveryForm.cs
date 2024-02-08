@@ -259,7 +259,7 @@ namespace EDDiscovery
             ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
 
-            PopOuts.RequestPanelOperation += tabControlMain.PerformPanelOperationPopOut;          // HOOK requests from the forms into the main tab..
+            PopOuts.RequestPanelOperation += tabControlMain.RequestPanelOperationPopOut;          // HOOK requests from the forms into the main tab..
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
             msg.Invoke("Applying Themes");

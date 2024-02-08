@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
                 UpdateAllRows();
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             var push = actionobj as UserControlCommonBase.PushStars;
             var action = actionobj as UserControlCommonBase.PanelAction;
@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
                         MakeVisible();
                     if (push.RouteTitle != null)
                         textBoxRouteName.Text = push.RouteTitle;
-                    return true;
+                    return PanelActionState.Success;
                 }
             }
             else if ( action != null )
@@ -187,16 +187,16 @@ namespace EDDiscovery.UserControls
                         string str = FileHelpers.TryReadAllTextFromFile(file);
                         Import(0, Path.GetFileNameWithoutExtension(file), str, ",", true); // will cope with str = null
                     }
-                    return true;
+                    return PanelActionState.Success;
                 }
             }
             else if ( pushlist != null)
             { 
                 latestplottedroute = pushlist.Systems;
+                return PanelActionState.HandledContinue;
             }
 
-
-            return false;
+            return PanelActionState.NotHandled;
         }
 
         #endregion

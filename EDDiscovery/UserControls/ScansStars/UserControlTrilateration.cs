@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
         #region Interaction with outside
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             var push = actionobj as UserControlCommonBase.PushStars;
             if (push != null && (push.PushTo == PushStars.PushType.TriWanted || push.PushTo == PushStars.PushType.TriSystems))
@@ -96,10 +96,10 @@ namespace EDDiscovery.UserControls
                         AddSystemToDataGridViewDistances(s, false);
                 }
 
-                return true;
+                return PanelActionState.Success;
             }
 
-            return false;
+            return PanelActionState.NotHandled;
         }
 
         #endregion

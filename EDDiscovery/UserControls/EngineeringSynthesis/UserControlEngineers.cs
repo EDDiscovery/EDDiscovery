@@ -305,7 +305,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            if (!RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist }))
+            if (RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist }) == PanelActionState.NotHandled)
             {
                 ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
             }

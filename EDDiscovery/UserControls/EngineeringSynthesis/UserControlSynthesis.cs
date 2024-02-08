@@ -451,7 +451,7 @@ namespace EDDiscovery.UserControls
         {
             if (NeededResources != null)
             {                                           // prefer popouts first, then anyone
-                if ( !RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = NeededResources }))
+                if ( RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = NeededResources }) != PanelActionState.Success)
                 {
                     ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
                 }

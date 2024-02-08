@@ -537,26 +537,29 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override bool PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             if ( actionobj is UserControlCommonBase.RequestTravelToJID)
             {
                 var ttj = actionobj as UserControlCommonBase.RequestTravelToJID;
-                if (GotoPosByJID(ttj.JID))
+                System.Diagnostics.Debug.WriteLine($"Travel grid perform move to JID {ttj.JID}");
+                var res = GotoPosByJID(ttj.JID);
+                System.Diagnostics.Debug.WriteLine($"..Travel grid perform move to JID {ttj.JID} result {res}");
+                if (res)
                 {
                     if (ttj.MakeVisible)
                         MakeVisible();
-                    return true;
+                    return PanelActionState.Success;
                 }
                 else
-                    return false;
+                    return PanelActionState.Failed;
             }
             else if ( actionobj is UserControlCommonBase.RequestTravelHistoryPos )
             {
                 var he = CurrentHE();
                 //System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
                 sender.PerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
-                return true;
+                return PanelActionState.Success;
             }
             else if (actionobj is UserControlCommonBase.PanelAction)
             {
@@ -570,15 +573,16 @@ namespace EDDiscovery.UserControls
                         EditNoteInWindow(he);
                     }
 
-                    return true;
+                    return PanelActionState.Success;
                 }
             }
             else if ( actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)      
             {
                 Display(current_historylist, false);
+                return PanelActionState.HandledContinue;
             }
 
-            return false;
+            return PanelActionState.NotHandled;
         }
 
         public bool GotoPosByJID(long jid)       
