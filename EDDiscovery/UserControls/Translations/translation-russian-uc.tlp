@@ -188,7 +188,7 @@ SECTION DataGridViewStarResults
 .EDSM: "View on EDSM" => "Открыть в EDSM"
 .Spansh: "View on Spansh" @
 .Data: "View Scan Display" => "Показать данные сканирования"
-.Goto: "Go to entry on grid" @
+.Goto: "View on History Panel" @
 
 SECTION UserControlEngineering
 
@@ -338,7 +338,7 @@ SECTION UserControlLedger
 .textBoxFilter.ToolTip: "Search to particular items" => "Поиск определенного объекта"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.toolStripMenuItemGotoItem: "Go to entry on grid" => "Перейти к записи в таблице"
+.toolStripMenuItemGotoItem: "View on History Panel" => "Перейти к записи в таблице"
 .CashTransactions: "Cash Transactions" => "Финансовые операции"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .NOLG: "No Ledger available" @
