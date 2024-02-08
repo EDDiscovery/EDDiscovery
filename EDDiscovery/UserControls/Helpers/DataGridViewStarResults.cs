@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls.Search
             cms.Items[3].Name = "EDSM";
             cms.Items[3].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
 
-            cms.Items[4].Text = "View on History Panel";
+            cms.Items[4].Text = "View on History Grid";
             cms.Items[4].Name = "Goto";
             cms.Items[4].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
 

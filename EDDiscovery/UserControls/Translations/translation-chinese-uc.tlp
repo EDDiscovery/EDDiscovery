@@ -188,7 +188,7 @@ SECTION DataGridViewStarResults
 .EDSM: "View on EDSM" => "在EDSM网站上查看"
 .Spansh: "View on Spansh" @
 .Data: "View Scan Display" => "查看该条目的数据"
-.Goto: "View on History Panel" @
+.Goto: "View on History Grid" @
 
 SECTION UserControlEngineering
 
@@ -338,7 +338,7 @@ SECTION UserControlLedger
 .textBoxFilter.ToolTip: "Search to particular items" => "搜索特定的条目"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.toolStripMenuItemGotoItem: "View on History Panel" => "跳转到表格中的条目"
+.toolStripMenuItemGotoItem: "View on History Grid" => "跳转到表格中的条目"
 .CashTransactions: "Cash Transactions" => "金融交易"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .NOLG: "No Ledger available" @

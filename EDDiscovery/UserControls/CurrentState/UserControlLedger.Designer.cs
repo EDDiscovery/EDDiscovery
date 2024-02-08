@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
             // 
             this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
             this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(174, 22);
-            this.toolStripMenuItemGotoItem.Text = "View on History Panel";
+            this.toolStripMenuItemGotoItem.Text = "View on History Grid";
             this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
             // 
             // vScrollBarCustomMC

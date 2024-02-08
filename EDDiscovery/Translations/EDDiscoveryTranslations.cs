@@ -1445,7 +1445,7 @@ namespace EDDiscovery
         DataGridViewStarResults_EDSM, // ToolStrip control 'View on EDSM'
         DataGridViewStarResults_Spansh, // ToolStrip control 'View on Spansh'
         DataGridViewStarResults_Data, // ToolStrip control 'View Data On Entry'
-        DataGridViewStarResults_Goto, // ToolStrip control 'View on History Panel'
+        DataGridViewStarResults_Goto, // ToolStrip control 'View on History Grid'
 
         UserControlMarketData_CategoryCol, // Column Header 'Category'
         UserControlMarketData_NameCol, // Column Header 'Name'
@@ -1493,7 +1493,7 @@ namespace EDDiscovery
         UserControlLedger_TotalProfit, // Column Header 'Total Profit'
         UserControlLedger_labelTime, // Control 'Time'
         UserControlLedger_labelSearch, // Control 'Search'
-        UserControlLedger_toolStripMenuItemGotoItem, // ToolStrip control 'View on History Panel'
+        UserControlLedger_toolStripMenuItemGotoItem, // ToolStrip control 'View on History Grid'
         UserControlLedger_comboBoxTime_ToolTip, // ToolTip 'Select the entries by age'
         UserControlLedger_textBoxFilter_ToolTip, // ToolTip 'Search to particular items'
         UserControlLedger_buttonFilter_ToolTip, // ToolTip 'Display entries matching this event type filter'
