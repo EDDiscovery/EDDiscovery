@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2021 EDDiscovery development team
+ * Copyright 2015-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,14 +10,12 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
 
-using QuickJSON;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -522,61 +520,5 @@ namespace EDDiscovery
   
 
         #endregion
-
-        #region Debug
-        public static void PostInitDebug()
-        {
-         //   var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);
-
-            System.Diagnostics.Debug.WriteLine($"Post Init debug");
-            var sp = new EliteDangerousCore.Spansh.SpanshClass();
-
-
-            //JToken tk = JToken.Parse(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\spanshmodtypes"));
-            //JArray mt = tk["values"].Array();
-            //foreach (var m in mt)
-            //{
-            //    string name = m.Str().Replace(" ", "").Replace("-", "_");
-            //    System.Diagnostics.Debug.Write($"{name},");
-            //}
-
-
-
-
-
-            //   var list = sp.GetServices("Scirth", new string[] { "Apex Interstellar", "Black Market" }, 12);
-            // var list = sp.GetServices("Scirth", new string[] { "Interstellar Factors Contact" }, 12);
-
-            // var sys = SystemCache.FindSystem("Lembava", WebExternalDataLookup.Spansh);
-
-            //  var isy = sp.GetSystem("sol");
-            //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
-
-            // while (true)
-            // {
-            //     System.Threading.Thread.Sleep(2000);
-            //     var resp = sp.TryGetRoadToRiches(queryid);
-            // }Aaw
-
-            // var ret = sp.GetStations("Sol", 4);
-
-            //SystemClass sol = new SystemClass("Sol", 10477373803);
-            //sp.GetBodies(sol);
-            // sp.GetStationsByDump(sol,10000000,false);
-
-            //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-            //sp.GetSystem("Sol");
-
-            //EDSMClass edsm = new EDSMClass();
-            // edsm.GetSystem("Sol");
-
-            //var permitlist = SystemsDB.GetListPermitSystems();
-            //foreach (var x in permitlist)
-            //    System.Diagnostics.Debug.WriteLine($"{x.Name} {x.SystemAddress} {x.X} {x.Y} {x.Z}");
-        }
-
-
-        #endregion
-
     }
 }
