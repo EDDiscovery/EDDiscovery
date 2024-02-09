@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2022 EDDiscovery development team
+ * Copyright © 2015 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -16,13 +16,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using static EDDiscovery.UserControls.UserControlCommonBase;
 
 namespace EDDiscovery
 {
-    public class MajorTabControl : ExtendedControls.ExtTabControl
+    public partial class MajorTabControl : ExtendedControls.ExtTabControl
     {
-        EDDiscoveryForm eddiscovery;
+        #region Public IF
 
         public UserControls.UserControlContainerSplitter PrimarySplitterTab
         {
@@ -79,7 +78,7 @@ namespace EDDiscovery
                 {
                     if (panelids[i] == -1)      // marker indicating the special history tab
                     {
-                        TabPage p = CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count, true);
+                        CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count, true);
                     }
                     else
                     {
@@ -232,9 +231,13 @@ namespace EDDiscovery
             if (page == null)
             {
                 page = CreateTab(ptype, null, -1, TabCount>0 ? TabCount-1 : 0,false);
-                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.LoadLayout();
-                uccb.InitialDisplay();
+
+                if (page != null)       // if created..
+                {
+                    UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                    uccb.LoadLayout();
+                    uccb.InitialDisplay();
+                }
             }
 
             if (selectit)
@@ -255,9 +258,11 @@ namespace EDDiscovery
             return null;
         }
 
+        #endregion
+
         #region Implementation
 
-        // MAY return null!
+        // Create a tab, this may return null if it fails to create the panel ID (unlikely)
 
         private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex, bool primary)
         {
@@ -316,9 +321,9 @@ namespace EDDiscovery
             TabPages.Insert(posindex, page);        // with inherit above, no font autoscale
 
             if (primary)                            // hook up the request system
-                uccb.RequestPanelOperation = RequestPanelOperationPrimary;
+                uccb.RequestPanelOperation = RequestPanelOperationPrimaryTab;
             else
-                uccb.RequestPanelOperation = (sender, op) => { return RequestPanelOperationOther(page,sender, op); };
+                uccb.RequestPanelOperation = (sender, op) => { return RequestPanelOperationSecondaryTab(page,sender, op); };
 
             if (Environment.OSVersion.Platform != PlatformID.Win32NT && SelectedIndex >= posindex)
             {
@@ -347,114 +352,7 @@ namespace EDDiscovery
             return page;
         }
 
-        // request came from primary panel
-        // splitter has already distributed it around itself
-        // We pass it onto other tabs, and stop if its been positively serviced
-
-        private PanelActionState RequestPanelOperationPrimary(UserControls.UserControlCommonBase sender, object actionobj)
-        {
-            System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary request {actionobj}");
-
-            // We should never get this because the primary tab always has a travel grid
-            // and it will claim the call in the primary tab splitter
-            System.Diagnostics.Debug.Assert(!(actionobj is RequestTravelToJID));      
-
-            foreach (TabPage tp in TabPages)
-            {
-                if (tp.Tag == null)       // tag is null if not primary. It came in on primary, don't resent to primary, as splitter has already distributed it
-                {
-                    var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
-
-                    System.Diagnostics.Debug.WriteLine($"MTC PerformOp primary from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
-                    var res = uccb.PerformPanelOperation(sender, actionobj);
-                    System.Diagnostics.Debug.WriteLine($"..PerformOp Primary result {res} panel {tp.Text}");
-
-                    if (IsPASResult(res))       // if we have a stopping result
-                    {
-                        System.Diagnostics.Debug.WriteLine($"..PerformOp Primary terminated {res} panel {tp.Text}");
-                        return res;
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary from {sender.PanelID} don't send back to primary: {actionobj}");
-                }
-            }
-
-            // pass onto popouts since noone has claimed it
-            return eddiscovery.PopOuts.PerformPanelOperation(sender, actionobj);       
-        }
-
-        // request came from secondary panel 
-        private PanelActionState RequestPanelOperationOther(TabPage page, UserControls.UserControlCommonBase sender, object actionobj)
-        {
-            System.Diagnostics.Debug.WriteLine($"Perform Other Panel operation request {actionobj}");
-            return RequestOperationOther(page, sender, actionobj);
-        }
-
-        // request came from a pop up panel
-        public PanelActionState RequestPanelOperationPopOut(UserControls.UserControlCommonBase sender, object actionobj)
-        {
-            System.Diagnostics.Debug.WriteLine($"Perform Popout Panel operation request {actionobj}");
-            return RequestOperationOther(null, sender, actionobj);
-        }
-
-        // For tabs other than primary, or for senders other than a tab page (action lang, popouts, page will be null)
-        // see if the request is valid, and for what tabs
-        // don't distribute certain types
-        // and send certain types only to primary tab
-
-        public PanelActionState RequestOperationOther(TabPage page, UserControls.UserControlCommonBase sender, object actionobj)
-        {
-            // if we are pushing an operation down, but its a TH push up from a secondary tab or a pop up panel, we stop it.
-            // only the primary tab pushes these around
-
-            if (IsOperationHistoryPush(actionobj))            
-            {
-                System.Diagnostics.Debug.WriteLine($"..blocked as TH push from secondary tab");
-                return PanelActionState.NotHandled;
-            }
-
-            // if we are pushing a operation for the primary TH only..
-            // send to primary tab only as it owns the travel grid
-
-            else if (IsOperationForPrimaryTH(actionobj))
-            {
-                System.Diagnostics.Debug.WriteLine($"..Send travel grid request to primary tab");
-                UserControls.UserControlContainerSplitter pt = PrimarySplitterTab;
-                return pt.PerformPanelOperation(sender, actionobj);        
-            }
-
-            // else push to all until we get a result
-            else 
-            { 
-                foreach (TabPage tp in TabPages)       
-                {
-                    if (tp != page)     // don't resent to page which originated it - its already been distributed on that page
-                    {
-                        var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
-
-                        System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
-
-                        var res = uccb.PerformPanelOperation(sender, actionobj);
-                        System.Diagnostics.Debug.WriteLine($"..PerformOp Other result {res} panel {tp.Text}");
-                        if (IsPASResult(res))
-                        {
-                            System.Diagnostics.Debug.WriteLine($"..PerformOp Other terminated {res} panel {tp.Text}");
-                            return res;
-                        }
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} don't send to original sender: {actionobj}");
-                    }
-                }
-            }
-
-            // no result stopped the push, so push to the panels
-            return eddiscovery.PopOuts.PerformPanelOperation(sender, actionobj);       // and send to all pop out forms
-        }
-
+        private EDDiscoveryForm eddiscovery;
 
         #endregion
 

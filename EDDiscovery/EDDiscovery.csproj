@@ -221,6 +221,9 @@
     <Compile Include="EDD\EDDiscoveryFormJournalEvents.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TabsPanelsAndPopOuts\MajorTabControlPanelActions.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TabsPanelsAndPopOuts\PopOuts.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
     <Compile Include="UserControls\3DMap\Bookmarks.cs" />

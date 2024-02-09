@@ -50,9 +50,9 @@ SECTION PopOutInfo
 
 .Log.Description: "Log of program information" @
 .Log.Title: "Log" @
-.Journal.Description: "Journal grid view" @
+.Journal.Description: "Journal grid" @
 .Journal.Title: "Journal" @
-.TravelGrid.Description: "History grid view" @
+.TravelGrid.Description: "History grid" @
 .TravelGrid.Title: "History" @
 .StarList.Description: "Visited Star list" @
 .StarList.Title: "Visited Stars" @
@@ -68,7 +68,7 @@ SECTION PopOutInfo
 .Modules.Title: "Ships/Loadout" @
 .Statistics.Description: "Statistics Information" @
 .Statistics.Title: "Statistics" @
-.MarketData.Description: "Market data view, giving commodity price information where available" @
+.MarketData.Description: "Market data, giving commodity price information where available" @
 .MarketData.Title: "Market Data" @
 .ShipYardPanel.Description: "Ship yards information from places you have visited" @
 .ShipYardPanel.Title: "Ship Yards" @
@@ -120,7 +120,7 @@ SECTION PopOutInfo
 .Compass.Title: "Compass" @
 .Settings.Description: "Settings for ED Discovery " @
 .Settings.Title: "Settings" @
-.ScreenShot.Description: "Screen shot view" @
+.ScreenShot.Description: "Screen shot" @
 .ScreenShot.Title: "Screen Shot" @
 .Grid.Description: "Grid (allows other panels to be placed in it)" @
 .Grid.Title: "Grid" @
