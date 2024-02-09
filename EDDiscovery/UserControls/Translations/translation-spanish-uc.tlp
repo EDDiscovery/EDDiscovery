@@ -188,7 +188,7 @@ SECTION DataGridViewStarResults
 .EDSM: "View on EDSM" => "Ver en EDSM"
 .Spansh: "View on Spansh" => "Ver en Spansh"
 .Data: "View Scan Display" => "Ver datos en la entrada"
-.Goto: "Go to entry on grid" => "Ir a la entrada en la cuadrícula"
+.Goto: "View on History Grid" => "Ir a la entrada en la cuadrícula"
 
 SECTION UserControlEngineering
 
@@ -338,7 +338,7 @@ SECTION UserControlLedger
 .textBoxFilter.ToolTip: "Search to particular items" => "Buscar elementos en particular"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Seleccione las entradas por antigüedad"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-.toolStripMenuItemGotoItem: "Go to entry on grid" => "Ir a la entrada en la cuadrícula"
+.toolStripMenuItemGotoItem: "View on History Grid" => "Ir a la entrada en la cuadrícula"
 .CashTransactions: "Cash Transactions" => "Transacciones en efectivo"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
 .NOLG: "No Ledger available" => "No hay libro mayor disponible"

@@ -188,7 +188,7 @@ SECTION DataGridViewStarResults
 .EDSM: "View on EDSM" => "Voir sur EDSM"
 .Spansh: "View on Spansh" @
 .Data: "View Scan Display" => "Voir les données sur l'entrée"
-.Goto: "Go to entry on grid" @
+.Goto: "View on History Grid" @
 
 SECTION UserControlEngineering
 
@@ -338,7 +338,7 @@ SECTION UserControlLedger
 .textBoxFilter.ToolTip: "Search to particular items" => "Recherche d'entrée précise"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Filtre les entrées par ancienneté"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.toolStripMenuItemGotoItem: "Go to entry on grid" => "Aller à l'entrée dans le tableau"
+.toolStripMenuItemGotoItem: "View on History Grid" => "Aller à l'entrée dans le tableau"
 .CashTransactions: "Cash Transactions" => "Transaction d'argent"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoie les données de tableau dans Excel"
 .NOLG: "No Ledger available" @
