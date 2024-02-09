@@ -686,12 +686,17 @@ namespace EDDiscovery
             // Now the installer
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Installer");
-            Installer.CheckForNewInstallerAsync((rel) =>  // in thread
+
+            if (EDDOptions.Instance.CheckRelease )
             {
-                newRelease = rel;
-                BeginInvoke(new Action(() => LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
-                BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".T(EDTx.EDDiscoveryForm_NRA)));
-            });
+                GitHubRelease.CheckForNewInstallerAsync(EDDiscovery.Properties.Resources.URLGithubDownload,
+                            System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString(), (rel) =>  // in thread
+                {
+                    newRelease = rel;
+                    BeginInvoke(new Action(() => LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
+                    BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".T(EDTx.EDDiscoveryForm_NRA)));
+                });
+            }
 
             // DEBUG STUFF
 
@@ -1019,7 +1024,7 @@ namespace EDDiscovery
 
         private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            newRelease = Installer.CheckForNewinstaller();
+            newRelease = GitHubRelease.CheckForNewInstaller(EDDiscovery.Properties.Resources.URLGithubDownload, System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString());
             if ( newRelease != null )
             {
                 using (NewReleaseForm frm = new NewReleaseForm(newRelease))

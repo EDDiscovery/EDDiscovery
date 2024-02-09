@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
         //          Sent up to tab - MainTab distributes it to other tabs and forms
         //          All panels must return HandledContinue or NotHandled so no one grabs it
 
-        //      class RequestTravelToJID
+        //  RequestTravelToJID
         //           request travel grid to go to this jid. Success or Failure or NotHandled
         public class RequestTravelToJID 
         { 
@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
         public class TravelHistoryStartStopChanged { }  // push start/stop has been changed
 
         // Compass Target
-        // compass should return Success when it grabs it
+        //           compass should return Success when it grabs it
         public class SetCompassTarget
         {
             public string Name { get; set; }

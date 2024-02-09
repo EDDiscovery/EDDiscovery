@@ -452,7 +452,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Profiles\EDDProfiles.cs" />
-    <Compile Include="Installer.cs" />
     <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="UserControls\Helpers\Outliner.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayForm.cs" />
