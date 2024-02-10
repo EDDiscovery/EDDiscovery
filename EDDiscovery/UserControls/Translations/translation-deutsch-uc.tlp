@@ -1268,7 +1268,7 @@ SECTION UserControlTravelGrid
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" => "Nächste Start/Stopp-Markierung ist versteckt"
 .StartStopNotFound: "No start/stop marker found below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
-.entryfilteredout: "Entry filtered out of grid" @
+.entryfilteredout: "Entry filtered out of grid" => "Eintrag in Historie ausgefiltert"
 
 SECTION UserControlCaptainsLog
 
