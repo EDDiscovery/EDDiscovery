@@ -807,7 +807,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Imposta ulteriori opzioni di schermata"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Abilita/disabilita conversione schermate"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Scegli quali aree della Galassia avere sul banco di dati"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "Imposta per abilitare lo scarico dei dati stellari da EDSM e informazioni di sistema da EDDB"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." => "Imposta per abilitare lo scarico dei dati stellari da EDSM e informazioni di sistema da EDDB"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "La finestra principale e tutte le altra sempre in cima"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @
@@ -1268,6 +1268,7 @@ SECTION UserControlTravelGrid
 .SearchTerms: "system:body:station:stationfaction" @
 .StartStopHidden: "Next start/stop marker is hidden" @
 .StartStopNotFound: "No start/stop marker found below" @
+.entryfilteredout: "Entry filtered out of grid" @
 
 SECTION UserControlCaptainsLog
 

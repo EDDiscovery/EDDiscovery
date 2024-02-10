@@ -807,7 +807,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "进一步配置截图选项"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "打开/关闭截图转换格式功能"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "选择想要储存在数据库里的银河星域"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "面板列表使用字母顺序进行排序，而不是安装类别排序。注意需要重启。（目前中文界面下无效）"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "所有窗口置顶"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "选中后会允许EDDiscovery的窗口在被缩放时实时改变窗口内容的尺寸。\r\n如果卡顿的话可以把此项关闭。"
@@ -1268,6 +1268,7 @@ SECTION UserControlTravelGrid
 .SearchTerms: "system:body:station:stationfaction" @
 .StartStopHidden: "Next start/stop marker is hidden" @
 .StartStopNotFound: "No start/stop marker found below" @
+.entryfilteredout: "Entry filtered out of grid" @
 
 SECTION UserControlCaptainsLog
 

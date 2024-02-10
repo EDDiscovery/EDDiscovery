@@ -168,7 +168,7 @@ SECTION SearchScans
 
 SECTION UserControlDiscoveries
 
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Especifique un término de búsqueda para filtrar eventos por contenido de columna. También puede usar system:<sistema>, body:<cuerpo>, station:<estación> y stationfaction:<"facción controlando la estación"> para filtrar eventos que ocurran con esas propiedades"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Especifique un término de búsqueda para filtrar eventos por contenido de columna. También puede usar system:<sistema>, body:<cuerpo>, station:<estación> y stationfaction:<"
 .extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" => "Seleccione descubrimientos para buscar, tomados de las búsquedas de escaneo del panel de búsqueda"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Activar o desactivar el ajuste de texto"
 .buttonExtExcel.ToolTip: "Export" => "Exportar"
@@ -188,7 +188,7 @@ SECTION DataGridViewStarResults
 .EDSM: "View on EDSM" => "Ver en EDSM"
 .Spansh: "View on Spansh" => "Ver en Spansh"
 .Data: "View Scan Display" => "Ver datos en la entrada"
-.Goto: "Go to entry on grid" => "Ir a la entrada en la cuadrícula"
+.Goto: "View on History Grid" => "Ir a la entrada en la cuadrícula"
 
 SECTION UserControlEngineering
 
@@ -338,7 +338,7 @@ SECTION UserControlLedger
 .textBoxFilter.ToolTip: "Search to particular items" => "Buscar elementos en particular"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Seleccione las entradas por antigüedad"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-.toolStripMenuItemGotoItem: "Go to entry on grid" => "Ir a la entrada en la cuadrícula"
+.toolStripMenuItemGotoItem: "View on History Grid" => "Ir a la entrada en la cuadrícula"
 .CashTransactions: "Cash Transactions" => "Transacciones en efectivo"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
 .NOLG: "No Ledger available" => "No hay libro mayor disponible"
@@ -463,7 +463,7 @@ SECTION UserControlSurveyor
 .extButtonPlanets.ToolTip: "Planet Filter" => "Filtro de planetas"
 .extButtonStars.ToolTip: "Star Filter" => "Filtro de estrellas"
 .extButtonShowControl.ToolTip: "Display Settings" => "Configuración de pantalla"
-.extButtonAlignment.ToolTip: "Alignment"  => "Alineación"
+.extButtonAlignment.ToolTip: "Alignment" => "Alineación"
 .extButtonFont.ToolTip: "Font" => "Fuente"
 .extButtonFSS.ToolTip: "FSS Signal Selection" => "Selección de señal ECS"
 .checkBoxEDSM.ToolTip: "EDSM lookup toggle" => "Alternar búsqueda EDSM"
@@ -807,7 +807,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Configurar más opciones de captura de pantalla"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Activar/desactivar conversión de captura de pantalla"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Configurar qué partes de la galaxia se almacenan en las bases de datos"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "Haz clic para habilitar la descarga de estrellas desde EDSM. Se aplicará en el próximo inicio."
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." => "Haz clic para habilitar la descarga de estrellas desde EDSM. Se aplicará en el próximo inicio."
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Las listas de paneles están ordenadas alfanuméricamente en lugar de ordenadas en grupos. Nota Requiere reiniciar"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Esta ventana, y sus hijos, arriba"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Marque para permitir que EDD vuelva a dibujar la pantalla durante el cambio de tamaño de la ventana principal. Desactive solo si es demasiado lento"
@@ -911,7 +911,7 @@ SECTION UserControlSpanel
 .showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "Escanear encima"
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "No mostrar información cuando"
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "atracado o aterrizado"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "en un panel"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "in a panel" => "en un panel"
 .dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" => "Ocultar el título cuando está oculto"
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Configurar ajustes generales"
 .extButtonColumns.ToolTip: "Configure columns shown" => "Configurar columnas mostradas"
@@ -974,7 +974,7 @@ SECTION UserControlStarList
 .JUMP: "Show/Hide presence of Jumponium Materials" => "Mostrar/Ocultar presencia de materiales de \"Jumponium\""
 .valueables: "Show valuable bodies" => "Mostrar cuerpos valiosos"
 .scanorganics: "Show organic scans" => "Mostrar escaneos orgánicos"
-.showcodex: "Show codex entries"  => "Mostrar entradas del Códice"
+.showcodex: "Show codex entries" => "Mostrar entradas del Códice"
 
 SECTION UserControlStats
 
@@ -1268,6 +1268,7 @@ SECTION UserControlTravelGrid
 .SearchTerms: "system:body:station:stationfaction" @
 .StartStopHidden: "Next start/stop marker is hidden" => "El próximo marcador de inicio/parada está oculto"
 .StartStopNotFound: "No start/stop marker found below" => "No se encontró marcador de inicio/parada debajo"
+.entryfilteredout: "Entry filtered out of grid" @
 
 SECTION UserControlCaptainsLog
 
@@ -1516,7 +1517,7 @@ SECTION UserControlSuitsWeapons
 .CSPrimary1: "Primary 1" => "Primario 1"
 .CSPrimary2: "Primary 2" => "Primario 2"
 .CSSecondary: "Secondary" => "Secundario"
-.CWTime: "Time" "Time" => "Hora"
+.CWTime: "Time" @
 .CWName: "Name" => "Nombre"
 .CWClass: "Class" => "Clase"
 .CWMods: "Mods" @

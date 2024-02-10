@@ -807,7 +807,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Дополнительные настройки для скриншотов"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Включить / выключить преобразование скриншотов"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Выберите, какая часть Галактики будет храниться в базе данных"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM. Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Список панелей отсортирован по алфавиту, а не по группам. Потребуется перезапуск."
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Закрепить это окно (и все дочерние) поверх других окон"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Разрешить EDD перерисовать окна при изменении размера главного окна. Помогает, если EDD работает слишком медленно"
@@ -911,7 +911,7 @@ SECTION UserControlSpanel
 .showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "Сверху"
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "Не показывать информацию"
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "если пристыкован или на поверхности"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "на панели карты Галактики"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "in a panel" => "на панели карты Галактики"
 .dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
 .extButtonColumns.ToolTip: "Configure columns shown" @
@@ -1268,6 +1268,7 @@ SECTION UserControlTravelGrid
 .SearchTerms: "system:body:station:stationfaction" @
 .StartStopHidden: "Next start/stop marker is hidden" @
 .StartStopNotFound: "No start/stop marker found below" @
+.entryfilteredout: "Entry filtered out of grid" @
 
 SECTION UserControlCaptainsLog
 

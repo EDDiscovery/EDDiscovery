@@ -54,9 +54,9 @@ SECTION PopOutInfo
 
 .Log.Description: "Log of program information" => "Journal du programme"
 .Log.Title: "Log" @
-.Journal.Description: "Journal grid view" => "Vue tableau du journal"
+.Journal.Description: "Journal grid" => "Vue tableau du journal"
 .Journal.Title: "Journal" @
-.TravelGrid.Description: "History grid view" => "Vue tableau de l'historique"
+.TravelGrid.Description: "History grid" => "Vue tableau de l'historique"
 .TravelGrid.Title: "History" => "Historique de Voyage"
 .StarList.Description: "Visited Star list" => "Liste des étoiles visitées"
 .StarList.Title: "Visited Stars" => "Liste des étoiles"
@@ -72,7 +72,7 @@ SECTION PopOutInfo
 .Modules.Title: "Ships/Loadout" => "Vaisseaux/Équipements"
 .Statistics.Description: "Statistics Information" => "Informations statistiques"
 .Statistics.Title: "Statistics" => "Statistiques"
-.MarketData.Description: "Market data view, giving commodity price information where available" => "Vue des données du marché, indique les prix quand ils sont disponibles"
+.MarketData.Description: "Market data, giving commodity price information where available" => "Vue des données du marché, indique les prix quand ils sont disponibles"
 .MarketData.Title: "Market Data" => "Marché"
 .ShipYardPanel.Description: "Ship yards information from places you have visited" => "Information sur les chantiers navals des endroits visités"
 .ShipYardPanel.Title: "Ship Yards" => "Chantiers Navals"
@@ -124,7 +124,7 @@ SECTION PopOutInfo
 .Compass.Title: "Compass" => "Boussole"
 .Settings.Description: "Settings for ED Discovery " => "Paramètres d'ED Discovery"
 .Settings.Title: "Settings" => "Paramètres"
-.ScreenShot.Description: "Screen shot view" => "Vue des captures d'écran"
+.ScreenShot.Description: "Screen shot" => "Vue des captures d'écran"
 .ScreenShot.Title: "Screen Shot" => "Captures d'écran"
 .Grid.Description: "Grid (allows other panels to be placed in it)" => "Tableau (permettant l'intégration d'autres panneaux)"
 .Grid.Title: "Grid" => "Tableau"
