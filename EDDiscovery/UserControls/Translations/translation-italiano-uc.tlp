@@ -911,7 +911,7 @@ SECTION UserControlSpanel
 .showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" @
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" @
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" @
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" @
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "in a panel" @
 .dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
 .extButtonColumns.ToolTip: "Configure columns shown" @
