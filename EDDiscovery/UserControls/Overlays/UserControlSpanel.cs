@@ -914,7 +914,7 @@ namespace EDDiscovery.UserControls
 
             string dontshow = "Don't show information when".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem) + " ";
             displayfilter.AddStandardOption(Configuration.showNothingWhenDocked, dontshow + "docked or landed".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem_showNothingWhenDockedtoolStripMenuItem));
-            displayfilter.AddStandardOption(Configuration.showNothingWhenPanel, dontshow + "when in a panel".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem_dontshowwhenInGalaxyPanelToolStripMenuItem));
+            displayfilter.AddStandardOption(Configuration.showNothingWhenPanel, dontshow + "in a panel".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem_dontshowwhenInGalaxyPanelToolStripMenuItem));
             displayfilter.AddStandardOption(Configuration.showNoTitleWhenHidden, "Hide the title when hidden".TxID(EDTx.UserControlSpanel_dontShowInformationWhenToolStripMenuItem_hideTitleToolStripMenuItem));
 
             CommonCtrl(displayfilter,extButtonShowControl);

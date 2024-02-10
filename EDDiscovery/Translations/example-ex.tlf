@@ -31,6 +31,7 @@ SafeModeForm: "EDDiscovery Safe Mode" @
 .buttonCancel: "Cancel" @
 .buttonRun: "Run" @
 .buttonRemoveJournals: "Remove Journals" @
+.buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
 .buttonDeleteUserDB: "Delete/Rebuild User DB" @
 .buttonDeleteSystemDB: "Delete/Rebuild System DB" @
 .buttonResetDBLoc: "Reset DB Location" @

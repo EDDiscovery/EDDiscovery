@@ -911,7 +911,7 @@ SECTION UserControlSpanel
 .showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "顶端"
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "在以下情况下隐藏面板"
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "降落在空间站或着陆在星球时"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "在银河系星图面板时"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "in a panel" => "在银河系星图面板时"
 .dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
 .extButtonColumns.ToolTip: "Configure columns shown" @

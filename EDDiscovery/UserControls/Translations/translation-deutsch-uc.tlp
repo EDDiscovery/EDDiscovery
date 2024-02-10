@@ -957,9 +957,9 @@ SECTION UserControlSpanel
 .showInPositionToolStripMenuItem.scanBelowMenuItem: "Scan below" => "Scan unter"
 .showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "Scan zuoberst"
 
-.dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "Zeige keine Informationen wenn..."
-.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "... angedockt oder gelandet"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "... in der Galaxiekarte"
+.dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "Zeige keine Informationen wenn"
+.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "angedockt oder gelandet"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "in der Galaxiekarte"
 .dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" => "Verbirg den Titel wenn versteckt"
 
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
