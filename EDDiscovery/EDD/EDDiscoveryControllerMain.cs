@@ -123,11 +123,6 @@ namespace EDDiscovery
         // ED Discovery calls this during its init to allow the controller to set some things up
         public void Init()      
         {
-            TraceLog.LogFileWriterException += ex =>            // now we can attach the log writing highter into it
-            {
-                LogLineHighlight($"Log Writer Exception: {ex}");
-            };
-
             EdsmLogFetcher = new EDSMLogFetcher(LogLine, (s) => StatusLineUpdate(EDDiscoveryForm.StatusLineUpdateType.EDSMLogFetcher, -1,s));
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 

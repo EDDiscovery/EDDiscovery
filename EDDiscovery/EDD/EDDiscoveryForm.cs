@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2022 EDDiscovery development team
+ * Copyright © 2015 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,7 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
  */
 
 using BaseUtils;
@@ -19,9 +18,8 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
-using EliteDangerousCore.GMO;
 using EliteDangerousCore.GEC;
-using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore.GMO;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -163,14 +161,25 @@ namespace EDDiscovery
                 FileHelpers.DeleteFiles(EDDOptions.Instance.ScanCachePath, "*.json", new TimeSpan(7, 0, 0, 0), 256);
             }
 
-            // attach debugger
+#if DEBUG
+            bool releasebuild = false;
+#else
+            bool releasebuild = true;
+#endif
+            // if no debugger or in release build or trace log set.
 
-            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)       // no debugger, or tracelog option set
+            if (!Debugger.IsAttached || releasebuild || EDDOptions.Instance.TraceLog != null)    
             {
-                TraceLog.RedirectTrace(logpath, true, EDDOptions.Instance.TraceLog);
+                TraceLog.RedirectTrace(logpath, EDDOptions.Instance.TraceLog);
+
+                TraceLog.LogFileWriterException += ex =>            // now we can attach the log writing highter into it
+                {
+                    LogLineHighlight($"Log Writer Exception: {ex}");
+                };
             }
 
-            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          // no debugger, or log exceptions set
+            // if no debugger, or log exceptions set
+            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          
             {
                 ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback);
             }
@@ -782,7 +791,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Closing
+#region Closing
 
         public bool disallowclose = true;
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -840,12 +849,14 @@ namespace EDDiscovery
 
             disallowclose = false;
             Close();
+
+            TraceLog.TerminateLogger();
             Application.Exit();
         }
      
 #endregion
     
-        #region Tools Menu
+#region Tools Menu
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -870,7 +881,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Admin Menu
+#region Admin Menu
 
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1012,7 +1023,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Add Ons Menu
+#region Add Ons Menu
 
         public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1048,7 +1059,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Help Menu
+#region Help Menu
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1126,7 +1137,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Other clicks - Captions etc
+#region Other clicks - Captions etc
 
         private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
@@ -1165,7 +1176,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Notify Icons
+#region Notify Icons
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -1217,7 +1228,7 @@ namespace EDDiscovery
 
 
 
-        #endregion
+#endregion
     }
 }
 

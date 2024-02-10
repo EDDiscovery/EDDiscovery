@@ -266,7 +266,7 @@ namespace EDDiscovery
 
         private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex, bool primary)
         {
-            System.Diagnostics.Debug.WriteLine($"\nMajorTabControl create tab {ptype} {name} {posindex}");
+            System.Diagnostics.Trace.WriteLine($"\nMajorTabControl create tab {ptype} {name} {posindex}");
 
             UserControls.UserControlCommonBase uccb = PanelInformation.Create(ptype);   // must create, since its a ptype.
             if (uccb == null)       // if ptype is crap, it returns null.. catch

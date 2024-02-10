@@ -181,7 +181,7 @@ namespace EDDiscovery.UserControls
                 if (uccb != null)     // tab strip may not have a control set..
                 {
                     uccb.CloseDown();
-                    //System.Diagnostics.Trace.WriteLine($"Splitter Close {uccb.panelid} tag {tagid} dno {displaynumber}");
+                    System.Diagnostics.Trace.WriteLine($"Splitter Close {uccb.PanelID} dno {DisplayNumber}");
                 }
             });
 

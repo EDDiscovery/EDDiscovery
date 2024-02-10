@@ -94,6 +94,17 @@ namespace EDDiscovery
                 File.WriteAllText(fn, s);
             }
 
+            //System.Diagnostics.Trace.Write($"A bit more");
+            //System.Diagnostics.Trace.Write($"and a line feed \n and a bit more");
+
+            //for (int m = 0; m < 100; m++)
+            //{
+            //    System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m/2}\r\nFred and jim\nlola\ndenis");
+            //    //System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m}");
+            //    //System.Diagnostics.Debug.WriteLine($"Trace message {m / 2}\nFred and jim\nlola\ndenis");
+            //    System.Threading.Thread.Sleep(200);
+            //}
+
         }
 
         //   var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);

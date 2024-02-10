@@ -217,7 +217,7 @@ namespace EDDiscovery.UserControls
 
             panelPlayfield.Controls.Add(uccr);
 
-            //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " " + numopenedinsidealready);
+            System.Diagnostics.Trace.WriteLine("Grid Make " + uccb.GetType().Name + " " + dnum + " " + numopenedinsidealready);
 
             uccb.Init(DiscoveryForm, dnum);
 
@@ -240,6 +240,7 @@ namespace EDDiscovery.UserControls
 
             if (uc.AllowClose())
             {
+                System.Diagnostics.Trace.WriteLine($"Grid Close {uc.PanelID} dno {DisplayNumber}");
                 uc.CloseDown();
                 panelPlayfield.Controls.Remove(uccr);
                 uccrlist.Remove(uccr);
@@ -398,7 +399,7 @@ namespace EDDiscovery.UserControls
                 // uccb init done above, contract states we now scale then theme.
                 
                 var scale = this.FindForm().CurrentAutoScaleFactor();
-                System.Diagnostics.Trace.WriteLine($"Grid apply scaling to {uccr.Name} {scale}");
+                //System.Diagnostics.Trace.WriteLine($"Grid apply scaling to {uccr.Name} {scale}");
                 uccr.Scale(scale);       // scale and
 
                 ExtendedControls.Theme.Current.ApplyStd(uccr);
