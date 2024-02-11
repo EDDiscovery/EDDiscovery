@@ -336,7 +336,7 @@ namespace EDDiscovery.UserControls
         {
             if (actionobj is EliteDangerousCore.HistoryEntry)       // he from travel grid
             {
-                System.Diagnostics.Debug.WriteLine($"systeminfo perform panel operation history");
+                //System.Diagnostics.Debug.WriteLine($"systeminfo perform panel operation history");
                 NewHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);
                 return PanelActionState.HandledContinue;
             }

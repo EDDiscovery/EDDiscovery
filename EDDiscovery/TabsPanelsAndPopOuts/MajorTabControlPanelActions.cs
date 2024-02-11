@@ -25,7 +25,7 @@ namespace EDDiscovery
 
         private PanelActionState RequestPanelOperationPrimaryTab(UserControls.UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary request {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary request {actionobj}");
 
             // We should never get this because the primary tab always has a travel grid
             // and it will claim the call in the primary tab splitter
@@ -37,19 +37,19 @@ namespace EDDiscovery
                 {
                     var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
 
-                    System.Diagnostics.Debug.WriteLine($"MTC PerformOp primary from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
+                    //System.Diagnostics.Debug.WriteLine($"MTC PerformOp primary from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
                     var res = uccb.PerformPanelOperation(sender, actionobj);
-                    System.Diagnostics.Debug.WriteLine($"..PerformOp Primary result {res} panel {tp.Text}");
+                    //System.Diagnostics.Debug.WriteLine($"..PerformOp Primary result {res} panel {tp.Text}");
 
                     if (IsPASResult(res))       // if we have a stopping result
                     {
-                        System.Diagnostics.Debug.WriteLine($"..PerformOp Primary terminated {res} panel {tp.Text}");
+                        //System.Diagnostics.Debug.WriteLine($"..PerformOp Primary terminated {res} panel {tp.Text}");
                         return res;
                     }
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary from {sender.PanelID} don't send back to primary: {actionobj}");
+                    //System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary from {sender.PanelID} don't send back to primary: {actionobj}");
                 }
             }
 
@@ -60,14 +60,14 @@ namespace EDDiscovery
         // request came from secondary panel 
         private PanelActionState RequestPanelOperationSecondaryTab(TabPage page, UserControls.UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Perform Other Panel operation request {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Perform Other Panel operation request {actionobj}");
             return RequestOperationOther(page, sender, actionobj);
         }
 
         // request came from a pop up panel
         public PanelActionState RequestPanelOperationPopOut(UserControls.UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Perform Popout Panel operation request {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Perform Popout Panel operation request {actionobj}");
             return RequestOperationOther(null, sender, actionobj);
         }
 
@@ -83,7 +83,7 @@ namespace EDDiscovery
 
             if (IsOperationHistoryPush(actionobj))            
             {
-                System.Diagnostics.Debug.WriteLine($"..blocked as TH push from secondary tab");
+                //System.Diagnostics.Debug.WriteLine($"..blocked as TH push from secondary tab");
                 return PanelActionState.NotHandled;
             }
 
@@ -92,7 +92,7 @@ namespace EDDiscovery
 
             else if (IsOperationForPrimaryTH(actionobj))
             {
-                System.Diagnostics.Debug.WriteLine($"..Send travel grid request {actionobj} to primary tab");
+                //System.Diagnostics.Debug.WriteLine($"..Send travel grid request {actionobj} to primary tab");
                 UserControls.UserControlContainerSplitter pt = PrimarySplitterTab;
                 return pt.PerformPanelOperation(sender, actionobj);        
             }
@@ -106,19 +106,19 @@ namespace EDDiscovery
                     {
                         var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
 
-                        System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
+                        //System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
                         var res = uccb.PerformPanelOperation(sender, actionobj);
-                        System.Diagnostics.Debug.WriteLine($"..PerformOp Other result {res} panel {tp.Text}");
+                        //System.Diagnostics.Debug.WriteLine($"..PerformOp Other result {res} panel {tp.Text}");
 
                         if (IsPASResult(res))
                         {
-                            System.Diagnostics.Debug.WriteLine($"..PerformOp Other terminated {res} panel {tp.Text}");
+                            //System.Diagnostics.Debug.WriteLine($"..PerformOp Other terminated {res} panel {tp.Text}");
                             return res;
                         }
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} don't send to original sender: {actionobj}");
+                        //System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} don't send to original sender: {actionobj}");
                     }
                 }
             }

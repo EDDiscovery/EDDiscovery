@@ -43,10 +43,10 @@ namespace EDDiscovery
 
             //System.Diagnostics.Debug.WriteLine($"Filterd JE {je.GetJson().ToString()}");
 
-            if ( EDCommander.NumberOfCommanders != commandercountafterhistoryread)      // if this changes, a commander has been added
+            if (EDCommander.NumberOfCommanders != commandercountafterhistoryread)      // if this changes, a commander has been added
             {
                 commandercountafterhistoryread = EDCommander.NumberOfCommanders;        // reset and invoke
-                System.Diagnostics.Trace.WriteLine( $"EDC Commander count changed to {commandercountafterhistoryread}");
+                System.Diagnostics.Trace.WriteLine($"EDC Commander count changed to {commandercountafterhistoryread}");
                 OnNewCommanderDuringPlayDetected?.Invoke();
             }
 
@@ -167,7 +167,7 @@ namespace EDDiscovery
 
                     // finally, CAPI, if docked, and CAPI is go for pc commander, do capi procedure
 
-                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && 
+                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active &&
                             !EDCommander.Current.ConsoleCommander && he.Status.TravelState != HistoryEntryStatus.TravelStateType.TaxiDocked
                             && he.Status.TravelState != HistoryEntryStatus.TravelStateType.MulticrewDocked &&
                             he.Status.MultiPlayer == false)
@@ -200,11 +200,11 @@ namespace EDDiscovery
             if (uifuel != null && History != null)
             {
                 History.ShipInformationList.UIFuel(uifuel);             // update the SI global value
-                if (History.ShipInformationList.CurrentShip != null )   // just to be paranoid
+                if (History.ShipInformationList.CurrentShip != null)   // just to be paranoid
                     History.GetLast?.UpdateShipInformation(History.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
             }
 
-            if ( u is EliteDangerousCore.UIEvents.UIOverallStatus)
+            if (u is EliteDangerousCore.UIEvents.UIOverallStatus)
             {
                 UIOverallStatus = u as EliteDangerousCore.UIEvents.UIOverallStatus;
             }
@@ -212,119 +212,8 @@ namespace EDDiscovery
             OnNewUIEvent?.Invoke(u);
 
             var t = BaseUtils.AppTicks.TickCountLapDelta("CTUI");
-            if ( t.Item2 > 25 )
-                System.Diagnostics.Debug.WriteLine( t.Item1 + " Controller UI !!!");
-        }
-
-        public void DoCAPI(string station, string system, bool? allowcobramkiv)
-        {
-            // don't hold up the main thread, do it in a task, as its a HTTP operation
-
-            System.Threading.Tasks.Task.Run(() =>
-            {
-                bool donemarket = false, doneshipyard = false;
-
-                for (int tries = 3; tries >= 1 && (donemarket == false || doneshipyard == false); tries--)
-                {
-                    Thread.Sleep(10000);        // for the first go, give the CAPI servers a chance to update, for the next goes, spread out the requests
-
-                    if (!donemarket)
-                    {
-                        string marketjson = FrontierCAPI.Market();
-
-                        if ( marketjson != null )
-                        {
-                            //System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
-
-                            CAPI.Market mk = new CAPI.Market(marketjson);
-                            if (mk.IsValid && station.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                System.Diagnostics.Trace.WriteLine($"CAPI got market {mk.Name}");
-
-                                var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(DateTime.UtcNow,
-                                                mk.ID, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
-
-                                var jo = entry.ToJSON();        // get json of it, and add it to the db
-                                entry.Add(jo);
-
-                                InvokeAsyncOnUiThread(() =>
-                                {
-                                    Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                    NewFilteredJournalEntryFromScanner(entry, null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
-                                                                                            // EDDN handler will pick up EDDCommodityPrices and send it.
-                                });
-
-                                donemarket = true;
-                                Thread.Sleep(500);      // space the next check out a bit
-                            }
-                            else
-                                LogLine($"MK is valid {mk.IsValid} station {mk.Name}");
-                        }
-                    }
-
-                    if (!donemarket)
-                    {
-                        LogLine("CAPI failed to get market data" + (tries > 1 ? ", retrying" : ", give up"));
-                    }
-
-                    if (!doneshipyard)
-                    {
-                        string shipyardjson = FrontierCAPI.Shipyard();
-
-                        if (shipyardjson != null)
-                        {
-                            CAPI.Shipyard sh = new CAPI.Shipyard(shipyardjson);
-                            
-                            //System.IO.File.WriteAllText(@"c:\code\shipyard.json", shipyardjson);
-
-                            if (sh.IsValid && station.Equals(sh.Name, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                System.Diagnostics.Trace.WriteLine($"CAPI got shipyard {sh.Name}");
-
-                                var modules = sh.GetModules();
-                                if ( modules?.Count > 0 )
-                                {
-                                    var list = modules.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.Cost)).ToArray();
-                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(DateTime.UtcNow, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
-
-                                    var jo = outfitting.ToJSON();        // get json of it, and add it to the db
-                                    outfitting.Add(jo);
-
-                                    InvokeAsyncOnUiThread(() =>
-                                    {
-                                        NewFilteredJournalEntryFromScanner(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
-                                    });
-                                }
-
-                                var shipyard = sh.GetShips();
-
-                                if ( shipyard?.Count > 0 && allowcobramkiv.HasValue)
-                                {
-                                    var list = shipyard.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.BaseValue)).ToArray();
-                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(DateTime.UtcNow, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
-
-                                    var jo = shipyardevent.ToJSON();        // get json of it, and add it to the db
-                                    shipyardevent.Add(jo);
-
-                                    InvokeAsyncOnUiThread(() =>
-                                    {
-                                        NewFilteredJournalEntryFromScanner(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
-                                    });
-                                }
-
-                                doneshipyard = true;
-                            }
-                        }
-                    }
-
-                    if (!doneshipyard)
-                    {
-                        LogLine("CAPI failed to get shipyard data" + (tries > 1 ? ", retrying" : ", give up"));
-                    }
-                }
-
-            });
-
+            if (t.Item2 > 25)
+                System.Diagnostics.Debug.WriteLine(t.Item1 + " Controller UI !!!");
         }
 
         private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();

@@ -196,6 +196,7 @@
     <Compile Include="Actions\ActionControllerVoice.cs" />
     <Compile Include="CapiClientID.cs" />
     <Compile Include="EDD\EDDiscoveryControllerHelpers.cs" />
+    <Compile Include="EDD\EDDiscoveryControllerCAPI.cs" />
     <Compile Include="EDD\EDDiscoveryFormDebug.cs">
       <SubType>Form</SubType>
     </Compile>

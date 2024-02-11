@@ -260,7 +260,7 @@ namespace EDDiscovery.UserControls
 
         private PanelActionState GridRequestAction(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} request action {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} request action {actionobj}");
 
             PanelActionState retstate = PanelActionState.NotHandled;
 
@@ -268,14 +268,14 @@ namespace EDDiscovery.UserControls
             {
                 if (uccr.UCCB != sender)        // don't send to sender
                 {
-                    System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform operation {actionobj}");
+                    //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform operation {actionobj}");
                     var state = uccr.UCCB.PerformPanelOperation(sender, actionobj);
-                    System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform operation {actionobj} result {state}");
+                    //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform operation {actionobj} result {state}");
 
                     if (IsPASResult(state))
                     {
                         retstate = state;
-                        System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} claimed this operation {actionobj} result {state}");
+                        //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} claimed this operation {actionobj} result {state}");
                         break;
                     }
                 }
@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
 
             if (!IsPASResult(retstate))
             {
-                System.Diagnostics.Debug.WriteLine($".. grid no claim on {actionobj}, pass on up the chain");
+                //System.Diagnostics.Debug.WriteLine($".. grid no claim on {actionobj}, pass on up the chain");
                 return RequestPanelOperation.Invoke(sender, actionobj);     // and pass up with us as the sender
             }
             else
@@ -296,11 +296,11 @@ namespace EDDiscovery.UserControls
         //SYNC with splitter
         public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} perform action {actionobj}");
+            //System.Diagnostics.Debug.WriteLine($"Grid {DisplayNumber} perform action {actionobj}");
 
             if (IsOperationHistoryPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid) != null)
             {
-                System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH in the grid for {actionobj}");
+                //System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH in the grid for {actionobj}");
                 return PanelActionState.NotHandled;
             }
 
@@ -308,16 +308,16 @@ namespace EDDiscovery.UserControls
 
             foreach (var uccr in uccrlist)
             {
-                System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform action from above {actionobj}");
+                //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform action from above {actionobj}");
                 var state = uccr.UCCB.PerformPanelOperation(sender, actionobj);     // pass to it
-                System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform action from above {actionobj} result {state}");
+                //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform action from above {actionobj} result {state}");
 
                 if ( state != PanelActionState.NotHandled)       // if we said something to it other than NotHandled
                 {
                     handled = true;
                     if (IsPASResult(state))
                     {
-                        System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} claimed this operation {actionobj} result {state}");
+                        //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} claimed this operation {actionobj} result {state}");
                         return state;
                     }
                 }

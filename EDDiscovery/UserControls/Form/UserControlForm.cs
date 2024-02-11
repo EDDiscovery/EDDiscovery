@@ -593,23 +593,23 @@ namespace EDDiscovery.UserControls
 
         public UserControlCommonBase.PanelActionState PerformPanelOperation(UserControlCommonBase sender, object action)
         {
-            System.Diagnostics.Debug.WriteLine($"MTC RequestOp pop outs from {sender.PanelID} {action}");
+            //System.Diagnostics.Debug.WriteLine($"MTC RequestOp pop outs from {sender.PanelID} {action}");
 
             UserControlCommonBase.PanelActionState retstate = UserControlCommonBase.PanelActionState.NotHandled;
 
             foreach (UserControlForm ucf in forms)
             {
-                System.Diagnostics.Debug.WriteLine($"MTC PerformOp pop outs from {sender.PanelID} distribute to tab {ucf.Name}: {action}");
+                //System.Diagnostics.Debug.WriteLine($"MTC PerformOp pop outs from {sender.PanelID} distribute to tab {ucf.Name}: {action}");
 
                 var res = ucf.UserControl.PerformPanelOperation(sender, action);
-                System.Diagnostics.Debug.WriteLine($"..PerformOp pop outs result {res} panel");
+                //System.Diagnostics.Debug.WriteLine($"..PerformOp pop outs result {res} panel");
 
                 if ( res != UserControlCommonBase.PanelActionState.NotHandled)
                 {
                     retstate = res;
                     if (UserControlCommonBase.IsPASResult(res))
                     {
-                        System.Diagnostics.Debug.WriteLine($"..PerformOp pop outs terminated {res} panel {ucf.Name}");
+                        //System.Diagnostics.Debug.WriteLine($"..PerformOp pop outs terminated {res} panel {ucf.Name}");
                         return res;
                     }
                 }
