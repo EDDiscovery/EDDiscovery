@@ -305,11 +305,14 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            if (RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist }) == PanelActionState.NotHandled)
-            {
-                ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
-            }
+            var req = new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist };
+            bool serviced = RequestPanelOperation(this, req) != PanelActionState.NotHandled;
 
+            if (!serviced)
+            {
+                DiscoveryForm.SelectTabPage(PanelInformation.PanelIDs.Resources, true, false);
+                RequestPanelOperation(this, req);
+            }
         }
 
         private void buttonClear_Click(object sender, EventArgs e)

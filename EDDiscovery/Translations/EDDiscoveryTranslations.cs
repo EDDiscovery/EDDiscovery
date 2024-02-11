@@ -1894,8 +1894,6 @@ namespace EDDiscovery
         UserControlCarrier_extTabControl_tabPageCAPI2_colCAPILockerQuantityNumeric,
 
         ActionPackVariablesForm_gv,
-
-        NoPanelAccepted,
     }
 
     internal static class EDTranslatorExtensions

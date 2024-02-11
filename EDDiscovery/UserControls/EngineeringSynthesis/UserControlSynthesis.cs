@@ -450,10 +450,14 @@ namespace EDDiscovery.UserControls
         private void extButtonPushResources_Click(object sender, EventArgs e)
         {
             if (NeededResources != null)
-            {                                           // prefer popouts first, then anyone
-                if ( RequestPanelOperation(this, new UserControlCommonBase.PushResourceWantedList() { Resources = NeededResources }) != PanelActionState.Success)
+            {
+                var req = new UserControlCommonBase.PushResourceWantedList() { Resources = NeededResources };
+                bool serviced = RequestPanelOperation(this, req) != PanelActionState.NotHandled;
+
+                if (!serviced)
                 {
-                    ExtendedControls.MessageBoxTheme.Show("No panel accepted list".T(EDTx.NoPanelAccepted));
+                    DiscoveryForm.SelectTabPage(PanelInformation.PanelIDs.Resources, true, false);
+                    RequestPanelOperation(this, req);
                 }
             }
         }
