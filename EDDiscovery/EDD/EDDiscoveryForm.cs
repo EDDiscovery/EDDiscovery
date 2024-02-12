@@ -584,7 +584,7 @@ namespace EDDiscovery
                                      return new Tuple<string, string, string>("Unknown", "Unknown", "Unknown");
                                  }
                              },
-                             8000       // ms to wait after file detected before assuming journal will not be updated
+                             3000       // ms to wait after file detected before assuming journal will not be updated
                              );
 
             ScreenshotConverter.OnScreenshot += (infile, outfile, imagesize, ss) => // screenshot seen
