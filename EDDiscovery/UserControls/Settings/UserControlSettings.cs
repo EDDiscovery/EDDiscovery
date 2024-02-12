@@ -234,7 +234,7 @@ namespace EDDiscovery.UserControls
                 ClientSize = new System.Drawing.Size(80, 20), Name = "ClearCAPIButton", Text = "Clear" };
             capiclearloginButton.Click += clearLoginButton_Click;
 
-            capiStateLabel = new Label() { Location = new System.Drawing.Point(4, 23), Name ="CAPIStatus"};
+            capiStateLabel = new Label() { Location = new System.Drawing.Point(4, 23), Name ="CAPIStatus", Margin = new Padding(3,3,3,0)};
             g1.Controls.Add(capiButton);
             g1.Controls.Add(capiclearloginButton);
             g1.Controls.Add(capiStateLabel);
