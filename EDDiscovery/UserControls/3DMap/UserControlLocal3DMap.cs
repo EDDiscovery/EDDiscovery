@@ -27,7 +27,7 @@ namespace EDDiscovery.UserControls
         private Map map;
         private UserControl3DMap.MapSaverImpl mapsave;
 
-        public UserControlLocal3DMap() 
+        public UserControlLocal3DMap()
         {
             InitializeComponent();
         }
@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Local3DMapPanel_";
 
-            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter,null,4,6);
+            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter, null, 4, 6);
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
         }
 
@@ -80,6 +80,7 @@ namespace EDDiscovery.UserControls
                 DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
                 DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
                 DiscoveryForm.OnSyncComplete += Discoveryform_OnSyncComplete;
+                EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
             }
         }
 
@@ -94,6 +95,7 @@ namespace EDDiscovery.UserControls
                 DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
                 DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
                 DiscoveryForm.OnSyncComplete -= Discoveryform_OnSyncComplete;
+                EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
 
                 glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
                 map.SaveState(mapsave);
@@ -145,6 +147,13 @@ namespace EDDiscovery.UserControls
             map.UpdateEDSMStarsLocalArea();
             map.UpdateTravelPath();
             map.UpdateNavRoute();
+        }
+
+        private void GlobalBookMarkList_OnBookmarkChange(EliteDangerousCore.DB.BookmarkClass bk, bool deleted)
+        {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
+            map.UpdateBookmarks();
         }
     }
 }
