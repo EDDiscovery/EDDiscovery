@@ -80,6 +80,7 @@ namespace EDDiscovery.UserControls
                 DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
                 DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
                 DiscoveryForm.OnSyncComplete += Discoveryform_OnSyncComplete;
+                EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
             }
         }
 
@@ -94,6 +95,7 @@ namespace EDDiscovery.UserControls
                 DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
                 DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
                 DiscoveryForm.OnSyncComplete -= Discoveryform_OnSyncComplete;
+                EliteDangerousCore.DB.GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
 
                 glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
                 map.SaveState(mapsave);
@@ -145,6 +147,13 @@ namespace EDDiscovery.UserControls
             map.UpdateEDSMStarsLocalArea();
             map.UpdateTravelPath();
             map.UpdateNavRoute();
+        }
+
+        private void GlobalBookMarkList_OnBookmarkChange(EliteDangerousCore.DB.BookmarkClass bk, bool deleted)
+        {
+            glwfc.EnsureCurrentContext();           // ensure the context
+
+            map.UpdateBookmarks();
         }
     }
 }
