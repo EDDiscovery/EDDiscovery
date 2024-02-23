@@ -19,7 +19,6 @@ using System.IO;
 using BaseUtils;
 using System.Threading.Tasks;
 using EliteDangerousCore.GEC;
-using System.Drawing;
 
 namespace EDDiscovery
 {
@@ -28,21 +27,23 @@ namespace EDDiscovery
         #region Aux file downloads
 
         // in its own thread..
-        public void DownloadExpeditions(Func<bool> cancelRequested)
+        public void DownloadExpeditions(System.Threading.CancellationToken cancel)
         {
             LogLine("Checking for new Expedition data".T(EDTx.EDDiscoveryController_EXPD));
 
             Task.Factory.StartNew(() =>
             {
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
-                var files = github.ReadDirectory("Expeditions");
+                GitHubClass github = new GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
+
+                var files = github.ReadFolder(cancel, "Expeditions");
+
                 if (files != null)        // may be empty, unlikely, but
                 {
                     string expeditiondir = EDDOptions.Instance.ExpeditionsAppDirectory();
 
-                    if (github.DownloadFiles(files, expeditiondir))
+                    if (github.DownloadFiles(cancel,expeditiondir, files, true, true))
                     {
-                        if (!cancelRequested())
+                        if (!cancel.IsCancellationRequested)
                         {
                             bool changed = SavedRouteClass.UpdateDBFromExpeditionFiles(expeditiondir);
                             InvokeAsyncOnUiThread(() => { OnExpeditionsDownloaded?.Invoke(changed); });
@@ -52,19 +53,20 @@ namespace EDDiscovery
             });
         }
 
-        public void DownloadHelp(Func<bool> cancelRequested)
+        public void DownloadHelp(System.Threading.CancellationToken cancel)
         {
             Task.Factory.StartNew(() =>
             {
                 string helpdir = EDDOptions.Instance.HelpDirectory();
 
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
-                var files = github.ReadDirectory("Help");
+                GitHubClass github = new GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
+
+                var files = github.ReadFolder(cancel, "Help");
                 if (files != null)        // may be empty, unlikely, but
                 {
-                    if (github.DownloadFiles(files, helpdir))
+                    if (github.DownloadFiles(cancel, helpdir, files, true, true))
                     {
-                        if (!cancelRequested())
+                        if (!cancel.IsCancellationRequested)
                         {
                             InvokeAsyncOnUiThread(() => { OnHelpDownloaded?.Invoke(); });
                         }
@@ -73,7 +75,7 @@ namespace EDDiscovery
             });
         }
 
-        public void DownloadEDSMGEC(Func<bool> cancelRequested)
+        public void DownloadEDSMGEC(System.Threading.CancellationToken cancel)
         {
             Task.Factory.StartNew(() =>
             {
@@ -84,7 +86,7 @@ namespace EDDiscovery
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
                     System.Diagnostics.Trace.WriteLine($"Download EDSM file background");
-                    if (EDSMClass.DownloadGMOFileFromEDSM(gmofile, cancelRequested))
+                    if (EDSMClass.DownloadGMOFileFromEDSM(gmofile,cancel))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                     System.Diagnostics.Trace.WriteLine($"Download GEC file background");
 
@@ -93,11 +95,11 @@ namespace EDDiscovery
                 // if we have a gec file, but its out of date, refresh it for next time, do it in background thread since not critical.
                 string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
 
-                if ( !cancelRequested() && File.Exists(gecfile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetGECGalMapLast()).TotalDays >= 7)
+                if ( !cancel.IsCancellationRequested && File.Exists(gecfile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetGECGalMapLast()).TotalDays >= 7)
                 {
                     LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
                     System.Diagnostics.Trace.WriteLine($"Download GEC file background");
-                    if (GECClass.DownloadGECFile(gecfile, cancelRequested))
+                    if (GECClass.DownloadGECFile(gecfile, cancel))
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                     System.Diagnostics.Trace.WriteLine($"Download GEC file end");
                 }

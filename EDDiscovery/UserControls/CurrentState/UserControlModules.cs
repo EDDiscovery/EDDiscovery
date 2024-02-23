@@ -536,7 +536,7 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Debug.WriteLine("Coriolis Export " + si.JSONCoriolis(out string error).ToString(true));
 
-                string uri = EDDConfig.Instance.CoriolisURL + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(coriolis) + "&bn=" + Uri.EscapeDataString(si.Name);
+                string uri = EDDConfig.Instance.CoriolisURL + "data=" + coriolis.URIGZipBase64Escape() + "&bn=" + Uri.EscapeDataString(si.Name);
 
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
@@ -584,7 +584,7 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine("EDSY Export " + si.JSONLoadout().ToString(true));
                 //System.Diagnostics.Debug.WriteLine("EDSY Export " + loadoutjournalline);
 
-                string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(loadoutjournalline);
+                string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" +loadoutjournalline.URIGZipBase64Escape();
 
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {

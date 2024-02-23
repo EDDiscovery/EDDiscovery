@@ -202,6 +202,9 @@ namespace EDDiscovery
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
+            PreInitDebug();        // call any debug we want at this point
+
+
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
 
@@ -401,8 +404,8 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                    if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile,()=>false))
-                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
+    //tbd                //if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile,()=>false))
+                    //    SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
                 string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
@@ -410,8 +413,8 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
                 {
                     LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
-                    if (GECClass.DownloadGECFile(gecfile,()=>false))
-                        SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
+//tbd                    if (GECClass.DownloadGECFile(gecfile,()=>false))
+     //                   SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
 
                 GalacticMapping = new GalacticMapping();
@@ -636,6 +639,7 @@ namespace EDDiscovery
             // Notifications, only check github when directed and we are not debugging it using a folder override
 
             Notifications.CheckForNewNotifications(EDDOptions.Instance.CheckGithubFiles && EDDOptions.Instance.NotificationFolderOverride == null, 
+                                                   "Notifications",
                                                    EDDOptions.Instance.NotificationsAppDirectory(),
                                                    EDDiscovery.Properties.Resources.URLGithubDataDownload,
             (notelist) =>
@@ -799,7 +803,7 @@ namespace EDDiscovery
             e.Cancel = disallowclose;
             System.Diagnostics.Debug.WriteLine($"EDF form closing called {Controller.PendingClose} {disallowclose}");
 
-            if (!Controller.PendingClose)       // if not shutting down..
+            if (!Controller.PendingClose.IsCancellationRequested)       // if not shutting down..
             {
                 bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the system database\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 

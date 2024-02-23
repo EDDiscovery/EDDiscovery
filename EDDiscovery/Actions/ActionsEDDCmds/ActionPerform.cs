@@ -158,19 +158,19 @@ namespace EDDiscovery.Actions
                     {
                         string gitfolder = nextword;
                         string filewildcard = thirdword;
-                        string directory = fourthword;
+                        string localdirectory = fourthword;
                         string optclean = fifthword;
 
-                        if (gitfolder != null && filewildcard != null && directory != null)
+                        if (gitfolder != null && filewildcard != null && localdirectory != null)
                         {
-                            if (System.IO.Directory.Exists(directory))
+                            if (System.IO.Directory.Exists(localdirectory))
                             {
                                 BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
-                                bool worked = ghc.Download(directory, gitfolder, filewildcard, optclean != null && optclean == "1");
+                                bool worked = ghc.DownloadFolder(new System.Threading.CancellationToken(), localdirectory, gitfolder, filewildcard, true, optclean != null && optclean == "1");
                                 ap["Downloaded"] = worked.ToStringIntValue();
                             }
                             else
-                                ap.ReportError("Download folder " + directory + " does not exist");
+                                ap.ReportError("Download folder " + localdirectory + " does not exist");
                         }
                         else
                             ap.ReportError("Missing parameters in Perform Datadownload");

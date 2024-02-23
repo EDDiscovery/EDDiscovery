@@ -1368,7 +1368,9 @@ namespace EDDiscovery.UserControls.Map3D
                             string path = System.IO.Path.Combine(EDDOptions.Instance.DownloadedImages(), filename);
                             System.Diagnostics.Debug.WriteLine($"HTTP load {name} to {path}");
 
-                            bool res = BaseUtils.DownloadFile.HTTPDownloadFile(name, path, false, out bool newfile);
+                            System.Threading.CancellationToken cancel = new System.Threading.CancellationToken();
+
+                            bool res = BaseUtils.HttpCom.DownloadFileFromURI(cancel,name, path, false, out bool newfile);
 
                             if (res)
                             {

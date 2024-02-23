@@ -42,7 +42,7 @@ namespace EDDiscovery
         public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null, bool removedupfsdentries = false)
         {
             System.Diagnostics.Debug.WriteLine($"Refresh History Async ordered nlp {netlogpath}, forcenetlogreload {forcejournalreload}, forcejr {forcejournalreload}, cmdr {currentcmdr}, removedupfsd {removedupfsdentries}");
-            if (PendingClose)
+            if (PendingClose.IsCancellationRequested)
             {
                 return false;
             }
@@ -92,18 +92,19 @@ namespace EDDiscovery
         private void BackgroundHistoryRefreshWorkerThread()
         {
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background history refresh worker thread going.. waiting for read for refresh");
-            WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh after initial load caused by DoRefreshHistory, called by the controller. It sets the flag
+
+            // Wait to be ready for new refresh after initial load caused by DoRefreshHistory, called by the controller. It sets the flag
+            WaitHandle.WaitAny(new WaitHandle[] { PendingClose.Token.WaitHandle, readyForNewRefresh }); 
 
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background history refresh worker running");
 
             int capirefreshinterval = 8000;        // how often we check CAPI system.  
 
-            while (!PendingClose)
+            while (!PendingClose.IsCancellationRequested)
             {
-                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested }, capirefreshinterval);     // wait for a second and subsequent refresh request.
+                // wait for a second and subsequent refresh request.
 
-                if (PendingClose)
-                    break;
+                int wh = WaitHandle.WaitAny(new WaitHandle[] { PendingClose.Token.WaitHandle, refreshRequested }, capirefreshinterval);     
 
                 switch (wh)
                 {
@@ -130,7 +131,7 @@ namespace EDDiscovery
                         {
                             readyForNewRefresh.Reset();
                             DoRefreshHistory(args);
-                            WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh
+                            WaitHandle.WaitAny(new WaitHandle[] { PendingClose.Token.WaitHandle, readyForNewRefresh }); // Wait to be ready for new refresh
                         }
                         break;
 
@@ -189,14 +190,15 @@ namespace EDDiscovery
 
                     System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Parse journal files");
 
-                    journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)), 
-                                                                         EDDOptions.Instance.MinJournalDateUTC,
-                                                                         forcereloadoflastn,
-                                                                         closerequested:closeRequested);
+                    journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)),
+                                                                        PendingClose.Token,
+                                                                        EDDOptions.Instance.MinJournalDateUTC,
+                                                                         forcereloadoflastn
+                                                                         );
 
                     if (args.NetLogPath != null)            // see if net logs need reading for old times sake.
                     {
-                        NetLogClass.ParseFiles(args.NetLogPath, out string errstr, EDCommander.Current.MapColour, () => PendingClose, (p, s) => ReportRefreshProgress(p, s), 
+                        NetLogClass.ParseFiles(args.NetLogPath, out string errstr, EDCommander.Current.MapColour, PendingClose.Token, (p, s) => ReportRefreshProgress(p, s), 
                             args.ForceNetLogReload, currentcmdrid: args.CurrentCommander);
                     }
                 }
@@ -219,7 +221,7 @@ namespace EDDiscovery
 
                     if (linkedcmdrid >= 0 && EDCommander.GetCommander(linkedcmdrid) != null )      // if loading a linked commander (new nov 22 u14)
                     {
-                        HistoryList.LoadHistory(newhistory, (p,s) => ReportRefreshProgress(p, s), () => PendingClose,
+                        HistoryList.LoadHistory(newhistory, (p,s) => ReportRefreshProgress(p, s),  PendingClose.Token,
                                                         linkedcmdrid, cmdr.Name,
                                                         EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                         essentialitemslist,
@@ -228,7 +230,7 @@ namespace EDDiscovery
                     }
 
                     // then load any data from our commander
-                    HistoryList.LoadHistory(newhistory, (p,s) => ReportRefreshProgress(p, s), () => PendingClose,
+                    HistoryList.LoadHistory(newhistory, (p,s) => ReportRefreshProgress(p, s), PendingClose.Token,
                                                     args.CurrentCommander, cmdr.Name,
                                                     EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                     essentialitemslist,
@@ -270,7 +272,7 @@ namespace EDDiscovery
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);     // in UI Thread
 
-            if (!PendingClose)
+            if (!PendingClose.IsCancellationRequested)
             {
                 System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC foreground history refresh start");
 

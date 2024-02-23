@@ -116,7 +116,7 @@ namespace EDDiscovery
 
                     if (syncstate.perform_fullsync)
                     {
-                        if (syncstate.perform_fullsync && !PendingClose)
+                        if (syncstate.perform_fullsync && !PendingClose.IsCancellationRequested)
                         {
                             // Download new systems
                             try
@@ -136,9 +136,9 @@ namespace EDDiscovery
                                 deletefile = false;
                                 downloadfile = spansh ? @"c:\code\spanshsystems.json.gz" : @"c:\code\examples\edsm\edsmsystems.1e6.json";
 #else
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, cancelRequested:()=>PendingClose, reportProgress: ReportDownloadProgress);
+                                bool success = BaseUtils.HttpCom.DownloadFileFromURI(PendingClose.Token, url, downloadfile, false, out bool newfile, reportProgress: ReportDownloadProgress);
 #endif
-                                if (!PendingClose)      // if not closing
+                                if (!PendingClose.IsCancellationRequested)      // if not closing
                                 {
                                     syncstate.perform_fullsync = false;
 
@@ -146,10 +146,10 @@ namespace EDDiscovery
                                     {
                                         ReportSyncProgress("Download complete, creating database");
 
-                                        syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, 200000, () => PendingClose, ReportSyncProgress, method: 3);
+                                        syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, 200000, PendingClose.Token, ReportSyncProgress, method: 3);
 
-                                        if (deletefile)
-                                            BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
+                                        if (deletefile && !PendingClose.IsCancellationRequested)        // if remove file, and we are not cancelled, delete it
+                                            BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       
 
                                         if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
                                             return;
@@ -171,7 +171,7 @@ namespace EDDiscovery
 
                     }
 
-                    if (!PendingClose)          // perform an update sync to get any new EDSM data
+                    if (!PendingClose.IsCancellationRequested)          // perform an update sync to get any new star data
                     {
                         if (spansh)
                         {
@@ -188,10 +188,10 @@ namespace EDDiscovery
                                 downloadfile = @"c:\code\examples\edsm\systems_1week.json";
                                 deletefile = false;
 #else
-                            if ( delta >= MiniumSpanshUpdateAge)        // if its older than this, we will do an update
+                            if ( delta >= MiniumSpanshUpdateAge )        // if its older than this, we will do an update
                             {
                                 ReportSyncProgress($"Performing partial download of System Data from {url}");
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(url, downloadfile, false, out bool newfile, reportProgress: ReportDownloadProgress);
+                                bool success = BaseUtils.HttpCom.DownloadFileFromURI(PendingClose.Token, url, downloadfile, false, out bool newfile, reportProgress: ReportDownloadProgress);
 #endif
 
                                 if (success)        // grabbed sucessfully
@@ -202,8 +202,8 @@ namespace EDDiscovery
 
                                     // we do this non overlapped with replace, to pause to allow main system to run ok
                                     SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grids, true, false );        
-                                    syncstate.updatesync_count = loader3.ParseJSONFile(downloadfile, () => PendingClose, ReportSyncProgress);
-                                    loader3.Finish();
+                                    syncstate.updatesync_count = loader3.ParseJSONFile(downloadfile, PendingClose.Token, ReportSyncProgress);
+                                    loader3.Finish(PendingClose.Token);
 
                                     System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count}");
                                 }
@@ -218,7 +218,7 @@ namespace EDDiscovery
                         }
                         else
                         {
-                            syncstate.updatesync_count = EDSMUpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                            syncstate.updatesync_count = EDSMUpdateSync(grids, PendingClose.Token, ReportSyncProgress);
                         }
                     }
                 }
@@ -253,7 +253,7 @@ namespace EDDiscovery
             System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
-        public long EDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
+        public long EDSMUpdateSync(bool[] grididallow, CancellationToken cancel, Action<string> ReportProgress)
         {
             // smallish block size, non overlap, allow overwrite
             SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grididallow, false, false);       
@@ -271,7 +271,7 @@ namespace EDDiscovery
             while (loader3.LastDate < minimumfetchspan)                              // stop at X mins before now, so we don't get in a condition
             {                                                                           // where we do a set, the time moves to just before now, 
                                                                                         // and we then do another set with minimum amount of hours
-                if (PendingClose())
+                if (cancel.IsCancellationRequested)
                     break;
 
                 if ( updates == 0)
@@ -289,7 +289,7 @@ namespace EDDiscovery
                 System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {loader3.LastDate} to {enddate} {hourstofetch}");
 
                 string json = null;
-                BaseUtils.ResponseData response;
+                BaseUtils.HttpCom.Response response;
                 try
                 {
                     System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
@@ -325,7 +325,7 @@ namespace EDDiscovery
                         LogLine($"EDSM rate limit hit - waiting 2 minutes");
                         for (int sec = 0; sec < 120; sec++)
                         {
-                            if (!PendingClose())
+                            if (!cancel.IsCancellationRequested)
                             {
                                 System.Threading.Thread.Sleep(1000);
                             }
@@ -353,7 +353,7 @@ namespace EDDiscovery
 
                 var prevrectime = loader3.LastDate;
 
-                long updated = loader3.ParseJSONString(json, PendingClose, ReportSyncProgress);
+                long updated = loader3.ParseJSONString(json, cancel, ReportSyncProgress);
 
                 System.Diagnostics.Trace.WriteLine($"EDSM parital download updated {updated} to {loader3.LastDate}");
 
@@ -388,14 +388,14 @@ namespace EDDiscovery
 
                 for (int sec = 0; sec < delay; sec++)
                 {
-                    if (!PendingClose())
+                    if (!cancel.IsCancellationRequested)
                     {
                         System.Threading.Thread.Sleep(1000);
                     }
                 }
             }
 
-            loader3.Finish();
+            loader3.Finish(cancel);
             return updates;
         }
 
@@ -407,7 +407,7 @@ namespace EDDiscovery
 
         public void ReportDownloadProgress(long count, double rate)
         {
-            StatusLineUpdate?.Invoke(EDDiscoveryForm.StatusLineUpdateType.SystemData, -1, $"Downloaded {count / 1024:N0} KB at {rate / 1024 / 1024:N2} MB/sec");
+            StatusLineUpdate?.Invoke(EDDiscoveryForm.StatusLineUpdateType.SystemData, -1, count == 0 ? "Starting Download" : $"Downloaded {count / 1024:N0} KB at {rate / 1024 / 1024:N2} MB/sec");
         }
 
     }

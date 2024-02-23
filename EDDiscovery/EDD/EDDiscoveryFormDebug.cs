@@ -18,12 +18,13 @@ using EliteDangerousCore.JournalEvents;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace EDDiscovery
 {
     public partial class EDDiscoveryForm
     {
-        public static void PostInitDebug()
+        public void PostInitDebug()
         {
             if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
             {
@@ -93,19 +94,72 @@ namespace EDDiscovery
 
                 File.WriteAllText(fn, s);
             }
+        }
 
-            //System.Diagnostics.Trace.Write($"A bit more");
-            //System.Diagnostics.Trace.Write($"and a line feed \n and a bit more");
+        public void PreInitDebug()
+        {
+            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDownload);
+            BaseUtils.GitHubClass ghd = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDataDownload);
+            //    BaseUtils.GitHubRelease rel = ghc.GetLatestRelease();
 
-            //for (int m = 0; m < 100; m++)
-            //{
-            //    System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m/2}\r\nFred and jim\nlola\ndenis");
-            //    //System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m}");
-            //    //System.Diagnostics.Debug.WriteLine($"Trace message {m / 2}\nFred and jim\nlola\ndenis");
-            //    System.Threading.Thread.Sleep(200);
-            //}
+            //          var dir = ghd.ReadFolder(new System.Threading.CancellationToken(), "Notifications");
+
+            //var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications","*.*","*.*");
+        //    var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications", "*.*", true);
+
 
         }
+
+        //System.Diagnostics.Trace.Write($"A bit more");
+        //System.Diagnostics.Trace.Write($"and a line feed \n and a bit more");
+
+        //for (int m = 0; m < 100; m++)
+        //{
+        //    System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m/2}\r\nFred and jim\nlola\ndenis");
+        //    //System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m}");
+        //    //System.Diagnostics.Debug.WriteLine($"Trace message {m / 2}\nFred and jim\nlola\ndenis");
+        //    System.Threading.Thread.Sleep(200);
+        //}
+
+        //  
+        //var allreleases = ghc.GetAllReleases(10);
+        //var latestrelease = ghc.GetLatestRelease();
+
+
+        //
+
+        // string url = string.Format(EDDConfig.Instance.SpanshSystemsURL, "_6months");
+
+        //   BaseUtils.HttpCom.DownloadURL(url, @"c:\code\spansh.dmp", true, out bool newfile, initialtimeout:2000);
+
+
+        // ghc.GetLatestReleaseAsync(RespCallback,this);
+
+        //var res = await ghc.GetLatestReleaseInTask();
+
+
+        //            var res = await ghc.GetLatestReleaseInTask(new System.Threading.CancellationToken(), 20000);
+        //          System.Diagnostics.Debug.WriteLine($"Result {res.StatusCode} {res.Body}");
+
+        //var cancel = new System.Threading.CancellationToken();
+        //var res = await ghc.GetLatestReleaseInTask(cancel,20000);
+        //System.Diagnostics.Debug.WriteLine($"Result {res.StatusCode} {res.Body}");
+
+        //static void RespCallback(BaseUtils.HttpCom.Response rd, object callerdata)
+        //{
+        //    System.Diagnostics.Debug.Assert(!System.Windows.Forms.Application.MessageLoop);
+        //    System.Diagnostics.Debug.Write($"Async reponse back {rd.Error} {rd.StatusCode} {rd.Body}");
+        //    EDDiscoveryForm form = callerdata as EDDiscoveryForm;
+
+        //    form.BeginInvoke(((MethodInvoker)delegate { form.RespCallBack(rd); }));
+        //}
+
+        //void RespCallBack(BaseUtils.HttpCom.Response rd)
+        //{
+        //    System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+        //    System.Diagnostics.Debug.Write($"Async reponse back in discovery form {rd.Error} {rd.StatusCode} {rd.Body}");
+
+        //}
 
         //   var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);
 

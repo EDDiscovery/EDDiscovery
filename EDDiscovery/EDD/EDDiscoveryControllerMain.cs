@@ -31,7 +31,7 @@ namespace EDDiscovery
         public HistoryList History { get; private set; } = new HistoryList();       // we always have a history
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
 
-        public bool PendingClose { get; private set; }                      // we want to close boys!      set once, then we close
+        public CancellationTokenSource PendingClose { get; private set; } = new CancellationTokenSource();                    // we want to close boys!      set once, then we close
 
         public CAPI.CompanionAPI FrontierCAPI;
         public BaseUtils.DDE.DDEServer DDEServer;
@@ -91,7 +91,6 @@ namespace EDDiscovery
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
 
-        private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
 
         private int commandercountafterhistoryread;
@@ -175,17 +174,17 @@ namespace EDDiscovery
             backgroundWorker.Name = "Background Worker Thread";
             backgroundWorker.Start();                                   
         }
+
         public void Shutdown()      // called to request a shutdown.. background thread co-ords the shutdown.
         {
-            if (!PendingClose)
+            if (!PendingClose.IsCancellationRequested)
             {
-                PendingClose = true;
+                PendingClose.Cancel();
                 EDDNSync.StopSync();
                 EDSMJournalSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
                 LogLineHighlight("Closing down, please wait..".T(EDTx.EDDiscoveryController_CD));
-                closeRequested.Set();
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
                 journalqueuedelaytimer.Dispose();
             }
@@ -219,14 +218,14 @@ namespace EDDiscovery
             if (EDDOptions.Instance.CheckGithubFiles)      // not normal in debug, due to git hub choking
             {
                 DateTime lastdownloadtime = UserDatabase.Instance.GetSettingDate("DownloadFilesLastTime", DateTime.MinValue);
-
-                if (DateTime.UtcNow - lastdownloadtime >= new TimeSpan(24, 0, 0))       // only update once per day
+                
+                if (true || DateTime.UtcNow - lastdownloadtime >= new TimeSpan(24, 0, 0))       // only update once per day
                 {
                     // Expedition data
-                    DownloadExpeditions(() => PendingClose);
+                    DownloadExpeditions(PendingClose.Token);
 
                     // and Help files
-                    DownloadHelp(() => PendingClose);
+                    DownloadHelp(PendingClose.Token);
 
                     UserDatabase.Instance.PutSettingDate("DownloadFilesLastTime", DateTime.UtcNow);
                 }
@@ -234,7 +233,7 @@ namespace EDDiscovery
 
             if (!EDDOptions.Instance.NoSystemsLoad)         // if normal operation, see if the EDSM/GEC files need a refresh for next time
             {
-                DownloadEDSMGEC(() => PendingClose);
+                DownloadEDSMGEC(PendingClose.Token);
             }
 
             SystemNoteClass.GetAllSystemNotes();
@@ -271,13 +270,13 @@ namespace EDDiscovery
                     DoPerformSync();        // this is done after the initial history load..
                 }
 
-                while (!PendingClose)
+                while (!PendingClose.IsCancellationRequested)
                 {
-                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
+                    int wh = WaitHandle.WaitAny(new WaitHandle[] { PendingClose.Token.WaitHandle, resyncRequestedEvent });
 
                     System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background worker kicked by {wh}");
 
-                    if (PendingClose)
+                    if (PendingClose.IsCancellationRequested)
                         break;
 
                     if (wh == 1)
@@ -296,8 +295,6 @@ namespace EDDiscovery
             System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background Worker closing down background worker");
 
             // Now we have been ordered to close down, so go thru the process
-
-            closeRequested.WaitOne();
 
             InvokeAsyncOnUiThread(() =>
             {

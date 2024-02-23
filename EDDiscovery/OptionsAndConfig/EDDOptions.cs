@@ -331,12 +331,6 @@ namespace EDDiscovery
                     case "nocheckrelease": CheckRelease = false; break;
                     case "nocheckgithub": CheckGithubFiles = false; break;
                     case "disablemerge": DisableMerge = true; break;
-                    case "edsmbeta":
-                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
-                        break;
-                    case "edsmnull":
-                        EDSMClass.ServerAddress = "";
-                        break;
                     case "disablebetacheck":
                         DisableBetaCommanderCheck = true;
                         break;
@@ -488,11 +482,6 @@ namespace EDDiscovery
                 if (!DisableShowDebugInfoInTitle)       // for when i'm doing help.. don't need this on
                 {
                     sb.Append(appfolderwarningmessage);
-
-                    if (EDSMClass.ServerAddress.Length == 0)
-                        sb.Append(" (EDSM No server)");
-                    else if (EDSMClass.ServerAddress.IndexOf("Beta", StringComparison.InvariantCultureIgnoreCase) != -1)
-                        sb.Append(" (EDSM Beta server)");
 
                     if (DisableBetaCommanderCheck)
                     {

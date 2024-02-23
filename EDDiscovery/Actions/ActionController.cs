@@ -437,7 +437,7 @@ namespace EDDiscovery.Actions
 
                 dmf.ShowDialog(discoveryform);
 
-                if (dmf.changelist.Count > 0)
+                if (dmf.ChangeList.Count > 0)
                 {
                     actionrunasync?.TerminateAll();
                     AudioQueueSpeech?.StopAll();
@@ -447,7 +447,7 @@ namespace EDDiscovery.Actions
                     CheckWarn();
 
                     string changes = "", updates="", removes="";
-                    foreach (KeyValuePair<string, string> kv in dmf.changelist)
+                    foreach (KeyValuePair<string, string> kv in dmf.ChangeList)
                     {
                         if (kv.Value.Contains("+"))
                         {

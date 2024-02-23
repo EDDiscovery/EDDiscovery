@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
             {
                 EDSMClass edsm = new EDSMClass();
                 url = edsm.GetUrlToSystem(sys.Name);
-                defaulturl = EDSMClass.ServerAddress;
+                defaulturl = EDSMClass.RootURL;
             }
             else if (source == "Spansh")
             {
