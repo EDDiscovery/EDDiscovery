@@ -270,7 +270,13 @@ namespace EDDiscovery
 
             PopOuts.RequestPanelOperation += tabControlMain.RequestPanelOperationPopOut;          // HOOK requests from the forms into the main tab..
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
+            // load saved commanders
+
+            EDCommander.LoadCommanders();
+
+            // STAGE 2 themeing the main interface (not the tab pages)
+
+            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");
             msg.Invoke("Applying Themes");
 
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
