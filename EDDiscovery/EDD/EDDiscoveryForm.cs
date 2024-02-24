@@ -398,14 +398,16 @@ namespace EDDiscovery
 
             //----------------------------------------------------------------- GMO etc load
 
-            { 
+            {
+                // normally updated by DownloadEDSMGEC in ControllerHelpers, but first time run, we want them now, before we continue
+
                 string edsmgmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
 
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-    //tbd                //if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile,()=>false))
-                    //    SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
+                    if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
+                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
                 string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
@@ -413,8 +415,8 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
                 {
                     LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
-//tbd                    if (GECClass.DownloadGECFile(gecfile,()=>false))
-     //                   SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
+                    if (GECClass.DownloadGECFile(gecfile, new System.Threading.CancellationToken()))
+                        SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
 
                 GalacticMapping = new GalacticMapping();

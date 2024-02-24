@@ -219,7 +219,7 @@ namespace EDDiscovery
             {
                 DateTime lastdownloadtime = UserDatabase.Instance.GetSettingDate("DownloadFilesLastTime", DateTime.MinValue);
                 
-                if (true || DateTime.UtcNow - lastdownloadtime >= new TimeSpan(24, 0, 0))       // only update once per day
+                if (DateTime.UtcNow - lastdownloadtime >= new TimeSpan(24, 0, 0))       // only update once per day
                 {
                     // Expedition data
                     DownloadExpeditions(PendingClose.Token);
