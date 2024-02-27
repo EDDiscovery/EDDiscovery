@@ -1277,7 +1277,7 @@ namespace EDDiscovery.UserControls
             if (rightclickhe != null)
             {
                 var mcmr = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
-                List<QuickJSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, mcmr);
+                List<QuickJSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, DateTime.UtcNow, mcmr);
 
                 foreach (var j in list)
                 {
