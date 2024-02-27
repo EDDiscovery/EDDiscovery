@@ -381,40 +381,40 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShowControl_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
-            // not yet until more than one displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
+            // not yet until more than one displayfilter.UC.AddAllNone();
+            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 
         private void extButtonAlignment_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             string lt = CtrlList.alignleft.ToString();
             string ct = CtrlList.aligncenter.ToString();
             string rt = CtrlList.alignright.ToString();
 
-            displayfilter.AddStandardOption(lt, "Alignment Left".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
-            displayfilter.AddStandardOption(ct, "Alignment Center".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
-            displayfilter.AddStandardOption(rt, "Alignment Right".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_rightToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
+            displayfilter.UC.Add(lt, "Alignment Left".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
+            displayfilter.UC.Add(ct, "Alignment Center".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
+            displayfilter.UC.Add(rt, "Alignment Right".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_rightToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
             displayfilter.CloseOnChange = true;
             CommonCtrl(displayfilter, extButtonAlignment);
         }
 
-        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
+        private void CommonCtrl(ExtendedControls.CheckedIconNewListBoxForm displayfilter, Control under)
         {
             displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
             displayfilter.AllOrNoneBack = false;
-            displayfilter.ImageSize = new Size(24, 24);
-            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.UC.ImageSize = new Size(24, 24);
+            displayfilter.UC.ScreenMargin = new Size(0, 0);
             displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {
-                PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
+                PutBoolSettingsFromString(s, displayfilter.UC.TagList());
                 PopulateCtrlList();
                 DrawAll();
             };

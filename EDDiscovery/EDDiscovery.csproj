@@ -291,7 +291,7 @@
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\RouteHelpers.cs" />
-    <Compile Include="UserControls\Helpers\ScanDisplayBodyFilters.cs">
+    <Compile Include="UserControls\Helpers\ScanDisplayBodyFiltersButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\ScanDisplayConfigureButton.cs">

@@ -358,14 +358,15 @@ namespace EDDiscovery.UserControls
 
         private void extButtonSearches_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-            displayfilter.AddAllNone();
-            displayfilter.SettingsSplittingChar = SettingsSplittingChar;     // pick a crazy one soe
-            displayfilter.AddGroupOption(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".T(EDTx.ProfileEditor_Default));
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
+            displayfilter.UC.AddAllNone();
+            displayfilter.UC.SettingsSplittingChar = SettingsSplittingChar;     // pick a crazy one soe
+            displayfilter.UC.AddGroupItem(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".T(EDTx.ProfileEditor_Default));
+            displayfilter.UC.MultiColumnSlide = true;
 
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();
             foreach (var s in searches)
-                displayfilter.AddStandardOption(s.Name, s.Name);
+                displayfilter.UC.Add(s.Name, s.Name);
 
             CommonCtrl(displayfilter, extButtonSearches, dbSearches);
         }
@@ -381,12 +382,12 @@ namespace EDDiscovery.UserControls
             searchesactive = set.SplitNoEmptyStartFinish('\u2188');
         }
 
-        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under, string saveasstring)
+        private void CommonCtrl(ExtendedControls.CheckedIconNewListBoxForm displayfilter, Control under, string saveasstring)
         {
             displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
             displayfilter.AllOrNoneBack = false;
-            displayfilter.ImageSize = new Size(24, 24);
-            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.UC.ImageSize = new Size(24, 24);
+            displayfilter.UC.ScreenMargin = new Size(0, 0);
 
             displayfilter.SaveSettings = (s, o) =>
             {

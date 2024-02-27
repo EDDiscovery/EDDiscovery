@@ -53,8 +53,8 @@ namespace EDDiscovery.UserControls
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
 
             cfs = new JournalFilterSelector();
-            cfs.AddAllNone();
-            cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
+            cfs.UC.AddAllNone();
+            cfs.UC.AddGroupItem(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
             cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewLedger);
             PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
-            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
+            PutSetting(dbUserGroups, cfs.GetUserGroups());
             DiscoveryForm.OnHistoryChange -= Redisplay;
             DiscoveryForm.OnNewEntry -= NewEntry;
         }

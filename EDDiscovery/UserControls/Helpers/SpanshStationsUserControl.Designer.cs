@@ -55,14 +55,14 @@ namespace EDDiscovery.UserControls.Helpers
             this.viewOutfittingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewShipyardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.extButtonType = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
-            this.extButtonCommoditiesBuy = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
-            this.extButtonServices = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
-            this.extButtonEconomy = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
-            this.extButtonShipyard = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
-            this.extButtonOutfitting = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
+            this.extButtonType = new ExtendedControls.ExtButtonWithNewCheckedListBox();
+            this.extButtonCommoditiesBuy = new ExtendedControls.ExtButtonWithNewCheckedListBox();
+            this.extButtonServices = new ExtendedControls.ExtButtonWithNewCheckedListBox();
+            this.extButtonEconomy = new ExtendedControls.ExtButtonWithNewCheckedListBox();
+            this.extButtonShipyard = new ExtendedControls.ExtButtonWithNewCheckedListBox();
+            this.extButtonOutfitting = new ExtendedControls.ExtButtonWithNewCheckedListBox();
             this.extButtonEditCommodities = new ExtendedControls.ExtButton();
-            this.extButtonCommoditiesSell = new ExtendedControls.ExtButtonWithCheckedIconListBoxGroup();
+            this.extButtonCommoditiesSell = new ExtendedControls.ExtButtonWithNewCheckedListBox();
             this.panelControls = new System.Windows.Forms.Panel();
             this.flowLayoutPanelFilters = new System.Windows.Forms.FlowLayoutPanel();
             this.labelFilter = new System.Windows.Forms.Label();
@@ -875,12 +875,12 @@ namespace EDDiscovery.UserControls.Helpers
         private System.Windows.Forms.ToolStripMenuItem viewOutfittingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewShipyardToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonType;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonCommoditiesBuy;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonOutfitting;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonShipyard;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonEconomy;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonServices;
+        private ExtendedControls.ExtButtonWithNewCheckedListBox extButtonType;
+        private ExtendedControls.ExtButtonWithNewCheckedListBox extButtonCommoditiesBuy;
+        private ExtendedControls.ExtButtonWithNewCheckedListBox extButtonOutfitting;
+        private ExtendedControls.ExtButtonWithNewCheckedListBox extButtonShipyard;
+        private ExtendedControls.ExtButtonWithNewCheckedListBox extButtonEconomy;
+        private ExtendedControls.ExtButtonWithNewCheckedListBox extButtonServices;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private System.Windows.Forms.Panel panelControls;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelFilters;
@@ -920,6 +920,6 @@ namespace EDDiscovery.UserControls.Helpers
         private System.Windows.Forms.DataGridViewTextBoxColumn colSmallPad;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMediumPads;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLargePads;
-        private ExtendedControls.ExtButtonWithCheckedIconListBoxGroup extButtonCommoditiesSell;
+        private ExtendedControls.ExtButtonWithNewCheckedListBox extButtonCommoditiesSell;
     }
 }

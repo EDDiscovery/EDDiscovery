@@ -54,9 +54,9 @@ namespace EDDiscovery.UserControls
             List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.Engineers).Distinct().ToList();
             engineers.Sort();
             efs = new RecipeFilterSelector(engineers);
-            efs.AddGroupOption(string.Join(";",ItemData.ShipEngineers()), "Ship Engineers");
-            efs.AddGroupOption(string.Join(";", ItemData.OnFootEngineers()), "On Foot Engineers");
-            efs.AddGroupOption("Guardian;Guardian Weapons;Human;Special Effect;Suit;Weapon;", "Other Enginnering");
+            efs.UC.AddGroupItem(string.Join(";",ItemData.ShipEngineers()), "Ship Engineers");
+            efs.UC.AddGroupItem(string.Join(";", ItemData.OnFootEngineers()), "On Foot Engineers");
+            efs.UC.AddGroupItem("Guardian;Guardian Weapons;Human;Special Effect;Suit;Weapon;", "Other Enginnering");
             efs.SaveSettings += (newvalue, e) => {
                 string prevsetting = GetSetting(dbEngFilterSave,"All");
                 if (prevsetting != newvalue)
@@ -306,9 +306,9 @@ namespace EDDiscovery.UserControls
             }
 
             var req = new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist };
-            bool serviced = RequestPanelOperation(this, req) != PanelActionState.NotHandled;
+            var res = RequestPanelOperation(this, req);
 
-            if (!serviced)
+            if (res == PanelActionState.NotHandled)
             {
                 DiscoveryForm.SelectTabPage(PanelInformation.PanelIDs.Resources, true, false);
                 RequestPanelOperation(this, req);

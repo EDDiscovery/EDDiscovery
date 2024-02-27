@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 
             cfs = new JournalFilterSelector();
-            cfs.AddAllNone();
+            cfs.UC.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
             cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
 
             DGVSaveColumnLayout(dataGridViewTravel);
 
-            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
+            PutSetting(dbUserGroups, cfs.GetUserGroups());
 
             DiscoveryForm.OnHistoryChange -= HistoryChanged;
             DiscoveryForm.OnNewEntry -= AddNewEntry;

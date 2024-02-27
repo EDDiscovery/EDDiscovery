@@ -496,13 +496,13 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShowControl_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
             displayfilter.AllOrNoneBack = false;
 
-            // not yet as only one item. displayfilter.AddAllNone();
-            displayfilter.AddStandardOption("fullblueprint", "Show full blueprint information".TxID(EDTx.UserControlModules_FullBluePrint));
+            // not yet as only one item. displayfilter.UC.AddAllNone();
+            displayfilter.UC.Add("fullblueprint", "Show full blueprint information".TxID(EDTx.UserControlModules_FullBluePrint));
 
-            displayfilter.ImageSize = new Size(24, 24);
+            displayfilter.UC.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
             {
                 displayfilters = s.Split(';');

@@ -16,18 +16,18 @@ namespace EDDiscovery.UserControls
 {
     // Control providing edsm/spansh settings, saving loading
 
-    public class EDSMSpanshButton : ExtendedControls.ExtButtonWithCheckedIconListBoxGroup
+    public class EDSMSpanshButton : ExtendedControls.ExtButtonWithNewCheckedListBox
     {
         // use ValueChanged to pick up the change 
 
         public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver ucb, string settingname, string defaultvalue)
         {
             string startsetting = ucb.GetSetting(settingname, defaultvalue);
-            Init(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption[]
+            Init(new ExtendedControls.CheckedIconUserControl.Item[]
             {
-                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("EDSM","EDSM",EDDiscovery.Icons.Controls.EDSM,"SPANSHEDSM"),
-                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSH","Spansh",EDDiscovery.Icons.Controls.spansh,"SPANSHEDSM"),
-                new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("SPANSHEDSM","Spansh -> EDSM",EDDiscovery.Icons.Controls.spansh,"EDSM;SPANSH"),
+                new ExtendedControls.CheckedIconUserControl.Item("EDSM","EDSM",EDDiscovery.Icons.Controls.EDSM,"SPANSHEDSM"),
+                new ExtendedControls.CheckedIconUserControl.Item("SPANSH","Spansh",EDDiscovery.Icons.Controls.spansh,"SPANSHEDSM"),
+                new ExtendedControls.CheckedIconUserControl.Item("SPANSHEDSM","Spansh -> EDSM",EDDiscovery.Icons.Controls.spansh,"EDSM;SPANSH"),
             }, 
             startsetting,
             (newsetting,ch) => { 

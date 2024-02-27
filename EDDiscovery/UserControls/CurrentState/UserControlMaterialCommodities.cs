@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, "UserControlMaterialCommodities");
 
             cfs = new JournalFilterSelector();
-            cfs.AddAllNone();
+            cfs.UC.AddAllNone();
 
             var matitems = MaterialCommodityMicroResourceType.GetMaterials(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
             var mattypes = MaterialCommodityMicroResourceType.GetTypes((x) => x.IsMaterial, true);
@@ -116,9 +116,9 @@ namespace EDDiscovery.UserControls
 
             if (showall)
             {
-                cfs.AddGroupOption(String.Join(";", matitems.Select(x => x.FDName)) + ";", "All Materials".T(EDTx.UserControlMaterialCommodities_AllMats));
-                cfs.AddGroupOption(String.Join(";", comitems.Select(x => x.FDName)) + ";", "All Commodities".T(EDTx.UserControlMaterialCommodities_AllCommods));
-                cfs.AddGroupOption(String.Join(";", mritems.Select(x => x.FDName)) + ";", "All Microresources".T(EDTx.UserControlMaterialCommodities_AllMicroresources));
+                cfs.UC.AddGroupItem(String.Join(";", matitems.Select(x => x.FDName)) + ";", "All Materials".T(EDTx.UserControlMaterialCommodities_AllMats));
+                cfs.UC.AddGroupItem(String.Join(";", comitems.Select(x => x.FDName)) + ";", "All Commodities".T(EDTx.UserControlMaterialCommodities_AllCommods));
+                cfs.UC.AddGroupItem(String.Join(";", mritems.Select(x => x.FDName)) + ";", "All Microresources".T(EDTx.UserControlMaterialCommodities_AllMicroresources));
             }
 
             if (PanelMode == PanelType.Materials || showall)
@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
                 foreach (var t in matcats)
                 {
                     string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
-                    cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2 + matpostfix);
+                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2 + matpostfix);
                 }
 
                 AddToControls(matitems, mattypes,true,true);
@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
             if (PanelMode == PanelType.Commodities || showall)
             {
                 MaterialCommodityMicroResourceType[] rare = comitems.Where(x => x.IsRareCommodity).ToArray();
-                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".T(EDTx.UserControlMaterialCommodities_Rare) + compostfix);
+                cfs.UC.AddGroupItem(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".T(EDTx.UserControlMaterialCommodities_Rare) + compostfix);
 
                 AddToControls(comitems, comtypes,  false, true );
             }
@@ -145,14 +145,14 @@ namespace EDDiscovery.UserControls
                 foreach (var t in mrcats)
                 {
                     string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
-                    cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2 + mrpostfix);
+                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2 + mrpostfix);
                 }
 
                 AddToControls(mritems, null, true, false);
             }
 
             if (showall )      // need to post sort as added above in sub groups
-                cfs.SortStandardOptions();
+                cfs.UC.Sort();
 
             // Designer has ColName, ColShortName, ColCategory, ColType, ColNumber,   ColBackpack, ColPrice,  ColRecipe, ColWanted, ColNeed
             // Materials:   ColName, ColShortName, ColCategory, ColType, ColNumber,   xxxxxx,      xxxxxxxx,  ColRecipe, ColWanted, ColNeed
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
                 foreach (var t in types)
                 {
                     string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfType(t.Item1, true);
-                    cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2);
+                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2);
                 }
             }
 
@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls
                 if (postfix.Length > 0)
                     postfix = " (" + postfix + ")";
 
-                cfs.AddStandardOption(x.FDName, x.Name + postfix);
+                cfs.UC.Add(x.FDName, x.Name + postfix);
             }
         }
 
@@ -253,7 +253,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbSplitter, splitContainerPanel.GetSplitterDistance());
 
             DGVSaveColumnLayout(dataGridViewMC);
-            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
+            PutSetting(dbUserGroups, cfs.GetUserGroups());
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -281,16 +281,16 @@ namespace EDDiscovery.UserControls
 
                 var cmd = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Materials list pushed from panel, set or add to this, or ignore?", "Materials list",
                                                     new string[] { "Cancel".T(EDTx.MessageBoxTheme_Cancel), "Add".T(EDTx.MessageBoxTheme_Add), "Set".T(EDTx.MessageBoxTheme_Set) });
-                if ( cmd != DialogResult.Ignore)     
+                if (cmd != DialogResult.Ignore)
                 {
                     bool add = cmd == DialogResult.Retry;   // Retry is second button, add
 
                     if (!add)
                         wantedamounts.Clear();
 
-                    foreach ( var kvp in pr.Resources)
+                    foreach (var kvp in pr.Resources)
                     {
-                        if ( wantedamounts.TryGetValue(kvp.Key.FDName,out int cur))
+                        if (wantedamounts.TryGetValue(kvp.Key.FDName, out int cur))
                         {
                             wantedamounts[kvp.Key.FDName] = add ? (cur + kvp.Value) : kvp.Value;
                         }
@@ -302,6 +302,8 @@ namespace EDDiscovery.UserControls
                     Display(last_mcl);
                     return PanelActionState.Success;
                 }
+                else
+                    return PanelActionState.Cancelled;
             }
 
             HistoryEntry he = actionobj as HistoryEntry;

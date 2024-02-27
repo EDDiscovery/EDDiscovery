@@ -74,13 +74,13 @@ namespace EDDiscovery.UserControls
             }
 
             cfs = new JournalFilterSelector();
-            cfs.AddAllNone();
+            cfs.UC.AddAllNone();
             foreach (var x in jtelist)
-                cfs.AddStandardOption(JournalEntry.GetNameImageOfEvent(x));
+                cfs.UC.Add(JournalEntry.GetNameImageOfEvent(x));
             foreach (var x in extradetaillist)
-                cfs.AddStandardOption(JournalEntry.GetNameImageOfEvent(x));
+                cfs.UC.Add(JournalEntry.GetNameImageOfEvent(x));
             
-            cfs.SortStandardOptions();
+            cfs.UC.Sort();
             cfs.SaveSettings += (newset,e) => {
                 string filters = GetSetting(dbFilter, "All");
                 if (filters != newset)

@@ -121,6 +121,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSearch.EndButtonEnable = true;
             this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
+            this.textBoxSearch.EndButtonSize16ths = 10;
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
             this.textBoxSearch.Location = new System.Drawing.Point(203, 2);
@@ -134,6 +135,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
             this.textBoxSearch.TabIndex = 31;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSearch.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
@@ -276,6 +278,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowColorScaling = 0.5F;
@@ -304,9 +307,11 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridView
             // 
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSortByColumnName = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -329,6 +334,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.SingleRowSelect = true;
             this.dataGridView.Size = new System.Drawing.Size(732, 650);
             this.dataGridView.TabIndex = 0;
+            this.dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
             // ColumnDate

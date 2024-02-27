@@ -248,10 +248,10 @@ namespace EDDiscovery
         {
             public PanelIDs PopoutID;
             public Type PopoutType;
-            public string WindowTitle;
-            public string WindowRefName;
+            public string WindowTitle;          // Translated
+            public string WindowRefName;        // DB key name to use for window state
             public Image TabIcon;
-            public string Description;          // must be non zero length to be user selectable
+            public string Description;          // must be non zero length to be user selectable.  Translated
             public Object Tag;                  // any other info
 
             public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description, Image icon = null, Object tag = null)

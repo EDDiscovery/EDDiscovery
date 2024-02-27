@@ -361,7 +361,7 @@ namespace EDDiscovery.UserControls
 
         private void DateTimeRangeDialog(Control button, List<Tuple<DateTime,DateTime>> times)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup startstopsel = new ExtendedControls.CheckedIconListBoxFormGroup();
+            ExtendedControls.CheckedIconNewListBoxForm startstopsel = new ExtendedControls.CheckedIconNewListBoxForm();
 
             for (int i = 0; i < times.Count; i++)
             {
@@ -370,7 +370,7 @@ namespace EDDiscovery.UserControls
                 {
                     s += EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item2).ToStringYearFirst() + " \u0394 " + (times[i].Item2 - times[i].Item1).ToString(@"d\:hh\:mm\:ss");
                 }
-                startstopsel.AddStandardOption(i.ToStringInvariant(), s);
+                startstopsel.UC.Add(i.ToStringInvariant(), s);
             }
 
             startstopsel.SaveSettings = (s, o) =>

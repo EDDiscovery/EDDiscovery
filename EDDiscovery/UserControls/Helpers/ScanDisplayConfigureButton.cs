@@ -18,7 +18,7 @@ namespace EDDiscovery.UserControls
 {
     // Control providing edsm/spansh settings, saving loading
 
-    public class ScanDisplayConfigureButton : ExtendedControls.ExtButtonWithCheckedIconListBoxGroup
+    public class ScanDisplayConfigureButton : ExtendedControls.ExtButtonWithNewCheckedListBox
     {
         // use ValueChanged to pick up the change 
 
@@ -29,31 +29,32 @@ namespace EDDiscovery.UserControls
         {
             Setting = ucb.GetSetting(settingname, "moons;icons;mats;allg;habzone;starclass;planetclass;dist;starage;starmass");
 
-            Init(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption[]
+            Init(new ExtendedControls.CheckedIconUserControl.Item[]
             {
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("icons", "Show body status icons".T(EDTx.UserControlScan_StatusIcons), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("mats", "Show Materials".T(EDTx.UserControlScan_ShowMaterials), global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("rares", "Show rare materials only".T(EDTx.UserControlScan_ShowRaresOnly), global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("matfull", "Hide materials which have reached their storage limit".T(EDTx.UserControlScan_MatFull), global::EDDiscovery.Icons.Controls.Scan_HideFullMaterials),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("moons", "Show Moons".T(EDTx.UserControlScan_ShowMoons), global::EDDiscovery.Icons.Controls.Scan_ShowMoons),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("allg", "Show G on all planets".T(EDTx.UserControlScan_AllG), global::EDDiscovery.Icons.Controls.ShowAllG),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("planetmass", "Show mass of planets".T(EDTx.UserControlScan_PlanetMass), global::EDDiscovery.Icons.Controls.ShowAllG),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starmass", "Show mass of stars".T(EDTx.UserControlScan_StarMass), global::EDDiscovery.Icons.Controls.ShowAllG),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starage", "Show age of stars".T(EDTx.UserControlScan_StarAge), global::EDDiscovery.Icons.Controls.ShowAllG),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("habzone", "Show Habitation Zone".T(EDTx.UserControlScan_HabZone), global::EDDiscovery.Icons.Controls.ShowHabZone),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starclass", "Show Classes of Stars".T(EDTx.UserControlScan_StarClass), global::EDDiscovery.Icons.Controls.ShowStarClasses),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("dist", "Show distance of bodies".T(EDTx.UserControlScan_Distance), global::EDDiscovery.Icons.Controls.ShowDistances),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways),
-            new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("starsondiffline", "Show bodyless stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses),
-            }, 
-            Setting,
-            (newsetting,ch) => {
-                Setting = newsetting;
-                ucb.PutSetting(settingname, newsetting);
-            },
-            allornoneshown:true,
-            closeboundaryregion:new System.Drawing.Size(64,64));
+                new ExtendedControls.CheckedIconUserControl.Item("icons", "Show body status icons".T(EDTx.UserControlScan_StatusIcons), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays),
+                new ExtendedControls.CheckedIconUserControl.Item("mats", "Show Materials".T(EDTx.UserControlScan_ShowMaterials), global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials),
+                new ExtendedControls.CheckedIconUserControl.Item("rares", "Show rare materials only".T(EDTx.UserControlScan_ShowRaresOnly), global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials),
+                new ExtendedControls.CheckedIconUserControl.Item("matfull", "Hide materials which have reached their storage limit".T(EDTx.UserControlScan_MatFull), global::EDDiscovery.Icons.Controls.Scan_HideFullMaterials),
+                new ExtendedControls.CheckedIconUserControl.Item("moons", "Show Moons".T(EDTx.UserControlScan_ShowMoons), global::EDDiscovery.Icons.Controls.Scan_ShowMoons),
+                new ExtendedControls.CheckedIconUserControl.Item("allg", "Show G on all planets".T(EDTx.UserControlScan_AllG), global::EDDiscovery.Icons.Controls.ShowAllG),
+                new ExtendedControls.CheckedIconUserControl.Item("planetmass", "Show mass of planets".T(EDTx.UserControlScan_PlanetMass), global::EDDiscovery.Icons.Controls.ShowAllG),
+                new ExtendedControls.CheckedIconUserControl.Item("starmass", "Show mass of stars".T(EDTx.UserControlScan_StarMass), global::EDDiscovery.Icons.Controls.ShowAllG),
+                new ExtendedControls.CheckedIconUserControl.Item("starage", "Show age of stars".T(EDTx.UserControlScan_StarAge), global::EDDiscovery.Icons.Controls.ShowAllG),
+                new ExtendedControls.CheckedIconUserControl.Item("habzone", "Show Habitation Zone".T(EDTx.UserControlScan_HabZone), global::EDDiscovery.Icons.Controls.ShowHabZone),
+                new ExtendedControls.CheckedIconUserControl.Item("starclass", "Show Classes of Stars".T(EDTx.UserControlScan_StarClass), global::EDDiscovery.Icons.Controls.ShowStarClasses),
+                new ExtendedControls.CheckedIconUserControl.Item("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses),
+                new ExtendedControls.CheckedIconUserControl.Item("dist", "Show distance of bodies".T(EDTx.UserControlScan_Distance), global::EDDiscovery.Icons.Controls.ShowDistances),
+                new ExtendedControls.CheckedIconUserControl.Item("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways),
+                new ExtendedControls.CheckedIconUserControl.Item("starsondiffline", "Show bodyless stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses),
+                }, 
+                Setting,
+                (newsetting,ch) => {
+                    Setting = newsetting;
+                    ucb.PutSetting(settingname, newsetting);
+                },
+                allornoneshown:true,
+                closeboundaryregion:new System.Drawing.Size(64,64),
+                multicolumns:true);
         }
 
         public void ApplyDisplayFilters(ScanDisplayUserControl sduc)

@@ -119,27 +119,27 @@ namespace EDDiscovery
             }
         }
 
-        ExtendedControls.ExtListBoxForm popoutdropdown;
-
         private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
-            popoutdropdown = new ExtendedControls.ExtListBoxForm("", true);
-            popoutdropdown.StartPosition = FormStartPosition.Manual;
-            popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
-            popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
-            popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
-            popoutdropdown.FlatStyle = FlatStyle.Popup;
-            popoutdropdown.PositionBelow(buttonExtPopOut);
-            popoutdropdown.FitImagesToItemHeight = true;
-            popoutdropdown.SelectedIndexChanged += (s, ea,key) =>
+            ExtendedControls.CheckedIconNewListBoxForm selection = new ExtendedControls.CheckedIconNewListBoxForm();
+
+            foreach( var pi in PanelInformation.GetUserSelectablePanelInfo(EDDConfig.Instance.SortPanelsByName))
             {
-                PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
+                selection.UC.AddButton("null", pi.Description, pi.TabIcon, usertag: pi.PopoutID);
+            }
+
+            selection.CloseBoundaryRegion = new Size(32, 32);
+            selection.UC.MultiColumnSlide = true;
+            selection.UC.ImageSize = ExtendedControls.Theme.Current.IconSize;
+
+            System.Diagnostics.Debug.WriteLine($"{buttonExtEditAddOns.Size} {selection.UC.ImageSize}");
+            selection.PositionBelow(buttonExtPopOut);
+            selection.UC.ButtonPressed += (index, tag, text, usertag, barg) =>
+            {
+                PopOuts.PopOut((PanelInformation.PanelIDs)usertag);
             };
 
-            ExtendedControls.Theme.Current.ApplyStd(popoutdropdown, true);
-            popoutdropdown.SelectionBackColor = ExtendedControls.Theme.Current.ButtonBackColor;
-            popoutdropdown.Show(this);
+            selection.Show(this);
         }
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)

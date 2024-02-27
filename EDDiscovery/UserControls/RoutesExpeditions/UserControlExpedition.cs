@@ -572,7 +572,6 @@ namespace EDDiscovery.UserControls
 
         #region Toolbar ui
 
-        ExtendedControls.ExtListBoxForm dropdown;
         private void extButtonLoadRoute_Click(object sender, EventArgs e)
         {
             if (outstandingprocessing != 0)
@@ -581,57 +580,62 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            ExtendedControls.ExtButton but = sender as ExtendedControls.ExtButton;
+            ExtButton but = sender as ExtendedControls.ExtButton;
 
-            dropdown = new ExtendedControls.ExtListBoxForm("", true);
+            CheckedIconNewListBoxForm selection = new CheckedIconNewListBoxForm();
 
             var savedroutes = SavedRouteClass.GetAllSavedRoutes();
 
             if (savedroutes.Count > 0)
             {
-                dropdown.FitImagesToItemHeight = true;
-                dropdown.Items = savedroutes.Select(x => x.Name).ToList();
-                dropdown.FlatStyle = FlatStyle.Popup;
-                dropdown.PositionBelow(sender as Control);
-                dropdown.SelectedIndexChanged += (s, ea, key) =>
+                foreach (var x in savedroutes)
                 {
-                    if (PromptAndSaveIfNeeded())
-                    {
-                        string name = savedroutes[dropdown.SelectedIndex].Name;
-                        savedroutes = SavedRouteClass.GetAllSavedRoutes();      // reload, in case reselecting saved route
-                        loadedroute = savedroutes.Find(x => x.Name == name);        // if your picking the same route again for some strange reason
-
-                        textBoxRouteName.Text = loadedroute.Name;
-                        if (loadedroute.StartDateUTC == null)
-                        {
-                            dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                            dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
-                        }
-                        else
-                        {
-                            dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = true;
-                            dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.StartDateUTC.Value);
-                        }
-
-                        if (loadedroute.EndDateUTC == null)
-                        {
-                            dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                            dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = false;
-                        }
-                        else
-                        {
-                            dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = true;
-                            dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.EndDateUTC.Value);
-                        }
-
-                        dataGridView.Rows.Clear();
-                        AppendOrInsertSystems(-1, loadedroute.Systems);
-                    }
-                };
-
-                ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
-                dropdown.Show(this.FindForm());
+                    selection.UC.AddButton("tag", x.Name, EDDiscovery.Icons.Controls.expedition, usertag: x);
+                }
             }
+
+            //displayfilter.UC.ImageSize = new Size(4, 4);
+            selection.CloseBoundaryRegion = new Size(32,32);
+            selection.UC.MultiColumnSlide = true;
+            selection.PositionBelow(but);
+            selection.UC.ButtonPressed += (index, tag, text, usertag, barg) => 
+            {
+                selection.Close();
+                if (PromptAndSaveIfNeeded())
+                {
+                    string name = savedroutes[index].Name;
+                    savedroutes = SavedRouteClass.GetAllSavedRoutes();      // reload, in case reselecting saved route
+                    loadedroute = savedroutes.Find(x => x.Name == name);        // if your picking the same route again for some strange reason
+
+                    textBoxRouteName.Text = loadedroute.Name;
+                    if (loadedroute.StartDateUTC == null)
+                    {
+                        dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                        dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
+                    }
+                    else
+                    {
+                        dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = true;
+                        dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.StartDateUTC.Value);
+                    }
+
+                    if (loadedroute.EndDateUTC == null)
+                    {
+                        dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                        dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = false;
+                    }
+                    else
+                    {
+                        dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = true;
+                        dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.EndDateUTC.Value);
+                    }
+
+                    dataGridView.Rows.Clear();
+                    AppendOrInsertSystems(-1, loadedroute.Systems);
+                }
+            };
+
+            selection.Show(this.FindForm());
         }
 
         private void extButtonNew_Click(object sender, EventArgs e)
@@ -804,12 +808,12 @@ namespace EDDiscovery.UserControls
 
             if (navroutes.Count > 0)
             {
-                ExtendedControls.CheckedIconListBoxFormGroup navroutefilter = new CheckedIconListBoxFormGroup();
+                ExtendedControls.CheckedIconNewListBoxForm navroutefilter = new CheckedIconNewListBoxForm();
 
                 for (int i = 0; i < navroutes.Count; i++)
                 {
                     var jroute = navroutes[i].journalEntry as JournalNavRoute;
-                    navroutefilter.AddStandardOption(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(navroutes[i].EventTimeUTC).ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
+                    navroutefilter.UC.Add(i.ToStringInvariant(), EDDConfig.Instance.ConvertTimeToSelectedFromUTC(navroutes[i].EventTimeUTC).ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
                 }
 
                 navroutefilter.SaveSettings = (s, o) =>
@@ -1025,25 +1029,25 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
             displayfilter.AllOrNoneBack = false;
 
-            displayfilter.AddAllNone();
-            displayfilter.AddStandardOption("stars", "Show All Stars".TxID(EDTx.UserControlSurveyor_showAllStarsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption("planets", "Show All Planets".TxID(EDTx.UserControlSurveyor_showAllPlanetsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
-            displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID(EDTx.UserControlSurveyor_showBeltClustersToolStripMenuItem), global::EDDiscovery.Icons.Controls.Belt);
-            displayfilter.AddStandardOption("valueables", "Show valuable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
-            displayfilter.AddStandardOption("signals", "Has Signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasVolcanismToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
-            displayfilter.AddStandardOption("values", "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
-            displayfilter.AddStandardOption("shortinfo", "Show More Information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.AddStandardOption("atmos", "Show atmospheres of landables".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.AddStandardOption("temp", "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.AddStandardOption("rings", "Show rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
-            displayfilter.AddStandardOption("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
-            displayfilter.AddStandardOption("gmoinfooff", "Disable showing GMO Info".T(EDTx.UserControlExpedition_GMOInfo), global::EDDiscovery.Icons.Controls.Globe);
-            displayfilter.ImageSize = new Size(24, 24);
+            displayfilter.UC.AddAllNone();
+            displayfilter.UC.Add("stars", "Show All Stars".TxID(EDTx.UserControlSurveyor_showAllStarsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.UC.Add("planets", "Show All Planets".TxID(EDTx.UserControlSurveyor_showAllPlanetsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
+            displayfilter.UC.Add("beltcluster", "Show belt clusters".TxID(EDTx.UserControlSurveyor_showBeltClustersToolStripMenuItem), global::EDDiscovery.Icons.Controls.Belt);
+            displayfilter.UC.Add("valueables", "Show valuable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.UC.Add("signals", "Has Signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add("volcanism", "Has Volcanism".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasVolcanismToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
+            displayfilter.UC.Add("values", "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.UC.Add("shortinfo", "Show More Information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("gravity", "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("atmos", "Show atmospheres of landables".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("temp", "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add("rings", "Show rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
+            displayfilter.UC.Add("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
+            displayfilter.UC.Add("gmoinfooff", "Disable showing GMO Info".T(EDTx.UserControlExpedition_GMOInfo), global::EDDiscovery.Icons.Controls.Globe);
+            displayfilter.UC.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
             {
                 displayfilters = s.Split(';');

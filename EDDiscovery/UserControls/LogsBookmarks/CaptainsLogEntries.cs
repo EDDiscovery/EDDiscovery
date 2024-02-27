@@ -328,14 +328,13 @@ namespace EDDiscovery.UserControls
             Dickeys.Sort();
             List<Tuple<string,string,Image>> options = (from x in Dickeys select new Tuple<string,string,Image>(x.ToString(),x.ToString(),EDDConfig.Instance.CaptainsLogTagImage[x])).ToList();
 
-            ExtendedControls.CheckedIconListBoxFormGroup cfs = new ExtendedControls.CheckedIconListBoxFormGroup();
+            ExtendedControls.CheckedIconNewListBoxForm cfs = new ExtendedControls.CheckedIconNewListBoxForm();
             cfs.CloseBoundaryRegion = new Size(32, 32);
             cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
             cfs.SaveSettings += TagsChanged;
-            cfs.AddAllNone();
-            cfs.AddStandardOption(options);
-            cfs.ImageSize = new Size(24, 24);
-
+            cfs.UC.AddAllNone();
+            cfs.UC.Add(options);
+            cfs.UC.ImageSize = new Size(24, 24);
 
             List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
             string taglist = curtags != null ? string.Join(";", curtags) : "";

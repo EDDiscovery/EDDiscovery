@@ -21,7 +21,7 @@ namespace EDDiscovery.UserControls
 {
     // Control providing edsm/spansh settings, saving loading
 
-    public class ScanDisplayBodyFiltersButton : ExtendedControls.ExtButtonWithCheckedIconListBoxGroup
+    public class ScanDisplayBodyFiltersButton : ExtendedControls.ExtButtonWithNewCheckedListBox
     {
         // use ValueChanged to pick up the change 
 
@@ -32,27 +32,28 @@ namespace EDDiscovery.UserControls
         {
             Setting = ucb.GetSetting(settingname, "All");
 
-            var options = new List<ExtendedControls.CheckedIconListBoxFormGroup.StandardOption>();
+            var options = new List<ExtendedControls.CheckedIconUserControl.Item>();
             foreach (var x in Enum.GetValues(typeof(EDPlanet)))
-                options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption(x.ToString(), Planets.PlanetName((EDPlanet)x)));
+                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Planets.PlanetName((EDPlanet)x)));
 
             foreach (var x in Enum.GetNames(typeof(EDStar)))
-                options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption(x.ToString(), Stars.StarName(x.ParseEnum<EDStar>())));
+                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Stars.StarName(x.ParseEnum<EDStar>())));
 
             // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
-            options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("star", "Star".T(EDTx.UserControlScan_Star)));
-            options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("body", "Body".T(EDTx.UserControlScan_Body)));
-            options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("barycentre", "Barycentre".T(EDTx.UserControlScan_Barycentre)));
-            options.Add(new ExtendedControls.CheckedIconListBoxFormGroup.StandardOption("belt", "Belt".T(EDTx.UserControlScan_Belt)));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("star", "Star".T(EDTx.UserControlScan_Star)));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("body", "Body".T(EDTx.UserControlScan_Body)));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("barycentre", "Barycentre".T(EDTx.UserControlScan_Barycentre)));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("belt", "Belt".T(EDTx.UserControlScan_Belt)));
 
             Init(options,
-            Setting,
-            (newsetting,ch) => {
-                Setting = newsetting;
-                ucb.PutSetting(settingname, newsetting);
-            },
-            allornoneshown:true,
-            closeboundaryregion:new System.Drawing.Size(64,64));
+                Setting,
+                (newsetting,ch) => {
+                    Setting = newsetting;
+                    ucb.PutSetting(settingname, newsetting);
+                },
+                allornoneshown:true,
+                closeboundaryregion:new System.Drawing.Size(64,64),
+                multicolumns:true);
         }
     }
 }

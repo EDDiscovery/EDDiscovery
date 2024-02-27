@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.AllowRowHeaderVisibleSelection = true;
 
             cfs = new JournalFilterSelector();
-            cfs.AddAllNone();
+            cfs.UC.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
             cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal);
-            PutSetting(dbUserGroups, cfs.GetUserGroupDefinition(1));
+            PutSetting(dbUserGroups, cfs.GetUserGroups());
             DiscoveryForm.OnHistoryChange -= HistoryChanged;
             DiscoveryForm.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();

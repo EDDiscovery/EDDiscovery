@@ -24,17 +24,17 @@ namespace EDDiscovery.UserControls
 {
     // UI to help select recipes
 
-    public class RecipeFilterSelector : ExtendedControls.CheckedIconListBoxFormGroup
+    public class RecipeFilterSelector : ExtendedControls.CheckedIconNewListBoxForm
     {
         public RecipeFilterSelector(List<string> opts)
         {
             CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
             HideOnDeactivate = true;
-            ScreenMargin = new Size(0, 0);
-
-            AddAllNone();
+            UC.ScreenMargin = new Size(0, 0);
+            UC.AddAllNone();
+            UC.MultiColumnSlide = true;
             foreach (var s in opts)
-                AddStandardOption(s, s);
+                UC.Add(s, s);
         }
 
         public void Open(string settings, Control ctr, Form parent)

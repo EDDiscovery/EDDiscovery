@@ -573,37 +573,37 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShowControl_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-            displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.showBelts.ToString(), "Show belts".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showRings.ToString(), "Show rings".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showMaterials.ToString(), "Show materials".TxID(EDTx.UserControlScanGrid_materialsToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlScanGrid_valuesToolStripMenuItem));
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
+            displayfilter.UC.AddAllNone();
+            displayfilter.UC.Add(CtrlList.showBelts.ToString(), "Show belts".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showRings.ToString(), "Show rings".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showMaterials.ToString(), "Show materials".TxID(EDTx.UserControlScanGrid_materialsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlScanGrid_valuesToolStripMenuItem));
             CommonCtrl(displayfilter, extButtonHabZones);
         }
 
         private void extButtonHabZones_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-            displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.showHabitable.ToString(), "Show Habitation Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showMetalRichPlanetsToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showWaterWorldsToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showEarthLikeToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showAmmoniaWorldsToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showIcyPlanetsToolStripMenuItem));
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
+            displayfilter.UC.AddAllNone();
+            displayfilter.UC.Add(CtrlList.showHabitable.ToString(), "Show Habitation Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showMetalRichPlanetsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showWaterWorldsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showEarthLikeToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showAmmoniaWorldsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showIcyPlanetsToolStripMenuItem));
             CommonCtrl(displayfilter, extButtonHabZones);
         }
 
-        private void CommonCtrl(CheckedIconListBoxFormGroup displayfilter, Control button)
+        private void CommonCtrl(CheckedIconNewListBoxForm displayfilter, Control button)
         {
             displayfilter.AllOrNoneBack = false;
-            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.UC.ScreenMargin = new Size(0, 0);
             displayfilter.CloseBoundaryRegion = new Size(32, button.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {
-                var ctrllist = displayfilter.SettingsTagList();
+                var ctrllist = displayfilter.UC.TagList();
                 PutBoolSettingsFromString(s, ctrllist);
                 PopulateCtrlList();
                 DrawSystem(last_he, true);

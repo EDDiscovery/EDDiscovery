@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        static public ConditionLists ShowDialog(System.Windows.Forms.Form parent, BaseUtils.ConditionLists fieldfilter, EDDiscoveryForm discoveryform, string title )
+        static public ConditionLists ShowDialog(System.Windows.Forms.Form parent, BaseUtils.ConditionLists fieldfilter, EDDiscoveryForm discoveryform, string title)
         {
             ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
 
@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
         private Variables filtervars;
         private HashSet<string> eventfilter;
 
-        public HistoryEventFilter(string eventfilterset,ConditionLists filters, Variables def)      // operates the event and field filter
+        public HistoryEventFilter(string eventfilterset, ConditionLists filters, Variables def)      // operates the event and field filter
         {
             eventfilter = eventfilterset.Split(';').ToHashSet();
             filterbyeventname = filters.GetConditionListDictionaryByEventName();

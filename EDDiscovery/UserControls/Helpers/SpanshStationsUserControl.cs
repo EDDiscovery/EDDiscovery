@@ -47,16 +47,16 @@ namespace EDDiscovery.UserControls.Helpers
             };
             extTextBoxAutoCompleteSystem.AutoCompleteTimeout = 1000;
 
-            filters = new ExtButtonWithCheckedIconListBoxGroup[] { extButtonType, extButtonCommoditiesBuy, extButtonCommoditiesSell, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
+            filters = new ExtButtonWithNewCheckedListBox[] { extButtonType, extButtonCommoditiesBuy, extButtonCommoditiesSell, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
 
-            var porttype = StationDefinitions.StarportNameTypes.Values.Distinct().Select(x => new CheckedIconListBoxFormGroup.StandardOption(x,x));
+            var porttype = StationDefinitions.StarportNameTypes.Values.Distinct().Select(x => new CheckedIconUserControl.Item(x,x));
             extButtonType.InitAllNoneAllBack(porttype,
                 GetFilter(FilterSettings.Type),
                 (newsetting,ch) => { SetFilter(FilterSettings.Type, newsetting, ch); });
 
 
             var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast)
-                            .Select(x => new CheckedIconListBoxFormGroup.StandardOption(x.FDName, x.Name));
+                            .Select(x => new CheckedIconUserControl.Item(x.FDName, x.Name));
 
             extButtonCommoditiesBuy.InitAllNoneAllBack(comitems,
                 GetFilter(FilterSettings.CommoditiesBuy),
@@ -67,14 +67,14 @@ namespace EDDiscovery.UserControls.Helpers
                 (newsetting, ch) => { SetFilter(FilterSettings.CommoditiesSell, newsetting, ch); });
 
             var moditems = ItemData.GetShipModulesList().Select(x => x.ModTypeString).Distinct().      // only return buyable modules
-                            Select(x2 => new CheckedIconListBoxFormGroup.StandardOption(x2, x2));
+                            Select(x2 => new CheckedIconUserControl.Item(x2, x2));
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
                 GetFilter(FilterSettings.Outfitting),
                 (newsetting, ch) => { SetFilter(FilterSettings.Outfitting, newsetting, ch); });
 
             var ships = ItemData.GetSpaceships().Select(x =>
-                new CheckedIconListBoxFormGroup.StandardOption(((ItemData.ShipInfoString)x[ItemData.ShipPropID.FDID]).Value,
+                new CheckedIconUserControl.Item(((ItemData.ShipInfoString)x[ItemData.ShipPropID.FDID]).Value,
                             ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value));
 
             extButtonShipyard.InitAllNoneAllBack(ships,
@@ -82,14 +82,14 @@ namespace EDDiscovery.UserControls.Helpers
                 (newsetting, ch) => { SetFilter(FilterSettings.Shipyard, newsetting, ch); });
 
             // could use Identifers to localise later
-            var economy = EconomyDefinitions.Types.Select(x => new CheckedIconListBoxFormGroup.StandardOption(x.Key, x.Value));
+            var economy = EconomyDefinitions.Types.Select(x => new CheckedIconUserControl.Item(x.Key, x.Value));
 
             extButtonEconomy.SettingsSplittingChar = '\u2345';     // because ; is used in identifiers
             extButtonEconomy.InitAllNoneAllBack(economy,
                 GetFilter(FilterSettings.Economy),
                 (newsetting, ch) => { SetFilter(FilterSettings.Economy, newsetting, ch); });
 
-            var services = StationDefinitions.ServiceTypes.Select(x => x.Value).Distinct().Select(x => new CheckedIconListBoxFormGroup.StandardOption(x, x));
+            var services = StationDefinitions.ServiceTypes.Select(x => x.Value).Distinct().Select(x => new CheckedIconUserControl.Item(x, x));
             extButtonServices.InitAllNoneAllBack(services,
                 GetFilter(FilterSettings.Services),
                 (newsetting, ch) => { SetFilter(FilterSettings.Services, newsetting, ch); });
@@ -168,8 +168,8 @@ namespace EDDiscovery.UserControls.Helpers
                     // go thru filters and reset the filter. alwaysclear == commoditiesbuy clears sell as well
                     if (clearallfilters || e == alwaysclear || (e == FilterSettings.CommoditiesSell && alwaysclear == FilterSettings.CommoditiesBuy))     
                     {
-                        SetFilter(e, CheckedIconListBoxFormGroup.Disabled, false);  // update the DB
-                        filters[(int)e].Set(CheckedIconListBoxFormGroup.Disabled);  // we need to update the button with the same setting
+                        SetFilter(e, CheckedIconGroupUserControl.Disabled, false);  // update the DB
+                        filters[(int)e].Set(CheckedIconGroupUserControl.Disabled);  // we need to update the button with the same setting
                     }
                 }
 
@@ -705,7 +705,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         private string GetFilter(FilterSettings f)
         {
-            return saver.GetSetting(f.ToString(), CheckedIconListBoxFormGroup.Disabled);
+            return saver.GetSetting(f.ToString(), CheckedIconGroupUserControl.Disabled);
         }
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
@@ -767,7 +767,7 @@ namespace EDDiscovery.UserControls.Helpers
         private const string dbLS = "MaxLs";
 
         private enum FilterSettings { Type, CommoditiesBuy, CommoditiesSell, Outfitting, Shipyard, Economy, Services };
-        private ExtButtonWithCheckedIconListBoxGroup[] filters;
+        private ExtButtonWithNewCheckedListBox[] filters;
 
         private const string dbWordWrap = "WordWrap";
 

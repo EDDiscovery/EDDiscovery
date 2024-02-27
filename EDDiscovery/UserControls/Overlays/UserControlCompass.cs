@@ -560,29 +560,29 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShowControl_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
-            displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
-            displayfilter.AddStandardOption(CtrlList.hidewithnolatlong.ToString(), "Hide when Elite has no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); 
-            displayfilter.AddStandardOption(CtrlList.hidewithnotarget.ToString(), "Hide when no Lat/Long target is set".TxID(EDTx.UserControlCompass_hidewhennotarget)); 
-            displayfilter.AddStandardOption(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); 
-            displayfilter.AddStandardOption(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); 
-            displayfilter.AddStandardOption(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship));
-            displayfilter.AddStandardOption(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); 
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
+            displayfilter.UC.AddAllNone();
+            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.hidewithnolatlong.ToString(), "Hide when Elite has no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); 
+            displayfilter.UC.Add(CtrlList.hidewithnotarget.ToString(), "Hide when no Lat/Long target is set".TxID(EDTx.UserControlCompass_hidewhennotarget)); 
+            displayfilter.UC.Add(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); 
+            displayfilter.UC.Add(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); 
+            displayfilter.UC.Add(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship));
+            displayfilter.UC.Add(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 
-        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
+        private void CommonCtrl(ExtendedControls.CheckedIconNewListBoxForm displayfilter, Control under)
         {
             displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
             displayfilter.AllOrNoneBack = false;
-            displayfilter.ImageSize = new Size(24, 24);
-            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.UC.ImageSize = new Size(24, 24);
+            displayfilter.UC.ScreenMargin = new Size(0, 0);
             displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
 
             displayfilter.SaveSettings = (s, o) =>
             {
-                PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
+                PutBoolSettingsFromString(s, displayfilter.UC.TagList());
                 PopulateCtrlList();
                 SetCompassVisibility();
             };

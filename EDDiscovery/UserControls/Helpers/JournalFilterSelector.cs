@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright 2016-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
@@ -25,58 +24,56 @@ namespace EDDiscovery.UserControls
 {
     // Extends the filter form to know how to save back to DB.  and to add some standard option lists in
 
-    public class JournalFilterSelector : ExtendedControls.CheckedIconListBoxFormGroup
+    public class JournalFilterSelector : ExtendedControls.CheckedIconNewListBoxForm
     {
         public JournalFilterSelector() : base()
         {
             CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
             HideOnDeactivate = true;
-            MultipleColumnsAllowed = true;
-            MultipleColumnsFitToScreen = true;
-            BorderStyle = BorderStyle.FixedSingle;
+            UC.MultiColumnSlide = true;
         }
 
         public void AddJournalExtraOptions()
         {
-            AddGroupOption("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;NavRoute", "Travel".T(EDTx.FilterSelector_Travel), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
+            UC.AddGroupItem("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;NavRoute", "Travel".T(EDTx.FilterSelector_Travel), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
-            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan;SAASignalsFound;FSSBodySignals", "Scan".T(EDTx.FilterSelector_Scan), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
+            UC.AddGroupItem("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan;SAASignalsFound;FSSBodySignals", "Scan".T(EDTx.FilterSelector_Scan), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
 
             var mile = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";
-            AddGroupOption(miltype, "Missions".T(EDTx.FilterSelector_Missions), JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
+            UC.AddGroupItem(miltype, "Missions".T(EDTx.FilterSelector_Missions), JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
 
             var mle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMaterials" });
             mle.Add(EliteDangerousCore.JournalEntry.GetNameImageOfEvent(JournalTypeEnum.MaterialDiscovered));
             string mattype = string.Join(";", mle.Select(x => x.Item1)) + ";";
-            AddGroupOption(mattype, "Materials".T(EDTx.FilterSelector_Materials), JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
+            UC.AddGroupItem(mattype, "Materials".T(EDTx.FilterSelector_Materials), JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
 
             var cle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCommodities" });
             string comtype = string.Join(";", cle.Select(x => x.Item1)) + ";";
-            AddGroupOption(comtype, "Commodities".T(EDTx.FilterSelector_Commodities), JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
+            UC.AddGroupItem(comtype, "Commodities".T(EDTx.FilterSelector_Commodities), JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
 
             var mrle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMicroResource" });
             string mrtype = string.Join(";", mrle.Select(x => x.Item1)) + ";";
-            AddGroupOption(mrtype, "Micro Resources".T(EDTx.FilterSelector_MicroResources), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuyMicroResources]);
+            UC.AddGroupItem(mrtype, "Micro Resources".T(EDTx.FilterSelector_MicroResources), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuyMicroResources]);
 
             var lle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
-            AddGroupOption(legtype, "Ledger".T(EDTx.FilterSelector_Ledger), BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"));
+            UC.AddGroupItem(legtype, "Ledger".T(EDTx.FilterSelector_Ledger), BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"));
 
             var sle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "ShipInformation" });
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";
-            AddGroupOption(shiptype, "Ship".T(EDTx.FilterSelector_Ship), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
+            UC.AddGroupItem(shiptype, "Ship".T(EDTx.FilterSelector_Ship), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
 
             var suitle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "SuitInformation", "LoadoutInformation", "WeaponInformation" });
             string suittype = string.Join(";", suitle.Select(x => x.Item1)) + ";";
-            AddGroupOption(suittype, "Suits".T(EDTx.FilterSelector_Suits), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
+            UC.AddGroupItem(suittype, "Suits".T(EDTx.FilterSelector_Suits), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
 
             var carriere = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCarrierStats" });
             string carriertype = string.Join(";", carriere.Select(x => x.Item1)) + ";";
 
-            AddGroupOption(carriertype, "Carrier".T(EDTx.FilterSelector_Carrier), JournalEntry.JournalTypeIcons[JournalTypeEnum.CarrierStats]);
+            UC.AddGroupItem(carriertype, "Carrier".T(EDTx.FilterSelector_Carrier), JournalEntry.JournalTypeIcons[JournalTypeEnum.CarrierStats]);
 
-            AddGroupOption("MiningRefined;AsteroidCracked;ProspectedAsteroid;LaunchDrone","Mining".T(EDTx.FilterSelector_Mining), JournalEntry.JournalTypeIcons[JournalTypeEnum.MiningRefined]);
+            UC.AddGroupItem("MiningRefined;AsteroidCracked;ProspectedAsteroid;LaunchDrone","Mining".T(EDTx.FilterSelector_Mining), JournalEntry.JournalTypeIcons[JournalTypeEnum.MiningRefined]);
         }
 
 
@@ -84,7 +81,7 @@ namespace EDDiscovery.UserControls
         {
             var items = JournalEntry.GetNameImageOfEvents(methods);
 
-            AddStandardOption(items);
+            UC.Add(items);
 
             var list = JournalEntry.GetEnumOfEvents(new string[] { "FilterItems" });
             foreach( var e in list)
@@ -92,21 +89,21 @@ namespace EDDiscovery.UserControls
                 Type t = JournalEntry.TypeOfJournalEntry(e);
                 MethodInfo info = t.GetMethod("FilterItems", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
                 List<Tuple<string, string, Image>> retlist = info.Invoke(null, new object[] { }) as List<Tuple<string, string, Image>>;
-                AddStandardOption(retlist);
+                UC.Add(retlist);
             }
 
-            SortStandardOptions();  // sorted by text
+            UC.Sort();  // sorted by text
         }
 
         public void AddUserGroups(string groupswithids)
         {
-            AddGroupOptions(groupswithids, 1, global::EDDiscovery.Icons.Controls.RescanJournals);
+            UC.AddStringListDefinitions(groupswithids, 1, true, global::EDDiscovery.Icons.Controls.RescanJournals);      // create with a usertag of int
 
             //System.Diagnostics.Debug.WriteLine($"Group setting {GetUserGroupDefinition(1)}");
 
-            AddStandardOptionAtTop(null, "Create new group".TxID(EDTx.FilterSelector_NewGroup), global::EDDiscovery.Icons.Controls.AddJournals, button: true);
+            UC.AddButton("creategroup", "Create new group".TxID(EDTx.FilterSelector_NewGroup), global::EDDiscovery.Icons.Controls.AddJournals, attop:true);
 
-            ButtonPressed += (index,stag, text, usertag, e) => 
+            UC.ButtonPressed += (index,stag, text, usertag, e) => 
             {
                 if (e.Button == MouseButtons.Right)
                 {
@@ -116,14 +113,14 @@ namespace EDDiscovery.UserControls
 
                         if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".TxID(EDTx.FilterSelector_Confirmremoval) + " " + text, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                         {
-                            Clear();
-                            RemoveGroupOption(index);
+                            UC.Remove(index);
+                            ForceRedrawOnNextShow();
                         }
                     }
                 }
                 else if ( e.Button == MouseButtons.Left)
                 {
-                    if ( stag == null )
+                    if ( stag == "creategroup" )
                     {
                         Hide();
 
@@ -131,12 +128,16 @@ namespace EDDiscovery.UserControls
                         if (promptValue != null)
                         {
                             string cursettings = GetChecked();
-                            Clear();        // will cause a reload
-                            AddGroupOption(cursettings, promptValue, global::EDDiscovery.Icons.Controls.RescanJournals, usertag:1);
+                            UC.AddGroupItem( cursettings, promptValue, global::EDDiscovery.Icons.Controls.RescanJournals, usertag:1);   // new entry with usertag:1
                         }
                     }
                 }
             };
+        }
+
+        public string GetUserGroups()
+        {
+            return UC.GetUserTagDefinitions(1);     // all with int
         }
 
         // use this to open the filter.

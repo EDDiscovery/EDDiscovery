@@ -231,7 +231,13 @@ namespace EDDiscovery.UserControls
             public double Longitude { get; set; }
         }
 
-        public enum PanelActionState { NotHandled = 0, HandledContinue = 1, Success, Failed };
+        public enum PanelActionState { 
+            NotHandled = 0,     // no one acked it
+            HandledContinue = 1, // someone had handled it, but continue
+            Success, // someone handled it okay
+            Failed,  // someone handled it but it failed
+            Cancelled // user has cancelled it
+        };
         public static bool IsPASResult(PanelActionState s) => (int)s >= 2;
 
         // Request action. Return one of the PAS State
