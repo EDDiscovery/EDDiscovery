@@ -38,7 +38,7 @@ namespace EDDiscovery
 
                     if (!donemarket)
                     {
-                        string marketjson = FrontierCAPI.Market();
+                        string marketjson = FrontierCAPI.Market(out DateTime servertime);
 
                         if ( marketjson != null )
                         {
@@ -49,7 +49,10 @@ namespace EDDiscovery
                             {
                                 System.Diagnostics.Trace.WriteLine($"CAPI got market {mk.Name}");
 
-                                var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(DateTime.UtcNow,
+                                servertime = servertime.Year < 2020 ? DateTime.UtcNow : servertime;     // it may be MinDate if frontier changes something, protect
+                                servertime = DateTime.UtcNow;       // temp until tested
+
+                                var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(servertime,
                                                 mk.ID, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
 
                                 var jo = entry.ToJSON();        // get json of it, and add it to the db
@@ -77,7 +80,7 @@ namespace EDDiscovery
 
                     if (!doneshipyard)
                     {
-                        string shipyardjson = FrontierCAPI.Shipyard();
+                        string shipyardjson = FrontierCAPI.Shipyard(out DateTime servertime);
 
                         if (shipyardjson != null)
                         {
@@ -89,11 +92,14 @@ namespace EDDiscovery
                             {
                                 System.Diagnostics.Trace.WriteLine($"CAPI got shipyard {sh.Name}");
 
+                                servertime = servertime.Year < 2020 ? DateTime.UtcNow : servertime;     // it may be MinDate if frontier changes something, protect
+                                servertime = DateTime.UtcNow;       // temp until tested
+
                                 var modules = sh.GetModules();
                                 if ( modules?.Count > 0 )
                                 {
                                     var list = modules.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.Cost)).ToArray();
-                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(DateTime.UtcNow, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
+                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(servertime, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
 
                                     var jo = outfitting.ToJSON();        // get json of it, and add it to the db
                                     outfitting.Add(jo);
@@ -109,7 +115,7 @@ namespace EDDiscovery
                                 if ( shipyard?.Count > 0 && allowcobramkiv.HasValue)
                                 {
                                     var list = shipyard.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.BaseValue)).ToArray();
-                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(DateTime.UtcNow, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
+                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(servertime, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
 
                                     var jo = shipyardevent.ToJSON();        // get json of it, and add it to the db
                                     shipyardevent.Add(jo);

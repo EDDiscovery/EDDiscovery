@@ -844,7 +844,7 @@ namespace EDDiscovery.UserControls
                     int tries = 3;
                     while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
-                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(nocontentreturnemptystring:true);
+                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring:true);
 
                         if (fleetcarrier != null)
                         {
