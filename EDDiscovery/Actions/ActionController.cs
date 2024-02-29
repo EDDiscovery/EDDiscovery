@@ -193,7 +193,7 @@ namespace EDDiscovery.Actions
 
         public bool EditPack(string name)            // edit pack name
         {
-            ActionPackEditPackForm frm = new ActionPackEditPackForm();
+            var frm = new ActionPackEditPackForm();
 
             frm.AdditionalNames += Frm_onAdditionalNames;
             frm.GetEventEditor += GetEventEditorForCondition;
