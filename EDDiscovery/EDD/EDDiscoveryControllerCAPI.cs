@@ -50,7 +50,6 @@ namespace EDDiscovery
                                 System.Diagnostics.Trace.WriteLine($"CAPI got market {mk.Name}");
 
                                 servertime = servertime.Year < 2020 ? DateTime.UtcNow : servertime;     // it may be MinDate if frontier changes something, protect
-                                servertime = DateTime.UtcNow;       // temp until tested
 
                                 var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(servertime,
                                                 mk.ID, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
@@ -93,7 +92,6 @@ namespace EDDiscovery
                                 System.Diagnostics.Trace.WriteLine($"CAPI got shipyard {sh.Name}");
 
                                 servertime = servertime.Year < 2020 ? DateTime.UtcNow : servertime;     // it may be MinDate if frontier changes something, protect
-                                servertime = DateTime.UtcNow;       // temp until tested
 
                                 var modules = sh.GetModules();
                                 if ( modules?.Count > 0 )
