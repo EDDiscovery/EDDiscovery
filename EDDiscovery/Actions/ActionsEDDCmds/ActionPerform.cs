@@ -63,6 +63,7 @@ namespace EDDiscovery.Actions
                     string thirdword = exp.Count >= 3 ? exp[2] : null;
                     string fourthword = exp.Count >= 4 ? exp[3] : null;
                     string fifthword = exp.Count >= 5 ? exp[4] : null;
+                    string sixthword = exp.Count >= 6 ? exp[5] : null;
 
                     var ac = ap.ActionController as ActionController;
 
@@ -94,11 +95,25 @@ namespace EDDiscovery.Actions
 
                     else if (cmdname.Equals("configurevoice"))
                     {
-                        ac.ConfigureVoice(nextword ?? null);
+                        var res = ac.ConfigureVoice(nextword, thirdword!=null,thirdword=="NOVOICENAME", thirdword, fourthword, fifthword, sixthword);
+                        ap["DialogResult"] = res != null ? "1" : "0";
+                        if (res!=null && thirdword != null)     // if we are getting the config, not globally setting it
+                        {
+                            ap["VoiceName"] = res.Item1;
+                            ap["Volume"] = res.Item2;
+                            ap["Rate"] = res.Item3;
+                            ap["Effects"] = res.Item4;
+                        }
                     }
                     else if (cmdname.Equals("configurewave"))
                     {
-                        ac.ConfigureWave(nextword ?? null);
+                        var res = ac.ConfigureWave(thirdword!=null, nextword, thirdword, fourthword);
+                        ap["DialogResult"] = res != null ? "1" : "0";
+                        if (res != null && thirdword != null)     // if we are getting the config, not globally setting it
+                        {
+                            ap["Volume"] = res.Item1;
+                            ap["Effects"] = res.Item2;
+                        }
                     }
                     else if (cmdname.Equals("voicenames"))
                     {

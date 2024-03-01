@@ -482,15 +482,17 @@ namespace EDDiscovery.Actions
 
         #endregion
 
-        public void ConfigureVoice(string title)    
+        // configure, using global vars, or passed values. If vcname == null the peristent variables are set on OK
+        public Tuple<string,string,string,string> ConfigureVoice(string title, bool nodevice, bool novoicename, 
+                            string vcname = null, string vcvolume = null, string vcrate = null, string vceffects = null)    
         {
-            string voicename = Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
-            string volume = Globals.GetString(ActionSay.globalvarspeechvolume, "Default");
-            string rate = Globals.GetString(ActionSay.globalvarspeechrate, "Default");
-            Variables effects = new Variables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), Variables.FromMode.MultiEntryComma);
+            string voicename = vcname ?? Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
+            string volume = vcvolume ?? Globals.GetString(ActionSay.globalvarspeechvolume, "Default");
+            string rate = vcrate ?? Globals.GetString(ActionSay.globalvarspeechrate, "Default");
+            Variables effects = new Variables(vceffects ?? PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.SpeechConfigure cfg = new ExtendedAudioForms.SpeechConfigure();
-            cfg.Init(true, AudioQueueSpeech, SpeechSynthesizer,
+            cfg.Init(true, nodevice, novoicename, AudioQueueSpeech, SpeechSynthesizer,
                         title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
@@ -500,22 +502,31 @@ namespace EDDiscovery.Actions
 
             if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
             {
-                SetPeristentGlobal(ActionSay.globalvarspeechvoice, cfg.VoiceName);
-                SetPeristentGlobal(ActionSay.globalvarspeechvolume, cfg.Volume);
-                SetPeristentGlobal(ActionSay.globalvarspeechrate, cfg.Rate);
-                SetPeristentGlobal(ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
+                if (vcname == null)
+                {
+                    SetPeristentGlobal(ActionSay.globalvarspeechvoice, cfg.VoiceName);
+                    SetPeristentGlobal(ActionSay.globalvarspeechvolume, cfg.Volume);
+                    SetPeristentGlobal(ActionSay.globalvarspeechrate, cfg.Rate);
+                    SetPeristentGlobal(ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
+                }
 
-                EDDConfig.Instance.DefaultVoiceDevice = AudioQueueSpeech.Driver.GetAudioEndpoint();
+                if ( !nodevice)
+                    EDDConfig.Instance.DefaultVoiceDevice = AudioQueueSpeech.Driver.GetAudioEndpoint();
+
+                return new Tuple<string, string, string, string>(cfg.VoiceName, cfg.Volume, cfg.Rate, cfg.Effects.ToString());
             }
+            else
+                return null;
         }
 
-        public void ConfigureWave(string title)
+        // configure, using global vars, or passed values. If vcname == null the peristent variables are set on OK
+        public Tuple<string, string> ConfigureWave(bool nodevice, string title, string vcvolume = null, string vceffects = null)
         {
-            string volume = Globals.GetString(ActionPlay.globalvarplayvolume, "60");
-            Variables effects = new Variables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), Variables.FromMode.MultiEntryComma);
+            string volume = vcvolume ?? Globals.GetString(ActionPlay.globalvarplayvolume, "60");
+            Variables effects = new Variables(vceffects ?? PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.WaveConfigureDialog dlg = new ExtendedAudioForms.WaveConfigureDialog();
-            dlg.Init(true, AudioQueueWave,
+            dlg.Init(true, nodevice, AudioQueueWave,
                         title, this.Icon,
                         "",
                         false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
@@ -523,13 +534,18 @@ namespace EDDiscovery.Actions
 
             if (dlg.ShowDialog(discoveryform) == DialogResult.OK)
             {
-                Variables cond = new Variables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
-
-                SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
-                SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+                if (vcvolume == null)
+                {
+                    SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
+                    SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+                }
 
                 EDDConfig.Instance.DefaultWaveDevice = AudioQueueWave.Driver.GetAudioEndpoint();
+
+                return new Tuple<string, string>(dlg.Volume, dlg.Effects.ToString());
             }
+            else
+                return null;
         }
 
 
