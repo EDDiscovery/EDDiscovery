@@ -95,7 +95,9 @@ namespace EDDiscovery.Actions
 
                     else if (cmdname.Equals("configurevoice"))
                     {
-                        var res = ac.ConfigureVoice(nextword, thirdword!=null,thirdword=="NOVOICENAME", thirdword, fourthword, fifthword, sixthword);
+                        var res = ac.ConfigureVoice(nextword, thirdword!=null,fifthword=="NORATE", thirdword=="NOVOICENAME", 
+                                                                thirdword, fourthword, fifthword, sixthword);
+
                         ap["DialogResult"] = res != null ? "1" : "0";
                         if (res!=null && thirdword != null)     // if we are getting the config, not globally setting it
                         {

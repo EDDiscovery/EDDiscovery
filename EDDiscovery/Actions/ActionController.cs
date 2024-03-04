@@ -387,7 +387,7 @@ namespace EDDiscovery.Actions
 
             if (avf.ShowDialog(discoveryform) == DialogResult.OK)
             {
-                LoadPeristentVariables(avf.result);
+                LoadPeristentVariables(avf.Result);
             }
         }
 
@@ -483,7 +483,7 @@ namespace EDDiscovery.Actions
         #endregion
 
         // configure, using global vars, or passed values. If vcname == null the peristent variables are set on OK
-        public Tuple<string,string,string,string> ConfigureVoice(string title, bool nodevice, bool novoicename, 
+        public Tuple<string,string,string,string> ConfigureVoice(string title, bool nodevice, bool novoicename, bool norate,
                             string vcname = null, string vcvolume = null, string vcrate = null, string vceffects = null)    
         {
             string voicename = vcname ?? Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
@@ -492,7 +492,7 @@ namespace EDDiscovery.Actions
             Variables effects = new Variables(vceffects ?? PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.SpeechConfigure cfg = new ExtendedAudioForms.SpeechConfigure();
-            cfg.Init(true, nodevice, novoicename, AudioQueueSpeech, SpeechSynthesizer,
+            cfg.Init(true, nodevice, novoicename, norate, AudioQueueSpeech, SpeechSynthesizer,
                         title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
