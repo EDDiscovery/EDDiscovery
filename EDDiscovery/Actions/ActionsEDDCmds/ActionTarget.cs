@@ -107,7 +107,7 @@ namespace EDDiscovery.Actions
 
                                 if (bk != null)
                                 {
-                                    TargetClass.SetTargetOnBookmark(name, bk.id, bk.x, bk.y, bk.z);
+                                    TargetClass.SetTargetOnBookmark(name, bk.ID, bk.X, bk.Y, bk.Z);
                                     discoveryform.NewTargetSet(this);
                                 }
                                 else

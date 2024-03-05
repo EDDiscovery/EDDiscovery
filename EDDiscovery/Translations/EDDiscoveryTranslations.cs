@@ -859,6 +859,7 @@ namespace EDDiscovery
         UserControlBookmarks_ColType, // Column Header 'Bookmark Type'
         UserControlBookmarks_ColBookmarkName, // Column Header 'Bookmark Name'
         UserControlBookmarks_ColDescription, // Column Header 'Description'
+        UserControlBookmarks_ColTags, // Column Header 'Tags'
         UserControlBookmarks_labelSearch, // Control 'Search'
         UserControlBookmarks_toolStripMenuItemGotoStar3dmap, // ToolStrip control 'Goto in 3D Map'
         UserControlBookmarks_openInEDSMToolStripMenuItem, // ToolStrip control 'Open in EDSM'

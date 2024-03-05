@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016-2023 EDDiscovery development team
+ * Copyright © 2016-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -17,6 +17,7 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -24,8 +25,11 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlBookmarks : UserControlCommonBase
     {
-        DataGridViewRow currentedit = null;
-        Timer searchtimer;
+        private DataGridViewRow currentedit = null;
+        private Timer searchtimer;
+        const int TagSpacing = 26;
+        const int MinRowSize = 24;
+        private bool updating_grid;
 
         #region init
         public UserControlBookmarks()
@@ -41,7 +45,8 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
 
-            var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName, EDTx.UserControlBookmarks_ColDescription, 
+            var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName,
+                                            EDTx.UserControlBookmarks_ColDescription, EDTx.UserControlBookmarks_ColTags,
                                             EDTx.UserControlBookmarks_labelSearch };
             var enumlistcms = new Enum[] { EDTx.UserControlBookmarks_toolStripMenuItemGotoStar3dmap, EDTx.UserControlBookmarks_openInEDSMToolStripMenuItem };
             var enumlisttt = new Enum[] { EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip, 
@@ -57,12 +62,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewBookMarks);
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewBookMarks);
+            DGVSaveColumnLayout(dataGridView);
 
             SaveBackAnyChanges();
 
@@ -72,7 +77,7 @@ namespace EDDiscovery.UserControls
         }
         #endregion
 
-        #region display
+        #region Display
         public override void InitialDisplay()
         {
             Display();
@@ -82,55 +87,118 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            this.dataGridViewBookMarks.SelectionChanged -= new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
+            this.dataGridView.SelectionChanged -= new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
 
-            int lastrow = dataGridViewBookMarks.CurrentCell != null ? dataGridViewBookMarks.CurrentCell.RowIndex : -1;
+            int lastrow = dataGridView.CurrentCell != null ? dataGridView.CurrentCell.RowIndex : -1;
 
-            DataGridViewColumn sortcol = dataGridViewBookMarks.SortedColumn != null ? dataGridViewBookMarks.SortedColumn : dataGridViewBookMarks.Columns[0];
-            SortOrder sortorder = dataGridViewBookMarks.SortOrder;
+            DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
+            SortOrder sortorder = dataGridView.SortOrder;
 
             dataViewScrollerPanel.SuspendLayout();
-            dataGridViewBookMarks.SuspendLayout();
+            dataGridView.SuspendLayout();
 
-            dataGridViewBookMarks.Rows.Clear();
+            dataGridView.Rows.Clear();
             
             foreach (BookmarkClass bk in GlobalBookMarkList.Instance.Bookmarks)
             {
                 //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
-                var rw = dataGridViewBookMarks.RowTemplate.Clone() as DataGridViewRow;
-                rw.CreateCells( dataGridViewBookMarks , bk.isRegion ? "Region" : "System" ,
-                    bk.isRegion ? bk.Heading : bk.StarName,
+                var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
+                rw.CreateCells( dataGridView , bk.IsRegion ? "Region" : "System" ,
+                    bk.IsRegion ? bk.Heading : bk.StarName,
                     bk.Note,
-                    bk.x.ToString("0.##"),
-                    bk.y.ToString("0.##"),
-                    bk.z.ToString("0.##") );
+                    bk.X.ToString("0.##"),
+                    bk.Y.ToString("0.##"),
+                    bk.Z.ToString("0.##"),
+                    "");
                 rw.Tag = bk;
+                rw.Cells[ColTags.Index].Tag = bk.Tags ?? "";
+                rw.Cells[ColTags.Index].ToolTipText = bk.Tags ?? "";
+                SetMinHeight(rw);
 
-                dataGridViewBookMarks.Rows.Add(rw);
+                dataGridView.Rows.Add(rw);
             }
 
-            dataGridViewBookMarks.ResumeLayout();
+            dataGridView.ResumeLayout();
             dataViewScrollerPanel.ResumeLayout();
 
-            dataGridViewBookMarks.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
-            dataGridViewBookMarks.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+            dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-            if (lastrow >= 0 && lastrow < dataGridViewBookMarks.Rows.Count)
-                dataGridViewBookMarks.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridViewBookMarks.Rows.Count - 1));
+            if (lastrow >= 0 && lastrow < dataGridView.Rows.Count)
+                dataGridView.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridView.Rows.Count - 1));
 
             RefreshCurrentEdit();
 
-            this.dataGridViewBookMarks.SelectionChanged += new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
+            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
         }
+
+        private void SetMinHeight(DataGridViewRow rw)
+        {
+            var taglist = (rw.Cells[ColTags.Index].Tag as string).SplitNoEmptyStartFinish(';');
+            int across = Math.Max(ColTags.Width / TagSpacing, 1);
+            int height = ((taglist.Length - 1) / across + 1) * TagSpacing;
+           // System.Diagnostics.Debug.WriteLine($"Count {taglist.Length} Row {rw.Index} height {height} across {across}");
+            rw.MinimumHeight = Math.Max(height, MinRowSize);
+        }
+
+        private void dataGridViewBookMarks_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+            var taglist = (rw.Cells[6].Tag as string).SplitNoEmptyStartFinish(';');
+
+            //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
+
+            Rectangle area = dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false);
+            int startx = area.X;
+            int across = Math.Max(ColTags.Width / TagSpacing, 1);
+
+            area.Width = TagSpacing - 2;
+            area.Height = TagSpacing - 2;
+
+            int tagscount = 0;
+            for (int i = 0; i < taglist.Length; i++)
+            {
+                if (!EDDConfig.Instance.BookmarkTagImage.TryGetValue(taglist[i], out Image img))
+                    img = EDDiscovery.Icons.Controls.Star;
+
+                e.Graphics.DrawImage(img, area);
+                if (i % across == across - 1)
+                {
+                    area.X = startx;
+                    area.Y += TagSpacing;
+                }
+                else
+                    area.X += TagSpacing;
+                tagscount++;
+            }
+        }
+
+        private void dataGridViewBookMarks_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            if (e.Column == ColTags)
+            {
+                foreach (DataGridViewRow rw in dataGridView.Rows)
+                    SetMinHeight(rw);
+            }
+        }
+
+        private void dataGridViewBookMarks_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 6)
+                e.SortDataGridViewColumnAlpha(true);
+            else if (e.Column.Index >= 3)
+                e.SortDataGridViewColumnNumeric();
+        }
+
 
         private void RefreshCurrentEdit()
         {
-            if (dataGridViewBookMarks.CurrentCell != null)
+            if (dataGridView.CurrentCell != null)
             {
-                currentedit = dataGridViewBookMarks.Rows[dataGridViewBookMarks.CurrentCell.RowIndex];
+                currentedit = dataGridView.Rows[dataGridView.CurrentCell.RowIndex];
                 BookmarkClass bk = (BookmarkClass)(currentedit.Tag);
                 //System.Diagnostics.Debug.WriteLine("Move to row " + currentedit.Index + " Notes " + bk.Name);
-                if (bk.isRegion)
+                if (bk.IsRegion)
                     userControlSurfaceBookmarks.Disable();
                 else
                     userControlSurfaceBookmarks.Init(bk.StarName,DiscoveryForm.History, bk.PlanetaryMarks);
@@ -144,69 +212,57 @@ namespace EDDiscovery.UserControls
 
         private void SaveBackAnyChanges()
         {
-            if (currentedit != null)
+            if (currentedit != null)        // if editing
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
-                string newNote = "";
-                if (null != currentedit.Cells[2].Value)
+                string descr = "";
+                if (null != currentedit.Cells[ColDescription.Index].Value)
                 {
-                    newNote = currentedit.Cells[2].Value.ToString();
+                    descr = currentedit.Cells[ColDescription.Index].Value.ToString();
                 }
                 //System.Diagnostics.Debug.WriteLine("Checking for save " + currentedit.Index);
 
-                if (!newNote.Equals(bk.Note) || userControlSurfaceBookmarks.Edited)     // notes or planet marks changed
+                if (!descr.Equals(bk.Note) || userControlSurfaceBookmarks.Edited)     // notes or planet marks changed
                 {
-                    updating = true;
+                    updating_grid = true;
                     //System.Diagnostics.Debug.WriteLine("Save back " + bk.Name + " " + newNote);
-                    currentedit.Tag = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion,
-                                    bk.isRegion ? bk.Heading : bk.StarName,
-                                    bk.x, bk.y, bk.z, bk.TimeUTC,
-                                    newNote,
+                    currentedit.Tag = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.IsRegion,
+                                    bk.IsRegion ? bk.Heading : bk.StarName,
+                                    bk.X, bk.Y, bk.Z, bk.TimeUTC,
+                                    descr, bk.Tags,    
                                     userControlSurfaceBookmarks.PlanetMarks);
-                    updating = false;
+                    updating_grid = false;
                     userControlSurfaceBookmarks.Edited = false;
                 }
             }
         }
 
-        private void dataGridViewBookMarks_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index >= 3)
-                e.SortDataGridViewColumnNumeric();
-        }
-
         #endregion
 
-        #region UI
+        #region Toolbar UI
 
         private void buttonNew_Click(object sender, EventArgs e)
         {
-            updating = true;
+            updating_grid = true;
             BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, null, null);
-            updating = false;
+            updating_grid = false;
             Display();
         }
 
         private void extButtonNewRegion_Click(object sender, EventArgs e)
         {
-            updating = true;
+            updating_grid = true;
             BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, null, null, true);
-            updating = false;
+            updating_grid = false;
             Display();
         }
 
         private void extButtonEditSystem_Click(object sender, EventArgs e)
         {
-            updating = true;
+            updating_grid = true;
             BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, DiscoveryForm.History.GetLast?.System, null);
-            updating = false;
+            updating_grid = false;
             Display();
-        }
-
-
-        private void dataGridViewBookMarks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            buttonEdit_Click(sender, e);
         }
 
         private void buttonEdit_Click(object sender, EventArgs e)
@@ -216,11 +272,11 @@ namespace EDDiscovery.UserControls
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
                 SaveBackAnyChanges();
-                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : null;
+                EliteDangerousCore.ISystem sys = bk.IsStar ? SystemCache.FindSystem(bk.Name, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : null;
 
-                updating = true;
+                updating_grid = true;
                 BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sys, bk);
-                updating = false;
+                updating_grid = false;
                 Display();
             }
         }
@@ -229,25 +285,25 @@ namespace EDDiscovery.UserControls
         {
             int[] rows = null;
 
-            if (dataGridViewBookMarks.SelectedCells.Count > 0)      // being paranoid
+            if (dataGridView.SelectedCells.Count > 0)      // being paranoid
             {
-                rows = (from DataGridViewCell x in dataGridViewBookMarks.SelectedCells select x.RowIndex).Distinct().ToArray();
+                rows = (from DataGridViewCell x in dataGridView.SelectedCells select x.RowIndex).Distinct().ToArray();
             }
 
             //System.Diagnostics.Debug.WriteLine("cells {0} rows {1} selrows {2}", dataGridViewBookMarks.SelectedCells.Count, dataGridViewBookMarks.SelectedRows.Count , rows.Length);
 
-            if ( rows != null && rows.Length > 1 )
+            if (rows != null && rows.Length > 1)
             {
                 if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} bookmarks?" + Environment.NewLine + "Confirm or Cancel").T(EDTx.UserControlBookmarks_CFN), rows.Length), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    updating = true;
+                    updating_grid = true;
                     foreach (int r in rows)
                     {
-                        BookmarkClass bk = (BookmarkClass)dataGridViewBookMarks.Rows[r].Tag;
+                        BookmarkClass bk = (BookmarkClass)dataGridView.Rows[r].Tag;
                         //System.Diagnostics.Debug.WriteLine("Delete " + bk.Name);
                         GlobalBookMarkList.Instance.Delete(bk);
                     }
-                    updating = false;
+                    updating_grid = false;
                     Display();
                 }
 
@@ -256,28 +312,25 @@ namespace EDDiscovery.UserControls
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the bookmark for {0}" + Environment.NewLine + "Confirm or Cancel").T(EDTx.UserControlBookmarks_CF),  bk.Name ), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the bookmark for {0}" + Environment.NewLine + "Confirm or Cancel").T(EDTx.UserControlBookmarks_CF), bk.Name), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    updating = true;
+                    updating_grid = true;
                     GlobalBookMarkList.Instance.Delete(bk);
-                    updating = false;
+                    updating_grid = false;
                     Display();
                 }
             }
         }
 
-        private void dataGridViewBookMarks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void buttonTags_Click(object sender, EventArgs e)
         {
-            if(e.ColumnIndex == 2)
-            {
-                SaveBackAnyChanges();
-            }
-        }
+            TagsForm tg = new TagsForm();
+            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.Instance.BookmarkTagImage);
 
-        private void dataGridViewBookMarks_SelectionChanged(object sender, EventArgs e)
-        {
-            SaveBackAnyChanges();
-            RefreshCurrentEdit();
+            if (tg.ShowDialog() == DialogResult.OK)
+            {
+                EDDConfig.Instance.BookmarkTagImage = tg.Result;
+            }
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
@@ -293,23 +346,81 @@ namespace EDDiscovery.UserControls
 
             SaveBackAnyChanges();
 
-            dataGridViewBookMarks.FilterGridView(textBoxFilter.Text);
+            dataGridView.FilterGridView(textBoxFilter.Text);
 
             RefreshCurrentEdit();
 
             this.Cursor = Cursors.Default;
         }
 
-   
+
+
+        #endregion
+
+        #region Grid Editing
+
+        private void dataGridViewBookMarks_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)    // row -1 is the header..
+            {
+                DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+                if (e.ColumnIndex == ColTags.Index)
+                    EditTags(rw);
+            }
+        }
+
+        private void EditTags(DataGridViewRow rw)
+        {
+            TagsForm.EditTags(this.FindForm(),
+                                        EDDConfig.Instance.BookmarkTagImage, rw.Cells[ColTags.Index].Tag as string,
+                                        dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false).Location),
+                                        TagsChanged, rw);
+        }
+
+        private void TagsChanged(string newtags, Object tag)
+        {
+            DataGridViewRow rwtagedited = tag as DataGridViewRow;
+            rwtagedited.Cells[ColTags.Index].Tag = newtags;
+            SetMinHeight(rwtagedited);
+            dataGridView.InvalidateRow(rwtagedited.Index);
+
+            BookmarkClass bk = (BookmarkClass)rwtagedited.Tag;
+            updating_grid = true;
+            GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.IsRegion,
+                                bk.IsRegion ? bk.Heading : bk.StarName,
+                                bk.X, bk.Y, bk.Z, bk.TimeUTC,
+                                bk.Note, newtags,
+                                userControlSurfaceBookmarks.PlanetMarks);
+            updating_grid = false;
+        }
+
+        private void dataGridViewBookMarks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if ( e.ColumnIndex != ColDescription.Index && e.ColumnIndex != ColTags.Index)
+                buttonEdit_Click(sender, e);
+        }
+        private void dataGridViewBookMarks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == ColDescription.Index)
+            {
+                SaveBackAnyChanges();
+            }
+        }
+
+        private void dataGridViewBookMarks_SelectionChanged(object sender, EventArgs e)
+        {
+            SaveBackAnyChanges();
+            RefreshCurrentEdit();
+        }
+
         #endregion
 
         #region Reaction to bookmarks doing stuff from outside sources
 
-        bool updating;
         private void BookmarksChanged(BookmarkClass bk, bool deleted)
         {
             //System.Diagnostics.Debug.WriteLine("Changed called " + updating);
-            if (updating)
+            if (updating_grid)
                 return;
 
             // removed this - this can overwrite commanded changes SaveBackAnyChanges();
@@ -324,18 +435,18 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
         {
-            rightclickbookmark = (dataGridViewBookMarks.RightClickRowValid) ? (BookmarkClass)dataGridViewBookMarks.Rows[dataGridViewBookMarks.RightClickRow].Tag : null;
+            rightclickbookmark = (dataGridView.RightClickRowValid) ? (BookmarkClass)dataGridView.Rows[dataGridView.RightClickRow].Tag : null;
         }
 
         private void contextMenuStripBookmarks_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             toolStripMenuItemGotoStar3dmap.Enabled = rightclickbookmark != null;
-            openInEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.isStar;
+            openInEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.IsStar;
         }
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
+            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.X, rightclickbookmark.Y, rightclickbookmark.Z));
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -351,9 +462,12 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+
+        #region Excel
+
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            if (dataGridViewBookMarks.Rows.Count == 0)
+            if (dataGridView.Rows.Count == 0)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "No data to export", "Export EDSM", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -373,7 +487,7 @@ namespace EDDiscovery.UserControls
                     BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
                     List<string> colh = new List<string>();
-                    colh.AddRange(new string[] { "Type", "Time", "System/Region", "Note","X","Y", "Z", "Planet", "Name", "Comment", "Lat","Long"});
+                    colh.AddRange(new string[] { "Type", "Time", "System/Region", "Note","X","Y","Z", "Tags", "Planet", "Name", "Comment", "Lat","Long", "Tags"});
 
                     grd.GetHeader += delegate (int c)
                     {
@@ -383,20 +497,20 @@ namespace EDDiscovery.UserControls
                     int bkrowno = 0;
                     IEnumerator<Tuple<PlanetMarks.Planet, PlanetMarks.Location>> planetloc = null;
 
-                    System.Diagnostics.Debug.WriteLine("Rows " + dataGridViewBookMarks.Rows.Count);
+                    System.Diagnostics.Debug.WriteLine("Rows " + dataGridView.Rows.Count);
 
                     grd.GetLineStatus += delegate (int r)
                     {
-                        return bkrowno < dataGridViewBookMarks.Rows.Count ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                        return bkrowno < dataGridView.Rows.Count ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.EOF;
                     };
 
                     grd.GetLine += delegate (int r)
                     {
-                        DataGridViewRow rw = dataGridViewBookMarks.Rows[bkrowno];
+                        DataGridViewRow rw = dataGridView.Rows[bkrowno];
                         BookmarkClass bk = rw.Tag as BookmarkClass;
                         bool firstplanetrow = false;
 
-                        if (planetloc == null && bk.hasPlanetaryMarks)          // if not iterating planets, but it has one, iterate
+                        if (planetloc == null && bk.HasPlanetaryMarks)          // if not iterating planets, but it has one, iterate
                         {
                             planetloc = bk.PlanetaryMarks.GetEnumerator();
                             planetloc.MoveNext();       // move to first
@@ -405,13 +519,14 @@ namespace EDDiscovery.UserControls
 
                         List<Object> retrow = new List<Object>
                         {
-                            bk.isRegion ? "Region" : "System",
+                            bk.IsRegion ? "Region" : "System",
                             EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC),
-                            bk.isRegion ? bk.Heading : bk.StarName,
+                            bk.IsRegion ? bk.Heading : bk.StarName,
                             bk.Note,
-                            bk.x,
-                            bk.y,
-                            bk.z,
+                            bk.X,
+                            bk.Y,
+                            bk.Z,
+                            bk.Tags,
                         };
 
                         System.Diagnostics.Debug.WriteLine("Export system " + bkrowno + " " + bk.StarName);
@@ -421,9 +536,9 @@ namespace EDDiscovery.UserControls
                             var plloc = planetloc.Current;
                             List<Object> planetrow = new List<Object>
                             {
-                                plloc.Item1.Name,
-                                plloc.Item2.Name,
-                                plloc.Item2.Comment,
+                                plloc.Item1.Name,       // planet name
+                                plloc.Item2.Name,       // loc name
+                                plloc.Item2.Comment,    // loc comment
                             };
 
                             if (plloc.Item2.IsWholePlanetBookmark)
@@ -437,9 +552,11 @@ namespace EDDiscovery.UserControls
                                 planetrow.Add(plloc.Item2.Longitude);
                             };
 
+                            planetrow.Add(plloc.Item2.Tags);
+
                             if (!firstplanetrow)
                             {
-                                retrow = new List<object>() { "", "", "", "", "", "", "" };
+                                retrow = new List<object>() { "", "", "", "",  "", "", "","" };     // same number at LIST<retrow> above
                             }
 
                             retrow.AddRange(planetrow);
@@ -478,8 +595,11 @@ namespace EDDiscovery.UserControls
 
                     BookmarkClass currentbk = null;
 
+                    
                     foreach (var r in rows)
                     {
+                        // 0: "Type", "Time", 2: "System/Region", "Note","X","Y","Z", 7:"Tags", 8:"Planet", "Name", "Comment", 11:"Lat","Long", 13:"Tags"
+
                         string type = r[0];
 
                         if (type.HasChars())
@@ -488,28 +608,29 @@ namespace EDDiscovery.UserControls
 
                             DateTime? timeutc = r.GetDateTime(1);
 
-                            if (timeutc.HasValue)
+                            if (timeutc.HasValue)       // need time
                             {
                                 timeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(timeutc.Value);     // assume import is in selected time base, convert
 
                                 string name = r[2];
-                                string note = r[3];
+                                string note = r[3] ?? "";
                                 double? x = r.GetDouble(4);
                                 double? y = r.GetDouble(5);
                                 double? z = r.GetDouble(6);
+                                string tags = r[7] ?? "";
 
                                 if (x != null && y != null && z != null)
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6}", type, timeutc.Value.ToStringZulu(), name, note, x, y, z);
+                                    System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6},{7}", type, timeutc.Value.ToStringZulu(), name, note, x, y, z, tags);
 
                                     currentbk = GlobalBookMarkList.Instance.FindBookmark(name, region);
 
-                                    if (currentbk != null)
+                                    if (currentbk != null)  // if we have it don't wipe planet marks out
                                     {
-                                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, timeutc.Value, note, currentbk.PlanetaryMarks);
+                                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, timeutc.Value, note, tags, currentbk.PlanetaryMarks);
                                     }
                                     else
-                                        currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, timeutc.Value, note, null);
+                                        currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, timeutc.Value, note, tags, null);
                                 }
                                 else
                                 {
@@ -520,22 +641,23 @@ namespace EDDiscovery.UserControls
                                 System.Diagnostics.Debug.WriteLine("Rejected due to date {0} {1}", r[0], r[1]);
                         }
 
-                        string planet = r[7];
+                        string planet = r[8];
 
                         if (planet.HasChars() && currentbk != null)
                         {
-                            string locname = r[8];
-                            string comment = r[9];
-                            double? latitude = r.GetDouble(10);
-                            double? longitude = r.GetDouble(11);
+                            string locname = r[9];
+                            string comment = r[10] ?? "";
+                            double? latitude = r.GetDouble(11);
+                            double? longitude = r.GetDouble(12);
+                            string tags = r[13] ?? "";
 
                             if (!locname.HasChars() && latitude == null && longitude == null) // whole planet bookmark
                             {
-                                currentbk.AddOrUpdatePlanetBookmark(planet, comment);
+                                currentbk.AddOrUpdatePlanetBookmark(planet, comment, tags);
                             }
                             else if (locname.HasChars() && latitude.HasValue && longitude.HasValue)
                             {
-                                currentbk.AddOrUpdateLocation(planet, locname, comment, latitude.Value, longitude.Value);
+                                currentbk.AddOrUpdateLocation(planet, locname, comment, latitude.Value, longitude.Value, tags);
                             }
                         }
                     }
@@ -547,5 +669,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
     }
 }

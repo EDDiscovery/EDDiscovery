@@ -68,6 +68,7 @@ namespace EDDiscovery
         private bool webserverenable = false;
         private string dllpermissions = "";
         Dictionary<string, Image> captainslogtaglist;
+        Dictionary<string, Image> bookmarkstaglist;
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -482,29 +483,11 @@ namespace EDDiscovery
             }
             set
             {
-                captainslogtaglist = new Dictionary<string, Image>();       // read the value, and look up icons, create the table..
-
-                string[] tagdefs = value.Split(';');
-                foreach (var s in tagdefs)
-                {
-                    string[] parts = s.Split('=');
-                    // valid number, valid length, image exists
-                    if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && BaseUtils.Icons.IconSet.Instance.Contains(parts[1]))
-                    {
-                        Image img = BaseUtils.Icons.IconSet.Instance.Get(parts[1]);      // image.tag has name - defined by icon system
-                        img.Tag = parts[1]; // store name in tag
-                        captainslogtaglist[parts[0]] = img;
-                    }
-                }
-
-                // write back what is correct. Incorrect icons will be removed.
-                string[] list = (from x in captainslogtaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
-                string setting = string.Join(";", list);
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("CaptainsLogPanelTagNames", setting);
+                SetImageDict(value, ref captainslogtaglist, "CaptainsLogPanelTagNames");
             }
         }
 
-        public Dictionary<string,Image> CaptainsLogTagImage // set as dictionary/string
+        public Dictionary<string, Image> CaptainsLogTagImage // set as dictionary/string
         {
             get
             {
@@ -516,6 +499,34 @@ namespace EDDiscovery
                 string[] list = (from x in captainslogtaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
                 string setting = string.Join(";", list);
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("CaptainsLogPanelTagNames", setting);
+            }
+        }
+
+        public string BookmarkTags       // get/set as string..
+        {
+            get
+            {
+                string[] list = (from x in bookmarkstaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
+                return string.Join(";", list);
+            }
+            set
+            {
+                SetImageDict(value, ref bookmarkstaglist, "BookmarkTagNames");
+            }
+        }
+
+        public Dictionary<string, Image> BookmarkTagImage // set as dictionary/string
+        {
+            get
+            {
+                return bookmarkstaglist;
+            }
+            set
+            {
+                bookmarkstaglist = value;
+                string[] list = (from x in bookmarkstaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
+                string setting = string.Join(";", list);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("BookmarkTagNames", setting);
             }
         }
 
@@ -599,6 +610,8 @@ namespace EDDiscovery
                 spanshsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("SpanshSystemsURL", "Default");
 
                 CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
+                BookmarkTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("BookmarkTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
+                
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);
                 dllpermissions = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
@@ -613,5 +626,32 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Helpers
+
+        private void SetImageDict(string value, ref Dictionary<string, Image> dict, string settingname)
+        {
+            dict = new Dictionary<string, Image>();       // read the value, and look up icons, create the table..
+
+            string[] tagdefs = value.Split(';');
+            foreach (var s in tagdefs)
+            {
+                string[] parts = s.Split('=');
+                // valid number, valid length, image exists
+                if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && BaseUtils.Icons.IconSet.Instance.Contains(parts[1]))
+                {
+                    Image img = BaseUtils.Icons.IconSet.Instance.Get(parts[1]);      // image.tag has name - defined by icon system
+                    img.Tag = parts[1]; // store name in tag
+                    dict[parts[0]] = img;
+                }
+            }
+
+            // write back what is correct. Incorrect icons will be removed.
+            string[] list = (from x in dict select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
+            string setting = string.Join(";", list);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(settingname, setting);
+
+        }
+
+        #endregion
     }
 }

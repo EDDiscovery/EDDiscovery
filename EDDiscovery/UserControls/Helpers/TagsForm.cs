@@ -250,6 +250,33 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Tag Helpers
+
+        static public void EditTags(Form frm, Dictionary<string,Image> dictimage, string taglist, Point loc, Action<string, object> reaction, object tag)
+        {
+            List<string> keys = new List<string>(dictimage.Keys);
+            keys.Sort();
+            List<Tuple<string, string, Image>> options = (from x in keys select new Tuple<string, string, Image>(x.ToString(), x.ToString(), dictimage[x])).ToList();
+            
+            ExtendedControls.CheckedIconNewListBoxForm cfs = new ExtendedControls.CheckedIconNewListBoxForm();
+            cfs.CloseBoundaryRegion = new Size(32, 32);
+            cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
+            cfs.SaveSettings += reaction;
+            cfs.UC.AddAllNone();
+            cfs.UC.Add(options);
+
+            foreach (var usertag in taglist.SplitNoEmptyStartFinish(';'))
+            {
+                if (!dictimage.ContainsKey(usertag))
+                    cfs.UC.Add(usertag, usertag, EDDiscovery.Icons.Controls.Star);
+            }
+
+            cfs.UC.ImageSize = new Size(24, 24);
+
+            cfs.Show(taglist, loc, frm, tag);
+        }
+
+        #endregion
 
     }
 }

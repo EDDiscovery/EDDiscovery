@@ -22,7 +22,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using static EliteDangerousCore.DB.PlanetMarks;
 
-namespace EDDiscovery.Forms
+namespace EDDiscovery.UserControls
 {
     // now a leaf class - does not know about callers data.. much easier to understand
 

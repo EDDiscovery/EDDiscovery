@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery.Forms
+namespace EDDiscovery.UserControls
 {
     partial class BookmarkForm
     {
@@ -43,6 +43,7 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BookmarkForm));
             this.labelName = new System.Windows.Forms.Label();
             this.labelBookmarkNotes = new System.Windows.Forms.Label();
@@ -66,15 +67,19 @@ namespace EDDiscovery.Forms
             this.textBoxName = new ExtendedControls.ExtTextBoxAutoComplete();
             this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
-            this.SurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
+            this.panelTags = new System.Windows.Forms.Panel();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.panelOuter = new System.Windows.Forms.Panel();
+            this.SurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
             this.extPanelScroll.SuspendLayout();
+            this.panelOuter.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(9, 16);
+            this.labelName.Location = new System.Drawing.Point(9, 18);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(35, 13);
             this.labelName.TabIndex = 0;
@@ -82,7 +87,7 @@ namespace EDDiscovery.Forms
             // 
             // labelBookmarkNotes
             // 
-            this.labelBookmarkNotes.Location = new System.Drawing.Point(9, 171);
+            this.labelBookmarkNotes.Location = new System.Drawing.Point(9, 173);
             this.labelBookmarkNotes.Name = "labelBookmarkNotes";
             this.labelBookmarkNotes.Size = new System.Drawing.Size(121, 69);
             this.labelBookmarkNotes.TabIndex = 0;
@@ -91,7 +96,7 @@ namespace EDDiscovery.Forms
             // labelTimeMade
             // 
             this.labelTimeMade.AutoSize = true;
-            this.labelTimeMade.Location = new System.Drawing.Point(9, 136);
+            this.labelTimeMade.Location = new System.Drawing.Point(9, 138);
             this.labelTimeMade.Name = "labelTimeMade";
             this.labelTimeMade.Size = new System.Drawing.Size(60, 13);
             this.labelTimeMade.TabIndex = 0;
@@ -102,8 +107,9 @@ namespace EDDiscovery.Forms
             this.textBoxBookmarkNotes.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBookmarkNotes.BorderColorScaling = 0.5F;
             this.textBoxBookmarkNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBookmarkNotes.DetectUrls = true;
             this.textBoxBookmarkNotes.HideScrollBar = true;
-            this.textBoxBookmarkNotes.Location = new System.Drawing.Point(139, 173);
+            this.textBoxBookmarkNotes.Location = new System.Drawing.Point(139, 175);
             this.textBoxBookmarkNotes.Name = "textBoxBookmarkNotes";
             this.textBoxBookmarkNotes.ReadOnly = false;
             this.textBoxBookmarkNotes.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
@@ -138,9 +144,10 @@ namespace EDDiscovery.Forms
             this.textBoxX.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxX.EndButtonEnable = true;
             this.textBoxX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxX.EndButtonImage")));
+            this.textBoxX.EndButtonSize16ths = 10;
             this.textBoxX.EndButtonVisible = false;
             this.textBoxX.InErrorCondition = false;
-            this.textBoxX.Location = new System.Drawing.Point(139, 46);
+            this.textBoxX.Location = new System.Drawing.Point(139, 48);
             this.textBoxX.Multiline = false;
             this.textBoxX.Name = "textBoxX";
             this.textBoxX.ReadOnly = true;
@@ -150,6 +157,7 @@ namespace EDDiscovery.Forms
             this.textBoxX.Size = new System.Drawing.Size(157, 20);
             this.textBoxX.TabIndex = 4;
             this.textBoxX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxX.TextNoChange = "";
             this.textBoxX.WordWrap = true;
             this.textBoxX.TextChanged += new System.EventHandler(this.textBox_TextNumChanged);
             // 
@@ -165,9 +173,10 @@ namespace EDDiscovery.Forms
             this.textBoxY.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxY.EndButtonEnable = true;
             this.textBoxY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxY.EndButtonImage")));
+            this.textBoxY.EndButtonSize16ths = 10;
             this.textBoxY.EndButtonVisible = false;
             this.textBoxY.InErrorCondition = false;
-            this.textBoxY.Location = new System.Drawing.Point(139, 75);
+            this.textBoxY.Location = new System.Drawing.Point(139, 77);
             this.textBoxY.Multiline = false;
             this.textBoxY.Name = "textBoxY";
             this.textBoxY.ReadOnly = true;
@@ -177,6 +186,7 @@ namespace EDDiscovery.Forms
             this.textBoxY.Size = new System.Drawing.Size(157, 20);
             this.textBoxY.TabIndex = 5;
             this.textBoxY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxY.TextNoChange = "";
             this.textBoxY.WordWrap = true;
             this.textBoxY.TextChanged += new System.EventHandler(this.textBox_TextNumChanged);
             // 
@@ -192,9 +202,10 @@ namespace EDDiscovery.Forms
             this.textBoxZ.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxZ.EndButtonEnable = true;
             this.textBoxZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxZ.EndButtonImage")));
+            this.textBoxZ.EndButtonSize16ths = 10;
             this.textBoxZ.EndButtonVisible = false;
             this.textBoxZ.InErrorCondition = false;
-            this.textBoxZ.Location = new System.Drawing.Point(139, 104);
+            this.textBoxZ.Location = new System.Drawing.Point(139, 106);
             this.textBoxZ.Multiline = false;
             this.textBoxZ.Name = "textBoxZ";
             this.textBoxZ.ReadOnly = true;
@@ -204,13 +215,14 @@ namespace EDDiscovery.Forms
             this.textBoxZ.Size = new System.Drawing.Size(157, 20);
             this.textBoxZ.TabIndex = 6;
             this.textBoxZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxZ.TextNoChange = "";
             this.textBoxZ.WordWrap = true;
             this.textBoxZ.TextChanged += new System.EventHandler(this.textBox_TextNumChanged);
             // 
             // labelX
             // 
             this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(9, 49);
+            this.labelX.Location = new System.Drawing.Point(9, 51);
             this.labelX.Name = "labelX";
             this.labelX.Size = new System.Drawing.Size(15, 13);
             this.labelX.TabIndex = 0;
@@ -219,7 +231,7 @@ namespace EDDiscovery.Forms
             // labelY
             // 
             this.labelY.AutoSize = true;
-            this.labelY.Location = new System.Drawing.Point(8, 78);
+            this.labelY.Location = new System.Drawing.Point(8, 80);
             this.labelY.Name = "labelY";
             this.labelY.Size = new System.Drawing.Size(15, 13);
             this.labelY.TabIndex = 0;
@@ -228,7 +240,7 @@ namespace EDDiscovery.Forms
             // labelZ
             // 
             this.labelZ.AutoSize = true;
-            this.labelZ.Location = new System.Drawing.Point(8, 105);
+            this.labelZ.Location = new System.Drawing.Point(8, 107);
             this.labelZ.Name = "labelZ";
             this.labelZ.Size = new System.Drawing.Size(15, 13);
             this.labelZ.TabIndex = 0;
@@ -246,9 +258,10 @@ namespace EDDiscovery.Forms
             this.textBoxTime.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTime.EndButtonEnable = true;
             this.textBoxTime.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTime.EndButtonImage")));
+            this.textBoxTime.EndButtonSize16ths = 10;
             this.textBoxTime.EndButtonVisible = false;
             this.textBoxTime.InErrorCondition = false;
-            this.textBoxTime.Location = new System.Drawing.Point(139, 134);
+            this.textBoxTime.Location = new System.Drawing.Point(139, 136);
             this.textBoxTime.Multiline = false;
             this.textBoxTime.Name = "textBoxTime";
             this.textBoxTime.ReadOnly = true;
@@ -258,11 +271,12 @@ namespace EDDiscovery.Forms
             this.textBoxTime.Size = new System.Drawing.Size(246, 20);
             this.textBoxTime.TabIndex = 7;
             this.textBoxTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTime.TextNoChange = "";
             this.textBoxTime.WordWrap = true;
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(752, 669);
+            this.buttonOK.Location = new System.Drawing.Point(752, 671);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 24);
             this.buttonOK.TabIndex = 1;
@@ -272,7 +286,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(624, 669);
+            this.buttonCancel.Location = new System.Drawing.Point(624, 671);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(100, 24);
             this.buttonCancel.TabIndex = 2;
@@ -282,7 +296,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(13, 669);
+            this.buttonDelete.Location = new System.Drawing.Point(13, 671);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(100, 24);
             this.buttonDelete.TabIndex = 9;
@@ -292,7 +306,7 @@ namespace EDDiscovery.Forms
             // 
             // labelTravelNote
             // 
-            this.labelTravelNote.Location = new System.Drawing.Point(6, 287);
+            this.labelTravelNote.Location = new System.Drawing.Point(6, 289);
             this.labelTravelNote.Name = "labelTravelNote";
             this.labelTravelNote.Size = new System.Drawing.Size(124, 49);
             this.labelTravelNote.TabIndex = 0;
@@ -303,11 +317,30 @@ namespace EDDiscovery.Forms
             this.textBoxTravelNote.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTravelNote.BorderColorScaling = 0.5F;
             this.textBoxTravelNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxTravelNote.Location = new System.Drawing.Point(139, 289);
+            this.textBoxTravelNote.DetectUrls = true;
+            this.textBoxTravelNote.HideScrollBar = true;
+            this.textBoxTravelNote.Location = new System.Drawing.Point(139, 291);
             this.textBoxTravelNote.Name = "textBoxTravelNote";
             this.textBoxTravelNote.ReadOnly = true;
+            this.textBoxTravelNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.textBoxTravelNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.textBoxTravelNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxTravelNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxTravelNote.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.textBoxTravelNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxTravelNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.textBoxTravelNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.textBoxTravelNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.textBoxTravelNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.textBoxTravelNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.textBoxTravelNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.textBoxTravelNote.ShowLineCount = false;
             this.textBoxTravelNote.Size = new System.Drawing.Size(726, 87);
             this.textBoxTravelNote.TabIndex = 8;
+            this.textBoxTravelNote.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxTravelNote.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // checkBoxTarget
             // 
@@ -320,7 +353,7 @@ namespace EDDiscovery.Forms
             this.checkBoxTarget.ImageIndeterminate = null;
             this.checkBoxTarget.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxTarget.ImageUnchecked = null;
-            this.checkBoxTarget.Location = new System.Drawing.Point(584, 19);
+            this.checkBoxTarget.Location = new System.Drawing.Point(584, 21);
             this.checkBoxTarget.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxTarget.Name = "checkBoxTarget";
             this.checkBoxTarget.Size = new System.Drawing.Size(87, 17);
@@ -331,7 +364,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonEDSM
             // 
-            this.buttonEDSM.Location = new System.Drawing.Point(488, 16);
+            this.buttonEDSM.Location = new System.Drawing.Point(488, 18);
             this.buttonEDSM.Name = "buttonEDSM";
             this.buttonEDSM.Size = new System.Drawing.Size(75, 23);
             this.buttonEDSM.TabIndex = 11;
@@ -342,7 +375,7 @@ namespace EDDiscovery.Forms
             // labelBadSystem
             // 
             this.labelBadSystem.AutoSize = true;
-            this.labelBadSystem.Location = new System.Drawing.Point(482, 22);
+            this.labelBadSystem.Location = new System.Drawing.Point(482, 24);
             this.labelBadSystem.Name = "labelBadSystem";
             this.labelBadSystem.Size = new System.Drawing.Size(0, 13);
             this.labelBadSystem.TabIndex = 14;
@@ -352,6 +385,7 @@ namespace EDDiscovery.Forms
             this.textBoxName.AutoCompleteCommentMarker = null;
             this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxName.AutoCompleteTimeout = 500;
             this.textBoxName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxName.BorderColorScaling = 0.5F;
@@ -364,11 +398,11 @@ namespace EDDiscovery.Forms
             this.textBoxName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxName.EndButtonEnable = false;
-            this.textBoxName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxName.EndButtonImage")));
+            this.textBoxName.EndButtonSize16ths = 10;
             this.textBoxName.EndButtonVisible = false;
             this.textBoxName.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxName.InErrorCondition = false;
-            this.textBoxName.Location = new System.Drawing.Point(139, 16);
+            this.textBoxName.Location = new System.Drawing.Point(139, 18);
             this.textBoxName.Multiline = false;
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.ReadOnly = false;
@@ -379,6 +413,7 @@ namespace EDDiscovery.Forms
             this.textBoxName.TabIndex = 13;
             this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxName.TextChangedEvent = "";
+            this.textBoxName.TextNoChange = "";
             this.textBoxName.WordWrap = true;
             // 
             // statusStripCustom
@@ -391,6 +426,7 @@ namespace EDDiscovery.Forms
             // extPanelScroll
             // 
             this.extPanelScroll.Controls.Add(this.extScrollBar1);
+            this.extPanelScroll.Controls.Add(this.panelTags);
             this.extPanelScroll.Controls.Add(this.textBoxTravelNote);
             this.extPanelScroll.Controls.Add(this.textBoxBookmarkNotes);
             this.extPanelScroll.Controls.Add(this.labelTimeMade);
@@ -416,19 +452,15 @@ namespace EDDiscovery.Forms
             this.extPanelScroll.FlowControlsLeftToRight = false;
             this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
             this.extPanelScroll.Name = "extPanelScroll";
-            this.extPanelScroll.Size = new System.Drawing.Size(895, 704);
+            this.extPanelScroll.Size = new System.Drawing.Size(893, 702);
             this.extPanelScroll.TabIndex = 15;
             this.extPanelScroll.VerticalScrollBarDockRight = true;
-            // 
-            // SurfaceBookmarks
-            // 
-            this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 390);
-            this.SurfaceBookmarks.Name = "SurfaceBookmarks";
-            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 261);
-            this.SurfaceBookmarks.TabIndex = 12;
+            this.extPanelScroll.MouseDown += new System.Windows.Forms.MouseEventHandler(this.extPanelScroll_MouseDown);
+            this.extPanelScroll.MouseUp += new System.Windows.Forms.MouseEventHandler(this.extPanelScroll_MouseUp);
             // 
             // extScrollBar1
             // 
+            this.extScrollBar1.AlwaysHideScrollBar = false;
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.extScrollBar1.ArrowColorScaling = 0.5F;
@@ -438,13 +470,13 @@ namespace EDDiscovery.Forms
             this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar1.HideScrollBar = false;
             this.extScrollBar1.LargeChange = 10;
-            this.extScrollBar1.Location = new System.Drawing.Point(879, 0);
-            this.extScrollBar1.Maximum = 100;
+            this.extScrollBar1.Location = new System.Drawing.Point(877, 0);
+            this.extScrollBar1.Maximum = 35;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBar1.Name = "extScrollBar1";
-            this.extScrollBar1.Size = new System.Drawing.Size(16, 704);
+            this.extScrollBar1.Size = new System.Drawing.Size(16, 702);
             this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar1.SmallChange = 1;
             this.extScrollBar1.TabIndex = 15;
@@ -453,15 +485,41 @@ namespace EDDiscovery.Forms
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
-            this.extScrollBar1.Value = 0;
-            this.extScrollBar1.ValueLimited = 0;
+            this.extScrollBar1.Value = 26;
+            this.extScrollBar1.ValueLimited = 26;
+            // 
+            // panelTags
+            // 
+            this.panelTags.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelTags.Location = new System.Drawing.Point(447, 131);
+            this.panelTags.Name = "panelTags";
+            this.panelTags.Size = new System.Drawing.Size(353, 32);
+            this.panelTags.TabIndex = 16;
+            this.panelTags.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTags_MouseDown);
+            // 
+            // panelOuter
+            // 
+            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.extPanelScroll);
+            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelOuter.Location = new System.Drawing.Point(0, 0);
+            this.panelOuter.Name = "panelOuter";
+            this.panelOuter.Size = new System.Drawing.Size(895, 704);
+            this.panelOuter.TabIndex = 17;
+            // 
+            // SurfaceBookmarks
+            // 
+            this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 392);
+            this.SurfaceBookmarks.Name = "SurfaceBookmarks";
+            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 261);
+            this.SurfaceBookmarks.TabIndex = 12;
             // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(895, 726);
-            this.Controls.Add(this.extPanelScroll);
+            this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.statusStripCustom);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
@@ -469,6 +527,7 @@ namespace EDDiscovery.Forms
             this.Text = "<code>";
             this.extPanelScroll.ResumeLayout(false);
             this.extPanelScroll.PerformLayout();
+            this.panelOuter.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -500,5 +559,8 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtStatusStrip statusStripCustom;
         private ExtendedControls.ExtPanelScroll extPanelScroll;
         private ExtendedControls.ExtScrollBar extScrollBar1;
+        private System.Windows.Forms.Panel panelTags;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Panel panelOuter;
     }
 }

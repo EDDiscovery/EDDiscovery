@@ -916,7 +916,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (bookmarks != null)
             {
                 var bks = EliteDangerousCore.DB.GlobalBookMarkList.Instance.Bookmarks;
-                var list = bks.Select(a => new Vector4((float)a.x, (float)a.y + 1.5f, (float)a.z, 1)).ToArray();
+                var list = bks.Select(a => new Vector4((float)a.X, (float)a.Y + 1.5f, (float)a.Z, 1)).ToArray();
                 bookmarks.Create(list);
                 FillBookmarkForm();
             }
@@ -980,7 +980,7 @@ namespace EDDiscovery.UserControls.Map3D
                     if (mouseevent.Button == GLMouseEventArgs.MouseButtons.Left && row >= 0)
                     {
                         var bk = dgv.Rows[row].Tag as EliteDangerousCore.DB.BookmarkClass;
-                        gl3dcontroller.SlewToPosition(new Vector3((float)bk.x, (float)bk.y, (float)bk.z), -1);
+                        gl3dcontroller.SlewToPosition(new Vector3((float)bk.X, (float)bk.Y, (float)bk.Z), -1);
                     }
                 };
 
@@ -1106,7 +1106,7 @@ namespace EDDiscovery.UserControls.Map3D
                     var row = dgv.CreateRow();
 
                     row.AddCell(new GLDataGridViewCellText(bk.Name),
-                                new GLDataGridViewCellText(bk.x.ToString("N1")), new GLDataGridViewCellText(bk.y.ToString("N1")), new GLDataGridViewCellText(bk.z.ToString("N1")),
+                                new GLDataGridViewCellText(bk.X.ToString("N1")), new GLDataGridViewCellText(bk.Y.ToString("N1")), new GLDataGridViewCellText(bk.Z.ToString("N1")),
                                 new GLDataGridViewCellText(bk.Note));
                     row.Tag = bk;
                     row.AutoSize = true;
@@ -1505,7 +1505,7 @@ namespace EDDiscovery.UserControls.Map3D
                 name = "Bookmark " + name;
 
             Vector3 pos =  gmo != null ? new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z) :
-                                bkm != null ? new Vector3((float)bkm.x, (float)bkm.y, (float)bkm.z) :
+                                bkm != null ? new Vector3((float)bkm.X, (float)bkm.Y, (float)bkm.Z) :
                                     new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
 
             string info = "";

@@ -1,5 +1,5 @@
 ﻿
-namespace EDDiscovery.Forms
+namespace EDDiscovery.UserControls
 {
     partial class SurfaceBookmarkUserControl
     {

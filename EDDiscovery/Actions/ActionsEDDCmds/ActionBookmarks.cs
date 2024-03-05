@@ -75,11 +75,11 @@ namespace EDDiscovery.Actions
                             {
                                 string nprefix = prefix + bcount++.ToStringInvariant() + "_";
 
-                                ap[nprefix + "isstar"] = b.isStar.ToStringIntValue();
+                                ap[nprefix + "isstar"] = b.IsStar.ToStringIntValue();
                                 ap[nprefix + "name"] = b.Name;
-                                ap[nprefix + "x"] = b.x.ToStringInvariant();
-                                ap[nprefix + "y"] = b.y.ToStringInvariant();
-                                ap[nprefix + "z"] = b.z.ToStringInvariant();
+                                ap[nprefix + "x"] = b.X.ToStringInvariant();
+                                ap[nprefix + "y"] = b.Y.ToStringInvariant();
+                                ap[nprefix + "z"] = b.Z.ToStringInvariant();
                                 ap[nprefix + "time"] = b.TimeUTC.ToStringUSInvariant(); // US Date format
                                 ap[nprefix + "note"] = b.Note;
 
@@ -135,11 +135,12 @@ namespace EDDiscovery.Actions
                             double? y = sp.NextDouble();
                             double? z = sp.NextDouble();
                             string notes = sp.NextQuotedWord(); // valid for it to be null.  Means don't update notes
+                            string tags = sp.NextQuotedWord();
 
                             if (x != null && y != null && z != null)
                             {
                                 BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmark(name, region);
-                                GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !region, name, x.Value, y.Value, z.Value, DateTime.Now, notes);
+                                GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !region, name, x.Value, y.Value, z.Value, DateTime.Now, notes, tags);
                             }
                             else
                                 ap.ReportError("Missing parameters in Add");
@@ -161,7 +162,7 @@ namespace EDDiscovery.Actions
                                 BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmark(name, region);
                                 if (bk != null)
                                 {
-                                    bk.UpdateNotes(notes);
+                                    bk.UpdateNote(notes);
                                     GlobalBookMarkList.Instance.TriggerChange(bk);
                                 }
                                 else
@@ -170,28 +171,52 @@ namespace EDDiscovery.Actions
                             else
                                 ap.ReportError("UpdateNote notes not present");
                         }
+                        else if (cmdname.Equals("UPDATETAG", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            string tags = sp.NextQuotedWord();
+
+                            if (tags != null)
+                            {
+                                BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmark(name, region);
+                                if (bk != null)
+                                {
+                                    bk.UpdateTags(tags);
+                                    GlobalBookMarkList.Instance.TriggerChange(bk);
+                                }
+                                else
+                                    ap.ReportError("UpdateNote cannot find star or region " + name);
+                            }
+                            else
+                                ap.ReportError("UpdatTag tag list not present");
+                        }
                         else
                         {
                             bool addstar = cmdname.Equals("ADDSTAR", StringComparison.InvariantCultureIgnoreCase);
                             bool addplanet = cmdname.Equals("ADDPLANET", StringComparison.InvariantCultureIgnoreCase);
                             bool deleteplanet = cmdname.Equals("DELETEPLANET", StringComparison.InvariantCultureIgnoreCase);
                             bool updatenoteonplanet = cmdname.Equals("UPDATEPLANETNOTE", StringComparison.InvariantCultureIgnoreCase);
+                            bool updatetagonplanet = cmdname.Equals("UPDATEPLANETTAG", StringComparison.InvariantCultureIgnoreCase);
                             bool planetmarkexists = cmdname.Equals("PLANETMARKEXISTS", StringComparison.InvariantCultureIgnoreCase);
 
-                            if ( !addstar && !addplanet && !deleteplanet && !updatenoteonplanet && !planetmarkexists)
+                            if (!addstar && !addplanet && !deleteplanet && !updatenoteonplanet && !planetmarkexists && !updatetagonplanet)
+                            {
                                 ap.ReportError("Unknown command");
-                            else if ( region )
+                            }
+                            else if (region)
+                            {
                                 ap.ReportError("Command and REGION are incompatible");
-                            else if ( addstar )
+                            }
+                            else if (addstar)
                             {
                                 var df = (ap.ActionController as ActionController).DiscoveryForm;
-                                ISystem sys = SystemCache.FindSystem(name,df.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
+                                ISystem sys = SystemCache.FindSystem(name, df.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
 
                                 if (sys != null)
                                 {
                                     string notes = sp.NextQuotedWord();     // valid for it to be null, means don't override or set to empty
+                                    string tags = sp.NextQuotedWord();  // can be null
                                     BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(name);
-                                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, true, name, sys.X, sys.Y, sys.Z, DateTime.UtcNow, notes);
+                                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, true, name, sys.X, sys.Y, sys.Z, DateTime.UtcNow, notes, tags);
                                 }
                                 else
                                     ap.ReportError("AddStar cannot find star " + name + " in database");
@@ -212,10 +237,11 @@ namespace EDDiscovery.Actions
                                             double? latp = sp.NextDouble();
                                             double? longp = sp.NextDouble();
                                             string comment = sp.NextQuotedWord();       // can be null
+                                            string tags = sp.NextQuotedWord();  // can be null
 
                                             if (planet != null && latp != null && longp != null)
                                             {
-                                                bk.AddOrUpdateLocation(planet, placename, comment ?? "", latp.Value, longp.Value);
+                                                bk.AddOrUpdateLocation(planet, placename, comment ?? "", latp.Value, longp.Value, tags);
                                                 GlobalBookMarkList.Instance.TriggerChange(bk);
                                             }
                                             else
@@ -234,6 +260,19 @@ namespace EDDiscovery.Actions
                                             else
                                                 ap.ReportError("UpdatePlanetNote no comment");
                                         }
+                                        else if (updatetagonplanet)
+                                        {
+                                            string tag = sp.NextQuotedWord();
+                                            if (tag != null)
+                                            {
+                                                if (bk.UpdateLocationTags(planet, placename, tag))
+                                                    GlobalBookMarkList.Instance.TriggerChange(bk);
+                                                else
+                                                    ap.ReportError("UpdatePlanetTag no such placename");
+                                            }
+                                            else
+                                                ap.ReportError("UpdatePlanetNote no comment");
+                                        }
                                         else if (deleteplanet)
                                         {
                                             if (bk.DeleteLocation(planet, placename))
@@ -241,7 +280,7 @@ namespace EDDiscovery.Actions
                                             else
                                                 ap.ReportError("DeletePlanet no such placename");
                                         }
-                                        else if ( planetmarkexists )
+                                        else if (planetmarkexists)
                                         {
                                             ap[prefix + "Exists"] = bk.HasLocation(planet, placename).ToStringIntValue();
                                         }

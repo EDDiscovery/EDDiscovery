@@ -467,7 +467,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (position.Location.ValidPosition)    // and we have a valid position, autocreate a new planet mark
                     {
-                        frm.Bookmark(sysbookmark, position.BodyName.ReplaceIfStartsWith(current_sys.Name, ""), position.Location.Latitude, position.Location.Longitude);
+                        frm.NewPlanetBookmark(sysbookmark, position.BodyName.ReplaceIfStartsWith(current_sys.Name, ""), position.Location.Latitude, position.Location.Longitude);
                     }
                     else
                     {
@@ -491,7 +491,7 @@ namespace EDDiscovery.UserControls
 
                 if (dr == DialogResult.OK)
                 {
-                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(sysbookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), datetimeutc, frm.Notes, frm.SurfaceLocations);
+                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(sysbookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), datetimeutc, frm.Notes, frm.TagList, frm.SurfaceLocations);
                 }
                 if (dr == DialogResult.Abort)
                 {

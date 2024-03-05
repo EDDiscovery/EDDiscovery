@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016-2022 EDDiscovery development team
+ * Copyright © 2016-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,6 @@
  * governing permissions and limitations under the License.
  */
 
-using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using System;
@@ -54,7 +53,7 @@ namespace EDDiscovery.UserControls
             }
             else                                        // update bookmark
             {
-                regionmarker = bkmark.isRegion;
+                regionmarker = bkmark.IsRegion;
                 timeutc = bkmark.TimeUTC;
                 frm.Bookmark(bkmark);
             }
@@ -66,16 +65,16 @@ namespace EDDiscovery.UserControls
             if (res == DialogResult.OK)
             {
                 BookmarkClass newcls = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
-                                                                    timeutc, frm.Notes, frm.SurfaceLocations);
+                                                                    timeutc, frm.Notes, frm.TagList, frm.SurfaceLocations);
 
 
 
                 // if form sets target, and our target ID is not the same.. or we have removed the target, we update the target system
 
-                if ((frm.IsTarget && curtargetid != newcls.id) || (!frm.IsTarget && curtargetid == newcls.id)) // changed..
+                if ((frm.IsTarget && curtargetid != newcls.ID) || (!frm.IsTarget && curtargetid == newcls.ID)) // changed..
                 {
                     if (frm.IsTarget)
-                        TargetClass.SetTargetOnBookmark(regionmarker ? ("RM:" + newcls.Heading) : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
+                        TargetClass.SetTargetOnBookmark(regionmarker ? ("RM:" + newcls.Heading) : newcls.StarName, newcls.ID, newcls.X, newcls.Y, newcls.Z);
                     else
                         TargetClass.ClearTarget();
 
@@ -86,7 +85,7 @@ namespace EDDiscovery.UserControls
             }
             else if (res == DialogResult.Abort && bkmark != null)
             {
-                if (curtargetid == bkmark.id)       // if we deleted it
+                if (curtargetid == bkmark.ID)       // if we deleted it
                 {
                     TargetClass.ClearTarget();
                     discoveryForm.NewTargetSet(parent);     // inform system
