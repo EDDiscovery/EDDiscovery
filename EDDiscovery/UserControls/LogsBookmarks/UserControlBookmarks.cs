@@ -27,8 +27,8 @@ namespace EDDiscovery.UserControls
     {
         private DataGridViewRow currentedit = null;
         private Timer searchtimer;
-        const int TagSpacing = 26;
-        const int MinRowSize = 24;
+
+        const int TagSize = 24;
         private bool updating_grid;
 
         #region init
@@ -111,9 +111,10 @@ namespace EDDiscovery.UserControls
                     bk.Z.ToString("0.##"),
                     "");
                 rw.Tag = bk;
-                rw.Cells[ColTags.Index].Tag = bk.Tags ?? "";
-                rw.Cells[ColTags.Index].ToolTipText = bk.Tags ?? "";
-                SetMinHeight(rw);
+                string tags = bk.Tags ?? "";
+                rw.Cells[ColTags.Index].Tag = tags;
+                rw.Cells[ColTags.Index].ToolTipText = tags;
+                TagsForm.SetMinHeight(tags, rw, ColTags.Width, TagSize);
 
                 dataGridView.Rows.Add(rw);
             }
@@ -132,45 +133,11 @@ namespace EDDiscovery.UserControls
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
         }
 
-        private void SetMinHeight(DataGridViewRow rw)
-        {
-            var taglist = (rw.Cells[ColTags.Index].Tag as string).SplitNoEmptyStartFinish(';');
-            int across = Math.Max(ColTags.Width / TagSpacing, 1);
-            int height = ((taglist.Length - 1) / across + 1) * TagSpacing;
-           // System.Diagnostics.Debug.WriteLine($"Count {taglist.Length} Row {rw.Index} height {height} across {across}");
-            rw.MinimumHeight = Math.Max(height, MinRowSize);
-        }
-
         private void dataGridViewBookMarks_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-            var taglist = (rw.Cells[6].Tag as string).SplitNoEmptyStartFinish(';');
-
-            //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
-
-            Rectangle area = dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false);
-            int startx = area.X;
-            int across = Math.Max(ColTags.Width / TagSpacing, 1);
-
-            area.Width = TagSpacing - 2;
-            area.Height = TagSpacing - 2;
-
-            int tagscount = 0;
-            for (int i = 0; i < taglist.Length; i++)
-            {
-                if (!EDDConfig.Instance.BookmarkTagImage.TryGetValue(taglist[i], out Image img))
-                    img = EDDiscovery.Icons.Controls.Star;
-
-                e.Graphics.DrawImage(img, area);
-                if (i % across == across - 1)
-                {
-                    area.X = startx;
-                    area.Y += TagSpacing;
-                }
-                else
-                    area.X += TagSpacing;
-                tagscount++;
-            }
+            TagsForm.PaintTags(rw.Cells[ColTags.Index].Tag as string, EDDConfig.Instance.BookmarkTagImage,
+                            dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false), e.Graphics, TagSize);
         }
 
         private void dataGridViewBookMarks_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
@@ -178,7 +145,7 @@ namespace EDDiscovery.UserControls
             if (e.Column == ColTags)
             {
                 foreach (DataGridViewRow rw in dataGridView.Rows)
-                    SetMinHeight(rw);
+                    TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize);
             }
         }
 
@@ -379,12 +346,12 @@ namespace EDDiscovery.UserControls
 
         private void TagsChanged(string newtags, Object tag)
         {
-            DataGridViewRow rwtagedited = tag as DataGridViewRow;
-            rwtagedited.Cells[ColTags.Index].Tag = newtags;
-            SetMinHeight(rwtagedited);
-            dataGridView.InvalidateRow(rwtagedited.Index);
+            DataGridViewRow rw = tag as DataGridViewRow;
+            rw.Cells[ColTags.Index].Tag = newtags;
+            TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize);
+            dataGridView.InvalidateRow(rw.Index);
 
-            BookmarkClass bk = (BookmarkClass)rwtagedited.Tag;
+            BookmarkClass bk = (BookmarkClass)rw.Tag;
             updating_grid = true;
             GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.IsRegion,
                                 bk.IsRegion ? bk.Heading : bk.StarName,

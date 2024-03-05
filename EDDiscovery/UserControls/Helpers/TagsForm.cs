@@ -276,6 +276,46 @@ namespace EDDiscovery.UserControls
             cfs.Show(taglist, loc, frm, tag);
         }
 
+        static public void PaintTags(string tags, Dictionary<string,Image> images, Rectangle area, Graphics gr, int tagsize)
+        {
+            var taglist = tags.SplitNoEmptyStartFinish(';');
+            //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
+
+            int tagspacing = tagsize + 2;
+            int startx = area.X;
+            int across = Math.Max(area.Width / tagspacing, 1);
+
+            area.Width = tagsize;
+            area.Height = tagsize;
+
+            int tagscount = 0;
+            for (int i = 0; i < taglist.Length; i++)
+            {
+                if (!images.TryGetValue(taglist[i], out Image img))
+                    img = EDDiscovery.Icons.Controls.Star;
+
+                gr.DrawImage(img, area);
+                if (i % across == across - 1)
+                {
+                    area.X = startx;
+                    area.Y += tagspacing;
+                }
+                else
+                    area.X += tagspacing;
+                tagscount++;
+            }
+        }
+
+        static public void SetMinHeight(string tags, DataGridViewRow rw, int width, int tagsize)
+        {
+            int tagspacing = tagsize + 2;
+            var taglist = tags.SplitNoEmptyStartFinish(';');
+            int across = Math.Max(width / tagspacing, 1);
+            int height = ((taglist.Length - 1) / across + 1) * tagspacing;
+            // System.Diagnostics.Debug.WriteLine($"Count {taglist.Length} Row {rw.Index} height {height} across {across}");
+            rw.MinimumHeight = Math.Max(height, tagspacing);
+        }
+
         #endregion
 
     }

@@ -35,8 +35,7 @@ namespace EDDiscovery.UserControls
         private string dbEndDate = "ED";
         private string dbEndDateOn = "EDOn";
 
-        const int TagSpacing = 26;
-        const int MinRowSize = 24;
+        const int TagSize = 24;
 
         Timer searchtimer;
         bool updateprogramatically;
@@ -146,9 +145,11 @@ namespace EDDiscovery.UserControls
 
                         rw.Tag = entry;
                         rw.Cells[ColTime.Index].Tag = entry.TimeUTC;      // column 0 gets time utc
-                        rw.Cells[ColTags.Index].Tag = entry.Tags ?? ""; // column 4 gets the tag list, or empty if class is null
-                        rw.Cells[ColTags.Index].ToolTipText = entry.Tags ?? "";
-                        SetMinHeight(rw);
+                        string tags = entry.Tags ?? "";
+
+                        rw.Cells[ColTags.Index].Tag = tags;
+                        rw.Cells[ColTags.Index].ToolTipText = tags;
+                        TagsForm.SetMinHeight(tags, rw, ColTags.Width, TagSize);
 
                         dataGridView.Rows.Add(rw);
                     }
@@ -168,46 +169,11 @@ namespace EDDiscovery.UserControls
                 dataGridView.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridView.Rows.Count - 1));
         }
 
-        private void SetMinHeight(DataGridViewRow rw)
-        {
-            var taglist = (rw.Cells[ColTags.Index].Tag as string).SplitNoEmptyStartFinish(';');
-
-            int across = Math.Max(ColTags.Width / TagSpacing, 1);
-            int height = ((taglist.Length - 1) / across + 1) * TagSpacing;
-            //System.Diagnostics.Debug.WriteLine($"Count {taglist.Length} Row {rw.Index} height {height} across {across}");
-            rw.MinimumHeight = Math.Max(height, MinRowSize);
-        }
-
         private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-            var taglist = (rw.Cells[ColTags.Index].Tag as string).SplitNoEmptyStartFinish(';');
-
-            //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
-
-            Rectangle area = dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false);
-            int startx = area.X;
-            int across = Math.Max(ColTags.Width / TagSpacing, 1);
-
-            area.Width = TagSpacing-2;
-            area.Height = TagSpacing-2;
-
-            int tagscount = 0;
-            for (int i = 0; i < taglist.Length; i++)
-            {
-                if (!EDDConfig.Instance.CaptainsLogTagImage.TryGetValue(taglist[i], out Image img))
-                    img = EDDiscovery.Icons.Controls.Star;
-
-                e.Graphics.DrawImage(img, area);
-                if (i % across == across - 1)
-                {
-                    area.X = startx;
-                    area.Y += TagSpacing;
-                }
-                else
-                    area.X += TagSpacing;
-                tagscount++;
-            }
+            TagsForm.PaintTags(rw.Cells[ColTags.Index].Tag as string, EDDConfig.Instance.CaptainsLogTagImage, 
+                                dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false), e.Graphics, TagSize);
         }
 
         private void dataGridView_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
@@ -216,7 +182,7 @@ namespace EDDiscovery.UserControls
             if (e.Column == ColTags)
             {
                 foreach (DataGridViewRow rw in dataGridView.Rows)
-                    SetMinHeight(rw);
+                    TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize); 
             }
         }
 
@@ -397,11 +363,11 @@ namespace EDDiscovery.UserControls
 
         private void TagsChanged(string newtags, Object tag)
         {
-            DataGridViewRow rwtagedited = tag as DataGridViewRow;
-            rwtagedited.Cells[ColTags.Index].Tag = newtags;
-            SetMinHeight(rwtagedited);
-            StoreRow(rwtagedited);
-            dataGridView.InvalidateRow(rwtagedited.Index);
+            DataGridViewRow rw = tag as DataGridViewRow;
+            rw.Cells[ColTags.Index].Tag = newtags;
+            TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize);
+            StoreRow(rw);
+            dataGridView.InvalidateRow(rw.Index);
         }
 
         private void StoreRow( DataGridViewRow rw)
@@ -479,6 +445,7 @@ namespace EDDiscovery.UserControls
 
             rw.Tag = null;
             rw.Cells[ColTime.Index].Tag = EDDConfig.Instance.ConvertTimeToUTCFromSelected(selectedtime);
+            rw.Cells[ColTags.Index].Tag = "";
 
             dataGridView.Rows.Insert(0, rw);
             dataGridView.SetCurrentSelOnRow(0, 2);
