@@ -149,12 +149,8 @@ namespace EDDiscovery.UserControls
 
                         rw.Tag = entry;
                         rw.Cells[0].Tag = entry.TimeUTC;      // column 0 gets time utc
-                        //System.Diagnostics.Debug.WriteLine($"Captains Log {rw.Index} date time utc {rw.Cells[0].Tag}");
-
-                        List<string> taglist = entry.Tags?.SplitNoEmptyStrings(';').ToList();        // may be null - we do not use all or none note
-                        rw.Cells[4].Tag = taglist;
-                        if (taglist != null)
-                            rw.MinimumHeight = Math.Max(taglist.Count * TagSpacing, MinRowSize);
+                        rw.Cells[4].Tag = entry.Tags ?? ""; // column 4 gets the tag list, or empty if class is null
+                        SetMinHeight(rw);
 
                         dataGridView.Rows.Add(rw);
                     }
@@ -174,30 +170,57 @@ namespace EDDiscovery.UserControls
                 dataGridView.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridView.Rows.Count - 1));
         }
 
+        private void SetMinHeight(DataGridViewRow rw)
+        {
+            var taglist = (rw.Cells[4].Tag as string).SplitNoEmptyStartFinish(';');
+
+            int across = Math.Max(ColTags.Width / TagSpacing, 1);
+            int height = ((taglist.Length - 1) / across + 1) * TagSpacing;
+            System.Diagnostics.Debug.WriteLine($"Count {taglist.Length} Row {rw.Index} height {height} across {across}");
+            rw.MinimumHeight = Math.Max(height, MinRowSize);
+        }
+
         private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-            List<string> tagstring = rw.Cells[4].Tag as List<string>;
+            var taglist = (rw.Cells[4].Tag as string).SplitNoEmptyStartFinish(';');
 
-            if (tagstring != null)
+            //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
+
+            Rectangle area = dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false);
+            int startx = area.X;
+            int across = Math.Max(ColTags.Width / TagSpacing, 1);
+
+            area.Width = TagSpacing-2;
+            area.Height = TagSpacing-2;
+
+            int tagscount = 0;
+            for (int i = 0; i < taglist.Length; i++)
             {
-                //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
-
-                Rectangle area = dataGridView.GetCellDisplayRectangle(4, rw.Index, false);
-                area.Width = 24;
-                area.Height = 24;
-
-                int tagscount = 0;
-                for (int i = 0; i < tagstring.Count; i++)
+                if (EDDConfig.Instance.CaptainsLogTagImage.ContainsKey(taglist[i]))
                 {
-                    if (EDDConfig.Instance.CaptainsLogTagImage.ContainsKey(tagstring[i]))
+                    e.Graphics.DrawImage(EDDConfig.Instance.CaptainsLogTagImage[taglist[i]], area);
+                    if (i % across == across - 1)
                     {
-                        e.Graphics.DrawImage(EDDConfig.Instance.CaptainsLogTagImage[tagstring[i]], area);
-                        area.Y += 26;
-                        tagscount++;
+                        area.X = startx;
+                        area.Y += TagSpacing;
                     }
+                    else
+                        area.X += TagSpacing;
+                    tagscount++;
                 }
             }
+        }
+
+        private void dataGridView_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine($"Column resize {e.Column.Name}");
+            if (e.Column == ColTags)
+            {
+                foreach (DataGridViewRow rw in dataGridView.Rows)
+                    SetMinHeight(rw);
+            }
+
         }
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -336,22 +359,18 @@ namespace EDDiscovery.UserControls
             cfs.UC.Add(options);
             cfs.UC.ImageSize = new Size(24, 24);
 
-            List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
-            string taglist = curtags != null ? string.Join(";", curtags) : "";
-            System.Diagnostics.Debug.WriteLine("Cur keys" + curtags);
-
+            var taglist = rw.Cells[4].Tag as string;
             Point loc = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(4, rw.Index, false).Location);
-
             cfs.Show(taglist, loc, this.FindForm(), tag:rw);
         }
 
         private void TagsChanged(string newtags, Object tag)
         {
-            var slist = newtags.Split(';').ToList();            // ; at end due to definition..
             DataGridViewRow rwtagedited = tag as DataGridViewRow;
-            rwtagedited.Cells[4].Tag = slist;
-            rwtagedited.MinimumHeight = Math.Max((slist.Count-1) * TagSpacing, MinRowSize);
+            rwtagedited.Cells[4].Tag = newtags;
+            SetMinHeight(rwtagedited);
             StoreRow(rwtagedited);
+           
             dataGridView.InvalidateRow(rwtagedited.Index);
         }
 
@@ -367,7 +386,7 @@ namespace EDDiscovery.UserControls
                 rw.Cells[2].Value = "?";
 
             string notes = rw.Cells[3].IsNullOrEmpty() ? "" : (string)rw.Cells[3].Value;
-            string tags = rw.Cells[4].Tag != null ? string.Join(";", rw.Cells[4].Tag as List<string>) : null;
+            string tags = rw.Cells[4].Tag as string;
 
             CaptainsLogClass cls = GlobalCaptainsLogList.Instance.AddOrUpdate(entry, EDCommander.CurrentCmdrID,
                            rw.Cells[1].Value as string,
