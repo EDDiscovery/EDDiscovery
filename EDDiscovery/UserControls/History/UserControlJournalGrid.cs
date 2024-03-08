@@ -26,49 +26,6 @@ using System.Windows.Forms;
 namespace EDDiscovery.UserControls
 {
     /// <summary>
-    /// Defines a class for extending IEnumerable functionalities. (Chunking)
-    /// </summary>
-    public static class EnumerableExtensions
-    {
-        
-        /// <summary>
-        /// Splits the source enumerable into chunks of a specified size.
-        /// </summary>
-        /// <typeparam name="T">The type of items in the enumerable.</typeparam>
-        /// <param name="source">The source enumerable to split into chunks.</param>
-        /// <param name="chunkSize">The size of each chunk.</param>
-        /// <returns>An enumerable of chunks containing items from the source.</returns>
-        public static IEnumerable<IEnumerable<T>> ChunkBy<T>(this IEnumerable<T> source, int chunkSize)
-        {
-            // Throws an exception if the chunk size is not positive.
-            if (chunkSize <= 0)
-                throw new ArgumentException("Chunk size must be greater than 0.", nameof(chunkSize));
-
-            // Initializes a new list to hold the current chunk of items.
-            var chunk = new List<T>(chunkSize);
-
-            // Iterates over each item in the source enumerable.
-            foreach (var item in source)
-            {
-                // Adds the current item to the chunk.
-                chunk.Add(item);
-                // If the chunk has reached the specified size, yield return it and start a new chunk.
-                if (chunk.Count == chunkSize)
-                {
-                    yield return chunk;
-                    chunk = new List<T>(chunkSize);
-                }
-            }
-
-            // If there are any items left in the chunk after iterating through the source, yield return it.
-            if (chunk.Any())
-            {
-                yield return chunk;
-            }
-        }
-    }
-    
-    /// <summary>
     /// UserControlJournalGrid is responsible for displaying the journal entries in a grid format.
     /// It allows filtering, searching, and sorting of journal entries based on various criteria.
     /// </summary>
@@ -83,7 +40,7 @@ namespace EDDiscovery.UserControls
         private static readonly string dbFieldFilter = "ControlFieldFilter";
         private static readonly string dbUserGroups = "UserGroups";
 
-        public event Action OnPopOut;
+
 
         private HistoryList current_historylist; // the last one set, for internal refresh purposes on sort
 
@@ -125,8 +82,10 @@ namespace EDDiscovery.UserControls
             SetupFilterSelector();
             SetupTimers();
             SubscribeToEvents();
-            ApplyTranslations();
             InitializeComboBox();
+            ApplyTranslations();
+
+
         }
 
         /// <summary>
@@ -184,26 +143,48 @@ namespace EDDiscovery.UserControls
         /// <summary>
         /// Applies translations to UI elements based on the current language settings.
         /// </summary>
-        /// </summary>
         private void ApplyTranslations()
         {
-            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime, EDTx.UserControlJournalGrid_ColumnEvent, EDTx.UserControlJournalGrid_ColumnDescription, 
-                EDTx.UserControlJournalGrid_ColumnInformation, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
+            var enumlist = new Enum[]
+            {
+                EDTx.UserControlJournalGrid_ColumnTime,
+                EDTx.UserControlJournalGrid_ColumnEvent,
+                EDTx.UserControlJournalGrid_ColumnDescription,
+                EDTx.UserControlJournalGrid_ColumnInformation,
+                EDTx.UserControlJournalGrid_labelTime,
+                EDTx.UserControlJournalGrid_labelSearch
+            };
 
-            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, 
-                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem,
+            var contextMenuTranslations = new Enum[]
+            {
+                EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem,
+                EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem,
+                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem,
+                EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem,
                 EDTx.UserControlJournalGrid_viewOnSpanshToolStripMenuItem,
                 EDTx.UserControlJournalGrid_viewScanDisplayToolStripMenuItem,
-                EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, 
-                EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
+                EDTx.UserControlJournalGrid_toolStripMenuItemStartStop,
+                EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem,
+                EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem
+            };
 
-            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, 
-                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip };
+            var toolTipTranslations = new Enum[]
+            {
+                EDTx.UserControlJournalGrid_comboBoxTime_ToolTip,
+                EDTx.UserControlJournalGrid_textBoxSearch_ToolTip,
+                EDTx.UserControlJournalGrid_buttonFilter_ToolTip,
+                EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip,
+                EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip,
+                EDTx.UserControlJournalGrid_labelTime,
+                EDTx.UserControlJournalGrid_labelSearch
+            };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, contextMenuTranslations, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, toolTipTranslations, this);
+
         }
+
 
         /// <summary>
         /// Initializes the combo box.
@@ -214,6 +195,7 @@ namespace EDDiscovery.UserControls
 
             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms)) // if translator has it defined, use it (share with travel grid)
                 searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
+
         }
 
         /// <summary>
@@ -988,5 +970,47 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+    }
+    /// <summary>
+    /// Defines a class for extending IEnumerable functionalities. (Chunking)
+    /// </summary>
+    public static class EnumerableExtensions
+    {
+
+        /// <summary>
+        /// Splits the source enumerable into chunks of a specified size.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the enumerable.</typeparam>
+        /// <param name="source">The source enumerable to split into chunks.</param>
+        /// <param name="chunkSize">The size of each chunk.</param>
+        /// <returns>An enumerable of chunks containing items from the source.</returns>
+        public static IEnumerable<IEnumerable<T>> ChunkBy<T>(this IEnumerable<T> source, int chunkSize)
+        {
+            // Throws an exception if the chunk size is not positive.
+            if (chunkSize <= 0)
+                throw new ArgumentException("Chunk size must be greater than 0.", nameof(chunkSize));
+
+            // Initializes a new list to hold the current chunk of items.
+            var chunk = new List<T>(chunkSize);
+
+            // Iterates over each item in the source enumerable.
+            foreach (var item in source)
+            {
+                // Adds the current item to the chunk.
+                chunk.Add(item);
+                // If the chunk has reached the specified size, yield return it and start a new chunk.
+                if (chunk.Count == chunkSize)
+                {
+                    yield return chunk;
+                    chunk = new List<T>(chunkSize);
+                }
+            }
+
+            // If there are any items left in the chunk after iterating through the source, yield return it.
+            if (chunk.Any())
+            {
+                yield return chunk;
+            }
+        }
     }
 }
