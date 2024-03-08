@@ -174,9 +174,7 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlJournalGrid_textBoxSearch_ToolTip,
                 EDTx.UserControlJournalGrid_buttonFilter_ToolTip,
                 EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip,
-                EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip,
-                EDTx.UserControlJournalGrid_labelTime,
-                EDTx.UserControlJournalGrid_labelSearch
+                EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip
             };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
