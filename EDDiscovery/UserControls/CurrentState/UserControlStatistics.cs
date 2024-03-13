@@ -649,55 +649,76 @@ namespace EDDiscovery.UserControls
             JournalPromotion pfederation = currentstat.Promotions.FindLast(x => x.Federation.HasValue);
             JournalPromotion pcqc = currentstat.Promotions.FindLast(x => x.CQC.HasValue);
 
+            // so we may have been promoted after lastrank, so horribly, fix it up
+            if ( lastrank != null )
+            {
+                if (pcombat?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(pcombat.EventTimeUTC, pcombat.Combat.Value, lastrank.Trade, lastrank.Explore, lastrank.Soldier, lastrank.ExoBiologist, lastrank.Empire, lastrank.Federation, lastrank.CQC);
+                if (ptrade?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(ptrade.EventTimeUTC, lastrank.Combat, ptrade.Trade.Value, lastrank.Explore, lastrank.Soldier, lastrank.ExoBiologist, lastrank.Empire, lastrank.Federation, lastrank.CQC);
+                if (pexplore?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(pexplore.EventTimeUTC, lastrank.Combat, lastrank.Trade, pexplore.Explore.Value, lastrank.Soldier, lastrank.ExoBiologist, lastrank.Empire, lastrank.Federation, lastrank.CQC);
+                if (psoldier?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(psoldier.EventTimeUTC, lastrank.Combat, lastrank.Trade, lastrank.Explore, psoldier.Soldier.Value, lastrank.ExoBiologist, lastrank.Empire, lastrank.Federation, lastrank.CQC);
+                if (pexobiologist?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(pexobiologist.EventTimeUTC, lastrank.Combat, lastrank.Trade, lastrank.Explore, lastrank.Soldier, pexobiologist.ExoBiologist.Value, lastrank.Empire, lastrank.Federation, lastrank.CQC);
+                if (pempire?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(pempire.EventTimeUTC, lastrank.Combat, lastrank.Trade, lastrank.Explore, lastrank.Soldier, lastrank.ExoBiologist, pempire.Empire.Value, lastrank.Federation, lastrank.CQC);
+                if (pfederation?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(pfederation.EventTimeUTC, lastrank.Combat, lastrank.Trade, lastrank.Explore, lastrank.Soldier, lastrank.ExoBiologist, lastrank.Empire, pfederation.Federation.Value, lastrank.CQC);
+                if (pcqc?.EventTimeUTC > lastrank.EventTimeUTC)
+                    lastrank = new JournalRank(pcqc.EventTimeUTC, lastrank.Combat, lastrank.Trade, lastrank.Explore, lastrank.Soldier, lastrank.ExoBiologist, lastrank.Empire, lastrank.Federation, pcqc.CQC.Value);
+            }
+
             dataGridViewRanks.Rows.Clear();
 
             var ranknames = JournalRank.TranslatedRankNames();
 
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[0], firstrank?.Combat.ToString().Replace("_", " ") ?? "?",lastrank?.Combat.ToString().Replace("_", " ") ?? "?",
+                ranknames[0], RankDefinitions.FriendlyName(firstrank?.Combat),RankDefinitions.FriendlyName(lastrank?.Combat),
                 currentstat.LastProgress?.Combat.ToString() ?? "-",
                 pcombat!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(pcombat.EventTimeUTC).ToString() : "-",
             });
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[1], firstrank?.Trade.ToString().Replace("_", " ") ?? "?",lastrank?.Trade.ToString().Replace("_", " ") ?? "?",
+                ranknames[1], RankDefinitions.FriendlyName(firstrank?.Trade),RankDefinitions.FriendlyName(lastrank?.Trade),
                 currentstat.LastProgress?.Trade.ToString() ?? "-",
                 ptrade!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ptrade.EventTimeUTC).ToString() : "-",
             });
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[2], firstrank?.Explore.ToString().Replace("_", " ") ?? "?",lastrank?.Explore.ToString().Replace("_", " ") ?? "?",
+                ranknames[2], RankDefinitions.FriendlyName(firstrank?.Explore),RankDefinitions.FriendlyName(lastrank?.Explore),
                 currentstat.LastProgress?.Explore.ToString() ?? "-",
                 pexplore!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(pexplore.EventTimeUTC).ToString() : "-",
             });
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[3], firstrank?.Soldier.ToString().Replace("_", " ") ?? "?",lastrank?.Soldier.ToString().Replace("_", " ") ?? "?",
+                ranknames[3], RankDefinitions.FriendlyName(firstrank?.Soldier),RankDefinitions.FriendlyName(lastrank?.Soldier),
                 currentstat.LastProgress?.Soldier.ToString() ?? "-",
                 psoldier!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(psoldier.EventTimeUTC).ToString() : "-",
             });
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[4], firstrank?.ExoBiologist.ToString().Replace("_", " ") ?? "?",lastrank?.ExoBiologist.ToString().Replace("_", " ") ?? "?",
+                ranknames[4], RankDefinitions.FriendlyName(firstrank?.ExoBiologist),RankDefinitions.FriendlyName(lastrank?.ExoBiologist),
                 currentstat.LastProgress?.ExoBiologist.ToString() ?? "-",
                 pexobiologist!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(pexobiologist.EventTimeUTC).ToString() : "-",
             });
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[5], firstrank?.Empire.ToString().Replace("_", " ") ?? "?",lastrank?.Empire.ToString().Replace("_", " ") ?? "?",
+                ranknames[5], RankDefinitions.FriendlyName(firstrank?.Empire),RankDefinitions.FriendlyName(lastrank?.Empire),
                 currentstat.LastProgress?.Empire.ToString() ?? "-",
                 pempire!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(pempire.EventTimeUTC).ToString() : "-",
             });
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[6], firstrank?.Federation.ToString().Replace("_", " ") ?? "?",lastrank?.Federation.ToString().Replace("_", " ") ?? "?",
+                ranknames[6], RankDefinitions.FriendlyName(firstrank?.Federation) ,RankDefinitions.FriendlyName(lastrank?.Federation),
                 currentstat.LastProgress?.Federation.ToString() ?? "-",
                 pfederation!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(pfederation.EventTimeUTC).ToString() : "-",
             });
             dataGridViewRanks.Rows.Add(new string[]
             {
-                ranknames[7], firstrank?.CQC.ToString().Replace("_", " ") ?? "?",lastrank?.CQC.ToString().Replace("_", " ") ?? "?",
+                ranknames[7], RankDefinitions.FriendlyName(firstrank?.CQC),RankDefinitions.FriendlyName(lastrank?.CQC),
                 currentstat.LastProgress?.CQC.ToString() ?? "-",
                 pcqc!=null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(pcqc.EventTimeUTC).ToString() : "-",
             });
