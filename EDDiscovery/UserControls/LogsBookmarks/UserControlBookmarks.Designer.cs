@@ -56,6 +56,7 @@
             this.extButtonEditSystem = new ExtendedControls.ExtButton();
             this.extButtonNewRegion = new ExtendedControls.ExtButton();
             this.buttonTags = new ExtendedControls.ExtButton();
+            this.buttonFilter = new ExtendedControls.ExtButton();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -71,7 +72,7 @@
             // 
             this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
-            this.buttonExtImport.Location = new System.Drawing.Point(457, 1);
+            this.buttonExtImport.Location = new System.Drawing.Point(493, 1);
             this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtImport.Name = "buttonExtImport";
             this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
@@ -84,7 +85,7 @@
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(421, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(457, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -96,7 +97,7 @@
             // buttonDelete
             // 
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(349, 1);
+            this.buttonDelete.Location = new System.Drawing.Point(385, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
@@ -108,7 +109,7 @@
             // buttonNew
             // 
             this.buttonNew.Image = global::EDDiscovery.Icons.Controls.New;
-            this.buttonNew.Location = new System.Drawing.Point(205, 1);
+            this.buttonNew.Location = new System.Drawing.Point(241, 1);
             this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(28, 28);
@@ -120,7 +121,7 @@
             // buttonEdit
             // 
             this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Edit;
-            this.buttonEdit.Location = new System.Drawing.Point(277, 1);
+            this.buttonEdit.Location = new System.Drawing.Point(313, 1);
             this.buttonEdit.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(28, 28);
@@ -144,8 +145,8 @@
             this.textBoxFilter.EndButtonSize16ths = 10;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
-            this.textBoxFilter.Location = new System.Drawing.Point(49, 1);
-            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxFilter.Location = new System.Drawing.Point(49, 4);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.ReadOnly = false;
@@ -163,8 +164,8 @@
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(0, 1);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelSearch.Location = new System.Drawing.Point(0, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 26;
@@ -305,6 +306,7 @@
             // 
             this.ColTags.FillWeight = 200F;
             this.ColTags.HeaderText = "Tags";
+            this.ColTags.MinimumWidth = 32;
             this.ColTags.Name = "ColTags";
             this.ColTags.ReadOnly = true;
             // 
@@ -346,7 +348,7 @@
             // extButtonEditSystem
             // 
             this.extButtonEditSystem.Image = global::EDDiscovery.Icons.Controls.EditSystem;
-            this.extButtonEditSystem.Location = new System.Drawing.Point(313, 1);
+            this.extButtonEditSystem.Location = new System.Drawing.Point(349, 1);
             this.extButtonEditSystem.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extButtonEditSystem.Name = "extButtonEditSystem";
             this.extButtonEditSystem.Size = new System.Drawing.Size(28, 28);
@@ -358,7 +360,7 @@
             // extButtonNewRegion
             // 
             this.extButtonNewRegion.Image = global::EDDiscovery.Icons.Controls.NewRegion;
-            this.extButtonNewRegion.Location = new System.Drawing.Point(241, 1);
+            this.extButtonNewRegion.Location = new System.Drawing.Point(277, 1);
             this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extButtonNewRegion.Name = "extButtonNewRegion";
             this.extButtonNewRegion.Size = new System.Drawing.Size(28, 28);
@@ -370,7 +372,7 @@
             // buttonTags
             // 
             this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Tags;
-            this.buttonTags.Location = new System.Drawing.Point(385, 1);
+            this.buttonTags.Location = new System.Drawing.Point(421, 1);
             this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonTags.Name = "buttonTags";
             this.buttonTags.Size = new System.Drawing.Size(28, 28);
@@ -379,11 +381,24 @@
             this.buttonTags.UseVisualStyleBackColor = true;
             this.buttonTags.Click += new System.EventHandler(this.buttonTags_Click);
             // 
+            // buttonFilter
+            // 
+            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
+            this.buttonFilter.Location = new System.Drawing.Point(205, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Name = "buttonFilter";
+            this.buttonFilter.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilter.TabIndex = 40;
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
+            this.buttonFilter.UseVisualStyleBackColor = true;
+            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
+            // 
             // topPanel
             // 
             this.topPanel.AutoSize = true;
             this.topPanel.Controls.Add(this.labelSearch);
             this.topPanel.Controls.Add(this.textBoxFilter);
+            this.topPanel.Controls.Add(this.buttonFilter);
             this.topPanel.Controls.Add(this.buttonNew);
             this.topPanel.Controls.Add(this.extButtonNewRegion);
             this.topPanel.Controls.Add(this.buttonEdit);
@@ -441,6 +456,7 @@
         private ExtendedControls.ExtButton extButtonEditSystem;
         private ExtendedControls.ExtButton extButtonNewRegion;
         private ExtendedControls.ExtButton buttonTags;
+        private ExtendedControls.ExtButton buttonFilter;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBookmarkName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDescription;

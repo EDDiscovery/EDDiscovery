@@ -99,9 +99,9 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ELITE DANGEROUS DISCOVERY TERMS AND CONDITIONS - February 2021
+        ///   Looks up a localized string similar to ELITE DANGEROUS DISCOVERY TERMS AND CONDITIONS â€“ December 2023
         ///1. This code is licensed under the Apache License Version 2.0, January 2004.  See below for the Apache license.
-        ///2. DOWNLOADING OF DATA FROM GITHUB.COM/EDDISCOVERY.  From this site, EDD automatically checks at start up for the following information: New releases, Updated Bookmarks, New Expeditions, New Exploration list files, Updated Maps, Notifications.  It automatically downloads to your APPDATA folder any new or updated files detected.  None [rest of string was truncated]&quot;;.
+        ///2. DOWNLOADING OF DATA FROM GITHUB.COM/EDDISCOVERY.  From this site, EDD automatically checks at start up for the following information: New releases, Updated Bookmarks, New Expeditions, New Exploration list files, Updated Maps, Notifications.  It automatically downloads to your APPDATA folder any new or updated files detected.  No [rest of string was truncated]&quot;;.
         /// </summary>
         public static string EDD_Licence_Mono {
             get {
@@ -218,24 +218,6 @@ namespace EDDiscovery.Properties {
         public static string URLGithubDownload {
             get {
                 return ResourceManager.GetString("URLGithubDownload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://inara.cz/galaxy-starsystem/?search=.
-        /// </summary>
-        public static string URLInaraStarSystem {
-            get {
-                return ResourceManager.GetString("URLInaraStarSystem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://inara.cz/galaxy-station/?search=.
-        /// </summary>
-        public static string URLInaraStation {
-            get {
-                return ResourceManager.GetString("URLInaraStation", resourceCulture);
             }
         }
         

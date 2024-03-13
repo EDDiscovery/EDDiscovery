@@ -16,6 +16,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -30,22 +31,22 @@ namespace EDDiscovery.UserControls
         public string z { get { return textBoxZ.Text; } }
         public bool IsTarget { get { return checkBoxTarget.Checked; } }
         public PlanetMarks SurfaceLocations { get { return SurfaceBookmarks.PlanetMarks; } }
-        public string TagList { get; private set; }
-
-        private string edsmurl = null;
-
-        private HistoryList historyentry;
+        public string Tags { get; private set; }
 
         public BookmarkForm(HistoryList he, bool enabletargetsetting = false)
         {
             InitializeComponent();
-            ExtendedControls.Theme.Current.ApplyDialog(this);
 
-            var enumlist = new Enum[] { EDTx.BookmarkForm_buttonEDSM, EDTx.BookmarkForm_labelName, EDTx.BookmarkForm_checkBoxTarget, EDTx.BookmarkForm_labelBookmarkNotes, EDTx.BookmarkForm_labelTravelNote, EDTx.BookmarkForm_labelTimeMade };
+            bool winborder = ExtendedControls.Theme.Current.ApplyDialog(this);
+            panelTop.Visible = !winborder;
+
+            var enumlist = new Enum[] { EDTx.BookmarkForm_labelName, EDTx.BookmarkForm_checkBoxTarget, EDTx.BookmarkForm_labelBookmarkNotes, EDTx.BookmarkForm_labelTravelNote, EDTx.BookmarkForm_labelTimeMade };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks });
 
             historyentry = he;
             checkBoxTarget.Visible = enabletargetsetting;
+
+            SurfaceBookmarks.TagFilter = "All";
         }
 
         #region External Initialisation
@@ -53,7 +54,7 @@ namespace EDDiscovery.UserControls
         // open an existing bookmark, region or system
         public void Bookmark(BookmarkClass bk)
         {
-            this.Text = "Update Bookmark".T(EDTx.BookmarkForm_UB);
+            labelTitle.Text = this.Text = "Update Bookmark".T(EDTx.BookmarkForm_UB);
             InitialisePos(bk.X, bk.Y, bk.Z);
 
             if (!bk.IsRegion)       // Star..
@@ -62,15 +63,13 @@ namespace EDDiscovery.UserControls
                 textBoxName.ReadOnly = true; // no change
                 textBoxTravelNote.Text = EliteDangerousCore.DB.SystemNoteClass.GetTextNotesOnSystem(bk.StarName);
 
-                var edsm = new EDSMClass();
-                edsmurl = edsm.GetUrlToSystem(bk.StarName);
-                SurfaceBookmarks.Init(bk.StarName, historyentry, bk.PlanetaryMarks);
+                SurfaceBookmarks.Display(bk.StarName, historyentry, () => closing, bk.PlanetaryMarks);
             }
             else
             {
                 textBoxName.Text = bk.Heading;
                 textBoxX.ReadOnly = textBoxY.ReadOnly = textBoxZ.ReadOnly = false;      // enable editing
-                HideEDSM();
+                HideExternalButtonLinks();
                 HideTravelNote();   // in order note
                 HideSurfaceBookmarks();
             }
@@ -80,8 +79,9 @@ namespace EDDiscovery.UserControls
             textBoxBookmarkNotes.ScrollToCaret();
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC).ToString();
 
-            TagList = bk.Tags;
-            RefreshPanelTags();
+            Tags = bk.Tags;
+            var taglist = EDDConfig.BookmarkTagArray(Tags);
+            TagsForm.FillTags(taglist, EDDConfig.Instance.BookmarkTagDictionary, panelTags, panelTags_MouseDown, toolTip);
 
             buttonOK.Text = "Update".T(EDTx.BookmarkForm_Update);
             buttonOK.Enabled = true;
@@ -93,14 +93,14 @@ namespace EDDiscovery.UserControls
         // create a new region bookmark
         public void NewRegionBookmark(DateTime timeutc)              // from map, a region bookmark at this time
         {
-            this.Text = "Create Region Bookmark".T(EDTx.BookmarkForm_RB);
+            labelTitle.Text = this.Text = "Create Region Bookmark".T(EDTx.BookmarkForm_RB);
             textBoxName.Text = "Enter a region name...".T(EDTx.BookmarkForm_RN);
             textBoxName.ClearOnFirstChar = true;
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxX.ReadOnly = textBoxY.ReadOnly = textBoxZ.ReadOnly = false;      // enable editing
 
-            HideEDSM();
+            HideExternalButtonLinks();
             HideTravelNote();   // in order
             HideSurfaceBookmarks();
             buttonDelete.Hide();
@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
         // create a new system bookmark from Isystem
         public void NewSystemBookmark(ISystem system, DateTime timeutc)    // from multipe, create a new system bookmark
         {
-            this.Text = "New System Bookmark".T(EDTx.BookmarkForm_SB);
+            labelTitle.Text = this.Text = "New System Bookmark".T(EDTx.BookmarkForm_SB);
             textBoxName.Text = system.Name;
             textBoxName.ReadOnly = true;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
@@ -120,9 +120,7 @@ namespace EDDiscovery.UserControls
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             InitialisePos(system);
             buttonDelete.Hide();
-            var edsm = new EDSMClass();
-            edsmurl = edsm.GetUrlToSystem(system.Name);
-            SurfaceBookmarks.Init(system.Name, historyentry);
+            SurfaceBookmarks.Display(system.Name, historyentry, () => closing);
             buttonOK.Enabled = true;
         }
 
@@ -143,7 +141,7 @@ namespace EDDiscovery.UserControls
         // New anywhere bookmark
         public void NewFreeEntrySystemBookmark(DateTime timeutc)                     // new system bookmark anywhere
         {
-            this.Text = "New System Bookmark".T(EDTx.BookmarkForm_NSB);
+            labelTitle.Text = this.Text = "New System Bookmark".T(EDTx.BookmarkForm_NSB);
             textBoxName.Text = "Enter a system name...".T(EDTx.BookmarkForm_ESN);
             textBoxName.ClearOnFirstChar = true;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
@@ -154,54 +152,26 @@ namespace EDDiscovery.UserControls
             textBoxName.Focus();
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             buttonDelete.Hide();
-            buttonEDSM.Enabled = false;
+            HideExternalButtonLinks();
             buttonOK.Enabled = false;
             textBoxX.ReadOnly = textBoxY.ReadOnly = textBoxZ.ReadOnly = false;      // enable editing
-            SurfaceBookmarks.Init("", historyentry);
+            SurfaceBookmarks.Display("", historyentry, () => closing);
         }
 
-        private void HideTravelNote() { labelTravelNote.Hide(); textBoxTravelNote.Hide(); ShiftControls(SurfaceBookmarks, textBoxTravelNote); }
-        private void HideSurfaceBookmarks() { SurfaceBookmarks.Hide(); ShiftControls(buttonOK, SurfaceBookmarks); }
-        private void HideEDSM() { buttonEDSM.Hide(); checkBoxTarget.Left = buttonEDSM.Left; }
-
-        private void ShiftControls(Control bot, Control top)
-        {
-            int topline = top.Top;
-            int delta = bot.Top - topline;
-
-            //System.Diagnostics.Debug.WriteLine("Control bot {0} {1} to {2} {3} delta {4}", bot.Name, bot.Top, top.Name, top.Top, delta);
-            foreach (Control c in extPanelScroll.Controls)
-            {
-                if (c.Top >= topline)  // if below..
-                {
-                    //System.Diagnostics.Debug.WriteLine("Control {0} at {1} -> {2}", c.Name, c.Top, c.Top - delta);
-                    c.Top -= delta;
-                }
-            }
-            //System.Diagnostics.Debug.WriteLine("height now " + Height + " delta " + delta);
-            Height -= delta;
+        private void HideTravelNote() 
+        { 
+            labelTravelNote.Visible = textBoxTravelNote.Visible = false;
+            this.ShiftControls(textBoxTravelNote.Top, new Point(0, SurfaceBookmarks.Top - textBoxTravelNote.Top), true);
         }
-
-        private void RefreshPanelTags()
+        private void HideSurfaceBookmarks()
         {
-            panelTags.Controls.Clear();
-            string[] taglist = TagList.SplitNoEmptyStartFinish(';');
-            int pos = 2;
-            for (int i = 0; i < taglist.Length; i++)
-            {
-                if (!EDDConfig.Instance.BookmarkTagImage.TryGetValue(taglist[i], out Image img))
-                    img = EDDiscovery.Icons.Controls.Star;
-                Panel p = new Panel();
-                p.BackgroundImage = img;
-                p.Bounds = new System.Drawing.Rectangle(pos, 0, 28, 28);
-                p.BackgroundImageLayout = ImageLayout.Stretch;
-                p.MouseDown += panelTags_MouseDown;
-                panelTags.Controls.Add(p);
-                toolTip.SetToolTip(p, taglist[i]);
-                pos += 32;
-            }
-
-            toolTip.SetToolTip(panelTags, TagList);
+            SurfaceBookmarks.Visible = false;
+            this.ShiftControls(SurfaceBookmarks.Top, new Point(0, SurfaceBookmarks.Height), true);
+        }
+        private void HideExternalButtonLinks() 
+        {
+            extButtonInaraSystem.Visible = extButtonEDSMSystem.Visible = extButtonSpanshSystem.Visible = false;
+            checkBoxTarget.Left = extButtonEDSMSystem.Left; 
         }
 
         #endregion
@@ -210,15 +180,16 @@ namespace EDDiscovery.UserControls
         private void panelTags_MouseDown(object sender, MouseEventArgs e)
         {
             TagsForm.EditTags(this.FindForm(),
-                                        EDDConfig.Instance.BookmarkTagImage, TagList,
+                                        EDDConfig.Instance.BookmarkTagDictionary, "", Tags,
                                         panelTags.PointToScreen(new Point(0, 0)),
-                                        TagsChanged, null);
+                                        TagsChanged, null, EDDConfig.TagSplitStringBK);
         }
 
         private void TagsChanged(string newtags, Object tag)
         {
-            TagList = newtags;
-            RefreshPanelTags();
+            Tags = newtags;
+            var taglist = EDDConfig.BookmarkTagArray(Tags);
+            TagsForm.FillTags(taglist, EDDConfig.Instance.BookmarkTagDictionary, panelTags, panelTags_MouseDown, toolTip);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -227,7 +198,7 @@ namespace EDDiscovery.UserControls
             Close();
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void extButtonDrawnClose_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
@@ -245,18 +216,16 @@ namespace EDDiscovery.UserControls
         }
         private void textBox_TextNameChanged(object sender, EventArgs e)
         {
-            ISystem f = SystemCache.FindSystem(textBoxName.Text, null);       // no edsm lookup, too slow to do interactively.
+            ISystem f = SystemCache.FindSystem(textBoxName.Text, null);       // no web lookup, too slow to do interactively.
             if (f != null && f.HasCoordinate)
             {
                 InitialisePos(f);
-                var edsm = new EDSMClass();
-                edsmurl = edsm.GetUrlToSystem(f.Name);
-                SurfaceBookmarks.Init(f.Name, historyentry);
+                SurfaceBookmarks.Display(f.Name, historyentry, () => closing);
             }
             else
                 textBoxX.Text = textBoxY.Text = textBoxZ.Text = "";
 
-            buttonEDSM.Enabled = buttonOK.Enabled = ValidateData() && f != null;
+            buttonOK.Enabled = ValidateData() && f != null;
         }
 
         private bool ValidateData()
@@ -265,10 +234,23 @@ namespace EDDiscovery.UserControls
             return (textBoxName.Text.Length > 0 && double.TryParse(textBoxX.Text, out xp) && double.TryParse(textBoxY.Text, out yp) && double.TryParse(textBoxZ.Text, out zp));
         }
 
-        private void buttonEDSM_Click(object sender, EventArgs e)
+        private void extButtonEDSMSystem_Click(object sender, EventArgs e)
         {
+            var edsm = new EDSMClass();
+            string edsmurl = edsm.GetUrlToSystem(textBoxName.Text);
             if (edsmurl != null)
                 BaseUtils.BrowserInfo.LaunchBrowser(edsmurl);
+        }
+
+        private void extButtonInaraSystem_Click(object sender, EventArgs e)
+        {
+            var ir = new EliteDangerousCore.Inara.InaraClass();
+            ir.LaunchBrowserForSystem(textBoxName.Text);
+        }
+
+        private void extButtonSpanshSystem_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(textBoxName.Text);
         }
 
         private void InitialisePos(ISystem system)
@@ -294,7 +276,18 @@ namespace EDDiscovery.UserControls
         { 
             OnCaptionMouseUp((Control) sender, e);
         }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            closing = true;
+        }
+
+        private bool closing = false;
+        private HistoryList historyentry;
+
         #endregion
+
 
     }
 }

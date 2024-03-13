@@ -177,7 +177,6 @@ namespace EDDiscovery
         UserControlForm_extButtonDrawnTransparentMode_ToolTip, // ToolTip 'Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n'
         UserControlForm_extButtonDrawnClose_ToolTip, // ToolTip 'Close'
 
-        BookmarkForm_buttonEDSM, // Control 'EDSM'
         BookmarkForm_labelName, // Control 'Name'
         BookmarkForm_checkBoxTarget, // Control 'Make Target'
         BookmarkForm_labelBookmarkNotes, // Control 'Bookmark Notes'
@@ -202,6 +201,8 @@ namespace EDDiscovery
         SurfaceBookmarkUserControl_Longitude, // Column Header 'Longitude'
         SurfaceBookmarkUserControl_Valid, // Column Header 'Saveable'
         SurfaceBookmarkUserControl_labelSurface, // Control 'Surface Bookmarks In System'
+        SurfaceBookmarkUserControl_ColTags, // Control 'Tags'
+        SurfaceBookmarkUserControl_labelSearch, // Control 'Search'
         SurfaceBookmarkUserControl_sendToCompassToolStripMenuItem, // ToolStrip control 'Send to compass'
         SurfaceBookmarkUserControl_deleteToolStripMenuItem, // ToolStrip control 'Delete Row'
         SurfaceBookmarkUserControl_addPlanetManuallyToolStripMenuItem, // ToolStrip control 'Manually Add Planet'

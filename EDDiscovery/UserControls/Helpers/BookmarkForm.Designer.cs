@@ -57,23 +57,30 @@ namespace EDDiscovery.UserControls
             this.labelZ = new System.Windows.Forms.Label();
             this.textBoxTime = new ExtendedControls.ExtTextBox();
             this.buttonOK = new ExtendedControls.ExtButton();
-            this.buttonCancel = new ExtendedControls.ExtButton();
             this.buttonDelete = new ExtendedControls.ExtButton();
             this.labelTravelNote = new System.Windows.Forms.Label();
             this.textBoxTravelNote = new ExtendedControls.ExtRichTextBox();
             this.checkBoxTarget = new ExtendedControls.ExtCheckBox();
-            this.buttonEDSM = new ExtendedControls.ExtButton();
             this.labelBadSystem = new System.Windows.Forms.Label();
             this.textBoxName = new ExtendedControls.ExtTextBoxAutoComplete();
             this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
+            this.extButtonSpanshSystem = new ExtendedControls.ExtButton();
+            this.extButtonInaraSystem = new ExtendedControls.ExtButton();
+            this.extButtonEDSMSystem = new ExtendedControls.ExtButton();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.panelTags = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extButtonDrawnClose = new ExtendedControls.ExtButtonDrawn();
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.labelTitle = new System.Windows.Forms.Label();
+            this.panelBotButtons = new System.Windows.Forms.Panel();
             this.SurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
             this.extPanelScroll.SuspendLayout();
             this.panelOuter.SuspendLayout();
+            this.panelTop.SuspendLayout();
+            this.panelBotButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelName
@@ -276,7 +283,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(752, 671);
+            this.buttonOK.Location = new System.Drawing.Point(766, 8);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 24);
             this.buttonOK.TabIndex = 1;
@@ -284,19 +291,9 @@ namespace EDDiscovery.UserControls
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
-            // buttonCancel
-            // 
-            this.buttonCancel.Location = new System.Drawing.Point(624, 671);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(100, 24);
-            this.buttonCancel.TabIndex = 2;
-            this.buttonCancel.Text = "%Cancel%";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(13, 671);
+            this.buttonDelete.Location = new System.Drawing.Point(10, 8);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(100, 24);
             this.buttonDelete.TabIndex = 9;
@@ -353,7 +350,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxTarget.ImageIndeterminate = null;
             this.checkBoxTarget.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxTarget.ImageUnchecked = null;
-            this.checkBoxTarget.Location = new System.Drawing.Point(584, 21);
+            this.checkBoxTarget.Location = new System.Drawing.Point(694, 24);
             this.checkBoxTarget.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxTarget.Name = "checkBoxTarget";
             this.checkBoxTarget.Size = new System.Drawing.Size(87, 17);
@@ -361,16 +358,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxTarget.Text = "Make Target";
             this.checkBoxTarget.TickBoxReductionRatio = 0.75F;
             this.checkBoxTarget.UseVisualStyleBackColor = true;
-            // 
-            // buttonEDSM
-            // 
-            this.buttonEDSM.Location = new System.Drawing.Point(488, 18);
-            this.buttonEDSM.Name = "buttonEDSM";
-            this.buttonEDSM.Size = new System.Drawing.Size(75, 23);
-            this.buttonEDSM.TabIndex = 11;
-            this.buttonEDSM.Text = "EDSM";
-            this.buttonEDSM.UseVisualStyleBackColor = true;
-            this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
             // 
             // labelBadSystem
             // 
@@ -418,14 +405,17 @@ namespace EDDiscovery.UserControls
             // 
             // statusStripCustom
             // 
-            this.statusStripCustom.Location = new System.Drawing.Point(0, 704);
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 766);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(895, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(899, 22);
             this.statusStripCustom.TabIndex = 32;
             // 
             // extPanelScroll
             // 
             this.extPanelScroll.Controls.Add(this.extScrollBar1);
+            this.extPanelScroll.Controls.Add(this.extButtonSpanshSystem);
+            this.extPanelScroll.Controls.Add(this.extButtonInaraSystem);
+            this.extPanelScroll.Controls.Add(this.extButtonEDSMSystem);
             this.extPanelScroll.Controls.Add(this.panelTags);
             this.extPanelScroll.Controls.Add(this.textBoxTravelNote);
             this.extPanelScroll.Controls.Add(this.textBoxBookmarkNotes);
@@ -437,14 +427,10 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.labelBookmarkNotes);
             this.extPanelScroll.Controls.Add(this.textBoxZ);
             this.extPanelScroll.Controls.Add(this.labelZ);
-            this.extPanelScroll.Controls.Add(this.buttonOK);
             this.extPanelScroll.Controls.Add(this.labelY);
-            this.extPanelScroll.Controls.Add(this.buttonCancel);
             this.extPanelScroll.Controls.Add(this.labelX);
-            this.extPanelScroll.Controls.Add(this.buttonDelete);
             this.extPanelScroll.Controls.Add(this.checkBoxTarget);
             this.extPanelScroll.Controls.Add(this.labelName);
-            this.extPanelScroll.Controls.Add(this.buttonEDSM);
             this.extPanelScroll.Controls.Add(this.SurfaceBookmarks);
             this.extPanelScroll.Controls.Add(this.textBoxName);
             this.extPanelScroll.Controls.Add(this.labelBadSystem);
@@ -452,11 +438,45 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.FlowControlsLeftToRight = false;
             this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
             this.extPanelScroll.Name = "extPanelScroll";
-            this.extPanelScroll.Size = new System.Drawing.Size(893, 702);
+            this.extPanelScroll.Size = new System.Drawing.Size(897, 702);
             this.extPanelScroll.TabIndex = 15;
             this.extPanelScroll.VerticalScrollBarDockRight = true;
             this.extPanelScroll.MouseDown += new System.Windows.Forms.MouseEventHandler(this.extPanelScroll_MouseDown);
             this.extPanelScroll.MouseUp += new System.Windows.Forms.MouseEventHandler(this.extPanelScroll_MouseUp);
+            // 
+            // extButtonSpanshSystem
+            // 
+            this.extButtonSpanshSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonSpanshSystem.Image = global::EDDiscovery.Icons.Controls.spansh;
+            this.extButtonSpanshSystem.Location = new System.Drawing.Point(617, 16);
+            this.extButtonSpanshSystem.Name = "extButtonSpanshSystem";
+            this.extButtonSpanshSystem.Padding = new System.Windows.Forms.Padding(2);
+            this.extButtonSpanshSystem.Size = new System.Drawing.Size(48, 28);
+            this.extButtonSpanshSystem.TabIndex = 17;
+            this.extButtonSpanshSystem.Text = "S";
+            this.extButtonSpanshSystem.Click += new System.EventHandler(this.extButtonSpanshSystem_Click);
+            // 
+            // extButtonInaraSystem
+            // 
+            this.extButtonInaraSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonInaraSystem.Image = global::EDDiscovery.Icons.Controls.Inara;
+            this.extButtonInaraSystem.Location = new System.Drawing.Point(551, 16);
+            this.extButtonInaraSystem.Name = "extButtonInaraSystem";
+            this.extButtonInaraSystem.Padding = new System.Windows.Forms.Padding(2);
+            this.extButtonInaraSystem.Size = new System.Drawing.Size(48, 28);
+            this.extButtonInaraSystem.TabIndex = 18;
+            this.extButtonInaraSystem.Click += new System.EventHandler(this.extButtonInaraSystem_Click);
+            // 
+            // extButtonEDSMSystem
+            // 
+            this.extButtonEDSMSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonEDSMSystem.Image = global::EDDiscovery.Icons.Controls.EDSM;
+            this.extButtonEDSMSystem.Location = new System.Drawing.Point(485, 16);
+            this.extButtonEDSMSystem.Name = "extButtonEDSMSystem";
+            this.extButtonEDSMSystem.Padding = new System.Windows.Forms.Padding(2);
+            this.extButtonEDSMSystem.Size = new System.Drawing.Size(48, 28);
+            this.extButtonEDSMSystem.TabIndex = 19;
+            this.extButtonEDSMSystem.Click += new System.EventHandler(this.extButtonEDSMSystem_Click);
             // 
             // extScrollBar1
             // 
@@ -470,8 +490,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar1.HideScrollBar = false;
             this.extScrollBar1.LargeChange = 10;
-            this.extScrollBar1.Location = new System.Drawing.Point(877, 0);
-            this.extScrollBar1.Maximum = 35;
+            this.extScrollBar1.Location = new System.Drawing.Point(881, 0);
+            this.extScrollBar1.Maximum = -12;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -485,8 +505,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
-            this.extScrollBar1.Value = 26;
-            this.extScrollBar1.ValueLimited = 26;
+            this.extScrollBar1.Value = -12;
+            this.extScrollBar1.ValueLimited = -12;
             // 
             // panelTags
             // 
@@ -497,30 +517,84 @@ namespace EDDiscovery.UserControls
             this.panelTags.TabIndex = 16;
             this.panelTags.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTags_MouseDown);
             // 
+            // extButtonDrawnClose
+            // 
+            this.extButtonDrawnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnClose.AutoEllipsis = false;
+            this.extButtonDrawnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnClose.Image = null;
+            this.extButtonDrawnClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
+            this.extButtonDrawnClose.Location = new System.Drawing.Point(872, 2);
+            this.extButtonDrawnClose.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnClose.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnClose.MouseSelectedColorEnable = true;
+            this.extButtonDrawnClose.Name = "extButtonDrawnClose";
+            this.extButtonDrawnClose.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnClose.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnClose.Selectable = false;
+            this.extButtonDrawnClose.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnClose.TabIndex = 26;
+            this.extButtonDrawnClose.TabStop = false;
+            this.extButtonDrawnClose.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip.SetToolTip(this.extButtonDrawnClose, "Close");
+            this.extButtonDrawnClose.UseMnemonic = true;
+            this.extButtonDrawnClose.Click += new System.EventHandler(this.extButtonDrawnClose_Click);
+            // 
             // panelOuter
             // 
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOuter.Controls.Add(this.extPanelScroll);
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 0);
+            this.panelOuter.Location = new System.Drawing.Point(0, 28);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(895, 704);
+            this.panelOuter.Size = new System.Drawing.Size(899, 704);
             this.panelOuter.TabIndex = 17;
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.labelTitle);
+            this.panelTop.Controls.Add(this.extButtonDrawnClose);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(899, 28);
+            this.panelTop.TabIndex = 17;
+            // 
+            // labelTitle
+            // 
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Location = new System.Drawing.Point(4, 6);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(43, 13);
+            this.labelTitle.TabIndex = 27;
+            this.labelTitle.Text = "<code>";
+            // 
+            // panelBotButtons
+            // 
+            this.panelBotButtons.Controls.Add(this.buttonOK);
+            this.panelBotButtons.Controls.Add(this.buttonDelete);
+            this.panelBotButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBotButtons.Location = new System.Drawing.Point(0, 732);
+            this.panelBotButtons.Name = "panelBotButtons";
+            this.panelBotButtons.Size = new System.Drawing.Size(899, 34);
+            this.panelBotButtons.TabIndex = 17;
             // 
             // SurfaceBookmarks
             // 
             this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 392);
             this.SurfaceBookmarks.Name = "SurfaceBookmarks";
-            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 261);
+            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 289);
             this.SurfaceBookmarks.TabIndex = 12;
             // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(895, 726);
+            this.ClientSize = new System.Drawing.Size(899, 788);
             this.Controls.Add(this.panelOuter);
+            this.Controls.Add(this.panelBotButtons);
             this.Controls.Add(this.statusStripCustom);
+            this.Controls.Add(this.panelTop);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -528,6 +602,9 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.ResumeLayout(false);
             this.extPanelScroll.PerformLayout();
             this.panelOuter.ResumeLayout(false);
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
+            this.panelBotButtons.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -547,12 +624,10 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelZ;
         private ExtendedControls.ExtTextBox textBoxTime;
         private ExtendedControls.ExtButton buttonOK;
-        private ExtendedControls.ExtButton buttonCancel;
         private ExtendedControls.ExtButton buttonDelete;
         private System.Windows.Forms.Label labelTravelNote;
         private ExtendedControls.ExtRichTextBox textBoxTravelNote;
         private ExtendedControls.ExtCheckBox checkBoxTarget;
-        private ExtendedControls.ExtButton buttonEDSM;
         private SurfaceBookmarkUserControl SurfaceBookmarks;
         private ExtendedControls.ExtTextBoxAutoComplete textBoxName;
         private System.Windows.Forms.Label labelBadSystem;
@@ -562,5 +637,12 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelTags;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelOuter;
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Panel panelBotButtons;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnClose;
+        private System.Windows.Forms.Label labelTitle;
+        private ExtendedControls.ExtButton extButtonSpanshSystem;
+        private ExtendedControls.ExtButton extButtonInaraSystem;
+        private ExtendedControls.ExtButton extButtonEDSMSystem;
     }
 }

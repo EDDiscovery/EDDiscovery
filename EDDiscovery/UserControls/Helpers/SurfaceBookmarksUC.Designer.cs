@@ -30,6 +30,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SurfaceBookmarkUserControl));
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sendToCompassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,17 +38,22 @@ namespace EDDiscovery.UserControls
             this.labelSurface = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewMarks = new BaseUtils.DataGridViewBaseEnhancements();
+            this.dataGridView = new BaseUtils.DataGridViewBaseEnhancements();
             this.BodyName = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.SurfaceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SurfaceDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Valid = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.textBoxFilter = new ExtendedControls.ExtTextBox();
+            this.buttonFilter = new ExtendedControls.ExtButton();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +91,8 @@ namespace EDDiscovery.UserControls
             // labelSurface
             // 
             this.labelSurface.AutoSize = true;
-            this.labelSurface.Location = new System.Drawing.Point(3, 0);
+            this.labelSurface.Location = new System.Drawing.Point(244, 4);
+            this.labelSurface.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
             this.labelSurface.Name = "labelSurface";
             this.labelSurface.Size = new System.Drawing.Size(149, 13);
             this.labelSurface.TabIndex = 2;
@@ -94,17 +101,18 @@ namespace EDDiscovery.UserControls
             // dataViewScrollerPanel
             // 
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewMarks);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 13);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(657, 187);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(657, 170);
             this.dataViewScrollerPanel.TabIndex = 6;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom1
             // 
+            this.vScrollBarCustom1.AlwaysHideScrollBar = false;
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
@@ -120,7 +128,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 187);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 170);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 7;
@@ -131,32 +139,37 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.Value = 0;
             this.vScrollBarCustom1.ValueLimited = 0;
             // 
-            // dataGridViewMarks
+            // dataGridView
             // 
-            this.dataGridViewMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewMarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridViewMarks.ColumnHeaderMenuStrip = null;
-            this.dataGridViewMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridView.AutoSortByColumnName = false;
+            this.dataGridView.ColumnHeaderMenuStrip = null;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BodyName,
             this.SurfaceName,
             this.SurfaceDesc,
             this.Latitude,
             this.Longitude,
+            this.ColTags,
             this.Valid});
-            this.dataGridViewMarks.ContextMenuStrip = this.contextMenuStrip;
-            this.dataGridViewMarks.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewMarks.Name = "dataGridViewMarks";
-            this.dataGridViewMarks.RowHeaderMenuStrip = null;
-            this.dataGridViewMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewMarks.SingleRowSelect = true;
-            this.dataGridViewMarks.Size = new System.Drawing.Size(641, 187);
-            this.dataGridViewMarks.TabIndex = 3;
-            this.dataGridViewMarks.TopLeftHeaderMenuStrip = null;
-            this.dataGridViewMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMarks_CellEndEdit);
-            this.dataGridViewMarks.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewMarks_CellValidating);
-            this.dataGridViewMarks.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewMarks_DataError);
-            this.dataGridViewMarks.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewMarks_UserDeletingRow);
+            this.dataGridView.ContextMenuStrip = this.contextMenuStrip;
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.RowHeaderMenuStrip = null;
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.SingleRowSelect = true;
+            this.dataGridView.Size = new System.Drawing.Size(641, 170);
+            this.dataGridView.TabIndex = 3;
+            this.dataGridView.TopLeftHeaderMenuStrip = null;
+            this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
+            this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMarks_CellEndEdit);
+            this.dataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewMarks_CellValidating);
+            this.dataGridView.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridView_ColumnWidthChanged);
+            this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewMarks_DataError);
+            this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewMarks_RowPostPaint);
+            this.dataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewMarks_UserDeletingRow);
             // 
             // BodyName
             // 
@@ -180,16 +193,27 @@ namespace EDDiscovery.UserControls
             // 
             // Latitude
             // 
+            this.Latitude.FillWeight = 75F;
             this.Latitude.HeaderText = "Latitude";
             this.Latitude.Name = "Latitude";
             // 
             // Longitude
             // 
+            this.Longitude.FillWeight = 75F;
             this.Longitude.HeaderText = "Longitude";
             this.Longitude.Name = "Longitude";
             // 
+            // ColTags
+            // 
+            this.ColTags.FillWeight = 150F;
+            this.ColTags.HeaderText = "Tags";
+            this.ColTags.MinimumWidth = 32;
+            this.ColTags.Name = "ColTags";
+            this.ColTags.ReadOnly = true;
+            // 
             // Valid
             // 
+            this.Valid.FillWeight = 60F;
             this.Valid.HeaderText = "Saveable";
             this.Valid.Name = "Valid";
             this.Valid.ReadOnly = true;
@@ -197,12 +221,71 @@ namespace EDDiscovery.UserControls
             // panelTop
             // 
             this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.labelSearch);
+            this.panelTop.Controls.Add(this.textBoxFilter);
+            this.panelTop.Controls.Add(this.buttonFilter);
             this.panelTop.Controls.Add(this.labelSurface);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(657, 13);
+            this.panelTop.Size = new System.Drawing.Size(657, 30);
             this.panelTop.TabIndex = 3;
+            // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(0, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 28;
+            this.labelSearch.Text = "Search";
+            this.labelSearch.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
+            // 
+            // textBoxFilter
+            // 
+            this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxFilter.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderColorScaling = 0.5F;
+            this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFilter.ClearOnFirstChar = false;
+            this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFilter.EndButtonEnable = true;
+            this.textBoxFilter.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
+            this.textBoxFilter.EndButtonSize16ths = 10;
+            this.textBoxFilter.EndButtonVisible = false;
+            this.textBoxFilter.InErrorCondition = false;
+            this.textBoxFilter.Location = new System.Drawing.Point(49, 4);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.textBoxFilter.Multiline = false;
+            this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.ReadOnly = false;
+            this.textBoxFilter.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxFilter.SelectionLength = 0;
+            this.textBoxFilter.SelectionStart = 0;
+            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
+            this.textBoxFilter.TabIndex = 27;
+            this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxFilter.TextNoChange = "";
+            this.textBoxFilter.WordWrap = true;
+            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
+            // 
+            // buttonFilter
+            // 
+            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
+            this.buttonFilter.Location = new System.Drawing.Point(205, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Name = "buttonFilter";
+            this.buttonFilter.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilter.TabIndex = 26;
+            this.buttonFilter.UseVisualStyleBackColor = true;
+            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // SurfaceBookmarkUserControl
             // 
@@ -214,7 +297,7 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(657, 200);
             this.contextMenuStrip.ResumeLayout(false);
             this.dataViewScrollerPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.ResumeLayout(false);
@@ -224,20 +307,25 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private BaseUtils.DataGridViewBaseEnhancements dataGridViewMarks;
+        private BaseUtils.DataGridViewBaseEnhancements dataGridView;
         private System.Windows.Forms.Label labelSurface;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem sendToCompassToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewComboBoxColumn BodyName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SurfaceName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SurfaceDesc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Latitude;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Longitude;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Valid;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addPlanetManuallyToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private ExtendedControls.ExtButton buttonFilter;
+        private System.Windows.Forms.Label labelSearch;
+        private ExtendedControls.ExtTextBox textBoxFilter;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.DataGridViewComboBoxColumn BodyName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SurfaceName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SurfaceDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Latitude;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Longitude;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Valid;
     }
 }

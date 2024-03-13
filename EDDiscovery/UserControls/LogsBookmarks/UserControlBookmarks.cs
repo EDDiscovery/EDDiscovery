@@ -17,7 +17,6 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -30,6 +29,8 @@ namespace EDDiscovery.UserControls
 
         const int TagSize = 24;
         private bool updating_grid;
+        const string dbTags = "TagFilter";
+        const string dbSurfaceTags = "TagFilter";
 
         #region init
         public UserControlBookmarks()
@@ -43,6 +44,7 @@ namespace EDDiscovery.UserControls
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
+
             GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
 
             var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName,
@@ -58,6 +60,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripBookmarks, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            userControlSurfaceBookmarks.TagFilter = GetSetting(dbSurfaceTags, "All");
         }
 
         public override void LoadLayout()
@@ -70,6 +74,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridView);
 
             SaveBackAnyChanges();
+            
+            PutSetting(dbSurfaceTags, userControlSurfaceBookmarks.TagFilter);
 
             searchtimer.Dispose();
 
@@ -98,7 +104,7 @@ namespace EDDiscovery.UserControls
             dataGridView.SuspendLayout();
 
             dataGridView.Rows.Clear();
-            
+
             foreach (BookmarkClass bk in GlobalBookMarkList.Instance.Bookmarks)
             {
                 //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
@@ -111,15 +117,21 @@ namespace EDDiscovery.UserControls
                     bk.Z.ToString("0.##"),
                     "");
                 rw.Tag = bk;
-                string tags = bk.Tags ?? "";
+                string tags = bk.Tags ?? "";        // character separated and end tagged list
                 rw.Cells[ColTags.Index].Tag = tags;
-                rw.Cells[ColTags.Index].ToolTipText = tags;
-                TagsForm.SetMinHeight(tags, rw, ColTags.Width, TagSize);
+                var taglist = EDDConfig.BookmarkTagArray(tags);
+                rw.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
+                TagsForm.SetMinHeight(taglist.Length, rw, ColTags.Width, TagSize);
 
                 dataGridView.Rows.Add(rw);
             }
 
+            string tagfilter = GetSetting(dbTags, "All");
+            if (textBoxFilter.Text.HasChars() || tagfilter != ExtendedControls.CheckedIconUserControl.All)
+                FilterView();
+
             dataGridView.ResumeLayout();
+
             dataViewScrollerPanel.ResumeLayout();
 
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
@@ -136,7 +148,8 @@ namespace EDDiscovery.UserControls
         private void dataGridViewBookMarks_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-            TagsForm.PaintTags(rw.Cells[ColTags.Index].Tag as string, EDDConfig.Instance.BookmarkTagImage,
+            var taglist = EDDConfig.BookmarkTagArray(rw.Cells[ColTags.Index].Tag as string);
+            TagsForm.PaintTags(taglist, EDDConfig.Instance.BookmarkTagDictionary,
                             dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false), e.Graphics, TagSize);
         }
 
@@ -145,7 +158,10 @@ namespace EDDiscovery.UserControls
             if (e.Column == ColTags)
             {
                 foreach (DataGridViewRow rw in dataGridView.Rows)
-                    TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize);
+                {
+                    var taglist = EDDConfig.BookmarkTagArray(rw.Cells[ColTags.Index].Tag as string);
+                    TagsForm.SetMinHeight(taglist.Length, rw, ColTags.Width, TagSize);
+                }
             }
         }
 
@@ -168,7 +184,7 @@ namespace EDDiscovery.UserControls
                 if (bk.IsRegion)
                     userControlSurfaceBookmarks.Disable();
                 else
-                    userControlSurfaceBookmarks.Init(bk.StarName,DiscoveryForm.History, bk.PlanetaryMarks);
+                    userControlSurfaceBookmarks.Display(bk.StarName,DiscoveryForm.History, ()=>IsClosed, bk.PlanetaryMarks);
             }
             else
             {
@@ -292,11 +308,11 @@ namespace EDDiscovery.UserControls
         private void buttonTags_Click(object sender, EventArgs e)
         {
             TagsForm tg = new TagsForm();
-            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.Instance.BookmarkTagImage);
+            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.TagSplitStringBK, EDDConfig.Instance.BookmarkTagDictionary);
 
             if (tg.ShowDialog() == DialogResult.OK)
             {
-                EDDConfig.Instance.BookmarkTagImage = tg.Result;
+                EDDConfig.Instance.BookmarkTagDictionary = tg.Result;
             }
         }
 
@@ -309,17 +325,33 @@ namespace EDDiscovery.UserControls
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
             searchtimer.Stop();
-            this.Cursor = Cursors.WaitCursor;
-
             SaveBackAnyChanges();
-
-            dataGridView.FilterGridView(textBoxFilter.Text);
-
+            FilterView();
             RefreshCurrentEdit();
-
-            this.Cursor = Cursors.Default;
         }
 
+        private void buttonFilter_Click(object sender, EventArgs e)
+        {
+            string curtags = TagsForm.UniqueTags(GlobalBookMarkList.Instance.GetAllTags(true), EDDConfig.TagSplitStringBK);
+            TagsForm.EditTags(this.FindForm(),
+                                        EDDConfig.Instance.BookmarkTagDictionary, curtags, GetSetting(dbTags, "All"),
+                                        buttonFilter.PointToScreen(new System.Drawing.Point(0,buttonFilter.Height)),
+                                        TagFilterChanged, null, EDDConfig.TagSplitStringBK,
+                                        true,// we want ALL back to include everything in case we don't know the tag (due to it being removed)
+                                        true);          // and we want Or/empty
+        }
+
+        private void TagFilterChanged(string newtags, Object tag)
+        {
+            PutSetting(dbTags, newtags);
+            FilterView();
+        }
+
+        private void FilterView()
+        {
+            string tags = GetSetting(dbTags, "All");
+            dataGridView.FilterGridView((row) => row.IsTextInRow(textBoxFilter.Text) && TagsForm.AreTagsInFilter(row.Cells[ColTags.Index].Tag, tags, EDDConfig.TagSplitStringBK));
+        }
 
 
         #endregion
@@ -332,23 +364,23 @@ namespace EDDiscovery.UserControls
             {
                 DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
                 if (e.ColumnIndex == ColTags.Index)
-                    EditTags(rw);
+                {
+                    string taglist = rw.Cells[ColTags.Index].Tag as string;
+                    TagsForm.EditTags(this.FindForm(),
+                                                EDDConfig.Instance.BookmarkTagDictionary, taglist, taglist,
+                                                dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false).Location),
+                                                TagsChanged, rw, EDDConfig.TagSplitStringBK);
+                }
             }
-        }
-
-        private void EditTags(DataGridViewRow rw)
-        {
-            TagsForm.EditTags(this.FindForm(),
-                                        EDDConfig.Instance.BookmarkTagImage, rw.Cells[ColTags.Index].Tag as string,
-                                        dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false).Location),
-                                        TagsChanged, rw);
         }
 
         private void TagsChanged(string newtags, Object tag)
         {
             DataGridViewRow rw = tag as DataGridViewRow;
             rw.Cells[ColTags.Index].Tag = newtags;
-            TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize);
+            var taglist = EDDConfig.BookmarkTagArray(newtags);
+            rw.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
+            TagsForm.SetMinHeight(taglist.Length, rw, ColTags.Width, TagSize);
             dataGridView.InvalidateRow(rw.Index);
 
             BookmarkClass bk = (BookmarkClass)rw.Tag;
@@ -637,5 +669,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }

@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
         private string dbStartDateOn = "SDOn";
         private string dbEndDate = "ED";
         private string dbEndDateOn = "EDOn";
+        const string dbTags = "TagFilter";
 
         const int TagSize = 24;
 
@@ -148,8 +149,9 @@ namespace EDDiscovery.UserControls
                         string tags = entry.Tags ?? "";
 
                         rw.Cells[ColTags.Index].Tag = tags;
-                        rw.Cells[ColTags.Index].ToolTipText = tags;
-                        TagsForm.SetMinHeight(tags, rw, ColTags.Width, TagSize);
+                        var taglist = EDDConfig.CaptainsLogTagArray(tags);
+                        rw.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
+                        TagsForm.SetMinHeight(taglist.Length, rw, ColTags.Width, TagSize);
 
                         dataGridView.Rows.Add(rw);
                     }
@@ -161,9 +163,10 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                 
-            if ( textBoxFilter.Text.HasChars() )
-                dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
+
+            string tagfilter = GetSetting(dbTags, "All");
+            if (textBoxFilter.Text.HasChars() || tagfilter != ExtendedControls.CheckedIconUserControl.All)
+                FilterView();
 
             if (lastrow >= 0 && lastrow < dataGridView.Rows.Count && dataGridView.Rows[lastrow].Visible)
                 dataGridView.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridView.Rows.Count - 1));
@@ -172,7 +175,8 @@ namespace EDDiscovery.UserControls
         private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-            TagsForm.PaintTags(rw.Cells[ColTags.Index].Tag as string, EDDConfig.Instance.CaptainsLogTagImage, 
+            var taglist = EDDConfig.CaptainsLogTagArray(rw.Cells[ColTags.Index].Tag as string);
+            TagsForm.PaintTags(taglist, EDDConfig.Instance.CaptainsLogTagDictionary, 
                                 dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false), e.Graphics, TagSize);
         }
 
@@ -182,7 +186,10 @@ namespace EDDiscovery.UserControls
             if (e.Column == ColTags)
             {
                 foreach (DataGridViewRow rw in dataGridView.Rows)
-                    TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize); 
+                {
+                    var taglist = EDDConfig.CaptainsLogTagArray(rw.Cells[ColTags.Index].Tag as string);
+                    TagsForm.SetMinHeight(taglist.Length, rw, ColTags.Width, TagSize);
+                }
             }
         }
 
@@ -256,11 +263,11 @@ namespace EDDiscovery.UserControls
         private void buttonTags_Click(object sender, EventArgs e)
         {
             TagsForm tg = new TagsForm();
-            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.Instance.CaptainsLogTagImage);
+            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.TagSplitStringCL, EDDConfig.Instance.CaptainsLogTagDictionary);
 
             if (tg.ShowDialog() == DialogResult.OK)
             {
-                EDDConfig.Instance.CaptainsLogTagImage = tg.Result;
+                EDDConfig.Instance.CaptainsLogTagDictionary = tg.Result;
                 Display();
             }
         }
@@ -355,17 +362,21 @@ namespace EDDiscovery.UserControls
 
         private void EditTags(DataGridViewRow rw)
         {
+            string taglist = rw.Cells[ColTags.Index].Tag as string;
             TagsForm.EditTags(this.FindForm(), 
-                                        EDDConfig.Instance.CaptainsLogTagImage, rw.Cells[ColTags.Index].Tag as string,
+                                        EDDConfig.Instance.CaptainsLogTagDictionary, taglist, taglist,
                                         dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(ColTags.Index, rw.Index, false).Location),
-                                        TagsChanged, rw);
+                                        TagsChanged, rw, EDDConfig.TagSplitStringCL);
         }
 
         private void TagsChanged(string newtags, Object tag)
         {
             DataGridViewRow rw = tag as DataGridViewRow;
+            System.Diagnostics.Debug.Assert(rw.Index >= 0);
             rw.Cells[ColTags.Index].Tag = newtags;
-            TagsForm.SetMinHeight(rw.Cells[ColTags.Index].Tag as string, rw, ColTags.Width, TagSize);
+            var taglist = EDDConfig.CaptainsLogTagArray(newtags);
+            rw.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
+            TagsForm.SetMinHeight(taglist.Length, rw, ColTags.Width, TagSize);
             StoreRow(rw);
             dataGridView.InvalidateRow(rw.Index);
         }
@@ -467,11 +478,31 @@ namespace EDDiscovery.UserControls
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
             searchtimer.Stop();
-            this.Cursor = Cursors.WaitCursor;
+            FilterView();
+        }
 
-            dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
+        private void buttonFilter_MouseClick(object sender, MouseEventArgs e)
+        {
+            string curtags = TagsForm.UniqueTags(GlobalCaptainsLogList.Instance.GetAllTags(EDCommander.CurrentCmdrID), EDDConfig.TagSplitStringCL);
+            TagsForm.EditTags(this.FindForm(),
+                                        EDDConfig.Instance.CaptainsLogTagDictionary, curtags, GetSetting(dbTags, "All"),
+                                        buttonFilter.PointToScreen(new System.Drawing.Point(0, buttonFilter.Height)),
+                                        TagFilterChanged, null, EDDConfig.TagSplitStringCL,
+                                        true,// we want ALL back to include everything in case we don't know the tag (due to it being removed)
+                                        true);          // and we want Or/empty
 
-            this.Cursor = Cursors.Default;
+        }
+
+        private void TagFilterChanged(string newtags, Object tag)
+        {
+            PutSetting(dbTags, newtags);
+            FilterView();
+        }
+
+        private void FilterView()
+        {
+            string tags = GetSetting(dbTags, "All");
+            dataGridView.FilterGridView((row) => row.IsTextInRow(textBoxFilter.Text) && TagsForm.AreTagsInFilter(row.Cells[ColTags.Index].Tag, tags, EDDConfig.TagSplitStringCL));
         }
 
         #endregion

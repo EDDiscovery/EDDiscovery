@@ -227,8 +227,8 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.EndButtonSize16ths = 10;
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
-            this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
-            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxSearch.Location = new System.Drawing.Point(195, 3);
+            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.textBoxSearch.Multiline = false;
             this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.ReadOnly = false;
@@ -246,8 +246,8 @@ namespace EDDiscovery.UserControls
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(146, 1);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelSearch.Location = new System.Drawing.Point(146, 3);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 24;
@@ -262,8 +262,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DisplayMember = "";
             this.comboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
-            this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxTime.Location = new System.Drawing.Point(38, 3);
+            this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTime.Name = "comboBoxTime";
             this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -281,8 +281,8 @@ namespace EDDiscovery.UserControls
             // labelTime
             // 
             this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(0, 1);
-            this.labelTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelTime.Location = new System.Drawing.Point(0, 3);
+            this.labelTime.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(30, 13);
             this.labelTime.TabIndex = 0;
@@ -799,8 +799,8 @@ namespace EDDiscovery.UserControls
             this.extComboBoxQuickMarks.DisplayMember = "";
             this.extComboBoxQuickMarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.extComboBoxQuickMarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extComboBoxQuickMarks.Location = new System.Drawing.Point(351, 1);
-            this.extComboBoxQuickMarks.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extComboBoxQuickMarks.Location = new System.Drawing.Point(351, 4);
+            this.extComboBoxQuickMarks.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.extComboBoxQuickMarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.extComboBoxQuickMarks.Name = "extComboBoxQuickMarks";
             this.extComboBoxQuickMarks.ScrollBarButtonColor = System.Drawing.Color.LightGray;

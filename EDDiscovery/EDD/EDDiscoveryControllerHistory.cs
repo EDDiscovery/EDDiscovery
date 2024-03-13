@@ -282,6 +282,9 @@ namespace EDDiscovery
 
                     History = hist;     // replace history
 
+                    EliteDangerousCore.Spansh.SpanshClass.ClearBodyCache();             // we need to clear out the body cache, so that HasBodyLookupOccurred trips again
+                    EliteDangerousCore.EDSM.EDSMClass.ClearBodyCache();     // because we have replaced history, and therefore starscan, so we need to add again.
+
                     EdsmLogFetcher.StopCheck();     // ensure edsm has stopped. previosly asked to stop above by an async call
 
                     System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh commanders Invoke");

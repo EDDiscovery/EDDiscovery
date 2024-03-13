@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             if (res == DialogResult.OK)
             {
                 BookmarkClass newcls = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
-                                                                    timeutc, frm.Notes, frm.TagList, frm.SurfaceLocations);
+                                                                    timeutc, frm.Notes, frm.Tags, frm.SurfaceLocations);
 
 
 

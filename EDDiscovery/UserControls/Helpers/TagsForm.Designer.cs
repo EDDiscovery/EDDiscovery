@@ -44,7 +44,6 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.buttonCancel = new ExtendedControls.ExtButton();
             this.buttonOK = new ExtendedControls.ExtButton();
             this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -62,18 +61,6 @@ namespace EDDiscovery.UserControls
             this.panelOuter.SuspendLayout();
             this.panelVScroll1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(234, 4);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 9;
-            this.buttonCancel.Text = "%Cancel%";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonOK
             // 
@@ -163,7 +150,6 @@ namespace EDDiscovery.UserControls
             // 
             // panelOK
             // 
-            this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelOK.Location = new System.Drawing.Point(3, 194);
@@ -195,6 +181,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustom2
             // 
+            this.vScrollBarCustom2.AlwaysHideScrollBar = false;
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
@@ -240,7 +227,6 @@ namespace EDDiscovery.UserControls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(415, 246);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
@@ -262,7 +248,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.ExtButton buttonCancel;
         private ExtendedControls.ExtButton buttonOK;
         private ExtendedControls.ExtStatusStrip statusStripCustom;
         private System.Windows.Forms.Panel panelTop;

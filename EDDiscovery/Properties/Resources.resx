@@ -172,12 +172,6 @@
   <data name="URLEDCD" xml:space="preserve">
     <value>https://edcd.github.io/</value>
   </data>
-  <data name="URLInaraStarSystem" xml:space="preserve">
-    <value>https://inara.cz/galaxy-starsystem/?search=</value>
-  </data>
-  <data name="URLInaraStation" xml:space="preserve">
-    <value>https://inara.cz/galaxy-station/?search=</value>
-  </data>
   <data name="URLProjectVideos" xml:space="preserve">
     <value>https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/</value>
   </data>

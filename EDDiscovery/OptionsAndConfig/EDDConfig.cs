@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -67,8 +66,8 @@ namespace EDDiscovery
         private int webserverport = 6502;
         private bool webserverenable = false;
         private string dllpermissions = "";
-        Dictionary<string, Image> captainslogtaglist;
-        Dictionary<string, Image> bookmarkstaglist;
+        Dictionary<string, string> captainslogtaglist;
+        Dictionary<string, string> bookmarkstaglist;
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -474,20 +473,24 @@ namespace EDDiscovery
             }
         }
 
-        public string CaptainsLogTags       // get/set as string..
+        public const string TagSplitStringCL = ";"; // keeping this so its backwards compatible
+
+        // get/set as tag list <separ>
+        public string CaptainsLogTags       
         {
             get
             {
-                string[] list = (from x in captainslogtaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
-                return string.Join(";", list);
+                string[] list = (from x in captainslogtaglist select (x.Key + "=" + x.Value)).ToArray();
+                return string.Join(TagSplitStringCL, list);
             }
             set
             {
-                SetImageDict(value, ref captainslogtaglist, "CaptainsLogPanelTagNames");
+                SetImageDict(value, ref captainslogtaglist, "CaptainsLogPanelTagNames", TagSplitStringCL);
             }
         }
 
-        public Dictionary<string, Image> CaptainsLogTagImage // set as dictionary/string
+        // Image has Tag as its logical name (EDDICONS path)
+        public Dictionary<string, string> CaptainsLogTagDictionary 
         {
             get
             {
@@ -496,26 +499,36 @@ namespace EDDiscovery
             set
             {
                 captainslogtaglist = value;
-                string[] list = (from x in captainslogtaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
-                string setting = string.Join(";", list);
+                string[] list = (from x in captainslogtaglist select (x.Key + "=" + x.Value)).ToArray();
+                string setting = string.Join(TagSplitStringCL, list) + TagSplitStringCL;        // nice to match with the terminator like the edit form does
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("CaptainsLogPanelTagNames", setting);
             }
         }
 
-        public string BookmarkTags       // get/set as string..
+        public static string[] CaptainsLogTagArray(string tags)
+        {
+            return tags.SplitNoEmptyStartFinish(TagSplitStringCL[0]);
+        }
+
+
+        public const string TagSplitStringBK = "\u2345";
+
+        // get/set as taglist <separ>
+        public string BookmarkTags       
         {
             get
             {
-                string[] list = (from x in bookmarkstaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
-                return string.Join(";", list);
+                string[] list = (from x in bookmarkstaglist select (x.Key + "=" + x.Value)).ToArray();
+                return string.Join(TagSplitStringBK, list);
             }
             set
             {
-                SetImageDict(value, ref bookmarkstaglist, "BookmarkTagNames");
+                SetImageDict(value, ref bookmarkstaglist, "BookmarkTagNames",TagSplitStringBK);
             }
         }
 
-        public Dictionary<string, Image> BookmarkTagImage // set as dictionary/string
+        // Image has Tag as its logical name (EDDICONS path)
+        public Dictionary<string, string> BookmarkTagDictionary
         {
             get
             {
@@ -524,10 +537,15 @@ namespace EDDiscovery
             set
             {
                 bookmarkstaglist = value;
-                string[] list = (from x in bookmarkstaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
-                string setting = string.Join(";", list);
+                string[] list = (from x in bookmarkstaglist select (x.Key + "=" + x.Value)).ToArray();
+                string setting = string.Join(TagSplitStringBK, list) + TagSplitStringBK;
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("BookmarkTagNames", setting);
             }
+        }
+
+        public static string[] BookmarkTagArray(string tags)
+        {
+            return tags.SplitNoEmptyStartFinish(TagSplitStringBK[0]);
         }
 
         public int WebServerPort
@@ -628,28 +646,25 @@ namespace EDDiscovery
 
         #region Helpers
 
-        private void SetImageDict(string value, ref Dictionary<string, Image> dict, string settingname)
+        private void SetImageDict(string value, ref Dictionary<string, string> dict, string settingname, string separ)
         {
-            dict = new Dictionary<string, Image>();       // read the value, and look up icons, create the table..
+            dict = new Dictionary<string, string>();       // read the value, and look up icons, create the table..
 
-            string[] tagdefs = value.Split(';');
+            string[] tagdefs = value.SplitNoEmptyStartFinish(separ[0]);
             foreach (var s in tagdefs)
             {
                 string[] parts = s.Split('=');
                 // valid number, valid length, image exists
                 if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && BaseUtils.Icons.IconSet.Instance.Contains(parts[1]))
                 {
-                    Image img = BaseUtils.Icons.IconSet.Instance.Get(parts[1]);      // image.tag has name - defined by icon system
-                    img.Tag = parts[1]; // store name in tag
-                    dict[parts[0]] = img;
+                    dict[parts[0]] = parts[1];
                 }
             }
 
             // write back what is correct. Incorrect icons will be removed.
-            string[] list = (from x in dict select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
-            string setting = string.Join(";", list);
+            string[] list = (from x in dict select (x.Key + "=" + x.Value)).ToArray();
+            string setting = string.Join(separ, list) + separ;
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(settingname, setting);
-
         }
 
         #endregion

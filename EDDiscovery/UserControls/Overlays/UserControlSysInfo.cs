@@ -691,8 +691,8 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                string uri = Properties.Resources.URLInaraStarSystem + HttpUtility.UrlEncode(last_he.System.Name);
-                BaseUtils.BrowserInfo.LaunchBrowser(uri);
+                var ir = new EliteDangerousCore.Inara.InaraClass();
+                ir.LaunchBrowserForSystem(last_he.System.Name);
             }
         }
 
@@ -706,8 +706,8 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                string uri = Properties.Resources.URLInaraStation + HttpUtility.UrlEncode(last_he.System.Name + "[" + last_he.WhereAmI + "]");
-                BaseUtils.BrowserInfo.LaunchBrowser(uri);
+                var ir = new EliteDangerousCore.Inara.InaraClass();
+                ir.LaunchBrowserForStation(last_he.System.Name,last_he.WhereAmI);
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,33 +10,31 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using BaseUtils;
 
 namespace EDDiscovery.UserControls
 { 
     public partial class TagsForm : ExtendedControls.DraggableForm
     {
-        public Dictionary<string, Image> Result;
-
-        public class Group
+        public Dictionary<string, string> Result;
+        private class Group
         {
             public Panel panel;
             public ExtendedControls.ExtTextBox name;
             public ExtendedControls.ExtButton icon;
+            public string iconname;
             public ExtendedControls.ExtButton del;
         }
 
-        List<Group> groups;
+        private List<Group> groups;
+        private string tagssplitstr;
 
-        int panelmargin = 2;
+        private int panelmargin = 2;
 
         #region Init
 
@@ -52,9 +50,10 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public void Init(string t, Icon ic, Dictionary<string,Image> tags = null )
+        public void Init(string t, Icon ic, string tagsplitstring, Dictionary<string,string> tags = null )
         {
             this.Icon = ic;
+            this.tagssplitstr = tagsplitstring;
             bool winborder = ExtendedControls.Theme.Current?.ApplyDialog(this) ?? true;
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
@@ -76,17 +75,17 @@ namespace EDDiscovery.UserControls
             FixUpGroups(false); // don't recalc min size, it creates a loop
         }
 
-        public Group CreateEntry(string var, Image img)
+        private Group CreateEntry(string var, string iconname)
         {
             Group g = new Group();
-
             g.panel = new Panel();
             g.panel.BorderStyle = BorderStyle.FixedSingle;
 
             g.name = new ExtendedControls.ExtTextBox();
             g.name.Size = new Size(250, 24);
-            g.name.Location = new Point(panelmargin, panelmargin+6);
+            g.name.Location = new Point(panelmargin, panelmargin+3);
             g.name.Text = var;
+            g.name.KeyPress += (s, e) => { if (e.KeyChar == tagssplitstr[0]) e.Handled = true; };   // prevent entry of split char
             g.panel.Controls.Add(g.name);
             toolTip.SetToolTip(g.name, "Tag name".T(EDTx.TagsForm_TN));
 
@@ -96,6 +95,7 @@ namespace EDDiscovery.UserControls
             g.icon.Location = new Point(g.name.Right + 8, panelmargin);
             g.icon.Size = new Size(28, 28);     // override autosize after theming
             g.icon.Click += Icon_Click;
+            g.icon.Tag = g;
             toolTip.SetToolTip(g.icon, "Select image for this tag".T(EDTx.TagsForm_SI));
             g.panel.Controls.Add(g.icon);
 
@@ -113,10 +113,13 @@ namespace EDDiscovery.UserControls
             panelVScroll1.Controls.Add(g.panel);
             ExtendedControls.Theme.Current?.ApplyDialog(g.panel);
 
+            g.iconname = iconname;
             g.icon.AutoSize = false;    // buttons are normally autosized due to theming, turn it off now
-            g.icon.Image = img;     // assign image - it may be big
+            g.icon.Image = BaseUtils.Icons.IconSet.GetIcon(iconname);     // assign image - it may be big
 
             FixUpGroups();
+
+            g.name.Focus();
 
             return g;
         }
@@ -153,37 +156,35 @@ namespace EDDiscovery.UserControls
 
         #region UI
 
-        ExtendedControls.ExtListBoxForm dropdown;
-
         private void Icon_Click(object sender, EventArgs e)
         {
             ExtendedControls.ExtButton but = sender as ExtendedControls.ExtButton;
+            Group g = but.Tag as Group;
 
-            dropdown = new ExtendedControls.ExtListBoxForm("", true);
+            var cfs = new ExtendedControls.CheckedIconNewListBoxForm();
 
-            List<string> Dickeys = new List<string>(BaseUtils.Icons.IconSet.Instance.Names());
-            Dickeys.Sort();
-            List<Image> images = new List<Image>();
-            foreach( var x in Dickeys )
+            string[] names = BaseUtils.Icons.IconSet.Instance.Names();
+            Array.Sort(names);
+
+            foreach (var n in names)
             {
-                Image i = BaseUtils.Icons.IconSet.Instance.Get(x);
-                i.Tag = x;
-                images.Add(i);
+                cfs.UC.AddButton(n, n.SplitCapsWordFull().Replace(" . ", " "), 
+                                BaseUtils.Icons.IconSet.Instance.Get(n));
             }
 
-            dropdown.FitImagesToItemHeight = true;
-            dropdown.Items = Dickeys;
-            dropdown.ImageItems = images;
-            dropdown.FlatStyle = FlatStyle.Popup;
-            dropdown.PositionBelow(sender as Control);
-            dropdown.SelectedIndexChanged += (s, ea, key) =>
-            {
-                Image img = images[dropdown.SelectedIndex];
-                but.Image = img;
+            cfs.PositionBelow(but);
+            cfs.UC.ImageSize = new Size(24, 24);
+            cfs.CloseBoundaryRegion = new Size(32, 32);
+            cfs.UC.MultiColumnSlide = true;
+
+            cfs.UC.ButtonPressed += (index, itemtag, itemname, usertag, me) => 
+            { 
+                but.Image = BaseUtils.Icons.IconSet.Instance.Get(itemtag);      // reset image and tag
+                g.iconname = itemtag;
+                cfs.Close(); 
             };
 
-            ExtendedControls.Theme.Current.ApplyDialog(dropdown, true);
-            dropdown.Show(this.FindForm());
+            cfs.Show(this);
         }
 
         private void Del_Clicked(object sender, EventArgs e)
@@ -200,12 +201,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            Result = new Dictionary<string, Image>();
+            Result = new Dictionary<string, string>();
             foreach (Group g in groups)
             {
                 if (g.name.Text.Length > 0)      // only ones with names are considered
                 {
-                    Result[g.name.Text] = g.icon.Image;
+                    Result[g.name.Text] = g.iconname;
                 }
             }
 
@@ -221,7 +222,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonMore_Click(object sender, EventArgs e)
         {
-            CreateEntry("", BaseUtils.Icons.IconSet.GetIcon("Legacy.star"));
+            CreateEntry("", "Legacy.star");
         }
 
         private void panel_close_Click(object sender, EventArgs e)
@@ -252,33 +253,43 @@ namespace EDDiscovery.UserControls
 
         #region Tag Helpers
 
-        static public void EditTags(Form frm, Dictionary<string,Image> dictimage, string taglist, Point loc, Action<string, object> reaction, object tag)
+        static public void EditTags(Form frm, Dictionary<string,string> configuredtags, string extratags, string currentsetting, 
+                        Point loc, Action<string, object> callback, object tag, string tagsplitstr, bool allornone = false, bool addemptyor = false )
         {
-            List<string> keys = new List<string>(dictimage.Keys);
-            keys.Sort();
-            List<Tuple<string, string, Image>> options = (from x in keys select new Tuple<string, string, Image>(x.ToString(), x.ToString(), dictimage[x])).ToList();
-            
             ExtendedControls.CheckedIconNewListBoxForm cfs = new ExtendedControls.CheckedIconNewListBoxForm();
+            cfs.UC.SettingsSplittingChar = tagsplitstr[0];
             cfs.CloseBoundaryRegion = new Size(32, 32);
-            cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
-            cfs.SaveSettings += reaction;
+            cfs.AllOrNoneBack = allornone;      
+            cfs.SaveSettings += callback;
             cfs.UC.AddAllNone();
-            cfs.UC.Add(options);
-
-            foreach (var usertag in taglist.SplitNoEmptyStartFinish(';'))
+            
+            if ( addemptyor )
             {
-                if (!dictimage.ContainsKey(usertag))
+                cfs.UC.Add("||", "||");
+                cfs.UC.Add("< >", "< >");
+                cfs.UC.NoneAllIgnore = "||" +tagsplitstr;
+            }
+
+            foreach (var x in configuredtags.Keys)
+                cfs.UC.Add(x, x, BaseUtils.Icons.IconSet.Instance.Get(configuredtags[x]));
+
+            foreach (var usertag in extratags.SplitNoEmptyStartFinish(tagsplitstr[0]))       // we may have older tags not in the configuredtags lets list them
+            {
+                if (!configuredtags.ContainsKey(usertag))
                     cfs.UC.Add(usertag, usertag, EDDiscovery.Icons.Controls.Star);
             }
 
+            cfs.UC.Sort();
             cfs.UC.ImageSize = new Size(24, 24);
+            cfs.Name = $"Edit tags {DateTime.UtcNow} {tag}";
 
-            cfs.Show(taglist, loc, frm, tag);
+            System.Diagnostics.Debug.WriteLine($"EditTags {cfs.Name}");
+            cfs.Show(currentsetting, loc, frm, tag);
         }
 
-        static public void PaintTags(string tags, Dictionary<string,Image> images, Rectangle area, Graphics gr, int tagsize)
+        // Paint Tags into a DGV
+        static public void PaintTags(string[] taglist, Dictionary<string,string> images, Rectangle area, Graphics gr, int tagsize)
         {
-            var taglist = tags.SplitNoEmptyStartFinish(';');
             //System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
 
             int tagspacing = tagsize + 2;
@@ -291,9 +302,7 @@ namespace EDDiscovery.UserControls
             int tagscount = 0;
             for (int i = 0; i < taglist.Length; i++)
             {
-                if (!images.TryGetValue(taglist[i], out Image img))
-                    img = EDDiscovery.Icons.Controls.Star;
-
+                Image img = images.TryGetValue(taglist[i], out string imagename) ? BaseUtils.Icons.IconSet.Instance.Get(imagename) : EDDiscovery.Icons.Controls.Star;
                 gr.DrawImage(img, area);
                 if (i % across == across - 1)
                 {
@@ -306,12 +315,89 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        static public void SetMinHeight(string tags, DataGridViewRow rw, int width, int tagsize)
+        // fill a panel control with tag images and hook to click and tooltip
+        static public void FillTags(string[] taglist,  Dictionary<string, string> images, Control panelTags, MouseEventHandler click, ToolTip toolTip)
+        {
+            panelTags.Controls.Clear();
+            int pos = 2;
+            for (int i = 0; i < taglist.Length; i++)
+            {
+                Image img = images.TryGetValue(taglist[i], out string imagename) ? BaseUtils.Icons.IconSet.Instance.Get(imagename) : EDDiscovery.Icons.Controls.Star;
+                Panel p = new Panel();
+                p.BackgroundImage = img;
+                p.Bounds = new System.Drawing.Rectangle(pos, 1, 28, 28);
+                p.BackgroundImageLayout = ImageLayout.Stretch;
+                p.MouseDown += click;
+                panelTags.Controls.Add(p);
+                toolTip.SetToolTip(p, taglist[i]);
+                pos += 32;
+            }
+
+            toolTip.SetToolTip(panelTags, string.Join(Environment.NewLine, taglist));
+        }
+
+        // take a list of tags<separ> values and form a new list with unique tags only
+        static public string UniqueTags(List<string> taglist, string tagsplitstr)
+        {
+            HashSet<string> tags = new HashSet<string>();
+            foreach( var t in taglist)
+            {
+                var ttags = t.SplitNoEmptyStartFinish(tagsplitstr[0]);
+                foreach (var x in ttags)
+                    tags.Add(x);
+            }
+            return string.Join(tagsplitstr, tags) + tagsplitstr;  // return it with normal trailing separ as per the editing form
+        }
+
+        static public bool AreTagsInFilter(object tag, string tagfilter, string tagsplitstr)
+        {
+            string itemtags = tag as string;
+            if ( tagfilter == ExtendedControls.CheckedIconUserControl.All || itemtags == null)
+                return true;
+
+            var tagfilterarray = tagfilter.SplitNoEmptyStartFinish(tagsplitstr[0]);
+
+            bool orcondition = tagfilter.Contains("||" + tagsplitstr);
+            if (orcondition)
+            {
+                if (itemtags == "" && tagfilter.Contains("< >" + tagsplitstr))
+                    return true;
+
+                foreach (var t in tagfilterarray)     // we need the string to contain t<separ>
+                {
+                    if (itemtags.Contains(t + tagsplitstr))
+                        return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                if (itemtags == "" && !tagfilter.Contains("< >" + tagsplitstr))        // we must be empty
+                    return false;
+
+                var itemtagarray = itemtags.SplitNoEmptyStartFinish(tagsplitstr[0]);
+                
+                if (itemtagarray.Length != tagfilterarray.Length)       // we must have same lists
+                    return false;
+
+                foreach (var t in itemtagarray)     
+                {
+                    if (Array.IndexOf(tagfilterarray, t) < 0)
+                        return false;
+                }
+
+                return true;
+            }
+
+        }
+
+        // work out tags min display height
+        static public void SetMinHeight(int tagcount, DataGridViewRow rw, int width, int tagsize)
         {
             int tagspacing = tagsize + 2;
-            var taglist = tags.SplitNoEmptyStartFinish(';');
             int across = Math.Max(width / tagspacing, 1);
-            int height = ((taglist.Length - 1) / across + 1) * tagspacing;
+            int height = ((tagcount - 1) / across + 1) * tagspacing;
             // System.Diagnostics.Debug.WriteLine($"Count {taglist.Length} Row {rw.Index} height {height} across {across}");
             rw.MinimumHeight = Math.Max(height, tagspacing);
         }

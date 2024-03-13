@@ -52,6 +52,7 @@
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openAScanPanelViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonFilter = new ExtendedControls.ExtButton();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonExcel = new ExtendedControls.ExtButton();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
@@ -121,7 +122,7 @@
             // buttonTags
             // 
             this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Tags;
-            this.buttonTags.Location = new System.Drawing.Point(277, 1);
+            this.buttonTags.Location = new System.Drawing.Point(313, 1);
             this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonTags.Name = "buttonTags";
             this.buttonTags.Size = new System.Drawing.Size(28, 28);
@@ -133,7 +134,7 @@
             // buttonDelete
             // 
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(241, 1);
+            this.buttonDelete.Location = new System.Drawing.Point(277, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
@@ -145,7 +146,7 @@
             // buttonNew
             // 
             this.buttonNew.Image = global::EDDiscovery.Icons.Controls.NewPage;
-            this.buttonNew.Location = new System.Drawing.Point(205, 1);
+            this.buttonNew.Location = new System.Drawing.Point(241, 1);
             this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(28, 28);
@@ -169,8 +170,8 @@
             this.textBoxFilter.EndButtonSize16ths = 10;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
-            this.textBoxFilter.Location = new System.Drawing.Point(49, 1);
-            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxFilter.Location = new System.Drawing.Point(49, 4);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.ReadOnly = false;
@@ -188,8 +189,8 @@
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(0, 1);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelSearch.Location = new System.Drawing.Point(0, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 26;
@@ -293,6 +294,7 @@
             // ColTags
             // 
             this.ColTags.HeaderText = "Tags";
+            this.ColTags.MinimumWidth = 32;
             this.ColTags.Name = "ColTags";
             this.ColTags.ReadOnly = true;
             // 
@@ -331,11 +333,24 @@
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // buttonFilter
+            // 
+            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
+            this.buttonFilter.Location = new System.Drawing.Point(205, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Name = "buttonFilter";
+            this.buttonFilter.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilter.TabIndex = 28;
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
+            this.buttonFilter.UseVisualStyleBackColor = true;
+            this.buttonFilter.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonFilter_MouseClick);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.labelSearch);
             this.flowLayoutPanel1.Controls.Add(this.textBoxFilter);
+            this.flowLayoutPanel1.Controls.Add(this.buttonFilter);
             this.flowLayoutPanel1.Controls.Add(this.buttonNew);
             this.flowLayoutPanel1.Controls.Add(this.buttonDelete);
             this.flowLayoutPanel1.Controls.Add(this.buttonTags);
@@ -349,7 +364,7 @@
             // extButtonExcel
             // 
             this.extButtonExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
-            this.extButtonExcel.Location = new System.Drawing.Point(313, 1);
+            this.extButtonExcel.Location = new System.Drawing.Point(349, 1);
             this.extButtonExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extButtonExcel.Name = "extButtonExcel";
             this.extButtonExcel.Size = new System.Drawing.Size(28, 28);
@@ -408,14 +423,15 @@
         private System.Windows.Forms.Label labelEndDate;
         private ExtendedControls.ExtDateTimePicker dateTimePickerStartDate;
         private System.Windows.Forms.Label labelDateStart;
+        private System.Windows.Forms.ToolStripMenuItem openAScanPanelViewToolStripMenuItem;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private ExtendedControls.ExtButton extButtonExcel;
+        private ExtendedControls.ExtButton buttonFilter;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
-        private System.Windows.Forms.ToolStripMenuItem openAScanPanelViewToolStripMenuItem;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-        private ExtendedControls.ExtButton extButtonExcel;
     }
 }

@@ -286,7 +286,6 @@ SECTION EDDiscoveryController
 
 SECTION BookmarkForm
 
-.buttonEDSM: "EDSM" @
 .labelName: "Name" @
 .checkBoxTarget: "Make Target" @
 .labelBookmarkNotes: "Bookmark Notes" @
@@ -317,6 +316,7 @@ SECTION SurfaceBookmarkUserControl
 .Latitude: "Latitude" @
 .Longitude: "Longitude" @
 .Valid: "Saveable" @
+.labelSearch: "Search" @
 .labelSurface: "Surface Bookmarks In System" @
 .sendToCompassToolStripMenuItem: "Send to compass" @
 .deleteToolStripMenuItem: "Delete Row" @

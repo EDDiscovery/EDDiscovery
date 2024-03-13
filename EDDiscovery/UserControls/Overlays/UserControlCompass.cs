@@ -491,7 +491,7 @@ namespace EDDiscovery.UserControls
 
                 if (dr == DialogResult.OK)
                 {
-                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(sysbookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), datetimeutc, frm.Notes, frm.TagList, frm.SurfaceLocations);
+                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(sysbookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), datetimeutc, frm.Notes, frm.Tags, frm.SurfaceLocations);
                 }
                 if (dr == DialogResult.Abort)
                 {

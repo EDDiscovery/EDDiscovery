@@ -187,8 +187,9 @@ namespace EDDiscovery.UserControls
             }
             else if (source == "Inara")
             {
-                url = Properties.Resources.URLInaraStarSystem + System.Web.HttpUtility.UrlEncode(sys.Name);
-                //defaulturl = urlallowed;
+                //https://inara.cz/elite/starsystem/?search=Scirth
+                var ir = new EliteDangerousCore.Inara.InaraClass();
+                url = ir.URLForSystem(sys.Name);
             }
 
             System.Diagnostics.Debug.WriteLine("Url is " + last_sys_tracked.Name + "=" + url);
