@@ -41,8 +41,8 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "MarketData";
 
-            dataGridViewMarketData.MakeDoubleBuffered();
-            dataGridViewMarketData.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dataGridView.MakeDoubleBuffered();
+            dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             checkBoxBuyOnly.Checked = GetSetting(dbBuyOnly, false);
             this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
@@ -68,13 +68,13 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            dataGridViewMarketData.RowTemplate.MinimumHeight= Font.ScalePixels(26);
-            DGVLoadColumnLayout(dataGridViewMarketData);
+            dataGridView.RowTemplate.MinimumHeight= Font.ScalePixels(26);
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewMarketData);
+            DGVSaveColumnLayout(dataGridView);
             PutSetting(dbBuyOnly, checkBoxBuyOnly.Checked);
             PutSetting(dbHasDemand, checkBoxHasDemand.Checked);
             PutSetting(dbAutoSwap, checkBoxAutoSwap.Checked);
@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Display
+        #region History
 
         HistoryEntry last_he;           // last HE
         HistoryEntry last_eddmd;        // last edd market data from last_he
@@ -140,18 +140,22 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
+
+        #region Display
+
         private void Display()
         {
-            DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
-            SortOrder sortorder = dataGridViewMarketData.SortOrder;
+            DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
+            SortOrder sortorder = dataGridView.SortOrder;
 
             dataViewScrollerPanel.SuspendLayout();
 
-            int firstdisplayed = dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex();
-            string commodity = (dataGridViewMarketData.CurrentRow != null) ? (string)dataGridViewMarketData.CurrentRow.Cells[1].Value : null;
-            int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? Math.Max(0,dataGridViewMarketData.CurrentRow.Index - firstdisplayed) : 0;
+            int firstdisplayed = dataGridView.SafeFirstDisplayedScrollingRowIndex();
+            string commodity = (dataGridView.CurrentRow != null) ? (string)dataGridView.CurrentRow.Cells[1].Value : null;
+            int currentoffset = (dataGridView.CurrentRow != null) ? Math.Max(0,dataGridView.CurrentRow.Index - firstdisplayed) : 0;
             
-            dataGridViewMarketData.Rows.Clear();
+            dataGridView.Rows.Clear();
 
             HistoryEntry left = (eddmd_left != null) ? eddmd_left : last_eddmd;       // if we have a selected left, use it, else use the last eddmd
             HistoryEntry cargo = (eddmd_left != null) ? eddmd_left : last_he;           // if we have a selected left, use it, else use the last he
@@ -187,6 +191,9 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
                     list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities);
                 }
+
+                // look thru out mclist and copmare it with market data, and produce a not found list to show
+
                 List<MaterialCommodityMicroResource> mclist = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetCommoditiesSorted(cargo.MaterialCommodity);      // stuff we have..  commodities only
                 List<MaterialCommodityMicroResource> notfound = new List<MaterialCommodityMicroResource>();
                 foreach (MaterialCommodityMicroResource m in mclist)
@@ -194,7 +201,7 @@ namespace EDDiscovery.UserControls
                     int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.FDName));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
                         list[index].CargoCarried = m.Count; // found it, set cargo count..
-                    else
+                    else if ( m.Details.Type != MaterialCommodityMicroResourceType.ItemType.Drones) // don't add drones
                         notfound.Add(m);        // not found, add to list for bottom
                 }
 
@@ -227,28 +234,35 @@ namespace EDDiscovery.UserControls
                                             c.ComparisionLR,
                                             c.ComparisionRL };
 
-                        int rowno = dataGridViewMarketData.Rows.Add(rowobj);
+                        DataGridViewRow rw = dataGridView.Rows[dataGridView.Rows.Add(rowobj)];
 
                         if (c.ComparisionRightOnly && ff != null && ff.IsStyleAvailable(FontStyle.Italic))
                         {
-                            for (int i = 1; i < dataGridViewMarketData.Columns.Count; i++)
-                                dataGridViewMarketData.Rows[rowno].Cells[i].Style.Font = new Font(this.Font, FontStyle.Italic);
+                            for (int i = 1; i < dataGridView.Columns.Count; i++)
+                                rw.Cells[i].Style.Font = new Font(this.Font, FontStyle.Italic);
                         }
 
-                        dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =
-                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = c.ToString();
+                        // rw.Cells[0].Value = mc?.TranslatedType + " " + rw.Index.ToString(); // debug
+                        //System.Diagnostics.Debug.WriteLine($"Display {c.fdname} {c.demandBracket} {c.stockBracket}");
+
+                        rw.Cells[DemandCol.Index].Tag = c.demandBracket;
+                        rw.Cells[SupplyCol.Index].Tag = c.stockBracket;
+                        rw.Cells[0].ToolTipText =
+                        rw.Cells[1].ToolTipText = c.ToString();
                     }
                     else
                     {
-
+                        System.Diagnostics.Debug.WriteLine($"Do not display {c.fdname}");
                     }
                 }
+
+                // things in your cargo which are not found
 
                 foreach (MaterialCommodityMicroResource m in notfound)
                 {
                     if (m.Count > 0)
                     {
-                        object[] rowobj = {     m.Details.TranslatedType,
+                        object[] rowobj = {     m.Details.TranslatedType + "!!!!",
                                                 m.Details.Name,
                                                 "",
                                                 "",
@@ -259,9 +273,9 @@ namespace EDDiscovery.UserControls
                                                 "",
                                                 "" };
 
-                        int rowno = dataGridViewMarketData.Rows.Add(rowobj);
-                        dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =
-                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item".T(EDTx.UserControlMarketData_Conly);
+                        int rowno = dataGridView.Rows.Add(rowobj);
+                        dataGridView.Rows[rowno].Cells[0].ToolTipText =
+                        dataGridView.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item".T(EDTx.UserControlMarketData_Conly);
                     }
                 }
 
@@ -279,18 +293,18 @@ namespace EDDiscovery.UserControls
 
             dataViewScrollerPanel.ResumeLayout();
 
-            dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            dataGridViewMarketData.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
             if ( commodity != null )
             {
-                foreach( DataGridViewRow rw in dataGridViewMarketData.Rows)
+                foreach( DataGridViewRow rw in dataGridView.Rows)
                 {
                     string v = (string)rw.Cells[1].Value;
                     if ( v.Equals(commodity))           // Find the commodity, and set it to the same relative position as before.
                     {
-                        dataGridViewMarketData.SetCurrentAndSelectAllCellsOnRow(rw.Index);
-                        dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex( Math.Max(rw.Index - currentoffset,0));
+                        dataGridView.SetCurrentAndSelectAllCellsOnRow(rw.Index);
+                        dataGridView.SafeFirstDisplayedScrollingRowIndex( Math.Max(rw.Index - currentoffset,0));
                         break;
                     }
                 }
@@ -300,65 +314,49 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Stop watch" + swp.ElapsedMilliseconds);
         }
 
-        private void FillComboBoxes()
+        static Image[] demandsupplybracketimages = new Image[] { EDDiscovery.Icons.Controls.Bar0, EDDiscovery.Icons.Controls.Bar1,
+                                        EDDiscovery.Icons.Controls.Bar2, EDDiscovery.Icons.Controls.Bar3};
+
+        private void dataGridViewMarketData_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            string selfrom = comboBoxCustomFrom.Text;
-            string selto = comboBoxCustomTo.Text;
+            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
 
-            comboBoxCustomFrom.Items.Clear();
-            comboBoxCustomTo.Items.Clear();
-
-            comboBoxCustomFrom.Items.Add("Travel History Entry Last".T(EDTx.UserControlMarketData_LEntry));
-            comboBoxCustomTo.Items.Add("None".T(EDTx.None));
-
-            comboboxentries.Clear();
-
-            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(DiscoveryForm.History.EntryOrder());
-            JournalCommodityPricesBase last = null;
-
-            foreach (HistoryEntry h in hlcpb)
+            // if we have a tag, we may not because of the notfound list
+            if (rw.Cells[SupplyCol.Index].Tag != null)
             {
-                var j = (JournalCommodityPricesBase)h.journalEntry;
-                if (last == null || !j.Station.Equals(last.Station) || last.EventTimeUTC - j.EventTimeUTC >= new TimeSpan(0,15,0))
+                int supplybracket = (int)rw.Cells[SupplyCol.Index].Tag;
+                if (supplybracket >= 0 && supplybracket < demandsupplybracketimages.Length)     // defend against frontier dark arts
                 {
-                    comboboxentries.Add(h);
-                    string v = h.System.Name + ":" + h.WhereAmI + " " + "on".T(EDTx.on) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
-                    if (h.journalEntry is JournalEDDCommodityPrices)
-                        v += " (CAPI)";
-                    comboBoxCustomFrom.Items.Add(v);
-                    comboBoxCustomTo.Items.Add(v);
-                    last = j;
+                    var supplyrect = dataGridView.GetCellDisplayRectangle(SupplyCol.Index, rw.Index, false);
+                    supplyrect.X += supplyrect.Width - supplyrect.Height - 4;
+                    supplyrect.Width = supplyrect.Height;
+                    e.Graphics.DrawImage(demandsupplybracketimages[supplybracket], supplyrect);
+                }
+
+                int demandbracket = (int)rw.Cells[DemandCol.Index].Tag;
+                if (demandbracket >= 0 && demandbracket < demandsupplybracketimages.Length)
+                {
+                    var demandrect = dataGridView.GetCellDisplayRectangle(DemandCol.Index, rw.Index, false);
+                    demandrect.X += demandrect.Width - demandrect.Height - 4;
+                    demandrect.Width = demandrect.Height;
+                    e.Graphics.DrawImage(demandsupplybracketimages[demandbracket], demandrect);
                 }
             }
-
-            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = false;
-
-            if (comboBoxCustomFrom.Items.Contains(selfrom))
-                comboBoxCustomFrom.SelectedItem = selfrom;
             else
-                comboBoxCustomFrom.SelectedIndex = 0;
+            {
 
-            if (comboBoxCustomTo.Items.Contains(selto))
-                comboBoxCustomTo.SelectedItem = selto;
-            else
-                comboBoxCustomTo.SelectedIndex = 0;
-
-            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = true;
+            }
         }
 
         #endregion
 
-        private void dataGridViewMarketData_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index >= 2)        // 2 on are numbers
-                e.SortDataGridViewColumnNumeric();
-        }
+        #region UI
 
         private void comboBoxCustomFrom_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxCustomFrom.Enabled)
             {
-                if (comboBoxCustomFrom.SelectedIndex == 0 )
+                if (comboBoxCustomFrom.SelectedIndex == 0)
                 {
                     eddmd_left = null;
                     Display();
@@ -400,6 +398,66 @@ namespace EDDiscovery.UserControls
 
             Display();
         }
+
+        private void FillComboBoxes()
+        {
+            string selfrom = comboBoxCustomFrom.Text;
+            string selto = comboBoxCustomTo.Text;
+
+            comboBoxCustomFrom.Items.Clear();
+            comboBoxCustomTo.Items.Clear();
+
+            comboBoxCustomFrom.Items.Add("Travel History Entry Last".T(EDTx.UserControlMarketData_LEntry));
+            comboBoxCustomTo.Items.Add("None".T(EDTx.None));
+
+            comboboxentries.Clear();
+
+            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(DiscoveryForm.History.EntryOrder());
+            JournalCommodityPricesBase last = null;
+
+            foreach (HistoryEntry h in hlcpb)
+            {
+                var j = (JournalCommodityPricesBase)h.journalEntry;
+                if (last == null || !j.Station.Equals(last.Station) || last.EventTimeUTC - j.EventTimeUTC >= new TimeSpan(0, 15, 0))
+                {
+                    comboboxentries.Add(h);
+                    string v = h.System.Name + ":" + h.WhereAmI + " " + "on".T(EDTx.on) + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
+                    if (h.journalEntry is JournalEDDCommodityPrices)
+                        v += " (CAPI)";
+                    comboBoxCustomFrom.Items.Add(v);
+                    comboBoxCustomTo.Items.Add(v);
+                    last = j;
+                }
+            }
+
+            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = false;
+
+            if (comboBoxCustomFrom.Items.Contains(selfrom))
+                comboBoxCustomFrom.SelectedItem = selfrom;
+            else
+                comboBoxCustomFrom.SelectedIndex = 0;
+
+            if (comboBoxCustomTo.Items.Contains(selto))
+                comboBoxCustomTo.SelectedItem = selto;
+            else
+                comboBoxCustomTo.SelectedIndex = 0;
+
+            comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = true;
+        }
+
+        #endregion
+
+
+        #region Grid
+
+        private void dataGridViewMarketData_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index >= 2)        // 2 on are numbers
+                e.SortDataGridViewColumnNumeric();
+        }
+
+        #endregion
+
 
     }
 }

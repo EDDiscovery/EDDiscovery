@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewMarketData = new BaseUtils.DataGridViewColumnControl();
+            this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SellCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,13 +67,13 @@ namespace EDDiscovery.UserControls
             this.checkBoxHasDemand = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewMarketData);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -85,12 +85,14 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewMarketData
             // 
-            this.dataGridViewMarketData.AllowUserToAddRows = false;
-            this.dataGridViewMarketData.AllowUserToDeleteRows = false;
-            this.dataGridViewMarketData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewMarketData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMarketData.ColumnReorder = true;
-            this.dataGridViewMarketData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSortByColumnName = false;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ColumnReorder = true;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CategoryCol,
             this.NameCol,
             this.SellCol,
@@ -101,15 +103,17 @@ namespace EDDiscovery.UserControls
             this.GalAvgCol,
             this.ProfitToCol,
             this.ProfitFromCol});
-            this.dataGridViewMarketData.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewMarketData.Name = "dataGridViewMarketData";
-            this.dataGridViewMarketData.RowHeaderMenuStrip = null;
-            this.dataGridViewMarketData.RowHeadersVisible = false;
-            this.dataGridViewMarketData.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewMarketData.SingleRowSelect = true;
-            this.dataGridViewMarketData.Size = new System.Drawing.Size(784, 549);
-            this.dataGridViewMarketData.TabIndex = 1;
-            this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Name = "dataGridViewMarketData";
+            this.dataGridView.PerColumnWordWrapControl = true;
+            this.dataGridView.RowHeaderMenuStrip = null;
+            this.dataGridView.RowHeadersVisible = false;
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.SingleRowSelect = true;
+            this.dataGridView.Size = new System.Drawing.Size(784, 549);
+            this.dataGridView.TabIndex = 1;
+            this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewMarketData_RowPostPaint);
+            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
             // 
             // CategoryCol
             // 
@@ -191,6 +195,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustomMC
             // 
+            this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
@@ -381,7 +386,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlMarketData";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.ResumeLayout(false);
@@ -392,7 +397,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private BaseUtils.DataGridViewColumnControl dataGridViewMarketData;
+        private BaseUtils.DataGridViewColumnControl dataGridView;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelLocation;

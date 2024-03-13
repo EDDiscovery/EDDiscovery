@@ -1112,6 +1112,11 @@
     <EmbeddedResource Include="Controls\Home.png" />
     <EmbeddedResource Include="Controls\CommodityBuy.png" />
     <EmbeddedResource Include="Controls\CommoditySell.png" />
+    <EmbeddedResource Include="Controls\Bar0.png" />
+    <EmbeddedResource Include="Controls\Bar1.png" />
+    <EmbeddedResource Include="Controls\Bar2.png" />
+    <EmbeddedResource Include="Controls\Bar3.png" />
+    <EmbeddedResource Include="Controls\BarNone.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

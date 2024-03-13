@@ -218,5 +218,9 @@ namespace EDDiscovery.Icons
         public static Image People { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.People"); } }
         public static Image Economy { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Economy"); } }
         public static Image Home { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Home"); } }
+        public static Image Bar0 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar0"); } }
+        public static Image Bar1 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar1"); } }
+        public static Image Bar2 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar2"); } }
+        public static Image Bar3 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar3"); } }
     }
 }
