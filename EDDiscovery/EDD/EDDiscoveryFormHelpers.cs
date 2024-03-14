@@ -140,7 +140,7 @@ namespace EDDiscovery
                 {
                     if (controlname.Contains("All"))
                     {
-                        dateutc = EDDConfig.GameLaunchTimeUTC();
+                        dateutc = EliteDangerousCore.EliteReleaseDates.GameRelease;
                         cf.ReturnResult(DialogResult.OK);
                     }
                     else if (controlname.Contains("Today"))

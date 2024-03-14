@@ -86,8 +86,8 @@ namespace EDDiscovery.UserControls.Helpers
             if (panelButtons.Visible)
             {
                 // Start of day/end is being paranoid
-                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerStart.Value.StartOfDay()) : EDDConfig.GameLaunchTimeUTC();
-                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerEnd.Value.EndOfDay()) : EDDConfig.GameEndTimeUTC();
+                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerStart.Value.StartOfDay()) : EliteDangerousCore.EliteReleaseDates.GameRelease;
+                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(customDateTimePickerEnd.Value.EndOfDay()) : EliteDangerousCore.EliteReleaseDates.GameEndTime;
                 show = DateTime.Compare(ms.Mission.EventTimeUTC, startdateutc) >= 0 && DateTime.Compare(ms.Mission.EventTimeUTC, enddateutc) <= 0;
             }
 
@@ -181,7 +181,7 @@ namespace EDDiscovery.UserControls.Helpers
             if (!EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerStart.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerEnd.Value))
             {
                 customDateTimePickerStart.Checked = customDateTimePickerEnd.Checked = false;
-                customDateTimePickerStart.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                customDateTimePickerStart.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteDangerousCore.EliteReleaseDates.GameRelease);
                 customDateTimePickerEnd.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
             }
         }

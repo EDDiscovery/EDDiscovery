@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
 
-            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.GameLaunchTimeUTC()).StartOfDay();
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EliteDangerousCore.EliteReleaseDates.GameRelease).StartOfDay();
             dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
             dateTimePickerEndDate.Value = GetSetting(dbEndDate, DateTime.UtcNow).EndOfDay();
             dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
@@ -125,8 +125,8 @@ namespace EDDiscovery.UserControls
             dataGridView.Rows.Clear();
 
             // be paranoid about end/start of day
-            DateTime startutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : EDDConfig.GameLaunchTimeUTC();
-            DateTime endutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : EDDConfig.GameEndTimeUTC();
+            DateTime startutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value.StartOfDay()) : EliteDangerousCore.EliteReleaseDates.GameRelease;
+            DateTime endutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value.EndOfDay()) : EliteDangerousCore.EliteReleaseDates.GameEndTime;
             System.Diagnostics.Debug.WriteLine($"Captains Log display filter {startutc} {endutc}");
 
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
@@ -413,7 +413,7 @@ namespace EDDiscovery.UserControls
             if (!EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerEndDate.Value))
             {
                 dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = false;
-                dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteDangerousCore.EliteReleaseDates.GameRelease);
                 dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
             }
             updateprogramatically = false;

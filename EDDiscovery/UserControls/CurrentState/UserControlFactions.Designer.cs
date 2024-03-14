@@ -29,20 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.datePanel = new System.Windows.Forms.Panel();
-            this.startDateTimePicker = new ExtendedControls.ExtDateTimePicker();
-            this.labelTo = new System.Windows.Forms.Label();
-            this.endDateTimePicker = new ExtendedControls.ExtDateTimePicker();
-            this.labelValue = new System.Windows.Forms.Label();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMissionsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showCommoditymaterialTradesForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBountiesAndBondsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFactionSystemDetailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.startDateTimePicker = new ExtendedControls.ExtDateTimePicker();
+            this.endDateTimePicker = new ExtendedControls.ExtDateTimePicker();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.scrollBarFactions = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewFactions = new BaseUtils.DataGridViewColumnControl();
+            this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.colFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMissions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfluence = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,89 +58,27 @@
             this.BountyKills = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BountyValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BountyRewardsValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRedeemVoucher = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFines = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBountyValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Interdicted = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Interdiction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.KillBondVictim = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.KillBondsAward = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.KillBondsValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CartoValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataLinkVictimFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataLinkPayeeFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataLinkPayeeValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.datePanel.SuspendLayout();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelTo = new System.Windows.Forms.Label();
+            this.labelInfo = new System.Windows.Forms.Label();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanelFactions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // datePanel
-            // 
-            this.datePanel.Controls.Add(this.startDateTimePicker);
-            this.datePanel.Controls.Add(this.labelTo);
-            this.datePanel.Controls.Add(this.endDateTimePicker);
-            this.datePanel.Controls.Add(this.labelValue);
-            this.datePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.datePanel.Location = new System.Drawing.Point(0, 0);
-            this.datePanel.Margin = new System.Windows.Forms.Padding(2);
-            this.datePanel.Name = "datePanel";
-            this.datePanel.Size = new System.Drawing.Size(853, 27);
-            this.datePanel.TabIndex = 0;
-            // 
-            // startDateTimePicker
-            // 
-            this.startDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
-            this.startDateTimePicker.BorderColorScaling = 0.5F;
-            this.startDateTimePicker.Checked = false;
-            this.startDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
-            this.startDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.startDateTimePicker.Location = new System.Drawing.Point(0, 1);
-            this.startDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.startDateTimePicker.Name = "startDateTimePicker";
-            this.startDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
-            this.startDateTimePicker.ShowCheckBox = true;
-            this.startDateTimePicker.ShowUpDown = false;
-            this.startDateTimePicker.Size = new System.Drawing.Size(220, 20);
-            this.startDateTimePicker.TabIndex = 2;
-            this.startDateTimePicker.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.startDateTimePicker, "Include from");
-            this.startDateTimePicker.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
-            // 
-            // labelTo
-            // 
-            this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(228, 4);
-            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(16, 13);
-            this.labelTo.TabIndex = 4;
-            this.labelTo.Text = "to";
-            // 
-            // endDateTimePicker
-            // 
-            this.endDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
-            this.endDateTimePicker.BorderColorScaling = 0.5F;
-            this.endDateTimePicker.Checked = false;
-            this.endDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
-            this.endDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.endDateTimePicker.Location = new System.Drawing.Point(251, 1);
-            this.endDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.endDateTimePicker.Name = "endDateTimePicker";
-            this.endDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
-            this.endDateTimePicker.ShowCheckBox = true;
-            this.endDateTimePicker.ShowUpDown = false;
-            this.endDateTimePicker.Size = new System.Drawing.Size(218, 20);
-            this.endDateTimePicker.TabIndex = 3;
-            this.endDateTimePicker.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.endDateTimePicker, "Include to");
-            this.endDateTimePicker.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
-            // 
-            // labelValue
-            // 
-            this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(477, 5);
-            this.labelValue.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.labelValue.Name = "labelValue";
-            this.labelValue.Size = new System.Drawing.Size(43, 13);
-            this.labelValue.TabIndex = 5;
-            this.labelValue.Text = "<code>";
             // 
             // contextMenuStrip
             // 
@@ -184,16 +123,67 @@
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // startDateTimePicker
+            // 
+            this.startDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
+            this.startDateTimePicker.BorderColorScaling = 0.5F;
+            this.startDateTimePicker.Checked = false;
+            this.startDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.startDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.startDateTimePicker.Location = new System.Drawing.Point(0, 1);
+            this.startDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.startDateTimePicker.Name = "startDateTimePicker";
+            this.startDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
+            this.startDateTimePicker.ShowCheckBox = true;
+            this.startDateTimePicker.ShowUpDown = false;
+            this.startDateTimePicker.Size = new System.Drawing.Size(220, 24);
+            this.startDateTimePicker.TabIndex = 2;
+            this.startDateTimePicker.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolTip.SetToolTip(this.startDateTimePicker, "Include from");
+            this.startDateTimePicker.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            // 
+            // endDateTimePicker
+            // 
+            this.endDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
+            this.endDateTimePicker.BorderColorScaling = 0.5F;
+            this.endDateTimePicker.Checked = false;
+            this.endDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.endDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.endDateTimePicker.Location = new System.Drawing.Point(252, 1);
+            this.endDateTimePicker.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.endDateTimePicker.Name = "endDateTimePicker";
+            this.endDateTimePicker.SelectedColor = System.Drawing.Color.Yellow;
+            this.endDateTimePicker.ShowCheckBox = true;
+            this.endDateTimePicker.ShowUpDown = false;
+            this.endDateTimePicker.Size = new System.Drawing.Size(218, 24);
+            this.endDateTimePicker.TabIndex = 3;
+            this.endDateTimePicker.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolTip.SetToolTip(this.endDateTimePicker, "Include to");
+            this.endDateTimePicker.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(478, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 33;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
             // dataViewScrollerPanelFactions
             // 
             this.dataViewScrollerPanelFactions.Controls.Add(this.scrollBarFactions);
-            this.dataViewScrollerPanelFactions.Controls.Add(this.dataGridViewFactions);
+            this.dataViewScrollerPanelFactions.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanelFactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelFactions.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanelFactions.Location = new System.Drawing.Point(0, 27);
+            this.dataViewScrollerPanelFactions.Location = new System.Drawing.Point(0, 32);
             this.dataViewScrollerPanelFactions.Margin = new System.Windows.Forms.Padding(2);
             this.dataViewScrollerPanelFactions.Name = "dataViewScrollerPanelFactions";
-            this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(853, 545);
+            this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(853, 540);
             this.dataViewScrollerPanelFactions.TabIndex = 1;
             this.dataViewScrollerPanelFactions.VerticalScrollBarDockRight = true;
             // 
@@ -216,7 +206,7 @@
             this.scrollBarFactions.MouseOverButtonColor = System.Drawing.Color.Green;
             this.scrollBarFactions.MousePressedButtonColor = System.Drawing.Color.Red;
             this.scrollBarFactions.Name = "scrollBarFactions";
-            this.scrollBarFactions.Size = new System.Drawing.Size(16, 545);
+            this.scrollBarFactions.Size = new System.Drawing.Size(16, 540);
             this.scrollBarFactions.SliderColor = System.Drawing.Color.DarkGray;
             this.scrollBarFactions.SmallChange = 1;
             this.scrollBarFactions.TabIndex = 1;
@@ -228,16 +218,24 @@
             this.scrollBarFactions.Value = -1;
             this.scrollBarFactions.ValueLimited = -1;
             // 
-            // dataGridViewFactions
+            // dataGridView
             // 
-            this.dataGridViewFactions.AllowRowHeaderVisibleSelection = false;
-            this.dataGridViewFactions.AllowUserToAddRows = false;
-            this.dataGridViewFactions.AllowUserToDeleteRows = false;
-            this.dataGridViewFactions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewFactions.AutoSortByColumnName = false;
-            this.dataGridViewFactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactions.ColumnReorder = true;
-            this.dataGridViewFactions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSortByColumnName = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ColumnReorder = true;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colFaction,
             this.colMissions,
             this.colInfluence,
@@ -252,28 +250,50 @@
             this.BountyKills,
             this.BountyValue,
             this.BountyRewardsValue,
+            this.colRedeemVoucher,
+            this.colFines,
+            this.colBountyValue,
             this.Interdicted,
             this.Interdiction,
             this.KillBondVictim,
             this.KillBondsAward,
             this.KillBondsValue,
             this.CartoValue,
+            this.colDataLinkVictimFaction,
+            this.colDataLinkPayeeFaction,
+            this.colDataLinkPayeeValue,
             this.colInfo});
-            this.dataGridViewFactions.ContextMenuStrip = this.contextMenuStrip;
-            this.dataGridViewFactions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewFactions.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewFactions.Margin = new System.Windows.Forms.Padding(2);
-            this.dataGridViewFactions.Name = "dataGridViewFactions";
-            this.dataGridViewFactions.PerColumnWordWrapControl = true;
-            this.dataGridViewFactions.RowHeaderMenuStrip = null;
-            this.dataGridViewFactions.RowHeadersVisible = false;
-            this.dataGridViewFactions.RowHeadersWidth = 62;
-            this.dataGridViewFactions.RowTemplate.Height = 28;
-            this.dataGridViewFactions.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewFactions.SingleRowSelect = true;
-            this.dataGridViewFactions.Size = new System.Drawing.Size(837, 545);
-            this.dataGridViewFactions.TabIndex = 0;
-            this.dataGridViewFactions.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewFactions_SortCompare);
+            this.dataGridView.ContextMenuStrip = this.contextMenuStrip;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.PerColumnWordWrapControl = true;
+            this.dataGridView.RowHeaderMenuStrip = null;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridView.RowHeadersVisible = false;
+            this.dataGridView.RowHeadersWidth = 62;
+            this.dataGridView.RowTemplate.Height = 28;
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.SingleRowSelect = true;
+            this.dataGridView.Size = new System.Drawing.Size(837, 540);
+            this.dataGridView.TabIndex = 0;
+            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewFactions_SortCompare);
             // 
             // colFaction
             // 
@@ -309,7 +329,6 @@
             // 
             // colMissionCredits
             // 
-            this.colMissionCredits.FillWeight = 130.0254F;
             this.colMissionCredits.HeaderText = "Mission Credits";
             this.colMissionCredits.MinimumWidth = 8;
             this.colMissionCredits.Name = "colMissionCredits";
@@ -384,6 +403,24 @@
             this.BountyRewardsValue.Name = "BountyRewardsValue";
             this.BountyRewardsValue.ReadOnly = true;
             // 
+            // colRedeemVoucher
+            // 
+            this.colRedeemVoucher.HeaderText = "Redeem Voucher";
+            this.colRedeemVoucher.Name = "colRedeemVoucher";
+            this.colRedeemVoucher.ReadOnly = true;
+            // 
+            // colFines
+            // 
+            this.colFines.HeaderText = "Pay Fines";
+            this.colFines.Name = "colFines";
+            this.colFines.ReadOnly = true;
+            // 
+            // colBountyValue
+            // 
+            this.colBountyValue.HeaderText = "Pay Bounty Value";
+            this.colBountyValue.Name = "colBountyValue";
+            this.colBountyValue.ReadOnly = true;
+            // 
             // Interdicted
             // 
             this.Interdicted.FillWeight = 100.0195F;
@@ -431,6 +468,24 @@
             this.CartoValue.Name = "CartoValue";
             this.CartoValue.ReadOnly = true;
             // 
+            // colDataLinkVictimFaction
+            // 
+            this.colDataLinkVictimFaction.HeaderText = "DL Victim";
+            this.colDataLinkVictimFaction.Name = "colDataLinkVictimFaction";
+            this.colDataLinkVictimFaction.ReadOnly = true;
+            // 
+            // colDataLinkPayeeFaction
+            // 
+            this.colDataLinkPayeeFaction.HeaderText = "DL Payee Faction";
+            this.colDataLinkPayeeFaction.Name = "colDataLinkPayeeFaction";
+            this.colDataLinkPayeeFaction.ReadOnly = true;
+            // 
+            // colDataLinkPayeeValue
+            // 
+            this.colDataLinkPayeeValue.HeaderText = "DL Payee Value";
+            this.colDataLinkPayeeValue.Name = "colDataLinkPayeeValue";
+            this.colDataLinkPayeeValue.ReadOnly = true;
+            // 
             // colInfo
             // 
             this.colInfo.FillWeight = 150.0293F;
@@ -439,35 +494,67 @@
             this.colInfo.Name = "colInfo";
             this.colInfo.ReadOnly = true;
             // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.startDateTimePicker);
+            this.panelTop.Controls.Add(this.labelTo);
+            this.panelTop.Controls.Add(this.endDateTimePicker);
+            this.panelTop.Controls.Add(this.buttonExtExcel);
+            this.panelTop.Controls.Add(this.labelInfo);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(2);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(853, 32);
+            this.panelTop.TabIndex = 0;
+            // 
+            // labelTo
+            // 
+            this.labelTo.AutoSize = true;
+            this.labelTo.Location = new System.Drawing.Point(228, 4);
+            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelTo.Name = "labelTo";
+            this.labelTo.Size = new System.Drawing.Size(16, 13);
+            this.labelTo.TabIndex = 4;
+            this.labelTo.Text = "to";
+            // 
+            // labelInfo
+            // 
+            this.labelInfo.AutoSize = true;
+            this.labelInfo.Location = new System.Drawing.Point(520, 4);
+            this.labelInfo.Margin = new System.Windows.Forms.Padding(6, 4, 8, 1);
+            this.labelInfo.Name = "labelInfo";
+            this.labelInfo.Size = new System.Drawing.Size(43, 13);
+            this.labelInfo.TabIndex = 5;
+            this.labelInfo.Text = "<code>";
+            // 
             // UserControlFactions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.dataViewScrollerPanelFactions);
-            this.Controls.Add(this.datePanel);
+            this.Controls.Add(this.panelTop);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UserControlFactions";
             this.Size = new System.Drawing.Size(853, 572);
-            this.datePanel.ResumeLayout(false);
-            this.datePanel.PerformLayout();
             this.contextMenuStrip.ResumeLayout(false);
             this.dataViewScrollerPanelFactions.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel datePanel;
         private ExtendedControls.ExtDateTimePicker startDateTimePicker;
         private System.Windows.Forms.Label labelTo;
         private ExtendedControls.ExtDateTimePicker endDateTimePicker;
-        private System.Windows.Forms.Label labelValue;
+        private System.Windows.Forms.Label labelInfo;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelFactions;
         private ExtendedControls.ExtScrollBar scrollBarFactions;
-        private BaseUtils.DataGridViewColumnControl dataGridViewFactions;
+        private BaseUtils.DataGridViewColumnControl dataGridView;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showMissionsForFactionToolStripMenuItem;
@@ -488,12 +575,20 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn BountyKills;
         private System.Windows.Forms.DataGridViewTextBoxColumn BountyValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn BountyRewardsValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRedeemVoucher;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFines;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBountyValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn Interdicted;
         private System.Windows.Forms.DataGridViewTextBoxColumn Interdiction;
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondVictim;
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondsAward;
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondsValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn CartoValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataLinkVictimFaction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataLinkPayeeFaction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataLinkPayeeValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn colInfo;
+        private ExtendedControls.ExtButton buttonExtExcel;
+        private System.Windows.Forms.FlowLayoutPanel panelTop;
     }
 }

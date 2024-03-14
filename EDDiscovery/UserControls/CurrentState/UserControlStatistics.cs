@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
 
 
             // datetime picker kind is not used
-            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC()));
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteDangerousCore.EliteReleaseDates.GameRelease));
             dateTimePickerEndDate.Value = GetSetting(dbEndDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow));
             startchecked = dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
             endchecked = dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
@@ -301,7 +301,7 @@ namespace EDDiscovery.UserControls
             if (!EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerEndDate.Value))
             {
                 dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = false;
-                dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteDangerousCore.EliteReleaseDates.GameRelease);
                 dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
             }
             updateprogramatically = false;
@@ -497,7 +497,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     DateTime starttimeutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) :
-                                                                            EDDConfig.GameLaunchTimeUTC();
+                                                                            EliteDangerousCore.EliteReleaseDates.GameRelease;
                     DateTime endtimeutc = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) :
                                                                             EDDConfig.Instance.SelectedEndOfTodayUTC();
 

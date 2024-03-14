@@ -523,7 +523,7 @@ namespace EDDiscovery.UserControls
             if (!EDDConfig.Instance.DateTimeInRangeForGame(extDateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(extDateTimePickerEndDate.Value))
             {
                 extDateTimePickerStartDate.Checked = extDateTimePickerEndDate.Checked = false;
-                extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EDDConfig.GameLaunchTimeUTC());
+                extDateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteDangerousCore.EliteReleaseDates.GameRelease);
                 extDateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
             }
             updatedprogramatically = false;

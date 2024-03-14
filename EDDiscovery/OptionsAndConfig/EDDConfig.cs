@@ -164,15 +164,6 @@ namespace EDDiscovery
             }
         }
 
-        public static DateTime GameLaunchTimeUTC()
-        {
-            return new DateTime(2014, 12, 14, 0, 0, 0, DateTimeKind.Utc);
-        }
-        public static DateTime GameEndTimeUTC()     // only an estimate! used when the code needs an end date with UTC.  DateTime.MinValue/MaxValue is not kinded.
-        {
-            return new DateTime(2999, 12, 14, 23, 59, 59, DateTimeKind.Utc);
-        }
-
         public bool DateTimeInRangeForGame(DateTime t)
         {
             if (displayTimeFormat == 2)
