@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright 2017-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,18 +10,13 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using ActionLanguage;
+using BaseUtils;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BaseUtils;
-using ActionLanguage;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 
 namespace EDDiscovery.Actions
@@ -83,6 +78,10 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
+                    string bodyname = sp.NextQuotedWord();      // may be null
+
+                    //System.Diagnostics.Debug.WriteLine($"Scan Star System {cmdname} body `{bodyname}`");
+
                     StarScan scan = (ap.ActionController as ActionController).HistoryList.StarScan;
 
                     StarScan.SystemNode sn = scan.FindSystemSynchronous(new SystemClass(cmdname), lookup);
@@ -91,50 +90,63 @@ namespace EDDiscovery.Actions
 
                     ap[prefix + "EDSMLookup"] = EliteDangerousCore.EDSM.EDSMClass.HasBodyLookupOccurred(cmdname).ToStringIntValue();
                     ap[prefix + "EDSMNoData"] = EliteDangerousCore.EDSM.EDSMClass.HasNoDataBeenStoredOnBody(cmdname).ToStringIntValue();
+                    ap[prefix + "SpanshLookup"] = EliteDangerousCore.Spansh.SpanshClass.HasBodyLookupOccurred(cmdname).ToStringIntValue();
+                    ap[prefix + "SpanshNoData"] = EliteDangerousCore.Spansh.SpanshClass.HasNoDataBeenStoredOnBody(cmdname).ToStringIntValue();
 
                     if ( sn != null )
                     {
-                        int starno = 1;
-                        ap[prefix + "Stars"] = sn.StarNodes.Count.ToString(ct);
-
-                        foreach (KeyValuePair<string, StarScan.ScanNode> scannode in sn.StarNodes)
+                        if (bodyname.HasChars())
                         {
-                            DumpInfo(ap, scannode, prefix + "Star_" + starno.ToString(ct) , "_Planets");
+                            var bn = sn.FindCustomNameOrFullname(bodyname);
+                            ap[prefix + "BodyFound"] = bn != null ? "1" : "0";
+                            if ( bn != null )
+                                DumpInfo(ap, bn.FullName, bn, prefix + "Body", "_Moons");
+                        }
+                        else
+                        {
+                            int starno = 1;
+                            ap[prefix + "Stars"] = sn.StarNodes.Count.ToString(ct);
 
-                            int pcount = 1;
-
-                            if (scannode.Value.Children != null)
+                            foreach (KeyValuePair<string, StarScan.ScanNode> starkvp in sn.StarNodes)
                             {
-                                foreach (KeyValuePair<string, StarScan.ScanNode> planetnodes in scannode.Value.Children)
+                                DumpInfo(ap, starkvp.Key, starkvp.Value, prefix + "Star_" + starno.ToString(ct), "_Planets");
+
+                                int pcount = 1;
+
+                                if (starkvp.Value.Children != null)
                                 {
-                                    DumpInfo(ap, planetnodes, prefix + "Planet_" + starno.ToString(ct) + "_" + pcount.ToString(ct) , "_Moons");
-
-                                    if (planetnodes.Value.Children != null)
+                                    foreach (KeyValuePair<string, StarScan.ScanNode> planetkvp in starkvp.Value.Children)
                                     {
-                                        int mcount = 1;
-                                        foreach (KeyValuePair<string, StarScan.ScanNode> moonnodes in planetnodes.Value.Children)
+                                        DumpInfo(ap, planetkvp.Key, planetkvp.Value, prefix + "Planet_" + starno.ToString(ct) + "_" + pcount.ToString(ct), "_Moons");
+
+                                        if (planetkvp.Value.Children != null)
                                         {
-                                            DumpInfo(ap, moonnodes, prefix + "Moon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) , "_Submoons");
-
-                                            if (moonnodes.Value.Children != null)
+                                            int mcount = 1;
+                                            foreach (KeyValuePair<string, StarScan.ScanNode> moonkvp in planetkvp.Value.Children)
                                             {
-                                                int smcount = 1;
-                                                foreach (KeyValuePair<string, StarScan.ScanNode> submoonnodes in moonnodes.Value.Children)
+                                                DumpInfo(ap, moonkvp.Key, moonkvp.Value, prefix + "Moon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct), "_Submoons");
+
+                                                if (moonkvp.Value.Children != null)
                                                 {
-                                                    DumpInfo(ap, submoonnodes, prefix + "SubMoon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) + "_" + smcount.ToString(ct),null);
-                                                    smcount++;
+                                                    int smcount = 1;
+                                                    foreach (KeyValuePair<string, StarScan.ScanNode> submoonkvp in moonkvp.Value.Children)
+                                                    {
+                                                        DumpInfo(ap, submoonkvp.Key, submoonkvp.Value, prefix + "SubMoon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) + "_" + smcount.ToString(ct), null);
+
+                                                        smcount++;
+                                                    }
                                                 }
+
+                                                mcount++;
                                             }
-
-                                            mcount++;
                                         }
+
+                                        pcount++;
                                     }
-
-                                    pcount++;
                                 }
-                            }
 
-                            starno++;
+                                starno++;
+                            }
                         }
                     }
                     else
@@ -151,64 +163,66 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        void DumpInfo( ActionProgramRun ap, KeyValuePair<string, EliteDangerousCore.StarScan.ScanNode> scannode, string prefix , string subname )
+        void DumpInfo( ActionProgramRun ap, string keyname, StarScan.ScanNode scannode, string storename , string childreninfoname )
         {
-            EliteDangerousCore.JournalEvents.JournalScan sc = scannode.Value.ScanData;
+            EliteDangerousCore.JournalEvents.JournalScan sc = scannode.ScanData;
 
-            ap[prefix] = scannode.Key;
-            ap[prefix + "_type"] = scannode.Value.NodeType.ToString();
-            ap[prefix + "_assignedname"] = scannode.Value.OwnName;
-            ap[prefix + "_assignedfullname"] = scannode.Value.FullName;
-            ap[prefix + "_data"] = (sc != null) ? "1" : "0";
-            ap[prefix + "_signals"] = scannode.Value.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalList(scannode.Value.Signals, 0, ",", true) : "";
-            ap[prefix + "_genuses"] = scannode.Value.Genuses != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.GenusList(scannode.Value.Genuses, 0, ",", true) : "";
+            ap[storename] = keyname;
+            ap[storename + "_type"] = scannode.NodeType.ToString();
+            ap[storename + "_assignedname"] = scannode.OwnName;
+            ap[storename + "_assignedfullname"] = scannode.FullName;
+            ap[storename + "_data"] = (sc != null) ? "1" : "0";
+            ap[storename + "_signals"] = scannode.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalList(scannode.Signals, 0, ",", true) : "";
+            ap[storename + "_genuses"] = scannode.Genuses != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.GenusList(scannode.Genuses, 0, ",", true) : "";
 
             if ( sc != null )
             {
-                ap[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
-                ap[prefix + "_edsmbody"] = sc.DataSource == SystemSource.FromEDSM ? "1" : "0";
-                ap[prefix + "_source"] = sc.DataSource.ToString();   
-                ap[prefix + "_bodyname"] = sc.BodyName;
-                ap[prefix + "_bodydesignation"] = sc.BodyDesignationOrName;
-                ap[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
-                ap[prefix + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.###");
-                ap[prefix + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.###");
-                ap[prefix + "_distls"] = sc.DistanceFromArrivalLS.ToNANSafeString("0.###");
+                ap[storename + "_isstar"] = sc.IsStar ? "1" : "0";
+                ap[storename + "_edsmbody"] = sc.DataSource == SystemSource.FromEDSM ? "1" : "0";
+                ap[storename + "_source"] = sc.DataSource.ToString();   
+                ap[storename + "_bodyname"] = sc.BodyName;
+                ap[storename + "_bodydesignation"] = sc.BodyDesignationOrName;
+                ap[storename + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.#######");
+                ap[storename + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.#######");
+                ap[storename + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.######");
+                ap[storename + "_distls"] = sc.DistanceFromArrivalLS.ToNANSafeString("0.######");
 
                 if ( sc.IsStar )
                 {
-                    ap[prefix + "_startype"] = sc.StarType;
-                    ap[prefix + "_startypetext"] = sc.StarTypeText;
-                    ap[prefix + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.###");
-                    ap[prefix + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
-                    ap[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
+                    ap[storename + "_startype"] = sc.StarType;
+                    ap[storename + "_startypeid"] = sc.StarTypeID.ToString();
+                    ap[storename + "_startypetext"] = sc.StarTypeText;
+                    ap[storename + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.#####");
+                    ap[storename + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
+                    ap[storename + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
                     EliteDangerousCore.JournalEvents.JournalScan.HabZones hz = sc.GetHabZones();
-                    ap[prefix + "_habinner"] = hz != null ? hz.HabitableZoneInner.ToString("0.##") : "";
-                    ap[prefix + "_habouter"] = hz != null ? hz.HabitableZoneOuter.ToString("0.##") : "";
+                    ap[storename + "_habinner"] = hz != null ? hz.HabitableZoneInner.ToString("0.##") : "";
+                    ap[storename + "_habouter"] = hz != null ? hz.HabitableZoneOuter.ToString("0.##") : "";
                 }
                 else
                 {
-                    ap[prefix + "_class"] = sc.PlanetClass.ToNullSafeString();
-                    ap[prefix + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
-                    ap[prefix + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
-                    ap[prefix + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
-                    ap[prefix + "_volcanism"] = sc.Volcanism.ToNullSafeString();
-                    ap[prefix + "_gravity"] = sc.nSurfaceGravity.ToNANNullSafeString("0.###");
-                    ap[prefix + "_pressure"] = sc.nSurfacePressure.ToNANNullSafeString("0.###");
-                    ap[prefix + "_mass"] = sc.nMassEM.ToNANNullSafeString("0.###");
-                    ap.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), prefix + "_Materials");
+                    ap[storename + "_class"] = sc.PlanetClass.ToNullSafeString();
+                    ap[storename + "_typeid"] = sc.PlanetTypeID.ToNullSafeString();
+                    ap[storename + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
+                    ap[storename + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
+                    ap[storename + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
+                    ap[storename + "_volcanism"] = sc.Volcanism.ToNullSafeString();
+                    ap[storename + "_gravity"] = sc.nSurfaceGravity.ToNANNullSafeString("0.####");
+                    ap[storename + "_pressure"] = sc.nSurfacePressure.ToNANNullSafeString("0.####");
+                    ap[storename + "_mass"] = sc.nMassEM.ToNANNullSafeString("0.####");
+                    ap.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), storename + "_Materials");
                 }
 
-                ap[prefix + "_text"] = sc.DisplayString();
-                ap[prefix + "_value"] = sc.EstimatedValue.ToStringInvariant();
+                ap[storename + "_text"] = sc.DisplayString();
+                ap[storename + "_value"] = sc.EstimatedValue.ToStringInvariant();
             }
 
-            if ( subname != null )
+            if ( childreninfoname != null )
             {
-                int totalchildren = (scannode.Value.Children != null) ? scannode.Value.Children.Count : 0;
-                int totalbodies = (scannode.Value.Children != null) ? (from x in scannode.Value.Children where x.Value.NodeType == StarScan.ScanNodeType.body select x).Count() : 0;
-                ap[prefix + subname] = totalchildren.ToStringInvariant();
-                ap[prefix + subname + "_Only"] = totalbodies.ToStringInvariant();       // we do this, because children can be other than bodies..
+                int totalchildren = (scannode.Children != null) ? scannode.Children.Count : 0;
+                int totalbodies = (scannode.Children != null) ? (from x in scannode.Children where x.Value.NodeType == StarScan.ScanNodeType.body select x).Count() : 0;
+                ap[storename + childreninfoname] = totalchildren.ToStringInvariant();
+                ap[storename + childreninfoname + "_Only"] = totalbodies.ToStringInvariant();       // we do this, because children can be other than bodies..
             }
         }
     }
