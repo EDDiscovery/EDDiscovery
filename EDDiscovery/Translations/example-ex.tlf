@@ -278,7 +278,7 @@ SECTION EDDiscoveryController
 .RTH: "Reading travel history" @
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." @
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" @
-.EDSMU: "Systems update complete with {0} systems" @
+.EDSMU: "Systems update complete with {0:N0} systems" @
 .PLF: "Processing log file {0}" @
 .RD: "Refresh Displays" @
 .HRC: "History refresh complete." @
@@ -321,6 +321,11 @@ SECTION SurfaceBookmarkUserControl
 .sendToCompassToolStripMenuItem: "Send to compass" @
 .deleteToolStripMenuItem: "Delete Row" @
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
+.ColTags: "Tags" @
+.textBoxFilter.ToolTip: "Search for planetary locations" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
+
+
 
 SECTION FindSystemsUserControl
 

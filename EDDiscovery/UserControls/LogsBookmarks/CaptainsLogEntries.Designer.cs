@@ -341,7 +341,7 @@
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 28;
-            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on tag");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonFilter_MouseClick);
             // 

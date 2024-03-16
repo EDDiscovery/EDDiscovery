@@ -18,6 +18,9 @@ SECTION UserControlBookmarks
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
 .extButtonNewRegion.ToolTip: "New Region Bookmark" @
+.ColTags: "Tags" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
+.buttonTags.ToolTip: "Edit Tags" @
 
 
 SECTION UserControlCombatPanel
@@ -849,7 +852,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" @
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" @
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" @
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." @
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." @
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" @
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @
@@ -1379,6 +1382,8 @@ SECTION CaptainsLogEntries
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" @
 .openInEDSMToolStripMenuItem: "Open in EDSM" @
 .openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
+
 
 SECTION UserControlTrilateration
 
@@ -1516,6 +1521,15 @@ SECTION UserControlFactions
 .CapShipAward: "Capital ship Award: " @
 .startDateTimePicker.ToolTip: "Include from" @
 .endDateTimePicker.ToolTip: "Include to" @
+.colRedeemVoucher: "Redeem Voucher" @
+.colFines: "Pay Fines" @
+.colBountyValue: "Pay Bounty Value" @
+.colDataLinkVictimFaction: "DL Victim" @
+.colDataLinkPayeeFaction: "DL Payee Faction" @
+.colDataLinkPayeeValue: "DL Payee Value" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+
+
 
 SECTION UserControlOrganics
 .extButtonShowControl.ToolTip: "Display Settings" @

@@ -51,8 +51,11 @@ namespace EDDiscovery.UserControls
             var enumlistcms = new Enum[] { EDTx.SurfaceBookmarkUserControl_sendToCompassToolStripMenuItem, 
                                 EDTx.SurfaceBookmarkUserControl_deleteToolStripMenuItem, 
                                 EDTx.SurfaceBookmarkUserControl_addPlanetManuallyToolStripMenuItem };
+            var enumlisttt = new Enum[] { EDTx.SurfaceBookmarkUserControl_textBoxFilter_ToolTip, EDTx.SurfaceBookmarkUserControl_buttonFilter_ToolTip }; ;
+
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;

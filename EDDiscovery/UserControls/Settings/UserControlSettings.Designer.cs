@@ -102,6 +102,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpScreenshots = new ExtendedControls.ExtButtonDrawn();
             this.groupBoxCustomEDSM = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpEDSM = new ExtendedControls.ExtButtonDrawn();
+            this.extButtonReloadStarDatabase = new ExtendedControls.ExtButton();
             this.groupBoxPopOuts = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpWindowOptions = new ExtendedControls.ExtButtonDrawn();
             this.extGroupBoxDLLPerms = new ExtendedControls.ExtGroupBox();
@@ -113,7 +114,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpSafeMode = new ExtendedControls.ExtButtonDrawn();
             this.labelSafeMode = new System.Windows.Forms.Label();
-            this.extButtonReloadStarDatabase = new ExtendedControls.ExtButton();
             this.extPanelScroll.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerCommanders.SuspendLayout();
@@ -367,7 +367,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEDSMDownload.TabIndex = 5;
             this.checkBoxCustomEDSMDownload.Text = "Enable Star Data Download";
             this.checkBoxCustomEDSMDownload.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxCustomEDSMDownload, "Click to enable downloading of stars from EDSM. Will apply at next start.");
+            this.toolTip.SetToolTip(this.checkBoxCustomEDSMDownload, "Click to enable downloading of stars from EDSM or Spansh. Will apply at next star" +
+        "t.");
             this.checkBoxCustomEDSMDownload.UseVisualStyleBackColor = true;
             // 
             // checkBoxPanelSortOrder
@@ -880,14 +881,16 @@ namespace EDDiscovery.UserControls
             this.numberBoxLongPortNo.DelayBeforeNotification = 0;
             this.numberBoxLongPortNo.EndButtonEnable = true;
             this.numberBoxLongPortNo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxLongPortNo.EndButtonImage")));
+            this.numberBoxLongPortNo.EndButtonSize16ths = 10;
             this.numberBoxLongPortNo.EndButtonVisible = false;
             this.numberBoxLongPortNo.Format = "D";
-            this.numberBoxLongPortNo.InErrorCondition = false;
+            this.numberBoxLongPortNo.InErrorCondition = true;
             this.numberBoxLongPortNo.Location = new System.Drawing.Point(57, 49);
             this.numberBoxLongPortNo.Maximum = ((long)(65535));
             this.numberBoxLongPortNo.Minimum = ((long)(1024));
             this.numberBoxLongPortNo.Multiline = false;
             this.numberBoxLongPortNo.Name = "numberBoxLongPortNo";
+            this.numberBoxLongPortNo.NumberStyles = ((System.Globalization.NumberStyles)((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxLongPortNo.ReadOnly = false;
             this.numberBoxLongPortNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxLongPortNo.SelectionLength = 0;
@@ -895,6 +898,7 @@ namespace EDDiscovery.UserControls
             this.numberBoxLongPortNo.Size = new System.Drawing.Size(50, 23);
             this.numberBoxLongPortNo.TabIndex = 6;
             this.numberBoxLongPortNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxLongPortNo.TextNoChange = "6502";
             this.numberBoxLongPortNo.Value = ((long)(6502));
             this.numberBoxLongPortNo.WordWrap = true;
             // 
@@ -1123,6 +1127,16 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpEDSM.UseMnemonic = true;
             this.extButtonDrawnHelpEDSM.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
+            // extButtonReloadStarDatabase
+            // 
+            this.extButtonReloadStarDatabase.Location = new System.Drawing.Point(10, 72);
+            this.extButtonReloadStarDatabase.Name = "extButtonReloadStarDatabase";
+            this.extButtonReloadStarDatabase.Size = new System.Drawing.Size(243, 23);
+            this.extButtonReloadStarDatabase.TabIndex = 10;
+            this.extButtonReloadStarDatabase.Text = "Reload Star Database";
+            this.extButtonReloadStarDatabase.UseVisualStyleBackColor = true;
+            this.extButtonReloadStarDatabase.Click += new System.EventHandler(this.extButtonReloadStarDatabase_Click);
+            // 
             // groupBoxPopOuts
             // 
             this.groupBoxPopOuts.BackColorScaling = 0.5F;
@@ -1309,16 +1323,6 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.TabIndex = 5;
             this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to ano" +
     "ther drive, reset UI, and other maintenance tasks...\r\n\r\n";
-            // 
-            // extButtonReloadStarDatabase
-            // 
-            this.extButtonReloadStarDatabase.Location = new System.Drawing.Point(10, 72);
-            this.extButtonReloadStarDatabase.Name = "extButtonReloadStarDatabase";
-            this.extButtonReloadStarDatabase.Size = new System.Drawing.Size(243, 23);
-            this.extButtonReloadStarDatabase.TabIndex = 10;
-            this.extButtonReloadStarDatabase.Text = "Reload Star Database";
-            this.extButtonReloadStarDatabase.UseVisualStyleBackColor = true;
-            this.extButtonReloadStarDatabase.Click += new System.EventHandler(this.extButtonReloadStarDatabase_Click);
             // 
             // UserControlSettings
             // 

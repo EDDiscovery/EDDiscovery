@@ -212,6 +212,8 @@ namespace EDDiscovery
         SurfaceBookmarkUserControl_PresstoAccept, // Press to Accept
         SurfaceBookmarkUserControl_PresstoCancel, // Press to Cancel
         SurfaceBookmarkUserControl_MAP, // Manually Add Planet
+        SurfaceBookmarkUserControl_textBoxFilter_ToolTip, 
+        SurfaceBookmarkUserControl_buttonFilter_ToolTip,
 
         CSV_Helpers_OpenFailed, // Failed to open<spc>
         CSV_Helpers_WriteFailed, // Failed to write to<spc>

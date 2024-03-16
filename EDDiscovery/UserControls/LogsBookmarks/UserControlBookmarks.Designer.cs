@@ -340,6 +340,7 @@
             this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
             this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 205);
             this.userControlSurfaceBookmarks.TabIndex = 5;
+            this.userControlSurfaceBookmarks.TagFilter = null;
             // 
             // toolTip
             // 
@@ -389,7 +390,7 @@
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 40;
-            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on tag");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 

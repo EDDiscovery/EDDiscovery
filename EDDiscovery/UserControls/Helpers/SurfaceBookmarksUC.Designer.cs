@@ -240,7 +240,6 @@ namespace EDDiscovery.UserControls
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 28;
             this.labelSearch.Text = "Search";
-            this.labelSearch.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
             // textBoxFilter
             // 
@@ -269,6 +268,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.TabIndex = 27;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxFilter.TextNoChange = "";
+            this.toolTip.SetToolTip(this.textBoxFilter, "Search for planetary locations");
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
@@ -280,6 +280,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 26;
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on tag");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
