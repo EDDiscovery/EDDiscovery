@@ -18,6 +18,9 @@ SECTION UserControlBookmarks
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exportar marcadores a archivo CSV"
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" => "Editar marcador en el sistema actual"
 .extButtonNewRegion.ToolTip: "New Region Bookmark" => "Nuevo Marcador de Región"
+.ColTags: "Tags" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
+.buttonTags.ToolTip: "Edit Tags" @
 
 SECTION UserControlCombatPanel
 
@@ -807,7 +810,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Configurar más opciones de captura de pantalla"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Activar/desactivar conversión de captura de pantalla"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Configurar qué partes de la galaxia se almacenan en las bases de datos"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." => "Haz clic para habilitar la descarga de estrellas desde EDSM o SPANSH. Se aplicará en el próximo inicio."
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "Haz clic para habilitar la descarga de estrellas desde EDSM o SPANSH. Se aplicará en el próximo inicio."
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Las listas de paneles están ordenadas alfanuméricamente en lugar de ordenadas en grupos. Nota Requiere reiniciar"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Esta ventana, y sus hijos, arriba"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Marque para permitir que EDD vuelva a dibujar la pantalla durante el cambio de tamaño de la ventana principal. Desactive solo si es demasiado lento"
@@ -1304,6 +1307,7 @@ SECTION CaptainsLogEntries
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Ir a mapa 3D"
 .openInEDSMToolStripMenuItem: "Open in EDSM" => "Abrir en EDSM"
 .openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "Abrir una vista del panel de escaneo"
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION UserControlTrilateration
 
@@ -1440,6 +1444,13 @@ SECTION UserControlFactions
 .CapShipAward: "Capital ship Award: " => "Premio a la nave capital: "
 .startDateTimePicker.ToolTip: "Include from" => "Incluir desde"
 .endDateTimePicker.ToolTip: "Include to" => "Incluir hasta"
+.colRedeemVoucher: "Redeem Voucher" @
+.colFines: "Pay Fines" @
+.colBountyValue: "Pay Bounty Value" @
+.colDataLinkVictimFaction: "DL Victim" @
+.colDataLinkPayeeFaction: "DL Payee Faction" @
+.colDataLinkPayeeValue: "DL Payee Value" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
 
 SECTION UserControlOrganics
 

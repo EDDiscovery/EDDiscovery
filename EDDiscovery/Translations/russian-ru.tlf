@@ -280,7 +280,7 @@ SECTION EDDiscoveryController
 .RTH: "Reading travel history" => "Читаю историю полетов"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Пожалуйста, не останавливайте ED Discovery до завершения обновления"
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Синхронизация с EDSM и EDDB отключена в настройках"
-.EDSMU: "Systems update complete with {0} systems" => "Количество систем, загруженных при обновлении EDSM: {0}"
+.EDSMU: "Systems update complete with {0:N0} systems" => "Количество систем, загруженных при обновлении EDSM: {0}"
 .PLF: "Processing log file {0}" => "Обрабатываю файл журнала {0}"
 .RD: "Refresh Displays" => "Обновляю вкладки"
 .HRC: "History refresh complete." => "Обновление истории завершено"
@@ -288,7 +288,6 @@ SECTION EDDiscoveryController
 
 SECTION BookmarkForm
 
-.buttonEDSM: "EDSM" => "В EDSM"
 .labelName: "Name" => "Название системы"
 .checkBoxTarget: "Make Target" => "Сделать целью"
 .labelBookmarkNotes: "Bookmark Notes" => "Примечание к закладке"
@@ -319,10 +318,14 @@ SECTION SurfaceBookmarkUserControl
 .Latitude: "Latitude" => "Широта"
 .Longitude: "Longitude" => "Долгота"
 .Valid: "Saveable" => "Сохраняемая"
+.labelSearch: "Search" @
 .labelSurface: "Surface Bookmarks In System" => "Закладки на поверхности планет в системе"
 .sendToCompassToolStripMenuItem: "Send to compass" => "Передать на компас"
 .deleteToolStripMenuItem: "Delete Row" => "Удалить строку"
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Добавить планету вручную"
+.ColTags: "Tags" @
+.textBoxFilter.ToolTip: "Search for planetary locations" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION FindSystemsUserControl
 

@@ -280,7 +280,7 @@ SECTION EDDiscoveryController
 .RTH: "Reading travel history" => "Wczytywanie historii podróży"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Proszę nie wyłączać EDDiscovery do momentu ukończenia odświeżania."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Synchronizacja z EDSM i EDDB jest wyłączona. Można ją włączyć w Ustawieniach"
-.EDSMU: "Systems update complete with {0} systems" => "Aktualizacja z EDSM ukończona - {0} układów"
+.EDSMU: "Systems update complete with {0:N0} systems" => "Aktualizacja z EDSM ukończona - {0} układów"
 .PLF: "Processing log file {0}" => "Przetwarzanie pliku dziennika {0}"
 .RD: "Refresh Displays" => "Odświeżanie Wskaźników"
 .HRC: "History refresh complete." => "Odświeżanie Historii zakończone."
@@ -288,7 +288,6 @@ SECTION EDDiscoveryController
 
 SECTION BookmarkForm
 
-.buttonEDSM: "EDSM" @
 .labelName: "Name" => "Nazwa"
 .checkBoxTarget: "Make Target" => "Ustaw Jako Cel"
 .labelBookmarkNotes: "Bookmark Notes" => "Notatki dot. zakładki"
@@ -319,10 +318,14 @@ SECTION SurfaceBookmarkUserControl
 .Latitude: "Latitude" => "Szerokość Geogr."
 .Longitude: "Longitude" => "Długość Geogr."
 .Valid: "Saveable" => "Zapisywalne"
+.labelSearch: "Search" @
 .labelSurface: "Surface Bookmarks In System" => "Zakładki Powierzchniowe w Układzie"
 .sendToCompassToolStripMenuItem: "Send to compass" => "Przekaż do Kompasu"
 .deleteToolStripMenuItem: "Delete Row" => "Usuń Wiersz"
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Dodaj Planetę Ręcznie"
+.ColTags: "Tags" @
+.textBoxFilter.ToolTip: "Search for planetary locations" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION FindSystemsUserControl
 

@@ -18,6 +18,9 @@ SECTION UserControlBookmarks
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Eksportuj zakładki do pliku CSV"
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
 .extButtonNewRegion.ToolTip: "New Region Bookmark" @
+.ColTags: "Tags" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
+.buttonTags.ToolTip: "Edit Tags" @
 
 SECTION UserControlCombatPanel
 
@@ -807,7 +810,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Więcej opcji konfiguracji zrzutów ekranu"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Włącz/Wyłącz konwersję zrzutów ekranu"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Ustaw, która część galaktyki ma być przechowywana w bazach danych"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or SPANSH. Will apply at next start." => "Kliknij, aby włączyć pobieranie danych gwiazd z EDSM i informacji o układach z EDDB. Zostanie zastosowane przy następnym uruchomieniu."
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "Kliknij, aby włączyć pobieranie danych gwiazd z EDSM i informacji o układach z EDDB. Zostanie zastosowane przy następnym uruchomieniu."
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Listy paneli sortowane alfanumerycznie zamiast posegregowane w grupach. Uwaga: Wymaga Ponownego Uruchomienia"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "To okno, oraz jego elementy podrzędne, na wierzchu"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Zaznacz, aby zezwolić na rysowanie ekranu od nowa podczas zmieniania rozmiaru głównego okna. Wyłącz tylko, jeśli działa zbyt wolno"
@@ -1304,6 +1307,7 @@ SECTION CaptainsLogEntries
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Pokaż na Mapie 3D"
 .openInEDSMToolStripMenuItem: "Open in EDSM" => "Otwórz w EDSM"
 .openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "Pokaż w Widoku Panelu Skanu"
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION UserControlTrilateration
 
@@ -1440,6 +1444,13 @@ SECTION UserControlFactions
 .CapShipAward: "Capital ship Award: " @
 .startDateTimePicker.ToolTip: "Include from" @
 .endDateTimePicker.ToolTip: "Include to" @
+.colRedeemVoucher: "Redeem Voucher" @
+.colFines: "Pay Fines" @
+.colBountyValue: "Pay Bounty Value" @
+.colDataLinkVictimFaction: "DL Victim" @
+.colDataLinkPayeeFaction: "DL Payee Faction" @
+.colDataLinkPayeeValue: "DL Payee Value" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
 
 SECTION UserControlOrganics
 
