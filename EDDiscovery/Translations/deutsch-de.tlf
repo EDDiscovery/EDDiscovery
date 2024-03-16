@@ -286,77 +286,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Aktualiserung der Historie abgeschlossen."
 .EXPD: "Checking for new Expedition data" => "Prüfe auf neue Expeditionsdaten"
 
-SECTION BookmarkForm
-
-.labelName: "Name" => "Name"
-.checkBoxTarget: "Make Target" => "Erstelle Ziel"
-.labelBookmarkNotes: "Bookmark Notes" => "Lesezeichennotizen"
-.labelTravelNote: "Travel History Note" => "Notizen zur Reisehistorie"
-.labelTimeMade: "Time Made" => "Erstellt am"
-.Update: "Update" => "Aktualisieren"
-.SB: "New System Bookmark" => "Neues Systemlesezeichen"
-.UB: "Update Bookmark" => "Lesezeichen aktualiseren"
-.RB: "Create Region Bookmark" => "Erstelle Regionslesezeichen"
-.RN: "Enter a region name..." => "Gib einen Regionsnamen ein..."
-.SI: "System Information" => "Systeminformationen"
-.NSB: "New System Bookmark" => "Neues Systemlesezeichen"
-.ESN: "Enter a system name..." => "Gib einen Systemnamen ein..."
-.GMO: "Galactic Mapping Object" => "Galactic Mapping Objekt"
-.Description: "Description" => "Beschreibung"
-
-SECTION SurfaceBookmarkUserControl
-
-.Enter: "Enter a name" => "Gib einen Namen ein"
-.PL: "Planet: " => "Planet: "
-.EPN: "Enter planet name" => "Planetennamen eingeben"
-.PresstoAccept: "Press to Accept" => "Drücken um anzunehmen"
-.PresstoCancel: "Press to Cancel" => "Drücken um Abzubrechen"
-.MAP: "Manually Add Planet" => "Planet manuell hinzufügen"
-.BodyName: "Planetary Body" => "Planetarer Körper"
-.SurfaceName: "Name" => "Name"
-.SurfaceDesc: "Description" => "Beschreibung"
-.Latitude: "Latitude" => "Breitengrad"
-.Longitude: "Longitude" => "Längengrad"
-.Valid: "Saveable" => "Speicherbar"
-.labelSearch: "Search" @
-.labelSurface: "Surface Bookmarks In System" => "Oberflächenlesezeichen im System"
-.sendToCompassToolStripMenuItem: "Send to compass" => "Sende an Kompass"
-.deleteToolStripMenuItem: "Delete Row" => "Zeile löschen"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Planet manuell hinzufügen"
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-
-SECTION FindSystemsUserControl
-
-.labelRadMax: "Max" => "Maximaler Radius"
-.labelRadMin: "Radius ly Min" => "Minimaler Radius"
-.labelFilter: "Star Name" => "Sternenname"
-.Cannotfindsystem: "Cannot find system " => "Kann System nicht finden"
-.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" => "Webseite sendete keine Daten von {0} zurück\nEs könnte ein galaktisches Objekt sein das es nicht kennt."
-.buttonExtNames: "From DB Find Names" => "Finde Namen in der DB"
-.buttonExtEDSM: "From EDSM" => "Von EDSM"
-.buttonExtDB: "From DB" => "Aus DB"
-.buttonExtVisited: "From Visited Systems" => "Aus den besuchten Systemen"
-.checkBoxCustomCube: "Cube" => "Würfel"
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Schließe besuchte Systeme aus"
-.extButtonFromSpansh: "From Spansh" => "Von Spansh"
-.extButtonFromSpanshFindNames: "From Spansh Find Names" => "Finde Namen mit Spansh"
-
-SECTION TravelHistoryFilter
-
-.Hours: "{0} hours" => "{0} Stunden"
-.Days: "{0} days" => "{0} Tage"
-.1Week: "One Week" => "Eine Woche"
-.Weeks: "{0} weeks" => "{0} wochen"
-.Month: "Month" => "Monat"
-.Quarter: "Quarter" => "Quartal"
-.HYear: "Half year" => "Halbjahr"
-.Year: "Year" => "Jahr"
-.LastN: "Last {0} entries" => "Letzte {0} Einträge"
-.LDock: "Last dock" => "Letztes andocken"
-.StartEnd: "Start/End Flag" => "Start/Ende Markierung"
-
 SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Globale"
@@ -399,14 +328,6 @@ ImportExportForm: "Export data" => "Daten exportieren"
 .labelPaste: "Click Paste or drag text or files to input box" => "Kopiere Text in, oder ziehe Dateien auf Eingabefeld"
 .extRadioButtonTab: "Tab" => "Tabulator"
 .extCheckBoxExcludeHeader: "Exclude Header Row" => "Ignoriere Headerzeile"
-
-SECTION Form2DMap
-
-.LastWeek: "Last Week" => "Letzte Woche"
-.LastMonth: "Last Month" => "Letzter Monat"
-.LastYear: "Last Year" => "Letztes Jahr"
-.All: "All" => "Alles"
-.Custom: "Custom" => "Benutzerdefiniert"
 
 SECTION GalaxySectorSelect
 
@@ -513,15 +434,6 @@ KeyForm: "Define Key Sequence" => "Definiere Tastensequenz"
 .NOPN: "Name a process to test sending keys" => "Nenne einen Prozess um das Senden von Tasten zu testen"
 .KERR: "Error {0} - check entry" => "Error {0} - Eintrag prüfen"
 .NOP: "No process names to send keys to" => "Kein Prozessname an den Tasten gesendet werden können"
-
-SECTION UserControlForm
-
-.extButtonDrawnMinimize.ToolTip: "Minimise" => "Minimieren"
-.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "'Fenster zuoberst' umschalten"
-.extButtonDrawnClose.ToolTip: "Close" => "Schließen"
-.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "Wechsle 'zeige Taskleistensymbol für dieses Fenster'"
-.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "Wechsle 'Sichtbarkeit dieses Fenster wenn transparent'"
-.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Wechsle Fenstertransparenz durch vier Einstellungen\r\nAus - normales Fenster\r\nEin (T) - transparent mit aktiver Steuerung während die Maus nicht im Fenster ist\r\nEin (Tc) - transparent mit aktiver Steuerung, zum Aktivieren Triggertaste drücken\r\nEin (Tf) - komplett transparent und inaktiv, zum aktivieren Triggertaste drücken\r\n\r\nBetrachte die Einstellungen um die Triggertaste zu sehen.\r\nDie Maus muss im Fenster sein und die Triggertaste für etwa\r\n500ms gedrückt werden.\r\n\r\n\r\n"
 
 SECTION ExtPanelRollUp
 

@@ -286,77 +286,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Recarregamento do histórico completo"
 .EXPD: "Checking for new Expedition data" => "Verificando por novos dados de exploração"
 
-SECTION BookmarkForm
-
-.labelName: "Name" => "Nome"
-.checkBoxTarget: "Make Target" => "Definir como destino"
-.labelBookmarkNotes: "Bookmark Notes" => "Nota do Favorito"
-.labelTravelNote: "Travel History Note" => "Nota do Histórico de Viajem"
-.labelTimeMade: "Time Made" => "Tempo realizado"
-.Update: "Update" => "Atualizar"
-.SB: "New System Bookmark" => "Novo Favorito de Sistema"
-.UB: "Update Bookmark" => "Atualizar Favorito"
-.RB: "Create Region Bookmark" => "Cria uma Região Favorita"
-.RN: "Enter a region name..." => "De um nome à região..."
-.SI: "System Information" => "Informação"
-.NSB: "New System Bookmark" => "Novo"
-.ESN: "Enter a system name..." => "Insere um nome de sistema..."
-.GMO: "Galactic Mapping Object" => "Objeto de Mapa Galáctico"
-.Description: "Description" => "Descrição"
-
-SECTION SurfaceBookmarkUserControl
-
-.Enter: "Enter a name" => "Insira um nome"
-.PL: "Planet: " => "Planeta"
-.EPN: "Enter planet name" => "Insira o nome do planeta"
-.PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
-.PresstoCancel: "Press to Cancel" => "Pressiona para cancelar"
-.MAP: "Manually Add Planet" => "Adiciona manualmente um planeta"
-.BodyName: "Planetary Body" => "Corpo planetario"
-.SurfaceName: "Name" => "Nome"
-.SurfaceDesc: "Description" => "Descrizione"
-.Latitude: "Latitude" => "Latitude"
-.Longitude: "Longitude" => "Longitude"
-.Valid: "Saveable" => "Salvável"
-.labelSearch: "Search" @
-.labelSurface: "Surface Bookmarks In System" => "Favorito de modelo de superfice"
-.sendToCompassToolStripMenuItem: "Send to compass" => "Envia"
-.deleteToolStripMenuItem: "Delete Row" => "Elimina linha"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Adiciona dados manualmente"
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-
-SECTION FindSystemsUserControl
-
-.labelRadMax: "Max" => "Máx"
-.labelRadMin: "Radius ly Min" => "Ráio Min (ly)"
-.labelFilter: "Star Name" => "Nome do Sistema"
-.Cannotfindsystem: "Cannot find system " => "Impossível achar o sistema"
-.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
-.buttonExtNames: "From DB Find Names" => "Cerca neve dal DB"
-.buttonExtEDSM: "From EDSM" => "Cerca da EDSM"
-.buttonExtDB: "From DB" => "Da banco de dados"
-.buttonExtVisited: "From Visited Systems" => "De sistemas visitados"
-.checkBoxCustomCube: "Cube" => "Cubo"
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Exclui sistemas visitados"
-.extButtonFromSpansh: "From Spansh" @
-.extButtonFromSpanshFindNames: "From Spansh Find Names" @
-
-SECTION TravelHistoryFilter
-
-.Hours: "{0} hours" => "{0} horas"
-.Days: "{0} days" => "{0} dias"
-.1Week: "One Week" => "Uma semana"
-.Weeks: "{0} weeks" => "{0} semanas"
-.Month: "Month" => "Meses"
-.Quarter: "Quarter" => "Quadrimestre"
-.HYear: "Half year" => "Semestre"
-.Year: "Year" => "Ano"
-.LastN: "Last {0} entries" => "Ultimos {0} registros"
-.LDock: "Last dock" => "Ultima docagem"
-.StartEnd: "Start/End Flag" => "Início/Fim"
-
 SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Global"
@@ -399,14 +328,6 @@ ImportExportForm: "Export data" => "Exportar"
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
-
-SECTION Form2DMap
-
-.LastWeek: "Last Week" => "Última Semana"
-.LastMonth: "Last Month" => "Último Mês"
-.LastYear: "Last Year" => "Último Ano"
-.All: "All" => "Tudo"
-.Custom: "Custom" => "Personalizado"
 
 SECTION GalaxySectorSelect
 
@@ -513,15 +434,6 @@ KeyForm: "Define Key Sequence" => "Defina uma sequência de teclas"
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
 .NOP: "No process names to send keys to" @
-
-SECTION UserControlForm
-
-.extButtonDrawnMinimize.ToolTip: "Minimise" => "Minimiza"
-.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "Imposta acima das outras janelas"
-.extButtonDrawnClose.ToolTip: "Close" => "Fecha"
-.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "Mostra ou não a ícona na barra de ferramentas"
-.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "Imposta a vibilidade do título da janela"
-.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Imposta a transparência através de quatro presets:\r\nOff - normal, sem transparências\r\nOn (T) - transparente, com os controles ativos quando o mouse está dentro da janela\r\nOn (Tc) - transparente, com os controles ativos, activada mantendo pressionada a tecla de ativação\r\nOn (Tf) - transparência total, inerte, para interagir manter pressionada a tecla de ativação\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n"
 
 SECTION ExtPanelRollUp
 

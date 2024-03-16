@@ -286,77 +286,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Ricaricamento dello storico completato"
 .EXPD: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
 
-SECTION BookmarkForm
-
-.labelName: "Name" => "Nome"
-.checkBoxTarget: "Make Target" => "Imposta come destino"
-.labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
-.labelTravelNote: "Travel History Note" => "Nota dello Storico di Viaggio"
-.labelTimeMade: "Time Made" => "Tempo fatto"
-.Update: "Update" => "Attualizza"
-.SB: "New System Bookmark" => "Nuovo Favorito di Sistema"
-.UB: "Update Bookmark" => "Attualizza Favorito"
-.RB: "Create Region Bookmark" => "Crea una Regione Favoriti"
-.RN: "Enter a region name..." => "Nomina la regione..."
-.SI: "System Information" => "Informazione"
-.NSB: "New System Bookmark" => "Nuovo"
-.ESN: "Enter a system name..." => "Inserisci un nome di sistema..."
-.GMO: "Galactic Mapping Object" => "Oggetto di Mappa Galattico"
-.Description: "Description" => "Descrizione"
-
-SECTION SurfaceBookmarkUserControl
-
-.Enter: "Enter a name" => "Inserisci un nome"
-.PL: "Planet: " => "Pianeta"
-.EPN: "Enter planet name" => "Inserisci il nome del pianeta"
-.PresstoAccept: "Press to Accept" => "Premi per accettar"
-.PresstoCancel: "Press to Cancel" => "Premi per cancellare"
-.MAP: "Manually Add Planet" => "Aggiungi manualmente un pianeta"
-.BodyName: "Planetary Body" => "Corpo Planetario"
-.SurfaceName: "Name" => "Nome"
-.SurfaceDesc: "Description" => "Descrizione"
-.Latitude: "Latitude" => "Latitudine"
-.Longitude: "Longitude" => "Longitudine"
-.Valid: "Saveable" => "Salvabile"
-.labelSearch: "Search" @
-.labelSurface: "Surface Bookmarks In System" => "Favoriti di Superfice nel sistema"
-.sendToCompassToolStripMenuItem: "Send to compass" => "Invia alla bussola"
-.deleteToolStripMenuItem: "Delete Row" => "Elimina riga"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Aggiungi corpo planetario manualmente"
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-
-SECTION FindSystemsUserControl
-
-.labelRadMax: "Max" => "Massimo"
-.labelRadMin: "Radius ly Min" => "Raggio Min (ly)"
-.labelFilter: "Star Name" => "Nome del Sistema"
-.Cannotfindsystem: "Cannot find system " => "Impossibile trovare il systema"
-.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
-.buttonExtNames: "From DB Find Names" => "Cerca nomi dal DB"
-.buttonExtEDSM: "From EDSM" => "Da EDSM"
-.buttonExtDB: "From DB" => "Dal DB"
-.buttonExtVisited: "From Visited Systems" => "Da sistemi visitati"
-.checkBoxCustomCube: "Cube" => "Cubo"
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Escludi sistemi visitati"
-.extButtonFromSpansh: "From Spansh" @
-.extButtonFromSpanshFindNames: "From Spansh Find Names" @
-
-SECTION TravelHistoryFilter
-
-.Hours: "{0} hours" => "{0} ore"
-.Days: "{0} days" => "{0} giorni"
-.1Week: "One Week" => "Una settimana"
-.Weeks: "{0} weeks" => "{0} settimane"
-.Month: "Month" => "Mesi"
-.Quarter: "Quarter" => "Quadrimestre"
-.HYear: "Half year" => "Semestre"
-.Year: "Year" => "Anno"
-.LastN: "Last {0} entries" => "Ultimi {0} registri"
-.LDock: "Last dock" => "Ultimo attracco"
-.StartEnd: "Start/End Flag" => "Inizio/Fine"
-
 SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Globale"
@@ -399,14 +328,6 @@ ImportExportForm: "Export data" => "Esporta"
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
-
-SECTION Form2DMap
-
-.LastWeek: "Last Week" => "Ultima Settimana"
-.LastMonth: "Last Month" => "Ultimo Mese"
-.LastYear: "Last Year" => "Ultimo Anno"
-.All: "All" => "Tutto"
-.Custom: "Custom" => "Personalizzato"
 
 SECTION GalaxySectorSelect
 
@@ -513,15 +434,6 @@ KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
 .NOP: "No process names to send keys to" @
-
-SECTION UserControlForm
-
-.extButtonDrawnMinimize.ToolTip: "Minimise" => "Minimizza"
-.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "Imposta finestra sopra alle altre"
-.extButtonDrawnClose.ToolTip: "Close" => "Chiudi"
-.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "Mostra o no l'icona della finestra sulla barra."
-.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "Mostra il titolo quando trasparente"
-.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Imposta trasparenza in quattro modi\r\nOff - normale (opaco)\r\nOn (T) - trasparente, con i controlli attivi quando il mouse é fuori\r\nOn (Tc) - trasparente, con i controlli attivi, per attivare, manetere premuto il tasto di attivazione\r\nOn (Tf) - trasparenza totale, inerte, per attivare mantenere premuto il tasto di attivazione\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n"
 
 SECTION ExtPanelRollUp
 

@@ -286,77 +286,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Обновление истории завершено"
 .EXPD: "Checking for new Expedition data" => "Ищу новые данные экспедиций"
 
-SECTION BookmarkForm
-
-.labelName: "Name" => "Название системы"
-.checkBoxTarget: "Make Target" => "Сделать целью"
-.labelBookmarkNotes: "Bookmark Notes" => "Примечание к закладке"
-.labelTravelNote: "Travel History Note" => "Примечание из истории полетов"
-.labelTimeMade: "Time Made" => "Время создания"
-.Update: "Update" => "Обновить"
-.SB: "New System Bookmark" => "Новая закладка для системы"
-.UB: "Update Bookmark" => "Обновить закладку"
-.RB: "Create Region Bookmark" => "Создать закладку для региона"
-.RN: "Enter a region name..." => "Введите название региона..."
-.SI: "System Information" => "Информация о системе"
-.NSB: "New System Bookmark" => "Новая закладка для системы"
-.ESN: "Enter a system name..." => "Введите название системы..."
-.GMO: "Galactic Mapping Object" => "Объект карты Галактики"
-.Description: "Description" => "Описание"
-
-SECTION SurfaceBookmarkUserControl
-
-.Enter: "Enter a name" => "Введите название"
-.PL: "Planet: " => "Планета: "
-.EPN: "Enter planet name" => "Введите название планеты"
-.PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
-.PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
-.MAP: "Manually Add Planet" => "Добавить планету вручную"
-.BodyName: "Planetary Body" => "Планета"
-.SurfaceName: "Name" => "Название"
-.SurfaceDesc: "Description" => "Описание"
-.Latitude: "Latitude" => "Широта"
-.Longitude: "Longitude" => "Долгота"
-.Valid: "Saveable" => "Сохраняемая"
-.labelSearch: "Search" @
-.labelSurface: "Surface Bookmarks In System" => "Закладки на поверхности планет в системе"
-.sendToCompassToolStripMenuItem: "Send to compass" => "Передать на компас"
-.deleteToolStripMenuItem: "Delete Row" => "Удалить строку"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Добавить планету вручную"
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-
-SECTION FindSystemsUserControl
-
-.labelRadMax: "Max" => "Макс."
-.labelRadMin: "Radius ly Min" => "Мин. радиус"
-.labelFilter: "Star Name" => "Система"
-.Cannotfindsystem: "Cannot find system " => "Не могу найти систему"
-.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
-.buttonExtNames: "From DB Find Names" => "Найти название в БД"
-.buttonExtEDSM: "From EDSM" => "Поиск по EDSM"
-.buttonExtDB: "From DB" => "Поиск по БД"
-.buttonExtVisited: "From Visited Systems" => "Поиск по посещенным"
-.checkBoxCustomCube: "Cube" => "Куб"
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
-.extButtonFromSpansh: "From Spansh" @
-.extButtonFromSpanshFindNames: "From Spansh Find Names" @
-
-SECTION TravelHistoryFilter
-
-.Hours: "{0} hours" => "{0} ч."
-.Days: "{0} days" => "{0} дн."
-.1Week: "One Week" => "Неделя"
-.Weeks: "{0} weeks" => "{0} нед."
-.Month: "Month" => "Месяц"
-.Quarter: "Quarter" => "Квартал"
-.HYear: "Half year" => "Полгода"
-.Year: "Year" => "Год"
-.LastN: "Last {0} entries" => "Посл. {0} событий"
-.LDock: "Last dock" => "Посл. стыковка"
-.StartEnd: "Start/End Flag" => "Start/End флаг"
-
 SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Глобальные переменные"
@@ -399,14 +328,6 @@ ImportExportForm: "Export data" => "Экспорт"
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
-
-SECTION Form2DMap
-
-.LastWeek: "Last Week" => "Последняя неделя"
-.LastMonth: "Last Month" => "Последний месяц"
-.LastYear: "Last Year" => "Последний год"
-.All: "All" => "Все"
-.Custom: "Custom" => "Свое"
 
 SECTION GalaxySectorSelect
 
@@ -513,15 +434,6 @@ KeyForm: "Define Key Sequence" => "Определить последовател
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
 .NOP: "No process names to send keys to" @
-
-SECTION UserControlForm
-
-.extButtonDrawnMinimize.ToolTip: "Minimise" => "Минимизировать"
-.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "Переместить окно поверх других"
-.extButtonDrawnClose.ToolTip: "Close" => "Закрыть"
-.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "Показать значок окна на панели задач"
-.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "Видимость заголовка окна во время прозрачности"
-.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
 
 SECTION ExtPanelRollUp
 

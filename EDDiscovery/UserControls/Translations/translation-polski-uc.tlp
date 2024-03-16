@@ -1648,3 +1648,91 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI2.colCAPILockerName: "Microresource" @
 .extTabControl.tabPageCAPI2.colCAPILockerType: "Type" @
 .extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" @
+
+SECTION BookmarkForm
+
+.labelName: "Name" => "Nazwa"
+.checkBoxTarget: "Make Target" => "Ustaw Jako Cel"
+.labelBookmarkNotes: "Bookmark Notes" => "Notatki dot. zakładki"
+.labelTravelNote: "Travel History Note" => "Notatka historii podróży"
+.labelTimeMade: "Time Made" => "Czas Utworzenia"
+.Update: "Update" => "Aktualizuj"
+.SB: "New System Bookmark" => "Nowa Zakładka w Układzie"
+.UB: "Update Bookmark" => "Aktualizuj Zakładkę"
+.RB: "Create Region Bookmark" => "Utwórz Zakładkę Regionu"
+.RN: "Enter a region name..." => "Wprowadź nazwę regionu..."
+.SI: "System Information" => "Informacje o Układzie"
+.NSB: "New System Bookmark" => "Nowa Zakładka w Układzie"
+.ESN: "Enter a system name..." => "Wprowadź nazwę układu..."
+.GMO: "Galactic Mapping Object" => "Obiekt Mapowania Galaktycznego"
+.Description: "Description" => "Opis"
+
+SECTION SurfaceBookmarkUserControl
+
+.Enter: "Enter a name" => "Wprowadź nazwę"
+.PL: "Planet: " => "Planeta: "
+.EPN: "Enter planet name" => "Wprowadź nazwę planety"
+.PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
+.PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
+.MAP: "Manually Add Planet" => "Dodaj Planetę Ręcznie"
+.BodyName: "Planetary Body" => "Ciało Niebieskie"
+.SurfaceName: "Name" => "Nazwa"
+.SurfaceDesc: "Description" => "Opis"
+.Latitude: "Latitude" => "Szerokość Geogr."
+.Longitude: "Longitude" => "Długość Geogr."
+.Valid: "Saveable" => "Zapisywalne"
+.labelSearch: "Search" @
+.labelSurface: "Surface Bookmarks In System" => "Zakładki Powierzchniowe w Układzie"
+.sendToCompassToolStripMenuItem: "Send to compass" => "Przekaż do Kompasu"
+.deleteToolStripMenuItem: "Delete Row" => "Usuń Wiersz"
+.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Dodaj Planetę Ręcznie"
+.ColTags: "Tags" @
+.textBoxFilter.ToolTip: "Search for planetary locations" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
+
+SECTION FindSystemsUserControl
+
+.labelRadMax: "Max" => "Maks."
+.labelRadMin: "Radius ly Min" => "Min.Promień LŚw"
+.labelFilter: "Star Name" => "Nazwa Gwiazdy"
+.Cannotfindsystem: "Cannot find system " => "Nie można znaleźć układu "
+.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
+.buttonExtNames: "From DB Find Names" => "Szukaj Nazwy w Bazie Danych"
+.buttonExtEDSM: "From EDSM" => "Z EDSM"
+.buttonExtDB: "From DB" => "Z Bazy Danych"
+.buttonExtVisited: "From Visited Systems" => "Z Odwiedzonych Układów"
+.checkBoxCustomCube: "Cube" => "Sześcian"
+.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
+.extButtonFromSpansh: "From Spansh" @
+.extButtonFromSpanshFindNames: "From Spansh Find Names" @
+
+SECTION TravelHistoryFilter
+
+.Hours: "{0} hours" => "{0} godzin"
+.Days: "{0} days" => "{0} dni"
+.1Week: "One Week" => "Tydzień"
+.Weeks: "{0} weeks" => "{0} tygodni(e)"
+.Month: "Month" => "Miesiąc"
+.Quarter: "Quarter" => "Kwartał"
+.HYear: "Half year" => "Pół roku"
+.Year: "Year" => "Rok"
+.LastN: "Last {0} entries" => "Ostatnie {0} wpisów"
+.LDock: "Last dock" => "Ostatnie dokowanie"
+.StartEnd: "Start/End Flag" => "Flaga Początek/Koniec"
+
+SECTION Form2DMap
+
+.LastWeek: "Last Week" => "Ostatni Tydzień"
+.LastMonth: "Last Month" => "Ostatni Miesiąc"
+.LastYear: "Last Year" => "Ostatni Rok"
+.All: "All" => "Wszystko"
+.Custom: "Custom" => "Niestandardowe"
+
+SECTION UserControlForm
+
+.extButtonDrawnMinimize.ToolTip: "Minimise" => "Minimalizuj"
+.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "Przełącz ustawienie okna na wierzchu pozostałych"
+.extButtonDrawnClose.ToolTip: "Close" => "Zamknij"
+.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "Włącz/Wyłącz ikonę paska zadań tego okna"
+.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "Przełącz widoczność tytułu tego okna gdy przezroczyste"
+.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Przełącz przezroczystość okien według czterech ustawień\r\nOff - normalne okno\r\nOn (T) - przezroczyste z aktywną kontrolą gdy kursor myszki nie znajduje się w oknie\r\nOn (Tc) - przezroczyste z aktywną kontrolą, aby aktywować przytrzymaj przycisk aktywacji\r\nOn (Tf) - całkowicie przezroczyste i nieaktywne, aby aktywować przytrzymaj przycisk aktywacji\r\n\r\nSprawdź stronę ustawień, aby ustawić przycisk jako przycisk aktywacji.  \r\nKursor myszki musi być w zakresie granic okna, przycisk musi być przytrzymany przez ok. 500ms.\r\n\r\n\r\n"

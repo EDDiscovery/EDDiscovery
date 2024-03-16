@@ -1728,4 +1728,91 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI2.colCAPILockerType: "Type" @
 .extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" @
 
+SECTION BookmarkForm
 
+.labelName: "Name" @
+.checkBoxTarget: "Make Target" @
+.labelBookmarkNotes: "Bookmark Notes" @
+.labelTravelNote: "Travel History Note" @
+.labelTimeMade: "Time Made" @
+.Update: "Update" @
+.SB: "New System Bookmark" @
+.UB: "Update Bookmark" @
+.RB: "Create Region Bookmark" @
+.RN: "Enter a region name..." @
+.SI: "System Information" @
+.NSB: "New System Bookmark" @
+.ESN: "Enter a system name..." @
+.GMO: "Galactic Mapping Object" @
+.Description: "Description" @
+
+SECTION SurfaceBookmarkUserControl
+
+.Enter: "Enter a name" @
+.PL: "Planet: " @
+.EPN: "Enter planet name" @
+.PresstoAccept: "Press to Accept" @
+.PresstoCancel: "Press to Cancel" @
+.MAP: "Manually Add Planet" @
+.BodyName: "Planetary Body" @
+.SurfaceName: "Name" @
+.SurfaceDesc: "Description" @
+.Latitude: "Latitude" @
+.Longitude: "Longitude" @
+.Valid: "Saveable" @
+.labelSearch: "Search" @
+.labelSurface: "Surface Bookmarks In System" @
+.sendToCompassToolStripMenuItem: "Send to compass" @
+.deleteToolStripMenuItem: "Delete Row" @
+.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
+.ColTags: "Tags" @
+.textBoxFilter.ToolTip: "Search for planetary locations" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" @
+
+
+SECTION FindSystemsUserControl
+
+.labelRadMax: "Max" @
+.labelRadMin: "Radius ly Min" @
+.labelFilter: "Star Name" @
+.Cannotfindsystem: "Cannot find system " @
+.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
+.buttonExtNames: "From DB Find Names" @
+.buttonExtEDSM: "From EDSM" @
+.buttonExtDB: "From DB" @
+.buttonExtVisited: "From Visited Systems" @
+.checkBoxCustomCube: "Cube" @
+.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
+.extButtonFromSpansh: "From Spansh" @
+.extButtonFromSpanshFindNames: "From Spansh Find Names" @
+
+SECTION TravelHistoryFilter
+
+.Hours: "{0} hours" @
+.Days: "{0} days" @
+.1Week: "One Week" @
+.Weeks: "{0} weeks" @
+.Month: "Month" @
+.Quarter: "Quarter" @
+.HYear: "Half year" @
+.Year: "Year" @
+.LastN: "Last {0} entries" @
+.LDock: "Last dock" @
+.StartEnd: "Start/End Flag" @
+
+SECTION Form2DMap
+
+.LastWeek: "Last Week" @
+.LastMonth: "Last Month" @
+.LastYear: "Last Year" @
+.All: "All" @
+.Custom: "Custom" @
+
+SECTION UserControlForm
+
+.extButtonDrawnMinimize.ToolTip: "Minimise" @
+.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" @
+.extButtonDrawnClose.ToolTip: "Close" @
+.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" @
+.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" @
+.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @

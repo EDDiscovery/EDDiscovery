@@ -286,77 +286,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." => "Se completó la actualización del historial"
 .EXPD: "Checking for new Expedition data" => "Comprobando nuevos datos de la expedición"
 
-SECTION BookmarkForm
-
-.labelName: "Name" => "Nombre"
-.checkBoxTarget: "Make Target" => "Hacer objetivo"
-.labelBookmarkNotes: "Bookmark Notes" => "Notas de marcador"
-.labelTravelNote: "Travel History Note" => "Nota del historial de viajes"
-.labelTimeMade: "Time Made" => "Fecha de Creación"
-.Update: "Update" => "Actualizar"
-.SB: "New System Bookmark" => "Nuevo marcador del sistema"
-.UB: "Update Bookmark" => "Actualizar marcador"
-.RB: "Create Region Bookmark" => "Crear marcador de región"
-.RN: "Enter a region name..." => "Introduzca un nombre de región ..."
-.SI: "System Information" => "Información del sistema"
-.NSB: "New System Bookmark" => "Nuevo marcador del sistema"
-.ESN: "Enter a system name..." => "Introduzca un nombre de sistema ..."
-.GMO: "Galactic Mapping Object" => "Objeto de cartografía galáctica"
-.Description: "Description" => "Descripción"
-
-SECTION SurfaceBookmarkUserControl
-
-.Enter: "Enter a name" => "Ingresa un nombre"
-.PL: "Planet: " => "Planeta: "
-.EPN: "Enter planet name" => "Ingresa el nombre del planeta"
-.PresstoAccept: "Press to Accept" => "Presione para aceptar"
-.PresstoCancel: "Press to Cancel" => "Presione para cancelar"
-.MAP: "Manually Add Planet" => "Agregar planeta manualmente"
-.BodyName: "Planetary Body" => "Cuerpo planetario"
-.SurfaceName: "Name" => "Nombre"
-.SurfaceDesc: "Description" => "Descripción"
-.Latitude: "Latitude" => "Latitud"
-.Longitude: "Longitude" => "Longitud"
-.Valid: "Saveable" => "Se puede guardar"
-.labelSearch: "Search" @
-.labelSurface: "Surface Bookmarks In System" => "Marcadores de superficie en el sistema"
-.sendToCompassToolStripMenuItem: "Send to compass" => "Enviar a brújula"
-.deleteToolStripMenuItem: "Delete Row" => "Borrar fila"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Agregar planeta manualmente"
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-
-SECTION FindSystemsUserControl
-
-.labelRadMax: "Max" => "Max"
-.labelRadMin: "Radius ly Min" => "Radio Min (al)"
-.labelFilter: "Star Name" => "Nombre"
-.Cannotfindsystem: "Cannot find system " => "No se puede encontrar el sistema "
-.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" => "EDSM no devolvió ningún dato sobre {0}\nPuede ser un objeto galáctico que no conoce"
-.buttonExtNames: "From DB Find Names" => "Buscar nombres Desde BD"
-.buttonExtEDSM: "From EDSM" => "Desde EDSM"
-.buttonExtDB: "From DB" => "Desde BD"
-.buttonExtVisited: "From Visited Systems" => "Desde los sistemas visitados"
-.checkBoxCustomCube: "Cube" => "Cubo"
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Excluir sistemas visitados"
-.extButtonFromSpansh: "From Spansh" => "Desde Spansh"
-.extButtonFromSpanshFindNames: "From Spansh Find Names" => "Desde Spansh Buscar Nombres"
-
-SECTION TravelHistoryFilter
-
-.Hours: "{0} hours" => "{0} horas"
-.Days: "{0} days" => "{0} días"
-.1Week: "One Week" => "Una semana"
-.Weeks: "{0} weeks" => "{0} semanas"
-.Month: "Month" => "Mes"
-.Quarter: "Quarter" => "Trimestre"
-.HYear: "Half year" => "Medio año"
-.Year: "Year" => "Año"
-.LastN: "Last {0} entries" => "Últimas {0} entradas"
-.LDock: "Last dock" => "Último atraco"
-.StartEnd: "Start/End Flag" => "Bandera de inicio/fin"
-
 SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Globales"
@@ -399,14 +328,6 @@ ImportExportForm: "Export data" => "Exportar Datos"
 .labelPaste: "Click Paste or drag text or files to input box" => "Haz clic en Pegar o arrastra texto o archivos a la casilla de entrada"
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" => "Excluir fila de encabezado"
-
-SECTION Form2DMap
-
-.LastWeek: "Last Week" => "La semana pasada"
-.LastMonth: "Last Month" => "El mes pasado"
-.LastYear: "Last Year" => "El año pasado"
-.All: "All" => "Todo"
-.Custom: "Custom" => "Personalizado"
 
 SECTION GalaxySectorSelect
 
@@ -513,15 +434,6 @@ KeyForm: "Define Key Sequence" => "Definir secuencia de teclas"
 .NOPN: "Name a process to test sending keys" => "Nombrar un proceso para probar el envío de teclas"
 .KERR: "Error {0} - check entry" => "Error {0} - revisa la entrada"
 .NOP: "No process names to send keys to" => "No hay nombres de procesos para enviar teclas"
-
-SECTION UserControlForm
-
-.extButtonDrawnMinimize.ToolTip: "Minimise" => "Minimizar"
-.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "Alternar ventana encima de otras"
-.extButtonDrawnClose.ToolTip: "Close" => "Cerrar"
-.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "Alternar mostrar el icono de la barra de tareas para esta ventana"
-.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "Alternar la visibilidad del título para esta ventana cuando sea transparente"
-.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Alternar la transparencia de la ventana a través de cuatro configuraciones\r\nOff - ventana normal\r\nOn (T) - transparente con controles activos cuando el mouse no está dentro de la ventana\r\nOn (Tc) - transparente con control activo, para activar mantenga presionada la tecla activar key\r\nOn (Tf) - totalmente transparente e inerte, para activar mantenga presionada la tecla de activación\r\n\r\nConsulte la página de configuración para configurar qué tecla es la tecla de activación.\r\nEl ratón debe estar dentro de los límites de la ventana y la tecla presionada durante\r\n500ms aproximadamente.\r\n\r\n\r\n "
 
 SECTION ExtPanelRollUp
 
