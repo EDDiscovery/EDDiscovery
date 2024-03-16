@@ -20,7 +20,7 @@ NoPos: "No Pos" @
 RemoveAll : "Remove All" @
 
 SECTION StartUp
-.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery is already running. Launch anyway?"
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
 
 SECTION DataGridView
 .WordWrap: "Word Wrap (Override)" @

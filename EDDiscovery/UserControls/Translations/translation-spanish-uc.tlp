@@ -1268,7 +1268,7 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Esquema de control"
-.SearchTerms: "system:body:station:stationfaction" @
+.SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" => "El próximo marcador de inicio/parada está oculto"
 .StartStopNotFound: "No start/stop marker found below" => "No se encontró marcador de inicio/parada debajo"
 .entryfilteredout: "Entry filtered out of grid" => "Entrada filtrada fuera de la cuadrícula"
