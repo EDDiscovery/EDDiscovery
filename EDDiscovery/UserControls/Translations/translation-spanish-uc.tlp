@@ -18,9 +18,9 @@ SECTION UserControlBookmarks
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exportar marcadores a archivo CSV"
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" => "Editar marcador en el sistema actual"
 .extButtonNewRegion.ToolTip: "New Region Bookmark" => "Nuevo Marcador de Región"
-.ColTags: "Tags" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-.buttonTags.ToolTip: "Edit Tags" @
+.ColTags: "Tags" => "Etiquetas"
+.buttonFilter.ToolTip: "Filter out entries based on tag" => "Filtrar entradas en base a etiqueta"
+.buttonTags.ToolTip: "Edit Tags" => "Editar Etiquetas"
 
 SECTION UserControlCombatPanel
 
@@ -505,51 +505,51 @@ SECTION UserControlModules
 
 .labelShip: "Ship" => "Nave"
 .labelVehicle: "Unknown" => "Desconocido"
-.comboBoxShips.ToolTip: "Select ship to view" => "Seleccionar Nave para ver"
+.comboBoxShips.ToolTip: "Select ship to view" => "Seleccionar Nave a ver"
 .extButtonShowControl.ToolTip: "Display Settings" => "Mostrar Configuración"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Configurar datos adicionales que faltan en la salida del diario Elite"
+.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Configurar datos adicionales que faltan en la salida del diario"
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Enviar a ED Ship Yard"
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Enviar a Coriolis"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula a Excel"
 .FullBluePrint: "Show full blueprint information" => "Mostrar información completa del plano"
 .ForceSell: "Force Sell" => "Forzar venta"
 .ConfirmForceSell: "Confirm sell of ship" => "Confirmar venta de la nave"
 .StoredModules: "Stored Modules" => "Módulos almacenados"
 .TravelHistoryEntry: "Travel History Entry" => "Entrada del historial de viajes"
 .System: "System" => "Sistema"
-.TxTime: "Tx Time" => "Tx Time"
+.TxTime: "Tx Time" => "Tiempo Tx"
 .Cost: "Cost" => "Costo"
 .SlotCol: "Slot" => "Ranura"
 .ItemInfo: "Info" => "Información"
 .Value: "Value" => "Valor"
 .Stored: "Stored" => "Almacenado"
 .AllModules: "All Modules" => "Todos los módulos"
-.FSDAvgJump: "FSD Avg Jump" => "Salto medio FSD"
+.FSDAvgJump: "FSD Avg Jump" => "Salto prom. MDD"
 .HT: "Half tank, no cargo" => "Medio tanque, sin carga"
-.MassFDUnladen: "Mass FD Unladen" => "Mass FD Unladen"
+.MassFDUnladen: "Mass FD Unladen" => "Masa sin Carga"
 .FuelReserveCapacity: "Fuel Reserve Capacity" => "Capacidad de reserva de combustible"
 .HullHealth: "Hull Health (Loadout)" => "Salud del casco (equipamiento)"
 .ItemLocalised: "Type" => "Tipo"
 .ItemCol: "Item" => "Artículo"
 .Mass: "Mass" => "Masa"
 .BluePrint: "BluePrint" => "Plano"
-.PriorityEnable: "P/E" => "EDUCACIÓN FÍSICA"
-.FSDMaxRange: "FSD Max Range" => "Rango máximo FSD"
+.PriorityEnable: "P/E" => "Prioridad"
+.FSDMaxRange: "FSD Max Range" => "Rango máximo MDD"
 .FT: "Full Tank, no cargo" => "Tanque lleno, sin carga"
-.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" => "FSD Maximum Fuel por salto"
+.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" => "Combustible Máximo MDD por salto"
 .HullValue: "Hull Value" => "Valor del casco"
 .ModulesValue: "Modules Value" => "Valor de los módulos"
 .TotalCost: "Total Cost" => "Coste total"
 .RebuyCost: "Rebuy Cost" => "Costo de recompra"
-.MassHull: "Mass Hull" => "Mass Hull"
-.MassUnladen: "Mass Unladen" => "Mass Unladen"
-.MassModules: "Mass Modules" => "Módulos de masa"
+.MassHull: "Mass Hull" => "Masa del Casco"
+.MassUnladen: "Mass Unladen" => "Masa sin Carga"
+.MassModules: "Mass Modules" => "Masa de Módulos"
 .Manufacturer: "Manufacturer" => "Fabricante"
 .FuelCapacity: "Fuel Capacity" => "Capacidad de combustible"
 .FuelLevel: "Fuel Level" => "Nivel de combustible"
 .FuelWarning: "Fuel Warning %" => "% De advertencia de combustible"
-.PadSize: "Pad Size" => "Tamaño de pad"
+.PadSize: "Pad Size" => "Tamaño de plataforma"
 .MainThrusterSpeed: "Main Thruster Speed" => "Velocidad del propulsor principal"
 .MainThrusterBoost: "Main Thruster Boost" => "Impulso del propulsor principal"
 .Storedat: "Stored at" => "Guardado en"
@@ -559,11 +559,11 @@ SECTION UserControlModules
 .EDSURL: "Enter ED Shipyard URL" => "Introduzca la URL del astillero ED"
 .CURL: "Enter Coriolis URL" => "Introduzca la URL de Coriolis"
 .FW: "Fuel Warning: " => "Advertencia de combustible: "
-.TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "Ingrese el nivel de advertencia de combustible en% (0 = apagado, 1-100%)"
+.TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "Ingrese el nivel de advertencia de combustible en % (0 = apagado, 1-100%)"
 .PresstoAccept: "Press to Accept" => "Presione para aceptar"
 .PresstoCancel: "Press to Cancel" => "Presione para cancelar"
 .NValid: "A Value is not valid" => "Un valor no es válido"
-.SC: "Ship Configure" => "Configurar envío"
+.SC: "Ship Configure" => "Configurar Nave"
 .MI: "Module Information" => "Información del módulo"
 .NOSI: "No Ship Information available" => "No hay información de envío disponible"
 
@@ -579,7 +579,7 @@ SECTION UserControlOutfitting
 .comboBoxYards.ToolTip: "Select ship to view" => "Seleccionar Nave para ver"
 .TravelHistoryEntry: "Travel History Entry" => "Entrada del historial de viajes"
 .Date: "Date" => "Fecha"
-.Yard: "Yard" => "Patio trasero"
+.Yard: "Yard" => "Astillero"
 .Item: "Item" => "Artículo"
 .Distance: "Distance" => "Distancia"
 .Price: "Price" => "Precio"
@@ -810,7 +810,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Configurar más opciones de captura de pantalla"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Activar/desactivar conversión de captura de pantalla"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Configurar qué partes de la galaxia se almacenan en las bases de datos"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "Haz clic para habilitar la descarga de estrellas desde EDSM o SPANSH. Se aplicará en el próximo inicio."
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "Haz clic para habilitar la descarga de estrellas desde EDSM o Spansh. Se aplicará en el próximo inicio."
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Las listas de paneles están ordenadas alfanuméricamente en lugar de ordenadas en grupos. Nota Requiere reiniciar"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Esta ventana, y sus hijos, arriba"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Marque para permitir que EDD vuelva a dibujar la pantalla durante el cambio de tamaño de la ventana principal. Desactive solo si es demasiado lento"
@@ -1307,7 +1307,7 @@ SECTION CaptainsLogEntries
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Ir a mapa 3D"
 .openInEDSMToolStripMenuItem: "Open in EDSM" => "Abrir en EDSM"
 .openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "Abrir una vista del panel de escaneo"
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" => "Filtrar entradas en base a Etiqueta"
 
 SECTION UserControlTrilateration
 
@@ -1444,13 +1444,13 @@ SECTION UserControlFactions
 .CapShipAward: "Capital ship Award: " => "Premio a la nave capital: "
 .startDateTimePicker.ToolTip: "Include from" => "Incluir desde"
 .endDateTimePicker.ToolTip: "Include to" => "Incluir hasta"
-.colRedeemVoucher: "Redeem Voucher" @
-.colFines: "Pay Fines" @
-.colBountyValue: "Pay Bounty Value" @
-.colDataLinkVictimFaction: "DL Victim" @
-.colDataLinkPayeeFaction: "DL Payee Faction" @
-.colDataLinkPayeeValue: "DL Payee Value" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.colRedeemVoucher: "Redeem Voucher" => "Bonos Canjeados"
+.colFines: "Pay Fines" => "Multas Pagadas"
+.colBountyValue: "Pay Bounty Value" => "Valor Recompensas Pagadas"
+.colDataLinkVictimFaction: "DL Victim" => "Víctima LD"
+.colDataLinkPayeeFaction: "DL Payee Faction" => "Facción Beneficiaria LD"
+.colDataLinkPayeeValue: "DL Payee Value" => "Valor Beneficiario LD"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos de la cuadrícula a Excel"
 
 SECTION UserControlOrganics
 
@@ -1681,19 +1681,19 @@ SECTION SurfaceBookmarkUserControl
 .Latitude: "Latitude" => "Latitud"
 .Longitude: "Longitude" => "Longitud"
 .Valid: "Saveable" => "Se puede guardar"
-.labelSearch: "Search" @
+.labelSearch: "Search" => "Buscar"
 .labelSurface: "Surface Bookmarks In System" => "Marcadores de superficie en el sistema"
 .sendToCompassToolStripMenuItem: "Send to compass" => "Enviar a brújula"
 .deleteToolStripMenuItem: "Delete Row" => "Borrar fila"
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Agregar planeta manualmente"
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+.ColTags: "Tags" => "Etiquetas"
+.textBoxFilter.ToolTip: "Search for planetary locations" => "Buscar lugares planetarios"
+.buttonFilter.ToolTip: "Filter out entries based on tag" => "Filtrar entradas en base a etiqueta"
 
 SECTION FindSystemsUserControl
 
 .labelRadMax: "Max" => "Max"
-.labelRadMin: "Radius ly Min" => "Radio Min (al)"
+.labelRadMin: "Radius ly Min" => "Radio Mín (al)"
 .labelFilter: "Star Name" => "Nombre"
 .Cannotfindsystem: "Cannot find system " => "No se puede encontrar el sistema "
 .EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" => "EDSM no devolvió ningún dato sobre {0}\nPuede ser un objeto galáctico que no conoce"
@@ -1704,7 +1704,7 @@ SECTION FindSystemsUserControl
 .checkBoxCustomCube: "Cube" => "Cubo"
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Excluir sistemas visitados"
 .extButtonFromSpansh: "From Spansh" => "Desde Spansh"
-.extButtonFromSpanshFindNames: "From Spansh Find Names" => "Desde Spansh Buscar Nombres"
+.extButtonFromSpanshFindNames: "From Spansh Find Names" => "Buscar Nombres desde Spansh"
 
 SECTION TravelHistoryFilter
 

@@ -18,9 +18,9 @@ SECTION UserControlBookmarks
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exportiere Lesezeichen in CSV-Datei"
 .extButtonEditSystem.ToolTip: "Edit Bookmark on current system" => "Bearbeite Lesezeichen des aktuellen Systems"
 .extButtonNewRegion.ToolTip: "New Region Bookmark" => "Neues Regionslesezeichen"
-.ColTags: "Tags" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-.buttonTags.ToolTip: "Edit Tags" @
+.ColTags: "Tags" => "Marke"
+.buttonFilter.ToolTip: "Filter out entries based on tag" => "Einträge anhand von Marke filtern"
+.buttonTags.ToolTip: "Edit Tags" => "Marken bearbeiten"
 
 SECTION UserControlCombatPanel
 
@@ -1307,7 +1307,7 @@ SECTION CaptainsLogEntries
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Gehe zu in 3D-Karte"
 .openInEDSMToolStripMenuItem: "Open in EDSM" => "Auf EDSM öffnen"
 .openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "In Scanpaneelansicht öffnen"
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+.buttonFilter.ToolTip: "Filter out entries based on tag" => "Einträge anhand von Marke filtern"
 
 SECTION UserControlTrilateration
 
@@ -1444,13 +1444,13 @@ SECTION UserControlFactions
 .CapShipAward: "Capital ship Award: " => "Großkampfschiff Belohnung: "
 .startDateTimePicker.ToolTip: "Include from" => "Erfasse von"
 .endDateTimePicker.ToolTip: "Include to" => "Erfasse bis"
-.colRedeemVoucher: "Redeem Voucher" @
-.colFines: "Pay Fines" @
-.colBountyValue: "Pay Bounty Value" @
-.colDataLinkVictimFaction: "DL Victim" @
-.colDataLinkPayeeFaction: "DL Payee Faction" @
-.colDataLinkPayeeValue: "DL Payee Value" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.colRedeemVoucher: "Redeem Voucher" => "Gutschein eingelöst"
+.colFines: "Pay Fines" => "Bezahlte Strafen"
+.colBountyValue: "Pay Bounty Value" =>  "Wert bezahlter Kopfgelder"
+.colDataLinkVictimFaction: "DL Victim" => "DL Opfer"
+.colDataLinkPayeeFaction: "DL Payee Faction" => "DL auszahlende Fraktion"
+.colDataLinkPayeeValue: "DL Payee Value" => "DL Auszahlungswert"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Schicke Gitterdaten an Excel"
 
 SECTION UserControlOrganics
 
@@ -1681,14 +1681,14 @@ SECTION SurfaceBookmarkUserControl
 .Latitude: "Latitude" => "Breitengrad"
 .Longitude: "Longitude" => "Längengrad"
 .Valid: "Saveable" => "Speicherbar"
-.labelSearch: "Search" @
+.labelSearch: "Search" => "Suche"
 .labelSurface: "Surface Bookmarks In System" => "Oberflächenlesezeichen im System"
 .sendToCompassToolStripMenuItem: "Send to compass" => "Sende an Kompass"
 .deleteToolStripMenuItem: "Delete Row" => "Zeile löschen"
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Planet manuell hinzufügen"
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+.ColTags: "Tags" => "Marken"
+.textBoxFilter.ToolTip: "Search for planetary locations" => "Suche nach planetarischen Standorten"
+.buttonFilter.ToolTip: "Filter out entries based on tag" => "Einträge anhand von Marke filtern"
 
 SECTION FindSystemsUserControl
 
