@@ -44,12 +44,12 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.extButtonHabZones = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewScangrid = new BaseUtils.DataGridViewColumnControl();
+            this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,12 +58,12 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.dataViewScrollerPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.statusStripSummary.SuspendLayout();
@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
             // 
             // dataViewScrollerPanel2
             // 
-            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScangrid);
+            this.dataViewScrollerPanel2.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -113,46 +113,46 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
-            // dataGridViewScangrid
+            // dataGridView
             // 
-            this.dataGridViewScangrid.AllowRowHeaderVisibleSelection = false;
-            this.dataGridViewScangrid.AllowUserToAddRows = false;
-            this.dataGridViewScangrid.AllowUserToDeleteRows = false;
-            this.dataGridViewScangrid.AllowUserToResizeRows = false;
-            this.dataGridViewScangrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewScangrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            this.dataGridViewScangrid.AutoSortByColumnName = false;
-            this.dataGridViewScangrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewScangrid.ColumnReorder = true;
-            this.dataGridViewScangrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AllowUserToResizeRows = false;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+            this.dataGridView.AutoSortByColumnName = false;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ColumnReorder = true;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colImage,
             this.colName,
             this.colClass,
             this.colDistance,
             this.colBriefing});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewScangrid.Name = "dataGridViewScangrid";
-            this.dataGridViewScangrid.PerColumnWordWrapControl = true;
-            this.dataGridViewScangrid.ReadOnly = true;
-            this.dataGridViewScangrid.RowHeaderMenuStrip = null;
-            this.dataGridViewScangrid.RowHeadersVisible = false;
-            this.dataGridViewScangrid.RowTemplate.Height = 36;
-            this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
-            this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewScangrid.SingleRowSelect = true;
-            this.dataGridViewScangrid.Size = new System.Drawing.Size(556, 519);
-            this.dataGridViewScangrid.TabIndex = 23;
-            this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
-            this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.PerColumnWordWrapControl = true;
+            this.dataGridView.ReadOnly = true;
+            this.dataGridView.RowHeaderMenuStrip = null;
+            this.dataGridView.RowHeadersVisible = false;
+            this.dataGridView.RowTemplate.Height = 36;
+            this.dataGridView.RowTemplate.ReadOnly = true;
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.SingleRowSelect = true;
+            this.dataGridView.Size = new System.Drawing.Size(556, 519);
+            this.dataGridView.TabIndex = 23;
+            this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
+            this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
             // 
             // colImage
             // 
@@ -260,6 +260,17 @@ namespace EDDiscovery.UserControls
             this.panelControls.Size = new System.Drawing.Size(572, 30);
             this.panelControls.TabIndex = 32;
             // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(88, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 36;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
             // statusStripSummary
             // 
             this.statusStripSummary.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -287,17 +298,6 @@ namespace EDDiscovery.UserControls
             this.toolStripJumponiumProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripJumponiumProgressBar.Size = new System.Drawing.Size(100, 17);
             // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(88, 1);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 36;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
-            // 
             // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -308,7 +308,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlScanGrid";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.rollUpPanelTop.ResumeLayout(false);
             this.rollUpPanelTop.PerformLayout();
             this.panelControls.ResumeLayout(false);
@@ -322,7 +322,7 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
-        private BaseUtils.DataGridViewColumnControl dataGridViewScangrid;
+        private BaseUtils.DataGridViewColumnControl dataGridView;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtStatusStrip statusStripSummary;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTotalValue;

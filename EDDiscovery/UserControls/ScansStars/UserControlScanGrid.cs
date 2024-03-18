@@ -40,9 +40,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
 
             // this allows the row to grow to accomodate the text.. with a min height of 48px.
-            dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            this.dataGridViewScangrid.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            this.dataGridView.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
         }
 
         #region Init
@@ -73,12 +73,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewScangrid);
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewScangrid);
+            DGVSaveColumnLayout(dataGridView);
             DiscoveryForm.OnNewEntry -= NewEntry;
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
         }
@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
             if (he == null)     //  no he, no display
             {
                 last_he = he;
-                dataGridViewScangrid.Rows.Clear();
+                dataGridView.Rows.Clear();
                 SetControlText("No Scan".T(EDTx.NoScan));
                 return;
             }
@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
                     last_he = null;
-                    dataGridViewScangrid.Rows.Clear();
+                    dataGridView.Rows.Clear();
                     SetControlText("No Scan".T(EDTx.NoScan));
                     return;
                 }
@@ -136,16 +136,16 @@ namespace EDDiscovery.UserControls
             last_he = he;
 
             // only record first row if same system 
-            var firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.SafeFirstDisplayedScrollingRowIndex() : -1;
+            var firstdisplayedrow = (dataGridView.RowCount > 0 && samesys) ? dataGridView.SafeFirstDisplayedScrollingRowIndex() : -1;
 
             toolStripJumponiumProgressBar.Visible = false;
             toolStripJumponiumProgressBar.Value = 0;     // reset the jumponium progress
 
-            dataGridViewScangrid.RowTemplate.MinimumHeight = Font.ScalePixels(64);        // based on icon size
-            bodysize = dataGridViewScangrid.RowTemplate.MinimumHeight;
+            dataGridView.RowTemplate.MinimumHeight = Font.ScalePixels(64);        // based on icon size
+            bodysize = dataGridView.RowTemplate.MinimumHeight;
             iconsize = bodysize / 4;
          
-            dataGridViewScangrid.Rows.Clear();
+            dataGridView.Rows.Clear();
 
             var all_nodes = scannode.Bodies.ToList(); // flatten tree of scan nodes to prepare for listing
 
@@ -169,12 +169,12 @@ namespace EDDiscovery.UserControls
 
                 if (sn.NodeType == StarScan.ScanNodeType.ring)
                 {
-                    // do nothing, by now
+                    // do nothing
                 }
                 else if (sn.NodeType == StarScan.ScanNodeType.beltcluster )
                 {
-                    // if have a scan, we show belts, and its not edsm body, or getting edsm
-                    if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet ))
+                    //if have a scan, we show belts, and its not edsm body, or getting edsm
+                    if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet))
                     {
                         bdClass.Clear();
                         bdClass.Append("Belt Cluster");
@@ -195,9 +195,9 @@ namespace EDDiscovery.UserControls
 
                         var img = global::EDDiscovery.Icons.Controls.Belt;
 
-                        dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
+                        dataGridView.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() });
 
-                        var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+                        var cur = dataGridView.Rows[dataGridView.Rows.Count - 1];
 
                         cur.Tag = img;
                         cur.Cells[0].Tag = null;
@@ -451,9 +451,8 @@ namespace EDDiscovery.UserControls
 
                     Bitmap img = (Bitmap)BaseUtils.Icons.IconSet.GetIcon(sn.ScanData.GetStarPlanetTypeImageName());
 
-                    dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
-
-                    var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+                    int rowno = dataGridView.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() });
+                    var cur = dataGridView.Rows[rowno];
 
                     cur.Tag = img;
 
@@ -486,9 +485,9 @@ namespace EDDiscovery.UserControls
                         bdDetails.Append(Environment.NewLine).Append(ol);
                     }
 
-                    dataGridViewScangrid.Rows.Add(new object[] { null, sn.FullName, "?", "?" , bdDetails });
+                    dataGridView.Rows.Add(new object[] { null, sn.FullName, "?", "?" , bdDetails.ToString() });
                     
-                    var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+                    var cur = dataGridView.Rows[dataGridView.Rows.Count - 1];
                     cur.Tag = BodyToImages.GetPlanetImageNotScanned();
                 }
             }
@@ -508,16 +507,16 @@ namespace EDDiscovery.UserControls
             SetControlText(scannode.System.Name);
             toolStripStatusTotalValue.Text = report;
 
-            if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
-                dataGridViewScangrid.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
+            if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridView.RowCount)
+                dataGridView.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
         }
 
         #endregion
 
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            var cur = dataGridViewScangrid.Rows[e.RowIndex];
-            PaintHelpers.PaintStarColumn(dataGridViewScangrid, e, cur.Cells[0].Tag as StarColumnOverlays, colImage.Index, iconsize, bodysize);
+            var cur = dataGridView.Rows[e.RowIndex];
+            PaintHelpers.PaintStarColumn(dataGridView, e, cur.Cells[0].Tag as StarColumnOverlays, colImage.Index, iconsize, bodysize);
         }
 
         #region UI
@@ -525,9 +524,9 @@ namespace EDDiscovery.UserControls
         {
             if (e.ColumnIndex == 4 && e.RowIndex >= 0)
             {
-                var curdata = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value;
-                dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
-                dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag = curdata;
+                var curdata = dataGridView.Rows[e.RowIndex].Cells[4].Value;
+                dataGridView.Rows[e.RowIndex].Cells[4].Value = dataGridView.Rows[e.RowIndex].Cells[4].Tag;
+                dataGridView.Rows[e.RowIndex].Cells[4].Tag = curdata;
             }
         }
 
