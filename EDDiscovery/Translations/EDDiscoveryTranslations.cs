@@ -886,6 +886,7 @@ namespace EDDiscovery
         UserControlCombatPanel_labelTotalKills, // Control 'Kills'
         UserControlCombatPanel_labelFactionKills, // Control 'Faction Kills'
         UserControlCombatPanel_labelBalance, // Control 'Balance'
+        UserControlCombatPanel_labelDied, // Died
         UserControlCombatPanel_labelTotalCrimes, // Control 'Crimes'
         UserControlCombatPanel_labelTarget, // Control 'Target'
         UserControlCombatPanel_labelFaction, // Control 'Faction'
@@ -904,15 +905,13 @@ namespace EDDiscovery
         UserControlCombatPanel_comboBoxCustomCampaign_ToolTip, // ToolTip 'Select Campaign to view'
         UserControlCombatPanel_buttonExtEditCampaign_ToolTip, // ToolTip 'Edit user defined campaign'
         UserControlCombatPanel_checkBoxCustomGridOn_ToolTip, // ToolTip 'Show grid when in transparent mode'
-        UserControlCombatPanel_Kills, // Kills:
-        UserControlCombatPanel_Faction, // Faction:
-        UserControlCombatPanel_Crimes, // Crimes:
-        UserControlCombatPanel_Bal, // Bal:
-        UserControlCombatPanel_labelDied, // Died
+        UserControlCombatPanel_NT, // No Target
         UserControlCombatPanel_NewCampaign, // New Campaign
         UserControlCombatPanel_SinceLastDock, // Since Last Dock
+
         UserControlCombatPanel_Name, // Name:
         UserControlCombatPanel_C1, // Give name to campaign
+        UserControlCombatPanel_Faction, // Faction:
         UserControlCombatPanel_C2, // Optional faction to target
         UserControlCombatPanel_Start, // Start:
         UserControlCombatPanel_C3, // Select Start time
@@ -924,7 +923,10 @@ namespace EDDiscovery
         UserControlCombatPanel_NoOverwrite, // Name of campaign already in use, cannot overwrite
         UserControlCombatPanel_Condel, // Confirm deletion of {0}
         UserControlCombatPanel_NC, // Name changed - can't delete
-        UserControlCombatPanel_NT, // No Target
+
+        UserControlCombatPanel_Kills, // Kills
+        UserControlCombatPanel_Crimes, // Crimes
+        UserControlCombatPanel_Bal, // Bal
 
         UserControlMissionOverlay_missionNameToolStripMenuItem, // ToolStrip control 'Mission Name'
         UserControlMissionOverlay_missionDescriptionToolStripMenuItem, // ToolStrip control 'Mission Description'

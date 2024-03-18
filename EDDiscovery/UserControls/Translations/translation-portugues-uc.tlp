@@ -50,10 +50,10 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" @
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" @
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" @
-.Kills: "Kills:" @
-.Faction: "Faction:" @
-.Crimes: "Crimes:" @
-.Bal: "Bal:" @
+.Kills: "Kills" @
+.Faction: "Faction" @
+.Crimes: "Crimes" @
+.Bal: "Bal" @
 .NewCampaign: "New Campaign" @
 .SinceLastDock: "Since Last Dock" @
 .Name: "Name:" @

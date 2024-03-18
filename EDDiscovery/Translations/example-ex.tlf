@@ -424,7 +424,7 @@ KeyForm.radioButtonPress: "Press" @
 KeyForm.checkBoxShift: "Shift" @
 KeyForm.checkBoxCtrl: "Ctrl" @
 KeyForm.checkBoxAlt: "Alt" @
-KeyForm.checkBoxKey: "'Press Key'" @
+KeyForm.checkBoxKey: "Press Key" @
 KeyForm.labelNextDelay: "Current Delay" @
 KeyForm.labelSelKeys: "Select Key" @
 KeyForm.labelDelay: "Start Delay(ms)" @
