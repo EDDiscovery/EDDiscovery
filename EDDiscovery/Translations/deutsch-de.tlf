@@ -30,7 +30,7 @@ SECTION DataGridView
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery abgesicherter Modus"
-.buttonCancel: "Cancel" => "Abbrechen"
+.buttonCancel: "Cancel" = Cancel
 .buttonRun: "Run" => "Starten"
 .buttonRemoveJournals: "Remove Journals" => "Journale entfernen"
 .buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" => "Journale && Kommandanten entfernen"
@@ -95,7 +95,7 @@ SECTION PopOutInfo
 .Map2D.Title: "2D Map" => "2D-Karte"
 .Map2D.Description: "2D Map of galaxy" => "2D-Karte der Galaxis"
 .MiningOverlay.Title: "Mining Overlay" => "Abbau Overlay"
-.MiningOverlay.Description: "Mining overlay" => "Abbau Overlay"
+.MiningOverlay.Description: "Mining overlay" = PopOutInfo.MiningOverlay.Title
 .LocalMap.Description: "3D Map of systems in range" => "3D-Karte der Systeme in Reichweite"
 .LocalMap.Title: "Local Map" => "Umgebungskarte"
 .Plot.Description: "2D Plot of systems in range" => "2D-Plan der Systeme in Reichweite"
@@ -111,11 +111,11 @@ SECTION PopOutInfo
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Expeditionsplaner, denk dir eine Expeditionsroute aus"
 .Expedition.Title: "Expedition" => "Expedition"
 .SystemInformation.Description: "System Information" => "Systeminformation"
-.SystemInformation.Title: "System Information" => "Systeminformation"
+.SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
 .Spanel.Description: "Summary panel overlay" => "Zusammenfassung der letzten Ereignisse"
 .Spanel.Title: "Summary Panel" => "Zusammenfassung"
 .Trippanel.Description: "Trip computer overlay" => "Trip-Computer"
-.Trippanel.Title: "Trip Computer" => "Trip-Computer"
+.Trippanel.Title: "Trip Computer" = PopOutInfo.Trippanel.Description
 .NotePanel.Description: "Notes overlay" => "Notizenoverlay"
 .NotePanel.Title: "Notes" => "Notizen"
 .RouteTracker.Description: "Route tracker overlay" => "Zeigt den Verlauf auf einer gewählten Route an"
@@ -133,7 +133,7 @@ SECTION PopOutInfo
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Suche"
-.Search.Description: "Search" => "Suche"
+.Search.Description: "Search" = PopOutInfo.Search.Title
 .CaptainsLog.Title: "Captain's Log" => "Kapitänslogbuch"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Reisenotizen"
 .Surveyor.Title: "Surveyor" => "Gutachter"
@@ -162,7 +162,7 @@ SECTION PopOutInfo
 .LocalMap3D.Description: "Local 3D Map of systems near you" => "3D-Karte der lokalen Systeme in deiner Umgebung"
 .Organics.Title: "Organic Scans" => "Organische Scans"
 .Organics.Description: "Organic scans of current body and historic scans" => "Informationen über organische Scans des aktuellen Planeten sowie Scanhistorie"
-.Engineers.Title: "Engineers" => "Ingenieure"
+.Engineers.Title: "Engineers" = PopOutInfo.Engineering.Title
 .Engineers.Description: "List of Engineers, status, recipes" => "Liste der Ingenieure, Status, Blaupausen"
 .Discoveries.Title: "Discoveries" => "Entdeckungen"
 .Discoveries.Description: "Discoveries Observer List" => "Discoveries Observer-Liste"
@@ -185,7 +185,7 @@ SECTION EDDiscoveryForm
 .SendEDSMCancel: "I'll decide later, do nothing" => "Ich entscheide später - mache nichts."
 .SendEDSMTitle: "Sending a large number of EDSM Entries" => "Übertrage eine große Anzahl an EDSM_Ereignissen"
 .toolsToolStripMenuItem: "&Tools" => "Werkzeuge"
-.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Einstellungen"
+.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" = PopOutInfo.Settings.Title
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "externe &Fenster"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Zeige ALLE in der Taskleiste"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Schalte bei ALLEN die Transparenz aus"
@@ -231,7 +231,7 @@ SECTION EDDiscoveryForm
 .renameTabToolStripMenuItem: "Rename Tab" => "Registerkarte umbenennen"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Registerkartensetupfehler: laden primärer Registerkarte oder TG fehlgeschlagen.\r\nDas ist ein abnormaler Zustand - bitte das Problem an das EDD-Team auf Discord oder Github melden.\r\nUm zu versuchen das Problem zu beheben bitte Shift drücken während EDD startet.\r\nKlicke auf Registerkarten zurücksetzen und danach auf Programm starten."
 .RTABL: "Name: " => "Name: "
-.RTABT: "Rename Tab" => "Registerkarte umbenennen"
+.RTABT: "Rename Tab" = EDDiscoveryForm.renameTabToolStripMenuItem
 .RTABTT: "Enter a new name for the tab" => "Neuen Namen für Registerkarte eingeben"
 .DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Die folgenden Anwendungs-DLLs wurden gefunden\r\nWillst du sie verwenden?\r\n\r\n{0} \r\n"
 .DLLL: "DLLs loaded: {0}" => "DLLs geladen: {0}"
@@ -252,15 +252,15 @@ SECTION EDDiscoveryForm
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Bestätige, dass du alle duplizierten FSA-Sprünge vom derzeitigen Kommandanten entfernen willst."
 .FSDRem: "Removed {0} FSD entries" => "{0} FSA-Einträge entfernt."
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Historische Inara-Uploads sind für einen Zeitraum von einer Stunde seit dem letzten Versuch gesperrt um den Server nicht zu fluten."
-.RH: "Refresh History." => "Historie aktualisieren"
+.RH: "Refresh History." = EDDiscoveryForm.buttonExtRefresh.ToolTip
 .NoEDSMAPI: "No EDSM API key set" => "Kein EDSM-API-Schlüssel eingetragen"
 .EP: "Edit Profiles" => "Profile bearbeiten"
-.PL: "Profile {0} Loaded" => "Profil {0} geladen"
+.PL: "Profile {0} Loaded" = EDDiscoveryForm.PROFL
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Paneel als externes Fenster"
 .CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualisiert die Systemdatenbank.\r\nKlicke OK um jetzt zu schließen, Abbrechen um zu warten bis die Aktualisierung abgeschlossen ist."
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Öffne EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Verstecke Tray-Icon"
-.notifyIconMenu_Exit: "E&xit" => "B&eenden"
+.notifyIconMenu_Exit: "E&xit" = EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Logs erneut abrufen"
 .adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Sternendaten erneut abrufen"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" => "User-DB-Indexes neu erstellen"
@@ -297,7 +297,7 @@ SECTION AddOnManagerForm
 .Description: "Description" => "Beschreibung"
 .Status: "Status" => "Status"
 .Action: "Action" => "Aktion"
-.Delete: "Delete" => "Löschen"
+.Delete: "Delete" = Delete
 .Enabled: "Enabled" => "aktiv"
 .Newer: "Newer EDD required" => "Neueres EDD erforderlich"
 .Old: "Too old for EDD" => "Zu alt für EDD"
@@ -324,7 +324,7 @@ ImportExportForm: "Export data" => "Daten exportieren"
 .checkBoxIncludeHeader: "Include Header" => "Kopfzeile inkludieren"
 .checkBoxCustomAutoOpen: "Open" => "Öffnen"
 .labelUTCEnd: "UTC" => "UTC"
-.labelUTCStart: "UTC" => "UTC"
+.labelUTCStart: "UTC" = ImportExportForm.labelUTCEnd
 .labelPaste: "Click Paste or drag text or files to input box" => "Kopiere Text in, oder ziehe Dateien auf Eingabefeld"
 .extRadioButtonTab: "Tab" => "Tabulator"
 .extCheckBoxExcludeHeader: "Exclude Header Row" => "Ignoriere Headerzeile"
@@ -337,7 +337,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Galaxiesektor wählen"
 .Custom: "Custom" => "Benutzerdefiniert"
 .Reset: "Reset" => "Zurücksetzen"
 .All: "All" => "Alles"
-.None: "None" => "Keine"
+.None: "None" = None
 .Bubble: "Bubble" => "Blase"
 .ExtendedBubble: "Extended Bubble" => "Erweiterte Blase"
 .BC: "Bubble+Colonia" => "Blase+Colonia"
@@ -360,7 +360,7 @@ MoveToCommander: "Move To Commander" => "Verschiebe zu Kommandanten"
 SECTION NewReleaseForm
 
 NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Veröffentlichung"
-.labelName: "Name" => "Name"
+.labelName: "Name" = AddOnManagerForm.Name
 .btnClose: "&Close" => "S&chließen"
 .labelURL: "GitHub URL" => "GitHub URL"
 .labelDownload: "Download" => "Download"
@@ -372,8 +372,8 @@ NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Veröffentlichung"
 SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" => "Profileditor"
-.buttonExtGlobals: "Globals" => "Globale"
-.Custom: "Custom" => "Benutzerdefiniert"
+.buttonExtGlobals: "Globals" = AddOnManagerForm.buttonExtGlobals
+.Custom: "Custom" = GalaxySectorSelect.Custom
 .Trigger: "Trigger" => "Auslöser"
 .Back: "Back" => "Zurück"
 .TrigEdit: "Edit Profile {0} Trigger" => "Bearbeite Profil {0} Auslöser"
@@ -392,16 +392,16 @@ SetNoteForm: "Set Note" => "Notizerstellung"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" => "Warnung"
+.Warning: "Warning" = Warning
 .Ignore: "Ignore" => "Ignoriere"
 .Retry: "Retry" => "Erneut versuchen"
 .Abort: "Abort" => "Abbruch"
-.Cancel: "Cancel" => "Abbrechen"
-.OK: "OK" => "OK"
+.Cancel: "Cancel" = Cancel
+.OK: "OK" = OK
 .No: "No" => "Nein"
 .Yes: "Yes" => "Ja"
 .Add: "Add" => "Hinzufügen"
-.Set: "Set" => "Festlegen"
+.Set: "Set" = GalaxySectorSelect.buttonExtSet
 
 SECTION DataGridViewDialogs
 
@@ -425,12 +425,12 @@ KeyForm: "Define Key Sequence" => "Definiere Tastensequenz"
 .labelSelKeys: "Select Key" => "Wähle Taste"
 .labelDelay: "Start Delay(ms)" => "Starte Verzögerung (ms)"
 .labelSendTo: "Send To" => "Sende an"
-.buttonReset: "Reset" => "Zurücksetzen"
+.buttonReset: "Reset" = GalaxySectorSelect.Reset
 .labelKeys: "Keys" => "Tasten"
-.buttonDelete: "Delete" => "Löschen"
+.buttonDelete: "Delete" = Delete
 .buttonNext: "Next" => "Nächste"
 .buttonTest: "Test" => "Test"
-.PK: "Press Key" => "Drücke Taste"
+.PK: "Press Key" = KeyForm.checkBoxKey
 .NOPN: "Name a process to test sending keys" => "Nenne einen Prozess um das Senden von Tasten zu testen"
 .KERR: "Error {0} - check entry" => "Error {0} - Eintrag prüfen"
 .NOP: "No process names to send keys to" => "Kein Prozessname an den Tasten gesendet werden können"
@@ -453,7 +453,7 @@ SECTION SpeechConfigure
 
 SpeechConfigure: "Configure Speech" => "Sprache konfigurieren"
 .Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Text zur Aussprache festlegen (benutze ; um zufällig zu wählende Phrasen zu trennen und {} um zu gruppieren)"
-.buttonExtTest: "Test" => "Test"
+.buttonExtTest: "Test" = KeyForm.buttonTest
 .buttonExtDevice: "Device" => "Gerät"
 .buttonExtEffects: "Effects" => "Effekte"
 .checkBoxCustomLiteral: "Literal" => "Literal"
@@ -464,51 +464,51 @@ SpeechConfigure: "Configure Speech" => "Sprache konfigurieren"
 .labelVoice: "Voice" => "Stimme"
 .labelVolume: "Volume" => "Lautstärke"
 .checkBoxCustomR: "Override" => "Überschreiben"
-.checkBoxCustomV: "Override" => "Überschreiben"
+.checkBoxCustomV: "Override" = SpeechConfigure.checkBoxCustomR
 
 SECTION WaveConfigureDialog
 
 WaveConfigureDialog: "Configure Wave" => "Wave konfigurieren"
-.buttonExtDevice: "Device" => "Gerät"
-.labelStartTrigger: "Start Trigger" => "Starttrigger"
-.labelEndTrigger: "End Trigger" => "Endtrigger"
+.buttonExtDevice: "Device" = SpeechConfigure.buttonExtDevice
+.labelStartTrigger: "Start Trigger" = SpeechConfigure.labelStartTrigger
+.labelEndTrigger: "End Trigger" = SpeechConfigure.labelEndTrigger
 .labelTitle: "Select Default device, volume and effects" => "Wähle Standardgerät, Lautstärke und Effekte"
 .buttonExtBrowse: "Browse" => "Durchstöbern"
 .checkBoxCustomComplete: "Wait until audio completes" => "Warte bis Audio zu Ende ist"
-.buttonExtEffects: "Effects" => "Effekte"
-.buttonExtTest: "Test" => "Test"
-.checkBoxCustomV: "Override" => "Überschreiben"
-.labelVolume: "Volume" => "Lautstärke"
+.buttonExtEffects: "Effects" = SpeechConfigure.buttonExtEffects
+.buttonExtTest: "Test" = KeyForm.buttonTest
+.checkBoxCustomV: "Override" = SpeechConfigure.checkBoxCustomR
+.labelVolume: "Volume" = SpeechConfigure.labelVolume
 
 SECTION SoundEffectsDialog
 
 SoundEffectsDialog: "Sound Effects" => "Soundeffekte"
 .labelEcho: "Echo" => "Echo"
-.buttonExtTest: "Test" => "Test"
+.buttonExtTest: "Test" = KeyForm.buttonTest
 .labelEchoMix: "Mix" => "Mix"
 .labelChorus: "Chorus" => "Chor"
 .checkBoxCustomNone: "No effects" => "Keine Effekte"
 .labelReverb: "Reverb" => "Hall"
 .checkBoxP: "Enable" => "Aktivieren"
-.checkBoxG: "Enable" => "Aktivieren"
+.checkBoxG: "Enable" = SoundEffectsDialog.checkBoxP
 .labelDistortion: "Distortion" => "Verzerrung"
-.checkBoxD: "Enable" => "Aktivieren"
+.checkBoxD: "Enable" = SoundEffectsDialog.checkBoxP
 .labelEchoFeedback: "Feedback" => "Resonanz"
 .labelPitch: "Pitch" => "Höhe"
 .labelGargle: "Gargle" => "Gurgeln"
-.labelChorusMix: "Mix" => "Mix"
+.labelChorusMix: "Mix" = SoundEffectsDialog.labelEchoMix
 .labelEchoDelay: "Delay" => "Verzögerung"
-.checkBoxR: "Enable" => "Aktivieren"
-.labelReverbMix: "Mix" => "Mix"
+.checkBoxR: "Enable" = SoundEffectsDialog.checkBoxP
+.labelReverbMix: "Mix" = SoundEffectsDialog.labelEchoMix
 .labelDistortionGain: "Gain" => "Zuwachs"
-.labelChorusFeedback: "Feedback" => "Resonanz"
-.checkBoxC: "Enable" => "Aktivieren"
+.labelChorusFeedback: "Feedback" = SoundEffectsDialog.labelEchoFeedback
+.checkBoxC: "Enable" = SoundEffectsDialog.checkBoxP
 .labelPitchOctave: "Octave" => "Oktave"
 .labelGargleFrequency: "Frequency" => "Frequenz"
-.checkBoxE: "Enable" => "Aktivieren"
+.checkBoxE: "Enable" = SoundEffectsDialog.checkBoxP
 .labelReverbTime: "Time" => "Zeit"
 .labelDistortionEdge: "Edge" => "Grenzer"
-.labelChorusDelay: "Delay" => "Verzögerung"
+.labelChorusDelay: "Delay" = SoundEffectsDialog.labelEchoDelay
 .labelChorusDepth: "Depth" => "Tiefe"
 .labelReverbHFRatio: "HF Ratio" => "HF-Verhältnis"
 .labelDistortionCentreFreq: "Cent Freq" => "Frequenzmittelpunkt"
@@ -530,7 +530,7 @@ ActionProgramEditForm: "Action Program" => "Action-Programm"
 .labelName: "Name:" => "Name:"
 .buttonExtDisk: "As File" => "Als Datei"
 .buttonExtLoad: "Load" => "Laden"
-.buttonExtSave: "Save" => "Speichern"
+.buttonExtSave: "Save" = SetNoteForm.buttonSave
 .buttonExtEdit: "Text Edit" => "Text ändern"
 .extButtonHeader: "Header" => "Kopfzeile"
 

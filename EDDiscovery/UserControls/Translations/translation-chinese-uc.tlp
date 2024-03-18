@@ -24,9 +24,9 @@ SECTION UserControlBookmarks
 
 SECTION UserControlCombatPanel
 
-.Time: "Time" => "时间"
+.Time: "Time" = Time
 .Event: "Event" => "事件"
-.Description: "Description" => "描述"
+.Description: "Description" = UserControlBookmarks.ColDescription
 .Reward: "Reward" => "报酬"
 .labelCredits: "Credits" => "金钱"
 .labelTotalKills: "Kills" => "杀敌数"
@@ -42,11 +42,11 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn: "Grid" => "网格"
 .labelCredits.ToolTip: "Current Credits" => "当前账户余额"
 .labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "战斗中的总杀敌数"
-.labelFactionKills.ToolTip: "Faction Kills" => "派系杀敌数"
+.labelFactionKills.ToolTip: "Faction Kills" = UserControlCombatPanel.labelFactionKills
 .labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "净收入（收入减去弹药，维修等费用）"
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "你被抓了几次？"
 .labelFaction.ToolTip: "Target Faction" => "目标派系"
-.labelTotalReward.ToolTip: "Total reward" => "总报酬"
+.labelTotalReward.ToolTip: "Total reward" = UserControlCombatPanel.labelTotalReward
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "摧毁目标派系所得的报酬"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "选择要浏览的战役"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "编辑用户创建的战役"
@@ -56,21 +56,21 @@ SECTION UserControlCombatPanel
 .SinceLastDock: "Since Last Dock" => "自最近降落后"
 .Name: "Name" => "名称"
 .C1: "Give name to campaign" => "给战役输入名称"
-.Faction: "Faction" => "派系"
+.Faction: "Faction" = UserControlCombatPanel.labelFaction
 .C2: "Optional faction to target" => "目标派系（可选）"
 .Start: "Start" => "开始"
 .C3: "Select Start time" => "选择开始时间"
 .End: "End" => "结束"
 .C4: "Select Start time" => "选择结束时间"
-.C5: "Press to Accept" => "确认"
-.C6: "Press to Cancel" => "取消"
-.C7: "Press to Delete" => "删除"
+.C5: "Press to Accept" = OK
+.C6: "Press to Cancel" = Cancel
+.C7: "Press to Delete" = Delete
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" => "该名称的战役已存在，不能覆盖。"
 .Condel: "Confirm deletion of {0}" => "确认要删除战役{0}吗"
 .NC: "Name changed - can't delete" => "名称已改变，不能删除"
-.Kills: "Kills" => "杀敌数"
+.Kills: "Kills" = UserControlCombatPanel.labelTotalKills
 .Crimes: "Crimes" => "犯罪次数"
-.Bal: "Bal" => "净收入"
+.Bal: "Bal" = UserControlCombatPanel.labelBalance
 
 SECTION UserControlContainerGrid
 
@@ -135,17 +135,17 @@ SECTION SearchMaterialsCommodities
 SECTION SearchScans
 
 .Select: "Select" => "请选择"
-.Name: "Name: " => "名称"
+.Name: "Name: " = UserControlCombatPanel.Name
 .SN: "Enter Search Name: " => "输入搜索名称："
 .DEL: "Confirm deletion of" => "确认要删除"
 .DELNO: "Cannot delete this entry" => "无法删除此项"
 .CNV: "Condition is not valid" => "条件无效"
 .CD: "Condition" => "条件"
-.ColumnDate: "Date" => "日期"
+.ColumnDate: "Date" = SearchMaterialsCommodities.ColumnDate
 .ColumnBody: "Body" @
 .ColumnInformation: "Information" => "信息"
-.ColumnCurrentDistance: "Current Distance" => "距离(ly)"
-.ColumnPosition: "Position" => "坐标(X,Y,Z)"
+.ColumnCurrentDistance: "Current Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
+.ColumnPosition: "Position" = SearchMaterialsCommodities.ColumnPosition
 .ColumnParent: "Parent" @
 .ColumnStar: "Star" @
 .ColumnParentParent: "Grandparent" @
@@ -179,15 +179,15 @@ SECTION UserControlDiscoveries
 SECTION SearchStars
 
 .ColumnIndex: "Index" @
-.ColumnStar: "Star" => "星系"
+.ColumnStar: "Star" = SearchMaterialsCommodities.ColumnStar
 .ColumnStarType: "Star type" @
 .ColumnCentreDistance: "Centre Distance" => "中心距离(ly)"
 .ColumnCurrentDistance: "Current Distance" => "当前距离(ly)"
-.ColumnPosition: "Position" => "坐标(X,Y,Z)"
+.ColumnPosition: "Position" = SearchMaterialsCommodities.ColumnPosition
 
 SECTION DataGridViewStarResults
 
-.3d: "Go to star on 3D Map" => "跳转至3D星图"
+.3d: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
 .EDSM: "View on EDSM" => "在EDSM网站上查看"
 .Spansh: "View on Spansh" @
 .Data: "View Scan Display" => "查看该条目的数据"
@@ -249,7 +249,7 @@ SECTION UserControlExpedition
 .FSSBodies: "FSS Bodies" @
 .KnownBodies: "Known Bodies" @
 .Stars: "Stars" => "主恒星"
-.Info: "Info" => "信息"
+.Info: "Info" = SearchScans.ColumnInformation
 .extButtonLoadRoute.ToolTip: "Load Route" => "加载"
 .extButtonNew.ToolTip: "New Expedition" => "新建航线"
 .extButtonSave.ToolTip: "Save Expedition" => "保存航线"
@@ -258,7 +258,7 @@ SECTION UserControlExpedition
 .extButtonImportRoute.ToolTip: "Import from Route Panel" => "导入航线"
 .extButtonImportNavRoute.ToolTip: "Import a Nav Route" @
 .extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
-.buttonExtExport.ToolTip: "Export to File" => "导出"
+.buttonExtExport.ToolTip: "Export to File" = ImportExportForm
 .extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "在3D星图中显示"
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "添加星系"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
@@ -267,8 +267,8 @@ SECTION UserControlExpedition
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
 .SystemName: "System Name" => "星系名称"
-.Distance: "Dist." => "距离(ly)"
-.Note: "Note" => "笔记"
+.Distance: "Dist." = SearchMaterialsCommodities.ColumnCurrentDistance
+.Note: "Note" = UserControlEngineering.NotesCol
 .ColumnDistStart: "Dist Start" @
 .ColumnDistanceRemaining: "Dist Remaining" @
 .ColumnHistoryNote: "History Note" @
@@ -301,20 +301,20 @@ SECTION UserControlExpedition
 SECTION UserControlJournalGrid
 
 .comboBoxTime.ToolTip: "Select the entries selected by age" => "安照时间顺序筛选条目"
-.ColumnTime: "Time" => "时间"
-.ColumnEvent: "Event" => "事件"
-.ColumnDescription: "Description" => "描述"
-.ColumnInformation: "Information" => "信息"
-.labelTime: "Time" => "时间"
-.labelSearch: "Search" => "搜索"
+.ColumnTime: "Time" = Time
+.ColumnEvent: "Event" = UserControlCombatPanel.Event
+.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
+.ColumnInformation: "Information" = SearchScans.ColumnInformation
+.labelTime: "Time" = Time
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "取消排序"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "跳至行"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "跳转至3D星图"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "对这条项目运行脚本"
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "复制航行日志条目到剪切板"
@@ -324,22 +324,22 @@ SECTION UserControlJournalGrid
 .TTFilt1: "Filtered {0}" => "过滤掉了{0}"
 .TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
 .JHF: "Journal: Filter out fields" @
-.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 
 SECTION UserControlLedger
 
-.TimeCol: "Time" => "时间"
+.TimeCol: "Time" = Time
 .Type: "Type" => "类型"
-.Notes: "Notes" => "笔记"
+.Notes: "Notes" = UserControlEngineering.NotesCol
 .Credits: "Credits" => "进账"
 .Debits: "Debits" => "出账"
 .Balance: "Balance" => "余额"
 .NormProfit: "Profit Per Unit" => "单位利润"
-.labelTime: "Time" => "时间"
-.labelSearch: "Search" => "搜索"
+.labelTime: "Time" = Time
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "显示匹配筛选事件类型的条目"
 .textBoxFilter.ToolTip: "Search to particular items" => "搜索特定的条目"
-.comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .toolStripMenuItemGotoItem: "View on History Grid" => "跳转到表格中的条目"
 .CashTransactions: "Cash Transactions" => "金融交易"
@@ -349,13 +349,13 @@ SECTION UserControlLedger
 
 SECTION UserControlLog
 
-.toolStripMenuItemCopy: "Copy" => "复制"
+.toolStripMenuItemCopy: "Copy" = UserControlExpedition.copyToolStripMenuItem
 .clearLogToolStripMenuItem: "Clear Log" => "清空日志"
 
 SECTION UserControlMarketData
 
 .CategoryCol: "Category" => "类别"
-.NameCol: "Name" => "名称"
+.NameCol: "Name" = UserControlCombatPanel.Name
 .SellCol: "Sell" => "售出价格(Cr/t)"
 .BuyCol: "Buy" => "收购价格(Cr/t)"
 .CargoCol: "Cargo" => "货舱所持(t)"
@@ -367,7 +367,7 @@ SECTION UserControlMarketData
 .checkBoxAutoSwap: "AutoSwap" => "自动切换"
 .checkBoxBuyOnly: "Buy Only" => "仅采购"
 .labelVs: "Vs" @
-.labelLocation: "No Data" => "无数据"
+.labelLocation: "No Data" = NoData
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "只显示你能买的商品"
 .comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "单击以选择用来比较的市场数据"
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "单击以切换跟随模式或显示特定市场的数据"
@@ -383,7 +383,7 @@ SECTION UserControlMaterialCommodities
 .Mats: "Mats" => "材料"
 .Total: "Total" => "总量"
 .Rare: "Rare" @
-.ColName: "Name" => "名称"
+.ColName: "Name" = UserControlCombatPanel.Name
 .ColShortName: "Abv" => "简称"
 .ColCategory: "Category" => "分类"
 .ColType: "Type" => "种类"
@@ -394,7 +394,7 @@ SECTION UserControlMaterialCommodities
 .ColWanted: "Want" @
 .ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" => "商品数量"
-.textBoxItems1.ToolTip: "Count of Items" => "商品数量"
+.textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems2.ToolTip
 .buttonFilter.ToolTip: "Filter out items" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
@@ -484,9 +484,9 @@ SECTION MissionListUserControl
 .pColStart: "Start Date" => "开始时间"
 .pColEnd: "End Date" => "结束时间"
 .pColOrigin: "Origin" => "起点"
-.pColFromFaction: "Faction" => "派系"
+.pColFromFaction: "Faction" = UserControlCombatPanel.labelFaction
 .pColDestSys: "Destination" => "目的地"
-.pColTargetFaction: "Target Faction" => "目标派系"
+.pColTargetFaction: "Target Faction" = UserControlCombatPanel.labelFaction.ToolTip
 .pColResult: "Result (cr)" => "奖金(Cr)"
 .pColInfo: "Info" => "详情"
 .labelTo: "to" => "至"
@@ -495,16 +495,16 @@ SECTION MissionListUserControl
 SECTION UserControlMissions
 
 .MPlural: " Missions" => " 任务"
-.MSingular: " Mission" => " 任务"
-.Name: "Name" => "任务名称"
+.MSingular: " Mission" = UserControlMissions.MPlural
+.Name: "Name" = MissionListUserControl.PcolName
 .Value: "Value (cr):\n{0:N0}" => "奖金(Cr)：\n{0:N0}"
-.ValueN: "Value (cr)" => "奖金(Cr)"
+.ValueN: "Value (cr)" = MissionListUserControl.pColResult
 .ValueC: "Value: " => "奖金："
 
 SECTION UserControlModules
 
 .labelShip: "Ship" => "飞船"
-.labelVehicle: "Unknown" => "未知"
+.labelVehicle: "Unknown" = Unknown
 .comboBoxShips.ToolTip: "Select ship to view" => "选择飞船以查看"
 .extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
@@ -517,7 +517,7 @@ SECTION UserControlModules
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
 .TravelHistoryEntry: "Travel History Entry" @
-.System: "System" => "星系"
+.System: "System" = SearchMaterialsCommodities.ColumnStar
 .TxTime: "Tx Time" => "运送时长"
 .Cost: "Cost" => "运送花费"
 .SlotCol: "Slot" @
@@ -560,8 +560,8 @@ SECTION UserControlModules
 .CURL: "Enter Coriolis URL" @
 .FW: "Fuel Warning: " => "燃料警告："
 .TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "输入燃料警告的百分比（0为关闭，输入1-100%）"
-.PresstoAccept: "Press to Accept" => "确认"
-.PresstoCancel: "Press to Cancel" => "取消"
+.PresstoAccept: "Press to Accept" = OK
+.PresstoCancel: "Press to Cancel" = Cancel
 .NValid: "A Value is not valid" => "请输入一个有效的值"
 .SC: "Ship Configure" => "飞船配置"
 .MI: "Module Information" => "模组信息"
@@ -574,17 +574,17 @@ SECTION UserControlNotePanel
 
 SECTION UserControlOutfitting
 
-.labelYard: "Unknown" => "未知"
+.labelYard: "Unknown" = Unknown
 .labelYardSel: "Sel" => "出售模组"
 .comboBoxYards.ToolTip: "Select ship to view" => "选择模组以查看"
 .TravelHistoryEntry: "Travel History Entry" => "航行记录"
-.Date: "Date" => "日期"
+.Date: "Date" = SearchMaterialsCommodities.ColumnDate
 .Yard: "Yard" => "空间站"
-.Item: "Item" => "模组"
+.Item: "Item" = UserControlEngineering.ModuleCol
 .Distance: "Distance" => "距离"
 .Price: "Price" => "价格"
-.Type: "Type" => "种类"
-.Info: "Info" => "信息"
+.Type: "Type" = UserControlMaterialCommodities.ColType
+.Info: "Info" = SearchScans.ColumnInformation
 .Mass: "Mass" => "质量"
 
 SECTION UserControlPanelSelector
@@ -604,9 +604,9 @@ SECTION UserControlRoute
 .M4: "Nearest to Waypoint with dev<=250ly" @
 .M5: "Nearest to Waypoint with dev<=500ly" @
 .M6: "Nearest to Waypoint + Deviation / 2" @
-.SystemCol: "System" => "星系"
+.SystemCol: "System" = SearchMaterialsCommodities.ColumnStar
 .NoteCol: "Notes" @
-.DistanceCol: "Distance" => "距离"
+.DistanceCol: "Distance" = UserControlOutfitting.Distance
 .StarClassCol: "Star Class" @
 .WayPointDistCol: "Dist. Waypoint" => "航点距离"
 .DeviationCol: "Deviation" => "偏航值"
@@ -628,18 +628,18 @@ SECTION UserControlRoute
 .labelFrom: "From" => "从"
 .labelLy2: "ly" @
 .labelLy1: "ly" @
-.buttonExtTravelTo: "History" => "航行记录"
+.buttonExtTravelTo: "History" = UserControlOutfitting.TravelHistoryEntry
 .labelEDSMBut: "Web Lookup" @
 .labelMaxJump: "Max jump" => "FSD跳跃范围"
 .labelDistance: "Distance" => "直线距离"
-.buttonExtTravelFrom: "History" => "航行记录"
+.buttonExtTravelFrom: "History" = UserControlOutfitting.TravelHistoryEntry
 .labelTo: "To" => "到"
-.buttonExtTargetTo: "Target" => "目标"
-.buttonTargetFrom: "Target" => "目标"
-.copyToolStripMenuItem: "Copy" => "复制"
+.buttonExtTargetTo: "Target" = UserControlCompass.labelTargetLat
+.buttonTargetFrom: "Target" = UserControlCompass.labelTargetLat
+.copyToolStripMenuItem: "Copy" = UserControlExpedition.copyToolStripMenuItem
 .showScanToolStripMenuItem: "View Scan Display" @
 .viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.showInEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
+.showInEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .extButtonExpeditionPush.ToolTip: "Push to expedition" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "导出表格中的数据到Excel中"
 .cmd3DMap.ToolTip: "Show route on 3D Map" => "在3D星图中显示航线"
@@ -652,12 +652,12 @@ SECTION UserControlRoute
 .textBox_ToName.ToolTip: "Alternate Name" => "别名"
 .textBox_FromZ.ToolTip: "Z Co-ord" => "Z坐标"
 .textBox_Range.ToolTip: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "输入你的飞船的FSD跳跃范围"
-.textBox_FromName.ToolTip: "Alternate name" => "别名"
-.textBox_ToX.ToolTip: "X Co-Ord" => "X坐标"
-.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "Y坐标"
+.textBox_FromName.ToolTip: "Alternate name" = UserControlRoute.textBox_ToName.ToolTip
+.textBox_ToX.ToolTip: "X Co-Ord" = UserControlRoute.textBox_FromX.ToolTip
+.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" = UserControlRoute.textBox_FromY.ToolTip
 .textBox_Distance.ToolTip: "Distance between start and end" => "起点与终点间的直线距离"
 .buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "将主航行历史里选中的条目当作航线终点"
-.textBox_ToZ.ToolTip: "Z Co-ord" => "Z坐标"
+.textBox_ToZ.ToolTip: "Z Co-ord" = UserControlRoute.textBox_FromZ.ToolTip
 .buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "将主航行历史里选中的条目当作航线起点"
 .buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "将目标星系当作航线终点"
 .textBox_To.ToolTip: "Select the system to end in" => "选择一个星系作为终点"
@@ -680,7 +680,7 @@ SECTION UserControlRouteTracker
 .showfuelinfo: "Show Fuel Information" @
 .J1: "jump" => "次跳跃"
 .TF: "To First WP " => "至下一个航点："
-.JS: "jumps" => "次跳跃"
+.JS: "jumps" = UserControlRouteTracker.J1
 .FL: "From Last WP " => "自上一个航点："
 .LF: ", Left {0:N1}ly" => "，剩余 {0:N1}Lj"
 .ToWP: "(WP {0})" => "至航点 {0}"
@@ -701,7 +701,7 @@ SECTION UserControlScan
 .buttonExtExcel.ToolTip: "Export" => "把当前面板显示的数据导出到Excel中"
 .System: "System:" => "星系："
 .EnterSys: "Show System" => "显示星系"
-.VLMT: "Set Valuable Minimum" => "设定高价值星体的最低标准"
+.VLMT: "Set Valuable Minimum" = UserControlScan.extButtonHighValue.ToolTip
 .StatusIcons: "Show body status icons" @
 .SystemValue: "Show system and value in main display" @
 .MatFull: "Hide materials which have reached their storage limit" @
@@ -725,15 +725,15 @@ SECTION UserControlScan
 
 SECTION UserControlScanGrid
 
-.colName: "Name" => "星体名称"
+.colName: "Name" = UserControlEstimatedValues.BodyName
 .colClass: "Class" => "星体种类"
 .colDistance: "Distance" @
-.colBriefing: "Information" => "信息"
+.colBriefing: "Information" = SearchScans.ColumnInformation
 .extButtonShowControl.ToolTip: "Configure overall settings" @
 .extButtonHabZones.ToolTip: "Configure hab zone information" @
 .checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
-.MainStar: "Main Star" => "主恒星"
-.Mass: "Mass" => "质量"
+.MainStar: "Main Star" = UserControlExpedition.Stars
+.Mass: "Mass" = UserControlOutfitting.Mass
 .Radius: "Radius" => "半径"
 .Temperature: "Temperature" => "温度"
 .Terraformable: "Terraformable" @
@@ -744,24 +744,24 @@ SECTION UserControlScanGrid
 .BC: "This body contains: " => "这个星体有："
 .Ring: "Ring: " => "有1个环"
 .Belt: "Belt: " => "小行星带："
-.Value: "Value" => "价值"
+.Value: "Value" = UserControlModules.Value
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
 .ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "星系{0}的扫描概要：{1}个恒星；{2}个行星（{3}个类地行星，{4}个气态巨行星），{5}个卫星"
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "小行星带(Belts)"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "环(Rings)"
-.materialsToolStripMenuItem: "Show materials" => "材料"
-.valuesToolStripMenuItem: "Show values" => "价值"
+.materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
+.valuesToolStripMenuItem: "Show values" = UserControlModules.Value
 
 SECTION UserControlSettings
 
 .groupBoxCommanders: "Commanders" => "指挥官"
-.ColumnCommander: "Commander" => "指挥官"
+.ColumnCommander: "Commander" = UserControlSettings.groupBoxCommanders
 .EdsmName: "EDSM Name" => "EDSM 用户名"
 .JournalDirCol: "Journal Folder" => "游戏日志文件路径"
-.NotesCol: "Notes" => "笔记"
-.btnDeleteCommander: "Delete" => "删除"
-.buttonEditCommander: "Edit" => "编辑"
+.NotesCol: "Notes" = UserControlEngineering.NotesCol
+.btnDeleteCommander: "Delete" = Delete
+.buttonEditCommander: "Edit" = UserControlCombatPanel.buttonExtEditCampaign
 .buttonAddCommander: "Add" => "添加"
 .groupBoxTheme: "Theme" => "主题"
 .button_edittheme: "Edit Theme" => "编辑主题"
@@ -822,7 +822,7 @@ SECTION UserControlSettings
 .WSQ: "Warning about webserver-  see english text" @
 .WSF: "Did not start - click OK to configure windows" @
 .FS: "All entries for Statistics" => "统计资料用的所有条目"
-.SM: "Safe Mode" => "安全模式"
+.SM: "Safe Mode" = UserControlSettings.groupBoxCustomSafeMode
 .CSM: "Confirm restart to safe mode" => "确认进入安全模式"
 .DLA: "Disabled-Load All" => "禁用-全部加载"
 .7daysold: ">7 days old" => "7天内"
@@ -840,7 +840,7 @@ SECTION UserControlSettings
 .ESM: "Scans,Cargo,Missions,State,Jumps etc" => "扫描，货物，任务，FSD跳跃等"
 .EJS: "Jumps and Scans" => "FSD跳跃和扫描"
 .EJ: "Jumps" => "FSD跳跃"
-.EN: "Nothing" => "无"
+.EN: "Nothing" = None
 .DelCmdr: "Do you wish to delete commander " @
 .Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .NoMap: "No map available!" @
@@ -850,16 +850,16 @@ SECTION UserControlSettings
 
 SECTION UserControlShipYards
 
-.labelYard: "Unknown" => "未知"
+.labelYard: "Unknown" = Unknown
 .labelYardSel: "Sel" => "出售飞船"
-.comboBoxYards.ToolTip: "Select ship to view" => "选择飞船以查看"
-.TravelHistoryEntry: "Travel History Entry" => "航行记录"
-.Date: "Date" => "日期"
+.comboBoxYards.ToolTip: "Select ship to view" = UserControlModules.comboBoxShips.ToolTip
+.TravelHistoryEntry: "Travel History Entry" = UserControlOutfitting.TravelHistoryEntry
+.Date: "Date" = SearchMaterialsCommodities.ColumnDate
 .Yard: "Yard" => "船坞"
-.Distance: "Distance" => "距离"
-.Price: "Price" => "价格"
-.Ship: "Ship" => "飞船"
-.Manufacturer: "Manufacturer" => "制造商"
+.Distance: "Distance" = UserControlOutfitting.Distance
+.Price: "Price" = UserControlOutfitting.Price
+.Ship: "Ship" = UserControlModules.labelShip
+.Manufacturer: "Manufacturer" = UserControlModules.Manufacturer
 .MS: "Mass/Speed" => "质量/速度"
 
 SECTION UserControlShoppingList
@@ -926,53 +926,53 @@ SECTION UserControlSpanel
 .extButtoScanPos.ToolTip: "Set position of scan display" @
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.Target: "Target" => "目标"
-.TVE: "View system on EDSM" => "在EDSM网站上查看"
+.Target: "Target" = UserControlCompass.labelTargetLat
+.TVE: "View system on EDSM" = DataGridViewStarResults.EDSM
 .SPF: "Summary Panel: Filter out fields" => "概要面板：筛选域"
 
 SECTION UserControlStarDistance
 
 .addToExpeditionToolStripMenuItem: "Add to Expedition" => "添加至远航面板"
-.colName: "Name" => "星系名称"
-.colDistance: "Distance" => "距离(ly)"
-.colVisited: "Visited" => "访问次数"
+.colName: "Name" = UserControlExpedition.SystemName
+.colDistance: "Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
+.colVisited: "Visited" = UserControlExpedition.Visits
 .checkBoxCube: "Cube" => "立方体"
 .labelExtMin: "Min" => "最近"
 .labelExtMax: "Max" => "最远"
 .addToTrilaterationToolStripMenuItem1: "Add to Trilateration" => "添加至三边测量面板"
-.viewOnEDSMToolStripMenuItem1: "View on EDSM" => "在EDSM网站上查看"
+.viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
 .checkBoxCube.ToolTip: "Check to indicate use a cube instead of a sphere for distances" => "勾选以使用立方体而不是球体作为距离范围"
 .textMinRadius.ToolTip: "Minimum star distance in ly" => "最近的星系距离 (ly)"
 .textMaxRadius.ToolTip: "Maximum star distance in ly" => "最远的星系距离 (ly)"
 .From: "From {0}" => "距离 {0} 星系"
-.NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+.NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 .viewSystemToolStripMenuItem: "View System" @
 .viewOnSpanshToolStripMenuItem: "View on Spansh" @
 
 SECTION UserControlStarList
 
 .ColumnTime: "Last Visit" => "最后访问时间"
-.ColumnSystem: "System" => "星系名称"
-.ColumnVisits: "Visits" => "访问次数"
-.ColumnInformation: "Information" => "信息"
-.labelSearch: "Search" => "搜索"
-.labelTime: "Time" => "时间"
-.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "取消排序"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "跳转至3D星图"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
+.ColumnSystem: "System" = UserControlExpedition.SystemName
+.ColumnVisits: "Visits" = UserControlExpedition.Visits
+.ColumnInformation: "Information" = SearchScans.ColumnInformation
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
+.labelTime: "Time" = Time
+.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .setNoteToolStripMenuItem: "Set Note" => "添加笔记"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
-.comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlJournalGrid.textBoxSearch.ToolTip
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" => "{0}个恒星 {1}"
 .FSD: "This system has materials for FSD boost" => "这个行星存在合成FSD助推剂用的材料："
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 .OB: "{0} Other bodies" => "{0}个其他星体"
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valuable bodies" @
@@ -985,11 +985,11 @@ SECTION UserControlStats
 .labelEndDate: "To" @
 .tabControlCustomStats.tabPageGeneral: "General" => "概况"
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "项目"
-.tabControlCustomStats.tabPageGeneral.Information: "Information" => "信息"
+.tabControlCustomStats.tabPageGeneral.Information: "Information" = SearchScans.ColumnInformation
 .tabControlCustomStats.tabPageTravel: "Travel" => "航行"
-.tabControlCustomStats.tabPageScan: "Scan" => "扫描"
+.tabControlCustomStats.tabPageScan: "Scan" = UserControlExpedition.Scans
 .tabControlCustomStats.tabPageGameStats: "In Game" => "游戏记录"
-.tabControlCustomStats.tabPageByShip: "By Ship" => "飞船"
+.tabControlCustomStats.tabPageByShip: "By Ship" = UserControlModules.labelShip
 .tabControlCustomStats.tabPageRanks: "Ranks" @
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" @
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" @
@@ -1069,7 +1069,7 @@ SECTION UserControlStats
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" => "扫描价值"
 .Beltcluster: "Belt Cluster" @
-.Lastdock: "Last dock" => "自最近降落后"
+.Lastdock: "Last dock" = UserControlCombatPanel.SinceLastDock
 .Trip: "Trip" => "旅程"
 .All: "All" @
 .BankAccount: "Bank Account" @
@@ -1104,15 +1104,15 @@ SECTION StatsTimeUserControl
 SECTION UserControlSynthesis
 
 .UpgradeCol: "Upgrade/Mat" => "合成"
-.Level: "Level" => "等级"
+.Level: "Level" = UserControlEngineering.LevelCol
 .MaxCol: "Max" => "最多合成次数"
-.WantedCol: "Wanted" => "愿望单"
-.Available: "Avail." => "可用"
-.Notes: "Notes" => "笔记"
-.Recipe: "Recipe" => "配方"
+.WantedCol: "Wanted" = UserControlEngineering.WantedCol
+.Available: "Avail." = UserControlEngineering.AvailableCol
+.Notes: "Notes" = UserControlEngineering.NotesCol
+.Recipe: "Recipe" = UserControlEngineering.RecipeCol
 .buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "按合成筛选表格"
-.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" => "按等级筛选表格"
-.buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "按材料筛选表格"
+.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" = UserControlEngineering.buttonFilterLevel.ToolTip
+.buttonMaterialFilter.ToolTip: "Filter the table by the material type" = UserControlEngineering.buttonFilterMaterial.ToolTip
 .buttonClear.ToolTip: "Set all wanted values to zero" => "把所有愿望单内的合成次数设为零"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
@@ -1121,7 +1121,7 @@ SECTION UserControlSynthesis
 SECTION UserControlSysInfo
 
 .toolStripSystem: "Display System Name" => "显示星系名称"
-.toolStripEDSM: "Display EDSM Buttons" => "显示EDSM按钮"
+.toolStripEDSM: "Display EDSM Buttons" = UserControlSpanel.EDSMButtonToolStripMenuItem
 .toolStripEDSMDownLine: "EDSM buttons on separate line" => "EDSM按钮显示在另外一行"
 .toolStripVisits: "Display Visits" => "显示访问次数"
 .toolStripBody: "Display Body Name" => "显示星体名称"
@@ -1131,7 +1131,7 @@ SECTION UserControlSysInfo
 .toolStripDistanceFrom: "Display Distance From" => "显示与母星和Sol之间的距离"
 .toolStripSystemState: "Display System State" => "显示星系状态"
 .displaySecurityToolStripMenuItem: "Display Security" @
-.toolStripNotes: "Display Notes" => "显示笔记"
+.toolStripNotes: "Display Notes" = UserControlSpanel.showNotesToolStripMenuItem
 .toolStripTarget: "Display Target" => "显示目标"
 .toolStripShip: "Display Ship Information" => "显示飞船信息"
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
@@ -1156,20 +1156,20 @@ SECTION UserControlSysInfo
 .extButtonEDSMTarget: "EDSM" @
 .labelSecurity: "Security" @
 .labelJumpRange: "Range" => "FSD范围"
-.labelTarget: "Target" => "目标"
-.labelSysName: "System" => "星系"
+.labelTarget: "Target" = UserControlCompass.labelTargetLat
+.labelSysName: "System" = SearchMaterialsCommodities.ColumnStar
 .labelGamemode: "Mode" => "模式"
-.labelTravel: "Travel" => "航行"
+.labelTravel: "Travel" = UserControlStats.tabControlCustomStats.tabPageTravel
 .labelOpenShip: "Open" @
 .labelOpenStation: "Open" @
 .labelOpen: "Open" => "打开"
 .labelCargo: "Cargo" => "货舱"
 .labelCredits: "Credits" => "账户余额"
-.labelShip: "Ship" => "飞船"
-.labelMaterials: "Materials" => "材料"
-.labelVisits: "Visits" => "访问次数"
+.labelShip: "Ship" = UserControlModules.labelShip
+.labelMaterials: "Materials" = UserControlMaterialCommodities.Mats
+.labelVisits: "Visits" = UserControlExpedition.Visits
 .labelMR: "MR" @
-.labelData: "Data" => "数据"
+.labelData: "Data" = UserControlMaterialCommodities.Data
 .labelFuel: "Fuel" => "燃料"
 .labelBodyName: "Body" => "星体"
 .labelPosition: "Pos" => "坐标"
@@ -1182,7 +1182,7 @@ SECTION UserControlSysInfo
 .labelHomeDist: "Home" => "距离母星"
 .labelNextDestination: "Dest" @
 .NoMissions: "No Missions" => "当前无任务"
-.SysUnk: "System unknown to EDSM" => "该星系还未被收录到EDSM的数据库中"
+.SysUnk: "System unknown to EDSM" = UserControlExpedition.EDSMUnk
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "当前坐标为 {0:0.00},{1:0.00},{2:0.00}"
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "在3D星图上右键单击以创建书签，区域标记或单击标记，然后在“设置目标”上打勾，或在此处输入并按Enter键"
 .OnFoot: "On Foot" @
@@ -1205,32 +1205,32 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
-.ColumnTime: "Time" => "时间"
-.ColumnEvent: "Event" => "事件"
-.ColumnDescription: "Description" => "描述"
-.ColumnInformation: "Information" => "信息"
-.ColumnNote: "Note" => "笔记"
-.labelTime: "Time" => "时间"
-.labelSearch: "Search" => "搜索"
+.ColumnTime: "Time" = Time
+.ColumnEvent: "Event" = UserControlCombatPanel.Event
+.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
+.ColumnInformation: "Information" = SearchScans.ColumnInformation
+.ColumnNote: "Note" = UserControlEngineering.NotesCol
+.labelTime: "Time" = Time
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
 .THF: "History: Filter out fields" @
-.TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
-.TTFilt1: "Filtered {0}" => "过滤掉了{0}"
-.TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
+.TT1: " showing {0} original {1}" = UserControlJournalGrid.TT1
+.TTFilt1: "Filtered {0}" = UserControlJournalGrid.TTFilt1
+.TTSelAge: "Select the entries by age, " = UserControlJournalGrid.TTSelAge
 .CSTART: "Clear Start marker" => "清除起点标记"
 .CSTOP: "Clear Stop marker" => "清除终点标记"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "设为航行计算的终点"
 .SETSTARTTC: "Set Start marker for travel calculations" => "设为航行计算的起点"
-.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "你确认要删除此项条目吗？\r\n它有可能会在重新扫描游戏日志文件的时候再次出现"
 .quickMarkToolStripMenuItem: "Marked" @
-.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "取消排序"
-.gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "跳至行"
-.setNoteToolStripMenuItem: "Set Note" => "添加笔记"
+.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
+.gotoEntryNumberToolStripMenuItem: "Jump to Entry" = UserControlJournalGrid.jumpToEntryToolStripMenuItem
+.setNoteToolStripMenuItem: "Set Note" = UserControlStarList.setNoteToolStripMenuItem
 .createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "创建/编辑书签"
-.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
+.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" = UserControlJournalGrid.toolStripMenuItemStartStop
 .gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "跳至下一个起点/终点的标记"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "跳转至3D星图"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .starMapColourToolStripMenuItem: "Star Map Colour..." => "星图上的颜色..."
 .addToTrilaterationToolStripMenuItem: "Add to ..." => "添加至..."
 .addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "三边测量面板里的星系"
@@ -1257,15 +1257,15 @@ SECTION UserControlTravelGrid
 .outliningOnOffToolStripMenuItem: "Outlining On" => "打开纲要模式"
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "收起扫描事件"
 .toolStripRollUpOlderOutlines: "Roll up older entries" => "收起旧的条目"
-.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" => "关闭"
+.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" = Off
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "第一个游戏日志之后"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "第五个游戏日志之后"
-.comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
+.buttonFilter.ToolTip: "Filter out entries based on event type" = UserControlJournalGrid.buttonFilter.ToolTip
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "筛选匹配域选项的条目"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "纲要模式控制"
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
@@ -1311,21 +1311,21 @@ SECTION CaptainsLogEntries
 
 SECTION UserControlTrilateration
 
-.ColumnSystem: "System" => "星系"
-.ColumnDistance: "Distance" => "距离(ly)"
+.ColumnSystem: "System" = SearchMaterialsCommodities.ColumnStar
+.ColumnDistance: "Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
 .ColumnCalculated: "Calculated" => "已计算"
-.ColumnStatus: "Status" => "状态"
+.ColumnStatus: "Status" = UserControlSysInfo.labelState
 .Source: "Source" => "来源"
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "待测星系"
 .toolStrip: "Press Start New" @
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "从待测星系中移除"
-.viewOnEDSMToolStripMenuItem1: "View on EDSM" => "在EDSM网站上查看"
+.viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
 .deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "删除所有有已知位置的星系"
 .addAllLocalSystemsToolStripMenuItem: "Add all local systems" => "添加所有本地星系"
 .addAllEDSMSystemsToolStripMenuItem: "Add all EDSM systems" => "添加所有EDSM星系"
 .addToWantedSystemsToolStripMenuItem: "Add to wanted systems" => "添加至待测星系"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
-.pasteToolStripMenuItem: "Paste" => "粘贴"
+.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
+.pasteToolStripMenuItem: "Paste" = UserControlExpedition.pasteToolStripMenuItem
 .toolStripButtonSubmitDistances: "&Submit Distances" => "提交距离(&S)"
 .toolStripButtonNew: "Start New" => "新开始(&N)"
 .toolStripLabelSystem: "From System:" => "自星系："
@@ -1339,7 +1339,7 @@ SECTION UserControlTrilateration
 .UPD: "Update 'From' system to current position ({0}) and submit entered distances?" @
 .Sub: "Submitting system to EDSM, please wait..." => "正在提交星系至EDSM，请稍等..."
 .NOTREM: "{0} is pushed from EDSM and cannot be removed" => "星系{0}是从EDSM那里推送过来的，不能移除"
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 .Cmdr: "Please enter commander name before submitting the system!" => "在提交星系前请先从设置里添加EDSM账号！"
 .Horray: "EDSM submission succeeded, trilateration successful." => "成功提交至EDSM，三边测量成功。"
 .Failed: "EDSM submission succeeded, but trilateration failed. Try adding more distances." => "成功提交至EDSM，但是三边测量失败。请添加更多的距离信息。"
@@ -1651,7 +1651,7 @@ SECTION UserControlCarrier
 
 SECTION BookmarkForm
 
-.labelName: "Name" => "名称"
+.labelName: "Name" = UserControlCombatPanel.Name
 .checkBoxTarget: "Make Target" => "选择为目标"
 .labelBookmarkNotes: "Bookmark Notes" => "书签笔记"
 .labelTravelNote: "Travel History Note" => "航行记录笔记"
@@ -1662,22 +1662,22 @@ SECTION BookmarkForm
 .RB: "Create Region Bookmark" => "创建区域标签"
 .RN: "Enter a region name..." => "输入一个区域名称..."
 .SI: "System Information" => "星系信息"
-.NSB: "New System Bookmark" => "新建星系标签"
+.NSB: "New System Bookmark" = BookmarkForm.SB
 .ESN: "Enter a system name..." => "输入一个星系名称..."
 .GMO: "Galactic Mapping Object" => "银河系星图绘制计划对象"
-.Description: "Description" => "描述"
+.Description: "Description" = UserControlBookmarks.ColDescription
 
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "输入一个名称"
-.PL: "Planet: " => "星体"
+.PL: "Planet: " = UserControlSysInfo.labelBodyName
 .EPN: "Enter planet name" => "输入星体名称"
 .PresstoAccept: "Press to Accept" => "点击以接受"
 .PresstoCancel: "Press to Cancel" => "点击以取消"
 .MAP: "Manually Add Planet" => "手动添加星体"
-.BodyName: "Planetary Body" => "星体"
-.SurfaceName: "Name" => "名称"
-.SurfaceDesc: "Description" => "描述"
+.BodyName: "Planetary Body" = UserControlSysInfo.labelBodyName
+.SurfaceName: "Name" = UserControlCombatPanel.Name
+.SurfaceDesc: "Description" = UserControlBookmarks.ColDescription
 .Latitude: "Latitude" => "纬度"
 .Longitude: "Longitude" => "经度"
 .Valid: "Saveable" => "可保存的"
@@ -1685,23 +1685,23 @@ SECTION SurfaceBookmarkUserControl
 .labelSurface: "Surface Bookmarks In System" => "星系中的地表标签"
 .sendToCompassToolStripMenuItem: "Send to compass" => "发送至指南针"
 .deleteToolStripMenuItem: "Delete Row" => "删除该行"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "手动添加星体"
+.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" = SurfaceBookmarkUserControl.MAP
 .ColTags: "Tags" @
 .textBoxFilter.ToolTip: "Search for planetary locations" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION FindSystemsUserControl
 
-.labelRadMax: "Max" => "最远"
+.labelRadMax: "Max" = UserControlStarDistance.labelExtMax
 .labelRadMin: "Radius ly Min" => "范围(ly)：最近"
-.labelFilter: "Star Name" => "星系名称"
+.labelFilter: "Star Name" = UserControlExpedition.SystemName
 .Cannotfindsystem: "Cannot find system " => "找不到星系"
 .EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" => "从数据库查找名称"
 .buttonExtEDSM: "From EDSM" => "从EDSM搜索"
 .buttonExtDB: "From DB" => "从数据库搜索"
 .buttonExtVisited: "From Visited Systems" => "从星系访问记录里搜索"
-.checkBoxCustomCube: "Cube" => "立方体"
+.checkBoxCustomCube: "Cube" = UserControlStarDistance.checkBoxCube
 .extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
 .extButtonFromSpansh: "From Spansh" @
 .extButtonFromSpanshFindNames: "From Spansh Find Names" @
@@ -1717,7 +1717,7 @@ SECTION TravelHistoryFilter
 .HYear: "Half year" => "半年"
 .Year: "Year" => "一年"
 .LastN: "Last {0} entries" => "最近{0}条记录"
-.LDock: "Last dock" => "自最近降落后"
+.LDock: "Last dock" = UserControlCombatPanel.SinceLastDock
 .StartEnd: "Start/End Flag" => "开始/结束标记"
 
 SECTION Form2DMap
@@ -1725,14 +1725,14 @@ SECTION Form2DMap
 .LastWeek: "Last Week" => "上一周"
 .LastMonth: "Last Month" => "上个月"
 .LastYear: "Last Year" => "去年"
-.All: "All" => "全部"
+.All: "All" = All
 .Custom: "Custom" => "自定义"
 
 SECTION UserControlForm
 
 .extButtonDrawnMinimize.ToolTip: "Minimise" => "最小化"
 .extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "切换窗口置顶"
-.extButtonDrawnClose.ToolTip: "Close" => "关闭"
+.extButtonDrawnClose.ToolTip: "Close" = Off
 .extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "切换是否显示此窗口任务栏图标"
 .extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "切换当此窗口透明时是否显示标题"
 .extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "切换四种窗口透明度模式\r\n关闭——普通窗口\r\n打开(T)——窗口透明切可用鼠标控制\r\n打开(Tc)——窗口透明按下激活窗口热键启用鼠标控制\r\n打开(Tf)——完全透明并无响应，按下激活窗口热键启用鼠标控制\r\n\r\n参照设置面板来配置激活窗口热键。\r\n鼠标必须在窗口范围内且按下热键大约500毫秒。\r\n\r\n\r\n"

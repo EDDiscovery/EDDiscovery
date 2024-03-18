@@ -26,7 +26,7 @@ SECTION UserControlCombatPanel
 
 .Time: "Time" => "Tempo"
 .Event: "Event" => "Evento"
-.Description: "Description" => "Descrizione"
+.Description: "Description" = UserControlBookmarks.ColDescription
 .Reward: "Reward" => "Ricompensa"
 .labelCredits: "Credits" => "Crediti"
 .labelTotalKills: "Kills" => "Abbattuti"
@@ -42,7 +42,7 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn: "Grid" => "Tabella"
 .labelCredits.ToolTip: "Current Credits" => "Crediti Attuali"
 .labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "Totale abbattuti nella campagna"
-.labelFactionKills.ToolTip: "Faction Kills" => "Abbattuti dalla Fazione"
+.labelFactionKills.ToolTip: "Faction Kills" = UserControlCombatPanel.labelFactionKills
 .labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "Ricomepnsa totale, meno costi (multe, compre, etc)"
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Quante volte sei stato catturato!"
 .labelFaction.ToolTip: "Target Faction" => "Fazione Bersaglio"
@@ -258,14 +258,14 @@ SECTION UserControlExpedition
 .extButtonImportRoute.ToolTip: "Import from Route Panel" => "Importa itinerario"
 .extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Importa Nav itinerario"
 .extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
-.buttonExtExport.ToolTip: "Export to File" => "Esporta"
+.buttonExtExport.ToolTip: "Export to File" = ImportExportForm
 .extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Mostra sulla mappa 3D"
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Aggiungi Systemi"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .buttonReverseRoute.ToolTip: "Reverse" => "Inverti"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.AddSys: "Add Systems" => "Aggiungi Systemi"
+.AddSys: "Add Systems" = UserControlExpedition.extButtonAddSystems.ToolTip
 .SystemName: "System Name" => "Nome del Sistema"
 .Distance: "Dist." @
 .Note: "Note" => "Nota"
@@ -301,12 +301,12 @@ SECTION UserControlExpedition
 SECTION UserControlJournalGrid
 
 .comboBoxTime.ToolTip: "Select the entries selected by age" @
-.ColumnTime: "Time" => "Tempo"
-.ColumnEvent: "Event" => "Evento"
-.ColumnDescription: "Description" => "Descrizione"
-.ColumnInformation: "Information" => "Informazione"
-.labelTime: "Time" => "Tempo"
-.labelSearch: "Search" => "Cerca"
+.ColumnTime: "Time" = UserControlCombatPanel.Time
+.ColumnEvent: "Event" = UserControlCombatPanel.Event
+.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
+.ColumnInformation: "Information" = Information
+.labelTime: "Time" = UserControlCombatPanel.Time
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
@@ -328,15 +328,15 @@ SECTION UserControlJournalGrid
 
 SECTION UserControlLedger
 
-.TimeCol: "Time" => "Tempo"
+.TimeCol: "Time" = UserControlCombatPanel.Time
 .Type: "Type" => "Tipo"
-.Notes: "Notes" => "Note"
+.Notes: "Notes" = UserControlEngineering.NotesCol
 .Credits: "Credits" => "Credit"
 .Debits: "Debits" => "Debiti"
-.Balance: "Balance" => "Bilancio"
+.Balance: "Balance" = UserControlCombatPanel.labelBalance
 .NormProfit: "Profit Per Unit" => "Reddito per Unit�"
-.labelTime: "Time" => "Tempo"
-.labelSearch: "Search" => "Cerca"
+.labelTime: "Time" = UserControlCombatPanel.Time
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "Mostra i registri che combinano con l'evento filtrato"
 .textBoxFilter.ToolTip: "Search to particular items" => "Cerca un oggeto specifico"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Cerca i registri per et�"
@@ -383,10 +383,10 @@ SECTION UserControlMaterialCommodities
 .Mats: "Mats" @
 .Total: "Total" @
 .Rare: "Rare" @
-.ColName: "Name" => "Nome"
+.ColName: "Name" = UserControlMarketData.NameCol
 .ColShortName: "Abv" @
-.ColCategory: "Category" => "Categoria"
-.ColType: "Type" => "Tipo"
+.ColCategory: "Category" = UserControlMarketData.CategoryCol
+.ColType: "Type" = UserControlLedger.Type
 .ColNumber: "Number" => "Numero"
 .ColBackPack: "Backpack" @
 .ColPrice: "Avg. Price" => "Prezzo medio"
@@ -394,7 +394,7 @@ SECTION UserControlMaterialCommodities
 .ColWanted: "Want" @
 .ColNeed: "Need" @
 .textBoxItems2.ToolTip: "Count of Items" => "Conteggio"
-.textBoxItems1.ToolTip: "Count of Items" => "Conteggio"
+.textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems2.ToolTip
 .buttonFilter.ToolTip: "Filter out items" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
@@ -480,11 +480,11 @@ SECTION UserControlSurveyor
 
 SECTION MissionListUserControl
 
-.PcolName: "Name" => "Nome"
+.PcolName: "Name" = UserControlMarketData.NameCol
 .pColStart: "Start Date" => "Data d'Inizio"
 .pColEnd: "End Date" => "Data di Termine"
 .pColOrigin: "Origin" => "Origine"
-.pColFromFaction: "Faction" => "Fazione"
+.pColFromFaction: "Faction" = UserControlCombatPanel.labelFaction
 .pColDestSys: "Destination" => "Destinazione"
 .pColTargetFaction: "Target Faction" => "Fazione di Destino"
 .pColResult: "Result (cr)" => "Risultato (cr)"
@@ -496,7 +496,7 @@ SECTION UserControlMissions
 
 .MPlural: " Missions" @
 .MSingular: " Mission" @
-.Name: "Name" => "Nome"
+.Name: "Name" = UserControlMarketData.NameCol
 .Value: "Value (cr):\n{0:N0}" @
 .ValueN: "Value (cr)" @
 .ValueC: "Value: " @
@@ -574,7 +574,7 @@ SECTION UserControlNotePanel
 
 SECTION UserControlOutfitting
 
-.labelYard: "Unknown" => "Sconosciuto"
+.labelYard: "Unknown" = Unknown
 .labelYardSel: "Sel" @
 .comboBoxYards.ToolTip: "Select ship to view" => "Seleziona la nave da vedere"
 .TravelHistoryEntry: "Travel History Entry" @
@@ -631,12 +631,12 @@ SECTION UserControlRoute
 .buttonExtTravelTo: "History" => "Storia"
 .labelEDSMBut: "Web Lookup" @
 .labelMaxJump: "Max jump" => "Saltpo ax"
-.labelDistance: "Distance" => "Distanza"
-.buttonExtTravelFrom: "History" => "Storia"
+.labelDistance: "Distance" = UserControlRoute.DistanceCol
+.buttonExtTravelFrom: "History" = UserControlRoute.buttonExtTravelTo
 .labelTo: "To" => "A"
 .buttonExtTargetTo: "Target" => "Destino"
-.buttonTargetFrom: "Target" => "Destino"
-.copyToolStripMenuItem: "Copy" => "Copia"
+.buttonTargetFrom: "Target" = UserControlRoute.buttonExtTargetTo
+.copyToolStripMenuItem: "Copy" = UserControlExpedition.copyToolStripMenuItem
 .showScanToolStripMenuItem: "View Scan Display" @
 .viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .showInEDSMToolStripMenuItem: "View on EDSM" => "Apri su EDSM"
@@ -652,9 +652,9 @@ SECTION UserControlRoute
 .textBox_ToName.ToolTip: "Alternate Name" => "Nome Alternativo"
 .textBox_FromZ.ToolTip: "Z Co-ord" @
 .textBox_Range.ToolTip: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "Fornisci il tuo raggio di salto, o cerca per salti lunghi"
-.textBox_FromName.ToolTip: "Alternate name" => "Nome Alternativo"
+.textBox_FromName.ToolTip: "Alternate name" = UserControlRoute.textBox_ToName.ToolTip
 .textBox_ToX.ToolTip: "X Co-Ord" @
-.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "Y (Verticale) Co-ord"
+.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" = UserControlRoute.textBox_FromY.ToolTip
 .textBox_Distance.ToolTip: "Distance between start and end" => "Distanza tra partenza e arrivo"
 .buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "Usa il registro sullo storico di viaggio come destino per la rotta"
 .textBox_ToZ.ToolTip: "Z Co-ord" @
@@ -759,9 +759,9 @@ SECTION UserControlSettings
 .ColumnCommander: "Commander" => "Comandante"
 .EdsmName: "EDSM Name" => "Nome su EDSM"
 .JournalDirCol: "Journal Folder" => "Cartella del Giornale"
-.NotesCol: "Notes" => "Note"
-.btnDeleteCommander: "Delete" => "Elimina"
-.buttonEditCommander: "Edit" => "Modifica"
+.NotesCol: "Notes" = UserControlEngineering.NotesCol
+.btnDeleteCommander: "Delete" = Delete
+.buttonEditCommander: "Edit" = UserControlCombatPanel.buttonExtEditCampaign
 .buttonAddCommander: "Add" => "Aggiungi"
 .groupBoxTheme: "Theme" => "Tema"
 .button_edittheme: "Edit Theme" => "Modifica il Tema"
@@ -1156,18 +1156,18 @@ SECTION UserControlSysInfo
 .extButtonEDSMTarget: "EDSM" @
 .labelSecurity: "Security" @
 .labelJumpRange: "Range" @
-.labelTarget: "Target" => "Destino"
-.labelSysName: "System" => "Sistema"
+.labelTarget: "Target" = UserControlRoute.buttonExtTargetTo
+.labelSysName: "System" = UserControlRoute.SystemCol
 .labelGamemode: "Mode" => "Modo"
 .labelTravel: "Travel" => "Viaggio"
 .labelOpenShip: "Open" @
 .labelOpenStation: "Open" @
 .labelOpen: "Open" => "Apri"
-.labelCargo: "Cargo" => "Carico"
-.labelCredits: "Credits" => "Crediti"
+.labelCargo: "Cargo" = UserControlMarketData.CargoCol
+.labelCredits: "Credits" = UserControlCombatPanel.labelCredits
 .labelShip: "Ship" => "Nave"
 .labelMaterials: "Materials" => "Materiali"
-.labelVisits: "Visits" => "Visite"
+.labelVisits: "Visits" = UserControlExpedition.Visits
 .labelMR: "MR" @
 .labelData: "Data" @
 .labelFuel: "Fuel" => "Serbatoio"
@@ -1206,12 +1206,12 @@ SECTION UserControlContainerSplitter
 SECTION UserControlTravelGrid
 
 .ColumnTime: "Time" => "Ora"
-.ColumnEvent: "Event" => "Evento"
-.ColumnDescription: "Description" => "Descrizione"
+.ColumnEvent: "Event" = UserControlCombatPanel.Event
+.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
 .ColumnInformation: "Information" => "Informazioni"
 .ColumnNote: "Note" @
-.labelTime: "Time" => "Ora"
-.labelSearch: "Search" => "Cerca"
+.labelTime: "Time" = UserControlTravelGrid.ColumnTime
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
 .THF: "History: Filter out fields" @
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
@@ -1230,7 +1230,7 @@ SECTION UserControlTravelGrid
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Imposta Inizio/Fine per il calcolo di viaggio"
 .gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "Salta al prossimo marchio Inizio/Fine"
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Vai all'inizio sulla Mappa 3D"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Visualizza su EDSM"
+.viewOnEDSMToolStripMenuItem: "View on EDSM" = UserControlJournalGrid.viewOnEDSMToolStripMenuItem
 .starMapColourToolStripMenuItem: "Star Map Colour..." => "Colore della Mappa Stellare..."
 .addToTrilaterationToolStripMenuItem: "Add to ..." => "Aggiungi a..."
 .addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "Sistemi sul Pannello di Trilaterazione"
@@ -1651,7 +1651,7 @@ SECTION UserControlCarrier
 
 SECTION BookmarkForm
 
-.labelName: "Name" => "Nome"
+.labelName: "Name" = UserControlMarketData.NameCol
 .checkBoxTarget: "Make Target" => "Imposta come destino"
 .labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
 .labelTravelNote: "Travel History Note" => "Nota dello Storico di Viaggio"
@@ -1661,11 +1661,11 @@ SECTION BookmarkForm
 .UB: "Update Bookmark" => "Attualizza Favorito"
 .RB: "Create Region Bookmark" => "Crea una Regione Favoriti"
 .RN: "Enter a region name..." => "Nomina la regione..."
-.SI: "System Information" => "Informazione"
+.SI: "System Information" = Information
 .NSB: "New System Bookmark" => "Nuovo"
 .ESN: "Enter a system name..." => "Inserisci un nome di sistema..."
 .GMO: "Galactic Mapping Object" => "Oggetto di Mappa Galattico"
-.Description: "Description" => "Descrizione"
+.Description: "Description" = UserControlBookmarks.ColDescription
 
 SECTION SurfaceBookmarkUserControl
 
@@ -1676,8 +1676,8 @@ SECTION SurfaceBookmarkUserControl
 .PresstoCancel: "Press to Cancel" => "Premi per cancellare"
 .MAP: "Manually Add Planet" => "Aggiungi manualmente un pianeta"
 .BodyName: "Planetary Body" => "Corpo Planetario"
-.SurfaceName: "Name" => "Nome"
-.SurfaceDesc: "Description" => "Descrizione"
+.SurfaceName: "Name" = UserControlMarketData.NameCol
+.SurfaceDesc: "Description" = UserControlBookmarks.ColDescription
 .Latitude: "Latitude" => "Latitudine"
 .Longitude: "Longitude" => "Longitudine"
 .Valid: "Saveable" => "Salvabile"
@@ -1694,7 +1694,7 @@ SECTION FindSystemsUserControl
 
 .labelRadMax: "Max" => "Massimo"
 .labelRadMin: "Radius ly Min" => "Raggio Min (ly)"
-.labelFilter: "Star Name" => "Nome del Sistema"
+.labelFilter: "Star Name" = UserControlExpedition.SystemName
 .Cannotfindsystem: "Cannot find system " => "Impossibile trovare il systema"
 .EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" => "Cerca nomi dal DB"
@@ -1725,7 +1725,7 @@ SECTION Form2DMap
 .LastWeek: "Last Week" => "Ultima Settimana"
 .LastMonth: "Last Month" => "Ultimo Mese"
 .LastYear: "Last Year" => "Ultimo Anno"
-.All: "All" => "Tutto"
+.All: "All" = All
 .Custom: "Custom" => "Personalizzato"
 
 SECTION UserControlForm

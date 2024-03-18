@@ -67,11 +67,11 @@ SECTION PopOutInfo
 .Ledger.Description: "Ledger of cash related entries" => "Ricevute d'incasso relazionate allo storico"
 .Ledger.Title: "Ledger" => "Ricevute"
 .Missions.Description: "Mission list" => "Missioni"
-.Missions.Title: "Missions" => "Missioni"
+.Missions.Title: "Missions" = PopOutInfo.Missions.Description
 .Modules.Description: "Ships and their loadouts plus stored modules" => "Navi, Impianti e Moduli"
 .Modules.Title: "Ships/Loadout" => "Navi/Impianti"
 .Statistics.Description: "Statistics Information" => "Statistiche"
-.Statistics.Title: "Statistics" => "Statistiche"
+.Statistics.Title: "Statistics" = PopOutInfo.Statistics.Description
 .MarketData.Description: "Market data, giving commodity price information where available" => "Dati di Mercato, mostrando i prezzi delle merci quando disponibili"
 .MarketData.Title: "Market Data" => "Dati di Mercato"
 .ShipYardPanel.Description: "Ship yards information from places you have visited" => "Informazioni sui cantieri dallo storico di visitazione"
@@ -111,15 +111,15 @@ SECTION PopOutInfo
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Pianifica di Spedizione, prepara un itinerario di spedizione"
 .Expedition.Title: "Expedition" => "Spedizioni"
 .SystemInformation.Description: "System Information" => "Informazioni sul Sistema"
-.SystemInformation.Title: "System Information" => "Informazioni sul Sistema"
+.SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
 .Spanel.Description: "Summary panel overlay" => "Sommario"
-.Spanel.Title: "Summary Panel" => "Sommario"
+.Spanel.Title: "Summary Panel" = PopOutInfo.Spanel.Description
 .Trippanel.Description: "Trip computer overlay" => "Computer di Viaggio"
-.Trippanel.Title: "Trip Computer" => "Computer di Viaggio"
+.Trippanel.Title: "Trip Computer" = PopOutInfo.Trippanel.Description
 .NotePanel.Description: "Notes overlay" => "Annotazioni sul Sistema"
 .NotePanel.Title: "Notes" => "Annotazioni"
 .RouteTracker.Description: "Route tracker overlay" => "Tracciatore di Itinerario"
-.RouteTracker.Title: "Route Tracker" => "Tracciatore di Itinerario"
+.RouteTracker.Title: "Route Tracker" = PopOutInfo.RouteTracker.Description
 .Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate"
 .Compass.Title: "Compass" => "Bussola Planetaria"
 .Settings.Description: "Settings for ED Discovery " => "Configurazioni di ED Discovery "
@@ -133,7 +133,7 @@ SECTION PopOutInfo
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" => "Cerca"
-.Search.Description: "Search" => "Cerca"
+.Search.Description: "Search" = PopOutInfo.Search.Title
 .CaptainsLog.Title: "Captain's Log" => "Diario del Comandante"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diario del Comandante - note di viaggio"
 .Surveyor.Title: "Surveyor" => "Topografo"
@@ -141,7 +141,7 @@ SECTION PopOutInfo
 .MissionOverlay.Title: "Mission Overlay" => "Simbolo di Missione"
 .MissionOverlay.Description: "Mission List overlay" => "Simbolo della lista di missioni"
 .MaterialTrader.Title: "Material Trader" => "Commerciante di Materiali"
-.MaterialTrader.Description: "Material trader" => "Commerciante di Materiali"
+.MaterialTrader.Description: "Material trader" = PopOutInfo.MaterialTrader.Title
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "EDSM - Automatic web view of system" => "Visualizzazione automatica della pagina di EDSM sul sistema"
 .Inara.Title: "Inara" @
@@ -297,7 +297,7 @@ SECTION AddOnManagerForm
 .Description: "Description" => "Descrizione"
 .Status: "Status" => "Stato"
 .Action: "Action" => "Azione"
-.Delete: "Delete" => "Elimina"
+.Delete: "Delete" = Delete
 .Enabled: "Enabled" => "Abilita"
 .Newer: "Newer EDD required" => "Nuova versione di EDD necessaria"
 .Old: "Too old for EDD" => "Troppo vecchio per EDD"
@@ -315,7 +315,7 @@ SECTION AddOnManagerForm
 SECTION ImportExportForm
 
 ImportExportForm: "Export data" => "Esporta"
-.buttonExport: "Export" => "Esporta"
+.buttonExport: "Export" = ImportExportForm
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "Separatore CVS"
@@ -360,7 +360,7 @@ MoveToCommander: "Move To Commander" => "Sposta al Comandante"
 SECTION NewReleaseForm
 
 NewReleaseForm: "EDDiscovery Release" => "Versione EDDiscovery"
-.labelName: "Name" => "Nome"
+.labelName: "Name" = AddOnManagerForm.Name
 .btnClose: "&Close" => "&Chiudi"
 .labelURL: "GitHub URL" => "URL GitHUB"
 .labelDownload: "Download" => "Scarica"
@@ -372,8 +372,8 @@ NewReleaseForm: "EDDiscovery Release" => "Versione EDDiscovery"
 SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" => "Editor di Profilo"
-.buttonExtGlobals: "Globals" => "Globale"
-.Custom: "Custom" => "Personalizzato"
+.buttonExtGlobals: "Globals" = AddOnManagerForm.buttonExtGlobals
+.Custom: "Custom" = GalaxySectorSelect.Custom
 .Trigger: "Trigger" => "Causa"
 .Back: "Back" => "Indietro"
 .TrigEdit: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del profilo {0}"
@@ -387,16 +387,16 @@ SetNoteForm: "Set Note" => "Imposta Nota"
 .labelTTimestamp: "Timestamp:" => "Data e ora"
 .buttonSave: "Save" => "Salva"
 .labelTSystem: "System:" => "Sistema"
-.labelTSummary: "Summary:" => "Sommario"
+.labelTSummary: "Summary:" = PopOutInfo.Spanel.Description
 .labelTDetails: "Details:" => "Dettagli"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" => "Attenzione"
+.Warning: "Warning" = Warning
 .Ignore: "Ignore" => "Ignora"
 .Retry: "Retry" => "Riprova"
 .Abort: "Abort" => "Aborta"
-.Cancel: "Cancel" => "Cancella"
+.Cancel: "Cancel" = Cancel
 .OK: "OK" @
 .No: "No" @
 .Yes: "Yes" => "Si"
@@ -425,12 +425,12 @@ KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
 .labelSelKeys: "Select Key" => "Seleziona Tasto"
 .labelDelay: "Start Delay(ms)" => "Ritardo Iniziale"
 .labelSendTo: "Send To" => "Invia a"
-.buttonReset: "Reset" => "Resetta"
+.buttonReset: "Reset" = GalaxySectorSelect.Reset
 .labelKeys: "Keys" => "Tasti"
-.buttonDelete: "Delete" => "Elimina"
+.buttonDelete: "Delete" = Delete
 .buttonNext: "Next" => "Prossimo"
 .buttonTest: "Test" => "Testa"
-.PK: "Press Key" => "Premi Tasto"
+.PK: "Press Key" = KeyForm.checkBoxKey
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
 .NOP: "No process names to send keys to" @

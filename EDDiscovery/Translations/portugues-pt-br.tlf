@@ -30,7 +30,7 @@ SECTION DataGridView
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "Modo seguro de EDDiscovery"
-.buttonCancel: "Cancel" => "Cancela"
+.buttonCancel: "Cancel" = Cancel
 .buttonRun: "Run" => "Começar"
 .buttonRemoveJournals: "Remove Journals" @
 .buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
@@ -71,7 +71,7 @@ SECTION PopOutInfo
 .Modules.Description: "Ships and their loadouts plus stored modules" => "Espaçonaves, Equipamentos e Modulos"
 .Modules.Title: "Ships/Loadout" => "Espaçonaves/Equipamentos"
 .Statistics.Description: "Statistics Information" => "Estatísticas"
-.Statistics.Title: "Statistics" => "Estatísticas"
+.Statistics.Title: "Statistics" = PopOutInfo.Statistics.Description
 .MarketData.Description: "Market data, giving commodity price information where available" => "Dados de Mercado, mostrando os preços das mercadorias quando disponíveis"
 .MarketData.Title: "Market Data" => "Dados de Mercado"
 .ShipYardPanel.Description: "Ship yards information from places you have visited" => "Informações sobre os estaleiros do histórico de visitação"
@@ -111,15 +111,15 @@ SECTION PopOutInfo
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Plano de Espedição, prepara um itinerário di espedição"
 .Expedition.Title: "Expedition" => "Expedição"
 .SystemInformation.Description: "System Information" => "Informações sobre o Sistema"
-.SystemInformation.Title: "System Information" => "Informações sobre o Sistema"
+.SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
 .Spanel.Description: "Summary panel overlay" => "Somário"
-.Spanel.Title: "Summary Panel" => "Somário"
+.Spanel.Title: "Summary Panel" = PopOutInfo.Spanel.Description
 .Trippanel.Description: "Trip computer overlay" => "Computador de Viajem"
-.Trippanel.Title: "Trip Computer" => "Computador de Viajem"
+.Trippanel.Title: "Trip Computer" = PopOutInfo.Trippanel.Description
 .NotePanel.Description: "Notes overlay" => "Anotações sobre o Sistema"
 .NotePanel.Title: "Notes" => "Anotações"
 .RouteTracker.Description: "Route tracker overlay" => "Traçador de Itinerário"
-.RouteTracker.Title: "Route Tracker" => "Traçador de Itinerário"
+.RouteTracker.Title: "Route Tracker" = PopOutInfo.RouteTracker.Description
 .Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetária; mostra a direção a seguir para chegar às coordenadas desejadas"
 .Compass.Title: "Compass" => "Bussola Planetária"
 .Settings.Description: "Settings for ED Discovery " => "Configurações de ED Discovery "
@@ -133,7 +133,7 @@ SECTION PopOutInfo
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" => "Procura"
-.Search.Description: "Search" => "Procura"
+.Search.Description: "Search" = PopOutInfo.Search.Title
 .CaptainsLog.Title: "Captain's Log" => "Diário do Capitão"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diário do Capitão - anotações pessoais"
 .Surveyor.Title: "Surveyor" => "Topógrafo"
@@ -141,7 +141,7 @@ SECTION PopOutInfo
 .MissionOverlay.Title: "Mission Overlay" => "Overlay das missões"
 .MissionOverlay.Description: "Mission List overlay" => "Overlays das listas de missões"
 .MaterialTrader.Title: "Material Trader" => "Mercador de Materiais"
-.MaterialTrader.Description: "Material trader" => "Mercador de Materiais"
+.MaterialTrader.Description: "Material trader" = PopOutInfo.MaterialTrader.Title
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "EDSM - Automatic web view of system" => "Visualização automática da página web EDSM no sistema"
 .Inara.Title: "Inara" @
@@ -315,7 +315,7 @@ SECTION AddOnManagerForm
 SECTION ImportExportForm
 
 ImportExportForm: "Export data" => "Exportar"
-.buttonExport: "Export" => "Exportar"
+.buttonExport: "Export" = ImportExportForm
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "Separador CVS"
@@ -336,7 +336,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seletor de Setores Galácticos"
 .labelSectorName: "Sector" => "Setores"
 .Custom: "Custom" => "Personalizado"
 .Reset: "Reset" => "Resetar"
-.All: "All" => "Tudo"
+.All: "All" = All
 .None: "None" => "Nenhum"
 .Bubble: "Bubble" => "Bolha"
 .ExtendedBubble: "Extended Bubble" => "Bolha Extendida"
@@ -360,7 +360,7 @@ MoveToCommander: "Move To Commander" => "Move para o comandante"
 SECTION NewReleaseForm
 
 NewReleaseForm: "EDDiscovery Release" => "Versão EDDiscovery"
-.labelName: "Name" => "Nome"
+.labelName: "Name" = AddOnManagerForm.Name
 .btnClose: "&Close" => "&Fecha"
 .labelURL: "GitHub URL" => "URL GitHUB"
 .labelDownload: "Download" => "Descarrega"
@@ -372,8 +372,8 @@ NewReleaseForm: "EDDiscovery Release" => "Versão EDDiscovery"
 SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" => "Editor de Perfil"
-.buttonExtGlobals: "Globals" => "Global"
-.Custom: "Custom" => "Personalizado"
+.buttonExtGlobals: "Globals" = AddOnManagerForm.buttonExtGlobals
+.Custom: "Custom" = GalaxySectorSelect.Custom
 .Trigger: "Trigger" => "Causa"
 .Back: "Back" => "Atrás"
 .TrigEdit: "Edit Profile {0} Trigger" => "Editar perfil {0} Sim"
@@ -387,12 +387,12 @@ SetNoteForm: "Set Note" => "Definir nota"
 .labelTTimestamp: "Timestamp:" => "Timestamp"
 .buttonSave: "Save" => "Salvar"
 .labelTSystem: "System:" => "Sistema: "
-.labelTSummary: "Summary:" => "Somário"
+.labelTSummary: "Summary:" = PopOutInfo.Spanel.Description
 .labelTDetails: "Details:" => "Detalhes"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" => "Atenção"
+.Warning: "Warning" = Warning
 .Ignore: "Ignore" => "Ignorar"
 .Retry: "Retry" => "Retentar"
 .Abort: "Abort" => "Abortar"
@@ -425,7 +425,7 @@ KeyForm: "Define Key Sequence" => "Defina uma sequência de teclas"
 .labelSelKeys: "Select Key" => "Selecionar tecla"
 .labelDelay: "Start Delay(ms)" => "Inicíar retardo(ms)"
 .labelSendTo: "Send To" => "Inviar a"
-.buttonReset: "Reset" => "Resetar"
+.buttonReset: "Reset" = GalaxySectorSelect.Reset
 .labelKeys: "Keys" => "Teclas"
 .buttonDelete: "Delete" => "Deletar"
 .buttonNext: "Next" => "Próximo"

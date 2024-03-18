@@ -1661,7 +1661,7 @@ SECTION BookmarkForm
 .UB: "Update Bookmark" => "Atualizar Favorito"
 .RB: "Create Region Bookmark" => "Cria uma Região Favorita"
 .RN: "Enter a region name..." => "De um nome à região..."
-.SI: "System Information" => "Informação"
+.SI: "System Information" = Information
 .NSB: "New System Bookmark" => "Novo"
 .ESN: "Enter a system name..." => "Insere um nome de sistema..."
 .GMO: "Galactic Mapping Object" => "Objeto de Mapa Galáctico"
@@ -1676,7 +1676,7 @@ SECTION SurfaceBookmarkUserControl
 .PresstoCancel: "Press to Cancel" => "Pressiona para cancelar"
 .MAP: "Manually Add Planet" => "Adiciona manualmente um planeta"
 .BodyName: "Planetary Body" => "Corpo planetario"
-.SurfaceName: "Name" => "Nome"
+.SurfaceName: "Name" = BookmarkForm.labelName
 .SurfaceDesc: "Description" => "Descrizione"
 .Latitude: "Latitude" => "Latitude"
 .Longitude: "Longitude" => "Longitude"
@@ -1725,7 +1725,7 @@ SECTION Form2DMap
 .LastWeek: "Last Week" => "Última Semana"
 .LastMonth: "Last Month" => "Último Mês"
 .LastYear: "Last Year" => "Último Ano"
-.All: "All" => "Tudo"
+.All: "All" = All
 .Custom: "Custom" => "Personalizado"
 
 SECTION UserControlForm

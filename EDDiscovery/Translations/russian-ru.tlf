@@ -30,7 +30,7 @@ SECTION DataGridView
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
-.buttonCancel: "Cancel" => "Отмена"
+.buttonCancel: "Cancel" = Cancel
 .buttonRun: "Run" => "Запуск"
 .buttonRemoveJournals: "Remove Journals" @
 .buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
@@ -133,7 +133,7 @@ SECTION PopOutInfo
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" => "Поиск"
-.Search.Description: "Search" => "Поиск"
+.Search.Description: "Search" = PopOutInfo.Search.Title
 .CaptainsLog.Title: "Captain's Log" => "Журнал капитана"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Заметки о путешествиях"
 .Surveyor.Title: "Surveyor" => "Топограф"
@@ -185,7 +185,7 @@ SECTION EDDiscoveryForm
 .SendEDSMCancel: "I'll decide later, do nothing" @
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "Инструменты"
-.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Настройки"
+.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" = PopOutInfo.Settings.Title
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "Отдельные окна"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "Показать все в панели задач"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "Отключить прозрачность"
@@ -231,7 +231,7 @@ SECTION EDDiscoveryForm
 .renameTabToolStripMenuItem: "Rename Tab" => "Переименовать вкладку"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Установить вкладку не удалось: основная вкладка или TG не загрузились.\r\nТак быть не должно - пожалуйста, сообщите о проблеме команде EDD через Discord или Github.\r\nЧтобы избежать ошибки, перезапустите программу, удерживая клавишу shift,\r\nвыберите опцию Reset tabs и перезапустите программу еще раз."
 .RTABL: "Name: " => "Название"
-.RTABT: "Rename Tab" => "Переименовать вкладку"
+.RTABT: "Rename Tab" = EDDiscoveryForm.renameTabToolStripMenuItem
 .RTABTT: "Enter a new name for the tab" => "Новое имя вкладки"
 .DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
 .DLLL: "DLLs loaded: {0}" => "Загруженные dll: {0}"
@@ -255,12 +255,12 @@ SECTION EDDiscoveryForm
 .RH: "Refresh History." => "Обновить историю."
 .NoEDSMAPI: "No EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
 .EP: "Edit Profiles" => "Изменить профили"
-.PL: "Profile {0} Loaded" => "Профиль {0} загружен"
+.PL: "Profile {0} Loaded" = EDDiscoveryForm.PROFL
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Создать отдельное окно..."
 .CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery обновляет базы данных EDSM и EDDB.\r\nНажмите «ОК», чтобы выйти прямо сейчас, или нажмите «Отмена», чтобы дождаться завершения обновления."
 .notifyIconMenu_Open: "&Open EDDiscovery" => "Открыть EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "Скрыть значок в трее"
-.notifyIconMenu_Exit: "E&xit" => "Выход"
+.notifyIconMenu_Exit: "E&xit" = EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Еще раз получить логи"
 .adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Еще раз получить данные о системах"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
@@ -273,7 +273,7 @@ SECTION EDDiscoveryForm
 
 SECTION EDDiscoveryController
 
-.CD: "Closing down, please wait.." => "Завершаю работу"
+.CD: "Closing down, please wait.." = EDDiscoveryForm.Closing
 .EDSM: "Get galactic mapping from EDSM." => "Получаю карту Галактики с EDSM"
 .GEC: "Get galactic mapping from GEC." @
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Загружаю примечания, закладки и карту Галактики"
@@ -289,15 +289,15 @@ SECTION EDDiscoveryController
 SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Глобальные переменные"
-.AddOnTitle: "Add-On Manager" => "Управление дополнениями"
+.AddOnTitle: "Add-On Manager" = EDDiscoveryForm.buttonExtManageAddOns.ToolTip
 .EditTitle: "Edit Add-Ons" => "Изменить дополнение"
 .Type: "Type" => "Тип"
-.Name: "Name" => "Название"
+.Name: "Name" = EDDiscoveryForm.RTABL
 .Version: "Version" => "Версия"
 .Description: "Description" => "Описание"
 .Status: "Status" => "Статус"
 .Action: "Action" => "Действие"
-.Delete: "Delete" => "Удалить"
+.Delete: "Delete" = Delete
 .Enabled: "Enabled" => "Включено"
 .Newer: "Newer EDD required" => "Требуется более новая версия EDD"
 .Old: "Too old for EDD" => "Слишком старая для EDD"
@@ -315,7 +315,7 @@ SECTION AddOnManagerForm
 SECTION ImportExportForm
 
 ImportExportForm: "Export data" => "Экспорт"
-.buttonExport: "Export" => "Экспорт"
+.buttonExport: "Export" = ImportExportForm
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
 .labelCVSSep: "CSV Separator" => "Разделитель CSV"
@@ -336,8 +336,8 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Выбор секторов Га�
 .labelSectorName: "Sector" => "Сектор"
 .Custom: "Custom" => "Свое"
 .Reset: "Reset" => "Сбросить"
-.All: "All" => "Все"
-.None: "None" => "Ничего"
+.All: "All" = All
+.None: "None" = None
 .Bubble: "Bubble" => "Пузырь"
 .ExtendedBubble: "Extended Bubble" => "Расширенный Пузырь"
 .BC: "Bubble+Colonia" => "Пузырь и Колония"
@@ -360,7 +360,7 @@ MoveToCommander: "Move To Commander" => "Передать командиру"
 SECTION NewReleaseForm
 
 NewReleaseForm: "EDDiscovery Release" => "Версия EDDiscovery"
-.labelName: "Name" => "Название"
+.labelName: "Name" = EDDiscoveryForm.RTABL
 .btnClose: "&Close" => "Закрыть"
 .labelURL: "GitHub URL" @
 .labelDownload: "Download" => "Скачать"
@@ -373,7 +373,7 @@ SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" @
 .buttonExtGlobals: "Globals" => "Глобальные данные"
-.Custom: "Custom" => "Свое"
+.Custom: "Custom" = GalaxySectorSelect.Custom
 .Trigger: "Trigger" => "Триггер"
 .Back: "Back" => "Назад"
 .TrigEdit: "Edit Profile {0} Trigger" => "Настроить триггер для профиля {0}"
@@ -392,11 +392,11 @@ SetNoteForm: "Set Note" => "Создать примечание"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" => "Внимание"
+.Warning: "Warning" = Warning
 .Ignore: "Ignore" => "Пропустить"
 .Retry: "Retry" => "Повторить"
 .Abort: "Abort" => "Прервать"
-.Cancel: "Cancel" => "Отмена"
+.Cancel: "Cancel" = Cancel
 .OK: "OK" @
 .No: "No" => "Нет"
 .Yes: "Yes" => "Да"
@@ -407,7 +407,7 @@ SECTION DataGridViewDialogs
 
 .Jumpto: "Jump to: " => "Номер записи: "
 .EN: "Enter number to jump to or near to" => "Введите номер, к которому нужно перейти"
-.PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
+.PresstoAccept: "Press to Accept" = GalaxySectorSelect.PresstoAccept
 .PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
 .VNV: "Value is not valid" => "Значение недействительно"
 
@@ -427,10 +427,10 @@ KeyForm: "Define Key Sequence" => "Определить последовател
 .labelSendTo: "Send To" => "Передать"
 .buttonReset: "Reset" => "Сброс"
 .labelKeys: "Keys" => "Клавиши"
-.buttonDelete: "Delete" => "Удалить"
+.buttonDelete: "Delete" = Delete
 .buttonNext: "Next" => "Далее"
 .buttonTest: "Test" => "Тест"
-.PK: "Press Key" => "Нажмите клавишу"
+.PK: "Press Key" = KeyForm.checkBoxKey
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
 .NOP: "No process names to send keys to" @

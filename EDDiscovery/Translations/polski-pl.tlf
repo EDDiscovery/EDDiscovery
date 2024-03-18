@@ -30,7 +30,7 @@ SECTION DataGridView
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "Tryb Bezpieczny EDDiscovery"
-.buttonCancel: "Cancel" => "Anuluj"
+.buttonCancel: "Cancel" = Cancel
 .buttonRun: "Run" => "Uruchom program"
 .buttonRemoveJournals: "Remove Journals" @
 .buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
@@ -133,7 +133,7 @@ SECTION PopOutInfo
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" => "Szukaj"
-.Search.Description: "Search" => "Szukaj"
+.Search.Description: "Search" = PopOutInfo.Search.Title
 .CaptainsLog.Title: "Captain's Log" => "Dziennik Kapitański"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Dziennik Kapitański - notatki z twoich podróży"
 .Surveyor.Title: "Surveyor" => "Sonda"
@@ -185,7 +185,7 @@ SECTION EDDiscoveryForm
 .SendEDSMCancel: "I'll decide later, do nothing" @
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "&Narzędzia"
-.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Ustawienia"
+.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" = PopOutInfo.Settings.Title
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Panele"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Pokaż Wszystko W Pasku Zadań"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Wyłącz Przezroczystość"
@@ -231,7 +231,7 @@ SECTION EDDiscoveryForm
 .renameTabToolStripMenuItem: "Rename Tab" => "Zmień nazwę Karty"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Błąd ustawiania Kart: Nie udało się wczytać karty głównej lub TG.\r\nProszę zgłosić problem do Zespołu EDD na Discord lub GitHub.\r\nAby spróbować usunąć problem, uruchom EDDiscovery trzymając Shift.\r\nKliknij na 'Resetuj Karty', a następnie 'Uruchom program', co może naprawić problem."
 .RTABL: "Name: " => "Nazwa: "
-.RTABT: "Rename Tab" => "Zmień nazwę Karty"
+.RTABT: "Rename Tab" = EDDiscoveryForm.renameTabToolStripMenuItem
 .RTABTT: "Enter a new name for the tab" => "Wprowadź nową nazwę dla tej karty"
 .DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Znaleziono poniższe pliki DLL rozszerzeń aplikacji\r\nCzy chcesz zezwolić na ich używanie?\r\n{0} \r\nJeśli nie chcesz, usuń pliki DLL z folderu plików DLL w AppData ED\r\nlub odinstaluj paczkę akcji która dodała pliki DLL\r\nlub przytrzymaj Shift podczas uruchamiania i użyj opcji 'Usuń wszystkie DLL Rozszerzeń'."
 .DLLL: "DLLs loaded: {0}" => "Wczytane pliki DLL: {0}"
@@ -260,7 +260,7 @@ SECTION EDDiscoveryForm
 .CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualizuje bazy danych EDSM i EDDB\r\nNaciśnij OK aby zamknąć teraz, Anuluj aby zaczekać na ukończenie aktualizacji"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Otwórz EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "Ukryj Ikonę Zasobnika"
-.notifyIconMenu_Exit: "E&xit" => "W&yjście"
+.notifyIconMenu_Exit: "E&xit" = EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Pobierz Dzienniki Ponownie"
 .adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Pobierz Dane Gwiazd Ponownie"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
@@ -290,14 +290,14 @@ SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Globalne"
 .AddOnTitle: "Add-On Manager" => "Menedżer Dodatków"
-.EditTitle: "Edit Add-Ons" => "Edytuj Dodatki"
+.EditTitle: "Edit Add-Ons" = EDDiscoveryForm.buttonExtEditAddOns.ToolTip
 .Type: "Type" => "Typ"
 .Name: "Name" => "Nazwa"
 .Version: "Version" => "Wersja"
 .Description: "Description" => "Opis"
 .Status: "Status" @
 .Action: "Action" => "Akcja"
-.Delete: "Delete" => "Usuń"
+.Delete: "Delete" = Delete
 .Enabled: "Enabled" => "Włączone"
 .Newer: "Newer EDD required" => "Wymagana nowsza wersja EDD"
 .Old: "Too old for EDD" => "Przestarzałe"
@@ -336,8 +336,8 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Wybór Sektora Galaktyki"
 .labelSectorName: "Sector" => "Sektor"
 .Custom: "Custom" => "Niestandardowe"
 .Reset: "Reset" @
-.All: "All" => "Wszystko"
-.None: "None" => "Nic"
+.All: "All" = All
+.None: "None" = None
 .Bubble: "Bubble" => "Bąbel"
 .ExtendedBubble: "Extended Bubble" => "Rozszerzony Bąbel"
 .BC: "Bubble+Colonia" => "Bąbel + Colonia"
@@ -360,7 +360,7 @@ MoveToCommander: "Move To Commander" => "Przenieś do Dowódcy"
 SECTION NewReleaseForm
 
 NewReleaseForm: "EDDiscovery Release" => "Wydanie EDDiscovery"
-.labelName: "Name" => "Nazwa"
+.labelName: "Name" = AddOnManagerForm.Name
 .btnClose: "&Close" => "&Zamknij"
 .labelURL: "GitHub URL" => "URL GitHub"
 .labelDownload: "Download" => "Pobierz"
@@ -373,7 +373,7 @@ SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" => "Edytor Profili"
 .buttonExtGlobals: "Globals" => "Dane Globalne"
-.Custom: "Custom" => "Niestandardowe"
+.Custom: "Custom" = GalaxySectorSelect.Custom
 .Trigger: "Trigger" => "Wyzwalacz"
 .Back: "Back" => "Wstecz"
 .TrigEdit: "Edit Profile {0} Trigger" => "Edytuj wyzwalacz profilu {0}"
@@ -392,11 +392,11 @@ SetNoteForm: "Set Note" => "Ustaw Notatkę"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" => "Uwaga"
+.Warning: "Warning" = Warning
 .Ignore: "Ignore" => "Ignoruj"
 .Retry: "Retry" => "Ponów"
 .Abort: "Abort" => "Przerwij"
-.Cancel: "Cancel" => "Anuluj"
+.Cancel: "Cancel" = Cancel
 .OK: "OK" @
 .No: "No" => "Nie"
 .Yes: "Yes" => "Tak"
@@ -407,7 +407,7 @@ SECTION DataGridViewDialogs
 
 .Jumpto: "Jump to: " => "Przejdź do: "
 .EN: "Enter number to jump to or near to" => "Wprowadź numer do którego chcesz przejść"
-.PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
+.PresstoAccept: "Press to Accept" = GalaxySectorSelect.PresstoAccept
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
 .VNV: "Value is not valid" => "Wartość nie jest prawidłowa"
 
@@ -427,10 +427,10 @@ KeyForm: "Define Key Sequence" => "Zdefiniuj Sekwencję Klawiszy"
 .labelSendTo: "Send To" => "Wyślij Do"
 .buttonReset: "Reset" @
 .labelKeys: "Keys" => "Klawisze"
-.buttonDelete: "Delete" => "Usuń"
+.buttonDelete: "Delete" = Delete
 .buttonNext: "Next" => "Następne"
 .buttonTest: "Test" @
-.PK: "Press Key" => "Naciśnij Klawisz"
+.PK: "Press Key" = KeyForm.checkBoxKey
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
 .NOP: "No process names to send keys to" @

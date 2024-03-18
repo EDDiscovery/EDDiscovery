@@ -30,7 +30,7 @@ SECTION DataGridView
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "Modo seguro de EDDiscovery"
-.buttonCancel: "Cancel" => "Cancelar"
+.buttonCancel: "Cancel" = Cancel
 .buttonRun: "Run" => "Ejecutar"
 .buttonRemoveJournals: "Remove Journals" => "Eliminar Diario"
 .buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" => "Eliminar Entradas del Diario y Comandantes"
@@ -95,7 +95,7 @@ SECTION PopOutInfo
 .Map2D.Title: "2D Map" => "Mapa 2D"
 .Map2D.Description: "2D Map of galaxy" => "Mapa 2D de la galaxia"
 .MiningOverlay.Title: "Mining Overlay" => "Superposición de minería"
-.MiningOverlay.Description: "Mining overlay" => "Superposición de minería"
+.MiningOverlay.Description: "Mining overlay" = PopOutInfo.MiningOverlay.Title
 .LocalMap.Description: "3D Map of systems in range" => "Mapa 3D de sistemas en rango"
 .LocalMap.Title: "Local Map" => "Mapa local"
 .Plot.Description: "2D Plot of systems in range" => "Gráfica 2D de sistemas en rango"
@@ -111,7 +111,7 @@ SECTION PopOutInfo
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Planificador de expediciones, arma una ruta de expedición"
 .Expedition.Title: "Expedition" => "Expedición"
 .SystemInformation.Description: "System Information" => "Información del sistema"
-.SystemInformation.Title: "System Information" => "Información del sistema"
+.SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
 .Spanel.Description: "Summary panel overlay" => "Superposición del panel de resumen"
 .Spanel.Title: "Summary Panel" => "Panel de resumen"
 .Trippanel.Description: "Trip computer overlay" => "Superposición de la computadora de viaje"
@@ -125,7 +125,7 @@ SECTION PopOutInfo
 .Settings.Description: "Settings for ED Discovery " => "Configuración para ED Discovery "
 .Settings.Title: "Settings" => "Ajustes"
 .ScreenShot.Description: "Screen shot" => "Captura de pantalla"
-.ScreenShot.Title: "Screen Shot" => "Captura de pantalla"
+.ScreenShot.Title: "Screen Shot" = PopOutInfo.ScreenShot.Description
 .Grid.Description: "Grid (allows other panels to be placed in it)" => "Cuadrícula (permite colocar otros paneles en él)"
 .Grid.Title: "Grid" => "Cuadrícula"
 .SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Divisor (permite colocar otros paneles en el mismo)"
@@ -133,7 +133,7 @@ SECTION PopOutInfo
 .PanelSelector.Description: "" => "Descripción"
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Búsqueda"
-.Search.Description: "Search" => "Búsqueda"
+.Search.Description: "Search" = PopOutInfo.Search.Title
 .CaptainsLog.Title: "Captain's Log" => "Bitácora del capitán"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Bitácora del capitán: notas sobre sus viajes"
 .Surveyor.Title: "Surveyor" => "Agrimensor"
@@ -141,7 +141,7 @@ SECTION PopOutInfo
 .MissionOverlay.Title: "Mission Overlay" => "Superposición de misión"
 .MissionOverlay.Description: "Mission List overlay" => "Superposición de la lista de misiones"
 .MaterialTrader.Title: "Material Trader" => "Comerciante de materiales"
-.MaterialTrader.Description: "Material trader" => "Comerciante de materiales"
+.MaterialTrader.Description: "Material trader" = PopOutInfo.MaterialTrader.Title
 .EDSM.Title: "EDSM" => "EDSM"
 .EDSM.Description: "EDSM - Automatic web view of system" => "Vista web automática de la página EDSM en el sistema"
 .Inara.Title: "Inara" => "Inara"
@@ -185,7 +185,7 @@ SECTION EDDiscoveryForm
 .SendEDSMCancel: "I'll decide later, do nothing" => "Decidiré más tarde, no hago nada"
 .SendEDSMTitle: "Sending a large number of EDSM Entries" => "Envío de una gran cantidad de entradas EDSM"
 .toolsToolStripMenuItem: "&Tools" => "&Herramientas"
-.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Ajustes"
+.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" = PopOutInfo.Settings.Title
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Paneles Emergentes"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostrar todo en la barra de tareas"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "Desactivar toda la &transparencia"
@@ -252,15 +252,15 @@ SECTION EDDiscoveryForm
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confirma que eliminas todas las entradas del MDD duplicadas del comandante actual"
 .FSDRem: "Removed {0} FSD entries" => "Se eliminaron {0} entradas del MDD"
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "La carga histórica de Inara está deshabilitada hasta que haya transcurrido 1 hora desde el último intento para evitar la inundación del servidor"
-.RH: "Refresh History." => "Actualizar historial"
+.RH: "Refresh History." = EDDiscoveryForm.buttonExtRefresh.ToolTip
 .NoEDSMAPI: "No EDSM API key set" => "No se ha establecido ninguna clave de API de EDSM"
 .EP: "Edit Profiles" => "Editar perfiles"
-.PL: "Profile {0} Loaded" => "Perfil {0} cargado"
+.PL: "Profile {0} Loaded" = EDDiscoveryForm.PROFL
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Panel emergente ..."
 .CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery está actualizando las bases de los sistemas\r\nPulse Aceptar para cerrar ahora, Cancelar para esperar hasta que se complete la actualización"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Abrir EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Ocultar icono de bandeja"
-.notifyIconMenu_Exit: "E&xit" => "&Salida"
+.notifyIconMenu_Exit: "E&xit" = EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Recuperar registros de nuevo"
 .adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Obtener datos de estrellas de nuevo"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" => "Reconstruir índices de base de datos de usuario"
@@ -290,14 +290,14 @@ SECTION AddOnManagerForm
 
 .buttonExtGlobals: "Globals" => "Globales"
 .AddOnTitle: "Add-On Manager" => "Administrador de complementos"
-.EditTitle: "Edit Add-Ons" => "Editar complementos"
+.EditTitle: "Edit Add-Ons" = EDDiscoveryForm.buttonExtEditAddOns.ToolTip
 .Type: "Type" => "Tipo"
 .Name: "Name" => "Nombre"
 .Version: "Version" => "Versión"
-.Description: "Description" => "Descripción"
+.Description: "Description" = PopOutInfo.PanelSelector.Description
 .Status: "Status" => "Estado"
 .Action: "Action" => "Acción"
-.Delete: "Delete" => "Borrar"
+.Delete: "Delete" = Delete
 .Enabled: "Enabled" => "Activado"
 .Newer: "Newer EDD required" => "Se requiere un EDD más reciente"
 .Old: "Too old for EDD" => "Demasiado antiguo para EDD"
@@ -336,8 +336,8 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seleccionar Sector Galáctico"
 .labelSectorName: "Sector" => "Sector"
 .Custom: "Custom" => "Personalizado"
 .Reset: "Reset" => "Reiniciar"
-.All: "All" => "Todo"
-.None: "None" => "Ninguno"
+.All: "All" = All
+.None: "None" = None
 .Bubble: "Bubble" => "Burbuja"
 .ExtendedBubble: "Extended Bubble" => "Burbuja extendida"
 .BC: "Bubble+Colonia" => "Burbuja + Colonia"
@@ -360,7 +360,7 @@ MoveToCommander: "Move To Commander" => "Mover a Comandante"
 SECTION NewReleaseForm
 
 NewReleaseForm: "EDDiscovery Release" => "Lanzamiento de EDDiscovery"
-.labelName: "Name" => "Nombre"
+.labelName: "Name" = AddOnManagerForm.Name
 .btnClose: "&Close" => "&Cerrar"
 .labelURL: "GitHub URL" => "URL de GitHub"
 .labelDownload: "Download" => "Descargar"
@@ -372,8 +372,8 @@ NewReleaseForm: "EDDiscovery Release" => "Lanzamiento de EDDiscovery"
 SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" => "Editor de perfiles"
-.buttonExtGlobals: "Globals" => "Globales"
-.Custom: "Custom" => "Personalizado"
+.buttonExtGlobals: "Globals" = AddOnManagerForm.buttonExtGlobals
+.Custom: "Custom" = GalaxySectorSelect.Custom
 .Trigger: "Trigger" => "Desencadenar"
 .Back: "Back" => "Atrás"
 .TrigEdit: "Edit Profile {0} Trigger" => "Editar perfil {0} Activador"
@@ -392,22 +392,22 @@ SetNoteForm: "Set Note" => "Establecer nota"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" => "Advertencia"
+.Warning: "Warning" = Warning
 .Ignore: "Ignore" => "Ignorar"
 .Retry: "Retry" => "Reintentar"
 .Abort: "Abort" => "Abortar"
-.Cancel: "Cancel" => "Cancelar"
-.OK: "OK" => "OK"
+.Cancel: "Cancel" = Cancel
+.OK: "OK" = OK
 .No: "No" => "No"
 .Yes: "Yes" => "Sí"
 .Add: "Add" => "Agregar"
-.Set: "Set" => "Establecer"
+.Set: "Set" = GalaxySectorSelect.buttonExtSet
 
 SECTION DataGridViewDialogs
 
 .Jumpto: "Jump to: " => "Salta a: "
 .EN: "Enter number to jump to or near to" => "Ingrese el número para saltar o cerca de"
-.PresstoAccept: "Press to Accept" => "Presione para aceptar"
+.PresstoAccept: "Press to Accept" = GalaxySectorSelect.PresstoAccept
 .PresstoCancel: "Press to Cancel" => "Presione para cancelar"
 .VNV: "Value is not valid" => "El valor no es válido"
 
@@ -425,9 +425,9 @@ KeyForm: "Define Key Sequence" => "Definir secuencia de teclas"
 .labelSelKeys: "Select Key" => "Seleccionar Tecla"
 .labelDelay: "Start Delay(ms)" => "Retraso de inicio (ms)"
 .labelSendTo: "Send To" => "Enviar a"
-.buttonReset: "Reset" => "Reiniciar"
+.buttonReset: "Reset" = GalaxySectorSelect.Reset
 .labelKeys: "Keys" => "Teclas"
-.buttonDelete: "Delete" => "Borrar"
+.buttonDelete: "Delete" = Delete
 .buttonNext: "Next" => "Próximo"
 .buttonTest: "Test" => "Prueba"
 .PK: "Press Key" => "Presione la tecla"
@@ -453,7 +453,7 @@ SECTION SpeechConfigure
 
 SpeechConfigure: "Configure Speech" => "Configurar Habla"
 .Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Establecer texto a decir (usar ; para separar frases seleccionables al azar y {} para agrupar)"
-.buttonExtTest: "Test" => "Prueba"
+.buttonExtTest: "Test" = KeyForm.buttonTest
 .buttonExtDevice: "Device" => "Dispositivo"
 .buttonExtEffects: "Effects" => "Efectos"
 .checkBoxCustomLiteral: "Literal" @
@@ -464,51 +464,51 @@ SpeechConfigure: "Configure Speech" => "Configurar Habla"
 .labelVoice: "Voice" => "Voz"
 .labelVolume: "Volume" => "Volumen"
 .checkBoxCustomR: "Override" => "Anular"
-.checkBoxCustomV: "Override" => "Anular"
+.checkBoxCustomV: "Override" = SpeechConfigure.checkBoxCustomR
 
 SECTION WaveConfigureDialog
 
 WaveConfigureDialog: "Configure Wave" => "Configurar Onda"
-.buttonExtDevice: "Device" => "Dispositivo"
-.labelStartTrigger: "Start Trigger" => "Iniciar Desencadenador"
-.labelEndTrigger: "End Trigger" => "Finalizar Desencadenador"
+.buttonExtDevice: "Device" = SpeechConfigure.buttonExtDevice
+.labelStartTrigger: "Start Trigger" = SpeechConfigure.labelStartTrigger
+.labelEndTrigger: "End Trigger" = SpeechConfigure.labelEndTrigger
 .labelTitle: "Select Default device, volume and effects" => "Seleccionar dispositivo predeterminado, volumen y efectos"
 .buttonExtBrowse: "Browse" => "Navegar"
 .checkBoxCustomComplete: "Wait until audio completes" => "Esperar hasta que el audio se complete"
-.buttonExtEffects: "Effects" => "Efectos"
-.buttonExtTest: "Test" => "Prueba"
-.checkBoxCustomV: "Override" => "Anular"
-.labelVolume: "Volume" => "Volumen"
+.buttonExtEffects: "Effects" = SpeechConfigure.buttonExtEffects
+.buttonExtTest: "Test" = KeyForm.buttonTest
+.checkBoxCustomV: "Override" = SpeechConfigure.checkBoxCustomR
+.labelVolume: "Volume" = SpeechConfigure.labelVolume
 
 SECTION SoundEffectsDialog
 
 SoundEffectsDialog: "Sound Effects" => "Efectos de Sonido"
 .labelEcho: "Echo" => "Eco"
-.buttonExtTest: "Test" => "Prueba"
+.buttonExtTest: "Test" = KeyForm.buttonTest
 .labelEchoMix: "Mix" => "Mezcla"
 .labelChorus: "Chorus" => "Coro"
 .checkBoxCustomNone: "No effects" => "Sin efectos"
 .labelReverb: "Reverb" => "Reverberación"
 .checkBoxP: "Enable" => "Habilitar"
-.checkBoxG: "Enable" => "Habilitar"
+.checkBoxG: "Enable" = SoundEffectsDialog.checkBoxP
 .labelDistortion: "Distortion" => "Distorsión"
-.checkBoxD: "Enable" => "Habilitar"
+.checkBoxD: "Enable" = SoundEffectsDialog.checkBoxP
 .labelEchoFeedback: "Feedback" => "Retroalimentación"
 .labelPitch: "Pitch" => "Tono"
 .labelGargle: "Gargle" => "Gargarismo"
-.labelChorusMix: "Mix" => "Mezcla"
+.labelChorusMix: "Mix" = SoundEffectsDialog.labelEchoMix
 .labelEchoDelay: "Delay" => "Retardo"
-.checkBoxR: "Enable" => "Habilitar"
-.labelReverbMix: "Mix" => "Mezcla"
+.checkBoxR: "Enable" = SoundEffectsDialog.checkBoxP
+.labelReverbMix: "Mix" = SoundEffectsDialog.labelEchoMix
 .labelDistortionGain: "Gain" => "Ganancia"
-.labelChorusFeedback: "Feedback" => "Retroalimentación"
-.checkBoxC: "Enable" => "Habilitar"
+.labelChorusFeedback: "Feedback" = SoundEffectsDialog.labelEchoFeedback
+.checkBoxC: "Enable" = SoundEffectsDialog.checkBoxP
 .labelPitchOctave: "Octave" => "Octava"
 .labelGargleFrequency: "Frequency" => "Frecuencia"
-.checkBoxE: "Enable" => "Habilitar"
-.labelReverbTime: "Time" => "Tiempo"
+.checkBoxE: "Enable" = SoundEffectsDialog.checkBoxP
+.labelReverbTime: "Time" = Time
 .labelDistortionEdge: "Edge" => "Borde"
-.labelChorusDelay: "Delay" => "Retardo"
+.labelChorusDelay: "Delay" = SoundEffectsDialog.labelEchoDelay
 .labelChorusDepth: "Depth" => "Profundidad"
 .labelReverbHFRatio: "HF Ratio" => "Relación de AF"
 .labelDistortionCentreFreq: "Cent Freq" => "Freq. Central"
@@ -527,7 +527,7 @@ SECTION ActionPackEditPackForm
 SECTION ActionProgramEditForm
 
 ActionProgramEditForm: "Action Program" @
-.labelName: "Name:" => "Nombre"
+.labelName: "Name:" = AddOnManagerForm.Name
 .buttonExtDisk: "As File" => "Como Archivo"
 .buttonExtLoad: "Load" => "Cargar"
 .buttonExtSave: "Save" => "Guardar"

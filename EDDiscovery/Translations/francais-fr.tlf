@@ -30,7 +30,7 @@ SECTION DataGridView
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery Mode sans échec"
-.buttonCancel: "Cancel" => "Annuler"
+.buttonCancel: "Cancel" = Cancel
 .buttonRun: "Run" => "Démarrer"
 .buttonRemoveJournals: "Remove Journals" @
 .buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
@@ -111,7 +111,7 @@ SECTION PopOutInfo
 .Expedition.Description: "Expedition Planner, make up a expedition route" => "Planificateur d'expédition"
 .Expedition.Title: "Expedition" => "Expédition"
 .SystemInformation.Description: "System Information" => "Information système"
-.SystemInformation.Title: "System Information" => "Information système"
+.SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
 .Spanel.Description: "Summary panel overlay" => "Panneau superposé de résumé (overlay)"
 .Spanel.Title: "Summary Panel" => "Panneau résumé"
 .Trippanel.Description: "Trip computer overlay" => "Ordinateur de voyage, superposé (overlay)"
@@ -133,7 +133,7 @@ SECTION PopOutInfo
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" => "Recherche"
-.Search.Description: "Search" => "Recherche"
+.Search.Description: "Search" = PopOutInfo.Search.Title
 .CaptainsLog.Title: "Captain's Log" => "Journal du capitaine"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Journal du capitaine - notes sur vos voyages"
 .Surveyor.Title: "Surveyor" => "Géomètre"
@@ -141,7 +141,7 @@ SECTION PopOutInfo
 .MissionOverlay.Title: "Mission Overlay" => "Mission (superposé)"
 .MissionOverlay.Description: "Mission List overlay" => "Liste des missions, superposée (overlay)"
 .MaterialTrader.Title: "Material Trader" => "Commerçants de matériaux"
-.MaterialTrader.Description: "Material trader" => "Commerçants de matériaux"
+.MaterialTrader.Description: "Material trader" = PopOutInfo.MaterialTrader.Title
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "EDSM - Automatic web view of system" => "Vue web automatique de la page EDSM d'un système"
 .Inara.Title: "Inara" @
@@ -185,7 +185,7 @@ SECTION EDDiscoveryForm
 .SendEDSMCancel: "I'll decide later, do nothing" @
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "&Outils"
-.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Paramètres"
+.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" = PopOutInfo.Settings.Title
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Fenêtres"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Afficher tout dans la barre des tâches"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Désactiver les effets de transparence"
@@ -255,12 +255,12 @@ SECTION EDDiscoveryForm
 .RH: "Refresh History." => "Rafraichir l'historique."
 .NoEDSMAPI: "No EDSM API key set" => "Veuillez vous assurer qu'un commandant est sélectionné et qu'une clé API EDSM est configurée."
 .EP: "Edit Profiles" => "Modifier les profils"
-.PL: "Profile {0} Loaded" => "Profil {0} chargé"
+.PL: "Profile {0} Loaded" = EDDiscoveryForm.PROFL
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Panneau fenêtré"
 .CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery met à jour les bases EDSM et EDDB\r\nCliquer sur OK pour fermer maintenant, Annuler pour attendre jusqu'à la fin de la mise à jour"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "&Ouvrir EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Masquer l'icône"
-.notifyIconMenu_Exit: "E&xit" => "&Quitter"
+.notifyIconMenu_Exit: "E&xit" = EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Récupérer les journaux à nouveau"
 .adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Récupérer les données stellaires à nouveau"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
@@ -297,7 +297,7 @@ SECTION AddOnManagerForm
 .Description: "Description" @
 .Status: "Status" => "Statut"
 .Action: "Action" @
-.Delete: "Delete" => "Supprimer"
+.Delete: "Delete" = Delete
 .Enabled: "Enabled" => "Activé"
 .Newer: "Newer EDD required" => "Version plus récente d'EDD nécessaire"
 .Old: "Too old for EDD" => "Trop ancien pour EDD"
@@ -336,8 +336,8 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 .labelSectorName: "Sector" => "Secteur"
 .Custom: "Custom" => "Personnalisé"
 .Reset: "Reset" => "RAZ"
-.All: "All" => "Tout"
-.None: "None" => "Aucun"
+.All: "All" = All
+.None: "None" = None
 .Bubble: "Bubble" => "Bulle"
 .ExtendedBubble: "Extended Bubble" => "Bulle étendue"
 .BC: "Bubble+Colonia" => "Bulle+Colonia"
@@ -373,7 +373,7 @@ SECTION ProfileEditor
 
 ProfileEditor: "ProfileEditor" @
 .buttonExtGlobals: "Globals" @
-.Custom: "Custom" => "Personnalisé"
+.Custom: "Custom" = GalaxySectorSelect.Custom
 .Trigger: "Trigger" => "Déclencheur"
 .Back: "Back" => "Retour"
 .TrigEdit: "Edit Profile {0} Trigger" => "Editer le déclencheur de profil {0}"
@@ -392,11 +392,11 @@ SetNoteForm: "Set Note" => "Définir une note"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" => "Attention"
+.Warning: "Warning" = Warning
 .Ignore: "Ignore" @
 .Retry: "Retry" => "Réessayer"
 .Abort: "Abort" => "Abandonner"
-.Cancel: "Cancel" => "Annuler"
+.Cancel: "Cancel" = Cancel
 .OK: "OK" @
 .No: "No" => "Non"
 .Yes: "Yes" => "Oui"
@@ -407,7 +407,7 @@ SECTION DataGridViewDialogs
 
 .Jumpto: "Jump to: " => "Sauter vers : "
 .EN: "Enter number to jump to or near to" => "Entrer un nombre de saut pour aller à ou à côté"
-.PresstoAccept: "Press to Accept" => "Cliquer pour accepter"
+.PresstoAccept: "Press to Accept" = GalaxySectorSelect.PresstoAccept
 .PresstoCancel: "Press to Cancel" => "Cliquer pour annuler"
 .VNV: "Value is not valid" => "Valeur invalide"
 
@@ -425,9 +425,9 @@ KeyForm: "Define Key Sequence" @
 .labelSelKeys: "Select Key" => "Choisir un touche"
 .labelDelay: "Start Delay(ms)" => "Délai de démarrage (ms)"
 .labelSendTo: "Send To" => "Envoyer vers"
-.buttonReset: "Reset" => "RAZ"
+.buttonReset: "Reset" = GalaxySectorSelect.Reset
 .labelKeys: "Keys" => "Touches"
-.buttonDelete: "Delete" => "Supprimer"
+.buttonDelete: "Delete" = Delete
 .buttonNext: "Next" => "Suivant"
 .buttonTest: "Test" @
 .PK: "Press Key" => "Appuyer sur une touche"
