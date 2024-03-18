@@ -32,12 +32,14 @@ SECTION UserControlCombatPanel
 .labelTotalKills: "Kills" @
 .labelFactionKills: "Faction Kills" @
 .labelBalance: "Balance" @
+.labelDied: "Died" @
 .labelTotalCrimes: "Crimes" @
+.labelTarget: "Target" @
 .labelFaction: "Faction" @
 .labelTotalReward: "TotalReward" @
 .labelFactionReward: "FactionReward" @
-.checkBoxCustomGridOn: "Grid" @
 .buttonExtEditCampaign: "Edit" @
+.checkBoxCustomGridOn: "Grid" @
 .labelCredits.ToolTip: "Current Credits" @
 .labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" @
 .labelFactionKills.ToolTip: "Faction Kills" @
@@ -45,19 +47,16 @@ SECTION UserControlCombatPanel
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" @
 .labelFaction.ToolTip: "Target Faction" @
 .labelTotalReward.ToolTip: "Total reward" @
-.labelDied: "Died" @
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" @
-.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" @
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" @
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" @
-.Kills: "Kills" @
-.Faction: "Faction" @
-.Crimes: "Crimes" @
-.Bal: "Bal" @
+.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" @
+.NT: "No Target" @
 .NewCampaign: "New Campaign" @
 .SinceLastDock: "Since Last Dock" @
 .Name: "Name:" @
 .C1: "Give name to campaign" @
+.Faction: "Faction:" @
 .C2: "Optional faction to target" @
 .Start: "Start:" @
 .C3: "Select Start time" @
@@ -69,8 +68,9 @@ SECTION UserControlCombatPanel
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" @
 .Condel: "Confirm deletion of {0}" @
 .NC: "Name changed - can't delete" @
-.NT: "No Target" @
-.labelTarget: "Target" @
+.Kills: "Kills" @
+.Crimes: "Crimes" @
+.Bal: "Bal" @
 
 SECTION UserControlContainerGrid
 

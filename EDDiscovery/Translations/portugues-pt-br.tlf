@@ -420,7 +420,7 @@ KeyForm: "Define Key Sequence" => "Defina uma sequência de teclas"
 .checkBoxShift: "Shift" @
 .checkBoxCtrl: "Ctrl" @
 .checkBoxAlt: "Alt" @
-.checkBoxKey: "'Press Key'" => "Pressionar tecla"
+.checkBoxKey: "Press Key" => "Pressionar tecla"
 .labelNextDelay: "Current Delay" => "Atraso atual"
 .labelSelKeys: "Select Key" => "Selecionar tecla"
 .labelDelay: "Start Delay(ms)" => "Inicíar retardo(ms)"

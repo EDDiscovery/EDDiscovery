@@ -32,12 +32,14 @@ SECTION UserControlCombatPanel
 .labelTotalKills: "Kills" => "杀敌数"
 .labelFactionKills: "Faction Kills" => "派系杀敌数"
 .labelBalance: "Balance" => "净收入"
+.labelDied: "Died" @
 .labelTotalCrimes: "Crimes" => "犯罪"
+.labelTarget: "Target" @
 .labelFaction: "Faction" => "派系"
 .labelTotalReward: "TotalReward" => "总报酬"
 .labelFactionReward: "FactionReward" => "派系报酬"
-.checkBoxCustomGridOn: "Grid" => "网格"
 .buttonExtEditCampaign: "Edit" => "编辑"
+.checkBoxCustomGridOn: "Grid" => "网格"
 .labelCredits.ToolTip: "Current Credits" => "当前账户余额"
 .labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "战斗中的总杀敌数"
 .labelFactionKills.ToolTip: "Faction Kills" => "派系杀敌数"
@@ -45,19 +47,16 @@ SECTION UserControlCombatPanel
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "你被抓了几次？"
 .labelFaction.ToolTip: "Target Faction" => "目标派系"
 .labelTotalReward.ToolTip: "Total reward" => "总报酬"
-.labelDied: "Died" @
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "摧毁目标派系所得的报酬"
-.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "透明模式下显示网格"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "选择要浏览的战役"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "编辑用户创建的战役"
-.Kills: "Kills:" => "杀敌数"
-.Faction: "Faction:" => "派系"
-.Crimes: "Crimes:" => "犯罪次数"
-.Bal: "Bal:" => "净收入"
+.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "透明模式下显示网格"
+.NT: "No Target" @
 .NewCampaign: "New Campaign" => "新建战役"
 .SinceLastDock: "Since Last Dock" => "自最近降落后"
 .Name: "Name:" => "名称"
 .C1: "Give name to campaign" => "给战役输入名称"
+.Faction: "Faction:" => "派系"
 .C2: "Optional faction to target" => "目标派系（可选）"
 .Start: "Start:" => "开始："
 .C3: "Select Start time" => "选择开始时间"
@@ -69,8 +68,9 @@ SECTION UserControlCombatPanel
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" => "该名称的战役已存在，不能覆盖。"
 .Condel: "Confirm deletion of {0}" => "确认要删除战役{0}吗"
 .NC: "Name changed - can't delete" => "名称已改变，不能删除"
-.NT: "No Target" @
-.labelTarget: "Target" @
+.Kills: "Kills" => "杀敌数"
+.Crimes: "Crimes" => "犯罪次数"
+.Bal: "Bal" => "净收入"
 
 SECTION UserControlContainerGrid
 

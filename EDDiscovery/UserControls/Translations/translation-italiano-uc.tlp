@@ -32,12 +32,14 @@ SECTION UserControlCombatPanel
 .labelTotalKills: "Kills" => "Abbattuti"
 .labelFactionKills: "Faction Kills" => "Abbattuti dalla Fazione"
 .labelBalance: "Balance" => "Bilancio"
+.labelDied: "Died" @
 .labelTotalCrimes: "Crimes" => "Crimini"
+.labelTarget: "Target" @
 .labelFaction: "Faction" => "Fazione"
 .labelTotalReward: "TotalReward" => "Ricompensa Total"
 .labelFactionReward: "FactionReward" => "Ricompensa della Fazione"
-.checkBoxCustomGridOn: "Grid" => "Tabella"
 .buttonExtEditCampaign: "Edit" => "Modifica"
+.checkBoxCustomGridOn: "Grid" => "Tabella"
 .labelCredits.ToolTip: "Current Credits" => "Crediti Attuali"
 .labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "Totale abbattuti nella campagna"
 .labelFactionKills.ToolTip: "Faction Kills" => "Abbattuti dalla Fazione"
@@ -45,19 +47,16 @@ SECTION UserControlCombatPanel
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Quante volte sei stato catturato!"
 .labelFaction.ToolTip: "Target Faction" => "Fazione Bersaglio"
 .labelTotalReward.ToolTip: "Total reward" => "Ricomensa Totale"
-.labelDied: "Died" @
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "Ricompensa associata alla distruzione delle nevi avversarie"
-.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Mostra tabella quando in modo trasparente"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Seleziona la campagna da visualizzare"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "Modifica campagna definita dall'utente"
-.Kills: "Kills" @
-.Faction: "Faction" @
-.Crimes: "Crimes" @
-.Bal: "Bal" @
+.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Mostra tabella quando in modo trasparente"
+.NT: "No Target" @
 .NewCampaign: "New Campaign" @
 .SinceLastDock: "Since Last Dock" @
 .Name: "Name:" @
 .C1: "Give name to campaign" @
+.Faction: "Faction:" @
 .C2: "Optional faction to target" @
 .Start: "Start:" @
 .C3: "Select Start time" @
@@ -69,8 +68,9 @@ SECTION UserControlCombatPanel
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" @
 .Condel: "Confirm deletion of {0}" @
 .NC: "Name changed - can't delete" @
-.NT: "No Target" @
-.labelTarget: "Target" @
+.Kills: "Kills" @
+.Crimes: "Crimes" @
+.Bal: "Bal" @
 
 SECTION UserControlContainerGrid
 

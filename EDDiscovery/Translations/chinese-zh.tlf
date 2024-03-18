@@ -420,7 +420,7 @@ KeyForm: "Define Key Sequence" => "定义按键"
 .checkBoxShift: "Shift" @
 .checkBoxCtrl: "Ctrl" @
 .checkBoxAlt: "Alt" @
-.checkBoxKey: "'Press Key'" => "按下一个键"
+.checkBoxKey: "Press Key" => "按下一个键"
 .labelNextDelay: "Current Delay" => "当前延时"
 .labelSelKeys: "Select Key" => "选择按键"
 .labelDelay: "Start Delay(ms)" => "启动延时(ms)"

@@ -32,12 +32,14 @@ SECTION UserControlCombatPanel
 .labelTotalKills: "Kills" => "Tués"
 .labelFactionKills: "Faction Kills" => "Tués par la faction"
 .labelBalance: "Balance" => "Solde"
+.labelDied: "Died" @
 .labelTotalCrimes: "Crimes" @
+.labelTarget: "Target" => "Cible"
 .labelFaction: "Faction" @
 .labelTotalReward: "TotalReward" => "Récompense totale"
 .labelFactionReward: "FactionReward" => "Récompense de faction"
-.checkBoxCustomGridOn: "Grid" => "Grille"
 .buttonExtEditCampaign: "Edit" => "Modifier"
+.checkBoxCustomGridOn: "Grid" => "Grille"
 .labelCredits.ToolTip: "Current Credits" => "Crédits disponibles"
 .labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "Nombre de tués dans la campagne"
 .labelFactionKills.ToolTip: "Faction Kills" => "Tués par la faction"
@@ -45,19 +47,16 @@ SECTION UserControlCombatPanel
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Nombre de fois ou vous avez été pris !"
 .labelFaction.ToolTip: "Target Faction" => "Faction cible"
 .labelTotalReward.ToolTip: "Total reward" => "Récompense totale"
-.labelDied: "Died" @
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "Récompense associée à la destruction de vaisseau de faction"
-.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Montrer la grille en mode transparent"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Selectionner la campagne à afficher"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "Editer la campgne définie par l'utilisateur"
-.Kills: "Kills" => "Tués "
-.Faction: "Faction" @
-.Crimes: "Crimes" @
-.Bal: "Bal" => "Solde"
+.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Montrer la grille en mode transparent"
+.NT: "No Target" => "Pas de cible"
 .NewCampaign: "New Campaign" => "Nouvelle Campagne"
 .SinceLastDock: "Since Last Dock" => "Depuis le dernier appontage"
 .Name: "Name:" => "Nom: "
 .C1: "Give name to campaign" => "Donner un nom à la campagne"
+.Faction: "Faction:" @
 .C2: "Optional faction to target" => "Faction à cibler (optionnel)"
 .Start: "Start:" => "Début: "
 .C3: "Select Start time" => "Selectionner heure de début"
@@ -69,8 +68,9 @@ SECTION UserControlCombatPanel
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" => "Nom de la campagne déjà utilisé, écrasement impossible"
 .Condel: "Confirm deletion of {0}" => "Connfirmer la suppression de {0}"
 .NC: "Name changed - can't delete" => "Nom changé - suppression impossible"
-.NT: "No Target" => "Pas de cible"
-.labelTarget: "Target" => "Cible"
+.Kills: "Kills" => "Tués "
+.Crimes: "Crimes" @
+.Bal: "Bal" => "Solde"
 
 SECTION UserControlContainerGrid
 
