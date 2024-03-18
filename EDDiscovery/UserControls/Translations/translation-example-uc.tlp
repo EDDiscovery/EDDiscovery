@@ -55,13 +55,13 @@ Section UserControlCombatPanel
 .NewCampaign: "New Campaign" @
 .SinceLastDock: "Since Last Dock" @
 
-.Name: "Name:" @
+.Name: "Name" @
 .C1: "Give name to campaign" @
-.Faction: "Faction:" @
+.Faction: "Faction" @
 .C2: "Optional faction to target" @
-.Start: "Start:" @
+.Start: "Start" @
 .C3: "Select Start time" @
-.End: "End:" @
+.End: "End" @
 .C4: "Select Start time" @
 .C5: "Press to Accept" @
 .C6: "Press to Cancel" @

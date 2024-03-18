@@ -54,13 +54,13 @@ SECTION UserControlCombatPanel
 .NT: "No Target" => "Pas de cible"
 .NewCampaign: "New Campaign" => "Nouvelle Campagne"
 .SinceLastDock: "Since Last Dock" => "Depuis le dernier appontage"
-.Name: "Name:" => "Nom: "
+.Name: "Name" => "Nom"
 .C1: "Give name to campaign" => "Donner un nom à la campagne"
-.Faction: "Faction:" @
+.Faction: "Faction" @
 .C2: "Optional faction to target" => "Faction à cibler (optionnel)"
-.Start: "Start:" => "Début: "
+.Start: "Start" => "Début"
 .C3: "Select Start time" => "Selectionner heure de début"
-.End: "End:" => "Fin: "
+.End: "End" => "Fin"
 .C4: "Select Start time" => "Selectionner heure de début"
 .C5: "Press to Accept" => "Appuyer pour accepter"
 .C6: "Press to Cancel" => "Appuyer pour annuler"
@@ -68,7 +68,7 @@ SECTION UserControlCombatPanel
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" => "Nom de la campagne déjà utilisé, écrasement impossible"
 .Condel: "Confirm deletion of {0}" => "Connfirmer la suppression de {0}"
 .NC: "Name changed - can't delete" => "Nom changé - suppression impossible"
-.Kills: "Kills" => "Tués "
+.Kills: "Kills" => "Tués"
 .Crimes: "Crimes" @
 .Bal: "Bal" => "Solde"
 
