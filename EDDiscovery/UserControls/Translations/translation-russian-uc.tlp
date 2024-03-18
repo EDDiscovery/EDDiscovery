@@ -60,7 +60,7 @@ SECTION UserControlCombatPanel
 .C2: "Optional faction to target" => "Выберите фракцию для атаки (необязательно)"
 .Start: "Start" => "Начало"
 .C3: "Select Start time" => "Выберите время начала кампании"
-.End: "End:" => "Конец: "
+.End: "End" => "Конец: "
 .C4: "Select Start time" => "Выберите время завершения кампании"
 .C5: "Press to Accept" => "Принять"
 .C6: "Press to Cancel" => "Отмена"
