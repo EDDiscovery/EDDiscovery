@@ -682,7 +682,8 @@ namespace EDDiscovery.UserControls.Helpers
             commoditiessearchdistance = f.GetInt("radius").Value;
             commoditiesclearfilters = f.GetBool("CLRF").Value;
             commoditieslargepad = f.GetBool("LPAD").Value;
-            commoditiescarriers = f.GetBool("CARRIER").Value;
+            var v = f.GetBool("CARRIER");
+            commoditiescarriers = v.HasValue ? v.Value : false;
         }
 
 
