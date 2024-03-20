@@ -50,16 +50,21 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName,
                                             EDTx.UserControlBookmarks_ColDescription, EDTx.UserControlBookmarks_ColTags,
                                             EDTx.UserControlBookmarks_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.UserControlBookmarks_toolStripMenuItemGotoStar3dmap, EDTx.UserControlBookmarks_openInEDSMToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip, 
-                                            EDTx.UserControlBookmarks_buttonEdit_ToolTip, EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip, 
-                                            EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip, 
-                                            EDTx.UserControlBookmarks_buttonExtImport_ToolTip,
-                                            EDTx.UserControlBookmarks_extButtonNewRegion_ToolTip};
             
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripBookmarks, enumlistcms, this);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip,
+                                            EDTx.UserControlBookmarks_buttonEdit_ToolTip, EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip,
+                                            EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip,
+                                            EDTx.UserControlBookmarks_buttonExtImport_ToolTip,
+                                            EDTx.UserControlBookmarks_extButtonNewRegion_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            // manually pick these up from DataGridViewStarResults as the names don't match
+            viewScanOfSystemToolStripMenuItem.Text = viewScanOfSystemToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Data);
+            mapGotoStartoolStripMenuItem.Text = mapGotoStartoolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_3d);
+            viewOnSpanshToolStripMenuItem.Text = viewOnSpanshToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Spansh);
+            viewOnEDSMToolStripMenuItem.Text = viewOnEDSMToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_EDSM);
 
             userControlSurfaceBookmarks.TagFilter = GetSetting(dbSurfaceTags, "All");
         }
@@ -439,13 +444,23 @@ namespace EDDiscovery.UserControls
 
         private void contextMenuStripBookmarks_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            toolStripMenuItemGotoStar3dmap.Enabled = rightclickbookmark != null;
-            openInEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.IsStar;
+            mapGotoStartoolStripMenuItem.Enabled = rightclickbookmark != null;
+            viewOnEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.IsStar;
         }
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
             DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.X, rightclickbookmark.Y, rightclickbookmark.Z));
+        }
+
+        private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), new SystemClass(rightclickbookmark.StarName), DiscoveryForm.History);
+        }
+
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(new SystemClass(rightclickbookmark.StarName));
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -669,6 +684,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
 
     }
 }

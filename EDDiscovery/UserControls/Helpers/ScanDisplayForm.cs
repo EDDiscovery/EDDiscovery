@@ -30,7 +30,8 @@ namespace EDDiscovery.UserControls
 
             ExtendedControls.ConfigurableForm form = new ExtendedControls.ConfigurableForm();
 
-            Size infosize = parent.SizeWithinScreen(new Size(parent.Width * 6 / 8, parent.Height * 6 / 8), 128, 128 + 100);        // go for this, but allow this around window
+            Screen scr = Screen.FromPoint(parent.PointToScreen(new Point(0,0)));
+            Size maincontentsize = new Size(scr.WorkingArea.Width * 5 / 8, scr.WorkingArea.Height * 5 / 8);
             int topmargin = 28+28;
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
@@ -43,7 +44,8 @@ namespace EDDiscovery.UserControls
             {
                 he.FillInformation(out string info, out string detailed);
 
-                form.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
+                form.Add(new ExtendedControls.ConfigurableForm.Entry("Content", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), maincontentsize, null)
+                { Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, MinimumSize = new Size(200, 200) });
 
                 JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
                 title += ", " +"Station".T(EDTx.ScanDisplayForm_Station) + ": " + jm.Station;
@@ -71,7 +73,7 @@ namespace EDDiscovery.UserControls
                 sd.SystemDisplay.ShowWebBodies = (forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup) != WebExternalDataLookup.None;
                 int selsize = (int)(ExtendedControls.Theme.Current.GetFont.Height / 10.0f * 48.0f);
                 sd.SystemDisplay.SetSize( selsize );
-                sd.Size = infosize;
+                sd.Size = maincontentsize;
 
                 nodedata = await hl.StarScan.FindSystemAsync(sys, forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup);    // look up system async
 
@@ -99,11 +101,23 @@ namespace EDDiscovery.UserControls
                 form.Add(new ExtendedControls.ConfigurableForm.Entry(configbut, "Con",  null, new Point(4 + 28 + 8, 28), new Size(28, 28), null));
                 if ( !forcedlookup.HasValue)
                     form.Add(new ExtendedControls.ConfigurableForm.Entry(edsmSpanshButton, "edsm", null, new Point(4 + 28 + 8 + 28 + 8, 28), new Size(28, 28), null));
-                form.Add(new ExtendedControls.ConfigurableForm.Entry(sd, "Sys", null, new Point(0, topmargin), infosize, null));
-                form.AllowResize = true;
+                form.Add(new ExtendedControls.ConfigurableForm.Entry(sd, "Content", null, new Point(0, topmargin), maincontentsize, null)
+                { Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, MinimumSize = new Size(100, 40) });
+
+                form.Trigger += (dialogname, controlname, ttag) =>
+                {
+                    if (controlname == "Resize")
+                    {
+                        //System.Diagnostics.Debug.WriteLine($"SDF Resize sd size {sd.Size}");
+                        sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
+                    }
+                };
             }
 
-            form.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
+            form.AllowResize = true;
+            
+            // removed OK for now.. not needed
+            //form.AddOK(new Point(maincontentsize.Width - 120, topmargin + maincontentsize.Height + 10), anchor: AnchorStyles.Right | AnchorStyles.Bottom );
 
             form.Trigger += (dialogname, controlname, ttag) =>
             {
@@ -113,7 +127,8 @@ namespace EDDiscovery.UserControls
                     form.ReturnResult(DialogResult.Cancel);
             };
 
-            form.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
+            form.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true, minsize:new Size(200,200));
+
 
             if (opacity < 1)
             {

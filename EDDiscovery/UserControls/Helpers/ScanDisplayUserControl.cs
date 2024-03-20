@@ -40,11 +40,6 @@ namespace EDDiscovery.UserControls
             SystemDisplay.LargerFont = ExtendedControls.Theme.Current?.GetFont ?? Font;
         }
 
-        private void UserControlScan_Resize(object sender, EventArgs e)
-        {
-            PositionInfo();
-        }
-
         #endregion
 
         #region Display
@@ -87,9 +82,18 @@ namespace EDDiscovery.UserControls
             HideInfo();
         }
 
+        #endregion
+
+        #region Implementation
+
         public void HideInfo()
         {
             rtbNodeInfo.Visible = false;
+        }
+        private void UserControlScan_Resize(object sender, EventArgs e)
+        {
+           // System.Diagnostics.Debug.WriteLine($"System Display size {Size}");
+            PositionInfo();
         }
 
         void PositionInfo()

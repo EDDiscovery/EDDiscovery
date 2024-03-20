@@ -56,12 +56,16 @@ namespace EDDiscovery.UserControls
             GlobalCaptainsLogList.Instance.OnLogEntryChanged += LogChanged;
 
             var enumlist = new Enum[] { EDTx.CaptainsLogEntries_ColTime, EDTx.CaptainsLogEntries_ColSystem, EDTx.CaptainsLogEntries_ColBodyName, EDTx.CaptainsLogEntries_ColNote, EDTx.CaptainsLogEntries_ColTags, EDTx.CaptainsLogEntries_labelDateStart, EDTx.CaptainsLogEntries_labelEndDate, EDTx.CaptainsLogEntries_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.CaptainsLogEntries_toolStripMenuItemGotoStar3dmap, EDTx.CaptainsLogEntries_openInEDSMToolStripMenuItem, EDTx.CaptainsLogEntries_openAScanPanelViewToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.CaptainsLogEntries_textBoxFilter_ToolTip, EDTx.CaptainsLogEntries_buttonNew_ToolTip, EDTx.CaptainsLogEntries_buttonDelete_ToolTip, EDTx.CaptainsLogEntries_buttonTags_ToolTip };
-
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { });
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+
+            var enumlisttt = new Enum[] { EDTx.CaptainsLogEntries_textBoxFilter_ToolTip, EDTx.CaptainsLogEntries_buttonNew_ToolTip, EDTx.CaptainsLogEntries_buttonDelete_ToolTip, EDTx.CaptainsLogEntries_buttonTags_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            // manually pick these up from DataGridViewStarResults as the names don't match
+            viewScanDisplayToolStripMenuItem.Text = viewScanDisplayToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Data);
+            mapGoto3StartoolStripMenuItem.Text = mapGoto3StartoolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_3d);
+            viewOnSpanshToolStripMenuItem.Text = viewOnSpanshToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Spansh);
+            viewOnEDSMToolStripMenuItem.Text = viewOnEDSMToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_EDSM);
 
             ColNote.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
@@ -533,15 +537,17 @@ namespace EDDiscovery.UserControls
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            toolStripMenuItemGotoStar3dmap.Enabled = rightclickentry != null;
-            openInEDSMToolStripMenuItem.Enabled = rightclickentry != null;
-            openAScanPanelViewToolStripMenuItem.Enabled = rightclickentry != null;
+            mapGoto3StartoolStripMenuItem.Enabled = 
+            viewOnEDSMToolStripMenuItem.Enabled = 
+            viewScanDisplayToolStripMenuItem.Enabled = 
+            viewOnSpanshToolStripMenuItem.Enabled = rightclickentry != null;
         }
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
-            DiscoveryForm.Open3DMap(s);
+            ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
+            if ( s != null )
+                DiscoveryForm.Open3DMap(s);
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -555,15 +561,14 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.Default;
         }
 
-        private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(new SystemClass(rightclickentry.SystemName));
+        }
 
-            if ( sys != null )
-                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, DiscoveryForm.History);
-            else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+        private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), new SystemClass(rightclickentry.SystemName), DiscoveryForm.History);
         }
 
         #endregion
@@ -630,6 +635,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
 
     }
 }

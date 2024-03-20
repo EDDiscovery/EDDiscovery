@@ -384,6 +384,9 @@ namespace EDDiscovery.UserControls
                 deleteToolStripMenuItem.Enabled = rw.IsNewRow == false;
                 sendToCompassToolStripMenuItem.Enabled = CompassSelected != null && ValidRow(rw, out double _1, out double _2) == RowValidity.ValidWithLatLong;
             }
+            else
+                sendToCompassToolStripMenuItem.Enabled = deleteToolStripMenuItem.Enabled = false;
+
         }
 
         private void addPlanetManuallyToolStripMenuItem_Click(object sender, EventArgs e)

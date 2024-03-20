@@ -30,13 +30,22 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlBookmarks));
-            this.buttonExtImport = new ExtendedControls.ExtButton();
-            this.buttonExtExcel = new ExtendedControls.ExtButton();
-            this.buttonDelete = new ExtendedControls.ExtButton();
-            this.buttonNew = new ExtendedControls.ExtButton();
-            this.buttonEdit = new ExtendedControls.ExtButton();
+            this.contextMenuStripBookmarks = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.viewScanOfSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.textBoxFilter = new ExtendedControls.ExtTextBox();
-            this.labelSearch = new System.Windows.Forms.Label();
+            this.buttonFilter = new ExtendedControls.ExtButton();
+            this.buttonNew = new ExtendedControls.ExtButton();
+            this.extButtonEditSystem = new ExtendedControls.ExtButton();
+            this.extButtonNewRegion = new ExtendedControls.ExtButton();
+            this.buttonEdit = new ExtendedControls.ExtButton();
+            this.buttonDelete = new ExtendedControls.ExtButton();
+            this.buttonTags = new ExtendedControls.ExtButton();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.buttonExtImport = new ExtendedControls.ExtButton();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
@@ -48,87 +57,61 @@
             this.ColY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripBookmarks = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.extButtonEditSystem = new ExtendedControls.ExtButton();
-            this.extButtonNewRegion = new ExtendedControls.ExtButton();
-            this.buttonTags = new ExtendedControls.ExtButton();
-            this.buttonFilter = new ExtendedControls.ExtButton();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.contextMenuStripBookmarks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.contextMenuStripBookmarks.SuspendLayout();
             this.topPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonExtImport
+            // contextMenuStripBookmarks
             // 
-            this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
-            this.buttonExtImport.Location = new System.Drawing.Point(493, 1);
-            this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtImport.Name = "buttonExtImport";
-            this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
-            this.buttonExtImport.TabIndex = 38;
-            this.toolTip.SetToolTip(this.buttonExtImport, "Import bookmarks to EDD from CSV file");
-            this.buttonExtImport.UseVisualStyleBackColor = true;
-            this.buttonExtImport.Click += new System.EventHandler(this.buttonExtImport_Click);
+            this.contextMenuStripBookmarks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewScanOfSystemToolStripMenuItem,
+            this.mapGotoStartoolStripMenuItem,
+            this.viewOnSpanshToolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem});
+            this.contextMenuStripBookmarks.Name = "contextMenuStripBookmarks";
+            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(187, 114);
+            this.contextMenuStripBookmarks.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripBookmarks_Opening);
             // 
-            // buttonExtExcel
+            // viewScanOfSystemToolStripMenuItem
             // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(457, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
-            this.buttonExtExcel.TabIndex = 38;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Export bookmarks to CSV file");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            this.viewScanOfSystemToolStripMenuItem.Name = "viewScanOfSystemToolStripMenuItem";
+            this.viewScanOfSystemToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewScanOfSystemToolStripMenuItem.Text = "View Scan Display";
+            this.viewScanOfSystemToolStripMenuItem.Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
             // 
-            // buttonDelete
+            // mapGotoStartoolStripMenuItem
             // 
-            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(385, 1);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(28, 28);
-            this.buttonDelete.TabIndex = 27;
-            this.toolTip.SetToolTip(this.buttonDelete, "Delete selected bookmark");
-            this.buttonDelete.UseVisualStyleBackColor = true;
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
+            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
+            this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemGotoStar3dmap_Click);
             // 
-            // buttonNew
+            // viewOnSpanshToolStripMenuItem
             // 
-            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.New;
-            this.buttonNew.Location = new System.Drawing.Point(241, 1);
-            this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonNew.Name = "buttonNew";
-            this.buttonNew.Size = new System.Drawing.Size(28, 28);
-            this.buttonNew.TabIndex = 2;
-            this.toolTip.SetToolTip(this.buttonNew, "New Bookmark");
-            this.buttonNew.UseVisualStyleBackColor = true;
-            this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
+            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
+            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewOnSpanshToolStripMenuItem.Text = "View On Spansh";
+            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
             // 
-            // buttonEdit
+            // viewOnEDSMToolStripMenuItem
             // 
-            this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Edit;
-            this.buttonEdit.Location = new System.Drawing.Point(313, 1);
-            this.buttonEdit.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonEdit.Name = "buttonEdit";
-            this.buttonEdit.Size = new System.Drawing.Size(28, 28);
-            this.buttonEdit.TabIndex = 3;
-            this.toolTip.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
-            this.buttonEdit.UseVisualStyleBackColor = true;
-            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // textBoxFilter
             // 
@@ -161,15 +144,115 @@
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
-            // labelSearch
+            // buttonFilter
             // 
-            this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(0, 4);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
-            this.labelSearch.Name = "labelSearch";
-            this.labelSearch.Size = new System.Drawing.Size(41, 13);
-            this.labelSearch.TabIndex = 26;
-            this.labelSearch.Text = "Search";
+            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
+            this.buttonFilter.Location = new System.Drawing.Point(205, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Name = "buttonFilter";
+            this.buttonFilter.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilter.TabIndex = 40;
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on tag");
+            this.buttonFilter.UseVisualStyleBackColor = true;
+            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
+            // 
+            // buttonNew
+            // 
+            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.New;
+            this.buttonNew.Location = new System.Drawing.Point(241, 1);
+            this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonNew.Name = "buttonNew";
+            this.buttonNew.Size = new System.Drawing.Size(28, 28);
+            this.buttonNew.TabIndex = 2;
+            this.toolTip.SetToolTip(this.buttonNew, "New Bookmark");
+            this.buttonNew.UseVisualStyleBackColor = true;
+            this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
+            // 
+            // extButtonEditSystem
+            // 
+            this.extButtonEditSystem.Image = global::EDDiscovery.Icons.Controls.EditSystem;
+            this.extButtonEditSystem.Location = new System.Drawing.Point(277, 1);
+            this.extButtonEditSystem.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonEditSystem.Name = "extButtonEditSystem";
+            this.extButtonEditSystem.Size = new System.Drawing.Size(28, 28);
+            this.extButtonEditSystem.TabIndex = 3;
+            this.toolTip.SetToolTip(this.extButtonEditSystem, "New bookmark on current system");
+            this.extButtonEditSystem.UseVisualStyleBackColor = true;
+            this.extButtonEditSystem.Click += new System.EventHandler(this.extButtonEditSystem_Click);
+            // 
+            // extButtonNewRegion
+            // 
+            this.extButtonNewRegion.Image = global::EDDiscovery.Icons.Controls.NewRegion;
+            this.extButtonNewRegion.Location = new System.Drawing.Point(313, 1);
+            this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonNewRegion.Name = "extButtonNewRegion";
+            this.extButtonNewRegion.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNewRegion.TabIndex = 2;
+            this.toolTip.SetToolTip(this.extButtonNewRegion, "New Region Bookmark");
+            this.extButtonNewRegion.UseVisualStyleBackColor = true;
+            this.extButtonNewRegion.Click += new System.EventHandler(this.extButtonNewRegion_Click);
+            // 
+            // buttonEdit
+            // 
+            this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Edit;
+            this.buttonEdit.Location = new System.Drawing.Point(349, 1);
+            this.buttonEdit.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonEdit.Name = "buttonEdit";
+            this.buttonEdit.Size = new System.Drawing.Size(28, 28);
+            this.buttonEdit.TabIndex = 3;
+            this.toolTip.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
+            this.buttonEdit.UseVisualStyleBackColor = true;
+            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
+            this.buttonDelete.Location = new System.Drawing.Point(385, 1);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(28, 28);
+            this.buttonDelete.TabIndex = 27;
+            this.toolTip.SetToolTip(this.buttonDelete, "Delete selected bookmark");
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
+            // buttonTags
+            // 
+            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Tags;
+            this.buttonTags.Location = new System.Drawing.Point(421, 1);
+            this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonTags.Name = "buttonTags";
+            this.buttonTags.Size = new System.Drawing.Size(28, 28);
+            this.buttonTags.TabIndex = 39;
+            this.toolTip.SetToolTip(this.buttonTags, "Edit Tags");
+            this.buttonTags.UseVisualStyleBackColor = true;
+            this.buttonTags.Click += new System.EventHandler(this.buttonTags_Click);
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(457, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 38;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Export bookmarks to CSV file");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // buttonExtImport
+            // 
+            this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
+            this.buttonExtImport.Location = new System.Drawing.Point(493, 1);
+            this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtImport.Name = "buttonExtImport";
+            this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtImport.TabIndex = 38;
+            this.toolTip.SetToolTip(this.buttonExtImport, "Import bookmarks to EDD from CSV file");
+            this.buttonExtImport.UseVisualStyleBackColor = true;
+            this.buttonExtImport.Click += new System.EventHandler(this.buttonExtImport_Click);
             // 
             // splitContainer
             // 
@@ -310,29 +393,6 @@
             this.ColTags.Name = "ColTags";
             this.ColTags.ReadOnly = true;
             // 
-            // contextMenuStripBookmarks
-            // 
-            this.contextMenuStripBookmarks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemGotoStar3dmap,
-            this.openInEDSMToolStripMenuItem});
-            this.contextMenuStripBookmarks.Name = "contextMenuStripBookmarks";
-            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(158, 48);
-            this.contextMenuStripBookmarks.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripBookmarks_Opening);
-            // 
-            // toolStripMenuItemGotoStar3dmap
-            // 
-            this.toolStripMenuItemGotoStar3dmap.Name = "toolStripMenuItemGotoStar3dmap";
-            this.toolStripMenuItemGotoStar3dmap.Size = new System.Drawing.Size(157, 22);
-            this.toolStripMenuItemGotoStar3dmap.Text = "Goto in 3D Map";
-            this.toolStripMenuItemGotoStar3dmap.Click += new System.EventHandler(this.toolStripMenuItemGotoStar3dmap_Click);
-            // 
-            // openInEDSMToolStripMenuItem
-            // 
-            this.openInEDSMToolStripMenuItem.Name = "openInEDSMToolStripMenuItem";
-            this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
-            this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
-            // 
             // userControlSurfaceBookmarks
             // 
             this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -342,58 +402,6 @@
             this.userControlSurfaceBookmarks.TabIndex = 5;
             this.userControlSurfaceBookmarks.TagFilter = null;
             // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
-            // 
-            // extButtonEditSystem
-            // 
-            this.extButtonEditSystem.Image = global::EDDiscovery.Icons.Controls.EditSystem;
-            this.extButtonEditSystem.Location = new System.Drawing.Point(349, 1);
-            this.extButtonEditSystem.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonEditSystem.Name = "extButtonEditSystem";
-            this.extButtonEditSystem.Size = new System.Drawing.Size(28, 28);
-            this.extButtonEditSystem.TabIndex = 3;
-            this.toolTip.SetToolTip(this.extButtonEditSystem, "Edit Bookmark on current system");
-            this.extButtonEditSystem.UseVisualStyleBackColor = true;
-            this.extButtonEditSystem.Click += new System.EventHandler(this.extButtonEditSystem_Click);
-            // 
-            // extButtonNewRegion
-            // 
-            this.extButtonNewRegion.Image = global::EDDiscovery.Icons.Controls.NewRegion;
-            this.extButtonNewRegion.Location = new System.Drawing.Point(277, 1);
-            this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonNewRegion.Name = "extButtonNewRegion";
-            this.extButtonNewRegion.Size = new System.Drawing.Size(28, 28);
-            this.extButtonNewRegion.TabIndex = 2;
-            this.toolTip.SetToolTip(this.extButtonNewRegion, "New Region Bookmark");
-            this.extButtonNewRegion.UseVisualStyleBackColor = true;
-            this.extButtonNewRegion.Click += new System.EventHandler(this.extButtonNewRegion_Click);
-            // 
-            // buttonTags
-            // 
-            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Tags;
-            this.buttonTags.Location = new System.Drawing.Point(421, 1);
-            this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonTags.Name = "buttonTags";
-            this.buttonTags.Size = new System.Drawing.Size(28, 28);
-            this.buttonTags.TabIndex = 39;
-            this.toolTip.SetToolTip(this.buttonTags, "Edit Tags");
-            this.buttonTags.UseVisualStyleBackColor = true;
-            this.buttonTags.Click += new System.EventHandler(this.buttonTags_Click);
-            // 
-            // buttonFilter
-            // 
-            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.buttonFilter.Location = new System.Drawing.Point(205, 1);
-            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonFilter.Name = "buttonFilter";
-            this.buttonFilter.Size = new System.Drawing.Size(28, 28);
-            this.buttonFilter.TabIndex = 40;
-            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on tag");
-            this.buttonFilter.UseVisualStyleBackColor = true;
-            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
-            // 
             // topPanel
             // 
             this.topPanel.AutoSize = true;
@@ -401,9 +409,9 @@
             this.topPanel.Controls.Add(this.textBoxFilter);
             this.topPanel.Controls.Add(this.buttonFilter);
             this.topPanel.Controls.Add(this.buttonNew);
+            this.topPanel.Controls.Add(this.extButtonEditSystem);
             this.topPanel.Controls.Add(this.extButtonNewRegion);
             this.topPanel.Controls.Add(this.buttonEdit);
-            this.topPanel.Controls.Add(this.extButtonEditSystem);
             this.topPanel.Controls.Add(this.buttonDelete);
             this.topPanel.Controls.Add(this.buttonTags);
             this.topPanel.Controls.Add(this.buttonExtExcel);
@@ -414,6 +422,16 @@
             this.topPanel.Size = new System.Drawing.Size(676, 30);
             this.topPanel.TabIndex = 39;
             // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(0, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 26;
+            this.labelSearch.Text = "Search";
+            // 
             // UserControlBookmarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -422,13 +440,13 @@
             this.Controls.Add(this.topPanel);
             this.Name = "UserControlBookmarks";
             this.Size = new System.Drawing.Size(676, 443);
+            this.contextMenuStripBookmarks.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.contextMenuStripBookmarks.ResumeLayout(false);
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -449,8 +467,8 @@
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBookmarks;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
-        private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtButton buttonExtImport;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
@@ -465,5 +483,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColY;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColZ;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
+        private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
     }
 }

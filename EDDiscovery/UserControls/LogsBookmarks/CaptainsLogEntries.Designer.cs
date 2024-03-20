@@ -48,14 +48,15 @@
             this.ColNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openAScanPanelViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapGoto3StartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewScanDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonFilter = new ExtendedControls.ExtButton();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonExcel = new ExtendedControls.ExtButton();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -301,33 +302,34 @@
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemGotoStar3dmap,
-            this.openInEDSMToolStripMenuItem,
-            this.openAScanPanelViewToolStripMenuItem});
+            this.viewScanDisplayToolStripMenuItem,
+            this.mapGoto3StartoolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem,
+            this.viewOnSpanshToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStripBookmarks";
-            this.contextMenuStrip.Size = new System.Drawing.Size(201, 70);
+            this.contextMenuStrip.Size = new System.Drawing.Size(187, 114);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
-            // toolStripMenuItemGotoStar3dmap
+            // mapGoto3StartoolStripMenuItem
             // 
-            this.toolStripMenuItemGotoStar3dmap.Name = "toolStripMenuItemGotoStar3dmap";
-            this.toolStripMenuItemGotoStar3dmap.Size = new System.Drawing.Size(200, 22);
-            this.toolStripMenuItemGotoStar3dmap.Text = "Goto in 3D Map";
-            this.toolStripMenuItemGotoStar3dmap.Click += new System.EventHandler(this.toolStripMenuItemGotoStar3dmap_Click);
+            this.mapGoto3StartoolStripMenuItem.Name = "mapGoto3StartoolStripMenuItem";
+            this.mapGoto3StartoolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.mapGoto3StartoolStripMenuItem.Text = "Go to star on 3D Map";
+            this.mapGoto3StartoolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemGotoStar3dmap_Click);
             // 
-            // openInEDSMToolStripMenuItem
+            // viewOnEDSMToolStripMenuItem
             // 
-            this.openInEDSMToolStripMenuItem.Name = "openInEDSMToolStripMenuItem";
-            this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
-            this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
             // 
-            // openAScanPanelViewToolStripMenuItem
+            // viewScanDisplayToolStripMenuItem
             // 
-            this.openAScanPanelViewToolStripMenuItem.Name = "openAScanPanelViewToolStripMenuItem";
-            this.openAScanPanelViewToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.openAScanPanelViewToolStripMenuItem.Text = "Open a Scan Panel View";
-            this.openAScanPanelViewToolStripMenuItem.Click += new System.EventHandler(this.openAScanPanelViewToolStripMenuItem_Click);
+            this.viewScanDisplayToolStripMenuItem.Name = "viewScanDisplayToolStripMenuItem";
+            this.viewScanDisplayToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewScanDisplayToolStripMenuItem.Text = "View Scan Display";
+            this.viewScanDisplayToolStripMenuItem.Click += new System.EventHandler(this.viewScanDisplayToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -385,6 +387,13 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(896, 22);
             this.flowLayoutPanel2.TabIndex = 28;
             // 
+            // viewOnSpanshToolStripMenuItem
+            // 
+            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
+            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
+            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
+            // 
             // CaptainsLogEntries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -415,15 +424,15 @@
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
-        private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mapGoto3StartoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private ExtendedControls.ExtButton buttonDelete;
         private ExtendedControls.ExtButton buttonTags;
         private ExtendedControls.ExtDateTimePicker dateTimePickerEndDate;
         private System.Windows.Forms.Label labelEndDate;
         private ExtendedControls.ExtDateTimePicker dateTimePickerStartDate;
         private System.Windows.Forms.Label labelDateStart;
-        private System.Windows.Forms.ToolStripMenuItem openAScanPanelViewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private ExtendedControls.ExtButton extButtonExcel;
@@ -433,5 +442,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
+        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
     }
 }
