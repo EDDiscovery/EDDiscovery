@@ -680,6 +680,14 @@ namespace EDDiscovery.UserControls.Map3D
                             ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
                             AddSystemsToExpedition?.Invoke(new List<string>() { s.Name });      // use call back to pass back up
                         }
+                    },
+                    new GLMenuItem("RCMCopyName", "Copy name to Clipboard")
+                    {
+                        Click = (s1) =>
+                        {
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.DiscoveryForm.History.GetLast);
+                            parent.SetClipboardText(nl.Item1);
+                        }
                     }
                 );
 
