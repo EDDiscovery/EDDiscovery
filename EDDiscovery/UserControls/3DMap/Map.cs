@@ -694,7 +694,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                     ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : rightclickmenu.Tag is ISystem ? (ISystem)rightclickmenu.Tag : null;
 
-                    ms["RCMAddExpedition"].Visible = ms["RCMViewStarDisplay"].Visible = ms["RCMViewEDSM"].Visible = s != null;
+                    ms["RCMAddExpedition"].Visible = ms["RCMViewStarDisplay"].Visible = ms["RCMViewEDSM"].Visible = ms["RCMViewSpansh"].Visible = s != null;
 
                     if (s!=null)
                     {
