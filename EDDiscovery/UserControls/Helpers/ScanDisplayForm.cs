@@ -23,7 +23,8 @@ namespace EDDiscovery.UserControls
     public static class ScanDisplayForm
     {
         // tag can be a Isystem or an He.. output depends on it.
-        public static async void ShowScanOrMarketForm(Form parent, Object tag, HistoryList hl, float opacity = 1, Color? keycolour = null, WebExternalDataLookup? forcedlookup = null)     
+        public static async void ShowScanOrMarketForm(Form parent, Object tag, HistoryList hl, float opacity = 1, Color? keycolour = null, 
+                                WebExternalDataLookup? forcedlookup = null)     
         {
             if (tag == null)
                 return;
@@ -36,7 +37,7 @@ namespace EDDiscovery.UserControls
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
             ISystem sys = he != null ? he.System : tag as ISystem;          // if so, sys is he.system, else its a direct sys
-            string title = "System".T(EDTx.ScanDisplayForm_Sys) + ": " + sys.Name;
+            string title = "System".T(EDTx.ScanDisplayForm_Sys) + $": {sys.Name} @ {sys.X:N3}, {sys.Y:N3}, {sys.Z:N3}";
 
             AutoScaleMode asm = AutoScaleMode.Font;
 

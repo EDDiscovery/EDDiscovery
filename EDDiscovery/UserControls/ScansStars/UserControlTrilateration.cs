@@ -88,12 +88,26 @@ namespace EDDiscovery.UserControls
             var push = actionobj as UserControlCommonBase.PushStars;
             if (push != null && (push.PushTo == PushStars.PushType.TriWanted || push.PushTo == PushStars.PushType.TriSystems))
             {
-                foreach (string s in push.SystemNames)
+                if (push.SystemNames != null)
                 {
-                    if (push.PushTo == PushStars.PushType.TriWanted)
-                        AddWantedSystem(s);
-                    else if (push.PushTo == PushStars.PushType.TriSystems)
-                        AddSystemToDataGridViewDistances(s, false);
+                    foreach (string s in push.SystemNames)
+                    {
+                        if (push.PushTo == PushStars.PushType.TriWanted)
+                            AddWantedSystem(s);
+                        else if (push.PushTo == PushStars.PushType.TriSystems)
+                            AddSystemToDataGridViewDistances(s, false);
+                    }
+                }
+                else
+                {
+                    foreach (var s in push.SystemList)
+                    {
+                        if (push.PushTo == PushStars.PushType.TriWanted)
+                            AddWantedSystem(s.Name);
+                        else if (push.PushTo == PushStars.PushType.TriSystems)
+                            AddSystemToDataGridViewDistances(s.Name, false);
+                    }
+
                 }
 
                 return PanelActionState.Success;

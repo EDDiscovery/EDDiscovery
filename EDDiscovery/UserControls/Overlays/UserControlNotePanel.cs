@@ -129,7 +129,7 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showGMPNotes))
                     {
-                        var gmo = DiscoveryForm.GalacticMapping.Find(hefsd.System.Name);
+                        var gmo = DiscoveryForm.GalacticMapping.FindSystem(hefsd.System.Name);
                         if (gmo != null)
                             botline = ("GMP: " + gmo.Description).WordWrap(60) + Environment.NewLine;
                     }

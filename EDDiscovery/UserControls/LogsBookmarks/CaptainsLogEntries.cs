@@ -58,7 +58,9 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.CaptainsLogEntries_ColTime, EDTx.CaptainsLogEntries_ColSystem, EDTx.CaptainsLogEntries_ColBodyName, EDTx.CaptainsLogEntries_ColNote, EDTx.CaptainsLogEntries_ColTags, EDTx.CaptainsLogEntries_labelDateStart, EDTx.CaptainsLogEntries_labelEndDate, EDTx.CaptainsLogEntries_labelSearch };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { });
 
-            var enumlisttt = new Enum[] { EDTx.CaptainsLogEntries_textBoxFilter_ToolTip, EDTx.CaptainsLogEntries_buttonNew_ToolTip, EDTx.CaptainsLogEntries_buttonDelete_ToolTip, EDTx.CaptainsLogEntries_buttonTags_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.CaptainsLogEntries_textBoxFilter_ToolTip, EDTx.CaptainsLogEntries_buttonNew_ToolTip, 
+                                        EDTx.CaptainsLogEntries_buttonDelete_ToolTip, EDTx.CaptainsLogEntries_buttonTags_ToolTip,
+                                        EDTx.CaptainsLogEntries_buttonFilter_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             // manually pick these up from DataGridViewStarResults as the names don't match

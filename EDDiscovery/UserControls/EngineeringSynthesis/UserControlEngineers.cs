@@ -67,7 +67,10 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            var enumlisttt = new Enum[] { EDTx.UserControlEngineers_buttonFilterEngineer_ToolTip, EDTx.UserControlEngineers_extCheckBoxWordWrap_ToolTip, EDTx.UserControlEngineers_extCheckBoxMoreInfo_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlEngineers_buttonFilterEngineer_ToolTip, 
+                        EDTx.UserControlEngineers_extCheckBoxWordWrap_ToolTip, EDTx.UserControlEngineers_extCheckBoxMoreInfo_ToolTip,
+                        EDTx.UserControlEngineers_buttonClear_ToolTip, EDTx.UserControlEngineers_extButtonPushResources_ToolTip, 
+                        EDTx.UserControlEngineers_chkNotHistoric_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
@@ -306,13 +309,7 @@ namespace EDDiscovery.UserControls
             }
 
             var req = new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist };
-            var res = RequestPanelOperation(this, req);
-
-            if (res == PanelActionState.NotHandled)
-            {
-                DiscoveryForm.SelectTabPage(PanelInformation.PanelIDs.Resources, true, false);
-                RequestPanelOperation(this, req);
-            }
+            RequestPanelOperationOpen(PanelInformation.PanelIDs.Resources, req);
         }
 
         private void buttonClear_Click(object sender, EventArgs e)

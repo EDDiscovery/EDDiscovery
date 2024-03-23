@@ -54,9 +54,10 @@ namespace EDDiscovery.UserControls
                 map.LoadState(mapsave, true, 0);
                 map.LoadImages();
 
-                map.AddSystemsToExpedition = (list) =>
+                map.AddSystemsToExpedition = (list,visible) =>
                 {
-                    RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemNames = list });
+                    var req = new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemList = list, MakeVisible = visible};
+                    RequestPanelOperationOpen(PanelInformation.PanelIDs.Expedition, req);
                 };
 
                 // start clock

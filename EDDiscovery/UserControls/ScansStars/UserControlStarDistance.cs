@@ -230,11 +230,12 @@ namespace EDDiscovery.UserControls
                                                                         .Distinct()
                                                                         .OrderBy(cell => cell.Index);
 
-            List<string> syslist = new List<string>();
+            List<ISystem> syslist = new List<ISystem>();
             foreach (DataGridViewRow r in selectedRows)
-                syslist.Add(r.Cells[0].Value.ToString());
+                syslist.Add(r.Tag as SystemClass);
 
-            RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = pushtype, SystemNames = syslist });
+            var req = new UserControlCommonBase.PushStars() { PushTo = pushtype, SystemList = syslist, MakeVisible = true };
+            RequestPanelOperationOpen(pushtype == PushStars.PushType.Expedition ? PanelInformation.PanelIDs.Expedition : PanelInformation.PanelIDs.Trilateration, req);
         }
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)

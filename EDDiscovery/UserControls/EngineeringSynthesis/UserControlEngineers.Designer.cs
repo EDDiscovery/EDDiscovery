@@ -109,6 +109,7 @@ namespace EDDiscovery.UserControls
             this.extButtonPushResources.Name = "extButtonPushResources";
             this.extButtonPushResources.Size = new System.Drawing.Size(28, 28);
             this.extButtonPushResources.TabIndex = 33;
+            this.toolTip.SetToolTip(this.extButtonPushResources, "Push items wanted to Resources panel");
             this.extButtonPushResources.UseVisualStyleBackColor = true;
             this.extButtonPushResources.Click += new System.EventHandler(this.extButtonPushResources_Click);
             // 

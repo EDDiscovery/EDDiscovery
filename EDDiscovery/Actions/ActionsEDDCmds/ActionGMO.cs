@@ -65,12 +65,12 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("LIST", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        string wildcard = sp.NextQuotedWord() ?? "*";
+                        string text = sp.NextQuotedWord() ?? "*";
 
                         int count = 1;
                         foreach( var gmo in discoveryform.GalacticMapping.GalacticMapObjects)
                         {
-                            if (gmo.IsNameWildCard(wildcard,true))
+                            if (gmo.IsDescriptiveName(text,true))     // wildcard match
                             {
                                 string nprefix = prefix + (count++).ToStringInvariant() + "_";
                                 DumpGMO(ap, nprefix, gmo);
@@ -89,7 +89,8 @@ namespace EDDiscovery.Actions
                         {
                             if (cmdname.Equals("EXISTS", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.GMO.GalacticMapObject gmo = discoveryform.GalacticMapping.Find(name, false);
+                                // exact match
+                                EliteDangerousCore.GMO.GalacticMapObject gmo = discoveryform.GalacticMapping.FindDescriptiveName(name, false,false);    
                                 ap[prefix + "Exists"] = (gmo != null).ToStringIntValue();
                                 if ( gmo != null )
                                     DumpGMO(ap, prefix, gmo);
@@ -115,8 +116,8 @@ namespace EDDiscovery.Actions
         void DumpGMO(ActionProgramRun ap, string nprefix, EliteDangerousCore.GMO.GalacticMapObject g)
         {
             ap[nprefix + "Name"] = g.NameList;
-            ap[nprefix + "Type"] = g.Type;
-            ap[nprefix + "Search"] = g.GalMapSearch;
+            ap[nprefix + "Type"] = g.GalMapType.VisibleType?.ToString() ?? g.GalMapType.Group.ToString();
+            ap[nprefix + "Search"] = g.StarSystem?.Name ?? "Unknown";
             ap[nprefix + "MapURL"] = g.GalMapUrl;
             ap[nprefix + "Description"] = g.Description;
             ap[nprefix + "Group"] = g.GalMapType.Group.ToString();

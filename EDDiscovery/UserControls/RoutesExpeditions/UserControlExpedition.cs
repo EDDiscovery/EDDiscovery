@@ -417,7 +417,7 @@ namespace EDDiscovery.UserControls
 
                 if (!disablegmoshow)
                 {
-                    var gmo = DiscoveryForm.GalacticMapping.Find(sys.Name);
+                    var gmo = DiscoveryForm.GalacticMapping.FindSystem(sys.Name);
                     if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
                         note = note.AppendPrePad(gmo.Description, "; ");
                 }

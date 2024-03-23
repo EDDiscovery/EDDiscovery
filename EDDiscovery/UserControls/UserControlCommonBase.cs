@@ -244,6 +244,24 @@ namespace EDDiscovery.UserControls
         // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
         public Func<UserControlCommonBase, object, PanelActionState> RequestPanelOperation;        
 
+        // Request panel operation with this request, if not handled, open this type of tab and try again
+        public PanelActionState RequestPanelOperationOpen(PanelInformation.PanelIDs paneltype, object req)
+        {
+            if (RequestPanelOperation != null)      // not likely, but
+            {
+                var res = RequestPanelOperation.Invoke(this, req);
+                if (res == PanelActionState.NotHandled)   // no-one serviced it, so create an expedition tab, and then reissue
+                {
+                    DiscoveryForm.SelectTabPage(paneltype, true, false);         // ensure panel is open
+                    res = RequestPanelOperation.Invoke(this, req);     // try again
+                }
+
+                return res;
+            }
+            else
+                return PanelActionState.NotHandled;
+        }
+
         // panel is asked for operation, return true to indicate its swallowed, or false to say pass it onto next guy. 
         // the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry
         // either override PerformPanelOperation for the full monty, or override ReceiveHistoryEntry if your just interested in HE receive

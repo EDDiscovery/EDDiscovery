@@ -223,6 +223,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 

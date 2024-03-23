@@ -235,6 +235,10 @@
     <Compile Include="UserControls\3DMap\GalMapObjects.cs" />
     <Compile Include="UserControls\3DMap\GalMapRegions.cs" />
     <Compile Include="UserControls\3DMap\ImageCache.cs" />
+    <Compile Include="UserControls\3DMap\MapUI.cs" />
+    <Compile Include="UserControls\3DMap\MapHelpers.cs" />
+    <Compile Include="UserControls\3DMap\MapSettings.cs" />
+    <Compile Include="UserControls\3DMap\MapFinding.cs" />
     <Compile Include="UserControls\3DMap\Map.cs" />
     <Compile Include="UserControls\3DMap\MapTheme.cs" />
     <Compile Include="UserControls\3DMap\MapMenu.cs" />

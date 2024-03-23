@@ -69,15 +69,18 @@ namespace EDDiscovery.UserControls
                         EDTx.UserControlFactions_colDataLinkVictimFaction, EDTx.UserControlFactions_colDataLinkPayeeFaction, EDTx.UserControlFactions_colDataLinkPayeeValue
                         };
 
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
             var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, 
                             EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem, 
                             EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, 
                 EDTx.UserControlFactions_showFactionSystemDetailToolStripMenuItem };
 
-            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTime_ToolTip, EDTx.UserControlFactions_endDateTime_ToolTip };
 
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTimePicker_ToolTip, EDTx.UserControlFactions_endDateTimePicker_ToolTip,
+                                EDTx.UserControlFactions_buttonExtExcel_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             labelInfo.Text = "";

@@ -840,7 +840,7 @@ namespace EDDiscovery
         CaptainsLogEntries_buttonNew_ToolTip, // ToolTip 'New Entry'
         CaptainsLogEntries_buttonDelete_ToolTip, // ToolTip 'Delete selected entries'
         CaptainsLogEntries_buttonTags_ToolTip, // ToolTip 'Edit Tags'
-
+        CaptainsLogEntries_buttonFilter_ToolTip,
         CaptainsLogDiary_Daysofweek, // Sun;Mon;Tue;Wed;Thu;Fri;Sat
         CaptainsLogEntries_DTF, // Bad Date Time format
         CaptainsLogEntries_Note, // Note:
@@ -1649,8 +1649,9 @@ namespace EDDiscovery
         UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem, // ToolStrip control 'Show commodity/material trades for faction'
         UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, // ToolStrip control 'Show bounties and bonds for faction'
         UserControlFactions_showFactionSystemDetailToolStripMenuItem, // ToolStrip control 'Show system detail for faction'
-        UserControlFactions_startDateTime_ToolTip, // ToolTip 'Include from'
-        UserControlFactions_endDateTime_ToolTip, // ToolTip 'Include to'
+        UserControlFactions_startDateTimePicker_ToolTip, // ToolTip 'Include from'
+        UserControlFactions_endDateTimePicker_ToolTip, // ToolTip 'Include to'
+        UserControlFactions_buttonExtExcel_ToolTip,
         UserControlFactions_SystemAddress, // System Address
         UserControlFactions_colInfluence,   // +Influence
         UserControlFactions_CBought,        // Commds +
@@ -1751,6 +1752,9 @@ namespace EDDiscovery
         UserControlEngineers_buttonFilterEngineer_ToolTip, 
         UserControlEngineers_extCheckBoxWordWrap_ToolTip, 
         UserControlEngineers_extCheckBoxMoreInfo_ToolTip,
+        UserControlEngineers_buttonClear_ToolTip, 
+        UserControlEngineers_extButtonPushResources_ToolTip, 
+        UserControlEngineers_chkNotHistoric_ToolTip,
 
         UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, // ToolStrip control 'Show Max FSD Injections'
         UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, // ToolStrip control 'Show Body Materials When Landed'

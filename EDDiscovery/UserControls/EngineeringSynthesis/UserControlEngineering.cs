@@ -464,13 +464,7 @@ namespace EDDiscovery.UserControls
             if (NeededResources != null)
             {
                 var req = new UserControlCommonBase.PushResourceWantedList() { Resources = NeededResources };
-                var res = RequestPanelOperation(this, req);
-
-                if (res == PanelActionState.NotHandled)
-                {
-                    DiscoveryForm.SelectTabPage(PanelInformation.PanelIDs.Resources, true, false);
-                    RequestPanelOperation(this, req);
-                }
+                RequestPanelOperationOpen(PanelInformation.PanelIDs.Resources, req);
             }
         }
 

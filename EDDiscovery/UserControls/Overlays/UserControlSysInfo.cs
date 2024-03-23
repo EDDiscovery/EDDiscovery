@@ -780,7 +780,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        GalacticMapObject gmo = DiscoveryForm.GalacticMapping.Find(textBoxTarget.Text, true);       // find gmo, any part
+                        GalacticMapObject gmo = DiscoveryForm.GalacticMapping.FindDescriptiveNameOrSystem(textBoxTarget.Text, true);       // find gmo, any part
                         if (gmo != null)
                         {
                             TargetClass.SetTargetOnGMO(gmo.NameList,gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);

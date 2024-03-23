@@ -1007,7 +1007,7 @@ namespace EDDiscovery.UserControls
                                                                         .Distinct()
                                                                         .OrderBy(cell => cell.Index);
 
-            List<string> systemnamelist = new List<string>();
+            List<ISystem> systemlist = new List<ISystem>();
 
             string lastname = "";
             foreach (DataGridViewRow r in selectedRows)
@@ -1017,18 +1017,18 @@ namespace EDDiscovery.UserControls
                 if (!sp.System.Name.Equals(lastname))
                 {
                     lastname = sp.System.Name;
-                    systemnamelist.Add(lastname);
+                    systemlist.Add(sp.System);
                 }
             }
 
             if (dist)
-                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriSystems, SystemNames = systemnamelist });
+                RequestPanelOperationOpen(PanelInformation.PanelIDs.Trilateration, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriSystems, SystemList = systemlist, MakeVisible = true });
 
             if (wanted)
-                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriWanted, SystemNames = systemnamelist });
+                RequestPanelOperationOpen(PanelInformation.PanelIDs.Trilateration, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriWanted, SystemList = systemlist, MakeVisible = true });
 
             if (expedition)
-                RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemNames = systemnamelist });
+                RequestPanelOperationOpen(PanelInformation.PanelIDs.Expedition, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemList = systemlist, MakeVisible = true });
 
         }
         private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
