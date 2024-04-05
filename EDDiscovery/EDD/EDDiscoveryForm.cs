@@ -28,6 +28,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery
@@ -412,8 +413,12 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                    if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
-                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
+
+                    Task.Run(() =>
+                    {
+                        if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
+                            SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
+                    }).Wait();
                 }
 
                 string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
@@ -421,8 +426,12 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
                 {
                     LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
-                    if (GECClass.DownloadGECFile(gecfile, new System.Threading.CancellationToken()))
-                        SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
+
+                    Task.Run(() =>
+                    {
+                        if (GECClass.DownloadGECFile(gecfile, new System.Threading.CancellationToken()))
+                            SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
+                    }).Wait();
                 }
 
                 GalacticMapping = new GalacticMapping();
