@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
             int lastrow = dataGridView.CurrentCell != null ? dataGridView.CurrentCell.RowIndex : -1;
 
             DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
-            SortOrder sortorder = dataGridView.SortOrder;
+            SortOrder sortorder = dataGridView.SortOrder != SortOrder.None ? dataGridView.SortOrder : SortOrder.Descending; ;
 
             dataViewScrollerPanel.SuspendLayout();
             dataGridView.SuspendLayout();
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
-                e.SortDataGridViewColumnAlpha(true);
+                e.SortDataGridViewColumnDate(true);
             else if (e.Column.Index == 4)
                 e.SortDataGridViewColumnTagsAsStringsLists(4);
         }
