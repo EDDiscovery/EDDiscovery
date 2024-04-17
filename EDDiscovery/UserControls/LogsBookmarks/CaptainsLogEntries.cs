@@ -202,7 +202,9 @@ namespace EDDiscovery.UserControls
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate(true);
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 1 || e.Column.Index == 2)
+                e.SortDataGridViewColumnAlphaInt();
             else if (e.Column.Index == 4)
                 e.SortDataGridViewColumnTagsAsStringsLists(4);
         }
