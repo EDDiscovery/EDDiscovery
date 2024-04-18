@@ -28,9 +28,9 @@ namespace EDDiscovery.UserControls
         public static void ExpeditionSave(Form frm, string exampleroutename, List<ISystem> routeSystems)
         {
             string name = ExtendedControls.PromptSingleLine.ShowDialog(frm, "Route Name:".TxID(EDTx.UserControlExpedition_labelRouteName), exampleroutename,
-                            "Save Expedition".TxID(EDTx.UserControlExpedition_extButtonSave_ToolTip), frm.Icon, widthboxes: 400);
+                            "Save Expedition".TxID(EDTx.UserControlExpedition_extButtonSave_ToolTip), frm.Icon, widthboxes: 400, requireinput:true);
 
-            if (name.HasChars())
+            if (name != null)
             {
                 var savedroutes = EliteDangerousCore.DB.SavedRouteClass.GetAllSavedRoutes();
                 var overwriteroute = savedroutes.Where(r => r.Name.Equals(name)).FirstOrDefault();

@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.ConditionLists cond = Valid();
             if (cond != null)
             {
-                string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".T(EDTx.SearchScans_Name), "", "Enter Search Name:".T(EDTx.SearchScans_SN), this.FindForm().Icon);
+                string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".T(EDTx.SearchScans_Name), "", "Enter Search Name:".T(EDTx.SearchScans_SN), this.FindForm().Icon, requireinput:true);
                 if (name != null)
                 {
                     HistoryListQueries.Instance.Set(name, cond.ToString(), HistoryListQueries.QueryType.User);

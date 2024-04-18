@@ -552,7 +552,7 @@ namespace EDDiscovery.UserControls
             if (e.Button == MouseButtons.Right)
             {
                 string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.CoriolisURL,
-                            "Enter Coriolis URL".T(EDTx.UserControlModules_CURL), this.FindForm().Icon);
+                            "Enter Coriolis URL".T(EDTx.UserControlModules_CURL), this.FindForm().Icon, requireinput:true);
                 if (url != null)
                     EDDConfig.Instance.CoriolisURL = url;
             }
@@ -599,7 +599,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.Button == MouseButtons.Right)
             {
-                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.EDDShipyardURL, "Enter ED Shipyard URL".T(EDTx.UserControlModules_EDSURL), this.FindForm().Icon);
+                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.EDDShipyardURL, "Enter ED Shipyard URL".T(EDTx.UserControlModules_EDSURL), this.FindForm().Icon, requireinput:true);
                 if (url != null)
                     EDDConfig.Instance.EDDShipyardURL = url;
             }

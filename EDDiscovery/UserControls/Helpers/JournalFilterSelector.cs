@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
                     {
                         Hide();
 
-                        string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(null, "", "", "Enter name of new group".TxID(EDTx.FilterSelector_Newgroupname), Properties.Resources.edlogo_3mo_icon);
+                        string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(null, "", "", "Enter name of new group".TxID(EDTx.FilterSelector_Newgroupname), Properties.Resources.edlogo_3mo_icon, requireinput:true);
                         if (promptValue != null)
                         {
                             string cursettings = GetChecked();
