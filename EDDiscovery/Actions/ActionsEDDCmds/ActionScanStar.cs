@@ -182,22 +182,22 @@ namespace EDDiscovery.Actions
                 ap[storename + "_source"] = sc.DataSource.ToString();   
                 ap[storename + "_bodyname"] = sc.BodyName;
                 ap[storename + "_bodydesignation"] = sc.BodyDesignationOrName;
-                ap[storename + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.#######");
-                ap[storename + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.#######");
-                ap[storename + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.######");
-                ap[storename + "_distls"] = sc.DistanceFromArrivalLS.ToNANSafeString("0.######");
+                ap[storename + "_orbitalperiod"] = sc.nOrbitalPeriod.ToStringInvariantNAN("R");
+                ap[storename + "_rotationperiod"] = sc.nRotationPeriod.ToStringInvariantNAN("R");
+                ap[storename + "_surfacetemperature"] = sc.nSurfaceTemperature.ToStringInvariantNAN("R");
+                ap[storename + "_distls"] = sc.DistanceFromArrivalLS.ToStringInvariantNAN("R");
 
                 if ( sc.IsStar )
                 {
                     ap[storename + "_startype"] = sc.StarType;
                     ap[storename + "_startypeid"] = sc.StarTypeID.ToString();
                     ap[storename + "_startypetext"] = sc.StarTypeText;
-                    ap[storename + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.#####");
-                    ap[storename + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
-                    ap[storename + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
+                    ap[storename + "_stellarmass"] = (sc.nStellarMass ?? 0).ToStringInvariantNAN("R");
+                    ap[storename + "_age"] = sc.nAge.ToStringInvariantNAN("R");
+                    ap[storename + "_mag"] = sc.nAbsoluteMagnitude.ToStringInvariantNAN("R");
                     EliteDangerousCore.JournalEvents.JournalScan.HabZones hz = sc.GetHabZones();
-                    ap[storename + "_habinner"] = hz != null ? hz.HabitableZoneInner.ToString("0.##") : "";
-                    ap[storename + "_habouter"] = hz != null ? hz.HabitableZoneOuter.ToString("0.##") : "";
+                    ap[storename + "_habinner"] = hz != null ? hz.HabitableZoneInner.ToStringInvariantNAN("R") : "";
+                    ap[storename + "_habouter"] = hz != null ? hz.HabitableZoneOuter.ToStringInvariantNAN("R") : "";
                 }
                 else
                 {
@@ -207,9 +207,10 @@ namespace EDDiscovery.Actions
                     ap[storename + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
                     ap[storename + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
                     ap[storename + "_volcanism"] = sc.Volcanism.ToNullSafeString();
-                    ap[storename + "_gravity"] = sc.nSurfaceGravity.ToNANNullSafeString("0.####");
-                    ap[storename + "_pressure"] = sc.nSurfacePressure.ToNANNullSafeString("0.####");
-                    ap[storename + "_mass"] = sc.nMassEM.ToNANNullSafeString("0.####");
+                    ap[storename + "_gravity"] = sc.nSurfaceGravity.ToStringInvariantNAN("R");
+                    ap[storename + "_gravityg"] = sc.nSurfaceGravityG.ToStringInvariantNAN("R");
+                    ap[storename + "_pressure"] = sc.nSurfacePressure.ToStringInvariantNAN("R");
+                    ap[storename + "_mass"] = sc.nMassEM.ToStringInvariantNAN("R");
                     ap.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), storename + "_Materials");
                 }
 

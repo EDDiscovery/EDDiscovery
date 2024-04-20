@@ -24,6 +24,12 @@ namespace EDDiscovery
 {
     public partial class EDDiscoveryForm
     {
+        public void PreInitDebug()
+        {
+
+
+        }
+
         public void PostInitDebug()
         {
             if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
@@ -94,21 +100,20 @@ namespace EDDiscovery
 
                 File.WriteAllText(fn, s);
             }
+
+
+            //FactionDefinitions.IDSTx();
         }
 
-        public void PreInitDebug()
-        {
-            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDownload);
-            BaseUtils.GitHubClass ghd = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDataDownload);
-            //    BaseUtils.GitHubRelease rel = ghc.GetLatestRelease();
+        //BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDownload);
+        //BaseUtils.GitHubClass ghd = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDataDownload);
+        //    BaseUtils.GitHubRelease rel = ghc.GetLatestRelease();
 
-            //          var dir = ghd.ReadFolder(new System.Threading.CancellationToken(), "Notifications");
+        //          var dir = ghd.ReadFolder(new System.Threading.CancellationToken(), "Notifications");
 
-            //var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications","*.*","*.*");
+        //var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications","*.*","*.*");
         //    var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications", "*.*", true);
 
-
-        }
 
         //System.Diagnostics.Trace.Write($"A bit more");
         //System.Diagnostics.Trace.Write($"and a line feed \n and a bit more");

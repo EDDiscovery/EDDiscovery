@@ -49,7 +49,9 @@ namespace EDDiscovery.UserControls.Helpers
 
             filters = new ExtButtonWithNewCheckedListBox[] { extButtonType, extButtonCommoditiesBuy, extButtonCommoditiesSell, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
 
-            var porttype = StationDefinitions.StarportNameTypes.Values.Distinct().Select(x => new CheckedIconUserControl.Item(x,x));
+            // tbd
+
+            var porttype = StationDefinitions.StarPortTypesNamesSpansh().Select(x => new CheckedIconUserControl.Item(x,x));
             extButtonType.InitAllNoneAllBack(porttype,
                 GetFilter(FilterSettings.Type),
                 (newsetting,ch) => { SetFilter(FilterSettings.Type, newsetting, ch); });
@@ -82,14 +84,15 @@ namespace EDDiscovery.UserControls.Helpers
                 (newsetting, ch) => { SetFilter(FilterSettings.Shipyard, newsetting, ch); });
 
             // could use Identifers to localise later
-            var economy = EconomyDefinitions.Types.Select(x => new CheckedIconUserControl.Item(x.Key, x.Value));
+            var economy = EconomyDefinitions.DecoratedNamesAndText().Select(x => new CheckedIconUserControl.Item(x.Key, x.Value));
 
             extButtonEconomy.SettingsSplittingChar = '\u2345';     // because ; is used in identifiers
             extButtonEconomy.InitAllNoneAllBack(economy,
                 GetFilter(FilterSettings.Economy),
                 (newsetting, ch) => { SetFilter(FilterSettings.Economy, newsetting, ch); });
 
-            var services = StationDefinitions.ServiceTypes.Select(x => x.Value).Distinct().Select(x => new CheckedIconUserControl.Item(x, x));
+            //tbd
+            var services = StationDefinitions.SpanshNamesAndText().Select(x => new CheckedIconUserControl.Item(x.Key,x.Value ));
             extButtonServices.InitAllNoneAllBack(services,
                 GetFilter(FilterSettings.Services),
                 (newsetting, ch) => { SetFilter(FilterSettings.Services, newsetting, ch); });
@@ -248,7 +251,7 @@ namespace EDDiscovery.UserControls.Helpers
                             ColPrice3.Tag != null ? station.GetItemStockDemandString((string)ColPrice3.Tag,showcommoditiesselltostation) ?? "" : "",
                             station.OutfittingStateString,
                             station.ShipyardStateString,
-                            station.Allegiance ?? "",
+                            AllegianceDefinitions.ToLocalisedLanguage(station.Allegiance),
                             station.Faction ?? "",
                             station.Economy_Localised ?? "",
                             station.Government_Localised ?? "",
@@ -509,7 +512,7 @@ namespace EDDiscovery.UserControls.Helpers
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
             ConfigurableForm.ShowDialogCentred((f) => {
-                var services = StationDefinitions.ServiceTypes.Select(x => x.Value).Distinct().ToArray();
+                var services = StationDefinitions.SpanshNamesAndText().Select(x => x.Value).Distinct().ToArray();
                 f.AddBools(services, services, servicestate, 4, 24, 200, 4, 200, "S_");
                 AddSearchEntries(f, servicessearchdistance, servicesclearfilters, serviceslargepad, servicescarriers);
             },
@@ -541,7 +544,7 @@ namespace EDDiscovery.UserControls.Helpers
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
             ConfigurableForm.ShowDialogCentred((f) => {
-                var economy = EconomyDefinitions.Types.Values.Select(x => x).ToArray();
+                var economy = EconomyDefinitions.DecoratedNamesAndText().Select(x => x.Value).ToArray();
                 f.AddBools(economy,economy, economystate, 4, 24, 120, 4, 120, "S_");
                 AddSearchEntries(f, economysearchdistance, economyclearfilters, economylargepad, null, clearfilterx:700);
             },

@@ -114,9 +114,9 @@ namespace EDDiscovery.Actions
                 vars[prefix + "StarSystem"] = s.Name;
                 vars[prefix + "StarSystemEDSMID"] = "0";
                 vars[prefix + "StarSystemAddress"] = (s.SystemAddress ?? 0).ToStringInvariant();
-                vars[prefix + "xpos"] = s.X.ToNANSafeString("0.###");
-                vars[prefix + "ypos"] = s.Y.ToNANSafeString("0.###");
-                vars[prefix + "zpos"] = s.Z.ToNANSafeString("0.###");
+                vars[prefix + "xpos"] = s.X.ToStringInvariantNAN("0.###");
+                vars[prefix + "ypos"] = s.Y.ToStringInvariantNAN("0.###");
+                vars[prefix + "zpos"] = s.Z.ToStringInvariantNAN("0.###");
             }
         }
 
