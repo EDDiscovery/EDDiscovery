@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2018-2021 EDDiscovery development team
+ * Copyright © 2018-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore.EDSM;
@@ -148,6 +146,179 @@ namespace EDDiscovery
             Init();
         }
 
+        private void Init()
+        {
+#if !DEBUG
+            CheckGithubFiles = true;
+            CheckRelease = true;
+#else
+            EnableTGRightDebugClicks = true;
+#endif
+            // Order is:
+            //  1. Check command line for -optionfiles relative for exedir, if so, allow -appfolder and process options
+            //  2. Check executable folder for options*.txt, if so, allow -appfolder and process options
+            //  3. Check command line for -appfolder
+            //  4. Establish app folder
+            //  5. Check command line for -optionfiles relative to appfolder, if so, process options.  Can't change appfolder
+            //  6. go thru appfolder and process options*.txt and dboptions*.txt
+            //  7. process command line for all but -optionfiles/-appfolder
+
+
+            // 1. go thru the command line looking for -optionfile only and process them
+            // allow for -appfolder to be set in the option file
+            ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption, true);
+
+            // 2. read the options*.txt files in the exe folder
+            foreach (var f in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
+            {
+                // pass for -appfolder
+                ProcessFileForAppFolder(f);
+
+                // second pass is for the rest of the options
+                ProcessFile(f, ProcessOption);
+            }
+
+            // 3. process command line options for -appfolder
+            string appfolderwarningmessage = "";        // only used for command line appfolder overrides
+            ProcessCommandLineOptions((optname, ca, toeol) =>
+            {
+                if (optname == "-appfolder" && ca.More)
+                {
+                    AppFolder = ca.Next();
+                    appfolderwarningmessage = " (Using " + AppFolder + ")";
+                    System.Diagnostics.Debug.WriteLine("Command line sets App Folder to " + AppFolder);
+                }
+            });
+
+            // 4. Set up AppDataDirectory
+
+            if (AppFolder == null)                      // if user did not set it..
+            {
+                AppFolder = "EDDiscovery";
+            }
+
+            if (Path.IsPathRooted(AppFolder))           // if rooted, the dir is -appfolder
+            {
+                AppDataDirectory = AppFolder;
+            }
+            else if (PortableInstall)                   // if store in program folder, its exe/appfolder
+            {
+                AppDataDirectory = Path.Combine(ExeDirectory(), AppFolder);
+            }
+            else
+            {
+                AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder);
+            }
+
+            if (!Directory.Exists(AppDataDirectory))        // make sure its there, don't fail
+                BaseUtils.FileHelpers.CreateDirectoryNoError(AppDataDirectory);
+
+            // here because 1 user did not have a big enough C: drive to holds the SQL temp files!  This may be an over-engineer!
+            if (TempDirInDataDir == true)
+            {
+                var tempdir = Path.Combine(AppDataDirectory, "Temp");
+                if (!Directory.Exists(tempdir))
+                    Directory.CreateDirectory(tempdir);
+
+                Environment.SetEnvironmentVariable("TMP", tempdir);
+                Environment.SetEnvironmentVariable("TEMP", tempdir);
+            }
+
+            translationfolder = Path.Combine(AppDataDirectory, "Translator");
+
+            // 5. go thru the command line looking for -optionfile relative to app folder, then read them. Do not allow appfolder change now
+
+            ProcessCommandLineForOptionsFile(AppDataDirectory, ProcessOption, false);
+
+            // 6. go thru appfolder looking for options*.txt and dboptions*.txt
+
+            try  // protect.. check incase we could not create appdata, because the user gave us a bad location where we can't make directories in
+            {
+                // process appdata options files
+                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
+                {
+                    ProcessFile(f, ProcessOption);
+                }
+
+                // process appdata dboptions files
+                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
+                {
+                    ProcessFile(f, ProcessOption);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"EDDOptions enumerate exception {ex}");
+            }
+
+            // 7. do all of the command line except optionsfile and appfolder..
+            ProcessCommandLineOptions(ProcessOption);
+
+            // Set version display string
+            {
+                StringBuilder sb = new StringBuilder("Version " + EDDApplicationContext.AppVersion);
+
+                if (!DisableShowDebugInfoInTitle)       // for when i'm doing help.. don't need this on
+                {
+                    sb.Append(appfolderwarningmessage);
+
+                    if (DisableBetaCommanderCheck)
+                    {
+                        sb.Append(" (no BETA detect)");
+                    }
+                    if (ForceBetaOnCommander)
+                    {
+                        sb.Append(" (Force BETA)");
+                    }
+                }
+
+                VersionDisplayString = sb.ToString();
+            }
+
+            // finally ensure we have a path for the dbs
+
+            if (UserDatabasePath == null)
+            {
+                UserDatabasePath = Path.Combine(AppDataDirectory, UserDatabaseFilename);
+            }
+            if (SystemDatabasePath == null)
+            {
+                SystemDatabasePath = Path.Combine(AppDataDirectory, SystemDatabaseFilename);
+            }
+            if (ScanCachePath == null)
+            {
+                ScanCachePath = Path.Combine(AppDataDirectory, "WebScans");
+            }
+
+            EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
+        }
+
+
+        // go thru command line and find -optionsfile, and execute the options in it. Allow the options file to set appfolder if permitted
+        private void ProcessCommandLineForOptionsFile(string basefolder, Action<string, BaseUtils.CommandArgs, bool> processoption, bool allowappfolderchange)   
+        {
+            //System.Diagnostics.Debug.WriteLine("OptionFile -optionsfile ");
+            ProcessCommandLineOptions((optname, ca, toeol) =>
+            {
+                if (optname == "-optionsfile" && ca.More)
+                {
+                    string filepath = ca.Next();
+
+                    if (!File.Exists(filepath) && !Path.IsPathRooted(filepath))  // if it does not exist on its own, may be relative to base folder ..
+                        filepath = Path.Combine(basefolder, filepath);
+
+                    if (File.Exists(filepath))
+                    {
+                        if ( allowappfolderchange)
+                            ProcessFileForAppFolder(filepath);                      // give it a chance to set appfolder
+                            
+                        ProcessFile(filepath, processoption);                       // execute all options
+                    }
+                    else
+                        System.Diagnostics.Debug.WriteLine("No Option File " + filepath);
+                }
+            });
+        }
 
         // read file and process thru process option
         private void ProcessFile(string filepath, Action<string, BaseUtils.CommandArgs, bool> processoption)       
@@ -182,27 +353,17 @@ namespace EDDiscovery
             }
         }
 
-        // go thru command line and find -optionsfile, and execute it
-        private void ProcessCommandLineForOptionsFile(string basefolder, Action<string, BaseUtils.CommandArgs, bool> getopt)     // command line -optionsfile
+        private void ProcessFileForAppFolder(string file)
         {
-            //System.Diagnostics.Debug.WriteLine("OptionFile -optionsfile ");
-            ProcessCommandLineOptions((optname, ca, toeol) =>              
-            {                                                           
-                if (optname == "-optionsfile" && ca.More)
+            ProcessFile(file, (optname, ca, toeol) =>
+            {
+                if (optname == "-appfolder" && ca.More)
                 {
-                    string filepath = ca.Next();
-
-                    if (!File.Exists(filepath) && !Path.IsPathRooted(filepath))  // if it does not exist on its own, may be relative to base folder ..
-                        filepath = Path.Combine(basefolder, filepath);
-
-                    if (File.Exists(filepath))
-                        ProcessFile(filepath, getopt);
-                    else
-                        System.Diagnostics.Debug.WriteLine("No Option File " + filepath);
+                    AppFolder = ca.Rest();
+                    System.Diagnostics.Debug.WriteLine("Exe sets App Folder to " + AppFolder);
                 }
             });
         }
-
 
         // standard process option (excepting -optionsfile and -appfolder)
         private void ProcessOption(string optname, BaseUtils.CommandArgs ca, bool toeol)
@@ -371,148 +532,6 @@ namespace EDDiscovery
         }
 
 
-        private void Init()
-        {
-#if !DEBUG
-            CheckGithubFiles = true;
-            CheckRelease = true;
-#else
-            EnableTGRightDebugClicks = true;
-#endif
-
-            // go thru the command line looking for -optionfile only
-            ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption);
-
-            //System.Windows.Forms.MessageBox.Show("Option folder " + ExeDirectory());
-            // read the options*.txt files in the exe folder
-            foreach (var f in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
-            {
-                ProcessFile(f, (optname, ca, toeol) =>
-                {
-                    if (optname == "-appfolder" && ca.More)
-                    {
-                        AppFolder = ca.Rest();
-                        System.Diagnostics.Debug.WriteLine("Exe sets App Folder to " + AppFolder);
-                    }
-                });
-
-                // second pass is for the rest of the options
-                ProcessFile(f, ProcessOption);
-            }
-
-            // process command line options for -appfolder
-
-            string appfolderwarningmessage = "";        // only used for command line appfolder overrides
-            ProcessCommandLineOptions((optname, ca, toeol) =>           
-            {                                                           
-                if (optname == "-appfolder" && ca.More)
-                {
-                    AppFolder = ca.Next();
-                    appfolderwarningmessage = " (Using " + AppFolder + ")";
-                    System.Diagnostics.Debug.WriteLine("App Folder to " + AppFolder);
-                }
-            });
-
-            // Set up AppDataDirectory
-
-            if (AppFolder == null)                      // if user did not set it..
-            {
-                AppFolder = "EDDiscovery";
-            }
-
-            if (Path.IsPathRooted(AppFolder))           // if rooted, the dir is -appfolder
-            {   
-                AppDataDirectory = AppFolder;
-            }
-            else if (PortableInstall)                   // if store in program folder, its exe/appfolder
-            {
-                AppDataDirectory = Path.Combine(ExeDirectory(), AppFolder);
-            }
-            else
-            {
-                AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder);
-            }
-
-            if (!Directory.Exists(AppDataDirectory))        // make sure its there, don't fail
-                BaseUtils.FileHelpers.CreateDirectoryNoError(AppDataDirectory);
-
-            // here because 1 user did not have a big enough C: drive to holds the SQL temp files!  This may be an over-engineer!
-            if (TempDirInDataDir == true)
-            {
-                var tempdir = Path.Combine(AppDataDirectory, "Temp");
-                if (!Directory.Exists(tempdir))
-                    Directory.CreateDirectory(tempdir);
-
-                Environment.SetEnvironmentVariable("TMP", tempdir);
-                Environment.SetEnvironmentVariable("TEMP", tempdir);
-            }
-
-            translationfolder = Path.Combine(AppDataDirectory, "Translator");
-
-            // go thru the command line looking for -optionfile relative to app folder, then read them
-
-            ProcessCommandLineForOptionsFile(AppDataDirectory, ProcessOption);
-
-            try  // protect.. check incase we could not create appdata, because the user gave us a bad location where we can't make directories in
-            {
-                // process appdata options files
-                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
-                {
-                    ProcessFile(f, ProcessOption);
-                }
-
-                // process appdata dboptions files
-                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
-                {
-                    ProcessFile(f, ProcessOption);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine($"EDDOptions enumerate exception {ex}");
-            }
-
-            // do all of the command line except optionsfile and appfolder..
-            ProcessCommandLineOptions(ProcessOption);
-
-            // Set version display string
-            {
-                StringBuilder sb = new StringBuilder("Version " + EDDApplicationContext.AppVersion);
-
-                if (!DisableShowDebugInfoInTitle)       // for when i'm doing help.. don't need this on
-                {
-                    sb.Append(appfolderwarningmessage);
-
-                    if (DisableBetaCommanderCheck)
-                    {
-                        sb.Append(" (no BETA detect)");
-                    }
-                    if (ForceBetaOnCommander)
-                    {
-                        sb.Append(" (Force BETA)");
-                    }
-                }
-
-                VersionDisplayString = sb.ToString();
-            }
-
-            // finally ensure we have a path for the dbs
-
-            if (UserDatabasePath == null )
-            {
-                UserDatabasePath = Path.Combine(AppDataDirectory, UserDatabaseFilename);
-            }
-            if (SystemDatabasePath == null)
-            {
-                SystemDatabasePath = Path.Combine(AppDataDirectory, SystemDatabaseFilename);
-            }
-            if (ScanCachePath == null)
-            {
-                ScanCachePath = Path.Combine(AppDataDirectory, "WebScans");
-            }
-
-            EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
-        }
 
         private static EDDOptions options = null;
         private string AppFolder;      // internal to use.. for -appfolder option
