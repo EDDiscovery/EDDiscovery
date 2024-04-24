@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls.Helpers
             filters = new ExtButtonWithNewCheckedListBox[] { extButtonType, extButtonCommoditiesBuy, extButtonCommoditiesSell, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
 
             // we place the fdname of the station type and the translated text
-            var stationtype = StationDefinitions.ValidTypes().Select(x => new CheckedIconUserControl.Item(x.ToString(),StationDefinitions.ToLocalisedLanguage(x)));
+            var stationtype = StationDefinitions.ValidTypes(true).Select(x => new CheckedIconUserControl.Item(x.ToString(),StationDefinitions.ToLocalisedLanguage(x)));
             extButtonType.InitAllNoneAllBack(stationtype,
                 GetFilter(FilterSettings.Type),
                 (newsetting,ch) => { SetFilter(FilterSettings.Type, newsetting, ch); });
@@ -672,7 +672,7 @@ namespace EDDiscovery.UserControls.Helpers
                     }
 
                 }
-            }, this, "Outfitting from {systemname}", 32);
+            }, this, $"Outfitting from {systemname}", 32);
         }
 
         private void AddSearchEntries(ConfigurableForm f, int searchdistance, bool clearfilters, bool lpad, bool? carrier, int maxdx = 400, int lpadx = 600, int carrierx = 700, int clearfilterx = 800)
