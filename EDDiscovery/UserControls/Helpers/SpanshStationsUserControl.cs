@@ -49,14 +49,13 @@ namespace EDDiscovery.UserControls.Helpers
 
             filters = new ExtButtonWithNewCheckedListBox[] { extButtonType, extButtonCommoditiesBuy, extButtonCommoditiesSell, extButtonOutfitting, extButtonShipyard, extButtonEconomy, extButtonServices };
 
-            // tbd
-
-            var porttype = StationDefinitions.StarPortTypesNamesSpansh().Select(x => new CheckedIconUserControl.Item(x,x));
-            extButtonType.InitAllNoneAllBack(porttype,
+            // we place the fdname of the station type and the translated text
+            var stationtype = StationDefinitions.ValidTypes().Select(x => new CheckedIconUserControl.Item(x.ToString(),StationDefinitions.ToLocalisedLanguage(x)));
+            extButtonType.InitAllNoneAllBack(stationtype,
                 GetFilter(FilterSettings.Type),
                 (newsetting,ch) => { SetFilter(FilterSettings.Type, newsetting, ch); });
 
-
+            // we place fdname of commodity with translated name
             var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast)
                             .Select(x => new CheckedIconUserControl.Item(x.FDName, x.Name));
 
@@ -68,13 +67,14 @@ namespace EDDiscovery.UserControls.Helpers
                 GetFilter(FilterSettings.CommoditiesSell),
                 (newsetting, ch) => { SetFilter(FilterSettings.CommoditiesSell, newsetting, ch); });
 
-            var moditems = ItemData.GetShipModulesList().Select(x => x.ModTypeString).Distinct().      // only return buyable modules
-                            Select(x2 => new CheckedIconUserControl.Item(x2, x2));
+            // we place fdname of module and type string
+            var moditems = ItemData.GetShipModulesList(false).Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.ModName));
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
                 GetFilter(FilterSettings.Outfitting),
                 (newsetting, ch) => { SetFilter(FilterSettings.Outfitting, newsetting, ch); });
 
+            // we place the spaceship fdname with its string name
             var ships = ItemData.GetSpaceships().Select(x =>
                 new CheckedIconUserControl.Item(((ItemData.ShipInfoString)x[ItemData.ShipPropID.FDID]).Value,
                             ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value));
@@ -83,16 +83,14 @@ namespace EDDiscovery.UserControls.Helpers
                 GetFilter(FilterSettings.Shipyard),
                 (newsetting, ch) => { SetFilter(FilterSettings.Shipyard, newsetting, ch); });
 
-            // could use Identifers to localise later
-            var economy = EconomyDefinitions.DecoratedNamesAndText().Select(x => new CheckedIconUserControl.Item(x.Key, x.Value));
-
-            extButtonEconomy.SettingsSplittingChar = '\u2345';     // because ; is used in identifiers
-            extButtonEconomy.InitAllNoneAllBack(economy,
+            // we place the fdname of the economy (as per EconomyDefinitions) with the localised name
+            extButtonEconomy.SettingsSplittingChar = '\u2345';     // because ; is used in identifiers. Key is fdname
+            extButtonEconomy.InitAllNoneAllBack(EconomyDefinitions.ValidStates().Select(x => new CheckedIconUserControl.Item(x.ToString(), EconomyDefinitions.ToLocalisedLanguage(x))),
                 GetFilter(FilterSettings.Economy),
                 (newsetting, ch) => { SetFilter(FilterSettings.Economy, newsetting, ch); });
 
-            //tbd
-            var services = StationDefinitions.SpanshNamesAndText().Select(x => new CheckedIconUserControl.Item(x.Key,x.Value ));
+            // we place the fdname of the service (as per StationDefinitions) with the localised name
+            var services = StationDefinitions.ValidServices().Select(x => new CheckedIconUserControl.Item(x.ToString(),StationDefinitions.ToLocalisedLanguage(x) ));
             extButtonServices.InitAllNoneAllBack(services,
                 GetFilter(FilterSettings.Services),
                 (newsetting, ch) => { SetFilter(FilterSettings.Services, newsetting, ch); });
@@ -204,12 +202,10 @@ namespace EDDiscovery.UserControls.Helpers
             {
                 foreach (var station in stationdata)
                 {
-                    string stationtype = station.StationType ?? "Unknown";
-
                     bool filterin = station.DistanceToArrival <= valueBoxMaxLs.Value;
 
                     if (!extButtonType.IsDisabled)
-                        filterin &= extButtonType.Get().HasChars() && extButtonType.Get().SplitNoEmptyStartFinish(extButtonType.SettingsSplittingChar).Contains(stationtype, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                        filterin &= extButtonType.Get().HasChars() && extButtonType.Get().SplitNoEmptyStartFinish(extButtonType.SettingsSplittingChar).Contains(station.FDStationType.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0;
 
                     if (!extButtonCommoditiesBuy.IsDisabled)
                         filterin &= extButtonCommoditiesBuy.Get().HasChars() && station.HasAnyItemInStock(extButtonCommoditiesBuy.Get().SplitNoEmptyStartFinish(extButtonCommoditiesBuy.SettingsSplittingChar));
@@ -217,6 +213,7 @@ namespace EDDiscovery.UserControls.Helpers
                     if (!extButtonCommoditiesSell.IsDisabled)
                         filterin &= extButtonCommoditiesSell.Get().HasChars() && station.HasAnyItemWithDemandAndPrice(extButtonCommoditiesSell.Get().SplitNoEmptyStartFinish(extButtonCommoditiesSell.SettingsSplittingChar));
 
+                    // tbd check
                     if (!extButtonOutfitting.IsDisabled)
                         filterin &= extButtonOutfitting.Get().HasChars() && station.HasAnyModuleTypes(extButtonOutfitting.Get().SplitNoEmptyStartFinish(extButtonOutfitting.SettingsSplittingChar));
 
@@ -231,7 +228,8 @@ namespace EDDiscovery.UserControls.Helpers
 
                     if (filterin)
                     {
-                        string ss = station.StationServices != null ? string.Join(", ", station.StationServices) : "";
+                        string ss = station.StationServices != null ? string.Join(", ", station.StationServices.Select(x => StationDefinitions.ToLocalisedLanguage(x))) : "";
+
                         object[] cells = new object[]
                         {
                             station.System.Name,
@@ -239,7 +237,7 @@ namespace EDDiscovery.UserControls.Helpers
                             station.BodyName?.ReplaceIfStartsWith(station.System.Name) ?? "",
                             station.StationName,
                             station.DistanceToArrival > 0 ? station.DistanceToArrival.ToString("N1") : "",
-                            stationtype,
+                            StationDefinitions.ToLocalisedLanguage(station.FDStationType),
                             station.Latitude.HasValue ? station.Latitude.Value.ToString("N4") : "",
                             station.Longitude.HasValue ? station.Longitude.Value.ToString("N4") : "",
                             station.MarketStateString,
@@ -253,8 +251,8 @@ namespace EDDiscovery.UserControls.Helpers
                             station.ShipyardStateString,
                             AllegianceDefinitions.ToLocalisedLanguage(station.Allegiance),
                             station.Faction ?? "",
-                            station.Economy_Localised ?? "",
-                            station.Government_Localised ?? "",
+                            EconomyDefinitions.ToLocalisedLanguage(station.Economy),
+                            GovernmentDefinitions.ToLocalisedLanguage(station.Government),
                             ss,
                             station.LandingPads?.Small.ToString() ?? "",
                             station.LandingPads?.Medium.ToString() ?? "",
@@ -512,11 +510,12 @@ namespace EDDiscovery.UserControls.Helpers
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
             ConfigurableForm.ShowDialogCentred((f) => {
-                var services = StationDefinitions.SpanshNamesAndText().Select(x => x.Value).Distinct().ToArray();
-                f.AddBools(services, services, servicestate, 4, 24, 200, 4, 200, "S_");
+                var services = StationDefinitions.ValidServices();
+                f.AddBools(services.Select(x=>x.ToString()).ToArray(), services.Select(x=>StationDefinitions.ToLocalisedLanguage(x)).ToArray(), servicestate, 4, 24, 200, 4, 200, "S_");
                 AddSearchEntries(f, servicessearchdistance, servicesclearfilters, serviceslargepad, servicescarriers);
             },
-            async (f) => {
+            async (f) =>
+            {
                 SetValues(f, ref servicessearchdistance, ref servicesclearfilters, ref serviceslargepad, ref servicescarriers);
 
                 servicestate = f.GetCheckedListNames("S_").ToHashSet();
@@ -532,7 +531,7 @@ namespace EDDiscovery.UserControls.Helpers
                     }
                 }
             },
-            this, $"Services from {systemname}",32);
+            this, $"Services from {systemname}", 32);
         }
 
 
@@ -543,12 +542,14 @@ namespace EDDiscovery.UserControls.Helpers
         {
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
-            ConfigurableForm.ShowDialogCentred((f) => {
-                var economy = EconomyDefinitions.DecoratedNamesAndText().Select(x => x.Value).ToArray();
-                f.AddBools(economy,economy, economystate, 4, 24, 120, 4, 120, "S_");
-                AddSearchEntries(f, economysearchdistance, economyclearfilters, economylargepad, null, clearfilterx:700);
+            ConfigurableForm.ShowDialogCentred((f) =>
+            {
+                var economy = EconomyDefinitions.ValidStates();
+                f.AddBools(economy.Select(x => x.ToString()).ToArray(), economy.Select(x => EconomyDefinitions.ToLocalisedLanguage(x)).ToArray(), economystate, 4, 24, 120, 4, 120, "S_");
+                AddSearchEntries(f, economysearchdistance, economyclearfilters, economylargepad, null, clearfilterx: 700);
             },
-            async (f) => {
+            async (f) =>
+            {
                 bool _ = false;
                 SetValues(f, ref economysearchdistance, ref economyclearfilters, ref economylargepad, ref _);
 
@@ -565,7 +566,7 @@ namespace EDDiscovery.UserControls.Helpers
                     }
                 }
             },
-            this, $"Economies from {systemname}",32);
+            this, $"Economies from {systemname}", 32);
         }
 
         int shipssearchdistance = 40;
@@ -600,7 +601,7 @@ namespace EDDiscovery.UserControls.Helpers
 
         int outfittingsearchdistance = 40;
         bool[] outfittingmodtypes = new bool[256];
-        bool[] outfittingclasses = new bool[8] { true, false, false, false, false, false, false, false };   // 0 =all, 0..6
+        bool[] outfittingclasses = new bool[10] { true, false, false, false, false,    false, false, false, false,false };   // 0 =all, 0..8
         bool[] outfittingratings = new bool[8] { true, false, false, false, false, false, false, false };   // 0 = all, A..G
         bool outfittingclearfilters = true, outfittinglargepad = false, outfittingcarriers = true;
 
@@ -608,30 +609,32 @@ namespace EDDiscovery.UserControls.Helpers
         {
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
-            var moditems = ItemData.GetShipModulesList().Select(x => x.ModTypeString).Distinct().ToArray();      // only return buyable modules
+            var moditems = ItemData.GetShipModulesList().Select(x => x.Value.ModTypeString).Distinct().ToArray();      // only return buyable modules
 
-            ConfigurableForm.ShowDialogCentred((f) => {
+            ConfigurableForm.ShowDialogCentred((f) =>
+            {
                 f.AddBools(moditems, moditems, outfittingmodtypes, 4, 24, 550, 4, 200, "M_");
 
                 int vpos = 580;
-                for (int cls = 0; cls <= 7; cls++)
+                for (int cls = 0; cls < outfittingclasses.Length; cls++)
                 {
-                    f.Add(new ConfigurableForm.Entry("C_" + cls, outfittingclasses[cls], cls == 0 ? "All Classes" : "Class " + (cls - 1), new Point(4 + cls * 150, vpos), new Size(140, 22), null));
+                    f.Add(new ConfigurableForm.Entry("C_" + cls, outfittingclasses[cls], cls == 0 ? "All Classes" : "Class " + (cls - 1), new Point(4 + cls * 100, vpos), new Size(100, 22), null));
                 }
 
                 vpos += 30;
-                for (int rating = 0; rating <= 7; rating++)
+                for (int rating = 0; rating < outfittingratings.Length; rating++)
                 {
-                    f.Add(new ConfigurableForm.Entry("R_" + rating, outfittingratings[rating], rating == 0 ? "All Ratings" : "Rating " + (char)('A' - 1 + rating), new Point(4 + rating * 150, vpos), new Size(140, 22), null));
+                    f.Add(new ConfigurableForm.Entry("R_" + rating, outfittingratings[rating], rating == 0 ? "All Ratings" : "Rating " + (char)('A' - 1 + rating), new Point(4 + rating * 100, vpos), new Size(100, 22), null));
                 }
 
                 AddSearchEntries(f, outfittingsearchdistance, outfittingclearfilters, outfittinglargepad, outfittingcarriers);
 
-                f.Trigger += (name, ctrl, obj) => {
+                f.Trigger += (name, ctrl, obj) =>
+                {
                     System.Diagnostics.Debug.WriteLine($"Click on {name} {ctrl}");
                     f.GetControl("OK").Enabled = f.IsAllValid();
                     if (ctrl == "C_0")
-                        f.SetCheckedList(new string[] { "C_1", "C_2", "C_3", "C_4", "C_5", "C_6", "C_7" }, false);
+                        f.SetCheckedList(new string[] { "C_1", "C_2", "C_3", "C_4", "C_5", "C_6", "C_7", "C_8", "C_9" }, false);
                     else if (ctrl.StartsWith("C_"))
                         f.SetCheckedList(new string[] { "C_0" }, false);
                     if (ctrl == "R_0")
@@ -639,8 +642,9 @@ namespace EDDiscovery.UserControls.Helpers
                     else if (ctrl.StartsWith("R_"))
                         f.SetCheckedList(new string[] { "R_0" }, false);
                 };
-            }, 
-            async (f) => {
+            },
+            async (f) =>
+            {
                 var modlist = f.GetCheckedListNames("M_").ToArray();
 
                 outfittingmodtypes = f.GetCheckBoxBools("M_");
@@ -652,7 +656,7 @@ namespace EDDiscovery.UserControls.Helpers
                 if (modlist.Length > 0 && outfittingclasses.Contains(true) && outfittingratings.Contains(true))
                 {
                     EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                    
+
                     List<StationInfo> ssd = await sp.SearchOutfittingAsync(systemname, modlist, outfittingclasses, outfittingratings, outfittingsearchdistance, outfittinglargepad ? true : default(bool?), outfittingcarriers, maxresults);
 
                     if (!IsClosed())      // async protect!
@@ -668,7 +672,7 @@ namespace EDDiscovery.UserControls.Helpers
                     }
 
                 }
-            }, this, "Outfitting from {systemname}",32);
+            }, this, "Outfitting from {systemname}", 32);
         }
 
         private void AddSearchEntries(ConfigurableForm f, int searchdistance, bool clearfilters, bool lpad, bool? carrier, int maxdx = 400, int lpadx = 600, int carrierx = 700, int clearfilterx = 800)
