@@ -93,7 +93,8 @@ namespace EDDiscovery.UserControls
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
-            var modlist = ItemData.GetShipModulesList(true, true, true, true, true).Select(x => x.Value.ModTypeString).Distinct();
+            // get ship modules, all types 
+            var modlist = ItemData.GetShipModules(true, true, true, true, true, true).Select(x => x.Value.ModTypeString).Distinct();
             comboBoxYards.Items.AddRange(modlist); // return all types of modules including unknown
 
             var list = (from x in ofl.GetFilteredList() select x.Ident()).ToList();

@@ -68,7 +68,9 @@ namespace EDDiscovery.UserControls.Helpers
                 (newsetting, ch) => { SetFilter(FilterSettings.CommoditiesSell, newsetting, ch); });
 
             // we place fdname of module and type string
-            var moditems = ItemData.GetShipModulesList(false).Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.ModName));
+            // note the bodges - only get the lightweight armour, and then mangle the text
+            var moditems = ItemData.GetShipModules(compressarmour:true).
+                                Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.ModName.Replace(" Lightweight Armour"," Armours")));
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
                 GetFilter(FilterSettings.Outfitting),
@@ -200,6 +202,9 @@ namespace EDDiscovery.UserControls.Helpers
 
             if (stationdata != null)
             {
+                // we precompute this, as we need to expand all armour_grade1 back out into all their different armour types before checking
+                string[] outfittinglist = ItemData.ExpandArmours(extButtonOutfitting.Get().SplitNoEmptyStartFinish(extButtonOutfitting.SettingsSplittingChar));
+
                 foreach (var station in stationdata)
                 {
                     bool filterin = station.DistanceToArrival <= valueBoxMaxLs.Value;
@@ -213,9 +218,8 @@ namespace EDDiscovery.UserControls.Helpers
                     if (!extButtonCommoditiesSell.IsDisabled)
                         filterin &= extButtonCommoditiesSell.Get().HasChars() && station.HasAnyItemWithDemandAndPrice(extButtonCommoditiesSell.Get().SplitNoEmptyStartFinish(extButtonCommoditiesSell.SettingsSplittingChar));
 
-                    // tbd check
                     if (!extButtonOutfitting.IsDisabled)
-                        filterin &= extButtonOutfitting.Get().HasChars() && station.HasAnyModuleTypes(extButtonOutfitting.Get().SplitNoEmptyStartFinish(extButtonOutfitting.SettingsSplittingChar));
+                        filterin &= extButtonOutfitting.Get().HasChars() && station.HasAnyModuleTypes(outfittinglist);
 
                     if (!extButtonShipyard.IsDisabled)
                         filterin &= extButtonShipyard.Get().HasChars() && station.HasAnyShipTypes(extButtonShipyard.Get().SplitNoEmptyStartFinish(extButtonShipyard.SettingsSplittingChar));
@@ -609,7 +613,7 @@ namespace EDDiscovery.UserControls.Helpers
         {
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
-            var moditems = ItemData.GetShipModulesList().Select(x => x.Value.ModTypeString).Distinct().ToArray();      // only return buyable modules
+            var moditems = ItemData.GetShipModules().Select(x => x.Value.ModTypeString).Distinct().ToArray();      // only return buyable modules
 
             ConfigurableForm.ShowDialogCentred((f) =>
             {
