@@ -69,8 +69,8 @@ namespace EDDiscovery.UserControls.Helpers
 
             // we place fdname of module and type string
             // note the bodges - only get the lightweight armour, and then mangle the text
-            var moditems = ItemData.GetShipModules(compressarmour:true).
-                                Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.ModName.Replace(" Lightweight Armour"," Armours")));
+            var moditems = ItemData.GetShipModules(compressarmourtosidewinderonly:true).
+                                Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.ModName.Replace("Sidewinder ","")));
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
                 GetFilter(FilterSettings.Outfitting),
