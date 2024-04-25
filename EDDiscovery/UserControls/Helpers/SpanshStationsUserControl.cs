@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls.Helpers
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
                 GetFilter(FilterSettings.Outfitting),
-                (newsetting, ch) => { SetFilter(FilterSettings.Outfitting, newsetting, ch); });
+                (newsetting, ch) => { SetFilter(FilterSettings.Outfitting, newsetting, ch); }, sortitems:true);
 
             // we place the spaceship fdname with its string name
             var ships = ItemData.GetSpaceships().Select(x =>
