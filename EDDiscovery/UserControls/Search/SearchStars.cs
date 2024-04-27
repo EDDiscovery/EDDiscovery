@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
                 foreach (Tuple<ISystem, double> ret in systems)
                 {
                     ISystem sys = ret.Item1;
-                    string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
+                    string sep = " / ";
                     object[] rowobj = {     index.ToString(),
                                             sys.Name,
                                             Stars.StarName(sys.MainStarType),

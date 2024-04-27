@@ -236,7 +236,12 @@ namespace EDDiscovery.UserControls.Search
                         DataGridViewRow rw = Rows[r];
                         List<Object> data = new List<object>();
                         for (int i = 0; i < columnsout; i++)
-                            data.Add(rw.Cells[i].Value);
+                        {
+                            if (double.TryParse(rw.Cells[i].Value as string, out double v))     // if its a number, export as a number
+                                data.Add(v);
+                            else
+                                data.Add(rw.Cells[i].Value);
+                        }
 
                         ISystem sys = SystemClassFrom(rw.Tag);
                         
