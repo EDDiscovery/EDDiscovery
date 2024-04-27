@@ -210,7 +210,7 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        wantedList.Append($"  {c.Item2} {c.Item1.Details.Name}{present}");
+                        wantedList.Append($"  {c.Item2} {c.Item1.Details.TranslatedName}{present}");
                         int? onHand = mcl.Where(m => m.Details.Shortname == c.Item1.Details.Shortname).FirstOrDefault()?.Count;
                         int totalReq = c.Item2 + (onHand.HasValue ? onHand.Value : 0);
                         if ((c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.VeryCommon && totalReq > VeryCommonCap) ||
@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
                             (c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.Rare && totalReq > RareCap) ||
                             (c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.VeryRare && totalReq > VeryRareCap))
                         {
-                            capExceededMats.Add(c.Item1.Details.Name);
+                            capExceededMats.Add(c.Item1.Details.TranslatedName);
                         }
                         if (!last_he.Status.IsLandedInShipOrSRV && last_sn != null)
                         {

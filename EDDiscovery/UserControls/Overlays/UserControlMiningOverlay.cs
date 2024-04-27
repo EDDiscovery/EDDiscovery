@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
                 {
                     mat = new MaterialsFound();
                     mat.matnamefd2 = fdname;
-                    mat.friendlyname = MaterialCommodityMicroResourceType.GetByFDName(fdname)?.Name ?? fdname;
+                    mat.friendlyname = MaterialCommodityMicroResourceType.GetByFDName(fdname)?.TranslatedName ?? fdname;
                     mat.prospectedamounts = new List<double>();
                     mat.content = new int[3];
                     list.Add(mat);
@@ -805,7 +805,7 @@ namespace EDDiscovery.UserControls
                             ret[0] = (r + 1).ToString("N0");
                             ret[1] = jp.EventTimeUTC.ToStringZulu();
                             ret[2] = jp.Content.ToString();
-                            ret[3] = MaterialCommodityMicroResourceType.GetByFDName(jp.MotherlodeMaterial)?.Name ?? jp.MotherlodeMaterial;
+                            ret[3] = MaterialCommodityMicroResourceType.GetByFDName(jp.MotherlodeMaterial)?.TranslatedName ?? jp.MotherlodeMaterial;
 
                             for (int m = 0; m < prosmat.Count; m++)
                             {

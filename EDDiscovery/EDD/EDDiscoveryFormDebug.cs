@@ -213,5 +213,19 @@ namespace EDDiscovery
         //var permitlist = SystemsDB.GetListPermitSystems();
         //foreach (var x in permitlist)
         //    System.Diagnostics.Debug.WriteLine($"{x.Name} {x.SystemAddress} {x.X} {x.Y} {x.Z}");
+
+            // for translator, dump out lines
+    //        foreach (var en in Enum.GetValues(typeof(ShipModule.ModuleTypes)))
+    //        {
+    //            string english = en.ToString().Replace("AX", "AX ").Replace("_", "-").SplitCapsWordFull();
+    //    System.Diagnostics.Debug.WriteLine($".{english.Replace(" ", "_")}: \"{english}\" @");
+    //        }
+    //        foreach (var en in Enum.GetValues(typeof(ShipSlots.Slot)))
+    //        {
+    //            string english = en.ToString().SplitCapsWordFull();
+    //System.Diagnostics.Debug.WriteLine($".{en.ToString()}: \"{english}\" @");
+    //        }
+
+
     }
 }

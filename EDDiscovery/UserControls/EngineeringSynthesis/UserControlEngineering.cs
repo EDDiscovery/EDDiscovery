@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             ufs = new RecipeFilterSelector(upgrades);
             ufs.SaveSettings += (newvalue, e) => { PutSetting(dbUpgradeFilterSave, newvalue); Display(); };
 
-            List<string> matLongNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
+            List<string> matLongNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.TranslatedName).Distinct().ToList();
             matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);
             matfs.SaveSettings += (newvalue, e) => { PutSetting(dbMaterialFilterSave, newvalue); Display(); };
@@ -265,7 +265,7 @@ namespace EDDiscovery.UserControls
 
                         if (materials != "All")
                         {
-                            var inglongname = Recipes.EngineeringRecipes[rno].Ingredients.Select(x => x.Name);
+                            var inglongname = Recipes.EngineeringRecipes[rno].Ingredients.Select(x => x.TranslatedName);
                             var included = matList.Intersect<string>(inglongname);
                             visible &= included.Count() > 0;
                         }
@@ -312,7 +312,7 @@ namespace EDDiscovery.UserControls
                     {
                         var cur = mcllist.Find((x) => x.Details == kvp.Key);    // may be null
                         DataGridViewRow r = dataGridViewEngineering.RowTemplate.Clone() as DataGridViewRow;
-                        r.CreateCells(dataGridViewEngineering, kvp.Key.Name, "", "", "", kvp.Value.ToString(), (cur?.Count ?? 0).ToString(), "", kvp.Key.Shortname, "");
+                        r.CreateCells(dataGridViewEngineering, kvp.Key.TranslatedName, "", "", "", kvp.Value.ToString(), (cur?.Count ?? 0).ToString(), "", kvp.Key.Shortname, "");
                         r.ReadOnly = true;
                         dataGridViewEngineering.Rows.Add(r);
                     }

@@ -648,7 +648,7 @@ namespace EDDiscovery.UserControls
 
                     if (ty != null)        // if we have found it, use the translated names and cat etc from
                     {
-                        mname = ty.Name;
+                        mname = ty.TranslatedName;
                         cat = ty.TranslatedCategory;
                         type = ty.TranslatedType;
                         if (ty.IsMicroResources)
@@ -963,7 +963,7 @@ namespace EDDiscovery.UserControls
 
                             if (ty != null)        // if we have found it, use the translated names and cat etc from
                             {
-                                mname = ty.Name;
+                                mname = ty.TranslatedName;
                                 cat = ty.TranslatedCategory;
                                 type = ty.TranslatedType;
                             }
@@ -1001,7 +1001,7 @@ namespace EDDiscovery.UserControls
 
                         if (ty != null)        // if we have found it, use the translated names and cat etc from
                         {
-                            mname = ty.Name;
+                            mname = ty.TranslatedName;
                             cat = ty.TranslatedCategory;
                         }
 
@@ -1073,8 +1073,8 @@ namespace EDDiscovery.UserControls
                             var ord = modules[i];
                             if (ItemData.TryGetShipModule(ord.Name, out ItemData.ShipModule modp, false))       // find, no create
                             {
-                                string name = modp?.ModName ?? ord.Name.SplitCapsWordFull();
-                                string mtype = modp?.ModTypeString ?? ord.Category ?? "";
+                                string name = modp?.TranslatedModName ?? ord.Name.SplitCapsWordFull();
+                                string mtype = modp?.TranslatedModTypeString ?? ord.Category ?? "";
                                 string mass = modp?.Mass.ToString("N1") ?? "";
                                 string power = modp?.Power.ToString("N1") ?? "";
                                 string info = modp?.Info ?? "";

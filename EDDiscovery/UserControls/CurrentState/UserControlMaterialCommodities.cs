@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls
                 if (postfix.Length > 0)
                     postfix = " (" + postfix + ")";
 
-                cfs.UC.Add(x.FDName, x.Name + postfix);
+                cfs.UC.Add(x.FDName, x.TranslatedName + postfix);
             }
         }
 
@@ -376,12 +376,12 @@ namespace EDDiscovery.UserControls
 
                 if (need > 0)
                 {
-                    shoppinglist = shoppinglist.AppendPrePad(string.Format("Need {0} {1}", mcd.Name, need), Environment.NewLine);
+                    shoppinglist = shoppinglist.AppendPrePad(string.Format("Need {0} {1}", mcd.TranslatedName, need), Environment.NewLine);
                 }
 
                 if (displayinshoppinglist.Contains(mcd.FDName) || (totalcount > 0 && displayallnonzeroitemsinshoppinglist))
                 {
-                    contentlist = contentlist.AppendPrePad(string.Format("{0} {1}", mcd.Name, totalcount), Environment.NewLine);
+                    contentlist = contentlist.AppendPrePad(string.Format("{0} {1}", mcd.TranslatedName, totalcount), Environment.NewLine);
                 }
 
                 if (all || filter.Contains(mcd.FDName))      // and see if they are in the filter
@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
                         {
                             int limit = mcd.MaterialLimit() ?? 0;
 
-                            rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
+                            rowobj = new[] { mcd.TranslatedName, mcd.Shortname, mcd.TranslatedCategory,
                                                 mcd.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
                                                 matcounts[0].ToString(),
                                                 wantedamount.ToStringInvariant(),
@@ -405,7 +405,7 @@ namespace EDDiscovery.UserControls
                         }
                         else if (PanelMode == PanelType.MicroResources)
                         {
-                            rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
+                            rowobj = new[] { mcd.TranslatedName, mcd.Shortname, mcd.TranslatedCategory,
                                                 matcounts[0].ToString(),  // locker
                                                 matcounts[1].ToString(),   // backpack
                                                 wantedamount.ToStringInvariant(),
@@ -417,7 +417,7 @@ namespace EDDiscovery.UserControls
                         {
                             int? limit = mcd.MaterialLimit();
 
-                            rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
+                            rowobj = new[] { mcd.TranslatedName, mcd.Shortname, mcd.TranslatedCategory,
                                                 mcd.IsMicroResources ? "" : (mcd.TranslatedType + ( limit.HasValue ? " (" + limit.Value.ToString() + ")" : "")) ,
                                                 matcounts[0].ToString(),      // number
                                                 mcd.IsMicroResources ? matcounts[1].ToString(): "",      // backpack
@@ -429,7 +429,7 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {                                                                       // commodities
-                            rowobj = new[] { mcd.Name, mcd.TranslatedType,
+                            rowobj = new[] { mcd.TranslatedName, mcd.TranslatedType,
                                                 matcounts[0].ToString(),
                                                 m != null ? m.Price.ToString("0.#") : "-",
                                                 wantedamount.ToStringInvariant(),

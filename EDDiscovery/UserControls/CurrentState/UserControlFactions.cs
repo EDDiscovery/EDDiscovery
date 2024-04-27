@@ -350,7 +350,7 @@ namespace EDDiscovery.UserControls
                     foreach (var i in items)
                     {
                         var m = EliteDangerousCore.MaterialCommodityMicroResourceType.GetByFDName(i.FDName);     // and we see if we actually have some at this time
-                        string name = m?.Name ?? i.FDName;
+                        string name = m?.TranslatedName ?? i.FDName;
 
                         int bought = i.Count > 0 ? i.Count : 0;
                         int sold = i.Count < 0 ? -i.Count : 0;

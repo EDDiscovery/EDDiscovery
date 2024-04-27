@@ -93,9 +93,10 @@ namespace EDDiscovery.UserControls
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
-            // get ship modules, all types 
-            var modlist = ItemData.GetShipModules(true, true, true, true, true, true).Select(x => x.Value.ModTypeString).Distinct();
-            comboBoxYards.Items.AddRange(modlist); // return all types of modules including unknown
+
+            // get ship modules, all types, including unknown, and store them into the combo box using the translated name
+            var modlist = ItemData.GetShipModules(true, true, true, true, true, true).Select(x => x.Value.TranslatedModTypeString).Distinct();
+            comboBoxYards.Items.AddRange(modlist); 
 
             var list = (from x in ofl.GetFilteredList() select x.Ident()).ToList();
             comboBoxYards.Items.AddRange(list);
@@ -139,7 +140,9 @@ namespace EDDiscovery.UserControls
 
             Outfitting yard = null;
 
-            if (comboBoxYards.SelectedIndex == 0 || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            // travel history
+            // second is due to the order History gets called vs this on start
+            if (comboBoxYards.SelectedIndex == 0 || comboBoxYards.Text.Length == 0)  
             {
                 HistoryEntry lastshipyard = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
                 if (lastshipyard != null)
@@ -147,15 +150,17 @@ namespace EDDiscovery.UserControls
             }
             else
             {
+                // see if its a yard being selected
                 yard = DiscoveryForm.History.Outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
-            if (yard?.Items != null ) // yard may be null, and its entries may be null
+            if (yard != null ) // yard has been found, display
             {
                 DisplayYard(yard);
             }
             else
             {
+                // search all yards for 
                 List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = DiscoveryForm.History.Outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
                 if ( itemlist.Count > 0 )
                     DisplayItems(itemlist, comboBoxYards.Text);
@@ -169,8 +174,6 @@ namespace EDDiscovery.UserControls
 
         private void DisplayItems(List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist, string moduletype)
         {
-            ISystem cursys = DiscoveryForm.History.CurrentSystem();
-
             foreach (var yard in itemlist)
             {
                 double distance = DiscoveryForm.History.DistanceCurrentTo(yard.Item1.StarSystem);
@@ -179,9 +182,9 @@ namespace EDDiscovery.UserControls
 
                 foreach (var item in yard.Item2)
                 {
-                    string itemname = item.Name.StartsWith(item.ModType) ? item.Name.Mid(item.ModType.Length+1) : item.Name;
+                    string itemname = item.TranslatedModuleName.StartsWith(item.TranslatedModTypeString) ? item.TranslatedModuleName.Mid(item.TranslatedModTypeString.Length+1) : item.TranslatedModuleName;
 
-                    if (ItemData.TryGetShipModule(item.FDName, out ItemData.ShipModule sm, false))    // find
+                    if (ItemData.TryGetShipModule(item.FDName, out ItemData.ShipModule sm, false))    // find if we have it
                         itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
 
                     object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), item.BuyPrice.ToString("N0") };
@@ -205,7 +208,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayYard(Outfitting yard)
         {
-            foreach (var item in yard.Items)
+            foreach (var item in yard.Items.EmptyIfNull())  // protect against empty items
             {
                 string info = "?";
                 if (ItemData.TryGetShipModule(item.FDName, out ItemData.ShipModule sm, false))    // find
@@ -213,7 +216,7 @@ namespace EDDiscovery.UserControls
                     info = sm.InfoMassPower(false);
                 }
 
-                object[] rowobj = { item.ModType, item.Name, info, sm.Mass.ToString("0.#t"),item.BuyPrice.ToString("N0") };
+                object[] rowobj = { item.TranslatedModTypeString, item.TranslatedModuleName, info, sm.Mass.ToString("0.#t"),item.BuyPrice.ToString("N0") };
                 dataGridViewOutfitting.Rows.Add(rowobj);
             }
 

@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls.Helpers
 
             // we place fdname of commodity with translated name
             var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast)
-                            .Select(x => new CheckedIconUserControl.Item(x.FDName, x.Name));
+                            .Select(x => new CheckedIconUserControl.Item(x.FDName, x.TranslatedName));
 
             extButtonCommoditiesBuy.InitAllNoneAllBack(comitems,
                 GetFilter(FilterSettings.CommoditiesBuy),
@@ -67,10 +67,10 @@ namespace EDDiscovery.UserControls.Helpers
                 GetFilter(FilterSettings.CommoditiesSell),
                 (newsetting, ch) => { SetFilter(FilterSettings.CommoditiesSell, newsetting, ch); });
 
-            // we place fdname of module and type string
+            // we place fdname of module and the translated text
             // note the bodges - only get the lightweight armour, and then mangle the text
             var moditems = ItemData.GetShipModules(compressarmourtosidewinderonly:true).
-                                Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.ModName.Replace("Sidewinder ","")));
+                                Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.TranslatedModName.Replace("Sidewinder ","")));
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
                 GetFilter(FilterSettings.Outfitting),
@@ -415,8 +415,8 @@ namespace EDDiscovery.UserControls.Helpers
                 var rarecommodities = MaterialCommodityMicroResourceType.GetRareCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
 
                 // tag consists of english name <separ> fdname
-                int max = f.AddBools(commodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), commodities.Select(x => x.Name).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
-                f.AddBools(rarecommodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), rarecommodities.Select(x => x.Name).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
+                int max = f.AddBools(commodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
+                f.AddBools(rarecommodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
 
                 f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(100, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { Panel = ConfigurableForm.Entry.PanelType.Top });
 
@@ -478,8 +478,8 @@ namespace EDDiscovery.UserControls.Helpers
                 f.Add(new ConfigurableForm.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(160, 22), 
                                     $"Set = Show price station buys the commodity at {Environment.NewLine} Clear = Show station sell price") { Panel = ConfigurableForm.Entry.PanelType.Top });
 
-                int max = f.AddBools(commodities.Select(x => x.FDName).ToArray(), commodities.Select(x => x.Name).ToArray(), showcommoditiesstate, 4, 24, 1000, 4, 200, "S_");
-                f.AddBools(rarecommodities.Select(x => x.FDName).ToArray(), rarecommodities.Select(x => x.Name).ToArray(), showcommoditiesstate, max + 16, 24, 500, 4, 200, "S_");
+                int max = f.AddBools(commodities.Select(x => x.FDName).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, 4, 24, 1000, 4, 200, "S_");
+                f.AddBools(rarecommodities.Select(x => x.FDName).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, max + 16, 24, 500, 4, 200, "S_");
                 f.Add(new ConfigurableForm.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableForm.Entry.PanelType.Top });
 
                 f.Trigger += (d, ctrlname, text) => { f.RadioButton("S_", ctrlname, 3); };
@@ -538,7 +538,6 @@ namespace EDDiscovery.UserControls.Helpers
             this, $"Services from {systemname}", 32);
         }
 
-
         int economysearchdistance = 40;
         HashSet<string> economystate = new HashSet<string>();
         bool economyclearfilters = true, economylargepad = false;
@@ -573,6 +572,7 @@ namespace EDDiscovery.UserControls.Helpers
             this, $"Economies from {systemname}", 32);
         }
 
+
         int shipssearchdistance = 40;
         HashSet<string> shipsstate = new HashSet<string>();
         bool shipsclearfilters = true, shipslargepad = false, shipscarriers = true;
@@ -603,6 +603,7 @@ namespace EDDiscovery.UserControls.Helpers
             this, $"Ships from {systemname}",32);
         }
 
+
         int outfittingsearchdistance = 40;
         bool[] outfittingmodtypes = new bool[256];
         bool[] outfittingclasses = new bool[10] { true, false, false, false, false,    false, false, false, false,false };   // 0 =all, 0..8
@@ -613,11 +614,12 @@ namespace EDDiscovery.UserControls.Helpers
         {
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
-            var moditems = ItemData.GetShipModules().Select(x => x.Value.ModTypeString).Distinct().ToArray();      // only return buyable modules
+            var moditems = ItemData.GetModuleTypeNamesTranslations(ItemData.GetShipModules());      // kvp of english modtype names vs translated names
 
             ConfigurableForm.ShowDialogCentred((f) =>
             {
-                f.AddBools(moditems, moditems, outfittingmodtypes, 4, 24, 550, 4, 200, "M_");
+                // key is in english of course, value is translated.
+                f.AddBools(moditems.Select(x=>x.Key).ToArray(), moditems.Select(x=>x.Value).ToArray(), outfittingmodtypes, 4, 24, 550, 4, 200, "M_");
 
                 int vpos = 580;
                 for (int cls = 0; cls < outfittingclasses.Length; cls++)

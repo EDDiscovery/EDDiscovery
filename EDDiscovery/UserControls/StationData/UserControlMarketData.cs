@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
                     {
                         MaterialCommodityMicroResourceType mc = MaterialCommodityMicroResourceType.GetByFDName(c.fdname);
 
-                        string name = mc?.Name ?? c.locName;
+                        string name = mc?.TranslatedName ?? c.locName;
                         if (c.ComparisionRightOnly)
                             name += " @ " + eddmd_right.WhereAmI;
 
@@ -263,7 +263,7 @@ namespace EDDiscovery.UserControls
                     if (m.Count > 0)
                     {
                         object[] rowobj = {     m.Details.TranslatedType + "!!!!",
-                                                m.Details.Name,
+                                                m.Details.TranslatedName,
                                                 "",
                                                 "",
                                                 m.Count,

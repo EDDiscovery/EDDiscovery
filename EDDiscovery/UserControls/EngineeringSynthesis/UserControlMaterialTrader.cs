@@ -252,7 +252,7 @@ namespace EDDiscovery.UserControls
                 foreach ( var mat in t.Item2 )
                 {
                     int offer = 0, receive = 0;
-                    string name = mat.Name;
+                    string name = mat.TranslatedName;
 
                     int mattotal = last_mcl == null ? int.MinValue : curmcl.Find(x=>x.Details.FDName == mat.FDName)?.Count ?? 0;    // find mcl in material list if there, and its count
 
@@ -402,16 +402,16 @@ namespace EDDiscovery.UserControls
                         {
                             totals[trade.element.FDName] += trade.receive;
 
-                            rw.CreateCells(dataGridViewTrades, trade.fromelement.Name, trade.offer.ToString(), totals[trade.fromelement.FDName].ToString(), trade.element.Name, trade.receive.ToString(), totals[trade.element.FDName].ToString());
+                            rw.CreateCells(dataGridViewTrades, trade.fromelement.TranslatedName, trade.offer.ToString(), totals[trade.fromelement.FDName].ToString(), trade.element.TranslatedName, trade.receive.ToString(), totals[trade.element.FDName].ToString());
                         }
                         else
                         {
-                            rw.CreateCells(dataGridViewTrades, trade.fromelement.Name, trade.offer.ToString(), "- !!!", trade.element.Name, trade.receive.ToString(), "-");
+                            rw.CreateCells(dataGridViewTrades, trade.fromelement.TranslatedName, trade.offer.ToString(), "- !!!", trade.element.TranslatedName, trade.receive.ToString(), "-");
                         }
                     }
                     else
                     {
-                        rw.CreateCells(dataGridViewTrades, trade.fromelement.Name, trade.offer.ToString(), "-", trade.element.Name, trade.receive.ToString(), "-");
+                        rw.CreateCells(dataGridViewTrades, trade.fromelement.TranslatedName, trade.offer.ToString(), "-", trade.element.TranslatedName, trade.receive.ToString(), "-");
                     }
 
                     dataGridViewTrades.Rows.Add(rw);
@@ -442,7 +442,7 @@ namespace EDDiscovery.UserControls
             if (i != null && tag is ElementTrade && last_mcl != null ) // must be an element, with a tag, must have a current mcl
             {
                 ElementTrade current = (ElementTrade)tag;
-                System.Diagnostics.Debug.WriteLine("Clicked on " + current.type + " " + current.element.Name);
+                System.Diagnostics.Debug.WriteLine("Clicked on " + current.type + " " + current.element.TranslatedName);
 
                 if (selected != null)
                 {

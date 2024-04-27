@@ -261,6 +261,7 @@ namespace EDDiscovery
                 typeof(ExtendedControls.ExtTextBoxAutoComplete),typeof(ExtendedControls.ExtDateTimePicker),typeof(ExtendedControls.ExtNumericUpDown) });
 
             MaterialCommodityMicroResourceType.FillTable();     // lets statically fill the table way before anyone wants to access it
+            ItemData.Initialise();                              // let the item data initialise
 
             Controller.Init();
             PanelInformation.Init();

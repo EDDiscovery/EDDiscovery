@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
                                 var mc = MaterialCommodityMicroResourceType.GetByFDName(mat.Key);
                                 if (mc?.IsJumponium == true)
                                 {
-                                    ret = ret.AppendPrePad(mc.Name, ", ");
+                                    ret = ret.AppendPrePad(mc.TranslatedName, ", ");
                                     overlays.materials = true;
                                 }
                             }

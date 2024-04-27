@@ -62,9 +62,9 @@ namespace EDDiscovery.UserControls
             dataGridView.Init(DiscoveryForm);
 
             itemlist = MaterialCommodityMicroResourceType.GetAll();
-            Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
+            Array.Sort(itemlist, (left, right) => left.TranslatedName.CompareTo(right.TranslatedName));
 
-            var list = (from x in itemlist select x.Name + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
+            var list = (from x in itemlist select x.TranslatedName + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
 
             comboBoxCustomCM1.Items.AddRange(list);
             comboBoxCustomCM1.SelectedIndex = Math.Min(GetSetting(dbCM1, 0), list.Count() - 1);

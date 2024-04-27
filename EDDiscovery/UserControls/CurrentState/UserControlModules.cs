@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright © 2016 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,6 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using ExtendedControls;
-using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -215,7 +214,9 @@ namespace EDDiscovery.UserControls
 
                     foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
                     {
-                        object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
+                        object[] rowobj = {
+                                JournalFieldNaming.GetForeignModuleType(sm.NameFD),
+                                JournalFieldNaming.GetForeignModuleName(sm.NameFD,sm.Name_Localised),
                                 sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), sm.TransferTimeString ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
@@ -238,7 +239,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (var si in ownedships)
                 {
-                    foreach (string key in si.Modules.Keys)
+                    foreach (var key in si.Modules.Keys)
                     {
                         ShipModule sm = si.Modules[key];
                         AddModuleLine(sm,si);
@@ -250,7 +251,10 @@ namespace EDDiscovery.UserControls
                 {
                     string info = sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit));
                     info = info.AppendPrePad(sm.TransferTimeString, ":");
-                    object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name, "Stored".TxID(EDTx.UserControlModules_Stored),
+                    object[] rowobj = {
+                                JournalFieldNaming.GetForeignModuleType(sm.NameFD),
+                                JournalFieldNaming.GetForeignModuleName(sm.NameFD,sm.Name_Localised),
+                                "Stored".TxID(EDTx.UserControlModules_Stored),
                                  info ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
@@ -286,9 +290,9 @@ namespace EDDiscovery.UserControls
         {
             last_si = si;
 
-            foreach (string key in si.Modules.Keys)
+            foreach (var key in si.Modules.Keys)
             {
-                EliteDangerousCore.ShipModule sm = si.Modules[key];
+                ShipModule sm = si.Modules[key];
                 AddModuleLine(sm);
             }
 
@@ -374,10 +378,6 @@ namespace EDDiscovery.UserControls
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
 
-            string typename = sm.LocalisedItem;
-            if (typename.IsEmpty() && ItemData.TryGetShipModule(sm.ItemFD,out ItemData.ShipModule modp, false))
-                typename = modp.ModTypeString;
-
             string eng = "";
             string engtooltip = null;
 
@@ -398,11 +398,14 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            object[] rowobj = { typename,
-                                sm.Item, sm.Slot, infoentry,
+            object[] rowobj = { JournalFieldNaming.GetForeignModuleType(sm.ItemFD),
+                                JournalFieldNaming.GetForeignModuleName(sm.ItemFD,sm.LocalisedItem),
+                                ShipSlots.ToLocalisedLanguage(sm.SlotFD),
+                                infoentry,
                                 sm.Mass > 0 ? (sm.Mass.ToString("0.#")+"t") : "",
                                 eng,
-                                value, sm.PE() };
+                                value, 
+                                sm.PE() };
 
             dataGridViewModules.Rows.Add(rowobj);
 
