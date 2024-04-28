@@ -766,10 +766,7 @@ namespace EDDiscovery
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF End shown");
 
-            // test code - open all types of panel
-            //foreach (PanelInformation.PanelIDs pc in Enum.GetValues(typeof(PanelInformation.PanelIDs))) { if (pc != PanelInformation.PanelIDs.GroupMarker) tabControlMain.EnsureMajorTabIsPresent(pc, false); }
-            // test code - close down all panels except tab 0
-            //foreach (PanelInformation.PanelIDs pc in Enum.GetValues(typeof(PanelInformation.PanelIDs))) { if (pc != PanelInformation.PanelIDs.GroupMarker) { TabPage p = tabControlMain.GetMajorTab(pc); if (p != null && p.TabIndex>0) tabControlMain.RemoveTab(p); } }
+            PostShownDebug();
         }
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)

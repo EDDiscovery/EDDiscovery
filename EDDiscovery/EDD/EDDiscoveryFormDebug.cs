@@ -101,27 +101,38 @@ namespace EDDiscovery
                 File.WriteAllText(fn, s);
             }
 
-            //foreach (ShipSlots.Slot en in Enum.GetValues(typeof(ShipSlots.Slot)))
-            //{
-            //    string english = ShipSlots.ToEnglish(en);
-            //    System.Diagnostics.Debug.WriteLine($".{en.ToString()}: \"{english}\" @");
-            // }
-
-            //foreach (var en in Enum.GetValues(typeof(ShipSlots.Slot)))
-            //{
-            //    string english = en.ToString().SplitCapsWordFull();
-            //    System.Diagnostics.Debug.WriteLine($"[Slot.{en.ToString()}] = \"{english}\",");
-            //}
-
-            //foreach (var en in Enum.GetValues(typeof(ItemData.ShipModule.ModuleTypes)))
-            //{
-            //    string english = en.ToString().Replace("AX", "AX ").Replace("_", "-").SplitCapsWordFull();
-            //    System.Diagnostics.Debug.WriteLine($".{english.Replace(" ", "_")}: \"{english}\" @");
-            //}
-
-
-            //FactionDefinitions.IDSTx();
+                //FactionDefinitions.IDSTx();
         }
+
+        public void PostShownDebug()
+        {
+            // test code - open all types of panel
+            //foreach (PanelInformation.PanelIDs pc in Enum.GetValues(typeof(PanelInformation.PanelIDs))) { if (pc != PanelInformation.PanelIDs.GroupMarker) tabControlMain.EnsureMajorTabIsPresent(pc, false); }
+            // test code - close down all panels except tab 0
+            //foreach (PanelInformation.PanelIDs pc in Enum.GetValues(typeof(PanelInformation.PanelIDs))) { if (pc != PanelInformation.PanelIDs.GroupMarker) { TabPage p = tabControlMain.GetMajorTab(pc); if (p != null && p.TabIndex>0) tabControlMain.RemoveTab(p); } }
+        }
+
+
+        //foreach (ShipSlots.Slot en in Enum.GetValues(typeof(ShipSlots.Slot)))
+        //{
+        //    string english = ShipSlots.ToEnglish(en);
+        //    System.Diagnostics.Debug.WriteLine($".{en.ToString()}: \"{english}\" @");
+        // }
+
+        //foreach (var en in Enum.GetValues(typeof(ShipSlots.Slot)))
+        //{
+        //    string english = en.ToString().SplitCapsWordFull();
+        //    System.Diagnostics.Debug.WriteLine($"[Slot.{en.ToString()}] = \"{english}\",");
+        //}
+
+        //foreach (var en in Enum.GetValues(typeof(ItemData.ShipModule.ModuleTypes)))
+        //{
+        //    string english = en.ToString().Replace("AX", "AX ").Replace("_", "-").SplitCapsWordFull();
+        //    System.Diagnostics.Debug.WriteLine($".{english.Replace(" ", "_")}: \"{english}\" @");
+        //}
+
+
+
 
         //BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDownload);
         //BaseUtils.GitHubClass ghd = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDataDownload);
