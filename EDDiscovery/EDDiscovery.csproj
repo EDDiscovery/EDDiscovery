@@ -1086,6 +1086,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Resources\Marx Nebula List 26-10-21.csv" />
     <None Include="Translations\chinese-zh.tlf" />
     <None Include="Translations\deutsch-de.tlf" />
     <None Include="Translations\example-ex.tlf" />

@@ -434,7 +434,7 @@ namespace EDDiscovery
                 if (File.Exists(edsmgmofile))
                     GalacticMapping.ParseGMPFile(edsmgmofile,0);                            // at this point, gal map data has been uploaded - get it into memory
 
-                GalacticMapping.LoadMarxObjects();
+                GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.Marx_Nebula_List_26_10_21, GalMapType.VisibleObjectsType.MarxNebula, " Nebula", "Marx sourced nebula");
             }
 
             {
