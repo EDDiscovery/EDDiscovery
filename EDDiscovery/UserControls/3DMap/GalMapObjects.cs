@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls.Map3D
             int i = 0;
             foreach (var o in GalMapType.VisibleTypes)
             {
-                State[o.Name] = i >= ss.Length || !ss[i].Equals("-");              // on if we don't have enough, or on if its not -
+                State[o.TypeName] = i >= ss.Length || !ss[i].Equals("-");              // on if we don't have enough, or on if its not -
                 i++;
             }
             UpdateEnables();
@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls.Map3D
             string s = "";
             foreach (var o in GalMapType.VisibleTypes)
             {
-                s += GetGalObjectTypeEnable(o.Name) ? "+," : "-,";
+                s += GetGalObjectTypeEnable(o.TypeName) ? "+," : "-,";
             }
             return s;
         }
@@ -236,8 +236,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             foreach (var o in renderablegalmapobjects)
             {
-                bool en = GetGalObjectTypeEnable(o.GalMapType.Name);
-                //System.Diagnostics.Debug.WriteLine($"{o.Name} {o.GalMapType.TypeName} {en}");
+                bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);
+                //System.Diagnostics.Debug.WriteLine($"3dmap galmapobject {o.GalMapType.TypeName} : {o.GalMapType.Description} : `{o.NameList}` Enabled : {en}");
 
                 if (en)
                 {
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                     foreach (var o in renderablegalmapobjects)
                     {
-                        bool en = GetGalObjectTypeEnable(o.GalMapType.Name);      // we need to account for ones not enabled, since we rewrite the model buffer list on each enable
+                        bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);      // we need to account for ones not enabled, since we rewrite the model buffer list on each enable
                         if (en)
                         {
                             if (index == (int)res[0].Y)

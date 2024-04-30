@@ -410,13 +410,13 @@ namespace EDDiscovery.UserControls.Map3D
                 for (int i = GalMapType.VisibleTypes.Length - 1; i >= 0; i--)
                 {
                     var gt = GalMapType.VisibleTypes[i];
-                    bool en = map.GetGalObjectTypeEnable(gt.Name);
+                    bool en = map.GetGalObjectTypeEnable(gt.TypeName);
                     GLCheckBox butg = new GLCheckBox("GMSEL" + i, new Rectangle(0, 0, iconsize, iconsize), icons[gt.VisibleType.Value], null);
                     butg.ToolTipText = "Enable/Disable " + gt.Description;
                     butg.Checked = en;
                     butg.CheckChanged += (e1) =>
                     {
-                        map.SetGalObjectTypeEnable(gt.Name, butg.Checked);
+                        map.SetGalObjectTypeEnable(gt.TypeName, butg.Checked);
                     };
                     galfp.Add(butg);
                 }
