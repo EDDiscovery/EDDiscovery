@@ -30,10 +30,10 @@ namespace EDDiscovery.Actions
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {
                 functions = new Dictionary<string, FuncEntry>();
-                functions.Add("body", new FuncEntry(Body, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
+                functions.Add("body", new FuncEntry(Body, 3, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE, FuncEntry.PT.LS));
                 functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.LmeSE));   // literal
                 functions.Add("version", new FuncEntry(Version, FuncEntry.PT.ImeSE));
-                functions.Add("star", new FuncEntry(Star, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
+                functions.Add("star", new FuncEntry(Star, 2, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE, FuncEntry.PT.LS));
                 functions.Add("ship", new FuncEntry(Ship, FuncEntry.PT.MESE));
                 functions.Add("events", new FuncEntry(Events, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
             }
@@ -108,6 +108,8 @@ namespace EDDiscovery.Actions
 
         protected bool Star(out string output)
         {
+            // 2 or 3 paras. [0] = value, [1] = replace, optional [3] = splitcaps
+
             paras[0].Value = paras[0].Value.Replace(" ", "  ");     // ensure we have enough spaces for regex
 
             paras[0].Value = System.Text.RegularExpressions.Regex.Replace(paras[0].Value,           // find space char space|EOL
@@ -138,7 +140,24 @@ namespace EDDiscovery.Actions
             paras[0].Value = paras[0].Value.Replace("  ", " ");
             paras[0].Value = paras[0].Value.Replace("Belt Cluster", ", Belt Cluster");
 
-            return ReplaceVarCommon(out output, true);
+            bool splitcaps = true;
+            if (paras.Count >= 3)
+            {
+                if (paras[2].Value.EqualsIIC("SplitCaps"))
+                { }
+                else if (paras[2].Value.EqualsIIC("NoSplitCaps") || paras[2].Value.EqualsIIC("NS"))
+                {
+                    splitcaps = false;
+                }
+                else
+                {
+                    output = "Incorrect Split caps control word";
+                    return false;
+                }
+            }
+
+            // expects para[0] = value, para[1] = replace var.
+            return ReplaceVarCommon(out output, splitcaps);
         }
 
         protected bool Body(out string output)
@@ -146,12 +165,23 @@ namespace EDDiscovery.Actions
             paras[0].Value = paras[0].Value.Trim();
 
             // if [0] starts with [1], and there is more in [0] then [1], remove
-            if (paras[0].Value.StartsWith(paras[1].Value, StringComparison.InvariantCultureIgnoreCase) && paras[0].Value.Length > paras[1].Value.Length )
+            if (paras[0].Value.StartsWith(paras[1].Value, StringComparison.InvariantCultureIgnoreCase)) 
             {
-                paras[0].Value = paras[0].Value.Substring(paras[1].Value.Length);
+                string v = paras[0].Value.Substring(paras[1].Value.Length).Trim();
+                if (v.Length > 0)       // don't replace if its all spaces..
+                    paras[0].Value = v;
             }
 
             paras[1].Value = paras[2].Value;    // move root var name to [1] where Star expects it to be.
+
+            if (paras.Count >= 4)           // if split caps control
+            {
+                paras[2].Value = paras[3].Value;    // move split caps control to position 2 and remove 3 so count the same
+                paras.RemoveAt(3);          // make count = 3
+            }
+            else
+                paras.RemoveAt(2);          // else remove para 3 to get length 2
+
 
             return Star(out output);        // do star
         }
