@@ -199,7 +199,7 @@ namespace EDDiscovery.UserControls
                     long value = data.ScanValue(!edsmSpanshButton.IsAnySet);
                     control_text += " ~ " + value.ToString("N0") + " cr";
 
-                    int scanned = data.StarPlanetsScanned();
+                    int scanned = data.StarPlanetsWithData(edsmSpanshButton.IsAnySet);
 
                     if (scanned > 0)
                     {

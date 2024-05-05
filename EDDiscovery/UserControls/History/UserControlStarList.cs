@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
             {
                 string st = sysnode.StarTypesFound();
                 int stars = sysnode.StarsScanned();
-                int total = sysnode.StarPlanetsScanned();
+                int total = sysnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet);      // total with data, include web bodies if we have the tick box on
 
                 infostr = string.Format("{0} Star(s) {1}".T(EDTx.UserControlStarList_CS), stars, st);
 

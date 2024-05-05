@@ -593,14 +593,14 @@ namespace EDDiscovery.UserControls
 
                 if (systemnode != null)
                 {
-                    int scanned = edsmSpanshButton.IsAnySet ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonWeb();
+                    int scanned = systemnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet);
 
                     if (scanned > 0)
                     {
                         scansummarytext = scansummarytext.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : ""), Environment.NewLine);
                     }
 
-                    long value = systemnode.ScanValue(false);
+                    long value = systemnode.ScanValue(false);   // don't include value of web bodies
 
                     if (value > 0 && IsSet(CtrlList.showValues))
                     {

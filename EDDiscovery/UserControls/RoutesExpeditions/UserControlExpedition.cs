@@ -461,9 +461,9 @@ namespace EDDiscovery.UserControls
 
                 if (sysnode != null)
                 {
-                    row.Cells[Scans.Index].Value = sysnode.StarPlanetsScannednonWeb().ToString("0");
+                    row.Cells[Scans.Index].Value = sysnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet).ToString("0");
                     row.Cells[FSSBodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
-                    row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsScanned().ToString("0");
+                    row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet).ToString("0");
                     row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
 
                     string info = "";
