@@ -206,6 +206,8 @@ namespace EDDiscovery
 
                 if (EDDOptions.Instance.DeleteSystemDB)
                     BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath);
+                if (EDDOptions.Instance.DeleteUserDB)
+                    BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath);
 
                 try
                 {

@@ -90,6 +90,8 @@ namespace EDDiscovery
         public int HistoryLoadDayLimit { get; private set; }    // default zero not set
 
         public bool DeleteSystemDB { get; private set; }
+        public bool DeleteUserDB { get; private set; }
+
         public bool KeepSystemDataDownloadedFiles { get; private set; }
         public string Culture { get; private set; }             // default null use system culture, use de-DE etc
 
@@ -126,6 +128,8 @@ namespace EDDiscovery
         public string WebView2ProfileDirectory() { return SubAppDirectory("WebView2"); }
         public string TranslatorDirectory() { return translationfolder; }
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
+        public bool SetEDDNforNewCommanders { get; private set; } = true;
+
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
         public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
 
@@ -519,7 +523,9 @@ namespace EDDiscovery
                     case "autoloadnextcommander": AutoLoadNextCommander = true; break;
                     case "null": break;     // null option - used by installer when it writes a app options file if it does not want to do anything
                     case "deletesystemdb": DeleteSystemDB = true; break;
+                    case "deleteuserdb": DeleteUserDB = true; break;
                     case "keepsystemdownloadedfiles": KeepSystemDataDownloadedFiles = true; break;
+                    case "noeddnfornewcommanders": SetEDDNforNewCommanders = false; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
