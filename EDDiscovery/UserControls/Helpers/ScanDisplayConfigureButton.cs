@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace EDDiscovery.UserControls
 {
-    // Control providing edsm/spansh settings, saving loading
+    // Control providing scan display settings
 
     public class ScanDisplayConfigureButton : ExtendedControls.ExtButtonWithNewCheckedListBox
     {
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
                 new ExtendedControls.CheckedIconUserControl.Item("starclass", "Show Classes of Stars".T(EDTx.UserControlScan_StarClass), global::EDDiscovery.Icons.Controls.ShowStarClasses),
                 new ExtendedControls.CheckedIconUserControl.Item("planetclass", "Show Classes of Planets".T(EDTx.UserControlScan_PlanetClass), global::EDDiscovery.Icons.Controls.ShowPlanetClasses),
                 new ExtendedControls.CheckedIconUserControl.Item("dist", "Show distance of bodies".T(EDTx.UserControlScan_Distance), global::EDDiscovery.Icons.Controls.ShowDistances),
-                new ExtendedControls.CheckedIconUserControl.Item("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways),
+                // no longer used new ExtendedControls.CheckedIconUserControl.Item("sys", "Show system and value in main display".T(EDTx.UserControlScan_SystemValue), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways),
                 new ExtendedControls.CheckedIconUserControl.Item("starsondiffline", "Show bodyless stars on separate lines".T(EDTx.UserControlScan_StarsOnDiffLines), global::EDDiscovery.Icons.Controls.ShowStarClasses),
                 }, 
                 Setting,
