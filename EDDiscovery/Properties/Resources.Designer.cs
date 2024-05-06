@@ -169,6 +169,17 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 19 Phi-2 Ceti,&quot;CMDR Ziljan recommends this tourist destination as &quot;&quot;A little known gem in an inhabited, ringed, Earth-like world, discovered in the heart of the human bubble, orbiting a blue ringed gas giant.&quot;&quot;&quot;,-12.31,-49.22,-8.28
+        ///2MASS J02351897+6131236,This system was recommended as a must see destination by Commander Draco25240 for its bountiful collection of stars.,-4192.72,114.50,-4190.63
+        ///64 Piscium,&quot;Commander Demilikos suggests this magnificent vista with multiple stars in close vicinity, and just  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string TouristBeacons {
+            get {
+                return ResourceManager.GetString("TouristBeacons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://coriolis.io/import?.
         /// </summary>
         public static string URLCoriolis {

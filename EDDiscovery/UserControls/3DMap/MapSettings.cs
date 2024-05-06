@@ -31,9 +31,9 @@ namespace EDDiscovery.UserControls.Map3D
         public bool TravelPathTapeStars { get { return travelpath?.EnableStars ?? true; } set { if (travelpath != null) travelpath.EnableStars = value; glwfc.Invalidate(); } }
         public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
         public void TravelPathRefresh() { if (travelpath != null) UpdateTravelPath(); }   // travelpath.Refresh() manually after these have changed
-        public DateTime TravelPathStartDateUTC { get { return travelpath?.TravelPathStartDateUTC ?? new DateTime(2014, 12, 14); } set { if (travelpath != null && travelpath.TravelPathStartDateUTC != value) { travelpath.TravelPathStartDateUTC = value; } } }
+        public DateTime TravelPathStartDateUTC { get { return travelpath?.TravelPathStartDateUTC ?? new DateTime(2014, 12, 14, 1, 1, 1, DateTimeKind.Utc); } set { if (travelpath != null && travelpath.TravelPathStartDateUTC != value) { travelpath.TravelPathStartDateUTC = value; } } }
         public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
-        public DateTime TravelPathEndDateUTC { get { return travelpath?.TravelPathEndDateUTC ?? new DateTime(2040, 1, 1); } set { if (travelpath != null && travelpath.TravelPathEndDateUTC != value) { travelpath.TravelPathEndDateUTC = value; } } }
+        public DateTime TravelPathEndDateUTC { get { return travelpath?.TravelPathEndDateUTC ?? new DateTime(2040, 1, 1, 1, 1, 1, DateTimeKind.Utc); } set { if (travelpath != null && travelpath.TravelPathEndDateUTC != value) { travelpath.TravelPathEndDateUTC = value; } } }
         public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
         public bool UserImagesEnable { get { return usertexturebitmaps?.Enable ?? false; } set { if (usertexturebitmaps != null) { usertexturebitmaps.Enable = value; glwfc.Invalidate(); } } }
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls.Map3D
             TravelPathTapeDisplay = defaults.GetSetting("TPD", true);
             TravelPathTapeStars = defaults.GetSetting("TPStars", true);
             TravelPathTextDisplay = defaults.GetSetting("TPText", true);
-            TravelPathStartDateUTC = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
+            TravelPathStartDateUTC = defaults.GetSetting("TPSD", EliteDangerousCore.EliteReleaseDates.GameRelease);
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
             TravelPathEndDateUTC = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
             TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
