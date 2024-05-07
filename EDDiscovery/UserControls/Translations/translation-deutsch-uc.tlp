@@ -5,8 +5,6 @@ SECTION UserControlBookmarks
 .ColBookmarkName: "Bookmark Name" => "Lesezeichenname"
 .ColDescription: "Description" => "Beschreibung"
 .labelSearch: "Search" => "Suche"
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Gehe zu in der 3D-Karte"
-.openInEDSMToolStripMenuItem: "Open in EDSM" => "Öffne in EDSM"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Lösche ausgewähltes Lesezeichen"
 .buttonNew.ToolTip: "New Bookmark" => "Neues Lesezeichen"
 .buttonEdit.ToolTip: "Edit Selected Bookmark" => "Bearbeite ausgewähltes Lesezeichen"
@@ -16,7 +14,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "System konnte nicht gefunden werden - wurde nicht synchronisiert oder EDSM ist nicht verfügbar"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Importiere Lesezeichen aus CSV-Datei nach EDD"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exportiere Lesezeichen in CSV-Datei"
-.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" => "Bearbeite Lesezeichen des aktuellen Systems"
+.extButtonEditSystem.ToolTip: "New bookmark on current system" => "Bearbeite Lesezeichen des aktuellen Systems"
 .extButtonNewRegion.ToolTip: "New Region Bookmark" => "Neues Regionslesezeichen"
 .ColTags: "Tags" => "Marke"
 .buttonFilter.ToolTip: "Filter out entries based on tag" => "Einträge anhand von Marke filtern"
@@ -222,6 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Vergrößere das Ingenieursgitter and zeige mehr Ingenieursdetails"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Setze alle 'gewollt'-Werte auf 0"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." = UserControlEngineering.chkNotHistoric.ToolTip
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
@@ -1304,9 +1303,6 @@ SECTION CaptainsLogEntries
 .buttonNew.ToolTip: "New Entry" => "Neuer Eintrag"
 .textBoxFilter.ToolTip: "Search for Log Entries" => "Suche nach Protokolleinträgen"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Gehe zu in 3D-Karte"
-.openInEDSMToolStripMenuItem: "Open in EDSM" => "Auf EDSM öffnen"
-.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "In Scanpaneelansicht öffnen"
 .buttonFilter.ToolTip: "Filter out entries based on tag" = UserControlBookmarks.buttonFilter.ToolTip
 
 SECTION UserControlTrilateration
