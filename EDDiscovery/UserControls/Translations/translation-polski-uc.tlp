@@ -5,8 +5,6 @@ SECTION UserControlBookmarks
 .ColBookmarkName: "Bookmark Name" => "Nazwa Zakładki"
 .ColDescription: "Description" => "Opis"
 .labelSearch: "Search" => "Szukaj"
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Pokaż na mapie 3D"
-.openInEDSMToolStripMenuItem: "Open in EDSM" => "Otwórz w EDSM"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Usuń zaznaczoną zakładkę"
 .buttonNew.ToolTip: "New Bookmark" => "Nowa zakładka"
 .buttonEdit.ToolTip: "Edit Selected Bookmark" => "Edytuj Zaznaczoną Zakładkę"
@@ -16,7 +14,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Importuj zakładki do EDD z pliku CSV"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Eksportuj zakładki do pliku CSV"
-.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
+.extButtonEditSystem.ToolTip: "New bookmark on current system" @
 .extButtonNewRegion.ToolTip: "New Region Bookmark" @
 .ColTags: "Tags" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
@@ -222,6 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
@@ -259,7 +258,7 @@ SECTION UserControlExpedition
 .extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Importuj Nav trasę"
 .extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
 .buttonExtExport.ToolTip: "Export to File" => "Eksportuj"
-.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" @
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Dodaj Układy"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
@@ -1304,9 +1303,6 @@ SECTION CaptainsLogEntries
 .buttonNew.ToolTip: "New Entry" => "Nowy Wpis"
 .textBoxFilter.ToolTip: "Search for Log Entries" => "Szukaj Wpisów Dziennika"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Pokaż na Mapie 3D"
-.openInEDSMToolStripMenuItem: "Open in EDSM" = UserControlBookmarks.openInEDSMToolStripMenuItem
-.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "Pokaż w Widoku Panelu Skanu"
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION UserControlTrilateration

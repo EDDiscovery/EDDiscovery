@@ -5,8 +5,6 @@ SECTION UserControlBookmarks
 .ColBookmarkName: "Bookmark Name" => "Название закладки"
 .ColDescription: "Description" => "Описание"
 .labelSearch: "Search" => "Поиск"
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Показать на 3D-карте"
-.openInEDSMToolStripMenuItem: "Open in EDSM" => "Открыть в EDSM"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Удалить выбранную закладку"
 .buttonNew.ToolTip: "New Bookmark" => "Новая закладка"
 .buttonEdit.ToolTip: "Edit Selected Bookmark" => "Изменить выбранную закладку"
@@ -16,7 +14,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Импорт закладок из csv-файла в EDD"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Экспорт закладок в csv-файл"
-.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
+.extButtonEditSystem.ToolTip: "New bookmark on current system" @
 .extButtonNewRegion.ToolTip: "New Region Bookmark" @
 .ColTags: "Tags" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
@@ -188,7 +186,7 @@ SECTION SearchStars
 SECTION DataGridViewStarResults
 
 .3d: "Go to star on 3D Map" => "Показать систему на 3D-карте"
-.EDSM: "View on EDSM" = UserControlBookmarks.openInEDSMToolStripMenuItem
+.EDSM: "View on EDSM" => "Открыть в EDSM"
 .Spansh: "View on Spansh" @
 .Data: "View Scan Display" => "Показать данные сканирования"
 .Goto: "View on History Grid" @
@@ -222,6 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
@@ -259,7 +258,7 @@ SECTION UserControlExpedition
 .extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Импорт Nav маршрута"
 .extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
 .buttonExtExport.ToolTip: "Export to File" = ImportExportForm
-.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Показать на 3D-карте"
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Добавить системы"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
@@ -940,7 +939,7 @@ SECTION UserControlStarDistance
 .labelExtMin: "Min" => "Мин."
 .labelExtMax: "Max" = UserControlEngineering.MaxCol
 .addToTrilaterationToolStripMenuItem1: "Add to Trilateration" => "Добавить в трилатерацию"
-.viewOnEDSMToolStripMenuItem1: "View on EDSM" = UserControlBookmarks.openInEDSMToolStripMenuItem
+.viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
 .checkBoxCube.ToolTip: "Check to indicate use a cube instead of a sphere for distances" => "Для расчета расстояний использовать не сферу, а куб"
 .textMinRadius.ToolTip: "Minimum star distance in ly" => "Минимальная дистанция до системы (св. л.)"
 .textMaxRadius.ToolTip: "Maximum star distance in ly" => "Максимальная дистанция до системы (св. л.)"
@@ -1304,9 +1303,6 @@ SECTION CaptainsLogEntries
 .buttonNew.ToolTip: "New Entry" => "Новая запись"
 .textBoxFilter.ToolTip: "Search for Log Entries" => "Поиск в заметках"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
-.openInEDSMToolStripMenuItem: "Open in EDSM" = UserControlBookmarks.openInEDSMToolStripMenuItem
-.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" = DataGridViewStarResults.Data
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION UserControlTrilateration

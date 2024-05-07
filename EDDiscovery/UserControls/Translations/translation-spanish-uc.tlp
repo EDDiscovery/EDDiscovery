@@ -5,8 +5,6 @@ SECTION UserControlBookmarks
 .ColBookmarkName: "Bookmark Name" => "Nombre del marcador"
 .ColDescription: "Description" => "Descripción"
 .labelSearch: "Search" => "Búsqueda"
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Ir a mapa 3D"
-.openInEDSMToolStripMenuItem: "Open in EDSM" => "Abrir en EDSM"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Eliminar marcador seleccionado"
 .buttonNew.ToolTip: "New Bookmark" => "Nuevo marcador"
 .buttonEdit.ToolTip: "Edit Selected Bookmark" => "Editar marcador seleccionado"
@@ -16,7 +14,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "No se pudo encontrar el sistema - no se ha sincronizado o EDSM no está disponible"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Importar marcadores a EDD desde un archivo CSV"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exportar marcadores a archivo CSV"
-.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" => "Editar marcador en el sistema actual"
+.extButtonEditSystem.ToolTip: "New bookmark on current system" => "Editar marcador en el sistema actual"
 .extButtonNewRegion.ToolTip: "New Region Bookmark" => "Nuevo Marcador de Región"
 .ColTags: "Tags" => "Etiquetas"
 .buttonFilter.ToolTip: "Filter out entries based on tag" => "Filtrar entradas en base a etiqueta"
@@ -222,6 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Aumentar el tamaño de la cuadrícula de ingenieros y mostrar más detalles del ingeniero"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Cuando está en rojo, use los materiales en el cursor para estimar. cuando está en verde, use siempre los materiales más recientes"
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
@@ -1304,9 +1303,6 @@ SECTION CaptainsLogEntries
 .buttonNew.ToolTip: "New Entry" => "Nueva entrada"
 .textBoxFilter.ToolTip: "Search for Log Entries" => "Buscar entradas de registro"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
-.openInEDSMToolStripMenuItem: "Open in EDSM" = UserControlBookmarks.openInEDSMToolStripMenuItem
-.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "Abrir una vista del panel de escaneo"
 .buttonFilter.ToolTip: "Filter out entries based on tag" => "Filtrar entradas en base a Etiqueta"
 
 SECTION UserControlTrilateration

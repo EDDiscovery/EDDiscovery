@@ -5,8 +5,6 @@ SECTION UserControlBookmarks
 .ColBookmarkName: "Bookmark Name" => "书签名称"
 .ColDescription: "Description" => "描述"
 .labelSearch: "Search" => "搜索"
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "跳转至3D星图"
-.openInEDSMToolStripMenuItem: "Open in EDSM" => "在EDSM网站上打开"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "删除选中的书签"
 .buttonNew.ToolTip: "New Bookmark" => "新建书签"
 .buttonEdit.ToolTip: "Edit Selected Bookmark" => "编辑选中的书签"
@@ -16,7 +14,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
-.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
+.extButtonEditSystem.ToolTip: "New bookmark on current system" @
 .extButtonNewRegion.ToolTip: "New Region Bookmark" @
 .ColTags: "Tags" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
@@ -187,7 +185,7 @@ SECTION SearchStars
 
 SECTION DataGridViewStarResults
 
-.3d: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.3d: "Go to star on 3D Map" => "跳转至3D星图"
 .EDSM: "View on EDSM" => "在EDSM网站上查看"
 .Spansh: "View on Spansh" @
 .Data: "View Scan Display" => "查看该条目的数据"
@@ -222,6 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
@@ -313,7 +312,7 @@ SECTION UserControlJournalGrid
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "取消排序"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "跳至行"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
 .viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "对这条项目运行脚本"
@@ -958,7 +957,7 @@ SECTION UserControlStarList
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .labelTime: "Time" = Time
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
 .viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .viewOnSpanshToolStripMenuItem: "View on Spansh" @
 .setNoteToolStripMenuItem: "Set Note" => "添加笔记"
@@ -1229,7 +1228,7 @@ SECTION UserControlTravelGrid
 .createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "创建/编辑书签"
 .toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" = UserControlJournalGrid.toolStripMenuItemStartStop
 .gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "跳至下一个起点/终点的标记"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = UserControlBookmarks.toolStripMenuItemGotoStar3dmap
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
 .viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .starMapColourToolStripMenuItem: "Star Map Colour..." => "星图上的颜色..."
 .addToTrilaterationToolStripMenuItem: "Add to ..." => "添加至..."
@@ -1304,9 +1303,6 @@ SECTION CaptainsLogEntries
 .buttonNew.ToolTip: "New Entry" @
 .textBoxFilter.ToolTip: "Search for Log Entries" @
 .labelSearch: "Search" @
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" @
-.openInEDSMToolStripMenuItem: "Open in EDSM" @
-.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION UserControlTrilateration

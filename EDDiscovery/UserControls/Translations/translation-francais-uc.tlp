@@ -5,8 +5,6 @@ SECTION UserControlBookmarks
 .ColBookmarkName: "Bookmark Name" => "Nom du marque-page"
 .ColDescription: "Description" @
 .labelSearch: "Search" => "Recherche"
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Aller dans la carte 3D"
-.openInEDSMToolStripMenuItem: "Open in EDSM" => "Ouvrir dans EDSM"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Supprimer le marque-page selectionné"
 .buttonNew.ToolTip: "New Bookmark" => "Nouveau marque-page"
 .buttonEdit.ToolTip: "Edit Selected Bookmark" => "Modifier le marque-page selectionné"
@@ -16,7 +14,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - il n'a pas été synchronisé ou EDSM est indisponible"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Importer des marque-pages vers EDD depuis un fichier CSV"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exporter des marque-pages vers un fichier CSV"
-.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
+.extButtonEditSystem.ToolTip: "New bookmark on current system" @
 .extButtonNewRegion.ToolTip: "New Region Bookmark" @
 .ColTags: "Tags" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
@@ -222,6 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
@@ -1304,9 +1303,6 @@ SECTION CaptainsLogEntries
 .buttonNew.ToolTip: "New Entry" => "Nouvelle entrée"
 .textBoxFilter.ToolTip: "Search for Log Entries" => "Rechercher dans les entrées de log"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
-.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Aller à la carte 3D"
-.openInEDSMToolStripMenuItem: "Open in EDSM" = UserControlBookmarks.openInEDSMToolStripMenuItem
-.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" => "Ouvrir un panneau de visualisation de scan"
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
 
 SECTION UserControlTrilateration
