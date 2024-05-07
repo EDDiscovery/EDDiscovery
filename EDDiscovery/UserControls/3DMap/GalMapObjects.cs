@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls.Map3D
         }
 
         public Font Font { get; set; } = new Font("Arial", 8.5f);
-        public bool GetGalObjectTypeEnable(string id) { return !State.ContainsKey(id) || State[id] == true; }
+        public bool GetGalObjectTypeEnableState(string id) { return !State.ContainsKey(id) || State[id] == true; }
 
         public bool Enable { get { return objectshader.Enable; } }
 
@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls.Map3D
             string s = "";
             foreach (var o in GalMapType.VisibleTypes)
             {
-                s += GetGalObjectTypeEnable(o.TypeName) ? "+," : "-,";
+                s += GetGalObjectTypeEnableState(o.TypeName) ? "+," : "-,";
             }
             return s;
         }
@@ -236,12 +236,14 @@ namespace EDDiscovery.UserControls.Map3D
 
             foreach (var o in renderablegalmapobjects)
             {
-                bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);
+                // for all types in this object, are we on?. If any are on, we are on
+
+                bool en = o.GalMapTypes.Where(x => GetGalObjectTypeEnableState(x.TypeName)).Select(x => x).Count() > 0;
                 //System.Diagnostics.Debug.WriteLine($"3dmap galmapobject {o.GalMapType.TypeName} : {o.GalMapType.Description} : `{o.NameList}` Enabled : {en}");
 
                 if (en)
                 {
-                    modelworldbuffer.Write(new Vector4(o.Points[0].X, o.Points[0].Y, o.Points[0].Z, o.GalMapType.Index + (!Animate(o.GalMapType.VisibleType.Value) ? 65536 : 0)));
+                    modelworldbuffer.Write(new Vector4(o.Points[0].X, o.Points[0].Y, o.Points[0].Z, o.GalMapTypes[0].Index + (!Animate(o.GalMapTypes[0].VisibleType.Value) ? 65536 : 0)));
                     indextoentry[mwpos++] = entry;
                     Positions.Add(new ObjectPosXYZ(o.Points[0].X, o.Points[0].Y, o.Points[0].Z));
                 }
@@ -276,7 +278,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                     foreach (var o in renderablegalmapobjects)
                     {
-                        bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);      // we need to account for ones not enabled, since we rewrite the model buffer list on each enable
+                        bool en = o.GalMapTypes.Where(x => GetGalObjectTypeEnableState(x.TypeName)).Select(x => x).Count() > 0;
                         if (en)
                         {
                             if (index == (int)res[0].Y)

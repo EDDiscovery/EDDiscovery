@@ -116,11 +116,11 @@ namespace EDDiscovery.Actions
         void DumpGMO(ActionProgramRun ap, string nprefix, EliteDangerousCore.GMO.GalacticMapObject g)
         {
             ap[nprefix + "Name"] = g.NameList;
-            ap[nprefix + "Type"] = g.GalMapType.VisibleType?.ToString() ?? g.GalMapType.Group.ToString();
+            ap[nprefix + "Type"] = g.GalMapTypes[0].VisibleType != null ? g.GalMapTypes[0].VisibleType.ToString() : g.GalMapTypes[0].Group.ToString();
             ap[nprefix + "Search"] = g.StarSystem?.Name ?? "Unknown";
             ap[nprefix + "MapURL"] = g.GalMapUrl;
             ap[nprefix + "Description"] = g.Description;
-            ap[nprefix + "Group"] = g.GalMapType.Group.ToString();
+            ap[nprefix + "Group"] = g.GalMapTypes[0].Group.ToString();
 
             if (g.Points != null)
             {

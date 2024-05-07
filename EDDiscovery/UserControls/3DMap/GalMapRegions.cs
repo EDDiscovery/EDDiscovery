@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             foreach (GalacticMapObject gmo in galmap.GalacticMapObjects)
             {
-                if (gmo.GalMapType.Group == GalMapType.GroupType.Regions)
+                if (gmo.GalMapTypes[0].Group == GalMapType.GroupType.Regions)
                 {
                     string gmoname = gmo.NameList;
 

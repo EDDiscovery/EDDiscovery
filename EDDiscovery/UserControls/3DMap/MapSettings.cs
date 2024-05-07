@@ -69,7 +69,7 @@ namespace EDDiscovery.UserControls.Map3D
                 glwfc.Invalidate();
             }
         }
-        public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? true; }
+        public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnableState(id) ?? true; }
         public string GetAllGalObjectTypeEnables() { return galmapobjects?.GetAllEnables() ?? ""; }
         public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Enable = value; glwfc.Invalidate(); } }
         public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
