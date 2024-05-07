@@ -168,13 +168,13 @@ namespace EDDiscovery
 #endif
             // if no debugger or in release build or trace log set.
 
-            if (!Debugger.IsAttached || releasebuild || EDDOptions.Instance.TraceLog != null)    
+            if (!Debugger.IsAttached || releasebuild || EDDOptions.Instance.TraceLog != null)
             {
                 TraceLog.RedirectTrace(logpath, EDDOptions.Instance.TraceLog);
 
                 TraceLog.LogFileWriterException += ex =>            // now we can attach the log writing highter into it
                 {
-                    LogLineHighlight($"Log Writer Exception: {ex}");
+                    LogLineColor($"Log Writer Exception: {ex}",Color.Red);
                 };
             }
 
@@ -200,10 +200,9 @@ namespace EDDiscovery
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Init config finished");
 
-            Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
+            Trace.WriteLine($"Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
             PreInitDebug();        // call any debug we want at this point
-
 
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
@@ -507,10 +506,10 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.TabsReset)
             {
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
-                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("ProfilePowerOnID");                 // back to base profile
+               UserDatabase.Instance.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
+               UserDatabase.Instance.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
+               UserDatabase.Instance.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+               UserDatabase.Instance.DeleteKey("ProfilePowerOnID");                 // back to base profile
             }
 
             // Make sure the primary splitter is set up.. and rational
@@ -549,8 +548,8 @@ namespace EDDiscovery
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
 
-
             PostInitDebug();        // call any debug we want at this point
+
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -559,7 +558,11 @@ namespace EDDiscovery
         {
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load");
 
-            if (!EDDOptions.Instance.NoTabs)        // load the tabs so when shown is done they are there..
+            // here we install the new may'24 important message hook, now the window has been created. Any *** messages get pumped out
+            TraceLog.ImportantMessage += ex => { LogLineColor(ex, Color.FromArgb(255,255,40,40)); };
+
+            // load the tabs so when shown is done they are there..
+            if (!EDDOptions.Instance.NoTabs)        
                 tabControlMain.LoadTabs();
 
             Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
