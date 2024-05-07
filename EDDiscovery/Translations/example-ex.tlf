@@ -17,12 +17,14 @@ Off: "Off" @
 Unknown: "Unknown" @
 Information: "Information" @
 NoPos: "No Pos" @
-RemoveAll : "Remove All" @
+RemoveAll: "Remove All" @
 
 SECTION StartUp
+
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
 
 SECTION DataGridView
+
 .WordWrap: "Word Wrap (Override)" @
 
 SECTION SafeModeForm
@@ -45,6 +47,7 @@ SafeModeForm: "EDDiscovery Safe Mode" @
 .buttonResetTheme: "Reset Theme" @
 
 SECTION InfoForm
+
 .buttonAcknowledge: "Acknowledge" @
 
 SECTION PopOutInfo
@@ -262,7 +265,6 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
 .adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
-
 .WSE: "Web server enabled" @
 .WSF: "Web server failed to start" @
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" @
@@ -283,7 +285,6 @@ SECTION EDDiscoveryController
 .RD: "Refresh Displays" @
 .HRC: "History refresh complete." @
 .EXPD: "Checking for new Expedition data" @
-
 
 SECTION AddOnManagerForm
 
@@ -311,14 +312,12 @@ SECTION AddOnManagerForm
 .Failed: "Add-on failed to update. Check files for read only status" @
 .DeleteWarn: "Do you really want to delete {0}" @
 
-
 SECTION ImportExportForm
 
 ImportExportForm: "Export data" @
 .buttonExport: "Export" @
 .ImportTitle: "Import data" @
 .ImportButton: "Import" @
-
 .labelCVSSep: "CSV Separator" @
 .radioButtonComma: "Comma" @
 .radioButtonSemiColon: "Semicolon" @
@@ -326,12 +325,9 @@ ImportExportForm: "Export data" @
 .checkBoxCustomAutoOpen: "Open" @
 .labelUTCEnd: "UTC" @
 .labelUTCStart: "UTC" @
-
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
-
-
 
 SECTION GalaxySectorSelect
 
@@ -418,41 +414,40 @@ SECTION DataGridViewDialogs
 SECTION KeyForm
 
 KeyForm: "Define Key Sequence" @
-KeyForm.radioButtonUp: "Up" @
-KeyForm.radioButtonDown: "Down" @
-KeyForm.radioButtonPress: "Press" @
-KeyForm.checkBoxShift: "Shift" @
-KeyForm.checkBoxCtrl: "Ctrl" @
-KeyForm.checkBoxAlt: "Alt" @
-KeyForm.checkBoxKey: "Press Key" @
-KeyForm.labelNextDelay: "Current Delay" @
-KeyForm.labelSelKeys: "Select Key" @
-KeyForm.labelDelay: "Start Delay(ms)" @
-KeyForm.labelSendTo: "Send To" @
-KeyForm.buttonReset: "Reset" @
-KeyForm.labelKeys: "Keys" @
-KeyForm.buttonDelete: "Delete" @
-KeyForm.buttonNext: "Next" @
-KeyForm.buttonTest: "Test" @
+.radioButtonUp: "Up" @
+.radioButtonDown: "Down" @
+.radioButtonPress: "Press" @
+.checkBoxShift: "Shift" @
+.checkBoxCtrl: "Ctrl" @
+.checkBoxAlt: "Alt" @
+.checkBoxKey: "Press Key" @
+.labelNextDelay: "Current Delay" @
+.labelSelKeys: "Select Key" @
+.labelDelay: "Start Delay(ms)" @
+.labelSendTo: "Send To" @
+.buttonReset: "Reset" @
+.labelKeys: "Keys" @
+.buttonDelete: "Delete" @
+.buttonNext: "Next" @
+.buttonTest: "Test" @
 .PK: "Press Key" @
 .NOPN: "Name a process to test sending keys" @
 .KERR: "Error {0} - check entry" @
 .NOP: "No process names to send keys to" @
 
-
 SECTION ExtPanelRollUp
+
 .RUPPin: "Pin to stop this menu bar disappearing automatically" @
 .RUPMarker: "Click or hover over this to unroll the menu bar" @
 
 SECTION CommanderForm
+
 .CAPILoggingin: "Logging in" @
 .CAPIDisabled: "Disabled" @
 .CAPILogout: "Logout" @
 .CAPILoggedin: "Logged in" @
 .CAPILogin: "Login" @
 .CAPIAwaitLogin: "Await Log in" @
-
-// I would not bother translating the below, but its here for completeness
 
 SECTION SpeechConfigure
 
@@ -471,7 +466,8 @@ SpeechConfigure: "Configure Speech" @
 .checkBoxCustomR: "Override" @
 .checkBoxCustomV: "Override" @
 
-Section WaveConfigureDialog
+SECTION WaveConfigureDialog
+
 WaveConfigureDialog: "Configure Wave" @
 .buttonExtDevice: "Device" @
 .labelStartTrigger: "Start Trigger" @
@@ -484,7 +480,8 @@ WaveConfigureDialog: "Configure Wave" @
 .checkBoxCustomV: "Override" @
 .labelVolume: "Volume" @
 
-Section SoundEffectsDialog
+SECTION SoundEffectsDialog
+
 SoundEffectsDialog: "Sound Effects" @
 .labelEcho: "Echo" @
 .buttonExtTest: "Test" @
@@ -517,16 +514,19 @@ SoundEffectsDialog: "Sound Effects" @
 .labelDistortionCentreFreq: "Cent Freq" @
 .labelDistortionFreqWidth: "Freq Width" @
 
-Section AudioDeviceConfigure
+SECTION AudioDeviceConfigure
+
 AudioDeviceConfigure: "Audio Device Select" @
 .labelText: "Select Device" @
 
-Section ActionPackEditPackForm
+SECTION ActionPackEditPackForm
+
 .buttonInstallationVars: "Install Parameters" @
 .labelEditProg: "Program" @
 
-Section ActionProgramEditForm
-ActionProgramEditForm : "Action Program" @
+SECTION ActionProgramEditForm
+
+ActionProgramEditForm: "Action Program" @
 .labelName: "Name:" @
 .buttonExtDisk: "As File" @
 .buttonExtLoad: "Load" @
@@ -535,17 +535,18 @@ ActionProgramEditForm : "Action Program" @
 .extButtonHeader: "Header" @
 
 SECTION ActionPackEditForm
+
 .ci: "Configuration items for installation - specialist use" @
 .ip: "Input parameters to pass to program on run" @
 .df: "Define Variable:" @
 .cp: "Variables to pass into called program" @
 
-ActionPackVariablesForm.gv: "Global User variables to pass to program on run" @
+SECTION ActionPackVariablesForm
 
+.gv: "Global User variables to pass to program on run" @
 
 include translation-example-uc.tlp
 
 include translation-example-je.tlp
 
 include translation-example-ed.tlp
-
