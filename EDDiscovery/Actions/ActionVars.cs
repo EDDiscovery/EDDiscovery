@@ -231,6 +231,7 @@ namespace EDDiscovery.Actions
                     vars[mp + "RewardCommodity"] = ms.Completed.CommoditiesList(false,false);
                     vars[mp + "RewardPermit"] = ms.Completed.PermitsList(false, false);
                     vars[mp + "RewardMaterials"] = ms.Completed.MaterialList(false, false);
+                    vars[mp + "FactionEffects"] = ms.Completed.FactionEffectsList(false, false);
                 }
                 i++;
             }
