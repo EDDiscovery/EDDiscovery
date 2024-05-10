@@ -211,6 +211,7 @@ namespace EDDiscovery.Actions
                 vars[mp + "Influence"] = ms.Mission.Influence;
                 vars[mp + "Reputation"] = ms.Mission.Reputation;
                 vars[mp + "Commodity"] = ms.Mission.CommodityLocalised.Alt(ms.Mission.FriendlyCommodity);
+                vars[mp + "CommodityTranslated"] = ms.Mission.FriendlyCommodity;
 
                 vars[mp + "TargetType"] = ms.Mission.TargetType;
                 vars[mp + "TargetTypeFriendly"] = ms.Mission.TargetTypeFriendly;
