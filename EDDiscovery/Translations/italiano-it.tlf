@@ -545,8 +545,8 @@ SECTION ActionPackVariablesForm
 
 .gv: "Global User variables to pass to program on run" @
 
-include translation-Italiano-uc.tlp
+include translation-italiano-uc.tlp
 
-include translation-Italiano-je.tlp
+include translation-italiano-je.tlp
 
-include translation-Italiano-ed.tlp
+include translation-italiano-ed.tlp
