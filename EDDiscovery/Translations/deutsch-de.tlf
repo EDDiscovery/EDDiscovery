@@ -130,7 +130,7 @@ SECTION PopOutInfo
 .Grid.Title: "Grid" => "Gitter"
 .SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Splitter (zum Einfügen beliebiger Paneele)"
 .SplitterControl.Title: "Splitter" => "Splitter"
-.PanelSelector.Description: "" @
+.PanelSelector.Description: "" => ""
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Suche"
 .Search.Description: "Search" = PopOutInfo.Search.Title

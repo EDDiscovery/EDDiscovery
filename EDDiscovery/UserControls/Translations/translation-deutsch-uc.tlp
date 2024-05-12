@@ -220,7 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Vergrößere das Ingenieursgitter and zeige mehr Ingenieursdetails"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Setze alle 'gewollt'-Werte auf 0"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." = UserControlEngineering.chkNotHistoric.ToolTip
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" => "Schiebe gewollte Gegenstände zum Ressourcenpanel"
 
 SECTION UserControlEstimatedValues
 
