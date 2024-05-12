@@ -7,3 +7,4 @@ eddtest normalisetranslate %cd%\eddiscovery\translations 2 example-ex portugues-
 eddtest normalisetranslate %cd%\eddiscovery\translations 2 example-ex russian-ru
 eddtest normalisetranslate %cd%\eddiscovery\translations 2 example-ex spanish-es
 del report.txt
+del crowdin*.json
