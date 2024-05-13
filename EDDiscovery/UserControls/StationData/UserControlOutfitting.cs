@@ -40,7 +40,8 @@ namespace EDDiscovery.UserControls
             DBBaseName = "Outfitting";
 
             dataGridViewOutfitting.MakeDoubleBuffered();
-            dataGridViewOutfitting.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+
+            dataGridViewOutfitting.SetWordWrap(true);
 
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
@@ -185,7 +186,7 @@ namespace EDDiscovery.UserControls
                     string itemname = item.TranslatedModuleName.StartsWith(item.TranslatedModTypeString) ? item.TranslatedModuleName.Mid(item.TranslatedModTypeString.Length+1) : item.TranslatedModuleName;
 
                     if (ItemData.TryGetShipModule(item.FDName, out ItemData.ShipModule sm, false))    // find if we have it
-                        itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
+                        itemname = itemname.AppendPrePad(sm.NonEngineeredProperties, ", ");
 
                     object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), item.BuyPrice.ToString("N0") };
                     dataGridViewOutfitting.Rows.Add(rowobj);
@@ -213,10 +214,10 @@ namespace EDDiscovery.UserControls
                 string info = "?";
                 if (ItemData.TryGetShipModule(item.FDName, out ItemData.ShipModule sm, false))    // find
                 {
-                    info = sm.InfoMassPower(false);
+                    info = sm.NonEngineeredProperties;
                 }
 
-                object[] rowobj = { item.TranslatedModTypeString, item.TranslatedModuleName, info, sm.Mass.ToString("0.#t"),item.BuyPrice.ToString("N0") };
+                object[] rowobj = { item.TranslatedModTypeString, item.TranslatedModuleName, info, sm?.Mass?.ToString("0.#t") ?? "",item.BuyPrice.ToString("N0") };
                 dataGridViewOutfitting.Rows.Add(rowobj);
             }
 

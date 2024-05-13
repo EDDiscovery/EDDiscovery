@@ -369,11 +369,30 @@ namespace EDDiscovery.UserControls
 
             if (si != null)
                 infoentry = si.ShipNameIdentType;
-            else if (sm.AmmoHopper.HasValue)
+            else
             {
-                infoentry = sm.AmmoHopper.Value.ToString();
-                if (sm.AmmoClip.HasValue)
-                    infoentry += "/" + sm.AmmoClip.ToString();
+                if (sm.AmmoHopper.HasValue)
+                {
+                    infoentry = infoentry.AppendPrePad($"Current Hopper: {sm.AmmoHopper.Value.ToString()}", ", ");
+                    if (sm.AmmoClip.HasValue)
+                        infoentry += "/" + sm.AmmoClip.ToString();
+                }
+                
+                if (sm.ModuleData != null)
+                {
+                    if (sm.Engineering == null)
+                    {
+                        infoentry = infoentry.AppendPrePad(sm.ModuleData.NonEngineeredProperties, ", ");
+                    }
+                    else
+                    {
+                        infoentry = infoentry.AppendPrePad("Module Engineered" , ", ");
+                    }
+                }
+                else
+                {
+
+                }
             }
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
