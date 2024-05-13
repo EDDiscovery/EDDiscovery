@@ -382,7 +382,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (sm.Engineering == null)
                     {
-                        infoentry = infoentry.AppendPrePad(sm.ModuleData.NonEngineeredProperties, ", ");
+                        infoentry = infoentry.AppendPrePad(sm.ModuleData.PropertiesAsText, ", ");
                     }
                     else
                     {
