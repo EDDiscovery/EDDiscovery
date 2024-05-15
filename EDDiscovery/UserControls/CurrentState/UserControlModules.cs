@@ -30,6 +30,7 @@ namespace EDDiscovery.UserControls
         private string storedmoduletext;
         private string travelhistorytext;
         private string allmodulestext;
+        private string allknownmodulestext;
 
         private HistoryEntry last_he = null;
         private ShipInformation last_si = null;
@@ -62,6 +63,7 @@ namespace EDDiscovery.UserControls
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
             allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
+            allknownmodulestext = "All Known Modules";
             dataGridViewModules.MakeDoubleBuffered();
 
             displayfilters = GetSetting(dbDisplayFilters, "").Split(';');
@@ -171,6 +173,12 @@ namespace EDDiscovery.UserControls
             {
                 update = !Object.ReferenceEquals(he.ShipInformation, last_si);      
             }
+            else if (comboBoxShips.Text == allknownmodulestext )           
+            {
+                last_he = he;
+                if (dataGridViewModules.Rows.Count == 0)        // if nothing display, display, else ignore subsequence updates
+                    Display();
+            }
             else
             {
                 ShipInformation si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);      // grab SI of specific ship (may be null)
@@ -242,7 +250,7 @@ namespace EDDiscovery.UserControls
                     foreach (var key in si.Modules.Keys)
                     {
                         ShipModule sm = si.Modules[key];
-                        AddModuleLine(sm,si);
+                        AddModuleLine(sm, si);
                     }
                     allmodulesref.Add(si);      // we add ref in effect to the list of modules we extracted info from - this is used to see if they changed during the update abovevi
                 }
@@ -263,6 +271,30 @@ namespace EDDiscovery.UserControls
                     dataGridViewModules.Rows.Add(rowobj);
                     allmodulesref.Add(sm);
                 }
+            }
+            else if (comboBoxShips.Text == allknownmodulestext)
+            {
+                labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
+
+                var modules = ItemData.GetShipModules(true, true, true, true, true, compressarmourtosidewinderonly: false);
+                foreach( var kvp in modules)
+                {
+                    ItemData.ShipModule sm = kvp.Value;
+                    object[] rowobj = {
+                                    sm.TranslatedModTypeString,
+                                    sm.TranslatedModName,
+                                    "",
+                                    sm.PropertiesAsText,
+                                    sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
+                                    "",
+                                    "",
+                                    "",
+                                };
+
+                    dataGridViewModules.Rows.Add(rowobj);
+
+                }
+
             }
             else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
@@ -457,7 +489,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Word wrap
-
+        
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
             PutSetting("WordWrap", extCheckBoxWordWrap.Checked);
@@ -482,6 +514,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add(travelhistorytext);
             comboBoxShips.Items.Add(storedmoduletext);
             comboBoxShips.Items.Add(allmodulestext);
+            comboBoxShips.Items.Add(allknownmodulestext);
 
             var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
             var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
