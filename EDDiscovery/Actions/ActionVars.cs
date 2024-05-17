@@ -179,7 +179,7 @@ namespace EDDiscovery.Actions
                     vars[mi + "Blueprint"] = (m.Engineering != null) ? m.Engineering.FriendlyBlueprintName : "";
                     vars[mi + "Health"] = m.Health.ToStringInvariant();
                     vars[mi + "Value"] = m.Value.ToStringInvariant();
-                    vars[mi + "Mass"] = m.Mass.ToStringInvariant();
+                    vars[mi + "Mass"] = m.Mass().ToStringInvariant();
                     ind++;
                 }
             }

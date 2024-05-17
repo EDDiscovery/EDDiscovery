@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
                                     sm.TranslatedModTypeString,
                                     sm.TranslatedModName,
                                     "",
-                                    sm.PropertiesAsText,
+                                    sm.PropertiesAsText(),
                                     sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                     "",
                                     "",
@@ -389,10 +389,10 @@ namespace EDDiscovery.UserControls
             if (cc > 0)
                 AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToString("N0") + "t");
 
-            labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = true;
+            labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
             buttonExtConfigure.Visible = si.State == ShipInformation.ShipState.Owned;
-            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumModulesForCoriolisEDSY();
         }
 
         void AddModuleLine(ShipModule sm , ShipInformation si = null)
@@ -409,22 +409,13 @@ namespace EDDiscovery.UserControls
                     if (sm.AmmoClip.HasValue)
                         infoentry += "/" + sm.AmmoClip.ToString();
                 }
-                
-                if (sm.ModuleData != null)
-                {
-                    if (sm.Engineering == null)
-                    {
-                        infoentry = infoentry.AppendPrePad(sm.ModuleData.PropertiesAsText, ", ");
-                    }
-                    else
-                    {
-                        infoentry = infoentry.AppendPrePad("Module Engineered" , ", ");
-                    }
-                }
-                else
-                {
 
-                }
+                bool engineeredfully = sm.ModuleDataEngineered(out ItemData.ShipModule engmod);
+                if ( engineeredfully )
+                    infoentry = infoentry.AppendPrePad(engmod.PropertiesAsText(), ", ");
+                else
+                    infoentry = infoentry.AppendPrePad("*** " + engmod.PropertiesAsText(), ", "); 
+
             }
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
@@ -439,9 +430,13 @@ namespace EDDiscovery.UserControls
                     eng += ": " + sm.Engineering.ExperimentalEffect_Localised;
 
                 engtooltip = sm.Engineering.ToString();
-                EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
-                if (spec != null)
-                    engtooltip += spec.ToString();
+
+                if (sm.SlotFD == ShipSlots.Slot.FrameShiftDrive)
+                {
+                    EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
+                    if (spec != null)
+                        engtooltip += spec.ToString();
+                }
 
                 if (displayfilters.Contains("fullblueprint"))
                 {
@@ -453,7 +448,7 @@ namespace EDDiscovery.UserControls
                                 JournalFieldNaming.GetForeignModuleName(sm.ItemFD,sm.LocalisedItem),
                                 ShipSlots.ToLocalisedLanguage(sm.SlotFD),
                                 infoentry,
-                                sm.Mass > 0 ? (sm.Mass.ToString("0.#")+"t") : "",
+                                sm.Mass() > 0 ? (sm.Mass().ToString("0.#")+"t") : "",
                                 eng,
                                 value, 
                                 sm.PE() };
