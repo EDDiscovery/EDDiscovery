@@ -307,7 +307,10 @@ namespace EDDiscovery.UserControls
             {
                 ShipInformation si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
+                {
+                    si.UpdateFuelWarningPercent();      // ensure its fresh from the DB
                     DisplayShip(si);
+                }
             }
 
             dataViewScrollerPanel.ResumeLayout();
@@ -411,10 +414,13 @@ namespace EDDiscovery.UserControls
                 }
 
                 bool engineeredfully = sm.ModuleDataEngineered(out ItemData.ShipModule engmod);
-                if ( engineeredfully )
-                    infoentry = infoentry.AppendPrePad(engmod.PropertiesAsText(), ", ");
-                else
-                    infoentry = infoentry.AppendPrePad("*** " + engmod.PropertiesAsText(), ", "); 
+                if (engmod != null) // may not have enough details to find module
+                {
+                    if (engineeredfully)
+                        infoentry = infoentry.AppendPrePad(engmod.PropertiesAsText(), ", ");
+                    else
+                        infoentry = infoentry.AppendPrePad("*** " + engmod.PropertiesAsText(), ", ");
+                }
 
             }
 

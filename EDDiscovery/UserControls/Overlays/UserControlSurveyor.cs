@@ -552,6 +552,8 @@ namespace EDDiscovery.UserControls
 
             if (shipinfo != null)
             {
+                shipinfo.UpdateFuelWarningPercent();      // ensure its fresh from the DB
+
                 double fuel = shipinfo.FuelLevel;
                 double tanksize = shipinfo.FuelCapacity;
                 double warninglevelpercent = shipinfo.FuelWarningPercent;
