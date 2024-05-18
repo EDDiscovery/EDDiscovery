@@ -16,6 +16,7 @@ using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -36,7 +37,8 @@ namespace EDDiscovery
             }
             else
             {
-                comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
+                var names = EDCommander.GetListInclHidden().Select(x => x.Name).OrderBy(x=>x);
+                comboBoxCommander.Items.AddRange(names);
                 if (History.CommanderId == -1)  // is hidden log
                 {
                     comboBoxCommander.SelectedIndex = 0;
