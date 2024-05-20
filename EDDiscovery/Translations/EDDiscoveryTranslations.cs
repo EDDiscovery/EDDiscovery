@@ -499,6 +499,7 @@ namespace EDDiscovery
         UserControlModules_buttonExtEDShipyard_ToolTip, // ToolTip 'Send to ED Ship Yard'
         UserControlModules_buttonExtConfigure_ToolTip, // ToolTip 'Configure extra data missing from Elite Journal Output'
         UserControlModules_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'l'
+        UserControlModules_extButtonLoadLoadout,
 
         UserControlModules_ForceSell, // Force Sell
         UserControlModules_ConfirmForceSell, // Confirm sell of ship

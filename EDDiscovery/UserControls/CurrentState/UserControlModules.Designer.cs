@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.buttonExtConfigure = new ExtendedControls.ExtButton();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonLoadLoadout = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -85,9 +86,11 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewModules
             // 
+            this.dataGridViewModules.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewModules.AllowUserToAddRows = false;
             this.dataGridViewModules.AllowUserToDeleteRows = false;
             this.dataGridViewModules.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewModules.AutoSortByColumnName = false;
             this.dataGridViewModules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewModules.ColumnReorder = true;
             this.dataGridViewModules.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -101,6 +104,7 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable});
             this.dataGridViewModules.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewModules.Name = "dataGridViewModules";
+            this.dataGridViewModules.PerColumnWordWrapControl = true;
             this.dataGridViewModules.RowHeaderMenuStrip = null;
             this.dataGridViewModules.RowHeadersVisible = false;
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -174,6 +178,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustomMC
             // 
+            this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
@@ -231,7 +236,7 @@ namespace EDDiscovery.UserControls
             // labelVehicle
             // 
             this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(440, 1);
+            this.labelVehicle.Location = new System.Drawing.Point(476, 1);
             this.labelVehicle.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
@@ -358,12 +363,26 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonExtEDShipyard);
             this.panelTop.Controls.Add(this.buttonExtConfigure);
             this.panelTop.Controls.Add(this.buttonExtExcel);
+            this.panelTop.Controls.Add(this.extButtonLoadLoadout);
             this.panelTop.Controls.Add(this.labelVehicle);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 30;
+            // 
+            // extButtonLoadLoadout
+            // 
+            this.extButtonLoadLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonLoadLoadout.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
+            this.extButtonLoadLoadout.Location = new System.Drawing.Point(440, 1);
+            this.extButtonLoadLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonLoadLoadout.Name = "extButtonLoadLoadout";
+            this.extButtonLoadLoadout.Size = new System.Drawing.Size(28, 28);
+            this.extButtonLoadLoadout.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonLoadLoadout, "Import a ship definition for display");
+            this.extButtonLoadLoadout.UseVisualStyleBackColor = true;
+            this.extButtonLoadLoadout.Click += new System.EventHandler(this.extButtonLoadLoadout_Click);
             // 
             // UserControlModules
             // 
@@ -406,5 +425,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private ExtendedControls.ExtButton extButtonShowControl;
         private ExtendedControls.ExtButton buttonExtConfigure;
+        private ExtendedControls.ExtButton extButtonLoadLoadout;
     }
 }

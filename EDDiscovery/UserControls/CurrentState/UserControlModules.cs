@@ -15,6 +15,7 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using ExtendedControls;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,6 +32,7 @@ namespace EDDiscovery.UserControls
         private string travelhistorytext;
         private string allmodulestext;
         private string allknownmodulestext;
+        private string importedshiptext;
 
         private HistoryEntry last_he = null;
         private ShipInformation last_si = null;
@@ -42,6 +44,8 @@ namespace EDDiscovery.UserControls
         private string[] displayfilters;
 
         private List<object> allmodulesref = new List<object>();
+
+        private ShipInformation importedship = null;        // if imported
 
         #region Init
 
@@ -57,13 +61,17 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo, EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable, EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            var enumlisttt = new Enum[] { EDTx.UserControlModules_extButtonShowControl_ToolTip, EDTx.UserControlModules_comboBoxShips_ToolTip, EDTx.UserControlModules_extCheckBoxWordWrap_ToolTip, EDTx.UserControlModules_buttonExtCoriolis_ToolTip, EDTx.UserControlModules_buttonExtEDShipyard_ToolTip, EDTx.UserControlModules_buttonExtConfigure_ToolTip, EDTx.UserControlModules_buttonExtExcel_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlModules_extButtonShowControl_ToolTip, EDTx.UserControlModules_comboBoxShips_ToolTip, 
+                                EDTx.UserControlModules_extCheckBoxWordWrap_ToolTip, EDTx.UserControlModules_buttonExtCoriolis_ToolTip, 
+                                EDTx.UserControlModules_buttonExtEDShipyard_ToolTip, EDTx.UserControlModules_buttonExtConfigure_ToolTip, 
+                                EDTx.UserControlModules_buttonExtExcel_ToolTip, EDTx.UserControlModules_extButtonLoadLoadout };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
             allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
             allknownmodulestext = "All Known Modules";
+            importedshiptext = "Imported ship";
             dataGridViewModules.MakeDoubleBuffered();
 
             displayfilters = GetSetting(dbDisplayFilters, "").Split(';');
@@ -173,7 +181,13 @@ namespace EDDiscovery.UserControls
             {
                 update = !Object.ReferenceEquals(he.ShipInformation, last_si);      
             }
-            else if (comboBoxShips.Text == allknownmodulestext )           
+            else if (comboBoxShips.Text == allknownmodulestext)
+            {
+                last_he = he;
+                if (dataGridViewModules.Rows.Count == 0)        // if nothing display, display, else ignore subsequence updates
+                    Display();
+            }
+            else if (comboBoxShips.Text == importedshiptext)
             {
                 last_he = he;
                 if (dataGridViewModules.Rows.Count == 0)        // if nothing display, display, else ignore subsequence updates
@@ -277,7 +291,7 @@ namespace EDDiscovery.UserControls
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
                 var modules = ItemData.GetShipModules(true, true, true, true, true, compressarmourtosidewinderonly: false);
-                foreach( var kvp in modules)
+                foreach (var kvp in modules)
                 {
                     ItemData.ShipModule sm = kvp.Value;
                     object[] rowobj = {
@@ -296,10 +310,18 @@ namespace EDDiscovery.UserControls
                 }
 
             }
+            else if (comboBoxShips.Text == importedshiptext)
+            {
+                if ( importedship != null )
+                {
+                    DisplayShip(importedship);
+                }
+            }
             else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
                 if (last_he?.ShipInformation != null)
                 {
+                    last_he.ShipInformation.UpdateFuelWarningPercent();      // ensure its fresh from the DB
                     DisplayShip(last_he.ShipInformation);
                 }
             }
@@ -516,6 +538,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add(storedmoduletext);
             comboBoxShips.Items.Add(allmodulestext);
             comboBoxShips.Items.Add(allknownmodulestext);
+            comboBoxShips.Items.Add(importedshiptext);
 
             var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
             var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
@@ -574,7 +597,11 @@ namespace EDDiscovery.UserControls
         {
             ShipInformation si = null;
 
-            if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            if (comboBoxShips.Text == importedshiptext)
+            {
+                si = importedship;
+            }
+            else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
                 if (last_he?.ShipInformation != null)
                     si = last_he.ShipInformation;
@@ -618,7 +645,11 @@ namespace EDDiscovery.UserControls
         {
             ShipInformation si = null;
 
-            if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            if (comboBoxShips.Text == importedshiptext)
+            {
+                si = importedship;
+            }
+            else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
                 if (last_he?.ShipInformation != null)
                     si = last_he.ShipInformation;
@@ -808,5 +839,53 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".T(EDTx.UserControlModules_NOSI), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        private void extButtonLoadLoadout_Click(object sender, EventArgs e)
+        {
+            var frm = new Forms.ImportExportForm();
+
+            frm.Import(new string[] { "SLEF - Loadout from EDSY or journal loadout event" },
+                 new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowPaste },
+                 new string[] { "JSON|*.json" }
+            );
+
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                string loadout = frm.ReadSource();
+                if (loadout?.Length>0)
+                {
+                    JToken jo = JToken.Parse(loadout);
+
+                    EliteDangerousCore.JournalEvents.JournalLoadout jloadout = null;
+                    if (jo != null)
+                    {
+                        if (jo.IsArray && jo.Count == 1 && jo[0].IsObject && jo[0].Object().Contains("header") && jo[0].Object().Contains("data"))
+                        {
+                            jo = jo[0]["data"];
+                            jloadout = new EliteDangerousCore.JournalEvents.JournalLoadout(jo.Object());
+                        }
+                        else if ( jo.IsObject && jo["event"].Str() == "Loadout")
+                        {
+                            jloadout = new EliteDangerousCore.JournalEvents.JournalLoadout(jo.Object());
+                        }
+                    }
+
+                    if (jloadout != null)
+                    {
+                        ShipInformationList sl = new ShipInformationList();
+                        jloadout.ShipInformation(sl, "Nowhere", new SystemClass("Sol"));
+                        if (sl.Ships.Count > 0)
+                        {
+                            importedship = sl.Ships.First().Value;
+                            importedship.State = ShipInformation.ShipState.Sold;
+
+                            if (comboBoxShips.Text != importedshiptext)
+                                comboBoxShips.SelectedItem = importedshiptext;
+                            else
+                                Display();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls
                 if ( last_he != null)
                 {
                     if (ep.Name.Contains("Guardian") || ep.Name.Equals("Human"))
-                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, EngineeringList.TechBrokerID);
+                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, EngineerCrafting.TechBrokerID);
                     else
                         crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, ep.Name);
                 }

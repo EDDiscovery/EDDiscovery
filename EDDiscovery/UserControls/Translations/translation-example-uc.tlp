@@ -508,6 +508,7 @@ SECTION UserControlModules
 .extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
+.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
