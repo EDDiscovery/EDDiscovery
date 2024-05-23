@@ -489,6 +489,8 @@ namespace EDDiscovery
         UserControlModules_PriorityEnable, // Column Header 'P/E'
         UserControlModules_labelShip, // Control 'Ship'
         UserControlModules_labelVehicle, // Control 'Unknown'
+        UserControlModules_labelArmour,
+        UserControlModules_labelShields,
 
         UserControlModules_FullBluePrint, // Show full blueprint information
 

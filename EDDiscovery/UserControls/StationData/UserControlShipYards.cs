@@ -193,13 +193,13 @@ namespace EDDiscovery.UserControls
             foreach (ShipYard.ShipyardItem i in yard.Ships)
             {
                 string col2 = "Unknown".T(EDTx.Unknown), col3 = "";
-                Dictionary<ItemData.ShipPropID, ItemData.IModuleInfo> shipprops = ItemData.GetShipProperties(i.ShipType);
+                ItemData.ShipProperties shipprops = ItemData.GetShipProperties(i.ShipType);
                 if ( shipprops != null)
                 {
-                    col2 = (shipprops[ItemData.ShipPropID.Manu] as ItemData.ShipInfoString).Value;
-                    col3 = (shipprops[ItemData.ShipPropID.HullMass] as ItemData.ShipInfoDouble).Value.ToString("0.#t") +
-                        ", " + (shipprops[ItemData.ShipPropID.Speed] as ItemData.ShipInfoInt).Value.ToString() +
-                        "/" + (shipprops[ItemData.ShipPropID.Boost] as ItemData.ShipInfoInt).Value.ToString();
+                    col2 = shipprops.Manufacturer;
+                    col3 = shipprops.HullMass.ToString("0.#t") +
+                        ", " + shipprops.Speed.ToString() +
+                        "/" + shipprops.Boost.ToString();
                 }
 
                 object[] rowobj = { i.ShipType_Localised, col2, col3,i.ShipPrice.ToString("N0") + "cr" };

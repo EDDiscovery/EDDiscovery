@@ -77,9 +77,7 @@ namespace EDDiscovery.UserControls.Helpers
                 (newsetting, ch) => { SetFilter(FilterSettings.Outfitting, newsetting, ch); }, sortitems:true);
 
             // we place the spaceship fdname with its string name
-            var ships = ItemData.GetSpaceships().Select(x =>
-                new CheckedIconUserControl.Item(((ItemData.ShipInfoString)x[ItemData.ShipPropID.FDID]).Value,
-                            ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value));
+            var ships = ItemData.GetSpaceships().Select(x =>  new CheckedIconUserControl.Item(x.FDID,x.Name));
 
             extButtonShipyard.InitAllNoneAllBack(ships,
                 GetFilter(FilterSettings.Shipyard),
@@ -581,7 +579,7 @@ namespace EDDiscovery.UserControls.Helpers
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
             ConfigurableForm.ShowDialogCentred((f) => {
-                var ships = ItemData.GetSpaceships().Select(x => x.ContainsKey(ItemData.ShipPropID.EDCDName) ? ((ItemData.ShipInfoString)x[ItemData.ShipPropID.EDCDName]).Value : ((ItemData.ShipInfoString)x[ItemData.ShipPropID.Name]).Value).ToArray();
+                var ships = ItemData.GetSpaceships().Select(x => x.EDCDID).ToArray();
                 f.AddBools(ships, ships, shipsstate, 4, 24, 200, 4, 200, "S_");
                 AddSearchEntries(f, shipssearchdistance, shipsclearfilters, shipslargepad, shipscarriers);
             },

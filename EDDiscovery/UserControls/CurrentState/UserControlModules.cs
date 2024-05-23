@@ -58,7 +58,10 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ModulesGrid";
 
-            var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo, EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable, EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle };
+            var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo, 
+                                    EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable, 
+                                    EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle ,
+                                    EDTx.UserControlModules_labelArmour, EDTx.UserControlModules_labelShields};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             var enumlisttt = new Enum[] { EDTx.UserControlModules_extButtonShowControl_ToolTip, EDTx.UserControlModules_comboBoxShips_ToolTip, 
@@ -88,6 +91,8 @@ namespace EDDiscovery.UserControls
 
             fuelresname = "Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity);
             fuellevelname = "Fuel Level".T(EDTx.UserControlModules_FuelLevel);
+
+            extPanelRollUpStats.Visible = false;
         }
 
         public override void LoadLayout()
@@ -227,6 +232,7 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxShips.Text == storedmoduletext)
             {
+                extPanelRollUpStats.Visible =
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
                 if (last_he?.StoredModules != null)
@@ -254,6 +260,7 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allmodulestext)
             {
+                extPanelRollUpStats.Visible =
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
                 ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
@@ -288,6 +295,7 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allknownmodulestext)
             {
+                extPanelRollUpStats.Visible =
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
                 var modules = ItemData.GetShipModules(true, true, true, true, true, compressarmourtosidewinderonly: false);
@@ -345,6 +353,39 @@ namespace EDDiscovery.UserControls
 
         private void DisplayShip(ShipInformation si)
         {
+            ItemData.ShipProperties shipp = si.GetShipProperties();     // may be null
+
+            si = ShipInformation.CreateFromLoadout(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\loadout.json"));
+            var stats = si.CalculateShipParameters();
+            string atext = "-", stext = "-";
+            if (stats != null)
+            {
+                if (stats.ArmourRaw.HasValue)
+                {
+                    atext = string.Format("Raw: {0} Kin: {1:0.#}% = {2:0.#} Thm: {3:0.#}% = {4:0.#} Exp: {5:0.#}% = {6:0.#} Cau: {7:0.#}% = {8:0.#}",
+                                stats.ArmourRaw,
+                                stats.ArmourKineticPercentage, stats.ArmourKineticValue,
+                                stats.ArmourThermalPercentage, stats.ArmourThermalValue,
+                                stats.ArmourExplosivePercentage, stats.ArmourExplosiveValue,
+                                stats.ArmourCausticPercentage, stats.ArmourCausticValue
+                                );
+                }
+
+                if (stats.ShieldsRaw.HasValue)
+                {
+                    stext = string.Format("Raw: {0} Sys: {1:0.#}% = {2:0.#} Kin: {3:0.#}% = {4:0.#} Thm: {5:0.#}% = {6:0.#} Exp: {7:0.#}% = {8:0.#}",
+                            stats.ShieldsRaw,
+                            stats.ShieldsSystemPercentage, stats.ShieldsSystemValue,
+                            stats.ShieldsKineticPercentage, stats.ShieldsKineticValue,
+                            stats.ShieldsThermalPercentage, stats.ShieldsThermalValue,
+                            stats.ShieldsExplosivePercentage, stats.ShieldsExplosiveValue
+                            );
+                }
+            }
+
+            labelShieldsValues.Text = stext;
+            labelArmourValues.Text = atext;
+
             last_si = si;
 
             foreach (var key in si.Modules.Keys)
@@ -387,7 +428,7 @@ namespace EDDiscovery.UserControls
                 AddMassLine("Mass FD Unladen".T(EDTx.UserControlModules_MassFDUnladen), si.UnladenMass.ToString("N2") + "t");
             AddMassLine("Mass Modules".T(EDTx.UserControlModules_MassModules), modulemass.ToString("N2") + "t");
 
-            AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.Manufacturer);
+            AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), shipp?.Manufacturer ?? "?");
 
             if (si.FuelCapacity > 0)
                 AddInfoLine("Fuel Capacity".T(EDTx.UserControlModules_FuelCapacity), si.FuelCapacity.ToString("N1") + "t");
@@ -401,9 +442,10 @@ namespace EDDiscovery.UserControls
             double fuelwarn = si.FuelWarningPercent;
             AddInfoLine("Fuel Warning %".T(EDTx.UserControlModules_FuelWarning), fuelwarn > 0 ? fuelwarn.ToString("N1") + "%" : "Off".T(EDTx.Off));
 
-            AddInfoLine("Pad Size".T(EDTx.UserControlModules_PadSize), si.PadSize);
-            AddInfoLine("Main Thruster Speed".T(EDTx.UserControlModules_MainThrusterSpeed), si.Speed.ToString("0.#"));
-            AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), si.Boost.ToString("0.#"));
+
+            AddInfoLine("Pad Size".T(EDTx.UserControlModules_PadSize), shipp?.ClassString ?? "");
+            AddInfoLine("Main Thruster Speed".T(EDTx.UserControlModules_MainThrusterSpeed), shipp?.Speed.ToString("N0") ?? "?");
+            AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), shipp?.Boost.ToString("N0") ?? "?");
 
             if (si.InTransit)
                 AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransitto), (si.StoredAtSystem ?? "Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
@@ -414,6 +456,7 @@ namespace EDDiscovery.UserControls
             if (cc > 0)
                 AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToString("N0") + "t");
 
+            extPanelRollUpStats.Visible =
             labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
             buttonExtConfigure.Visible = si.State == ShipInformation.ShipState.Owned;
@@ -435,7 +478,7 @@ namespace EDDiscovery.UserControls
                         infoentry += "/" + sm.AmmoClip.ToString();
                 }
 
-                bool engineeredfully = sm.ModuleDataEngineered(out ItemData.ShipModule engmod);
+                bool engineeredfully = sm.GetModuleEngineered(out ItemData.ShipModule engmod);
                 if (engmod != null) // may not have enough details to find module
                 {
                     if (engineeredfully)
@@ -853,36 +896,16 @@ namespace EDDiscovery.UserControls
                 string loadout = frm.ReadSource();
                 if (loadout?.Length>0)
                 {
-                    JToken jo = JToken.Parse(loadout);
-
-                    EliteDangerousCore.JournalEvents.JournalLoadout jloadout = null;
-                    if (jo != null)
+                    ShipInformation si = ShipInformation.CreateFromLoadout(loadout);
+                    if ( si !=null )
                     {
-                        if (jo.IsArray && jo.Count == 1 && jo[0].IsObject && jo[0].Object().Contains("header") && jo[0].Object().Contains("data"))
-                        {
-                            jo = jo[0]["data"];
-                            jloadout = new EliteDangerousCore.JournalEvents.JournalLoadout(jo.Object());
-                        }
-                        else if ( jo.IsObject && jo["event"].Str() == "Loadout")
-                        {
-                            jloadout = new EliteDangerousCore.JournalEvents.JournalLoadout(jo.Object());
-                        }
-                    }
+                        importedship = si;
+                        
 
-                    if (jloadout != null)
-                    {
-                        ShipInformationList sl = new ShipInformationList();
-                        jloadout.ShipInformation(sl, "Nowhere", new SystemClass("Sol"));
-                        if (sl.Ships.Count > 0)
-                        {
-                            importedship = sl.Ships.First().Value;
-                            importedship.State = ShipInformation.ShipState.Sold;
-
-                            if (comboBoxShips.Text != importedshiptext)
-                                comboBoxShips.SelectedItem = importedshiptext;
-                            else
-                                Display();
-                        }
+                        if (comboBoxShips.Text != importedshiptext)
+                            comboBoxShips.SelectedItem = importedshiptext;
+                        else
+                            Display();
                     }
                 }
             }

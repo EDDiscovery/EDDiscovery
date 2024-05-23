@@ -1032,13 +1032,14 @@ namespace EDDiscovery.UserControls
                         for (int i = 0; i < ships.Count; i++)
                         {
                             var ord = ships[i];
+                            ItemData.ShipProperties ship = ItemData.GetShipProperties(ord.Name);
 
-                            string name = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Name, null, null) ?? ord.Name.SplitCapsWordFull();
-                            string manu = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Manu, null, null) ?? "";
-                            string speed = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Speed, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                            string boost = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Boost, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                            string mass = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.HullMass, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
-                            string classv = ItemData.GetShipPropertyAsString(ord.Name, ItemData.ShipPropID.Class, "N0", System.Globalization.CultureInfo.CurrentCulture) ?? "";
+                            string name = ship?.Name ?? ord.Name.SplitCapsWordFull();
+                            string manu = ship?.Manufacturer ?? "";
+                            string speed = ship?.Speed.ToString("N0") ?? "";
+                            string boost = ship?.Boost.ToString("N0") ?? "";
+                            string mass = ship?.HullMass.ToString("N0") ?? "";
+                            string classv = ship?.ClassString ?? ""; 
 
                             object[] rowobj = {
                                             name,
