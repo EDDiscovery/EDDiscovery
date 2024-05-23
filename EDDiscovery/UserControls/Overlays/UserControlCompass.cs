@@ -44,6 +44,8 @@ namespace EDDiscovery.UserControls
         private string sentbookmarktext;    // Another panel has sent a bookmark, and its position, add it to the combobox and allow selection
         private EliteDangerousCore.UIEvents.UIPosition.Position sentposition;
 
+        bool lasttransparentmode = false;
+
         #region Init
 
         public UserControlCompass()
@@ -125,12 +127,14 @@ namespace EDDiscovery.UserControls
             PopulateBookmarkComboSetBookmarkEnable();
             UpdateCompass();
             SetCompassVisibility();
+            SetCompassForegroundColours();      // do this in case history change caused by theme change
         }
 
         public override bool SupportTransparency { get { return true; } }
         public override bool DefaultTransparent { get { return true; } }
         public override void SetTransparency(bool on, Color curbackcol)
         {
+            lasttransparentmode = on;   // keep this because its the only record of transparency mode, and we may need it in history change for SetCompassForegroundColour
             BackColor = curbackcol;
 
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
@@ -141,17 +145,22 @@ namespace EDDiscovery.UserControls
             comboBoxBookmarks.BackColor = curbackcol;
             buttonNewBookmark.BackColor = curbackcol;
 
-            Color fore = on ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+            SetCompassForegroundColours();
+        }
+
+        public void SetCompassForegroundColours()
+        { 
+            Color fore = lasttransparentmode ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
             compassControl.ForeColor = fore;
             compassControl.StencilColor = fore;
             compassControl.CentreTickColor = fore.Multiply(1.2F);
             compassControl.BugColor = fore.Multiply(0.8F);
-            compassControl.BackColor = on ? Color.Transparent : BackColor;
+            compassControl.BackColor = lasttransparentmode ? Color.Transparent : BackColor;
             compassControl.Font = ExtendedControls.Theme.Current.GetScaledFont(1f);
-            flowLayoutPanelTop.Visible = !on;
+            flowLayoutPanelTop.Visible = !lasttransparentmode;
             compassControl.Font = displayfont ?? this.Font;     // due to themeing, set control font again
 
-            intransparent = on;
+            intransparent = lasttransparentmode;
             SetCompassVisibility();
         }
 
