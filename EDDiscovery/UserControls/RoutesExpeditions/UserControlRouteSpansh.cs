@@ -297,7 +297,7 @@ namespace EDDiscovery.UserControls
         {
             ConfigurableForm f = new ConfigurableForm();
 
-            ShipInformation si = DiscoveryForm.History.GetLast?.ShipInformation;
+            Ship si = DiscoveryForm.History.GetLast?.ShipInformation;
 
             if (si != null)
             {

@@ -121,7 +121,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        static public void ShipBasicInformation(Variables vars, ShipInformation si, string prefix)
+        static public void ShipBasicInformation(Variables vars, Ship si, string prefix)
         {
             string ship = "Unknown", id = "0", name = "Unknown", ident = "Unknown", sv = "None", fullinfo = "Unknown", shortname = "Unknown", fuel = "0", cargo = "0", fuellevel = "0";
 
@@ -160,7 +160,7 @@ namespace EDDiscovery.Actions
             // removed due to load in V21 (11.9.4+) vars[prefix + "ScanCount"] = hl.GetScans(s.Name).Count.ToString(ct); vars[prefix + "FSDJumpsTotal"] = hl.GetFSDCarrierJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
         }
 
-        static public void ShipModuleInformation(ActionLanguage.ActionProgramRun vars, ShipInformation si, string prefix)
+        static public void ShipModuleInformation(ActionLanguage.ActionProgramRun vars, Ship si, string prefix)
         {
             if (si != null && si.Modules != null)
             {

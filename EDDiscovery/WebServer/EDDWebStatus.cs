@@ -115,7 +115,7 @@ namespace EDDiscovery.WebServer
             string shipname = "N/A", fuel = "N/A", range = "N/A", tanksize = "N/A";
             string cargo = cargocount.ToStringInvariant();
 
-            ShipInformation si = he.ShipInformation;
+            Ship si = he.ShipInformation;
             if (si != null)
             {
                 shipname = si.ShipFullInfo(cargo: false, fuel: false);

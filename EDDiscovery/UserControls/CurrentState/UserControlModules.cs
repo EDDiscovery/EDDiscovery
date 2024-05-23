@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         private string importedshiptext;
 
         private HistoryEntry last_he = null;
-        private ShipInformation last_si = null;
+        private Ship last_si = null;
 
         private string fuellevelname;
         private string fuelresname;
@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
 
         private List<object> allmodulesref = new List<object>();
 
-        private ShipInformation importedship = null;        // if imported
+        private Ship importedship = null;        // if imported
 
         #region Init
 
@@ -171,13 +171,13 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allmodulestext)      // this displays the stored modules, as well as all other ship modules, at top of history
             {
-                ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
-                var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+                ShipList shm = DiscoveryForm.History.ShipInformationList;
+                var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 List<object> curref = new List<object>();       // repeat the objects used in the display
                 foreach (var si in ownedships)  
                     curref.Add(si);
-                foreach (ModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
+                foreach (ShipModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
                     curref.Add(sm);
 
                 update = !allmodulesref.ReferenceEquals(curref);        // if not identical, something has changed, execute update
@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ShipInformation si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);      // grab SI of specific ship (may be null)
+                Ship si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);      // grab SI of specific ship (may be null)
                 update = !Object.ReferenceEquals(si, last_si);      // this vs ship
             }
 
@@ -237,10 +237,10 @@ namespace EDDiscovery.UserControls
 
                 if (last_he?.StoredModules != null)
                 {
-                    ModulesInStore mi = last_he.StoredModules;
+                    ShipModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
 
-                    foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
+                    foreach (ShipModulesInStore.StoredModule sm in mi.StoredModules)
                     {
                         object[] rowobj = {
                                 JournalFieldNaming.GetForeignModuleType(sm.NameFD),
@@ -263,8 +263,8 @@ namespace EDDiscovery.UserControls
                 extPanelRollUpStats.Visible =
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
-                ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
-                var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+                ShipList shm = DiscoveryForm.History.ShipInformationList;
+                var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 foreach (var si in ownedships)
                 {
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
                     allmodulesref.Add(si);      // we add ref in effect to the list of modules we extracted info from - this is used to see if they changed during the update abovevi
                 }
 
-                foreach (ModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
+                foreach (ShipModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
                 {
                     string info = sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit));
                     info = info.AppendPrePad(sm.TransferTimeString, ":");
@@ -335,7 +335,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ShipInformation si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
+                Ship si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
                 {
                     si.UpdateFuelWarningPercent();      // ensure its fresh from the DB
@@ -351,11 +351,11 @@ namespace EDDiscovery.UserControls
                 dataGridViewModules.SafeFirstDisplayedScrollingRowIndex(firstline);
         }
 
-        private void DisplayShip(ShipInformation si)
+        private void DisplayShip(Ship si)
         {
             ItemData.ShipProperties shipp = si.GetShipProperties();     // may be null
 
-            si = ShipInformation.CreateFromLoadout(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\loadout.json"));
+            si = Ship.CreateFromLoadout(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\loadout.json"));
             var stats = si.CalculateShipParameters();
             string atext = "-", stext = "-";
             if (stats != null)
@@ -459,11 +459,11 @@ namespace EDDiscovery.UserControls
             extPanelRollUpStats.Visible =
             labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
-            buttonExtConfigure.Visible = si.State == ShipInformation.ShipState.Owned;
+            buttonExtConfigure.Visible = si.State == Ship.ShipState.Owned;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumModulesForCoriolisEDSY();
         }
 
-        void AddModuleLine(ShipModule sm , ShipInformation si = null)
+        void AddModuleLine(ShipModule sm , Ship si = null)
         {
             string infoentry = "";
 
@@ -573,7 +573,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox()
         {
-            ShipInformationList shm = DiscoveryForm.History.ShipInformationList;
+            ShipList shm = DiscoveryForm.History.ShipInformationList;
             string cursel = comboBoxShips.Text;
 
             comboBoxShips.Items.Clear();
@@ -583,8 +583,8 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add(allknownmodulestext);
             comboBoxShips.Items.Add(importedshiptext);
 
-            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
-            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+            var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+            var notownedships = (from x1 in shm.Ships where x1.Value.State != Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
             var fightersrvs = (from x1 in shm.Ships where ItemData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
 
             var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
@@ -638,7 +638,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtCoriolis_Click(object sender, EventArgs e)
         {
-            ShipInformation si = null;
+            Ship si = null;
 
             if (comboBoxShips.Text == importedshiptext)
             {
@@ -686,7 +686,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtEDShipyard_Click(object sender, EventArgs e)
         {
-            ShipInformation si = null;
+            Ship si = null;
 
             if (comboBoxShips.Text == importedshiptext)
             {
@@ -868,7 +868,7 @@ namespace EDDiscovery.UserControls
 
                         while (x.MoveNext())
                         {
-                            if ( x.Current.Value.State == ShipInformation.ShipState.Owned )
+                            if ( x.Current.Value.State == Ship.ShipState.Owned )
                                 return new Object[] { x.Current.Value.ShipFullInfo() };
                         }
 
@@ -896,7 +896,7 @@ namespace EDDiscovery.UserControls
                 string loadout = frm.ReadSource();
                 if (loadout?.Length>0)
                 {
-                    ShipInformation si = ShipInformation.CreateFromLoadout(loadout);
+                    Ship si = Ship.CreateFromLoadout(loadout);
                     if ( si !=null )
                     {
                         importedship = si;

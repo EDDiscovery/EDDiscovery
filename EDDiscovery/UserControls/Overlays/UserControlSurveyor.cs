@@ -1314,7 +1314,7 @@ namespace EDDiscovery.UserControls
         private SavedRouteClass currentRoute = null;
         private string lastsystemroute;
 
-        private ShipInformation shipinfo;   // and last ship info
+        private Ship shipinfo;   // and last ship info
         private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
 
         private Font displayfont;

@@ -543,7 +543,7 @@ namespace EDDiscovery.UserControls
 
                     if (he.ShipInformation != null)
                     {
-                        ShipInformation si = he.ShipInformation;
+                        Ship si = he.ShipInformation;
 
                         textBoxShip.Text = si.ShipFullInfo(cargo: false, fuel: false);
 
