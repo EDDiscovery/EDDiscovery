@@ -268,9 +268,6 @@ namespace EDDiscovery
             // Some components require the controller to be initialized
             InitializeComponent();
 
-            PostInitializeDebug();        // call any debug we want at this point
-
-
 
             ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
