@@ -136,7 +136,7 @@ namespace EDDiscovery.Actions
                 shortname = si.ShipShortName.Alt("Unknown");
                 fuel = si.FuelCapacity.ToStringInvariant("0.0");
                 fuellevel = si.FuelLevel.ToStringInvariant("0.0");
-                cargo = si.CargoCapacity().ToStringInvariant();
+                cargo = si.CalculateCargoCapacity().ToStringInvariant();
             }
 
             vars[prefix + "Ship"] = ship;                   // need to be backwards compatible with older entries..

@@ -502,17 +502,31 @@ SECTION UserControlMissions
 
 SECTION UserControlModules
 
+.ItemLocalised: "Type" @
+.ItemCol: "Item" @
+.BluePrint: "BluePrint" @
+.PriorityEnable: "P/E" @
 .labelShip: "Ship" @
 .labelVehicle: "Unknown" @
+.labelMass: "Mass:" @
+.labelCost: "Cost:" @
+.labelFSD: "FSD:" @
+.labelThrusters: "Thrust:" @
+.labelShields: "Shields:" @
+.labelArmour: "Armour:" @
+
+
+.FullBluePrint: "Show full blueprint information" @
+
 .comboBoxShips.ToolTip: "Select ship to view" @
 .extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
-.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
-.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" @
+.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
+.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.FullBluePrint: "Show full blueprint information" @
+.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
+
 .ForceSell: "Force Sell" @
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
@@ -525,35 +539,10 @@ SECTION UserControlModules
 .Value: "Value" @
 .Stored: "Stored" @
 .AllModules: "All Modules" @
-.FSDAvgJump: "FSD Avg Jump" @
-.HT: "Half tank, no cargo" @
-.MassFDUnladen: "Mass FD Unladen" @
-.FuelReserveCapacity: "Fuel Reserve Capacity" @
-.HullHealth: "Hull Health (Loadout)" @
-.ItemLocalised: "Type" @
-.ItemCol: "Item" @
 .Mass: "Mass" @
-.BluePrint: "BluePrint" @
-.PriorityEnable: "P/E" @
-.FSDMaxRange: "FSD Max Range" @
-.FT: "Full Tank, no cargo" @
-.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" @
-.HullValue: "Hull Value" @
-.ModulesValue: "Modules Value" @
-.TotalCost: "Total Cost" @
-.RebuyCost: "Rebuy Cost" @
-.MassHull: "Mass Hull" @
-.MassUnladen: "Mass Unladen" @
-.MassModules: "Mass Modules" @
 .Manufacturer: "Manufacturer" @
-.FuelCapacity: "Fuel Capacity" @
-.FuelLevel: "Fuel Level" @
-.FuelWarning: "Fuel Warning %" @
-.PadSize: "Pad Size" @
-.MainThrusterSpeed: "Main Thruster Speed" @
-.MainThrusterBoost: "Main Thruster Boost" @
+
 .Storedat: "Stored at" @
-.CargoCapacity: "Cargo Capacity" @
 .InTransit: "In Transit" @
 .InTransitto: "In Transit to " @
 .EDSURL: "Enter ED Shipyard URL" @

@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
                 {
                     int limpetsleft = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
                     int cargo = DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(newheabove.MaterialCommodity);
-                    int cargocap = newheabove.ShipInformation?.CargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
+                    int cargocap = newheabove.ShipInformation?.CalculateCargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
                     int cargoleft = cargocap - cargo; 
 
                     // if no list, or diff no of items (due to new entry) or different start point, we reset and display, else we just quit as current is good

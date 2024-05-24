@@ -491,6 +491,10 @@ namespace EDDiscovery
         UserControlModules_labelVehicle, // Control 'Unknown'
         UserControlModules_labelArmour,
         UserControlModules_labelShields,
+        UserControlModules_labelMass,
+        UserControlModules_labelCost,
+        UserControlModules_labelFSD,
+        UserControlModules_labelThrusters,
 
         UserControlModules_FullBluePrint, // Show full blueprint information
 
@@ -515,33 +519,10 @@ namespace EDDiscovery
         UserControlModules_Value, // Value
         UserControlModules_Stored, // Stored
         UserControlModules_AllModules, // All Modules
-
-        UserControlModules_FSDAvgJump, // FSD Avg Jump
-        UserControlModules_HT, // Half tank, no cargo
-        UserControlModules_MassFDUnladen, // Mass FD Unladen
-        UserControlModules_FuelReserveCapacity, // Fuel Reserve Capacity
-        UserControlModules_HullHealth, // Hull Health (Loadout)
         UserControlModules_Mass, // Mass
-        UserControlModules_FSDMaxRange, // FSD Max Range
-        UserControlModules_FT, // Full Tank, no cargo
-        UserControlModules_FSDMaximumFuelperjump, // FSD Maximum Fuel per jump
-        UserControlModules_HullValue, // Hull Value
-        UserControlModules_ModulesValue, // Modules Value
-        UserControlModules_TotalCost, // Total Cost
-        UserControlModules_RebuyCost, // Rebuy Cost
-        UserControlModules_MassHull, // Mass Hull
-        UserControlModules_MassUnladen, // Mass Unladen
-
-        UserControlModules_MassModules, // Mass Modules
         UserControlModules_Manufacturer, // Manufacturer
-        UserControlModules_FuelCapacity, // Fuel Capacity
-        UserControlModules_FuelLevel, // Fuel Level
-        UserControlModules_FuelWarning, // Fuel Warning %
-        UserControlModules_PadSize, // Pad Size
-        UserControlModules_MainThrusterSpeed, // Main Thruster Speed
-        UserControlModules_MainThrusterBoost, // Main Thruster Boost
+
         UserControlModules_Storedat, // Stored at
-        UserControlModules_CargoCapacity, // Cargo Capacity
         UserControlModules_InTransit, // In Transit
         UserControlModules_InTransitto, // In Transit
         UserControlModules_EDSURL, // Enter ED Shipyard URL

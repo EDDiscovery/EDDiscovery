@@ -325,10 +325,13 @@ namespace EDDiscovery.UserControls
                     gpexcludesecondary = f.GetBool("ess").Value;
                     gpalgo = f.Get("algo");
 
-                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si , gpalgo.ToLower().Replace(" ","_"));
-                    StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
-
-                    labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Plotter)";
+                    // this may fail due to not having fsd info
+                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si, gpalgo.ToLower().Replace(" ", "_"));
+                    if (spanshjobname != null)
+                    {
+                        StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
+                        labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Plotter)";
+                    }
                 }
             }
         }

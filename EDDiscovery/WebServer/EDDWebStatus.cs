@@ -127,12 +127,11 @@ namespace EDDiscovery.WebServer
                 EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
                 if (fsd != null)
                 {
-                    EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(cargocount,
-                                                                si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2, he.Status.CurrentBoost);
-                    range = ji.cursinglejump.ToString("N2") + "ly";
+                    double cursinglejump = fsd.JumpRange( cargocount, si.ModuleMass() + si.HullMass(), si.FuelLevel, he.Status.CurrentBoost);
+                    range = cursinglejump.ToString("N2") + "ly";
                 }
 
-                int cargocap = si.CargoCapacity();
+                int cargocap = si.CalculateCargoCapacity();
 
                 if (cargocap > 0)
                     cargo += "/" + cargocap.ToStringInvariant();

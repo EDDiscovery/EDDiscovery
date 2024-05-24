@@ -36,9 +36,7 @@ namespace EDDiscovery.UserControls
 
         private HistoryEntry last_he = null;
         private Ship last_si = null;
-
-        private string fuellevelname;
-        private string fuelresname;
+        private int last_cargo = 0;
 
         private string dbDisplayFilters = "DisplayFilters";
         private string[] displayfilters;
@@ -61,7 +59,8 @@ namespace EDDiscovery.UserControls
             var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo, 
                                     EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable, 
                                     EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle ,
-                                    EDTx.UserControlModules_labelArmour, EDTx.UserControlModules_labelShields};
+                                    EDTx.UserControlModules_labelArmour, EDTx.UserControlModules_labelShields, EDTx.UserControlModules_labelMass, 
+                                    EDTx.UserControlModules_labelCost, EDTx.UserControlModules_labelFSD, EDTx.UserControlModules_labelThrusters};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             var enumlisttt = new Enum[] { EDTx.UserControlModules_extButtonShowControl_ToolTip, EDTx.UserControlModules_comboBoxShips_ToolTip, 
@@ -88,9 +87,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-
-            fuelresname = "Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity);
-            fuellevelname = "Fuel Level".T(EDTx.UserControlModules_FuelLevel);
 
             extPanelRollUpStats.Visible = false;
         }
@@ -137,15 +133,7 @@ namespace EDDiscovery.UserControls
 
                 if (last_si.ShipNameIdentType == DiscoveryForm.History.GetLast.ShipInformation.ShipNameIdentType ) 
                 {
-                    // update grid if found. Doing it this way stops flicker.
-
-                    int rowfuel = dataGridViewModules.FindRowWithValue(0, fuellevelname);
-                    if (rowfuel != -1)
-                        dataGridViewModules.Rows[rowfuel].Cells[1].Value = last_he.ShipInformation.FuelLevel.ToString("N1") + "t";
-                    int rowres = dataGridViewModules.FindRowWithValue(0, fuelresname);
-                    if (rowres != -1)
-                        dataGridViewModules.Rows[rowres].Cells[1].Value = last_he.ShipInformation.ReserveFuelCapacity.ToString("N2") + "t";
-
+                    DisplayShipData(last_si);
                     System.Diagnostics.Debug.WriteLine("Modules Fuel update");
                 }
             }
@@ -322,13 +310,15 @@ namespace EDDiscovery.UserControls
             {
                 if ( importedship != null )
                 {
+                    last_cargo = 0;
                     DisplayShip(importedship);
                 }
             }
-            else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start.  Current ship at travel history
             {
                 if (last_he?.ShipInformation != null)
                 {
+                    last_cargo = DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(last_he.MaterialCommodity);
                     last_he.ShipInformation.UpdateFuelWarningPercent();      // ensure its fresh from the DB
                     DisplayShip(last_he.ShipInformation);
                 }
@@ -338,6 +328,7 @@ namespace EDDiscovery.UserControls
                 Ship si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
                 {
+                    last_cargo = 0;                     // presume empty cargo
                     si.UpdateFuelWarningPercent();      // ensure its fresh from the DB
                     DisplayShip(si);
                 }
@@ -351,18 +342,21 @@ namespace EDDiscovery.UserControls
                 dataGridViewModules.SafeFirstDisplayedScrollingRowIndex(firstline);
         }
 
-        private void DisplayShip(Ship si)
-        {
-            ItemData.ShipProperties shipp = si.GetShipProperties();     // may be null
 
-            si = Ship.CreateFromLoadout(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\loadout.json"));
-            var stats = si.CalculateShipParameters();
-            string atext = "-", stext = "-";
+        // call to update the ship data panel
+        private void DisplayShipData(Ship si)
+        {
+            double currentfuel = si.FuelLevel;
+            double reservefuel = si.ReserveFuelLevel;
+
+            var stats = si?.CalculateShipStats(4, 4, last_cargo, currentfuel, reservefuel);                  // may be null
+
+            string atext = "-", stext = "-", ttext = "-", ftext = "-";
             if (stats != null)
             {
                 if (stats.ArmourRaw.HasValue)
                 {
-                    atext = string.Format("Raw: {0} Kin: {1:0.#}% = {2:0.#} Thm: {3:0.#}% = {4:0.#} Exp: {5:0.#}% = {6:0.#} Cau: {7:0.#}% = {8:0.#}",
+                    atext = string.Format("Raw: {0} | Kin: {1:0.#}% = {2:0.#} | Thm: {3:0.#}% = {4:0.#} | Exp: {5:0.#}% = {6:0.#} | Cau: {7:0.#}% = {8:0.#}",
                                 stats.ArmourRaw,
                                 stats.ArmourKineticPercentage, stats.ArmourKineticValue,
                                 stats.ArmourThermalPercentage, stats.ArmourThermalValue,
@@ -373,20 +367,73 @@ namespace EDDiscovery.UserControls
 
                 if (stats.ShieldsRaw.HasValue)
                 {
-                    stext = string.Format("Raw: {0} Sys: {1:0.#}% = {2:0.#} Kin: {3:0.#}% = {4:0.#} Thm: {5:0.#}% = {6:0.#} Exp: {7:0.#}% = {8:0.#}",
+                    stext = string.Format("Raw: {0} | Sys: {1:0.#}% = {2:0.#} | Kin: {3:0.#}% = {4:0.#} | Thm: {5:0.#}% = {6:0.#} | Exp: {7:0.#}% = {8:0.#}",
                             stats.ShieldsRaw,
                             stats.ShieldsSystemPercentage, stats.ShieldsSystemValue,
                             stats.ShieldsKineticPercentage, stats.ShieldsKineticValue,
                             stats.ShieldsThermalPercentage, stats.ShieldsThermalValue,
                             stats.ShieldsExplosivePercentage, stats.ShieldsExplosiveValue
                             );
+
+                    if (stats.ShieldBuildTime.HasValue)
+                        stext += string.Format(" | Build {0:0.#}s Regen {1:0.#}s", stats.ShieldBuildTime.Value, stats.ShieldRegenTime);
+                }
+
+                if (stats.CurrentSpeed.HasValue)
+                {
+                    ttext = string.Format("Cur: Spd {0:0.#} Bst {1:0.#} | Laden: {2:0.#} / {3:0.#} | Unladen: {4:0.#} / {5:0.#} | Max: {6:0.#} / {7:0.#} | Boost Freq: Cur {8:0.#}s Max {9:0.#}s",
+                        stats.CurrentSpeed, stats.CurrentBoost,
+                        stats.LadenSpeed, stats.LadenBoost,
+                        stats.UnladenSpeed, stats.UnladenBoost,
+                        stats.MaxSpeed, stats.MaxBoost,
+                        stats.CurrentBoostFrequency, stats.MaxBoostFrequency);
+                }
+
+                if (stats.FSDCurrentRange.HasValue)
+                {
+                    ftext = string.Format("Cur: {0:0.##}ly (Max {1:0.##})ly Laden: {2:0.##}ly UnLaden: {3:0.##}ly Max: {4:0.##}ly MaxFuel: {5:0.##}t Current: {6:0.#}/{7:0}t Reserve {8:0.#}/{9:0.#}t",
+                        stats.FSDCurrentRange, stats.FSDCurrentMaxRange, stats.FSDLadenRange, stats.FSDUnladenRange, stats.FSDMaxRange, stats.FSDMaxFuelPerJump, 
+                                    si.FuelLevel, si.FuelCapacity, si.ReserveFuelLevel, si.ReserveFuelCapacity);
                 }
             }
 
+            double hullmass = si.HullMass();
+            double modulemass = si.ModuleMass();
+
+            string mtext = string.Format("Mass: Cur {0:0.##}t Hull {1:0.##}t Modules {2:0.##}t Unladen {3:0.##}t Fuel {4:0.##}+{5:0.##}t Cargo {6:0}/{7:0}t",
+                            hullmass + modulemass + currentfuel + last_cargo + reservefuel,
+                            hullmass, modulemass, hullmass + modulemass, currentfuel, reservefuel, last_cargo, si.CalculateCargoCapacity());
+            if (si.FuelWarningPercent > 0)
+                mtext += string.Format(" Warning At {0:0.#}%", si.FuelWarningPercent);
+
+            string ctext = string.Format("Cost: Hull {0:N0}cr Modules {1:N0}cr Total {2:N0}cr Rebuy {3:N0}cr", si.HullValue, si.ModulesValue, si.HullValue + si.ModulesValue, si.Rebuy);
+
+            if (si.InTransit)
+                ftext = "In Transit to ".T(EDTx.UserControlModules_InTransitto) + (si.StoredAtSystem ?? "Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)) + " | " + ftext;
+            if (si.StoredAtSystem != null)
+                ftext = "Stored at".T(EDTx.UserControlModules_Storedat) + si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)) + " | " + ftext;
+
             labelShieldsValues.Text = stext;
             labelArmourValues.Text = atext;
+            labelThrustValues.Text = ttext;
+            labelFSDValues.Text = ftext;
+            labelMassValues.Text = mtext;
+            labelCostValues.Text = ctext;
+        }
+
+
+        // call to update the grid and the ship data panel
+        private void DisplayShip(Ship si)
+        {
+            string debugfile = BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\loadout.json");     // debug
+            if ( debugfile.HasChars() )
+            {
+                si = Ship.CreateFromLoadout(debugfile);
+            }
 
             last_si = si;
+
+            DisplayShipData(si);
 
             foreach (var key in si.Modules.Keys)
             {
@@ -394,67 +441,7 @@ namespace EDDiscovery.UserControls
                 AddModuleLine(sm);
             }
 
-            double hullmass = si.HullMass();
-            double modulemass = si.ModuleMass();
-
-            EliteDangerousCalculations.FSDSpec fsdspec = si.GetFSDSpec();
-            if (fsdspec != null)
-            {
-                EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2, 1.0);   // based on no boost
-                AddInfoLine("FSD Avg Jump".T(EDTx.UserControlModules_FSDAvgJump), ji.avgsinglejumpnocargo.ToString("N2") + "ly", "Half tank, no cargo".T(EDTx.UserControlModules_HT), fsdspec.ToString());
-                DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
-                AddInfoLine("FSD Max Range".T(EDTx.UserControlModules_FSDMaxRange), ji.maxjumprange.ToString("N2") + "ly", "Full Tank, no cargo".T(EDTx.UserControlModules_FT), fsdspec.ToString());
-                AddInfoLine("FSD Maximum Fuel per jump".T(EDTx.UserControlModules_FSDMaximumFuelperjump), fsdspec.MaxFuelPerJump.ToString() + "t", "", fsdspec.ToString());
-
-                //{
-                //    double eddmaxunlanen = fsdspec.JumpRange(0, modulemass + hullmass, 5, 1);
-                //    double spanshmaxunladen = fsdspec.SpanshJumpRange(modulemass + hullmass + 5);
-                //    AddInfoLine("AAFSD", $"5t fuel EDD = {eddmaxunlanen}\r\nSpansh:{spanshmaxunladen}");
-                //}
-            }
-
-            if (si.HullValue > 0)
-                AddValueLine("Hull Value".T(EDTx.UserControlModules_HullValue), si.HullValue);
-            if (si.ModulesValue > 0)
-                AddValueLine("Modules Value".T(EDTx.UserControlModules_ModulesValue), si.ModulesValue);
-            if (si.HullValue > 0 && si.ModulesValue > 0)
-                AddValueLine("Total Cost".T(EDTx.UserControlModules_TotalCost), si.HullValue + si.ModulesValue);
-            if (si.Rebuy > 0)
-                AddValueLine("Rebuy Cost".T(EDTx.UserControlModules_RebuyCost), si.Rebuy);
-
-            AddMassLine("Mass Hull".T(EDTx.UserControlModules_MassHull), hullmass.ToString("N2") + "t");
-            AddMassLine("Mass Unladen".T(EDTx.UserControlModules_MassUnladen), (hullmass + modulemass).ToString("N2") + "t");
-            if (si.UnladenMass > 0)
-                AddMassLine("Mass FD Unladen".T(EDTx.UserControlModules_MassFDUnladen), si.UnladenMass.ToString("N2") + "t");
-            AddMassLine("Mass Modules".T(EDTx.UserControlModules_MassModules), modulemass.ToString("N2") + "t");
-
-            AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), shipp?.Manufacturer ?? "?");
-
-            if (si.FuelCapacity > 0)
-                AddInfoLine("Fuel Capacity".T(EDTx.UserControlModules_FuelCapacity), si.FuelCapacity.ToString("N1") + "t");
-            if (si.FuelLevel > 0)
-                AddInfoLine(fuellevelname, si.FuelLevel.ToString("N1") + "t");
-            if (si.ReserveFuelCapacity > 0)
-                AddInfoLine(fuelresname, si.ReserveFuelCapacity.ToString("N2") + "t");
-            if (si.HullHealthAtLoadout > 0)
-                AddInfoLine("Hull Health (Loadout)".T(EDTx.UserControlModules_HullHealth), si.HullHealthAtLoadout.ToString("N1") + "%");
-
-            double fuelwarn = si.FuelWarningPercent;
-            AddInfoLine("Fuel Warning %".T(EDTx.UserControlModules_FuelWarning), fuelwarn > 0 ? fuelwarn.ToString("N1") + "%" : "Off".T(EDTx.Off));
-
-
-            AddInfoLine("Pad Size".T(EDTx.UserControlModules_PadSize), shipp?.ClassString ?? "");
-            AddInfoLine("Main Thruster Speed".T(EDTx.UserControlModules_MainThrusterSpeed), shipp?.Speed.ToString("N0") ?? "?");
-            AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), shipp?.Boost.ToString("N0") ?? "?");
-
-            if (si.InTransit)
-                AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransitto), (si.StoredAtSystem ?? "Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
-            else if (si.StoredAtSystem != null)
-                AddInfoLine("Stored at".T(EDTx.UserControlModules_Storedat), si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
-
-            int cc = si.CargoCapacity();
-            if (cc > 0)
-                AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToString("N0") + "t");
+            AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.GetShipProperties()?.Manufacturer ?? "?");
 
             extPanelRollUpStats.Visible =
             labelVehicle.Visible = true;
@@ -502,13 +489,6 @@ namespace EDDiscovery.UserControls
 
                 engtooltip = sm.Engineering.ToString();
 
-                if (sm.SlotFD == ShipSlots.Slot.FrameShiftDrive)
-                {
-                    EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
-                    if (spec != null)
-                        engtooltip += spec.ToString();
-                }
-
                 if (displayfilters.Contains("fullblueprint"))
                 {
                     eng = engtooltip;
@@ -532,24 +512,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        void AddValueLine(string s, long v, string opt = "")
-        {
-            object[] rowobj = { s, opt, "", "", "", "", v.ToString("N0"), "" };
-            dataGridViewModules.Rows.Add(rowobj);
-        }
-
         void AddInfoLine(string s, string v, string opt = "", string tooltip = "")
         {
             object[] rowobj = { s, v.AppendPrePad(opt), "", "", "", "", "", "" };
             dataGridViewModules.Rows.Add(rowobj);
             if (!string.IsNullOrEmpty(tooltip))
                 dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[0].ToolTipText = tooltip;
-        }
-
-        void AddMassLine(string m, string v, string opt = "")
-        {
-            object[] rowobj = { m, opt, "", "", v, "", "", "" };
-            dataGridViewModules.Rows.Add(rowobj);
         }
 
         #endregion

@@ -490,7 +490,7 @@ namespace EDDiscovery.UserControls
                 var counts = MaterialCommoditiesMicroResourceList.Count(mcl,0);
                 int cargocount = counts[(int)MaterialCommodityMicroResourceType.CatType.Commodity];
 
-                int cc = he.ShipInformation?.CargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
+                int cc = he.ShipInformation?.CalculateCargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
                 if (cc > 0)
                     textBoxCargo.Text = cargocount.ToString() + "/" + cc.ToString();
                 else
@@ -509,8 +509,9 @@ namespace EDDiscovery.UserControls
 
 
                 EliteDangerousCalculations.FSDSpec fsd = !he.Status.OnFoot && he.ShipInformation != null ? he.ShipInformation.GetFSDSpec() : null;
-                EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd != null ? fsd.GetJumpInfo(cargocount, he.ShipInformation.HullModuleMass(),
-                                he.ShipInformation.FuelLevel, he.ShipInformation.FuelCapacity / 2, he.Status.CurrentBoost) : null;
+
+                double? currentjumprange = fsd?.JumpRange(cargocount, he.ShipInformation.HullModuleMass(), he.ShipInformation.FuelLevel, he.Status.CurrentBoost);
+
 
                 textBoxJumpRange.Text = "";
 
@@ -554,8 +555,8 @@ namespace EDDiscovery.UserControls
                         else
                             textBoxFuel.Text = "N/A".T(EDTx.UserControlSysInfo_NA);
 
-                        if ( ji != null)
-                            textBoxJumpRange.Text = ji.cursinglejump.ToString("N2") + "ly";
+                        if ( currentjumprange != null)
+                            textBoxJumpRange.Text = currentjumprange.Value.ToString("N2") + "ly";
 
                         extButtonCoriolis.Enabled = extButtonEDSY.Enabled = true;
                     }
@@ -631,12 +632,12 @@ namespace EDDiscovery.UserControls
                             double dist = sys.Distance(DiscoveryForm.History.GetLast.System);       // we must have a last to be here
                             distance = $"{dist:N2}ly";
 
-                            if (ji != null) // and therefore fsd is non null
+                            if (currentjumprange != null) // and therefore fsd is non null
                             {
                                 double fuel = fsd.FuelUse(cargocount, he.ShipInformation.HullModuleMass(), he.ShipInformation.FuelLevel, dist, he.Status.CurrentBoost);
                                 distance += $" {fuel:N2}t";
 
-                                if (ji.cursinglejump < dist)
+                                if (currentjumprange.Value < dist)
                                     textdistcolor = ExtendedControls.Theme.Current.TextBlockHighlightColor;
                             }
 
