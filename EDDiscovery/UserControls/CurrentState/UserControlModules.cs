@@ -89,6 +89,17 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
 
             extPanelRollUpStats.Visible = false;
+
+            multiPipControlEng.Add(multiPipControlSys);
+            multiPipControlEng.Add(multiPipControlWep);
+            multiPipControlSys.Add(multiPipControlEng);
+            multiPipControlSys.Add(multiPipControlWep);
+            multiPipControlWep.Add(multiPipControlSys);
+            multiPipControlWep.Add(multiPipControlEng);
+            multiPipControlEng.ValueChanged += (s) => { DisplayShipData(last_si); };
+            multiPipControlSys.ValueChanged += (s) => { DisplayShipData(last_si); };
+            multiPipControlWep.ValueChanged += (s) => { DisplayShipData(last_si); };
+
         }
 
         public override void LoadLayout()
@@ -349,7 +360,7 @@ namespace EDDiscovery.UserControls
             double currentfuel = si.FuelLevel;
             double reservefuel = si.ReserveFuelLevel;
 
-            var stats = si?.CalculateShipStats(4, 4, last_cargo, currentfuel, reservefuel);                  // may be null
+            var stats = si?.CalculateShipStats(multiPipControlSys.Value, multiPipControlEng.Value, last_cargo, currentfuel, reservefuel);                  // may be null
 
             string atext = "-", stext = "-", ttext = "-", ftext = "-";
             if (stats != null)
@@ -391,7 +402,7 @@ namespace EDDiscovery.UserControls
 
                 if (stats.FSDCurrentRange.HasValue)
                 {
-                    ftext = string.Format("Cur: {0:0.##}ly (Max {1:0.##})ly Laden: {2:0.##}ly UnLaden: {3:0.##}ly Max: {4:0.##}ly MaxFuel: {5:0.##}t Current: {6:0.#}/{7:0}t Reserve {8:0.#}/{9:0.#}t",
+                    ftext = string.Format("Cur: {0:0.##}ly (Range {1:0.##})ly Laden: {2:0.##}ly UnLaden: {3:0.##}ly Max: {4:0.##}ly MaxFuel: {5:0.##}t Current: {6:0.#}/{7:0}t Reserve {8:0.#}/{9:0.#}t",
                         stats.FSDCurrentRange, stats.FSDCurrentMaxRange, stats.FSDLadenRange, stats.FSDUnladenRange, stats.FSDMaxRange, stats.FSDMaxFuelPerJump, 
                                     si.FuelLevel, si.FuelCapacity, si.ReserveFuelLevel, si.ReserveFuelCapacity);
                 }
