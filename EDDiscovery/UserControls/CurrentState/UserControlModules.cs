@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             multiPipControlEng.ValueChanged += (s) => { DisplayShipData(last_si); };
             multiPipControlSys.ValueChanged += (s) => { DisplayShipData(last_si); };
             multiPipControlWep.ValueChanged += (s) => { DisplayShipData(last_si); };
-
+            extButtonDrawnResetPips.Text = "RST";   // done to bypass translation
         }
 
         public override void LoadLayout()
@@ -154,6 +154,7 @@ namespace EDDiscovery.UserControls
         {
             labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            extButtonDrawnResetPips.Top = multiPipControlEng.Bottom - extButtonDrawnResetPips.Height;       // lets realign the control manually to make sure it lines up at the bottom
         }
 
         // new entry received from travel grid
@@ -614,6 +615,10 @@ namespace EDDiscovery.UserControls
             displayfilter.Show(string.Join(";", displayfilters), extButtonShowControl, this.FindForm());
         }
 
+        private void extButtonDrawnResetPips_Click(object sender, EventArgs e)
+        {
+            multiPipControlEng.Value = multiPipControlSys.Value = multiPipControlWep.Value = 4;
+        }
 
         private void buttonExtCoriolis_Click(object sender, EventArgs e)
         {
@@ -889,5 +894,6 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+
     }
 }
