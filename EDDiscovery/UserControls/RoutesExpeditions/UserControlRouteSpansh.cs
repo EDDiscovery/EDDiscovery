@@ -332,6 +332,9 @@ namespace EDDiscovery.UserControls
                         StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
                         labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Plotter)";
                     }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show("Ship information does not have FSD Spec - will be corrected when you log into Elite again");
+
                 }
             }
         }

@@ -45,9 +45,6 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelShip = new System.Windows.Forms.Label();
-            this.labelVehicle = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewModules = new BaseUtils.DataGridViewColumnControl();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -60,22 +57,26 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.extPanelRollUpStats = new ExtendedControls.ExtPanelRollUp();
+            this.labelDataArmour = new ExtendedControls.LabelData();
+            this.labelDataShields = new ExtendedControls.LabelData();
+            this.labelDataMass = new ExtendedControls.LabelData();
+            this.labelDataCost = new ExtendedControls.LabelData();
+            this.labelDataFSD = new ExtendedControls.LabelData();
+            this.labelDataThrust = new ExtendedControls.LabelData();
+            this.labelDataWep = new ExtendedControls.LabelData();
             this.extButtonDrawnResetPips = new ExtendedControls.ExtButtonDrawn();
             this.multiPipControlSys = new ExtendedControls.MultiPipControl();
             this.multiPipControlWep = new ExtendedControls.MultiPipControl();
             this.multiPipControlEng = new ExtendedControls.MultiPipControl();
-            this.labelMassValues = new System.Windows.Forms.Label();
-            this.labelCostValues = new System.Windows.Forms.Label();
-            this.labelFSDValues = new System.Windows.Forms.Label();
-            this.labelThrustValues = new System.Windows.Forms.Label();
-            this.labelShieldsValues = new System.Windows.Forms.Label();
-            this.labelArmourValues = new System.Windows.Forms.Label();
             this.labelMass = new System.Windows.Forms.Label();
             this.labelCost = new System.Windows.Forms.Label();
             this.labelFSD = new System.Windows.Forms.Label();
             this.labelThrusters = new System.Windows.Forms.Label();
+            this.labelWep = new System.Windows.Forms.Label();
             this.labelShields = new System.Windows.Forms.Label();
             this.labelArmour = new System.Windows.Forms.Label();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelShip = new System.Windows.Forms.Label();
             this.comboBoxShips = new ExtendedControls.ExtComboBox();
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
@@ -84,54 +85,18 @@ namespace EDDiscovery.UserControls
             this.buttonExtConfigure = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extButtonLoadLoadout = new ExtendedControls.ExtButton();
-            this.panelTop.SuspendLayout();
+            this.extButtonSaveLoadout = new ExtendedControls.ExtButton();
+            this.extButtonViewLoadoutFolder = new ExtendedControls.ExtButton();
+            this.labelVehicle = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.extPanelRollUpStats.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
-            // 
-            // panelTop
-            // 
-            this.panelTop.AutoSize = true;
-            this.panelTop.Controls.Add(this.labelShip);
-            this.panelTop.Controls.Add(this.comboBoxShips);
-            this.panelTop.Controls.Add(this.extButtonShowControl);
-            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
-            this.panelTop.Controls.Add(this.buttonExtCoriolis);
-            this.panelTop.Controls.Add(this.buttonExtEDShipyard);
-            this.panelTop.Controls.Add(this.buttonExtConfigure);
-            this.panelTop.Controls.Add(this.buttonExtExcel);
-            this.panelTop.Controls.Add(this.extButtonLoadLoadout);
-            this.panelTop.Controls.Add(this.labelVehicle);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 30);
-            this.panelTop.TabIndex = 30;
-            // 
-            // labelShip
-            // 
-            this.labelShip.AutoSize = true;
-            this.labelShip.Location = new System.Drawing.Point(0, 1);
-            this.labelShip.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.labelShip.Name = "labelShip";
-            this.labelShip.Size = new System.Drawing.Size(28, 13);
-            this.labelShip.TabIndex = 26;
-            this.labelShip.Text = "Ship";
-            // 
-            // labelVehicle
-            // 
-            this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(476, 1);
-            this.labelVehicle.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.labelVehicle.Name = "labelVehicle";
-            this.labelVehicle.Size = new System.Drawing.Size(53, 13);
-            this.labelVehicle.TabIndex = 28;
-            this.labelVehicle.Text = "Unknown";
             // 
             // dataViewScrollerPanel
             // 
@@ -139,9 +104,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 202);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 226);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 370);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 346);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -170,7 +135,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.RowHeadersVisible = false;
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewModules.SingleRowSelect = true;
-            this.dataGridViewModules.Size = new System.Drawing.Size(784, 370);
+            this.dataGridViewModules.Size = new System.Drawing.Size(784, 346);
             this.dataGridViewModules.TabIndex = 1;
             this.dataGridViewModules.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellDoubleClick);
             this.dataGridViewModules.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewModules_SortCompare);
@@ -255,7 +220,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 370);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 346);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -271,20 +236,22 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUpStats.AutoHeight = false;
             this.extPanelRollUpStats.AutoHeightWidthDisable = false;
             this.extPanelRollUpStats.AutoWidth = false;
+            this.extPanelRollUpStats.Controls.Add(this.labelDataArmour);
+            this.extPanelRollUpStats.Controls.Add(this.labelDataShields);
+            this.extPanelRollUpStats.Controls.Add(this.labelDataMass);
+            this.extPanelRollUpStats.Controls.Add(this.labelDataCost);
+            this.extPanelRollUpStats.Controls.Add(this.labelDataFSD);
+            this.extPanelRollUpStats.Controls.Add(this.labelDataThrust);
+            this.extPanelRollUpStats.Controls.Add(this.labelDataWep);
             this.extPanelRollUpStats.Controls.Add(this.extButtonDrawnResetPips);
             this.extPanelRollUpStats.Controls.Add(this.multiPipControlSys);
             this.extPanelRollUpStats.Controls.Add(this.multiPipControlWep);
             this.extPanelRollUpStats.Controls.Add(this.multiPipControlEng);
-            this.extPanelRollUpStats.Controls.Add(this.labelMassValues);
-            this.extPanelRollUpStats.Controls.Add(this.labelCostValues);
-            this.extPanelRollUpStats.Controls.Add(this.labelFSDValues);
-            this.extPanelRollUpStats.Controls.Add(this.labelThrustValues);
-            this.extPanelRollUpStats.Controls.Add(this.labelShieldsValues);
-            this.extPanelRollUpStats.Controls.Add(this.labelArmourValues);
             this.extPanelRollUpStats.Controls.Add(this.labelMass);
             this.extPanelRollUpStats.Controls.Add(this.labelCost);
             this.extPanelRollUpStats.Controls.Add(this.labelFSD);
             this.extPanelRollUpStats.Controls.Add(this.labelThrusters);
+            this.extPanelRollUpStats.Controls.Add(this.labelWep);
             this.extPanelRollUpStats.Controls.Add(this.labelShields);
             this.extPanelRollUpStats.Controls.Add(this.labelArmour);
             this.extPanelRollUpStats.Dock = System.Windows.Forms.DockStyle.Top;
@@ -297,9 +264,128 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUpStats.RollUpDelay = 1000;
             this.extPanelRollUpStats.SecondHiddenMarkerWidth = 0;
             this.extPanelRollUpStats.ShowHiddenMarker = true;
-            this.extPanelRollUpStats.Size = new System.Drawing.Size(800, 172);
+            this.extPanelRollUpStats.Size = new System.Drawing.Size(800, 196);
             this.extPanelRollUpStats.TabIndex = 2;
             this.extPanelRollUpStats.UnrollHoverDelay = 1000;
+            // 
+            // labelDataArmour
+            // 
+            this.labelDataArmour.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataArmour.BorderWidth = 1;
+            this.labelDataArmour.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataArmour.Data = null;
+            this.labelDataArmour.DataFont = null;
+            this.labelDataArmour.InterSpacing = 4;
+            this.labelDataArmour.Location = new System.Drawing.Point(68, 38);
+            this.labelDataArmour.Name = "labelDataArmour";
+            this.labelDataArmour.NoDataText = "?";
+            this.labelDataArmour.Size = new System.Drawing.Size(1200, 19);
+            this.labelDataArmour.TabIndex = 6;
+            this.labelDataArmour.TabSpacingData = 120;
+            this.labelDataArmour.Text = "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" +
+    "";
+            // 
+            // labelDataShields
+            // 
+            this.labelDataShields.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataShields.BorderWidth = 1;
+            this.labelDataShields.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataShields.Data = null;
+            this.labelDataShields.DataFont = null;
+            this.labelDataShields.InterSpacing = 4;
+            this.labelDataShields.Location = new System.Drawing.Point(68, 58);
+            this.labelDataShields.Name = "labelDataShields";
+            this.labelDataShields.NoDataText = "?";
+            this.labelDataShields.Size = new System.Drawing.Size(1200, 19);
+            this.labelDataShields.TabIndex = 6;
+            this.labelDataShields.TabSpacingData = 120;
+            this.labelDataShields.Text = "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" +
+    "";
+            // 
+            // labelDataMass
+            // 
+            this.labelDataMass.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataMass.BorderWidth = 1;
+            this.labelDataMass.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataMass.Data = null;
+            this.labelDataMass.DataFont = null;
+            this.labelDataMass.InterSpacing = 4;
+            this.labelDataMass.Location = new System.Drawing.Point(68, 158);
+            this.labelDataMass.Name = "labelDataMass";
+            this.labelDataMass.NoDataText = "?";
+            this.labelDataMass.Size = new System.Drawing.Size(1200, 19);
+            this.labelDataMass.TabIndex = 6;
+            this.labelDataMass.TabSpacingData = 120;
+            this.labelDataMass.Text = "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} War" +
+    "ning at {0.#|%}";
+            // 
+            // labelDataCost
+            // 
+            this.labelDataCost.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataCost.BorderWidth = 1;
+            this.labelDataCost.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataCost.Data = null;
+            this.labelDataCost.DataFont = null;
+            this.labelDataCost.InterSpacing = 4;
+            this.labelDataCost.Location = new System.Drawing.Point(68, 138);
+            this.labelDataCost.Name = "labelDataCost";
+            this.labelDataCost.NoDataText = "?";
+            this.labelDataCost.Size = new System.Drawing.Size(1200, 19);
+            this.labelDataCost.TabIndex = 6;
+            this.labelDataCost.TabSpacingData = 120;
+            this.labelDataCost.Text = "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}";
+            // 
+            // labelDataFSD
+            // 
+            this.labelDataFSD.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataFSD.BorderWidth = 1;
+            this.labelDataFSD.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataFSD.Data = null;
+            this.labelDataFSD.DataFont = null;
+            this.labelDataFSD.InterSpacing = 4;
+            this.labelDataFSD.Location = new System.Drawing.Point(68, 118);
+            this.labelDataFSD.Name = "labelDataFSD";
+            this.labelDataFSD.NoDataText = "?";
+            this.labelDataFSD.Size = new System.Drawing.Size(1200, 19);
+            this.labelDataFSD.TabIndex = 6;
+            this.labelDataFSD.TabSpacingData = 120;
+            this.labelDataFSD.Text = "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} Max" +
+    "Fuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Store" +
+    "d at {}";
+            // 
+            // labelDataThrust
+            // 
+            this.labelDataThrust.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataThrust.BorderWidth = 1;
+            this.labelDataThrust.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataThrust.Data = null;
+            this.labelDataThrust.DataFont = null;
+            this.labelDataThrust.InterSpacing = 4;
+            this.labelDataThrust.Location = new System.Drawing.Point(68, 98);
+            this.labelDataThrust.Name = "labelDataThrust";
+            this.labelDataThrust.NoDataText = "?";
+            this.labelDataThrust.Size = new System.Drawing.Size(1200, 19);
+            this.labelDataThrust.TabIndex = 6;
+            this.labelDataThrust.TabSpacingData = 120;
+            this.labelDataThrust.Text = "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boo" +
+    "st Cur {0.#|s} Max {0.#|s}";
+            // 
+            // labelDataWep
+            // 
+            this.labelDataWep.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataWep.BorderWidth = 1;
+            this.labelDataWep.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataWep.Data = null;
+            this.labelDataWep.DataFont = null;
+            this.labelDataWep.InterSpacing = 4;
+            this.labelDataWep.Location = new System.Drawing.Point(68, 78);
+            this.labelDataWep.Name = "labelDataWep";
+            this.labelDataWep.NoDataText = "?";
+            this.labelDataWep.Size = new System.Drawing.Size(1200, 19);
+            this.labelDataWep.TabIndex = 6;
+            this.labelDataWep.TabSpacingData = 80;
+            this.labelDataWep.Text = "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} " +
+    "Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}";
             // 
             // extButtonDrawnResetPips
             // 
@@ -377,64 +463,10 @@ namespace EDDiscovery.UserControls
             this.multiPipControlEng.Value = 4;
             this.multiPipControlEng.ValueChanged = null;
             // 
-            // labelMassValues
-            // 
-            this.labelMassValues.AutoSize = true;
-            this.labelMassValues.Location = new System.Drawing.Point(68, 138);
-            this.labelMassValues.Name = "labelMassValues";
-            this.labelMassValues.Size = new System.Drawing.Size(43, 13);
-            this.labelMassValues.TabIndex = 1;
-            this.labelMassValues.Text = "<code>";
-            // 
-            // labelCostValues
-            // 
-            this.labelCostValues.AutoSize = true;
-            this.labelCostValues.Location = new System.Drawing.Point(68, 118);
-            this.labelCostValues.Name = "labelCostValues";
-            this.labelCostValues.Size = new System.Drawing.Size(43, 13);
-            this.labelCostValues.TabIndex = 1;
-            this.labelCostValues.Text = "<code>";
-            // 
-            // labelFSDValues
-            // 
-            this.labelFSDValues.AutoSize = true;
-            this.labelFSDValues.Location = new System.Drawing.Point(68, 98);
-            this.labelFSDValues.Name = "labelFSDValues";
-            this.labelFSDValues.Size = new System.Drawing.Size(43, 13);
-            this.labelFSDValues.TabIndex = 1;
-            this.labelFSDValues.Text = "<code>";
-            // 
-            // labelThrustValues
-            // 
-            this.labelThrustValues.AutoSize = true;
-            this.labelThrustValues.Location = new System.Drawing.Point(68, 78);
-            this.labelThrustValues.Name = "labelThrustValues";
-            this.labelThrustValues.Size = new System.Drawing.Size(43, 13);
-            this.labelThrustValues.TabIndex = 1;
-            this.labelThrustValues.Text = "<code>";
-            // 
-            // labelShieldsValues
-            // 
-            this.labelShieldsValues.AutoSize = true;
-            this.labelShieldsValues.Location = new System.Drawing.Point(68, 58);
-            this.labelShieldsValues.Name = "labelShieldsValues";
-            this.labelShieldsValues.Size = new System.Drawing.Size(43, 13);
-            this.labelShieldsValues.TabIndex = 1;
-            this.labelShieldsValues.Text = "<code>";
-            // 
-            // labelArmourValues
-            // 
-            this.labelArmourValues.AutoSize = true;
-            this.labelArmourValues.Location = new System.Drawing.Point(68, 38);
-            this.labelArmourValues.Name = "labelArmourValues";
-            this.labelArmourValues.Size = new System.Drawing.Size(43, 13);
-            this.labelArmourValues.TabIndex = 1;
-            this.labelArmourValues.Text = "<code>";
-            // 
             // labelMass
             // 
             this.labelMass.AutoSize = true;
-            this.labelMass.Location = new System.Drawing.Point(6, 138);
+            this.labelMass.Location = new System.Drawing.Point(6, 158);
             this.labelMass.Name = "labelMass";
             this.labelMass.Size = new System.Drawing.Size(35, 13);
             this.labelMass.TabIndex = 0;
@@ -443,7 +475,7 @@ namespace EDDiscovery.UserControls
             // labelCost
             // 
             this.labelCost.AutoSize = true;
-            this.labelCost.Location = new System.Drawing.Point(6, 118);
+            this.labelCost.Location = new System.Drawing.Point(6, 138);
             this.labelCost.Name = "labelCost";
             this.labelCost.Size = new System.Drawing.Size(31, 13);
             this.labelCost.TabIndex = 0;
@@ -452,7 +484,7 @@ namespace EDDiscovery.UserControls
             // labelFSD
             // 
             this.labelFSD.AutoSize = true;
-            this.labelFSD.Location = new System.Drawing.Point(6, 98);
+            this.labelFSD.Location = new System.Drawing.Point(6, 118);
             this.labelFSD.Name = "labelFSD";
             this.labelFSD.Size = new System.Drawing.Size(31, 13);
             this.labelFSD.TabIndex = 0;
@@ -461,11 +493,20 @@ namespace EDDiscovery.UserControls
             // labelThrusters
             // 
             this.labelThrusters.AutoSize = true;
-            this.labelThrusters.Location = new System.Drawing.Point(6, 78);
+            this.labelThrusters.Location = new System.Drawing.Point(6, 98);
             this.labelThrusters.Name = "labelThrusters";
             this.labelThrusters.Size = new System.Drawing.Size(40, 13);
             this.labelThrusters.TabIndex = 0;
             this.labelThrusters.Text = "Thrust:";
+            // 
+            // labelWep
+            // 
+            this.labelWep.AutoSize = true;
+            this.labelWep.Location = new System.Drawing.Point(6, 78);
+            this.labelWep.Name = "labelWep";
+            this.labelWep.Size = new System.Drawing.Size(56, 13);
+            this.labelWep.TabIndex = 0;
+            this.labelWep.Text = "Weapons:";
             // 
             // labelShields
             // 
@@ -484,6 +525,37 @@ namespace EDDiscovery.UserControls
             this.labelArmour.Size = new System.Drawing.Size(43, 13);
             this.labelArmour.TabIndex = 0;
             this.labelArmour.Text = "Armour:";
+            // 
+            // panelTop
+            // 
+            this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.labelShip);
+            this.panelTop.Controls.Add(this.comboBoxShips);
+            this.panelTop.Controls.Add(this.extButtonShowControl);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
+            this.panelTop.Controls.Add(this.buttonExtCoriolis);
+            this.panelTop.Controls.Add(this.buttonExtEDShipyard);
+            this.panelTop.Controls.Add(this.buttonExtConfigure);
+            this.panelTop.Controls.Add(this.buttonExtExcel);
+            this.panelTop.Controls.Add(this.extButtonLoadLoadout);
+            this.panelTop.Controls.Add(this.extButtonSaveLoadout);
+            this.panelTop.Controls.Add(this.extButtonViewLoadoutFolder);
+            this.panelTop.Controls.Add(this.labelVehicle);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(800, 30);
+            this.panelTop.TabIndex = 30;
+            // 
+            // labelShip
+            // 
+            this.labelShip.AutoSize = true;
+            this.labelShip.Location = new System.Drawing.Point(0, 1);
+            this.labelShip.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelShip.Name = "labelShip";
+            this.labelShip.Size = new System.Drawing.Size(28, 13);
+            this.labelShip.TabIndex = 26;
+            this.labelShip.Text = "Ship";
             // 
             // comboBoxShips
             // 
@@ -621,6 +693,42 @@ namespace EDDiscovery.UserControls
             this.extButtonLoadLoadout.UseVisualStyleBackColor = true;
             this.extButtonLoadLoadout.Click += new System.EventHandler(this.extButtonLoadLoadout_Click);
             // 
+            // extButtonSaveLoadout
+            // 
+            this.extButtonSaveLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonSaveLoadout.Image = global::EDDiscovery.Icons.Controls.Save;
+            this.extButtonSaveLoadout.Location = new System.Drawing.Point(476, 1);
+            this.extButtonSaveLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonSaveLoadout.Name = "extButtonSaveLoadout";
+            this.extButtonSaveLoadout.Size = new System.Drawing.Size(28, 28);
+            this.extButtonSaveLoadout.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonSaveLoadout, "Save this loadout to the EDD loadout folder");
+            this.extButtonSaveLoadout.UseVisualStyleBackColor = true;
+            this.extButtonSaveLoadout.Click += new System.EventHandler(this.extButtonSaveLoadout_Click);
+            // 
+            // extButtonViewLoadoutFolder
+            // 
+            this.extButtonViewLoadoutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonViewLoadoutFolder.Image = global::EDDiscovery.Icons.Controls.Folder;
+            this.extButtonViewLoadoutFolder.Location = new System.Drawing.Point(512, 1);
+            this.extButtonViewLoadoutFolder.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonViewLoadoutFolder.Name = "extButtonViewLoadoutFolder";
+            this.extButtonViewLoadoutFolder.Size = new System.Drawing.Size(28, 28);
+            this.extButtonViewLoadoutFolder.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonViewLoadoutFolder, "Open the EDD folder containing .loadout files");
+            this.extButtonViewLoadoutFolder.UseVisualStyleBackColor = true;
+            this.extButtonViewLoadoutFolder.Click += new System.EventHandler(this.extButtonViewLoadoutFolder_Click);
+            // 
+            // labelVehicle
+            // 
+            this.labelVehicle.AutoSize = true;
+            this.labelVehicle.Location = new System.Drawing.Point(548, 1);
+            this.labelVehicle.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelVehicle.Name = "labelVehicle";
+            this.labelVehicle.Size = new System.Drawing.Size(53, 13);
+            this.labelVehicle.TabIndex = 28;
+            this.labelVehicle.Text = "Unknown";
+            // 
             // UserControlModules
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -630,12 +738,12 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlModules";
             this.Size = new System.Drawing.Size(800, 572);
-            this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).EndInit();
             this.extPanelRollUpStats.ResumeLayout(false);
             this.extPanelRollUpStats.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -667,21 +775,25 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonExtConfigure;
         private ExtendedControls.ExtButton extButtonLoadLoadout;
         private System.Windows.Forms.Label labelArmour;
-        private System.Windows.Forms.Label labelArmourValues;
         private ExtendedControls.ExtPanelRollUp extPanelRollUpStats;
-        private System.Windows.Forms.Label labelShieldsValues;
         private System.Windows.Forms.Label labelShields;
-        private System.Windows.Forms.Label labelThrustValues;
         private System.Windows.Forms.Label labelThrusters;
         private System.Windows.Forms.Label labelFSD;
-        private System.Windows.Forms.Label labelFSDValues;
         private System.Windows.Forms.Label labelCost;
-        private System.Windows.Forms.Label labelCostValues;
-        private System.Windows.Forms.Label labelMassValues;
         private System.Windows.Forms.Label labelMass;
         private ExtendedControls.MultiPipControl multiPipControlEng;
         private ExtendedControls.MultiPipControl multiPipControlSys;
         private ExtendedControls.MultiPipControl multiPipControlWep;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnResetPips;
+        private ExtendedControls.ExtButton extButtonSaveLoadout;
+        private ExtendedControls.ExtButton extButtonViewLoadoutFolder;
+        private ExtendedControls.LabelData labelDataWep;
+        private System.Windows.Forms.Label labelWep;
+        private ExtendedControls.LabelData labelDataShields;
+        private ExtendedControls.LabelData labelDataArmour;
+        private ExtendedControls.LabelData labelDataCost;
+        private ExtendedControls.LabelData labelDataFSD;
+        private ExtendedControls.LabelData labelDataThrust;
+        private ExtendedControls.LabelData labelDataMass;
     }
 }

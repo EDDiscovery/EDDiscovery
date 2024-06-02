@@ -542,9 +542,7 @@ SECTION UserControlModules
 .Mass: "Mass" @
 .Manufacturer: "Manufacturer" @
 
-.Storedat: "Stored at" @
 .InTransit: "In Transit" @
-.InTransitto: "In Transit to " @
 .EDSURL: "Enter ED Shipyard URL" @
 .CURL: "Enter Coriolis URL" @
 .FW: "Fuel Warning: " @

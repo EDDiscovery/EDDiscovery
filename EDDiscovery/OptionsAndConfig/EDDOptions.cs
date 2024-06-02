@@ -129,7 +129,7 @@ namespace EDDiscovery
         public string TranslatorDirectory() { return translationfolder; }
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         public bool SetEDDNforNewCommanders { get; private set; } = true;
-
+        public string ShipLoadoutsDirectory() { return SubAppDirectory("Loadouts"); }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
         public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
 

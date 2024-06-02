@@ -222,5 +222,6 @@ namespace EDDiscovery.Icons
         public static Image Bar1 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar1"); } }
         public static Image Bar2 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar2"); } }
         public static Image Bar3 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar3"); } }
+        public static Image Folder { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Folder"); } }
     }
 }

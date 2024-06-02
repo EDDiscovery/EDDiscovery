@@ -235,21 +235,6 @@ namespace EDDiscovery
         UserControlCompass_hidewhennotarget,
 
 
-        ImportExportForm, // Control 'Export'
-        ImportExportForm_buttonExport, // Control 'Export'
-        ImportExportForm_ImportTitle,
-        ImportExportForm_ImportButton,
-        ImportExportForm_labelCVSSep, // Control 'CSV Separator'
-        ImportExportForm_radioButtonComma, // Control 'Comma'
-        ImportExportForm_radioButtonSemiColon, // Control 'Semicolon'
-        ImportExportForm_checkBoxIncludeHeader, // Control 'Include Header'
-        ImportExportForm_checkBoxCustomAutoOpen, // Control 'Open'
-        ImportExportForm_labelUTCEnd, // Control 'UTC'
-        ImportExportForm_labelUTCStart, // Control 'UTC'
-        ImportExportForm_labelPaste,
-        ImportExportForm_extRadioButtonTab,
-        ImportExportForm_extCheckBoxExcludeHeader,
-
         Form2DMap_LastWeek, // Last Week
         Form2DMap_LastMonth, // Last Month
         Form2DMap_LastYear, // Last Year
@@ -492,9 +477,18 @@ namespace EDDiscovery
         UserControlModules_labelArmour,
         UserControlModules_labelShields,
         UserControlModules_labelMass,
+        UserControlModules_labelWep,
         UserControlModules_labelCost,
         UserControlModules_labelFSD,
         UserControlModules_labelThrusters,
+
+        UserControlModules_labelDataWep,
+        UserControlModules_labelDataShields,
+        UserControlModules_labelDataArmour,
+        UserControlModules_labelDataThrust,
+        UserControlModules_labelDataFSD,
+        UserControlModules_labelDataCost,
+        UserControlModules_labelDataMass,
 
         UserControlModules_FullBluePrint, // Show full blueprint information
 
@@ -522,9 +516,7 @@ namespace EDDiscovery
         UserControlModules_Mass, // Mass
         UserControlModules_Manufacturer, // Manufacturer
 
-        UserControlModules_Storedat, // Stored at
         UserControlModules_InTransit, // In Transit
-        UserControlModules_InTransitto, // In Transit
         UserControlModules_EDSURL, // Enter ED Shipyard URL
         UserControlModules_CURL, // Enter Coriolis URL
         UserControlModules_FW, // Fuel Warning:
