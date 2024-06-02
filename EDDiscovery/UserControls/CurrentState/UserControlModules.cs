@@ -862,7 +862,7 @@ namespace EDDiscovery.UserControls
                             UpdateComboBox();
                             if ( comboBoxShips.Text == name)
                             {
-                                DisplayShip(si);
+                                Display();
                             }
                             else
                                 comboBoxShips.SelectedItem = name;
