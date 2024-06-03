@@ -458,10 +458,7 @@ namespace EDDiscovery.UserControls
                 bool engineeredfully = sm.GetModuleEngineered(out ItemData.ShipModule engmod);
                 if (engmod != null) // may not have enough details to find module
                 {
-                    if (engineeredfully)
-                        infoentry = infoentry.AppendPrePad(engmod.PropertiesAsText(), ", ");
-                    else
-                        infoentry = infoentry.AppendPrePad("*** " + engmod.PropertiesAsText(), ", ");
+                    infoentry = infoentry.AppendPrePad((engineeredfully ? "" : "!**! ") + engmod.PropertiesAsText(Environment.NewLine), Environment.NewLine);
                 }
 
             }
