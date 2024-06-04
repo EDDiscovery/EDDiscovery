@@ -79,8 +79,6 @@ namespace EDDiscovery.UserControls
 
             displayfilters = GetSetting(dbDisplayFilters, "").Split(';');
 
-            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
-
             extCheckBoxWordWrap.Checked = GetSetting("WordWrap", false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
@@ -89,7 +87,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
 
-            extPanelRollUpStats.Visible = false;
 
             multiPipControlEng.Add(multiPipControlSys);
             multiPipControlEng.Add(multiPipControlWep);
@@ -101,6 +98,8 @@ namespace EDDiscovery.UserControls
             multiPipControlSys.ValueChanged += (s) => { DisplayShipData(last_si); };
             multiPipControlWep.ValueChanged += (s) => { DisplayShipData(last_si); };
             extButtonDrawnResetPips.Text = "RST";   // done to bypass translation
+
+            HideShipRelatedButtons();
         }
 
         public override void LoadLayout()
@@ -233,7 +232,7 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxShips.Text == storedmoduletext)
             {
-                SetToolbarButtonVisibility(false);
+                HideShipRelatedButtons();
 
                 if (last_he?.StoredModules != null)
                 {
@@ -273,7 +272,7 @@ namespace EDDiscovery.UserControls
                     allmodulesref.Add(si);      // we add ref in effect to the list of modules we extracted info from - this is used to see if they changed during the update abovevi
                 }
 
-                SetToolbarButtonVisibility(false);
+                HideShipRelatedButtons();
 
                 foreach (ShipModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
                 {
@@ -294,7 +293,7 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allknownmodulestext)
             {
-                SetToolbarButtonVisibility(false);
+                HideShipRelatedButtons();
                 Value.Visible = SlotCol.Visible = PriorityEnable.Visible = BluePrint.Visible = false;
 
                 var modules = ItemData.GetShipModules(true, true, true, true, true, compressarmourtosidewinderonly: false);
@@ -305,7 +304,7 @@ namespace EDDiscovery.UserControls
                                     sm.TranslatedModTypeString,
                                     sm.TranslatedModName,
                                     "",
-                                    sm.PropertiesAsText(),
+                                    sm.ToString(Environment.NewLine),
                                     sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                     "",
                                     "",
@@ -323,7 +322,7 @@ namespace EDDiscovery.UserControls
                     Ship si = Ship.CreateFromLoadout(loadoutfile);
                     if ( si != null )
                     {
-                        DisplayShip(si);
+                        DisplayShip(si,true);
                     }
                 }
             }
@@ -333,7 +332,7 @@ namespace EDDiscovery.UserControls
                 {
                     last_cargo = DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(last_he.MaterialCommodity);
                     last_he.ShipInformation.UpdateFuelWarningPercent();      // ensure its fresh from the DB
-                    DisplayShip(last_he.ShipInformation);
+                    DisplayShip(last_he.ShipInformation,false);
                 }
             }
             else
@@ -343,7 +342,7 @@ namespace EDDiscovery.UserControls
                 {
                     last_cargo = 0;                     // presume empty cargo
                     si.UpdateFuelWarningPercent();      // ensure its fresh from the DB
-                    DisplayShip(si);
+                    DisplayShip(si,false);
                 }
             }
 
@@ -355,15 +354,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewModules.SafeFirstDisplayedScrollingRowIndex(firstline);
         }
 
-        private void SetToolbarButtonVisibility(bool vis)
-        {
-            extPanelRollUpStats.Visible = extButtonSaveLoadout.Visible = extButtonViewLoadoutFolder.Visible = extButtonLoadLoadout.Visible = 
-            labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = vis;
-        }
-
-
         // call to update the grid and the ship data panel
-        private void DisplayShip(Ship si)
+        private void DisplayShip(Ship si, bool displaydeleteloadoutbutton)
         {
             last_si = si;
 
@@ -377,11 +369,17 @@ namespace EDDiscovery.UserControls
 
             AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.GetShipProperties()?.Manufacturer ?? "?");
 
-            extPanelRollUpStats.Visible = labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
+
+            
             buttonExtConfigure.Visible = si.State == Ship.ShipState.Owned;
-            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = extButtonSaveLoadout.Visible = si.CheckMinimumModulesForCoriolisEDSY();
-            extButtonViewLoadoutFolder.Visible = true;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumModulesForCoriolisEDSY();          //ORDER is important due to flow control panel
+            extButtonLoadLoadout.Visible = true;
+            extPanelRollUpStats.Visible = !ItemData.IsSRVOrFighter(si.ShipFD);
+            labelVehicle.Visible = true;
+            extButtonSaveLoadout.Visible = true;
+            extButtonDeleteLoadout.Visible = displaydeleteloadoutbutton;
+            
         }
 
         // call to update the ship data panel
@@ -414,10 +412,10 @@ namespace EDDiscovery.UserControls
                                     si.FuelLevel, si.FuelCapacity, si.ReserveFuelLevel, si.ReserveFuelCapacity, transit, storedat
             } : null;
 
-            labelDataWep.Data = stats?.WeaponRaw.HasValue??false ? new object[] { stats.WeaponRaw.Value, 
-                        stats.WeaponAbsolutePercentage, stats.WeaponKineticPercentage, stats.WeaponThermalPercentage,stats.WeaponExplosivePercentage, stats.WeaponAXPercentage,
-                        stats.WeaponDuration, stats.WeaponDurationMax, stats.WeaponAmmoDuration, stats.WeaponCurSus, stats.WeaponMaxSus,
-            } : null;
+            //labelDataWep.Data = stats?.WeaponRaw.HasValue??false ? new object[] { stats.WeaponRaw.Value, 
+            //            stats.WeaponAbsolutePercentage, stats.WeaponKineticPercentage, stats.WeaponThermalPercentage,stats.WeaponExplosivePercentage, stats.WeaponAXPercentage,
+            //            stats.WeaponDuration, stats.WeaponDurationMax, stats.WeaponAmmoDuration, stats.WeaponCurSus, stats.WeaponMaxSus,
+            //} : null;
 
             labelDataThrust.Data = stats?.CurrentSpeed.HasValue ?? false ? new object[]  {
                                         stats.CurrentSpeed, stats.CurrentBoost,
@@ -440,27 +438,24 @@ namespace EDDiscovery.UserControls
 
         }
 
-        void AddModuleLine(ShipModule sm , Ship si = null)
+        void AddModuleLine(ShipModule sm , Ship onship = null)
         {
             string infoentry = "";
 
-            if (si != null)
-                infoentry = si.ShipNameIdentType;
-            else
+            if (onship != null)
+                infoentry = onship.ShipNameIdentType;
+
+            if (sm.AmmoHopper.HasValue)
             {
-                if (sm.AmmoHopper.HasValue)
-                {
-                    infoentry = infoentry.AppendPrePad($"Current Hopper: {sm.AmmoHopper.Value.ToString()}", ", ");
-                    if (sm.AmmoClip.HasValue)
-                        infoentry += "/" + sm.AmmoClip.ToString();
-                }
+                infoentry = infoentry.AppendPrePad($"Current Hopper: {sm.AmmoHopper.Value.ToString()}", ", ");
+                if (sm.AmmoClip.HasValue)
+                    infoentry += "/" + sm.AmmoClip.ToString();
+            }
 
-                bool engineeredfully = sm.GetModuleEngineered(out ItemData.ShipModule engmod);
-                if (engmod != null) // may not have enough details to find module
-                {
-                    infoentry = infoentry.AppendPrePad((engineeredfully ? "" : "!**! ") + engmod.PropertiesAsText(Environment.NewLine), Environment.NewLine);
-                }
-
+            bool engineeredfully = sm.GetModuleEngineered(out ItemData.ShipModule engmod);
+            if (engmod != null) // may not have enough details to find module
+            {
+                infoentry = infoentry.AppendPrePad((engineeredfully ? "" : "!**! ") + engmod.ToString(Environment.NewLine), Environment.NewLine);
             }
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
@@ -507,10 +502,17 @@ namespace EDDiscovery.UserControls
                 dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[0].ToolTipText = tooltip;
         }
 
+        private void HideShipRelatedButtons()
+        {
+            extPanelRollUpStats.Visible = extButtonSaveLoadout.Visible = extButtonDeleteLoadout.Visible = extButtonLoadLoadout.Visible =
+            labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
+        }
+
+
         #endregion
 
         #region Word wrap
-        
+
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
             PutSetting("WordWrap", extCheckBoxWordWrap.Checked);
@@ -873,23 +875,33 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewModules.RowCount > 0 && last_si != null)
             {
-                string name = ExtendedControls.PromptSingleLine.ShowDialog(FindForm(), "Name:", "", "Enter loadout description to save ship with", FindForm().Icon, requireinput: true);
+                string name = ExtendedControls.PromptSingleLine.ShowDialog(FindForm(), "Name:", "", "Enter loadout description to save ship with".T(EDTx.UserControlModules_SaveLoadout), FindForm().Icon, requireinput: true);
+
                 if ( name!=null )
                 {
-                    string path = System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), name + ".loadout");
-                    BaseUtils.FileHelpers.TryWriteToFile(path, last_si.JSONLoadout().ToString(true));        // we don't write raw text, rather our loadout. And don't moan if failed
-
-                    UpdateComboBox();
+                    name += ".loadout";
+                    string path = System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), name);
+                    if (BaseUtils.FileHelpers.TryWriteToFile(path, last_si.JSONLoadout().ToString(true)))
+                    {
+                        UpdateComboBox();
+                        comboBoxShips.SelectedItem = name;
+                    }
                 }
             }
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".T(EDTx.UserControlModules_NOSI), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void extButtonViewLoadoutFolder_Click(object sender, EventArgs e)
+        private void extButtonDeleteLoadout_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(EDDOptions.Instance.ShipLoadoutsDirectory());
-
+            string name = comboBoxShips.Text;
+            if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".TxID(EDTx.FilterSelector_Confirmremoval) + " " + name, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                string path = System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), name);
+                BaseUtils.FileHelpers.DeleteFileNoError(path);
+                UpdateComboBox();       // this will remove the entry from the combo box and go back to travel history
+                Display();
+            }
         }
     }
 }

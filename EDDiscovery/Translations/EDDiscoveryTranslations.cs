@@ -527,6 +527,7 @@ namespace EDDiscovery
         UserControlModules_SC, // Ship Configure
         UserControlModules_MI, // Module Information
         UserControlModules_NOSI, // No ship information available
+        UserControlModules_SaveLoadout,
 
         UserControlStats_tabControlCustomStats_tabPageGeneral, // Control 'General'
         UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName, // Column Header 'Item'

@@ -45,6 +45,16 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.comboBoxShips = new ExtendedControls.ExtComboBox();
+            this.extButtonShowControl = new ExtendedControls.ExtButton();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
+            this.buttonExtCoriolis = new ExtendedControls.ExtButton();
+            this.buttonExtEDShipyard = new ExtendedControls.ExtButton();
+            this.buttonExtConfigure = new ExtendedControls.ExtButton();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.extButtonLoadLoadout = new ExtendedControls.ExtButton();
+            this.extButtonSaveLoadout = new ExtendedControls.ExtButton();
+            this.extButtonDeleteLoadout = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewModules = new BaseUtils.DataGridViewColumnControl();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,16 +87,6 @@ namespace EDDiscovery.UserControls
             this.labelArmour = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.labelShip = new System.Windows.Forms.Label();
-            this.comboBoxShips = new ExtendedControls.ExtComboBox();
-            this.extButtonShowControl = new ExtendedControls.ExtButton();
-            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
-            this.buttonExtCoriolis = new ExtendedControls.ExtButton();
-            this.buttonExtEDShipyard = new ExtendedControls.ExtButton();
-            this.buttonExtConfigure = new ExtendedControls.ExtButton();
-            this.buttonExtExcel = new ExtendedControls.ExtButton();
-            this.extButtonLoadLoadout = new ExtendedControls.ExtButton();
-            this.extButtonSaveLoadout = new ExtendedControls.ExtButton();
-            this.extButtonViewLoadoutFolder = new ExtendedControls.ExtButton();
             this.labelVehicle = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
@@ -97,6 +97,168 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
+            // 
+            // comboBoxShips
+            // 
+            this.comboBoxShips.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxShips.ButtonColorScaling = 0.5F;
+            this.comboBoxShips.DataSource = null;
+            this.comboBoxShips.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxShips.DisplayMember = "";
+            this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxShips.Location = new System.Drawing.Point(36, 1);
+            this.comboBoxShips.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxShips.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxShips.Name = "comboBoxShips";
+            this.comboBoxShips.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxShips.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxShips.SelectedIndex = -1;
+            this.comboBoxShips.SelectedItem = null;
+            this.comboBoxShips.SelectedValue = null;
+            this.comboBoxShips.Size = new System.Drawing.Size(188, 21);
+            this.comboBoxShips.TabIndex = 0;
+            this.comboBoxShips.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
+            this.comboBoxShips.ValueMember = "";
+            this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // extButtonShowControl
+            // 
+            this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extButtonShowControl.Location = new System.Drawing.Point(240, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonShowControl.Name = "extButtonShowControl";
+            this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
+            this.extButtonShowControl.TabIndex = 33;
+            this.toolTip.SetToolTip(this.extButtonShowControl, "Display Settings");
+            this.extButtonShowControl.UseVisualStyleBackColor = false;
+            this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
+            // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(272, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 32;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
+            // 
+            // buttonExtCoriolis
+            // 
+            this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Coriolis;
+            this.buttonExtCoriolis.Location = new System.Drawing.Point(308, 1);
+            this.buttonExtCoriolis.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtCoriolis.Name = "buttonExtCoriolis";
+            this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtCoriolis.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Coriolis");
+            this.buttonExtCoriolis.UseVisualStyleBackColor = false;
+            this.buttonExtCoriolis.Click += new System.EventHandler(this.buttonExtCoriolis_Click);
+            this.buttonExtCoriolis.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtCoriolis_MouseDown);
+            // 
+            // buttonExtEDShipyard
+            // 
+            this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.EDShipYard;
+            this.buttonExtEDShipyard.Location = new System.Drawing.Point(340, 1);
+            this.buttonExtEDShipyard.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
+            this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtEDShipyard.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
+            this.buttonExtEDShipyard.UseVisualStyleBackColor = false;
+            this.buttonExtEDShipyard.Click += new System.EventHandler(this.buttonExtEDShipyard_Click);
+            this.buttonExtEDShipyard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtEDShipyard_MouseDown);
+            // 
+            // buttonExtConfigure
+            // 
+            this.buttonExtConfigure.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Spaceship;
+            this.buttonExtConfigure.Location = new System.Drawing.Point(372, 1);
+            this.buttonExtConfigure.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtConfigure.Name = "buttonExtConfigure";
+            this.buttonExtConfigure.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtConfigure.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
+            this.buttonExtConfigure.UseVisualStyleBackColor = false;
+            this.buttonExtConfigure.Click += new System.EventHandler(this.buttonExtConfigure_Click);
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(404, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 31;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // extButtonLoadLoadout
+            // 
+            this.extButtonLoadLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonLoadLoadout.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
+            this.extButtonLoadLoadout.Location = new System.Drawing.Point(440, 1);
+            this.extButtonLoadLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonLoadLoadout.Name = "extButtonLoadLoadout";
+            this.extButtonLoadLoadout.Size = new System.Drawing.Size(28, 28);
+            this.extButtonLoadLoadout.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonLoadLoadout, "Import a ship definition for display");
+            this.extButtonLoadLoadout.UseVisualStyleBackColor = true;
+            this.extButtonLoadLoadout.Click += new System.EventHandler(this.extButtonLoadLoadout_Click);
+            // 
+            // extButtonSaveLoadout
+            // 
+            this.extButtonSaveLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonSaveLoadout.Image = global::EDDiscovery.Icons.Controls.Save;
+            this.extButtonSaveLoadout.Location = new System.Drawing.Point(476, 1);
+            this.extButtonSaveLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonSaveLoadout.Name = "extButtonSaveLoadout";
+            this.extButtonSaveLoadout.Size = new System.Drawing.Size(28, 28);
+            this.extButtonSaveLoadout.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonSaveLoadout, "Save this loadout to the EDD loadout folder");
+            this.extButtonSaveLoadout.UseVisualStyleBackColor = true;
+            this.extButtonSaveLoadout.Click += new System.EventHandler(this.extButtonSaveLoadout_Click);
+            // 
+            // extButtonDeleteLoadout
+            // 
+            this.extButtonDeleteLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonDeleteLoadout.Image = global::EDDiscovery.Icons.Controls.Delete;
+            this.extButtonDeleteLoadout.Location = new System.Drawing.Point(512, 1);
+            this.extButtonDeleteLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonDeleteLoadout.Name = "extButtonDeleteLoadout";
+            this.extButtonDeleteLoadout.Size = new System.Drawing.Size(28, 28);
+            this.extButtonDeleteLoadout.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonDeleteLoadout, "Delete loadout");
+            this.extButtonDeleteLoadout.UseVisualStyleBackColor = true;
+            this.extButtonDeleteLoadout.Click += new System.EventHandler(this.extButtonDeleteLoadout_Click);
             // 
             // dataViewScrollerPanel
             // 
@@ -539,7 +701,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.extButtonLoadLoadout);
             this.panelTop.Controls.Add(this.extButtonSaveLoadout);
-            this.panelTop.Controls.Add(this.extButtonViewLoadoutFolder);
+            this.panelTop.Controls.Add(this.extButtonDeleteLoadout);
             this.panelTop.Controls.Add(this.labelVehicle);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -556,168 +718,6 @@ namespace EDDiscovery.UserControls
             this.labelShip.Size = new System.Drawing.Size(28, 13);
             this.labelShip.TabIndex = 26;
             this.labelShip.Text = "Ship";
-            // 
-            // comboBoxShips
-            // 
-            this.comboBoxShips.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxShips.ButtonColorScaling = 0.5F;
-            this.comboBoxShips.DataSource = null;
-            this.comboBoxShips.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxShips.DisplayMember = "";
-            this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxShips.Location = new System.Drawing.Point(36, 1);
-            this.comboBoxShips.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.comboBoxShips.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxShips.Name = "comboBoxShips";
-            this.comboBoxShips.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxShips.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxShips.SelectedIndex = -1;
-            this.comboBoxShips.SelectedItem = null;
-            this.comboBoxShips.SelectedValue = null;
-            this.comboBoxShips.Size = new System.Drawing.Size(188, 21);
-            this.comboBoxShips.TabIndex = 0;
-            this.comboBoxShips.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
-            this.comboBoxShips.ValueMember = "";
-            this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // extButtonShowControl
-            // 
-            this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonShowControl.Location = new System.Drawing.Point(240, 1);
-            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonShowControl.Name = "extButtonShowControl";
-            this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
-            this.extButtonShowControl.TabIndex = 33;
-            this.toolTip.SetToolTip(this.extButtonShowControl, "Display Settings");
-            this.extButtonShowControl.UseVisualStyleBackColor = false;
-            this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
-            // 
-            // extCheckBoxWordWrap
-            // 
-            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
-            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
-            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
-            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
-            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
-            this.extCheckBoxWordWrap.ImageIndeterminate = null;
-            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(272, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
-            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
-            this.extCheckBoxWordWrap.TabIndex = 32;
-            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
-            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
-            // 
-            // buttonExtCoriolis
-            // 
-            this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Coriolis;
-            this.buttonExtCoriolis.Location = new System.Drawing.Point(308, 1);
-            this.buttonExtCoriolis.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtCoriolis.Name = "buttonExtCoriolis";
-            this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtCoriolis.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Coriolis");
-            this.buttonExtCoriolis.UseVisualStyleBackColor = false;
-            this.buttonExtCoriolis.Click += new System.EventHandler(this.buttonExtCoriolis_Click);
-            this.buttonExtCoriolis.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtCoriolis_MouseDown);
-            // 
-            // buttonExtEDShipyard
-            // 
-            this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.EDShipYard;
-            this.buttonExtEDShipyard.Location = new System.Drawing.Point(340, 1);
-            this.buttonExtEDShipyard.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
-            this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtEDShipyard.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
-            this.buttonExtEDShipyard.UseVisualStyleBackColor = false;
-            this.buttonExtEDShipyard.Click += new System.EventHandler(this.buttonExtEDShipyard_Click);
-            this.buttonExtEDShipyard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtEDShipyard_MouseDown);
-            // 
-            // buttonExtConfigure
-            // 
-            this.buttonExtConfigure.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Spaceship;
-            this.buttonExtConfigure.Location = new System.Drawing.Point(372, 1);
-            this.buttonExtConfigure.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtConfigure.Name = "buttonExtConfigure";
-            this.buttonExtConfigure.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtConfigure.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
-            this.buttonExtConfigure.UseVisualStyleBackColor = false;
-            this.buttonExtConfigure.Click += new System.EventHandler(this.buttonExtConfigure_Click);
-            // 
-            // buttonExtExcel
-            // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(404, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
-            this.buttonExtExcel.TabIndex = 31;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
-            // 
-            // extButtonLoadLoadout
-            // 
-            this.extButtonLoadLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonLoadLoadout.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
-            this.extButtonLoadLoadout.Location = new System.Drawing.Point(440, 1);
-            this.extButtonLoadLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonLoadLoadout.Name = "extButtonLoadLoadout";
-            this.extButtonLoadLoadout.Size = new System.Drawing.Size(28, 28);
-            this.extButtonLoadLoadout.TabIndex = 31;
-            this.toolTip.SetToolTip(this.extButtonLoadLoadout, "Import a ship definition for display");
-            this.extButtonLoadLoadout.UseVisualStyleBackColor = true;
-            this.extButtonLoadLoadout.Click += new System.EventHandler(this.extButtonLoadLoadout_Click);
-            // 
-            // extButtonSaveLoadout
-            // 
-            this.extButtonSaveLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonSaveLoadout.Image = global::EDDiscovery.Icons.Controls.Save;
-            this.extButtonSaveLoadout.Location = new System.Drawing.Point(476, 1);
-            this.extButtonSaveLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonSaveLoadout.Name = "extButtonSaveLoadout";
-            this.extButtonSaveLoadout.Size = new System.Drawing.Size(28, 28);
-            this.extButtonSaveLoadout.TabIndex = 31;
-            this.toolTip.SetToolTip(this.extButtonSaveLoadout, "Save this loadout to the EDD loadout folder");
-            this.extButtonSaveLoadout.UseVisualStyleBackColor = true;
-            this.extButtonSaveLoadout.Click += new System.EventHandler(this.extButtonSaveLoadout_Click);
-            // 
-            // extButtonViewLoadoutFolder
-            // 
-            this.extButtonViewLoadoutFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonViewLoadoutFolder.Image = global::EDDiscovery.Icons.Controls.Folder;
-            this.extButtonViewLoadoutFolder.Location = new System.Drawing.Point(512, 1);
-            this.extButtonViewLoadoutFolder.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonViewLoadoutFolder.Name = "extButtonViewLoadoutFolder";
-            this.extButtonViewLoadoutFolder.Size = new System.Drawing.Size(28, 28);
-            this.extButtonViewLoadoutFolder.TabIndex = 31;
-            this.toolTip.SetToolTip(this.extButtonViewLoadoutFolder, "Open the EDD folder containing .loadout files");
-            this.extButtonViewLoadoutFolder.UseVisualStyleBackColor = true;
-            this.extButtonViewLoadoutFolder.Click += new System.EventHandler(this.extButtonViewLoadoutFolder_Click);
             // 
             // labelVehicle
             // 
@@ -786,7 +786,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.MultiPipControl multiPipControlWep;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnResetPips;
         private ExtendedControls.ExtButton extButtonSaveLoadout;
-        private ExtendedControls.ExtButton extButtonViewLoadoutFolder;
         private ExtendedControls.LabelData labelDataWep;
         private System.Windows.Forms.Label labelWep;
         private ExtendedControls.LabelData labelDataShields;
@@ -795,5 +794,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.LabelData labelDataFSD;
         private ExtendedControls.LabelData labelDataThrust;
         private ExtendedControls.LabelData labelDataMass;
+        private ExtendedControls.ExtButton extButtonDeleteLoadout;
     }
 }

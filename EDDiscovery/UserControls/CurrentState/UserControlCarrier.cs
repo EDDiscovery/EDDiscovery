@@ -1077,8 +1077,8 @@ namespace EDDiscovery.UserControls
                                 string name = modp?.TranslatedModName ?? ord.Name.SplitCapsWordFull();
                                 string mtype = modp?.TranslatedModTypeString ?? ord.Category ?? "";
                                 string mass = modp?.Mass?.ToString("N1") ?? "";
-                                string power = modp?.Power?.ToString("N1") ?? "";
-                                string info = modp.PropertiesAsText();
+                                string power = modp?.PowerDraw?.ToString("N1") ?? "";
+                                string info = modp.ToString();
 
                                 object[] rowobj = {
                                                 name,
