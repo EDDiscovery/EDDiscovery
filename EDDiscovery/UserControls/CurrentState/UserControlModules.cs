@@ -15,7 +15,6 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using ExtendedControls;
-using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -455,7 +454,7 @@ namespace EDDiscovery.UserControls
             bool engineeredfully = sm.GetModuleEngineered(out ItemData.ShipModule engmod);
             if (engmod != null) // may not have enough details to find module
             {
-                infoentry = infoentry.AppendPrePad((engineeredfully ? "" : "!**! ") + engmod.ToString(Environment.NewLine), Environment.NewLine);
+                infoentry = infoentry.AppendPrePad((engineeredfully ? "" : "!**! ") + engmod.ToString(" " + Environment.NewLine), Environment.NewLine);
             }
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
@@ -486,11 +485,13 @@ namespace EDDiscovery.UserControls
                                 value, 
                                 sm.PE() };
 
-            dataGridViewModules.Rows.Add(rowobj);
+            int row = dataGridViewModules.Rows.Add(rowobj);
+
+            dataGridViewModules.Rows[row].Cells[3].ToolTipText = infoentry;
 
             if (engtooltip != null)
             {
-                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[5].ToolTipText = engtooltip;
+                dataGridViewModules.Rows[row].Cells[5].ToolTipText = engtooltip;
             }
         }
 
