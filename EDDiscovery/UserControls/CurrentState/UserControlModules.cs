@@ -402,7 +402,6 @@ namespace EDDiscovery.UserControls
                             stats.ShieldsExplosivePercentage, stats.ShieldsExplosiveValue
             } : null;
 
-            //EDTx.UserControlModules_InTransitto
             string transit = si.InTransit ? (si.StoredAtSystem ?? "Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)) : null;
             string storedat = si.StoredAtSystem != null ? (si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown))) : null;
 
@@ -411,10 +410,13 @@ namespace EDDiscovery.UserControls
                                     si.FuelLevel, si.FuelCapacity, si.ReserveFuelLevel, si.ReserveFuelCapacity, transit, storedat
             } : null;
 
-            //labelDataWep.Data = stats?.WeaponRaw.HasValue??false ? new object[] { stats.WeaponRaw.Value, 
-            //            stats.WeaponAbsolutePercentage, stats.WeaponKineticPercentage, stats.WeaponThermalPercentage,stats.WeaponExplosivePercentage, stats.WeaponAXPercentage,
-            //            stats.WeaponDuration, stats.WeaponDurationMax, stats.WeaponAmmoDuration, stats.WeaponCurSus, stats.WeaponMaxSus,
-            //} : null;
+            //Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}
+
+            labelDataWep.Data = stats?.WeaponRaw.HasValue ?? false ? new object[] { 
+                        stats.WeaponRaw.Value,
+                        stats.WeaponAbsolutePercentage, stats.WeaponKineticPercentage, stats.WeaponThermalPercentage,stats.WeaponExplosivePercentage, stats.WeaponAXPercentage,
+                        stats.WeaponDuration, stats.WeaponDurationMax, stats.WeaponAmmoDuration, stats.WeaponCurSus, stats.WeaponMaxSus,
+            } : null;
 
             labelDataThrust.Data = stats?.CurrentSpeed.HasValue ?? false ? new object[]  {
                                         stats.CurrentSpeed, stats.CurrentBoost,
@@ -480,8 +482,7 @@ namespace EDDiscovery.UserControls
                                 JournalFieldNaming.GetForeignModuleName(sm.ItemFD,sm.LocalisedItem),
                                 ShipSlots.ToLocalisedLanguage(sm.SlotFD),
                                 infoentry,
-                                sm.Mass() > 0 ? (sm.Mass().ToString("0.#")+"t") : "",
-                                eng,
+                                sm.Mass() > 0 ? (sm.Mass().ToString("0.#")+"t") : "",                                eng,
                                 value, 
                                 sm.PE() };
 
@@ -552,7 +553,8 @@ namespace EDDiscovery.UserControls
 
             comboBoxShips.Items.AddRange(notownedships.Select(x => x.ShipNameIdentType).ToList());
 
-            var loadoutfiles = System.IO.Directory.EnumerateFiles(EDDOptions.Instance.ShipLoadoutsDirectory(), "*.loadout", System.IO.SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderBy(p => p.Name).ToArray();
+            var loadoutfiles = System.IO.Directory.EnumerateFiles(EDDOptions.Instance.ShipLoadoutsDirectory(), "*.loadout", System.IO.SearchOption.TopDirectoryOnly).
+                        Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTimeUtc).ToArray();
             foreach (var x in loadoutfiles)
                 comboBoxShips.Items.Add(x.Name);
 
@@ -765,6 +767,20 @@ namespace EDDiscovery.UserControls
                                 new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude, Forms.ImportExportForm.ShowFlags.None },
                                 new string[] { "CSV export| *.csv", "SLEF Loadout|*.loadout" }
                                 );
+                if (last_si != null)
+                {
+                    frm.ShowOptionalButton("Loadout", () =>
+                     {
+                         frm.Close();
+                         string s = last_si.JSONLoadout().ToString(false);
+                         s = s.Replace("\"", "\"\"");
+                         s = "@\"" + s + "\"";
+
+                         InfoForm info = new InfoForm();
+                         info.Info("Loadout", this.FindForm().Icon, s);
+                         info.Show(this);
+                     });
+                }
 
                 if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
                 {

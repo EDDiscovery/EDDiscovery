@@ -547,7 +547,7 @@ namespace EDDiscovery.UserControls
             this.labelDataWep.TabIndex = 6;
             this.labelDataWep.TabSpacingData = 80;
             this.labelDataWep.Text = "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} " +
-    "Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}";
+    "DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}";
             // 
             // extButtonDrawnResetPips
             // 
