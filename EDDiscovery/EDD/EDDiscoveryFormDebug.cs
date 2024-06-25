@@ -26,8 +26,7 @@ namespace EDDiscovery
     {
         public void PreInitDebug()
         {
-            //EngineeringUnitTest.UnitTest();
-
+          //  EngineeringUnitTest.UnitTest();
         }
 
         public void PostInitDebug()

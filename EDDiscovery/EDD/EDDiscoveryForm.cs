@@ -13,17 +13,11 @@
  */
 
 using BaseUtils;
-using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.GEC;
-using EliteDangerousCore.GMO;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -52,8 +46,8 @@ namespace EDDiscovery
         public EliteDangerousCore.ScreenShots.ScreenShotConverter ScreenshotConverter { get; set; }
         public PopOutControl PopOuts { get; set; }
 
-        public GalacticMapping GalacticMapping { get; private set; }
-        public GalacticMapping EliteRegions { get; private set; }
+        public EliteDangerousCore.GMO.GalacticMapping GalacticMapping { get; private set; }
+        public EliteDangerousCore.GMO.GalacticMapping EliteRegions { get; private set; }
 
         public HistoryList History { get { return Controller.History; } }
 
@@ -143,6 +137,8 @@ namespace EDDiscovery
         // called from EDDApplicationContext .. continues on with the construction of the system
         public void Init(Action<string> msg)  
         {
+            System.Diagnostics.Trace.WriteLine($"Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
+
             if (EDDOptions.Instance.Culture != null)
                 CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
 
@@ -161,6 +157,12 @@ namespace EDDiscovery
                 FileHelpers.DeleteFiles(EDDOptions.Instance.ScanCachePath, "*.json", new TimeSpan(7, 0, 0, 0), 256);
             }
 
+            HttpCom.LogPath = logpath;
+
+            PreInitDebug();        // call any debug we want at this point
+
+            //--- listeners
+
 #if DEBUG
             bool releasebuild = false;
 #else
@@ -168,7 +170,7 @@ namespace EDDiscovery
 #endif
             // if no debugger or in release build or trace log set.
 
-            if (!Debugger.IsAttached || releasebuild || EDDOptions.Instance.TraceLog != null)
+            if (!System.Diagnostics.Debugger.IsAttached || releasebuild || EDDOptions.Instance.TraceLog != null)
             {
                 TraceLog.RedirectTrace(logpath, EDDOptions.Instance.TraceLog);
 
@@ -179,7 +181,7 @@ namespace EDDiscovery
             }
 
             // if no debugger, or log exceptions set
-            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          
+            if (!System.Diagnostics.Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          
             {
                 ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback);
             }
@@ -189,20 +191,12 @@ namespace EDDiscovery
                 FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
             }
 
-            Process.GetCurrentProcess().PriorityClass = EDDOptions.Instance.ProcessPriorityClass;
+            System.Diagnostics.Process.GetCurrentProcess().PriorityClass = EDDOptions.Instance.ProcessPriorityClass;
 
             if (EDDOptions.Instance.ForceTLS12)
             {
                 System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
             }
-
-            HttpCom.LogPath = logpath;
-
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Init config finished");
-
-            Trace.WriteLine($"Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
-
-            PreInitDebug();        // call any debug we want at this point
 
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
@@ -224,7 +218,7 @@ namespace EDDiscovery
             string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");
             BaseUtils.Icons.IconSet.Instance.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF init");        // STAGE 1
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF init");        // STAGE 1
 
             msg.Invoke("Loading Translations");
 
@@ -281,7 +275,7 @@ namespace EDDiscovery
 
             // STAGE 2 themeing the main interface (not the tab pages)
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        
             msg.Invoke("Applying Themes");
 
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
@@ -363,7 +357,7 @@ namespace EDDiscovery
 
             // ---------------------------------------------------------------- Event hook
 
-            EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            EliteDangerousCore.EDSM.EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
@@ -373,7 +367,7 @@ namespace EDDiscovery
                 });
             };
 
-            EDDNSync.SentEvents = (count) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            EliteDangerousCore.EDDN.EDDNSync.SentEvents = (count) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
@@ -396,7 +390,7 @@ namespace EDDiscovery
             // ---------------------------------------------------------------- DLL Load
 
             msg.Invoke("Loading Extension DLLs");
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF DLL setup");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF DLL setup");
 
             DLLStart();
 
@@ -414,7 +408,7 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                    if (EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
+                    if (EliteDangerousCore.EDSM.EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
@@ -423,11 +417,11 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
                 {
                     LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
-                    if (GECClass.DownloadGECFile(gecfile, new System.Threading.CancellationToken()))
+                    if (EliteDangerousCore.GEC.GECClass.DownloadGECFile(gecfile, new System.Threading.CancellationToken()))
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
 
-                GalacticMapping = new GalacticMapping(); 
+                GalacticMapping = new EliteDangerousCore.GMO.GalacticMapping(); 
 
                 // in priority order..
 
@@ -446,7 +440,7 @@ namespace EDDiscovery
             }
 
             {
-                EliteRegions = new GalacticMapping();
+                EliteRegions = new EliteDangerousCore.GMO.GalacticMapping();
                 var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
                 EliteRegions.ParseGMPJson(text,int.MaxValue/2 + 100000);                            // at this point, gal map data has been uploaded - get it into memory
             }
@@ -504,7 +498,7 @@ namespace EDDiscovery
             // ---------------------------------------------------------------- open all the major tabs except the built in ones
 
             msg.Invoke("Loading Tabs");
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Creating major tabs Now");        // STAGE 3 Tabs
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Creating major tabs Now");        // STAGE 3 Tabs
 
             if (EDDOptions.Instance.TabsReset)
             {
@@ -548,7 +542,7 @@ namespace EDDiscovery
 
             helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this, contextMenuStripTabs.PointToScreen(new Point(0, 0)), tabControlMain.LastTabClicked); };
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
 
             PostInitDebug();        // call any debug we want at this point
 
@@ -558,7 +552,7 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load");
 
             // here we install the new may'24 important message hook, now the window has been created. Any *** messages get pumped out
             TraceLog.ImportantMessage += ex => { LogLineColor(ex, Color.FromArgb(255,255,40,40)); };
@@ -567,18 +561,18 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTabs)        
                 tabControlMain.LoadTabs();
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
         }
 
 
         // OnShown is called once
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF shown");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF shown");
 
             if (SystemsDatabase.Instance.GetGridIDs() == "Not Set")        // initial state.. this holds up the shown and postinit_shown stopping any background worker action
             {
-                var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
+                var ressel = Forms.GalaxySectorSelect.SelectGalaxyMenu(this);
                 SystemsDatabase.Instance.SetDBSource(ressel.Item1);
                 SystemsDatabase.Instance.SetGridIDs(ressel.Item3);
                 EDDConfig.Instance.SystemDBDownload = ressel.Item3 != "None";
@@ -621,7 +615,7 @@ namespace EDDiscovery
                 ScreenShotCaptured?.Invoke(outfile, imagesize);         // tell others screen shot is captured
             };
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Web");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Web");
 
             WebServerControl(EDDConfig.Instance.WebServerEnable, EDDConfig.Instance.WebServerPort);
 
@@ -641,7 +635,7 @@ namespace EDDiscovery
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
             // Bindings
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
 
             if (actioncontroller.FrontierBindings.FileLoaded != null)
             {
@@ -655,7 +649,7 @@ namespace EDDiscovery
             else
                 LogLine("Frontier bindings did not load");
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
 
             // Notifications, only check github when directed and we are not debugging it using a folder override
 
@@ -719,7 +713,7 @@ namespace EDDiscovery
 
             // Now the installer
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Installer");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Installer");
 
             if (EDDOptions.Instance.CheckRelease )
             {
@@ -776,7 +770,7 @@ namespace EDDiscovery
 
             DLLManager.Shown();     // tell the DLLs form has shown
 
-            Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF End shown");
+            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF End shown");
 
             PostShownDebug();
         }
@@ -914,7 +908,7 @@ namespace EDDiscovery
                 string cmdrfolder = cmdr.JournalDir.HasChars() ? cmdr.JournalDir : (EliteDangerousCore.FrontierFolder.FolderName() ?? ".");
                 if (Directory.Exists(cmdrfolder))
                 {
-                    Process.Start(cmdrfolder);
+                    System.Diagnostics.Process.Start(cmdrfolder);
                 }
             }
         }
@@ -987,7 +981,7 @@ namespace EDDiscovery
             newRelease = GitHubRelease.CheckForNewInstaller(EDDiscovery.Properties.Resources.URLGithubDownload, System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString());
             if ( newRelease != null )
             {
-                using (NewReleaseForm frm = new NewReleaseForm(newRelease))
+                using (Forms.NewReleaseForm frm = new Forms.NewReleaseForm(newRelease))
                     frm.ShowDialog(this);
             }
             else
@@ -1110,7 +1104,7 @@ namespace EDDiscovery
 
         public void AboutBox(Form parent = null)
         {
-            AboutForm frm = new AboutForm();
+            Forms.AboutForm frm = new Forms.AboutForm();
             frm.ShowDialog(parent ?? this);
         }
 
@@ -1175,7 +1169,7 @@ namespace EDDiscovery
         {
             if (e.Button == MouseButtons.Left && newRelease != null)
             {
-                using (NewReleaseForm frm = new NewReleaseForm(newRelease))
+                using (Forms.NewReleaseForm frm = new Forms.NewReleaseForm(newRelease))
                     frm.ShowDialog(this);
             }
             else

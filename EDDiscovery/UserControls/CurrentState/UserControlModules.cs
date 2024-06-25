@@ -453,10 +453,10 @@ namespace EDDiscovery.UserControls
                     infoentry += "/" + sm.AmmoClip.ToString();
             }
 
-            bool engineeredfully = sm.GetModuleEngineered(out ItemData.ShipModule engmod);
+            var engmod = sm.GetModuleEngineered();
             if (engmod != null) // may not have enough details to find module
             {
-                infoentry = infoentry.AppendPrePad((engineeredfully ? "" : "!**! ") + engmod.ToString(" " + Environment.NewLine), Environment.NewLine);
+                infoentry = infoentry.AppendPrePad(engmod.ToString(" " + Environment.NewLine), Environment.NewLine);
             }
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
