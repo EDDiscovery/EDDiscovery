@@ -803,7 +803,7 @@ namespace EDDiscovery.UserControls
                             EventDescription,
                             EventDetailedInfo,
                             he.isTravelling ? he.TravelledDistance.ToString("N1",grd.FormatCulture) : "",
-                            he.isTravelling ? he.TravelledSeconds.ToString("N0",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledSeconds.ToString("d'd 'h'h 'm'm 's's'",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledJumps.ToString("N0",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledMissingJumps.ToString("N0",grd.FormatCulture) : "",
                             };
