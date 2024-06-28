@@ -383,7 +383,7 @@ namespace EDDiscovery.UserControls
         // call to update the ship data panel
         private void DisplayShipData(Ship si)
         {
-            var stats = si?.CalculateShipStats(multiPipControlSys.Value, multiPipControlEng.Value, multiPipControlWep.Value, last_cargo, si.FuelLevel, si.ReserveFuelLevel);                  // may be null
+            var stats = si?.GetShipStats(multiPipControlSys.Value, multiPipControlEng.Value, multiPipControlWep.Value, last_cargo, si.FuelLevel, si.ReserveFuelLevel);                  // may be null
 
             labelDataArmour.Data = stats?.ArmourRaw.HasValue ?? false ? new object[] {
                                 stats.ArmourRaw,
