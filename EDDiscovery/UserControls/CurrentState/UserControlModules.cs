@@ -14,7 +14,6 @@
 
 using EDDiscovery.Controls;
 using EliteDangerousCore;
-using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -582,7 +581,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonShowControl_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
+            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new ExtendedControls.CheckedIconNewListBoxForm();
             displayfilter.AllOrNoneBack = false;
 
             // not yet as only one item. displayfilter.UC.AddAllNone();
@@ -773,10 +772,7 @@ namespace EDDiscovery.UserControls
                      {
                          frm.Close();
                          string s = last_si.JSONLoadout().ToString(false);
-                         s = s.Replace("\"", "\"\"");
-                         s = "@\"" + s + "\"";
-
-                         InfoForm info = new InfoForm();
+                         ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                          info.Info("Loadout", this.FindForm().Icon, s);
                          info.Show(this);
                      });
