@@ -425,6 +425,7 @@ SECTION UserControlSurveyor
 .Systemscancomplete: "System scan complete" @
 .bodiesdetected: " bodies detected." @
 .bodiesfound: " bodies found." @
+.ShowSignalMismatch: " Cluster and NonBody counts differ by " @
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" @
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" @
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" @
@@ -449,6 +450,7 @@ SECTION UserControlSurveyor
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
 .showSignalsToolStripMenuItem: "Show signals" @
+.showSignalMismatchToolStripMenuItem: "Show signal mismatch" @
 .showValuesToolStripMenuItem: "Show values" @
 .showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
