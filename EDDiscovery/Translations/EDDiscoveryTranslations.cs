@@ -514,7 +514,6 @@ namespace EDDiscovery
         UserControlModules_Stored, // Stored
         UserControlModules_AllModules, // All Modules
         UserControlModules_Mass, // Mass
-        UserControlModules_Manufacturer, // Manufacturer
 
         UserControlModules_InTransit, // In Transit
         UserControlModules_EDSURL, // Enter ED Shipyard URL

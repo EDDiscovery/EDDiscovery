@@ -365,11 +365,8 @@ namespace EDDiscovery.UserControls
                 AddModuleLine(sm);
             }
 
-            AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.GetShipProperties()?.Manufacturer ?? "?");
+            labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false, manu: true);
 
-            labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
-
-            
             buttonExtConfigure.Visible = si.State == Ship.ShipState.Owned;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumModulesForCoriolisEDSY();          //ORDER is important due to flow control panel
             extButtonLoadLoadout.Visible = true;
@@ -411,7 +408,7 @@ namespace EDDiscovery.UserControls
 
             //Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}
 
-            labelDataWep.Data = stats?.WeaponRaw.HasValue ?? false ? new object[] { 
+            labelDataWep.Data = stats?.ValidWeaponData ?? false ? new object[] { 
                         stats.WeaponRaw.Value,
                         stats.WeaponAbsolutePercentage, stats.WeaponKineticPercentage, stats.WeaponThermalPercentage,stats.WeaponExplosivePercentage, stats.WeaponAXPercentage,
                         stats.WeaponDuration, stats.WeaponDurationMax, stats.WeaponAmmoDuration, stats.WeaponCurSus, stats.WeaponMaxSus,

@@ -440,7 +440,7 @@ namespace EDDiscovery.UserControls
             this.labelDataArmour.InterSpacing = 4;
             this.labelDataArmour.Location = new System.Drawing.Point(68, 38);
             this.labelDataArmour.Name = "labelDataArmour";
-            this.labelDataArmour.NoDataText = "?";
+            this.labelDataArmour.NoDataText = "-";
             this.labelDataArmour.Size = new System.Drawing.Size(1200, 19);
             this.labelDataArmour.TabIndex = 6;
             this.labelDataArmour.TabSpacingData = 120;
@@ -457,7 +457,7 @@ namespace EDDiscovery.UserControls
             this.labelDataShields.InterSpacing = 4;
             this.labelDataShields.Location = new System.Drawing.Point(68, 58);
             this.labelDataShields.Name = "labelDataShields";
-            this.labelDataShields.NoDataText = "?";
+            this.labelDataShields.NoDataText = "-";
             this.labelDataShields.Size = new System.Drawing.Size(1200, 19);
             this.labelDataShields.TabIndex = 6;
             this.labelDataShields.TabSpacingData = 120;
@@ -474,7 +474,7 @@ namespace EDDiscovery.UserControls
             this.labelDataMass.InterSpacing = 4;
             this.labelDataMass.Location = new System.Drawing.Point(68, 158);
             this.labelDataMass.Name = "labelDataMass";
-            this.labelDataMass.NoDataText = "?";
+            this.labelDataMass.NoDataText = "-";
             this.labelDataMass.Size = new System.Drawing.Size(1200, 19);
             this.labelDataMass.TabIndex = 6;
             this.labelDataMass.TabSpacingData = 120;
@@ -491,7 +491,7 @@ namespace EDDiscovery.UserControls
             this.labelDataCost.InterSpacing = 4;
             this.labelDataCost.Location = new System.Drawing.Point(68, 138);
             this.labelDataCost.Name = "labelDataCost";
-            this.labelDataCost.NoDataText = "?";
+            this.labelDataCost.NoDataText = "-";
             this.labelDataCost.Size = new System.Drawing.Size(1200, 19);
             this.labelDataCost.TabIndex = 6;
             this.labelDataCost.TabSpacingData = 120;
@@ -507,7 +507,7 @@ namespace EDDiscovery.UserControls
             this.labelDataFSD.InterSpacing = 4;
             this.labelDataFSD.Location = new System.Drawing.Point(68, 118);
             this.labelDataFSD.Name = "labelDataFSD";
-            this.labelDataFSD.NoDataText = "?";
+            this.labelDataFSD.NoDataText = "-";
             this.labelDataFSD.Size = new System.Drawing.Size(1200, 19);
             this.labelDataFSD.TabIndex = 6;
             this.labelDataFSD.TabSpacingData = 120;
@@ -525,7 +525,7 @@ namespace EDDiscovery.UserControls
             this.labelDataThrust.InterSpacing = 4;
             this.labelDataThrust.Location = new System.Drawing.Point(68, 98);
             this.labelDataThrust.Name = "labelDataThrust";
-            this.labelDataThrust.NoDataText = "?";
+            this.labelDataThrust.NoDataText = "-";
             this.labelDataThrust.Size = new System.Drawing.Size(1200, 19);
             this.labelDataThrust.TabIndex = 6;
             this.labelDataThrust.TabSpacingData = 120;
@@ -542,7 +542,7 @@ namespace EDDiscovery.UserControls
             this.labelDataWep.InterSpacing = 4;
             this.labelDataWep.Location = new System.Drawing.Point(68, 78);
             this.labelDataWep.Name = "labelDataWep";
-            this.labelDataWep.NoDataText = "?";
+            this.labelDataWep.NoDataText = "-";
             this.labelDataWep.Size = new System.Drawing.Size(1200, 19);
             this.labelDataWep.TabIndex = 6;
             this.labelDataWep.TabSpacingData = 80;

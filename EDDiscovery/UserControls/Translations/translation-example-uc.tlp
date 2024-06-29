@@ -540,7 +540,6 @@ SECTION UserControlModules
 .Stored: "Stored" @
 .AllModules: "All Modules" @
 .Mass: "Mass" @
-.Manufacturer: "Manufacturer" @
 
 .InTransit: "In Transit" @
 .EDSURL: "Enter ED Shipyard URL" @
@@ -553,6 +552,18 @@ SECTION UserControlModules
 .SC: "Ship Configure" @
 .MI: "Module Information" @
 .NOSI: "No Ship Information available" @
+
+.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
+.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
+.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
+.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
+.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
+.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
+.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
+.labelWep: "Weapons:" @
+
+.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
+.extButtonDeleteLoadout.ToolTip: "Delete loadout" @
 
 SECTION UserControlNotePanel
 
