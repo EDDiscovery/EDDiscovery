@@ -538,8 +538,8 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add(allknownmodulestext);
 
             var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
-            var notownedships = (from x1 in shm.Ships where x1.Value.State != Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
-            var fightersrvs = (from x1 in shm.Ships where ItemData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var soldships = (from x1 in shm.Ships where x1.Value.State != Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+            // withdrawn, appears loadouts no longer written for these. var fightersrvs = (from x1 in shm.Ships where ItemData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
 
             var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
             comboBoxShips.Items.AddRange(now);
@@ -547,14 +547,15 @@ namespace EDDiscovery.UserControls
             var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType).ToList();
             comboBoxShips.Items.AddRange(stored);
 
-            comboBoxShips.Items.AddRange(notownedships.Select(x => x.ShipNameIdentType).ToList());
 
             var loadoutfiles = System.IO.Directory.EnumerateFiles(EDDOptions.Instance.ShipLoadoutsDirectory(), "*.loadout", System.IO.SearchOption.TopDirectoryOnly).
                         Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTimeUtc).ToArray();
             foreach (var x in loadoutfiles)
                 comboBoxShips.Items.Add(x.Name);
 
-            comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
+            comboBoxShips.Items.AddRange(soldships.Select(x => x.ShipNameIdentType).ToList());
+
+            //comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
 
             if (cursel == "")
                 cursel = GetSetting("ShipSelect", "");
