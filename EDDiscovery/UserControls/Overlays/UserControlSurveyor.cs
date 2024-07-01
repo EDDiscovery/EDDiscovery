@@ -553,7 +553,7 @@ namespace EDDiscovery.UserControls
             if (shipinfo != null)
             {
                 shipinfo.UpdateFuelWarningPercent();      // ensure its fresh from the DB
-
+                
                 double fuel = shipinfo.FuelLevel;
                 double tanksize = shipinfo.FuelCapacity;
                 double warninglevelpercent = shipinfo.FuelWarningPercent;
@@ -596,6 +596,7 @@ namespace EDDiscovery.UserControls
                 if (systemnode != null)
                 {
                     int scanned = systemnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet);
+                    int clusters = systemnode.BeltClusters();
 
                     if (scanned > 0)
                     {
@@ -607,8 +608,13 @@ namespace EDDiscovery.UserControls
                     if (value > 0 && IsSet(CtrlList.showValues))
                     {
                         scansummarytext.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "", Environment.NewLine));
-                        scansummarytext = scansummarytext.AppendPrePad("~ " + value.ToString("N0") + " cr", "; ");
+                        scansummarytext = scansummarytext.AppendPrePad("~ " + value.ToString("N0") + " cr" + ";");                        
                     }
+                    if (systemnode.FSSTotalNonBodies != null && IsSet(CtrlList.showsignalmismatch))
+                    {
+                        scansummarytext = scansummarytext.AppendPrePad(systemnode.FSSTotalNonBodies.Value != clusters ? " Cluster and NonBody counts differ by ".T(EDTx.UserControlSurveyor_ShowSignalMismatch) + Math.Abs(systemnode.FSSTotalNonBodies.Value - clusters).ToString("N0") : "");
+                    }
+                    
                 }
             }
 
@@ -951,7 +957,9 @@ namespace EDDiscovery.UserControls
             // 20
             showValues, moreinfo, showGravity, atmos, temp, volcanism, showsignals, autohide, donthidefssmode, hideMapped, showsysinfo, showscansum, showstarclass, showdividers,
             // 31
-            alignleft, aligncenter, alignright
+            alignleft, aligncenter, alignright,
+            //34
+            showsignalmismatch
         };
 
         private bool[] ctrlset; // holds current state of each control above
@@ -1046,6 +1054,7 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.Add(CtrlList.temp.ToString(), "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.volcanism.ToString(), "Show volcanism".TxID(EDTx.UserControlSurveyor_showVolcanismToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showsignals.ToString(), "Show signals".TxID(EDTx.UserControlSurveyor_showSignalsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showsignalmismatch.ToString(), "Show signal mismatch".TxID(EDTx.UserControlSurveyor_showSignalMismatchToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID(EDTx.UserControlSurveyor_dontHideInFSSModeToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID(EDTx.UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem));

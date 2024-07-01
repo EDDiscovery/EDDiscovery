@@ -959,6 +959,7 @@ namespace EDDiscovery
         UserControlSurveyor_Systemscancomplete, // System scan complete.
         UserControlSurveyor_bodiesdetected, //  bodies detected.
         UserControlSurveyor_bodiesfound, //  bodies found.
+        UserControlSurveyor_ShowSignalMismatch, //  Cluster and NonBody counts differ by 
         UserControlSurveyor_fuel, //  bodies found.
         UserControlSurveyor_navroute, //  bodies found.
         UserControlSurveyor_fsssignals,
@@ -991,6 +992,7 @@ namespace EDDiscovery
         UserControlSurveyor_showTempToolStripMenuItem,
         UserControlSurveyor_showVolcanismToolStripMenuItem,
         UserControlSurveyor_showSignalsToolStripMenuItem,
+        UserControlSurveyor_showSignalMismatchToolStripMenuItem,
         UserControlSurveyor_autoHideToolStripMenuItem,
         UserControlSurveyor_dontHideInFSSModeToolStripMenuItem,
         UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem,
