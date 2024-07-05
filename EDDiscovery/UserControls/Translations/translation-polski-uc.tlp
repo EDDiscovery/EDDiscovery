@@ -425,6 +425,7 @@ SECTION UserControlSurveyor
 .Systemscancomplete: "System scan complete" => "Ukończono skan układu."
 .bodiesdetected: " bodies detected." @
 .bodiesfound: " bodies found." => " znalezionych ciał niebieskich."
+.ShowSignalMismatch: " Cluster and NonBody counts differ by " @
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Lewo"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "Środek"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" => "Prawo"
@@ -449,6 +450,7 @@ SECTION UserControlSurveyor
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
 .showSignalsToolStripMenuItem: "Show signals" @
+.showSignalMismatchToolStripMenuItem: "Show signal mismatch" @
 .showValuesToolStripMenuItem: "Show values" @
 .showMoreInformationToolStripMenuItem: "Show more information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
@@ -502,16 +504,28 @@ SECTION UserControlMissions
 
 SECTION UserControlModules
 
+.ItemLocalised: "Type" = UserControlLedger.Type
+.ItemCol: "Item" => "Przedmiot"
+.BluePrint: "BluePrint" => "Schemat"
+.PriorityEnable: "P/E" => "W/P"
 .labelShip: "Ship" => "Statek"
 .labelVehicle: "Unknown" = Unknown
+.labelMass: "Mass:" @
+.labelCost: "Cost:" @
+.labelFSD: "FSD:" @
+.labelThrusters: "Thrust:" @
+.labelShields: "Shields:" @
+.labelArmour: "Armour:" @
+.FullBluePrint: "Show full blueprint information" @
+.EngineeredValues: "Show Engineered Values" @
 .comboBoxShips.ToolTip: "Select ship to view" => "Wybierz statek do wyświetlenia"
 .extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguruj dodatkowe dane brakujące w Dzienniku Elite"
-.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Prześlij do ED Ship Yard"
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Prześlij do Coriolis"
+.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Prześlij do ED Ship Yard"
+.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguruj dodatkowe dane brakujące w Dzienniku Elite"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.FullBluePrint: "Show full blueprint information" @
+.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
 .ForceSell: "Force Sell" @
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" => "Przechowywane Moduły"
@@ -524,37 +538,8 @@ SECTION UserControlModules
 .Value: "Value" => "Wartość"
 .Stored: "Stored" @
 .AllModules: "All Modules" @
-.FSDAvgJump: "FSD Avg Jump" => "Śr. Skok FSD"
-.HT: "Half tank, no cargo" => "Paliwo 50%, bez ładunku"
-.MassFDUnladen: "Mass FD Unladen" @
-.FuelReserveCapacity: "Fuel Reserve Capacity" @
-.HullHealth: "Hull Health (Loadout)" @
-.ItemLocalised: "Type" = UserControlLedger.Type
-.ItemCol: "Item" => "Przedmiot"
 .Mass: "Mass" => "Masa"
-.BluePrint: "BluePrint" => "Schemat"
-.PriorityEnable: "P/E" => "W/P"
-.FSDMaxRange: "FSD Max Range" => "Maks. Zasięg FSD"
-.FT: "Full Tank, no cargo" => "Paliwo 100%, bez ładunku"
-.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" => "Maks. paliwa na skok FSD"
-.HullValue: "Hull Value" => "Wartość Kadłuba"
-.ModulesValue: "Modules Value" => "Wartość Modułów"
-.TotalCost: "Total Cost" => "Koszt Razem"
-.RebuyCost: "Rebuy Cost" => "Koszt Ubezpieczenia"
-.MassHull: "Mass Hull" => "Masa Kadłuba"
-.MassUnladen: "Mass Unladen" => "Masa Bez Ładunku"
-.MassModules: "Mass Modules" => "Masa Modułów"
-.Manufacturer: "Manufacturer" => "Producent"
-.FuelCapacity: "Fuel Capacity" => "Poj. zbiornika paliwa"
-.FuelLevel: "Fuel Level" => "Poziom paliwa"
-.FuelWarning: "Fuel Warning %" => "Uwaga - Paliwo %"
-.PadSize: "Pad Size" => "Rozmiar Lądowiska"
-.MainThrusterSpeed: "Main Thruster Speed" => "Prędkość Gł. Silników"
-.MainThrusterBoost: "Main Thruster Boost" => "Doładowanie Gł. Silników"
-.Storedat: "Stored at" => "Przechowane w"
-.CargoCapacity: "Cargo Capacity" => "Pojemność Ładowni"
 .InTransit: "In Transit" => "W Tranzycie"
-.InTransitto: "In Transit to " => "W Tranzycie Do"
 .EDSURL: "Enter ED Shipyard URL" => "Wprowadź URL ED Shipyard"
 .CURL: "Enter Coriolis URL" => "Wprowadź URL Coriolis"
 .FW: "Fuel Warning: " => "Uwaga - Paliwo: "
@@ -565,6 +550,16 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Konfiguracja Statku"
 .MI: "Module Information" => "Informacje o Modułach"
 .NOSI: "No Ship Information available" @
+.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
+.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
+.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
+.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
+.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
+.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
+.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
+.labelWep: "Weapons:" @
+.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
+.extButtonDeleteLoadout.ToolTip: "Delete loadout" @
 
 SECTION UserControlNotePanel
 
@@ -858,7 +853,7 @@ SECTION UserControlShipYards
 .Distance: "Distance" = UserControlExpedition.Distance
 .Price: "Price" = UserControlOutfitting.Price
 .Ship: "Ship" = UserControlModules.labelShip
-.Manufacturer: "Manufacturer" = UserControlModules.Manufacturer
+.Manufacturer: "Manufacturer" => "Producent"
 .MS: "Mass/Speed" => "Masa/Prędkość"
 
 SECTION UserControlShoppingList
