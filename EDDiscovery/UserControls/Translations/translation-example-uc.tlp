@@ -519,6 +519,7 @@ SECTION UserControlModules
 
 
 .FullBluePrint: "Show full blueprint information" @
+.EngineeredValues: "Show Engineered Values" @
 
 .comboBoxShips.ToolTip: "Select ship to view" @
 .extButtonShowControl.ToolTip: "Display Settings" @

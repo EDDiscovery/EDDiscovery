@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         private Ship last_si = null;
         private int last_cargo = 0;
 
-        private string dbDisplayFilters = "DisplayFilters";
+        private string dbDisplayFilters = "DisplayFiltersNew";
         private string[] displayfilters;
 
         private List<object> allmodulesref = new List<object>();
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             allknownmodulestext = "All Known Modules";
             dataGridViewModules.MakeDoubleBuffered();
 
-            displayfilters = GetSetting(dbDisplayFilters, "").Split(';');
+            displayfilters = GetSetting(dbDisplayFilters, "fullblueprint;engineeredvalues").Split(';');
 
             extCheckBoxWordWrap.Checked = GetSetting("WordWrap", false);
             UpdateWordWrap();
@@ -449,10 +449,13 @@ namespace EDDiscovery.UserControls
                     infoentry += "/" + sm.AmmoClip.ToString();
             }
 
-            var engmod = sm.GetModuleEngineered();
-            if (engmod != null) // may not have enough details to find module
+            if (displayfilters.Contains("engineeredvalues"))
             {
-                infoentry = infoentry.AppendPrePad(engmod.ToString(" " + Environment.NewLine), Environment.NewLine);
+                var engmod = sm.GetModuleEngineered();
+                if (engmod != null) // may not have enough details to find module
+                {
+                    infoentry = infoentry.AppendPrePad(engmod.ToString(" " + Environment.NewLine), Environment.NewLine);
+                }
             }
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
@@ -584,6 +587,7 @@ namespace EDDiscovery.UserControls
 
             // not yet as only one item. displayfilter.UC.AddAllNone();
             displayfilter.UC.Add("fullblueprint", "Show full blueprint information".TxID(EDTx.UserControlModules_FullBluePrint));
+            displayfilter.UC.Add("engineeredvalues", "Show Engineered Values".TxID(EDTx.UserControlModules_EngineeredValues));
 
             displayfilter.UC.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>

@@ -491,6 +491,7 @@ namespace EDDiscovery
         UserControlModules_labelDataMass,
 
         UserControlModules_FullBluePrint, // Show full blueprint information
+        UserControlModules_EngineeredValues,
 
         UserControlModules_comboBoxShips_ToolTip, // ToolTip 'Select ship to view'
         UserControlModules_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
