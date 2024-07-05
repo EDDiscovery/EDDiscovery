@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
 
             displayfilters = GetSetting(dbDisplayFilters, "fullblueprint;engineeredvalues").Split(';');
 
-            extCheckBoxWordWrap.Checked = GetSetting("WordWrap", false);
+            extCheckBoxWordWrap.Checked = GetSetting("WordWrap", true);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
