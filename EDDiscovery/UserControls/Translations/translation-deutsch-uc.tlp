@@ -510,22 +510,22 @@ SECTION UserControlModules
 .PriorityEnable: "P/E" => "P/A"
 .labelShip: "Ship" => "Schiff"
 .labelVehicle: "Unknown" = Unknown
-.labelMass: "Mass:" @
-.labelCost: "Cost:" @
-.labelFSD: "FSD:" @
-.labelThrusters: "Thrust:" @
-.labelShields: "Shields:" @
-.labelArmour: "Armour:" @
+.labelMass: "Mass:" => "Masse"
+.labelCost: "Cost:" => "Kosten"
+.labelFSD: "FSD:" => "FSA"
+.labelThrusters: "Thrust:" => "Schub"
+.labelShields: "Shields:" => "Schilde"
+.labelArmour: "Armour:" => "Panzerung"
 .FullBluePrint: "Show full blueprint information" => "Zeige vollständige Blaupauseninformationen"
-.EngineeredValues: "Show Engineered Values" @
+.EngineeredValues: "Show Engineered Values" => "Zeige verbesserte Werte"
 .comboBoxShips.ToolTip: "Select ship to view" => "Wähle anzuzeigendes Schiff"
 .extButtonShowControl.ToolTip: "Display Settings" => "Anzeigeoptionen"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Sende an Coriolis"
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Sende an ED Ship Yard"
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguriere Extrdaten, die im Elite-Journal nicht ausgegeben werden"
+.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguriere Extradaten, die im Elite-Journal nicht ausgegeben werden"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
+.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" => "Schiffsdefinition zum Anzeigen importieren"
 .ForceSell: "Force Sell" => "Verkaufen erzwingen"
 .ConfirmForceSell: "Confirm sell of ship" => "Bestätige Verkauf von Schiff"
 .StoredModules: "Stored Modules" => "Gelagerte Module"
@@ -550,16 +550,16 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Schiffskonfiguration"
 .MI: "Module Information" => "Modulinformation"
 .NOSI: "No Ship Information available" => "Keine Schiffsinformationen verfügbar"
-.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
-.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
-.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
-.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
-.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
-.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
-.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-.labelWep: "Weapons:" @
-.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
-.extButtonDeleteLoadout.ToolTip: "Delete loadout" @
+.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Roh {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Ätz {0.#|% =|0.#}"
+.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Roh {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
+.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Masse {0.##|t} Hülle {0.##|t} Module {0.##|t} Unbeladen {0.##|t} Fracht {0|/|0|t} Warnung bei {0.#|%}"
+.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" => "Kosten Hülle {N0|cr} Module {N0|cr} Total {N0|cr} Rückkauf {N0|cr}"
+.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Dzt {0.##|ly} Reichweite {0.##|ly} Beladen {0.##|ly} Unbeladen {0.##|ly} Max {0.##|ly} MaxTStoff {0.##|t} Derzeit {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} Im Transfer nach {} Gelagert bei {}"
+.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Dzt Gsw {0.#} Bst {0.#} Beladen {0.#|/|0.#} Unbeladen {0.#|/|0.#} Max {0.#|/|0.#} Nachbrenner Dzt {0.#|s} Max {0.#|s}"
+.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Roh {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dau {0.#|s} DauMax {0.#|s} Ammo {0.#|s} Dzt {0.#|%} Max {0.#|%}"
+.labelWep: "Weapons:" => "Waffen"
+.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Speichere diese Konfiguration im EDD-Loadout-Ordner"
+.extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Konfiguration löschen"
 
 SECTION UserControlNotePanel
 
