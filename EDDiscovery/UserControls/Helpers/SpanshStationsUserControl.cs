@@ -452,10 +452,10 @@ namespace EDDiscovery.UserControls.Helpers
                         ColPrice1.Tag = entries.Length >= 1 ? entries[0].Name.Substring(entries[0].Name.IndexOf(separ) + 1) : null;      // need to get the fdname for the columns
                         ColPrice1.HeaderText = entries.Length >= 1 ? entries[0].TextValue : "?";
 
-                        ColPrice2.Tag = entries.Length >= 2 ? entries[0].Name.Substring(entries[1].Name.IndexOf(separ) + 1) : null;
+                        ColPrice2.Tag = entries.Length >= 2 ? entries[1].Name.Substring(entries[1].Name.IndexOf(separ) + 1) : null;
                         ColPrice2.HeaderText = entries.Length >= 2 ? entries[1].TextValue : "?";
 
-                        ColPrice3.Tag = entries.Length >= 3 ? entries[0].Name.Substring(entries[2].Name.IndexOf(separ) + 1) : null;
+                        ColPrice3.Tag = entries.Length >= 3 ? entries[2].Name.Substring(entries[2].Name.IndexOf(separ) + 1) : null;
                         ColPrice3.HeaderText = entries.Length >= 3 ? entries[2].TextValue : "?";
 
                         showcommoditiesstate = commoditiesstate.Take(3).Select(x=>x.Substring(x.IndexOf(separ) +1)).ToHashSet();     // take the list, limit to 3, get the fdname only, fill in the c-state
