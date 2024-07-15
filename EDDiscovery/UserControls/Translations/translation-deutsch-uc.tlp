@@ -532,13 +532,13 @@ SECTION UserControlModules
 .TravelHistoryEntry: "Travel History Entry" => "Reisehistorieneintrag"
 .System: "System" = SearchScans.ColumnSystem
 .TxTime: "Tx Time" => "Tx Zeit"
-.Cost: "Cost" => "Kosten"
+.Cost: "Cost" = UserControlModules.labelCost
 .SlotCol: "Slot" => "Schacht"
 .ItemInfo: "Info" = UserControlExpedition.Info
 .Value: "Value" => "Wert"
 .Stored: "Stored" => "Gelagert"
 .AllModules: "All Modules" => "Alle Module"
-.Mass: "Mass" => "Masse"
+.Mass: "Mass" = UserControlModules.labelMass
 .InTransit: "In Transit" => "Im Transit"
 .EDSURL: "Enter ED Shipyard URL" => "ED Shipyard URL eingeben"
 .CURL: "Enter Coriolis URL" => "Coriolis URL eingeben"
@@ -579,7 +579,7 @@ SECTION UserControlOutfitting
 .Price: "Price" => "Preis"
 .Type: "Type" = UserControlLedger.Type
 .Info: "Info" = UserControlExpedition.Info
-.Mass: "Mass" = UserControlModules.Mass
+.Mass: "Mass" = UserControlModules.labelMass
 
 SECTION UserControlPanelSelector
 
@@ -727,7 +727,7 @@ SECTION UserControlScanGrid
 .extButtonHabZones.ToolTip: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone"
 .checkBoxEDSM.ToolTip: "EDSM lookup toggle" = UserControlSurveyor.checkBoxEDSM.ToolTip
 .MainStar: "Main Star" => "Hauptstern"
-.Mass: "Mass" = UserControlModules.Mass
+.Mass: "Mass" = UserControlModules.labelMass
 .Radius: "Radius" => "Radius"
 .Temperature: "Temperature" => "Temperatur"
 .Terraformable: "Terraformable" = UserControlSurveyor.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem
@@ -1574,7 +1574,7 @@ SECTION UserControlCarrier
 .ServiceNotInstalled: "This Service is Not Installed" => "Dieser Service ist nicht installiert"
 .NoPacks: "No Module or Ship packs installed" => "Kein Modul- oder Schiffspaket installiert"
 .Tier: "Tier" = UserControlStats.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank
-.Cost: "Cost" = UserControlModules.Cost
+.Cost: "Cost" = UserControlModules.labelCost
 .Jumping: "Jumping" => "Springend"
 .NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" => "KEine CAPI-Daten von Frontier, entweder Server- oder Netzwerkfehler"
 .NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Du bist nicht im CAPI angemeldet.\r\nGehe zum Einstellungspanel, öffne deine Kommandanteneinstellungen und logge dich ein."
@@ -1616,17 +1616,17 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" = UserControlModules.Value
 .extTabControl.tabPageCAPI1: "CAPI Ships/Modules" => "CAPI Schiffe/Module"
 .extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" = UserControlCombatPanel.Name
-.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" => "Hersteller"
+.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" = UserControlShipYards.Manufacturer
 .extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" = UserControlOutfitting.Price
 .extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" => "Geschwindigkeit"
 .extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" => "Boost"
-.extTabControl.tabPageCAPI1.colCAPIShipsMassNumeric: "Mass" = UserControlModules.Mass
+.extTabControl.tabPageCAPI1.colCAPIShipsMassNumeric: "Mass" = UserControlModules.labelMass
 .extTabControl.tabPageCAPI1.colCAPIShipsLandingPadNumeric: "Landing Pad" => "Landeplattform"
 .extTabControl.tabPageCAPI1.colCAPIModulesName: "Name" = UserControlCombatPanel.Name
 .extTabControl.tabPageCAPI1.colCAPIModulesCat: "Category" = UserControlMarketData.CategoryCol
-.extTabControl.tabPageCAPI1.colCAPIModulesMassNumeric: "Mass" = UserControlModules.Mass
+.extTabControl.tabPageCAPI1.colCAPIModulesMassNumeric: "Mass" = UserControlModules.labelMass
 .extTabControl.tabPageCAPI1.colCAPIModulesPowerNumeric: "Power" => "Leistung"
-.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" = UserControlModules.Cost
+.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" = UserControlModules.labelCost
 .extTabControl.tabPageCAPI1.colCAPIModulesStockNumeric: "Stock" => "Lagerstand"
 .extTabControl.tabPageCAPI1.colCAPIModulesInfo: "Info" = UserControlExpedition.Info
 .extTabControl.tabPageCAPI2: "CAPI Items" => "CAPI Gegenstände"

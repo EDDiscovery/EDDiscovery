@@ -1616,7 +1616,7 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" = UserControlModules.Value
 .extTabControl.tabPageCAPI1: "CAPI Ships/Modules" => "Naves/Módulos de CAPI"
 .extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" = UserControlCombatPanel.Name
-.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" => "Fabricante"
+.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" = UserControlShipYards.Manufacturer
 .extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" = UserControlOutfitting.Price
 .extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" => "Velocidad"
 .extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" => "Postquemador"
