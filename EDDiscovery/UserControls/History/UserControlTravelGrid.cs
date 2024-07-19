@@ -460,7 +460,7 @@ namespace EDDiscovery.UserControls
                                + $"s{he.Status.StationName},{he.Status.StationType}\r\n"
                                + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
-                               + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship}\r\n"
+                               + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship} mp {he.Status.MultiPlayer}\r\n"
                                + $"jcb{he.Status.CurrentBoost} fsds{he.Status.FSDJumpSequence} jm'{he.Status.FSDJumpNextSystemName??"NoJump"}' ad{he.Status.FSDJumpNextSystemAddress??-1}\r\n"
                                + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledSeconds} jmps {he.TravelledJumps}"
                                ;

@@ -183,7 +183,7 @@ namespace EDDiscovery.WebServer
             else
                 response["SolDist"] = response["HomeDist"] = "-";
 
-            response["GameMode"] = he.GameModeGroup;
+            response["GameMode"] = he.Status.GameModeGroup;
             response["Group"] = he.Status.Group;
             response["Wanted"] = he.Status.Wanted;
             response["Credits"] = he.Credits.ToStringInvariant();

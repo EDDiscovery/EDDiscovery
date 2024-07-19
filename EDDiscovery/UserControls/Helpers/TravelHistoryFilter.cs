@@ -133,7 +133,8 @@ namespace EDDiscovery.UserControls
             }
             else if (MaximumDataAge.HasValue)
             {
-                return HistoryList.LimitByDate(list, MaximumDataAge.Value, entries, reverse);
+                DateTime lastentry = list.Count > 0 ? list.Last().EventTimeUTC : DateTime.UtcNow;       // if a list, last date in list, else UTC now
+                return HistoryList.LimitByDate(list, lastentry, MaximumDataAge.Value, entries, reverse);
             }
             else
             {

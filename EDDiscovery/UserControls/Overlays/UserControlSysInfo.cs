@@ -473,7 +473,7 @@ namespace EDDiscovery.UserControls
                     richTextBoxScrollMissions.Text = t;
                 }
 
-                textBoxGameMode.Text = he.GameModeGroup;
+                textBoxGameMode.Text = he.Status.GameModeGroupMulticrew;
 
                 if (he.isTravelling)
                 {
