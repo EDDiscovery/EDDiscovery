@@ -170,7 +170,7 @@ namespace EDDiscovery
                     if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active &&
                             !EDCommander.Current.ConsoleCommander && he.Status.TravelState != HistoryEntryStatus.TravelStateType.TaxiDocked
                             && he.Status.TravelState != HistoryEntryStatus.TravelStateType.MulticrewDocked &&
-                            he.Status.MultiPlayer == false)
+                            he.Status.IsInMultiPlayer == false)
                     {
                         var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
                         DoCAPI(dockevt.StationName, he.System.Name, History.Shipyards.AllowCobraMkIV);

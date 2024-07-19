@@ -173,7 +173,7 @@ namespace EDDiscovery.WebServer
             response["StationType"] = he.Status.StationType;
             response["StationFaction"] = he.Status.StationFaction;
             response["OnCrewWithCaptain"] = he.Status.OnCrewWithCaptain;
-            response["Multiplayer"] = he.Status.MultiPlayer;
+            response["Multiplayer"] = he.Status.IsInMultiPlayer;
 
             if (he.System.HasCoordinate)         // cursystem has them?
             {

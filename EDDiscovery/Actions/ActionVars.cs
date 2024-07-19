@@ -69,7 +69,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "IsTravelling"] = he.isTravelling.ToStringIntValue();
                 vars[prefix + "TravelledJumps"] = he.TravelledJumps.ToStringInvariant();
                 vars[prefix + "TravelledMissingJumps"] = he.TravelledMissingJumps.ToStringInvariant();
-                vars[prefix + "MultiPlayer"] = he.Status.MultiPlayer.ToStringIntValue();
+                vars[prefix + "MultiPlayer"] = he.Status.IsInMultiPlayer.ToStringIntValue();
                 vars[prefix + "EventSummary"] = he.EventSummary;
 
                 vars[prefix + "StartMarker"] = he.StartMarker.ToStringIntValue();
