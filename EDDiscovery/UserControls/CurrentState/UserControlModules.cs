@@ -451,7 +451,7 @@ namespace EDDiscovery.UserControls
 
             if (displayfilters.Contains("engineeredvalues"))
             {
-                var engmod = sm.GetModuleEngineered();
+                var engmod = sm.GetModuleEngineered(out string _);
                 if (engmod != null) // may not have enough details to find module
                 {
                     infoentry = infoentry.AppendPrePad(engmod.ToString(" " + Environment.NewLine), Environment.NewLine);
