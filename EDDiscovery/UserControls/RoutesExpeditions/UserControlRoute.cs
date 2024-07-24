@@ -346,7 +346,8 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFromSpansh_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(textBox_From.Text);
+            if ( !EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(textBox_From.Text))
+                MessageBoxTheme.Show(FindForm(), "System unknown to Spansh");
         }
 
         #endregion
