@@ -115,6 +115,10 @@ namespace EDDiscovery
 
         }
 
+        public void PostHistoryLoadDebug()  // on UI thread
+        {
+        }
+
 
         //    foreach (StationDefinitions.StationServices en in Enum.GetValues(typeof(StationDefinitions.StationServices)))
         //    {
@@ -123,143 +127,143 @@ namespace EDDiscovery
         //    }
 
 
-    //foreach (ShipSlots.Slot en in Enum.GetValues(typeof(ShipSlots.Slot)))
-    //{
-    //    string english = ShipSlots.ToEnglish(en);
-    //    System.Diagnostics.Debug.WriteLine($".{en.ToString()}: \"{english}\" @");
-    // }
+        //foreach (ShipSlots.Slot en in Enum.GetValues(typeof(ShipSlots.Slot)))
+        //{
+        //    string english = ShipSlots.ToEnglish(en);
+        //    System.Diagnostics.Debug.WriteLine($".{en.ToString()}: \"{english}\" @");
+        // }
 
-    //foreach (var en in Enum.GetValues(typeof(ShipSlots.Slot)))
-    //{
-    //    string english = en.ToString().SplitCapsWordFull();
-    //    System.Diagnostics.Debug.WriteLine($"[Slot.{en.ToString()}] = \"{english}\",");
-    //}
+        //foreach (var en in Enum.GetValues(typeof(ShipSlots.Slot)))
+        //{
+        //    string english = en.ToString().SplitCapsWordFull();
+        //    System.Diagnostics.Debug.WriteLine($"[Slot.{en.ToString()}] = \"{english}\",");
+        //}
 
-    //foreach (var en in Enum.GetValues(typeof(ItemData.ShipModule.ModuleTypes)))
-    //{
-    //    string english = en.ToString().Replace("AX", "AX ").Replace("_", "-").SplitCapsWordFull();
-    //    System.Diagnostics.Debug.WriteLine($".{english.Replace(" ", "_")}: \"{english}\" @");
-    //}
-
-
-
-
-    //BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDownload);
-    //BaseUtils.GitHubClass ghd = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDataDownload);
-    //    BaseUtils.GitHubRelease rel = ghc.GetLatestRelease();
-
-    //          var dir = ghd.ReadFolder(new System.Threading.CancellationToken(), "Notifications");
-
-    //var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications","*.*","*.*");
-    //    var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications", "*.*", true);
-
-
-    //System.Diagnostics.Trace.Write($"A bit more");
-    //System.Diagnostics.Trace.Write($"and a line feed \n and a bit more");
-
-    //for (int m = 0; m < 100; m++)
-    //{
-    //    System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m/2}\r\nFred and jim\nlola\ndenis");
-    //    //System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m}");
-    //    //System.Diagnostics.Debug.WriteLine($"Trace message {m / 2}\nFred and jim\nlola\ndenis");
-    //    System.Threading.Thread.Sleep(200);
-    //}
-
-    //  
-    //var allreleases = ghc.GetAllReleases(10);
-    //var latestrelease = ghc.GetLatestRelease();
-
-
-    //
-
-    // string url = string.Format(EDDConfig.Instance.SpanshSystemsURL, "_6months");
-
-    //   BaseUtils.HttpCom.DownloadURL(url, @"c:\code\spansh.dmp", true, out bool newfile, initialtimeout:2000);
-
-
-    // ghc.GetLatestReleaseAsync(RespCallback,this);
-
-    //var res = await ghc.GetLatestReleaseInTask();
-
-
-    //            var res = await ghc.GetLatestReleaseInTask(new System.Threading.CancellationToken(), 20000);
-    //          System.Diagnostics.Debug.WriteLine($"Result {res.StatusCode} {res.Body}");
-
-    //var cancel = new System.Threading.CancellationToken();
-    //var res = await ghc.GetLatestReleaseInTask(cancel,20000);
-    //System.Diagnostics.Debug.WriteLine($"Result {res.StatusCode} {res.Body}");
-
-    //static void RespCallback(BaseUtils.HttpCom.Response rd, object callerdata)
-    //{
-    //    System.Diagnostics.Debug.Assert(!System.Windows.Forms.Application.MessageLoop);
-    //    System.Diagnostics.Debug.Write($"Async reponse back {rd.Error} {rd.StatusCode} {rd.Body}");
-    //    EDDiscoveryForm form = callerdata as EDDiscoveryForm;
-
-    //    form.BeginInvoke(((MethodInvoker)delegate { form.RespCallBack(rd); }));
-    //}
-
-    //void RespCallBack(BaseUtils.HttpCom.Response rd)
-    //{
-    //    System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-    //    System.Diagnostics.Debug.Write($"Async reponse back in discovery form {rd.Error} {rd.StatusCode} {rd.Body}");
-
-    //}
-
-    //   var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);
-
-    //System.Diagnostics.Debug.WriteLine($"Post Init debug");
-    //var sp = new EliteDangerousCore.Spansh.SpanshClass();
-
-
-    //JToken tk = JToken.Parse(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\spanshmodtypes"));
-    //JArray mt = tk["values"].Array();
-    //foreach (var m in mt)
-    //{
-    //    string name = m.Str().Replace(" ", "").Replace("-", "_");
-    //    System.Diagnostics.Debug.Write($"{name},");
-    //}
+        //foreach (var en in Enum.GetValues(typeof(ItemData.ShipModule.ModuleTypes)))
+        //{
+        //    string english = en.ToString().Replace("AX", "AX ").Replace("_", "-").SplitCapsWordFull();
+        //    System.Diagnostics.Debug.WriteLine($".{english.Replace(" ", "_")}: \"{english}\" @");
+        //}
 
 
 
 
+        //BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDownload);
+        //BaseUtils.GitHubClass ghd = new BaseUtils.GitHubClass(Properties.Resources.URLGithubDataDownload);
+        //    BaseUtils.GitHubRelease rel = ghc.GetLatestRelease();
 
-    //   var list = sp.GetServices("Scirth", new string[] { "Apex Interstellar", "Black Market" }, 12);
-    // var list = sp.GetServices("Scirth", new string[] { "Interstellar Factors Contact" }, 12);
+        //          var dir = ghd.ReadFolder(new System.Threading.CancellationToken(), "Notifications");
 
-    // var sys = SystemCache.FindSystem("Lembava", WebExternalDataLookup.Spansh);
-
-    //  var isy = sp.GetSystem("sol");
-    //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
-
-    // while (true)
-    // {
-    //     System.Threading.Thread.Sleep(2000);
-    //     var resp = sp.TryGetRoadToRiches(queryid);
-    // }Aaw
-
-    // var ret = sp.GetStations("Sol", 4);
-
-    //SystemClass sol = new SystemClass("Sol", 10477373803);
-    //sp.GetBodies(sol);
-    // sp.GetStationsByDump(sol,10000000,false);
-
-    //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-    //sp.GetSystem("Sol");
-
-    //EDSMClass edsm = new EDSMClass();
-    // edsm.GetSystem("Sol");
-
-    //var permitlist = SystemsDB.GetListPermitSystems();
-    //foreach (var x in permitlist)
-    //    System.Diagnostics.Debug.WriteLine($"{x.Name} {x.SystemAddress} {x.X} {x.Y} {x.Z}");
-
-    // for translator, dump out lines
-    //        foreach (var en in Enum.GetValues(typeof(ShipModule.ModuleTypes)))
-    //        {
-    //            string english = en.ToString().Replace("AX", "AX ").Replace("_", "-").SplitCapsWordFull();
-    //    System.Diagnostics.Debug.WriteLine($".{english.Replace(" ", "_")}: \"{english}\" @");
-    //        }
+        //var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications","*.*","*.*");
+        //    var download = ghd.DownloadFolder(new System.Threading.CancellationToken(), @"c:\code\github","Notifications", "*.*", true);
 
 
-}
+        //System.Diagnostics.Trace.Write($"A bit more");
+        //System.Diagnostics.Trace.Write($"and a line feed \n and a bit more");
+
+        //for (int m = 0; m < 100; m++)
+        //{
+        //    System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m/2}\r\nFred and jim\nlola\ndenis");
+        //    //System.Diagnostics.Trace.WriteLine($"\r\nTrace message {m}");
+        //    //System.Diagnostics.Debug.WriteLine($"Trace message {m / 2}\nFred and jim\nlola\ndenis");
+        //    System.Threading.Thread.Sleep(200);
+        //}
+
+        //  
+        //var allreleases = ghc.GetAllReleases(10);
+        //var latestrelease = ghc.GetLatestRelease();
+
+
+        //
+
+        // string url = string.Format(EDDConfig.Instance.SpanshSystemsURL, "_6months");
+
+        //   BaseUtils.HttpCom.DownloadURL(url, @"c:\code\spansh.dmp", true, out bool newfile, initialtimeout:2000);
+
+
+        // ghc.GetLatestReleaseAsync(RespCallback,this);
+
+        //var res = await ghc.GetLatestReleaseInTask();
+
+
+        //            var res = await ghc.GetLatestReleaseInTask(new System.Threading.CancellationToken(), 20000);
+        //          System.Diagnostics.Debug.WriteLine($"Result {res.StatusCode} {res.Body}");
+
+        //var cancel = new System.Threading.CancellationToken();
+        //var res = await ghc.GetLatestReleaseInTask(cancel,20000);
+        //System.Diagnostics.Debug.WriteLine($"Result {res.StatusCode} {res.Body}");
+
+        //static void RespCallback(BaseUtils.HttpCom.Response rd, object callerdata)
+        //{
+        //    System.Diagnostics.Debug.Assert(!System.Windows.Forms.Application.MessageLoop);
+        //    System.Diagnostics.Debug.Write($"Async reponse back {rd.Error} {rd.StatusCode} {rd.Body}");
+        //    EDDiscoveryForm form = callerdata as EDDiscoveryForm;
+
+        //    form.BeginInvoke(((MethodInvoker)delegate { form.RespCallBack(rd); }));
+        //}
+
+        //void RespCallBack(BaseUtils.HttpCom.Response rd)
+        //{
+        //    System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+        //    System.Diagnostics.Debug.Write($"Async reponse back in discovery form {rd.Error} {rd.StatusCode} {rd.Body}");
+
+        //}
+
+        //   var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast);
+
+        //System.Diagnostics.Debug.WriteLine($"Post Init debug");
+        //var sp = new EliteDangerousCore.Spansh.SpanshClass();
+
+
+        //JToken tk = JToken.Parse(BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\spanshmodtypes"));
+        //JArray mt = tk["values"].Array();
+        //foreach (var m in mt)
+        //{
+        //    string name = m.Str().Replace(" ", "").Replace("-", "_");
+        //    System.Diagnostics.Debug.Write($"{name},");
+        //}
+
+
+
+
+
+        //   var list = sp.GetServices("Scirth", new string[] { "Apex Interstellar", "Black Market" }, 12);
+        // var list = sp.GetServices("Scirth", new string[] { "Interstellar Factors Contact" }, 12);
+
+        // var sys = SystemCache.FindSystem("Lembava", WebExternalDataLookup.Spansh);
+
+        //  var isy = sp.GetSystem("sol");
+        //var queryid = sp.RequestRoadToRiches("Sol", "Col 359 Sector BF-Z d136", 30, 25, 100, false, true, true, 1000000, 100000);
+
+        // while (true)
+        // {
+        //     System.Threading.Thread.Sleep(2000);
+        //     var resp = sp.TryGetRoadToRiches(queryid);
+        // }Aaw
+
+        // var ret = sp.GetStations("Sol", 4);
+
+        //SystemClass sol = new SystemClass("Sol", 10477373803);
+        //sp.GetBodies(sol);
+        // sp.GetStationsByDump(sol,10000000,false);
+
+        //EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+        //sp.GetSystem("Sol");
+
+        //EDSMClass edsm = new EDSMClass();
+        // edsm.GetSystem("Sol");
+
+        //var permitlist = SystemsDB.GetListPermitSystems();
+        //foreach (var x in permitlist)
+        //    System.Diagnostics.Debug.WriteLine($"{x.Name} {x.SystemAddress} {x.X} {x.Y} {x.Z}");
+
+        // for translator, dump out lines
+        //        foreach (var en in Enum.GetValues(typeof(ShipModule.ModuleTypes)))
+        //        {
+        //            string english = en.ToString().Replace("AX", "AX ").Replace("_", "-").SplitCapsWordFull();
+        //    System.Diagnostics.Debug.WriteLine($".{english.Replace(" ", "_")}: \"{english}\" @");
+        //        }
+
+
+    }
 }

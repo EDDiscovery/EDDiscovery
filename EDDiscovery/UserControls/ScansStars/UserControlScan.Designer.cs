@@ -191,7 +191,7 @@ namespace EDDiscovery.UserControls
             // 
             // scanDisplayConfigureButton
             // 
-            this.scanDisplayConfigureButton.Cursor = System.Windows.Forms.Cursors.PanSW;
+            this.scanDisplayConfigureButton.Cursor = System.Windows.Forms.Cursors.Default;
             this.scanDisplayConfigureButton.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
             this.scanDisplayConfigureButton.Location = new System.Drawing.Point(80, 1);
             this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
@@ -233,7 +233,10 @@ namespace EDDiscovery.UserControls
             systemDisplay1.ShowOnlyMaterialsRare = false;
             systemDisplay1.ShowOverlays = true;
             systemDisplay1.ShowPlanetClasses = true;
+            systemDisplay1.ShowPlanetMass = true;
+            systemDisplay1.ShowStarAge = true;
             systemDisplay1.ShowStarClasses = true;
+            systemDisplay1.ShowStarMass = true;
             systemDisplay1.ShowWebBodies = false;
             systemDisplay1.ValueLimit = 50000;
             this.panelStars.SystemDisplay = systemDisplay1;

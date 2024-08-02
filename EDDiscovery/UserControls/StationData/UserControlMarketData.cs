@@ -16,10 +16,12 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -57,13 +59,15 @@ namespace EDDiscovery.UserControls
 
             var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, 
                             EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, 
-                            EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol, EDTx.UserControlMarketData_labelLocation, EDTx.UserControlMarketData_labelVs, 
+                            EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol,  EDTx.UserControlMarketData_labelVs, 
                             EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxHasDemand, EDTx.UserControlMarketData_checkBoxAutoSwap };
             var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, 
                                     EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            labelLocation.Text = labelComparison.Text = "No Data".T(EDTx.NoData);
         }
 
         public override void LoadLayout()
@@ -399,6 +403,110 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+
+        private void extButtonSelectWhere_Click(object sender, EventArgs e)
+        {
+            CheckedIconNewListBoxForm frm = new CheckedIconNewListBoxForm();
+            frm.UC.AddButton("th", "Travel History Entry Last".T(EDTx.UserControlMarketData_LEntry));
+            PopulateMenu(frm);
+            frm.PositionBelow(extButtonSelectWhere);
+            frm.UC.MultipleColumns = true;
+            frm.CloseBoundaryRegion = new Size(400, 64);        // allow a lot of X, to allow mouse to be side on to the menu popout, less Y
+            frm.UC.ButtonPressed += (index, stag, text, utag, bev) => 
+            { 
+                if ( stag == "th")
+                {
+                    System.Diagnostics.Debug.WriteLine($"Travel history");
+                }
+                else if (stag == "st")
+                {
+                    HistoryEntry he = ((CheckedIconUserControl.SubForm)utag).Items[0].UserTag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"Whereis Button pressed {he.EventTimeUTC}");
+                }
+                else if (stag == "e")
+                {
+                    HistoryEntry he = utag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"HE Button pressed {he.EventTimeUTC}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"System button pressed no action");
+                }
+
+                frm.Close(); 
+            
+            };
+            frm.Show(this);
+
+        }
+
+        private void PopulateMenu(CheckedIconNewListBoxForm frm)
+        {
+            var list = HistoryList.FilterByCommodityPricesBackwardsSystemWhereAmI(DiscoveryForm.History.EntryOrder());
+
+            foreach (List<System.Linq.IGrouping<string, HistoryEntry>> system in list)
+            {
+                CheckedIconUserControl.SubForm stations = new CheckedIconUserControl.SubForm();
+
+                frm.UC.AddButton("sys", system[0].First().System.Name, usertag: stations);
+
+                foreach (var stat in system)
+                {
+                    if (stat.Count() == 1)
+                    {
+                        var he = stat.First();
+                        stations.Items.Add(new CheckedIconUserControl.Item() { Tag = "e", Text = stat.Key + ":" + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(), Button = true, UserTag = he });
+                    }
+                    else
+                    {
+                        CheckedIconUserControl.SubForm timelist = new CheckedIconUserControl.SubForm();
+
+                        stations.Items.Add(new CheckedIconUserControl.Item() { Tag = "st", Text = stat.Key, Button = true, UserTag = timelist });
+
+                        foreach (var he in stat)
+                        {
+                            timelist.Items.Add(new CheckedIconUserControl.Item() { Tag = "e", Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(), Button = true, UserTag = he });
+                        }
+                    }
+                }
+            }
+        }
+
+        private void extButtonSelectComparision_Click(object sender, EventArgs e)
+        {
+            CheckedIconNewListBoxForm frm = new CheckedIconNewListBoxForm();
+            frm.UC.AddButton("none", "None".T(EDTx.None));
+            PopulateMenu(frm);
+            frm.PositionBelow(extButtonSelectWhere);
+            frm.UC.MultipleColumns = true;
+            frm.CloseBoundaryRegion = new Size(400, 64);        // allow a lot of X, to allow mouse to be side on to the menu popout, less Y
+            frm.UC.ButtonPressed += (index, stag, text, utag, bev) =>
+            {
+                if (stag == "none")
+                {
+                    System.Diagnostics.Debug.WriteLine($"None");
+                }
+                else if (stag == "st")
+                {
+                    HistoryEntry he = ((CheckedIconUserControl.SubForm)utag).Items[0].UserTag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"Whereis Button pressed {he.EventTimeUTC}");
+                }
+                else if (stag == "e")
+                {
+                    HistoryEntry he = utag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"HE Button pressed {he.EventTimeUTC}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"System button pressed no action");
+                }
+
+                frm.Close();
+
+            };
+            frm.Show(this);
+
+        }
         private void FillComboBoxes()
         {
             string selfrom = comboBoxCustomFrom.Text;
@@ -456,8 +564,9 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnNumeric();
         }
 
-        #endregion
 
+
+        #endregion
 
     }
 }

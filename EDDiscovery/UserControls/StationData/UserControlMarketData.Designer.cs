@@ -66,6 +66,9 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxHasDemand = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelComparison = new System.Windows.Forms.Label();
+            this.extButtonSelectWhere = new ExtendedControls.ExtButton();
+            this.extButtonSelectComparision = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -77,13 +80,13 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 23);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 34);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 549);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1055, 538);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // dataGridViewMarketData
+            // dataGridView
             // 
             this.dataGridView.AllowRowHeaderVisibleSelection = false;
             this.dataGridView.AllowUserToAddRows = false;
@@ -104,13 +107,13 @@ namespace EDDiscovery.UserControls
             this.ProfitToCol,
             this.ProfitFromCol});
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView.Name = "dataGridViewMarketData";
+            this.dataGridView.Name = "dataGridView";
             this.dataGridView.PerColumnWordWrapControl = true;
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(784, 549);
+            this.dataGridView.Size = new System.Drawing.Size(1039, 538);
             this.dataGridView.TabIndex = 1;
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewMarketData_RowPostPaint);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
@@ -205,13 +208,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(1039, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 549);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 538);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -233,8 +236,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoSwap.ImageIndeterminate = null;
             this.checkBoxAutoSwap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoSwap.ImageUnchecked = null;
-            this.checkBoxAutoSwap.Location = new System.Drawing.Point(622, 1);
-            this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxAutoSwap.Location = new System.Drawing.Point(737, 4);
+            this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.checkBoxAutoSwap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
             this.checkBoxAutoSwap.Size = new System.Drawing.Size(75, 17);
@@ -254,8 +257,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxBuyOnly.ImageIndeterminate = null;
             this.checkBoxBuyOnly.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxBuyOnly.ImageUnchecked = null;
-            this.checkBoxBuyOnly.Location = new System.Drawing.Point(450, 1);
-            this.checkBoxBuyOnly.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxBuyOnly.Location = new System.Drawing.Point(565, 4);
+            this.checkBoxBuyOnly.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
             this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
@@ -268,8 +271,8 @@ namespace EDDiscovery.UserControls
             // labelVs
             // 
             this.labelVs.AutoSize = true;
-            this.labelVs.Location = new System.Drawing.Point(239, 1);
-            this.labelVs.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelVs.Location = new System.Drawing.Point(85, 4);
+            this.labelVs.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.labelVs.Name = "labelVs";
             this.labelVs.Size = new System.Drawing.Size(19, 13);
             this.labelVs.TabIndex = 28;
@@ -284,8 +287,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomTo.DisplayMember = "";
             this.comboBoxCustomTo.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomTo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomTo.Location = new System.Drawing.Point(266, 1);
-            this.comboBoxCustomTo.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxCustomTo.Location = new System.Drawing.Point(381, 2);
+            this.comboBoxCustomTo.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
             this.comboBoxCustomTo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomTo.Name = "comboBoxCustomTo";
             this.comboBoxCustomTo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -309,8 +312,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomFrom.DisplayMember = "";
             this.comboBoxCustomFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomFrom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomFrom.Location = new System.Drawing.Point(55, 1);
-            this.comboBoxCustomFrom.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxCustomFrom.Location = new System.Drawing.Point(197, 2);
+            this.comboBoxCustomFrom.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
             this.comboBoxCustomFrom.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomFrom.Name = "comboBoxCustomFrom";
             this.comboBoxCustomFrom.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -328,12 +331,12 @@ namespace EDDiscovery.UserControls
             // labelLocation
             // 
             this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(0, 1);
-            this.labelLocation.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelLocation.Location = new System.Drawing.Point(0, 4);
+            this.labelLocation.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.labelLocation.Name = "labelLocation";
-            this.labelLocation.Size = new System.Drawing.Size(47, 13);
+            this.labelLocation.Size = new System.Drawing.Size(43, 13);
             this.labelLocation.TabIndex = 26;
-            this.labelLocation.Text = "No Data";
+            this.labelLocation.Text = "<code>";
             // 
             // toolTip
             // 
@@ -350,8 +353,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxHasDemand.ImageIndeterminate = null;
             this.checkBoxHasDemand.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxHasDemand.ImageUnchecked = null;
-            this.checkBoxHasDemand.Location = new System.Drawing.Point(526, 1);
-            this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxHasDemand.Location = new System.Drawing.Point(641, 4);
+            this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.checkBoxHasDemand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxHasDemand.Name = "checkBoxHasDemand";
             this.checkBoxHasDemand.Size = new System.Drawing.Size(88, 17);
@@ -365,8 +368,11 @@ namespace EDDiscovery.UserControls
             // 
             this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.labelLocation);
-            this.panelTop.Controls.Add(this.comboBoxCustomFrom);
+            this.panelTop.Controls.Add(this.extButtonSelectWhere);
             this.panelTop.Controls.Add(this.labelVs);
+            this.panelTop.Controls.Add(this.labelComparison);
+            this.panelTop.Controls.Add(this.extButtonSelectComparision);
+            this.panelTop.Controls.Add(this.comboBoxCustomFrom);
             this.panelTop.Controls.Add(this.comboBoxCustomTo);
             this.panelTop.Controls.Add(this.checkBoxBuyOnly);
             this.panelTop.Controls.Add(this.checkBoxHasDemand);
@@ -374,8 +380,38 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 23);
+            this.panelTop.Size = new System.Drawing.Size(1055, 34);
             this.panelTop.TabIndex = 2;
+            // 
+            // labelComparison
+            // 
+            this.labelComparison.AutoSize = true;
+            this.labelComparison.Location = new System.Drawing.Point(112, 4);
+            this.labelComparison.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelComparison.Name = "labelComparison";
+            this.labelComparison.Size = new System.Drawing.Size(43, 13);
+            this.labelComparison.TabIndex = 26;
+            this.labelComparison.Text = "<code>";
+            // 
+            // extButtonSelectWhere
+            // 
+            this.extButtonSelectWhere.Image = global::EDDiscovery.Icons.Controls.Find;
+            this.extButtonSelectWhere.Location = new System.Drawing.Point(54, 3);
+            this.extButtonSelectWhere.Name = "extButtonSelectWhere";
+            this.extButtonSelectWhere.Size = new System.Drawing.Size(28, 28);
+            this.extButtonSelectWhere.TabIndex = 30;
+            this.extButtonSelectWhere.UseVisualStyleBackColor = true;
+            this.extButtonSelectWhere.Click += new System.EventHandler(this.extButtonSelectWhere_Click);
+            // 
+            // extButtonSelectComparision
+            // 
+            this.extButtonSelectComparision.Image = global::EDDiscovery.Icons.Controls.Find;
+            this.extButtonSelectComparision.Location = new System.Drawing.Point(166, 3);
+            this.extButtonSelectComparision.Name = "extButtonSelectComparision";
+            this.extButtonSelectComparision.Size = new System.Drawing.Size(28, 28);
+            this.extButtonSelectComparision.TabIndex = 31;
+            this.extButtonSelectComparision.UseVisualStyleBackColor = true;
+            this.extButtonSelectComparision.Click += new System.EventHandler(this.extButtonSelectComparision_Click);
             // 
             // UserControlMarketData
             // 
@@ -384,7 +420,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlMarketData";
-            this.Size = new System.Drawing.Size(800, 572);
+            this.Size = new System.Drawing.Size(1055, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.panelTop.ResumeLayout(false);
@@ -418,5 +454,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox checkBoxAutoSwap;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private ExtendedControls.ExtCheckBox checkBoxHasDemand;
+        private System.Windows.Forms.Label labelComparison;
+        private ExtendedControls.ExtButton extButtonSelectWhere;
+        private ExtendedControls.ExtButton extButtonSelectComparision;
     }
 }

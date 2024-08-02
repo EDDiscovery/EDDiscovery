@@ -366,7 +366,6 @@ SECTION UserControlMarketData
 .checkBoxAutoSwap: "AutoSwap" @
 .checkBoxBuyOnly: "Buy Only" @
 .labelVs: "Vs" @
-.labelLocation: "No Data" @
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" @
 .comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" @
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" @

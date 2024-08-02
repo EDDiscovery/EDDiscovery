@@ -1437,7 +1437,6 @@ namespace EDDiscovery
         UserControlMarketData_GalAvgCol, // Column Header 'Galactic Avg'
         UserControlMarketData_ProfitToCol, // Column Header 'Profit To cr/t'
         UserControlMarketData_ProfitFromCol, // Column Header 'Profit From cr/t'
-        UserControlMarketData_labelLocation, // Control 'No Data'
         UserControlMarketData_labelVs, // Control 'Vs'
         UserControlMarketData_checkBoxBuyOnly, // Control 'Buy Only'
         UserControlMarketData_checkBoxHasDemand, // Control 'Has Demand'
