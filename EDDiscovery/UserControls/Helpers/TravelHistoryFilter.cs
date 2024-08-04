@@ -30,6 +30,8 @@ namespace EDDiscovery.UserControls
         public bool Lastdockflag { get; }
         public bool Startendflag { get; }
         public string Label { get; }
+        public DateTime? StartDateUTC { get; }
+        public DateTime? EndDateUTC { get; }
 
         public static TravelHistoryFilter NoFilter { get; } = new TravelHistoryFilter();
 
@@ -50,6 +52,13 @@ namespace EDDiscovery.UserControls
             Lastdockflag = ld;
             Startendflag = startend;
             Label = label;
+        }
+
+        private TravelHistoryFilter(DateTime startutc, DateTime endutc)
+        {
+            StartDateUTC = startutc;
+            EndDateUTC = endutc;
+            Label = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(StartDateUTC.Value).ToString() + ".." + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EndDateUTC.Value).ToString();
         }
 
         private TravelHistoryFilter()
@@ -115,6 +124,10 @@ namespace EDDiscovery.UserControls
         {
             return new TravelHistoryFilter(false, true, $"Start/End Flag".T(EDTx.TravelHistoryFilter_StartEnd));
         }
+        public static TravelHistoryFilter StartEnd(DateTime start, DateTime end)
+        {
+            return new TravelHistoryFilter(start, end);
+        }
 
         public List<HistoryEntry> Filter(List<HistoryEntry> list, HashSet<JournalTypeEnum> entries = null, bool reverse = true)      // list should be in entry order. oldest first
         {
@@ -135,6 +148,10 @@ namespace EDDiscovery.UserControls
             {
                 DateTime lastentry = list.Count > 0 ? list.Last().EventTimeUTC : DateTime.UtcNow;       // if a list, last date in list, else UTC now
                 return HistoryList.LimitByDate(list, lastentry, MaximumDataAge.Value, entries, reverse);
+            }
+            else if (StartDateUTC.HasValue)
+            {
+                return HistoryList.LimitByDate(list, StartDateUTC.Value, EndDateUTC.Value, entries, reverse);
             }
             else
             {
@@ -206,6 +223,8 @@ namespace EDDiscovery.UserControls
                 TravelHistoryFilter.LastThreeYears(),
             };
 
+            //HtmlElementErrorEventArgs pick up from config extra time filters
+
             if (inclnumberlimit)
             {
                 el.Add(TravelHistoryFilter.Last(10));
@@ -230,6 +249,11 @@ namespace EDDiscovery.UserControls
             cc.SelectedIndex = (entry >= 0) ? entry : 0;
 
             cc.Enabled = true;
+        }
+
+        public static void EditUserDataTimeRange()
+        {
+           // ...
         }
     }
 

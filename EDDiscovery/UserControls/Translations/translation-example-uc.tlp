@@ -762,6 +762,7 @@ SECTION UserControlSettings
 .JournalDirCol: "Journal Folder" @
 .NotesCol: "Notes" @
 .btnDeleteCommander: "Delete" @
+.extButtonUnDelete: "Undelete" @
 .buttonEditCommander: "Edit" @
 .buttonAddCommander: "Add" @
 .groupBoxTheme: "Theme" @
@@ -848,6 +849,7 @@ SECTION UserControlSettings
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
 .extButtonReloadStarDatabase: "Reload Star Database" @
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
+.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
 
 SECTION UserControlShipYards
 

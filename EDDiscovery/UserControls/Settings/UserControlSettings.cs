@@ -65,7 +65,8 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlSettings_checkBoxKeepOnTop, EDTx.UserControlSettings_checkBoxCustomResize, EDTx.UserControlSettings_checkBoxMinimizeToNotifyIcon, 
                                         EDTx.UserControlSettings_checkBoxUseNotifyIcon, EDTx.UserControlSettings_extGroupBoxDLLPerms, EDTx.UserControlSettings_extButtonDLLConfigure, 
                                         EDTx.UserControlSettings_extButtonDLLPerms, EDTx.UserControlSettings_groupBoxCustomLanguage, EDTx.UserControlSettings_groupBoxCustomSafeMode, 
-                                        EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode, EDTx.UserControlSettings_extButtonReloadStarDatabase };
+                                        EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode, EDTx.UserControlSettings_extButtonReloadStarDatabase,
+                                        EDTx.UserControlSettings_extButtonUnDelete};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
@@ -160,6 +161,8 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
             checkBoxCustomEDSMDownload.Text += " " + SystemsDatabase.Instance.DBSource;
+
+            extButtonUnDelete.Enabled = EDCommander.DeletedCommanders() > 0;
         }
 
         public void ConfigureHelpButton(ExtendedControls.ExtButtonDrawn p, string tag)
@@ -380,16 +383,29 @@ namespace EDDiscovery.UserControls
 
                 if (result == DialogResult.Yes)
                 {
-                    EDCommander.Delete(cmdr);
+                    var perm= ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)".T(EDTx.UserControlSettings_PermDelCmdr), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    int id = cmdr.Id;
+
+                    EDCommander.Delete(id,perm==DialogResult.Yes);
+                    if ( perm == DialogResult.Yes)
+                       JournalEntry.DeleteCommander(id);
                     DiscoveryForm.UpdateCommandersListBox();
                     UpdateCommandersListBox();
                     DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
 
+                    extButtonUnDelete.Enabled = EDCommander.DeletedCommanders() > 0;
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
             }
         }
 
+        private void extButtonUnDelete_Click(object sender, EventArgs e)
+        {
+            EDCommander.UndeleteCommanders();
+            DiscoveryForm.UpdateCommandersListBox();
+            UpdateCommandersListBox();
+            extButtonUnDelete.Enabled = EDCommander.DeletedCommanders() > 0;
+        }
 
         #endregion
 
