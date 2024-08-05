@@ -80,7 +80,7 @@ namespace EDDiscovery.Actions
 
                 EDDiscoveryForm discoveryform = (ap.ActionController as ActionController).DiscoveryForm;
 
-                List<EDCommander> cmdrlist = EDCommander.GetListCommanders();
+                List<EDCommander> cmdrlist = EDCommander.GetListActiveCommanders();
 
                 if (cmdname != null)
                 {

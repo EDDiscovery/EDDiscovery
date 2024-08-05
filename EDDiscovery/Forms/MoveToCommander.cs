@@ -32,7 +32,7 @@ namespace EDDiscovery.Forms
 
         public bool Init()
         {
-            List<EDCommander> commanders = EDCommander.GetListCommanders();
+            List<EDCommander> commanders = EDCommander.GetListActiveCommanders();
 
             comboBoxCommanders.DisplayMember = "Name";
             comboBoxCommanders.ValueMember = "Nr";

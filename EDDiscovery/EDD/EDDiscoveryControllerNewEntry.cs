@@ -43,10 +43,10 @@ namespace EDDiscovery
 
             //System.Diagnostics.Debug.WriteLine($"Filterd JE {je.GetJson().ToString()}");
 
-            if (EDCommander.NumberOfCommanders != commandercountafterhistoryread)      // if this changes, a commander has been added
+            if (EDCommander.AddOrUpdateCount != commanderaddorupdatecount)      // if this changes, a commander has been added
             {
-                commandercountafterhistoryread = EDCommander.NumberOfCommanders;        // reset and invoke
-                System.Diagnostics.Trace.WriteLine($"EDC Commander count changed to {commandercountafterhistoryread}");
+                commanderaddorupdatecount = EDCommander.AddOrUpdateCount;        // reset and invoke
+                System.Diagnostics.Trace.WriteLine($"EDC Commander added/updated commander {commanderaddorupdatecount}");
                 OnNewCommanderDuringPlayDetected?.Invoke();
             }
 

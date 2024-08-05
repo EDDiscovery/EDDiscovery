@@ -30,24 +30,16 @@ namespace EDDiscovery
             comboBoxCommander.Enabled = false;
             comboBoxCommander.Items.Clear();            // comboBox is nicer with items
 
-            if (EDDOptions.Instance.DisableCommanderSelect)
+            if (EDDOptions.Instance.DisableCommanderSelect) // debug only 
             {
                 comboBoxCommander.Items.Add("Jameson");
                 comboBoxCommander.SelectedIndex = 0;
             }
             else
             {
-                var names = EDCommander.GetListInclHidden().Select(x => x.Name).OrderBy(x=>x);
+                var names = EDCommander.GetListActiveHiddenCommanders().Select(x => x.Name);
                 comboBoxCommander.Items.AddRange(names);
-                if (History.CommanderId == -1)  // is hidden log
-                {
-                    comboBoxCommander.SelectedIndex = 0;
-                }
-                else
-                {
-                    comboBoxCommander.SelectedItem = EDCommander.Current.Name;
-                }
-
+                comboBoxCommander.SelectedItem = EDCommander.Current.Name;
                 comboBoxCommander.Enabled = true;
             }
         }
@@ -56,7 +48,7 @@ namespace EDDiscovery
         {
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
-                var itm = (from EDCommander c in EDCommander.GetListInclHidden() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
+                var itm = (from EDCommander c in EDCommander.GetListActiveHiddenCommanders() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
                 ChangeToCommander(itm[0].Id);
             }
         }

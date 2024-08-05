@@ -83,7 +83,8 @@ namespace EDDiscovery.UserControls
 
             ResetThemeList();
 
-            btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
+            btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
+            extButtonUnDelete.Enabled = EDCommander.GetListDeletedCommanders().Count > 0;
 
             comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts: true);
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
@@ -121,7 +122,7 @@ namespace EDDiscovery.UserControls
             checkBoxMinimizeToNotifyIcon.Enabled = EDDConfig.Instance.UseNotifyIcon;
 
             dataGridViewCommanders.AutoGenerateColumns = false;             // BEFORE assigned to list..
-            dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();
+            dataGridViewCommanders.DataSource = EDCommander.GetListActiveCommanders();
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
@@ -162,7 +163,6 @@ namespace EDDiscovery.UserControls
             extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
             checkBoxCustomEDSMDownload.Text += " " + SystemsDatabase.Instance.DBSource;
 
-            extButtonUnDelete.Enabled = EDCommander.DeletedCommanders() > 0;
         }
 
         public void ConfigureHelpButton(ExtendedControls.ExtButtonDrawn p, string tag)
@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
         {
             int selrow = dataGridViewCommanders.SelectedRows.Count > 0 ? dataGridViewCommanders.SelectedRows[0].Index : -1;
             dataGridViewCommanders.DataSource = null;
-            List<EDCommander> cmdrs = EDCommander.GetListCommanders();
+            List<EDCommander> cmdrs = EDCommander.GetListActiveCommanders();
             dataGridViewCommanders.DataSource = cmdrs;
             if (selrow >= 0 && selrow < dataGridViewCommanders.RowCount)
                 dataGridViewCommanders.Rows[selrow].Selected = true;
@@ -324,7 +324,7 @@ namespace EDDiscovery.UserControls
                     UpdateCommandersListBox();
                     DiscoveryForm.UpdateCommandersListBox();
                     DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
-                    btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
+                    btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -393,18 +393,19 @@ namespace EDDiscovery.UserControls
                     UpdateCommandersListBox();
                     DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
 
-                    extButtonUnDelete.Enabled = EDCommander.DeletedCommanders() > 0;
-                    btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
+                    btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
+                    extButtonUnDelete.Enabled = EDCommander.GetListDeletedCommanders().Count > 0;
                 }
             }
         }
 
         private void extButtonUnDelete_Click(object sender, EventArgs e)
         {
-            EDCommander.UndeleteCommanders();
+            EDCommander.UndeleteAllCommanders();
             DiscoveryForm.UpdateCommandersListBox();
             UpdateCommandersListBox();
-            extButtonUnDelete.Enabled = EDCommander.DeletedCommanders() > 0;
+            btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
+            extButtonUnDelete.Enabled = EDCommander.GetListDeletedCommanders().Count > 0;
         }
 
         #endregion
