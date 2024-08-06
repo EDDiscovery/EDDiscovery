@@ -885,6 +885,9 @@
     <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogEntries.resx">
       <DependentUpon>CaptainsLogEntries.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlLog.resx">
+      <DependentUpon>UserControlLog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlCombatPanel.resx">
       <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
     </EmbeddedResource>
