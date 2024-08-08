@@ -834,7 +834,7 @@ SECTION UserControlSettings
 .180daysold: ">180 days old" @
 .270daysold: ">270 days old" @
 .365daysold: "> 365 days old" @
-.AddC: "Commander name is not valid or duplicate" @
+.AddC: "Commander name is not valid or duplicate (this includes deleted commanders)" @
 .AddT: "Cannot create Commander" @
 .Language: "Applies at next restart of ED Discovery" @
 .RemoveSectors: "Remove Sectors" @

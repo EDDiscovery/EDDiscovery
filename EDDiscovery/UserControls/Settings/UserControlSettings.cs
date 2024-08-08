@@ -327,7 +327,7 @@ namespace EDDiscovery.UserControls
                     btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate (this includes deleted commanders)".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
 
             DiscoveryForm.FrontierCAPI.StatusChange -= CAPICallBack;
