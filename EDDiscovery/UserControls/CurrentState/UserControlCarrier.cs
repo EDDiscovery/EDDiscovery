@@ -515,12 +515,12 @@ namespace EDDiscovery.UserControls
                     Graphics gr = imageControlServices.GetGraphics();
                     int vpos = linemargin;
 
-                    foreach (JournalCarrierCrewServices.ServiceType en in Enum.GetValues(typeof(JournalCarrierCrewServices.ServiceType)))
+                    foreach (JournalCarrierCrewServices.ServiceType srvtype in Enum.GetValues(typeof(JournalCarrierCrewServices.ServiceType)))
                     {
-                        if (JournalCarrierCrewServices.IsValidService(en))
+                        if (JournalCarrierCrewServices.IsValidService(srvtype))
                         {
-                            var servicestate = cs.State.GetService(en);     // may be null for a core or non listed service
-                            var optional = JournalCarrierCrewServices.IsOptionalService(en);
+                            var servicestate = cs.State.GetService(srvtype);     // may be null for a core or non listed service
+                            var optional = JournalCarrierCrewServices.IsOptionalService(srvtype);
                             bool active = !optional || (servicestate != null && servicestate.Enabled == true && servicestate.Activated == true);
                             bool disabled = servicestate != null && servicestate.Enabled == false && servicestate.Activated == true;
 
@@ -535,17 +535,18 @@ namespace EDDiscovery.UserControls
 
                             const int titlewidth = 200;
 
-                            var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(en), bigfont, color);
+                            var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(srvtype), bigfont, color);
                             pointtextleft.Y += (int)(size.Height + 1);
-                            string coreoroptional = en <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".TxID(EDTx.UserControlCarrier_CoreService) : "Optional Service".TxID(EDTx.UserControlCarrier_OptionalService);
+                            string coreoroptional = srvtype <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".TxID(EDTx.UserControlCarrier_CoreService) : "Optional Service".TxID(EDTx.UserControlCarrier_OptionalService);
                             imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
 
-                            Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + en.ToString());
+                            Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + srvtype.ToString());
                             imageControlServices.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height, img.Width, img.Height));
 
                             var servicecol1top = new Point(titlewidth + 50, vpos + linemargin * 2);
 
-                            JournalCarrierCrewServices.ServicesData si = JournalCarrierCrewServices.GetDataOnServiceType(en);
+                            // lookup fixed information on service type
+                            JournalCarrierCrewServices.ServicesData si = JournalCarrierCrewServices.GetDataOnServiceType(srvtype);
                             if (si != null)
                             {
                                 int lineh = normfont.Height + linemargin * 2;
@@ -555,8 +556,8 @@ namespace EDDiscovery.UserControls
                                 imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost".TxID(EDTx.UserControlCarrier_Upkeepcost) + ": " + si.UpkeepCost.ToString("N0"), normfont, color);
                                 imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost".TxID(EDTx.UserControlCarrier_Suspendedupkeepcost) + ": " + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
 
-                                if (!cs.CrewNames.TryGetValue(en, out string crewname))
-                                    crewname = "??";
+                                // crewname, if either no service state or name is null, ??
+                                string crewname = servicestate?.CrewName ?? "??";
 
                                 imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".TxID(EDTx.UserControlCarrier_CrewName) + ": " + crewname, normfont, color);
                             }
