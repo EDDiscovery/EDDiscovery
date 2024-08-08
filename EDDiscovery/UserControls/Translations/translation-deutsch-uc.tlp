@@ -510,14 +510,17 @@ SECTION UserControlModules
 .PriorityEnable: "P/E" => "P/A"
 .labelShip: "Ship" => "Schiff"
 .labelVehicle: "Unknown" = Unknown
-.labelMass: "Mass:" => "Masse"
-.labelCost: "Cost:" => "Kosten"
-.labelFSD: "FSD:" => "FSA"
-.labelThrusters: "Thrust:" => "Schub"
-.labelShields: "Shields:" => "Schilde"
-.labelArmour: "Armour:" => "Panzerung"
+.labelMass: "Mass:" => "Masse:"
+.labelCost: "Cost:" => "Kosten:"
+.labelFSD: "FSD:" => "FSA:"
+.labelThrusters: "Thrust:" => "Schub:"
+.labelShields: "Shields:" => "Schilde:"
+.labelArmour: "Armour:" => "Panzerung:"
+
+
 .FullBluePrint: "Show full blueprint information" => "Zeige vollständige Blaupauseninformationen"
 .EngineeredValues: "Show Engineered Values" => "Zeige verbesserte Werte"
+
 .comboBoxShips.ToolTip: "Select ship to view" => "Wähle anzuzeigendes Schiff"
 .extButtonShowControl.ToolTip: "Display Settings" => "Anzeigeoptionen"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
@@ -526,6 +529,7 @@ SECTION UserControlModules
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguriere Extradaten, die im Elite-Journal nicht ausgegeben werden"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .extButtonLoadLoadout.ToolTip: "Import a ship definition for display" => "Schiffsdefinition zum Anzeigen importieren"
+
 .ForceSell: "Force Sell" => "Verkaufen erzwingen"
 .ConfirmForceSell: "Confirm sell of ship" => "Bestätige Verkauf von Schiff"
 .StoredModules: "Stored Modules" => "Gelagerte Module"
@@ -539,6 +543,7 @@ SECTION UserControlModules
 .Stored: "Stored" => "Gelagert"
 .AllModules: "All Modules" => "Alle Module"
 .Mass: "Mass" = UserControlModules.labelMass
+
 .InTransit: "In Transit" => "Im Transit"
 .EDSURL: "Enter ED Shipyard URL" => "ED Shipyard URL eingeben"
 .CURL: "Enter Coriolis URL" => "Coriolis URL eingeben"
@@ -550,6 +555,7 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Schiffskonfiguration"
 .MI: "Module Information" => "Modulinformation"
 .NOSI: "No Ship Information available" => "Keine Schiffsinformationen verfügbar"
+
 .labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Roh {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Ätz {0.#|% =|0.#}"
 .labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Roh {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
 .labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Masse {0.##|t} Hülle {0.##|t} Module {0.##|t} Unbeladen {0.##|t} Fracht {0|/|0|t} Warnung bei {0.#|%}"
@@ -558,6 +564,7 @@ SECTION UserControlModules
 .labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Dzt Gsw {0.#} Bst {0.#} Beladen {0.#|/|0.#} Unbeladen {0.#|/|0.#} Max {0.#|/|0.#} Nachbrenner Dzt {0.#|s} Max {0.#|s}"
 .labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Roh {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dau {0.#|s} DauMax {0.#|s} Ammo {0.#|s} Dzt {0.#|%} Max {0.#|%}"
 .labelWep: "Weapons:" => "Waffen"
+
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Speichere diese Konfiguration im EDD-Loadout-Ordner"
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Konfiguration löschen"
 
@@ -755,6 +762,7 @@ SECTION UserControlSettings
 .JournalDirCol: "Journal Folder" => "Journalordner"
 .NotesCol: "Notes" = UserControlEngineering.NotesCol
 .btnDeleteCommander: "Delete" = Delete
+.extButtonUnDelete: "Undelete" => "Wiederherstellen"
 .buttonEditCommander: "Edit" = UserControlCombatPanel.buttonExtEditCampaign
 .buttonAddCommander: "Add" => "Hinzufügen"
 .groupBoxTheme: "Theme" => "Thema"
@@ -841,6 +849,7 @@ SECTION UserControlSettings
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Beendet. Bitte schließe diese Fenster.\r\nWenn die 3D-Karte bereits geöffnet ist werden Änderungen erst nach einem EDD-Neustart sichtbar."
 .extButtonReloadStarDatabase: "Reload Star Database" => "Sternendatenbank neu laden"
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Dies löscht die Sternendatenbank.\r\n\r\nDanach kannst du erneut die Datenquelle sowie\r\ndie Regionen wählen.\r\nDies benötigt einen erneuten Download der Daten vom Server.\r\nBenutze dies nur, wenn du die Datenbank neu erstellen willst."
+.PermDelCmdr: "Do you wish to permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Willst du alle Kommandanten und Journaldaten permanent löschen (JA),\r\noder den Kommandanten nur verbergen und ihn nie wieder anzeigen (NEIN)?"
 
 SECTION UserControlShipYards
 
@@ -1542,39 +1551,42 @@ SECTION UserControlCarrier
 
 .Decommissioned: "Decommissioned" => "Dekommissioniert"
 .DecommissionedOn: "Decommissioning on" => "Dekommissionierung am"
-.Cargo: "Cargo" = UserControlMarketData.CargoCol
-.Services: "Services" => "Einrichtungen"
-.Shippacks: "Ship packs" => "Schiffspakete"
-.Modulepacks: "Module Packs" => "Modulpakete"
-.Freespace: "Free Space" => "Freier Platz"
-.Jumprange: "Jump Range" => "Sprungreichweite"
-.Maxjump: "Max Jump" => "Max."
-.Fuel: "Fuel" = UserControlSysInfo.labelFuel
-.DockingAccess: "Docking Access" => "Andockzugang"
-.Notorious: "Notorious" => "berüchtigt"
-.Balance: "Balance" = UserControlCombatPanel.labelBalance
-.Reserve: "Reserve" => "Reserve"
-.Available: "Available" => "Verfügbar"
+.Cargo: "Cargo: ; t;N0" => "Fracht: ; t;N0"
+.Services: "Services: ; t;N0" => "Einrichtungen: ; t;N0"
+.Shippacks: "Ship packs: ; t;N0" => "Schiffspakete: ; t;N0"
+.Modulepacks: "Module Pacsk: ; t;N0" => "Modulpakete: ; t;N0"
+.Reservedspace: "Reserved Space: ; t;N0" => "Reservierter Platz: ; t;N0"
+.Freespace: "Free Space: ; t;N0" => "Freier Platz: ; t;N0"
+.Jumprange: "Jump Range: ; ly;N0" => "Sprungreichweite: ; ly;N0"
+.Maxjump: "Max Jump: ; ly;N0" => "Max. Sprung: ; ly;N0"
+.Fuel: "Fuel: ; t;N0" => "Treibstoff: ; t;N0"
+.DockingAccess: "Docking Access: " => "Andockzugang: "
+.Notorious: "Notorious: " => "Berüchtigt: "
+.Balance: "Balance: ; cr;N0" => "Kontostand: : ; cr;N0"
+.Reserve: "Reserve: ; cr;N0" => "Reserve: ; cr;N0"
+.Available: "Available: ; cr;N0" => "Verfügbar: ; cr;N0"
+.Reservepercent: "Reserve: ; %;N0" => "Reserve: ; %;N0"
 .PioneerTax: "Pioneer Tax" => "Pioniersteuer"
 .ShipyardTax: "Shipyard Tax" => "Werftsteuer"
 .RearmTax: "Rearm Tax" => "Nachladesteuer"
 .OutfittingTax: "Outfitting Tax" => "Ausrüstungssteuer"
 .RefuelTax: "Refuel Tax" => "Auftanksteuer"
 .RepairTax: "Repair Tax" => "Reparatursteuer"
-.CoreCost: "Core Cost" => "Kernkosten"
-.ServicesCost: "Services Cost" => "Einrichtungskosten"
+.Taxpercentage: ": ; %;N0" => ": ; %;N0"
+.CoreCost: "Core Cost: ; cr;N0" => "Kernkosten: ; cr;N0"
+.ServicesCost: "Services Cost: ; cr;N0" => "Einrichtungskosten: ; cr;N0"
 .NoCarrier: "No Carrier" => "Kein Carrier"
-.InstallCost: "Install cost" => "Installationskosten"
-.CapacityAllocated: "Capacity Allocated" => "Zugewiesene Kapazität"
-.Upkeepcost: "Upkeep cost" => "Instandhaltungskosten"
-.Suspendedupkeepcost: "Suspended upkeep cost" => "Eingestellte Instandhaltungskosten"
-.CrewName: "Crew Name" => "Crewname"
+.InstallCost: "Install cost: ; cr;N0" => "Installationskosten: ; cr;N0"
+.CapacityAllocated: "Capacity Allocated: ; Units;N0" => "Zugewiesene Kapazität: ; Einheiten;N0"
+.Upkeepcost: "Upkeep cost: ; cr;N0" => "Instandhaltungskosten: ; cr;N0"
+.Suspendedupkeepcost: "Suspended upkeep cost: ; cr;N0" => "Eingestellte Instandhaltungskosten: ; cr;N0"
+.CrewName: "Crew Name: " => "Crewname: "
 .ServiceActive: "This Service is Active" => "Diese Einrichtung ist aktiv"
 .ServiceSuspended: "This service is suspended" => "Dieser Service ist beurlaubt"
 .ServiceNotInstalled: "This Service is Not Installed" => "Dieser Service ist nicht installiert"
 .NoPacks: "No Module or Ship packs installed" => "Kein Modul- oder Schiffspaket installiert"
-.Tier: "Tier" = UserControlStats.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank
-.Cost: "Cost" = UserControlModules.labelCost
+.Tier: "Tier " => "Rang "
+.Cost: "Cost: ; cr;N0" => "Kosten: ; cr;N0"
 .Jumping: "Jumping" => "Springend"
 .NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" => "KEine CAPI-Daten von Frontier, entweder Server- oder Netzwerkfehler"
 .NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Du bist nicht im CAPI angemeldet.\r\nGehe zum Einstellungspanel, öffne deine Kommandanteneinstellungen und logge dich ein."
