@@ -1551,39 +1551,42 @@ SECTION UserControlCarrier
 
 .Decommissioned: "Decommissioned" @
 .DecommissionedOn: "Decommissioning on" @
-.Cargo: "Cargo" @
-.Services: "Services" @
-.Shippacks: "Ship packs" @
-.Modulepacks: "Module Packs" @
-.Freespace: "Free Space" @
-.Jumprange: "Jump Range" @
-.Maxjump: "Max Jump" @
-.Fuel: "Fuel" @
-.DockingAccess: "Docking Access" @
-.Notorious: "Notorious" @
-.Balance: "Balance" @
-.Reserve: "Reserve" @
-.Available: "Available" @
+.Cargo: "Cargo: ; t;N0" @
+.Services: "Services: ; t;N0" @
+.Shippacks: "Ship packs: ; t;N0" @
+.Modulepacks: "Module Packs: ; t;N0" @
+.Reservedspace: "Reserved Space: ; t;N0" @
+.Freespace: "Free Space: ; t;N0" @
+.Jumprange: "Jump Range: ; ly;N0" @
+.Maxjump: "Max Jump: ; ly;N0" @
+.Fuel: "Fuel: ; t;N0" @
+.DockingAccess: "Docking Access: " @
+.Notorious: "Notorious: " @
+.Balance: "Balance: ; cr;N0" @
+.Reserve: "Reserve: ; cr;N0" @
+.Available: "Available: ; cr;N0" @
+.Reservepercent: "Reserve: ; %;N0" @
 .PioneerTax: "Pioneer Tax" @
 .ShipyardTax: "Shipyard Tax" @
 .RearmTax: "Rearm Tax" @
 .OutfittingTax: "Outfitting Tax" @
 .RefuelTax: "Refuel Tax" @
 .RepairTax: "Repair Tax" @
-.CoreCost: "Core Cost" @
-.ServicesCost: "Services Cost" @
+.Taxpercentage: ": ; %;N0" @
+.CoreCost: "Core Cost: ; cr;N0" @
+.ServicesCost: "Services Cost: ; cr;N0" @
 .NoCarrier: "No Carrier" @
-.InstallCost: "Install cost" @
-.CapacityAllocated: "Capacity Allocated" @
-.Upkeepcost: "Upkeep cost" @
-.Suspendedupkeepcost: "Suspended upkeep cost" @
-.CrewName: "Crew Name" @
+.InstallCost: "Install cost: ; cr;N0" @
+.CapacityAllocated: "Capacity Allocated: ; Units;N0" @
+.Upkeepcost: "Upkeep cost: ; cr;N0" @
+.Suspendedupkeepcost: "Suspended upkeep cost: ; cr;N0" @
+.CrewName: "Crew Name: " @
 .ServiceActive: "This Service is Active" @
 .ServiceSuspended: "This service is suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
 .NoPacks: "No Module or Ship packs installed" @
-.Tier: "Tier" @
-.Cost: "Cost" @
+.Tier: "Tier " @
+.Cost: "Cost: ; cr;N0" @
 .Jumping: "Jumping" @
 .NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" @
 .NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
