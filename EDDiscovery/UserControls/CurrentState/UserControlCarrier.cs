@@ -454,24 +454,25 @@ namespace EDDiscovery.UserControls
                     vposr += bigfont.Height + linemargin;
 
                     string[] text = new string[] {
-                        "Cargo".TxID(EDTx.UserControlCarrier_Cargo) + ": " + cs.State.SpaceUsage.Cargo.ToString("N0") + "t",
-                        "Services".TxID(EDTx.UserControlCarrier_Services) + ": " + cs.State.SpaceUsage.Crew.ToString("N0") + "t",
-                        "Ship packs".TxID(EDTx.UserControlCarrier_Shippacks) + ": " + cs.State.SpaceUsage.ShipPacks.ToString("N0") + "t",
-                        "Module Packs".TxID(EDTx.UserControlCarrier_Modulepacks) + ": " + cs.State.SpaceUsage.ModulePacks.ToString("N0") + "t",
-                        "Free Space".TxID(EDTx.UserControlCarrier_Freespace) + ": " + cs.State.SpaceUsage.FreeSpace.ToString("N0") + "t",
-                        "Jump Range".TxID(EDTx.UserControlCarrier_Jumprange) + ": " + cs.State.JumpRangeCurr.ToString("N0") + "ly",
-                        "Max Jump".TxID(EDTx.UserControlCarrier_Maxjump) + ": " + cs.State.JumpRangeMax.ToString("N0") + "ly",
-                        "Fuel".TxID(EDTx.UserControlCarrier_Fuel) + ": " + cs.State.FuelLevel.ToString("N0") + "t",
-                        "Docking Access".TxID(EDTx.UserControlCarrier_DockingAccess) + ": " + cs.State.DockingAccessSplittable.SplitCapsWordFull(),
-                        "Notorious".TxID(EDTx.UserControlCarrier_Notorious) + ": " + (cs.State.AllowNotorious ? "Yes".TxID(EDTx.MessageBoxTheme_Yes) : "No".TxID(EDTx.MessageBoxTheme_No)),
+                        BaseUtils.FieldBuilder.Build("Cargo: ; t;N0".TxID(EDTx.UserControlCarrier_Cargo), cs.State.SpaceUsage.Cargo),
+                        BaseUtils.FieldBuilder.Build("Services: ; t;N0".TxID(EDTx.UserControlCarrier_Services), cs.State.SpaceUsage.Crew),
+                        BaseUtils.FieldBuilder.Build("Ship Packs: ; t;N0".TxID(EDTx.UserControlCarrier_Shippacks), cs.State.SpaceUsage.ShipPacks),
+                        BaseUtils.FieldBuilder.Build("Module Packs: ; t;N0".TxID(EDTx.UserControlCarrier_Modulepacks), cs.State.SpaceUsage.ModulePacks),
+                        BaseUtils.FieldBuilder.Build("Reserved Space: ; t;N0".TxID(EDTx.UserControlCarrier_Reservedspace), cs.State.SpaceUsage.CargoSpaceReserved),
+                        BaseUtils.FieldBuilder.Build("Free Space: ; t;N0".TxID(EDTx.UserControlCarrier_Freespace), cs.State.SpaceUsage.FreeSpace),
+                        BaseUtils.FieldBuilder.Build("Jump Range: ; ly;N0".TxID(EDTx.UserControlCarrier_Jumprange), cs.State.JumpRangeCurr),
+                        BaseUtils.FieldBuilder.Build("Max Jump: ; ly;N0".TxID(EDTx.UserControlCarrier_Maxjump), cs.State.JumpRangeMax),
+                        BaseUtils.FieldBuilder.Build("Fuel: ; t;N0".TxID(EDTx.UserControlCarrier_Fuel), cs.State.FuelLevel),
+                        BaseUtils.FieldBuilder.Build("Docking Access: ".TxID(EDTx.UserControlCarrier_DockingAccess), cs.State.DockingAccessSplittable.SplitCapsWordFull()),
+                        BaseUtils.FieldBuilder.Build("Notorious: ".TxID(EDTx.UserControlCarrier_Notorious), (cs.State.AllowNotorious ? "Yes".TxID(EDTx.MessageBoxTheme_Yes) : "No".TxID(EDTx.MessageBoxTheme_No))),
                     };
 
                     imageControlOverall.DrawText(new Point(rightpos, vposr + linemargin), new Size(30000, 30000), text, normfont, linemargin, color);
 
-                    labelFCarrierBalance.Text = "Balance".TxID(EDTx.UserControlCarrier_Balance) + ": " + cs.State.Finance.CarrierBalance.ToString("N0") + "cr";
-                    labelFReserveBalance.Text = "Reserve".TxID(EDTx.UserControlCarrier_Reserve) + ": " + cs.State.Finance.ReserveBalance.ToString("N0") + "cr";
-                    labelFAvailableBalance.Text = "Available".TxID(EDTx.UserControlCarrier_Available) + ": " + cs.State.Finance.AvailableBalance.ToString("N0") + "cr";
-                    labelFReservePercent.Text = "Reserve".TxID(EDTx.UserControlCarrier_Reserve) + ": " + cs.State.Finance.ReservePercent.ToString("N0") + "%";
+                    labelFCarrierBalance.Text = BaseUtils.FieldBuilder.Build("Balance: ; cr;N0".TxID(EDTx.UserControlCarrier_Balance), cs.State.Finance.CarrierBalance);
+                    labelFReserveBalance.Text = BaseUtils.FieldBuilder.Build("Reserve: ; cr;N0".TxID(EDTx.UserControlCarrier_Reserve), cs.State.Finance.ReserveBalance);
+                    labelFAvailableBalance.Text = BaseUtils.FieldBuilder.Build("Available: ; cr;N0".TxID(EDTx.UserControlCarrier_Available), cs.State.Finance.AvailableBalance);
+                    labelFReservePercent.Text = BaseUtils.FieldBuilder.Build("Reserve: ; %;N0".TxID(EDTx.UserControlCarrier_Reservepercent), cs.State.Finance.ReservePercent);
 
                     TaxRate(labelFTaxPioneerSupplies, "Pioneer Tax".TxID(EDTx.UserControlCarrier_PioneerTax), cs.State.Finance.TaxRatePioneersupplies);
                     TaxRate(labelFTaxShipyard, "Shipyard Tax".TxID(EDTx.UserControlCarrier_ShipyardTax), cs.State.Finance.TaxRateShipyard);
@@ -480,8 +481,8 @@ namespace EDDiscovery.UserControls
                     TaxRate(labelFTaxRefuel, "Refuel Tax".TxID(EDTx.UserControlCarrier_RefuelTax), cs.State.Finance.TaxRateRefuel);
                     TaxRate(labelFTaxRepair, "Repair Tax".TxID(EDTx.UserControlCarrier_RepairTax), cs.State.Finance.TaxRateRepair);
 
-                    labelFCoreCost.Text = "Core Cost".TxID(EDTx.UserControlCarrier_CoreCost) + ": " + cs.State.GetCoreCost().ToString("N0") + "cr";
-                    labelFServicesCost.Text = "Services Cost".TxID(EDTx.UserControlCarrier_ServicesCost) + ": " + cs.State.GetServicesCost().ToString("N0") + "cr";
+                    labelFCoreCost.Text = BaseUtils.FieldBuilder.Build("Core Cost: ; cr;N0".TxID(EDTx.UserControlCarrier_CoreCost), cs.State.GetCoreCost());
+                    labelFServicesCost.Text = BaseUtils.FieldBuilder.Build("Services Cost: ; cr;N0".TxID(EDTx.UserControlCarrier_ServicesCost), cs.State.GetServicesCost());
 
                     string[] itinerylines = new string[] { cs.LastJumpText(1), cs.LastJumpText(2), cs.LastJumpText(3), cs.LastJumpText(4), cs.LastJumpText(5), cs.LastJumpText(6) };
                     int lines = itinerylines.Where(x => x != null).Count();
@@ -550,16 +551,16 @@ namespace EDDiscovery.UserControls
                             if (si != null)
                             {
                                 int lineh = normfont.Height + linemargin * 2;
-                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), "Install cost".TxID(EDTx.UserControlCarrier_InstallCost) + ": " + si.InstallCost.ToString("N0"), normfont, color);
-                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Capacity Allocated".TxID(EDTx.UserControlCarrier_CapacityAllocated) + ": " + si.CargoSize.ToString("N0") + " Units", normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh), new Size(2000, 2000), BaseUtils.FieldBuilder.Build("Install cost: ; cr;N0".TxID(EDTx.UserControlCarrier_InstallCost), si.InstallCost), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X, servicecol1top.Y + lineh * 2), new Size(2000, 2000), BaseUtils.FieldBuilder.Build("Capacity Allocated: ; Units;N0".TxID(EDTx.UserControlCarrier_CapacityAllocated), si.CargoSize), normfont, color);
 
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), "Upkeep cost".TxID(EDTx.UserControlCarrier_Upkeepcost) + ": " + si.UpkeepCost.ToString("N0"), normfont, color);
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), "Suspended upkeep cost".TxID(EDTx.UserControlCarrier_Suspendedupkeepcost) + ": " + si.SuspendedUpkeepCost.ToString("N0"), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh), new Size(2000, 2000), BaseUtils.FieldBuilder.Build("Upkeep cost: ; cr;N0".TxID(EDTx.UserControlCarrier_Upkeepcost), si.UpkeepCost), normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 400, servicecol1top.Y + lineh * 2), new Size(2000, 2000), BaseUtils.FieldBuilder.Build("Suspended upkeep cost: ; cr;N0".TxID(EDTx.UserControlCarrier_Suspendedupkeepcost), si.SuspendedUpkeepCost), normfont, color);
 
                                 // crewname, if either no service state or name is null, ??
                                 string crewname = servicestate?.CrewName ?? "??";
 
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".TxID(EDTx.UserControlCarrier_CrewName) + ": " + crewname, normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name: ".TxID(EDTx.UserControlCarrier_CrewName) + crewname, normfont, color);
                             }
 
                             if (active)
@@ -691,14 +692,14 @@ namespace EDDiscovery.UserControls
 
             var size = imageControlPacks.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), sp.PackTheme.SplitCapsWordFull(), bigfont, color);
             pointtextleft.Y += (int)(size.Height + 1) + linemargin;
-            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier".TxID(EDTx.UserControlCarrier_Tier) +" "+ sp.PackTier.ToString("N0"), bigfont, color);
+            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".TxID(EDTx.UserControlCarrier_Tier) + sp.PackTier.ToString("N0"), bigfont, color);
 
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
 
             if (DiscoveryForm.History.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
-                imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), "Cost".TxID(EDTx.UserControlCarrier_Cost) + ": " + value.ToString("N0"), normfont, color);
+                imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), BaseUtils.FieldBuilder.Build("Cost: ; cr;N0".TxID(EDTx.UserControlCarrier_Cost), value), normfont, color);
             }
 
             Image img = BaseUtils.Icons.IconSet.Instance.Get(module ? "Controls.ModulePack" : "Controls.Shipyard");
@@ -744,7 +745,7 @@ namespace EDDiscovery.UserControls
         private void TaxRate(Label l, string t, double? value)
         {
             if (value.HasValue)
-                l.Text = t + ": " + value.Value.ToString("N0") + "%";
+                l.Text = t + BaseUtils.FieldBuilder.Build(": ; %;N0".TxID(EDTx.UserControlCarrier_Taxpercentage), value.Value);
             else
                 l.Text = "";
         }
