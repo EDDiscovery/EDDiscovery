@@ -755,6 +755,7 @@ SECTION UserControlSettings
 .JournalDirCol: "Journal Folder" => "Carpeta de diario"
 .NotesCol: "Notes" = UserControlEngineering.NotesCol
 .btnDeleteCommander: "Delete" = Delete
+.extButtonUnDelete: "Undelete" @
 .buttonEditCommander: "Edit" = UserControlCombatPanel.buttonExtEditCampaign
 .buttonAddCommander: "Add" => "Agregar"
 .groupBoxTheme: "Theme" => "Tema"
@@ -826,7 +827,7 @@ SECTION UserControlSettings
 .180daysold: ">180 days old" => ">180 días de edad"
 .270daysold: ">270 days old" => ">270 días de edad"
 .365daysold: "> 365 days old" => "> 365 días de edad"
-.AddC: "Commander name is not valid or duplicate" => "El nombre del comandante no es válido o está duplicado"
+.AddC: "Commander name is not valid or duplicate (this includes deleted commanders)" => "El nombre del comandante no es válido o está duplicado"
 .AddT: "Cannot create Commander" => "No se puede crear Commander"
 .Language: "Applies at next restart of ED Discovery" => "Se aplica en el próximo reinicio de ED Discovery"
 .RemoveSectors: "Remove Sectors" => "Eliminar sectores"
@@ -841,6 +842,7 @@ SECTION UserControlSettings
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Finalizado, cierre la ventana.\r\nSi ya tiene abierto el mapa 3d, los cambios no se reflejarán en ese mapa hasta el próximo inicio de EDD\r\n"
 .extButtonReloadStarDatabase: "Reload Star Database" => "Recargar Base de Datos Estelar"
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Esto eliminará la base de datos de sistemas.\r\n\r\nLuego puede volver a seleccionar la fuente de datos de la base de datos y el\r\nconjunto de estrellas requerido.\r\n\r\nEsto requerirá una descarga completa de la base de datos de estrellas desde el servidor.\r\nSolo use esto si está dispuesto a descargar el conjunto de datos nuevamente."
+.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
 
 SECTION UserControlShipYards
 
@@ -1547,7 +1549,7 @@ SECTION UserControlCarrier
 .Shippacks: "Ship packs: ; t;N0" => "Paquetes de naves: ; t;N0"
 .Modulepacks: "Module Packs: ; t;N0" => "Paquetes de módulos: ; t;N0"
 .Reservedspace: "Reserved Space: ; t;N0" => "Espacio reservado: ; t;N0"
-.Freespace: "Free Space" => "Espacio libre: ; t;N0"
+.Freespace: "Free Space: ; t;N0" => "Espacio libre: ; t;N0"
 .Jumprange: "Jump Range: ; ly;N0" => "Rango de salto: ; al;N0"
 .Maxjump: "Max Jump: ; ly;N0" => "Salto máximo: ; ly;N0"
 .Fuel: "Fuel: ; t;N0" => "Combustible: ; t;N0"
@@ -1584,7 +1586,6 @@ SECTION UserControlCarrier
 .OptionalService: "Optional Service" => "Servicio opcional"
 .CoreService: "Core Service" => "Servicio principal"
 .extTabControl.tabPageOverall: "Overall" = UserControlStats.tabControlCustomStats.tabPageGeneral
-.extTabControl.tabPageOverall.imageControlOverall: "imageControl1" @
 .extTabControl.tabPageItinerary: "Itinerary" => "Itinerario"
 .extTabControl.tabPageItinerary.colItinDate: "Date" = SearchMaterialsCommodities.ColumnDate
 .extTabControl.tabPageItinerary.colItinSystemAlphaInt: "System" = SearchScans.ColumnSystem
@@ -1601,10 +1602,8 @@ SECTION UserControlCarrier
 .extTabControl.tabPageFinances.colLedgerDebitNumeric: "Debits" = UserControlLedger.Debits
 .extTabControl.tabPageFinances.colLedgerBalanceNumeric: "Balance cr" => "Saldo cr"
 .extTabControl.tabPageFinances.colLedgerNotes: "Notes" = UserControlEngineering.NotesCol
-.extTabControl.tabPageServices: "Services" = UserControlCarrier.Services
-.extTabControl.tabPageServices.imageControlServices: "imageControl1" @
+.extTabControl.tabPageServices: "Services" => "Servicios"
 .extTabControl.tabPagePacks: "Packs" => "Paquetes"
-.extTabControl.tabPagePacks.imageControlPacks: "imageControl1" @
 .extTabControl.tabPageOrders: "Orders" => "Órdenes"
 .extTabControl.tabPageOrders.colOrdersDate: "Date" = SearchMaterialsCommodities.ColumnDate
 .extTabControl.tabPageOrders.colOrdersCommodity: "Commodity" => "Producto"

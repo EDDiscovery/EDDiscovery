@@ -260,7 +260,6 @@
             this.imageControlOverall.Name = "imageControlOverall";
             this.imageControlOverall.Size = new System.Drawing.Size(839, 540);
             this.imageControlOverall.TabIndex = 0;
-            this.imageControlOverall.Text = "imageControl1";
             // 
             // tabPageItinerary
             // 
@@ -762,7 +761,6 @@
             this.imageControlServices.Name = "imageControlServices";
             this.imageControlServices.Size = new System.Drawing.Size(823, 217);
             this.imageControlServices.TabIndex = 1;
-            this.imageControlServices.Text = "imageControl1";
             // 
             // extScrollBarServices
             // 
@@ -831,7 +829,6 @@
             this.imageControlPacks.Name = "imageControlPacks";
             this.imageControlPacks.Size = new System.Drawing.Size(823, 217);
             this.imageControlPacks.TabIndex = 1;
-            this.imageControlPacks.Text = "imageControl1";
             // 
             // extScrollBarPacks
             // 

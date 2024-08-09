@@ -1829,7 +1829,6 @@ namespace EDDiscovery
         UserControlCarrier_CoreService,
 
         UserControlCarrier_extTabControl_tabPageOverall,
-        UserControlCarrier_extTabControl_tabPageOverall_imageControlOverall,
         UserControlCarrier_extTabControl_tabPageItinerary,
         UserControlCarrier_extTabControl_tabPageItinerary_colItinDate,
         UserControlCarrier_extTabControl_tabPageItinerary_colItinSystemAlphaInt,
@@ -1847,9 +1846,7 @@ namespace EDDiscovery
         UserControlCarrier_extTabControl_tabPageFinances_colLedgerBalanceNumeric,
         UserControlCarrier_extTabControl_tabPageFinances_colLedgerNotes,
         UserControlCarrier_extTabControl_tabPageServices,
-        UserControlCarrier_extTabControl_tabPageServices_imageControlServices,
         UserControlCarrier_extTabControl_tabPagePacks,
-        UserControlCarrier_extTabControl_tabPagePacks_imageControlPacks,
         UserControlCarrier_extTabControl_tabPageOrders,
         UserControlCarrier_extTabControl_tabPageOrders_colOrdersDate,
         UserControlCarrier_extTabControl_tabPageOrders_colOrdersCommodity,

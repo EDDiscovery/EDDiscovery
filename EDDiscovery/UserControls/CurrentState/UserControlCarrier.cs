@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
             labelCAPICarrierBalance.Text = labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
             extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;     // off until period poll
 
-            var enumlist = new Enum[] {EDTx.UserControlCarrier_extTabControl_tabPageOverall, EDTx.UserControlCarrier_extTabControl_tabPageOverall_imageControlOverall,
+            var enumlist = new Enum[] {EDTx.UserControlCarrier_extTabControl_tabPageOverall, 
                 EDTx.UserControlCarrier_extTabControl_tabPageItinerary, EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinDate,
                 EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinSystemAlphaInt, EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinBodyAlphaInt,
                 EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinJumpDistNumeric, EDTx.UserControlCarrier_extTabControl_tabPageItinerary_colItinDistFromNumeric,
@@ -91,8 +91,8 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerBodyAlphaInt, EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerEvent,
                 EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerCreditNumeric, EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerDebitNumeric,
                 EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerBalanceNumeric, EDTx.UserControlCarrier_extTabControl_tabPageFinances_colLedgerNotes,
-                EDTx.UserControlCarrier_extTabControl_tabPageServices, EDTx.UserControlCarrier_extTabControl_tabPageServices_imageControlServices,
-                EDTx.UserControlCarrier_extTabControl_tabPagePacks, EDTx.UserControlCarrier_extTabControl_tabPagePacks_imageControlPacks,
+                EDTx.UserControlCarrier_extTabControl_tabPageServices, 
+                EDTx.UserControlCarrier_extTabControl_tabPagePacks, 
                 EDTx.UserControlCarrier_extTabControl_tabPageOrders, EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersDate,
                 EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersCommodity, EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersType,
                 EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersGroup, EDTx.UserControlCarrier_extTabControl_tabPageOrders_colOrdersPurchaseNumeric,

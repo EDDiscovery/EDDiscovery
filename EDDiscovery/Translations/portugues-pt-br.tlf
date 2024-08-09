@@ -120,7 +120,7 @@ SECTION PopOutInfo
 .NotePanel.Title: "Notes" => "Anotações"
 .RouteTracker.Description: "Route tracker overlay" => "Traçador de Itinerário"
 .RouteTracker.Title: "Route Tracker" = PopOutInfo.RouteTracker.Description
-.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetária; mostra a direção a seguir para chegar às coordenadas desejadas"
+.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetária mostra a direção a seguir para chegar às coordenadas desejadas"
 .Compass.Title: "Compass" => "Bussola Planetária"
 .Settings.Description: "Settings for ED Discovery " => "Configurações de ED Discovery "
 .Settings.Title: "Settings" => "Configurações"
@@ -280,7 +280,7 @@ SECTION EDDiscoveryController
 .RTH: "Reading travel history" => "Lendo o histórico de viajem"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Por favor, continua a usar EDDiscovery até o completo refresco."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronização a EDSM e EDDB disabilitados. Abilitá-los nos ajustes do comandante"
-.EDSMU: "Systems update complete with {0:N0} systems" => "Attualização EDSM completada com {0} sistemas"
+.EDSMU: "Systems update complete with {0:N0} systems" => "Attualização EDSM completada com {0:N0} sistemas"
 .PLF: "Processing log file {0}" => "Processando o file de registro {0}"
 .RD: "Refresh Displays" => "Recarregando a exibição"
 .HRC: "History refresh complete." => "Recarregamento do histórico completo"

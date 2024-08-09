@@ -755,6 +755,7 @@ SECTION UserControlSettings
 .JournalDirCol: "Journal Folder" => "Путь к файлам журнала"
 .NotesCol: "Notes" = UserControlEngineering.NotesCol
 .btnDeleteCommander: "Delete" = Delete
+.extButtonUnDelete: "Undelete" @
 .buttonEditCommander: "Edit" => "Изменить"
 .buttonAddCommander: "Add" => "Добавить"
 .groupBoxTheme: "Theme" => "Тема"
@@ -826,7 +827,7 @@ SECTION UserControlSettings
 .180daysold: ">180 days old" => ">180 дней"
 .270daysold: ">270 days old" => ">270 дней"
 .365daysold: "> 365 days old" => ">365 дней"
-.AddC: "Commander name is not valid or duplicate" => "Неправильное или дублирующееся имя командира"
+.AddC: "Commander name is not valid or duplicate (this includes deleted commanders)" => "Неправильное или дублирующееся имя командира"
 .AddT: "Cannot create Commander" => "Не удалось создать командира"
 .Language: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
 .RemoveSectors: "Remove Sectors" => "Удалить сектора"
@@ -841,6 +842,7 @@ SECTION UserControlSettings
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Процесс удаления завершен, можете закрыть это окно.\r\nЕсли 3D-карта была открыта, то изменения не будут видны до перезапуска ED Discovery\r\n"
 .extButtonReloadStarDatabase: "Reload Star Database" @
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
+.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
 
 SECTION UserControlShipYards
 
@@ -1584,7 +1586,6 @@ SECTION UserControlCarrier
 .OptionalService: "Optional Service" @
 .CoreService: "Core Service" @
 .extTabControl.tabPageOverall: "Overall" @
-.extTabControl.tabPageOverall.imageControlOverall: "imageControl1" @
 .extTabControl.tabPageItinerary: "Itinerary" @
 .extTabControl.tabPageItinerary.colItinDate: "Date" @
 .extTabControl.tabPageItinerary.colItinSystemAlphaInt: "System" @
@@ -1602,9 +1603,7 @@ SECTION UserControlCarrier
 .extTabControl.tabPageFinances.colLedgerBalanceNumeric: "Balance cr" @
 .extTabControl.tabPageFinances.colLedgerNotes: "Notes" @
 .extTabControl.tabPageServices: "Services" @
-.extTabControl.tabPageServices.imageControlServices: "imageControl1" @
 .extTabControl.tabPagePacks: "Packs" @
-.extTabControl.tabPagePacks.imageControlPacks: "imageControl1" @
 .extTabControl.tabPageOrders: "Orders" @
 .extTabControl.tabPageOrders.colOrdersDate: "Date" @
 .extTabControl.tabPageOrders.colOrdersCommodity: "Commodity" @

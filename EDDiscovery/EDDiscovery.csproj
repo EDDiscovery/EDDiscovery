@@ -1083,6 +1083,7 @@
     <None Include="Translations\Italiano-it.tlf" />
     <None Include="Translations\polski-pl.tlf" />
     <None Include="Translations\portugues-pt-br.tlf" />
+    <None Include="Translations\russian-ru.tlf" />
     <None Include="Translations\spanish-es.tlf" />
     <None Include="UserControls\Translations\translation-chinese-uc.tlp" />
     <None Include="UserControls\Translations\translation-deutsch-uc.tlp" />
