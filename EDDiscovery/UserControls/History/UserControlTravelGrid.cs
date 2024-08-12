@@ -234,6 +234,8 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
+       /// example     filter = TravelHistoryFilter.StartEnd(new DateTime(2023, 6, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2023, 7, 1, 0, 0, 0, DateTimeKind.Utc));
+
             List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
             fdropdown = hl.Count - result.Count();
 

@@ -811,6 +811,8 @@ namespace EDDiscovery.UserControls.Map3D
             // finished
             mapcreatedokay = GLShaderLog.Okay;      // record shader status
 
+            displaycontrol.ClearLayoutFlags();
+            displaycontrol.InvalidateLayout();
             return mapcreatedokay;
         }
         #endregion

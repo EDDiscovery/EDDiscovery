@@ -280,7 +280,7 @@ SECTION EDDiscoveryController
 .RTH: "Reading travel history" => "读取航行记录中"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "请在刷新完成之前不要关闭EDDiscovery"
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "同步至EDSM和EDDB已被禁用，从设置面板重新开启"
-.EDSMU: "Systems update complete with {0:N0} systems" => "EDSM完成更新了{0}个星系"
+.EDSMU: "Systems update complete with {0:N0} systems" => "EDSM完成更新了{0:N0}个星系"
 .PLF: "Processing log file {0}" => "正在处理日志文件 {0}"
 .RD: "Refresh Displays" => "刷新显示"
 .HRC: "History refresh complete." => "航行记录刷新完成。"

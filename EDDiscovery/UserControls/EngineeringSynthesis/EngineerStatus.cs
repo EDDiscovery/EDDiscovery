@@ -223,10 +223,13 @@ namespace EDDiscovery.UserControls
                         var cb = c.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerCraftBase;
                         if (cb != null)     // if an craft base type, check name and level
                         {
-                            if (cb.Engineering.BlueprintName.Equals(r.FDName, StringComparison.InvariantCultureIgnoreCase) && cb.Engineering.Level == r.LevelInt)
+                            if (cb.Engineering != null)     // may be null due to bad engineering info from journal
                             {
-                                tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (c.ShipInformation?.Name ?? "?") + " " + (cb.Engineering.ExperimentalEffect_Localised ?? ""), Environment.NewLine);
-                                craftcount++;
+                                if (cb.Engineering.BlueprintName.Equals(r.FDName, StringComparison.InvariantCultureIgnoreCase) && cb.Engineering.Level == r.LevelInt)
+                                {
+                                    tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (c.ShipInformation?.Name ?? "?") + " " + (cb.Engineering.ExperimentalEffect_Localised ?? ""), Environment.NewLine);
+                                    craftcount++;
+                                }
                             }
                         }
                         else if (c.EntryType == JournalTypeEnum.TechnologyBroker)       // if tech broker, check name

@@ -114,6 +114,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpSafeMode = new ExtendedControls.ExtButtonDrawn();
             this.labelSafeMode = new System.Windows.Forms.Label();
+            this.extButtonUnDelete = new ExtendedControls.ExtButton();
             this.extPanelScroll.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerCommanders.SuspendLayout();
@@ -676,6 +677,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutButtons.Controls.Add(this.btnDeleteCommander);
             this.flowLayoutButtons.Controls.Add(this.buttonEditCommander);
             this.flowLayoutButtons.Controls.Add(this.buttonAddCommander);
+            this.flowLayoutButtons.Controls.Add(this.extButtonUnDelete);
             this.flowLayoutButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutButtons.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutButtons.Location = new System.Drawing.Point(3, 117);
@@ -688,6 +690,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpCommanders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpCommanders.AutoEllipsis = false;
             this.extButtonDrawnHelpCommanders.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpCommanders.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpCommanders.BorderWidth = 1;
             this.extButtonDrawnHelpCommanders.Image = null;
             this.extButtonDrawnHelpCommanders.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpCommanders.Location = new System.Drawing.Point(929, 3);
@@ -739,6 +743,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpTheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpTheme.AutoEllipsis = false;
             this.extButtonDrawnHelpTheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpTheme.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpTheme.BorderWidth = 1;
             this.extButtonDrawnHelpTheme.Image = null;
             this.extButtonDrawnHelpTheme.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpTheme.Location = new System.Drawing.Point(253, 12);
@@ -779,6 +785,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpHistory.AutoEllipsis = false;
             this.extButtonDrawnHelpHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpHistory.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpHistory.BorderWidth = 1;
             this.extButtonDrawnHelpHistory.Image = null;
             this.extButtonDrawnHelpHistory.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpHistory.Location = new System.Drawing.Point(253, 12);
@@ -851,6 +859,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpWebServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpWebServer.AutoEllipsis = false;
             this.extButtonDrawnHelpWebServer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpWebServer.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpWebServer.BorderWidth = 1;
             this.extButtonDrawnHelpWebServer.Image = null;
             this.extButtonDrawnHelpWebServer.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpWebServer.Location = new System.Drawing.Point(253, 12);
@@ -963,6 +973,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpTransparency.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpTransparency.AutoEllipsis = false;
             this.extButtonDrawnHelpTransparency.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpTransparency.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpTransparency.BorderWidth = 1;
             this.extButtonDrawnHelpTransparency.Image = null;
             this.extButtonDrawnHelpTransparency.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpTransparency.Location = new System.Drawing.Point(253, 12);
@@ -1013,6 +1025,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpMemory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpMemory.AutoEllipsis = false;
             this.extButtonDrawnHelpMemory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpMemory.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpMemory.BorderWidth = 1;
             this.extButtonDrawnHelpMemory.Image = null;
             this.extButtonDrawnHelpMemory.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpMemory.Location = new System.Drawing.Point(253, 12);
@@ -1070,6 +1084,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpScreenshots.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpScreenshots.AutoEllipsis = false;
             this.extButtonDrawnHelpScreenshots.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpScreenshots.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpScreenshots.BorderWidth = 1;
             this.extButtonDrawnHelpScreenshots.Image = null;
             this.extButtonDrawnHelpScreenshots.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpScreenshots.Location = new System.Drawing.Point(253, 12);
@@ -1110,6 +1126,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpEDSM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpEDSM.AutoEllipsis = false;
             this.extButtonDrawnHelpEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpEDSM.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpEDSM.BorderWidth = 1;
             this.extButtonDrawnHelpEDSM.Image = null;
             this.extButtonDrawnHelpEDSM.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpEDSM.Location = new System.Drawing.Point(253, 12);
@@ -1162,6 +1180,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpWindowOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpWindowOptions.AutoEllipsis = false;
             this.extButtonDrawnHelpWindowOptions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpWindowOptions.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpWindowOptions.BorderWidth = 1;
             this.extButtonDrawnHelpWindowOptions.Image = null;
             this.extButtonDrawnHelpWindowOptions.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpWindowOptions.Location = new System.Drawing.Point(253, 12);
@@ -1201,6 +1221,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpDLL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpDLL.AutoEllipsis = false;
             this.extButtonDrawnHelpDLL.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpDLL.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpDLL.BorderWidth = 1;
             this.extButtonDrawnHelpDLL.Image = null;
             this.extButtonDrawnHelpDLL.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpDLL.Location = new System.Drawing.Point(253, 12);
@@ -1298,6 +1320,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpSafeMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelpSafeMode.AutoEllipsis = false;
             this.extButtonDrawnHelpSafeMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpSafeMode.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpSafeMode.BorderWidth = 1;
             this.extButtonDrawnHelpSafeMode.Image = null;
             this.extButtonDrawnHelpSafeMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelpSafeMode.Location = new System.Drawing.Point(251, 16);
@@ -1323,6 +1347,16 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.TabIndex = 5;
             this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to ano" +
     "ther drive, reset UI, and other maintenance tasks...\r\n\r\n";
+            // 
+            // extButtonUnDelete
+            // 
+            this.extButtonUnDelete.Location = new System.Drawing.Point(505, 3);
+            this.extButtonUnDelete.Name = "extButtonUnDelete";
+            this.extButtonUnDelete.Size = new System.Drawing.Size(100, 23);
+            this.extButtonUnDelete.TabIndex = 0;
+            this.extButtonUnDelete.Text = "Undelete";
+            this.extButtonUnDelete.UseVisualStyleBackColor = true;
+            this.extButtonUnDelete.Click += new System.EventHandler(this.extButtonUnDelete_Click);
             // 
             // UserControlSettings
             // 
@@ -1428,5 +1462,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelpCommanders;
         private ExtendedControls.ExtSplitterResizeParent extSplitterResizeParentGroupBoxCommanders;
         private ExtendedControls.ExtButton extButtonReloadStarDatabase;
+        private ExtendedControls.ExtButton extButtonUnDelete;
     }
 }

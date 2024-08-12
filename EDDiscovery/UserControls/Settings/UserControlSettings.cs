@@ -65,7 +65,8 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlSettings_checkBoxKeepOnTop, EDTx.UserControlSettings_checkBoxCustomResize, EDTx.UserControlSettings_checkBoxMinimizeToNotifyIcon, 
                                         EDTx.UserControlSettings_checkBoxUseNotifyIcon, EDTx.UserControlSettings_extGroupBoxDLLPerms, EDTx.UserControlSettings_extButtonDLLConfigure, 
                                         EDTx.UserControlSettings_extButtonDLLPerms, EDTx.UserControlSettings_groupBoxCustomLanguage, EDTx.UserControlSettings_groupBoxCustomSafeMode, 
-                                        EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode, EDTx.UserControlSettings_extButtonReloadStarDatabase };
+                                        EDTx.UserControlSettings_buttonExtSafeMode, EDTx.UserControlSettings_labelSafeMode, EDTx.UserControlSettings_extButtonReloadStarDatabase,
+                                        EDTx.UserControlSettings_extButtonUnDelete};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
@@ -82,7 +83,8 @@ namespace EDDiscovery.UserControls
 
             ResetThemeList();
 
-            btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
+            btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
+            extButtonUnDelete.Enabled = EDCommander.GetListDeletedCommanders().Count > 0;
 
             comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts: true);
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
@@ -120,7 +122,7 @@ namespace EDDiscovery.UserControls
             checkBoxMinimizeToNotifyIcon.Enabled = EDDConfig.Instance.UseNotifyIcon;
 
             dataGridViewCommanders.AutoGenerateColumns = false;             // BEFORE assigned to list..
-            dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();
+            dataGridViewCommanders.DataSource = EDCommander.GetListActiveCommanders();
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
@@ -160,6 +162,7 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
             checkBoxCustomEDSMDownload.Text += " " + SystemsDatabase.Instance.DBSource;
+
         }
 
         public void ConfigureHelpButton(ExtendedControls.ExtButtonDrawn p, string tag)
@@ -208,7 +211,7 @@ namespace EDDiscovery.UserControls
         {
             int selrow = dataGridViewCommanders.SelectedRows.Count > 0 ? dataGridViewCommanders.SelectedRows[0].Index : -1;
             dataGridViewCommanders.DataSource = null;
-            List<EDCommander> cmdrs = EDCommander.GetListCommanders();
+            List<EDCommander> cmdrs = EDCommander.GetListActiveCommanders();
             dataGridViewCommanders.DataSource = cmdrs;
             if (selrow >= 0 && selrow < dataGridViewCommanders.RowCount)
                 dataGridViewCommanders.Rows[selrow].Selected = true;
@@ -321,10 +324,10 @@ namespace EDDiscovery.UserControls
                     UpdateCommandersListBox();
                     DiscoveryForm.UpdateCommandersListBox();
                     DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
-                    btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
+                    btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate (this includes deleted commanders)".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
 
             DiscoveryForm.FrontierCAPI.StatusChange -= CAPICallBack;
@@ -380,16 +383,30 @@ namespace EDDiscovery.UserControls
 
                 if (result == DialogResult.Yes)
                 {
-                    EDCommander.Delete(cmdr);
+                    var perm= ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)".T(EDTx.UserControlSettings_PermDelCmdr), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    int id = cmdr.Id;
+
+                    EDCommander.Delete(id,perm==DialogResult.Yes);
+                    if ( perm == DialogResult.Yes)
+                       JournalEntry.DeleteCommander(id);
                     DiscoveryForm.UpdateCommandersListBox();
                     UpdateCommandersListBox();
                     DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
 
-                    btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
+                    btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
+                    extButtonUnDelete.Enabled = EDCommander.GetListDeletedCommanders().Count > 0;
                 }
             }
         }
 
+        private void extButtonUnDelete_Click(object sender, EventArgs e)
+        {
+            EDCommander.UndeleteAllCommanders();
+            DiscoveryForm.UpdateCommandersListBox();
+            UpdateCommandersListBox();
+            btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
+            extButtonUnDelete.Enabled = EDCommander.GetListDeletedCommanders().Count > 0;
+        }
 
         #endregion
 

@@ -280,7 +280,7 @@ SECTION EDDiscoveryController
 .RTH: "Reading travel history" => "Wczytywanie historii podróży"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Proszę nie wyłączać EDDiscovery do momentu ukończenia odświeżania."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Synchronizacja z EDSM i EDDB jest wyłączona. Można ją włączyć w Ustawieniach"
-.EDSMU: "Systems update complete with {0:N0} systems" => "Aktualizacja z EDSM ukończona - {0} układów"
+.EDSMU: "Systems update complete with {0:N0} systems" => "Aktualizacja z EDSM ukończona - {0:N0} układów"
 .PLF: "Processing log file {0}" => "Przetwarzanie pliku dziennika {0}"
 .RD: "Refresh Displays" => "Odświeżanie Wskaźników"
 .HRC: "History refresh complete." => "Odświeżanie Historii zakończone."

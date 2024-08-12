@@ -319,29 +319,37 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                double totaldistance = 0;
+                double[] distances = new double[dataGridView.Rows.Count];       // will all be 0
+                SystemClass prevrowsystem = null;
 
                 for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // for all rows, compute distances
                 {
-                    var row = dataGridView.Rows[rowindex];
-                    SystemClass sys = row.Tag as SystemClass;
-
-                    double? dist = null;
-
-                    if (sys != null)
+                    SystemClass sys = dataGridView.Rows[rowindex].Tag as SystemClass;
+                    if (sys != null && sys.HasCoordinate)       // if its a valid co-ordinate system
                     {
-                        SystemClass prevrowsystem = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as SystemClass : null;
-                        dist = sys.HasCoordinate && prevrowsystem != null && prevrowsystem.HasCoordinate ? prevrowsystem.Distance(sys) : default(double?);
+                        if (prevrowsystem != null)              // we can measure distance..
+                            distances[rowindex] = prevrowsystem.Distance(sys);
 
-                        if (dist.HasValue)
-                        {
-                            totaldistance += dist.Value;
-                        }
+                        //System.Diagnostics.Debug.WriteLine($"{rowindex} {prevrowsystem?.Name ?? "-"} -> {sys.Name} : {distances[rowindex]}");
+
+                        prevrowsystem = sys;                    // and we set this to system. We skip entries without valid co-ords
                     }
+                }
 
-                    row.Cells[Distance.Index].Value = dist.HasValue ? dist.Value.ToString("N2") : "";
+                double totaldistance = distances.Sum();
+                double distancedone = 0;
+
+                for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // for all rows, compute distances
+                {
+                    distancedone += distances[rowindex];
+
+                    var row = dataGridView.Rows[rowindex];
+                    row.Cells[Distance.Index].Value = distances[rowindex]>0 ? distances[rowindex].ToString("N2") : "";
+
+                    SystemClass sys = row.Tag as SystemClass;
                     row.Cells[ColumnDistStart.Index].Value = firstsys != null && sys != null && sys.HasCoordinate ? sys.Distance(firstsys).ToString("N2") : "";
-                    row.Cells[ColumnDistanceRemaining.Index].Value = lastsys != null && sys != null && sys.HasCoordinate ? sys.Distance(lastsys).ToString("N2") : "";
+                    row.Cells[ColumnDistanceRemaining.Index].Value = distances[rowindex] > 0 || rowindex == 0 ? (totaldistance - distancedone).ToString("N2") : "";
+
                 }
 
                 txtCmlDistance.Text = totaldistance.ToString("N1") + " ly";

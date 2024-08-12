@@ -369,6 +369,7 @@ namespace EDDiscovery
         UserControlSettings_buttonSaveTheme_ToolTip, // ToolTip 'Save theme to disk'
         UserControlSettings_checkBoxOrderRowsInverted_ToolTip, // ToolTip 'Number oldest entry 1, latest entry highest'
         UserControlSettings_extButtonReloadStarDatabase,
+        UserControlSettings_extButtonUnDelete,
 
         UserControlSettings_comboBoxClickThruKey_ToolTip, // ToolTip 'Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards'
         UserControlSettings_comboBoxCustomEssentialEntries_ToolTip, // ToolTip 'Select which items you consider essential to load older than the time above'
@@ -408,8 +409,9 @@ namespace EDDiscovery
         UserControlSettings_EJS, // Jumps and Scans
         UserControlSettings_EJ, // Jumps
         UserControlSettings_EN, // Nothing
-        UserControlSettings_RELOAD, 
+        UserControlSettings_RELOAD,
         UserControlSettings_DelCmdr, // delete commander
+        UserControlSettings_PermDelCmdr, // delete commander
         UserControlSettings_Font, // The font used by this theme is not available on your system.
         UserControlSettings_NoMap, // No map downloaded
         UserControlSettings_GalFini, // Finished, Please close the window.
@@ -1787,6 +1789,7 @@ namespace EDDiscovery
         UserControlCarrier_Services,
         UserControlCarrier_Shippacks,
         UserControlCarrier_Modulepacks,
+        UserControlCarrier_Reservedspace,
         UserControlCarrier_Freespace,
         UserControlCarrier_Jumprange,
         UserControlCarrier_Maxjump,
@@ -1795,6 +1798,7 @@ namespace EDDiscovery
         UserControlCarrier_Notorious,
         UserControlCarrier_Balance,
         UserControlCarrier_Reserve,
+        UserControlCarrier_Reservepercent,
         UserControlCarrier_Available,
         UserControlCarrier_PioneerTax,
         UserControlCarrier_ShipyardTax,
@@ -1802,6 +1806,7 @@ namespace EDDiscovery
         UserControlCarrier_OutfittingTax,
         UserControlCarrier_RefuelTax,
         UserControlCarrier_RepairTax,
+        UserControlCarrier_Taxpercentage,
         UserControlCarrier_CoreCost,
         UserControlCarrier_ServicesCost,
         UserControlCarrier_NoCarrier,
@@ -1823,7 +1828,6 @@ namespace EDDiscovery
         UserControlCarrier_CoreService,
 
         UserControlCarrier_extTabControl_tabPageOverall,
-        UserControlCarrier_extTabControl_tabPageOverall_imageControlOverall,
         UserControlCarrier_extTabControl_tabPageItinerary,
         UserControlCarrier_extTabControl_tabPageItinerary_colItinDate,
         UserControlCarrier_extTabControl_tabPageItinerary_colItinSystemAlphaInt,
@@ -1841,9 +1845,7 @@ namespace EDDiscovery
         UserControlCarrier_extTabControl_tabPageFinances_colLedgerBalanceNumeric,
         UserControlCarrier_extTabControl_tabPageFinances_colLedgerNotes,
         UserControlCarrier_extTabControl_tabPageServices,
-        UserControlCarrier_extTabControl_tabPageServices_imageControlServices,
         UserControlCarrier_extTabControl_tabPagePacks,
-        UserControlCarrier_extTabControl_tabPagePacks_imageControlPacks,
         UserControlCarrier_extTabControl_tabPageOrders,
         UserControlCarrier_extTabControl_tabPageOrders_colOrdersDate,
         UserControlCarrier_extTabControl_tabPageOrders_colOrdersCommodity,

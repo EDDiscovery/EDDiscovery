@@ -93,7 +93,7 @@ namespace EDDiscovery
 
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
 
-        private int commandercountafterhistoryread;
+        private int commanderaddorupdatecount;                         // this is set at history read and allows detection of new commanders during reading
 
         #endregion
 

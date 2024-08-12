@@ -278,7 +278,7 @@ namespace EDDiscovery
 
                 if (hist != null)       // if we had an exception above, we may have an empty history
                 {
-                    commandercountafterhistoryread = EDCommander.NumberOfCommanders;        // current count of commanders at the history change point
+                    commanderaddorupdatecount = EDCommander.AddOrUpdateCount;        // current count of adds/updates due to scanning at the history change point
 
                     History = hist;     // replace history
 
