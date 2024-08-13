@@ -354,14 +354,17 @@ namespace EDDiscovery.UserControls
                 string v = (string)dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value;
                 int rno = (int)dataGridViewEngineering.Rows[e.RowIndex].Tag;
 
-                if (v.InvariantParse(out int iv))
+                // parse with current culture, as it was placed there with ToString()
+                if (int.TryParse(v, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out int iv))
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     WantedPerRecipe[rno] = iv;
                     Display();
                 }
                 else
+                {
                     dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = WantedPerRecipe[rno].ToString();
+                }
             }
         }
 

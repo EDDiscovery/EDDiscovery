@@ -124,13 +124,19 @@ namespace EDDiscovery.UserControls
                     Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[i];
 
                     var row = dataGridViewEngineering.Rows[dataGridViewEngineering.Rows.Add()];
+
+                    // row.Tag holds the recipe
                     row.Tag = r;
-                    row.Cells[0].Tag = wno++;           // index into WantedPerRecipe
-                    row.Cells[UpgradeCol.Index].Value = r.Name; 
+                    // index into WantedPerRecipe - use this not the row.index as sort will affect that - bug aug 24
+                    row.Cells[0].Tag = wno++;
+                    // keep engineers list in tag   - can't see aug 24 why but keep for now
+                    row.Cells[EngineersCol.Index].Tag = r.Engineers;        
+
+                    row.Cells[UpgradeCol.Index].Value = r.Name + ":" + row.Index; 
                     row.Cells[ModuleCol.Index].Value = r.ModuleList;
-                    row.Cells[LevelCol.Index].Value = r.Level;
-                    row.Cells[EngineersCol.Index].Tag = r.Engineers;        // keep list in tag
+                    row.Cells[LevelCol.Index].Value = r.Level;              // use current culture
                     row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.Engineers);
+
                     row.Cells[RecipeCol.Index].ToolTipText = r.IngredientsStringLong;
                 }
             }
@@ -204,15 +210,10 @@ namespace EDDiscovery.UserControls
                 dataViewScrollerPanel.Suspend();
                 dataGridViewEngineering.SuspendLayout();
 
-                var wwmode = dataGridViewEngineering.DefaultCellStyle.WrapMode;
-                dataGridViewEngineering.DefaultCellStyle.WrapMode = DataGridViewTriState.False;     // seems to make it a tad faster
-
                 NeededResources = new Dictionary<MaterialCommodityMicroResourceType, int>();
 
                 foreach (DataGridViewRow row in dataGridViewEngineering.Rows)
                 {
-                    row.Visible = true;     // if we hide stuff, we just make it invisible, we do not remove it
-
                     Recipes.EngineeringRecipe r = row.Tag as Recipes.EngineeringRecipe;
 
                     string tooltip = "";
@@ -246,9 +247,12 @@ namespace EDDiscovery.UserControls
 
                     row.Cells[CraftedCol.Index].ToolTipText = tooltip;
 
-                    var res = MaterialCommoditiesRecipe.HowManyLeft(r, WantedPerRecipe[row.Index], mcllist, totals, NeededResources, reducetotals: false);    // recipes not chained not in order
+                    int wantednumber = (int)row.Cells[0].Tag;       // look here, not row index, as sort alters the row index vs wanted
+                    int wanted = WantedPerRecipe[wantednumber];
 
-                    row.Cells[WantedCol.Index].Value = WantedPerRecipe[ (int)row.Cells[0].Tag].ToString();
+                    var res = MaterialCommoditiesRecipe.HowManyLeft(r, wanted, mcllist, totals, NeededResources, reducetotals: false);    // recipes not chained not in order
+
+                    row.Cells[WantedCol.Index].Value = wanted.ToString();        // use current culture to fill in decimal
                     row.Cells[MaxCol.Index].Value = res.Item1.ToString();
                     row.Cells[CraftedCol.Index].Value = CraftedCol.HeaderText == "-" ? "" : craftcount.ToString();
                     row.Cells[PercentageCol.Index].Value = res.Item5.ToString("N0");
@@ -258,7 +262,6 @@ namespace EDDiscovery.UserControls
                     row.DefaultCellStyle.BackColor = (res.Item5 >= 100.0) ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                 }
 
-                dataGridViewEngineering.DefaultCellStyle.WrapMode = wwmode;
                 dataGridViewEngineering.ResumeLayout();
                 dataViewScrollerPanel.Resume();
             }
@@ -288,17 +291,25 @@ namespace EDDiscovery.UserControls
         {
             if (e.ColumnIndex == WantedCol.Index)
             {
-                string v = (string)dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value;
+                DataGridViewRow row = dataGridViewEngineering.Rows[e.RowIndex];
 
-                if (v.InvariantParse(out int iv))
+                string v = (string)row.Cells[WantedCol.Index].Value;
+
+                int wantednumber = (int)row.Cells[0].Tag;       // look here, not row index, as sort alters the row index vs wanted
+
+                // parse with current culture, as it was placed there with ToString()
+                if (int.TryParse(v, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out int iv))
                 {
-                    //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
-                    WantedPerRecipe[e.RowIndex] = iv;
+                    //System.Diagnostics.Debug.WriteLine($"Set wanted '{v}' {WantedCol.Index} {e.RowIndex} to {iv} in wanted index {wantednumber}");
+                    WantedPerRecipe[wantednumber] = iv;
                     SaveSettings?.Invoke();
                     AskForRedisplay?.Invoke();
                 }
                 else
-                    dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = WantedPerRecipe[e.RowIndex].ToString();
+                {
+                    //System.Diagnostics.Debug.WriteLine($"Set wanted '{v}' {WantedCol.Index} {e.RowIndex} failed");
+                    row.Cells[WantedCol.Index].Value = WantedPerRecipe[wantednumber].ToString();
+                }
             }
         }
 

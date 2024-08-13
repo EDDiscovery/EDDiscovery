@@ -323,20 +323,21 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            string v = (string)dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            int rno = (int)dataGridViewSynthesis.Rows[e.RowIndex].Tag;
-
-            if (v.InvariantParse(out int iv))
+            if (e.ColumnIndex == WantedCol.Index)
             {
-                if (e.ColumnIndex == 3)
+                string v = (string)dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                int rno = (int)dataGridViewSynthesis.Rows[e.RowIndex].Tag;
+
+                // parse with current culture, as it was placed there with ToString()
+                if (int.TryParse(v, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out int iv))
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     WantedPerRecipe[rno] = iv;
                     Display();
                 }
+                else
+                    dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = WantedPerRecipe[rno].ToString();
             }
-            else
-                dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = WantedPerRecipe[rno].ToString();
         }
         private void dataGridViewSynthesis_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
