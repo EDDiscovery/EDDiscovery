@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         #region Init
 
         private const string dbFilter = "EventFilter2";                 // DB names
-        private const string dbHistorySave = "EDUIHistory";
+        private const string dbTimeSelector = "EDUIHistory";
         private const string dbFieldFilter = "FieldFilter";
         private const string dbOutlines = "Outlines";
         private const string dbWordWrap = "WordWrap";
@@ -46,6 +46,7 @@ namespace EDDiscovery.UserControls
         private const string dbDebugMode = "DebugMode";
         private const string dbBookmarks = "Bookmarks";
         private const string dbUserGroups = "UserGroups";
+        private const string dbTimeDates = "TimeDates";
 
         private string searchterms = "system:body:station:stationfaction";
 
@@ -162,7 +163,11 @@ namespace EDDiscovery.UserControls
             var enumlisttt = new Enum[] { EDTx.UserControlTravelGrid_comboBoxTime_ToolTip, EDTx.UserControlTravelGrid_textBoxSearch_ToolTip, EDTx.UserControlTravelGrid_buttonFilter_ToolTip, EDTx.UserControlTravelGrid_buttonField_ToolTip, EDTx.UserControlTravelGrid_buttonExtExcel_ToolTip, EDTx.UserControlTravelGrid_checkBoxCursorToTop_ToolTip, EDTx.UserControlTravelGrid_extCheckBoxWordWrap_ToolTip, EDTx.UserControlTravelGrid_extCheckBoxOutlines_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""), true, true, true);
+            // set up the combo box, and if we can't find the setting, reset the setting
+            if (TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true, true, true, GetSetting(dbTimeDates, "")) == false)
+            {
+                PutSetting(dbTimeSelector, comboBoxTime.Text);
+            }
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
@@ -193,7 +198,9 @@ namespace EDDiscovery.UserControls
             searchtimer.Dispose();
         }
 
-#endregion
+        #endregion
+
+        #region Hooks
 
         public override void InitialDisplay()
         {
@@ -209,7 +216,10 @@ namespace EDDiscovery.UserControls
             quickMarkJIDs = str.Select(x => x.InvariantParseLong(-1)).ToList().ToHashSet();
         }
 
- 
+        #endregion
+
+        #region TravelGrid
+
         public void Display(HistoryList hl, bool disablesorting)
         {
             todo.Clear();           // clear queue of things to do
@@ -630,10 +640,12 @@ namespace EDDiscovery.UserControls
                 return null;
         }
 
+
+        // time selector changed to new valid entry
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxTime.Text);
-            Display(current_historylist,false);       
+            PutSetting(dbTimeSelector, comboBoxTime.Text);
+            Display(current_historylist, false);
         }
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -717,9 +729,9 @@ namespace EDDiscovery.UserControls
             int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1));
             PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, ColumnEvent.Index, true);
         }
+        #endregion
 
-
-#region Right/Left Clicks
+        #region Right/Left Clicks
 
         HistoryEntry rightclickhe = null;
         HistoryEntry leftclickhe = null;
@@ -1250,6 +1262,25 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Time Ranges
+
+        private void extButtonTimeRanges_Click(object sender, EventArgs e)
+        {
+            string set = TravelHistoryFilter.EditUserDataTimeRange(this.FindForm(),GetSetting(dbTimeDates,""));
+            if (set != null)
+            {
+                PutSetting(dbTimeDates, set);
+                
+                // if we can't stay on the same setting, it will move it to all, 
+                if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true, true, true, GetSetting(dbTimeDates, "")) == false )
+                {
+                    // time selector will be invalid, invalid will select all. Leave alone
+                    Display(current_historylist, false);
+                }
+            }
+        }
+        #endregion
+
         #region Word wrap/visited
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
@@ -1396,6 +1427,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
 
     }
 }

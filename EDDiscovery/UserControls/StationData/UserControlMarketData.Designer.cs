@@ -60,14 +60,12 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoSwap = new ExtendedControls.ExtCheckBox();
             this.checkBoxBuyOnly = new ExtendedControls.ExtCheckBox();
             this.labelVs = new System.Windows.Forms.Label();
-            this.comboBoxCustomTo = new ExtendedControls.ExtComboBox();
-            this.comboBoxCustomFrom = new ExtendedControls.ExtComboBox();
             this.labelLocation = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxHasDemand = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelComparison = new System.Windows.Forms.Label();
             this.extButtonSelectWhere = new ExtendedControls.ExtButton();
+            this.labelComparison = new System.Windows.Forms.Label();
             this.extButtonSelectComparision = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -236,8 +234,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoSwap.ImageIndeterminate = null;
             this.checkBoxAutoSwap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoSwap.ImageUnchecked = null;
-            this.checkBoxAutoSwap.Location = new System.Drawing.Point(737, 4);
-            this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.checkBoxAutoSwap.Location = new System.Drawing.Point(369, 8);
+            this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
             this.checkBoxAutoSwap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
             this.checkBoxAutoSwap.Size = new System.Drawing.Size(75, 17);
@@ -257,8 +255,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxBuyOnly.ImageIndeterminate = null;
             this.checkBoxBuyOnly.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxBuyOnly.ImageUnchecked = null;
-            this.checkBoxBuyOnly.Location = new System.Drawing.Point(565, 4);
-            this.checkBoxBuyOnly.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.checkBoxBuyOnly.Location = new System.Drawing.Point(197, 8);
+            this.checkBoxBuyOnly.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
             this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
             this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
@@ -278,61 +276,11 @@ namespace EDDiscovery.UserControls
             this.labelVs.TabIndex = 28;
             this.labelVs.Text = "Vs";
             // 
-            // comboBoxCustomTo
-            // 
-            this.comboBoxCustomTo.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomTo.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomTo.DataSource = null;
-            this.comboBoxCustomTo.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxCustomTo.DisplayMember = "";
-            this.comboBoxCustomTo.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomTo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomTo.Location = new System.Drawing.Point(381, 2);
-            this.comboBoxCustomTo.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
-            this.comboBoxCustomTo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomTo.Name = "comboBoxCustomTo";
-            this.comboBoxCustomTo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomTo.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomTo.SelectedIndex = -1;
-            this.comboBoxCustomTo.SelectedItem = null;
-            this.comboBoxCustomTo.SelectedValue = null;
-            this.comboBoxCustomTo.Size = new System.Drawing.Size(176, 21);
-            this.comboBoxCustomTo.TabIndex = 27;
-            this.comboBoxCustomTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxCustomTo, "Click to select a comparision market data set");
-            this.comboBoxCustomTo.ValueMember = "";
-            this.comboBoxCustomTo.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomTo_SelectedIndexChanged);
-            // 
-            // comboBoxCustomFrom
-            // 
-            this.comboBoxCustomFrom.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomFrom.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomFrom.DataSource = null;
-            this.comboBoxCustomFrom.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxCustomFrom.DisplayMember = "";
-            this.comboBoxCustomFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomFrom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomFrom.Location = new System.Drawing.Point(197, 2);
-            this.comboBoxCustomFrom.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
-            this.comboBoxCustomFrom.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomFrom.Name = "comboBoxCustomFrom";
-            this.comboBoxCustomFrom.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomFrom.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomFrom.SelectedIndex = -1;
-            this.comboBoxCustomFrom.SelectedItem = null;
-            this.comboBoxCustomFrom.SelectedValue = null;
-            this.comboBoxCustomFrom.Size = new System.Drawing.Size(176, 21);
-            this.comboBoxCustomFrom.TabIndex = 27;
-            this.comboBoxCustomFrom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxCustomFrom, "Click to select between tracking the cursor or a particular market data set");
-            this.comboBoxCustomFrom.ValueMember = "";
-            this.comboBoxCustomFrom.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomFrom_SelectedIndexChanged);
-            // 
             // labelLocation
             // 
             this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(0, 4);
-            this.labelLocation.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelLocation.Location = new System.Drawing.Point(0, 8);
+            this.labelLocation.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
             this.labelLocation.Name = "labelLocation";
             this.labelLocation.Size = new System.Drawing.Size(43, 13);
             this.labelLocation.TabIndex = 26;
@@ -353,8 +301,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxHasDemand.ImageIndeterminate = null;
             this.checkBoxHasDemand.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxHasDemand.ImageUnchecked = null;
-            this.checkBoxHasDemand.Location = new System.Drawing.Point(641, 4);
-            this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.checkBoxHasDemand.Location = new System.Drawing.Point(273, 8);
+            this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
             this.checkBoxHasDemand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxHasDemand.Name = "checkBoxHasDemand";
             this.checkBoxHasDemand.Size = new System.Drawing.Size(88, 17);
@@ -372,8 +320,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.labelVs);
             this.panelTop.Controls.Add(this.labelComparison);
             this.panelTop.Controls.Add(this.extButtonSelectComparision);
-            this.panelTop.Controls.Add(this.comboBoxCustomFrom);
-            this.panelTop.Controls.Add(this.comboBoxCustomTo);
             this.panelTop.Controls.Add(this.checkBoxBuyOnly);
             this.panelTop.Controls.Add(this.checkBoxHasDemand);
             this.panelTop.Controls.Add(this.checkBoxAutoSwap);
@@ -382,16 +328,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(1055, 34);
             this.panelTop.TabIndex = 2;
-            // 
-            // labelComparison
-            // 
-            this.labelComparison.AutoSize = true;
-            this.labelComparison.Location = new System.Drawing.Point(112, 4);
-            this.labelComparison.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
-            this.labelComparison.Name = "labelComparison";
-            this.labelComparison.Size = new System.Drawing.Size(43, 13);
-            this.labelComparison.TabIndex = 26;
-            this.labelComparison.Text = "<code>";
             // 
             // extButtonSelectWhere
             // 
@@ -402,6 +338,16 @@ namespace EDDiscovery.UserControls
             this.extButtonSelectWhere.TabIndex = 30;
             this.extButtonSelectWhere.UseVisualStyleBackColor = true;
             this.extButtonSelectWhere.Click += new System.EventHandler(this.extButtonSelectWhere_Click);
+            // 
+            // labelComparison
+            // 
+            this.labelComparison.AutoSize = true;
+            this.labelComparison.Location = new System.Drawing.Point(112, 8);
+            this.labelComparison.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
+            this.labelComparison.Name = "labelComparison";
+            this.labelComparison.Size = new System.Drawing.Size(43, 13);
+            this.labelComparison.TabIndex = 26;
+            this.labelComparison.Text = "<code>";
             // 
             // extButtonSelectComparision
             // 
@@ -437,8 +383,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelLocation;
-        private ExtendedControls.ExtComboBox comboBoxCustomTo;
-        private ExtendedControls.ExtComboBox comboBoxCustomFrom;
         private System.Windows.Forms.Label labelVs;
         private ExtendedControls.ExtCheckBox checkBoxBuyOnly;
         private System.Windows.Forms.DataGridViewTextBoxColumn CategoryCol;

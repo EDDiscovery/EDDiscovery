@@ -159,6 +159,10 @@ namespace EDDiscovery
 
             HttpCom.LogPath = logpath;
 
+#if DEBUG
+            QuickJSON.JToken.TraceOutput = true;
+#endif
+
             PreInitDebug();        // call any debug we want at this point
 
             //--- listeners

@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxShowIncomplete.Checked = GetSetting("ShowIncomplete", true);
             extCheckBoxShowIncomplete.Click += ExtCheckBoxShowIncomplete_Click;
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, "", true, false, false);
+            TravelHistoryFilter.InitialiseComboBox(comboBoxTime, "", true, false, false);
             comboBoxTime.Text = "";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright © 2016 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * 
  */
 
 using EDDiscovery.Controls;
@@ -39,8 +37,9 @@ namespace EDDiscovery.UserControls
             public const int SystemValue = 4;
         }
 
-        private string dbHistorySave = "EDUIHistory";
+        private string dbTimeSelector = "EDUIHistory";
         private string dbDisplayFilters = "DisplayFilters";
+        private const string dbTimeDates = "TimeDates";
 
         private string[] displayfilters;        // display filters
 
@@ -105,7 +104,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false, true, false);
+            // set up the combo box, and if we can't find the setting, reset the setting
+            if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), false, true, false, GetSetting(dbTimeDates, "")) == false)
+            {
+                PutSetting(dbTimeSelector, comboBoxTime.Text);
+            }
 
              if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
                 searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
@@ -262,9 +265,9 @@ namespace EDDiscovery.UserControls
 
             dataGridViewStarList.Columns[0].HeaderText = EDDConfig.Instance.GetTimeTitle();
 
-            var visitlist = DiscoveryForm.History.Visited.Values.ToList();
+            var visitlist = DiscoveryForm.History.Visited.Values.ToList();      // this is in unsorted order
 
-            // sort is latest first
+            // sort the latest first
             visitlist.Sort(delegate (HistoryEntry left, HistoryEntry right) { return right.EventTimeUTC.CompareTo(left.EventTimeUTC); });
 
             var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
@@ -559,7 +562,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxTime.Text);
+            PutSetting(dbTimeSelector, comboBoxTime.Text);
             Display(false);
         }
 
@@ -624,6 +627,24 @@ namespace EDDiscovery.UserControls
         {
             rightclickhe = dataGridViewStarList.RightClickRowValid ? (HistoryEntry)(dataGridViewStarList.Rows[dataGridViewStarList.RightClickRow].Tag as HistoryEntry) : null;
         }
+
+        private void extButtonTimeRanges_Click(object sender, EventArgs e)
+        {
+            string set = TravelHistoryFilter.EditUserDataTimeRange(this.FindForm(), GetSetting(dbTimeDates, ""));
+            if (set != null)
+            {
+                PutSetting(dbTimeDates, set);
+
+                // if we can't stay on the same setting, it will move it to all, 
+                if (TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), false, true, false, GetSetting(dbTimeDates, "")) == false)
+                {
+                    // time selector will be invalid, invalid will select all. Leave alone
+                    Display(false);
+                }
+            }
+
+        }
+
 
         #endregion
 
@@ -819,8 +840,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

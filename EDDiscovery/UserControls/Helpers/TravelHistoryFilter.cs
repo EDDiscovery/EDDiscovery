@@ -15,6 +15,8 @@
  */
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using ExtendedControls;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -58,7 +60,7 @@ namespace EDDiscovery.UserControls
         {
             StartDateUTC = startutc;
             EndDateUTC = endutc;
-            Label = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(StartDateUTC.Value).ToString() + ".." + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EndDateUTC.Value).ToString();
+            Label = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(StartDateUTC.Value).ToString() + " .. " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EndDateUTC.Value).ToString();
         }
 
         private TravelHistoryFilter()
@@ -129,7 +131,8 @@ namespace EDDiscovery.UserControls
             return new TravelHistoryFilter(start, end);
         }
 
-        public List<HistoryEntry> Filter(List<HistoryEntry> list, HashSet<JournalTypeEnum> entries = null, bool reverse = true)      // list should be in entry order. oldest first
+        // list should be in entry order. oldest first
+        public List<HistoryEntry> Filter(List<HistoryEntry> list, HashSet<JournalTypeEnum> entries = null, bool reverse = true)      
         {
             if (Lastdockflag)
             {
@@ -165,7 +168,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        // list should be in latest first order, supports a limited set
+        // list should be in latest first order, supports a limited set of options
         public List<HistoryEntry> FilterLatestFirst(List<HistoryEntry> list)      
         {
             if (MaximumNumberOfItems.HasValue)
@@ -177,6 +180,10 @@ namespace EDDiscovery.UserControls
                 var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
                 int index = list.FindIndex(x => x.EventTimeUTC < oldestData);       // find first entry with date younger than oldest data
                 return index >= 0 ? list.GetRange(0, index) : list;                 // if not found one, they are all younger than the time, so its all, else its a range
+            }
+            else if (StartDateUTC.HasValue)
+            {
+                return HistoryList.LimitByDate(list, StartDateUTC.Value, EndDateUTC.Value, reverse:false);
             }
             else
             {
@@ -201,7 +208,10 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public static void InitaliseComboBox(ExtendedControls.ExtComboBox cc, string last, bool incldock, bool inclnumberlimit, bool inclstartend)
+        // given a combobox, and the current setting, fill with time selection options
+        // if customtimerangesettings, its a JSON with start/end dates
+        // return if we can select the same entry
+        public static bool InitialiseComboBox(ExtComboBox cc, string currentsetting, bool incldock, bool inclnumberlimit, bool inclstartend, string customtimerangesetting = null)
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
@@ -223,7 +233,15 @@ namespace EDDiscovery.UserControls
                 TravelHistoryFilter.LastThreeYears(),
             };
 
-            //HtmlElementErrorEventArgs pick up from config extra time filters
+            if ( customtimerangesetting!=null)
+            {
+                var customrange = ConvertTimeRangeFromJson(customtimerangesetting);   // may be null if bad
+                if (customrange != null)
+                {
+                    for( int i = 0; i < customrange.Item1.Count; i++)
+                        el.Add(StartEnd(customrange.Item1[i], customrange.Item2[i]));
+                }
+            }
 
             if (inclnumberlimit)
             {
@@ -244,16 +262,96 @@ namespace EDDiscovery.UserControls
 
             cc.DataSource = el;
 
-            int entry = el.FindIndex(x => x.Label == last);
-            //System.Diagnostics.Debug.WriteLine(dbname + "=" + last + "=" + entry);
-            cc.SelectedIndex = (entry >= 0) ? entry : 0;
+            // find current setting
+            int entry = el.FindIndex(x => x.Label == currentsetting);
+
+            // if not found, we select All, else we select the entry
+            cc.SelectedIndex = entry >= 0 ? entry : 0;
 
             cc.Enabled = true;
+
+            return entry >= 0;      // return if selected current setting
         }
 
-        public static void EditUserDataTimeRange()
+
+        // Edit time settings
+        public static string EditUserDataTimeRange(Form form, string settings)
         {
-           // ...
+            ConfigurableForm frm = new ConfigurableForm();
+
+            int vpos = 32, spacing = 32;
+            int addvpos = vpos;                         // record where these fields start from
+            int controlnumber = 0;                      // a unique ID which always incremements
+
+            var customrange = ConvertTimeRangeFromJson(settings);   // may be null
+            if (customrange != null)
+            {
+                for (int i = 0; i < customrange.Item1.Count ; i++)
+                {
+                    AddDT(frm, customrange.Item1[i], customrange.Item2[i], vpos, controlnumber++);
+                    vpos += spacing;
+                }
+            }
+
+            frm.Add(new ConfigurableForm.Entry("add", typeof(ExtButton), "+", new Point(8, vpos), new Size(24, 24), "Add a new date time range"));
+            frm.AddOK(new Point(420, vpos), "OK");
+            frm.InstallStandardTriggers();
+            frm.Trigger += (name, control, obj) =>      // same as spansh extButtonFleetCarrier_Click
+            {
+                if (control == "add")
+                {
+                    int numcontrols = frm.GetByStartingName("dates:").Length;     // get number up there
+                    int pos = addvpos + numcontrols * spacing;           // work out where next should be
+                    frm.MoveControls(pos - 10, spacing);                     // move anything after this (less a bit for safety) to space
+                    AddDT(frm, DateTime.UtcNow.StartOfMinute(), DateTime.UtcNow.StartOfMinute(), pos, controlnumber++);
+                    frm.UpdateDisplayAfterAddNewControls();
+                }
+                else if (control.StartsWith("del:"))
+                {
+                    //System.Diagnostics.Debug.WriteLine($"Delete control {control}");
+                    frm.MoveControls(control, -32);                   // move everything at or below this up
+                    frm.RemoveEntry(control);                         // and remove the two controls
+                    frm.RemoveEntry("dates:" + control.Substring(4));
+                    frm.RemoveEntry("datee:" + control.Substring(4));
+                    frm.UpdateDisplayAfterAddNewControls();
+                }
+
+            };
+
+            if (frm.ShowDialogCentred(form, form.Icon, "Times", closeicon: true) == DialogResult.OK)
+            {
+                DateTime[] startt = frm.GetByStartingName<DateTime>("dates:");
+                DateTime[] endt = frm.GetByStartingName<DateTime>("datee:");
+                JObject jo = new JObject { ["start"] = new JArray(), ["end"] = new JArray() };
+                jo["start"].AddRange(startt);
+                jo["end"].AddRange(endt);
+                return jo.ToString();
+            }
+
+            return null;
+        }
+
+        // JSON string->DateTimes
+        public static Tuple<List<DateTime>, List<DateTime>> ConvertTimeRangeFromJson(string settings)
+        {
+            try
+            {
+                JObject jo = JObject.Parse(settings);
+                if (!(jo == null || !jo.Contains("start") || !jo.Contains("end") || jo["start"].Count != jo["end"].Count))     // triage ok
+                    return new Tuple<List<DateTime>, List<DateTime>>(jo["start"].Array().DateTime(), jo["end"].Array().DateTime());
+            }
+            catch ( Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"ConvertTimeRangeFromJSON bad settings string {settings} {ex}");
+            }
+            return null;
+        }
+
+        private static void AddDT(ConfigurableForm frm, DateTime s, DateTime e, int vpos, int controlnumber)
+        {
+            frm.Add(new ConfigurableForm.Entry("dates:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s), new Point(8, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            frm.Add(new ConfigurableForm.Entry("datee:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(e), new Point(250, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            frm.Add(new ConfigurableForm.Entry("del:" + controlnumber, typeof(ExtButton), "X", new Point(470, vpos), new Size(24, 24), null));
         }
     }
 

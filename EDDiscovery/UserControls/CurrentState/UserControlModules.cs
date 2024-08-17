@@ -66,7 +66,10 @@ namespace EDDiscovery.UserControls
             var enumlisttt = new Enum[] { EDTx.UserControlModules_extButtonShowControl_ToolTip, EDTx.UserControlModules_comboBoxShips_ToolTip, 
                                 EDTx.UserControlModules_extCheckBoxWordWrap_ToolTip, EDTx.UserControlModules_buttonExtCoriolis_ToolTip, 
                                 EDTx.UserControlModules_buttonExtEDShipyard_ToolTip, EDTx.UserControlModules_buttonExtConfigure_ToolTip, 
-                                EDTx.UserControlModules_buttonExtExcel_ToolTip, EDTx.UserControlModules_extButtonLoadLoadout };
+                                EDTx.UserControlModules_buttonExtExcel_ToolTip,
+                                EDTx.UserControlModules_extButtonLoadLoadout_ToolTip, EDTx.UserControlModules_extButtonSaveLoadout_ToolTip,
+                                EDTx.UserControlModules_extButtonDeleteLoadout_ToolTip,
+                            };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);

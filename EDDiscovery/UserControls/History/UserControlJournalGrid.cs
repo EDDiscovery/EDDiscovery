@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright © 2016 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -32,9 +32,11 @@ namespace EDDiscovery.UserControls
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         private const string dbFilter = "EventFilter2";
-        private const string dbHistorySave = "EDUIHistory";
+        private const string dbTimeSelector = "EDUIHistory";
         private const string dbFieldFilter = "ControlFieldFilter";
         private const string dbUserGroups = "UserGroups";
+        private const string dbTimeDates = "TimeDates";
+
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -115,7 +117,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""), true,true,true);
+            // set up the combo box, and if we can't find the setting, reset the setting
+            if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true,true,true, GetSetting(dbTimeDates, "")) == false)
+            {
+                PutSetting(dbTimeSelector, comboBoxTime.Text);
+            }
 
             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
                 searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
@@ -404,7 +410,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxTime.Text);
+            PutSetting(dbTimeSelector, comboBoxTime.Text);
             Display(current_historylist, false);
         }
 
@@ -418,6 +424,23 @@ namespace EDDiscovery.UserControls
                 Display(current_historylist, false);
             }
         }
+
+        private void extButtonTimeRanges_Click(object sender, EventArgs e)
+        {
+            string set = TravelHistoryFilter.EditUserDataTimeRange(this.FindForm(), GetSetting(dbTimeDates, ""));
+            if (set != null)
+            {
+                PutSetting(dbTimeDates, set);
+
+                // if we can't stay on the same setting, it will move it to all, 
+                if (TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true, true, true, GetSetting(dbTimeDates, "")) == false)
+                {
+                    // time selector will be invalid, invalid will select all. Leave alone
+                    Display(current_historylist, false);
+                }
+            }
+        }
+
 
         #endregion
 
@@ -668,8 +691,8 @@ namespace EDDiscovery.UserControls
         }
 
 
-        #endregion
 
+        #endregion
 
     }
 }

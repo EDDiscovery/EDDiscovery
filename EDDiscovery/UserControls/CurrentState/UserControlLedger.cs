@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false,true,false);
+            TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false,true,false);
 
             splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
 
