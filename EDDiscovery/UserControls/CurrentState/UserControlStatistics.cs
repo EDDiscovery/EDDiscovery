@@ -142,6 +142,7 @@ namespace EDDiscovery.UserControls
 
                 extChartLedger.YAutoScale();
                 extChartLedger.SetYAxisFormat("N0");
+                extChartLedger.IsStartedFromZeroY = false;
 
                 extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
 
