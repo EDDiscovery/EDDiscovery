@@ -91,8 +91,9 @@ namespace EDDiscovery.UserControls
                 extChartLedger.XCursorSelection();
                 extChartLedger.SetXCursorInterval(1, DateTimeIntervalType.Seconds);
 
-                extChartLedger.YAutoScale();
+                extChartLedger.YAutoScale();        // turn on Y autoscale
                 extChartLedger.SetYAxisFormat("N0");
+                extChartLedger.IsStartedFromZeroY = false;
 
                 extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
 

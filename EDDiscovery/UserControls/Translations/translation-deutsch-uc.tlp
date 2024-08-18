@@ -41,7 +41,7 @@ SECTION UserControlCombatPanel
 .labelCredits.ToolTip: "Current Credits" => "Derzeitige Credits"
 .labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "Gesamte Tötungen (NPC/PVP) in der Kampagne"
 .labelFactionKills.ToolTip: "Faction Kills" = UserControlCombatPanel.labelFactionKills
-.labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "Gesamte Belohnung ohne sonstige Kosten (Strafen, Neukäufe, etc."
+.labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "Gesamte Belohnung ohne sonstige Kosten (Strafen, Neukäufe, etc.)"
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Wie oft du gefangen wurdest!"
 .labelFaction.ToolTip: "Target Faction" => "Zielfraktion"
 .labelTotalReward.ToolTip: "Total reward" => "Belohnung gesamt"
@@ -330,8 +330,8 @@ SECTION UserControlLedger
 .TimeCol: "Time" = UserControlCombatPanel.Time
 .Type: "Type" => "Art"
 .Notes: "Notes" = UserControlEngineering.NotesCol
-.Credits: "Credits" = UserControlCombatPanel.labelCredits
-.Debits: "Debits" => "Schulden"
+.Credits: "Credits" => "Gutschrift"
+.Debits: "Debits" => "Abbuchung"
 .Balance: "Balance" = UserControlCombatPanel.labelBalance
 .NormProfit: "Profit Per Unit" => "Profit pro Einheit"
 .labelTime: "Time" = UserControlCombatPanel.Time
@@ -344,7 +344,7 @@ SECTION UserControlLedger
 .CashTransactions: "Cash Transactions" => "Bartransaktionen"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten am Gitter an Excel"
 .NOLG: "No Ledger available" => "Kein Kassabuch verfügbar"
-.TotalProfit: "Total Profit" => "gesamter Profit"
+.TotalProfit: "Total Profit" => "Gesamter Profit"
 
 SECTION UserControlLog
 
