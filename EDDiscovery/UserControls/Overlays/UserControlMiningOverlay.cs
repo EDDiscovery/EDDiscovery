@@ -98,7 +98,6 @@ namespace EDDiscovery.UserControls
             Display(he);
         }
 
-
         #endregion
 
         #region Implementation
@@ -115,6 +114,8 @@ namespace EDDiscovery.UserControls
 
         int limpetsleftdisplay = 0;     // used to track if we need to redisplay due to limpet change
         int cargoleftdisplay = 0;       // used to track what we wrote for cargo
+
+        ExtendedControls.ExtSafeChart chart = null;
 
         private void Display(HistoryEntry he)       // at he, see if changed
         {
@@ -159,6 +160,267 @@ namespace EDDiscovery.UserControls
                 Display();
             }
         }
+
+        private void Display()
+        {
+            timetimer.Stop();       // redisplay, stop the time timer and lose the timeie.
+            timeie = null;
+
+            pictureBox.ClearImageList();
+
+            Controls.RemoveByKey("chart");
+            chart?.Dispose();
+
+            if (eventlist != null)
+            {
+                var found = ReadHistory( out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
+
+                Font displayfont = ExtendedControls.Theme.Current.GetFont;
+                Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                Color backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
+                
+                using (StringFormat frmt = new StringFormat())
+                {
+                    frmt.FormatFlags = StringFormatFlags.NoWrap;
+
+                    int vpos = 5;
+                    int colwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("0000", displayfont, frmt).Width;
+                    int percentwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("00000.0", displayfont, frmt).Width;
+                    int hmlwidth = percentwidth * 2;
+
+                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, hmlwidth, colwidth };
+                    int[] hpos = new int[colsw.Length];
+                    hpos[0] = 4;
+                    for (int i = 1; i < hpos.Length; i++)
+                        hpos[i] = hpos[i - 1] + colsw[i - 1];
+
+                    int limpetscolpos = 0;
+                    if (eventlist.Count() > 0)
+                    {
+                        lastrefined = found.Sum(x => x.amountrefined);      // for use by timer
+
+                        string timetext = TimeText(true);
+                        if (timetext.HasChars())
+                        {
+                            timeie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), timetext, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            limpetscolpos = 1;
+                        }
+                    }
+                    else
+                        lastrefined = 0;
+
+                    {
+                        string text = string.Format("Limpets left {0}, Cargo left {1}".T(EDTx.UserControlMiningOverlay_Limcargo), limpetsleftdisplay, cargoleftdisplay);
+                        if (collectorsused > 0 || prospectorsused > 0 || asteroidscracked > 0)
+                            text += string.Format(", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}".T(EDTx.UserControlMiningOverlay_Proscoll), prospectorsused, collectorsused, asteroidscracked);
+
+                        var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(2000, this.Height),
+                                    text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+
+                        vpos = ieprosp.Location.Bottom + displayfont.ScalePixels(2);
+                    }
+
+                    bool displaytable = found.Count > 0 && (extCheckBoxZeroRefined.Checked ? lastrefined > 0 : true);
+
+                    if (displaytable)
+                    {
+                        var ieheader = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), "Ref.".T(EDTx.UserControlMiningOverlay_ref), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), "Coll.".T(EDTx.UserControlMiningOverlay_coll), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), "Prosp.".T(EDTx.UserControlMiningOverlay_pros), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+
+                        pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), "Ratio%".T(EDTx.UserControlMiningOverlay_ratio), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), "Avg%".T(EDTx.UserControlMiningOverlay_avg), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), "Min%".T(EDTx.UserControlMiningOverlay_min), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), "Max%".T(EDTx.UserControlMiningOverlay_max), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode".T(EDTx.UserControlMiningOverlay_mload), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.".T(EDTx.UserControlMiningOverlay_hml), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), "Discv".T(EDTx.UserControlMiningOverlay_discv), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        vpos = ieheader.Location.Bottom + displayfont.ScalePixels(2);
+
+                        if (prospected > 0)
+                        {
+                            var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.".T(EDTx.UserControlMiningOverlay_astpros), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), prospected.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), content[0].ToString("N0") + "/" + content[1].ToString("N0") + "/" + content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
+                        }
+
+                        foreach (var m in found)
+                        {
+                            if (!extCheckBoxZeroRefined.Checked || m.amountrefined > 0)
+                            {
+                                var ie1 = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), m.friendlyname, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), m.amountrefined.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), (m.amountcollected - m.amountdiscarded).ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                if (m.prospectednoasteroids > 0)
+                                {
+                                    pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), m.prospectednoasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+
+                                    pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), (100.0 * (double)m.prospectednoasteroids / prospected).ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), m.prospectedamounts.Average().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), m.prospectedamounts.Min().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), m.prospectedamounts.Max().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), m.content[0].ToString("N0") + "/" + m.content[1].ToString("N0") + "/" + m.content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                }
+
+                                if (m.motherloadasteroids > 0)
+                                {
+                                    pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), m.motherloadasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                }
+
+                                if (m.discovered)
+                                    pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), " *", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+
+                                vpos = ie1.Location.Bottom + displayfont.ScalePixels(2);
+                            }
+                        }
+                    }
+
+                    pictureBox.Render(true, new Size(0, vpos + displayfont.ScalePixels(8)));       // control is resized with a min height
+
+                    var prospectedlist = found.Where(m => m.prospectednoasteroids > 0).ToList();
+
+                    UpdateComboBox(prospectedlist.Select(m => m.friendlyname).ToList());
+
+                    int? seli = selectedchart as int?;          // indicates select N items
+                    int? selm = selectedchart is string ? prospectedlist.FindIndex(x => x.friendlyname == selectedchart as string) : default(int?);     // indicates select particular item
+
+                    if (prospectedlist.Count > 0 && ((seli.HasValue && seli > 0) || selm.HasValue)) // if we have a chart, and we selected something
+                    {
+                        List<MaterialsFound> matdata = new List<MaterialsFound>();
+
+                        if (seli.HasValue)      // if selected number of items
+                        {
+                            if (seli == chartfixeditems.Length - 1)     // seli is index into chart options (None,1-4,8) so if selected 8, then select 8, else select 1,2,3,4 by using the index
+                                seli = 8;
+
+                            for (int i = 0; i < seli.Value && i < prospectedlist.Count; i++)    // add items to matdata
+                                matdata.Add(prospectedlist[i]);
+                        }
+                        else
+                            matdata.Add(prospectedlist[selm.Value]);    // else add just this to mat data
+
+
+                        chart = new ExtendedControls.ExtSafeChart();
+                        chart.Name = "chart";
+                        chart.Dock = DockStyle.Fill;
+                        chart.BeginInit();
+                        chart.AddChartArea("mining");
+                        chart.EnableZoomMouseWheelX();
+                        chart.ZoomMouseWheelXMinimumInterval = 1;
+                        chart.SetXAxisInterval(DateTimeIntervalType.Auto, 5);
+                        chart.SetYAxisMaxMin(0, 100);
+
+                        string title = (matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") + (extCheckBoxChartBase.Checked ? "Distribution vs All".T(EDTx.UserControlMiningOverlay_distall) : "Distribution if Contains".T(EDTx.UserControlMiningOverlay_dist));
+                        chart.AddTitle("main", title);
+
+                        if (matdata.Count > 1)
+                        {
+                            chart.AddLegend("legend");
+                        }
+
+                        int mi = 0;
+                        foreach (var material in matdata)
+                        {
+                            chart.AddSeries(material.friendlyname, "mining", SeriesChartType.Line, legend: "legend");
+                            double min = material.prospectedamounts.Min();
+                            int asteroids = extCheckBoxChartBase.Checked ? prospected : material.prospectednoasteroids;
+
+                            //foreach (var x in material.prospectedamounts) System.Diagnostics.Debug.WriteLine($"Material {material.friendlyname} % {x}");
+
+                            for (int percent = 0; percent < CFDbMax; percent++)        // for each % chance up to CFdbMax (50)
+                            {
+                                // if percent is less than the prospected amount minimum value don't show
+
+                                if (percent >= (int)min)
+                                {
+                                    // here, see how many entries are at or above the percentage amount
+                                    int numberabove = material.prospectedamounts.Count(x => x >= percent);
+                                    // and therefore the chance is the number above / no of asteroids
+                                    double chance = ((double)numberabove) / asteroids * 100.0;
+
+                                    //System.Diagnostics.Debug.WriteLine($"Mining {material.friendlyname} %{percent} no {numberabove} {material.prospectednoasteroids} = {chance}, min is {min}");
+
+                                    chart.AddPoint(new DataPoint(percent, chance), axislabel: percent.ToString());
+
+                                    //series.Points.Add(new DataPoint(percent, chance));
+                                    //series.Points[series.Points.Count - 1].AxisLabel = percent.ToString();
+
+                                    if (numberabove == 0 && percent % 10 == 0)      // if we have no items, terminate data at next 10% interval - chart will size
+                                        break;
+                                }
+                            }
+
+                            mi++;
+                        }
+
+                        chart.EndInit();
+                        chart.Theme(ExtendedControls.Theme.Current);
+
+                        try
+                        {
+                            Controls.Add(chart);
+                            Controls.SetChildIndex(chart, 0);       // #3471 seen an exception here, but I can't make it do it. Hide error
+                        }
+                        catch ( Exception ex)
+                        {
+                            System.Diagnostics.Trace.WriteLine($"Mining overlay Exception during add/set child {ex}");
+                        }
+                    }
+                }
+    
+                buttonExtExcel.Enabled = found.Count != 0;
+            }
+            else
+            {
+                pictureBox.Render();
+                buttonExtExcel.Enabled = false;
+            }
+
+            Update();
+        }
+
+        private void Timetimer_Tick(object sender, EventArgs e)
+        {
+            Font displayfont = ExtendedControls.Theme.Current.GetFont;
+            Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+            Color backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
+
+            using (StringFormat frmt = new StringFormat())
+            {
+                var lab = new ExtendedControls.ExtPictureBox.ImageElement();
+                lab.TextAutoSize(timeie.Position, timeie.Size, TimeText(false), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                pictureBox.RemoveItem(timeie, backcolour);
+                pictureBox.AddItem(lab);
+                timeie = lab;
+            }
+        }
+
+        private string TimeText(bool setstart)
+        {
+            if (eventlist != null && eventlist.Count > 0 )
+            {
+                DateTime lasteventtime = eventlist.Last().EventTimeUTC;        // last event time
+                bool inprogress = incurrentplay && (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // N min we are still in progress, and we are in current play
+                TimeSpan timemining = inprogress ? (DateTime.UtcNow - eventlist.First().EventTimeUTC) : (lasteventtime - eventlist.First().EventTimeUTC);
+                string text = timemining.ToString(@"hh\:mm\:ss");
+                if (lastrefined > 0 && timemining.TotalHours>0)
+                {
+                    double rate = lastrefined / timemining.TotalHours;
+                    text += " " + rate.ToString("N1") + "t/Hr";
+                }
+                if (setstart && inprogress)
+                    timetimer.Start();
+                return text;
+            }
+            else
+                return "";
+        }
+
+
+        #endregion
+
+        #region Material detection
 
         class MaterialsFound
         {
@@ -282,320 +544,6 @@ namespace EDDiscovery.UserControls
 
             return found;
         }
-
-        private void Display()
-        {
-            timetimer.Stop();       // redisplay, stop the time timer and lose the timeie.
-            timeie = null;
-
-            pictureBox.ClearImageList();
-            Controls.RemoveByKey("chart");
-
-            if (eventlist != null)
-            {
-                var found = ReadHistory( out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
-
-                Font displayfont = ExtendedControls.Theme.Current.GetFont;
-                Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                Color backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
-                Color GridC = ExtendedControls.Theme.Current.GridBorderLines;
-                Color TextC = ExtendedControls.Theme.Current.GridCellText;
-                Color BackC = ExtendedControls.Theme.Current.GridCellBack;
-                Color[] LineC = new Color[] { ExtendedControls.Theme.Current.KnownSystemColor , ExtendedControls.Theme.Current.TextBlockHighlightColor,
-                                                         Color.Blue, Color.Yellow, Color.Green, Color.Gray, Color.HotPink, Color.Teal };
-
-                using (StringFormat frmt = new StringFormat())
-                {
-                    frmt.FormatFlags = StringFormatFlags.NoWrap;
-
-                    int vpos = 5;
-                    int colwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("0000", displayfont, frmt).Width;
-                    int percentwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("00000.0", displayfont, frmt).Width;
-                    int hmlwidth = percentwidth * 2;
-
-                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, hmlwidth, colwidth };
-                    int[] hpos = new int[colsw.Length];
-                    hpos[0] = 4;
-                    for (int i = 1; i < hpos.Length; i++)
-                        hpos[i] = hpos[i - 1] + colsw[i - 1];
-
-                    int limpetscolpos = 0;
-                    if (eventlist.Count() > 0)
-                    {
-                        lastrefined = found.Sum(x => x.amountrefined);      // for use by timer
-
-                        string timetext = TimeText(true);
-                        if (timetext.HasChars())
-                        {
-                            timeie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), timetext, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            limpetscolpos = 1;
-                        }
-                    }
-                    else
-                        lastrefined = 0;
-
-                    {
-                        string text = string.Format("Limpets left {0}, Cargo left {1}".T(EDTx.UserControlMiningOverlay_Limcargo), limpetsleftdisplay, cargoleftdisplay);
-                        if (collectorsused > 0 || prospectorsused > 0 || asteroidscracked > 0)
-                            text += string.Format(", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}".T(EDTx.UserControlMiningOverlay_Proscoll), prospectorsused, collectorsused, asteroidscracked);
-
-                        var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(2000, this.Height),
-                                    text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-
-                        vpos = ieprosp.Location.Bottom + displayfont.ScalePixels(2);
-                    }
-
-                    bool displaytable = found.Count > 0 && (extCheckBoxZeroRefined.Checked ? lastrefined > 0 : true);
-
-                    if (displaytable)
-                    {
-                        var ieheader = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), "Ref.".T(EDTx.UserControlMiningOverlay_ref), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), "Coll.".T(EDTx.UserControlMiningOverlay_coll), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), "Prosp.".T(EDTx.UserControlMiningOverlay_pros), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-
-                        pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), "Ratio%".T(EDTx.UserControlMiningOverlay_ratio), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), "Avg%".T(EDTx.UserControlMiningOverlay_avg), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), "Min%".T(EDTx.UserControlMiningOverlay_min), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), "Max%".T(EDTx.UserControlMiningOverlay_max), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode".T(EDTx.UserControlMiningOverlay_mload), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.".T(EDTx.UserControlMiningOverlay_hml), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), "Discv".T(EDTx.UserControlMiningOverlay_discv), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        vpos = ieheader.Location.Bottom + displayfont.ScalePixels(2);
-
-                        if (prospected > 0)
-                        {
-                            var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.".T(EDTx.UserControlMiningOverlay_astpros), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), prospected.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), content[0].ToString("N0") + "/" + content[1].ToString("N0") + "/" + content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
-                        }
-
-                        foreach (var m in found)
-                        {
-                            if (!extCheckBoxZeroRefined.Checked || m.amountrefined > 0)
-                            {
-                                var ie1 = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), m.friendlyname, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), m.amountrefined.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), (m.amountcollected - m.amountdiscarded).ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                if (m.prospectednoasteroids > 0)
-                                {
-                                    pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), m.prospectednoasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-
-                                    pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), (100.0 * (double)m.prospectednoasteroids / prospected).ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                    pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), m.prospectedamounts.Average().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                    pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), m.prospectedamounts.Min().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                    pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), m.prospectedamounts.Max().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                    pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), m.content[0].ToString("N0") + "/" + m.content[1].ToString("N0") + "/" + m.content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                }
-
-                                if (m.motherloadasteroids > 0)
-                                {
-                                    pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), m.motherloadasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                                }
-
-                                if (m.discovered)
-                                    pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), " *", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-
-                                vpos = ie1.Location.Bottom + displayfont.ScalePixels(2);
-                            }
-                        }
-                    }
-
-                    pictureBox.Render(true, new Size(0, vpos + displayfont.ScalePixels(8)));       // control is resized with a min height
-
-                    var prospectedlist = found.Where(m => m.prospectednoasteroids > 0).ToList();
-
-                    UpdateComboBox(prospectedlist.Select(m => m.friendlyname).ToList());
-
-                    int? seli = selectedchart as int?;
-                    int? selm = selectedchart is string ? prospectedlist.FindIndex(x => x.friendlyname == selectedchart as string) : default(int?);
-
-                    if (prospectedlist.Count > 0 && ((seli.HasValue && seli > 0) || selm.HasValue))
-                    {
-                        List<MaterialsFound> matdata = new List<MaterialsFound>();
-                        if (seli.HasValue)
-                        {
-                            if (seli == chartfixeditems.Length - 1)
-                                seli = LineC.Length;
-
-                            for (int i = 0; i < seli.Value && i < prospectedlist.Count; i++)
-                                matdata.Add(prospectedlist[i]);
-                        }
-                        else
-                            matdata.Add(prospectedlist[selm.Value]);
-
-                        //int spaceleft = ClientRectangle.Height - pictureBox.Height - extPanelRollUp.Height;
-
-                        //if (spaceleft < 200)
-                        //    Height += 200 + pictureBox.Height - extPanelRollUp.Height;
-
-                        try
-                        {
-                            Chart chart = new Chart();
-                            chart.Name = "chart";       // important for remove by key above
-                            chart.Dock = DockStyle.Fill;
-                            chart.BorderlineColor = GridC;          // around the whole thing.
-                            chart.BackColor = backcolour;           // the whole chart background
-
-                            chart.BeginInit();
-                            chart.BorderlineDashStyle = ChartDashStyle.Solid;
-
-                            ChartArea chartarea = new ChartArea();
-                            chartarea.BorderColor = GridC;          // gives the top/right colours for this type of chart
-                            chartarea.BorderDashStyle = ChartDashStyle.Solid;
-                            chartarea.BorderWidth = 1;
-                            chartarea.BackColor = BackC;            // chart area is coloured slightly
-
-                            chartarea.AxisX.LabelStyle.ForeColor = TextC;  // label on axis colour
-                            chartarea.AxisX.LabelStyle.Font = displayfont;
-                            chartarea.AxisX.MajorGrid.LineColor = GridC;   // major grid colour
-                            chartarea.AxisX.LineColor = GridC;      // axis (0 value) colour
-                            chartarea.AxisX.Title = "Content %".T(EDTx.UserControlMiningOverlay_content);
-                            chartarea.AxisX.TitleFont = displayfont;
-                            chartarea.AxisX.TitleForeColor = TextC;
-                            chartarea.AxisX.Interval = 10;
-                            chartarea.AxisX.Minimum = 0;
-
-                            chartarea.AxisY.LabelStyle.ForeColor = TextC;
-                            chartarea.AxisY.LabelStyle.Font = displayfont;
-                            chartarea.AxisY.MajorGrid.LineColor = GridC;
-                            chartarea.AxisY.LineColor = GridC;      // axis (0 value) colour
-                            chartarea.AxisY.Title = "% Above".T(EDTx.UserControlMiningOverlay_above);
-                            chartarea.AxisY.TitleFont = displayfont;
-                            chartarea.AxisY.TitleForeColor = TextC;
-                            chartarea.AxisY.Interval = 10;
-                            chartarea.AxisY.Maximum = 101;
-
-                            chart.ChartAreas.Add(chartarea);
-
-                            chart.Titles.Clear();
-                            var title = new Title((matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") +
-                                            (extCheckBoxChartBase.Checked ? "Distribution vs All".T(EDTx.UserControlMiningOverlay_distall) : "Distribution if Contains".T(EDTx.UserControlMiningOverlay_dist)), 
-                                            Docking.Top, displayfont, TextC);
-                            chart.Titles.Add(title);
-
-                            Legend legend = null;
-
-                            if (matdata.Count > 1)      // one legend, series are attached to it via name field
-                            {
-                                legend = new Legend();
-                                legend.Name = "Legend1";
-                                legend.LegendStyle = LegendStyle.Column;
-                                legend.Docking = Docking.Right;
-                                legend.BackColor = backcolour;
-                                legend.ForeColor = TextC;
-                                chart.Legends.Add(legend);
-                            }
-
-                            int mi = 0;
-                            foreach (var material in matdata)
-                            {
-                                Series series = new Series();
-                                series.Name = material.friendlyname;
-                                series.ChartArea = "ChartArea1";
-                                series.ChartType = SeriesChartType.Line;
-                                series.Color = LineC[mi];
-                                series.Legend = "Legend1";
-
-                                double min = material.prospectedamounts.Min();
-                                int asteroids = extCheckBoxChartBase.Checked ? prospected : material.prospectednoasteroids;
-
-                                //foreach (var x in material.prospectedamounts) System.Diagnostics.Debug.WriteLine($"Material {material.friendlyname} % {x}");
-
-                                for (int percent = 0; percent < CFDbMax; percent++)        // for each % chance up to CFdbMax (50)
-                                {
-                                    // if percent is less than the prospected amount minimum value don't show
-
-                                    if (percent >= (int)min)
-                                    {
-                                        // here, see how many entries are at or above the percentage amount
-                                        int numberabove = material.prospectedamounts.Count(x => x >= percent);
-                                        // and therefore the chance is the number above / no of asteroids
-                                        double chance = ((double)numberabove) / asteroids * 100.0;
-
-                                        //System.Diagnostics.Debug.WriteLine($"Mining {material.friendlyname} %{percent} no {numberabove} {material.prospectednoasteroids} = {chance}, min is {min}");
-
-                                        series.Points.Add(new DataPoint(percent, chance));
-                                        series.Points[series.Points.Count - 1].AxisLabel = percent.ToString();
-
-                                        if (numberabove == 0 && percent % 10 == 0)      // if we have no items, terminate data at next 10% interval - chart will size
-                                            break;
-                                    }
-                                }
-                                
-                                chart.Series.Add(series);
-                                mi++;
-                               
-                            }
-
-                            chart.EndInit();
-
-                            try
-                            {
-                                Controls.Add(chart);
-                                Controls.SetChildIndex(chart, 0);       // #3471 seen an exception here, but I can't make it do it. Hide error
-                            }
-                            catch ( Exception ex)
-                            {
-                                System.Diagnostics.Trace.WriteLine($"Mining overlay Exception during add/set child {ex}");
-                            }
-                        }
-                        catch (NotImplementedException)
-                        {
-                            // Charting not implemented in mono System.Windows.Forms
-                        }
-                    }
-
-                }
-
-                buttonExtExcel.Enabled = found.Count != 0;
-            }
-            else
-            {
-                pictureBox.Render();
-                buttonExtExcel.Enabled = false;
-            }
-
-            Update();
-        }
-
-        private void Timetimer_Tick(object sender, EventArgs e)
-        {
-            Font displayfont = ExtendedControls.Theme.Current.GetFont;
-            Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-            Color backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
-
-            using (StringFormat frmt = new StringFormat())
-            {
-                var lab = new ExtendedControls.ExtPictureBox.ImageElement();
-                lab.TextAutoSize(timeie.Position, timeie.Size, TimeText(false), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                pictureBox.RemoveItem(timeie, backcolour);
-                pictureBox.AddItem(lab);
-                timeie = lab;
-            }
-        }
-
-        private string TimeText(bool setstart)
-        {
-            if (eventlist != null && eventlist.Count > 0 )
-            {
-                DateTime lasteventtime = eventlist.Last().EventTimeUTC;        // last event time
-                bool inprogress = incurrentplay && (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // N min we are still in progress, and we are in current play
-                TimeSpan timemining = inprogress ? (DateTime.UtcNow - eventlist.First().EventTimeUTC) : (lasteventtime - eventlist.First().EventTimeUTC);
-                string text = timemining.ToString(@"hh\:mm\:ss");
-                if (lastrefined > 0 && timemining.TotalHours>0)
-                {
-                    double rate = lastrefined / timemining.TotalHours;
-                    text += " " + rate.ToString("N1") + "t/Hr";
-                }
-                if (setstart && inprogress)
-                    timetimer.Start();
-                return text;
-            }
-            else
-                return "";
-        }
-
 
         #endregion
 
