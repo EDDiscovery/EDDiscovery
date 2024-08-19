@@ -309,7 +309,9 @@ namespace EDDiscovery.UserControls
                         chart.EnableZoomMouseWheelX();
                         chart.ZoomMouseWheelXMinimumInterval = 1;
                         chart.SetXAxisInterval(DateTimeIntervalType.Auto, 5);
+                        chart.SetXAxisTitle("Content %".T(EDTx.UserControlMiningOverlay_content));
                         chart.SetYAxisMaxMin(0, 100);
+                        chart.SetYAxisTitle("% Above".T(EDTx.UserControlMiningOverlay_above));
 
                         string title = (matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") + (extCheckBoxChartBase.Checked ? "Distribution vs All".T(EDTx.UserControlMiningOverlay_distall) : "Distribution if Contains".T(EDTx.UserControlMiningOverlay_dist));
                         chart.AddTitle("main", title);
