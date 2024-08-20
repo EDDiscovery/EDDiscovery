@@ -177,7 +177,8 @@ namespace EDDiscovery.UserControls
             }
             else if (MaximumDataAge.HasValue)
             {
-                var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
+                DateTime lastentry = list.Count > 0 ? list.First().EventTimeUTC : DateTime.UtcNow;       // if a list, last date in list, else UTC now
+                var oldestData = lastentry.Subtract(MaximumDataAge.Value);
                 int index = list.FindIndex(x => x.EventTimeUTC < oldestData);       // find first entry with date younger than oldest data
                 return index >= 0 ? list.GetRange(0, index) : list;                 // if not found one, they are all younger than the time, so its all, else its a range
             }
@@ -191,21 +192,22 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        // list in is in ascending order, return in ascending date order
-        public List<Ledger.Transaction> Filter(List<Ledger.Transaction> txlist )
+        // list in is in ascending order, oldest first, return in ascending date order
+        public List<Ledger.Transaction> Filter(List<Ledger.Transaction> list )
         {                                                             
             if (MaximumNumberOfItems.HasValue)
             {
-                int startdata = Math.Max(0, txlist.Count - MaximumNumberOfItems.Value);
-                return txlist.GetRange(startdata, txlist.Count - startdata);
+                int startdata = Math.Max(0, list.Count - MaximumNumberOfItems.Value);
+                return list.GetRange(startdata, list.Count - startdata);
             }
             else if (MaximumDataAge.HasValue)
             {
-                var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
-                return txlist.Where(x => x.EventTimeUTC >= oldestData).ToList();
+                DateTime lastentry = list.Count > 0 ? list.Last().EventTimeUTC : DateTime.UtcNow;       // if a list, last date in list, else UTC now
+                var oldestData = lastentry.Subtract(MaximumDataAge.Value);
+                return list.Where(x => x.EventTimeUTC >= oldestData).ToList();
             }
             else
-                return txlist;
+                return list;
         }
 
         // given a combobox, and the current setting, fill with time selection options
