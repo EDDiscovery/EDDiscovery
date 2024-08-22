@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
             CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
             HideOnDeactivate = true;
             UC.MultiColumnSlide = true;
+            UC.ShowClose = true;
         }
 
         public void AddJournalExtraOptions()
