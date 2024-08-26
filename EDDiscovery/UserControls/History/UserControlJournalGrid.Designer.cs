@@ -103,13 +103,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(788, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(785, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 686);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(19, 686);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewJournal.ShowCellToolTips = false;
             this.dataGridViewJournal.SingleRowSelect = true;
-            this.dataGridViewJournal.Size = new System.Drawing.Size(788, 686);
+            this.dataGridViewJournal.Size = new System.Drawing.Size(785, 686);
             this.dataGridViewJournal.TabIndex = 0;
             this.dataGridViewJournal.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellClick);
             this.dataGridViewJournal.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellDoubleClick);

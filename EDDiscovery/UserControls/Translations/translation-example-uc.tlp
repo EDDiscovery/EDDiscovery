@@ -345,6 +345,8 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .NOLG: "No Ledger available" @
 .TotalProfit: "Total Profit" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+
 
 SECTION UserControlLog
 

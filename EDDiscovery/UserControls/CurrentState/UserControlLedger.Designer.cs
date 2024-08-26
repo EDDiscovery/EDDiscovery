@@ -69,10 +69,11 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
             this.label24h = new System.Windows.Forms.Label();
+            this.label7d = new System.Windows.Forms.Label();
             this.splitContainerLedger = new System.Windows.Forms.SplitContainer();
             this.extChartLedger = new ExtendedControls.ExtSafeChart();
-            this.label7d = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -97,6 +98,7 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewLedger
             // 
+            this.dataGridViewLedger.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewLedger.AllowUserToAddRows = false;
             this.dataGridViewLedger.AllowUserToDeleteRows = false;
             this.dataGridViewLedger.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -114,6 +116,7 @@ namespace EDDiscovery.UserControls
             this.TotalProfit});
             this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewLedger.MultiSelect = false;
             this.dataGridViewLedger.Name = "dataGridViewLedger";
             this.dataGridViewLedger.PerColumnWordWrapControl = true;
             this.dataGridViewLedger.RowHeaderMenuStrip = null;
@@ -121,9 +124,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewLedger.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewLedger.SingleRowSelect = true;
-            this.dataGridViewLedger.Size = new System.Drawing.Size(784, 266);
+            this.dataGridViewLedger.Size = new System.Drawing.Size(781, 266);
             this.dataGridViewLedger.TabIndex = 1;
-            this.dataGridViewLedger.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_CellClick);
+            this.dataGridViewLedger.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_RowEnter);
             this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
             // 
             // TimeCol
@@ -187,17 +190,18 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemGotoItem});
             this.contextMenuStrip.Name = "contextMenuStripLedger";
-            this.contextMenuStrip.Size = new System.Drawing.Size(175, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(183, 26);
             // 
             // toolStripMenuItemGotoItem
             // 
             this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
-            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(174, 22);
+            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(182, 22);
             this.toolStripMenuItemGotoItem.Text = "View on History Grid";
             this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
             // 
             // vScrollBarCustomMC
             // 
+            this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
@@ -207,13 +211,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(781, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 266);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(19, 266);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -258,6 +262,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.EndButtonEnable = true;
             this.textBoxFilter.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
+            this.textBoxFilter.EndButtonSize16ths = 10;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(195, 1);
@@ -271,6 +276,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxFilter.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBoxFilter, "Search to particular items");
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
@@ -318,7 +324,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(423, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(459, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -366,6 +372,7 @@ namespace EDDiscovery.UserControls
             this.topPanel.Controls.Add(this.textBoxFilter);
             this.topPanel.Controls.Add(this.buttonFilter);
             this.topPanel.Controls.Add(this.extCheckBoxWordWrap);
+            this.topPanel.Controls.Add(this.checkBoxCursorToTop);
             this.topPanel.Controls.Add(this.buttonExtExcel);
             this.topPanel.Controls.Add(this.label24h);
             this.topPanel.Controls.Add(this.label7d);
@@ -375,15 +382,55 @@ namespace EDDiscovery.UserControls
             this.topPanel.Size = new System.Drawing.Size(800, 30);
             this.topPanel.TabIndex = 2;
             // 
+            // checkBoxCursorToTop
+            // 
+            this.checkBoxCursorToTop.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxCursorToTop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxCursorToTop.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
+            this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.ImageIndeterminate = null;
+            this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(423, 1);
+            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
+            this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxCursorToTop.TabIndex = 30;
+            this.checkBoxCursorToTop.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxCursorToTop, "Automatically move the cursor to the latest entry when it arrives");
+            this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
+            // 
             // label24h
             // 
             this.label24h.AutoSize = true;
-            this.label24h.Location = new System.Drawing.Point(459, 3);
+            this.label24h.Location = new System.Drawing.Point(495, 3);
             this.label24h.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.label24h.Name = "label24h";
             this.label24h.Size = new System.Drawing.Size(64, 13);
             this.label24h.TabIndex = 34;
             this.label24h.Text = "<code 24h>";
+            // 
+            // label7d
+            // 
+            this.label7d.AutoSize = true;
+            this.label7d.Location = new System.Drawing.Point(567, 3);
+            this.label7d.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
+            this.label7d.Name = "label7d";
+            this.label7d.Size = new System.Drawing.Size(58, 13);
+            this.label7d.TabIndex = 34;
+            this.label7d.Text = "<code 7d>";
             // 
             // splitContainerLedger
             // 
@@ -407,6 +454,8 @@ namespace EDDiscovery.UserControls
             // 
             this.extChartLedger.AutoScaleYAddedPercent = 5D;
             this.extChartLedger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extChartLedger.IsStartedFromZeroX = false;
+            this.extChartLedger.IsStartedFromZeroY = false;
             this.extChartLedger.LeftArrowEnable = true;
             this.extChartLedger.LeftArrowPosition = elementPosition1;
             this.extChartLedger.Location = new System.Drawing.Point(0, 0);
@@ -417,16 +466,6 @@ namespace EDDiscovery.UserControls
             this.extChartLedger.TabIndex = 11;
             this.extChartLedger.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartLedger.ZoomMouseWheelXZoomFactor = 1.5D;
-            // 
-            // label7d
-            // 
-            this.label7d.AutoSize = true;
-            this.label7d.Location = new System.Drawing.Point(531, 3);
-            this.label7d.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
-            this.label7d.Name = "label7d";
-            this.label7d.Size = new System.Drawing.Size(58, 13);
-            this.label7d.TabIndex = 34;
-            this.label7d.Text = "<code 7d>";
             // 
             // UserControlLedger
             // 
@@ -478,5 +517,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtSafeChart extChartLedger;
         private System.Windows.Forms.Label label24h;
         private System.Windows.Forms.Label label7d;
+        private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
     }
 }

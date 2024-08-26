@@ -63,12 +63,19 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            DiscoveryForm.OnHistoryChange += Redisplay;
-            DiscoveryForm.OnNewEntry += NewEntry;
+            checkBoxCursorToTop.Checked = true;
 
-            var enumlist = new Enum[] { EDTx.UserControlLedger_TimeCol, EDTx.UserControlLedger_Type, EDTx.UserControlLedger_Notes, EDTx.UserControlLedger_Credits, EDTx.UserControlLedger_Debits, EDTx.UserControlLedger_Balance, EDTx.UserControlLedger_NormProfit, EDTx.UserControlLedger_TotalProfit, EDTx.UserControlLedger_labelTime, EDTx.UserControlLedger_labelSearch };
+            DiscoveryForm.OnHistoryChange += Redisplay;
+            DiscoveryForm.OnNewEntry += OnNewEntry;
+
+            var enumlist = new Enum[] { EDTx.UserControlLedger_TimeCol, EDTx.UserControlLedger_Type, EDTx.UserControlLedger_Notes, 
+                                    EDTx.UserControlLedger_Credits, EDTx.UserControlLedger_Debits, EDTx.UserControlLedger_Balance, 
+                                    EDTx.UserControlLedger_NormProfit, EDTx.UserControlLedger_TotalProfit, EDTx.UserControlLedger_labelTime, 
+                                    EDTx.UserControlLedger_labelSearch };
             var enumlistcms = new Enum[] { EDTx.UserControlLedger_toolStripMenuItemGotoItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlLedger_comboBoxTime_ToolTip, EDTx.UserControlLedger_textBoxFilter_ToolTip, EDTx.UserControlLedger_buttonFilter_ToolTip, EDTx.UserControlLedger_buttonExtExcel_ToolTip , EDTx.UserControlLedger_extCheckBoxWordWrap_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlLedger_comboBoxTime_ToolTip, EDTx.UserControlLedger_textBoxFilter_ToolTip, 
+                        EDTx.UserControlLedger_buttonFilter_ToolTip, EDTx.UserControlLedger_buttonExtExcel_ToolTip , EDTx.UserControlLedger_extCheckBoxWordWrap_ToolTip,
+                        EDTx.UserControlLedger_checkBoxCursorToTop_ToolTip};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
@@ -125,7 +132,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
             PutSetting(dbUserGroups, cfs.GetUserGroups());
             DiscoveryForm.OnHistoryChange -= Redisplay;
-            DiscoveryForm.OnNewEntry -= NewEntry;
+            DiscoveryForm.OnNewEntry -= OnNewEntry;
         }
 
         #endregion
@@ -203,11 +210,7 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-            var tx1 = ledger.TransactionBefore(DateTime.UtcNow.AddHours(-24));
-            label24h.Text = tx1 != null ? ("24h: " + (ledger.CashTotal - tx1.CashTotal).ToString("N0") + "cr") : "";
-            var tx2 = ledger.TransactionBefore(DateTime.UtcNow.AddDays(-7));
-            label7d.Text = tx2 != null ? ("7d: " + (ledger.CashTotal - tx2.CashTotal).ToString("N0") + "cr") : "";
-
+            Calculate24h7Day();
         }
 
         private DataGridViewRow CreateRow(Ledger.Transaction tx, HashSet<string> eventfilter, string textfilter)
@@ -230,14 +233,14 @@ namespace EDDiscovery.UserControls
                 var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
                 row.CreateCells(dataGridViewLedger, rowobj);
                 row.Tag = tx.JID;
-                row.Cells[0].Tag = tx.EventTimeUTC;
+                row.Cells[0].Tag = tx;
                 return row;
             }
             else
                 return null;
         }
 
-        private void NewEntry(HistoryEntry he)
+        private void OnNewEntry(HistoryEntry he)
         {
             while(transactioncountatdisplay < DiscoveryForm.History.CashLedger.Transactions.Count)   // if new transaction
             {
@@ -253,9 +256,36 @@ namespace EDDiscovery.UserControls
                     var seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
                     //System.Diagnostics.Debug.WriteLine($"Ledger Chart add {seltime} {seltime.ToOADate()} {tx.CashTotal}");
                     extChartLedger.AddXY(seltime, tx.CashTotal);
+
+                    if (checkBoxCursorToTop.Checked) // Move focus to first row
+                    {
+                        dataGridViewLedger.ClearSelection();
+                        dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
+                    }
                 }
 
                 transactioncountatdisplay++;
+            }
+        }
+
+        private void Calculate24h7Day()
+        {
+            int row = dataGridViewLedger.SelectedRowAndCount(false, true, -1).Item1;
+            if (row >= 0)
+            {
+                Ledger ledger = DiscoveryForm.History.CashLedger;
+                Ledger.Transaction tx = dataGridViewLedger.Rows[row].Cells[0].Tag as Ledger.Transaction;
+
+                //System.Diagnostics.Debug.WriteLine($"Ledger calc amount at row {row} time {tx.EventTimeUTC}");
+                var tx1 = ledger.TransactionBefore(tx, new TimeSpan(24, 0, 0));
+                //System.Diagnostics.Debug.WriteLine($"Ledger calc amount tx1 {tx1?.EventTimeUTC}");
+                var tx2 = ledger.TransactionBefore(tx, new TimeSpan(7, 0, 0, 0));
+                //System.Diagnostics.Debug.WriteLine($"Ledger calc amount tx2 {tx2?.EventTimeUTC}");
+
+                label24h.Text = tx1 != null ? ("24h: " + (ledger.CashTotal - tx1.CashTotal).ToString("N0") + "cr") : "";
+                label7d.Text = tx2 != null ? ("7d: " + (ledger.CashTotal - tx2.CashTotal).ToString("N0") + "cr") : "";
+                //label24h.Text = tx1 != null ? ("24h: " + tx1.EventTimeUTC + " " + (ledger.CashTotal - tx1.CashTotal).ToString("N0") + "cr") : "";
+                //label7d.Text = tx2 != null ? ("7d: " + tx2.EventTimeUTC + " " + (ledger.CashTotal - tx2.CashTotal).ToString("N0") + "cr") : "";
             }
         }
 
@@ -327,17 +357,18 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Click on grid
+        #region Grid interaction
 
-        private void dataGridViewLedger_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewLedger_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)        // triage actually clicking on row
             {
-                var row = dataGridViewLedger.Rows[e.RowIndex];
-                var datetime = (DateTime)row.Cells[0].Tag;
-                System.Diagnostics.Debug.WriteLine($"Ledger Selected Graph cursor position {datetime}");
-                extChartLedger.SetXCursorPosition(datetime);
+                Ledger.Transaction tx = dataGridViewLedger.Rows[e.RowIndex].Cells[0].Tag as Ledger.Transaction;
+                System.Diagnostics.Debug.WriteLine($"Ledger Selected Graph cursor position {tx.EventTimeUTC}");
+                extChartLedger.SetXCursorPosition(tx.EventTimeUTC);
+                Calculate24h7Day();
             }
+
         }
 
         #endregion
@@ -348,7 +379,7 @@ namespace EDDiscovery.UserControls
             if (!double.IsNaN(pos))     // this means its off graph, ignore
             {
                 DateTime dtgraph = DateTime.FromOADate(pos);                    // back to date/time
-                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => (DateTime)r.Cells[0].Tag, dtgraph, long.MaxValue);  // we accept any nearest
+                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => ((Ledger.Transaction)r.Cells[0].Tag).EventTimeUTC, dtgraph, long.MaxValue);  // we accept any nearest
                 if (row >= 0)
                 {
                     dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(row);
