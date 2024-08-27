@@ -282,8 +282,8 @@ namespace EDDiscovery.UserControls
                 var tx2 = ledger.TransactionBefore(tx, new TimeSpan(7, 0, 0, 0));
                 //System.Diagnostics.Debug.WriteLine($"Ledger calc amount tx2 {tx2?.EventTimeUTC}");
 
-                label24h.Text = tx1 != null ? ("24h: " + (ledger.CashTotal - tx1.CashTotal).ToString("N0") + "cr") : "";
-                label7d.Text = tx2 != null ? ("7d: " + (ledger.CashTotal - tx2.CashTotal).ToString("N0") + "cr") : "";
+                label24h.Text = tx1 != null ? ("24h: " + (tx.CashTotal - tx1.CashTotal).ToString("N0") + "cr") : "";
+                label7d.Text = tx2 != null ? ("7d: " + (tx.CashTotal - tx2.CashTotal).ToString("N0") + "cr") : "";
                 //label24h.Text = tx1 != null ? ("24h: " + tx1.EventTimeUTC + " " + (ledger.CashTotal - tx1.CashTotal).ToString("N0") + "cr") : "";
                 //label7d.Text = tx2 != null ? ("7d: " + tx2.EventTimeUTC + " " + (ledger.CashTotal - tx2.CashTotal).ToString("N0") + "cr") : "";
             }
@@ -359,13 +359,22 @@ namespace EDDiscovery.UserControls
 
         #region Grid interaction
 
+        bool movingpos = false;     // prevent changing the ledger row causing a call back to chart cursor pos change, and visa versa
+
         private void dataGridViewLedger_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)        // triage actually clicking on row
+            if (!movingpos && e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)        // triage actually clicking on row
             {
                 Ledger.Transaction tx = dataGridViewLedger.Rows[e.RowIndex].Cells[0].Tag as Ledger.Transaction;
-                System.Diagnostics.Debug.WriteLine($"Ledger Selected Graph cursor position {tx.EventTimeUTC}");
-                extChartLedger.SetXCursorPosition(tx.EventTimeUTC);
+                // bug here, found by Ealhstan. Graph is in user time base, need to convert utc->user time
+                var usertime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
+
+                //System.Diagnostics.Debug.WriteLine($"Ledger Selected Graph cursor position utc {tx.EventTimeUTC} user {usertime}");
+                movingpos = true;
+                extChartLedger.SetXCursorPosition(usertime);
+                movingpos = false;
+                //System.Diagnostics.Debug.WriteLine($".. end Selected Graph cursor position utc {tx.EventTimeUTC} user {usertime}");
+
                 Calculate24h7Day();
             }
 
@@ -376,15 +385,23 @@ namespace EDDiscovery.UserControls
         #region Chart
         private void LedgerCursorPositionChanged(ExtendedControls.ExtSafeChart chart, string chartarea, AxisName axis, double pos)
         {
-            if (!double.IsNaN(pos))     // this means its off graph, ignore
+            if (!movingpos && !double.IsNaN(pos))     // this means its off graph, ignore. time is a double based on OLE automation Date!
             {
-                DateTime dtgraph = DateTime.FromOADate(pos);                    // back to date/time
-                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => ((Ledger.Transaction)r.Cells[0].Tag).EventTimeUTC, dtgraph, long.MaxValue);  // we accept any nearest
+                var oadate = DateTime.FromOADate(pos);                                  // from pos-> Date
+                var seldate = EDDConfig.Instance.ConvertTimeToSelected(oadate);         // Make sure its in selected kind (Local or UTC)
+                var utc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(seldate);     // convert to UTC
+
+                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => ((Ledger.Transaction)r.Cells[0].Tag).EventTimeUTC, utc, long.MaxValue);  // we accept any nearest
+               // System.Diagnostics.Debug.WriteLine($"Ledger Chart Selected {pos} correspondion to {seldate} utc {utc} = row {row}");
                 if (row >= 0)
                 {
+                    movingpos = true;
                     dataGridViewLedger.SetCurrentAndSelectAllCellsOnRow(row);
                     dataGridViewLedger.Rows[row].Selected = true;
+                    movingpos = false;
+                    Calculate24h7Day();
                 }
+               // System.Diagnostics.Debug.WriteLine($".. end Chart Selected {pos} correspondion to {seldate} utc {utc} = row {row}");
             }
         }
 
