@@ -18,6 +18,7 @@ Unknown: "Unknown" => "未知"
 Information: "Information" => "提示"
 NoPos: "No Pos" => "无坐标"
 RemoveAll: "Remove All" @
+Disabled: "Disabled" @
 
 SECTION StartUp
 
@@ -225,7 +226,6 @@ SECTION EDDiscoveryForm
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "编辑插件"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "管理插件"
 .buttonExtRefresh.ToolTip: "Refresh the history" => "刷新航行记录"
-.buttonReloadActions.ToolTip: "DEBUG reload action system" => "（调试）重载插件系统"
 .addTabToolStripMenuItem: "Insert Tab with panel.." => "添加标签页面板"
 .removeTabToolStripMenuItem: "Remove Tab" => "移除标签页"
 .renameTabToolStripMenuItem: "Rename Tab" => "重命名标签页"
@@ -328,6 +328,7 @@ ImportExportForm: "Export data" => "导出"
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
+.labelSaveImport: "Save Import As" @
 
 SECTION GalaxySectorSelect
 
@@ -347,9 +348,9 @@ GalaxySectorSelect: "Galaxy Sector Select" => "选择想要下载的银河系星
 .GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
 .Select: "Select: " => "选择："
 .GALSELEN: "Select the data set" => "选择数据集"
-.GALSELSRC: "Select the data source" @
 .PresstoAccept: "Press to Accept" => "点击以接受"
 .GALSELTitle: "Select Galaxy Data" => "选择 EDSM 银河星图数据"
+.Area: "Area:" @
 
 SECTION MoveToCommander
 

@@ -18,6 +18,7 @@ Unknown: "Unknown" => "Sconosciuto"
 Information: "Information" => "Informazione"
 NoPos: "No Pos" => "Nessuna Posizione"
 RemoveAll: "Remove All" @
+Disabled: "Disabled" @
 
 SECTION StartUp
 
@@ -225,7 +226,6 @@ SECTION EDDiscoveryForm
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Modifica i Componenti"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Gestisci i Componenti"
 .buttonExtRefresh.ToolTip: "Refresh the history" => "Aggiorna lo storico"
-.buttonReloadActions.ToolTip: "DEBUG reload action system" @
 .addTabToolStripMenuItem: "Insert Tab with panel.." => "Inserisci un pannelo come scheda"
 .removeTabToolStripMenuItem: "Remove Tab" => "Rimuovi scheda"
 .renameTabToolStripMenuItem: "Rename Tab" => "Rinomina scheda"
@@ -328,6 +328,7 @@ ImportExportForm: "Export data" => "Esporta"
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
+.labelSaveImport: "Save Import As" @
 
 SECTION GalaxySectorSelect
 
@@ -347,9 +348,9 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seleziona Settori Galattici"
 .GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery scarica i dati stellari da EDSM/EDDB, che è usato per importare dati addizionali. Seleziona quanti dati vuoi scaricare e conservare. Quanto più settori galattici scarichi, maggiore lo spazio necessario e la memoria usata."
 .Select: "Select: " => "Seleziona"
 .GALSELEN: "Select the data set" => "Seleziona il set di dati"
-.GALSELSRC: "Select the data source" @
 .PresstoAccept: "Press to Accept" => "Premi per accettare"
 .GALSELTitle: "Select Galaxy Data" => "Seleziona dati galattici EDSM"
+.Area: "Area:" @
 
 SECTION MoveToCommander
 

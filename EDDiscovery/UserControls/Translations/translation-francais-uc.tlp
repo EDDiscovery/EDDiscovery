@@ -235,7 +235,6 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" => "Valeur est."
-.checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Récupérer et montrer les infos d'EDSM"
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" => "Valeur estimé du scan de {0}"
@@ -261,7 +260,6 @@ SECTION UserControlExpedition
 .extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Afficher l'itinéraire sur la carte 3D"
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Ajouter systèmes"
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .buttonReverseRoute.ToolTip: "Reverse" => "Inverser"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" = UserControlExpedition.extButtonAddSystems.ToolTip
@@ -470,7 +468,6 @@ SECTION UserControlSurveyor
 .extButtonAlignment.ToolTip: "Alignment" @
 .extButtonFont.ToolTip: "Font" @
 .extButtonFSS.ToolTip: "FSS Signal Selection" @
-.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
@@ -560,6 +557,7 @@ SECTION UserControlModules
 .labelWep: "Weapons:" @
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" @
+.SaveLoadout: "Enter loadout description to save ship with" @
 
 SECTION UserControlNotePanel
 
@@ -660,6 +658,8 @@ SECTION UserControlRoute
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Ouvrir ce début d'itinéraire dans EDSM"
 .extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
 .labelCargo: "Cargo" @
+.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
+.NoRoute: "No route set up, retry" @
 
 SECTION UserControlRouteTracker
 
@@ -686,11 +686,10 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
+.scanDisplayBodyFiltersButton.ToolTip: "! Configure scan display body filters !" @
+.scanDisplayConfigureButton.ToolTip: "! Configure scan display !" @
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Sélectionner un autre système à visualiser"
-.extButtonFilter.ToolTip: "Filter Bodies" @
-.extButtonDisplayFilters.ToolTip: "Settings" @
 .buttonSize.ToolTip: "Select image size" => "Selectionner la taille d'image"
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Afficher/Masquer les données de corps provenant d'EDSM"
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Définir la limite haute de valeur"
 .buttonExtExcel.ToolTip: "Export" = UserControlModules.buttonExtExcel.ToolTip
 .System: "System:" = UserControlWebBrowser.System
@@ -725,7 +724,6 @@ SECTION UserControlScanGrid
 .colBriefing: "Information" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
 .extButtonHabZones.ToolTip: "Configure hab zone information" @
-.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
 .MainStar: "Main Star" => "Étoile principale"
 .Mass: "Mass" = UserControlModules.Mass
 .Radius: "Radius" => "Rayon"
@@ -960,7 +958,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" = SetNoteForm
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplacer automatiquement le curseur sur la dernier entrée quand elle arrive"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi des données dans Excel"
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." => "Afficher/Masquer les données du corps provenant d'EDSM. En raison des contraintes serveur, vous devez cliquer sur un système pour récupérer les données de ce dernier depuis EDSM"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Trier les entrées par âge"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" => "Afficher la vue scan"
 .Value: "Scan Value" => "Valeur de scan"
@@ -998,7 +995,6 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageCombat: "Combat" @
 .Powerplay: "Powerplay" @
 .Squadron: "Squadron" @
-.NoTrip: "No Trip" @
 .BountiesThargoid: "Bounties on Thargoids" @
 .BountiesOnFootNPC: "Bounties on On Foot NPC" @
 .BountiesSkimmers: "Bounties on Skimmers" @
@@ -1066,7 +1062,6 @@ SECTION UserControlStats
 .Scanvalue: "Scan value" = UserControlStarList.Value
 .Beltcluster: "Belt Cluster" @
 .Lastdock: "Last dock" => "Dernier appontage"
-.Trip: "Trip" = UserControlStats.tabControlCustomStats.tabPageTravel
 .All: "All" = All
 .BankAccount: "Bank Account" => "Compte en banque"
 .Combat: "Combat" @
@@ -1095,7 +1090,6 @@ SECTION StatsTimeUserControl
 .Day: "Day" => "Jour"
 .Week: "Week" => "Semaine"
 .Month: "Month" => "Mois"
-.Custom: "Custom" => "Personnalisé"
 
 SECTION UserControlSynthesis
 
@@ -1127,7 +1121,6 @@ SECTION UserControlSysInfo
 .toolStripDistanceFrom: "Display Distance From" => "Afficher la distance depuis"
 .toolStripSystemState: "Display System State" => "Afficher le statut du système"
 .displaySecurityToolStripMenuItem: "Display Security" @
-.toolStripNotes: "Display Notes" = UserControlSpanel.showNotesToolStripMenuItem
 .toolStripTarget: "Display Target" => "Afficher la cible"
 .toolStripShip: "Display Ship Information" => "Afficher les informations du vaisseau"
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
@@ -1244,7 +1237,6 @@ SECTION UserControlTravelGrid
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Éxécution des actions dans la selection pour débug vocal (debug)"
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Éxécution de la selection via le système d'Inara (Debug)"
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Éxécuter l'entrée via le système de profil (Debug)"
-.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Éxécuter la selection via IGAU (Debug)"
 .runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
 .sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
@@ -1287,7 +1279,6 @@ SECTION CaptainsLogEntries
 .CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Voulez vous vraiment supprimer la note pour {0}\r\nConfirmer ou Annuler"
 .SetTags: "Set Tags" => "Définir les tags"
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" = UserControlStarDistance.NoEDSMSys
-.NSS: "No such system" => "Système introuvable"
 .ColTime: "Time" = UserControlLedger.TimeCol
 .ColSystem: "System" = UserControlModules.System
 .ColBodyName: "Body" = UserControlScan.Body
@@ -1310,7 +1301,6 @@ SECTION UserControlTrilateration
 .ColumnStatus: "Status" = UserControlSysInfo.labelState
 .Source: "Source" @
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Recherché dans les systèmes"
-.toolStrip: "Press Start New" @
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Retirer des systèmes recherchés"
 .viewOnEDSMToolStripMenuItem1: "View on EDSM" = UserControlJournalGrid.viewOnEDSMToolStripMenuItem
 .deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "Tout supprimer des positions connues"
@@ -1435,8 +1425,6 @@ SECTION UserControlFactions
 .MissionsInProgress: "Missions In Progress: " @
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
-.startDateTimePicker.ToolTip: "Include from" @
-.endDateTimePicker.ToolTip: "Include to" @
 .colRedeemVoucher: "Redeem Voucher" @
 .colFines: "Pay Fines" @
 .colBountyValue: "Pay Bounty Value" @
@@ -1451,7 +1439,6 @@ SECTION UserControlOrganics
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
-.extButtonAlignment_ToolTip: "Alignment" @
 .at: "At {0}" @
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 .extButtonAlignment.ToolTip: "Alignment" @
@@ -1654,11 +1641,8 @@ SECTION BookmarkForm
 .UB: "Update Bookmark" => "Mettre à jour le marque-page"
 .RB: "Create Region Bookmark" => "Créer un marque-page de région"
 .RN: "Enter a region name..." => "Entrer un nom de région..."
-.SI: "System Information" => "Information du système"
 .NSB: "New System Bookmark" => "Nouveau marque-page de système"
 .ESN: "Enter a system name..." => "Entrer un nom de système..."
-.GMO: "Galactic Mapping Object" => "Objet de cartographie galactique"
-.Description: "Description" @
 
 SECTION SurfaceBookmarkUserControl
 
@@ -1688,7 +1672,7 @@ SECTION FindSystemsUserControl
 .labelRadMax: "Max" @
 .labelRadMin: "Radius ly Min" => "Rayon AL Min"
 .labelFilter: "Star Name" => "Nom de l'étoile"
-.Cannotfindsystem: "Cannot find system " = CaptainsLogEntries.NSS
+.Cannotfindsystem: "Cannot find system " => "Système introuvable"
 .EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" => "Trouver le nom depuis la base de données"
 .buttonExtEDSM: "From EDSM" => "Depuis EDSM"
@@ -1719,7 +1703,7 @@ SECTION Form2DMap
 .LastMonth: "Last Month" => "Mois précédent"
 .LastYear: "Last Year" => "Année précédente"
 .All: "All" = All
-.Custom: "Custom" = StatsTimeUserControl.Custom
+.Custom: "Custom" => "Personnalisé"
 
 SECTION UserControlForm
 
