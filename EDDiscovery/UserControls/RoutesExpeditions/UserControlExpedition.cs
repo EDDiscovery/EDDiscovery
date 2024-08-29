@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
                                           EDTx.UserControlExpedition_extButtonImportFile_ToolTip, EDTx.UserControlExpedition_extButtonImportRoute_ToolTip, EDTx.UserControlExpedition_extButtonImportNavRoute_ToolTip, EDTx.UserControlExpedition_extButtonNavRouteLatest_ToolTip, 
                                           EDTx.UserControlExpedition_extButtonAddSystems_ToolTip, 
                                           EDTx.UserControlExpedition_buttonExtExport_ToolTip, EDTx.UserControlExpedition_extButtonShow3DMap_ToolTip, 
-                                          EDTx.UserControlExpedition_extButtonDisplayFilters_ToolTip, EDTx.UserControlExpedition_checkBoxEDSM_ToolTip,
+                                          EDTx.UserControlExpedition_extButtonDisplayFilters_ToolTip, 
                                          EDTx.UserControlExpedition_buttonReverseRoute_ToolTip, EDTx.UserControlExpedition_extCheckBoxWordWrap_ToolTip };
             var enumlistcms = new Enum[] { EDTx.UserControlExpedition_copyToolStripMenuItem, EDTx.UserControlExpedition_cutToolStripMenuItem, EDTx.UserControlExpedition_pasteToolStripMenuItem,
                                             EDTx.UserControlExpedition_insertRowAboveToolStripMenuItem,

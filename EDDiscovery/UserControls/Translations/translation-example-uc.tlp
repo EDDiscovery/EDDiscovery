@@ -235,7 +235,6 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" @
-.checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" @
@@ -261,7 +260,6 @@ SECTION UserControlExpedition
 .extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" @
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" @
 .extButtonDisplayFilters.ToolTip: "Select filters on Info" @
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .buttonReverseRoute.ToolTip: "Reverse" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AddSys: "Add Systems" @
@@ -471,7 +469,6 @@ SECTION UserControlSurveyor
 .extButtonAlignment.ToolTip: "Alignment" @
 .extButtonFont.ToolTip: "Font" @
 .extButtonFSS.ToolTip: "FSS Signal Selection" @
-.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extButtonSetRoute.ToolTip: "Select route to follow" @
 .extButtonControlRoute.ToolTip: "Route Settings" @
@@ -568,6 +565,8 @@ SECTION UserControlModules
 
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" @
+
+.SaveLoadout: "Enter loadout description to save ship with" @
 
 SECTION UserControlNotePanel
 
@@ -668,6 +667,8 @@ SECTION UserControlRoute
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" @
 .extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
 .labelCargo: "Cargo" @
+.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
+.NoRoute: "No route set up, retry" @
 
 SECTION UserControlRouteTracker
 
@@ -694,11 +695,10 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
+.scanDisplayBodyFiltersButton.ToolTip: "! Configure scan display body filters !" @
+.scanDisplayConfigureButton.ToolTip: "! Configure scan display !" @
 .extCheckBoxStar.ToolTip: "Select another system to view" @
-.extButtonFilter.ToolTip: "Filter Bodies" @
-.extButtonDisplayFilters.ToolTip: "Settings" @
 .buttonSize.ToolTip: "Select image size" @
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" @
 .extButtonHighValue.ToolTip: "Set High Value Limit" @
 .buttonExtExcel.ToolTip: "Export" @
 .System: "System:" @
@@ -733,7 +733,6 @@ SECTION UserControlScanGrid
 .colBriefing: "Information" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
 .extButtonHabZones.ToolTip: "Configure hab zone information" @
-.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
 .MainStar: "Main Star" @
 .Mass: "Mass" @
 .Radius: "Radius" @
@@ -968,7 +967,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
 .comboBoxTime.ToolTip: "Select the entries by age" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
@@ -1006,7 +1004,6 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageCombat: "Combat" @
 .Powerplay: "Powerplay" @
 .Squadron: "Squadron" @
-.NoTrip: "No Trip" @
 .BountiesThargoid: "Bounties on Thargoids" @
 .BountiesOnFootNPC: "Bounties on On Foot NPC" @
 .BountiesSkimmers: "Bounties on Skimmers" @
@@ -1074,7 +1071,6 @@ SECTION UserControlStats
 .Scanvalue: "Scan value" @
 .Beltcluster: "Belt Cluster" @
 .Lastdock: "Last dock" @
-.Trip: "Trip" @
 .All: "All" @
 .BankAccount: "Bank Account" @
 .Combat: "Combat" @
@@ -1103,7 +1099,6 @@ SECTION StatsTimeUserControl
 .Day: "Day" @
 .Week: "Week" @
 .Month: "Month" @
-.Custom: "Custom" @
 
 SECTION UserControlSynthesis
 
@@ -1135,7 +1130,6 @@ SECTION UserControlSysInfo
 .toolStripDistanceFrom: "Display Distance From" @
 .toolStripSystemState: "Display System State" @
 .displaySecurityToolStripMenuItem: "Display Security" @
-.toolStripNotes: "Display Notes" @
 .toolStripTarget: "Display Target" @
 .toolStripShip: "Display Ship Information" @
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
@@ -1252,7 +1246,6 @@ SECTION UserControlTravelGrid
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" @
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" @
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" @
-.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
 .sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
@@ -1295,7 +1288,6 @@ SECTION CaptainsLogEntries
 .CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" @
 .SetTags: "Set Tags" @
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" @
-.NSS: "No such system" @
 .ColTime: "Time" @
 .ColSystem: "System" @
 .ColBodyName: "Body" @
@@ -1318,7 +1310,6 @@ SECTION UserControlTrilateration
 .ColumnStatus: "Status" @
 .Source: "Source" @
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" @
-.toolStrip: "Press Start New" @
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" @
 .viewOnEDSMToolStripMenuItem1: "View on EDSM" @
 .deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" @
@@ -1420,8 +1411,8 @@ SECTION UserControlFactions
 .CartoValue: "Cartographic Value" @
 .colInfo: "Other Info" @
 .labelTo: "to" @
-.startDateTime.ToolTip: "Include from" @
-.endDateTime.ToolTip: "Include to" @
+.startDateTimePicker.ToolTip: "Include from" @
+.endDateTimePicker.ToolTip: "Include to" @
 .FactionsPlural: "Factions" @
 .MissionsFor: "Missions for " @
 .BountyBond: "Bounty/Bond" @
@@ -1459,7 +1450,6 @@ SECTION UserControlOrganics
 .extButtonFont.ToolTip: "Font" @
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" @
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
-.extButtonAlignment_ToolTip: "Alignment" @
 .at: "At {0}" @
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 .extButtonAlignment.ToolTip: "Alignment" @
@@ -1662,11 +1652,8 @@ SECTION BookmarkForm
 .UB: "Update Bookmark" @
 .RB: "Create Region Bookmark" @
 .RN: "Enter a region name..." @
-.SI: "System Information" @
 .NSB: "New System Bookmark" @
 .ESN: "Enter a system name..." @
-.GMO: "Galactic Mapping Object" @
-.Description: "Description" @
 
 SECTION SurfaceBookmarkUserControl
 

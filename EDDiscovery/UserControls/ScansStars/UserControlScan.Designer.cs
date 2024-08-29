@@ -187,6 +187,7 @@ namespace EDDiscovery.UserControls
             this.scanDisplayBodyFiltersButton.SettingsSplittingChar = ';';
             this.scanDisplayBodyFiltersButton.Size = new System.Drawing.Size(28, 28);
             this.scanDisplayBodyFiltersButton.TabIndex = 32;
+            this.toolTip.SetToolTip(this.scanDisplayBodyFiltersButton, "Configure scan display body filters");
             this.scanDisplayBodyFiltersButton.UseVisualStyleBackColor = true;
             // 
             // scanDisplayConfigureButton
@@ -199,6 +200,7 @@ namespace EDDiscovery.UserControls
             this.scanDisplayConfigureButton.SettingsSplittingChar = ';';
             this.scanDisplayConfigureButton.Size = new System.Drawing.Size(28, 28);
             this.scanDisplayConfigureButton.TabIndex = 31;
+            this.toolTip.SetToolTip(this.scanDisplayConfigureButton, "Configure scan display");
             this.scanDisplayConfigureButton.UseVisualStyleBackColor = true;
             // 
             // edsmSpanshButton

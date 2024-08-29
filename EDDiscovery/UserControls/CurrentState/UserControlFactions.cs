@@ -58,7 +58,8 @@ namespace EDDiscovery.UserControls
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
 
-            var enumlist = new Enum[] { EDTx.UserControlFactions_colFaction, EDTx.UserControlFactions_colMissions, EDTx.UserControlFactions_colInfluence, 
+            var enumlist = new Enum[] { 
+                        EDTx.UserControlFactions_colFaction, EDTx.UserControlFactions_colMissions, EDTx.UserControlFactions_colInfluence, 
                         EDTx.UserControlFactions_colReputation, EDTx.UserControlFactions_colMissionCredits, EDTx.UserControlFactions_CBought, 
                         EDTx.UserControlFactions_CSold, EDTx.UserControlFactions_CProfit, EDTx.UserControlFactions_MBought, EDTx.UserControlFactions_MSold, 
                         EDTx.UserControlFactions_CrimeCommitted, EDTx.UserControlFactions_BountyKills, EDTx.UserControlFactions_BountyValue, 
@@ -71,16 +72,14 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, 
-                            EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem, 
-                            EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, 
-                EDTx.UserControlFactions_showFactionSystemDetailToolStripMenuItem };
-
+            var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem,
+                        EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, EDTx.UserControlFactions_showFactionSystemDetailToolStripMenuItem
+                };
 
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTimePicker_ToolTip, EDTx.UserControlFactions_endDateTimePicker_ToolTip,
-                                EDTx.UserControlFactions_buttonExtExcel_ToolTip};
+            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTimePicker_ToolTip, EDTx.UserControlFactions_endDateTimePicker_ToolTip, EDTx.UserControlFactions_buttonExtExcel_ToolTip
+                    };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             labelInfo.Text = "";

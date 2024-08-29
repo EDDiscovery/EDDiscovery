@@ -84,7 +84,9 @@ namespace EDDiscovery.UserControls
 
             DiscoveryForm.OnNewEntry += NewEntry;
 
-            var enumlisttt = new Enum[] { EDTx.UserControlScan_extCheckBoxStar_ToolTip, EDTx.UserControlScan_extButtonFilter_ToolTip, EDTx.UserControlScan_extButtonDisplayFilters_ToolTip, EDTx.UserControlScan_buttonSize_ToolTip, EDTx.UserControlScan_checkBoxEDSM_ToolTip, EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlScan_extCheckBoxStar_ToolTip, EDTx.UserControlScan_scanDisplayConfigureButton_ToolTip, 
+                    EDTx.UserControlScan_scanDisplayBodyFiltersButton_ToolTip, EDTx.UserControlScan_buttonSize_ToolTip, 
+                    EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater

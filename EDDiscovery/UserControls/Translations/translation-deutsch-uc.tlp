@@ -1412,8 +1412,8 @@ SECTION UserControlFactions
 .CartoValue: "Cartographic Value" => "Kartographischer Wert"
 .colInfo: "Other Info" => "Andere Info"
 .labelTo: "to" = MissionListUserControl.labelTo
-.startDateTime.ToolTip: "Include from" => "Inkludiere von"
-.endDateTime.ToolTip: "Include to" => "Inkludiere bis"
+.startDateTimePicker.ToolTip: "Include from" => "Inkludiere von"
+.endDateTimePicker.ToolTip: "Include to" => "Inkludiere bis"
 .FactionsPlural: "Factions" => "Fraktionen"
 .MissionsFor: "Missions for " => "Missionen für "
 .BountyBond: "Bounty/Bond" => "Kopfgeld/Belohnung"

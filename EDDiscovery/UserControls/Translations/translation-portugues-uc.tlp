@@ -1412,8 +1412,8 @@ SECTION UserControlFactions
 .CartoValue: "Cartographic Value" @
 .colInfo: "Other Info" @
 .labelTo: "to" @
-.startDateTime.ToolTip: "Include from" @
-.endDateTime.ToolTip: "Include to" @
+.startDateTimePicker.ToolTip: "Include from" @
+.endDateTimePicker.ToolTip: "Include to" @
 .FactionsPlural: "Factions" @
 .MissionsFor: "Missions for " @
 .BountyBond: "Bounty/Bond" @
