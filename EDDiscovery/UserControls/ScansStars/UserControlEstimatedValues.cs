@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlEstimatedValues_BodyName, EDTx.UserControlEstimatedValues_BodyType, EDTx.UserControlEstimatedValues_EDSM, EDTx.UserControlEstimatedValues_Mapped, EDTx.UserControlEstimatedValues_WasMapped, EDTx.UserControlEstimatedValues_WasDiscovered, EDTx.UserControlEstimatedValues_EstBase, EDTx.UserControlEstimatedValues_MappedValue, EDTx.UserControlEstimatedValues_FirstMappedEff, EDTx.UserControlEstimatedValues_FirstDiscMapped, EDTx.UserControlEstimatedValues_EstValue };
-            var enumlisttt = new Enum[] { EDTx.UserControlEstimatedValues_checkBoxEDSM_ToolTip, EDTx.UserControlEstimatedValues_checkBoxShowZeros_ToolTip, EDTx.UserControlEstimatedValues_extCheckBoxShowImpossible_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlEstimatedValues_checkBoxShowZeros_ToolTip, EDTx.UserControlEstimatedValues_extCheckBoxShowImpossible_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);

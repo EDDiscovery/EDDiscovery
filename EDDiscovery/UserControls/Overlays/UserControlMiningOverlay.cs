@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
             var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, 
                         EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, 
-                        EDTx.UserControlMiningOverlay_extCheckBoxChartBase_Text };
+                        };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             extPanelRollUp.SetToolTip(toolTip);
 

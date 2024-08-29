@@ -78,7 +78,7 @@
             this.viewOnSpanshToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem});
             this.contextMenuStripBookmarks.Name = "contextMenuStripBookmarks";
-            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(187, 114);
+            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(187, 92);
             this.contextMenuStripBookmarks.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripBookmarks_Opening);
             // 
             // viewScanOfSystemToolStripMenuItem

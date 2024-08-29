@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 598);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 620);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // quickMarkToolStripMenuItem
@@ -819,6 +819,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelp.AutoEllipsis = false;
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelp.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelp.BorderWidth = 1;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelp.Location = new System.Drawing.Point(717, 3);

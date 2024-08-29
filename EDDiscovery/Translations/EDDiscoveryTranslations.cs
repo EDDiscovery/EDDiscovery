@@ -43,19 +43,16 @@ namespace EDDiscovery
         Information, // Information
         NoPos, // No Pos
 
-        // copy from Extended control
-        MessageBoxTheme_OK,
+        // copy from Extended control used here
         MessageBoxTheme_Cancel,
-        MessageBoxTheme_Warning,
         MessageBoxTheme_No,
         MessageBoxTheme_Yes,
-        MessageBoxTheme_Abort,
-        MessageBoxTheme_Retry,
-        MessageBoxTheme_Ignore,
         MessageBoxTheme_Add,
         MessageBoxTheme_Set,
 
         TBD, // TBD - to be done
+
+        DataGridView_WordWrap,      // used in base utils, not referenced directly, here to stop errors being reported by EDTOOLS scanner
 
         StartUp_DUPLOAD,        // EDDiscovery is already running. Launch anyway? in program.cs
 
@@ -185,14 +182,11 @@ namespace EDDiscovery
 
         BookmarkForm_NSB, // New System Bookmark
         BookmarkForm_ESN, // Enter a system name...
-        BookmarkForm_GMO, // Galactic Mapping Object
         BookmarkForm_SB, // New System Bookmark
         BookmarkForm_UB, // Update Bookmark
         BookmarkForm_RB, // Create Region Bookmark
         BookmarkForm_RN, // Enter a region name...
-        BookmarkForm_SI, // System Information
         BookmarkForm_Update, // Update
-        BookmarkForm_Description, // Description
 
         SurfaceBookmarkUserControl_BodyName, // Column Header 'Planetary Body'
         SurfaceBookmarkUserControl_SurfaceName, // Column Header 'Name'
@@ -253,9 +247,8 @@ namespace EDDiscovery
         GalaxySectorSelect_BC, // Bubble+Colonia
         GalaxySectorSelect_RD, // You have added new sectors!
         GalaxySectorSelect_NoSync, // Synchronisation to star data disabled in settings.
-        GalaxySectorSelect_GALSELEX, // ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed
-        GalaxySectorSelect_GALSELEN, // Enter number to jump to or near to
-        GalaxySectorSelect_GALSELSRD, // Enter number to jump to or near to
+        GalaxySectorSelect_GALSELEX, 
+        GalaxySectorSelect_GALSELEN, 
         GalaxySectorSelect_Select, // GalaxySectorSelect
         GalaxySectorSelect_Area, 
         GalaxySectorSelect_PresstoAccept, // Press to Accept
@@ -495,14 +488,16 @@ namespace EDDiscovery
         UserControlModules_FullBluePrint, // Show full blueprint information
         UserControlModules_EngineeredValues,
 
-        UserControlModules_comboBoxShips_ToolTip, // ToolTip 'Select ship to view'
-        UserControlModules_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
-        UserControlModules_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
-        UserControlModules_buttonExtCoriolis_ToolTip, // ToolTip 'Send to Coriolis'
-        UserControlModules_buttonExtEDShipyard_ToolTip, // ToolTip 'Send to ED Ship Yard'
-        UserControlModules_buttonExtConfigure_ToolTip, // ToolTip 'Configure extra data missing from Elite Journal Output'
-        UserControlModules_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'l'
-        UserControlModules_extButtonLoadLoadout,
+        UserControlModules_comboBoxShips_ToolTip,
+        UserControlModules_extButtonShowControl_ToolTip,
+        UserControlModules_extCheckBoxWordWrap_ToolTip,
+        UserControlModules_buttonExtCoriolis_ToolTip,
+        UserControlModules_buttonExtEDShipyard_ToolTip,
+        UserControlModules_buttonExtConfigure_ToolTip,
+        UserControlModules_buttonExtExcel_ToolTip,
+        UserControlModules_extButtonLoadLoadout_ToolTip,
+        UserControlModules_extButtonSaveLoadout_ToolTip,
+        UserControlModules_extButtonDeleteLoadout_ToolTip,
 
         UserControlModules_ForceSell, // Force Sell
         UserControlModules_ConfirmForceSell, // Confirm sell of ship
@@ -568,8 +563,6 @@ namespace EDDiscovery
         UserControlStats_Scanvalue, // Scan value
         UserControlStats_OrganicScans, // Scan value
         UserControlStats_Lastdock, // Last dock
-        UserControlStats_Trip, // Trip
-        UserControlStats_NoTrip, // No Trip
         UserControlStats_All, // All
         UserControlStats_Type, // Type
         UserControlStats_BankAccount, // Bank Account
@@ -790,7 +783,6 @@ namespace EDDiscovery
         UserControlStarList_setNoteToolStripMenuItem, // ToolStrip control 'Set Note'
         UserControlStarList_viewScanDisplayToolStripMenuItem, // ToolStrip control 'View Scan Display'
         UserControlStarList_comboBoxTime_ToolTip, // ToolTip 'Select the entries by age'
-        UserControlStarList_checkBoxEDSM_ToolTip, // ToolTip 'Show/Hide Body data from EDSM.'
         UserControlStarList_textBoxSearch_ToolTip, // ToolTip 'Enter text to search in any fields for an item'
         UserControlStarList_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'
         UserControlStarList_checkBoxCursorToTop_ToolTip, // ToolTip 'Automatically move the cursor to the latest entry when it arrives'
@@ -827,7 +819,6 @@ namespace EDDiscovery
         CaptainsLogEntries_CFN, // Do you really want to delete {0} notes?
         CaptainsLogEntries_CF, // Do you really want to delete the note for {0}
         CaptainsLogEntries_SysU, // System could not be found - has not been synched or EDSM is unavailable
-        CaptainsLogEntries_NSS, // No such system
         CaptainsLogEntries_SetTags, // Set Tags
 
         TagsForm_buttonMore_ToolTip, // ToolTip 'Add more tags'
@@ -835,19 +826,22 @@ namespace EDDiscovery
         TagsForm_SI, // Select image for this tag
         TagsForm_DE, // Delete entry
 
+        UserControlBookmarks_textBoxFilter_ToolTip,
+        UserControlBookmarks_buttonFilter_ToolTip,
+        UserControlBookmarks_buttonNew_ToolTip,
+        UserControlBookmarks_extButtonEditSystem_ToolTip,
+        UserControlBookmarks_extButtonNewRegion_ToolTip,
+        UserControlBookmarks_buttonEdit_ToolTip,
+        UserControlBookmarks_buttonDelete_ToolTip,
+        UserControlBookmarks_buttonTags_ToolTip,
+        UserControlBookmarks_buttonExtExcel_ToolTip,
+        UserControlBookmarks_buttonExtImport_ToolTip,
+
         UserControlBookmarks_ColType, // Column Header 'Bookmark Type'
         UserControlBookmarks_ColBookmarkName, // Column Header 'Bookmark Name'
         UserControlBookmarks_ColDescription, // Column Header 'Description'
         UserControlBookmarks_ColTags, // Column Header 'Tags'
         UserControlBookmarks_labelSearch, // Control 'Search'
-        UserControlBookmarks_textBoxFilter_ToolTip, // ToolTip 'Search for Bookmark'
-        UserControlBookmarks_buttonNew_ToolTip, // ToolTip 'New Bookmark'
-        UserControlBookmarks_buttonEdit_ToolTip, // ToolTip 'Edit Selected Bookmark'
-        UserControlBookmarks_extButtonEditSystem_ToolTip, // ToolTip 'Edit Bookmark on current system'
-        UserControlBookmarks_buttonDelete_ToolTip, // ToolTip 'Delete selected bookmark'
-        UserControlBookmarks_buttonExtExcel_ToolTip, // ToolTip 'Export bookmarks to CSV file'
-        UserControlBookmarks_buttonExtImport_ToolTip, // ToolTip 'Import bookmarks to EDD from CSV file'
-        UserControlBookmarks_extButtonNewRegion_ToolTip,
         UserControlBookmarks_CFN, // Do you really want to delete {0} bookmarks?
         UserControlBookmarks_CF, // Do you really want to delete the bookmark for {0}
         UserControlBookmarks_SysU, // System could not be found - has not been synched or EDSM is unavailable
@@ -914,7 +908,6 @@ namespace EDDiscovery
         UserControlMiningOverlay_buttonExtExcel_ToolTip, // ToolTip 'Export'
         UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, // ToolTip 'Select chart options'
         UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, // ToolTip 'Default shows distribution of asteroids that actually contain the material'
-        UserControlMiningOverlay_extCheckBoxChartBase_Text, // Text 'Base chart on all asteroids'
         UserControlMiningOverlay_Limcargo, // discrete
         UserControlMiningOverlay_Proscoll, // discrete
         UserControlMiningOverlay_ref, // discrete
@@ -952,7 +945,6 @@ namespace EDDiscovery
         UserControlSurveyor_extButtonShowControl_ToolTip, // ToolTip 'Display Settings'
         UserControlSurveyor_extButtonAlignment_ToolTip, // ToolTip 'Alignment'
         UserControlSurveyor_extButtonFSS_ToolTip, // ToolTip 'FSS Signal Selection'
-        UserControlSurveyor_checkBoxEDSM_ToolTip, // ToolTip 'EDSM lookup toggle'
         UserControlSurveyor_extButtonSetRoute_ToolTip, // ToolTip 'Select route to follow'
         UserControlSurveyor_extButtonControlRoute_ToolTip, // ToolTip 'Route Settings'
         UserControlSurveyor_extButtonFont_ToolTip, // ToolTip 'Font'
@@ -1133,7 +1125,6 @@ namespace EDDiscovery
         UserControlExpedition_buttonExtExport_ToolTip, // ToolTip 'Export to File'
         UserControlExpedition_extButtonShow3DMap_ToolTip, // ToolTip 'Show expedition on 3D Map'
         UserControlExpedition_extButtonDisplayFilters_ToolTip, // ToolTip 'Select filters on Info'
-        UserControlExpedition_checkBoxEDSM_ToolTip, // ToolTip 'Show/Hide Body data from EDSM.'
         UserControlExpedition_copyToolStripMenuItem, // ToolStrip control 'Copy'
         UserControlExpedition_pasteToolStripMenuItem, // ToolStrip control 'Paste'
         UserControlExpedition_cutToolStripMenuItem, // ToolStrip control 'Paste'
@@ -1191,7 +1182,6 @@ namespace EDDiscovery
         UserControlRoute_buttonToEDSM_ToolTip, // ToolTip 'Open this end route system in EDSM'
         UserControlRoute_buttonFromEDSM_ToolTip, // ToolTip 'Open this start route system in EDSM'
         UserControlRoute_buttonTargetFrom_ToolTip, // ToolTip 'Copy the target system to start route entry'
-        UserControlRoute_checkBoxEDSM_ToolTip, // ToolTip 'Lookup stars from EDSM if not found in database'
         UserControlRoute_cmd3DMap_ToolTip, // ToolTip 'Show route on 3D Map'
         UserControlRoute_textBox_From_ToolTip, // ToolTip 'Select system to start the route'
         UserControlRoute_textBox_Range_ToolTip, // ToolTip 'Give your jump range, or search range for long jumps'
@@ -1248,7 +1238,6 @@ namespace EDDiscovery
         UserControlEstimatedValues_FirstMappedEff, // Column Header 'First Mapped'
         UserControlEstimatedValues_FirstDiscMapped, // Column Header 'First Discovered Mapped'
         UserControlEstimatedValues_EstValue, // Column Header 'Current Value'
-        UserControlEstimatedValues_checkBoxEDSM_ToolTip, // ToolTip 'Get and show information from EDSM'
         UserControlEstimatedValues_checkBoxShowZeros_ToolTip, // ToolTip 'Green will show materials with zero counts, red means remove them'
         UserControlEstimatedValues_extCheckBoxShowImpossible_ToolTip, // ToolTip 'Show all values, even ones which are impossible to get'
         UserControlEstimatedValues_SV, // Estimated Scan Values for {0}
@@ -1258,10 +1247,9 @@ namespace EDDiscovery
         UserControlLog_clearLogToolStripMenuItem, // ToolStrip control 'Clear Log'
 
         UserControlScan_extCheckBoxStar_ToolTip, // ToolTip 'Select another system to view'
-        UserControlScan_extButtonFilter_ToolTip, // ToolTip 'Filter Bodies'
-        UserControlScan_extButtonDisplayFilters_ToolTip, // ToolTip 'Settings'
+        UserControlScan_scanDisplayConfigureButton_ToolTip, // ToolTip 'Filter Bodies'
+        UserControlScan_scanDisplayBodyFiltersButton_ToolTip, // ToolTip 'Settings'
         UserControlScan_buttonSize_ToolTip, // ToolTip 'Select image size'
-        UserControlScan_checkBoxEDSM_ToolTip, // ToolTip 'Show/Hide Body data from EDSM'
         UserControlScan_extButtonHighValue_ToolTip, // ToolTip 'Set High Value Limit'
         UserControlScan_buttonExtExcel_ToolTip, // ToolTip 'Export'
         UserControlScan_System, // System:
@@ -1312,7 +1300,6 @@ namespace EDDiscovery
         UserControlTrilateration_ColumnStatus, // Column Header 'Status'
         UserControlTrilateration_Source, // Column Header 'Source'
         UserControlTrilateration_dataGridViewTextBoxColumnClosestSystemsSystem, // Column Header 'Wanted System'
-        UserControlTrilateration_toolStrip, // Control ''Press Start New''
         UserControlTrilateration_removeFromWantedSystemsToolStripMenuItem, // ToolStrip control 'Remove from wanted systems'
         UserControlTrilateration_viewOnEDSMToolStripMenuItem1, // ToolStrip control 'View on EDSM'
         UserControlTrilateration_deleteAllWithKnownPositionToolStripMenuItem, // ToolStrip control 'Delete all with known position'
@@ -1509,7 +1496,6 @@ namespace EDDiscovery
         UserControlScanGrid_colBriefing, // Column Header 'Information'
         UserControlScanGrid_extButtonShowControl_ToolTip, // ToolTip 'Configure overall settings'
         UserControlScanGrid_extButtonHabZones_ToolTip, // ToolTip 'Configure hab zone information'
-        UserControlScanGrid_checkBoxEDSM_ToolTip, // ToolTip 'EDSM lookup toggle'
         UserControlScanGrid_MainStar, // Main Star
         UserControlScanGrid_Mass, // Mass
         UserControlScanGrid_Radius, // Radius
@@ -1538,7 +1524,6 @@ namespace EDDiscovery
         StatsTimeUserControl_Day, // Day
         StatsTimeUserControl_Week, // Week
         StatsTimeUserControl_Month, // Month
-        StatsTimeUserControl_Custom, // Custom
 
         FilterSelector_Travel, // Travel
         FilterSelector_Scan, // Scan

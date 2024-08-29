@@ -187,6 +187,7 @@ namespace EDDiscovery.UserControls
             this.scanDisplayBodyFiltersButton.SettingsSplittingChar = ';';
             this.scanDisplayBodyFiltersButton.Size = new System.Drawing.Size(28, 28);
             this.scanDisplayBodyFiltersButton.TabIndex = 32;
+            this.toolTip.SetToolTip(this.scanDisplayBodyFiltersButton, "Configure scan display body filters");
             this.scanDisplayBodyFiltersButton.UseVisualStyleBackColor = true;
             // 
             // scanDisplayConfigureButton
@@ -199,6 +200,7 @@ namespace EDDiscovery.UserControls
             this.scanDisplayConfigureButton.SettingsSplittingChar = ';';
             this.scanDisplayConfigureButton.Size = new System.Drawing.Size(28, 28);
             this.scanDisplayConfigureButton.TabIndex = 31;
+            this.toolTip.SetToolTip(this.scanDisplayConfigureButton, "Configure scan display");
             this.scanDisplayConfigureButton.UseVisualStyleBackColor = true;
             // 
             // edsmSpanshButton
@@ -233,7 +235,10 @@ namespace EDDiscovery.UserControls
             systemDisplay1.ShowOnlyMaterialsRare = false;
             systemDisplay1.ShowOverlays = true;
             systemDisplay1.ShowPlanetClasses = true;
+            systemDisplay1.ShowPlanetMass = true;
+            systemDisplay1.ShowStarAge = true;
             systemDisplay1.ShowStarClasses = true;
+            systemDisplay1.ShowStarMass = true;
             systemDisplay1.ShowWebBodies = false;
             systemDisplay1.ValueLimit = 50000;
             this.panelStars.SystemDisplay = systemDisplay1;

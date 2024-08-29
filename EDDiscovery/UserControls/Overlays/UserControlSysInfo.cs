@@ -157,7 +157,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlSysInfo_toolStripMissionList, EDTx.UserControlSysInfo_toolStripJumpRange, EDTx.UserControlSysInfo_toolStripSkinny,
                                         EDTx.UserControlSysInfo_toolStripReset, EDTx.UserControlSysInfo_toolStripRemoveAll , EDTx.UserControlSysInfo_displayNextDestinationToolStripMenuItem};
             var enumlisttt = new Enum[] { EDTx.UserControlSysInfo_ToolTip, EDTx.UserControlSysInfo_textBoxTargetDist_ToolTip, EDTx.UserControlSysInfo_textBoxTarget_ToolTip };
-
+            
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);

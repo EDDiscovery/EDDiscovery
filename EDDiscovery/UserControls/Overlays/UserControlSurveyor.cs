@@ -55,7 +55,10 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             string thisname = typeof(UserControlSurveyor).Name;
-            var enumlisttt = new Enum[] { EDTx.UserControlSurveyor_extButtonPlanets_ToolTip, EDTx.UserControlSurveyor_extButtonStars_ToolTip, EDTx.UserControlSurveyor_extButtonShowControl_ToolTip, EDTx.UserControlSurveyor_extButtonAlignment_ToolTip, EDTx.UserControlSurveyor_extButtonFSS_ToolTip, EDTx.UserControlSurveyor_checkBoxEDSM_ToolTip, EDTx.UserControlSurveyor_extButtonSetRoute_ToolTip, EDTx.UserControlSurveyor_extButtonControlRoute_ToolTip, EDTx.UserControlSurveyor_extButtonFont_ToolTip, EDTx.UserControlSurveyor_extCheckBoxWordWrap_ToolTip, EDTx.UserControlSurveyor_extButtonSearches_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlSurveyor_extButtonPlanets_ToolTip, EDTx.UserControlSurveyor_extButtonStars_ToolTip, EDTx.UserControlSurveyor_extButtonShowControl_ToolTip, EDTx.UserControlSurveyor_extButtonAlignment_ToolTip, 
+                            EDTx.UserControlSurveyor_extButtonFSS_ToolTip, EDTx.UserControlSurveyor_extButtonSetRoute_ToolTip, 
+                            EDTx.UserControlSurveyor_extButtonControlRoute_ToolTip, EDTx.UserControlSurveyor_extButtonFont_ToolTip, EDTx.UserControlSurveyor_extCheckBoxWordWrap_ToolTip, 
+                            EDTx.UserControlSurveyor_extButtonSearches_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, thisname);
             rollUpPanelTop.SetToolTip(toolTip);
 

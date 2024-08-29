@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += NewEntry;
 
             var enumlist = new Enum[] { EDTx.UserControlScanGrid_colName, EDTx.UserControlScanGrid_colClass, EDTx.UserControlScanGrid_colDistance, EDTx.UserControlScanGrid_colBriefing };
-            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip, EDTx.UserControlScanGrid_checkBoxEDSM_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);

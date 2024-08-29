@@ -53,11 +53,10 @@ namespace EDDiscovery.UserControls
             
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
 
-            var enumlisttt = new Enum[] { EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip,
-                                            EDTx.UserControlBookmarks_buttonEdit_ToolTip, EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip,
-                                            EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip,
-                                            EDTx.UserControlBookmarks_buttonExtImport_ToolTip,
-                                            EDTx.UserControlBookmarks_extButtonNewRegion_ToolTip};
+            var enumlisttt = new Enum[] {EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip,
+                    EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip, EDTx.UserControlBookmarks_extButtonNewRegion_ToolTip, EDTx.UserControlBookmarks_buttonEdit_ToolTip,
+                    EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonTags_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip,
+                    EDTx.UserControlBookmarks_buttonExtImport_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             // manually pick these up from DataGridViewStarResults as the names don't match

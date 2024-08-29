@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
             var enumlistcms = new Enum[] { EDTx.UserControlStarList_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlStarList_mapGotoStartoolStripMenuItem,
                 EDTx.UserControlStarList_viewOnEDSMToolStripMenuItem, EDTx.UserControlStarList_viewOnSpanshToolStripMenuItem, EDTx.UserControlStarList_setNoteToolStripMenuItem, 
                 EDTx.UserControlStarList_viewScanDisplayToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlStarList_comboBoxTime_ToolTip, EDTx.UserControlStarList_checkBoxEDSM_ToolTip, 
+            var enumlisttt = new Enum[] { EDTx.UserControlStarList_comboBoxTime_ToolTip, 
                 EDTx.UserControlStarList_textBoxSearch_ToolTip, EDTx.UserControlStarList_buttonExtExcel_ToolTip, EDTx.UserControlStarList_checkBoxCursorToTop_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);

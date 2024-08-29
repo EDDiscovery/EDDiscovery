@@ -19,6 +19,10 @@ Information: "Information" @
 NoPos: "No Pos" @
 RemoveAll: "Remove All" @
 
+// from extended controls
+
+Disabled: "Disabled" @
+
 SECTION StartUp
 
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
@@ -225,7 +229,6 @@ SECTION EDDiscoveryForm
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" @
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" @
 .buttonExtRefresh.ToolTip: "Refresh the history" @
-.buttonReloadActions.ToolTip: "DEBUG reload action system" @
 .addTabToolStripMenuItem: "Insert Tab with panel.." @
 .removeTabToolStripMenuItem: "Remove Tab" @
 .renameTabToolStripMenuItem: "Rename Tab" @
@@ -328,6 +331,7 @@ ImportExportForm: "Export data" @
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
+.labelSaveImport: "Save Import As" @
 
 SECTION GalaxySectorSelect
 
@@ -347,9 +351,9 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 .GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." @
 .Select: "Select: " @
 .GALSELEN: "Select the data set" @
-.GALSELSRC: "Select the data source" @
 .PresstoAccept: "Press to Accept" @
 .GALSELTitle: "Select Galaxy Data" @
+.Area: "Area:"  @
 
 SECTION MoveToCommander
 
