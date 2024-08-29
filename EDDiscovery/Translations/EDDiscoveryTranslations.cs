@@ -1430,8 +1430,6 @@ namespace EDDiscovery
         UserControlMarketData_checkBoxBuyOnly, // Control 'Buy Only'
         UserControlMarketData_checkBoxHasDemand, // Control 'Has Demand'
         UserControlMarketData_checkBoxAutoSwap, // Control 'AutoSwap'
-        UserControlMarketData_comboBoxCustomFrom_ToolTip, // ToolTip 'Click to select between tracking the cursor or a particular market data set'
-        UserControlMarketData_comboBoxCustomTo_ToolTip, // ToolTip 'Click to select a comparision market data set'
         UserControlMarketData_checkBoxBuyOnly_ToolTip, // ToolTip 'Show items you can buy only'
         UserControlMarketData_checkBoxHasDemand_ToolTip, // ToolTip 'Show items that has demand'
 

@@ -61,8 +61,7 @@ namespace EDDiscovery.UserControls
                             EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, 
                             EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol,  EDTx.UserControlMarketData_labelVs, 
                             EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxHasDemand, EDTx.UserControlMarketData_checkBoxAutoSwap };
-            var enumlisttt = new Enum[] { EDTx.UserControlMarketData_comboBoxCustomFrom_ToolTip, EDTx.UserControlMarketData_comboBoxCustomTo_ToolTip, 
-                                    EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
+            var enumlisttt = new Enum[] {  EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
