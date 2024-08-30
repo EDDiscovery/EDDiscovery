@@ -565,6 +565,15 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTabs)        
                 tabControlMain.LoadTabs();
 
+            if ( EDDOptions.Instance.OpenAllTabTypes)
+            {
+                foreach( PanelInformation.PanelIDs pid in Enum.GetValues(typeof(PanelInformation.PanelIDs)))
+                {
+                    if ( pid>=0)
+                        tabControlMain.EnsureMajorTabIsPresent(pid,false);
+                }
+            }
+
             System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
         }
 

@@ -18,6 +18,7 @@ Unknown: "Unknown" => "Неизвестно"
 Information: "Information" => "Информация"
 NoPos: "No Pos" => "Нет положения"
 RemoveAll: "Remove All" @
+Disabled: "Disabled" @
 
 SECTION StartUp
 
@@ -225,7 +226,6 @@ SECTION EDDiscoveryForm
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Изменить дополнения"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Управление дополнениями"
 .buttonExtRefresh.ToolTip: "Refresh the history" => "Обновить историю"
-.buttonReloadActions.ToolTip: "DEBUG reload action system" @
 .addTabToolStripMenuItem: "Insert Tab with panel.." => "Вставить вкладку с панелью..."
 .removeTabToolStripMenuItem: "Remove Tab" => "Удалить вкладку"
 .renameTabToolStripMenuItem: "Rename Tab" => "Переименовать вкладку"
@@ -328,6 +328,7 @@ ImportExportForm: "Export data" => "Экспорт"
 .labelPaste: "Click Paste or drag text or files to input box" @
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" @
+.labelSaveImport: "Save Import As" @
 
 SECTION GalaxySectorSelect
 
@@ -347,9 +348,9 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Выбор секторов Га�
 .GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
 .Select: "Select: " => "Выберите: "
 .GALSELEN: "Select the data set" @
-.GALSELSRC: "Select the data source" @
 .PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
 .GALSELTitle: "Select Galaxy Data" => "Выберите EDSM Galaxy Data"
+.Area: "Area:" @
 
 SECTION MoveToCommander
 

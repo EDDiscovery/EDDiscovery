@@ -18,6 +18,7 @@ Unknown: "Unknown" => "Desconocido"
 Information: "Information" => "Información"
 NoPos: "No Pos" => "No pos"
 RemoveAll: "Remove All" => "Eliminar Todo"
+Disabled: "Disabled" @
 
 SECTION StartUp
 
@@ -225,7 +226,6 @@ SECTION EDDiscoveryForm
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Editar complementos"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Administrar complementos"
 .buttonExtRefresh.ToolTip: "Refresh the history" => "Actualizar historial"
-.buttonReloadActions.ToolTip: "DEBUG reload action system" => "Sistema de acción de recarga. DEPURAR"
 .addTabToolStripMenuItem: "Insert Tab with panel.." => "Insertar pestaña con panel ..."
 .removeTabToolStripMenuItem: "Remove Tab" => "Eliminar pestaña"
 .renameTabToolStripMenuItem: "Rename Tab" => "Cambiar nombre de pestaña"
@@ -328,6 +328,7 @@ ImportExportForm: "Export data" => "Exportar Datos"
 .labelPaste: "Click Paste or drag text or files to input box" => "Haz clic en Pegar o arrastra texto o archivos a la casilla de entrada"
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" => "Excluir fila de encabezado"
+.labelSaveImport: "Save Import As" @
 
 SECTION GalaxySectorSelect
 
@@ -347,9 +348,9 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seleccionar Sector Galáctico"
 .GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery descarga datos estelares de EDSM o Spansh, que se utilizan para proporcionarte datos adicionales. Selecciona cuántos datos deseas almacenar. Cuanto más de la galaxia elijas, más grande será el almacenamiento necesario. Ten en cuenta que tu base de datos del sistema ubicada en la carpeta Appdata debe almacenarse en un SSD. El uso de un HDD será muy lento. Selecciona 'Ninguno' si estás utilizando un HDD."
 .Select: "Select: " => "Seleccione: "
 .GALSELEN: "Select the data set" => "Seleccione el conjunto de datos"
-.GALSELSRC: "Select the data source" => "Seleccione la fuente de datos"
 .PresstoAccept: "Press to Accept" => "Presione para aceptar"
 .GALSELTitle: "Select Galaxy Data" => "Seleccione EDSM Galaxy Data"
+.Area: "Area:" @
 
 SECTION MoveToCommander
 

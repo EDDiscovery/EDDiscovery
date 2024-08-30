@@ -52,6 +52,7 @@ namespace EDDiscovery
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
         public bool NoTabs { get; private set; }
+        public bool OpenAllTabTypes { get; private set; }
         public bool TabsReset { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
@@ -504,6 +505,7 @@ namespace EDDiscovery
                         break;
                     case "notheme": NoTheme = true; break;
                     case "notabs": NoTabs = true; break;
+                    case "openalltabtypes": OpenAllTabTypes = true; break;
                     case "tabsreset": TabsReset = true; break;
                     case "nosound": NoSound = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
