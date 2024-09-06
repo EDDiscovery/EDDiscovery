@@ -343,6 +343,7 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .NOLG: "No Ledger available" @
 .TotalProfit: "Total Profit" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 
 SECTION UserControlLog
 
@@ -364,7 +365,6 @@ SECTION UserControlMarketData
 .checkBoxAutoSwap: "AutoSwap" @
 .checkBoxBuyOnly: "Buy Only" @
 .labelVs: "Vs" @
-.labelLocation: "No Data" @
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" @
 .comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" @
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" @
@@ -1413,15 +1413,9 @@ SECTION UserControlFactions
 .BountiesBondsFor: "Bounties/Bonds for " @
 .Item: "Item" @
 .MaterialCommodsFor: "Materials/Commodities for " @
-.SystemAddress: "System Address" @
-.BountiesPlural: "Bounties" @
-.RewardsPlural: "Rewards" @
-.BondsPlural: "Bonds" @
-.SystemsDetailFor: "Systems Detail for " @
 .showMissionsForFactionToolStripMenuItem: "Show missions for faction" @
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
-.showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
 .MissionsInProgress: "Missions In Progress: " @
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @

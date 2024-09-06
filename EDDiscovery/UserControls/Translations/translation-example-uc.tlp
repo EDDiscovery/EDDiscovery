@@ -1422,11 +1422,6 @@ SECTION UserControlFactions
 .BountiesBondsFor: "Bounties/Bonds for " @
 .Item: "Item" @
 .MaterialCommodsFor: "Materials/Commodities for " @
-.SystemAddress: "System Address" @
-.BountiesPlural: "Bounties" @
-.RewardsPlural: "Rewards" @
-.BondsPlural: "Bonds" @
-.SystemsDetailFor: "Systems Detail for " @
 .showMissionsForFactionToolStripMenuItem: "Show missions for faction" @
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @

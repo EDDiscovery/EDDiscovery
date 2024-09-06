@@ -1633,16 +1633,11 @@ namespace EDDiscovery
         UserControlFactions_extCheckBoxShowHideKillBonds_ToolTip,
         UserControlFactions_extCheckBoxShowHideDataLink_ToolTip,
         UserControlFactions_extCheckBoxShowHideCartographic_ToolTip,
-        UserControlFactions_SystemAddress, // System Address
         UserControlFactions_colInfluence,   // +Influence
         UserControlFactions_CBought,        // Commds +
         UserControlFactions_CSold,  // Commds -
         UserControlFactions_MBought, // Mats +
         UserControlFactions_MSold,  // Mats-
-        UserControlFactions_RewardsPlural, // Rewards
-        UserControlFactions_BountiesPlural, // Bounties
-        UserControlFactions_BondsPlural, // Bonds
-        UserControlFactions_SystemsDetailFor, // Systems Detail for
 
 
         FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, // Control 'Exclude Visited Systems'

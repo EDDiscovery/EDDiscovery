@@ -343,6 +343,7 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten am Gitter an Excel"
 .NOLG: "No Ledger available" => "Kein Kassabuch verfügbar"
 .TotalProfit: "Total Profit" => "Gesamter Profit"
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 
 SECTION UserControlLog
 
@@ -364,7 +365,6 @@ SECTION UserControlMarketData
 .checkBoxAutoSwap: "AutoSwap" => "AutomatischerTausch"
 .checkBoxBuyOnly: "Buy Only" => "Nur kaufen"
 .labelVs: "Vs" => "gegen"
-.labelLocation: "No Data" => "keine Daten"
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Nur Gegenstände die du kaufen kannst anzeigen"
 .comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Klicken um Vergleichsmarktdatensatz auszuwählen"
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Klicken um zwischen 'Verfolge Zeiger' oder 'Verfolge einen bestimmten Marktdatensatz' zu wechseln"
@@ -1413,15 +1413,9 @@ SECTION UserControlFactions
 .BountiesBondsFor: "Bounties/Bonds for " => "Kopfgelder/Belohnungen für "
 .Item: "Item" = UserControlModules.ItemCol
 .MaterialCommodsFor: "Materials/Commodities for " => "Materialien/Waren für "
-.SystemAddress: "System Address" => "Systemadresse"
-.BountiesPlural: "Bounties" = UserControlStats.Bounties
-.RewardsPlural: "Rewards" => "Belohnungen"
-.BondsPlural: "Bonds" = UserControlFactions.RewardsPlural
-.SystemsDetailFor: "Systems Detail for " => "Systemdetails für "
 .showMissionsForFactionToolStripMenuItem: "Show missions for faction" => "Zeige Missionen für Fraktion"
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" => "Zeige Waren-/Materialienhandel für Fraktion"
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" => "Zeige Kopfgelder und Belohnungen für Fraktion"
-.showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" => "Zeige Systemdetails für Fraktion"
 .MissionsInProgress: "Missions In Progress: " => "Misionen in Arbeit: "
 .CapShipVictims: "Capital ship Victims: " => "Großkampfschiff Opfer: "
 .CapShipAward: "Capital ship Award: " => "Großkampfschiff Belohnung: "

@@ -343,6 +343,7 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .NOLG: "No Ledger available" => "No hay libro mayor disponible"
 .TotalProfit: "Total Profit" => "Total Ganancias"
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 
 SECTION UserControlLog
 
@@ -364,7 +365,6 @@ SECTION UserControlMarketData
 .checkBoxAutoSwap: "AutoSwap" => "AutoIntercambio"
 .checkBoxBuyOnly: "Buy Only" => "Solo comprar"
 .labelVs: "Vs" => "Vs"
-.labelLocation: "No Data" = NoData
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Mostrar artículos que solo se pueden comprar"
 .comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Haga clic para seleccionar un conjunto de datos de mercado de comparación"
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Haga clic para seleccionar entre seguir el cursor o un conjunto de datos de mercado en particular"
@@ -1413,15 +1413,9 @@ SECTION UserControlFactions
 .BountiesBondsFor: "Bounties/Bonds for " => "Recompensas/Bonos para "
 .Item: "Item" = UserControlModules.ItemCol
 .MaterialCommodsFor: "Materials/Commodities for " => "Materiales/Mercancías para "
-.SystemAddress: "System Address" => "Dirección del sistema"
-.BountiesPlural: "Bounties" = UserControlStats.Bounties
-.RewardsPlural: "Rewards" = UserControlStats.Bounties
-.BondsPlural: "Bonds" => "Bonos"
-.SystemsDetailFor: "Systems Detail for " => "Detalle de sistemas para "
 .showMissionsForFactionToolStripMenuItem: "Show missions for faction" => "Mostrar misiones para la facción"
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" => "Mostrar intercambios de materias primas/materiales para la facción"
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" => "Muestra recompensas y Bonos para la facción"
-.showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" => "Mostrar detalles por sistema para la facción"
 .MissionsInProgress: "Missions In Progress: " => "Misiones en curso: "
 .CapShipVictims: "Capital ship Victims: " => "Víctimas del Nave capital: "
 .CapShipAward: "Capital ship Award: " => "Premio a la nave capital: "
