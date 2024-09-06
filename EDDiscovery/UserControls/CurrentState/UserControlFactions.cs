@@ -112,7 +112,8 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            last_he_received = DiscoveryForm.History.GetLast;
+            Display();
         }
 
         public override void Closing()
@@ -139,7 +140,7 @@ namespace EDDiscovery.UserControls
 
         private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
-            if (he.MissionList != last_he_received?.MissionList || he.EventTimeUTC > NextExpiryUTC)      // note this works if last_he is null....
+            if (he.MissionList != last_he_received?.MissionList || he.journalEntry is IStatsJournalEntry || he.EventTimeUTC > NextExpiryUTC)      // note this works if last_he is null....
             {
                 last_he_received = he;
                 Display();
