@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlFactions));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -36,15 +37,35 @@
             this.showMissionsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showCommoditymaterialTradesForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBountiesAndBondsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showFactionSystemDetailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.startDateTimePicker = new ExtendedControls.ExtDateTimePicker();
             this.endDateTimePicker = new ExtendedControls.ExtDateTimePicker();
+            this.extCheckBoxShowHideSystemInfo = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideMission = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideCommodities = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideMaterials = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideBounties = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideInterdictions = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideKillBonds = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideDataLink = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowHideCartographic = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelTo = new System.Windows.Forms.Label();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.textBoxSearch = new ExtendedControls.ExtTextBox();
+            this.labelInfo = new System.Windows.Forms.Label();
             this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.scrollBarFactions = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.colFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLastRep = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFactionState = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFactionGov = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFactionAllegiance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFactionSystemInfluence = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFactionOtherSystemInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMissions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfluence = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colReputation = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,17 +88,15 @@
             this.KillBondsAward = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.KillBondsValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CartoValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colOrganicDataSold = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDataLinkVictimFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDataLinkPayeeFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDataLinkPayeeValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelTo = new System.Windows.Forms.Label();
-            this.labelInfo = new System.Windows.Forms.Label();
             this.contextMenuStrip.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.dataViewScrollerPanelFactions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip
@@ -86,10 +105,10 @@
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showMissionsForFactionToolStripMenuItem,
             this.showCommoditymaterialTradesForFactionToolStripMenuItem,
-            this.showBountiesAndBondsForFactionToolStripMenuItem,
-            this.showFactionSystemDetailToolStripMenuItem});
+            this.showBountiesAndBondsForFactionToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(310, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(310, 70);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // showMissionsForFactionToolStripMenuItem
             // 
@@ -111,13 +130,6 @@
             this.showBountiesAndBondsForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.showBountiesAndBondsForFactionToolStripMenuItem.Text = "Show bounties and bonds for faction";
             this.showBountiesAndBondsForFactionToolStripMenuItem.Click += new System.EventHandler(this.showBountiesAndBondsForFactionToolStripMenuItem_Click);
-            // 
-            // showFactionSystemDetailToolStripMenuItem
-            // 
-            this.showFactionSystemDetailToolStripMenuItem.Name = "showFactionSystemDetailToolStripMenuItem";
-            this.showFactionSystemDetailToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.showFactionSystemDetailToolStripMenuItem.Text = "Show system detail for faction";
-            this.showFactionSystemDetailToolStripMenuItem.Click += new System.EventHandler(this.showFactionSystemDetailToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -161,18 +173,310 @@
             this.toolTip.SetToolTip(this.endDateTimePicker, "Include to");
             this.endDateTimePicker.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             // 
+            // extCheckBoxShowHideSystemInfo
+            // 
+            this.extCheckBoxShowHideSystemInfo.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideSystemInfo.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideSystemInfo.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideSystemInfo.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideSystemInfo.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideSystemInfo.Image = global::EDDiscovery.Icons.Controls.SearchStars;
+            this.extCheckBoxShowHideSystemInfo.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideSystemInfo.ImageIndeterminate = null;
+            this.extCheckBoxShowHideSystemInfo.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideSystemInfo.ImageUnchecked = null;
+            this.extCheckBoxShowHideSystemInfo.Location = new System.Drawing.Point(686, 2);
+            this.extCheckBoxShowHideSystemInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideSystemInfo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideSystemInfo.Name = "extCheckBoxShowHideSystemInfo";
+            this.extCheckBoxShowHideSystemInfo.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideSystemInfo.TabIndex = 36;
+            this.extCheckBoxShowHideSystemInfo.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideSystemInfo, "Show/Hide System Info");
+            this.extCheckBoxShowHideSystemInfo.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideSystemInfo.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideSystemInfo_CheckedChanged);
+            // 
+            // extCheckBoxShowHideMission
+            // 
+            this.extCheckBoxShowHideMission.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideMission.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideMission.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideMission.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideMission.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideMission.Image = global::EDDiscovery.Icons.Controls.Missions;
+            this.extCheckBoxShowHideMission.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideMission.ImageIndeterminate = null;
+            this.extCheckBoxShowHideMission.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideMission.ImageUnchecked = null;
+            this.extCheckBoxShowHideMission.Location = new System.Drawing.Point(720, 2);
+            this.extCheckBoxShowHideMission.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideMission.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideMission.Name = "extCheckBoxShowHideMission";
+            this.extCheckBoxShowHideMission.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideMission.TabIndex = 36;
+            this.extCheckBoxShowHideMission.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideMission, "Show/Hide Mission");
+            this.extCheckBoxShowHideMission.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideMission.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideMission_CheckedChanged);
+            // 
+            // extCheckBoxShowHideCommodities
+            // 
+            this.extCheckBoxShowHideCommodities.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideCommodities.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideCommodities.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideCommodities.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideCommodities.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
+            this.extCheckBoxShowHideCommodities.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideCommodities.ImageIndeterminate = null;
+            this.extCheckBoxShowHideCommodities.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideCommodities.ImageUnchecked = null;
+            this.extCheckBoxShowHideCommodities.Location = new System.Drawing.Point(754, 2);
+            this.extCheckBoxShowHideCommodities.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideCommodities.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideCommodities.Name = "extCheckBoxShowHideCommodities";
+            this.extCheckBoxShowHideCommodities.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideCommodities.TabIndex = 36;
+            this.extCheckBoxShowHideCommodities.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideCommodities, "Show/Hide Commodities");
+            this.extCheckBoxShowHideCommodities.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideCommodities.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideCommodities_CheckedChanged);
+            // 
+            // extCheckBoxShowHideMaterials
+            // 
+            this.extCheckBoxShowHideMaterials.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideMaterials.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideMaterials.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideMaterials.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideMaterials.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideMaterials.Image = global::EDDiscovery.Icons.Controls.Materials;
+            this.extCheckBoxShowHideMaterials.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideMaterials.ImageIndeterminate = null;
+            this.extCheckBoxShowHideMaterials.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideMaterials.ImageUnchecked = null;
+            this.extCheckBoxShowHideMaterials.Location = new System.Drawing.Point(788, 2);
+            this.extCheckBoxShowHideMaterials.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideMaterials.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideMaterials.Name = "extCheckBoxShowHideMaterials";
+            this.extCheckBoxShowHideMaterials.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideMaterials.TabIndex = 36;
+            this.extCheckBoxShowHideMaterials.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideMaterials, "Show/Hide Materials");
+            this.extCheckBoxShowHideMaterials.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideMaterials.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideMaterials_CheckedChanged);
+            // 
+            // extCheckBoxShowHideBounties
+            // 
+            this.extCheckBoxShowHideBounties.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideBounties.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideBounties.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideBounties.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideBounties.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideBounties.Image = global::EDDiscovery.Icons.Controls.Bounty;
+            this.extCheckBoxShowHideBounties.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideBounties.ImageIndeterminate = null;
+            this.extCheckBoxShowHideBounties.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideBounties.ImageUnchecked = null;
+            this.extCheckBoxShowHideBounties.Location = new System.Drawing.Point(822, 2);
+            this.extCheckBoxShowHideBounties.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideBounties.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideBounties.Name = "extCheckBoxShowHideBounties";
+            this.extCheckBoxShowHideBounties.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideBounties.TabIndex = 36;
+            this.extCheckBoxShowHideBounties.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideBounties, "Show/Hide Crimes/Bounties");
+            this.extCheckBoxShowHideBounties.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideBounties.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideBounties_CheckedChanged);
+            // 
+            // extCheckBoxShowHideInterdictions
+            // 
+            this.extCheckBoxShowHideInterdictions.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideInterdictions.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideInterdictions.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideInterdictions.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideInterdictions.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideInterdictions.Image = global::EDDiscovery.Icons.Controls.Interdiction;
+            this.extCheckBoxShowHideInterdictions.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideInterdictions.ImageIndeterminate = null;
+            this.extCheckBoxShowHideInterdictions.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideInterdictions.ImageUnchecked = null;
+            this.extCheckBoxShowHideInterdictions.Location = new System.Drawing.Point(856, 2);
+            this.extCheckBoxShowHideInterdictions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideInterdictions.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideInterdictions.Name = "extCheckBoxShowHideInterdictions";
+            this.extCheckBoxShowHideInterdictions.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideInterdictions.TabIndex = 36;
+            this.extCheckBoxShowHideInterdictions.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideInterdictions, "Show/Hide Interdictions");
+            this.extCheckBoxShowHideInterdictions.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideInterdictions.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideInterdictions_CheckedChanged);
+            // 
+            // extCheckBoxShowHideKillBonds
+            // 
+            this.extCheckBoxShowHideKillBonds.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideKillBonds.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideKillBonds.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideKillBonds.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideKillBonds.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideKillBonds.Image = global::EDDiscovery.Icons.Controls.FactionKillBond;
+            this.extCheckBoxShowHideKillBonds.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideKillBonds.ImageIndeterminate = null;
+            this.extCheckBoxShowHideKillBonds.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideKillBonds.ImageUnchecked = null;
+            this.extCheckBoxShowHideKillBonds.Location = new System.Drawing.Point(890, 2);
+            this.extCheckBoxShowHideKillBonds.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideKillBonds.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideKillBonds.Name = "extCheckBoxShowHideKillBonds";
+            this.extCheckBoxShowHideKillBonds.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideKillBonds.TabIndex = 36;
+            this.extCheckBoxShowHideKillBonds.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideKillBonds, "Show/Hide Kill Bonds");
+            this.extCheckBoxShowHideKillBonds.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideKillBonds.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideKillBonds_CheckedChanged);
+            // 
+            // extCheckBoxShowHideDataLink
+            // 
+            this.extCheckBoxShowHideDataLink.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideDataLink.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideDataLink.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideDataLink.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideDataLink.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideDataLink.Image = global::EDDiscovery.Icons.Controls.DatalinkScan;
+            this.extCheckBoxShowHideDataLink.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideDataLink.ImageIndeterminate = null;
+            this.extCheckBoxShowHideDataLink.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideDataLink.ImageUnchecked = null;
+            this.extCheckBoxShowHideDataLink.Location = new System.Drawing.Point(924, 2);
+            this.extCheckBoxShowHideDataLink.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideDataLink.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideDataLink.Name = "extCheckBoxShowHideDataLink";
+            this.extCheckBoxShowHideDataLink.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideDataLink.TabIndex = 36;
+            this.extCheckBoxShowHideDataLink.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideDataLink, "Show/Hide Datalink");
+            this.extCheckBoxShowHideDataLink.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideDataLink.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideDataLink_CheckedChanged);
+            // 
+            // extCheckBoxShowHideCartographic
+            // 
+            this.extCheckBoxShowHideCartographic.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowHideCartographic.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowHideCartographic.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideCartographic.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowHideCartographic.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowHideCartographic.Image = global::EDDiscovery.Icons.Controls.SellExplorationData;
+            this.extCheckBoxShowHideCartographic.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowHideCartographic.ImageIndeterminate = null;
+            this.extCheckBoxShowHideCartographic.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowHideCartographic.ImageUnchecked = null;
+            this.extCheckBoxShowHideCartographic.Location = new System.Drawing.Point(958, 2);
+            this.extCheckBoxShowHideCartographic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.extCheckBoxShowHideCartographic.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowHideCartographic.Name = "extCheckBoxShowHideCartographic";
+            this.extCheckBoxShowHideCartographic.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowHideCartographic.TabIndex = 36;
+            this.extCheckBoxShowHideCartographic.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowHideCartographic, "Show Hide Cartographic/Organic Sold");
+            this.extCheckBoxShowHideCartographic.UseVisualStyleBackColor = true;
+            this.extCheckBoxShowHideCartographic.CheckedChanged += new System.EventHandler(this.extCheckBoxShowHideCartographic_CheckedChanged);
+            // 
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(478, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(992, 2);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 33;
             this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.startDateTimePicker);
+            this.panelTop.Controls.Add(this.labelTo);
+            this.panelTop.Controls.Add(this.endDateTimePicker);
+            this.panelTop.Controls.Add(this.labelSearch);
+            this.panelTop.Controls.Add(this.textBoxSearch);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideSystemInfo);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideMission);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideCommodities);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideMaterials);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideBounties);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideInterdictions);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideKillBonds);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideDataLink);
+            this.panelTop.Controls.Add(this.extCheckBoxShowHideCartographic);
+            this.panelTop.Controls.Add(this.buttonExtExcel);
+            this.panelTop.Controls.Add(this.labelInfo);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(2);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(1573, 32);
+            this.panelTop.TabIndex = 0;
+            // 
+            // labelTo
+            // 
+            this.labelTo.AutoSize = true;
+            this.labelTo.Location = new System.Drawing.Point(228, 4);
+            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelTo.Name = "labelTo";
+            this.labelTo.Size = new System.Drawing.Size(16, 13);
+            this.labelTo.TabIndex = 4;
+            this.labelTo.Text = "to";
+            // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(478, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 35;
+            this.labelSearch.Text = "Search";
+            // 
+            // textBoxSearch
+            // 
+            this.textBoxSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxSearch.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxSearch.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSearch.BorderColorScaling = 0.5F;
+            this.textBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSearch.ClearOnFirstChar = false;
+            this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxSearch.EndButtonEnable = true;
+            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
+            this.textBoxSearch.EndButtonSize16ths = 10;
+            this.textBoxSearch.EndButtonVisible = false;
+            this.textBoxSearch.InErrorCondition = false;
+            this.textBoxSearch.Location = new System.Drawing.Point(527, 4);
+            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.textBoxSearch.Multiline = false;
+            this.textBoxSearch.Name = "textBoxSearch";
+            this.textBoxSearch.ReadOnly = false;
+            this.textBoxSearch.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxSearch.SelectionLength = 0;
+            this.textBoxSearch.SelectionStart = 0;
+            this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
+            this.textBoxSearch.TabIndex = 34;
+            this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSearch.TextNoChange = "";
+            this.textBoxSearch.WordWrap = true;
+            this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
+            // 
+            // labelInfo
+            // 
+            this.labelInfo.AutoSize = true;
+            this.labelInfo.Location = new System.Drawing.Point(1029, 4);
+            this.labelInfo.Margin = new System.Windows.Forms.Padding(6, 4, 8, 1);
+            this.labelInfo.Name = "labelInfo";
+            this.labelInfo.Size = new System.Drawing.Size(43, 13);
+            this.labelInfo.TabIndex = 5;
+            this.labelInfo.Text = "<code>";
             // 
             // dataViewScrollerPanelFactions
             // 
@@ -183,7 +487,7 @@
             this.dataViewScrollerPanelFactions.Location = new System.Drawing.Point(0, 32);
             this.dataViewScrollerPanelFactions.Margin = new System.Windows.Forms.Padding(2);
             this.dataViewScrollerPanelFactions.Name = "dataViewScrollerPanelFactions";
-            this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(853, 540);
+            this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(1573, 589);
             this.dataViewScrollerPanelFactions.TabIndex = 1;
             this.dataViewScrollerPanelFactions.VerticalScrollBarDockRight = true;
             // 
@@ -199,14 +503,14 @@
             this.scrollBarFactions.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.scrollBarFactions.HideScrollBar = false;
             this.scrollBarFactions.LargeChange = 0;
-            this.scrollBarFactions.Location = new System.Drawing.Point(837, 0);
+            this.scrollBarFactions.Location = new System.Drawing.Point(1554, 0);
             this.scrollBarFactions.Margin = new System.Windows.Forms.Padding(2);
             this.scrollBarFactions.Maximum = -1;
             this.scrollBarFactions.Minimum = 0;
             this.scrollBarFactions.MouseOverButtonColor = System.Drawing.Color.Green;
             this.scrollBarFactions.MousePressedButtonColor = System.Drawing.Color.Red;
             this.scrollBarFactions.Name = "scrollBarFactions";
-            this.scrollBarFactions.Size = new System.Drawing.Size(16, 540);
+            this.scrollBarFactions.Size = new System.Drawing.Size(19, 589);
             this.scrollBarFactions.SliderColor = System.Drawing.Color.DarkGray;
             this.scrollBarFactions.SmallChange = 1;
             this.scrollBarFactions.TabIndex = 1;
@@ -237,6 +541,13 @@
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colFaction,
+            this.colSystem,
+            this.colLastRep,
+            this.colFactionState,
+            this.colFactionGov,
+            this.colFactionAllegiance,
+            this.colFactionSystemInfluence,
+            this.colFactionOtherSystemInfo,
             this.colMissions,
             this.colInfluence,
             this.colReputation,
@@ -259,6 +570,7 @@
             this.KillBondsAward,
             this.KillBondsValue,
             this.CartoValue,
+            this.colOrganicDataSold,
             this.colDataLinkVictimFaction,
             this.colDataLinkPayeeFaction,
             this.colDataLinkPayeeValue,
@@ -291,17 +603,60 @@
             this.dataGridView.RowTemplate.Height = 28;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(837, 540);
+            this.dataGridView.Size = new System.Drawing.Size(1554, 589);
             this.dataGridView.TabIndex = 0;
+            this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewFactions_SortCompare);
             // 
             // colFaction
             // 
-            this.colFaction.FillWeight = 200.039F;
+            this.colFaction.FillWeight = 200F;
             this.colFaction.HeaderText = "Faction";
             this.colFaction.MinimumWidth = 8;
             this.colFaction.Name = "colFaction";
             this.colFaction.ReadOnly = true;
+            // 
+            // colSystem
+            // 
+            this.colSystem.HeaderText = "System";
+            this.colSystem.Name = "colSystem";
+            this.colSystem.ReadOnly = true;
+            // 
+            // colLastRep
+            // 
+            this.colLastRep.HeaderText = "Last Known Reputation";
+            this.colLastRep.Name = "colLastRep";
+            this.colLastRep.ReadOnly = true;
+            // 
+            // colFactionState
+            // 
+            this.colFactionState.HeaderText = "Last State";
+            this.colFactionState.Name = "colFactionState";
+            this.colFactionState.ReadOnly = true;
+            // 
+            // colFactionGov
+            // 
+            this.colFactionGov.HeaderText = "Government";
+            this.colFactionGov.Name = "colFactionGov";
+            this.colFactionGov.ReadOnly = true;
+            // 
+            // colFactionAllegiance
+            // 
+            this.colFactionAllegiance.HeaderText = "Allegiance";
+            this.colFactionAllegiance.Name = "colFactionAllegiance";
+            this.colFactionAllegiance.ReadOnly = true;
+            // 
+            // colFactionSystemInfluence
+            // 
+            this.colFactionSystemInfluence.HeaderText = "System Influence";
+            this.colFactionSystemInfluence.Name = "colFactionSystemInfluence";
+            this.colFactionSystemInfluence.ReadOnly = true;
+            // 
+            // colFactionOtherSystemInfo
+            // 
+            this.colFactionOtherSystemInfo.HeaderText = "Other System Info";
+            this.colFactionOtherSystemInfo.Name = "colFactionOtherSystemInfo";
+            this.colFactionOtherSystemInfo.ReadOnly = true;
             // 
             // colMissions
             // 
@@ -348,6 +703,7 @@
             this.CSold.HeaderText = "Commds -";
             this.CSold.MinimumWidth = 8;
             this.CSold.Name = "CSold";
+            this.CSold.ReadOnly = true;
             // 
             // CProfit
             // 
@@ -355,6 +711,7 @@
             this.CProfit.HeaderText = "Commds Profit";
             this.CProfit.MinimumWidth = 8;
             this.CProfit.Name = "CProfit";
+            this.CProfit.ReadOnly = true;
             // 
             // MBought
             // 
@@ -378,6 +735,7 @@
             this.CrimeCommitted.HeaderText = "Crimes Committed";
             this.CrimeCommitted.MinimumWidth = 8;
             this.CrimeCommitted.Name = "CrimeCommitted";
+            this.CrimeCommitted.ReadOnly = true;
             // 
             // BountyKills
             // 
@@ -468,6 +826,12 @@
             this.CartoValue.Name = "CartoValue";
             this.CartoValue.ReadOnly = true;
             // 
+            // colOrganicDataSold
+            // 
+            this.colOrganicDataSold.HeaderText = "Organic Data Value";
+            this.colOrganicDataSold.Name = "colOrganicDataSold";
+            this.colOrganicDataSold.ReadOnly = true;
+            // 
             // colDataLinkVictimFaction
             // 
             this.colDataLinkVictimFaction.HeaderText = "DL Victim";
@@ -494,40 +858,6 @@
             this.colInfo.Name = "colInfo";
             this.colInfo.ReadOnly = true;
             // 
-            // panelTop
-            // 
-            this.panelTop.Controls.Add(this.startDateTimePicker);
-            this.panelTop.Controls.Add(this.labelTo);
-            this.panelTop.Controls.Add(this.endDateTimePicker);
-            this.panelTop.Controls.Add(this.buttonExtExcel);
-            this.panelTop.Controls.Add(this.labelInfo);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Margin = new System.Windows.Forms.Padding(2);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(853, 32);
-            this.panelTop.TabIndex = 0;
-            // 
-            // labelTo
-            // 
-            this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(228, 4);
-            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
-            this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(16, 13);
-            this.labelTo.TabIndex = 4;
-            this.labelTo.Text = "to";
-            // 
-            // labelInfo
-            // 
-            this.labelInfo.AutoSize = true;
-            this.labelInfo.Location = new System.Drawing.Point(520, 4);
-            this.labelInfo.Margin = new System.Windows.Forms.Padding(6, 4, 8, 1);
-            this.labelInfo.Name = "labelInfo";
-            this.labelInfo.Size = new System.Drawing.Size(43, 13);
-            this.labelInfo.TabIndex = 5;
-            this.labelInfo.Text = "<code>";
-            // 
             // UserControlFactions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -537,12 +867,12 @@
             this.Controls.Add(this.panelTop);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UserControlFactions";
-            this.Size = new System.Drawing.Size(853, 572);
+            this.Size = new System.Drawing.Size(1573, 621);
             this.contextMenuStrip.ResumeLayout(false);
-            this.dataViewScrollerPanelFactions.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            this.dataViewScrollerPanelFactions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -560,8 +890,27 @@
         private System.Windows.Forms.ToolStripMenuItem showMissionsForFactionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showCommoditymaterialTradesForFactionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showBountiesAndBondsForFactionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showFactionSystemDetailToolStripMenuItem;
+        private ExtendedControls.ExtButton buttonExtExcel;
+        private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private System.Windows.Forms.Label labelSearch;
+        private ExtendedControls.ExtTextBox textBoxSearch;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideMaterials;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideSystemInfo;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideCommodities;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideBounties;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideInterdictions;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideKillBonds;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideDataLink;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideMission;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowHideCartographic;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFaction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLastRep;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFactionState;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFactionGov;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFactionAllegiance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFactionSystemInfluence;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFactionOtherSystemInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMissions;
         private System.Windows.Forms.DataGridViewTextBoxColumn colInfluence;
         private System.Windows.Forms.DataGridViewTextBoxColumn colReputation;
@@ -584,11 +933,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondsAward;
         private System.Windows.Forms.DataGridViewTextBoxColumn KillBondsValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn CartoValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colOrganicDataSold;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDataLinkVictimFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDataLinkPayeeFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDataLinkPayeeValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn colInfo;
-        private ExtendedControls.ExtButton buttonExtExcel;
-        private System.Windows.Forms.FlowLayoutPanel panelTop;
     }
 }

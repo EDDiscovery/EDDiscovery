@@ -359,8 +359,8 @@ namespace EDDiscovery.Actions
                 var events = ActionEventEDList.StaticDefinedEvents();
 
                 ActionEvent ty = events.Find(x => x.TriggerName == evname);
-                if ( ty?.Variables != null )                                           // if its a static event and it has variables, add..
-                    fieldnames.AddRange(ty.Variables);
+                if ( ty?.Properties != null )                                           // if its a static event and it has variables, add..
+                    fieldnames.AddRange(ty.Properties);
 
                 // first see if its a journal event..
                 List<TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_", comment: "Event Variable");
@@ -587,18 +587,20 @@ namespace EDDiscovery.Actions
             ActionRun(ActionEventEDList.onRefreshEnd);
         }
 
-        public int ActionRunOnEntry(HistoryEntry he, ActionEvent ev, string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
+        public int ActionRunOnEntry(HistoryEntry he, ActionEvent ev, string flagstart = null, bool now = false)      
         {
             return ActionRun(ev, he, null, flagstart, now);
         }
 
-        public override int ActionRun(ActionEvent ev, Variables additionalvars = null, string flagstart = null, bool now = false)              // override base
+        // override base
+        public override int ActionRun(ActionEvent ev, Variables additionalvars = null, string flagstart = null, bool now = false)              
         { return ActionRun(ev, null, additionalvars, flagstart, now); }
 
         public int ActionRun(ActionEvent ev, 
                                 HistoryEntry he = null, 
                                 Variables additionalvars = null,
-                                string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
+                                string flagstart = null,                    //set flagstart to be the first flag of the actiondata..
+                                bool now = false)       
         {
             List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, flagstart);      // look thru all actions, find matching ones
 

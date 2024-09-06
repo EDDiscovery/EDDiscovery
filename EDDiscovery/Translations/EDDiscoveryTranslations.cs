@@ -1607,15 +1607,32 @@ namespace EDDiscovery
         UserControlFactions_colDataLinkVictimFaction, 
         UserControlFactions_colDataLinkPayeeFaction, 
         UserControlFactions_colDataLinkPayeeValue,
+        UserControlFactions_colLastRep,
+        UserControlFactions_colSystem,
+        UserControlFactions_labelSearch,
+        UserControlFactions_colFactionState, 
+        UserControlFactions_colFactionGov,
+        UserControlFactions_colFactionAllegiance, 
+        UserControlFactions_colFactionSystemInfluence, 
+        UserControlFactions_colFactionOtherSystemInfo,
+        UserControlFactions_colOrganicDataSold,
         UserControlFactions_colInfo, // Column Header 'Other Info'
         UserControlFactions_labelTo, // Control 'to'
         UserControlFactions_showMissionsForFactionToolStripMenuItem, // ToolStrip control 'Show missions for faction'
         UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem, // ToolStrip control 'Show commodity/material trades for faction'
         UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, // ToolStrip control 'Show bounties and bonds for faction'
-        UserControlFactions_showFactionSystemDetailToolStripMenuItem, // ToolStrip control 'Show system detail for faction'
         UserControlFactions_startDateTimePicker_ToolTip, // ToolTip 'Include from'
         UserControlFactions_endDateTimePicker_ToolTip, // ToolTip 'Include to'
         UserControlFactions_buttonExtExcel_ToolTip,
+        UserControlFactions_extCheckBoxShowHideSystemInfo_ToolTip,
+        UserControlFactions_extCheckBoxShowHideMission_ToolTip,
+        UserControlFactions_extCheckBoxShowHideCommodities_ToolTip,
+        UserControlFactions_extCheckBoxShowHideMaterials_ToolTip,
+        UserControlFactions_extCheckBoxShowHideBounties_ToolTip,
+        UserControlFactions_extCheckBoxShowHideInterdictions_ToolTip,
+        UserControlFactions_extCheckBoxShowHideKillBonds_ToolTip,
+        UserControlFactions_extCheckBoxShowHideDataLink_ToolTip,
+        UserControlFactions_extCheckBoxShowHideCartographic_ToolTip,
         UserControlFactions_SystemAddress, // System Address
         UserControlFactions_colInfluence,   // +Influence
         UserControlFactions_CBought,        // Commds +

@@ -223,6 +223,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Bounty {
+            get {
+                object obj = ResourceManager.GetObject("Bounty", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap CheckForNewRelease {
             get {
                 object obj = ResourceManager.GetObject("CheckForNewRelease", resourceCulture);
@@ -366,6 +376,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap CursorToTop {
             get {
                 object obj = ResourceManager.GetObject("CursorToTop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap DatalinkScan {
+            get {
+                object obj = ResourceManager.GetObject("DatalinkScan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -653,6 +673,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap FactionKillBond {
+            get {
+                object obj = ResourceManager.GetObject("FactionKillBond", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap FieldFilter {
             get {
                 object obj = ResourceManager.GetObject("FieldFilter", resourceCulture);
@@ -913,6 +943,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Interdiction {
+            get {
+                object obj = ResourceManager.GetObject("Interdiction", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap LandablePlanet {
             get {
                 object obj = ResourceManager.GetObject("LandablePlanet", resourceCulture);
@@ -1006,6 +1046,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Menu {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Missions {
+            get {
+                object obj = ResourceManager.GetObject("Missions", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1676,6 +1726,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Selector2 {
             get {
                 object obj = ResourceManager.GetObject("Selector2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap SellExplorationData {
+            get {
+                object obj = ResourceManager.GetObject("SellExplorationData", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

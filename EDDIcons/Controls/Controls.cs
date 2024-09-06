@@ -224,5 +224,11 @@ namespace EDDiscovery.Icons
         public static Image Bar3 { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bar3"); } }
         public static Image Folder { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Folder"); } }
         public static Image Clock { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Clock"); } }
+        public static Image Missions { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Missions"); } }
+        public static Image Bounty { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Bounty"); } }
+        public static Image Interdiction { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Interdiction"); } }
+        public static Image FactionKillBond { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.FactionKillBond"); } }
+        public static Image DatalinkScan { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.DataLinkScan"); } }
+        public static Image SellExplorationData { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.SellExplorationData"); } }
     }
 }
