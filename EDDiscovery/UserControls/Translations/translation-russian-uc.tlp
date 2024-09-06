@@ -686,8 +686,8 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
-.scanDisplayBodyFiltersButton.ToolTip: "! Configure scan display body filters !" @
-.scanDisplayConfigureButton.ToolTip: "! Configure scan display !" @
+.scanDisplayBodyFiltersButton.ToolTip: "Configure scan display body filters" @
+.scanDisplayConfigureButton.ToolTip: "Configure scan display" @
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Выбрать другую систему"
 .buttonSize.ToolTip: "Select image size" => "Выбрать размер изображений"
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Выбрать стоимость скана"
@@ -1426,6 +1426,24 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" @
 .colDataLinkPayeeValue: "DL Payee Value" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.colSystem: "System" @
+.colLastRep: "Last Known Reputation" @
+.colFactionState: "Last State" @
+.colFactionGov: "Government" @
+.colFactionAllegiance: "Allegiance" @
+.colFactionSystemInfluence: "System Influence" @
+.colFactionOtherSystemInfo: "Other System Info" @
+.colOrganicDataSold: "Organic Data Value" @
+.labelSearch: "Search" @
+.extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" @
+.extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" @
+.extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" @
+.extCheckBoxShowHideMaterials.ToolTip: "Show/Hide Materials" @
+.extCheckBoxShowHideBounties.ToolTip: "Show/Hide Crimes/Bounties" @
+.extCheckBoxShowHideInterdictions.ToolTip: "Show/Hide Interdictions" @
+.extCheckBoxShowHideKillBonds.ToolTip: "Show/Hide Kill Bonds" @
+.extCheckBoxShowHideDataLink.ToolTip: "Show/Hide Datalink" @
+.extCheckBoxShowHideCartographic.ToolTip: "Show Hide Cartographic/Organic Sold" @
 
 SECTION UserControlOrganics
 
