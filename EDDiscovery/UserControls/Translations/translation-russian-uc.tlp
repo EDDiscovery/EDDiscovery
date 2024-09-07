@@ -366,8 +366,6 @@ SECTION UserControlMarketData
 .checkBoxBuyOnly: "Buy Only" => "Наличие"
 .labelVs: "Vs" => "ср. с"
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Показывать только товары, которые можно купить"
-.comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Выбрать запись для сравнения рыночных данных"
-.comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Выбрать последнюю запись в истории полетов или определенную запись"
 .Conly: "Cargo only, no market data on this item" => "Только груз, нет рыночных данных в этом списке"
 .LEntry: "Travel History Entry Last" => "Последняя запись в истории полетов"
 .checkBoxHasDemand: "Has Demand" @

@@ -366,8 +366,6 @@ SECTION UserControlMarketData
 .checkBoxBuyOnly: "Buy Only" => "Solo comprar"
 .labelVs: "Vs" => "Vs"
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Mostrar artículos que solo se pueden comprar"
-.comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Haga clic para seleccionar un conjunto de datos de mercado de comparación"
-.comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Haga clic para seleccionar entre seguir el cursor o un conjunto de datos de mercado en particular"
 .Conly: "Cargo only, no market data on this item" => "Solo carga, no hay datos de mercado sobre este artículo"
 .LEntry: "Travel History Entry Last" => "Última entrada del historial de viajes"
 .checkBoxHasDemand: "Has Demand" => "Tiene Demanda"

@@ -26,7 +26,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlFactions : UserControlCommonBase
     {
-        private DateTime NextExpiryUTC;
+        private DateTime NextExpiryUTC = DateTime.MaxValue;
         private HistoryEntry last_he_received = null;           // tracks the last entry in history
         private Timer searchtimer;
 
@@ -140,13 +140,21 @@ namespace EDDiscovery.UserControls
 
         private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
-            if (he.MissionList != last_he_received?.MissionList || he.journalEntry is IStatsJournalEntry || he.EventTimeUTC > NextExpiryUTC)      // note this works if last_he is null....
+            UTCRange(out DateTime start, out DateTime end);
+
+            if (he.EventTimeUTC >= start && he.EventTimeUTC <= end)     // if event is within the date range of the display
             {
-                last_he_received = he;
-                Display();
-                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
-                NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EliteReleaseDates.GameEndTime;
-                System.Diagnostics.Debug.WriteLine($"Faction List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he_received?.MissionList}, next expiry time {NextExpiryUTC}");
+                //System.Diagnostics.Debug.WriteLine($"Faction List past initial triage, {start}->{end} he time {he.EventTimeUTC}");
+    
+                // mission list changes, or its an IStats affecting the Stats, or event time has exceeded
+                if (he.MissionList != last_he_received?.MissionList || he.journalEntry is IStatsJournalEntry || he.EventTimeUTC > NextExpiryUTC)        
+                {
+                    last_he_received = he;
+                    Display();
+                    var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
+                    NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EliteReleaseDates.GameEndTime;
+                    //System.Diagnostics.Debug.WriteLine($"Faction List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he_received?.MissionList}, next expiry time {NextExpiryUTC}");
+                }
             }
         }
 

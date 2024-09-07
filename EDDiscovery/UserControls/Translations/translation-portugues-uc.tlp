@@ -366,8 +366,6 @@ SECTION UserControlMarketData
 .checkBoxBuyOnly: "Buy Only" @
 .labelVs: "Vs" @
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" @
-.comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" @
-.comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" @
 .Conly: "Cargo only, no market data on this item" @
 .LEntry: "Travel History Entry Last" @
 .checkBoxHasDemand: "Has Demand" @
