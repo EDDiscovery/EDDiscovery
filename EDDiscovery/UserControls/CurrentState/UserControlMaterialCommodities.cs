@@ -35,10 +35,10 @@ namespace EDDiscovery.UserControls
         private const string dbDisplayInTransparent = "DisplayInTransparent";
         private const string AllNonZeroMarker = "AllNonZero";
         private const string dbSplitter = "Splitter";
+        private const string dbMaterialView = "MaterialView";
 
-        private const int MCDTag = 0;       // MCD structure tag cell index
-        private const int MRTag = 1;        // microresource count tag, may be null
-        private const int RTag = 2;         // recipe string
+        private const int MCGrid_MCDType = 0;       // MCD grid MCD tag cell index
+        private const int MCGrid_MCMR = 1;           // MCD grid MCD with count tag, may be null
 
         public enum PanelType { Materials, Commodities, MicroResources, All };
         public PanelType PanelMode;
@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
 
         private Dictionary<string, int> wantedamounts;      // list of wanted items
         private HashSet<string> displayinshoppinglist;       // list of items to list in transparent mode
-        
+
         private Font displayfont;
 
 
@@ -66,11 +66,16 @@ namespace EDDiscovery.UserControls
             DBBaseName = PanelMode == PanelType.Materials ? "MaterialsGrid" : PanelMode == PanelType.Commodities ? "CommoditiesGrid" : PanelMode == PanelType.All ? "ResourcesGrid" : "MicroResourcesGrid";
 
             dataGridViewMC.MakeDoubleBuffered();
+            
+            //set up word wrap for main grid
+
             extCheckBoxWordWrap.Checked = GetSetting(dbWrapText, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            var enumlist = new Enum[] { EDTx.UserControlMaterialCommodities_ColName, EDTx.UserControlMaterialCommodities_ColShortName, EDTx.UserControlMaterialCommodities_ColCategory, 
+            // translations
+
+            var enumlist = new Enum[] { EDTx.UserControlMaterialCommodities_ColName, EDTx.UserControlMaterialCommodities_ColShortName, EDTx.UserControlMaterialCommodities_ColCategory,
                                         EDTx.UserControlMaterialCommodities_ColType, EDTx.UserControlMaterialCommodities_ColNumber,EDTx.UserControlMaterialCommodities_ColBackPack,
                                         EDTx.UserControlMaterialCommodities_ColPrice,
                                         EDTx.UserControlMaterialCommodities_ColRecipes,
@@ -91,13 +96,12 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlMaterialCommodities_displayAllInShoppingListToolStripMenuItem};
 
             var enumlistcmsSL = new Enum[] { EDTx.UserControlMaterialCommodities_toolStripMenuItemSLClearAll };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, "UserControlMaterialCommodities");
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, "UserControlMaterialCommodities");
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, "UserControlMaterialCommodities");
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, "UserControlMaterialCommodities");
+            // tbd tbd BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, "UserControlMaterialCommodities");
+            //BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, "UserControlMaterialCommodities");
+            //BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, "UserControlMaterialCommodities");
+            //BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, "UserControlMaterialCommodities");
 
-            cfs = new JournalFilterSelector();
-            cfs.UC.AddAllNone();
+            // now configure grid, filter selector
 
             var matitems = MaterialCommodityMicroResourceType.GetMaterials(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
             var mattypes = MaterialCommodityMicroResourceType.GetTypes((x) => x.IsMaterial, true);
@@ -112,7 +116,10 @@ namespace EDDiscovery.UserControls
             var mrcats = MaterialCommodityMicroResourceType.GetCategories((x) => x.IsMicroResources, true);
             string mrpostfix = "";
 
-            bool showall = PanelMode == PanelType.All;
+            bool showall = PanelMode == PanelType.All;      // for panel mode all, everything is shown
+
+            cfs = new JournalFilterSelector();
+            cfs.UC.AddAllNone();
 
             if (showall)
             {
@@ -121,7 +128,7 @@ namespace EDDiscovery.UserControls
                 cfs.UC.AddGroupItem(String.Join(";", mritems.Select(x => x.FDName)) + ";", "All Microresources".T(EDTx.UserControlMaterialCommodities_AllMicroresources));
             }
 
-            if (PanelMode == PanelType.Materials || showall)
+            if (PanelMode == PanelType.Materials || showall)        // add materials
             {
                 foreach (var t in matcats)
                 {
@@ -129,18 +136,18 @@ namespace EDDiscovery.UserControls
                     cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2 + matpostfix);
                 }
 
-                AddToControls(matitems, mattypes,true,true);
+                AddtoCFS(matitems, mattypes, true, true);
             }
 
-            if (PanelMode == PanelType.Commodities || showall)
+            if (PanelMode == PanelType.Commodities || showall)      // add commodities
             {
                 MaterialCommodityMicroResourceType[] rare = comitems.Where(x => x.IsRareCommodity).ToArray();
                 cfs.UC.AddGroupItem(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".T(EDTx.UserControlMaterialCommodities_Rare) + compostfix);
 
-                AddToControls(comitems, comtypes,  false, true );
+                AddtoCFS(comitems, comtypes, false, true);
             }
 
-            if (PanelMode == PanelType.MicroResources || showall)
+            if (PanelMode == PanelType.MicroResources || showall)   // add mrs
             {
                 foreach (var t in mrcats)
                 {
@@ -148,10 +155,10 @@ namespace EDDiscovery.UserControls
                     cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2 + mrpostfix);
                 }
 
-                AddToControls(mritems, null, true, false);
+                AddtoCFS(mritems, null, true, false);
             }
 
-            if (showall )      // need to post sort as added above in sub groups
+            if (showall)      // need to post sort as added above in sub groups
                 cfs.UC.Sort();
 
             // Designer has ColName, ColShortName, ColCategory, ColType, ColNumber,   ColBackpack, ColPrice,  ColRecipe, ColWanted, ColNeed
@@ -161,19 +168,32 @@ namespace EDDiscovery.UserControls
 
             ColPrice.Tag = ColNumber.Tag = ColWanted.Tag = ColNeed.Tag = "Num";     // these tell the sorter to do numeric sorting
 
+            // configure main grid and materials alt view
+            // grid has Name | ShortName | Catagory | Type | Number | Backpack | Avg.Price | Want | Need | Recipes columns at start
+
             if (PanelMode == PanelType.Materials)
             {
-                dataGridViewMC.Columns.Remove(ColPrice);       // do not use price
-                dataGridViewMC.Columns.Remove(ColBackPack);       // do not use price
+                dataGridViewMC.Columns.Remove(ColBackPack);         // do not use back pack
+                dataGridViewMC.Columns.Remove(ColPrice);            // do not use price
 
                 labelItems1.Text = "Data".T(EDTx.UserControlMaterialCommodities_Data);
                 labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
+
+                extCheckBoxMaterialView.Checked = GetSetting(dbMaterialView, true);     // materials alt view selector
+                SetMatView();
+                this.extCheckBoxMaterialView.CheckedChanged += new System.EventHandler(this.extCheckBoxMaterialView_CheckedChanged);
             }
             else
             {
+                // commodities, MRs, All
+
+                // label1 bbecome Total and label2 not used
                 labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
                 textBoxItems2.Visible = labelItems2.Visible = false;
-                checkBoxShowZeros.Location = new Point(textBoxItems1.Right + 8, checkBoxShowZeros.Top);
+
+                extCheckBoxMaterialView.Visible = false;    // only for materials
+
+                checkBoxShowZeros.Location = new Point(textBoxItems1.Right + 8, checkBoxShowZeros.Top); // move into better pos
 
                 if (PanelMode == PanelType.Commodities)
                 {
@@ -190,49 +210,30 @@ namespace EDDiscovery.UserControls
                 }
             }
 
+            // now configure last bits - checkboxzero, cfs
+
             checkBoxShowZeros.Checked = !GetSetting(dbClearZero, true); // used to be clear zeros, now its show zeros, invert
             checkBoxShowZeros.CheckedChanged += CheckBoxClear_CheckedChanged;
 
             cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += FilterChanged;
 
+            // from the wanted list, set wanted amounts
+
             JToken json = JToken.Parse(GetSetting(dbWantedList, ""), QuickJSON.JToken.ParseOptions.CheckEOL);
             wantedamounts = json?.ToObject<Dictionary<string, int>>();
             if (wantedamounts == null)
                 wantedamounts = new Dictionary<string, int>();
-            
+
+            // from the display list of materials in the upper display panel, configure variable
+
             json = JToken.Parse(GetSetting(dbDisplayInTransparent, ""), QuickJSON.JToken.ParseOptions.CheckEOL);
             displayinshoppinglist = json?.ToObject<HashSet<string>>();
             if (displayinshoppinglist == null)
                 displayinshoppinglist = new HashSet<string>();
 
+            // font 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);        // null if not set
-        }
-
-        public void AddToControls(MaterialCommodityMicroResourceType[] items, Tuple<MaterialCommodityMicroResourceType.ItemType, string>[] types, bool showcat, bool showtype)
-        {
-            if (types != null)
-            {
-                foreach (var t in types)
-                {
-                    string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfType(t.Item1, true);
-                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2);
-                }
-            }
-
-            foreach (var x in items)
-            {
-                string postfix = "";
-                if (showcat)
-                    postfix = x.TranslatedCategory;
-                if (showtype)
-                    postfix = postfix.AppendPrePad(x.TranslatedType, ",");
-
-                if (postfix.Length > 0)
-                    postfix = " (" + postfix + ")";
-
-                cfs.UC.Add(x.FDName, x.TranslatedName + postfix);
-            }
         }
 
         public override void LoadLayout()
@@ -249,7 +250,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbWantedList, tojson.ToString());
             tojson = JToken.FromObject(displayinshoppinglist);
             PutSetting(dbDisplayInTransparent, tojson.ToString());
-            
+
             PutSetting(dbSplitter, splitContainerPanel.GetSplitterDistance());
 
             DGVSaveColumnLayout(dataGridViewMC);
@@ -259,9 +260,9 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            splitContainerPanel.BackColor =  this.BackColor = 
-            splitContainerPanel.Panel1.BackColor = 
-            splitContainerPanel.Panel2.BackColor = 
+            splitContainerPanel.BackColor = this.BackColor =
+            splitContainerPanel.Panel1.BackColor =
+            splitContainerPanel.Panel2.BackColor =
             extPictureBoxScrollShoppingList.BackColor = extPictureBoxShoppingList.BackColor = curcol;
             panelTop.Visible = dataViewScrollerPanel.Visible = !on;
             extScrollBarShoppingList.AlwaysHideScrollBar = on;
@@ -269,13 +270,13 @@ namespace EDDiscovery.UserControls
 
         public override void TransparencyModeChanged(bool on)
         {
-            Display(last_mcl,false);        // need to redraw the shopping list
+            Display(last_mcl, false);        // need to redraw the shopping list
         }
 
         public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             PushResourceWantedList pr = actionobj as PushResourceWantedList;
-            if (pr != null && PanelMode == UserControlMaterialCommodities.PanelType.All )
+            if (pr != null && PanelMode == UserControlMaterialCommodities.PanelType.All)
             {
                 MakeVisible();
 
@@ -307,7 +308,7 @@ namespace EDDiscovery.UserControls
             }
 
             HistoryEntry he = actionobj as HistoryEntry;
-            if ( he != null )
+            if (he != null)
             {
                 uint mcl = he.MaterialCommodity;
                 if (mcl != last_mcl)
@@ -336,6 +337,15 @@ namespace EDDiscovery.UserControls
             if (mcl == null)
                 return;
 
+            if (extCheckBoxMaterialView.Checked == false)       // will be false (default) for everything except materials panel
+                DisplayMCMR(repaintgrid);
+            else
+                DisplayMatView();
+        }
+
+        // Display the standard view of the MCMR grid
+        private void DisplayMCMR(bool repaintgrid)
+        {
             DataGridViewColumn sortcolprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortedColumn : dataGridViewMC.Columns[0];
             SortOrder sortorderprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortOrder : SortOrder.Ascending;
             int firstline = dataGridViewMC.SafeFirstDisplayedScrollingRowIndex();
@@ -362,41 +372,41 @@ namespace EDDiscovery.UserControls
 
             bool displayallnonzeroitemsinshoppinglist = displayinshoppinglist.Contains(AllNonZeroMarker);
 
-            foreach (MaterialCommodityMicroResourceType mcd in allitems)        // we go thru all items..
+            foreach (MaterialCommodityMicroResourceType mcmrt in allitems)        // we go thru all items..
             {
-                MaterialCommodityMicroResource m = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(mcl.Value, mcd.FDName);      // at generation mcl, find fdname.
+                MaterialCommodityMicroResource mcmr = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value, mcmrt.FDName);      // at generation mcl, find fdname.
 
-                int[] matcounts = m != null ? m.Counts : MaterialCommodityMicroResource.ZeroCounts;        // if we have some, gets its count array, else return empty array
+                int[] matcounts = mcmr != null ? mcmr.Counts : MaterialCommodityMicroResource.ZeroCounts;        // if we have some, gets its count array, else return empty array
                 int totalcount = matcounts.Sum();
 
                 int wantedamount = 0;
-                wantedamounts.TryGetValue(mcd.FDName, out wantedamount);
+                wantedamounts.TryGetValue(mcmrt.FDName, out wantedamount);
 
                 int need = Math.Max(0, wantedamount - totalcount);
 
                 if (need > 0)
                 {
-                    shoppinglist = shoppinglist.AppendPrePad(string.Format("Need {0} {1}", mcd.TranslatedName, need), Environment.NewLine);
+                    shoppinglist = shoppinglist.AppendPrePad(string.Format("Need {0} {1}", mcmrt.TranslatedName, need), Environment.NewLine);
                 }
 
-                if (displayinshoppinglist.Contains(mcd.FDName) || (totalcount > 0 && displayallnonzeroitemsinshoppinglist))
+                if (displayinshoppinglist.Contains(mcmrt.FDName) || (totalcount > 0 && displayallnonzeroitemsinshoppinglist))
                 {
-                    contentlist = contentlist.AppendPrePad(string.Format("{0} {1}", mcd.TranslatedName, totalcount), Environment.NewLine);
+                    contentlist = contentlist.AppendPrePad(string.Format("{0} {1}", mcmrt.TranslatedName, totalcount), Environment.NewLine);
                 }
 
-                if (all || filter.Contains(mcd.FDName))      // and see if they are in the filter
+                if (all || filter.Contains(mcmrt.FDName))      // and see if they are in the filter
                 {
                     if (showzeros || totalcount > 0)       // if display zero, or we have some..
                     {
-                        string recipes = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);
+                        string recipes = Recipes.UsedInRecipesByFDName(mcmrt.FDName, Environment.NewLine);   // empty or text
                         object[] rowobj;
 
                         if (PanelMode == PanelType.Materials)
                         {
-                            int limit = mcd.MaterialLimit() ?? 0;
+                            int limit = mcmrt.MaterialLimit() ?? 0;
 
-                            rowobj = new[] { mcd.TranslatedName, mcd.Shortname, mcd.TranslatedCategory,
-                                                mcd.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
+                            rowobj = new[] { mcmrt.TranslatedName, mcmrt.Shortname, mcmrt.TranslatedCategory,
+                                                mcmrt.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
                                                 matcounts[0].ToString(),
                                                 wantedamount.ToStringInvariant(),
                                                 need.ToString(),
@@ -405,7 +415,7 @@ namespace EDDiscovery.UserControls
                         }
                         else if (PanelMode == PanelType.MicroResources)
                         {
-                            rowobj = new[] { mcd.TranslatedName, mcd.Shortname, mcd.TranslatedCategory,
+                            rowobj = new[] { mcmrt.TranslatedName, mcmrt.Shortname, mcmrt.TranslatedCategory,
                                                 matcounts[0].ToString(),  // locker
                                                 matcounts[1].ToString(),   // backpack
                                                 wantedamount.ToStringInvariant(),
@@ -415,13 +425,13 @@ namespace EDDiscovery.UserControls
                         }
                         else if (PanelMode == PanelType.All)
                         {
-                            int? limit = mcd.MaterialLimit();
+                            int? limit = mcmrt.MaterialLimit();
 
-                            rowobj = new[] { mcd.TranslatedName, mcd.Shortname, mcd.TranslatedCategory,
-                                                mcd.IsMicroResources ? "" : (mcd.TranslatedType + ( limit.HasValue ? " (" + limit.Value.ToString() + ")" : "")) ,
+                            rowobj = new[] { mcmrt.TranslatedName, mcmrt.Shortname, mcmrt.TranslatedCategory,
+                                                mcmrt.IsMicroResources ? "" : (mcmrt.TranslatedType + ( limit.HasValue ? " (" + limit.Value.ToString() + ")" : "")) ,
                                                 matcounts[0].ToString(),      // number
-                                                mcd.IsMicroResources ? matcounts[1].ToString(): "",      // backpack
-                                                mcd.IsCommodity ? (m != null ? m.Price.ToString("0.#") : "-") : "",
+                                                mcmrt.IsMicroResources ? matcounts[1].ToString(): "",      // backpack
+                                                mcmrt.IsCommodity ? (mcmr != null ? mcmr.Price.ToString("0.#") : "-") : "",
                                                 wantedamount.ToStringInvariant(),
                                                 need.ToString(),
                                                 recipes,
@@ -429,9 +439,9 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {                                                                       // commodities
-                            rowobj = new[] { mcd.TranslatedName, mcd.TranslatedType,
+                            rowobj = new[] { mcmrt.TranslatedName, mcmrt.TranslatedType,
                                                 matcounts[0].ToString(),
-                                                m != null ? m.Price.ToString("0.#") : "-",
+                                                mcmr != null ? mcmr.Price.ToString("0.#") : "-",
                                                 wantedamount.ToStringInvariant(),
                                                 need.ToString(),
                                                 recipes,
@@ -442,10 +452,9 @@ namespace EDDiscovery.UserControls
                         if (repaintgrid)
                         {
                             int rowno = dataGridViewMC.Rows.Add(rowobj);
-                            dataGridViewMC.Rows[rowno].Cells[ColRecipes.Index].ToolTipText = recipes;
-                            dataGridViewMC.Rows[rowno].Cells[MCDTag].Tag = mcd;
-                            dataGridViewMC.Rows[rowno].Cells[MRTag].Tag = m;
-                            dataGridViewMC.Rows[rowno].Cells[RTag].Tag = recipes;
+                            dataGridViewMC.Rows[rowno].Cells[ColRecipes.Index].ToolTipText = recipes;   // may be empty, never null
+                            dataGridViewMC.Rows[rowno].Cells[MCGrid_MCDType].Tag = mcmrt;    // always set
+                            dataGridViewMC.Rows[rowno].Cells[MCGrid_MCMR].Tag = mcmr;     // could be null
                         }
                     }
                 }
@@ -460,7 +469,7 @@ namespace EDDiscovery.UserControls
                 if (firstline >= 0 && firstline < dataGridViewMC.RowCount)
                     dataGridViewMC.SafeFirstDisplayedScrollingRowIndex(firstline);
 
-                var mcllist = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(mcl.Value);
+                var mcllist = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
                 var counts = MaterialCommoditiesMicroResourceList.Count(mcllist);
 
                 if (PanelMode == PanelType.Materials)
@@ -471,7 +480,7 @@ namespace EDDiscovery.UserControls
                 else if (PanelMode == PanelType.MicroResources)
                 {
                     textBoxItems1.Text = (counts[(int)MaterialCommodityMicroResourceType.CatType.Data] + counts[(int)MaterialCommodityMicroResourceType.CatType.Component] +
-                                           counts[(int)MaterialCommodityMicroResourceType.CatType.Item] + counts[(int)MaterialCommodityMicroResourceType.CatType.Consumable]).ToString();
+                                            counts[(int)MaterialCommodityMicroResourceType.CatType.Item] + counts[(int)MaterialCommodityMicroResourceType.CatType.Consumable]).ToString();
                 }
                 else if (PanelMode == PanelType.Commodities)
                 {
@@ -493,16 +502,79 @@ namespace EDDiscovery.UserControls
             extPictureBoxShoppingList.AddTextAutoSize(
                 new Point(0, 5),
                 new Size(10000, 10000),
-                shoppinglist.AppendPrePad(contentlist,Environment.NewLine),
+                shoppinglist.AppendPrePad(contentlist, Environment.NewLine),
                 dfont,
                 textcolour,
                 backcolour,
                 1.0F);
 
-            extPictureBoxScrollShoppingList.Render();   
+            extPictureBoxScrollShoppingList.Render();
         }
 
+        // Display the materials group vview
+
+        private void DisplayMatView()
+        {
+            dataGridViewMatView.Rows.Clear();
+
+            foreach (var t in Enum.GetValues(typeof(MaterialCommodityMicroResourceType.MaterialGroupType)))     // relies on MCD being in order
+            {
+                var matgroup = (MaterialCommodityMicroResourceType.MaterialGroupType)t;
+
+                if (matgroup != MaterialCommodityMicroResourceType.MaterialGroupType.NA)
+                {
+                    var list = MaterialCommodityMicroResourceType.Get(x => x.MaterialGroup == matgroup);
+
+                    var textrow = dataGridViewMatView.RowTemplate.Clone() as DataGridViewRow;
+                    var progressrow = dataGridViewMatView.RowTemplate.Clone() as DataGridViewRow;
+
+                    var tbc = new DataGridViewTextBoxCell();
+                    tbc.Value = list[0].TranslatedMaterialGroup;
+                    textrow.Cells.Add(tbc);
+                    tbc = new DataGridViewTextBoxCell();
+                    tbc.Value = "";
+                    progressrow.Cells.Add(tbc);
+
+                    foreach ( var mcd in list)
+                    {
+                        MaterialCommodityMicroResource m = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value, mcd.FDName);      // at generation mcl, find fdname.
+                        int count = m != null ? m.Count : 0;
+                        int limit = mcd.MaterialLimit().Value;
+
+                        tbc = new DataGridViewTextBoxCell();
+                        tbc.Value = $"{mcd.TranslatedName} ({count}/{limit})";
+                        textrow.Cells.Add(tbc);
+
+                        var pcell = new BaseUtils.DataGridViewProgressCell();
+                        pcell.BarForeColor = ExtendedControls.Theme.Current.TextBlockSuccessColor;
+                        pcell.Value = 100 * count / limit;
+                        pcell.TextToRightPreferentially = true;
+                        progressrow.Cells.Add(pcell);
+
+                        string recipes = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);    // may be empty. Not null
+                        if (recipes.HasChars())
+                        {
+                            pcell.ToolTipText = tbc.ToolTipText = recipes;
+                            pcell.Tag = tbc.Tag = mcd.TranslatedName;
+                        }
+                    }
+
+                    dataGridViewMatView.Rows.Add(textrow);
+                    dataGridViewMatView.Rows.Add(progressrow);
+                }
+            }
+
+
+            var mcllist = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
+            var counts = MaterialCommoditiesMicroResourceList.Count(mcllist);
+            textBoxItems1.Text = counts[(int)MaterialCommodityMicroResourceType.CatType.Encoded].ToString();
+            textBoxItems2.Text = (counts[(int)MaterialCommodityMicroResourceType.CatType.Raw] + counts[(int)MaterialCommodityMicroResourceType.CatType.Manufactured]).ToString();
+        }
+
+
         #endregion
+
+        #region Toolbar UI for Standard grid
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -510,10 +582,11 @@ namespace EDDiscovery.UserControls
             cfs.Open(GetSetting(dbFilter, "All"), b, this.FindForm());
         }
 
+        // called back by CFS changing state
         private void FilterChanged(string newset, Object e)
         {
             string filters = GetSetting(dbFilter, "All");
-            if ( filters != newset )
+            if (filters != newset)
             {
                 PutSetting(dbFilter, newset);
                 Display(last_mcl);
@@ -537,12 +610,10 @@ namespace EDDiscovery.UserControls
             PutSetting(dbClearZero, !checkBoxShowZeros.Checked);    // negative because we changed button sense
             Display(last_mcl);
         }
-
-        private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        private void buttonClear_Click(object sender, EventArgs e)
         {
-            object tag = e.Column.Tag;
-            if ( tag != null)
-                e.SortDataGridViewColumnNumeric();
+            wantedamounts.Clear();
+            Display(last_mcl);
         }
 
         private void extButtonFont_Click(object sender, EventArgs e)
@@ -555,77 +626,11 @@ namespace EDDiscovery.UserControls
             Display(last_mcl);
         }
 
-        private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int rcell = dataGridViewMC.ColumnCount - 1;
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count && e.ColumnIndex == rcell)
-            {
-                DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
-
-                if (row.Cells[rcell].Style.WrapMode == DataGridViewTriState.True)
-                    row.Cells[rcell].Style.WrapMode = DataGridViewTriState.NotSet;
-                else
-                {
-                    using (Graphics g = Parent.CreateGraphics())
-                    {
-                        string ms = (string)row.Cells[rcell].Value + ".";
-                        var sz = g.MeasureString(ms, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000));
-
-                        if (sz.Height > dataGridViewMC.Height * 3 / 4)  // if text is unreasonable in size, open in window
-                        {
-                            OpenRecipeInWindow(row.Index);
-                        }
-                        else
-                            row.Cells[rcell].Style.WrapMode = DataGridViewTriState.True;    //else word wrap
-                    }
-                }
-
-                dataViewScrollerPanel.UpdateScroll();
-            }
-
-        }
-
-        private void dataGridViewMC_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridViewCell cell = dataGridViewMC[e.ColumnIndex, e.RowIndex];
-
-            string text = cell.Value as string;
-
-            if ( text != null && int.TryParse(text, out int wanted) && wanted >= 0)    
-            {
-                MaterialCommodityMicroResourceType mcd = dataGridViewMC.Rows[e.RowIndex].Cells[MCDTag].Tag as MaterialCommodityMicroResourceType;
-                wantedamounts[mcd.FDName] = wanted;
-                System.Diagnostics.Debug.WriteLine($"Set {mcd.FDName} to {wanted}");
-
-                MaterialCommodityMicroResource m = dataGridViewMC.Rows[e.RowIndex].Cells[MRTag].Tag as MaterialCommodityMicroResource;
-
-                int need = wanted;
-
-                if ( m != null)
-                    need = Math.Max(0,wanted - m.Total);
-
-                dataGridViewMC[ColNeed.Index, e.RowIndex].Value = need.ToString();
-                Display(last_mcl, false);
-            }
-            else
-            {
-                Console.Beep(512,400);
-                cell.Value = "0";
-            }
-
-        }
-
-        private void buttonClear_Click(object sender, EventArgs e)
-        {
-            wantedamounts.Clear();
-            Display(last_mcl);
-        }
-
         private void buttonExtImport_Click(object sender, EventArgs e)
         {
             var frm = new Forms.ImportExportForm();
 
-            frm.Import( new string[] { "CSV" },
+            frm.Import(new string[] { "CSV" },
                  new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowImportOptions },
                  new string[] { "CSV|*.csv" }
             );
@@ -634,14 +639,14 @@ namespace EDDiscovery.UserControls
             {
                 var csv = frm.CSVRead();
 
-                if ( csv!=null && csv.Rows.Count>0)
+                if (csv != null && csv.Rows.Count > 0)
                 {
                     var rows = frm.ExcludeHeader ? csv.RowsExcludingHeaderRow : csv.Rows;
                     int amountcol = frm.ExcludeHeader ? csv.CellNumberOfHeaderItem(new string[] { "Qty", "Amount", "Quantity", "Count" }) : -1;
 
                     wantedamounts.Clear();
-                    
-                    foreach( var r in rows.EmptyIfNull())
+
+                    foreach (var r in rows.EmptyIfNull())
                     {
                         MaterialCommodityMicroResourceType mcrt = null;
                         int count = int.MinValue;
@@ -653,7 +658,7 @@ namespace EDDiscovery.UserControls
                         {
                             var c = r.Cells[i];
                             //System.Diagnostics.Debug.Write($"{c},");
-                        
+
                             var mcd = MaterialCommodityMicroResourceType.GetByEnglishName(c);
                             if (mcd != null)
                                 mcrt = mcd;
@@ -676,15 +681,88 @@ namespace EDDiscovery.UserControls
         }
 
 
-        #region Right click
+        #endregion
+
+        #region Standard grid hooks to grid
+
+        private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            object tag = e.Column.Tag;
+            if (tag != null)
+                e.SortDataGridViewColumnNumeric();
+        }
+
+        // cell double click on recipe cell 
+        private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count && e.ColumnIndex == ColRecipes.Index)
+            {
+                DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
+
+                // if we are in wrap mode, then set to non wrap
+                if (row.Cells[ColRecipes.Index].Style.WrapMode == DataGridViewTriState.True)
+                {
+                    row.Cells[ColRecipes.Index].Style.WrapMode = DataGridViewTriState.NotSet;
+                }
+                else
+                {
+                    // we are in non wrap mode, see if we want to toggle word wrap, or pop out
+                    string text = (string)row.Cells[ColRecipes.Index].Value + ".";      // . is just so we have 1 extra padding char
+                    double percentage = dataGridViewMC.CalculateTextHeightPercentage(text, ColRecipes.Index);
+
+                    if ( percentage >= 0.75F)
+                        OpenRecipeInWindow(row.Cells[0].Value as string, text);
+                    else
+                        row.Cells[ColRecipes.Index].Style.WrapMode = DataGridViewTriState.True;    //else word wrap
+                }
+
+                dataViewScrollerPanel.UpdateScroll();
+            }
+
+        }
+
+        // cell end edit, only possible on wanted column
+        private void dataGridViewMC_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewCell cell = dataGridViewMC[e.ColumnIndex, e.RowIndex];
+
+            string text = cell.Value as string;
+
+            if (text != null && int.TryParse(text, out int wanted) && wanted >= 0)
+            {
+                MaterialCommodityMicroResourceType mcd = dataGridViewMC.Rows[e.RowIndex].Cells[MCGrid_MCDType].Tag as MaterialCommodityMicroResourceType;
+                wantedamounts[mcd.FDName] = wanted;
+                System.Diagnostics.Debug.WriteLine($"Set {mcd.FDName} to {wanted}");
+
+                int need = wanted;
+
+                MaterialCommodityMicroResource mcmr = dataGridViewMC.Rows[e.RowIndex].Cells[MCGrid_MCMR].Tag as MaterialCommodityMicroResource;    // may be null
+                if (mcmr != null)
+                    need = Math.Max(0, wanted - mcmr.Total);
+
+                dataGridViewMC[ColNeed.Index, e.RowIndex].Value = need.ToString();
+                Display(last_mcl, false);
+            }
+            else
+            {
+                Console.Beep(512, 400);
+                cell.Value = "0";
+            }
+        }
+
+
+
+        #endregion
+
+        #region Right click on standard grid
 
         private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
             if (dataGridViewMC.RightClickRowValid)
             {
-                string mats = (string)dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[RTag].Tag;
-                openRecipeInWindowToolStripMenuItem.Enabled = mats.HasChars();
-                var mcd = (MaterialCommodityMicroResourceType)dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[MCDTag].Tag;
+                string recipe = (string)dataGridViewMC.ClickedRightRow.Cells[ColRecipes.Index].Value; 
+                openRecipeInWindowToolStripMenuItem.Enabled = recipe.HasChars();
+                var mcd = (MaterialCommodityMicroResourceType)dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[MCGrid_MCDType].Tag;
                 displayItemInShoppingListToolStripMenuItem.Checked = displayinshoppinglist.Contains(mcd.FDName);
             }
         }
@@ -692,30 +770,16 @@ namespace EDDiscovery.UserControls
         private void openRecipeInWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridViewMC.RightClickRowValid)
-                OpenRecipeInWindow(dataGridViewMC.RightClickRow);
-        }
-
-        void OpenRecipeInWindow(int row)
-        {
-            string mats = (string)dataGridViewMC.Rows[row].Cells[RTag].Tag;
-            if (mats != null)   // sheer paranoia.
-            {
-                mats = mats.Replace(": ", Environment.NewLine + "      ");
-                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                info.Info(dataGridViewMC.Rows[row].Cells[0].Value as string, FindForm().Icon, mats);
-                info.Size = new Size(800, 600);
-                info.StartPosition = FormStartPosition.CenterParent;
-                info.ShowDialog(FindForm());
-            }
+                OpenRecipeInWindow(dataGridViewMC.ClickedRightRow.Cells[0].Value as string, dataGridViewMC.ClickedRightRow.Cells[ColRecipes.Index].Value as string);
         }
 
         private void displayItemInShoppingListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridViewMC.RightClickRowValid)
             {
-                var mcd = (MaterialCommodityMicroResourceType)dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[MCDTag].Tag;
+                var mcd = (MaterialCommodityMicroResourceType)dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[MCGrid_MCDType].Tag;
 
-                if ( displayItemInShoppingListToolStripMenuItem.Checked )
+                if (displayItemInShoppingListToolStripMenuItem.Checked)
                     displayinshoppinglist.Remove(mcd.FDName);
                 else
                     displayinshoppinglist.Add(mcd.FDName);
@@ -734,6 +798,97 @@ namespace EDDiscovery.UserControls
             if (!displayinshoppinglist.Contains(AllNonZeroMarker))
                 displayinshoppinglist.Add(AllNonZeroMarker);
             Display(last_mcl, false);
+        }
+
+        #endregion
+
+        #region Mat group view Grid UI
+
+        private void dataGridViewMatView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridViewMatView.ClickRowValid && e.ColumnIndex>=0)
+                OpenRecipeInWindow(dataGridViewMatView.ClickedRow.Cells[e.ColumnIndex].Tag as string, dataGridViewMatView.ClickedRow.Cells[e.ColumnIndex].ToolTipText);
+        }
+
+        #endregion
+
+        #region Mat view mode select
+        private void extCheckBoxMaterialView_CheckedChanged(object sender, EventArgs e)
+        {
+            SetMatView();
+            PutSetting(dbMaterialView, extCheckBoxMaterialView.Checked);
+            Display(last_mcl);
+        }
+
+        private void SetMatView()
+        {
+            if (extCheckBoxMaterialView.Checked)
+            {
+                Controls.Remove(dataGridViewMatView);       // disconnect from top level
+                dataGridViewMatView.Visible = true;         // visible
+                dataViewScrollerPanel.SwapDGV(dataGridViewMatView); // swap in scroller panel, to mat view. Leaves viewMC orphaned
+                dataGridViewMC.Visible = false;             // not visible
+                dataGridViewMC.Rows.Clear();
+                Controls.Add(dataGridViewMC);               // reconnect to top so it can be themed - this is where the inactive DGV is docked to.
+                splitContainerPanel.Panel1Collapsed = true;
+            }
+            else if ( !dataViewScrollerPanel.Controls.Contains(dataGridViewMC))      // initial condition is that it would have this, so don't do anything if so
+            {
+                Controls.Remove(dataGridViewMC);       // disconnect from top level as it will be here
+                dataGridViewMC.Visible = true;
+                dataViewScrollerPanel.SwapDGV(dataGridViewMC);
+                dataGridViewMatView.Rows.Clear();
+                dataGridViewMatView.Visible = false;
+                Controls.Add(dataGridViewMatView);          // reconnect back to top as inactive
+                splitContainerPanel.Panel1Collapsed = false;
+            }
+
+            buttonFilter.Visible =  buttonClear.Visible = checkBoxShowZeros.Visible = extCheckBoxWordWrap.Visible = 
+                extButtonFont.Visible = buttonExtImport.Visible = extCheckBoxMaterialView.Checked == false;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        // add items to CFS
+        public void AddtoCFS(MaterialCommodityMicroResourceType[] items, Tuple<MaterialCommodityMicroResourceType.ItemType, string>[] types, bool showcat, bool showtype)
+        {
+            if (types != null)
+            {
+                foreach (var t in types)
+                {
+                    string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfType(t.Item1, true);
+                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2);
+                }
+            }
+
+            foreach (var x in items)
+            {
+                string postfix = "";
+                if (showcat)
+                    postfix = x.TranslatedCategory;
+                if (showtype)
+                    postfix = postfix.AppendPrePad(x.TranslatedType, ",");
+
+                if (postfix.Length > 0)
+                    postfix = " (" + postfix + ")";
+
+                cfs.UC.Add(x.FDName, x.TranslatedName + postfix);
+            }
+        }
+
+        void OpenRecipeInWindow(string name, string recipe)
+        {
+            if (recipe.HasChars())   // may be null on MatView
+            {
+                recipe = recipe.Replace(": ", Environment.NewLine + "      ");
+                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                info.Info(name, FindForm().Icon, recipe);
+                info.Size = new Size(800, 600);
+                info.StartPosition = FormStartPosition.CenterParent;
+                info.ShowDialog(FindForm());
+            }
         }
 
 
