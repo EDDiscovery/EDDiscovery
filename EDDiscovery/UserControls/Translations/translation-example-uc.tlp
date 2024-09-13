@@ -389,22 +389,29 @@ SECTION UserControlMaterialCommodities
 .ColRecipes: "Recipes" @
 .ColWanted: "Want" @
 .ColNeed: "Need" @
-.textBoxItems2.ToolTip: "Count of Items" @
-.textBoxItems1.ToolTip: "Count of Items" @
-.buttonFilter.ToolTip: "Filter out items" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+
 .AllMats: "All Materials" @
 .AllCommods: "All Commodities" @
 .AllMicroresources: "All Microresources" @
+
+.textBoxItems1.ToolTip: "Count of Items" @
+.textBoxItems2.ToolTip: "Count of Items" @
+.buttonFilter.ToolTip: "Filter out items" @
+
 .buttonClear.ToolTip: "Set all wanted values to zero" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxMaterialView.ToolTip: "Switch Material Views" @
 .extButtonFont.ToolTip: "Font for shopping list" @
 .buttonExtImport.ToolTip: "Import materials list into panel" @
+
 .openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
 .displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
 .clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
 .displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
 .toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
+.Progress: "Progress" @
+
 
 SECTION UserControlMissionOverlay
 

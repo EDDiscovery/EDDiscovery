@@ -388,15 +388,16 @@ SECTION UserControlMaterialCommodities
 .ColRecipes: "Recipes" => "Recetas"
 .ColWanted: "Want" => "Deseado"
 .ColNeed: "Need" => "Necesario"
-.textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
-.textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems2.ToolTip
-.buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = UserControlEngineering.extCheckBoxWordWrap.ToolTip
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
 .AllMats: "All Materials" => "Todos los Materiales"
 .AllCommods: "All Commodities" => "Todas las Mercancías"
 .AllMicroresources: "All Microresources" => "Todos los Microrecursos"
+.textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems2.ToolTip
+.textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
+.buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = UserControlEngineering.extCheckBoxWordWrap.ToolTip
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
+.extCheckBoxMaterialView.ToolTip: "Switch Material Views" @
 .extButtonFont.ToolTip: "Font for shopping list" => "Fuente para la lista de compras"
 .buttonExtImport.ToolTip: "Import materials list into panel" => "Importar lista de materiales al panel"
 .openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" => "Abrir Receta en Ventana"
@@ -404,6 +405,7 @@ SECTION UserControlMaterialCommodities
 .clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" => "Limpiar todos los elementos en la lista de compras"
 .displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" => "Mostrar todos los elementos no nulos en la lista de compras"
 .toolStripMenuItemSLClearAll: "Clear all display items in shopping list" = UserControlMaterialCommodities.clearAllDisplayItemsInShoppingListToolStripMenuItem
+.Progress: "Progress" @
 
 SECTION UserControlMissionOverlay
 

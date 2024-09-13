@@ -425,6 +425,7 @@ namespace EDDiscovery
         UserControlMaterialCommodities_buttonClear_ToolTip,
         UserControlMaterialCommodities_extButtonFont_ToolTip,
         UserControlMaterialCommodities_buttonExtImport_ToolTip,
+        UserControlMaterialCommodities_extCheckBoxMaterialView_ToolTip,
 
         UserControlMaterialCommodities_checkBoxShowZeros_ToolTip, // ToolTip 'Green will show materials with zero counts, red means remove them'
         UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
@@ -434,6 +435,7 @@ namespace EDDiscovery
         UserControlMaterialCommodities_Total, // Data !! NOTE
         UserControlMaterialCommodities_Rare, // Rare !! NOTE
         UserControlMaterialCommodities_ShipLocker,
+        UserControlMaterialCommodities_Progress,
         UserControlMaterialCommodities_AllMats,
         UserControlMaterialCommodities_AllCommods,
         UserControlMaterialCommodities_AllMicroresources,

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright © 2016 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -82,6 +82,9 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlMaterialCommodities_ColWanted, EDTx.UserControlMaterialCommodities_ColNeed,
                                         };
 
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { dataGridViewMatView }, "UserControlMaterialCommodities");
+            colMType.HeaderText = "Type".TxID(EDTx.UserControlMaterialCommodities_ColType);     // we exclude MatView, as its mostly non translated things, and just fix type
+
             var enumlisttt = new Enum[] { EDTx.UserControlMaterialCommodities_buttonFilter_ToolTip, EDTx.UserControlMaterialCommodities_textBoxItems1_ToolTip,
                                         EDTx.UserControlMaterialCommodities_textBoxItems2_ToolTip,
                                         EDTx.UserControlMaterialCommodities_buttonClear_ToolTip,
@@ -89,17 +92,20 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip,
                                         EDTx.UserControlMaterialCommodities_extButtonFont_ToolTip,
                                         EDTx.UserControlMaterialCommodities_buttonExtImport_ToolTip,
+                                        EDTx.UserControlMaterialCommodities_extCheckBoxMaterialView_ToolTip,
                                         };
 
-            var enumlistcms = new Enum[] {EDTx.UserControlMaterialCommodities_openRecipeInWindowToolStripMenuItem, EDTx.UserControlMaterialCommodities_displayItemInShoppingListToolStripMenuItem,
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, "UserControlMaterialCommodities");
+
+            var enumlistcms = new Enum[] {EDTx.UserControlMaterialCommodities_openRecipeInWindowToolStripMenuItem,
+                                        EDTx.UserControlMaterialCommodities_displayItemInShoppingListToolStripMenuItem,
                                         EDTx.UserControlMaterialCommodities_clearAllDisplayItemsInShoppingListToolStripMenuItem,
                                         EDTx.UserControlMaterialCommodities_displayAllInShoppingListToolStripMenuItem};
 
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, "UserControlMaterialCommodities");
+
             var enumlistcmsSL = new Enum[] { EDTx.UserControlMaterialCommodities_toolStripMenuItemSLClearAll };
-            // tbd tbd BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, "UserControlMaterialCommodities");
-            //BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, "UserControlMaterialCommodities");
-            //BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, "UserControlMaterialCommodities");
-            //BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, "UserControlMaterialCommodities");
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, "UserControlMaterialCommodities");
 
             // now configure grid, filter selector
 
@@ -161,20 +167,18 @@ namespace EDDiscovery.UserControls
             if (showall)      // need to post sort as added above in sub groups
                 cfs.UC.Sort();
 
-            // Designer has ColName, ColShortName, ColCategory, ColType, ColNumber,   ColBackpack, ColPrice,  ColRecipe, ColWanted, ColNeed
-            // Materials:   ColName, ColShortName, ColCategory, ColType, ColNumber,   xxxxxx,      xxxxxxxx,  ColRecipe, ColWanted, ColNeed
-            // Commodities: ColName, xxxxxx      , xxxxxx     , ColType, ColNumber,   xxxxxx,      ColPrice,  ColRecipe, ColWanted, ColNeed
-            // MicroRes:    ColName, ColShortName, ColCategory, xxxxxx,  Ship locker, ColBackPack, ColPrice,  ColRecipe, ColWanted, ColNeed
-
-            ColPrice.Tag = ColNumber.Tag = ColWanted.Tag = ColNeed.Tag = "Num";     // these tell the sorter to do numeric sorting
+            // Designer has ColName, ColShortName, ColCategory, ColType, ColNumber,   ColBackpack, ColPrice,  ColWanted, ColNeed, ColRecipe
+            // Materials:   ColName, ColShortName, ColCategory, ColType, ColNumber,   xxxxxx,      xxxxxxxx,  ColWanted, ColNeed, ColRecipe
+            // Commodities: ColName, xxxxxx      , xxxxxx     , ColType, ColNumber,   xxxxxx,      ColPrice,  ColWanted, ColNeed, ColRecipe
+            // MicroRes:    ColName, ColShortName, ColCategory, xxxxxx,  Ship locker, ColBackPack, xxxxxxxx,  ColWanted, ColNeed, ColRecipe
 
             // configure main grid and materials alt view
-            // grid has Name | ShortName | Catagory | Type | Number | Backpack | Avg.Price | Want | Need | Recipes columns at start
 
             if (PanelMode == PanelType.Materials)
             {
                 dataGridViewMC.Columns.Remove(ColBackPack);         // do not use back pack
-                dataGridViewMC.Columns.Remove(ColPrice);            // do not use price
+
+                ColPrice.HeaderText = "Progress".T(EDTx.UserControlMaterialCommodities_Progress);     // price becomes progress bar
 
                 labelItems1.Text = "Data".T(EDTx.UserControlMaterialCommodities_Data);
                 labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
@@ -408,6 +412,7 @@ namespace EDDiscovery.UserControls
                             rowobj = new[] { mcmrt.TranslatedName, mcmrt.Shortname, mcmrt.TranslatedCategory,
                                                 mcmrt.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
                                                 matcounts[0].ToString(),
+                                                "??",
                                                 wantedamount.ToStringInvariant(),
                                                 need.ToString(),
                                                 recipes,
@@ -451,10 +456,23 @@ namespace EDDiscovery.UserControls
 
                         if (repaintgrid)
                         {
-                            int rowno = dataGridViewMC.Rows.Add(rowobj);
-                            dataGridViewMC.Rows[rowno].Cells[ColRecipes.Index].ToolTipText = recipes;   // may be empty, never null
-                            dataGridViewMC.Rows[rowno].Cells[MCGrid_MCDType].Tag = mcmrt;    // always set
-                            dataGridViewMC.Rows[rowno].Cells[MCGrid_MCMR].Tag = mcmr;     // could be null
+                            DataGridViewRow rw = dataGridViewMC.Add(rowobj);        // use extension method to add rowobjs and return
+
+                            if ( PanelMode == PanelType.Materials)
+                            {
+                                var pcell= new BaseUtils.DataGridViewProgressCell();
+                                pcell.BarForeColor = ExtendedControls.Theme.Current.TextBlockSuccessColor;
+
+                                int limit = mcmrt.MaterialLimit().Value;
+                                pcell.Value = 100 * matcounts[0] / limit;
+                                pcell.TextToRightPreferentially = true;
+                                // no need pcell.PercentageTextFormat = "{0:0.#}% (" + limit.ToStringInvariant() + ")";
+                                rw.Cells[ColPrice.Index] = pcell;
+                            }
+
+                            rw.Cells[ColRecipes.Index].ToolTipText = recipes;   // may be empty, never null
+                            rw.Cells[MCGrid_MCDType].Tag = mcmrt;    // always set
+                            rw.Cells[MCGrid_MCMR].Tag = mcmr;     // could be null
                         }
                     }
                 }
@@ -517,9 +535,9 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewMatView.Rows.Clear();
 
-            foreach (var t in Enum.GetValues(typeof(MaterialCommodityMicroResourceType.MaterialGroupType)))     // relies on MCD being in order
+            foreach (MaterialCommodityMicroResourceType.MaterialGroupType groupt in Enum.GetValues(typeof(MaterialCommodityMicroResourceType.MaterialGroupType)))     // relies on MCD being in order
             {
-                var matgroup = (MaterialCommodityMicroResourceType.MaterialGroupType)t;
+                var matgroup = (MaterialCommodityMicroResourceType.MaterialGroupType)groupt;
 
                 if (matgroup != MaterialCommodityMicroResourceType.MaterialGroupType.NA)
                 {
@@ -535,14 +553,14 @@ namespace EDDiscovery.UserControls
                     tbc.Value = "";
                     progressrow.Cells.Add(tbc);
 
-                    foreach ( var mcd in list)
+                    foreach ( var mcmrt in list)
                     {
-                        MaterialCommodityMicroResource m = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value, mcd.FDName);      // at generation mcl, find fdname.
+                        MaterialCommodityMicroResource m = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value, mcmrt.FDName);      // at generation mcl, find fdname.
                         int count = m != null ? m.Count : 0;
-                        int limit = mcd.MaterialLimit().Value;
+                        int limit = mcmrt.MaterialLimit().Value;
 
                         tbc = new DataGridViewTextBoxCell();
-                        tbc.Value = $"{mcd.TranslatedName} ({count}/{limit})";
+                        tbc.Value = $"{mcmrt.TranslatedName} ({count}/{limit})";
                         textrow.Cells.Add(tbc);
 
                         var pcell = new BaseUtils.DataGridViewProgressCell();
@@ -551,11 +569,11 @@ namespace EDDiscovery.UserControls
                         pcell.TextToRightPreferentially = true;
                         progressrow.Cells.Add(pcell);
 
-                        string recipes = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);    // may be empty. Not null
+                        string recipes = Recipes.UsedInRecipesByFDName(mcmrt.FDName, Environment.NewLine);    // may be empty. Not null
                         if (recipes.HasChars())
                         {
                             pcell.ToolTipText = tbc.ToolTipText = recipes;
-                            pcell.Tag = tbc.Tag = mcd.TranslatedName;
+                            pcell.Tag = tbc.Tag = mcmrt.TranslatedName;
                         }
                     }
 
@@ -687,8 +705,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            object tag = e.Column.Tag;
-            if (tag != null)
+            if (e.Column == ColName || e.Column == ColShortName || e.Column == ColRecipes || e.Column == ColCategory || e.Column == ColType)
+                e.SortDataGridViewColumnAlpha();
+            else
                 e.SortDataGridViewColumnNumeric();
         }
 
