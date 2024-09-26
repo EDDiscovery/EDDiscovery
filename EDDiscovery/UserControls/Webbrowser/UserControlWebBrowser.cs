@@ -229,8 +229,8 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 int width = 500;
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".T(EDTx.UserControlWebBrowser_System), new Point(10, 40), new Size(110, 24), null));
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(120, 40), new Size(width - 120 - 20, 24), null));
+                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "System:".T(EDTx.UserControlWebBrowser_System), new Point(10, 40), new Size(110, 24), null));
+                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(120, 40), new Size(width - 120 - 20, 24), null));
 
                 f.AddOK(new Point(width - 20 - 80, 80));
                 f.AddCancel(new Point(width - 200, 80));
@@ -296,7 +296,7 @@ namespace EDDiscovery.UserControls
 
             string deflist = GetSetting("Allowed", "");
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { TextBoxMultiline = true });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { TextBoxMultiline = true });
 
             f.AddOK(new Point(width - 100, 180));
             f.AddCancel(new Point(width - 200, 180));

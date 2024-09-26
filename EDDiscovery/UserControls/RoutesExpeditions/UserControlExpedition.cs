@@ -1007,7 +1007,7 @@ namespace EDDiscovery.UserControls
                 f.ReturnResult(DialogResult.OK);
             };
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry(usc, "UC", "", new Point(5, 30), usc.Size, null));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry(usc, "UC", "", new Point(5, 30), usc.Size, null));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {

@@ -193,10 +193,10 @@ namespace EDDiscovery
 
                     ExtButton wikibutton = new ExtButton();
                     wikibutton.Image = global::EDDiscovery.Icons.Controls.Wiki;
-                    cfg.Add(new ConfigurableForm.Entry(wikibutton, "Wiki", null, new Point(0, 0), new Size(24, 24), null));
+                    cfg.Add(new ConfigurableEntryList.Entry(wikibutton, "Wiki", null, new Point(0, 0), new Size(24, 24), null));
                     ExtButton videobutton = new ExtButton();
                     videobutton.Image = global::EDDiscovery.Icons.Controls.Video;
-                    cfg.Add(new ConfigurableForm.Entry(videobutton, "Video", null, new Point(26, 0), new Size(24, 24), null));
+                    cfg.Add(new ConfigurableEntryList.Entry(videobutton, "Video", null, new Point(26, 0), new Size(24, 24), null));
 
                     cfg.Trigger += (string logicalname, string ctrlname, object callertag) =>
                     {

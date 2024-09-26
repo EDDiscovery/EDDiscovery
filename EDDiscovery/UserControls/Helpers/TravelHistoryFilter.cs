@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            frm.Add(new ConfigurableForm.Entry("add", typeof(ExtButton), "+", new Point(8, vpos), new Size(24, 24), "Add a new date time range"));
+            frm.Add(new ConfigurableEntryList.Entry("add", typeof(ExtButton), "+", new Point(8, vpos), new Size(24, 24), "Add a new date time range"));
             frm.AddOK(new Point(420, vpos), "OK");
             frm.InstallStandardTriggers();
             frm.Trigger += (name, control, obj) =>      // same as spansh extButtonFleetCarrier_Click
@@ -351,9 +351,9 @@ namespace EDDiscovery.UserControls
 
         private static void AddDT(ConfigurableForm frm, DateTime s, DateTime e, int vpos, int controlnumber)
         {
-            frm.Add(new ConfigurableForm.Entry("dates:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s), new Point(8, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
-            frm.Add(new ConfigurableForm.Entry("datee:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(e), new Point(250, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
-            frm.Add(new ConfigurableForm.Entry("del:" + controlnumber, typeof(ExtButton), "X", new Point(470, vpos), new Size(24, 24), null));
+            frm.Add(new ConfigurableEntryList.Entry("dates:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s), new Point(8, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            frm.Add(new ConfigurableEntryList.Entry("datee:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(e), new Point(250, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            frm.Add(new ConfigurableEntryList.Entry("del:" + controlnumber, typeof(ExtButton), "X", new Point(470, vpos), new Size(24, 24), null));
         }
     }
 

@@ -30,8 +30,8 @@ public static class DataGridViewDialogs
 
         Type t = typeof(DataGridViewDialogs);
 
-        f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Jump to:".TxID(EDTx.DataGridViewDialogs_Jumpto), new Point(10, 40), new Size(140, 24), ""));
-        f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", typeof(ExtendedControls.NumberBoxLong), initialvalue.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter number to jump to or near to".TxID(EDTx.DataGridViewDialogs_EN)) { NumberBoxDoubleMinimum = 0, NumberBoxFormat = "0" });
+        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Jump to:".TxID(EDTx.DataGridViewDialogs_Jumpto), new Point(10, 40), new Size(140, 24), ""));
+        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Entry", typeof(ExtendedControls.NumberBoxLong), initialvalue.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter number to jump to or near to".TxID(EDTx.DataGridViewDialogs_EN)) { NumberBoxDoubleMinimum = 0, NumberBoxFormat = "0" });
 
         f.AddOK(new Point(width - 100, 70), "Press to Accept".TxID(EDTx.DataGridViewDialogs_PresstoAccept));
         f.AddCancel(new Point(width - 200, 70), "Press to Cancel".TxID(EDTx.DataGridViewDialogs_PresstoCancel));

@@ -92,7 +92,7 @@ namespace EDDiscovery.Actions
                     new BaseUtils.TypeHelpers.PropertyNameInfo("PopOutTitle", "Title of popout", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
                     new BaseUtils.TypeHelpers.PropertyNameInfo("PopOutIndex", "Index of popout,0 on", BaseUtils.ConditionEntry.MatchType.NumericEquals, "Event Variable"),
                 }
-                ),
+                ), //11
             new ActionEventEDList("onPopDown", "UserUIEvent", "UI",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
                 {
@@ -101,29 +101,24 @@ namespace EDDiscovery.Actions
                 }
                 ), //12
             
-            null, // 13 was OnPanelChange
-            null, // 14 was onHistorySelection
-            
             new ActionEventEDList("onEliteUIEvent", "EliteUIEvent", "UIEvents",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
                 {
                     new BaseUtils.TypeHelpers.PropertyNameInfo("EventClass_UIDisplayed", "Indicates if UI events are shown in the journal", BaseUtils.ConditionEntry.MatchType.IsTrue, "Event Variable"),
                 }
-                ),  // 15
+                ),  // 13
             new ActionEventEDList("onEDDNSync", "ProgramEvent", "Program",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
                 {
                     new BaseUtils.TypeHelpers.PropertyNameInfo("EventCount", "Number of events sent", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
-                }), // 16
-
-            null, //17 was IGAU removed for 17.0.1 by request - no longer called
+                }), // 14
 
             new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
                 {
                     new BaseUtils.TypeHelpers.PropertyNameInfo("EventStarList", "List of stars, semi colon separated", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
                     new BaseUtils.TypeHelpers.PropertyNameInfo("EventCount", "Number of events sent", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
-                }), // 18
+                }), // 15
 
             new ActionEventEDList("onVoiceInput", "Voice", "Voice",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
@@ -131,22 +126,22 @@ namespace EDDiscovery.Actions
                     new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceInput", "Voice text recognised", BaseUtils.ConditionEntry.MatchType.MatchSemicolonList, "Event Variable"),
                     new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceConfidence", "% confidence in recognition", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual, "Event Variable"),
                 }
-                ), //19
+                ), //16
             new ActionEventEDList("onVoiceInputFailed", "Voice", "VoiceOther",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
                 {
                     new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceInput", "Voice text not recognised", BaseUtils.ConditionEntry.MatchType.MatchSemicolonList, "Event Variable"),
                     new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceConfidence", "% confidence in recognition", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual, "Event Variable"),
                 }
-                ), //20
+                ), //17
             new ActionEventEDList("onKeyReleased", "KeyPress", "UI",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
                 {
                     new BaseUtils.TypeHelpers.PropertyNameInfo("KeyPress", "Logical name of key", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable")
                 }
-                ), //21
+                ), //18
 
-            new ActionEventEDList("onEliteInputRaw","EliteUIEvent",  "InputToKey",null),        // 22
+            new ActionEventEDList("onEliteInputRaw","EliteUIEvent",  "InputToKey",null),        // 19
 
             new ActionEventEDList("onSurveyor","PanelEvent",  "Program",
                  new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
@@ -155,9 +150,9 @@ namespace EDDiscovery.Actions
                     new BaseUtils.TypeHelpers.PropertyNameInfo("Body", "Long body name", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
                     new BaseUtils.TypeHelpers.PropertyNameInfo("BodyShortName", "Short Body Name (excluding star system)", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
                     new BaseUtils.TypeHelpers.PropertyNameInfo("Value", "Associated data for certain types", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
-                }), // 23
+                }), // 20
 
-            new ActionEventEDList("All","","Misc",null),                      // All, special match only
+            new ActionEventEDList("All","","Misc",null),                      // 21, All, special match only
         };
 
         public static ActionEvent onInstall { get { return eddevents[0]; } }
@@ -173,14 +168,14 @@ namespace EDDiscovery.Actions
         public static ActionEvent onEliteInputOff { get { return eddevents[10]; } }
         public static ActionEvent onPopUp { get { return eddevents[11]; } }
         public static ActionEvent onPopDown { get { return eddevents[12]; } }
-        public static ActionEvent onUIEvent { get { return eddevents[15]; } }
-        public static ActionEvent onEDDNSync { get { return eddevents[16]; } }
-        public static ActionEvent onEDSMSync { get { return eddevents[18]; } }
-        public static ActionEvent onVoiceInput { get { return eddevents[19]; } }
-        public static ActionEvent onVoiceInputFailed { get { return eddevents[20]; } }
-        public static ActionEvent onKeyReleased { get { return eddevents[21]; } }
-        public static ActionEvent onInputToKey { get { return eddevents[22]; } }
-        public static ActionEvent onSurveyor { get { return eddevents[23]; } }
+        public static ActionEvent onUIEvent { get { return eddevents[13]; } }
+        public static ActionEvent onEDDNSync { get { return eddevents[14]; } }
+        public static ActionEvent onEDSMSync { get { return eddevents[15]; } }
+        public static ActionEvent onVoiceInput { get { return eddevents[16]; } }
+        public static ActionEvent onVoiceInputFailed { get { return eddevents[17]; } }
+        public static ActionEvent onKeyReleased { get { return eddevents[18]; } }
+        public static ActionEvent onInputToKey { get { return eddevents[19]; } }
+        public static ActionEvent onSurveyor { get { return eddevents[20]; } }
 
         // for events marked with run at refresh, get an HE per entry
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", "",null); }
@@ -210,8 +205,8 @@ namespace EDDiscovery.Actions
 
         public static List<ActionEvent> StaticDefinedEvents()       
         {
-            List<ActionEvent> be = new List<ActionEvent>(ActionEvent.events);
-            be.AddRange(ActionEventEDList.eddevents);
+            List<ActionEvent> be = new List<ActionEvent>(ActionEvent.events.Where(e => e != null));     // in case when we remove entries we set them to null, exclude those
+            be.AddRange(ActionEventEDList.eddevents.Where(e=>e!=null));       
             return be;
         }
 
