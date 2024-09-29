@@ -380,13 +380,6 @@ namespace EDDiscovery.UserControls
 
             rw.Cells[1].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
-            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
-
-            string tip = String.Join(Environment.NewLine, he.EventSummary, EventDescription, EventDetailedInfo);
-
-            rw.Cells[1].ToolTipText = tip;
-            rw.Cells[3].ToolTipText = tip;
-
             return rw;
         }
 
@@ -810,8 +803,6 @@ namespace EDDiscovery.UserControls
                         HistoryEntry he = dataGridViewStarList.Rows[r].Tag as HistoryEntry;
                         DataGridViewRow rw = dataGridViewStarList.Rows[r];
 
-                        he.FillInformation(out string EventDescription, out string EventDetailedInfo);
-
                         return new Object[] {
                             rw.Cells[0].Value,
                             rw.Cells[1].Value,
@@ -821,8 +812,8 @@ namespace EDDiscovery.UserControls
                             "",
                             he.WhereAmI ,
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
-                            EventDescription,
-                            EventDetailedInfo,
+                            he.GetInfo(),
+                            he.GetDetailed()??"",
                             he.isTravelling ? he.TravelledDistance.ToString("N1",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledSeconds.ToString("d'd 'h'h 'm'm 's's'",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledJumps.ToString("N0",grd.FormatCulture) : "",

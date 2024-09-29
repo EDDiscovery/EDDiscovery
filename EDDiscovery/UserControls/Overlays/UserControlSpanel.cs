@@ -323,52 +323,53 @@ namespace EDDiscovery.UserControls
 
                             StarScan.SystemNode sn = await scan.FindSystemAsync(last.System, EliteDangerousCore.WebExternalDataLookup.All);    // web lookup
 
-                            StringBuilder res = new StringBuilder();
+                            StringBuilder sb = new StringBuilder();
 
                             if (sn != null && sn.StarNodes.Count > 0 && sn.StarNodes.Values[0].ScanData != null)
                             {
-                                JournalScan js = sn.StarNodes.Values[0].ScanData;
+                                JournalScan sd = sn.StarNodes.Values[0].ScanData;
+                                JournalScan.HabZones hz = sd.GetHabZones();
 
                                 if (Config(Configuration.showHabInformation))
                                 {
-                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZHab);
-                                    res.AppendFormat(hz + Environment.NewLine);
+                                    sd.HabZoneText_Hab(hz, sb);
+                                    sb.AppendCR();
                                 }
 
                                 if (Config(Configuration.showMetalRichZone))
                                 {
-                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZMR);
-                                    res.AppendFormat(hz + Environment.NewLine);
+                                    sd.HabZoneText_MRP(hz, sb); 
+                                    sb.AppendCR();
                                 }
 
                                 if (Config(Configuration.showWaterWrldZone))
                                 {
-                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZWW);
-                                    res.AppendFormat(hz + Environment.NewLine);
+                                    sd.HabZoneText_WW(hz, sb);
+                                    sb.AppendCR();
                                 }
 
                                 if (Config(Configuration.showEarthLikeZone))
                                 {
-                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZEL);
-                                    res.AppendFormat(hz + Environment.NewLine);
+                                    sd.HabZoneText_EL(hz, sb);
+                                    sb.AppendCR();
                                 }
 
                                 if (Config(Configuration.showAmmonWrldZone))
                                 {
-                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZAW);
-                                    res.AppendFormat(hz + Environment.NewLine);
+                                    sd.HabZoneText_AW(hz, sb);
+                                    sb.AppendCR();
                                 }
 
                                 if (Config(Configuration.showIcyPlanetZone))
                                 {
-                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZIP);
-                                    res.AppendFormat(hz + Environment.NewLine);
+                                    sd.HabZoneText_ZIP(hz, sb); 
+                                    sb.AppendCR();
                                 }
                             }
 
-                            if (res.ToString().HasChars())
+                            if (sb.ToString().HasChars())
                             {
-                                rowpos = rowmargin + AddColText(0, 0, rowpos, res.ToString(), textcolour, backcolour, dfont, null).Location.Bottom;
+                                rowpos = rowmargin + AddColText(0, 0, rowpos, sb.ToString(), textcolour, backcolour, dfont, null).Location.Bottom;
                             }
                         }
 
@@ -419,8 +420,6 @@ namespace EDDiscovery.UserControls
             if (Config(Configuration.showIcon))
                 coldata.Add("`!!ICON!!");                // dummy place holder..
 
-            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
-
             if (Config(Configuration.showDescription))
             {
                 tooltipattach.Add(coldata.Count);
@@ -430,7 +429,7 @@ namespace EDDiscovery.UserControls
             if (Config(Configuration.showInformation))
             {
                 tooltipattach.Add(coldata.Count);
-                coldata.Add(EventDescription.Replace("\r\n", " "));
+                coldata.Add(he.GetInfo().Replace("\r\n", " "));
             }
 
             if (layoutorder == 0 && Config(Configuration.showNotes))
@@ -474,8 +473,6 @@ namespace EDDiscovery.UserControls
                 colnum++;
             }
 
-            string tooltip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
-
             List<ExtendedControls.ExtPictureBox.ImageElement> items = new List<ExtPictureBox.ImageElement>();
 
             for (int i = 0; i < coldata.Count; i++)             // then we draw them, allowing them to overfill columns if required
@@ -493,7 +490,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    var e = AddColText(colnum + i, colnum + nextfull, rowpos, coldata[i], textcolour, backcolour, dfont, tooltipattach.Contains(i) ? tooltip : null);
+                    var e = AddColText(colnum + i, colnum + nextfull, rowpos, coldata[i], textcolour, backcolour, dfont, null);
                     if (e != null)
                     {
                         maxrowpos = Math.Max(maxrowpos, e.Location.Bottom);
@@ -847,7 +844,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayString(0,historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
+                scantext = scan.DisplayString(historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
                 SetSurfaceScanBehaviour();  // set up timers etc.
             }

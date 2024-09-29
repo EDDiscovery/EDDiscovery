@@ -292,10 +292,9 @@ namespace EDDiscovery.UserControls
             if (CreateEntry(he, out var rewardcol))
             {
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
-                he.FillInformation(out var eventDescription, out _);
 
                 rw.CreateCells(dataGridViewCombat, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
-                    he.EventSummary, eventDescription, rewardcol);
+                    he.EventSummary, he.GetInfo(), rewardcol);
 
                 rw.Tag = he;
                 return rw;
@@ -658,18 +657,16 @@ namespace EDDiscovery.UserControls
 
                 var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Tag;
 
-                leftclicksystem.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                 if (expanded) // put it back to original text
                 {
-                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription;
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = leftclicksystem.GetInfo();
                     row.Cells[0].Tag = null;
-
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.NotSet;
                 }
                 else
                 {
-                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = leftclicksystem.GetInfoDetailed(); 
                     row.Cells[0].Tag = true;
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.True;
                 }

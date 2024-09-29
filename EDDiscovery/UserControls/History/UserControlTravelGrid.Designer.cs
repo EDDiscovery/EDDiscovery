@@ -105,9 +105,9 @@ namespace EDDiscovery.UserControls
             this.rollUpAfterFirstToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollUpAfter5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
             this.extComboBoxQuickMarks = new ExtendedControls.ExtComboBox();
             this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
-            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -320,7 +320,7 @@ namespace EDDiscovery.UserControls
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 620);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 598);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // quickMarkToolStripMenuItem
@@ -604,7 +604,7 @@ namespace EDDiscovery.UserControls
             this.panelOutlining.KeepLastEntriesVisibleOnRollUp = 1;
             this.panelOutlining.Location = new System.Drawing.Point(0, 0);
             this.panelOutlining.Name = "panelOutlining";
-            this.panelOutlining.Size = new System.Drawing.Size(10, 616);
+            this.panelOutlining.Size = new System.Drawing.Size(2, 616);
             this.panelOutlining.TabIndex = 5;
             // 
             // vScrollBarCustom
@@ -619,13 +619,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(840, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(837, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 616);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(19, 616);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 4;
@@ -653,14 +653,14 @@ namespace EDDiscovery.UserControls
             this.ColumnNote});
             this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewTravel.Location = new System.Drawing.Point(10, 0);
+            this.dataGridViewTravel.Location = new System.Drawing.Point(2, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
             this.dataGridViewTravel.PerColumnWordWrapControl = true;
             this.dataGridViewTravel.RowHeaderMenuStrip = null;
             this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTravel.SingleRowSelect = true;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(830, 616);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(835, 616);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
@@ -792,6 +792,17 @@ namespace EDDiscovery.UserControls
             this.panelTop.Size = new System.Drawing.Size(859, 30);
             this.panelTop.TabIndex = 31;
             // 
+            // extButtonTimeRanges
+            // 
+            this.extButtonTimeRanges.Image = global::EDDiscovery.Icons.Controls.Clock;
+            this.extButtonTimeRanges.Location = new System.Drawing.Point(146, 1);
+            this.extButtonTimeRanges.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonTimeRanges.Name = "extButtonTimeRanges";
+            this.extButtonTimeRanges.Size = new System.Drawing.Size(28, 28);
+            this.extButtonTimeRanges.TabIndex = 25;
+            this.extButtonTimeRanges.UseVisualStyleBackColor = true;
+            this.extButtonTimeRanges.Click += new System.EventHandler(this.extButtonTimeRanges_Click);
+            // 
             // extComboBoxQuickMarks
             // 
             this.extComboBoxQuickMarks.BorderColor = System.Drawing.Color.Red;
@@ -839,17 +850,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.extButtonDrawnHelp.UseMnemonic = true;
             this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
-            // 
-            // extButtonTimeRanges
-            // 
-            this.extButtonTimeRanges.Image = global::EDDiscovery.Icons.Controls.Clock;
-            this.extButtonTimeRanges.Location = new System.Drawing.Point(146, 1);
-            this.extButtonTimeRanges.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonTimeRanges.Name = "extButtonTimeRanges";
-            this.extButtonTimeRanges.Size = new System.Drawing.Size(28, 28);
-            this.extButtonTimeRanges.TabIndex = 25;
-            this.extButtonTimeRanges.UseVisualStyleBackColor = true;
-            this.extButtonTimeRanges.Click += new System.EventHandler(this.extButtonTimeRanges_Click);
             // 
             // UserControlTravelGrid
             // 

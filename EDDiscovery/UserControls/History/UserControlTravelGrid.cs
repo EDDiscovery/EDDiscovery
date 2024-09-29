@@ -460,7 +460,7 @@ namespace EDDiscovery.UserControls
 
             string colIcon = "";
             string colDescription = he.EventSummary;
-            he.FillInformation(out string colInformation, out string eventDetailedInfo);
+            string colInformation = he.GetInfo();
 
             string colNote = he.GetNoteText;
 
@@ -524,11 +524,12 @@ namespace EDDiscovery.UserControls
             else if ( he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump)
                 rw.Cells[2].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
-            string tip = he.EventSummary + Environment.NewLine + colInformation + Environment.NewLine + eventDetailedInfo;
-            if ( tip.Length>2000)
-                tip = tip.Substring(0, 2000);
+// tbd tooltip
+            //string tip = he.EventSummary + Environment.NewLine + colInformation + Environment.NewLine + eventDetailedInfo;
+            //if ( tip.Length>2000)
+            //    tip = tip.Substring(0, 2000);
 
-            rw.Cells[3].ToolTipText = tip;
+            //rw.Cells[3].ToolTipText = tip;
 
             rowsbyjournalid[he.Journalid] = rw;
             return rw;
@@ -755,20 +756,19 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
                     DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
                     bool expanded = row.Cells[ColumnInformation.Index].Tag != null;
 
                     if (expanded) // put it back to original text, remove tag, and set wrap mode notset
                     {
-                        row.Cells[ColumnInformation.Index].Value = EventDescription;
+                        row.Cells[ColumnInformation.Index].Value = leftclickhe.GetInfo();
                         row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;
                         row.Cells[ColumnInformation.Index].Tag = null;
                     }
                     else
                     {
-                        string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);        // make up detailed line
+                        string infodetailed = leftclickhe.GetInfoDetailed();
 
                         using (Graphics g = Parent.CreateGraphics())
                         {
@@ -1152,8 +1152,7 @@ namespace EDDiscovery.UserControls
                 HistoryEntry he = row.Tag as HistoryEntry;
                 if (he.IsFSD || he.StopMarker || he == rightclickhe)
                 {
-                    he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
-                    row.Cells[ColumnInformation.Index].Value = eventdescription;
+                    row.Cells[ColumnInformation.Index].Value = he.GetInfo();
                     row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;        // in case it was in expanded state (see cell double click)
                     row.Cells[ColumnInformation.Index].Tag = null;
                 }

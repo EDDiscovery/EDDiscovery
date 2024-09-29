@@ -141,7 +141,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.PerColumnWordWrapControl = true;
             this.dataGridViewJournal.RowHeaderMenuStrip = null;
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewJournal.ShowCellToolTips = false;
             this.dataGridViewJournal.SingleRowSelect = true;
             this.dataGridViewJournal.Size = new System.Drawing.Size(785, 686);
             this.dataGridViewJournal.TabIndex = 0;
@@ -313,6 +312,7 @@ namespace EDDiscovery.UserControls
             this.buttonField.Name = "buttonField";
             this.buttonField.Size = new System.Drawing.Size(28, 28);
             this.buttonField.TabIndex = 25;
+            this.toolTip.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
             this.buttonField.UseVisualStyleBackColor = true;
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 

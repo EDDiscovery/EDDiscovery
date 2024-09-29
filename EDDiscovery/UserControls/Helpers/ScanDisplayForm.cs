@@ -43,9 +43,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null && (he.EntryType == JournalTypeEnum.Market || he.EntryType == JournalTypeEnum.EDDCommodityPrices))  // station data..
             {
-                he.FillInformation(out string info, out string detailed);
-
-                form.Add(new ExtendedControls.ConfigurableEntryList.Entry("Content", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), maincontentsize, null)
+                form.Add(new ExtendedControls.ConfigurableEntryList.Entry("Content", typeof(ExtendedControls.ExtRichTextBox), he.GetDetailed()??"", new Point(0, topmargin), maincontentsize, null)
                 { Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, MinimumSize = new Size(200, 200) });
 
                 JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;

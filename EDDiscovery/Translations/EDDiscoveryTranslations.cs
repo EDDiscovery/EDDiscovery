@@ -691,6 +691,7 @@ namespace EDDiscovery
         UserControlJournalGrid_buttonFilter_ToolTip, // ToolTip 'Filter out entries based on event type'
         UserControlJournalGrid_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'
         UserControlJournalGrid_checkBoxCursorToTop_ToolTip, // ToolTip 'Automatically move the cursor to the latest entry when it arrives'
+        UserControlJournalGrid_buttonField_ToolTip,
         UserControlJournalGrid_TT1, //  showing {0} original {1}
         UserControlJournalGrid_TTFilt1, // Filtered {0}
         UserControlJournalGrid_TTSelAge, // Select the entries by age,

@@ -88,9 +88,8 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "Note"] = he.GetNoteText;
 
-                he.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                vars[prefix + "EventDescription"] = EventDescription;
-                vars[prefix + "EventDetailedInfo"] = EventDetailedInfo;
+                vars[prefix + "EventDescription"] = he.GetInfo();
+                vars[prefix + "EventDetailedInfo"] = he.GetDetailed() ?? "";
 
                 vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);      //depth seems good enough
 

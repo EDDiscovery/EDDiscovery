@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 519);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(1007, 519);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowTemplate.ReadOnly = true;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(556, 519);
+            this.dataGridView.Size = new System.Drawing.Size(988, 519);
             this.dataGridView.TabIndex = 23;
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
@@ -208,13 +208,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(556, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(988, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 519);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(19, 519);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.RollUpDelay = 1000;
             this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
             this.rollUpPanelTop.ShowHiddenMarker = true;
-            this.rollUpPanelTop.Size = new System.Drawing.Size(572, 30);
+            this.rollUpPanelTop.Size = new System.Drawing.Size(1007, 30);
             this.rollUpPanelTop.TabIndex = 25;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
@@ -257,7 +257,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(572, 30);
+            this.panelControls.Size = new System.Drawing.Size(1007, 30);
             this.panelControls.TabIndex = 32;
             // 
             // edsmSpanshButton
@@ -280,7 +280,7 @@ namespace EDDiscovery.UserControls
             this.statusStripSummary.Location = new System.Drawing.Point(0, 549);
             this.statusStripSummary.Name = "statusStripSummary";
             this.statusStripSummary.ShowItemToolTips = true;
-            this.statusStripSummary.Size = new System.Drawing.Size(572, 23);
+            this.statusStripSummary.Size = new System.Drawing.Size(1007, 23);
             this.statusStripSummary.SizingGrip = false;
             this.statusStripSummary.TabIndex = 27;
             // 
@@ -306,7 +306,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.rollUpPanelTop);
             this.Controls.Add(this.statusStripSummary);
             this.Name = "UserControlScanGrid";
-            this.Size = new System.Drawing.Size(572, 572);
+            this.Size = new System.Drawing.Size(1007, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.rollUpPanelTop.ResumeLayout(false);

@@ -111,6 +111,9 @@ namespace EDDiscovery
             // test code - close down all panels except tab 0
             //forach (PanelInformation.PanelIDs pc in Enum.GetValues(typeof(PanelInformation.PanelIDs))) { if (pc != PanelInformation.PanelIDs.GroupMarker) { TabPage p = tabControlMain.GetMajorTab(pc); if (p != null && p.TabIndex>0) tabControlMain.RemoveTab(p); } }
 
+           // EliteDangerousCore.JournalTest.CheckAllJournalsGetInfoDescription(@"c:\users\rk\saved games\frontier developments\elite dangerous", "*.log", @"c:\code\out.log");
+            // EliteDangerousCore.JournalTest.CheckAllJournalsGetInfoDescription(@"c:\code\logs", "journal*.log", @"c:\code\out.log");
+        //    EliteDangerousCore.JournalTest.CheckAllJournalsGetInfoDescription(@"c:\code\logs\atlasgaming", "journal*.log", @"c:\code\out.log");
 
 
         }
