@@ -46,17 +46,17 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extButtonShowControl = new ExtendedControls.ExtButton();
+            this.extButtonHabZones = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.extButtonShowControl = new ExtendedControls.ExtButton();
-            this.extButtonHabZones = new ExtendedControls.ExtButton();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -75,6 +75,34 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
+            // 
+            // extButtonShowControl
+            // 
+            this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extButtonShowControl.Location = new System.Drawing.Point(8, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonShowControl.Name = "extButtonShowControl";
+            this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
+            this.extButtonShowControl.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonShowControl, "Configure overall settings");
+            this.extButtonShowControl.UseVisualStyleBackColor = false;
+            this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
+            // 
+            // extButtonHabZones
+            // 
+            this.extButtonHabZones.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonHabZones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonHabZones.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
+            this.extButtonHabZones.Location = new System.Drawing.Point(48, 1);
+            this.extButtonHabZones.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonHabZones.Name = "extButtonHabZones";
+            this.extButtonHabZones.Size = new System.Drawing.Size(28, 28);
+            this.extButtonHabZones.TabIndex = 35;
+            this.toolTip.SetToolTip(this.extButtonHabZones, "Configure hab zone information");
+            this.extButtonHabZones.UseVisualStyleBackColor = false;
+            this.extButtonHabZones.Click += new System.EventHandler(this.extButtonHabZones_Click);
             // 
             // dataViewScrollerPanel2
             // 
@@ -197,33 +225,16 @@ namespace EDDiscovery.UserControls
             this.panelControls.Size = new System.Drawing.Size(1007, 30);
             this.panelControls.TabIndex = 32;
             // 
-            // extButtonShowControl
+            // edsmSpanshButton
             // 
-            this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonShowControl.Location = new System.Drawing.Point(8, 1);
-            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonShowControl.Name = "extButtonShowControl";
-            this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
-            this.extButtonShowControl.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonShowControl, "Configure overall settings");
-            this.extButtonShowControl.UseVisualStyleBackColor = false;
-            this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
-            // 
-            // extButtonHabZones
-            // 
-            this.extButtonHabZones.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonHabZones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonHabZones.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
-            this.extButtonHabZones.Location = new System.Drawing.Point(48, 1);
-            this.extButtonHabZones.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonHabZones.Name = "extButtonHabZones";
-            this.extButtonHabZones.Size = new System.Drawing.Size(28, 28);
-            this.extButtonHabZones.TabIndex = 35;
-            this.toolTip.SetToolTip(this.extButtonHabZones, "Configure hab zone information");
-            this.extButtonHabZones.UseVisualStyleBackColor = false;
-            this.extButtonHabZones.Click += new System.EventHandler(this.extButtonHabZones_Click);
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(88, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 36;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
             // statusStripSummary
             // 
@@ -252,20 +263,9 @@ namespace EDDiscovery.UserControls
             this.toolStripJumponiumProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripJumponiumProgressBar.Size = new System.Drawing.Size(100, 17);
             // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(88, 1);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 36;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
-            // 
             // colImage
             // 
-            this.colImage.FillWeight = 20F;
+            this.colImage.FillWeight = 50F;
             this.colImage.HeaderText = "";
             this.colImage.MinimumWidth = 20;
             this.colImage.Name = "colImage";

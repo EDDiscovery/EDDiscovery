@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-       //     DGVLoadColumnLayout(dataGridView);
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
