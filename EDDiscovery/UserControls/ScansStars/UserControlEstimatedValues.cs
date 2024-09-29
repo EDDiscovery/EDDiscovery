@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
                     if (bodies.ScanData != null && bodies.ScanData.BodyName != null && (edsmSpanshButton.IsAnySet || !bodies.ScanData.IsWebSourced))     
                     {
                         //System.Diagnostics.Debug.WriteLine("Estimated values Recalc for " + bodies.ScanData.BodyName);
-                        var ev = bodies.ScanData.RecalcEstimatedValues();
+                        var ev = bodies.ScanData.GetEstimatedValues();
                         if (!checkBoxShowZeros.Checked && ev.EstimatedValueBase == 0)
                             continue; // skip 0-value things
 

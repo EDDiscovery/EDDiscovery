@@ -1495,6 +1495,9 @@ namespace EDDiscovery
         UserControlScanGrid_colClass, // Column Header 'Class'
         UserControlScanGrid_colDistance, // Column Header 'Distance'
         UserControlScanGrid_colBriefing, // Column Header 'Information'
+        UserControlScanGrid_ColCurValue, 
+        UserControlScanGrid_ColMaxValue,
+        UserControlScanGrid_ColOrganics,
         UserControlScanGrid_extButtonShowControl_ToolTip, // ToolTip 'Configure overall settings'
         UserControlScanGrid_extButtonHabZones_ToolTip, // ToolTip 'Configure hab zone information'
         UserControlScanGrid_MainStar, // Main Star
@@ -1509,7 +1512,6 @@ namespace EDDiscovery
         UserControlScanGrid_BC, // This body contains:
         UserControlScanGrid_Ring, // Has 1 ring:
         UserControlScanGrid_Belt, // Belt:
-        UserControlScanGrid_Value, // Value
         UserControlScanGrid_GS, // This is a green system, as it has all existing jumponium materials available!
         UserControlScanGrid_JS, //  jumponium materials found in system.
         UserControlScanGrid_ScanSummaryfor, // Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons
@@ -1517,7 +1519,7 @@ namespace EDDiscovery
         UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem,
         UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem,
         UserControlScanGrid_materialsToolStripMenuItem,
-        UserControlScanGrid_valuesToolStripMenuItem,
+
 
         UserControlCommonBase_Copyingtexttoclipboardfailed, // Copying text to clipboard failed
 

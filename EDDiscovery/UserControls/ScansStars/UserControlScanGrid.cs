@@ -53,10 +53,11 @@ namespace EDDiscovery.UserControls
 
             DiscoveryForm.OnNewEntry += NewEntry;
 
-            var enumlist = new Enum[] { EDTx.UserControlScanGrid_colName, EDTx.UserControlScanGrid_colClass, EDTx.UserControlScanGrid_colDistance, EDTx.UserControlScanGrid_colBriefing };
-            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip};
-
+            var enumlist = new Enum[] { EDTx.UserControlScanGrid_colName, EDTx.UserControlScanGrid_colClass, EDTx.UserControlScanGrid_colDistance, EDTx.UserControlScanGrid_colBriefing,
+            EDTx.UserControlScanGrid_ColCurValue, EDTx.UserControlScanGrid_ColMaxValue, EDTx.UserControlScanGrid_ColOrganics };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);
@@ -73,7 +74,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView);
+       //     DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
@@ -160,12 +161,22 @@ namespace EDDiscovery.UserControls
 
             HashSet<string> jumponiums = new HashSet<string>();
 
+            SystemDisplay sd = new SystemDisplay();
+            sd.Font = Theme.Current.GetFont;
+            Size imagesize = new Size(48, 48);
+
+            long organicstotal = 0;
+
             foreach (StarScan.ScanNode sn in all_nodes)
             {
                 // define strings to be populated
                 var bdClass = new StringBuilder();
                 var bdDist = new StringBuilder();
                 var bdDetails = new StringBuilder();
+
+                string[] texttoadd = null;
+                long organicssystem = 0;
+                DataGridViewPictureBox pb = new DataGridViewPictureBox();
 
                 if (sn.NodeType == StarScan.ScanNodeType.ring)
                 {
@@ -192,24 +203,14 @@ namespace EDDiscovery.UserControls
                             bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / BodyPhysicalConstants.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
                         }
 
-                        var img = global::EDDiscovery.Icons.Controls.Belt;
+                        texttoadd = new string[] { sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
-                        dataGridView.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() });
-
-                        var cur = dataGridView.Rows[dataGridView.Rows.Count - 1];
-
-                        cur.Tag = img;
-                        cur.Cells[0].Tag = null;
-                        cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                    sn.ScanData.DisplayString( historicmcl, curmcl);
+                        pb.PictureBox.AddImage(new Rectangle(0,0, imagesize.Width, imagesize.Height), BodyToImages.GetBeltImage());
                     }
                 }
-
                 // must have scan data and either not edsm body or edsm check
                 else if (sn.ScanData != null && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet))
                 { 
-                    var overlays = new StarColumnOverlays();
-// tbd
                     if (sn.ScanData.IsStar)
                     {
                         // is a star, so populate its information field with relevant data
@@ -357,20 +358,17 @@ namespace EDDiscovery.UserControls
                             }
 
                             bdDetails.AppendCR().Append("Landable".T(EDTx.UserControlScanGrid_Landable)).Append(Gg).Append(". ");
-                            overlays.landable = true;
                         }
 
                         // tell us that there is some volcanic activity
                         if (sn.ScanData.Volcanism.HasChars())
                         {
                             bdDetails.AppendCR().Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).AppendColonS().Append(sn.ScanData.Volcanism).Append(". ");
-                            overlays.volcanism = true;
                         }
 
                         if (sn.ScanData.Mapped)
                         {
                             bdDetails.AppendCR().Append("Surface mapped".T(EDTx.UserControlScanGrid_Surfacemapped)).Append(". ");
-                            overlays.mapped = true;
                         }
 
                         if (sn.SurfaceFeatures != null)
@@ -378,10 +376,12 @@ namespace EDDiscovery.UserControls
                             bdDetails.AppendCR();
                             StarScan.SurfaceFeatureList(bdDetails, sn.SurfaceFeatures, 0, false);
                         }
-                        if (sn.Organics != null)
+                        if (sn.Organics != null)        // organic scans done
                         {
                             bdDetails.AppendCR();
                             JournalScanOrganic.OrganicList(bdDetails, sn.Organics,0,false);
+                            foreach (var os in sn.Organics)
+                                organicssystem += os.Value;
                         }
                         if (sn.Signals != null)
                         {
@@ -404,7 +404,6 @@ namespace EDDiscovery.UserControls
                                 if (mc?.IsJumponium == true)
                                 {
                                     ret = ret.AppendPrePad(mc.TranslatedName, ", ");
-                                    overlays.materials = true;
                                 }
                             }
 
@@ -445,30 +444,18 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    // give estimated value
-                    if (IsSet(CtrlList.showValues))
-                    {
-                        var value = sn.ScanData.EstimatedValue;
-                        bdDetails.AppendCR().Append("Value".T(EDTx.UserControlScanGrid_Value)).AppendSPC().Append(value.ToString("N0"));
-                    }
-
                     if ( sn.ScanData.IsWebSourced)
                         bdDetails.AppendCR().Append(sn.ScanData.DataSourceName);
 
-                    // pick an image
-
-                    Bitmap img = (Bitmap)BaseUtils.Icons.IconSet.GetIcon(sn.ScanData.GetStarPlanetTypeImageName());
-
-                    int rowno = dataGridView.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() });
-                    var cur = dataGridView.Rows[rowno];
-
-                    cur.Tag = img;
-
-                    cur.Cells[0].Tag = overlays;
-                    cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                sn.ScanData.DisplayString(historicmcl, curmcl);
-
                     sn.ScanData.Jumponium(jumponiums);      // add to jumponiums hash any seen
+
+                    texttoadd = new string[] { sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
+
+                    List<ExtPictureBox.ImageElement> pc = new List<ExtPictureBox.ImageElement>();
+                    sd.DrawNode(pc, sn, null, null, BodyToImages.GetPlanetImageNotScanned(), new Point(imagesize.Width, imagesize.Height), true, false, out Rectangle _, out int _, imagesize,
+                        SystemDisplay.DrawLevel.NoText, new Random());
+                    pb.PictureBox.AddRange(pc);
+
                 }
                 else if ( !sn.WebCreatedNode )             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
                 {
@@ -493,10 +480,53 @@ namespace EDDiscovery.UserControls
                         JournalSAASignalsFound.GenusList(bdDetails, sn.Genuses, 0, false, false);
                     }
 
-                    dataGridView.Rows.Add(new object[] { null, sn.FullName, "?", "?" , bdDetails.ToString() });
-                    
-                    var cur = dataGridView.Rows[dataGridView.Rows.Count - 1];
-                    cur.Tag = BodyToImages.GetPlanetImageNotScanned();
+                    texttoadd = new string[] { sn.FullName, "", "", bdDetails.ToString() };
+                    pb.PictureBox.AddImage(new Rectangle(0, 0, imagesize.Width,imagesize.Height),
+                            sn.NodeType == StarScan.ScanNodeType.star ? BodyToImages.GetStarImageNotScanned() :
+                            sn.NodeType == StarScan.ScanNodeType.belt ? BodyToImages.GetBeltImage() :
+                            BodyToImages.GetPlanetImageNotScanned());
+                }
+
+                if (texttoadd != null)
+                {
+                    var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
+                    pb.PictureBox.Render();
+                    rw.Cells.Add(pb);
+                    DataGridViewTextBoxCell c1 = new DataGridViewTextBoxCell();
+                    c1.Value = texttoadd[0];
+                    rw.Cells.Add(c1);
+                    DataGridViewTextBoxCell c2 = new DataGridViewTextBoxCell();
+                    c2.Value = texttoadd[1];
+                    rw.Cells.Add(c2);
+                    DataGridViewTextBoxCell c3 = new DataGridViewTextBoxCell();
+                    c3.Value = texttoadd[2];
+                    rw.Cells.Add(c3);
+                    DataGridViewTextBoxCell c4 = new DataGridViewTextBoxCell();
+                    c4.Value = texttoadd[3];
+                    var tooltiptext = sn.ScanData?.DisplayString(historicmcl, curmcl);
+                    if (tooltiptext != null)
+                        c4.Tag = c4.ToolTipText = tooltiptext;
+                    rw.Cells.Add(c4);
+
+                    var ev = sn.ScanData?.GetEstimatedValues();     // may be null
+
+                    System.Diagnostics.Debug.WriteLine($"{sn.FullName} {ev?.EstimatedValueBase} {ev?.EstimatedValueFirstDiscoveredFirstMappedEfficiently} {sn.ScanData?.EstimatedValue}");
+                    DataGridViewTextBoxCell c5 = new DataGridViewTextBoxCell();
+                    c5.Value = sn.ScanData?.EstimatedValue.ToString("N0") ?? "";
+                    rw.Cells.Add(c5);
+
+                    DataGridViewTextBoxCell c6 = new DataGridViewTextBoxCell();
+                    c6.Value = ev != null ? ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently.ToString("N0") : "" ;
+                    rw.Cells.Add(c6);
+
+                    DataGridViewTextBoxCell c7 = new DataGridViewTextBoxCell();
+                    bool biosignals = sn.Signals != null ? JournalSAASignalsFound.ContainsBio(sn.Signals) : false;      // has bio signals
+                    c7.Value = organicssystem>0 ? organicssystem.ToString("N0") : biosignals ? "???" : "";     // tick if has biosignals, but we don't have totals
+                    rw.Cells.Add(c7);
+
+                    dataGridView.Rows.Add(rw);
+
+                    organicstotal += organicssystem;
                 }
             }
 
@@ -510,10 +540,13 @@ namespace EDDiscovery.UserControls
             else
                 toolStripJumponiumProgressBar.ToolTipText = toolStripJumponiumProgressBar.Value + " jumponium materials found in system.".T(EDTx.UserControlScanGrid_JS);
 
-            string report = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.System.Name, stars, planets, terrestrial, gasgiants, moons);
-            report = "~" + scannode.ScanValue( edsmSpanshButton.IsAnySet).ToString() + " cr " + report;
-            SetControlText(scannode.System.Name);
-            toolStripStatusTotalValue.Text = report;
+            string ct = scannode.System.Name;
+            long totalv = scannode.ScanValue(edsmSpanshButton.IsAnySet) + organicstotal;
+            if (totalv > 0)
+                ct += " ~" + totalv.ToString("N0") + "cr";
+            SetControlText( ct ); 
+
+            toolStripStatusTotalValue.Text = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.System.Name, stars, planets, terrestrial, gasgiants, moons);
 
             if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridView.RowCount)
                 dataGridView.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
@@ -523,18 +556,18 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            var cur = dataGridView.Rows[e.RowIndex];
-            PaintHelpers.PaintStarColumn(dataGridView, e, cur.Cells[0].Tag as StarColumnOverlays, colImage.Index, iconsize, bodysize);
+     //       var cur = dataGridView.Rows[e.RowIndex];
+        //    PaintHelpers.PaintStarColumn(dataGridView, e, cur.Cells[0].Tag as StarColumnOverlays, colImage.Index, iconsize, bodysize);
         }
 
         #region UI
         void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 4 && e.RowIndex >= 0)
+            if (e.ColumnIndex == colBriefing.Index && e.RowIndex >= 0)
             {
-                var curdata = dataGridView.Rows[e.RowIndex].Cells[4].Value;
-                dataGridView.Rows[e.RowIndex].Cells[4].Value = dataGridView.Rows[e.RowIndex].Cells[4].Tag;
-                dataGridView.Rows[e.RowIndex].Cells[4].Tag = curdata;
+                var curdata = dataGridView.Rows[e.RowIndex].Cells[colBriefing.Index].Value;
+                dataGridView.Rows[e.RowIndex].Cells[colBriefing.Index].Value = dataGridView.Rows[e.RowIndex].Cells[colBriefing.Index].Tag;      // swap data between tag and value
+                dataGridView.Rows[e.RowIndex].Cells[colBriefing.Index].Tag = curdata;
             }
         }
 
@@ -542,7 +575,7 @@ namespace EDDiscovery.UserControls
         protected enum CtrlList
         {
             showHabitable,showMetalRich,showWaterWorlds,showEarthLike,showAmmonia,showIcyBodies,
-            showBelts,showRings,showMaterials,showValues,
+            showBelts,showRings,showMaterials
         };
 
 
@@ -585,7 +618,6 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.Add(CtrlList.showBelts.ToString(), "Show belts".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showRings.ToString(), "Show rings".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showMaterials.ToString(), "Show materials".TxID(EDTx.UserControlScanGrid_materialsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlScanGrid_valuesToolStripMenuItem));
             CommonCtrl(displayfilter, extButtonHabZones);
         }
 

@@ -737,6 +737,9 @@ SECTION UserControlScanGrid
 .colClass: "Class" @
 .colDistance: "Distance" @
 .colBriefing: "Information" @
+.ColCurValue: "Current Value" @
+.ColMaxValue: "Max Value" @
+.ColOrganics: "Organics Value" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
 .extButtonHabZones.ToolTip: "Configure hab zone information" @
 .MainStar: "Main Star" @
@@ -751,14 +754,15 @@ SECTION UserControlScanGrid
 .BC: "This body contains: " @
 .Ring: "Ring: " @
 .Belt: "Belt: " @
-.Value: "Value" @
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
 .ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" @
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" @
 .materialsToolStripMenuItem: "Show materials" @
-.valuesToolStripMenuItem: "Show values" @
+
+//.Value: "Value" @
+//.valuesToolStripMenuItem: "Show values" @
 
 SECTION UserControlSettings
 
