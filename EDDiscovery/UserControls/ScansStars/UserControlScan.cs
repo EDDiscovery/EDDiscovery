@@ -37,6 +37,7 @@ namespace EDDiscovery.UserControls
         List<MaterialCommodityMicroResource> showing_matcomds;
 
         bool closing = false;           // set when closing, to prevent a resize, which you can get, causing a big redraw
+        const string dbValueLimit = "ValueLimit";
 
         #region Init
         public UserControlScan()
@@ -75,7 +76,7 @@ namespace EDDiscovery.UserControls
 
             scanDisplayConfigureButton.ApplyDisplayFilters(panelStars);
 
-            panelStars.SystemDisplay.ValueLimit = GetSetting("ValueLimit", 50000);
+            panelStars.SystemDisplay.ValueLimit = GetSetting(dbValueLimit, 50000);
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
 
@@ -290,40 +291,11 @@ namespace EDDiscovery.UserControls
 
         private void extButtonHighValue_Click(object sender, EventArgs e)
         {
-            ExtendedControls.ConfigurableForm cf = new ConfigurableForm();
-            int width = 300;
-            int height = 100;
-
-            cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("UC", typeof(ExtendedControls.NumberBoxLong), panelStars.SystemDisplay.ValueLimit.ToStringInvariant(),
-                                        new Point(5, 30), new Size(width - 5 - 20, 24), null)
-            { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 2000000000 });
-
-            cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK),
-                        new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
-
-            cf.Trigger += (dialogname, controlname, tag) =>
+            int v = ScanDisplayUserControl.HighValueForm(this.FindForm(), panelStars.SystemDisplay.ValueLimit);
+            if ( v >= 0)
             {
-                System.Diagnostics.Debug.WriteLine("control" + controlname);
-
-                if (controlname.Contains("Validity:False"))
-                    cf.GetControl("OK").Enabled = false;
-                else if (controlname.Contains("Validity:True"))
-                    cf.GetControl("OK").Enabled = true;
-                else if (controlname == "OK")
-                {
-                    cf.ReturnResult(DialogResult.OK);
-                }
-                else if (controlname == "Cancel")
-                {
-                    cf.ReturnResult(DialogResult.Cancel);
-                }
-            };
-
-            if (cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Set Valuable Minimum".T(EDTx.UserControlScan_VLMT)) == DialogResult.OK)
-            {
-                long? value = cf.GetLong("UC");
-                panelStars.SystemDisplay.ValueLimit = (int)value.Value;
-                PutSetting("ValueLimit", panelStars.SystemDisplay.ValueLimit);
+                panelStars.SystemDisplay.ValueLimit = v;
+                PutSetting(dbValueLimit, panelStars.SystemDisplay.ValueLimit);
                 DrawSystem();
             }
         }

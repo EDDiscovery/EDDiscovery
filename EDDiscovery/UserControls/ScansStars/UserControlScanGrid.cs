@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
         private int iconsize;   // computed icon and body sizes
         private int bodysize;
         private string dbRolledUp = "RolledUp";
+        const string dbValueLimit = "ValueLimit";
 
         public UserControlScanGrid()
         {
@@ -57,7 +58,7 @@ namespace EDDiscovery.UserControls
             EDTx.UserControlScanGrid_ColCurValue, EDTx.UserControlScanGrid_ColMaxValue, EDTx.UserControlScanGrid_ColOrganics };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip};
+            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip, EDTx.UserControlScanGrid_extButtonHighValue_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);
@@ -162,6 +163,7 @@ namespace EDDiscovery.UserControls
             HashSet<string> jumponiums = new HashSet<string>();
 
             SystemDisplay sd = new SystemDisplay();
+            sd.ValueLimit = GetSetting(dbValueLimit, 50000);
             sd.Font = Theme.Current.GetFont;
             Size imagesize = new Size(48, 48);
 
@@ -662,6 +664,16 @@ namespace EDDiscovery.UserControls
             };
 
             displayfilter.Show(CtrlStateAsString(), button, this.FindForm());
+        }
+
+        private void extButtonHighValue_Click(object sender, EventArgs e)
+        {
+            int v = ScanDisplayUserControl.HighValueForm(this.FindForm(), GetSetting(dbValueLimit,50000));
+            if (v >= 0)
+            {
+                PutSetting(dbValueLimit, v);
+                DrawSystem(last_he,true);
+            }
         }
 
 

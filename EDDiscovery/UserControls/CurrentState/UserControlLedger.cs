@@ -83,6 +83,8 @@ namespace EDDiscovery.UserControls
 
             TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false,true,false);
 
+            label24h.Text = label7d.Text = "";
+
             splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
 
             {                                                                               // same code as in carrier/stats really

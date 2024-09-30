@@ -122,6 +122,47 @@ namespace EDDiscovery.UserControls
 
 
         #endregion
+
+        // static as it is used externally to this
+        static public int HighValueForm(Form form, int v)
+        {
+            ConfigurableForm cf = new ConfigurableForm();
+            int width = 300;
+            int height = 100;
+
+            cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("UC", typeof(ExtendedControls.NumberBoxInt), v.ToStringInvariant(),
+                                        new Point(5, 30), new Size(width - 5 - 20, 24), null)
+            { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 1000000000 });
+
+            cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK),
+                        new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
+
+            cf.Trigger += (dialogname, controlname, tag) =>
+            {
+                System.Diagnostics.Debug.WriteLine("control" + controlname);
+
+                if (controlname.Contains("Validity:False"))
+                    cf.GetControl("OK").Enabled = false;
+                else if (controlname.Contains("Validity:True"))
+                    cf.GetControl("OK").Enabled = true;
+                else if (controlname == "OK")
+                {
+                    cf.ReturnResult(DialogResult.OK);
+                }
+                else if (controlname == "Cancel")
+                {
+                    cf.ReturnResult(DialogResult.Cancel);
+                }
+            };
+
+            if (cf.ShowDialogCentred(form, form.Icon, "Set Valuable Minimum".T(EDTx.UserControlScan_VLMT)) == DialogResult.OK)
+            {
+                return cf.GetInt("UC").Value;
+            }
+            else
+                return int.MinValue;
+        }
+
     }
 }
 
