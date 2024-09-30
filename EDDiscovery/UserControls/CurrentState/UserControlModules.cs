@@ -467,11 +467,21 @@ namespace EDDiscovery.UserControls
 
             if (sm.Engineering != null)
             {
-                eng = sm.Engineering.FriendlyBlueprintName + ": " + sm.Engineering.Level.ToStringInvariant();
+                System.Text.StringBuilder sb = new System.Text.StringBuilder(1024);
+                sb.Append(sm.Engineering.FriendlyBlueprintName);
+                sb.AppendColonS();
+                sb.Append(sm.Engineering.Level.ToStringInvariant());
                 if (sm.Engineering.ExperimentalEffect_Localised.HasChars())
-                    eng += ": " + sm.Engineering.ExperimentalEffect_Localised;
+                {
+                    sb.AppendColonS();
+                    sb.Append(sm.Engineering.ExperimentalEffect_Localised);
+                }
 
-                engtooltip = sm.Engineering.ToString();
+                eng = sb.ToString();
+
+                System.Text.StringBuilder sbtt = new System.Text.StringBuilder(1024);
+                sm.Engineering.Build(sbtt);
+                engtooltip = sm.ToString();
 
                 if (displayfilters.Contains("fullblueprint"))
                 {

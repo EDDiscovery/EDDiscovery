@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
                 long organicssystem = 0;
                 DataGridViewPictureBox pb = new DataGridViewPictureBox();
 
-                if (sn.NodeType == StarScan.ScanNodeType.ring)
+                if (sn.NodeType == StarScan.ScanNodeType.ring || sn.NodeType == StarScan.ScanNodeType.belt || sn.NodeType == StarScan.ScanNodeType.barycentre )
                 {
                     // do nothing
                 }
@@ -508,15 +508,28 @@ namespace EDDiscovery.UserControls
                         c4.Tag = c4.ToolTipText = tooltiptext;
                     rw.Cells.Add(c4);
 
-                    var ev = sn.ScanData?.GetEstimatedValues();     // may be null
-
-                    System.Diagnostics.Debug.WriteLine($"{sn.FullName} {ev?.EstimatedValueBase} {ev?.EstimatedValueFirstDiscoveredFirstMappedEfficiently} {sn.ScanData?.EstimatedValue}");
                     DataGridViewTextBoxCell c5 = new DataGridViewTextBoxCell();
-                    c5.Value = sn.ScanData?.EstimatedValue.ToString("N0") ?? "";
-                    rw.Cells.Add(c5);
-
                     DataGridViewTextBoxCell c6 = new DataGridViewTextBoxCell();
-                    c6.Value = ev != null ? ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently.ToString("N0") : "" ;
+
+                    if (sn.ScanData != null)
+                    {
+                        sn.ScanData.GetPossibleEstimatedValues(false,
+                                          out long basevalue,
+                                          out long mappedvalue, out long mappedefficiently,                     
+                                          out long firstmappedvalue, out long firstmappedefficiently,            
+                                          out long firstdiscoveredmappedvalue, out long firstdiscoveredmappedefficiently, 
+                                          out long best
+                          );
+
+                        c5.Value = sn.ScanData.EstimatedValue.ToString("N0");
+                        c6.Value = best.ToString("N0");
+                    }
+                    else
+                    {
+                        c5.Value = c6.Value = "";
+                    }
+                    
+                    rw.Cells.Add(c5);
                     rw.Cells.Add(c6);
 
                     DataGridViewTextBoxCell c7 = new DataGridViewTextBoxCell();

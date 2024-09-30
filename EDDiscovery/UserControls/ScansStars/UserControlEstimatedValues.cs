@@ -145,41 +145,21 @@ namespace EDDiscovery.UserControls
 
                     if (bodies.ScanData != null && bodies.ScanData.BodyName != null && (edsmSpanshButton.IsAnySet || !bodies.ScanData.IsWebSourced))     
                     {
-                        //System.Diagnostics.Debug.WriteLine("Estimated values Recalc for " + bodies.ScanData.BodyName);
-                        var ev = bodies.ScanData.GetEstimatedValues();
-                        if (!checkBoxShowZeros.Checked && ev.EstimatedValueBase == 0)
-                            continue; // skip 0-value things
-
-                        bool showimpossibleValues = extCheckBoxShowImpossible.Checked;
-
                         string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
 
+                        bodies.ScanData.GetPossibleEstimatedValues(extCheckBoxShowImpossible.Checked,
+                                            out long basevalue,
+                                            out long mappedvalue, out long mappedefficiently,                  
+                                            out long firstmappedvalue, out long firstmappedefficiently,        
+                                            out long firstdiscoveredmappedvalue, out long firstdiscoveredmappedefficiently,  
+                                            out long _
+                            );
+
+                        string mappedstr = mappedvalue > 0 ? (mappedefficiently.ToString("N0") + " / " + mappedvalue.ToString("N0")) : "";
+                        string firstmappedeffstr = firstmappedvalue > 0 ? (firstmappedefficiently.ToString("N0") + " / " + firstmappedvalue.ToString("N0")) : "";
+                        string fdmappedstr = firstdiscoveredmappedvalue > 0 ? (firstdiscoveredmappedefficiently + " / " + firstdiscoveredmappedvalue) : "";
+
                         // System.Diagnostics.Debug.WriteLine($"EV was map {bodies.ScanData.IsPreviouslyMapped} was dis {bodies.ScanData.IsPreviouslyDiscovered} we map {bodies.ScanData.Mapped}");
-
-                        bool pr31condition = bodies.ScanData.IsNotPreviouslyDiscovered && bodies.ScanData.IsPreviouslyMapped;       // condition of bodies in the bubble, marked not discovered, but mapped
-
-                        // Mapped column: shown if not previously mapped and we have not mapped it yet.. 
-                        bool mappedcond = bodies.ScanData.IsPreviouslyMapped && bodies.ScanData.Mapped == false;
-
-                        string mappedstr = ev.EstimatedValueMapped > 0 && (showimpossibleValues || mappedcond)
-                                        ? (ev.EstimatedValueMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueMapped.ToString("N0")) : "";
-
-                        // Note EDSM bodies are marked as wasdiscovered=true, wasmapped=false (don't know so presume not)
-
-                        // First Mapped: shown if previously discovered, not previously mapped and we have not mapped
-                        bool firstmapcond = bodies.ScanData.IsPreviouslyDiscovered && bodies.ScanData.IsNotPreviouslyMapped && bodies.ScanData.Mapped == false;
-
-                        string firstmappedeffstr = ev.EstimatedValueFirstMappedEfficiently > 0 && (showimpossibleValues || firstmapcond)
-                                        ? (ev.EstimatedValueFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstMapped.ToString("N0")) : "";
-
-                        // First Discovered Mapped: shown if not in pr31, not discovered, not mapped, have not mapped
-
-                        bool firstdiscoveredmappedcond = !pr31condition && bodies.ScanData.IsNotPreviouslyDiscovered && bodies.ScanData.IsNotPreviouslyMapped && bodies.ScanData.Mapped == false;
-
-                        string fdmappedstr = ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 && (showimpossibleValues || firstdiscoveredmappedcond)
-                            ? (ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstDiscoveredFirstMapped.ToString("N0")) : "";
-
-                        //System.Diagnostics.Debug.WriteLine($"{bodies.ScanData.BodyName} pr31 {pr31condition} m {mappedcond} fd {firstdiscovercond} fm {firstmapcond} fdm {firstdiscoveredmappedcond}");
 
                         int estimatedvalue = bodies.ScanData.EstimatedValue;
 
@@ -189,8 +169,8 @@ namespace EDDiscovery.UserControls
                                         bodies.ScanData.DataSourceName,
                                         (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : nullimg),
                                         (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg),
-                                        pr31condition ? Icons.Controls.Scan_NotDiscoveredButMapped : bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
-                                        ev.EstimatedValueBase.ToString("N0"),
+                                        bodies.ScanData.PR31State ? Icons.Controls.Scan_NotDiscoveredButMapped : bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
+                                        basevalue.ToString("N0"),
                                         mappedstr,
                                         firstmappedeffstr,
                                         fdmappedstr ,
