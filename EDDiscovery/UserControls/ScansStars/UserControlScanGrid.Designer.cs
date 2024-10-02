@@ -51,6 +51,13 @@ namespace EDDiscovery.UserControls
             this.extButtonHighValue = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
+            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
+            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
+            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
+            this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
+            this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,13 +66,6 @@ namespace EDDiscovery.UserControls
             this.ColCurValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColMaxValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColOrganics = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
-            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
-            this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
-            this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
@@ -173,68 +173,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Size = new System.Drawing.Size(988, 519);
             this.dataGridView.TabIndex = 23;
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
-            // 
-            // colImage
-            // 
-            this.colImage.FillWeight = 50F;
-            this.colImage.HeaderText = "";
-            this.colImage.MinimumWidth = 20;
-            this.colImage.Name = "colImage";
-            this.colImage.ReadOnly = true;
-            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // colName
-            // 
-            this.colName.FillWeight = 42F;
-            this.colName.HeaderText = "Name";
-            this.colName.MinimumWidth = 20;
-            this.colName.Name = "colName";
-            this.colName.ReadOnly = true;
-            // 
-            // colClass
-            // 
-            this.colClass.FillWeight = 30F;
-            this.colClass.HeaderText = "Class";
-            this.colClass.MinimumWidth = 20;
-            this.colClass.Name = "colClass";
-            this.colClass.ReadOnly = true;
-            // 
-            // colDistance
-            // 
-            this.colDistance.FillWeight = 30F;
-            this.colDistance.HeaderText = "Distance";
-            this.colDistance.MinimumWidth = 20;
-            this.colDistance.Name = "colDistance";
-            this.colDistance.ReadOnly = true;
-            // 
-            // colBriefing
-            // 
-            this.colBriefing.FillWeight = 150F;
-            this.colBriefing.HeaderText = "Information";
-            this.colBriefing.MinimumWidth = 20;
-            this.colBriefing.Name = "colBriefing";
-            this.colBriefing.ReadOnly = true;
-            // 
-            // ColCurValue
-            // 
-            this.ColCurValue.FillWeight = 30F;
-            this.ColCurValue.HeaderText = "Current Value";
-            this.ColCurValue.Name = "ColCurValue";
-            this.ColCurValue.ReadOnly = true;
-            // 
-            // ColMaxValue
-            // 
-            this.ColMaxValue.FillWeight = 30F;
-            this.ColMaxValue.HeaderText = "Max Value";
-            this.ColMaxValue.Name = "ColMaxValue";
-            this.ColMaxValue.ReadOnly = true;
-            // 
-            // ColOrganics
-            // 
-            this.ColOrganics.FillWeight = 30F;
-            this.ColOrganics.HeaderText = "Organics Value";
-            this.ColOrganics.Name = "ColOrganics";
-            this.ColOrganics.ReadOnly = true;
+            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
             // vScrollBarCustom2
             // 
@@ -340,6 +279,69 @@ namespace EDDiscovery.UserControls
             this.toolStripJumponiumProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripJumponiumProgressBar.Size = new System.Drawing.Size(100, 17);
             // 
+            // colImage
+            // 
+            this.colImage.FillWeight = 50F;
+            this.colImage.HeaderText = "";
+            this.colImage.MinimumWidth = 20;
+            this.colImage.Name = "colImage";
+            this.colImage.ReadOnly = true;
+            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.colImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colName
+            // 
+            this.colName.FillWeight = 42F;
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 20;
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            // 
+            // colClass
+            // 
+            this.colClass.FillWeight = 30F;
+            this.colClass.HeaderText = "Class";
+            this.colClass.MinimumWidth = 20;
+            this.colClass.Name = "colClass";
+            this.colClass.ReadOnly = true;
+            // 
+            // colDistance
+            // 
+            this.colDistance.FillWeight = 30F;
+            this.colDistance.HeaderText = "Distance";
+            this.colDistance.MinimumWidth = 20;
+            this.colDistance.Name = "colDistance";
+            this.colDistance.ReadOnly = true;
+            // 
+            // colBriefing
+            // 
+            this.colBriefing.FillWeight = 150F;
+            this.colBriefing.HeaderText = "Information";
+            this.colBriefing.MinimumWidth = 20;
+            this.colBriefing.Name = "colBriefing";
+            this.colBriefing.ReadOnly = true;
+            // 
+            // ColCurValue
+            // 
+            this.ColCurValue.FillWeight = 30F;
+            this.ColCurValue.HeaderText = "Current Value";
+            this.ColCurValue.Name = "ColCurValue";
+            this.ColCurValue.ReadOnly = true;
+            // 
+            // ColMaxValue
+            // 
+            this.ColMaxValue.FillWeight = 30F;
+            this.ColMaxValue.HeaderText = "Max Value";
+            this.ColMaxValue.Name = "ColMaxValue";
+            this.ColMaxValue.ReadOnly = true;
+            // 
+            // ColOrganics
+            // 
+            this.ColOrganics.FillWeight = 30F;
+            this.ColOrganics.HeaderText = "Organics Value";
+            this.ColOrganics.Name = "ColOrganics";
+            this.ColOrganics.ReadOnly = true;
+            // 
             // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -374,6 +376,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonShowControl;
         private ExtendedControls.ExtButton extButtonHabZones;
         private EDSMSpanshButton edsmSpanshButton;
+        private ExtendedControls.ExtButton extButtonHighValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn colImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
@@ -382,6 +385,5 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColCurValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColMaxValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColOrganics;
-        private ExtendedControls.ExtButton extButtonHighValue;
     }
 }

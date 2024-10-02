@@ -19,6 +19,7 @@ using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -131,13 +132,9 @@ namespace EDDiscovery.UserControls
 
             // only record first row if same system 
             //var firstdisplayedrow = (dataGridView.RowCount > 0 && samesys) ? dataGridView.SafeFirstDisplayedScrollingRowIndex() : -1;
+                //            if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridView.RowCount) // not sure if needed
+                //              dataGridView.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
 
-            //dataGridView.RowTemplate.MinimumHeight = Font.ScalePixels(64);        // based on icon size
-
-            if (!samesys) // if changed system..
-            {
-                dataGridView.Rows.Clear();
-            }
 
             var stars = 0;      // count entities
             var planets = 0;
@@ -516,6 +513,7 @@ namespace EDDiscovery.UserControls
                     pbc.PictureBox.ClearImageList();
                     pbc.PictureBox.AddRange(pc);
                     pbc.PictureBox.Render();
+                    dataGridView.InvalidateCell(pbc);   // ensure revalidation
 
                     rw.Cells[1].Value = texttoadd[0];
                     rw.Cells[2].Value = texttoadd[1];
@@ -569,8 +567,10 @@ namespace EDDiscovery.UserControls
 
             toolStripStatusTotalValue.Text = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), systemnode.System.Name, stars, planets, terrestrial, gasgiants, moons);
 
-//            if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridView.RowCount) // not sure if needed
-  //              dataGridView.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
+            if (dataGridView.SortedColumn != null)      // resort if sorted
+            {
+                dataGridView.Sort(dataGridView.SortedColumn, dataGridView.SortOrder == SortOrder.Descending ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            }
         }
 
         #endregion
@@ -678,5 +678,12 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == colName.Index)
+                e.SortDataGridViewColumnAlphaInt();
+            else if (e.Column.Index == colDistance.Index || e.Column.Index == ColCurValue.Index || e.Column.Index == ColMaxValue.Index || e.Column.Index == ColOrganics.Index)
+                e.SortDataGridViewColumnNumeric();
+        }
     }
 }
