@@ -741,7 +741,6 @@ SECTION UserControlScanGrid
 .ColMaxValue: "Max Value" @
 .ColOrganics: "Organics Value" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonHabZones.ToolTip: "Configure hab zone information" @
 .extButtonHighValue_ToolTip: "Set High Value Limit" @
 .MainStar: "Main Star" @
 .Mass: "Mass" @

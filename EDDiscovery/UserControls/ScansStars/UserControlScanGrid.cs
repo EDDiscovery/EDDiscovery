@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
             EDTx.UserControlScanGrid_ColCurValue, EDTx.UserControlScanGrid_ColMaxValue, EDTx.UserControlScanGrid_ColOrganics };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHabZones_ToolTip, EDTx.UserControlScanGrid_extButtonHighValue_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHighValue_ToolTip };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);
@@ -91,14 +91,14 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(HistoryEntry he)        //we track the history cursor
         {
-            DrawSystem(he, false);
+            DrawSystem(he);
         }
 
         #endregion
 
         #region PopulateGrid
 
-        private async void DrawSystem(HistoryEntry he, bool force)
+        private async void DrawSystem(HistoryEntry he, bool redrawall = false)
         {
             StarScan.SystemNode systemnode = null;
 
@@ -106,9 +106,9 @@ namespace EDDiscovery.UserControls
 
             bool scanupdate = he.journalEntry is IStarScan;      // possible update to data..
 
-            System.Diagnostics.Debug.WriteLine($"Scan grid @{he?.EventTimeUTC} {he?.EventSummary} Samesync {samesys} force {force} istarscan {scanupdate}");
+            System.Diagnostics.Debug.WriteLine($"Scan grid @{he?.EventTimeUTC} {he?.EventSummary} Samesync {samesys} force {redrawall} istarscan {scanupdate}");
 
-            if (he == null || he.System.Name == "Unknown" || (samesys && !force && !scanupdate))      // no he, or unknown system, or same system with no force, no redisplay
+            if (he == null || he.System.Name == "Unknown" || (samesys && !redrawall && !scanupdate))      // no he, or unknown system, or same system with no force, no redisplay
                 return;
 
             last_he = he;   // record the he to note the last system visited
@@ -129,6 +129,12 @@ namespace EDDiscovery.UserControls
             }
 
             System.Diagnostics.Debug.WriteLine($"Scan grid update display at {he.System.Name} found with {systemnode.Bodies.Count()} bodies");
+
+            if (redrawall || !samesys)
+            {
+                System.Diagnostics.Debug.WriteLine($"Scan grid clear grid - samesys {samesys} redisplay all {redrawall}");
+                dataGridView.Rows.Clear();
+            }
 
             // only record first row if same system 
             //var firstdisplayedrow = (dataGridView.RowCount > 0 && samesys) ? dataGridView.SafeFirstDisplayedScrollingRowIndex() : -1;
@@ -322,7 +328,7 @@ namespace EDDiscovery.UserControls
                         {
                             bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).AppendColonS()
                             .Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append("K, (")
-                            .Append((sn.ScanData.nSurfaceTemperature.Value - 273).ToString("N2")).Append("C).");
+                            .Append((sn.ScanData.nSurfaceTemperature.Value - 273.15).ToString("N2")).Append("C).");
                         }
 
                         // print the main atmospheric composition and pressure, if presents
@@ -624,7 +630,6 @@ namespace EDDiscovery.UserControls
             return s;
         }
 
-
         private void extButtonShowControl_Click(object sender, EventArgs e)
         {
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
@@ -632,22 +637,15 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.Add(CtrlList.showBelts.ToString(), "Show belts".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showRings.ToString(), "Show rings".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showMaterials.ToString(), "Show materials".TxID(EDTx.UserControlScanGrid_materialsToolStripMenuItem));
-            CommonCtrl(displayfilter, extButtonHabZones);
-        }
-
-        private void extButtonHabZones_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
-            displayfilter.UC.AddAllNone();
             displayfilter.UC.Add(CtrlList.showHabitable.ToString(), "Show Habitation Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showMetalRichPlanetsToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showWaterWorldsToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showEarthLikeToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showAmmoniaWorldsToolStripMenuItem));
             displayfilter.UC.Add(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showIcyPlanetsToolStripMenuItem));
-            CommonCtrl(displayfilter, extButtonHabZones);
+            CommonCtrl(displayfilter, extButtonShowControl);
         }
-
+        
         private void CommonCtrl(CheckedIconNewListBoxForm displayfilter, Control button)
         {
             displayfilter.AllOrNoneBack = false;

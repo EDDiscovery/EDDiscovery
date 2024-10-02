@@ -47,17 +47,9 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonShowControl = new ExtendedControls.ExtButton();
-            this.extButtonHabZones = new ExtendedControls.ExtButton();
             this.extButtonHighValue = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
-            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
-            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
-            this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
-            this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,6 +58,13 @@ namespace EDDiscovery.UserControls
             this.ColCurValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColMaxValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColOrganics = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
+            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
+            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
+            this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
+            this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.rollUpPanelTop.SuspendLayout();
@@ -91,26 +90,12 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.UseVisualStyleBackColor = false;
             this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
             // 
-            // extButtonHabZones
-            // 
-            this.extButtonHabZones.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonHabZones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonHabZones.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
-            this.extButtonHabZones.Location = new System.Drawing.Point(40, 1);
-            this.extButtonHabZones.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
-            this.extButtonHabZones.Name = "extButtonHabZones";
-            this.extButtonHabZones.Size = new System.Drawing.Size(28, 28);
-            this.extButtonHabZones.TabIndex = 35;
-            this.toolTip.SetToolTip(this.extButtonHabZones, "Configure hab zone information");
-            this.extButtonHabZones.UseVisualStyleBackColor = false;
-            this.extButtonHabZones.Click += new System.EventHandler(this.extButtonHabZones_Click);
-            // 
             // extButtonHighValue
             // 
             this.extButtonHighValue.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonHighValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonHighValue.Image = global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue;
-            this.extButtonHighValue.Location = new System.Drawing.Point(76, 1);
+            this.extButtonHighValue.Location = new System.Drawing.Point(40, 1);
             this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
             this.extButtonHighValue.Name = "extButtonHighValue";
             this.extButtonHighValue.Size = new System.Drawing.Size(28, 28);
@@ -175,110 +160,6 @@ namespace EDDiscovery.UserControls
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
-            // vScrollBarCustom2
-            // 
-            this.vScrollBarCustom2.AlwaysHideScrollBar = false;
-            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = true;
-            this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(988, 0);
-            this.vScrollBarCustom2.Maximum = -1;
-            this.vScrollBarCustom2.Minimum = 0;
-            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(19, 519);
-            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom2.SmallChange = 1;
-            this.vScrollBarCustom2.TabIndex = 24;
-            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -1;
-            this.vScrollBarCustom2.ValueLimited = -1;
-            // 
-            // rollUpPanelTop
-            // 
-            this.rollUpPanelTop.AutoHeight = true;
-            this.rollUpPanelTop.AutoHeightWidthDisable = false;
-            this.rollUpPanelTop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.rollUpPanelTop.AutoWidth = false;
-            this.rollUpPanelTop.Controls.Add(this.panelControls);
-            this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rollUpPanelTop.HiddenMarkerWidth = 400;
-            this.rollUpPanelTop.Location = new System.Drawing.Point(0, 0);
-            this.rollUpPanelTop.Name = "rollUpPanelTop";
-            this.rollUpPanelTop.PinState = true;
-            this.rollUpPanelTop.RolledUpHeight = 5;
-            this.rollUpPanelTop.RollUpAnimationTime = 500;
-            this.rollUpPanelTop.RollUpDelay = 1000;
-            this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
-            this.rollUpPanelTop.ShowHiddenMarker = true;
-            this.rollUpPanelTop.Size = new System.Drawing.Size(1007, 30);
-            this.rollUpPanelTop.TabIndex = 25;
-            this.rollUpPanelTop.UnrollHoverDelay = 1000;
-            // 
-            // panelControls
-            // 
-            this.panelControls.AutoSize = true;
-            this.panelControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panelControls.BackColor = System.Drawing.SystemColors.Control;
-            this.panelControls.Controls.Add(this.extButtonShowControl);
-            this.panelControls.Controls.Add(this.extButtonHabZones);
-            this.panelControls.Controls.Add(this.extButtonHighValue);
-            this.panelControls.Controls.Add(this.edsmSpanshButton);
-            this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelControls.Location = new System.Drawing.Point(0, 0);
-            this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(1007, 30);
-            this.panelControls.TabIndex = 32;
-            // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(112, 1);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 36;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
-            // 
-            // statusStripSummary
-            // 
-            this.statusStripSummary.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusTotalValue,
-            this.toolStripJumponiumProgressBar});
-            this.statusStripSummary.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStripSummary.Location = new System.Drawing.Point(0, 549);
-            this.statusStripSummary.Name = "statusStripSummary";
-            this.statusStripSummary.ShowItemToolTips = true;
-            this.statusStripSummary.Size = new System.Drawing.Size(1007, 23);
-            this.statusStripSummary.SizingGrip = false;
-            this.statusStripSummary.TabIndex = 27;
-            // 
-            // toolStripStatusTotalValue
-            // 
-            this.toolStripStatusTotalValue.Name = "toolStripStatusTotalValue";
-            this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 18);
-            this.toolStripStatusTotalValue.Text = "Estimated scans value";
-            // 
-            // toolStripJumponiumProgressBar
-            // 
-            this.toolStripJumponiumProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripJumponiumProgressBar.Maximum = 8;
-            this.toolStripJumponiumProgressBar.Name = "toolStripJumponiumProgressBar";
-            this.toolStripJumponiumProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripJumponiumProgressBar.Size = new System.Drawing.Size(100, 17);
-            // 
             // colImage
             // 
             this.colImage.FillWeight = 50F;
@@ -342,6 +223,109 @@ namespace EDDiscovery.UserControls
             this.ColOrganics.Name = "ColOrganics";
             this.ColOrganics.ReadOnly = true;
             // 
+            // vScrollBarCustom2
+            // 
+            this.vScrollBarCustom2.AlwaysHideScrollBar = false;
+            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom2.HideScrollBar = true;
+            this.vScrollBarCustom2.LargeChange = 0;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(988, 0);
+            this.vScrollBarCustom2.Maximum = -1;
+            this.vScrollBarCustom2.Minimum = 0;
+            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(19, 519);
+            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SmallChange = 1;
+            this.vScrollBarCustom2.TabIndex = 24;
+            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom2.Value = -1;
+            this.vScrollBarCustom2.ValueLimited = -1;
+            // 
+            // rollUpPanelTop
+            // 
+            this.rollUpPanelTop.AutoHeight = true;
+            this.rollUpPanelTop.AutoHeightWidthDisable = false;
+            this.rollUpPanelTop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.rollUpPanelTop.AutoWidth = false;
+            this.rollUpPanelTop.Controls.Add(this.panelControls);
+            this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rollUpPanelTop.HiddenMarkerWidth = 400;
+            this.rollUpPanelTop.Location = new System.Drawing.Point(0, 0);
+            this.rollUpPanelTop.Name = "rollUpPanelTop";
+            this.rollUpPanelTop.PinState = true;
+            this.rollUpPanelTop.RolledUpHeight = 5;
+            this.rollUpPanelTop.RollUpAnimationTime = 500;
+            this.rollUpPanelTop.RollUpDelay = 1000;
+            this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
+            this.rollUpPanelTop.ShowHiddenMarker = true;
+            this.rollUpPanelTop.Size = new System.Drawing.Size(1007, 30);
+            this.rollUpPanelTop.TabIndex = 25;
+            this.rollUpPanelTop.UnrollHoverDelay = 1000;
+            // 
+            // panelControls
+            // 
+            this.panelControls.AutoSize = true;
+            this.panelControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelControls.BackColor = System.Drawing.SystemColors.Control;
+            this.panelControls.Controls.Add(this.extButtonShowControl);
+            this.panelControls.Controls.Add(this.extButtonHighValue);
+            this.panelControls.Controls.Add(this.edsmSpanshButton);
+            this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelControls.Location = new System.Drawing.Point(0, 0);
+            this.panelControls.Name = "panelControls";
+            this.panelControls.Size = new System.Drawing.Size(1007, 30);
+            this.panelControls.TabIndex = 32;
+            // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(76, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 36;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
+            // statusStripSummary
+            // 
+            this.statusStripSummary.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusTotalValue,
+            this.toolStripJumponiumProgressBar});
+            this.statusStripSummary.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.statusStripSummary.Location = new System.Drawing.Point(0, 549);
+            this.statusStripSummary.Name = "statusStripSummary";
+            this.statusStripSummary.ShowItemToolTips = true;
+            this.statusStripSummary.Size = new System.Drawing.Size(1007, 23);
+            this.statusStripSummary.SizingGrip = false;
+            this.statusStripSummary.TabIndex = 27;
+            // 
+            // toolStripStatusTotalValue
+            // 
+            this.toolStripStatusTotalValue.Name = "toolStripStatusTotalValue";
+            this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 18);
+            this.toolStripStatusTotalValue.Text = "Estimated scans value";
+            // 
+            // toolStripJumponiumProgressBar
+            // 
+            this.toolStripJumponiumProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripJumponiumProgressBar.Maximum = 8;
+            this.toolStripJumponiumProgressBar.Name = "toolStripJumponiumProgressBar";
+            this.toolStripJumponiumProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripJumponiumProgressBar.Size = new System.Drawing.Size(100, 17);
+            // 
             // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -374,7 +358,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelRollUp rollUpPanelTop;
         private System.Windows.Forms.FlowLayoutPanel panelControls;
         private ExtendedControls.ExtButton extButtonShowControl;
-        private ExtendedControls.ExtButton extButtonHabZones;
         private EDSMSpanshButton edsmSpanshButton;
         private ExtendedControls.ExtButton extButtonHighValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn colImage;

@@ -1499,7 +1499,6 @@ namespace EDDiscovery
         UserControlScanGrid_ColMaxValue,
         UserControlScanGrid_ColOrganics,
         UserControlScanGrid_extButtonShowControl_ToolTip, // ToolTip 'Configure overall settings'
-        UserControlScanGrid_extButtonHabZones_ToolTip, // ToolTip 'Configure hab zone information'
         UserControlScanGrid_extButtonHighValue_ToolTip,
         UserControlScanGrid_MainStar, // Main Star
         UserControlScanGrid_Mass, // Mass
